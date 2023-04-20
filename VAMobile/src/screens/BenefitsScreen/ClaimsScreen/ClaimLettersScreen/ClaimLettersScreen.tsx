@@ -7,11 +7,13 @@ import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScre
 import { Box, DefaultList, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView } from 'components'
 import { DecisionLettersState, getDecisionLetters } from 'store/slices/decisionLettersSlice'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { VATypographyThemeVariants } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoClaimLettersScreen from './NoClaimLettersScreen/NoClaimLettersScreen'
@@ -68,11 +70,13 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     const variant = 'MobileBodyBold' as keyof VATypographyThemeVariants
     const date = t('claimLetters.letterDate', { date: formatDateMMMMDDYYYY(receivedAt || '') })
     const textLines: Array<TextLine> = [{ text: date, variant }, { text: typeDescription }]
+    const onPress = () => {
+      logAnalyticsEvent(Events.vama_ddl_letter_view())
+    }
 
     const letterButton = {
       textLines,
-      // TODO: Link to Letter View screen (ticket #5045)
-      onPress: () => {},
+      onPress,
       a11yValue: t('listPosition', { position: index + 1, total: decisionLetters.length }),
       testId: getA11yLabelText(textLines), // read by screen reader
     }

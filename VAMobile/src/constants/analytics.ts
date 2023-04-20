@@ -160,6 +160,26 @@ export const Events = {
       name: 'vama_claim_upload_fail',
     }
   },
+  vama_ddl_button_shown: (): Event => {
+    return {
+      name: 'vama_ddl_button_shown',
+    }
+  },
+  vama_ddl_status_click: (): Event => {
+    return {
+      name: 'vama_ddl_status_click',
+    }
+  },
+  vama_ddl_landing_click: (): Event => {
+    return {
+      name: 'vama_ddl_landing_click',
+    }
+  },
+  vama_ddl_letter_view: (): Event => {
+    return {
+      name: 'vama_ddl_letter_view',
+    }
+  },
   vama_vaccine_details: (groupName: string): Event => {
     return {
       name: 'vama_vaccine_details',
