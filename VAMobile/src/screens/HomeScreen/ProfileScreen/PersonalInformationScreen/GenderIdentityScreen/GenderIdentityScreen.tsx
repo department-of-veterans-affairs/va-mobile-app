@@ -71,7 +71,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
     })
   }
 
-  const goToWhatToKnow = (): void => {
+  const goToHelp = (): void => {
     logAnalyticsEvent(Events.vama_gender_id_help)
     navigateTo('WhatToKnow')()
   }
@@ -121,7 +121,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
           <TextView variant="MobileBodyBold">{t('personalInformation.genderIdentity.preferNotToAnswer')}</TextView>
         </TextView>
         <RadioGroup {...radioGroupProps} />
-        <Pressable onPress={goToWhatToKnow} accessibilityRole="link" accessible={true}>
+        <Pressable onPress={goToHelp} accessibilityRole="link" accessible={true}>
           <TextView variant="MobileBodyLink">{t('personalInformation.genderIdentity.whatToKnow')}</TextView>
         </Pressable>
       </Box>
