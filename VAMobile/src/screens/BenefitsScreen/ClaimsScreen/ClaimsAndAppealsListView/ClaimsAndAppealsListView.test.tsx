@@ -68,6 +68,7 @@ context('ClaimsAndAppealsListView', () => {
         attributes: {
           subtype: 'supplementalClaim',
           completed: false,
+          decisionLetterSent: false,
           dateFiled: '2020-10-22',
           updatedAt: '2020-10-28',
           displayTitle: 'supplemental claim for disability compensation',
@@ -79,6 +80,7 @@ context('ClaimsAndAppealsListView', () => {
         attributes: {
           subtype: 'Compensation',
           completed: false,
+          decisionLetterSent: false,
           dateFiled: '2020-10-22',
           updatedAt: '2020-10-30',
           displayTitle: 'Compensation',
@@ -93,6 +95,7 @@ context('ClaimsAndAppealsListView', () => {
         attributes: {
           subtype: 'Compensation',
           completed: true,
+          decisionLetterSent: true,
           dateFiled: '2020-10-25',
           updatedAt: '2020-10-31',
           displayTitle: 'Compensation',
