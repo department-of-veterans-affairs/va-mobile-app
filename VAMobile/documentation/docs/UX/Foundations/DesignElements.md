@@ -15,7 +15,7 @@ The VA mobile app has two color themes: Light and Dark. [The VA mobile app theme
 - [Light theme in Figma](https://www.figma.com/file/yXL0MkEKyAPGXPZqRH0VFZ/VA-Mobile-light-theme?node-id=183%3A441)
 - [Dark theme in Figma](https://www.figma.com/file/gOhb2kZvoQiXiGigqWZhnx/VA-Mobile-dark-theme?node-id=183%3A441)
 
-See also [FrontEnd: Fonts and Colors](/docs/Engineering/FrontEnd/Fonts%20and%20Colors/FontsAndColors)
+See also [FrontEnd: Fonts and Colors](/docs/Engineering/FrontEnd/FontsAndColors)
 
 
 ### Typography
