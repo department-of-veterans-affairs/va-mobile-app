@@ -1,16 +1,18 @@
 ---
-title: Team charter
+title: Team Charter
+sidebar_position: 1
 ---
 
-## Guideposts
+# Team Charter 
 
-### Team Vision
+## Vision
 
 Each Veteran is securely connected to the VA services that matter most to them regardless of device or VA org chart.
 
-### Team Mission Statement
+## Mission Statement
 
 A native mobile app that is a trusted source for Veterans to quickly and easily check the status of their VA services and complete simple, transactional tasks across their health and benefits.
+
 
 ## What we work on
 
@@ -38,73 +40,36 @@ A native mobile app that is a trusted source for Veterans to quickly and easily 
 #### Payments
 - Compensation
 
-## Who we are
 
-### Teams
+## Team Organization
+The VA mobile App team is split into two groups covering different areas of focus.
 
-#### Red Team
+### Red Team
+Health-related products in the app.
 
-Concentrating on health products in the app.
+### Blue Team
+Benefits-related products, global app features like navigation and single sign on (SIS), and incremental improvements and maintenance (aka TLC).
 
-#### Blue Team
-
-Concentrating on benefits products and global features in the app such as navigation, single sign on (SIS), and improvements and maintenance (aka TLC).
-
-
-### Team Members
-
-#### VA Product Owners
-
-- Chris Johnston
-- Rachel Han
-- Ryan Thurlwell
-- Martha Wilkes (accessibility as needed)
-
-#### Program Management
-
-- Seth Eheart - Program Manager
-
-#### Product
-
-- Matt Hall - Product Leadership
-- Adam Bischoff - Product
-- Stacy Blackwood - Product
-- Meko Hong - Product
-- Kelly Lein - Product
-- Greta Opzt - Data
-
-#### UX
-
-- Jen Ecker - UX Leadership
-- Brea Blackwelder - Accessibility Design
-- Holly Collier - Design
-- Melissa Lefevre - Design
-- Misty Milliron-Grant - Content Strategist
-- Lauren Russell - Design
-- Liz Straghalis - Research
-- Jessica Woodin - Design
-
-#### Engineering
-
-- Tim Wright - Engineering Leadership
-- Chika Adibemma - Engineering
-- Chris Alexander - Engineering
-- Theo Bentum - Engineering
-- Jon Bindbeutel - Engineering
-- Jason Conigliari - Engineering
-- Andrew Herzberg - Engineering
-- Dylan Nienberg - Engineering
-- Jayson Perkins - Engineering
-- Kris Pethtel - Engineering
-- Narin Ratana - Engineering
-- Tim Roettger - Engineering
-- Tom Gammons - Engineering, QA
-- Therese Dickson - Engineering, QA
-- Rachael Bontrager - Engineering, QA
+See [Who we are](/docs/About/who-we-are) for the team roster.
 
 ## How we work
 
-### Team Meetings Cadence
+### Communications
+
+
+#### Slack DSVA “#va-mobile-app”:
+
+This is our main means of communication with each other. Keep as much conversation in public channels as possible, to minimize duplicative and extraneous communication.
+
+#### GitHub
+
+- Product and research documentation are on[ VA.gov repository](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app).
+- Codebase and issues are on separate [VA mobile repository](https://github.com/department-of-veterans-affairs/va-mobile-app).
+- Update tickets regularly. If conversations happen in Slack that are pertinent to a product or initiative, copy the useful info into GitHub/ZenHub.
+
+See [Team Norms](/docs/About/team-norms) for more details on team communications.
+
+### Team meeting cadence
 
 #### Stand-up
 
@@ -174,7 +139,8 @@ Outline work to be done next quarter in order to accomplish the team's goals.
 - 2 hours
 - Entire team (Red + Blue)
 
-### Issue Etiquette
+
+### GitHub Etiquette
 
 - Anyone on the team can create a(n) issue/ticket/story.
 - All teammates are responsible for keeping them up to date.
@@ -270,42 +236,4 @@ We use fibonacci numbers (1, 2, 3, 5, 8, 13) to account for the level of effort,
   </tr>
 </table>
 
-
-## Team Norms
-
-### Values
-
-- We strive to create a product that is usable for all Veterans, no matter their abilities.
-    - We take a proactive, accessibility-first approach to everything we build. Accessibility is never an afterthought. It’s considered in every step of our process, from initial discovery to QA. 
-    - We also believe in accessibility beyond compliance. We don’t just meet the bare minimum of accessibility. recommendations. We go above and beyond these recommendations to ensure we’re creating a product that is truly accessible to all of our users.
-- We aim to start simple when building new features and take advantage of existing components.
-- We want to act as a partner to VA rather than a vendor.
-- We get input and feedback from all disciplines throughout feature implementation.
-- We make a point to celebrate our accomplishments.
-
-### Communication
-
-- Meetings follow communication norms as outlined in [inclusive meeting tips](/docs/about/inclusive-meetings).
-- We use Slack "threads" to contain conversations in a single place and aim to work in public channels. 
-- We don’t wait for meetings get question answered.
-- We respect before/after hours time commitments and time zones. When we will be away we communicate availability in Slack, team calendars, and OOO docs.
-- We work to balance having just enough meetings for folks to get work done while also feeling connected to team
-- NEW: Meetings have agenda, notes, description and desired outcome, send along read ahead.
-- NEW: Cameras are encouraged but optional in meetings.
-- NEW: We strive to keep Friday a non-meeting day.
-- NEW: Be considerate of long Slack threads. Signals of a thread getting out of hand are if you have to @folks to get attention or there are multiple conversations going on. If you see that happening, consider changing the format to a meeting and link meeting notes in the Slack thread.
-
-### Slack DSVA “#va-mobile-app”:
-
-This is our main means of communication with each other. Keep as much conversation in public channels as possible, to minimize duplicative and extraneous communication.
-
-### GitHub
-
-- Product and research documentation are on[ VA.gov repository](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app).
-- Codebase and issues are on separate [VA mobile repository](https://github.com/department-of-veterans-affairs/va-mobile-app).
-- Update tickets regularly. If conversations happen in Slack that are pertinent to a product or initiative, copy the useful info into GitHub/ZenHub.
-
-### PTO
-
-- We will respect time off and understand that mental, physical, and personal health is the top priority for team members.
 
