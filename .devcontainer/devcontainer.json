@@ -1,21 +1,17 @@
 {
-  "name": "Codespaces: Node Setup",
-  "extensions": [
-      "coenraads.bracket-pair-colorizer-2",
-      "cschleiden.vscode-github-actions",
-      "eamodio.gitlens",
-      "github.vscode-pull-request-github",
-      "ms-azuretools.vscode-docker",
-      "ms-vsliveshare.vsliveshare",
-      "vscode-icons-team.vscode-icons",
-      "visualstudioexptteam.vscodeintellicode"
-  ],
-  "dockerFile": "Dockerfile",
-  "settings": {
-      "terminal.integrated.shell.linux": "/usr/bin/zsh",
-      "files.exclude": {
-          "**/README.md": true,
-          "**/TESTING": true
-      }
+"name": "Codespaces: Documentation Preview",
+"postCreateCommand": "cd VAMobile && yarn && cd documentation && yarn && yarn build && yarn serve",
+"forwardPorts": [
+  3000
+],
+"portsAttributes": {
+  "3000": {
+    "label": "documentation"
   }
+},
+"hostRequirements": {
+  "cpus": 16,
+  "memory": "32gb",
+  "storage": "128gb"
+}
 }
