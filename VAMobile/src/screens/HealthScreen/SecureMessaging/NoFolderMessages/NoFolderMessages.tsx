@@ -14,7 +14,7 @@ export type NoFolderMessagesProps = {
   folderName: string
 }
 
-const NoFolderMessages: FC<NoFolderMessagesProps> = ({ folderName }) => {
+const NoFolderMessages: FC<NoFolderMessagesProps> = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -24,8 +24,6 @@ const NoFolderMessages: FC<NoFolderMessagesProps> = ({ folderName }) => {
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
     navigateTo('SecureMessaging')()
   }
-
-  const noEntriesTextKey = folderName === 'Drafts' ? 'secureMessaging.folders.noDrafts' : 'secureMessaging.folders.noFolderMessages'
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
@@ -38,7 +36,7 @@ const NoFolderMessages: FC<NoFolderMessagesProps> = ({ folderName }) => {
         <ComposeMessageButton />
         <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
           <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
-            {t(noEntriesTextKey, { folderName })}
+            {t('secureMessaging.folders.noFolderMessages')}
           </TextView>
           <Box width={'100%'}>
             <VAButton buttonType={'buttonPrimary'} label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} a11yHint={t('secureMessaging.goToInbox.a11yHint')} />
