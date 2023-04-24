@@ -1,0 +1,17 @@
+{
+"name": "Codespaces: Documentation Preview",
+"postCreateCommand": "cd VAMobile && yarn && cd documentation && yarn && yarn build && yarn serve",
+"forwardPorts": [
+  3000
+],
+"portsAttributes": {
+  "3000": {
+    "label": "documentation"
+  }
+},
+"hostRequirements": {
+  "cpus": 16,
+  "memory": "32gb",
+  "storage": "128gb"
+}
+}
