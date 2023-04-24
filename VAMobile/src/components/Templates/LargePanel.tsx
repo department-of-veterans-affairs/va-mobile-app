@@ -32,6 +32,8 @@ export type LargePanelProps = {
   onFooterButtonPress?: () => void
   /** function called when right button is pressed and a save action is needed */
   onRightButtonPress?: () => void
+  /** Optional TestID for scrollView */
+  testID?: string
 }
 
 export const LargePanel: FC<LargePanelProps> = ({
@@ -45,6 +47,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   footerButtonText,
   onRightButtonPress,
   onFooterButtonPress,
+  testID,
 }) => {
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -98,7 +101,7 @@ export const LargePanel: FC<LargePanelProps> = ({
     <>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
-        <VAScrollView>
+        <VAScrollView testID={testID}>
           {children}
           {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
         </VAScrollView>
