@@ -518,7 +518,7 @@ export const updatePreferredName =
         logNonFatalErrorToFirebase(err, `updatePreferredName: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveUpdatePreferredName(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, true, true, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
     }
   }
@@ -559,7 +559,7 @@ export const updateGenderIdentity =
         logNonFatalErrorToFirebase(error, `updateGenderIdentity: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishUpdateGenderIdentity(error))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, true, true, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
     }
   }
