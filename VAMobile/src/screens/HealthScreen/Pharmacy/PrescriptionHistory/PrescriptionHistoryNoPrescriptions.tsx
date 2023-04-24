@@ -30,8 +30,8 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
           <TextView pt={theme.paragraphSpacing.spacing20FontSize} paragraphSpacing={true} accessibilityLabel={t('prescriptions.notFound.yourVA.a11y')}>
             {t('prescriptions.notFound.yourVA')}
           </TextView>
-          <VABulletList listOfText={bullets} />
-          <TextView pt={theme.paragraphSpacing.spacing20FontSize}>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
+          <VABulletList listOfText={bullets} paragraphSpacing={true} />
+          <TextView>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
           <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />
         </AlertBox>
       </Box>

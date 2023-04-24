@@ -58,8 +58,8 @@ const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({
     }
 
     return (
-      <Box mx={gutter} mb={theme.paragraphSpacing.spacing20FontSize}>
-        <VABulletList listOfText={bulletedListOfText} />
+      <Box mx={gutter}>
+        <VABulletList listOfText={bulletedListOfText} paragraphSpacing={true} />
       </Box>
     )
   }

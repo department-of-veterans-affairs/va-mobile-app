@@ -33,13 +33,13 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
         </TextView>
         <TextView variant="MobileBodyBold">{t('claimDetails.whatYouHaveClaimed')}</TextView>
         {attributes?.contentionList && attributes.contentionList.length > 0 ? (
-          <VABulletList listOfText={attributes.contentionList} />
+          <VABulletList listOfText={attributes.contentionList} paragraphSpacing={true} />
         ) : (
-          <TextView variant="MobileBody">{t('noneNoted')}</TextView>
+          <TextView variant="MobileBody" paragraphSpacing={true}>
+            {t('noneNoted')}
+          </TextView>
         )}
-        <TextView variant="MobileBodyBold" mt={theme.paragraphSpacing.spacing20FontSize}>
-          {t('claimDetails.dateReceived')}
-        </TextView>
+        <TextView variant="MobileBodyBold">{t('claimDetails.dateReceived')}</TextView>
         <TextView variant="MobileBody" paragraphSpacing={true}>
           {formattedDateFiled}
         </TextView>

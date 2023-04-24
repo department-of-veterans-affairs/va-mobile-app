@@ -33,7 +33,9 @@ const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
         <TextView variant="MobileBody" paragraphSpacing={true}>
           {t('howWillYou.useInfo.1')}
         </TextView>
-        <TextView variant="MobileBody" accessibilityLabel={t('howWillYou.useInfo.2.a11yLabel')}>{t('howWillYou.useInfo.2')}</TextView>
+        <TextView variant="MobileBody" accessibilityLabel={t('howWillYou.useInfo.2.a11yLabel')}>
+          {t('howWillYou.useInfo.2')}
+        </TextView>
       </Box>
     </LargePanel>
   )
