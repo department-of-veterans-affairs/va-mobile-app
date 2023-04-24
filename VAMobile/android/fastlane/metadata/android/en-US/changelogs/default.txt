@@ -1,10 +1,1 @@
-We’ve updated where you find tools and information in the app.
-
-When you sign in, you’ll go to a new Home screen. On most screens in the app, you’ll find buttons at the bottom to select these 4 sections: Home, Benefits, Health, and Payments. Here’s what’s in each section:
-
-- The Home section shows your name and branch of service. It also includes links for how to contact us, find VA locations, and get updated information on COVID-19.
-- The Benefits section includes your disability rating, claims and appeals, and VA letters.
-- The Health section includes your VA health care appointments, secure messages, and vaccine records.
-- The Payments section includes your VA payment history and direct deposit information.
-
-We moved the Profile section to the top right area of the Home screen. Your Profile section includes your personal, contact, and military information. You can also manage the app’s settings in the Profile section.
+We added general improvements and fixed a few bugs.
