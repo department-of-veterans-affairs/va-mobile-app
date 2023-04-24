@@ -43,7 +43,7 @@ const fontSizes = {
   },
   AppointmentRequestCtaBtnText: {
     fontSize: 18,
-    lineHeight: 25,
+    lineHeight: 27,
   },
   BitterBoldHeading: {
     fontSize: 26,
