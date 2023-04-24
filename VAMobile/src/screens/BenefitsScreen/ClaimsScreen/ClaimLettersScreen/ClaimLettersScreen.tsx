@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack'
+import { useNavigationState } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { useEffect } from 'react'
 
@@ -23,6 +24,10 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const dispatch = useAppDispatch()
   const { loading, decisionLetters } = useSelector<RootState, DecisionLettersState>((state) => state.decisionLetters)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
+
+  // This screen is reachable from two different screens, so adjust back button label
+  const backLabel = prevScreen === 'ClaimDetailsScreen' ? t('claimDetails.title') : t('claims.title')
 
   useEffect(() => {
     if (!claimsInDowntime) {
@@ -36,7 +41,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
   if (useError(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
+      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID} onTryAgain={fetchInfoAgain} />
       </FeatureLandingTemplate>
     )
@@ -44,7 +49,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
   if (loading) {
     return (
-      <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
+      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
         <LoadingComponent text={t('claimLetters.loading')} />
       </FeatureLandingTemplate>
     )
@@ -52,7 +57,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
   if (decisionLetters.length === 0) {
     return (
-      <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
+      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
         <NoClaimLettersScreen />
       </FeatureLandingTemplate>
     )
@@ -76,7 +81,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   })
 
   return (
-    <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
+    <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
       <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
         {t('claimLetters.overview')}
       </TextView>
