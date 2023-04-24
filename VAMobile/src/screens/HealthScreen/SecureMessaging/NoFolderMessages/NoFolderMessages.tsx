@@ -10,11 +10,8 @@ import { updateSecureMessagingTab } from 'store/slices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 
-export type NoFolderMessagesProps = {
-  folderName: string
-}
 
-const NoFolderMessages: FC<NoFolderMessagesProps> = () => {
+const NoFolderMessages: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
