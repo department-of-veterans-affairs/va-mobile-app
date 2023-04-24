@@ -74,12 +74,11 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
         navigateTo('ClaimLettersScreen')()
       }
 
-      let claimResolvedOn = t('claimDetails.weDecidedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
+      const claimDecidedOn = t('claimDetails.weDecidedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
       let letterAvailable = t('claimDetails.decisionLetterMailed')
       let showButton = false
 
       if (featureEnabled('decisionLetters') && claim.attributes.decisionLetterSent) {
-        claimResolvedOn = t('claimDetails.weClosedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
         letterAvailable = t('claimDetails.youCanDownload')
         showButton = true
         if (!sentEvent.current) {
@@ -91,8 +90,8 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
       return (
         <Box mb={theme.dimensions.condensedMarginBetween}>
           <TextArea>
-            <Box {...testIdProps(claimResolvedOn)} accessibilityRole="header" accessible={true}>
-              <TextView variant="MobileBodyBold">{claimResolvedOn}</TextView>
+            <Box {...testIdProps(claimDecidedOn)} accessibilityRole="header" accessible={true}>
+              <TextView variant="MobileBodyBold">{claimDecidedOn}</TextView>
             </Box>
             <Box {...testIdProps(letterAvailable)} accessible={true}>
               <TextView variant="MobileBody">{letterAvailable}</TextView>
