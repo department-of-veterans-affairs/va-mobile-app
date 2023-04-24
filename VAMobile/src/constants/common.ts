@@ -36,6 +36,7 @@ const screensToCloseSnackbarOnNavigation = [
   'AskForClaimDecision',
   'ClaimDetails',
   'ClaimDetailsScreen',
+  'ClaimLettersScreen',
   'ComposeMessage',
   'DirectDeposit',
   'EditDirectDeposit',
