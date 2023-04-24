@@ -80,7 +80,9 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
         <Box mb={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <Box {...testIdProps(claimResolvedOn)} accessibilityRole="header" accessible={true}>
-              <TextView variant="MobileBodyBold" paragraphSpacing={true}>{claimResolvedOn}</TextView>
+              <TextView variant="MobileBodyBold" paragraphSpacing={true}>
+                {claimResolvedOn}
+              </TextView>
             </Box>
             <Box {...testIdProps(letterAvailable)} accessible={true}>
               <TextView variant="MobileBody">{letterAvailable}</TextView>

@@ -5,7 +5,6 @@ import { Box, TextArea, TextView, VABulletList } from 'components'
 import { ClaimData } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
 
 type ClaimDetailsProps = {
   claim: ClaimData
@@ -19,7 +18,6 @@ type ClaimDetailsProps = {
  */
 const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
   const { attributes } = claim
 
   const formattedDateFiled = formatDateMMMMDDYYYY(attributes?.dateFiled || '')
