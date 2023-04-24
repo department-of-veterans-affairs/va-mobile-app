@@ -86,46 +86,13 @@ const TextView: FC<TextViewProps> = ({ selectable = false, paragraphSpacing = fa
 
   if (paragraphSpacing) {
     const variant = getFontFamily(theme, wrapperProps)
-    switch (variant) {
-      case theme.typography.textWithIconButton:
-      case theme.typography.webviewTitle:
-        wrapperProps.mb = theme.paragraphSpacing.spacing12FontSize
-        break
-      case theme.typography.TableFooterLabel:
-        wrapperProps.mb = theme.paragraphSpacing.spacing14FontSize
-        break
-      case theme.typography.DescriptiveBackButton:
-      case theme.typography.HelperText:
-      case theme.typography.HelperTextBold:
-      case theme.typography.LabelTag:
-      case theme.typography.SnackBarBtnText:
-        wrapperProps.mb = theme.paragraphSpacing.spacing16FontSize
-        break
-      case theme.typography.AppointmentRequestCtaBtnText:
-        wrapperProps.mb = theme.paragraphSpacing.spacing18FontSize
-        break
-      case theme.typography.ActionBar:
-      case theme.typography.ClaimPhase:
-      case theme.typography.MobileBody:
-      case theme.typography.MobileBodyBold:
-      case theme.typography.MobileBodyLink:
-      case theme.typography.MobileBodyTight:
-      case theme.typography.TableHeaderBold:
-      case theme.typography.TableHeaderLabel:
-      case theme.typography.UnreadMessagesTag:
-      case theme.typography.VASelector:
-        wrapperProps.mb = theme.paragraphSpacing.spacing20FontSize
-        break
-      case theme.typography.BitterBoldHeading:
-        wrapperProps.mb = theme.paragraphSpacing.spacing26FontSize
-        break
-      case theme.typography.VAHeader:
-        wrapperProps.mb = theme.paragraphSpacing.spacing28FontSize
-        break
-      default:
-        wrapperProps.mb = wrapperProps.mb
-        break
-    }
+    const fontSize = +(
+      variant
+        .match(/font-size:..px/)
+        ?.toString()
+        .replace(/[^0-9]/g, '') || 0
+    )
+    wrapperProps.mb = fontSize * 2
   }
 
   if (wrapperProps.onPress) {
