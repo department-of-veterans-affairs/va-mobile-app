@@ -51,6 +51,10 @@ export type TextViewProps = AccessibilityProps &
 
     /** if true apply paragraphSpacing, it overrides the mb if supplied*/
     paragraphSpacing?: boolean
+
+    /** Optional TestID */
+    testID?: string
+
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
@@ -79,7 +83,7 @@ const StyledText = styled(Text)`
  *
  * @returns TextView component
  */
-const TextView: FC<TextViewProps> = ({ selectable = false, paragraphSpacing = false, ...props }) => {
+const TextView: FC<TextViewProps> = ({ selectable = false, paragraphSpacing = false, testID, ...props }) => {
   const { isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const theme = useTheme()
   const wrapperProps = { ...props }
@@ -99,14 +103,14 @@ const TextView: FC<TextViewProps> = ({ selectable = false, paragraphSpacing = fa
     const { onPress, ...remainingProps } = wrapperProps
     return (
       <Pressable onPress={onPress} accessible={false}>
-        <StyledText {...remainingProps} />
+        <StyledText testID={testID} {...remainingProps} />
       </Pressable>
     )
   }
 
   const selectToCopyProps = isVoiceOverTalkBackRunning ? {} : { selectable, selectionColor: theme.colors.selectCopyText }
 
-  return <StyledText {...selectToCopyProps} {...wrapperProps} />
+  return <StyledText testID={testID} {...selectToCopyProps} {...wrapperProps} />
 }
 
 export default TextView

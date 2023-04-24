@@ -15,7 +15,7 @@ The VA mobile app has two color themes: Light and Dark. [The VA mobile app theme
 - [Light theme in Figma](https://www.figma.com/file/yXL0MkEKyAPGXPZqRH0VFZ/VA-Mobile-light-theme?node-id=183%3A441)
 - [Dark theme in Figma](https://www.figma.com/file/gOhb2kZvoQiXiGigqWZhnx/VA-Mobile-dark-theme?node-id=183%3A441)
 
-See also [FrontEnd: Fonts and Colors](/docs/Engineering/FrontEnd/Fonts%20and%20Colors/FontsAndColors)
+See also [FrontEnd: Fonts and Colors](/docs/Engineering/FrontEnd/FontsAndColors)
 
 
 ### Typography
@@ -77,7 +77,7 @@ Typography in the VA mobile app generally follows [typography used by VA.gov](ht
 <iframe width="550" height="500" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2F%25F0%259F%2593%2590-DesignLibrary2.0---VAMobile%3Fnode-id%3D578%253A462%26t%3DNqEZTGAECLNEikbi-1" allowfullscreen></iframe>
 
 * [Typography in Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?node-id=578%3A462&t=NqEZTGAECLNEikbi-1)
-* See also [FrontEnd: Fonts and Colors](/docs/Engineering/FrontEnd/Fonts%20and%20Colors/FontsAndColors)
+* See also [FrontEnd: Fonts and Colors](/docs/Engineering/FrontEnd/FontsAndColors)
 
 ### Icons
 Icons are used sparingly throughout the VA mobile app as a way to enhance user understanding and wayfinding.

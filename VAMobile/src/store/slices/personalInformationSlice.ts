@@ -510,16 +510,18 @@ export const updatePreferredName =
       await api.put<api.EditResponseData>('/v0/user/preferred_name', preferredNameUpdateData as unknown as api.Params)
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_preferred_name())
+      await logAnalyticsEvent(Events.vama_pref_name_success)
 
       dispatch(dispatchFinishSaveUpdatePreferredName())
       showSnackBar(messages.successMsg, dispatch, undefined, true, false)
     } catch (err) {
-      console.debug('error updating name')
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `updatePreferredName: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveUpdatePreferredName(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
+      await logAnalyticsEvent(Events.vama_pref_name_fail)
     }
   }
 
@@ -548,6 +550,7 @@ export const updateGenderIdentity =
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_prof_update_gender(totalTime, actionTime))
+      await logAnalyticsEvent(Events.vama_gender_id_success)
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
@@ -559,8 +562,9 @@ export const updateGenderIdentity =
         logNonFatalErrorToFirebase(error, `updateGenderIdentity: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishUpdateGenderIdentity(error))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
+      await logAnalyticsEvent(Events.vama_gender_id_fail)
     }
   }
 
