@@ -1,3 +1,8 @@
+---
+title: Development Setup Process
+sidebar_position: 5
+---
+
 # Development Setup Instructions
 
 ## Prerequisites

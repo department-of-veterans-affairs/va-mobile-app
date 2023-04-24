@@ -1,7 +1,34 @@
 ---
-title: Inclusive Meeting Tips
+title: Team Norms
+sidebar_position: 2
 ---
-## Best practices:
+
+# Team Norms
+
+## Our Values
+
+- We strive to create a product that is usable for all Veterans, no matter their abilities.
+    - We take a proactive, accessibility-first approach to everything we build. Accessibility is never an afterthought. It’s considered in every step of our process, from initial discovery to QA. 
+    - We also believe in accessibility beyond compliance. We don’t just meet the bare minimum of accessibility. recommendations. We go above and beyond these recommendations to ensure we’re creating a product that is truly accessible to all of our users.
+- We aim to start simple when building new features and take advantage of existing components.
+- We want to act as a partner to VA rather than a vendor.
+- We get input and feedback from all disciplines throughout feature implementation.
+- We make a point to celebrate our accomplishments.
+
+## Communication
+
+- Meetings follow communication norms  outlined in Inclusive Meeting Best Practices (below).
+- We use Slack "threads" to contain conversations in a single place and aim to work in public channels. 
+- We don’t wait for meetings get question answered.
+- We respect before/after hours time commitments and time zones. When we will be away we communicate availability in Slack, team calendars, and OOO docs.
+- We work to balance having just enough meetings for folks to get work done while also feeling connected to team
+- NEW: Meetings have agenda, notes, description and desired outcome, send along read ahead.
+- NEW: Cameras are encouraged but optional in meetings.
+- NEW: We strive to keep Friday a non-meeting day.
+- NEW: Be considerate of long Slack threads. Signals of a thread getting out of hand are if you have to @folks to get attention or there are multiple conversations going on. If you see that happening, consider changing the format to a meeting and link meeting notes in the Slack thread.
+
+
+### Inclusive Meeting Best Practices:
 
 - **Try to share the meeting agenda and materials ahead of time**. This allows folks to come to the meeting prepared with questions, review them async if that is more comfortable, or follow along if they can’t attend a meeting.  Also it’s helpful to add timecodes when creating meeting invites.
 - **Turn on live captioning for every call.** Live captioning services are a critical way for some individuals to understand and participate in meetings. 
@@ -14,7 +41,7 @@ title: Inclusive Meeting Tips
 - **Consider which chat method would work best for your meeting.** For some folks, especially those who might be using assistive technology, discussions in the meeting chat software can be distracting or confusing to follow. Also the discussion often will be lost once the meeting ends which means folks not in attendance could miss out. One option is to capture those comments and conversations in Slack or in an asynchronous document used for the meeting.
 
 
-## Other caption specific pro-tips we’ve learned:
+#### Other caption specific pro-tips we’ve learned:
 
 - Turn on captions for yourself and follow them to make sure what you are saying is translating correctly. For example, some names don’t translate well so you may need to also say folk’s title (e.g. “Let’s check with the product manager on that feature”). 
 - Captioning software can struggle if folks talk too fast. It will attempt to autocorrect words as it goes, but keep in mind that you might have to talk a bit slower so it can translate correctly.  
@@ -22,4 +49,8 @@ title: Inclusive Meeting Tips
 - Google Meet: You don’t need to do anything to enable captions on Google Meet.
 - Zoom: If you are hosting Zoom meetings [here is info on how to enable auto captioning](https://support.zoom.us/hc/en-us/articles/8158289360141-Enabling-automated-captions).
 
+
+### PTO
+
+- We respect time off and understand that mental, physical, and personal health is the top priority for team members.
 

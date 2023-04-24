@@ -1,3 +1,8 @@
+---
+title: Debugging Tools 
+sidebar_position: 4
+---
+
 # Debugging Instructions 
 This page shows the different debug tools that we use to debug the VAMobile app. You can use your prefer method.
 
