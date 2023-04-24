@@ -47,5 +47,6 @@ See [Bug Tracking](https://github.com/department-of-veterans-affairs/va.gov-team
 ## Ticket Checklist
 - [ ] Steps to reproduce are defined
 - [ ] Desired behavior is added
-- [ ] Labels added (front-end, back-end, feature, bug)
-- [ ] Estimate of 1 added
+- [ ] Labels added (front-end, back-end, relevant feature, accessibility, etc)
+- [ ] Estimate of 1 added (for front-end tickets)
+- [ ] Added either to the relevant feature epic (if found during new feature implementation), or the [bug epic](https://app.zenhub.com/workspaces/va-mobile-product-view-610035bc5395bb000e62e529/issues/gh/department-of-veterans-affairs/va-mobile-app/5367)

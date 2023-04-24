@@ -78,14 +78,9 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
         onChange: onSetName,
         helperTextKey: 'personalInformation.preferredName.editHelperText',
         a11yLabel: 'personalInformation.preferredNameScreen.body.a11yLabel',
-        isRequiredField: true,
       },
       fieldErrorMessage: t('personalInformation.preferredName.fieldEmpty'),
       validationList: [
-        {
-          validationFunction: nameLengthValidation,
-          validationFunctionErrorMessage: t('personalInformation.preferredName.tooManyCharacters'),
-        },
         {
           validationFunction: lettersOnlyValidation,
           validationFunctionErrorMessage: t('personalInformation.preferredName.lettersOnly'),
@@ -93,6 +88,10 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
         {
           validationFunction: whiteSpaceOnlyValidation,
           validationFunctionErrorMessage: t('personalInformation.preferredName.fieldEmpty'),
+        },
+        {
+          validationFunction: nameLengthValidation,
+          validationFunctionErrorMessage: t('personalInformation.preferredName.tooManyCharacters'),
         },
       ],
     },

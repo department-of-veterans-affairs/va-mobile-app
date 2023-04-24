@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
-import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
+import { Box, ButtonTypesConstants, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
 import { ClaimData } from 'store/api/types'
 import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { NAMESPACE } from 'constants/namespaces'
+import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -65,17 +66,30 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
         return <></>
       }
 
-      const claimWasClosedOn = t('claimDetails.yourClaimWasClosedOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
+      let claimResolvedOn = t('claimDetails.weDecidedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
+      let letterAvailable = t('claimDetails.decisionLetterMailed')
+      let showButton = false
+
+      if (featureEnabled('decisionLetters') && claim.attributes.decisionLetterSent) {
+        claimResolvedOn = t('claimDetails.weClosedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
+        letterAvailable = t('claimDetails.youCanDownload')
+        showButton = true
+      }
 
       return (
         <Box mb={theme.dimensions.condensedMarginBetween}>
           <TextArea>
-            <Box {...testIdProps(claimWasClosedOn)} accessibilityRole="header" accessible={true}>
-              <TextView variant="MobileBodyBold">{claimWasClosedOn}</TextView>
+            <Box {...testIdProps(claimResolvedOn)} accessibilityRole="header" accessible={true}>
+              <TextView variant="MobileBodyBold">{claimResolvedOn}</TextView>
             </Box>
-            <Box {...testIdProps(t('claimDetails.decisionPacketMailed'))} accessible={true}>
-              <TextView variant="MobileBody">{t('claimDetails.decisionPacketMailed')}</TextView>
+            <Box {...testIdProps(letterAvailable)} accessible={true}>
+              <TextView variant="MobileBody">{letterAvailable}</TextView>
             </Box>
+            {showButton && (
+              <Box mt={theme.dimensions.condensedMarginBetween}>
+                <VAButton onPress={navigateTo('ClaimLettersScreen')} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} />
+              </Box>
+            )}
           </TextArea>
         </Box>
       )

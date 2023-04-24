@@ -11,3 +11,5 @@ The VA Health & Benefits mobile app's navigation model is the same on both iOS a
   * The tab bar must contain at least 3 but no more than 5 items, and is reserved for the default/Home screen, top level categories and if applicable, global features that require direct access from anywhere in the app.
 * **Secondary navigation:**
   * The right side of the app’s top navigation bar is reserved for global contextual features that relate to the content on that screen (Example: Profile, Help).
+
+  For ENG components that make up the primary navigation, see [Primary Navigation](/va-mobile-app/docs/UX/ComponentsSection/Navigation/Primary/) in the UX Components section.
