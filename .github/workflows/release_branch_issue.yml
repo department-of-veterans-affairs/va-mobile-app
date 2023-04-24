@@ -1,4 +1,4 @@
-name: "Create Release Branch Ticket"
+name: 'Create Release Branch Ticket'
 
 on:
   create:
@@ -67,8 +67,8 @@ jobs:
       - run: gh auth login --with-token < token.txt
       - run: echo ${{needs.start_testrail_run.outputs.testrailUrl}}
       - run: |
+          TICKET_NUM=${{ needs.release_ticket.outputs.ticketNumber }}
           RUN_URL=${{ needs.start_testrail_run.outputs.testrailUrl }}
-          OLD_BODY=$(echo $(gh issue view 3359 --json body | jq -r '.body'))
-          NEW_BODY=$(echo "$BODY" | sed -e "s/\^\^\^Testrail-url\^\^\^/$RUN_URL/g")
-          gh issue edit ${{ needs.release_ticket.outputs.ticketNumber }} -b $NEW_BODY
-
+          OLD_BODY=$(echo $(gh issue view $TICKET_NUM --json body | jq -r '.body'))
+          NEW_BODY=$(echo "$OLD_BODY" | sed -e "s#\^\^\^Testrail-url\^\^\^#$RUN_URL#g")
+          gh issue edit $TICKET_NUM -b $NEW_BODY

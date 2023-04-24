@@ -72,6 +72,7 @@
           "attributes": {
             "subtype": "Compensation",
             "completed": true,
+            "decisionLetterSent": true,
             "dateFiled": "2021-01-01",
             "updatedAt": "2021-04-09",
             "displayTitle": "Compensation"
