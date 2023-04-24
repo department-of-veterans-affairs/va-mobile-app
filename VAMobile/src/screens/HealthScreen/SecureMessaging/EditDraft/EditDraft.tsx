@@ -205,18 +205,25 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const onDeletePressed = (): void => {
     destructiveAlert({
-      title: t('secureMessaging.deleteDraft.areYouSure'),
+      title: t('secureMessaging.deleteDraft.deleteThisDraft'),
       message: t('secureMessaging.deleteDraft.deleteInfo'),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: tc('cancel'),
+          text: t('secureMessaging.deleteDraft.keep'),
         },
         {
-          text: tc('delete'),
+          text: t('secureMessaging.deleteDraft.delete'),
           onPress: () => {
             dispatch(deleteDraft(messageID, snackbarMessages))
+          },
+        },
+        {
+          text: t('secureMessaging.deleteDraft.save'),
+          onPress: () => {
+            setOnSaveDraftClicked(true)
+            setOnSendClicked(true)
           },
         },
       ],
