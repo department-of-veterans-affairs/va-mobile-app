@@ -22,7 +22,7 @@ const NoLettersScreen: FC = () => {
         <TextView variant="MobileBodyBold" textAlign={'center'} accessibilityRole="header" paragraphSpacing={true}>
           {t('noLetters.header')}
         </TextView>
-        <TextView variant="MobileBody" textAlign={'center'} py={6} paragraphSpacing={true}>
+        <TextView variant="MobileBody" textAlign={'center'} paragraphSpacing={true}>
           {t('noLetters.ifYouThink')}
         </TextView>
         <ClickToCallPhoneNumber center={true} phone={t('noLetters.benefitsAndServicesNumber')} displayedText={t('noLetters.benefitsAndServicesNumberDisplayed')} />
