@@ -74,12 +74,11 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
         navigateTo('ClaimLettersScreen')()
       }
 
-      let claimResolvedOn = t('claimDetails.weDecidedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
+      const claimResolvedOn = t('claimDetails.weDecidedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
       let letterAvailable = t('claimDetails.decisionLetterMailed')
       let showButton = false
 
       if (featureEnabled('decisionLetters') && claim.attributes.decisionLetterSent) {
-        claimResolvedOn = t('claimDetails.weDecidedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
         letterAvailable = t('claimDetails.youCanDownload')
         showButton = true
         if (!sentEvent.current) {
