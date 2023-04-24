@@ -806,6 +806,7 @@
   "howWillYou.title": "How will you use my contact information page",
   "howWillYou.useInfo.1": "We’ll use this information to contact you about certain benefits and services, like disability compensation, pension benefits, and claims and appeals.",
   "howWillYou.useInfo.2": "If you’re enrolled in VA health care, we’ll send your prescriptions to your mailing address. Your health care team may also use this information to contact you.",
+  "howWillYou.useInfo.2.a11yLabel": "If you’re enrolled in V-A health care, we’ll send your prescriptions to your mailing address. Your health care team may also use this information to contact you.",
   "militaryInformation.title": "Military information",
   "militaryInformation.branch": "{{branch}}",
   "militaryInformation.history": "{{begin}} - {{end}}",
