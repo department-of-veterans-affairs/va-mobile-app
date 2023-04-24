@@ -1,3 +1,8 @@
+---
+title: Accessibility Information
+sidebar_position: 1
+---
+
 # Accessibility Information
 This page describes the nuances of accessibility(a11y) for front end development.
 
