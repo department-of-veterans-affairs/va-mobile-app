@@ -88,7 +88,7 @@ platform :ios do
   desc "Build new Production build and upload to App Store for review"
   lane :review do |options|
     puts("Begin Review Lane")
-    ensure_xcode_version(version: "13", strict: false)
+    ensure_xcode_version(version: "14", strict: false)
     update_version(options[:version])
     sign
     build
@@ -165,7 +165,7 @@ platform :ios do
       tag = "ios-build-" + build.to_s
       puts "Tagging commit with " + tag
       add_git_tag(tag: tag)
-      push_git_tags
+      push_git_tags(tag: tag)
     rescue => e
         puts e.to_s
       slack_github_error(e, "Error tagging iOS build", "iOS", ENV['SLACK_THREAD_TS'])

@@ -114,6 +114,6 @@ The VA mobile app has 5 main screen types that fall into two categories:
   * [Figma file: Webview](https://www.figma.com/file/cdp7Be4UdYesq9fXeqaOgt/VAMobile-Navigation2.0-ScreenTemplates-Shipped%F0%9F%9A%A2?node-id=208%3A2793&t=b57jsZqgwHpuU2ja-4)
 
 
-## Adding new screen types to the app​
-* Always try to use an existing screen type first before proposing a new (or modifying an existing) screen type.
-* New screen types should apply to multiple features/locations in the app rather than stand as one-offs, and need to be approved by the Component Committee.
+### Adding new screen types
+-Always try to use an existing screen type first before proposing a new (or modifying an existing) screen type.
+- New screen types should apply to multiple features/locations in the app rather than stand as one-offs, and need to be approved by the Component Committee.
