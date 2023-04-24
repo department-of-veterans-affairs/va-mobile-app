@@ -45,25 +45,29 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   }
 
   const onConfirmCancel = (): void => {
-    confirmAlert({
-      title: '',
-      message: t('personalInformation.preferredName.cancelMessage'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('personalInformation.preferredName.keepEditing'),
-          onPress: () => {},
-        },
-        {
-          text: t('personalInformation.preferredName.deleteChanges'),
-          onPress: () => {
-            navigation.goBack()
+    if (preferredName !== getInitialState()) {
+      confirmAlert({
+        title: '',
+        message: t('personalInformation.preferredName.cancelMessage'),
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+        buttons: [
+          {
+            text: t('personalInformation.preferredName.keepEditing'),
+            onPress: () => {},
           },
-        },
-      ],
-    })
-    return
+          {
+            text: t('personalInformation.preferredName.deleteChanges'),
+            onPress: () => {
+              navigation.goBack()
+            },
+          },
+        ],
+      })
+      return
+    } else {
+      navigation.goBack()
+    }
   }
 
   const onSave = (): void => {
