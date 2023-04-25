@@ -24,7 +24,7 @@ const NoInboxMessages: FC = () => {
         </TextView>
       </Box>
       <Box accessible={true}>
-        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.inbox.noMessages.body.a11y'))}>
+        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween}>
           {t('secureMessaging.inbox.noMessages.body')}
         </TextView>
       </Box>
