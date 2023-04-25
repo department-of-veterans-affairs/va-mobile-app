@@ -80,7 +80,7 @@ context('GenderIdentityScreen', () => {
 
     testInstance.findAllByType(VAButton)[0].props.onPress()
     const textViews = testInstance.findAllByType(TextView)
-    expect(textViews[4].props.children).toEqual('Select an option')
+    expect(textViews[5].props.children).toEqual('Select an option')
   })
 
   it('renders the ErrorComponent when an error occurs', async () => {
