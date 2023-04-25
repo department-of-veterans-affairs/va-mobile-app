@@ -515,11 +515,11 @@ export const updatePreferredName =
       dispatch(dispatchFinishSaveUpdatePreferredName())
       showSnackBar(messages.successMsg, dispatch, undefined, true, false)
     } catch (err) {
-      console.debug('error updating name')
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `updatePreferredName: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishSaveUpdatePreferredName(err))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
       await logAnalyticsEvent(Events.vama_pref_name_fail)
     }
@@ -562,7 +562,7 @@ export const updateGenderIdentity =
         logNonFatalErrorToFirebase(error, `updateGenderIdentity: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishUpdateGenderIdentity(error))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
       await logAnalyticsEvent(Events.vama_gender_id_fail)
     }
