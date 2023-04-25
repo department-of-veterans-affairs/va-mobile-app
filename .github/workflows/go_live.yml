@@ -3,7 +3,7 @@
 name: Go live in app stores
 
 on:
-  # Tuesdays 14:00 UTC, 10AM ET, 1PM PT
+  # Tuesdays 14:00 UTC, 10AM ET, 7AM PT
   schedule:
     - cron: '0 14 * * 2'
 
@@ -14,6 +14,7 @@ jobs:
     secrets: inherit
     with:
       lane: release
+      ref: main
 
   android:
     name: Android Go Live
@@ -21,3 +22,4 @@ jobs:
     secrets: inherit
     with:
       lane: release
+      ref: main
