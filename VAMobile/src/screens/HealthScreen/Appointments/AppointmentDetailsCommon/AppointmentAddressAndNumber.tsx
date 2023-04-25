@@ -2,12 +2,15 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import { AppointmentAttributes, AppointmentLocation, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
-import { Box, ClickForActionLink, ClickToCallPhoneNumber, TextView } from 'components'
+import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAllFieldsThatExist } from 'utils/common'
 import { getDirectionsUrl } from 'utils/location'
 import { isAPendingAppointment } from 'utils/appointments'
+import getEnv from 'utils/env'
+
+const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean => {
   return (
@@ -96,7 +99,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     const hasPartialAddress = Boolean(address?.street || (address?.city && address?.state && address?.zipCode))
     const hasLatLong = Boolean(location.lat && location.long)
     const hasMappableAddress = hasFullAddress || hasLatLong
-    const hasName = Boolean(location.name)
+    const hasName = Boolean(location.name || healthcareProvider)
     const hasPhone = Boolean(!appointmentIsAtlas && phone?.number)
 
     if (isPendingAppointment && hasNoProvider) {
@@ -104,12 +107,23 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     }
 
     let missingAddressMessage = ''
+    let showFacilityLocatorLink = false
     if (hasPhone && hasName && !hasPartialAddress) {
       missingAddressMessage = t('common:upcomingAppointmentDetails.phoneAndNameButNoAddress')
     } else if (hasPhone && !hasName && !hasPartialAddress) {
       missingAddressMessage = t('common:upcomingAppointmentDetails.phoneButNoNameOrAddress')
     } else if (!hasPhone && !hasPartialAddress) {
       missingAddressMessage = t('common:upcomingAppointmentDetails.noPhoneOrAddress')
+      showFacilityLocatorLink = true
+    }
+
+    const findYourVALocationProps: LinkButtonProps = {
+      displayedText: t('common:upcomingAppointmentDetails.findYourVAFacility'),
+      linkType: LinkTypeOptionsConstants.url,
+      linkUrlIconType: LinkUrlIconType.Arrow,
+      numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
+      a11yLabel: t('common:upcomingAppointmentDetails.findYourVAFacility.a11yLabel'),
+      accessibilityHint: t('common:upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
     }
 
     return (
@@ -128,6 +142,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
               {...a11yHintProp(t('common:directions.a11yHint'))}
             />
           )}
+          {showFacilityLocatorLink && <ClickForActionLink {...findYourVALocationProps} />}
         </Box>
         {hasPhone && <ClickToCallPhoneNumber phone={phone} />}
       </>
