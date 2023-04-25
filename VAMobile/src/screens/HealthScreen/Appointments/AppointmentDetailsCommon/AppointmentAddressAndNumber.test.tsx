@@ -100,7 +100,7 @@ context('AppointmentAddressAndNumber', () => {
   })
 
   describe('when the address does not exist', () => {
-    it('should not display the address TextViews', async () => {
+    it('should display the correct message', async () => {
       await initializeTestInstance({
         appointmentType: AppointmentTypeConstants.VA,
         location: {
@@ -113,7 +113,9 @@ context('AppointmentAddressAndNumber', () => {
           },
         },
       })
-      expect(testInstance.findAllByType(TextView).length).toEqual(5)
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
+        "We can't display this provider's address right now. Try again later, or call the provider to get the address.",
+      )
     })
   })
 
