@@ -520,7 +520,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       <Box>
         <Box accessible={true} accessibilityRole={'header'}>
           <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
-            {t('secureMessaging.reply.messageThread')}
+            {t('secureMessaging.reply.messageConversation')}
           </TextView>
         </Box>
         {message && messagesById && thread && (
