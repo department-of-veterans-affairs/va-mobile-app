@@ -408,12 +408,16 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       title={tc('compose')}
       leftButtonText={tc('cancel')}
       onLeftButtonPress={navigation.goBack}
-      rightButtonText={tc('save')}
-      rightVAIconProps={{ name: 'Save' }}
-      onRightButtonPress={() => {
-        setOnSaveDraftClicked(true)
-        setOnSendClicked(true)
-      }}
+      rightButtonText={noProviderError ? undefined : tc('save')}
+      rightVAIconProps={noProviderError ? undefined : { name: 'Save' }}
+      onRightButtonPress={
+        noProviderError
+          ? undefined
+          : () => {
+              setOnSaveDraftClicked(true)
+              setOnSendClicked(true)
+            }
+      }
       showCrisisLineCta={true}>
       <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
     </FullScreenSubtask>
