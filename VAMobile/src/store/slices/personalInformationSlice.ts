@@ -510,6 +510,7 @@ export const updatePreferredName =
       await api.put<api.EditResponseData>('/v0/user/preferred_name', preferredNameUpdateData as unknown as api.Params)
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_preferred_name())
+      await logAnalyticsEvent(Events.vama_pref_name_success)
 
       dispatch(dispatchFinishSaveUpdatePreferredName())
       showSnackBar(messages.successMsg, dispatch, undefined, true, false)
@@ -520,6 +521,7 @@ export const updatePreferredName =
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
+      await logAnalyticsEvent(Events.vama_pref_name_fail)
     }
   }
 
@@ -548,6 +550,7 @@ export const updateGenderIdentity =
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_prof_update_gender(totalTime, actionTime))
+      await logAnalyticsEvent(Events.vama_gender_id_success)
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
@@ -561,6 +564,7 @@ export const updateGenderIdentity =
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
+      await logAnalyticsEvent(Events.vama_gender_id_fail)
     }
   }
 
