@@ -257,7 +257,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           {receiverName}
         </TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessible={true}>
-          {t('secureMessaging.formMessage.subject')}
+          {t('secureMessaging.composeMessage.subject')}
         </TextView>
         <TextView variant="MobileBodyBold" accessible={true}>
           {subjectHeader}
