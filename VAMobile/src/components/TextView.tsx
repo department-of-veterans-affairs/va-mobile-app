@@ -54,7 +54,6 @@ export type TextViewProps = AccessibilityProps &
 
     /** Optional TestID */
     testID?: string
-
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
