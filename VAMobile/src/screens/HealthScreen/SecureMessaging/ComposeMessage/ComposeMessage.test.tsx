@@ -313,7 +313,7 @@ context('ComposeMessage', () => {
       it('should display a field error for that field', async () => {
         await waitFor(() => {
           expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
         })
       })
@@ -350,7 +350,7 @@ context('ComposeMessage', () => {
       it('should display a field error for that field', async () => {
         await waitFor(() => {
           expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
         })
       })
@@ -371,7 +371,7 @@ context('ComposeMessage', () => {
       })
 
       expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
 
       await waitFor(() => {
@@ -383,7 +383,7 @@ context('ComposeMessage', () => {
       })
 
       expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeFalsy()
-      expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeFalsy()
+      expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Attachments')).toBeTruthy()
     })
