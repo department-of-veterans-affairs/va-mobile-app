@@ -476,7 +476,6 @@
   "secureMessaging.inbox.a11yHint": "You have {{inboxUnreadCount}} unread messages. Review messages in your inbox",
   "secureMessaging.inbox.noMessages.title": "You don't have any messages in your inbox",
   "secureMessaging.inbox.noMessages.body": "Waiting for a reply from your care team? It may take up to 3 business days to get a reply.",
-  "secureMessaging.folder": "{{folderName}} folder",
   "secureMessaging.folders": "Folders",
   "secureMessaging.folders.a11yHint": "review your folders",
   "secureMessaging.folders.count.a11yHint": "You have {{ count }} messages in your {{ folderName }} folder. Open your {{ folderName }} messages",
