@@ -56,7 +56,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   if (loading || downloading) {
     return (
       <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-        <LoadingComponent text={t('claimLetters.loading')} />
+        <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
       </FeatureLandingTemplate>
     )
   }
