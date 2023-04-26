@@ -5,7 +5,6 @@ import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, FooterButton, RadioGroup, TextView, TextViewProps, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { isAndroid } from 'utils/platform'
 import { useTheme } from 'utils/hooks'
 
 export type RadioPickerGroup = {
@@ -34,12 +33,18 @@ export type RadioGroupModalProps = {
   buttonText: string
   /** Accessibility hint for the button that launches the modal */
   buttonA11yHint?: string
+  /** Optional TestID for the button  */
+  buttonTestID?: string
   /** Text for the button in the upper right of the modal */
   topRightButtonText: string
   /** Accessibility hint for the button in the upper right */
   topRightButtonA11yHint?: string
+  /** Optional TestID for the right button  */
+  topRightButtonTestID?: string
   /** Function called when the modal is opened to support analytics */
   onShowAnalyticsFn?: () => void
+  /** Optional TestID for scrollView */
+  testID?: string
 }
 
 const RadioGroupModal: FC<RadioGroupModalProps> = ({
@@ -50,9 +55,12 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   onUpperRightAction,
   onCancel,
   buttonA11yHint,
+  buttonTestID,
   topRightButtonText,
   topRightButtonA11yHint,
+  topRightButtonTestID,
   onShowAnalyticsFn,
+  testID,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
@@ -150,14 +158,13 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
       <Modal
         animationType="slide"
         transparent={true}
-        statusBarTranslucent={true}
         visible={modalVisible}
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={() => {
           setModalVisible(!modalVisible)
         }}>
         <Box flex={1} flexDirection="column" accessibilityViewIsModal={true}>
-          <Box backgroundColor={isAndroid() ? 'modalOverlay' : undefined} pt={insets.top} />
+          <Box pt={insets.top} />
           <Box backgroundColor="list" pb={insets.bottom} flex={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancelPressed} {...cancelButtonProps}>
@@ -169,15 +176,19 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
                 </TextView>
               </Box>
               <Pressable onPress={onUpperRightActionPressed} {...resetButtonProps}>
-                <TextView {...commonButtonProps}>{topRightButtonText}</TextView>
+                <TextView testID={topRightButtonTestID} {...commonButtonProps}>
+                  {topRightButtonText}
+                </TextView>
               </Pressable>
             </Box>
-            <VAScrollView bounces={false}>{getGroups()}</VAScrollView>
+            <VAScrollView testID={testID} bounces={false}>
+              {getGroups()}
+            </VAScrollView>
             <FooterButton text={tc('apply')} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onApply} />
           </Box>
         </Box>
       </Modal>
-      <Pressable {...pressableProps}>
+      <Pressable testID={buttonTestID} {...pressableProps}>
         <Box {...buttonDisplayProps}>
           <TextView maxFontSizeMultiplier={1.5} variant={'HelperText'}>
             {buttonText}

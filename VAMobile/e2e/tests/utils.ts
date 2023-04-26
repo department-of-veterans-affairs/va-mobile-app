@@ -22,6 +22,8 @@ export const CommonE2eIdConstants = {
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'You’re leaving the app',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
+  HEALTH_TAB_BUTTON_TEXT: 'Health',
+  PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
 }
 
@@ -108,35 +110,41 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
  * @param newJsonValue - string or boolean: new value for the json object
  */
 export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue: string | boolean | dictionary) {
-			
+	
+	var isJsonPropertyArray = Array.isArray(jsonProperty)
 	fs.readFile('./src/store/api/demo/mocks/' + mockFileName, 'utf8', (error, data) => {
 		 if(error){
-			console.log(error);
+			console.log(error)
 			return;
 		 }
-
-		const jsonParsed = JSON.parse(data)
-		//const jsonFirstObject = source[jsonProperty[0]]
-		var key
-		var value
-		for(x=0; x<jsonProperty.length; x++) {
-			if (x == 0) {
-				mockDataVariable = jsonParsed[jsonProperty[x]]
-			} else if (x == jsonProperty.length - 1) {
-				mockDataVariable[jsonProperty[x]] = newJsonValue
-			} else {
-				if (jsonProperty[x].constructor == Object) {
-					key = Object.keys(jsonProperty[x])
-					value = jsonProperty[x][key]
-					mockDataVariable = mockDataVariable[key[0]]
-					mockDataVariable = mockDataVariable[value]
+		
+		var jsonParsed
+		if (isJsonPropertyArray == false) {
+			data = data.replace(jsonProperty, newJsonValue)
+			jsonParsed = JSON.parse(data)
+		} else {
+		
+			jsonParsed = JSON.parse(data)
+			var key
+			var value
+			for(x=0; x<jsonProperty.length; x++) {
+				if (x == 0) {
+					mockDataVariable = jsonParsed[jsonProperty[x]]
+				} else if (x == jsonProperty.length - 1) {
+					mockDataVariable[jsonProperty[x]] = newJsonValue
 				} else {
-					mockDataVariable = mockDataVariable[jsonProperty[x]]
+					if (jsonProperty[x].constructor == Object) {
+						key = Object.keys(jsonProperty[x])
+						value = jsonProperty[x][key]
+						mockDataVariable = mockDataVariable[key[0]]
+						mockDataVariable = mockDataVariable[value]
+					} else {
+						mockDataVariable = mockDataVariable[jsonProperty[x]]
+					}
 				}
 			}
-				
 		}
-		//log(JSON.stringify(jsonParsed, null, 2))
+					
 	
 		fs.writeFile('./src/store/api/demo/mocks/' + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
 			if (err) { return console.log(err) }
@@ -181,6 +189,10 @@ export async function openHealth() {
 	await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap() 
 }
 
+export async function openPrescriptions() {
+	await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
+}
+
 /**
  * Going back on android and iOS
 */
@@ -191,5 +203,4 @@ export async function backButton() {
 	await element(by.traits(['button'])).atIndex(0).tap();
   }
 }
-
 

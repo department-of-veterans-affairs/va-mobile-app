@@ -271,14 +271,17 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     {
       value: PrescriptionHistoryTabConstants.ALL,
       title: t('prescriptions.tabs.all', { count: tabCounts[PrescriptionHistoryTabConstants.ALL] }),
+      testID: 'prescriptionAllCountTestID',
     },
     {
       value: PrescriptionHistoryTabConstants.PENDING,
       title: t('prescriptions.tabs.pending', { count: tabCounts[PrescriptionHistoryTabConstants.PENDING] }),
+      testID: 'prescriptionPendingCountTestID',
     },
     {
       value: PrescriptionHistoryTabConstants.TRACKING,
       title: t('prescriptions.tabs.tracking', { count: tabCounts[PrescriptionHistoryTabConstants.TRACKING] }),
+      testID: 'prescriptionTrackingCountTestID',
     },
   ]
 
@@ -422,9 +425,12 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     ],
     buttonText: `${t('prescriptions.sort.by')}: ${getDisplayForValue(sortByOptions, sortByToUse)}`,
     buttonA11yHint: t('prescription.filter.sort.a11y'),
+    buttonTestID: 'openSortTestID',
     headerText: t('prescription.filter.sort'),
     topRightButtonText: tc('reset'),
     topRightButtonA11yHint: t('prescription.filter.sort.reset.a11y'),
+    topRightButtonTestID: 'resetSortTestID',
+    testID: 'sortListTestID',
     onConfirm: () => {
       setSortOnToUse(selectedSortOn)
       setSortByToUse(selectedSortBy)
@@ -466,9 +472,12 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     ],
     buttonText: filterButtonText,
     buttonA11yHint: t('prescription.filter.by.a11y'),
+    buttonTestID: 'openFilterTestID',
     headerText: t('prescription.filter.status'),
     topRightButtonText: tc('reset'),
     topRightButtonA11yHint: t('prescription.filter.by.reset.a11y'),
+    topRightButtonTestID: 'resetFilterTestID',
+    testID: 'filterListTestID',
     onConfirm: () => {
       setPage(1)
       setFilterToUse(selectedFilter)
@@ -493,6 +502,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     pt: 16,
     pb: 6,
     px: 20,
+    testID: 'filterSortWrapperBoxTestID',
   }
 
   const filterWrapperProps: BoxProps = {
@@ -624,7 +634,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   }
 
   return (
-    <FeatureLandingTemplate headerButton={headerButton} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+    <FeatureLandingTemplate headerButton={headerButton} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')} testID="PrescriptionHistory">
       {getRequestRefillButton()}
       <TabBar {...tabProps} />
       <Box {...filterWrapperProps}>
