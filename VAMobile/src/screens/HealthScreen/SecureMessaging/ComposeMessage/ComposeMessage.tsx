@@ -406,7 +406,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     ? undefined
     : {
         rightButtonText: tc('save'),
-        rightVAIconProps: 'Save',
+        rightVAIconProps: { name: 'Save' },
         onRightButtonPress: () => {
           setOnSaveDraftClicked(true)
           setOnSendClicked(true)
