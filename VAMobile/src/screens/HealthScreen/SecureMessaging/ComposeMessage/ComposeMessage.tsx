@@ -22,6 +22,7 @@ import {
   TextArea,
   TextView,
   VAButton,
+  VAIconProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import {
@@ -402,11 +403,13 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
+  const rightVAIconProps:VAIconProps = { name: 'Save' }
+
   const rightButtonProps = noProviderError
     ? undefined
     : {
         rightButtonText: tc('save'),
-        rightVAIconProps: { name: 'Save' },
+        rightVAIconProps: rightVAIconProps,
         onRightButtonPress: () => {
           setOnSaveDraftClicked(true)
           setOnSendClicked(true)
