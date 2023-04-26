@@ -101,6 +101,7 @@ context('claimsAndAppeals', () => {
       attributes: {
         subtype: 'supplementalClaim',
         completed: false,
+        decisionLetterSent: false,
         dateFiled: '2020-10-22',
         updatedAt: '2020-10-28',
         displayTitle: 'supplemental claim for disability compensation',
@@ -112,6 +113,7 @@ context('claimsAndAppeals', () => {
       attributes: {
         subtype: 'Disability',
         completed: false,
+        decisionLetterSent: false,
         dateFiled: '2020-11-13',
         updatedAt: '2020-11-30',
         displayTitle: 'Disability',
@@ -123,6 +125,7 @@ context('claimsAndAppeals', () => {
       attributes: {
         subtype: 'Compensation',
         completed: false,
+        decisionLetterSent: false,
         dateFiled: '2020-06-11',
         updatedAt: '2020-12-07',
         displayTitle: 'Compensation',
@@ -137,6 +140,7 @@ context('claimsAndAppeals', () => {
       attributes: {
         subtype: 'supplementalClaim',
         completed: true,
+        decisionLetterSent: true,
         dateFiled: '2020-10-22',
         updatedAt: '2020-10-28',
         displayTitle: 'supplemental claim for disability compensation',
@@ -148,6 +152,7 @@ context('claimsAndAppeals', () => {
       attributes: {
         subtype: 'Disability',
         completed: true,
+        decisionLetterSent: true,
         dateFiled: '2020-11-13',
         updatedAt: '2020-11-30',
         displayTitle: 'Disability',
@@ -159,6 +164,7 @@ context('claimsAndAppeals', () => {
       attributes: {
         subtype: 'Compensation',
         completed: true,
+        decisionLetterSent: true,
         dateFiled: '2020-06-11',
         updatedAt: '2020-12-07',
         displayTitle: 'Disability',
