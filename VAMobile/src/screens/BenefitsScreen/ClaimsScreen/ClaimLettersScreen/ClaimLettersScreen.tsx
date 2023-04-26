@@ -7,12 +7,14 @@ import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScre
 import { Box, DefaultList, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView } from 'components'
 import { DecisionLettersState, downloadDecisionLetter, getDecisionLetters } from 'store/slices/decisionLettersSlice'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { VATypographyThemeVariants } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoClaimLettersScreen from './NoClaimLettersScreen/NoClaimLettersScreen'
@@ -75,6 +77,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     const date = t('claimLetters.letterDate', { date: formatDateMMMMDDYYYY(receivedAt || '') })
     const textLines: Array<TextLine> = [{ text: date, variant }, { text: typeDescription }]
     const onPress = () => {
+      logAnalyticsEvent(Events.vama_ddl_letter_view())
       snackBar?.hideAll()
       dispatch(downloadDecisionLetter(letter.id, snackbarMessages))
     }
