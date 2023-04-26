@@ -57,7 +57,7 @@ export const productionDefaults: FeatureToggleValues = {
   preferredNameGender: false,
   haptics: true,
   whatsNewUI: true,
-  decisionLetters: false,
+  decisionLetters: true,
 }
 
 /**

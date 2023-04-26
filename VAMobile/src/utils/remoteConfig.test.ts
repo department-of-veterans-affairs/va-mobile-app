@@ -25,7 +25,7 @@ const mockOverrides = {
   preferredNameGender: false,
   haptics: false,
   whatsNewUI: false,
-  decisionLetters: false,
+  decisionLetters: true,
 }
 
 describe('activate', () => {
