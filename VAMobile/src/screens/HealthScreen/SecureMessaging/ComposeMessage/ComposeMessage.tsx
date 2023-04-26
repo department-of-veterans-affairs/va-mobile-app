@@ -402,15 +402,16 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  const rightButtonProps = noProviderError ? undefined : 
-  {
-    rightButtonText: tc('save'),
-    rightVAIconProps: 'Save',
-    onRightButtonPress: () => {
-      setOnSaveDraftClicked(true)
-      setOnSendClicked(true)
-    },
-  }
+  const rightButtonProps = noProviderError
+    ? undefined
+    : {
+        rightButtonText: tc('save'),
+        rightVAIconProps: 'Save',
+        onRightButtonPress: () => {
+          setOnSaveDraftClicked(true)
+          setOnSendClicked(true)
+        },
+      }
 
   return (
     <FullScreenSubtask
