@@ -403,7 +403,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  const rightVAIconProps:VAIconProps = { name: 'Save' }
+  const rightVAIconProps: VAIconProps = { name: 'Save' }
 
   const rightButtonProps = noProviderError
     ? undefined
