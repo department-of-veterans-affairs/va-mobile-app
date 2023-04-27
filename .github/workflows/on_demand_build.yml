@@ -2,12 +2,17 @@
 # feature-build-* prefix.  Will use the subsequent words in the tag as
 # release notes in TestFlight and Firebase App Distribution
 
-name: Feature Build
+name: On Demand Build
 
 on:
-  push:
-    tags:
-      - 'feature-build-*'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch
+        required: true
+      notes:
+        description: Notes
+        required: true
 
 jobs:
   queue_build:
@@ -22,20 +27,22 @@ jobs:
     with:
       message: 'On-demand feature build process starting. Please see :thread: for results. This process may take a while.'
   ios:
-    name: iOS Feature Build
+    name: iOS On Demand Build
     needs: start_slack_thread
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
     with:
       lane: on_demand
-      notes: ${{ github.ref_name }}
-      slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
+      ref: ${{ inputs.branch }}
+      notes: ${{ inputs.notes }}
+      slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
   android:
-    name: Android Feature Build
+    name: Android On Demand Build
     needs: start_slack_thread
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
     with:
       lane: on_demand
-      notes: ${{ github.ref_name }}
-      slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
+      ref: ${{ inputs.branch }}
+      notes: ${{ inputs.notes }}
+      slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
