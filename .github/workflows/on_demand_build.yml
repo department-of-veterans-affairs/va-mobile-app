@@ -21,7 +21,7 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      message: 'On-demand feature build process starting. Please see :thread: for results. This process may take a while.'
+      message: 'On demand build started by ${{ github.actor }}: "${{ inputs.notes }}" (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: for results.'
   ios:
     name: iOS On Demand Build
     needs: start_slack_thread
