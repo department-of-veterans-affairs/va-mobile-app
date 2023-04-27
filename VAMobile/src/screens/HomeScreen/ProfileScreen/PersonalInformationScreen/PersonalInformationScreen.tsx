@@ -143,7 +143,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
         <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })} accessibilityRole="link" accessible={true}>
           <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
         </Pressable>
-        {featureEnabled('preferredNameGender') && (
+        {featureEnabled('preferredNameGenderWaygate') && (
           <>
             <LargeNavButton
               title={t('personalInformation.preferredName.title')}
