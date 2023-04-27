@@ -78,7 +78,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
       let letterAvailable = t('claimDetails.decisionLetterMailed')
       let showButton = false
 
-      if (featureEnabled('decisionLetters') && claim.attributes.decisionLetterSent) {
+      if (featureEnabled('decisionLettersWaygate') && claim.attributes.decisionLetterSent) {
         letterAvailable = t('claimDetails.youCanDownload')
         showButton = true
         if (!sentEvent.current) {
