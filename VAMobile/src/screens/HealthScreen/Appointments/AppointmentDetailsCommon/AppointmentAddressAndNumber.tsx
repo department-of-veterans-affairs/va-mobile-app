@@ -56,9 +56,6 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
   }
 
   const cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
-
-  const testIdFields = !appointmentIsAtlas ? [location.name, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
-  const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
   const hasNoProvider = !healthcareProvider && !location.name
   const isPendingAppointment = isAPendingAppointment(attributes)
 
@@ -107,6 +104,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     }
 
     let missingAddressMessage = ''
+    let missingAddressA11yLabel = ''
     let showFacilityLocatorLink = false
     if (hasPhone && hasName && !hasPartialAddress) {
       missingAddressMessage = t('common:upcomingAppointmentDetails.phoneAndNameButNoAddress')
@@ -114,12 +112,18 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
       missingAddressMessage = t('common:upcomingAppointmentDetails.phoneButNoNameOrAddress')
     } else if (!hasPhone && !hasPartialAddress) {
       missingAddressMessage = t('common:upcomingAppointmentDetails.noPhoneOrAddress')
+      missingAddressA11yLabel = t('common:upcomingAppointmentDetails.noPhoneOrAddress.a11yLabel')
       showFacilityLocatorLink = true
     }
 
+    // testId is read by screen reader
+    const testIdFields = !appointmentIsAtlas ? [location.name, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
+    testIdFields.push(',', missingAddressA11yLabel || missingAddressMessage)
+    const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
+
     const findYourVALocationProps: LinkButtonProps = {
       displayedText: t('common:upcomingAppointmentDetails.findYourVAFacility'),
-      linkType: LinkTypeOptionsConstants.url,
+      linkType: LinkTypeOptionsConstants.externalLink,
       linkUrlIconType: LinkUrlIconType.Arrow,
       numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
       a11yLabel: t('common:upcomingAppointmentDetails.findYourVAFacility.a11yLabel'),
@@ -130,7 +134,13 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
       <>
         <Box {...testIdProps(testId)} accessible={true}>
           {getLocationName()}
-          {missingAddressMessage ? <TextView variant="MobileBody">{missingAddressMessage}</TextView> : getAddress()}
+          {missingAddressMessage ? (
+            <TextView variant="MobileBody" accessibilityLabel={missingAddressA11yLabel || undefined}>
+              {missingAddressMessage}
+            </TextView>
+          ) : (
+            getAddress()
+          )}
         </Box>
         <Box>
           {hasMappableAddress && (
