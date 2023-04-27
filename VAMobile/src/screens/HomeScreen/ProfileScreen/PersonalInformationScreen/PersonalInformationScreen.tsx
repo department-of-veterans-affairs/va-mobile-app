@@ -143,28 +143,24 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
         <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })} accessibilityRole="link" accessible={true}>
           <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
         </Pressable>
-        {featureEnabled('preferredNameGender') && (
-          <>
-            <LargeNavButton
-              title={t('personalInformation.preferredName.title')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-              borderColor={'secondary'}
-              borderColorActive={'primaryDarkest'}
-              borderStyle={'solid'}
-              subText={getPreferredName(profile, t)}
-              onPress={navigateTo('PreferredName')}
-            />
-            <LargeNavButton
-              title={t('personalInformation.genderIdentity.title')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-              borderColor={'secondary'}
-              borderColorActive={'primaryDarkest'}
-              borderStyle={'solid'}
-              subText={getGenderIdentity(profile, t, genderIdentityOptions)}
-              onPress={navigateTo('GenderIdentity')}
-            />
-          </>
-        )}
+        <LargeNavButton
+          title={t('personalInformation.preferredName.title')}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
+          subText={getPreferredName(profile, t)}
+          onPress={navigateTo('PreferredName')}
+        />
+        <LargeNavButton
+          title={t('personalInformation.genderIdentity.title')}
+          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderColor={'secondary'}
+          borderColorActive={'primaryDarkest'}
+          borderStyle={'solid'}
+          subText={getGenderIdentity(profile, t, genderIdentityOptions)}
+          onPress={navigateTo('GenderIdentity')}
+        />
       </Box>
     </FeatureLandingTemplate>
   )
