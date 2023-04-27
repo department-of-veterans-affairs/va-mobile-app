@@ -64,6 +64,20 @@ const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
   return theme.typography[props.variant as keyof VATypographyThemeVariants] || theme.typography.MobileBody
 }
 
+/** function to get fontsize from variant string:
+ *  1.It matches to the part font-size:..px in the string and extracts that part out for the next step
+ *  2.It then replaces all non number instances with an empty string
+ *  3.The + operator coerces it to a number type so that we can use it to multiply and get the spacing needed
+ */
+const getFontSize = (variant: string) => {
+  return +(
+    variant
+      .match(/font-size:..px/)
+      ?.toString()
+      .replace(/[^0-9]/g, '') || 0
+  )
+}
+
 const getTextDecorationColor = (theme: VATheme, props: TextViewProps): string => {
   return theme.colors.text[props.textDecorationColor as keyof VATextColors] || theme.colors.buttonText[props.textDecorationColor as keyof VAButtonTextColors] || ''
 }
@@ -89,12 +103,7 @@ const TextView: FC<TextViewProps> = ({ selectable = false, paragraphSpacing = fa
 
   if (paragraphSpacing) {
     const variant = getFontFamily(theme, wrapperProps)
-    const fontSize = +(
-      variant
-        .match(/font-size:..px/)
-        ?.toString()
-        .replace(/[^0-9]/g, '') || 0
-    )
+    const fontSize = getFontSize(variant)
     wrapperProps.mb = fontSize * 2
   }
 
