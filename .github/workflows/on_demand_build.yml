@@ -22,7 +22,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: 'On demand build triggered by :github: ${{ github.actor }}: \${{ inputs.notes }}\"' # (:git: ${{ github.ref_name }}). This process may take a while. See :thread: for results.'
+      message: 'On demand build triggered by :github: ${{ github.actor }}: ${{ inputs.notes }} # (:git: ${{ github.ref_name }}). This process may take a while. See :thread: for results.'
   # ios:
   #   name: iOS On Demand Build
   #   needs: start_slack_thread
