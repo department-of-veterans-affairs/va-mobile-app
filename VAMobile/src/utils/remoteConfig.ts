@@ -54,7 +54,7 @@ export const productionDefaults: FeatureToggleValues = {
   SIS: true,
   testFeature: false,
   inAppUpdates: false,
-  preferredNameGender: false,
+  preferredNameGender: true,
   haptics: true,
   whatsNewUI: true,
   decisionLetters: false,
