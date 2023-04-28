@@ -23,23 +23,23 @@ jobs:
     with:
       channel_name: va-mobile-build-alerts
       message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: for results.'
-  # ios:
-  #   name: iOS On Demand Build
-  #   needs: start_slack_thread
-  #   uses: ./.github/workflows/build_ios.yml
-  #   secrets: inherit
-  #   with:
-  #     lane: on_demand
-  #     ref: ${{ github.ref_name }}
-  #     notes: ${{ inputs.notes }}
-  #     slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
-  # android:
-  #   name: Android On Demand Build
-  #   needs: start_slack_thread
-  #   uses: ./.github/workflows/build_android.yml
-  #   secrets: inherit
-  #   with:
-  #     lane: on_demand
-  #     ref: ${{ github.ref_name }}
-  #     notes: ${{ inputs.notes }}
-  #     slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
+  ios:
+    name: iOS On Demand Build
+    needs: start_slack_thread
+    uses: ./.github/workflows/build_ios.yml
+    secrets: inherit
+    with:
+      lane: on_demand
+      ref: ${{ github.ref_name }}
+      notes: ${{ inputs.notes }}
+      slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
+  android:
+    name: Android On Demand Build
+    needs: start_slack_thread
+    uses: ./.github/workflows/build_android.yml
+    secrets: inherit
+    with:
+      lane: on_demand
+      ref: ${{ github.ref_name }}
+      notes: ${{ inputs.notes }}
+      slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
