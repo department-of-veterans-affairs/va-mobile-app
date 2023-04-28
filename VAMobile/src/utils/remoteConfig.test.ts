@@ -22,7 +22,7 @@ const mockOverrides = {
   SIS: true,
   testFeature: false,
   inAppUpdates: false,
-  preferredNameGenderWaygate: false,
+  preferredNameGender: false,
   haptics: false,
   whatsNewUI: false,
   decisionLettersWaygate: false,
