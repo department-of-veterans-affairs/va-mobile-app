@@ -6,6 +6,14 @@ name: On Demand Build
 on:
   workflow_dispatch:
     inputs:
+      environment:
+        description: Environment
+        required: true
+        default: staging
+        type: choice
+        options:
+          - staging
+          - production
       notes:
         description: Notes
         required: true
