@@ -19,7 +19,7 @@ export type FeatureToggleType =
   | 'SIS'
   | 'testFeature'
   | 'inAppUpdates'
-  | 'preferredNameGenderWaygate'
+  | 'preferredNameGender'
   | 'haptics'
   | 'whatsNewUI'
   | 'decisionLettersWaygate'
@@ -30,7 +30,7 @@ type FeatureToggleValues = {
   SIS: boolean
   testFeature: boolean
   inAppUpdates: boolean
-  preferredNameGenderWaygate: boolean
+  preferredNameGender: boolean
   haptics: boolean
   whatsNewUI: boolean
   decisionLettersWaygate: boolean
@@ -42,7 +42,7 @@ export let devConfig: FeatureToggleValues = {
   SIS: true,
   testFeature: true,
   inAppUpdates: true,
-  preferredNameGenderWaygate: true,
+  preferredNameGender: true,
   haptics: true,
   whatsNewUI: true,
   decisionLettersWaygate: true,
@@ -54,7 +54,7 @@ export const productionDefaults: FeatureToggleValues = {
   SIS: true,
   testFeature: false,
   inAppUpdates: false,
-  preferredNameGenderWaygate: true,
+  preferredNameGender: false,
   haptics: true,
   whatsNewUI: true,
   decisionLettersWaygate: true,
