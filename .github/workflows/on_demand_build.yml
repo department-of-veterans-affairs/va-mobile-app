@@ -1,0 +1,55 @@
+# On demand builds that can be run via GitHub UI at
+# https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/on_demand_build.yml
+
+name: On Demand Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment
+        required: true
+        default: staging
+        type: choice
+        options:
+          - staging
+          - production
+      notes:
+        description: Notes
+        required: true
+
+jobs:
+  queue_build:
+    name: Queue Build
+    uses: ./.github/workflows/queue_builds.yml
+    secrets: inherit
+  start_slack_thread:
+    name: Start Slack thread
+    needs: queue_build
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-app
+      message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: for results.'
+  ios:
+    name: iOS On Demand Build
+    needs: start_slack_thread
+    uses: ./.github/workflows/build_ios.yml
+    secrets: inherit
+    with:
+      lane: on_demand
+      ref: ${{ github.ref_name }}
+      environment: ${{ inputs.environment }}
+      notes: ${{ inputs.notes }}
+      slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
+  android:
+    name: Android On Demand Build
+    needs: start_slack_thread
+    uses: ./.github/workflows/build_android.yml
+    secrets: inherit
+    with:
+      lane: on_demand
+      ref: ${{ github.ref_name }}
+      environment: ${{ inputs.environment }}
+      notes: ${{ inputs.notes }}
+      slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
