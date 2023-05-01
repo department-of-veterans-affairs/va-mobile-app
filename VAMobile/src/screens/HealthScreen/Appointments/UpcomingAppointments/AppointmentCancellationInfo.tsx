@@ -9,7 +9,6 @@ import {
   ClickToCallPhoneNumber,
   LinkButtonProps,
   LinkTypeOptionsConstants,
-  LinkUrlIconType,
   TextArea,
   TextView,
   VAButton,
