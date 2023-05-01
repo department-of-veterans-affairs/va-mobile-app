@@ -4,8 +4,7 @@ import React, { FC, ReactElement } from 'react'
 import { AppointmentAttributes, AppointmentLocation, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
 import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { getAllFieldsThatExist } from 'utils/common'
+import { a11yHintProp } from 'utils/accessibility'
 import { getDirectionsUrl } from 'utils/location'
 import { isAPendingAppointment } from 'utils/appointments'
 import getEnv from 'utils/env'
@@ -55,7 +54,6 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     )
   }
 
-  const cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
   const hasNoProvider = !healthcareProvider && !location.name
   const isPendingAppointment = isAPendingAppointment(attributes)
 
@@ -84,7 +82,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
         )}
         {!!address?.city && address?.state && address?.zipCode && (
           <TextView variant="MobileBody" selectable={true}>
-            {cityStateZip}
+            {address ? `${address.city}, ${address.state} ${address.zipCode}` : ''}
           </TextView>
         )}
       </>
@@ -116,11 +114,6 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
       showFacilityLocatorLink = true
     }
 
-    // testId is read by screen reader
-    const testIdFields = !appointmentIsAtlas ? [location.name, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
-    testIdFields.push(',', missingAddressA11yLabel || missingAddressMessage)
-    const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
-
     const findYourVALocationProps: LinkButtonProps = {
       displayedText: t('common:upcomingAppointmentDetails.findYourVAFacility'),
       linkType: LinkTypeOptionsConstants.externalLink,
@@ -131,7 +124,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
 
     return (
       <>
-        <Box {...testIdProps(testId)} accessible={true}>
+        <Box accessible={true}>
           {getLocationName()}
           {missingAddressMessage ? (
             <TextView variant="MobileBody" accessibilityLabel={missingAddressA11yLabel || undefined}>
