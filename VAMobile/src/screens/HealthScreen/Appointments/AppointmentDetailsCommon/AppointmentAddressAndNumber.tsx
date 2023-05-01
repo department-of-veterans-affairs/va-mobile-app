@@ -82,7 +82,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
         )}
         {!!address?.city && address?.state && address?.zipCode && (
           <TextView variant="MobileBody" selectable={true}>
-            {address ? `${address.city}, ${address.state} ${address.zipCode}` : ''}
+            {`${address.city}, ${address.state} ${address.zipCode}`}
           </TextView>
         )}
       </>
