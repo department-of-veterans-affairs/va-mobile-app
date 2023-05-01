@@ -45,7 +45,6 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   const findYourVALocationProps: LinkButtonProps = {
     displayedText: t('upcomingAppointmentDetails.findYourVALocation'),
     linkType: LinkTypeOptionsConstants.externalLink,
-    linkUrlIconType: LinkUrlIconType.Arrow,
     numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
     a11yLabel: t('upcomingAppointmentDetails.findYourVALocation.a11yLabel'),
     accessibilityHint: t('upcomingAppointmentDetails.findYourVALocation.a11yHint'),
