@@ -98,7 +98,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   if (messages.length === 0) {
     return (
       <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
-        <NoFolderMessages folderName={folderName} />
+        <NoFolderMessages />
       </ChildTemplate>
     )
   }
