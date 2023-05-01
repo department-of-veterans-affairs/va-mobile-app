@@ -1,5 +1,5 @@
 ---
-title: How to update the app stores
+title: Updating the App stores
 sidebar_position: 3
 ---
 
@@ -15,6 +15,7 @@ sidebar_position: 3
         * Taking a screenshot using the camera icon in Android Emulator will result in rounded corners. To bypass this:
             * Go to View > Tool Windows > Logcat
             * In the panel that pops up, click the camera icon in the left toolbar to take a screenshot without rounded corners
+
             ![Screenshot of Android emulator](/img/app-store/android-emulator.png)
 3. Engineering shares screenshots with designer through [Google Drive](https://drive.google.com/drive/folders/1RdW9zwKs6savg8Eg96M556unwV_9fz8y)
 
@@ -99,6 +100,7 @@ sidebar_position: 3
 
 4. Design exports images to [Google Drive](https://drive.google.com/drive/folders/1t_WOjaZkJKNR9oXEMczjtIePAFef2ym6)
     * For all images, make sure “ignore overlapping layers” and “include bounding box” are checked before exporting.
+    
     ![Screenshot of Figma export options](/img/app-store/figma-export.png)
     * For Android, images should be exported at 4x and can be up to 8 MB per screen. Feature graphic should be exported at 1x and can be up to 1 MB.
 	* Frames in Figma are currently named according to the app store requirements
