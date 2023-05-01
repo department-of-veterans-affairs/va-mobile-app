@@ -995,7 +995,7 @@
   "upcomingAppointmentDetails.noPhoneOrAddress.a11yLabel": "We can't display this provider's contact information right now. Try again later, or contact your V-A facility and ask for the community care office.",
   "upcomingAppointmentDetails.findYourVAFacility": "Find your VA facility",
   "upcomingAppointmentDetails.findYourVAFacility.a11yLabel": "Find your V-A facility",
-  "upcomingAppointmentDetails.findYourVAFacility.a11yHint": "Takes you to the V-A facility locator page. This page will open in your device's browser",
+  "upcomingAppointmentDetails.findYourVAFacility.a11yHint": "This page will open in your device's browser",
   "whatsNew.title": "What's new",
   "whatsNew.dismissMessage": "Dismiss this message",
   "whatsNew.bodyCopy.1.41": "Copy specific to release-1",
