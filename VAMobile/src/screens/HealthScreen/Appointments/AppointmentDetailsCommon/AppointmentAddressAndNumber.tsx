@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import { AppointmentAttributes, AppointmentLocation, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
-import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
+import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAllFieldsThatExist } from 'utils/common'
@@ -124,7 +124,6 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     const findYourVALocationProps: LinkButtonProps = {
       displayedText: t('common:upcomingAppointmentDetails.findYourVAFacility'),
       linkType: LinkTypeOptionsConstants.externalLink,
-      linkUrlIconType: LinkUrlIconType.Arrow,
       numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
       a11yLabel: t('common:upcomingAppointmentDetails.findYourVAFacility.a11yLabel'),
       accessibilityHint: t('common:upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
