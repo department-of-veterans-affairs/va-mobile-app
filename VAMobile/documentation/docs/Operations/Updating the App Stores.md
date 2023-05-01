@@ -1,5 +1,5 @@
 ---
-title: Updating the App stores
+title: Updating the App Stores
 sidebar_position: 3
 ---
 
