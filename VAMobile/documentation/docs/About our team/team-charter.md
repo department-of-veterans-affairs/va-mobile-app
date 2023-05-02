@@ -50,7 +50,7 @@ Health-related products in the app.
 ### Blue team
 Benefits-related products, global app features like navigation and single sign on (SIS), and incremental improvements and maintenance (aka TLC).
 
-See [Who we are](/docs/About/who-we-are) for the team roster.
+See [Who we are](/docs/About%20our%20team/who-we-are) for the team roster.
 
 ## How we work
 
@@ -67,7 +67,7 @@ This is our main means of communication with each other. Keep as much conversati
 - Codebase and issues are on separate [VA mobile repository](https://github.com/department-of-veterans-affairs/va-mobile-app).
 - Update tickets regularly. If conversations happen in Slack that are pertinent to a product or initiative, copy the useful info into GitHub/ZenHub.
 
-See [Team Norms](/docs/About/team-norms) for more details on team communications.
+See [Team Norms](/docs/About%20our%20team/team-norms) for more details on team communications.
 
 ### Team meeting cadence
 
