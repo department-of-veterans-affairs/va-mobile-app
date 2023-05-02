@@ -46,7 +46,7 @@ context('NoFolderMessages', () => {
   const initializeTestInstance = () => {
     when(mockNavigationSpy).mockReturnValue(() => {}).calledWith('SecureMessaging').mockReturnValue(mockNavigateToSpy)
     mockNavigationSpy.mockReturnValueOnce(() => {}).mockReturnValueOnce(mockNavigateToSpy)
-    component = render(<NoFolderMessages folderName={'test'} />)
+    component = render(<NoFolderMessages />)
 
     testInstance = component.container
   }
@@ -61,7 +61,7 @@ context('NoFolderMessages', () => {
 
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[1].props.children).toBe("You don't have any messages in your test folder")
+    expect(texts[1].props.children).toBe("You don't have any messages in this folder")
   })
 
   describe('on click of the go to inbox button', () => {
@@ -80,7 +80,7 @@ context('NoDrafts', () => {
 
   const initializeTestInstance = () => {
     when(mockNavigationSpy).mockReturnValue(() => {}).calledWith('SecureMessaging').mockReturnValue(mockNavigateToSpy)
-    component = render(<NoFolderMessages folderName={'Drafts'} />)
+    component = render(<NoFolderMessages />)
     testInstance = component.container
   }
 
@@ -94,7 +94,7 @@ context('NoDrafts', () => {
 
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[1].props.children).toBe("You don't have any drafts in your Drafts folder")
+    expect(texts[1].props.children).toBe("You don't have any messages in this folder")
   })
 
   describe('on click of the go to inbox button', () => {

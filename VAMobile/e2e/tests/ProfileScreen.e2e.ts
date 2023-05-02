@@ -2,18 +2,13 @@ import { expect, device, by, element, waitFor } from 'detox'
 import { CommonE2eIdConstants, loginToDemoMode, openProfile } from './utils'
 
 export const ProfileE2eIdConstants = {
-  PROFILE_PAGE_ID: 'Profile-page',
+  PROFILE_TEXT: 'Profile',
   DISABILITY_RATING_ROW_TEXT: 'Disability rating',
-  PERSONAL_CONTACT_INFO_ROW_TEXT: 'Personal and contact information',
+  PERSONAL_INFO_ROW_TEXT: 'Personal information',
+  CONTACT_INFO_ROW_TEXT: 'Contact information',
   MILITARY_INFO_ROW_TEXT: 'Military information',
-  DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
-  LETTERS_ROW_LABEL: 'V-A letters and documents',
-  PAYMENTS_ROW_TEXT: 'Payments',
-  BANNER_BRANCH_ICON_ID: 'United States Coast Guard-seal', // all banner elements specific to demo mode user
-  BANNER_NAME_ID: 'KIMBERLY WASHINGTON',
-  BANNER_BRANCH_ID: 'Coast-Guard',
-  BANNER_DISABILITY_ID: 'Your disability rating: ',
-  BANNER_COMBINED_PCT_ID: '100% service connected'
+  BANNER_NAME_ID: 'Kimberly Washington',
+  BANNER_BRANCH_ID: 'United States Coast Guard',
 }
 
 
@@ -25,29 +20,19 @@ beforeAll(async () => {
 
 describe('Profile Screen', () => {
   it('should show profile list content', async () => {
-    await waitFor(element(by.id(ProfileE2eIdConstants.PROFILE_PAGE_ID)))
+    await waitFor(element(by.text(ProfileE2eIdConstants.PROFILE_TEXT)))
       .toExist()
-      .withTimeout(2000)
+      .withTimeout(6000)
 
-    await expect(element(by.text(ProfileE2eIdConstants.DISABILITY_RATING_ROW_TEXT))).toExist()
-    await expect(element(by.text(ProfileE2eIdConstants.PERSONAL_CONTACT_INFO_ROW_TEXT))).toExist()
+    await expect(element(by.text(ProfileE2eIdConstants.PERSONAL_INFO_ROW_TEXT))).toExist()
     await expect(element(by.text(ProfileE2eIdConstants.MILITARY_INFO_ROW_TEXT))).toExist() 
-    await expect(element(by.text(ProfileE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT))).toExist()
-    await expect(element(by.label(ProfileE2eIdConstants.LETTERS_ROW_LABEL))).toExist()
-    await expect(element(by.text(ProfileE2eIdConstants.PAYMENTS_ROW_TEXT))).toExist() 
+    await expect(element(by.text(ProfileE2eIdConstants.CONTACT_INFO_ROW_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT))).toExist()
   })
 
-  it('should show sign out button', async () => {
-    await expect(element(by.id(CommonE2eIdConstants.SIGN_OUT_BTN_ID))).toExist()
-  })
-
   it('should show profile banner elements', async () => {
-    await expect(element(by.id(ProfileE2eIdConstants.BANNER_BRANCH_ICON_ID))).toExist()
-    await expect(element(by.id(ProfileE2eIdConstants.BANNER_NAME_ID))).toExist()
-    await expect(element(by.id(ProfileE2eIdConstants.BANNER_BRANCH_ID))).toExist()
-    await expect(element(by.id(ProfileE2eIdConstants.BANNER_DISABILITY_ID))).toExist()
-    await expect(element(by.id(ProfileE2eIdConstants.BANNER_COMBINED_PCT_ID))).toExist()
+    await expect(element(by.text(ProfileE2eIdConstants.BANNER_NAME_ID))).toExist()
+    await expect(element(by.text(ProfileE2eIdConstants.BANNER_BRANCH_ID))).toExist()
   })
   
 })

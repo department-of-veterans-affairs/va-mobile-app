@@ -48,6 +48,9 @@ export type TextViewProps = AccessibilityProps &
 
     /** Max size for font when user adjusts their font scaling */
     maxFontSizeMultiplier?: number
+
+    /** Optional TestID */
+    testID?: string
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
@@ -76,7 +79,7 @@ const StyledText = styled(Text)`
  *
  * @returns TextView component
  */
-const TextView: FC<TextViewProps> = ({ selectable = false, ...props }) => {
+const TextView: FC<TextViewProps> = ({ selectable = false, testID, ...props }) => {
   const { isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const theme = useTheme()
   const wrapperProps = { ...props }
@@ -85,14 +88,14 @@ const TextView: FC<TextViewProps> = ({ selectable = false, ...props }) => {
     const { onPress, ...remainingProps } = wrapperProps
     return (
       <Pressable onPress={onPress} accessible={false}>
-        <StyledText {...remainingProps} />
+        <StyledText testID={testID} {...remainingProps} />
       </Pressable>
     )
   }
 
   const selectToCopyProps = isVoiceOverTalkBackRunning ? {} : { selectable, selectionColor: theme.colors.selectCopyText }
 
-  return <StyledText {...selectToCopyProps} {...wrapperProps} />
+  return <StyledText testID={testID} {...selectToCopyProps} {...wrapperProps} />
 }
 
 export default TextView

@@ -176,7 +176,7 @@ platform :android do
       tag = "android-build-" + ENV['BUILD_NUM'].to_s
       puts "Tagging commit with " + tag
       add_git_tag(tag: tag)
-      push_git_tags
+      push_git_tags(tag: tag)
     rescue => e
       slack_github_error(e, "Error tagging Android build", "Android", ENV['SLACK_THREAD_TS'])
     end

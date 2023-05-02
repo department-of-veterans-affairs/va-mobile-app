@@ -32,7 +32,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
   })
 
   return (
-    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
+    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')} testID="IncorrectServiceTestID">
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('militaryInformation.incorrectServiceInfo')}
@@ -41,6 +41,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
           {t('militaryInformation.incorrectServiceInfo.body')}
         </TextView>
         <ClickForActionLink
+          testID="incorrectServiceDMDCNumberTestID"
           displayedText={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed')}
           a11yLabel={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed.a11yLabel')}
           numberOrUrlLink={t('militaryInformation.incorrectServiceInfo.DMDCNumber')}

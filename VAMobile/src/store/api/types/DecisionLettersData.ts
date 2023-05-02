@@ -4,7 +4,7 @@ export type DecisionLetterAttributes = {
   typeDescription: string
   typeId: string
   docType: string
-  subject: string
+  subject?: string
   receivedAt: string
   source: string
   mimeType: string

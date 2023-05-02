@@ -1,9 +1,9 @@
 ---
-title: Intro to the VA Health and Benefits App
+title: Intro to the VA Mobile App
 sidebar_position: 1
 ---
 
-# Intro to the VA: Health and Benefits App
+# Intro to the VA Mobile App
 
 
 <img width="125" height="125" alt="image of mobile app icon" src="https://mobile.va.gov/sites/default/files/image/icons/va-health-and-benefits-app-icon.png"></img>
@@ -11,9 +11,6 @@ sidebar_position: 1
 ## Background
 Nearly 40% of all traffic to VA.gov comes from users on their mobile devices. This traffic is typically driven by users that want to complete quick transactions, such as viewing Claims Status or Facility Locator. The VA: Health and Benefits App team has a hypothesis, validated by user research, that native functionality in a mobile app will allow Veterans to more easily complete key transactions across VA Health and Benefits services.
 
-
-## Team
-Information on the [team](/docs/About/team-charter#who-we-are) can can be found in the [team charter](/docs/About/team-charter).
 
 
 ## Release Cycle

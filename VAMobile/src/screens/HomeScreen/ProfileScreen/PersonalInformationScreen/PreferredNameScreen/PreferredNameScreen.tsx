@@ -9,7 +9,7 @@ import { PersonalInformationState, finishUpdatePreferredName, updatePreferredNam
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api'
 import { SnackbarMessages } from 'components/SnackBar'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
@@ -21,6 +21,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
+  const confirmAlert = useDestructiveAlert()
 
   const getInitialState = (): string => {
     const item = profile?.preferredName
@@ -41,6 +42,32 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('personalInformation.preferredName.saved'),
     errorMsg: t('personalInformation.preferredName.notSaved'),
+  }
+
+  const onConfirmCancel = (): void => {
+    if (preferredName !== getInitialState()) {
+      confirmAlert({
+        title: '',
+        message: t('personalInformation.preferredName.cancelMessage'),
+        cancelButtonIndex: 0,
+        destructiveButtonIndex: 1,
+        buttons: [
+          {
+            text: t('personalInformation.preferredName.keepEditing'),
+            onPress: () => {},
+          },
+          {
+            text: t('personalInformation.preferredName.deleteChanges'),
+            onPress: () => {
+              navigation.goBack()
+            },
+          },
+        ],
+      })
+      return
+    } else {
+      navigation.goBack()
+    }
   }
 
   const onSave = (): void => {
@@ -78,14 +105,9 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
         onChange: onSetName,
         helperTextKey: 'personalInformation.preferredName.editHelperText',
         a11yLabel: 'personalInformation.preferredNameScreen.body.a11yLabel',
-        isRequiredField: true,
       },
       fieldErrorMessage: t('personalInformation.preferredName.fieldEmpty'),
       validationList: [
-        {
-          validationFunction: nameLengthValidation,
-          validationFunctionErrorMessage: t('personalInformation.preferredName.tooManyCharacters'),
-        },
         {
           validationFunction: lettersOnlyValidation,
           validationFunctionErrorMessage: t('personalInformation.preferredName.lettersOnly'),
@@ -93,6 +115,10 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
         {
           validationFunction: whiteSpaceOnlyValidation,
           validationFunctionErrorMessage: t('personalInformation.preferredName.fieldEmpty'),
+        },
+        {
+          validationFunction: nameLengthValidation,
+          validationFunctionErrorMessage: t('personalInformation.preferredName.tooManyCharacters'),
         },
       ],
     },
@@ -109,7 +135,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   return (
     <FullScreenSubtask
       leftButtonText={t('cancel')}
-      onLeftButtonPress={navigation.goBack}
+      onLeftButtonPress={onConfirmCancel}
       title={t('personalInformation.preferredName.title')}
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>

@@ -4,7 +4,9 @@ import React from 'react'
 
 import { BenefitsStackParamList } from '../BenefitsStackScreens'
 import { Box, FeatureLandingTemplate, LargeNavButton } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
@@ -13,6 +15,11 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+
+  const onClaimLettersPress = () => {
+    logAnalyticsEvent(Events.vama_ddl_landing_click())
+    navigateTo('ClaimLettersScreen')()
+  }
 
   return (
     <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
@@ -27,7 +34,7 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
         />
         <LargeNavButton
           title={t('claimLetters.title')}
-          onPress={navigateTo('ClaimLettersScreen')}
+          onPress={onClaimLettersPress}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
