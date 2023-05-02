@@ -18,6 +18,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
+import { stringToTitleCase } from 'utils/formattingUtils'
 
 type phoneType = 'homePhoneNumber' | 'workPhoneNumber' | 'mobilePhoneNumber'
 
@@ -144,7 +145,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
     return (
       <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} overrideFeatureName={t('contactInformation.title')} />
+        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} overrideFeatureName={stringToTitleCase(t('contactInformation.title'))} />
       </FeatureLandingTemplate>
     )
   }
