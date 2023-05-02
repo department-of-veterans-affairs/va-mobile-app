@@ -37,7 +37,7 @@ The above information will be presented, by the incident commander, to the VA Mo
 
 Incidents the mobile application team does not control should be reported to Platform and monitored in case any user messaging is necessary. These issues do not require an incident commander, but the reporting team member should also update the DSVA mobile slack channel (#va-mobile-app) with a link to where the issue was reported (support ticket or general channel link) to communicate that the issue is known.
 
-### Incident Example
+### Non-control Incident Example
 
 1. Incident happens
 2. Someone notices it
