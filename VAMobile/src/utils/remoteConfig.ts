@@ -6,7 +6,8 @@ import remoteConfig from '@react-native-firebase/remote-config'
 const { IS_TEST } = getEnv()
 
 const fetchRemote = !__DEV__ && !IS_TEST
-const RC_CACHE_TIME = 43200000 // 12 hours
+const RC_FETCH_TIMEOUT = 10000 // 10 sec
+const RC_CACHE_TIME = 30 * 60 * 1000 // 30 min
 const REMOTE_CONFIG_OVERRIDES_KEY = '@store_remote_config_overrides'
 
 export let overrideRemote = false
@@ -21,7 +22,7 @@ export type FeatureToggleType =
   | 'preferredNameGender'
   | 'haptics'
   | 'whatsNewUI'
-  | 'decisionLetters'
+  | 'decisionLettersWaygate'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
@@ -32,7 +33,7 @@ type FeatureToggleValues = {
   preferredNameGender: boolean
   haptics: boolean
   whatsNewUI: boolean
-  decisionLetters: boolean
+  decisionLettersWaygate: boolean
 }
 
 export let devConfig: FeatureToggleValues = {
@@ -44,7 +45,7 @@ export let devConfig: FeatureToggleValues = {
   preferredNameGender: true,
   haptics: true,
   whatsNewUI: true,
-  decisionLetters: true,
+  decisionLettersWaygate: true,
 }
 
 export const productionDefaults: FeatureToggleValues = {
@@ -56,16 +57,19 @@ export const productionDefaults: FeatureToggleValues = {
   preferredNameGender: false,
   haptics: true,
   whatsNewUI: true,
-  decisionLetters: false,
+  decisionLettersWaygate: true,
 }
 
 /**
- * Sets up Remote Config, setting defaults, activating them, and fetching the config for next app launch
- * following Strategy 3 https://firebase.google.com/docs/remote-config/loading#strategy_3_load_new_values_for_next_startup
+ * Sets up Remote Config, sets defaults, fetches and activates config from firebase
  * @returns Promise<void>
  */
 export const activateRemoteConfig = async (): Promise<void> => {
   try {
+    // Sets timeout for remote config fetch
+    await remoteConfig().setConfigSettings({ fetchTimeMillis: RC_FETCH_TIMEOUT })
+    console.debug(`Remote Config: Set fetch timeout to ${RC_FETCH_TIMEOUT / 1000} seconds`)
+
     console.debug('Remote Config: Setting defaults')
     // Sets defaults for remote config for use prior to fetching and activating
     const defaults = fetchRemote ? productionDefaults : devConfig
@@ -78,11 +82,10 @@ export const activateRemoteConfig = async (): Promise<void> => {
      */
     if (fetchRemote) {
       console.debug('Remote Config: Fetching and activating')
-      // Activate last fetched config then fetch latest config for use on next app launch
-      await remoteConfig().activate()
-      console.debug('Remote Config: Activated last fetched config')
       await remoteConfig().fetch(RC_CACHE_TIME)
       console.debug('Remote Config: Fetched latest remote config')
+      await remoteConfig().activate()
+      console.debug('Remote Config: Activated config')
     }
 
     await loadOverrides()

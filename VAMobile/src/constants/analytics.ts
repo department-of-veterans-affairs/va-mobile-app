@@ -126,6 +126,31 @@ export const Events = {
       },
     }
   },
+  vama_pref_name_success: (): Event => {
+    return {
+      name: 'vama_pref_name_success',
+    }
+  },
+  vama_pref_name_fail: (): Event => {
+    return {
+      name: 'vama_pref_name_fail',
+    }
+  },
+  vama_gender_id_success: (): Event => {
+    return {
+      name: 'vama_gender_id_success',
+    }
+  },
+  vama_gender_id_fail: (): Event => {
+    return {
+      name: 'vama_gender_id_fail',
+    }
+  },
+  vama_gender_id_help: (): Event => {
+    return {
+      name: 'vama_gender_id_help',
+    }
+  },
   vama_update_dir_dep: (totalTime: number, actionTime: number): Event => {
     return {
       name: 'vama_update_dir_dep',
@@ -158,6 +183,26 @@ export const Events = {
   vama_claim_upload_fail: (): Event => {
     return {
       name: 'vama_claim_upload_fail',
+    }
+  },
+  vama_ddl_button_shown: (): Event => {
+    return {
+      name: 'vama_ddl_button_shown',
+    }
+  },
+  vama_ddl_status_click: (): Event => {
+    return {
+      name: 'vama_ddl_status_click',
+    }
+  },
+  vama_ddl_landing_click: (): Event => {
+    return {
+      name: 'vama_ddl_landing_click',
+    }
+  },
+  vama_ddl_letter_view: (): Event => {
+    return {
+      name: 'vama_ddl_letter_view',
     }
   },
   vama_vaccine_details: (groupName: string): Event => {

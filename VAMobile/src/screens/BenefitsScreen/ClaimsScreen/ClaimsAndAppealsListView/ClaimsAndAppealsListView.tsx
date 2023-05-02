@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, DefaultList, DefaultListItemObj, Pagination, PaginationProps, TextLine } from 'components'
+import { Box, DefaultList, DefaultListItemObj, LabelTagTypeConstants, Pagination, PaginationProps, TextLine } from 'components'
 import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { ClaimsAndAppealsState, getClaimsAndAppeals } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -61,6 +62,11 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
         { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold' },
         { text: `Submitted ${formattedDateFiled}` },
       ]
+
+      if (featureEnabled('decisionLettersWaygate') && attributes.decisionLetterSent) {
+        const margin = theme.dimensions.condensedMarginBetween
+        textLines.push({ text: t('claims.decisionLetterAvailable'), textTag: { labelType: LabelTagTypeConstants.tagBlue }, mt: margin, mb: margin })
+      }
 
       const position = (currentPage - 1) * perPage + index + 1
       const a11yValue = t('listPosition', { position, total: totalEntries })

@@ -1,11 +1,14 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, useRef } from 'react'
 
-import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
+import { Box, ButtonTypesConstants, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
 import { ClaimData } from 'store/api/types'
 import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
@@ -29,6 +32,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const sentEvent = useRef(false)
 
   const ActiveClaimStatusDetails = (): ReactElement => {
     // alternative check if need to update: isClosedClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
@@ -65,17 +69,38 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
         return <></>
       }
 
-      const claimWasClosedOn = t('claimDetails.yourClaimWasClosedOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
+      const onPress = () => {
+        logAnalyticsEvent(Events.vama_ddl_status_click())
+        navigateTo('ClaimLettersScreen')()
+      }
+
+      const claimDecidedOn = t('claimDetails.weDecidedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
+      let letterAvailable = t('claimDetails.decisionLetterMailed')
+      let showButton = false
+
+      if (featureEnabled('decisionLettersWaygate') && claim.attributes.decisionLetterSent) {
+        letterAvailable = t('claimDetails.youCanDownload')
+        showButton = true
+        if (!sentEvent.current) {
+          logAnalyticsEvent(Events.vama_ddl_button_shown())
+          sentEvent.current = true
+        }
+      }
 
       return (
         <Box mb={theme.dimensions.condensedMarginBetween}>
           <TextArea>
-            <Box {...testIdProps(claimWasClosedOn)} accessibilityRole="header" accessible={true}>
-              <TextView variant="MobileBodyBold">{claimWasClosedOn}</TextView>
+            <Box {...testIdProps(claimDecidedOn)} accessibilityRole="header" accessible={true}>
+              <TextView variant="MobileBodyBold">{claimDecidedOn}</TextView>
             </Box>
-            <Box {...testIdProps(t('claimDetails.decisionPacketMailed'))} accessible={true}>
-              <TextView variant="MobileBody">{t('claimDetails.decisionPacketMailed')}</TextView>
+            <Box {...testIdProps(letterAvailable)} accessible={true}>
+              <TextView variant="MobileBody">{letterAvailable}</TextView>
             </Box>
+            {showButton && (
+              <Box mt={theme.dimensions.condensedMarginBetween}>
+                <VAButton onPress={onPress} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} />
+              </Box>
+            )}
           </TextArea>
         </Box>
       )
