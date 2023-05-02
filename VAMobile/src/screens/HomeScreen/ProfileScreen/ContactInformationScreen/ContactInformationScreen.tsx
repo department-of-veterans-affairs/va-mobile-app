@@ -14,11 +14,11 @@ import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfi
 import { RootState } from 'store'
 import { getA11yLabelText } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
+import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
-import { stringToTitleCase } from 'utils/formattingUtils'
 
 type phoneType = 'homePhoneNumber' | 'workPhoneNumber' | 'mobilePhoneNumber'
 
