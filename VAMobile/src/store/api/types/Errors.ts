@@ -78,7 +78,6 @@ export const DowntimeFeatureTypeConstants: {
   payments: 'payment_history',
   rx: 'rx_refill',
 }
-
 // Friendly names shown in downtime messages
 export const DowntimeFeatureNameConstants = {
   [DowntimeFeatureTypeConstants.facilityLocator]: 'Facility Locator',
