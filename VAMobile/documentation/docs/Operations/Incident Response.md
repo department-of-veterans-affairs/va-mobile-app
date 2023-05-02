@@ -41,6 +41,5 @@ Incidents the mobile application team does not control should be reported to Pla
 
 1. Incident happens
 2. Someone notices it
-3. Whoever notices it, reports it to platform in the appropriate channel
-4. If it’s been reported already, no need to re-report it.
-5. Add a link to the reported message into the DSVA mobile slack channel
+3. That person should check if its been reported to platform, and if not does so.
+4. Add a link to the reported message into the DSVA mobile slack channel
