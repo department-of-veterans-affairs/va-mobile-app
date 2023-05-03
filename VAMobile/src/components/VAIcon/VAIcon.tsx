@@ -74,7 +74,6 @@ import BuildingSolid from './svgs/buildingSolid.svg'
 import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
-import CommentSolid from './svgs/comment-solid.svg'
 import Compose from './svgs/compose.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
 import Delete from './svgs/delete.svg'
@@ -83,7 +82,6 @@ import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
 import FolderSolid from './svgs/folder-solid.svg'
 import InboxSolid from './svgs/inbox-solid.svg'
 import InfoIcon from './svgs/info-circle.svg'
-import ListSolid from './svgs/list-solid.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 import Minus from './svgs/minus.svg'
@@ -160,8 +158,6 @@ export const VA_ICON_MAP = {
   InboxSolid,
   BuildingSolid,
   InfoIcon,
-  CommentSolid,
-  ListSolid,
   WhiteCheckCircle,
   WhiteCloseCircle,
   Truck,
@@ -189,6 +185,9 @@ export type VAIconProps = BoxProps & {
 
   /** optional boolean that prevents the icon from being scaled when set to true */
   preventScaling?: boolean
+
+  /** Optional TestID */
+  testID?: string
 }
 
 /**
@@ -196,7 +195,7 @@ export type VAIconProps = BoxProps & {
  *
  * @returns VAIcon component
  */
-const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventScaling, ...boxProps }) => {
+const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventScaling, testID, ...boxProps }) => {
   const theme = useTheme()
   const fs: (val: number) => number = useFontScale()
   const dispatch = useAppDispatch()
@@ -231,7 +230,7 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventSca
   }
 
   return (
-    <Box {...boxProps}>
+    <Box testID={testID} {...boxProps}>
       <Icon {...iconProps} />
     </Box>
   )

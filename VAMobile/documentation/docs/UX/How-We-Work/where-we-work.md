@@ -1,6 +1,6 @@
 ---
 title: Where we work
-sidebar_position: 2
+sidebar_position: 1
 ---
 
 # Where we work

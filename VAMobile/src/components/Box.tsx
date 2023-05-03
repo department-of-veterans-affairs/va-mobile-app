@@ -123,6 +123,8 @@ export type BoxProps = ViewProps & {
   borderRadiusTop?: number | string
   /** sets the border radius just for the bottom of the component */
   borderRadiusBottom?: number | string
+  /** Optional TestID */
+  testID?: string
 }
 
 const toDimen = (val?: string | number): string | undefined => {
@@ -282,8 +284,8 @@ const StyledBox = styled(View)`
  *
  * @returns TextView component
  */
-const Box: FC<BoxProps> = (props) => {
-  return <StyledBox {...props} />
+const Box: FC<BoxProps> = (props, { testID }) => {
+  return <StyledBox testID={testID} {...props} />
 }
 
 export default Box

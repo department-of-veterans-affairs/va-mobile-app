@@ -442,12 +442,12 @@ export function useAttachments(): [
 
   const removeAttachment = (attachmentFileToRemove: imageDocumentResponseType) => {
     destructiveAlert({
-      title: t('health:secureMessaging.attachments.removeAttachmentAreYouSure'),
+      title: t('health:secureMessaging.attachments.removeAttachment'),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('common:cancel'),
+          text: t('health:secureMessaging.attachments.keep'),
         },
         {
           text: t('common:remove'),
