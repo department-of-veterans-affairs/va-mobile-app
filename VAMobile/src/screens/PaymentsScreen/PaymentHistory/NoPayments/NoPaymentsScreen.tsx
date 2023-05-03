@@ -20,11 +20,11 @@ const NoPaymentsScreen: FC = () => {
           <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.noPayments.body.1.a11yLabel')}>
             {t('payments.noPayments.body.1')}
           </TextView>
+          <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.missingOrNoPayments.body.1.a11yLabel')}>
+            {t('payments.missingOrNoPayments.body.1')}
+          </TextView>
           <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.noPayments.body.2.a11yLabel')}>
             {t('payments.noPayments.body.2')}
-          </TextView>
-          <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.noPayments.body.3.a11yLabel')}>
-            {t('payments.noPayments.body.3')}
           </TextView>
           <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />
         </AlertBox>

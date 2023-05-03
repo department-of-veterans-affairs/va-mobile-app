@@ -19,8 +19,8 @@ const PaymentMissing: FC<PaymentMissingScreenProps> = () => {
         <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
           {t('payments.ifIAmMissingPayemt')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.missingPayments.body.1.a11yLabel')}>
-          {t('payments.missingPayments.body.1')}
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.missingOrNoPayments.body.1.a11yLabel')}>
+          {t('payments.missingOrNoPayments.body.1')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.missingPayments.body.2.a11yLabel')}>
           {t('payments.missingPayments.body.2')}
