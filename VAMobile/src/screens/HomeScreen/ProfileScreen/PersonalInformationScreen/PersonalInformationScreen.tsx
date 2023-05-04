@@ -54,7 +54,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const { profile, loading, loadingGenderIdentityOptions, needsDataLoad, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>(
     (state) => state.personalInformation,
   )
-  const { gutter, condensedMarginBetween, standardMarginBetween } = theme.dimensions
+  const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
   const navigateTo = useRouteNavigation()
 
@@ -89,7 +89,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   const dobLinkProps: TextViewProps = {
     variant: 'MobileBodyLink',
-    mb: standardMarginBetween,
+    mb: formMarginBetween,
   }
 
   const boxProps: BoxProps = {
