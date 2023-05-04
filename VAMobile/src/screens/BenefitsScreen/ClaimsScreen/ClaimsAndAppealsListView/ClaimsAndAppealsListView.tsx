@@ -63,7 +63,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
         { text: `Submitted ${formattedDateFiled}` },
       ]
 
-      if (featureEnabled('decisionLetters') && attributes.decisionLetterSent) {
+      if (featureEnabled('decisionLettersWaygate') && attributes.decisionLetterSent) {
         const margin = theme.dimensions.condensedMarginBetween
         textLines.push({ text: t('claims.decisionLetterAvailable'), textTag: { labelType: LabelTagTypeConstants.tagBlue }, mt: margin, mb: margin })
       }

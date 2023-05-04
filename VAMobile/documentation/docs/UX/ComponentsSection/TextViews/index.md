@@ -1,3 +1,3 @@
 ---
-title: Text Views
+title: Text views
 ---
