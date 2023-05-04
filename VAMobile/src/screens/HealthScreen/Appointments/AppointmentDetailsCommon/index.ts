@@ -10,6 +10,8 @@ export { default as PendingAppointmentCancelButton } from './PendingAppointmentC
 export * from './PendingAppointmentCancelButton'
 export { default as AppointmentAddressAndNumber } from './AppointmentAddressAndNumber'
 export * from './AppointmentAddressAndNumber'
+export { default as AppointmentReason } from './AppointmentReason'
+export * from './AppointmentReason'
 export { default as AppointmentTypeAndDate } from './AppointmentTypeAndDate'
 export * from './AppointmentTypeAndDate'
 export { default as ProviderName } from './ProviderName'
