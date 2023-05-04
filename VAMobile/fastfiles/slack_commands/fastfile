@@ -1,8 +1,9 @@
 # sends a success message to the build slack
 def slack_build_success (buildNum, version, buildType, message, os, thread_ts = nil)
  puts "Send slack success message"
+ channel = buildType == 'On Demand' ? '#va-mobile-build-alerts' : '#va-mobile-app'
  post_to_slack(
-   channel: "#va-mobile-app",
+   channel: channel,
    username: "VA App Builder",
    icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/build_bot.png?raw=true",
    message: message,
