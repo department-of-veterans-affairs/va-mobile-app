@@ -630,7 +630,6 @@
   "appointmentList.phoneOnly": "Phone call",
   "appointmentList.inPerson": "In-person",
   "appointmentList.youRequested": "Request type: {{typeOfVisit}}",
-  "upcomingAppointmentDetails.reason": "You shared these details about your concern",
   "vaccines.details.address": "{{city}}, {{state}} {{zip}}",
   "vaccines.details.lot": "Lot number",
   "vaccines.details.typeAndDosage": "Type and dosage",

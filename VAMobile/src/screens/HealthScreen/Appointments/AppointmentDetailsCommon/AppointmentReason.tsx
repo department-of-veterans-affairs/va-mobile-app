@@ -9,25 +9,16 @@ import { useTheme } from 'utils/hooks'
 
 type AppointmentReasonProps = {
   attributes: AppointmentAttributes
-  messages?: Array<AppointmentMessages>
 }
 
-const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes, messages }) => {
+const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const { reason } = attributes || ({} as AppointmentAttributes)
   const isPendingAppointment = isAPendingAppointment(attributes)
 
   let text
-  if (isPendingAppointment) {
-    // Pending appointments(submitted or submitted canceled)
-    // Only use the first index as the remaining items are just the doctors response to the user's concern
-    const message = messages?.length && messages?.[0].attributes?.messageText
-    if (!message) {
-      return <></>
-    }
-    text = message
-  } else {
+  if (!isPendingAppointment) {
     // Confirmed appointments that are either booked or canceled
     if (!reason) {
       return <></>

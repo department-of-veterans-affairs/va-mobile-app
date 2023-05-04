@@ -85,7 +85,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
 
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
-          <AppointmentReason attributes={attributes} messages={messages} />
+          <AppointmentReason attributes={attributes} />
           <ContactInformation attributes={attributes} />
         </TextArea>
 
