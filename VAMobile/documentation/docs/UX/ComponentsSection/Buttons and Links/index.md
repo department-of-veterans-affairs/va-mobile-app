@@ -1,4 +1,4 @@
 ---
-title: Buttons and Links
+title: Buttons and links
 ---
 

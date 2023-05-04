@@ -3,7 +3,7 @@ title: Designing the UI
 sidebar_position: 3
 ---
 
-## UI Best Practices
+## UI best practices
 
 - **Use [components](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/ComponentsSection/) already available** in the system.
 - Use [Balsamiq](https://balsamiq.cloud/s4uw4la/pnnwuqv) or another **lower fidelity tool to ideate**
@@ -29,7 +29,7 @@ There are a few paths that can be taken when updating existing features or creat
     - Once approved, work with the [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian/) to add it to the library.
 
 
-### Best Practices in Figma
+### Best practices in Figma
 
 - Follow the rules around [where we work in Figma](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/where-we-work#ui-library-and-feature-designs---figma). Generally, most of your work will be done in the [working file](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/where-we-work#categoryname) for the category your feature is in.
  When starting a new feature, work with the [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian/) to create a new working file.

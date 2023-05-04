@@ -1,4 +1,4 @@
-# UI Automation Testing
+# UI automation testing
 
 ## Background
 _For folks looking for a basic primer on "what is UI automation testing", reading one of the [many articles available via quick google search](https://www.atlassian.com/continuous-delivery/software-testing/types-of-software-testing) is the recommended method. This section instead covers the background of automated UI testing for the mobile team._

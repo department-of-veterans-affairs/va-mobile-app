@@ -2,18 +2,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToA11yLabel } from 'store/api/types'
-import {
-  Box,
-  ButtonTypesConstants,
-  ClickForActionLink,
-  ClickToCallPhoneNumber,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  LinkUrlIconType,
-  TextArea,
-  TextView,
-  VAButton,
-} from 'components'
+import { Box, ButtonTypesConstants, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { cancelAppointment } from 'store/slices'
 import { formatDateMMDDYYYY } from 'utils/formattingUtils'
@@ -44,8 +33,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
 
   const findYourVALocationProps: LinkButtonProps = {
     displayedText: t('upcomingAppointmentDetails.findYourVALocation'),
-    linkType: LinkTypeOptionsConstants.url,
-    linkUrlIconType: LinkUrlIconType.Arrow,
+    linkType: LinkTypeOptionsConstants.externalLink,
     numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
     a11yLabel: t('upcomingAppointmentDetails.findYourVALocation.a11yLabel'),
     accessibilityHint: t('upcomingAppointmentDetails.findYourVALocation.a11yHint'),
