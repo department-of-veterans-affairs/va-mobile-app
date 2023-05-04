@@ -6,6 +6,6 @@ Maintenance windows are periods of time during which specific vets-api functiona
 
 ## Backend
 
-Unlike most of the data used in the vets-api engine, MaintenanceWindows come from the database and not from upstream servers. They contain the external service name, start time, and end time.
+Unlike most of the data used in the vets-api engine, MaintenanceWindows come from the database and not from upstream servers. They contain the external service name, start time, and end time. The mobile app requests maintenance windows via the maintenance windows controller. The controller creates a ServiceGraph object that searches the database for MaintenanceWindow records that end in the future.
 
-The mobile app requests maintenance windows via the maintenance windows controller. , which creates a ServiceGraph object that searches the database for MaintenanceWindow records that end in the future. The ServiceGraph
+The ServiceGraph is an abstraction that accepts a flexible number of arguments. Each argument must be an array consisting of two symbols such as `[:bgs, :evss]`.
