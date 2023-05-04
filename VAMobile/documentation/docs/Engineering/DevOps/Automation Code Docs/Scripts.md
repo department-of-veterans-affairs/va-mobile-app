@@ -5,23 +5,6 @@ sidebar_label: Scripts, Etc.
 
 Lists all the reusable scripts available in the repository. 
 
-## `queue-builds.py`
-
-### Description
-This python script runs as a step in every build job. It is a simplified version of the [CircleCI Orb for the same purpose](https://circleci.com/developer/orbs/orb/eddiewebb/queue).
-
-iOS and Android Stores use build number as the unique ID and do not allow builds to be uploaded with the same build number. Since the build number has to be saved *PRIOR TO* the build process starting, there is no way to keep the system from running concurrent jobs where the build numbers collide.
-
-The queueing script queries CircleCI for jobs running with a specific regular expression and queues the older jobs, which allows the system to upload one build number before a second build job can fire off, eliminating upload collisions for duplicate build numbers. This allows a greater flexibility for who can kick off a build job.
-
-
-### Parameters
-No params, but requires the `CIRCLE_BUILD_NUM` and `BUILD_REGEX` environment variables to be set in order to work properly.
-### File location
-[~/VAMobile/queue-builds.py](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/VAMobile/queue-builds.py)
-
----
-
 ## `on-demand-build.sh`
 
 ### Description

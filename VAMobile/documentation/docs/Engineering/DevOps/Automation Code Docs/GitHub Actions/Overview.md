@@ -49,7 +49,7 @@ The build system currently allows us to build in multiple ways and for multiple 
 - Automated creation of TestRail Milestone to track testing completion
 - Automated updating of the QA run mermaid chart in release tickets when a TestRail run updates (There are limitations to this due to TestRail events API)
 - Approve slash command that merges release branch to `main` and creates a PR from the release branch to merge any changes back to `develop`, then comments on the issue and closed it.
-- Workflow that checks merges to main for a message that matches the version format from the slash merge and then tags the commit with that version number, kicking off the [CircleCI workflow](../CircleCI/Workflows.md/#release_build)
+- Workflow that checks merges to main for a message that matches the version format from the slash merge and then tags the commit with that version number, kicking off the [GitHub Action workflow](../GitHub%20Actions/BuildWorkflows#release-build-release_buildd)
 
 ## Local Testing
 
