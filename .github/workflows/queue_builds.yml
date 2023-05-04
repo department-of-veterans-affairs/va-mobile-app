@@ -8,7 +8,7 @@ env:
   # Number of minutes to wait in between rechecking in progress workflow runs
   WAIT_TIME: 2
   # Names of workflows that should be waited on (places that use `build_android` and `build_ios`)
-  WORKFLOW_NAMES: '["Daily QA Build", "On Demand Build", "Release Build", "Release Candidate Build"]'
+  WORKFLOW_NAMES: '["[Build] Daily QA Build", "[Build] On Demand build", "[Build] Release Build", "[Build] Release Candidate Build"]'
 
 jobs:
   queue_builds:
