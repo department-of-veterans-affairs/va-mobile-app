@@ -512,12 +512,12 @@ export const updatePreferredName =
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_preferred_name())
       await logAnalyticsEvent(Events.vama_pref_name_success)
 
-      dispatch(dispatchFinishSaveUpdatePreferredName())
+      dispatch(dispatchFinishSaveUpdatePreferredName({ name: preferredName }))
       showSnackBar(messages.successMsg, dispatch, undefined, true, false)
     } catch (err) {
       if (isErrorObject(err)) {
         logNonFatalErrorToFirebase(err, `updatePreferredName: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishSaveUpdatePreferredName(err))
+        dispatch(dispatchFinishSaveUpdatePreferredName({ error: err }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
@@ -555,12 +555,12 @@ export const updateGenderIdentity =
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
 
-      dispatch(dispatchFinishUpdateGenderIdentity())
+      dispatch(dispatchFinishUpdateGenderIdentity({ genderIdentity: genderIdentity }))
       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `updateGenderIdentity: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishUpdateGenderIdentity(error))
+        dispatch(dispatchFinishUpdateGenderIdentity({ error: error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
@@ -718,25 +718,28 @@ const peronalInformationSlice = createSlice({
       state.loading = false
       state.preferredNameSaved = false
     },
-    dispatchFinishSaveUpdatePreferredName: (state, action: PayloadAction<Error | undefined>) => {
-      const preferredNameSaved = !action.payload
-      state.error = action.payload
+    dispatchFinishSaveUpdatePreferredName: (state, action: PayloadAction<{ name?: string; error?: Error | undefined }>) => {
+      const { name, error } = action.payload
+      state.error = error
       state.loading = false
-      state.needsDataLoad = preferredNameSaved
-      state.preferredNameSaved = preferredNameSaved
+      if (state.profile) {
+        state.profile.preferredName = name || ''
+      }
+      state.preferredNameSaved = !error
     },
     dispatchStartUpdateGenderIdentity: (state) => {
       state.loading = true
     },
-    dispatchFinishUpdateGenderIdentity: (state, action: PayloadAction<Error | undefined>) => {
-      const error = action.payload
+    dispatchFinishUpdateGenderIdentity: (state, action: PayloadAction<{ genderIdentity?: string; error?: Error | undefined }>) => {
+      const { genderIdentity, error } = action.payload
       state.error = error
       state.loading = false
-      state.needsDataLoad = !error
+      if (state.profile) {
+        state.profile.genderIdentity = genderIdentity || ''
+      }
       state.genderIdentitySaved = !error
     },
     dispatchFinishEditGenderIdentity: (state) => {
-      state.loading = true
       state.genderIdentitySaved = false
     },
     dispatchStartGetGenderIdentityOptions: (state) => {

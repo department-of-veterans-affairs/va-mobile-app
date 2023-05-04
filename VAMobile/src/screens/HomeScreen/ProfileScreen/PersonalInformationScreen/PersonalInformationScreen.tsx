@@ -6,17 +6,17 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, ErrorComponent, FeatureLandingTemplate, LargeNavButton, LoadingComponent, TextView, TextViewProps } from 'components'
-import { DowntimeFeatureTypeConstants, GenderIdentityOptions, ScreenIDTypesConstants } from 'store/api/types'
+import { GenderIdentityOptions, ScreenIDTypesConstants } from 'store/api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, getGenderIdentityOptions, getProfileInfo } from 'store/slices/personalInformationSlice'
+import { PersonalInformationState, getGenderIdentityOptions } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { UserDataProfile } from 'store/api/types'
 import { featureEnabled } from 'utils/remoteConfig'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { formatDateMMMMDDYYYY, stringToTitleCase } from 'utils/formattingUtils'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
@@ -30,14 +30,14 @@ const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): strin
 
 const getPreferredName = (profile: UserDataProfile | undefined, t: TFunction): string => {
   if (profile && profile.preferredName) {
-    return t('dynamicField', { field: profile.preferredName })
+    return stringToTitleCase(profile.preferredName)
   } else {
     return t('personalInformation.genericBody', { informationType: t('personalInformation.preferredName.title').toLowerCase() })
   }
 }
 
 const getGenderIdentity = (profile: UserDataProfile | undefined, t: TFunction, genderIdentityOptions: GenderIdentityOptions): string => {
-  if (profile?.genderIdentity) {
+  if (profile && profile.genderIdentity) {
     const genderIdentity = genderIdentityOptions[profile.genderIdentity]
     return t('dynamicField', { field: genderIdentity })
   } else {
@@ -55,16 +55,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     (state) => state.personalInformation,
   )
   const { gutter, condensedMarginBetween } = theme.dimensions
-  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
   const navigateTo = useRouteNavigation()
-
-  useFocusEffect(
-    React.useCallback(() => {
-      if (needsDataLoad && profileNotInDowntime) {
-        dispatch(getProfileInfo(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
-      }
-    }, [dispatch, needsDataLoad, profileNotInDowntime]),
-  )
 
   useFocusEffect(
     React.useCallback(() => {
