@@ -1,5 +1,5 @@
 ---
-title: Primary Navigation
+title: Primary navigation
 ---
 
 The primary navigation pattern for the VA mobile app is a standard tab/navigation bar. For a detailed description, see [Navigation model templates](/va-mobile-app/docs/UX/Templates/NavigationModel). 

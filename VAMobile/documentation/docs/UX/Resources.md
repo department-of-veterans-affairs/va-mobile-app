@@ -1,5 +1,5 @@
 ---
-title: Resources
+title: UX Resources
 sidebar_position: 6
 ---
 
@@ -49,5 +49,5 @@ VA Mobile app [UX resources on github](https://github.com/department-of-veterans
 * [Library style sheets (deprecated)](https://adhoc.invisionapp.com/share/AX108RJZPB6E#/screens/445194518) 
 Shows the components from the design library. Deprecated July 2021.
 
-### Componenets
+### Components
 * [MVP Mobile App UI Styles on Google Docs (deprecated)](https://docs.google.com/document/d/1VC-CLWnhevB8HLBBHPwkSJvECn8EBie8HOkJylKE1lo/edit?usp=sharing)
