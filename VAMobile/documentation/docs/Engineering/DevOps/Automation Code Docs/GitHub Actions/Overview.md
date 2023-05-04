@@ -13,7 +13,7 @@ sidebar_label: Overview
 
 Our workflows can curently be categorized into three types: Release and Build workflows, Code Quality workflows, and Other workflows.
 
-### Build and Release Workflows
+## Build and Release Workflows
 
 We [release](/docs/Operations/Releases/release-process) a new version of the app to app stores every 2 weeks. The process of building, packaging, uploading the app, updating screenshots and release notes manually can be very time consuming.  We use a combination of [GitHub Actions](https://docs.github.com/en/actions) and [fastlane](https://fastlane.tools/) to automate these processes with a combination of git branching strategy, scheduled jobs, and scripting. 
 
