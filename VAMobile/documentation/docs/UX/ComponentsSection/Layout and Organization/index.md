@@ -1,4 +1,4 @@
 ---
-title: Layout and Organization
+title: Layout and organization
 ---
 
