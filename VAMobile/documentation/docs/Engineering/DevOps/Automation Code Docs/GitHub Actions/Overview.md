@@ -5,7 +5,7 @@ sidebar_label: Overview
 # GitHub Actions
 
 ## Overview
-[GitHub Actions](https://github.com/features/actions) is used to the majority of our automation. We previously had our build automations in CircleCI but due to a security incident, the VA asked that all automations be moved off of Circle CI by March 23rd, 2023. Our workflows can be found on the va-mobile-app repo's [Actions tab](https://github.com/department-of-veterans-affairs/va-mobile-app/actions).
+[GitHub Actions](https://github.com/features/actions) is used to the majority of our automation. We previously had our build automations in CircleCI but due to [a security incident](https://circleci.com/blog/jan-4-2023-incident-report/), the VA asked that all automations be moved off of Circle CI by March 23rd, 2023. Our workflows can be found on the va-mobile-app repo's [Actions tab](https://github.com/department-of-veterans-affairs/va-mobile-app/actions).
 
 ## Automation Robot
 We use our GitHub automation robot account to do any work in Actions. `va-mobile-automation-robot` account credentials are located in the VA Mobile vault in 1Password.
