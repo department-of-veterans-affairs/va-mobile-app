@@ -5,7 +5,7 @@ sidebar_label: Overview
 # GitHub Actions
 
 ## Overview
-GitHub Actions is used to do most of our non-build operations and automation. It can be much easier to tune the triggers and has most of the tools we need pre-installed to do the work within GitHub and doesn't require a complicated connection from CircleCI to authorize. 
+[GitHub Actions](https://github.com/features/actions) is used to the majority of our automation. We previously had our build automations in CircleCI but due to a security incident, the VA asked that all automations be moved off of Circle CI by March 23rd, 2023. Our workflows can be found on the va-mobile-app repo's [Actions tab](https://github.com/department-of-veterans-affairs/va-mobile-app/actions).
 
 ## Automation Robot
 We use our GitHub automation robot account to do any work in Actions. `va-mobile-automation-robot` account credentials are located in the VA Mobile vault in 1Password.
@@ -16,6 +16,27 @@ Access in Actions is granted with [Personal Access Tokens](https://docs.github.c
 
 ## Workflows
 This is the current list of things automated by GitHub Workflows
+
+### Code Quality
+- Code checks: linting and automated test runners
+- Vulnerability checking with [CodeQL](https://codeql.github.com/)
+### Build Workflows
+- Daily QA builds
+- Release Candidate (RC) builds
+- On Demand builds
+- Release builds
+- Submission to App/Play Stores for approval
+- Scheduled "Go Live" every other Tuesday
+#### Build Automation Capabilities
+The build system currently allows us to build in multiple ways and for multiple configurations.
+- Staging API or Production API
+- Special Release Candidate configuration
+- Options to upload to a specific lane or Test Flight group
+- Configurations to create one-off builds for feature branch testing prior to merging
+- Queueing capabilities to avoid build collisions on build numbers
+- Dependency installation and caching to speed up delivery
+- Slack integration to send useful messages to our DSVA Slack channels to raise errors and to indicate success
+### Non-build Workflows
 
 - Adding a new user to the `va-mobile-team` in GitHub to grant write access in the repository and ZenHub.
 - Automated updates for bundler and Fastlane plugins to keep the build system up to date. 
