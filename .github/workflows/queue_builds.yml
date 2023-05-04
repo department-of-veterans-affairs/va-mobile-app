@@ -1,5 +1,5 @@
 # Reusable workflow that waits for older in progress builds to finish
-name: Queue Builds
+name: '[Build] Queue Build'
 
 on:
   workflow_call:
