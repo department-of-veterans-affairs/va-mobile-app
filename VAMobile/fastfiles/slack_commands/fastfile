@@ -1,9 +1,10 @@
-# sends a success message to the build slack
+alerts_channel = "#va-mobile-build-alerts"# sends a success message to the build slack
+va_mobile_channel = "#va-mobile-app"
+
 def slack_build_success (buildNum, version, buildType, message, os, thread_ts = nil)
  puts "Send slack success message"
- channel = buildType == 'On Demand' ? '#va-mobile-build-alerts' : '#va-mobile-app'
  post_to_slack(
-   channel: channel,
+   channel: alerts_channel,
    username: "VA App Builder",
    icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/build_bot.png?raw=true",
    message: message,
@@ -24,7 +25,7 @@ end
 def slack_build_error(e, buildType, message, os, thread_ts = nil)
   puts "Send slack build error message"
   post_to_slack(
-    channel: "#va-mobile-app",
+    channel: alerts_channel,
     username: "VA App Builder",
     icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
     message: message,
@@ -44,7 +45,7 @@ end
 def slack_github_error(e, message, os, thread_ts = nil)
   puts "Send slack GitHub error message"
   post_to_slack(
-    channel: "#va-mobile-app",
+    channel: alerts_channel,
     username: "VA App Builder",
     icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
     message: message,
@@ -63,7 +64,7 @@ end
 def slack_release_success(version, os, thread_ts = nil)
   puts "Send slack message to indicate release is live"
   post_to_slack(
-     channel: "#va-mobile-app",
+     channel: va_mobile_channel,
      username: "VA App Ground Control",
      icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/launch_icon.jpeg?raw=true",
      message: "Version #{version} is now live for #{os} :rocket: :raised_hands:",
@@ -76,7 +77,7 @@ end
 def slack_release_error(version, os, e, thread_ts = nil)
   puts "Send slack message to indicate release promotion had errors"
   post_to_slack(
-     channel: "#va-mobile-app",
+     channel: va_mobile_channel,
      username: "VA App Ground Control",
      icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
      message: "Version #{version} release failed for #{os}",
@@ -96,7 +97,7 @@ end
 def slack_firebase_dist_error(os, e, thread_ts = nil)
   puts "Send slack message to indicate Firebase Distribution error"
   post_to_slack(
-     channel: "#va-mobile-app",
+     channel: alerts_channel,
      username: "VA App Builders",
      icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
      message: "Firebase Distribution failed for #{os}",
@@ -115,7 +116,7 @@ end
 def slack_sent_for_review(buildNum, version, message, os, thread_ts = nil)
   puts "Send slack message to indicate next production version has been sent for review"
   post_to_slack(
-   channel: "#va-mobile-app",
+   channel: va_mobile_channel,
    username: "VA App Delivery Services",
    icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/delivered.jpeg?raw=true",
    message: message,
@@ -135,7 +136,7 @@ end
 def slack_test()
   slack(
      message: "Build Bot Test :dancing_box_robot:",
-     channel: "#va-mobile-app",
+     channel: alerts_channel,
      default_payloads: [],
   )
 end
