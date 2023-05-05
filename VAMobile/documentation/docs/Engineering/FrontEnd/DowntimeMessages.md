@@ -13,7 +13,9 @@ Downtime messages use the same display pattern as errors in code, with additiona
 
 ## Maintenance Window Technical Description
 
-The data returned from the back-end for a `maintenance window` includes a `service name`, and start time, and an end time. The service name is determined by the back-end and is not directly equivalent to `feature names` used in the front-end, so a mapping from `service name` to `feature name` as well as `service name` to the affected `screen ID` is provided in the `store/api/types/Errors.ts` file. Anytime a new feature with downtime is added, this mapping needs to be updated and the rest of the logic will automatically piggyback off of error logic and the checks in `store/slices/errorSlice.ts:checkForDowntimeErrors()`
+The data returned from the back-end for a `maintenance window` includes a `service name`, and start time, and an end time. The service name is determined by the back-end and is not directly equivalent to `feature names` used in the front-end, so a mapping from `service name` to `feature name` as well as `service name` to the affected `screen ID` is provided in the `store/api/types/Errors.ts` file. Anytime a new feature with downtime is added, this mapping needs to be updated and the rest of the logic will automatically piggyback off of error logic and the checks in `store/slices/errorSlice.ts:checkForDowntimeErrors()`.
+
+Maintenance windows, as derived from `DowntimeFeatureTypeConstants`, are also used in some cases within view components to disable data fetches from the backend to avoid fetching data that we know will be unavailable or unreliable during maintenance windows.
 
 Example return data from `/v0/maintenance_windows` endpoint:
 ```
@@ -39,10 +41,6 @@ data: [
 ]
 ```
 
-## Back-end
-
-See back-end description [here](../BackEnd/Features/MaintenanceWindows.md)
-
 ## Downtime Messages Display
 
 The downtime message displays as a full page error with a warning border. The template and an example are show below
@@ -50,3 +48,7 @@ The downtime message displays as a full page error with a warning border. The te
 ![Downtime Messages Template](/img/downtimeMessagesImages/downtime-messages-template.png)
 
 ![Downtime Messages Example](/img/downtimeMessagesImages/downtime-messages-example.png)
+
+## Back-end
+
+See back-end description [here](../BackEnd/Features/MaintenanceWindows.md)
