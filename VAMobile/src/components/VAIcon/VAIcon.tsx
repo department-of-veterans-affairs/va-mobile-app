@@ -83,7 +83,7 @@ import InfoIcon from './svgs/info-circle.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 import Minus from './svgs/minus.svg'
-import PaperClip from './svgs/paperClip.svg'
+import PaperClip from './svgs/PaperClip.svg'
 import PhoneSolid from './svgs/phoneSolid.svg'
 import PickerArrows from './svgs/picker-arrows.svg'
 import QuestionMark from './svgs/questionMark.svg'
@@ -111,6 +111,7 @@ export const VA_ICON_MAP = {
   HealthUnselected,
   HomeSelected,
   HomeUnselected,
+  PaperClip, // Needs git name fix
   PaymentsSelected,
   PaymentsUnselected,
   ProfileSelected,
@@ -132,7 +133,6 @@ export const VA_ICON_MAP = {
   Marines,
   Minus,
   Navy,
-  PaperClip,
   Phone,
   PhoneTTY,
   Chat,

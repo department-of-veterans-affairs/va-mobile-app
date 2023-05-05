@@ -15,7 +15,7 @@ import { ReactComponent as Inbox} from '@componentsDocs/VAIcon/svgs/inbox-solid.
 import { ReactComponent as Info} from '@componentsDocs/VAIcon/svgs/info-circle.svg';
 import { ReactComponent as MedicalFolder} from '@componentsDocs/VAIcon/svgs/folder-medical-solid.svg';
 import { ReactComponent as Minus} from '@componentsDocs/VAIcon/svgs/minus.svg';
-import { ReactComponent as PaperClip} from '@componentsDocs/VAIcon/svgs/paperClip.svg';
+import { ReactComponent as PaperClip} from '@componentsDocs/VAIcon/svgs/PaperClip.svg';
 import { ReactComponent as PhoneSolid} from '@componentsDocs/VAIcon/svgs/phoneSolid.svg';
 import { ReactComponent as PickerArrows} from '@componentsDocs/VAIcon/svgs/picker-arrows.svg';
 import { ReactComponent as QuestionMark} from '@componentsDocs/VAIcon/svgs/questionMark.svg';
@@ -52,7 +52,7 @@ Inbox | <Inbox  className="icons"/> | inbox-solid.svg
 Info | <Info  className="icons"/> | info-circle.svg
 Medical Folder | <MedicalFolder  className="icons"/> | folder-medical-solid.svg
 Minus | <Minus  className="icons"/> | minus.svg
-Paper Clip | <PaperClip  className="icons"/> | paperClip.svg
+Paper Clip | <PaperClip  className="icons"/> | PaperClip.svg
 Phone Solid | <PhoneSolid  className="icons"/> | phoneSolid.svg
 Picker Arrows | <PickerArrows className="icons" /> | picker-arrows.svg
 Question Mark | <QuestionMark  className="icons"/> | questionMark.svg
