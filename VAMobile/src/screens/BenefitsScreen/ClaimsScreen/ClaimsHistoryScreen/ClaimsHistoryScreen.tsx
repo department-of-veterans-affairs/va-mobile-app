@@ -35,8 +35,8 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
-  const title = featureEnabled('decisionLetters') ? t('claimsHistory.title') : t('claims.title')
-  const backLabel = featureEnabled('decisionLetters') ? t('claims.title') : t('benefits.title')
+  const title = featureEnabled('decisionLettersWaygate') ? t('claimsHistory.title') : t('claims.title')
+  const backLabel = featureEnabled('decisionLettersWaygate') ? t('claims.title') : t('benefits.title')
 
   useEffect(() => {
     // Fetch the profile information
