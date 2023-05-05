@@ -358,27 +358,27 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       {
         fieldType: FieldType.Picker,
         fieldProps: {
-          labelKey: 'health:secureMessaging.formMessage.subject',
+          labelKey: 'health:secureMessaging.formMessage.category',
           selectedValue: category,
           onSelectionChange: onCategoryChange,
           pickerOptions: getComposeMessageSubjectPickerOptions(t),
           includeBlankPlaceholder: true,
           isRequiredField: true,
         },
-        fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldError'),
+        fieldErrorMessage: t('secureMessaging.composeMessage.category.fieldError'),
       },
       {
         fieldType: FieldType.TextInput,
         fieldProps: {
           inputType: 'none',
-          labelKey: 'health:secureMessaging.composeMessage.subjectLine',
+          labelKey: 'health:secureMessaging.composeMessage.subject',
           value: subject,
           onChange: setSubject,
-          helperTextKey: 'health:secureMessaging.composeMessage.subjectLine.helperText',
+          helperTextKey: 'health:secureMessaging.composeMessage.subject.helperText',
           maxLength: 50,
           isRequiredField: category === CategoryTypeFields.other,
         },
-        fieldErrorMessage: t('secureMessaging.composeMessage.subjectLine.fieldError'),
+        fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldError'),
       },
     ]
   }
@@ -474,7 +474,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
                 {message?.recipientName}
               </TextView>
               <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
-                {t('secureMessaging.formMessage.subject')}
+                {t('secureMessaging.composeMessage.subject')}
               </TextView>
               <TextView variant="MobileBodyBold" accessible={true}>
                 {subjectHeader}

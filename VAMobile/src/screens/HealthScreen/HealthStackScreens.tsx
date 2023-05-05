@@ -23,7 +23,7 @@ import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
 import RequestAppointmentScreen from './Appointments/RequestAppointments/RequestAppointmentScreen'
 import SessionNotStarted from './Appointments/UpcomingAppointments/SessionNotStarted'
-import StatusGlossary from './Pharmacy/StatusGlossary/StatusGlossary'
+import StatusDefinition from './Pharmacy/StatusDefinition/StatusDefinition'
 
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
@@ -119,7 +119,7 @@ export type HealthStackParamList = WebviewStackParams & {
   RefillTrackingModal: {
     prescription: PrescriptionData
   }
-  StatusGlossary: {
+  StatusDefinition: {
     display: string
     value: RefillStatus
   }
@@ -181,7 +181,7 @@ export const getHealthScreens = (t: TFunction) => {
     <HealthStack.Screen key={'RefillScreenModal'} name="RefillScreenModal" component={RefillScreenModal} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'RefillTrackingModal'} name="RefillTrackingModal" component={RefillTrackingModal} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'PrescriptionHelp'} name="PrescriptionHelp" component={PrescriptionHelp} options={LARGE_PANEL_OPTIONS} />,
-    <HealthStack.Screen key={'StatusGlossary'} name="StatusGlossary" component={StatusGlossary} options={LARGE_PANEL_OPTIONS} />,
+    <HealthStack.Screen key={'StatusDefinition'} name="StatusDefinition" component={StatusDefinition} options={LARGE_PANEL_OPTIONS} />,
     <HealthStack.Screen key={'SessionNotStarted'} name="SessionNotStarted" component={SessionNotStarted} options={LARGE_PANEL_OPTIONS} />,
   ]
 }

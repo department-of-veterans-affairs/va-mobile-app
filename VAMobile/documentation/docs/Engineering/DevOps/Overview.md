@@ -1,4 +1,7 @@
-# Build Automation Overview
+---
+title: Build automation overview
+postion: 1 
+---
 
 ## Releases
 Our releases are made live every other Tuesday morning. A GitHub Action runs every Tuesday morning to check and see if there is a staged build ready for developer release in the Apple App Store. For Play Store, it checks to see if there is a newer build than the production lane waiting in the Pre-Prod Stash lane. If there is, they are released to production at that time and sends a message to the main va-mobile-app channel in DSVA slack. If not, it completes silently. 
