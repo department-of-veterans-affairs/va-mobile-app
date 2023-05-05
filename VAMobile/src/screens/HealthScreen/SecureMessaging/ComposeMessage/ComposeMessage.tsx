@@ -266,27 +266,27 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'health:secureMessaging.formMessage.subject',
+        labelKey: 'health:secureMessaging.formMessage.category',
         selectedValue: subject,
         onSelectionChange: onSubjectChange,
         pickerOptions: getComposeMessageSubjectPickerOptions(t),
         includeBlankPlaceholder: true,
         isRequiredField: true,
       },
-      fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldError'),
+      fieldErrorMessage: t('secureMessaging.composeMessage.category.fieldError'),
     },
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'none',
-        labelKey: 'health:secureMessaging.composeMessage.subjectLine',
+        labelKey: 'health:secureMessaging.composeMessage.subject',
         value: subjectLine,
         onChange: setSubjectLine,
-        helperTextKey: 'health:secureMessaging.composeMessage.subjectLine.helperText',
+        helperTextKey: 'health:secureMessaging.composeMessage.subject.helperText',
         maxLength: 50,
         isRequiredField: subject === CategoryTypeFields.other,
       },
-      fieldErrorMessage: t('secureMessaging.composeMessage.subjectLine.fieldError'),
+      fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldError'),
     },
     {
       fieldType: FieldType.FormAttachmentsList,

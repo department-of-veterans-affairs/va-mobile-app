@@ -119,6 +119,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
         <TextView variant="MobileBody" mb={error ? theme.dimensions.condensedMarginBetween : theme.dimensions.standardMarginBetween}>
           {t('personalInformation.genderIdentity.changeSelection')}
           <TextView variant="MobileBodyBold">{t('personalInformation.genderIdentity.preferNotToAnswer')}</TextView>
+          <TextView variant="MobileBody">.</TextView>
         </TextView>
         <RadioGroup {...radioGroupProps} />
         <Pressable onPress={goToHelp} accessibilityRole="link" accessible={true}>
