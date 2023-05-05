@@ -22,7 +22,7 @@ export type FeatureToggleType =
   | 'preferredNameGender'
   | 'haptics'
   | 'whatsNewUI'
-  | 'decisionLetters'
+  | 'decisionLettersWaygate'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
@@ -33,7 +33,7 @@ type FeatureToggleValues = {
   preferredNameGender: boolean
   haptics: boolean
   whatsNewUI: boolean
-  decisionLetters: boolean
+  decisionLettersWaygate: boolean
 }
 
 export let devConfig: FeatureToggleValues = {
@@ -45,7 +45,7 @@ export let devConfig: FeatureToggleValues = {
   preferredNameGender: true,
   haptics: true,
   whatsNewUI: true,
-  decisionLetters: true,
+  decisionLettersWaygate: true,
 }
 
 export const productionDefaults: FeatureToggleValues = {
@@ -57,7 +57,7 @@ export const productionDefaults: FeatureToggleValues = {
   preferredNameGender: false,
   haptics: true,
   whatsNewUI: true,
-  decisionLetters: false,
+  decisionLettersWaygate: true,
 }
 
 /**
