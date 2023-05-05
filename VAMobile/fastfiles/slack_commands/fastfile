@@ -1,6 +1,7 @@
-alerts_channel = "#va-mobile-build-alerts"# sends a success message to the build slack
+alerts_channel = "#va-mobile-build-alerts"
 va_mobile_channel = "#va-mobile-app"
 
+# sends a success message to the build slack
 def slack_build_success (buildNum, version, buildType, message, os, thread_ts = nil)
  puts "Send slack success message"
  post_to_slack(
