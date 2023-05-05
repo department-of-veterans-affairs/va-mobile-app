@@ -1,3 +1,7 @@
+---
+title: Incident response
+---
+
 # Incident Response
 
 This document outlines a process for the VA mobile team to respond to incidents that might happen in relation to the VA: Health and Benefits flagship mobile app. This should outline a process to follow when we can control issues as well as when issues are out of the control of the team (e.g. when an external service goes down). The process also only applies during business hours (Monday - Friday, 9am ET - 5pm PT), we’re not asking anyone to be responsive outside of normal work hours.

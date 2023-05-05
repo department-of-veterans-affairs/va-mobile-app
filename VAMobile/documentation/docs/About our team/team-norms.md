@@ -1,11 +1,11 @@
 ---
-title: Team Norms
+title: Team norms
 sidebar_position: 2
 ---
 
-# Team Norms
+# Team norms
 
-## Our Values
+## Our values
 
 - We strive to create a product that is usable for all Veterans, no matter their abilities.
     - We take a proactive, accessibility-first approach to everything we build. Accessibility is never an afterthought. It’s considered in every step of our process, from initial discovery to QA. 
@@ -28,7 +28,7 @@ sidebar_position: 2
 - NEW: Be considerate of long Slack threads. Signals of a thread getting out of hand are if you have to @folks to get attention or there are multiple conversations going on. If you see that happening, consider changing the format to a meeting and link meeting notes in the Slack thread.
 
 
-### Inclusive Meeting Best Practices:
+### Inclusive meeting best practices:
 
 - **Try to share the meeting agenda and materials ahead of time**. This allows folks to come to the meeting prepared with questions, review them async if that is more comfortable, or follow along if they can’t attend a meeting.  Also it’s helpful to add timecodes when creating meeting invites.
 - **Turn on live captioning for every call.** Live captioning services are a critical way for some individuals to understand and participate in meetings. 
