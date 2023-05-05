@@ -7,7 +7,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useExternalLink } from 'utils/hooks'
 import Box from './Box'
 import TextView, { FontVariant, TextViewProps } from './TextView'
-import VAIcon from './VAIcon'
+// import VAIcon from './VAIcon'
 
 /**
  * Props for item in {@link listOfText}
@@ -77,8 +77,9 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
 
         return (
           <Box display="flex" flexDirection="row" alignItems="flex-start" key={index} accessible={true}>
-            <Box mr={20} mt={12}>
-              <VAIcon name="Bullet" fill={color || 'bodyText'} height={6} width={6} />
+            <Box>
+              {/* <VAIcon name="Bullet" fill={color || 'bodyText'} height={6} width={6} /> */}
+              <TextView variant="MobileBodyBold">{'•     '}</TextView>
             </Box>
             <TextView {...textViewProps} {...testIdProps(a11yLabel || text)}>
               {text.trim()}

@@ -18,7 +18,6 @@ import HomeUnselected from './svgs/navIcon/homeUnselected.svg'
 import PaymentsSelected from './svgs/navIcon/paymentsSelected.svg'
 import PaymentsUnselected from './svgs/navIcon/paymentsUnselected.svg'
 import ProfileSelected from './svgs/navIcon/profileSelected.svg'
-import ProfileUnselected from './svgs/navIcon/profileUnselected.svg'
 
 // Arrows
 import ArrowDown from './svgs/chevron-down.svg'
@@ -98,21 +97,20 @@ import VideoCamera from './svgs/videoCamera.svg'
 
 export const VA_ICON_MAP = {
   ArrowDown,
-  Bullet,
-  CheckMark,
-  CircleCheckMark,
-  FilledCheckBox,
-  // Done ^
-  HomeSelected,
-  HomeUnselected,
-  HealthSelected,
-  HealthUnselected,
   BenefitsSelected,
   BenefitsUnselected,
-  ProfileSelected, // SKIPPED FOR UPDATE FIRST PASS DUE TO BEING TEST ICON
-  ProfileUnselected, // REMOVE, Not used
+  Bullet, // DELETE FOR CHARACTERS?
+  CheckMark,
+  CircleCheckMark, // TODO: Combine with WhiteCheckCircle on follow-up ticket to enhance VAIcon for 2 fills
+  FilledCheckBox,
+  HealthSelected,
+  HealthUnselected,
+  HomeSelected,
+  HomeUnselected,
   PaymentsSelected,
   PaymentsUnselected,
+  ProfileSelected,
+  // Done ^
   Add,
   ArrowUp,
   ArrowLeft,

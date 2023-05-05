@@ -7,7 +7,6 @@ import { ReactComponent as HomeUnselected} from '@componentsDocs/VAIcon/svgs/nav
 import { ReactComponent as PaymentsSelected} from '@componentsDocs/VAIcon/svgs/navIcon/paymentsSelected.svg';
 import { ReactComponent as PaymentsUnselected} from '@componentsDocs/VAIcon/svgs/navIcon/paymentsUnselected.svg';
 import { ReactComponent as ProfileSelected} from '@componentsDocs/VAIcon/svgs/navIcon/profileSelected.svg';
-import { ReactComponent as ProfileUnselected} from '@componentsDocs/VAIcon/svgs/navIcon/profileUnselected.svg';
 import IconsPathSection from '@site/src/components/IconsPathSection'
 
 # Navigation
@@ -27,4 +26,3 @@ Home Unselected | <HomeUnselected  className="icons"/> | homeUnselected.svg
 Payments Selected | <PaymentsSelected  className="icons"/> | paymentsSelected.svg 
 Payments Unselected | <PaymentsUnselected  className="icons"/> | paymentsUnselected.svg 
 Profile Selected | <ProfileSelected  className="icons"/> | profileSelected.svg 
-Profile Unselected | <ProfileUnselected  className="icons"/> | profileUnselected.svg 
