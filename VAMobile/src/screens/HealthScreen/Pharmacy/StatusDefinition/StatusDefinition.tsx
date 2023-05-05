@@ -4,21 +4,20 @@ import React, { FC, useLayoutEffect } from 'react'
 import { Box, ClosePanelButton, LargePanel, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { getStatusGlossaryTextForRefillStatus } from 'utils/prescriptions'
+import { getStatusDefinitionTextForRefillStatus } from 'utils/prescriptions'
 import { isIOS } from 'utils/platform'
 import { usePanelHeaderStyles, useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
-type StatusGlossaryProps = StackScreenProps<HealthStackParamList, 'StatusGlossary'>
+type StatusDefinitionProps = StackScreenProps<HealthStackParamList, 'StatusDefinition'>
 
-const StatusGlossary: FC<StatusGlossaryProps> = ({ navigation, route }) => {
+const StatusDefinition: FC<StatusDefinitionProps> = ({ navigation, route }) => {
   const { display, value } = route.params
   const headerStyle = usePanelHeaderStyles()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const { text, a11yLabel } = getStatusGlossaryTextForRefillStatus(value, t)
+  const { text, a11yLabel } = getStatusDefinitionTextForRefillStatus(value, tc)
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -35,7 +34,7 @@ const StatusGlossary: FC<StatusGlossaryProps> = ({ navigation, route }) => {
   }, [navigation, headerStyle, tc])
 
   return (
-    <LargePanel title={tc('statusGlossary')} rightButtonText={tc('close')}>
+    <LargePanel title={tc('statusDefinition')} rightButtonText={tc('close')}>
       <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextView variant="MobileBodyBold">{display}</TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween} accessibilityLabel={a11yLabel}>
@@ -46,4 +45,4 @@ const StatusGlossary: FC<StatusGlossaryProps> = ({ navigation, route }) => {
   )
 }
 
-export default StatusGlossary
+export default StatusDefinition

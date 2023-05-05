@@ -59,7 +59,7 @@ platform :android do
     distribute_to_firebase(notes, "qa")
     tag_build
     message = "New On Demand build successfully uploaded to Google Play"
-    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "On-Demand", message, "Android", ENV['SLACK_THREAD_TS'])
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "On Demand", message, "Android", ENV['SLACK_THREAD_TS'])
   end
 
   desc "Deploy a RC new version to Firebase Distribution"
