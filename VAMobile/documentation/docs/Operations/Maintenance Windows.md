@@ -1,4 +1,5 @@
 # Maintenance Windows
 
-See back-end description [here](../BackEnd/Features/MaintenanceWindows.md)
-See front-end description [here](../FrontEnd/DowntimeMessages.md).
+See back-end documentation [here](../Engineering/BackEnd/Features/MaintenanceWindows.md).
+
+See front-end documentation [here](../Engineering/FrontEnd/DowntimeMessages.md).

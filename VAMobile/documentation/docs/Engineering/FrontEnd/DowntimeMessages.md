@@ -51,4 +51,4 @@ The downtime message displays as a full page error with a warning border. The te
 
 ## Back-end
 
-See back-end description [here](../BackEnd/Features/MaintenanceWindows.md)
+See back-end documentation [here](../BackEnd/Features/MaintenanceWindows.md)

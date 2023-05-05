@@ -24,4 +24,4 @@ Using the above example, if there is an upcoming maintenance window for `bgs`, i
 
 ## Front-end
 
-See front-end description [here](../FrontEnd/DowntimeMessages.md). It is important to note that coordination with front-end will be required for handling any changes to the maintenance windows list because effort is required on their part to add handling for maintenance windows within the mobile app.
+See front-end documentation [here](../../FrontEnd/DowntimeMessages.md). It is important to note that coordination with front-end will be required for handling any changes to the maintenance windows list because effort is required on the front-end to add handling for maintenance windows within the mobile app.
