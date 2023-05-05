@@ -10,11 +10,12 @@ import getEnv from 'utils/env'
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
 
 type NoAppointmentsProps = {
+  showVAGovLink?: boolean
   subText: string
   subTextA11yLabel?: string
 }
 
-export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLabel }) => {
+export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLabel, showVAGovLink = true }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
@@ -30,14 +31,16 @@ export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLa
           {subText}
         </TextView>
       </Box>
-      <ClickForActionLink
-        {...a11yHintProp(t('noAppointments.visitVAA11yHint'))}
-        displayedText={t('noAppointments.visitVA')}
-        numberOrUrlLink={LINK_URL_SCHEDULE_APPOINTMENTS}
-        linkType={LinkTypeOptionsConstants.url}
-        linkUrlIconType={LinkUrlIconType.Arrow}
-        a11yLabel={t('noAppointments.visitVAA11yLabel')}
-      />
+      {showVAGovLink && (
+        <ClickForActionLink
+          {...a11yHintProp(t('noAppointments.visitVAA11yHint'))}
+          displayedText={t('noAppointments.visitVA')}
+          numberOrUrlLink={LINK_URL_SCHEDULE_APPOINTMENTS}
+          linkType={LinkTypeOptionsConstants.url}
+          linkUrlIconType={LinkUrlIconType.Arrow}
+          a11yLabel={t('noAppointments.visitVAA11yLabel')}
+        />
+      )}
     </Box>
   )
 }
