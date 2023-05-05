@@ -585,7 +585,6 @@ const claimsAndAppealsSlice = createSlice({
       return { ...initialClaimsAndAppealsState }
     },
   },
-  
 })
 
 export const {
