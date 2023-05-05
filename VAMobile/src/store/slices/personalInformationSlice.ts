@@ -722,8 +722,8 @@ const peronalInformationSlice = createSlice({
       const { preferredName, error } = action.payload
       state.error = error
       state.loading = false
-      if (state.profile) {
-        state.profile.preferredName = preferredName || ''
+      if (state.profile && preferredName) {
+        state.profile.preferredName = preferredName
       }
       state.preferredNameSaved = !error
     },
@@ -734,8 +734,8 @@ const peronalInformationSlice = createSlice({
       const { genderIdentity, error } = action.payload
       state.error = error
       state.loading = false
-      if (state.profile) {
-        state.profile.genderIdentity = genderIdentity || ''
+      if (state.profile && genderIdentity) {
+        state.profile.genderIdentity = genderIdentity
       }
       state.genderIdentitySaved = !error
     },
