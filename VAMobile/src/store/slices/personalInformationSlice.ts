@@ -512,13 +512,13 @@ export const updatePreferredName =
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_preferred_name())
       await logAnalyticsEvent(Events.vama_pref_name_success)
 
-      dispatch(dispatchFinishSaveUpdatePreferredName({ name: preferredName }))
+      dispatch(dispatchFinishSaveUpdatePreferredName({ preferredName }))
       showSnackBar(messages.successMsg, dispatch, undefined, true, false)
-    } catch (err) {
-      if (isErrorObject(err)) {
-        logNonFatalErrorToFirebase(err, `updatePreferredName: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishSaveUpdatePreferredName({ error: err }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `updatePreferredName: ${personalInformationNonFatalErrorString}`)
+        dispatch(dispatchFinishSaveUpdatePreferredName({ error }))
+        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
       await logAnalyticsEvent(Events.vama_pref_name_fail)
@@ -555,12 +555,12 @@ export const updateGenderIdentity =
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
 
-      dispatch(dispatchFinishUpdateGenderIdentity({ genderIdentity: genderIdentity }))
+      dispatch(dispatchFinishUpdateGenderIdentity({ genderIdentity }))
       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `updateGenderIdentity: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishUpdateGenderIdentity({ error: error }))
+        dispatch(dispatchFinishUpdateGenderIdentity({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
       }
@@ -718,12 +718,12 @@ const peronalInformationSlice = createSlice({
       state.loading = false
       state.preferredNameSaved = false
     },
-    dispatchFinishSaveUpdatePreferredName: (state, action: PayloadAction<{ name?: string; error?: Error | undefined }>) => {
-      const { name, error } = action.payload
+    dispatchFinishSaveUpdatePreferredName: (state, action: PayloadAction<{ preferredName?: string; error?: Error | undefined }>) => {
+      const { preferredName, error } = action.payload
       state.error = error
       state.loading = false
       if (state.profile) {
-        state.profile.preferredName = name || ''
+        state.profile.preferredName = preferredName || ''
       }
       state.preferredNameSaved = !error
     },

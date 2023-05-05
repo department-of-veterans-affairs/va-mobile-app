@@ -29,7 +29,7 @@ const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): strin
 }
 
 const getPreferredName = (profile: UserDataProfile | undefined, t: TFunction): string => {
-  if (profile && profile.preferredName) {
+  if (profile?.preferredName) {
     return stringToTitleCase(profile.preferredName)
   } else {
     return t('personalInformation.genericBody', { informationType: t('personalInformation.preferredName.title').toLowerCase() })
@@ -37,9 +37,8 @@ const getPreferredName = (profile: UserDataProfile | undefined, t: TFunction): s
 }
 
 const getGenderIdentity = (profile: UserDataProfile | undefined, t: TFunction, genderIdentityOptions: GenderIdentityOptions): string => {
-  if (profile && profile.genderIdentity) {
-    const genderIdentity = genderIdentityOptions[profile.genderIdentity]
-    return t('dynamicField', { field: genderIdentity })
+  if (profile?.genderIdentity) {
+    return genderIdentityOptions[profile.genderIdentity]
   } else {
     return t('personalInformation.genericBody', { informationType: t('personalInformation.genderIdentity.title').toLowerCase() })
   }
@@ -51,9 +50,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { profile, loading, loadingGenderIdentityOptions, needsDataLoad, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>(
-    (state) => state.personalInformation,
-  )
+  const { profile, loading, loadingGenderIdentityOptions, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { gutter, condensedMarginBetween } = theme.dimensions
   const navigateTo = useRouteNavigation()
 
