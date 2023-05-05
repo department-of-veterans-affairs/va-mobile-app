@@ -4,7 +4,7 @@
 
 Maintenance windows are periods of time during which specific vets-api functionality are expected to be down for maintenance. The mobile app requests this information after login and stores the data locally. If the user navigates to a page that relies on the service during the window, they will be shown a banner informing them that the data is temporarily unavailable and the app will not attempt to fetch the data.
 
-## Backend
+## Back-end
 
 Unlike most of the data used in the vets-api engine, MaintenanceWindows come from the database and not from upstream servers. (How do they get there?) They contain the external service name, start time, and end time. The mobile app requests maintenance windows via the maintenance windows controller, which creates a ServiceGraph object that searches the database for MaintenanceWindow records that end in the future.
 
@@ -22,6 +22,6 @@ Mobile::V0::ServiceGraph.new(
 
 Using the above example, if there is an upcoming maintenance window for `bgs`, it would return `[claims, direct_deposit_benefits]`. It would not include `evss` because that is an intermediate service and not a terminal node. If there is an upcoming a maintenance window for `evss`, it would also return `[claims, direct_deposit_benefits]`.
 
-## Frontend
+## Front-end
 
-After a user starts a new session, the mobile app pings the backend for the maintenance window list and stores it locally. The items returned are intended to map to features within the mobile app. So, continuing with the example from above, military_service_history, claims, and military_service_history should be features within the mobile app, while bgs, evss, and vet360 should not be. 
+See front-end description [here](../FrontEnd/DowntimeMessages.md).

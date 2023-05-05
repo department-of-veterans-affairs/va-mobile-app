@@ -7,7 +7,7 @@ sidebar_position: 6
 
 ## Overview
 
-**Downtime Messages** are error pages that shown to users when a known `maintenance window` is actively occuring for a specific feature in the app. Downtime windows are determined by upstream service providers and compiled into a single list by the back-end. The front-end checks for active downtime windows once per session durin the sync stage after login and caches the data for the remainder of the session.
+**Downtime Messages** are error pages that shown to users when a known `maintenance window` is actively occuring for a specific feature in the app. Downtime windows are determined by upstream service providers and compiled into a single list by the back-end. The front-end checks for active downtime windows once per session during the sync stage after login and caches the data for the remainder of the session.
 
 Downtime messages use the same display pattern as errors in code, with additional checks in the `useError` utility to check if a downtime error exists for a specific `screen ID`. Multiple features can trigger a downtime message on a single screen, e.g. claims and appeals are two separate features but display on the same page. Whether a downtime message is displayed if a subset of features on the screen are down is a business decision that varies based on feature.
 
@@ -38,6 +38,10 @@ data: [
   },
 ]
 ```
+
+## Back-end
+
+See back-end description [here](../BackEnd/Features/MaintenanceWindows.md)
 
 ## Downtime Messages Display
 
