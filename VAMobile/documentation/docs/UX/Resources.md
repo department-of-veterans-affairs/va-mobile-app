@@ -1,17 +1,25 @@
 ---
-title: Resources
+title: UX Resources
 sidebar_position: 6
 ---
 
 VA Mobile app [UX resources on github](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-design).
 
 
-## Design: Working files
+## Design
 ### Figma
-* [VA Mobile Team](https://www.figma.com/files/team/1114266503868297401)
-	* Current features, resources, libraries, and design explorations.
-* [Design Library](https://www.figma.com/files/827597988283174959/project/60961499/%F0%9F%93%90-Design-Library?fuid=1114240858371616544)
-	* Finalized components, text styles, and color styles.
+#### [VA Mobile Team](https://www.figma.com/files/team/1114266503868297401)
+* Current features, resources, libraries, and design explorations.
+#### [Design Library](https://www.figma.com/files/827597988283174959/project/60961499/%F0%9F%93%90-Design-Library?fuid=1114240858371616544)
+* Finalized components, text styles, and color styles.
+
+#### 🚢 Shipped files 
+* Example screens that are in production.
+	* [Global](https://www.figma.com/file/PpHk9Yyw8dC9xj38AeR9pL/%F0%9F%9A%A2-Global-2.0---Shipped---VA-Mobile?t=i6c9U7y2iqNodqgF-1)
+	* [Home](https://www.figma.com/file/ddMWiCQCfmUKFhMcYG9fYv/%F0%9F%9A%A2-Home-2.0---Shipped---VA-Mobile?t=i6c9U7y2iqNodqgF-1) & [Profile](https://www.figma.com/file/O6sdr5N7xV6GOZhTPcgY5x/%F0%9F%9A%A2-Profile-2.0---Shipped---VA-Mobile)
+	* [Benefits](https://www.figma.com/file/p0vlRz38TKIOwWDfI2bGc7/%F0%9F%9A%A2-Benefits-2.0---Shipped---VA-Mobile?t=i6c9U7y2iqNodqgF-1)
+	* [Health](https://www.figma.com/file/JQAoUBxvSWCzKvu2ifRRE7/%F0%9F%9A%A2-Health-2.0---Shipped---VA-Mobile?t=i6c9U7y2iqNodqgF-1)
+	* [Payments](https://www.figma.com/file/yhGsaPc2px6eCVzXhuOwm4/%F0%9F%9A%A2-Payments-2.0---Shipped---VA-Mobile?t=i6c9U7y2iqNodqgF-1)
 
 ### Balsamiq
 * [UX brainstorm & work](https://balsamiq.cloud/s4uw4la/pnnwuqv) 
@@ -49,5 +57,5 @@ VA Mobile app [UX resources on github](https://github.com/department-of-veterans
 * [Library style sheets (deprecated)](https://adhoc.invisionapp.com/share/AX108RJZPB6E#/screens/445194518) 
 Shows the components from the design library. Deprecated July 2021.
 
-### Componenets
+### Components
 * [MVP Mobile App UI Styles on Google Docs (deprecated)](https://docs.google.com/document/d/1VC-CLWnhevB8HLBBHPwkSJvECn8EBie8HOkJylKE1lo/edit?usp=sharing)

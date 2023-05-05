@@ -1,1 +1,1 @@
-[OpenAPI Docs](/api/)
+[OpenAPI docs](/api/)

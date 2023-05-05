@@ -16,7 +16,7 @@ In order to accomplish this we approach our design work by the following values:
 ### Process
 Our values are embodied in our design process:
 
-* **Discovery & [research](/docs/UX/Research)**
+* **Discovery & [research](Research)**
   * In order to understand a new feature or problem we interview users, go through research done by other VA teams, and/or look at other companies or applications for inspiration. 
 * **Iteration cycles**
   * In most cases, we go through several iterations of a design before it is handed off to engineering. Most designs begin with sketches or low-fidelity mockups in Balsamiq.

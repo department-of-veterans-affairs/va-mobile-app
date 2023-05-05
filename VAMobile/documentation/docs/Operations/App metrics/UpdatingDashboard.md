@@ -1,8 +1,9 @@
 ---
+title: Updating the dashboard
 sidebar_position: 2
 ---
 
-# Updating the Dashboard
+# Updating the dashboard
 
 Currently, the [monthly dashboard](Dashboard.md) needs to by updated with a fairly manual process. There are no APIs for some store data we use to derive the current dashboard, which makes automating the entire process difficult. Beyond that, some store data is very volatile and can take up to 7 days to settle. We currently update the reports every month after the 7th of the month for consistency and to avoid any discrepancies that happen due to Apple and Google's collection processes. 
 
