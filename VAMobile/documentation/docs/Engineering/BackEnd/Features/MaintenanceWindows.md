@@ -8,7 +8,7 @@ Maintenance windows are periods of time during which specific vets-api functiona
 
 Unlike most of the data used in the vets-api engine, MaintenanceWindows come from the vets-api database and not from upstream servers. They're added there by developers on other teams. They contain the external service name, start time, and end time. The mobile app requests maintenance windows via the maintenance windows controller, which searches the database for MaintenanceWindow records that end in the future and creates a ServiceGraph object to process those windows into a format that is more easily used by the front-end.
 
-The ServiceGraph is an abstraction that allows us to provide a flexible number of arguments that define a hierarchy that matches upstream services to downstream features. It returns a list of features that have upcoming outages due to maintenance windows. This allows each team to define its own mapping of services to features. Each argument is an array of two symbols in which the first element is the top-most service and the second key is either an intermediate service or the feature name that would be received by the mobile app. Intermediate services are not included in the results, only terminal nodes (i.e., second items in the array that do not match the first items of any subsequent arrays).
+The ServiceGraph is an abstraction that accepts a flexible number of arguments that define a hierarchy that matches upstream services to downstream features and returns a list of features that have upcoming outages due to maintenance windows. This allows each team to define its own mapping of services to features. Each argument is an array of two symbols in which the first element is an upstream service or intermediate service and the second key is either an intermediate service or the feature name that would be received by the mobile app. Intermediate services are not included in the results, only terminal nodes (i.e., second items in the array that do not match the first items of any subsequent arrays).
 
 An example ServiceGraph instance could be something like:
 ```
@@ -20,7 +20,16 @@ Mobile::V0::ServiceGraph.new(
 )
 ```
 
-Using the above example, if there is an upcoming maintenance window for `bgs`, it would return `[claims, direct_deposit_benefits]`. It would not include `evss` because that is an intermediate service and not a terminal node. If there is an upcoming a maintenance window for `evss`, it would also return `[claims, direct_deposit_benefits]`.
+This gets processed into a hierarchy like:
+```
+{
+  bgs: [claims, direct_deposit_benefits],
+  evss: [claims, direct_deposit_benefits],
+  vet360: [military_service_history]
+}
+```
+
+So if there's an upcoming maintenance window for either `bgs` or `evss`, the ServiceGraph would return `[claims, direct_deposit_benefits]`. If there's an upcoming maintenance window for `vet360`, it would return `[military_service_history]`. And if all three services had upcoming maintenance windows, it would return `[claims, direct_deposit_benefits, military_service_history]`.
 
 ## Front-end
 
