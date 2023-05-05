@@ -320,7 +320,12 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
               <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
-              <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={theme.dimensions.chevronListItemWidth} height={theme.dimensions.chevronListItemHeight} />
+              <VAIcon
+                name={'ChevronRight'}
+                fill={theme.colors.icon.chevronListItem}
+                width={theme.dimensions.chevronListItemWidth}
+                height={theme.dimensions.chevronListItemHeight}
+              />
             </Box>
           </Pressable>
         </>

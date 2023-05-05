@@ -92,7 +92,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
 
   const profileIconProps: VAIconProps = {
-    name: 'ProfileSelected',
+    name: 'ChevronUp',
     // stroke: 'red',
   }
 

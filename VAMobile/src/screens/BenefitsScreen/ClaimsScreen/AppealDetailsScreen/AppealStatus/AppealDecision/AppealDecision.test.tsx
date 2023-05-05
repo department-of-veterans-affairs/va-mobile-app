@@ -38,7 +38,7 @@ context('AppealDecision', () => {
     describe('when ama is true', () => {
       it('should display the text "After the {{aojDesc}} has completed the judge’s instructions to correct the error, they will make a new decision."', async () => {
         initializeTestInstance([{ description: 'desc', disposition: 'remand' }], 'vba', true, true)
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual(
+        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual(
           'After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.',
         )
       })
@@ -49,7 +49,7 @@ context('AppealDecision', () => {
     describe('when boardDecision is true', () => {
       it('should display the text "If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months."', async () => {
         initializeTestInstance([{ description: 'desc', disposition: 'allowed' }], 'vba', true, true)
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual(
+        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual(
           'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
         )
       })

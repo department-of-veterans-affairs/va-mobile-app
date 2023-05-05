@@ -7,7 +7,9 @@ import { VAIconColors, VATextColors } from 'styles/theme'
 import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
 
 import { Box, BoxProps } from 'components'
-// New svgs need to set `fill` to `#000` and `stroke` to `#00F`. See /svgs for examples
+
+// SVGs should have `fill` set to `#000`. If `stroke` is used, set to `#00F`. See existing icons for guidance.
+
 // Navigation
 import BenefitsSelected from './svgs/navIcon/benefitsSelected.svg'
 import BenefitsUnselected from './svgs/navIcon/benefitsUnselected.svg'
@@ -19,11 +21,11 @@ import PaymentsSelected from './svgs/navIcon/paymentsSelected.svg'
 import PaymentsUnselected from './svgs/navIcon/paymentsUnselected.svg'
 import ProfileSelected from './svgs/navIcon/profileSelected.svg'
 
-// Arrows
-import ArrowDown from './svgs/chevron-down.svg'
-import ArrowLeft from './svgs/chevron-left.svg'
-import ArrowRight from './svgs/chevron-right.svg'
-import ArrowUp from './svgs/chevron-up.svg'
+// Chevrons
+import ChevronDown from './svgs/chevron-down.svg'
+import ChevronLeft from './svgs/chevron-left.svg'
+import ChevronRight from './svgs/chevron-right.svg'
+import ChevronUp from './svgs/chevron-up.svg'
 
 // forces icons
 
@@ -96,11 +98,14 @@ import UnreadIcon from './svgs/unread_icon.svg'
 import VideoCamera from './svgs/videoCamera.svg'
 
 export const VA_ICON_MAP = {
-  ArrowDown,
   BenefitsSelected,
   BenefitsUnselected,
   Bullet, // DELETE FOR CHARACTERS?
   CheckMark,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
   CircleCheckMark, // TODO: Combine with WhiteCheckCircle on follow-up ticket to enhance VAIcon for 2 fills
   FilledCheckBox,
   HealthSelected,
@@ -112,9 +117,6 @@ export const VA_ICON_MAP = {
   ProfileSelected,
   // Done ^
   Add,
-  ArrowUp,
-  ArrowLeft,
-  ArrowRight,
   Airforce,
   Army,
   Calendar,
@@ -144,7 +146,7 @@ export const VA_ICON_MAP = {
   WebviewOpen,
   WebviewRefresh,
   Lock,
-  PickerArrows,
+  PickerArrows, // RENAME TO 'Sort'
   Logo,
   ErrorCheckBox,
   QuestionMark,
@@ -190,7 +192,11 @@ export type VAIconProps = BoxProps & {
 }
 
 /**
- * A common component to display assets(svgs). Svgs need to place in VAIcon/svgs folder. Set fill to #000 and stroke to #00F in the svg so VAIcon component can set the fill/stroke color. Examples/details can be found in VAIcon component.
+ * A common component to display assets (SVGs).
+ * In the SVG definitions, on the path:
+ *    - Set `fill` to `#000` to inherit VAIcon's fill color prop
+ *    - If `stroke` is used (uncommon), set to `#00F` to inherit VAIcon's stroke color prop
+ *    - See existing icons for guidance
  *
  * @returns VAIcon component
  */

@@ -155,7 +155,7 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
     default:
       return (
         <VAIcon
-          name={'ArrowRight'}
+          name={'ChevronRight'}
           fill={theme.colors.icon.chevronListItem}
           width={theme.dimensions.chevronListItemWidth}
           height={theme.dimensions.chevronListItemHeight}

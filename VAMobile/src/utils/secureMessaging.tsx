@@ -61,7 +61,7 @@ export const getMessagesListItems = (
         },
         leftIconProps: paperClipProps,
         rightIconProps: {
-          name: 'ArrowRight',
+          name: 'ChevronRight',
           width: theme.dimensions.chevronListItemWidth,
           height: theme.dimensions.chevronListItemHeight,
           fill: theme.colors.icon.chevronListItem,
