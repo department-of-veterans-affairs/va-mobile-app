@@ -51,7 +51,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { profile, loading, loadingGenderIdentityOptions, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const { gutter, condensedMarginBetween } = theme.dimensions
+  const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const navigateTo = useRouteNavigation()
 
   useFocusEffect(
@@ -77,7 +77,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   const dobLinkProps: TextViewProps = {
     variant: 'MobileBodyLink',
-    mb: condensedMarginBetween,
+    mb: formMarginBetween,
   }
 
   const boxProps: BoxProps = {
