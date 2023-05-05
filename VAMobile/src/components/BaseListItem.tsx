@@ -30,7 +30,7 @@ export enum ButtonDecoratorType {
   /** Empty radio button decorator */
   EmptyCheckBox = 'EmptyCheckBox',
   /** Filled radio button decorator */
-  FilledCheckBox = 'FilledCheckBox',
+  CheckBoxFilled = 'CheckBoxFilled',
 }
 
 export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
@@ -129,10 +129,10 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
           {...decoratorProps}
         />
       )
-    case ButtonDecoratorType.FilledCheckBox:
+    case ButtonDecoratorType.CheckBoxFilled:
       return (
         <VAIcon
-          name={'FilledCheckBox'}
+          name={'CheckBoxFilled'}
           height={radioBtnHeight}
           width={radioBtnWidth}
           fill={theme.colors.icon.checkboxEnabledPrimary}

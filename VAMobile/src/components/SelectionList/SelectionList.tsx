@@ -82,7 +82,7 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
     let fill = 'checkboxEnabledPrimary'
     let stroke = 'checkboxEnabledPrimary'
     if (numSelected === items.length) {
-      name = 'FilledCheckBox'
+      name = 'CheckBoxFilled'
     } else if (numSelected > 0) {
       name = 'IntermediateCheckBox'
     } else {

@@ -7,7 +7,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useExternalLink } from 'utils/hooks'
 import Box from './Box'
 import TextView, { FontVariant, TextViewProps } from './TextView'
-import VAIcon from './VAIcon'
+// import VAIcon from './VAIcon'
 
 /**
  * Props for item in {@link listOfText}

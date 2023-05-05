@@ -35,7 +35,7 @@ const SelectionListItem: FC<SelectionListItemProps> = ({ content, setSelectedFn,
     let stroke = 'checkboxEnabledPrimary'
 
     if (isSelected) {
-      name = 'FilledCheckBox'
+      name = 'CheckBoxFilled'
     } else {
       name = 'EmptyCheckBox'
       fill = 'checkboxDisabledContrast'

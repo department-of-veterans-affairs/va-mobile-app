@@ -3,32 +3,34 @@ import { SvgProps } from 'react-native-svg'
 import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
-import { VAIconColors, VATextColors } from 'styles/theme'
-import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
-
+import { AccessibilityState } from 'store/slices'
 import { Box, BoxProps } from 'components'
+import { RootState } from 'store'
+import { VAIconColors, VATextColors } from 'styles/theme'
+import { updateFontScale } from 'utils/accessibility'
+import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 // SVGs should have `fill` set to `#000`. If `stroke` is used, set to `#00F`. See existing icons for guidance.
 
 // Navigation
-import BenefitsSelected from './svgs/navIcon/benefitsSelected.svg'
-import BenefitsUnselected from './svgs/navIcon/benefitsUnselected.svg'
-import HealthSelected from './svgs/navIcon/healthSelected.svg'
-import HealthUnselected from './svgs/navIcon/healthUnselected.svg'
-import HomeSelected from './svgs/navIcon/homeSelected.svg'
-import HomeUnselected from './svgs/navIcon/homeUnselected.svg'
-import PaymentsSelected from './svgs/navIcon/paymentsSelected.svg'
-import PaymentsUnselected from './svgs/navIcon/paymentsUnselected.svg'
-import ProfileSelected from './svgs/navIcon/profileSelected.svg'
+import BenefitsSelected from './svgs/navIcon/BenefitsSelected.svg'
+import BenefitsUnselected from './svgs/navIcon/BenefitsUnselected.svg'
+import HealthSelected from './svgs/navIcon/HealthSelected.svg'
+import HealthUnselected from './svgs/navIcon/HealthUnselected.svg'
+import HomeSelected from './svgs/navIcon/HomeSelected.svg'
+import HomeUnselected from './svgs/navIcon/HomeUnselected.svg'
+import PaymentsSelected from './svgs/navIcon/PaymentsSelected.svg'
+import PaymentsUnselected from './svgs/navIcon/PaymentsUnselected.svg'
+import ProfileSelected from './svgs/navIcon/ProfileSelected.svg'
 
 // Chevrons
-import ChevronDown from './svgs/chevron-down.svg'
-import ChevronLeft from './svgs/chevron-left.svg'
-import ChevronRight from './svgs/chevron-right.svg'
-import ChevronUp from './svgs/chevron-up.svg'
+import ChevronDown from './svgs/ChevronDown.svg'
+import ChevronLeft from './svgs/ChevronLeft.svg'
+import ChevronRight from './svgs/ChevronRight.svg'
+import ChevronUp from './svgs/ChevronUp.svg'
 
-// forces icons
-
+// Branch icons
 import Airforce from './svgs/dodBranch/air-force.svg'
 import Army from './svgs/dodBranch/army.svg'
 import CoastGuard from './svgs/dodBranch/coast-guard.svg'
@@ -52,11 +54,11 @@ import WebviewOpen from './svgs/webview/external-link-alt-solid.svg'
 import WebviewRefresh from './svgs/webview/redo-solid.svg'
 
 // VASelector
+import CheckBoxFilled from './svgs/checkbox/CheckBoxFilled.svg'
 import DisabledRadio from './svgs/radio/radioDisabled.svg'
 import EmptyCheckBox from './svgs/checkbox/checkBoxEmpty.svg'
 import EmptyRadio from './svgs/radio/radioEmpty.svg'
 import ErrorCheckBox from './svgs/checkbox/checkBoxError.svg'
-import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
 import FilledRadio from './svgs/radio/radioFilled.svg'
 import IntermediateCheckBox from './svgs/checkbox/checkBoxIntermediate.svg'
 
@@ -66,16 +68,12 @@ import WhiteCloseCircle from './svgs/circleWhiteIcon/white-close-circle.svg'
 
 // Misc
 
-import { AccessibilityState } from 'store/slices'
-import { RootState } from 'store'
-import { updateFontScale } from 'utils/accessibility'
-import { useSelector } from 'react-redux'
 import Add from './svgs/add.svg'
 import BuildingSolid from './svgs/buildingSolid.svg'
-import Bullet from './svgs/bullet.svg'
-import CheckMark from './svgs/check-mark.svg'
-import CircleCheckMark from './svgs/checkmark-in-circle.svg'
-import Compose from './svgs/compose.svg'
+import Bullet from './svgs/Bullet.svg'
+import CheckMark from './svgs/CheckMark.svg'
+import CircleCheckMark from './svgs/CircleCheckMark.svg'
+import Compose from './svgs/Compose.svg'
 import Delete from './svgs/delete.svg'
 import EllipsisSolid from './svgs/ellipsisSolid.svg'
 import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
@@ -101,13 +99,14 @@ export const VA_ICON_MAP = {
   BenefitsSelected,
   BenefitsUnselected,
   Bullet, // DELETE FOR CHARACTERS?
+  CheckBoxFilled,
   CheckMark,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   ChevronUp,
   CircleCheckMark, // TODO: Combine with WhiteCheckCircle on follow-up ticket to enhance VAIcon for 2 fills
-  FilledCheckBox,
+  Compose,
   HealthSelected,
   HealthUnselected,
   HomeSelected,
@@ -120,7 +119,6 @@ export const VA_ICON_MAP = {
   Airforce,
   Army,
   Calendar,
-  Compose,
   CoastGuard,
   Delete,
   Directions,

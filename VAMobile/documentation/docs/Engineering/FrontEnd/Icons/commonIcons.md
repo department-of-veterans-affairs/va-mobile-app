@@ -1,13 +1,13 @@
 import { ReactComponent as Add} from '@componentsDocs/VAIcon/svgs/add.svg';
 import { ReactComponent as Building} from '@componentsDocs/VAIcon/svgs/buildingSolid.svg';
-import { ReactComponent as Bullet} from '@componentsDocs/VAIcon/svgs/bullet.svg';
-import { ReactComponent as CheckMark} from '@componentsDocs/VAIcon/svgs/check-mark.svg';
-import { ReactComponent as CheckMarkCircle} from '@componentsDocs/VAIcon/svgs/checkmark-in-circle.svg';
-import { ReactComponent as ChevronDown} from '@componentsDocs/VAIcon/svgs/chevron-down.svg';
-import { ReactComponent as ChevronLeft} from '@componentsDocs/VAIcon/svgs/chevron-left.svg';
-import { ReactComponent as ChevronRight} from '@componentsDocs/VAIcon/svgs/chevron-right.svg';
-import { ReactComponent as ChevronUp} from '@componentsDocs/VAIcon/svgs/chevron-up.svg';
-import { ReactComponent as Compose} from '@componentsDocs/VAIcon/svgs/compose.svg';
+import { ReactComponent as Bullet} from '@componentsDocs/VAIcon/svgs/Bullet.svg';
+import { ReactComponent as CheckMark} from '@componentsDocs/VAIcon/svgs/CheckMark.svg';
+import { ReactComponent as CheckMarkCircle} from '@componentsDocs/VAIcon/svgs/CircleCheckMark.svg';
+import { ReactComponent as ChevronDown} from '@componentsDocs/VAIcon/svgs/ChevronDown.svg';
+import { ReactComponent as ChevronLeft} from '@componentsDocs/VAIcon/svgs/ChevronLeft.svg';
+import { ReactComponent as ChevronRight} from '@componentsDocs/VAIcon/svgs/ChevronRight.svg';
+import { ReactComponent as ChevronUp} from '@componentsDocs/VAIcon/svgs/ChevronUp.svg';
+import { ReactComponent as Compose} from '@componentsDocs/VAIcon/svgs/Compose.svg';
 import { ReactComponent as Ellipsis} from '@componentsDocs/VAIcon/svgs/ellipsisSolid.svg';
 import { ReactComponent as ExclamationTriangleSolid} from '@componentsDocs/VAIcon/svgs/exclamationTriangleSolid.svg';
 import { ReactComponent as Folder} from '@componentsDocs/VAIcon/svgs/folder-solid.svg';
@@ -37,14 +37,14 @@ Name | Icon | File Location
 :---: | :---: | :---: 
 Add | <Add  className="icons"/> | add.svg
 Building | <Building  className="icons"/> | buildingSolid.svg
-Bullet | <Bullet  className="icons"/> | bullet.svg
-Check Mark | <CheckMark  className="icons"/> | check-mark.svg
-Check Mark Circle | <CheckMarkCircle  className="icons"/> | checkmark-in-circle.svg
-Chevron Down | <ChevronDown  className="icons"/> | chevron-down.svg
-Chevron Left | <ChevronLeft  className="icons"/> | chevron-left.svg
-Chevron Right | <ChevronRight  className="icons iconsStroke"/> | chevron-right.svg
-Chevron Up | <ChevronUp  className="icons"/> | chevron-up.svg
-Compose | <Compose  className="icons"/> | compose.svg
+Bullet | <Bullet  className="icons"/> | Bullet.svg
+Check Mark | <CheckMark  className="icons"/> | CheckMark.svg
+Check Mark Circle | <CheckMarkCircle  className="icons"/> | CircleCheckMark.svg
+Chevron Down | <ChevronDown  className="icons"/> | ChevronDown.svg
+Chevron Left | <ChevronLeft  className="icons"/> | ChevronLeft.svg
+Chevron Right | <ChevronRight  className="icons iconsStroke"/> | ChevronRight.svg
+Chevron Up | <ChevronUp  className="icons"/> | ChevronUp.svg
+Compose | <Compose  className="icons"/> | Compose.svg
 Ellipsis | <Ellipsis  className="icons"/> | ellipsisSolid.svg
 Exclamation Triangle | <ExclamationTriangleSolid  className="icons"/> | exclamationTriangleSolid.svg
 Folder | <Folder  className="icons"/> | folder-solid.svg

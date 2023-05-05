@@ -80,7 +80,7 @@ context('VASelector', () => {
   describe('when selected is true', () => {
     it('should display the filled checkbox icon', async () => {
       initializeTestInstance(true)
-      const filledCheckBox = findByTestID(testInstance, 'FilledCheckBox')
+      const filledCheckBox = findByTestID(testInstance, 'CheckBoxFilled')
 
       expect(filledCheckBox).toBeTruthy()
       expect(filledCheckBox.props.fill).toEqual('checkboxEnabledPrimary')
