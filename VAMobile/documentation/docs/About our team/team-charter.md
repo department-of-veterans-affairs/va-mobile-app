@@ -1,5 +1,5 @@
 ---
-title: Team Charter
+title: Team charter
 sidebar_position: 1
 ---
 
@@ -9,18 +9,18 @@ sidebar_position: 1
 
 Each Veteran is securely connected to the VA services that matter most to them regardless of device or VA org chart.
 
-## Mission Statement
+## Mission statement
 
 A native mobile app that is a trusted source for Veterans to quickly and easily check the status of their VA services and complete simple, transactional tasks across their health and benefits.
 
 
 ## What we work on
 
-### Product Suite 
+### Product suite 
 - Health, benefits, payments, and profile products and services.
 - Global systems like UI library, FE components, accessibility, devops, governance and documentation.
 
-### Product Portfolio
+### Product portfolio
 
 #### Health
 
@@ -41,16 +41,16 @@ A native mobile app that is a trusted source for Veterans to quickly and easily 
 - Compensation
 
 
-## Team Organization
+## Team organization
 The VA mobile App team is split into two groups covering different areas of focus.
 
-### Red Team
+### Red team
 Health-related products in the app.
 
-### Blue Team
+### Blue team
 Benefits-related products, global app features like navigation and single sign on (SIS), and incremental improvements and maintenance (aka TLC).
 
-See [Who we are](/docs/About/who-we-are) for the team roster.
+See [Who we are](/docs/About%20our%20team/who-we-are) for the team roster.
 
 ## How we work
 
@@ -67,7 +67,7 @@ This is our main means of communication with each other. Keep as much conversati
 - Codebase and issues are on separate [VA mobile repository](https://github.com/department-of-veterans-affairs/va-mobile-app).
 - Update tickets regularly. If conversations happen in Slack that are pertinent to a product or initiative, copy the useful info into GitHub/ZenHub.
 
-See [Team Norms](/docs/About/team-norms) for more details on team communications.
+See [Team Norms](/docs/About%20our%20team/team-norms) for more details on team communications.
 
 ### Team meeting cadence
 

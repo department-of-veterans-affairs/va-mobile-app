@@ -4,11 +4,11 @@ import React from 'react'
 import { render, context, RenderAPI, mockNavProps } from 'testUtils'
 import { ReactTestInstance } from 'react-test-renderer'
 
-import StatusGlossary from './StatusGlossary'
+import StatusDefinition from './StatusDefinition'
 import { RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { TextView } from 'components'
 
-context('StatusGlossary', () => {
+context('StatusDefinition', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
@@ -19,7 +19,7 @@ context('StatusGlossary', () => {
      { params: routeMock || { display: '', value: 'active'}
     })
 
-    component = render(<StatusGlossary {...props} />)
+    component = render(<StatusDefinition {...props} />)
     testInstance = component.container
   }
 
