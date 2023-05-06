@@ -16,7 +16,7 @@ import { ReactComponent as Info} from '@componentsDocs/VAIcon/svgs/info-circle.s
 import { ReactComponent as MedicalFolder} from '@componentsDocs/VAIcon/svgs/folder-medical-solid.svg';
 import { ReactComponent as Minus} from '@componentsDocs/VAIcon/svgs/minus.svg';
 import { ReactComponent as PaperClip} from '@componentsDocs/VAIcon/svgs/PaperClip.svg';
-import { ReactComponent as PhoneSolid} from '@componentsDocs/VAIcon/svgs/phoneSolid.svg';
+import { ReactComponent as Phone} from '@componentsDocs/VAIcon/svgs/Phone.svg';
 import { ReactComponent as PickerArrows} from '@componentsDocs/VAIcon/svgs/picker-arrows.svg';
 import { ReactComponent as QuestionMark} from '@componentsDocs/VAIcon/svgs/questionMark.svg';
 import { ReactComponent as Remove} from '@componentsDocs/VAIcon/svgs/remove.svg';
@@ -39,7 +39,7 @@ Add | <Add  className="icons"/> | add.svg
 Building | <Building  className="icons"/> | buildingSolid.svg
 Bullet | <Bullet  className="icons"/> | Bullet.svg
 Check Mark | <CheckMark  className="icons"/> | CheckMark.svg
-Check Mark Circle | <CheckMarkCircle  className="icons"/> | CircleCheckMark.svg
+Check Mark in Circle | <CheckMarkCircle  className="icons"/> | CircleCheckMark.svg
 Chevron Down | <ChevronDown  className="icons"/> | ChevronDown.svg
 Chevron Left | <ChevronLeft  className="icons"/> | ChevronLeft.svg
 Chevron Right | <ChevronRight  className="icons iconsStroke"/> | ChevronRight.svg
@@ -53,7 +53,7 @@ Info | <Info  className="icons"/> | info-circle.svg
 Medical Folder | <MedicalFolder  className="icons"/> | folder-medical-solid.svg
 Minus | <Minus  className="icons"/> | minus.svg
 Paper Clip | <PaperClip  className="icons"/> | PaperClip.svg
-Phone Solid | <PhoneSolid  className="icons"/> | phoneSolid.svg
+Phone | <Phone  className="icons"/> | Phone.svg
 Picker Arrows | <PickerArrows className="icons" /> | picker-arrows.svg
 Question Mark | <QuestionMark  className="icons"/> | questionMark.svg
 Remove | <Remove  className="icons"/> | remove.svg

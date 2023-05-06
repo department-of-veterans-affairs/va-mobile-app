@@ -40,10 +40,10 @@ import Navy from './svgs/dodBranch/navy.svg'
 // Links
 import Calendar from './svgs/links/calendar.svg'
 import Chat from './svgs/links/chat.svg'
+import CirclePhone from './svgs/links/CirclePhone.svg'
 import Directions from './svgs/links/directions.svg'
 import ExternalLink from './svgs/links/circle_external_link.svg'
-import Phone from './svgs/links/phone.svg'
-import PhoneTTY from './svgs/links/phone-tty.svg'
+import PhoneTTY from './svgs/links/PhoneTTY.svg'
 import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
 import Text from './svgs/links/text.svg'
 
@@ -84,7 +84,7 @@ import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 import Minus from './svgs/minus.svg'
 import PaperClip from './svgs/PaperClip.svg'
-import PhoneSolid from './svgs/phoneSolid.svg'
+import Phone from './svgs/Phone.svg'
 import PickerArrows from './svgs/picker-arrows.svg'
 import QuestionMark from './svgs/questionMark.svg'
 import Remove from './svgs/remove.svg'
@@ -106,14 +106,17 @@ export const VA_ICON_MAP = {
   ChevronRight,
   ChevronUp,
   CircleCheckMark, // TODO: Combine with WhiteCheckCircle on follow-up ticket to enhance VAIcon for 2 fills
+  CirclePhone,
   Compose,
   HealthSelected,
   HealthUnselected,
   HomeSelected,
   HomeUnselected,
-  PaperClip, // Needs git name fix
+  PaperClip,
   PaymentsSelected,
   PaymentsUnselected,
+  Phone,
+  PhoneTTY, // Design ?: should we simplify? Very small icon for "keyboard" on it
   ProfileSelected,
   // Done ^
   Add,
@@ -133,8 +136,6 @@ export const VA_ICON_MAP = {
   Marines,
   Minus,
   Navy,
-  Phone,
-  PhoneTTY,
   Chat,
   Text,
   RightArrowInCircle,
@@ -151,7 +152,6 @@ export const VA_ICON_MAP = {
   Remove,
   UnreadIcon,
   VideoCamera,
-  PhoneSolid,
   ExclamationTriangleSolid,
   TrashSolid,
   InboxSolid,
