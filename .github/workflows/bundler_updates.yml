@@ -1,4 +1,4 @@
-name: "Update Bundler"
+name: "[Code Quality] Update Bundler"
 
 on:
   schedule:

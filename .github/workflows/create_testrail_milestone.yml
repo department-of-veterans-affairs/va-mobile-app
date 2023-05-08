@@ -1,4 +1,4 @@
-name: "Create Testrail Milestone"
+name: "[TestRail] Create TestRail Milestone"
 
 on:
   workflow_call:
@@ -7,10 +7,10 @@ on:
         value: ${{ jobs.create_milestone.outputs.milestoneId }}
     secrets:
       TEST_RAIL_USER:
-        description: "Testrail robot userid"
+        description: "TestRail robot userid"
         required: true
       TEST_RAIL_KEY:
-        description: "Testrail api key"
+        description: "TestRail api key"
         required: true
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
       milestoneId: ${{ steps.add_milestone.outputs.milestone }}
     runs-on: ubuntu-latest
     steps:
-      - name: 'Add new sprint milestone in Testrail'
+      - name: 'Add new sprint milestone in TestRail'
         id: add_milestone
         run: |
           dateRange="$(date '+%B %-d') - $(date -d '+13 days' '+%B %-d')"

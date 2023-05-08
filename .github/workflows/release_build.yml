@@ -1,7 +1,7 @@
 # Release builds that are triggered by the v*.*.* tag. Release tags occur when
 # someone comments /approve on the associated release ticket
 
-name: Release Build
+name: '[Build] Release Build'
 
 on:
   push:
