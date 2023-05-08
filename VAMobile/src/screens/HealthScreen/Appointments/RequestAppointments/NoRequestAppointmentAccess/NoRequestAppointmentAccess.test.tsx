@@ -53,9 +53,9 @@ context('NoRequestAppointmentAccess', () => {
     const texts = testInstance.findAllByType(TextView)
     expect(texts[3].props.children).toBe("We can't find your facility registration")
     expect(texts[4].props.children).toBe('To request an appointment online, you need to be:')
-    expect(texts[6].props.children[0]).toBe('Enrolled in VA health care,')
-    expect(texts[7].props.children).toBe(' and')
-    expect(texts[9].props.children[0]).toBe('Registered with at least 1 VA medical center that accepts online scheduling')
+    expect(texts[5].props.children[0]).toBe('Enrolled in VA health care,')
+    expect(texts[6].props.children).toBe(' and')
+    expect(texts[7].props.children[0]).toBe('Registered with at least 1 VA medical center that accepts online scheduling')
   })
 
   it('should use route navigation when Find facility button is pressed', async () => {

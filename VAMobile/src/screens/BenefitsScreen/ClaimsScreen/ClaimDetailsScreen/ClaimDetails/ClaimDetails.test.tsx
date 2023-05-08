@@ -78,7 +78,7 @@ context('ClaimDetails', () => {
   describe('when the contention list has items', () => {
     it('will display the header "What you\'ve claimed"', async () => {
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews.length).toEqual(9) // +1 for bullet
+      expect(textViews.length).toEqual(8)
 
       expect(textViews[2].props.children).toEqual("What you've claimed")
     })
