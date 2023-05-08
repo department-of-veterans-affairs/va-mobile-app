@@ -137,7 +137,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
       case 'directions':
         return 'Directions'
       case 'externalLink':
-        return 'ExternalLink'
+        return 'CircleExternalLink'
     }
   }
 

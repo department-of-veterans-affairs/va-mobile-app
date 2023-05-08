@@ -2,14 +2,15 @@ import { ReactComponent as Add} from '@componentsDocs/VAIcon/svgs/Add.svg';
 import { ReactComponent as Building} from '@componentsDocs/VAIcon/svgs/buildingSolid.svg';
 import { ReactComponent as Bullet} from '@componentsDocs/VAIcon/svgs/Bullet.svg';
 import { ReactComponent as CheckMark} from '@componentsDocs/VAIcon/svgs/CheckMark.svg';
-import { ReactComponent as CheckMarkCircle} from '@componentsDocs/VAIcon/svgs/CircleCheckMark.svg';
 import { ReactComponent as ChevronDown} from '@componentsDocs/VAIcon/svgs/ChevronDown.svg';
 import { ReactComponent as ChevronLeft} from '@componentsDocs/VAIcon/svgs/ChevronLeft.svg';
 import { ReactComponent as ChevronRight} from '@componentsDocs/VAIcon/svgs/ChevronRight.svg';
 import { ReactComponent as ChevronUp} from '@componentsDocs/VAIcon/svgs/ChevronUp.svg';
+import { ReactComponent as CircleCheckMark} from '@componentsDocs/VAIcon/svgs/CircleCheckMark.svg';
 import { ReactComponent as Compose} from '@componentsDocs/VAIcon/svgs/Compose.svg';
 import { ReactComponent as Ellipsis} from '@componentsDocs/VAIcon/svgs/ellipsisSolid.svg';
 import { ReactComponent as ExclamationTriangleSolid} from '@componentsDocs/VAIcon/svgs/exclamationTriangleSolid.svg';
+import { ReactComponent as ExternalLink} from '@componentsDocs/VAIcon/svgs/ExternalLink.svg';
 import { ReactComponent as Folder} from '@componentsDocs/VAIcon/svgs/folder-solid.svg';
 import { ReactComponent as Inbox} from '@componentsDocs/VAIcon/svgs/inbox-solid.svg';
 import { ReactComponent as Info} from '@componentsDocs/VAIcon/svgs/info-circle.svg';
@@ -41,7 +42,7 @@ Add | <Add  className="icons"/> | Add.svg
 Building | <Building  className="icons"/> | buildingSolid.svg
 Bullet | <Bullet  className="icons"/> | Bullet.svg
 Check Mark | <CheckMark  className="icons"/> | CheckMark.svg
-Check Mark in Circle | <CheckMarkCircle  className="icons"/> | CircleCheckMark.svg
+Check Mark in Circle | <CircleCheckMark  className="icons"/> | CircleCheckMark.svg
 Chevron Down | <ChevronDown  className="icons"/> | ChevronDown.svg
 Chevron Left | <ChevronLeft  className="icons"/> | ChevronLeft.svg
 Chevron Right | <ChevronRight  className="icons iconsStroke"/> | ChevronRight.svg
@@ -49,6 +50,7 @@ Chevron Up | <ChevronUp  className="icons"/> | ChevronUp.svg
 Compose | <Compose  className="icons"/> | Compose.svg
 Ellipsis | <Ellipsis  className="icons"/> | ellipsisSolid.svg
 Exclamation Triangle | <ExclamationTriangleSolid  className="icons"/> | exclamationTriangleSolid.svg
+External Link | <ExternalLink  className="icons"/> | ExternalLink.svg
 Folder | <Folder  className="icons"/> | folder-solid.svg
 Inbox | <Inbox  className="icons"/> | inbox-solid.svg
 Info | <Info  className="icons"/> | info-circle.svg

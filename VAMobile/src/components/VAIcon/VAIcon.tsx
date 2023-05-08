@@ -40,18 +40,12 @@ import Navy from './svgs/dodBranch/navy.svg'
 // Links
 import Calendar from './svgs/links/calendar.svg'
 import Chat from './svgs/links/chat.svg'
+import CircleExternalLink from './svgs/links/CircleExternalLink.svg'
 import CirclePhone from './svgs/links/CirclePhone.svg'
 import Directions from './svgs/links/directions.svg'
-import ExternalLink from './svgs/links/circle_external_link.svg'
 import PhoneTTY from './svgs/links/PhoneTTY.svg'
 import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
 import Text from './svgs/links/text.svg'
-
-// Webview
-import WebviewBack from './svgs/webview/chevron-left-solid.svg'
-import WebviewForward from './svgs/webview/chevron-right-solid.svg'
-import WebviewOpen from './svgs/webview/external-link-alt-solid.svg'
-import WebviewRefresh from './svgs/webview/redo-solid.svg'
 
 // VASelector
 import CheckBoxFilled from './svgs/checkbox/CheckBoxFilled.svg'
@@ -72,16 +66,18 @@ import CircleCheckMark from './svgs/CircleCheckMark.svg'
 import Compose from './svgs/Compose.svg'
 import EllipsisSolid from './svgs/ellipsisSolid.svg'
 import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
+import ExternalLink from './svgs/ExternalLink.svg'
 import FolderSolid from './svgs/folder-solid.svg'
 import InboxSolid from './svgs/inbox-solid.svg'
 import InfoIcon from './svgs/info-circle.svg'
-import Lock from './svgs/webview/lock-solid.svg'
+import Lock from './svgs/Lock.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 import Minus from './svgs/Minus.svg'
 import PaperClip from './svgs/PaperClip.svg'
 import Phone from './svgs/Phone.svg'
 import PickerArrows from './svgs/picker-arrows.svg'
 import QuestionMark from './svgs/questionMark.svg'
+import Redo from './svgs/Redo.svg'
 import Remove from './svgs/Remove.svg'
 import Reply from './svgs/reply.svg'
 import Save from './svgs/folder-medical-solid.svg'
@@ -121,12 +117,15 @@ export const VA_ICON_MAP = {
   ChevronRight,
   ChevronUp,
   CircleCheckMark,
+  CircleExternalLink,
   CirclePhone,
   Compose,
+  ExternalLink,
   HealthSelected,
   HealthUnselected,
   HomeSelected,
   HomeUnselected,
+  Lock,
   Minus,
   PaperClip,
   PaymentsSelected,
@@ -134,6 +133,7 @@ export const VA_ICON_MAP = {
   Phone,
   PhoneTTY, // Design ?: should we simplify? Very small icon for "keyboard" on it
   ProfileSelected,
+  Redo,
   Remove,
   WhiteCircleCheckMark, // TODO: Combine with CircleCheckMark on follow-up ticket to enhance VAIcon for 2 fills
   WhiteRemove, // TODO: Combine with Remove on follow-up ticket to enhance VAIcon for 2 fills
@@ -156,11 +156,6 @@ export const VA_ICON_MAP = {
   Text,
   RightArrowInCircle,
   Reply,
-  WebviewBack,
-  WebviewForward,
-  WebviewOpen,
-  WebviewRefresh,
-  Lock,
   PickerArrows, // RENAME TO 'Sort'
   Logo,
   ErrorCheckBox,
@@ -173,7 +168,6 @@ export const VA_ICON_MAP = {
   BuildingSolid,
   InfoIcon,
   Truck,
-  ExternalLink,
   Save,
 }
 
