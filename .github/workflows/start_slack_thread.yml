@@ -1,5 +1,5 @@
 # Reusable workflow for starting a Slack thread in the provided channel
-name: Start Slack Thread
+name: '[Utils] Start Slack Thread'
 
 on:
   workflow_call:

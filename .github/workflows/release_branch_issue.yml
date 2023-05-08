@@ -1,4 +1,4 @@
-name: 'Create Release Branch Ticket'
+name: '[Release] New Release Issue'
 
 on:
   create:

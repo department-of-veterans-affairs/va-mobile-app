@@ -1,4 +1,4 @@
-name: "Start Release Candidate Testrail run for a release ticket"
+name: "[TestRail] Start RC Run"
 
 on:
   workflow_call:
