@@ -196,7 +196,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     if (appointmentsDoNotExist) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
+          <NoAppointments subText={t('noAppointments.youDontHaveForDates')} />
         </Box>
       )
     }
