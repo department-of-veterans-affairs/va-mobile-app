@@ -1,6 +1,6 @@
 # Reusable workflow that sets up environment, installs depdendencies, and
 # runs Android fastlane using provided inputs
-name: Build Android
+name: '[Build] Reusable Android Workflow'
 
 on:
   workflow_call:
