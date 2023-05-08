@@ -9,6 +9,7 @@ import { PersonalInformationState, finishUpdatePreferredName, updatePreferredNam
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api'
 import { SnackbarMessages } from 'components/SnackBar'
+import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
@@ -25,7 +26,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
 
   const getInitialState = (): string => {
     const item = profile?.preferredName
-    return item ? item : ''
+    return item ? stringToTitleCase(item) : ''
   }
 
   const [preferredName, setName] = useState(getInitialState())
