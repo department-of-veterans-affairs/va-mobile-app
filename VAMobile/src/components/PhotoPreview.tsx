@@ -119,7 +119,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
         {selected && <Box {...blueOpacity} />}
         <Box pt={photoPreviewIconPadding} pr={photoPreviewIconPadding} position="absolute" alignSelf="flex-end">
           {selected && <VAIcon name={'Minus'} width={photoPreviewIconSize} height={photoPreviewIconSize} fill={themeColor.icon.photoAdd} />}
-          {!selected && <VAIcon name={'Delete'} width={photoPreviewIconSize} height={photoPreviewIconSize} fill={themeColor.icon.deleteFill} />}
+          {!selected && <VAIcon name={'WhiteRemove'} width={photoPreviewIconSize} height={photoPreviewIconSize} fill={themeColor.icon.deleteFill} />}
         </Box>
       </Box>
       <Box width={width} flexDirection="row">

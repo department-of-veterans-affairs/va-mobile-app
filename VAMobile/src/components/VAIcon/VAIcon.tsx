@@ -62,19 +62,14 @@ import ErrorCheckBox from './svgs/checkbox/checkBoxError.svg'
 import FilledRadio from './svgs/radio/radioFilled.svg'
 import IntermediateCheckBox from './svgs/checkbox/checkBoxIntermediate.svg'
 
-// white icons with changeable filled circle
-import WhiteCheckCircle from './svgs/circleWhiteIcon/white-check-circle.svg'
-import WhiteCloseCircle from './svgs/circleWhiteIcon/white-close-circle.svg'
-
 // Misc
 
-import Add from './svgs/add.svg'
+import Add from './svgs/Add.svg'
 import BuildingSolid from './svgs/buildingSolid.svg'
 import Bullet from './svgs/Bullet.svg'
 import CheckMark from './svgs/CheckMark.svg'
 import CircleCheckMark from './svgs/CircleCheckMark.svg'
 import Compose from './svgs/Compose.svg'
-import Delete from './svgs/delete.svg'
 import EllipsisSolid from './svgs/ellipsisSolid.svg'
 import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
 import FolderSolid from './svgs/folder-solid.svg'
@@ -82,20 +77,40 @@ import InboxSolid from './svgs/inbox-solid.svg'
 import InfoIcon from './svgs/info-circle.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
-import Minus from './svgs/minus.svg'
+import Minus from './svgs/Minus.svg'
 import PaperClip from './svgs/PaperClip.svg'
 import Phone from './svgs/Phone.svg'
 import PickerArrows from './svgs/picker-arrows.svg'
 import QuestionMark from './svgs/questionMark.svg'
-import Remove from './svgs/remove.svg'
+import Remove from './svgs/Remove.svg'
 import Reply from './svgs/reply.svg'
 import Save from './svgs/folder-medical-solid.svg'
 import TrashSolid from './svgs/trash-solid.svg'
 import Truck from './svgs/truck.svg'
 import UnreadIcon from './svgs/unread_icon.svg'
 import VideoCamera from './svgs/videoCamera.svg'
+import WhiteCircleCheckMark from './svgs/WhiteCircleCheckMark.svg'
+import WhiteRemove from './svgs/WhiteRemove.svg'
+
+/**
+ * Process for each icon:
+ *   1. Update .svg file from spreadsheet
+ *      1.5 Update fill from 'black' to '#000'
+ *   2. Check if VAIcon name should change
+ *   3. If so, update calling places (SAVE as you go)
+ *   4. Check if SVG name should change
+ *   5. If so, update file name, VAIcon import, and doc site file name/import
+ *   6. Move icon up to the 'Done' section in alphabetical order
+ *   7. If file name was case-only change, add `// Needs case fix` tag to remedy w/ Git
+ *   8. Add any other notes if appropriate
+ *   9. Update Home screen to icon and load app
+ *   10. Check light/dark mode
+ *   11. Inspect sizing good
+ *   12. Spot check an actual place the icon is used that it looks good
+ */
 
 export const VA_ICON_MAP = {
+  Add,
   BenefitsSelected,
   BenefitsUnselected,
   Bullet, // DELETE FOR CHARACTERS?
@@ -105,26 +120,28 @@ export const VA_ICON_MAP = {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
-  CircleCheckMark, // TODO: Combine with WhiteCheckCircle on follow-up ticket to enhance VAIcon for 2 fills
+  CircleCheckMark,
   CirclePhone,
   Compose,
   HealthSelected,
   HealthUnselected,
   HomeSelected,
   HomeUnselected,
+  Minus,
   PaperClip,
   PaymentsSelected,
   PaymentsUnselected,
   Phone,
   PhoneTTY, // Design ?: should we simplify? Very small icon for "keyboard" on it
   ProfileSelected,
+  Remove,
+  WhiteCircleCheckMark, // TODO: Combine with CircleCheckMark on follow-up ticket to enhance VAIcon for 2 fills
+  WhiteRemove, // TODO: Combine with Remove on follow-up ticket to enhance VAIcon for 2 fills
   // Done ^
-  Add,
   Airforce,
   Army,
   Calendar,
   CoastGuard,
-  Delete,
   Directions,
   EmptyCheckBox,
   IntermediateCheckBox,
@@ -134,7 +151,6 @@ export const VA_ICON_MAP = {
   FilledRadio,
   DisabledRadio,
   Marines,
-  Minus,
   Navy,
   Chat,
   Text,
@@ -149,7 +165,6 @@ export const VA_ICON_MAP = {
   Logo,
   ErrorCheckBox,
   QuestionMark,
-  Remove,
   UnreadIcon,
   VideoCamera,
   ExclamationTriangleSolid,
@@ -157,12 +172,11 @@ export const VA_ICON_MAP = {
   InboxSolid,
   BuildingSolid,
   InfoIcon,
-  WhiteCheckCircle,
-  WhiteCloseCircle,
   Truck,
   ExternalLink,
   Save,
 }
+
 /**
  *  Props that need to be passed in to {@link VAIcon}
  */
