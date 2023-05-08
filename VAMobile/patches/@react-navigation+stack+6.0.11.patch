@@ -1,8 +1,8 @@
 diff --git a/node_modules/@react-navigation/stack/src/types.tsx b/node_modules/@react-navigation/stack/src/types.tsx
-index 5bafc6e..3566ebb 100644
+index 5bafc6e..cd2b8e7 100644
 --- a/node_modules/@react-navigation/stack/src/types.tsx
 +++ b/node_modules/@react-navigation/stack/src/types.tsx
-@@ -40,6 +40,11 @@ export type StackNavigationEventMap = {
+@@ -40,6 +40,12 @@ export type StackNavigationEventMap = {
    gestureCancel: { data: undefined };
  };
  
@@ -11,10 +11,11 @@ index 5bafc6e..3566ebb 100644
 +// with all versions of @types/react-native`
 +type AnimatedInterpolation = ReturnType<Animated.Value['interpolate']>;
 +
++
  export type StackNavigationHelpers = NavigationHelpers<
    ParamListBase,
    StackNavigationEventMap
-@@ -103,17 +108,17 @@ export type SceneProgress = {
+@@ -103,17 +109,17 @@ export type SceneProgress = {
    /**
     * Progress value of the current screen.
     */
@@ -35,7 +36,7 @@ index 5bafc6e..3566ebb 100644
  };
  
  export type StackHeaderMode = 'float' | 'screen';
-@@ -361,7 +366,7 @@ export type StackCardInterpolationProps = {
+@@ -361,7 +367,7 @@ export type StackCardInterpolationProps = {
      /**
       * Animated node representing the progress value of the current screen.
       */
@@ -44,7 +45,7 @@ index 5bafc6e..3566ebb 100644
    };
    /**
     * Values for the screen after this one in the stack.
-@@ -371,7 +376,7 @@ export type StackCardInterpolationProps = {
+@@ -371,7 +377,7 @@ export type StackCardInterpolationProps = {
      /**
       * Animated node representing the progress value of the next screen.
       */
@@ -53,7 +54,7 @@ index 5bafc6e..3566ebb 100644
    };
    /**
     * The index of the card with this interpolation in the stack.
-@@ -380,15 +385,15 @@ export type StackCardInterpolationProps = {
+@@ -380,15 +386,15 @@ export type StackCardInterpolationProps = {
    /**
     * Animated node representing whether the card is closing (1 - closing, 0 - not closing).
     */
@@ -72,7 +73,7 @@ index 5bafc6e..3566ebb 100644
    /**
     * Layout measurements for various items we use for animation.
     */
-@@ -440,7 +445,7 @@ export type StackHeaderInterpolationProps = {
+@@ -440,7 +446,7 @@ export type StackHeaderInterpolationProps = {
      /**
       * Animated node representing the progress value of the current screen.
       */
@@ -81,7 +82,7 @@ index 5bafc6e..3566ebb 100644
    };
    /**
     * Values for the screen after this one in the stack.
-@@ -450,7 +455,7 @@ export type StackHeaderInterpolationProps = {
+@@ -450,7 +456,7 @@ export type StackHeaderInterpolationProps = {
      /**
       * Animated node representing the progress value of the next screen.
       */
