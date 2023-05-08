@@ -20,8 +20,8 @@ import { formatSubject, getfolderName } from 'utils/secureMessaging'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
-import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
+import StartNewMessage from '../StartNewMessageButton/StartNewMessageButton'
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
 
@@ -233,7 +233,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         <ReplyMessageButton messageID={messageID} />
       ) : (
         <Box>
-          <ComposeMessageButton />
+          <StartNewMessage />
           <Box mt={theme.dimensions.standardMarginBetween}>
             <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')} />
           </Box>
