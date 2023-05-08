@@ -1,7 +1,7 @@
 # Daily QA Build workflow that runs the reusable build_ios and build_android workflows
 # with default inputs for QA builds
 
-name: Daily QA Build
+name: '[Build] Daily QA Build'
 
 on:
   # Run on weekdays 4:00 AM UTC

@@ -5,7 +5,10 @@ import { getfolderName } from 'utils/secureMessaging'
 import { profileAddressOptions, profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 export const GenerateFolderMessage = (t: TFunction, folderID: number, folders: SecureMessagingFolderList, isUndo: boolean, isError: boolean): string => {
-  const folderName = getfolderName(folderID.toString(), folders)
+  let folderName = getfolderName(folderID.toString(), folders)
+  if (folderName === 'Inbox' || folderName === 'Trash' || folderName === 'Drafts') {
+    folderName = folderName.toLowerCase()
+  }
   let messageString
   if (!isUndo && isError) {
     messageString = t('secureMessaging.folders.messageMovedError')
