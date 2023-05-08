@@ -2,7 +2,7 @@
 # branches off of develop at the end of every sprint and tags the newly created release
 # branch, which should trigger this build
 
-name: Release Candidate Build
+name: '[Build] Release Candidate Build'
 
 on:
   push:
