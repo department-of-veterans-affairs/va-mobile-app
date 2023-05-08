@@ -27,13 +27,13 @@ export const Nametag: FC = () => {
 
     switch (branch) {
       case BranchesOfServiceConstants.AirForce:
-        return <VAIcon testID="United States Air Force" name="Airforce" {...dimensions} />
+        return <VAIcon testID="United States Air Force" name="AirForce" {...dimensions} />
       case BranchesOfServiceConstants.Army:
         return <VAIcon testID="United States Army" name="Army" {...dimensions} />
       case BranchesOfServiceConstants.CoastGuard:
         return <VAIcon testID="United States Coast Guard" name="CoastGuard" {...dimensions} />
       case BranchesOfServiceConstants.MarineCorps:
-        return <VAIcon testID="United States Marine Corps" name="Marines" {...dimensions} />
+        return <VAIcon testID="United States Marine Corps" name="MarineCorps" {...dimensions} />
       case BranchesOfServiceConstants.Navy:
         return <VAIcon testID="United States Navy" name="Navy" {...dimensions} />
     }

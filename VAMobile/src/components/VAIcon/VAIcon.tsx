@@ -31,11 +31,11 @@ import ChevronRight from './svgs/ChevronRight.svg'
 import ChevronUp from './svgs/ChevronUp.svg'
 
 // Branch icons
-import Airforce from './svgs/dodBranch/air-force.svg'
-import Army from './svgs/dodBranch/army.svg'
-import CoastGuard from './svgs/dodBranch/coast-guard.svg'
-import Marines from './svgs/dodBranch/marine.svg'
-import Navy from './svgs/dodBranch/navy.svg'
+import AirForce from './svgs/dodBranch/AirForce.svg'
+import Army from './svgs/dodBranch/Army.svg'
+import CoastGuard from './svgs/dodBranch/CoastGuard.svg'
+import MarineCorps from './svgs/dodBranch/MarineCorps.svg'
+import Navy from './svgs/dodBranch/Navy.svg'
 
 // Links
 import Calendar from './svgs/links/calendar.svg'
@@ -107,6 +107,8 @@ import WhiteRemove from './svgs/WhiteRemove.svg'
 
 export const VA_ICON_MAP = {
   Add,
+  AirForce,
+  Army, // Needs case fix
   BenefitsSelected,
   BenefitsUnselected,
   Bullet, // DELETE FOR CHARACTERS?
@@ -119,6 +121,7 @@ export const VA_ICON_MAP = {
   CircleCheckMark,
   CircleExternalLink,
   CirclePhone,
+  CoastGuard,
   Compose,
   ExternalLink,
   HealthSelected,
@@ -126,7 +129,9 @@ export const VA_ICON_MAP = {
   HomeSelected,
   HomeUnselected,
   Lock,
+  MarineCorps,
   Minus,
+  Navy, // Needs case fix
   PaperClip,
   PaymentsSelected,
   PaymentsUnselected,
@@ -138,10 +143,7 @@ export const VA_ICON_MAP = {
   WhiteCircleCheckMark, // TODO: Combine with CircleCheckMark on follow-up ticket to enhance VAIcon for 2 fills
   WhiteRemove, // TODO: Combine with Remove on follow-up ticket to enhance VAIcon for 2 fills
   // Done ^
-  Airforce,
-  Army,
   Calendar,
-  CoastGuard,
   Directions,
   EmptyCheckBox,
   IntermediateCheckBox,
@@ -150,8 +152,6 @@ export const VA_ICON_MAP = {
   EllipsisSolid,
   FilledRadio,
   DisabledRadio,
-  Marines,
-  Navy,
   Chat,
   Text,
   RightArrowInCircle,
