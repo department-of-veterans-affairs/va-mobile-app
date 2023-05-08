@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
+import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -36,8 +36,7 @@ export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLa
           {...a11yHintProp(t('noAppointments.visitVAA11yHint'))}
           displayedText={t('noAppointments.visitVA')}
           numberOrUrlLink={LINK_URL_SCHEDULE_APPOINTMENTS}
-          linkType={LinkTypeOptionsConstants.url}
-          linkUrlIconType={LinkUrlIconType.Arrow}
+          linkType={LinkTypeOptionsConstants.externalLink}
           a11yLabel={t('noAppointments.visitVAA11yLabel')}
         />
       )}
