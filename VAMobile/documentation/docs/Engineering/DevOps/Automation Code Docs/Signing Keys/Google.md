@@ -10,7 +10,7 @@ An additional step of creating a Google Play service worker in order to upload w
 This process rarely needs to happen. A service account can live the life of the app if the credentials are not shared. The same is true for the upload certificates. 
 
 ## Location in the CI
-The Android certificates are stored in CircleCI as base64 strings that are decoded by the CI when they are needed. 
+The Android certificates are stored in GitHub Actions as base64 strings that are decoded by the CI when they are needed. 
 
 ### ENV Constants for the keys 
 | Key Name               | ENV String     | Destination ENV String | Decoded Location                                     | CI Command          |
