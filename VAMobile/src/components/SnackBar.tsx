@@ -6,8 +6,10 @@ import React, { FC } from 'react'
 
 import { Box, TextViewProps } from 'components'
 import { BoxProps } from './Box'
+import { NAMESPACE } from 'constants/namespaces'
 import { triggerHaptic } from 'utils/haptics'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useTranslation } from 'react-i18next'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 import colors from '../styles/themes/VAColors'
@@ -27,6 +29,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
   const { onActionPressed, isError, actionBtnText, isUndo } = data || {}
   const { colors: themeColor } = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   useFocusEffect(setFocus)
 
@@ -146,12 +149,12 @@ const SnackBar: FC<ToastProps> = (toast) => {
           {!isUndo && (
             <TouchableOpacity onPress={onActionPress} style={confirmBtnStlye} accessible={true} accessibilityRole={'button'}>
               <TextView variant={'SnackBarBtnText'} display={'flex'}>
-                {actionBtnText || isError ? 'Retry' : 'Undo'}
+                {actionBtnText || isError ? t('snackbar.tryAgain') : t('snackbar.undo')}
               </TextView>
             </TouchableOpacity>
           )}
           <TouchableOpacity onPress={onDismissPress} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
-            <TextView variant={'SnackBarBtnText'}>{'Dismiss'}</TextView>
+            <TextView variant={'SnackBarBtnText'}>{t('snackbar.dismiss')}</TextView>
           </TouchableOpacity>
         </Box>
       </Box>
