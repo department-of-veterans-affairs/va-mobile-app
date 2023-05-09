@@ -1,4 +1,4 @@
-import { Pressable, PressableProps, ScrollView } from 'react-native'
+import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
@@ -65,6 +65,9 @@ import getEnv from 'utils/env'
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
 const pageSize = DEFAULT_PAGE_SIZE
+
+// Delay custom screen reader announcements so they don't cut off native announcements
+const announcementDelay = 1000
 
 const sortByOptions = [
   { display: 'prescriptions.sort.facility', value: PrescriptionSortOptionConstants.FACILITY_NAME },
@@ -399,6 +402,13 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
   })
 
+  const announceAfterDelay = (announcement: string) => {
+    setTimeout(() => AccessibilityInfo.announceForAccessibility(announcement), announcementDelay)
+  }
+
+  const sortDisplayValue = getDisplayForValue(sortByOptions, sortByToUse)
+  const sortButtonText = `${t('prescriptions.sort.by')}: ${sortDisplayValue}`
+  const sortAnnouncementText = tc('prescriptions.resetAnnouncement', { value: sortDisplayValue })
   const sortOrderRadioOptions = getSortOrderOptionsForSortBy(selectedSortBy, t)
 
   const sortProps: RadioGroupModalProps = {
@@ -420,7 +430,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         title: t('prescriptions.sort.order'),
       },
     ],
-    buttonText: `${t('prescriptions.sort.by')}: ${getDisplayForValue(sortByOptions, sortByToUse)}`,
+    buttonText: sortButtonText,
     buttonA11yHint: t('prescription.filter.sort.a11y'),
     headerText: t('prescription.filter.sort'),
     topRightButtonText: tc('reset'),
@@ -433,6 +443,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     onUpperRightAction: () => {
       setSelectedSortBy(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
       setSelectedSortOn(ASCENDING)
+      announceAfterDelay(sortAnnouncementText)
     },
     onCancel: () => {
       setSelectedSortBy(sortByToUse)
@@ -452,7 +463,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
   })
 
-  const filterButtonText = `${t('prescription.filter.by')}: ${getDisplayForValue(filterOptionsForTab, filterToUse)}`
+  const filterDisplayValue = getDisplayForValue(filterOptionsForTab, filterToUse)
+  const filterButtonText = `${t('prescription.filter.by')}: ${filterDisplayValue}`
+  const filterAnnouncementText = tc('prescriptions.resetAnnouncement', { value: filterDisplayValue })
 
   const filterProps: RadioGroupModalProps = {
     groups: [
@@ -476,6 +489,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     },
     onUpperRightAction: () => {
       setSelectedFilter('')
+      announceAfterDelay(filterAnnouncementText)
     },
     onCancel: () => {
       setSelectedFilter(filterToUse)
