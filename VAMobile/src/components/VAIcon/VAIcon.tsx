@@ -113,7 +113,7 @@ export const VA_ICON_MAP = {
   BenefitsUnselected,
   Bullet,
   Calendar,
-  Chat, // Needs case fix
+  Chat,
   CheckBoxFilled,
   CheckMark,
   ChevronDown,
@@ -133,7 +133,7 @@ export const VA_ICON_MAP = {
   HomeUnselected,
   Info,
   Lock,
-  Logo, // Needs case fix
+  Logo,
   MarineCorps,
   Minus,
   Navy,
