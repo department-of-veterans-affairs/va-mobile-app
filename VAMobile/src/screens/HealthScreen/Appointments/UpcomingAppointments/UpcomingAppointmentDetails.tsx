@@ -5,6 +5,7 @@ import React, { FC, ReactElement, useEffect } from 'react'
 import {
   AppointmentAddressAndNumber,
   AppointmentAlert,
+  AppointmentReason,
   AppointmentTypeAndDate,
   ContactInformation,
   PendingAppointmentCancelButton,
@@ -287,6 +288,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
+          <AppointmentReason attributes={attributes} />
           <ContactInformation attributes={attributes} />
           <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointment?.id} />
         </TextArea>
