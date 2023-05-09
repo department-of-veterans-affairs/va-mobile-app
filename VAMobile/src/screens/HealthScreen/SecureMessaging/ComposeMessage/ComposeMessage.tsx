@@ -353,9 +353,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           text={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolled')}
           textA11yLabel={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
           border="error">
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
-          </Box>
+          <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
         </AlertBox>
       )
     }

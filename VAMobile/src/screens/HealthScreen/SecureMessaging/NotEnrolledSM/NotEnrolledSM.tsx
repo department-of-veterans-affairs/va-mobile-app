@@ -60,20 +60,12 @@ const NotEnrolledSM: FC = () => {
             <TextView variant="MobileBody" paragraphSpacing={true}>
               {t('notEnrolledSM.toUpgrade')}
             </TextView>
-            <Box mb={standardMarginBetween}>
-              <VABulletList listOfText={[bulletOne]} />
-            </Box>
-            <Box mb={standardMarginBetween}>
-              <VABulletList listOfText={[bulletTwo]} />
-            </Box>
-            <Box mb={standardMarginBetween}>
-              <VABulletList listOfText={[bulletThree]} />
-            </Box>
-            <Box mb={standardMarginBetween}>
-              <TextView {...textViewProps} paragraphSpacing={true}>
-                {t('notEnrolledSM.learnHowTo')}
-              </TextView>
-            </Box>
+            <VABulletList listOfText={[bulletOne]} />
+            <VABulletList listOfText={[bulletTwo]} />
+            <VABulletList listOfText={[bulletThree]} />
+            <TextView {...textViewProps} paragraphSpacing={true}>
+              {t('notEnrolledSM.learnHowTo')}
+            </TextView>
             <Box>
               <TextView>
                 <TextView variant="MobileBodyBold">{tc('note') + ' '}</TextView>

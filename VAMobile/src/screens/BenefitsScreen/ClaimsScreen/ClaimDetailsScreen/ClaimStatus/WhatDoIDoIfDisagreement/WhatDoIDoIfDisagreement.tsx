@@ -33,12 +33,7 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = () => {
         <TextView variant="MobileBody" paragraphSpacing={true}>
           {t('claimsDetails.whatDoIDoIfDisagreement.content')}
         </TextView>
-        <TextView
-          variant="MobileBodyLink"
-          mt={theme.dimensions.standardMarginBetween}
-          accessibilityRole="link"
-          {...a11yHintProp(`${text} ${t('mobileBodyLink.a11yHint')}`)}
-          onPress={onDecisionReview}>
+        <TextView variant="MobileBodyLink" accessibilityRole="link" {...a11yHintProp(`${text} ${t('mobileBodyLink.a11yHint')}`)} onPress={onDecisionReview}>
           {text}
         </TextView>
       </Box>

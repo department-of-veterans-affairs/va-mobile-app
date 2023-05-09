@@ -19,7 +19,7 @@ const PaymentIssue: FC<PaymentIssueScreenProps> = () => {
         <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
           {t('payments.ifMyPaymentDoesNotLookRight')}
         </TextView>
-        <TextView variant="MobileBody" accessibilityLabel={t('paymentIssues.body.a11yLabel')}>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('paymentIssues.body.a11yLabel')}>
           {t('paymentIssues.body')}
         </TextView>
         <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />

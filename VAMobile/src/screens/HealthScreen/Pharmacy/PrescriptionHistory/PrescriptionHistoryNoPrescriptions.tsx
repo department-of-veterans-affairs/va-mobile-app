@@ -31,7 +31,7 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
             {t('prescriptions.notFound.yourVA')}
           </TextView>
           <VABulletList listOfText={bullets} paragraphSpacing={true} />
-          <TextView>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
+          <TextView paragraphSpacing={true}>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
           <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />
         </AlertBox>
       </Box>

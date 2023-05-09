@@ -47,8 +47,8 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
     }
 
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.accessibilityAlert.body.a11y')}>
+      <Box mt={theme.paragraphSpacing.spacing20FontSize}>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('fileUpload.accessibilityAlert.body.a11y')}>
           {t('fileUpload.accessibilityAlert.body')}
         </TextView>
         <ClickForActionLink {...linkToCallProps} />

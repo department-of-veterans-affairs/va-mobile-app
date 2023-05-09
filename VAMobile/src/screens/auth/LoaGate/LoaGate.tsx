@@ -35,15 +35,17 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
     <FullScreenSubtask leftButtonText={t('back')} onLeftButtonPress={navigation.goBack}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView {...bodyTextProps}>{t('loaGate.p1')}</TextView>
-        <TextView {...bodyTextProps} my={theme.dimensions.standardMarginBetween}>
+        <TextView paragraphSpacing={true} {...bodyTextProps}>
+          {t('loaGate.p1')}
+        </TextView>
+        <TextView paragraphSpacing={true} {...bodyTextProps}>
           {t('loaGate.p2')}
         </TextView>
         <CollapsibleView text={t('loaGate.expandMsg')} showInTextArea={false} a11yHint={t('loaGate.expandMsg.a11yHint')}>
-          <TextView {...bodyTextProps}>{t('loaGate.readMore.p1')}</TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <TextView {...titleTextProps}>{t('loaGate.readMore.p2')}</TextView>
-          </Box>
+          <TextView paragraphSpacing={true} {...bodyTextProps}>
+            {t('loaGate.readMore.p1')}
+          </TextView>
+          <TextView {...titleTextProps}>{t('loaGate.readMore.p2')}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <TextView {...bodyTextProps}>
               {t('loaGate.readMore.itemOne')}
@@ -57,10 +59,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
             <TextView {...bodyTextProps}>{t('loaGate.readMore.itemTwo.OfferProof')}</TextView>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VABulletList listOfText={[bulletOne]} />
-          </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VABulletList listOfText={[{ text: t('loaGate.readMore.bulletTwo') }]} />
+            <VABulletList listOfText={[bulletOne, { text: t('loaGate.readMore.bulletTwo') }]} />
           </Box>
         </CollapsibleView>
 

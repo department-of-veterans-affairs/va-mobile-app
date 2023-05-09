@@ -16,7 +16,7 @@ const NoClaimsAndAppealsAccess: FC = () => {
         <TextView variant="BitterBoldHeading">{t('claimsAndAppeals.noClaimsAndAppealsAccess.title')}</TextView>
       </Box>
       <TextArea>
-        <TextView variant="MobileBody" {...testIdProps(t('claimsAndAppeals.noClaimsAndAppealsAccess.body.a11yLabel'))}>
+        <TextView variant="MobileBody" paragraphSpacing={true} {...testIdProps(t('claimsAndAppeals.noClaimsAndAppealsAccess.body.a11yLabel'))}>
           {t('claimsAndAppeals.noClaimsAndAppealsAccess.body')}
         </TextView>
         <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />

@@ -45,7 +45,7 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
   }
 
   return (
-    <Box alignItems={center ? 'center' : undefined} mt={theme.dimensions.standardMarginBetween}>
+    <Box alignItems={center ? 'center' : undefined}>
       <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
       <ClickForActionLink {...ttyProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
     </Box>

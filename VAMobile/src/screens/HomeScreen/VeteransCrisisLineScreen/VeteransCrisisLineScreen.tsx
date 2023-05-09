@@ -35,23 +35,21 @@ const VeteransCrisisLineScreen: FC = () => {
   return (
     <LargePanel title={tc('veteransCrisisLine.title')} rightButtonText={tc('done')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
+        <TextView variant="MobileBodyBold" paragraphSpacing={true} accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
-        <Box mt={standardMarginBetween}>
-          <TextView variant="MobileBody">{t('veteransCrisisLine.connectWithResponders')}</TextView>
-        </Box>
-        <Box mt={standardMarginBetween}>
-          <ClickForActionLink
-            testID="veteransCrisisLineCrisisCallNumberTestID"
-            displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
-            a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed')}
-            numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')}
-            linkType={LinkTypeOptionsConstants.call}
-            fireAnalytic={fireAnalyticFn}
-            {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
-          />
-        </Box>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {t('veteransCrisisLine.connectWithResponders')}
+        </TextView>
+        <ClickForActionLink
+          testID="veteransCrisisLineCrisisCallNumberTestID"
+          displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
+          a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed')}
+          numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')}
+          linkType={LinkTypeOptionsConstants.call}
+          fireAnalytic={fireAnalyticFn}
+          {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
+        />
         <Box mt={standardMarginBetween}>
           <ClickForActionLink
             testID="veteransCrisisLineTextNumberTestID"

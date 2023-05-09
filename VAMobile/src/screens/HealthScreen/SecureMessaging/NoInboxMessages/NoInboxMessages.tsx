@@ -19,12 +19,12 @@ const NoInboxMessages: FC = () => {
       alignItems="center"
       mt={theme.dimensions.standardMarginBetween}>
       <Box accessible={true} accessibilityRole={'header'}>
-        <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" paragraphSpacing={true}>
           {t('secureMessaging.inbox.noMessages.title')}
         </TextView>
       </Box>
       <Box accessible={true}>
-        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" textAlign="center" mb={theme.dimensions.standardMarginBetween}>
           {t('secureMessaging.inbox.noMessages.body')}
         </TextView>
       </Box>

@@ -90,14 +90,14 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
     <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
       <Box>
         <Box mx={gutter}>
-          <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
+          <TextView variant="MobileBody" paragraphSpacing={true} {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
             {t('directDeposit.viewAndEditText')}
           </TextView>
         </Box>
       </Box>
       <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />
       <Box>
-        <Box mx={gutter} mt={condensedMarginBetween}>
+        <Box mx={gutter} my={theme.paragraphSpacing.spacing20FontSize}>
           <TextView>
             <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
             <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
