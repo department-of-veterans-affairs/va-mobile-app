@@ -28,7 +28,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
 
-  const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
+  const { gutter, contentMarginBottom } = theme.dimensions
 
   useFocusEffect(
     useCallback(() => {
