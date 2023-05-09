@@ -1,5 +1,5 @@
 import { ReactComponent as Calendar} from '@componentsDocs/VAIcon/svgs/links/Calendar.svg';
-import { ReactComponent as Chat} from '@componentsDocs/VAIcon/svgs/links/chat.svg';
+import { ReactComponent as Chat} from '@componentsDocs/VAIcon/svgs/links/Chat.svg';
 import { ReactComponent as CircleExternalLink} from '@componentsDocs/VAIcon/svgs/links/CircleExternalLink.svg';
 import { ReactComponent as CirclePhone} from '@componentsDocs/VAIcon/svgs/links/CirclePhone.svg';
 import { ReactComponent as Directions} from '@componentsDocs/VAIcon/svgs/links/Directions.svg';
@@ -18,7 +18,7 @@ import IconsPathSection from '@site/src/components/IconsPathSection'
 Name | Icon | File Name 
 :---: | :---: | :---: 
 Calendar | <Calendar  className="linkIcons"/> | Calendar.svg
-Chat | <Chat  className="linkIcons"/> | chat.svg
+Chat | <Chat  className="linkIcons"/> | Chat.svg
 Directions | <Directions  className="linkIcons iconDirection"/> | Directions.svg
 External Link in Circle | <CircleExternalLink  className="icons"/> | CircleExternalLink.svg
 Phone in Circle | <CirclePhone  className="linkIcons"/> | CirclePhone.svg

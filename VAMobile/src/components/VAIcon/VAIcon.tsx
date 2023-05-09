@@ -39,7 +39,7 @@ import Navy from './svgs/dodBranch/Navy.svg'
 
 // Links
 import Calendar from './svgs/links/Calendar.svg'
-import Chat from './svgs/links/chat.svg'
+import Chat from './svgs/links/Chat.svg'
 import CircleExternalLink from './svgs/links/CircleExternalLink.svg'
 import CirclePhone from './svgs/links/CirclePhone.svg'
 import Directions from './svgs/links/Directions.svg'
@@ -69,9 +69,9 @@ import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
 import ExternalLink from './svgs/ExternalLink.svg'
 import FolderSolid from './svgs/folder-solid.svg'
 import InboxSolid from './svgs/inbox-solid.svg'
-import InfoIcon from './svgs/info-circle.svg'
+import Info from './svgs/Info.svg'
 import Lock from './svgs/Lock.svg'
-import Logo from './svgs/vaParentLogo/logo.svg'
+import Logo from './svgs/vaParentLogo/Logo.svg'
 import Minus from './svgs/Minus.svg'
 import PaperClip from './svgs/PaperClip.svg'
 import Phone from './svgs/Phone.svg'
@@ -83,7 +83,7 @@ import Reply from './svgs/reply.svg'
 import Save from './svgs/folder-medical-solid.svg'
 import TrashSolid from './svgs/trash-solid.svg'
 import Truck from './svgs/truck.svg'
-import UnreadIcon from './svgs/unread_icon.svg'
+import Unread from './svgs/Unread.svg'
 import VideoCamera from './svgs/videoCamera.svg'
 import WhiteCircleCheckMark from './svgs/WhiteCircleCheckMark.svg'
 import WhiteRemove from './svgs/WhiteRemove.svg'
@@ -113,6 +113,7 @@ export const VA_ICON_MAP = {
   BenefitsUnselected,
   Bullet,
   Calendar,
+  Chat, // Needs case fix
   CheckBoxFilled,
   CheckMark,
   ChevronDown,
@@ -130,7 +131,9 @@ export const VA_ICON_MAP = {
   HealthUnselected,
   HomeSelected,
   HomeUnselected,
+  Info,
   Lock,
+  Logo, // Needs case fix
   MarineCorps,
   Minus,
   Navy,
@@ -144,6 +147,7 @@ export const VA_ICON_MAP = {
   Remove,
   RightArrowInCircle, // SVG-only update, TODO: ticket 3402 (or separate implementation ticket) to remove this icon
   Text,
+  Unread,
   WhiteCircleCheckMark, // TODO: Combine with CircleCheckMark on follow-up ticket to enhance VAIcon for 2 fills
   WhiteRemove, // TODO: Combine with Remove on follow-up ticket to enhance VAIcon for 2 fills
   // Done ^
@@ -154,19 +158,15 @@ export const VA_ICON_MAP = {
   EllipsisSolid,
   FilledRadio,
   DisabledRadio,
-  Chat, // Needs SVG fix, is missing duotone
   Reply,
   PickerArrows, // RENAME TO 'Sort'
-  Logo,
   ErrorCheckBox,
-  QuestionMark, // Needs SVG fix, 512x512 instead of 24x24
-  UnreadIcon,
+  QuestionMark, // Needs SVG fix, missing circle
   VideoCamera,
   ExclamationTriangleSolid,
   TrashSolid,
   InboxSolid,
   BuildingSolid,
-  InfoIcon,
   Truck,
   Save,
 }
