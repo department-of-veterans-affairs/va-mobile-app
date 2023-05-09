@@ -1,7 +1,7 @@
 # On demand builds that can be run via GitHub UI at
 # https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/on_demand_build.yml
 
-name: '[Build] On Demand build'
+name: '[Build] On Demand Build'
 
 on:
   workflow_dispatch:
@@ -25,6 +25,7 @@ jobs:
     secrets: inherit
   start_slack_thread:
     name: Start Slack thread
+    needs: queue_build
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
@@ -32,7 +33,7 @@ jobs:
       message: 'On demand build started by ${{ github.actor }}: \"${{ inputs.notes }}\"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
   ios:
     name: iOS On Demand Build
-    needs: [queue_build, start_slack_thread]
+    needs: queue_build
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
     with:
@@ -43,7 +44,7 @@ jobs:
       slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
   android:
     name: Android On Demand Build
-    needs: [queue_build, start_slack_thread]
+    needs: queue_build
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
     with:
