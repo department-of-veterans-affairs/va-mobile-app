@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
+import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -10,11 +10,12 @@ import getEnv from 'utils/env'
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
 
 type NoAppointmentsProps = {
+  showVAGovLink?: boolean
   subText: string
   subTextA11yLabel?: string
 }
 
-export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLabel }) => {
+export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLabel, showVAGovLink = true }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
@@ -30,14 +31,15 @@ export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLa
           {subText}
         </TextView>
       </Box>
-      <ClickForActionLink
-        {...a11yHintProp(t('noAppointments.visitVAA11yHint'))}
-        displayedText={t('noAppointments.visitVA')}
-        numberOrUrlLink={LINK_URL_SCHEDULE_APPOINTMENTS}
-        linkType={LinkTypeOptionsConstants.url}
-        linkUrlIconType={LinkUrlIconType.Arrow}
-        a11yLabel={t('noAppointments.visitVAA11yLabel')}
-      />
+      {showVAGovLink && (
+        <ClickForActionLink
+          {...a11yHintProp(t('noAppointments.visitVAA11yHint'))}
+          displayedText={t('noAppointments.visitVA')}
+          numberOrUrlLink={LINK_URL_SCHEDULE_APPOINTMENTS}
+          linkType={LinkTypeOptionsConstants.externalLink}
+          a11yLabel={t('noAppointments.visitVAA11yLabel')}
+        />
+      )}
     </Box>
   )
 }

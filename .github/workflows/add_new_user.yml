@@ -1,4 +1,4 @@
-name: Add User from Issues
+name: '[Utils] Add User to va-mobile-team repo'
 
 on:
   issues:
