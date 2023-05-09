@@ -76,15 +76,15 @@ import Minus from './svgs/Minus.svg'
 import PaperClip from './svgs/PaperClip.svg'
 import Phone from './svgs/Phone.svg'
 import PickerArrows from './svgs/picker-arrows.svg'
-import QuestionMark from './svgs/questionMark.svg'
+import QuestionMark from './svgs/QuestionMark.svg'
 import Redo from './svgs/Redo.svg'
 import Remove from './svgs/Remove.svg'
-import Reply from './svgs/reply.svg'
+import Reply from './svgs/Reply.svg'
 import Save from './svgs/folder-medical-solid.svg'
 import TrashSolid from './svgs/trash-solid.svg'
-import Truck from './svgs/truck.svg'
+import Truck from './svgs/Truck.svg'
 import Unread from './svgs/Unread.svg'
-import VideoCamera from './svgs/videoCamera.svg'
+import VideoCamera from './svgs/VideoCamera.svg'
 import WhiteCircleCheckMark from './svgs/WhiteCircleCheckMark.svg'
 import WhiteRemove from './svgs/WhiteRemove.svg'
 
@@ -143,11 +143,15 @@ export const VA_ICON_MAP = {
   Phone,
   PhoneTTY, // Design ?: should we simplify? Very small icon for "keyboard" on it
   ProfileSelected,
+  QuestionMark, // Needs case fix
   Redo,
   Remove,
+  Reply, // Needs case fix
   RightArrowInCircle, // SVG-only update, TODO: ticket 3402 (or separate implementation ticket) to remove this icon
   Text,
+  Truck, // Needs case fix
   Unread,
+  VideoCamera, // Needs case fix
   WhiteCircleCheckMark, // TODO: Combine with CircleCheckMark on follow-up ticket to enhance VAIcon for 2 fills
   WhiteRemove, // TODO: Combine with Remove on follow-up ticket to enhance VAIcon for 2 fills
   // Done ^
@@ -158,17 +162,13 @@ export const VA_ICON_MAP = {
   EllipsisSolid,
   FilledRadio,
   DisabledRadio,
-  Reply,
   PickerArrows, // RENAME TO 'Sort'
   ErrorCheckBox,
-  QuestionMark, // Needs SVG fix, missing circle
-  VideoCamera,
   ExclamationTriangleSolid,
   TrashSolid,
   InboxSolid,
   BuildingSolid,
-  Truck,
-  Save,
+  Save, // Design ?: What's the deal with this being a medical folder?
 }
 
 /**
