@@ -131,7 +131,7 @@ To set up Docusaurus, you will need to do two things.
 #### First: Open the VAMobile folder in Terminal or Command Line.   
    1. To do this, use the **Finder** to navigate to the folder where the doc site is on your machine: `somefolderonyourcomputer/VAMobile`
 
-![VA Mobile in Finder](../../../static/img/updating-docsite/VAmobile-in-finder.png "VA Mobile in Finder")
+![VA Mobile in Finder](../../../static/img/updating-docsite/VAMobile-in-finder.png "VA Mobile in Finder")
 
    2. Back in Terminal/Command Line, type `cd` and then a space, then drag and drop the `somefolderonyourcomuter/VAMobile/` folder from the finder into Terminal/Command Line. It will look like this:
 
