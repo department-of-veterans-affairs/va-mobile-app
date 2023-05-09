@@ -74,7 +74,6 @@ jobs:
           ref: ${{ inputs.ref }}
       - name: Set git config
         run: |
-          echo Notes: ${{ inputs.notes }}
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
       # Decodes base64 encoded keystore, Play Store service distribution key,
