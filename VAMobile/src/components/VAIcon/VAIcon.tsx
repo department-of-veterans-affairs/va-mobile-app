@@ -143,15 +143,15 @@ export const VA_ICON_MAP = {
   Phone,
   PhoneTTY, // Design ?: should we simplify? Very small icon for "keyboard" on it
   ProfileSelected,
-  QuestionMark, // Needs case fix
+  QuestionMark,
   Redo,
   Remove,
-  Reply, // Needs case fix
+  Reply,
   RightArrowInCircle, // SVG-only update, TODO: ticket 3402 (or separate implementation ticket) to remove this icon
   Text,
-  Truck, // Needs case fix
+  Truck,
   Unread,
-  VideoCamera, // Needs case fix
+  VideoCamera,
   WhiteCircleCheckMark, // TODO: Combine with CircleCheckMark on follow-up ticket to enhance VAIcon for 2 fills
   WhiteRemove, // TODO: Combine with Remove on follow-up ticket to enhance VAIcon for 2 fills
   // Done ^
