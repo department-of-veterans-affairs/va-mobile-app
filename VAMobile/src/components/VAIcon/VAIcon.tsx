@@ -112,7 +112,7 @@ export const VA_ICON_MAP = {
   BenefitsSelected,
   BenefitsUnselected,
   Bullet,
-  Calendar, // Needs case fix
+  Calendar,
   CheckBoxFilled,
   CheckMark,
   ChevronDown,
@@ -124,7 +124,7 @@ export const VA_ICON_MAP = {
   CirclePhone,
   CoastGuard,
   Compose,
-  Directions, // Needs case fix
+  Directions,
   ExternalLink,
   HealthSelected,
   HealthUnselected,
@@ -143,7 +143,7 @@ export const VA_ICON_MAP = {
   Redo,
   Remove,
   RightArrowInCircle, // SVG-only update, TODO: ticket 3402 (or separate implementation ticket) to remove this icon
-  Text, // Needs case fix
+  Text,
   WhiteCircleCheckMark, // TODO: Combine with CircleCheckMark on follow-up ticket to enhance VAIcon for 2 fills
   WhiteRemove, // TODO: Combine with Remove on follow-up ticket to enhance VAIcon for 2 fills
   // Done ^
