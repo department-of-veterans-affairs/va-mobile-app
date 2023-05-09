@@ -24,6 +24,8 @@ const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes }) => {
       return <></>
     }
     text = reason
+  } else {
+    return <></>
   }
 
   return (
