@@ -38,14 +38,14 @@ import MarineCorps from './svgs/dodBranch/MarineCorps.svg'
 import Navy from './svgs/dodBranch/Navy.svg'
 
 // Links
-import Calendar from './svgs/links/calendar.svg'
+import Calendar from './svgs/links/Calendar.svg'
 import Chat from './svgs/links/chat.svg'
 import CircleExternalLink from './svgs/links/CircleExternalLink.svg'
 import CirclePhone from './svgs/links/CirclePhone.svg'
-import Directions from './svgs/links/directions.svg'
+import Directions from './svgs/links/Directions.svg'
 import PhoneTTY from './svgs/links/PhoneTTY.svg'
 import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
-import Text from './svgs/links/text.svg'
+import Text from './svgs/links/Text.svg'
 
 // VASelector
 import CheckBoxFilled from './svgs/checkbox/CheckBoxFilled.svg'
@@ -108,10 +108,11 @@ import WhiteRemove from './svgs/WhiteRemove.svg'
 export const VA_ICON_MAP = {
   Add,
   AirForce,
-  Army, // Needs case fix
+  Army,
   BenefitsSelected,
   BenefitsUnselected,
-  Bullet, // DELETE FOR CHARACTERS?
+  Bullet,
+  Calendar, // Needs case fix
   CheckBoxFilled,
   CheckMark,
   ChevronDown,
@@ -123,6 +124,7 @@ export const VA_ICON_MAP = {
   CirclePhone,
   CoastGuard,
   Compose,
+  Directions, // Needs case fix
   ExternalLink,
   HealthSelected,
   HealthUnselected,
@@ -131,7 +133,7 @@ export const VA_ICON_MAP = {
   Lock,
   MarineCorps,
   Minus,
-  Navy, // Needs case fix
+  Navy,
   PaperClip,
   PaymentsSelected,
   PaymentsUnselected,
@@ -140,11 +142,11 @@ export const VA_ICON_MAP = {
   ProfileSelected,
   Redo,
   Remove,
+  RightArrowInCircle, // SVG-only update, TODO: ticket 3402 (or separate implementation ticket) to remove this icon
+  Text, // Needs case fix
   WhiteCircleCheckMark, // TODO: Combine with CircleCheckMark on follow-up ticket to enhance VAIcon for 2 fills
   WhiteRemove, // TODO: Combine with Remove on follow-up ticket to enhance VAIcon for 2 fills
   // Done ^
-  Calendar,
-  Directions,
   EmptyCheckBox,
   IntermediateCheckBox,
   FolderSolid,
@@ -152,14 +154,12 @@ export const VA_ICON_MAP = {
   EllipsisSolid,
   FilledRadio,
   DisabledRadio,
-  Chat,
-  Text,
-  RightArrowInCircle,
+  Chat, // Needs SVG fix, is missing duotone
   Reply,
   PickerArrows, // RENAME TO 'Sort'
   Logo,
   ErrorCheckBox,
-  QuestionMark,
+  QuestionMark, // Needs SVG fix, 512x512 instead of 24x24
   UnreadIcon,
   VideoCamera,
   ExclamationTriangleSolid,
