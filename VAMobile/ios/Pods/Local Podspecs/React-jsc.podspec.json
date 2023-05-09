@@ -1,0 +1,31 @@
+{
+  "name": "React-jsc",
+  "version": "0.71.7",
+  "summary": "JavaScriptCore engine for React Native",
+  "homepage": "https://reactnative.dev/",
+  "license": "MIT",
+  "authors": "Facebook, Inc. and its affiliates",
+  "platforms": {
+    "ios": "12.4"
+  },
+  "source": {
+    "git": "https://github.com/facebook/react-native.git",
+    "tag": "v0.71.7"
+  },
+  "source_files": "JSCRuntime.{cpp,h}",
+  "exclude_files": "**/test/*",
+  "frameworks": "JavaScriptCore",
+  "dependencies": {
+    "React-jsi": [
+      "0.71.7"
+    ]
+  },
+  "subspecs": [
+    {
+      "name": "Fabric",
+      "pod_target_xcconfig": {
+        "OTHER_CFLAGS": "$(inherited) -DRN_FABRIC_ENABLED"
+      }
+    }
+  ]
+}
