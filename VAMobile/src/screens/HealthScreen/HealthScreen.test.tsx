@@ -7,7 +7,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HealthScreen } from './HealthScreen'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
-import { initialAuthState, initialErrorsState, initialSecureMessagingState, loadAllPrescriptions } from 'store/slices'
+import { initialAuthorizedServicesState, initialAuthState, initialErrorsState, initialSecureMessagingState, loadAllPrescriptions } from 'store/slices'
 import { TextView, MessagesCountTag } from 'components'
 import { when } from 'jest-when'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -58,7 +58,7 @@ context('HealthScreen', () => {
   let mockFeatureEnabled = featureEnabled as jest.Mock
 
   //mockList:  SecureMessagingMessageList --> for inboxMessages
-  const initializeTestInstance = (unreadCount = 13, hasLoadedInbox = true, prescriptionsEnabled = false, prescriptionsNeedLoad = false) => {
+  const initializeTestInstance = (unreadCount = 13, hasLoadedInbox = true, prescriptionsEnabled = false, prescriptionsNeedLoad = false, smAuthorized = true) => {
     mockNavigateToCrisisLineSpy = jest.fn()
     mockNavigateToAppointmentSpy = jest.fn()
     mockNavigateToSecureMessagingSpy = jest.fn()
@@ -85,6 +85,7 @@ context('HealthScreen', () => {
       preloadedState: {
         auth: { ...initialAuthState },
         prescriptions: { prescriptionsNeedLoad },
+        authorizedServices: { ...initialAuthorizedServicesState, secureMessaging: smAuthorized },
         secureMessaging: {
           ...initialSecureMessagingState,
           hasLoadedInbox,
