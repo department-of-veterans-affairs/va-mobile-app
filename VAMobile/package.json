@@ -125,7 +125,7 @@
     "@wdio/spec-reporter": "^7.13.0",
     "appium": "^1.22.0",
     "appium-doctor": "^1.16.0",
-    "babel-jest": "^27.4.6",
+    "babel-jest": "^29.5.0",
     "babel-plugin-module-resolver": "^4.1.0",
     "chromedriver": "^97.0.2",
     "concurrently": "^7.0.0",
