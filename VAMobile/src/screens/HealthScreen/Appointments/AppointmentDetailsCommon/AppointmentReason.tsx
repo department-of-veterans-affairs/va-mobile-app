@@ -17,25 +17,18 @@ const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes }) => {
   const { reason } = attributes || ({} as AppointmentAttributes)
   const isPendingAppointment = isAPendingAppointment(attributes)
 
-  let text
-  if (!isPendingAppointment) {
-    // Confirmed appointments that are either booked or canceled
-    if (!reason) {
-      return <></>
-    }
-    text = reason
-  } else {
+  if (isPendingAppointment || !reason) {
     return <></>
+  } else {
+    return (
+      <Box my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {t('upcomingAppointmentDetails.reason')}
+        </TextView>
+        <TextView variant="MobileBody">{reason}</TextView>
+      </Box>
+    )
   }
-
-  return (
-    <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
-      <TextView variant="MobileBodyBold" accessibilityRole="header">
-        {t('upcomingAppointmentDetails.reason')}
-      </TextView>
-      <TextView variant="MobileBody">{text}</TextView>
-    </Box>
-  )
 }
 
 export default AppointmentReason
