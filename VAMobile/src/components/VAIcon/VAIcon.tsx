@@ -59,29 +59,29 @@ import IntermediateCheckBox from './svgs/checkbox/checkBoxIntermediate.svg'
 // Misc
 
 import Add from './svgs/Add.svg'
-import BuildingSolid from './svgs/buildingSolid.svg'
+import Building from './svgs/Building.svg'
 import Bullet from './svgs/Bullet.svg'
 import CheckMark from './svgs/CheckMark.svg'
 import CircleCheckMark from './svgs/CircleCheckMark.svg'
 import Compose from './svgs/Compose.svg'
-import EllipsisSolid from './svgs/ellipsisSolid.svg'
-import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
+import Ellipsis from './svgs/Ellipsis.svg'
+import ExclamationTriangle from './svgs/ExclamationTriangle.svg'
 import ExternalLink from './svgs/ExternalLink.svg'
-import FolderSolid from './svgs/folder-solid.svg'
-import InboxSolid from './svgs/inbox-solid.svg'
+import Folder from './svgs/Folder.svg'
+import Inbox from './svgs/Inbox.svg'
 import Info from './svgs/Info.svg'
 import Lock from './svgs/Lock.svg'
 import Logo from './svgs/vaParentLogo/Logo.svg'
 import Minus from './svgs/Minus.svg'
 import PaperClip from './svgs/PaperClip.svg'
 import Phone from './svgs/Phone.svg'
-import PickerArrows from './svgs/picker-arrows.svg'
 import QuestionMark from './svgs/QuestionMark.svg'
 import Redo from './svgs/Redo.svg'
 import Remove from './svgs/Remove.svg'
 import Reply from './svgs/Reply.svg'
 import Save from './svgs/folder-medical-solid.svg'
-import TrashSolid from './svgs/trash-solid.svg'
+import Sort from './svgs/Sort.svg'
+import Trash from './svgs/Trash.svg'
 import Truck from './svgs/Truck.svg'
 import Unread from './svgs/Unread.svg'
 import VideoCamera from './svgs/VideoCamera.svg'
@@ -111,6 +111,7 @@ export const VA_ICON_MAP = {
   Army,
   BenefitsSelected,
   BenefitsUnselected,
+  Building,
   Bullet,
   Calendar,
   Chat,
@@ -126,11 +127,15 @@ export const VA_ICON_MAP = {
   CoastGuard,
   Compose,
   Directions,
+  Ellipsis,
+  ExclamationTriangle,
   ExternalLink,
+  Folder,
   HealthSelected,
   HealthUnselected,
   HomeSelected,
   HomeUnselected,
+  Inbox,
   Info,
   Lock,
   Logo,
@@ -148,7 +153,9 @@ export const VA_ICON_MAP = {
   Remove,
   Reply,
   RightArrowInCircle, // SVG-only update, TODO: ticket 3402 (or separate implementation ticket) to remove this icon
+  Sort,
   Text,
+  Trash,
   Truck,
   Unread,
   VideoCamera,
@@ -157,17 +164,10 @@ export const VA_ICON_MAP = {
   // Done ^
   EmptyCheckBox,
   IntermediateCheckBox,
-  FolderSolid,
   EmptyRadio,
-  EllipsisSolid,
   FilledRadio,
   DisabledRadio,
-  PickerArrows, // RENAME TO 'Sort'
   ErrorCheckBox,
-  ExclamationTriangleSolid,
-  TrashSolid,
-  InboxSolid,
-  BuildingSolid,
   Save, // Design ?: What's the deal with this being a medical folder?
 }
 

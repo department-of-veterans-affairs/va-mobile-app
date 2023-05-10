@@ -93,7 +93,7 @@ export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOn
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
       return { ...iconProp, name: 'VideoCamera' }
     case AppointmentTypeConstants.VA:
-      return phoneOnly ? { ...iconProp, name: 'Phone' } : { ...iconProp, name: 'BuildingSolid' }
+      return phoneOnly ? { ...iconProp, name: 'Phone' } : { ...iconProp, name: 'Building' }
     case AppointmentTypeConstants.COMMUNITY_CARE:
     default:
       return phoneOnly ? { ...iconProp, name: 'Phone' } : undefined
