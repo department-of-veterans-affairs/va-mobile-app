@@ -402,17 +402,23 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
+  const rightButtonProps = noProviderError
+    ? undefined
+    : {
+        rightButtonText: tc('save'),
+        onRightButtonPress: () => {
+          setOnSaveDraftClicked(true)
+          setOnSendClicked(true)
+        },
+      }
+
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
       title={tc('compose')}
       leftButtonText={tc('cancel')}
       onLeftButtonPress={navigation.goBack}
-      rightButtonText={tc('save')}
-      onRightButtonPress={() => {
-        setOnSaveDraftClicked(true)
-        setOnSendClicked(true)
-      }}
+      {...rightButtonProps}
       showCrisisLineCta={true}>
       <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
     </FullScreenSubtask>
