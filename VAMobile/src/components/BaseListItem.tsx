@@ -22,11 +22,11 @@ export enum ButtonDecoratorType {
   /** Trash can decorator */
   Delete = 'Delete',
   /** Empty radio button decorator */
-  EmptyRadio = 'EmptyRadio',
+  RadioEmpty = 'RadioEmpty',
   /** Filled radio button decorator */
-  FilledRadio = 'FilledRadio',
+  RadioFilled = 'RadioFilled',
   /** Disabled radio button decorator */
-  DisabledRadio = 'DisabledRadio',
+  RadioDisabled = 'RadioDisabled',
   /** Empty check box button decorator */
   CheckBoxEmpty = 'CheckBoxEmpty',
   /** Filled check box button decorator */
@@ -96,21 +96,12 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
       return <VAIcon name={'CheckMark'} height={13} width={16} fill={theme.colors.icon.pickerIcon} {...decoratorProps} />
     case ButtonDecoratorType.Delete:
       return <VAIcon name={'Trash'} height={16} width={14} fill={theme.colors.icon.error} {...decoratorProps} />
-    case ButtonDecoratorType.FilledRadio:
+    case ButtonDecoratorType.RadioFilled:
+      return <VAIcon name={'RadioFilled'} height={radioBtnHeight} width={radioBtnWidth} fill={theme.colors.icon.checkboxEnabledPrimary} {...decoratorProps} />
+    case ButtonDecoratorType.RadioEmpty:
       return (
         <VAIcon
-          name={'FilledRadio'}
-          height={radioBtnHeight}
-          width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxEnabledPrimary}
-          stroke={theme.colors.icon.checkboxEnabledPrimary}
-          {...decoratorProps}
-        />
-      )
-    case ButtonDecoratorType.EmptyRadio:
-      return (
-        <VAIcon
-          name={'EmptyRadio'}
+          name={'RadioEmpty'}
           height={radioBtnHeight}
           width={radioBtnWidth}
           fill={theme.colors.icon.checkboxDisabledContrast}
@@ -118,13 +109,13 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
           {...decoratorProps}
         />
       )
-    case ButtonDecoratorType.DisabledRadio:
+    case ButtonDecoratorType.RadioDisabled:
       return (
         <VAIcon
-          name={'DisabledRadio'}
+          name={'RadioEmpty'}
           height={radioBtnHeight}
           width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxDisabledContrast}
+          fill={theme.colors.icon.radioDisabled}
           stroke={theme.colors.icon.checkboxDisabled}
           {...decoratorProps}
         />
@@ -221,7 +212,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     onPressOut: _onPressOut,
     accessible: true,
     accessibilityRole,
-    disabled: decorator === ButtonDecoratorType.DisabledRadio,
+    disabled: decorator === ButtonDecoratorType.RadioDisabled,
   }
 
   const boxProps: BoxProps = {

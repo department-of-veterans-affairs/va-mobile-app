@@ -109,10 +109,10 @@ context('VASelector', () => {
   })
 
   describe('when disabled is true and the selector type is radio', () => {
-    it('should display the DisabledRadio icon', async () => {
+    it('should display the RadioEmpty icon', async () => {
       initializeTestInstance(false, true, '', false, SelectorType.Radio)
-      const disabledRadio = findByTestID(testInstance, 'DisabledRadio')
-      expect(disabledRadio).toBeTruthy()
+      const radioDisabled = findByTestID(testInstance, 'RadioEmpty')
+      expect(radioDisabled).toBeTruthy()
     })
   })
 

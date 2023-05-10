@@ -52,9 +52,8 @@ import CheckBoxEmpty from './svgs/checkbox/CheckBoxEmpty.svg'
 import CheckBoxError from './svgs/checkbox/CheckBoxError.svg'
 import CheckBoxFilled from './svgs/checkbox/CheckBoxFilled.svg'
 import CheckBoxIntermediate from './svgs/checkbox/CheckBoxIntermediate.svg'
-import DisabledRadio from './svgs/radio/radioDisabled.svg'
-import EmptyRadio from './svgs/radio/radioEmpty.svg'
-import FilledRadio from './svgs/radio/radioFilled.svg'
+import RadioEmpty from './svgs/radio/RadioEmpty.svg'
+import RadioFilled from './svgs/radio/RadioFilled.svg'
 
 // Misc
 import Add from './svgs/Add.svg'
@@ -150,6 +149,8 @@ export const VA_ICON_MAP = {
   PhoneTTY,
   ProfileSelected,
   QuestionMark,
+  RadioEmpty, // Needs case fix; Also used for RadioDisabled content--same icon, different colors
+  RadioFilled, // Needs case fix
   Redo,
   Remove,
   Reply,
@@ -160,10 +161,6 @@ export const VA_ICON_MAP = {
   Truck,
   Unread,
   VideoCamera,
-  // Done ^
-  EmptyRadio,
-  FilledRadio, // Don't forget duotone
-  DisabledRadio,
 }
 
 /**
