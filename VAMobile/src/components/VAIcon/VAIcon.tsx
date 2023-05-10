@@ -113,10 +113,10 @@ export const VA_ICON_MAP = {
   Bullet,
   Calendar,
   Chat,
-  CheckBoxEmpty, // Needs case fix
-  CheckBoxError, // Needs case fix
+  CheckBoxEmpty,
+  CheckBoxError,
   CheckBoxFilled,
-  CheckBoxIntermediate, // Needs case fix
+  CheckBoxIntermediate,
   CheckMark,
   ChevronDown,
   ChevronLeft,
