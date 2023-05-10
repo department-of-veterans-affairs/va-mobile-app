@@ -53,7 +53,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes })
   } else {
     // booked
     content = (
-      <Box {...testIdProps(`${date} ${time}`)} accessibilityRole={'header'} accessible={true}>
+      <Box accessibilityRole={'header'} accessible={true}>
         <TextView variant={'BitterBoldHeading'} selectable={true} accessible={false}>
           {date}
         </TextView>
