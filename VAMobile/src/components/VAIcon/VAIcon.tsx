@@ -48,13 +48,13 @@ import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
 import Text from './svgs/links/Text.svg'
 
 // VASelector
+import CheckBoxEmpty from './svgs/checkbox/CheckBoxEmpty.svg'
+import CheckBoxError from './svgs/checkbox/CheckBoxError.svg'
 import CheckBoxFilled from './svgs/checkbox/CheckBoxFilled.svg'
+import CheckBoxIntermediate from './svgs/checkbox/CheckBoxIntermediate.svg'
 import DisabledRadio from './svgs/radio/radioDisabled.svg'
-import EmptyCheckBox from './svgs/checkbox/checkBoxEmpty.svg'
 import EmptyRadio from './svgs/radio/radioEmpty.svg'
-import ErrorCheckBox from './svgs/checkbox/checkBoxError.svg'
 import FilledRadio from './svgs/radio/radioFilled.svg'
-import IntermediateCheckBox from './svgs/checkbox/checkBoxIntermediate.svg'
 
 // Misc
 import Add from './svgs/Add.svg'
@@ -78,7 +78,6 @@ import QuestionMark from './svgs/QuestionMark.svg'
 import Redo from './svgs/Redo.svg'
 import Remove from './svgs/Remove.svg'
 import Reply from './svgs/Reply.svg'
-import Save from './svgs/folder-medical-solid.svg'
 import Sort from './svgs/Sort.svg'
 import Trash from './svgs/Trash.svg'
 import Truck from './svgs/Truck.svg'
@@ -114,7 +113,10 @@ export const VA_ICON_MAP = {
   Bullet,
   Calendar,
   Chat,
+  CheckBoxEmpty, // Needs case fix
+  CheckBoxError, // Needs case fix
   CheckBoxFilled,
+  CheckBoxIntermediate, // Needs case fix
   CheckMark,
   ChevronDown,
   ChevronLeft,
@@ -145,7 +147,7 @@ export const VA_ICON_MAP = {
   PaymentsSelected,
   PaymentsUnselected,
   Phone,
-  PhoneTTY, // Design ?: should we simplify? Very small icon for "keyboard" on it
+  PhoneTTY,
   ProfileSelected,
   QuestionMark,
   Redo,
@@ -159,13 +161,9 @@ export const VA_ICON_MAP = {
   Unread,
   VideoCamera,
   // Done ^
-  EmptyCheckBox,
-  IntermediateCheckBox, // Don't forget duotone
   EmptyRadio,
   FilledRadio, // Don't forget duotone
   DisabledRadio,
-  ErrorCheckBox,
-  Save, // Design ?: What's the deal with this being a medical folder?
 }
 
 /**

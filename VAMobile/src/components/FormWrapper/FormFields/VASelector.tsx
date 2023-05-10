@@ -98,15 +98,15 @@ const VASelector: FC<VASelectorProps> = ({
     }
 
     if (!!error && selectorType === SelectorType.Checkbox) {
-      return <VAIcon {...getIconsProps('ErrorCheckBox', theme.colors.icon.error)} {...testIdProps('ErrorCheckBox')} />
+      return <VAIcon {...getIconsProps('CheckBoxError', theme.colors.icon.error, 'checkboxDisabledContrast')} {...testIdProps('CheckBoxError')} />
     }
 
     const filledName = selectorType === SelectorType.Checkbox ? 'CheckBoxFilled' : 'FilledRadio'
-    const emptyName = selectorType === SelectorType.Checkbox ? 'EmptyCheckBox' : 'EmptyRadio'
+    const emptyName = selectorType === SelectorType.Checkbox ? 'CheckBoxEmpty' : 'EmptyRadio'
 
     const name = selected ? filledName : emptyName
     const fill = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabledContrast'
-    const stroke = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabled'
+    const stroke = selected ? undefined : 'checkboxDisabled'
 
     return <VAIcon {...getIconsProps(name, stroke, fill)} {...testIdProps(name)} />
   }

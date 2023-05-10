@@ -14,7 +14,6 @@ import { ReactComponent as ExternalLink} from '@componentsDocs/VAIcon/svgs/Exter
 import { ReactComponent as Folder} from '@componentsDocs/VAIcon/svgs/Folder.svg';
 import { ReactComponent as Inbox} from '@componentsDocs/VAIcon/svgs/Inbox.svg';
 import { ReactComponent as Info} from '@componentsDocs/VAIcon/svgs/Info.svg';
-import { ReactComponent as MedicalFolder} from '@componentsDocs/VAIcon/svgs/folder-medical-solid.svg';
 import { ReactComponent as Minus} from '@componentsDocs/VAIcon/svgs/Minus.svg';
 import { ReactComponent as PaperClip} from '@componentsDocs/VAIcon/svgs/PaperClip.svg';
 import { ReactComponent as Phone} from '@componentsDocs/VAIcon/svgs/Phone.svg';
@@ -52,7 +51,6 @@ External Link | <ExternalLink  className="icons"/> | ExternalLink.svg
 Folder | <Folder  className="icons"/> | Folder.svg
 Inbox | <Inbox  className="icons"/> | Inbox.svg
 Info | <Info  className="icons"/> | Info.svg
-Medical Folder | <MedicalFolder  className="icons"/> | folder-medical-solid.svg
 Minus | <Minus  className="icons"/> | Minus.svg
 Paper Clip | <PaperClip  className="icons"/> | PaperClip.svg
 Phone | <Phone  className="icons"/> | Phone.svg

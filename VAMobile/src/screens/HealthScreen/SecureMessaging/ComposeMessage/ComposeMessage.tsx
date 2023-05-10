@@ -409,7 +409,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       leftButtonText={tc('cancel')}
       onLeftButtonPress={navigation.goBack}
       rightButtonText={tc('save')}
-      rightVAIconProps={{ name: 'Save' }}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
