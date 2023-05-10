@@ -431,6 +431,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       },
     ],
     buttonText: sortButtonText,
+    buttonA11yLabel: sortButtonText, // so Android reads button text
     buttonA11yHint: t('prescription.filter.sort.a11y'),
     headerText: t('prescription.filter.sort'),
     topRightButtonText: tc('reset'),
@@ -478,6 +479,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       },
     ],
     buttonText: filterButtonText,
+    buttonA11yLabel: filterButtonText, // so Android reads button text
     buttonA11yHint: t('prescription.filter.by.a11y'),
     headerText: t('prescription.filter.status'),
     topRightButtonText: tc('reset'),
