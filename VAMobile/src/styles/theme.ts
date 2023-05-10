@@ -107,6 +107,7 @@ export type VAIconColors = {
   prescriptionHelper: string
   infoIconContrast: string
   tagInfoIcon: string
+  transparent: string
 }
 
 export type VATypographyThemeVariants = {

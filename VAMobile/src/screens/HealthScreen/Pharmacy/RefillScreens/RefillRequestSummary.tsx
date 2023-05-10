@@ -113,7 +113,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const getRequestSummaryItem = () => {
     return refillRequestSummaryItems.map((request, index) => {
       const vaIconProps: VAIconProps = {
-        name: request.submitted ? 'WhiteCircleCheckMark' : 'WhiteRemove',
+        name: request.submitted ? 'CircleCheckMark' : 'Remove',
         width: 20,
         height: 20,
         fill: request.submitted ? theme.colors.icon.success : theme.colors.icon.error,

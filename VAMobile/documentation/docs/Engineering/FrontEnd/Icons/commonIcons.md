@@ -26,8 +26,6 @@ import { ReactComponent as Trash} from '@componentsDocs/VAIcon/svgs/Trash.svg';
 import { ReactComponent as Truck} from '@componentsDocs/VAIcon/svgs/Truck.svg';
 import { ReactComponent as Unread} from '@componentsDocs/VAIcon/svgs/Unread.svg';
 import { ReactComponent as VideoCamera} from '@componentsDocs/VAIcon/svgs/VideoCamera.svg';
-import { ReactComponent as WhiteCircleCheckMark} from '@componentsDocs/VAIcon/svgs/WhiteCircleCheckMark.svg';
-import { ReactComponent as WhiteRemove} from '@componentsDocs/VAIcon/svgs/WhiteRemove.svg';
 import IconsPathSection from '@site/src/components/IconsPathSection'
 
 # Common
@@ -66,5 +64,3 @@ Trash | <Trash  className="icons"/> | Trash.svg
 Truck | <Truck  className="icons"/> | Truck.svg
 Unread | <Unread  className="icons"/> | Unread.svg
 Video Camera | <VideoCamera  className="icons"/> | VideoCamera.svg
-White fill Check Mark in Circle | <WhiteCircleCheckMark  className="icons"/> | WhiteCircleCheckMark.svg
-White fill Remove | <WhiteRemove  className="icons"/> | WhiteRemove.svg

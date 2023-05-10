@@ -60,6 +60,7 @@ const TrackingCard: FC<TrackingCardProps> = ({ onPress, a11yHint, title, dateShi
   const rightIconProps: VAIconProps = {
     name: 'Info',
     fill: 'infoIcon',
+    fill2: 'transparent',
     height: 16,
     width: 16,
   }

@@ -11,7 +11,7 @@ import { updateFontScale } from 'utils/accessibility'
 import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
-// SVGs should have `fill` set to `#000`. If `stroke` is used, set to `#00F`. See existing icons for guidance.
+// See VAIcon function documentation below for guidance on adding new SVGs
 
 // Navigation
 import BenefitsSelected from './svgs/navIcon/BenefitsSelected.svg'
@@ -57,7 +57,6 @@ import FilledRadio from './svgs/radio/radioFilled.svg'
 import IntermediateCheckBox from './svgs/checkbox/checkBoxIntermediate.svg'
 
 // Misc
-
 import Add from './svgs/Add.svg'
 import Building from './svgs/Building.svg'
 import Bullet from './svgs/Bullet.svg'
@@ -85,8 +84,6 @@ import Trash from './svgs/Trash.svg'
 import Truck from './svgs/Truck.svg'
 import Unread from './svgs/Unread.svg'
 import VideoCamera from './svgs/VideoCamera.svg'
-import WhiteCircleCheckMark from './svgs/WhiteCircleCheckMark.svg'
-import WhiteRemove from './svgs/WhiteRemove.svg'
 
 /**
  * Process for each icon:
@@ -104,6 +101,8 @@ import WhiteRemove from './svgs/WhiteRemove.svg'
  *   11. Inspect sizing good
  *   12. Spot check an actual place the icon is used that it looks good
  */
+
+// TODO: MAKE SPIKE TICKET TO INVESTIGATE FULL DUOTONE IMPLEMENTATION WITH DIFFERING COLORS FOR LIGHT/DARK MODE
 
 export const VA_ICON_MAP = {
   Add,
@@ -159,13 +158,11 @@ export const VA_ICON_MAP = {
   Truck,
   Unread,
   VideoCamera,
-  WhiteCircleCheckMark, // TODO: Combine with CircleCheckMark on follow-up ticket to enhance VAIcon for 2 fills
-  WhiteRemove, // TODO: Combine with Remove on follow-up ticket to enhance VAIcon for 2 fills
   // Done ^
   EmptyCheckBox,
-  IntermediateCheckBox,
+  IntermediateCheckBox, // Don't forget duotone
   EmptyRadio,
-  FilledRadio,
+  FilledRadio, // Don't forget duotone
   DisabledRadio,
   ErrorCheckBox,
   Save, // Design ?: What's the deal with this being a medical folder?
@@ -180,6 +177,9 @@ export type VAIconProps = BoxProps & {
 
   /** Fill color for the icon */
   fill?: keyof VAIconColors | keyof VATextColors | string
+
+  /** Secondary fill color for duotone icons--fills icons inside main fill, defaults white */
+  fill2?: keyof VAIconColors | keyof VATextColors | string
 
   /** Stroke color of the icon */
   stroke?: keyof VAIconColors | string
@@ -199,14 +199,23 @@ export type VAIconProps = BoxProps & {
 
 /**
  * A common component to display assets (SVGs).
- * In the SVG definitions, on the path:
+ *
+ * For all icons in the SVG definitions, on the primary/only path:
  *    - Set `fill` to `#000` to inherit VAIcon's fill color prop
- *    - If `stroke` is used (uncommon), set to `#00F` to inherit VAIcon's stroke color prop
- *    - See existing icons for guidance
+ * If the SVG icon is duotone, additionally:
+ *    - Set `color` to `#fff` on the top level svg (not path)
+ *    - Set `fill` to `currentColor` on the secondary path to inherit VAIcon's fill2 color prop
+ * If the SVG icon uses stroke, additionally:
+ *    - Set `stroke` to `#00F` to inherit VAIcon's stroke color prop
+ *
+ * Example icons of each classification:
+ *    - One layer: HomeSelected.svg
+ *    - Duotone: CircleCheckMark.svg
+ *    - Stroke: RadioEmpty
  *
  * @returns VAIcon component
  */
-const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventScaling, testID, ...boxProps }) => {
+const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, fill2, stroke, preventScaling, testID, ...boxProps }) => {
   const theme = useTheme()
   const fs: (val: number) => number = useFontScale()
   const dispatch = useAppDispatch()
@@ -221,6 +230,10 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventSca
 
   if (fill) {
     iconProps = Object.assign({}, iconProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || theme.colors.text[fill as keyof VATextColors] || fill })
+  }
+
+  if (fill2) {
+    iconProps = Object.assign({}, iconProps, { color: theme.colors.icon[fill2 as keyof VAIconColors] || theme.colors.text[fill2 as keyof VATextColors] || fill2 })
   }
 
   if (stroke) {

@@ -105,6 +105,7 @@ export const lightTheme = {
     prescriptionHelper: colors.white,
     infoIconContrast: colors.grayLightest,
     tagInfoIcon: colors.base,
+    transparent: colors.transparent,
   },
   text: {
     footerButton: colors.primary,
@@ -301,6 +302,7 @@ export const darkTheme = {
     prescriptionHelper: colors.darkmodeLightBlue,
     infoIconContrast: colors.grayLight,
     tagInfoIcon: colors.base,
+    transparent: colors.transparent,
   },
   text: {
     descriptiveBackButton: colors.darkmodeLightBlue,
