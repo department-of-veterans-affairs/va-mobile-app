@@ -83,25 +83,6 @@ import Truck from './svgs/Truck.svg'
 import Unread from './svgs/Unread.svg'
 import VideoCamera from './svgs/VideoCamera.svg'
 
-/**
- * Process for each icon:
- *   1. Update .svg file from spreadsheet
- *      1.5 Update fill from 'black' to '#000'
- *   2. Check if VAIcon name should change
- *   3. If so, update calling places (SAVE as you go)
- *   4. Check if SVG name should change
- *   5. If so, update file name, VAIcon import, and doc site file name/import
- *   6. Move icon up to the 'Done' section in alphabetical order
- *   7. If file name was case-only change, add `// Needs case fix` tag to remedy w/ Git
- *   8. Add any other notes if appropriate
- *   9. Update Home screen to icon and load app
- *   10. Check light/dark mode
- *   11. Inspect sizing good
- *   12. Spot check an actual place the icon is used that it looks good
- */
-
-// TODO: MAKE SPIKE TICKET TO INVESTIGATE FULL DUOTONE IMPLEMENTATION WITH DIFFERING COLORS FOR LIGHT/DARK MODE
-
 export const VA_ICON_MAP = {
   Add,
   AirForce,
@@ -149,12 +130,12 @@ export const VA_ICON_MAP = {
   PhoneTTY,
   ProfileSelected,
   QuestionMark,
-  RadioEmpty, // Needs case fix; Also used for RadioDisabled content--same icon, different colors
-  RadioFilled, // Needs case fix
+  RadioEmpty, // Also used for RadioDisabled content--same icon, different colors
+  RadioFilled,
   Redo,
   Remove,
   Reply,
-  RightArrowInCircle, // SVG-only update, TODO: ticket 3402 (or separate implementation ticket) to remove this icon
+  RightArrowInCircle, // TODO: Ticket 3402 (or separate implementation ticket) to remove this icon
   Sort,
   Text,
   Trash,
