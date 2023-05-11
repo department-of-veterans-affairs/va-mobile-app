@@ -35,12 +35,10 @@ const NoMatchInRecords: FC = () => {
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
           <Box {...testIdProps(t('noMatch.titleA11yLabel'))} accessibilityRole="header" accessible={true}>
-            <TextView variant="BitterBoldHeading">
-              {t('noMatch.title')}
-            </TextView>
+            <TextView variant="BitterBoldHeading">{t('noMatch.title')}</TextView>
           </Box>
           <Box {...testIdProps(t('noMatch.noMatchA11yLabel'))} accessible={true}>
-            <TextView variant="MobileBody" paragraphSpacing={true}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
               {t('noMatch.noMatch')}
             </TextView>
           </Box>
