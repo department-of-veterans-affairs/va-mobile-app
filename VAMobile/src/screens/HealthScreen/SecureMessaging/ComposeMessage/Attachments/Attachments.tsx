@@ -148,7 +148,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
             <AlertBox scrollViewRef={scrollViewRef} text={error} textA11yLabel={errorA11y} border="error" />
           </Box>
         )}
-        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('secureMessaging.attachments.fileAttachment')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true}>

@@ -33,9 +33,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
     <LargePanel title={tc('common:messagesHelp.title')} rightButtonText={tc('common:close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant={'MobileBodyBold'} paragraphSpacing={true}>
-            {t('secureMessaging.attachments.FAQ.howCanIAttach')}
-          </TextView>
+          <TextView variant={'MobileBodyBold'}>{t('secureMessaging.attachments.FAQ.howCanIAttach')}</TextView>
         </Box>
         <VABulletList
           listOfText={[
@@ -50,7 +48,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
           {t('secureMessaging.attachments.FAQ.noteText')}
         </TextView>
         <VABulletList listOfText={bulletedListOfText} paragraphSpacing={true} />
-        <TextView variant="MobileBody" accessibilityLabel={t('secureMessaging.attachments.FAQ.ifYourProblemA11y')}>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('secureMessaging.attachments.FAQ.ifYourProblemA11y')}>
           {t('secureMessaging.attachments.FAQ.ifYourProblem')}
         </TextView>
         <ClickToCallPhoneNumber phone={tc('common:8773270022.displayText')} {...a11yHintProp(tc('home:veteransCrisisLine.callA11yHint'))} />

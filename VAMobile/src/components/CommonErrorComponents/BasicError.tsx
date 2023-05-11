@@ -44,12 +44,14 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
         {headerText && (
-          <TextView {...testIdProps(headerA11yLabel ? headerA11yLabel : headerText)} variant="MobileBodyBold" accessibilityRole="header" textAlign="center">
+          <TextView {...testIdProps(headerA11yLabel ? headerA11yLabel : headerText)} variant="MobileBodyBold" paragraphSpacing={true} accessibilityRole="header" textAlign="center">
             {headerText}
           </TextView>
         )}
-        <TextView textAlign="center">{messageText}</TextView>
-        <Box mt={theme.dimensions.standardMarginBetween} accessibilityRole="button">
+        <TextView paragraphSpacing={true} textAlign="center">
+          {messageText}
+        </TextView>
+        <Box accessibilityRole="button">
           <VAButton onPress={onTryAgain} label={buttonText} buttonType={ButtonTypesConstants.buttonPrimary} a11yHint={buttonA11yHint} testID={buttonText} />
         </Box>
       </Box>

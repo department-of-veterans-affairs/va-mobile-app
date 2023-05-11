@@ -95,7 +95,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
           </Box>
         )}
         <TextArea>
-          <TextView paragraphSpacing={true} variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
           </TextView>
           <TextView variant="MobileBody" paragraphSpacing={true}>

@@ -542,7 +542,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       headerText: t('prescription.history.transferred.title'),
       body: (
         <>
-          <TextView mt={theme.paragraphSpacing.spacing20FontSize} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')} paragraphSpacing={true}>
+          <TextView accessibilityLabel={t('prescription.history.transferred.instructions.a11y')} paragraphSpacing={true}>
             {t('prescription.history.transferred.instructions')}
           </TextView>
           <TextView paragraphSpacing={true} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>

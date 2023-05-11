@@ -14,7 +14,7 @@ const NoPaymentsScreen: FC = () => {
     <VAScrollView>
       <Box mt={standardMarginBetween}>
         <AlertBox border="informational">
-          <TextView variant="MobileBodyBold" paragraphSpacing={true} accessibilityLabel={t('payments.noPayments.title.a11yLabel')}>
+          <TextView variant="MobileBodyBold" accessibilityLabel={t('payments.noPayments.title.a11yLabel')}>
             {t('payments.noPayments.title')}
           </TextView>
           <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.noPayments.body.1.a11yLabel')}>

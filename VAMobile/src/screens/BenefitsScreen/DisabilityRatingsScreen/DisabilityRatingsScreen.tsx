@@ -129,7 +129,7 @@ const DisabilityRatingsScreen: FC = () => {
     return (
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')} paragraphSpacing={true}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')}>
             {t('disabilityRating.learnAbout')}
           </TextView>
         </Box>
@@ -147,7 +147,7 @@ const DisabilityRatingsScreen: FC = () => {
     return (
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('disabilityRatingDetails.needHelp')}
           </TextView>
         </Box>

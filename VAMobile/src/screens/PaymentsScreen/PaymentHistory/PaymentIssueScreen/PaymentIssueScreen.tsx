@@ -16,7 +16,7 @@ const PaymentIssue: FC<PaymentIssueScreenProps> = () => {
   return (
     <LargePanel title={t('paymentsHelp.title')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('payments.ifMyPaymentDoesNotLookRight')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('paymentIssues.body.a11yLabel')}>

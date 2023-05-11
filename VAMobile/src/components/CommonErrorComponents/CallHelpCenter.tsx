@@ -46,7 +46,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA
           text={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
           border="error">
           <Box>
-            <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
+            <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
               {errorText ? errorText : t('errors.callHelpCenter.informationLine')}
             </TextView>
             <ClickToCallPhoneNumber

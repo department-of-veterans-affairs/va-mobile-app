@@ -33,7 +33,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
   return (
     <LargePanel title={t('profile.help.title')} rightButtonText={t('close')} testID="IncorrectServiceTestID">
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('militaryInformation.incorrectServiceInfo')}
         </TextView>
         <TextView accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.1')} variant="MobileBody" paragraphSpacing={true}>

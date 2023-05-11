@@ -72,7 +72,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         />
       </Box>
       <TextArea>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('fileUpload.uploadFileUsingCamera', { displayName })}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true}>

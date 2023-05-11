@@ -36,9 +36,7 @@ const StatusDefinition: FC<StatusDefinitionProps> = ({ navigation, route }) => {
   return (
     <LargePanel title={tc('statusDefinition')} rightButtonText={tc('close')}>
       <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <TextView variant="MobileBodyBold" paragraphSpacing={true}>
-          {display}
-        </TextView>
+        <TextView variant="MobileBodyBold">{display}</TextView>
         <TextView variant="MobileBody" accessibilityLabel={a11yLabel}>
           {text}
         </TextView>

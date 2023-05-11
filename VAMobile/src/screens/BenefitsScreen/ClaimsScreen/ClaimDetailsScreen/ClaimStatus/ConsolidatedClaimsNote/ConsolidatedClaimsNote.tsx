@@ -16,7 +16,7 @@ const ConsolidatedClaimsNote: FC<ConsolidatedClaimsNoteProps> = () => {
   return (
     <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('claimDetails.consolidatedClaims.noteHeader')}
         </TextView>
         <TextView variant="MobileBody">{t('claimDetails.consolidatedClaims.noteContent')}</TextView>

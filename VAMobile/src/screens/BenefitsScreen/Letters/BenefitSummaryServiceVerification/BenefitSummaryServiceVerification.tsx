@@ -226,7 +226,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       {...testIdProps('Letters: Benefit-Summary-Service-Verification-Letter-Page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('letters.benefitService.title')}
           </TextView>
           <TextView variant="MobileBody">{t('letters.benefitService.summary')}</TextView>

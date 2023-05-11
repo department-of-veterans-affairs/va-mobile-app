@@ -121,7 +121,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
 
   return (
     <TextArea>
-      <TextView variant="MobileBodyBold" paragraphSpacing={true} accessibilityRole="header" {...testIdProps(titleA11yLabel || title)}>
+      <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(titleA11yLabel || title)}>
         {title}
       </TextView>
       <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} paragraphSpacing={true}>

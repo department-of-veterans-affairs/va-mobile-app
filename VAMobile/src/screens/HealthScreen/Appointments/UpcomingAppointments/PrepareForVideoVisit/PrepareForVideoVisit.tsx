@@ -28,7 +28,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
   return (
     <LargePanel title={tc('appointmentsHelp')} rightButtonText={tc('close')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter} mt={theme.dimensions.cardPadding}>
-        <TextView variant="MobileBodyBold" paragraphSpacing={true} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('prepareForVideoVisit.beforeYourAppointment')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true}>
@@ -41,7 +41,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
           {t('prepareForVideoVisit.joinBy')}
         </TextView>
 
-        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('prepareForVideoVisit.toHaveBestExperience')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true}>
@@ -54,7 +54,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
           {t('prepareForVideoVisit.connectWithWifi')}
         </TextView>
 
-        <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('prepareForVideoVisit.medicationReview')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true}>
