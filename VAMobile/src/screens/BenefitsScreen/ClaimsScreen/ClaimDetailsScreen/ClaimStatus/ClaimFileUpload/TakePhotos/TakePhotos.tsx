@@ -85,7 +85,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
             <TextView variant="MobileBody">{t('fileUpload.ifMoreThan10.3')}</TextView>
           </TextView>
         </TextView>
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBodyBold">
           {t('fileUpload.maxFileSize')}
         </TextView>
         <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')} paragraphSpacing={true}>
