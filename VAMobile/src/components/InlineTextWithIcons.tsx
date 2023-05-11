@@ -19,16 +19,16 @@ export type InlineTextWithIconsProps = {
 
 /**Common component to show an icon with a line of text*/
 export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({ inlineIcon, leftIconProps, rightIconProps, leftTextProps, rightTextProps }) => {
-  const themes = useTheme()
+  const theme = useTheme()
   return (
     <Box flexDirection={'row'} flexGrow={1}>
-      <Box ml={leftIconProps ? 0 : 16} mt={7} mr={themes.dimensions.condensedMarginBetween}>
+      <Box ml={leftIconProps ? 0 : 16} mt={7} mr={theme?.dimensions?.condensedMarginBetween}>
         {!inlineIcon && leftIconProps && <VAIcon name={leftIconProps.name} width={leftIconProps.width} height={leftIconProps.height} fill={leftIconProps.fill} />}
       </Box>
       {inlineIcon && leftIconProps ? (
         <VAIcon name={leftIconProps.name} width={leftIconProps.width} height={leftIconProps.height} fill={leftIconProps.fill} />
       ) : (
-        <TextView mr={themes.dimensions.condensedMarginBetween} flex={7} variant={leftTextProps.variant} textAlign={leftTextProps.textAlign} color={leftTextProps.color}>
+        <TextView mr={theme?.dimensions?.condensedMarginBetween} flex={7} variant={leftTextProps.variant} textAlign={leftTextProps.textAlign} color={leftTextProps.color}>
           {leftTextProps.text}
         </TextView>
       )}
