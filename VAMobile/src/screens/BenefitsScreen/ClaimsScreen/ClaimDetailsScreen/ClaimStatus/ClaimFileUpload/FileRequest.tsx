@@ -71,7 +71,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
         </TextView>
         <Box mt={standardMarginBetween}>
           <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header">
+            <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
               {t('fileRequest.askForYourClaimEvaluationTitle')}
             </TextView>
             <TextView variant="MobileBody" paragraphSpacing={true}>
