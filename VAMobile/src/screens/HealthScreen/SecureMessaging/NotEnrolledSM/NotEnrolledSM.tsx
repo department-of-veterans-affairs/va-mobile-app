@@ -14,7 +14,7 @@ const NotEnrolledSM: FC = () => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
   const theme = useTheme()
-  const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme.dimensions
+  const { contentMarginBottom, contentMarginTop } = theme.dimensions
 
   const bulletOne = {
     text: t('notEnrolledSM.youAreEnrolled'),
