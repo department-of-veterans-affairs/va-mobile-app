@@ -7,7 +7,10 @@ module.exports = {
 	"reporters": [ "default", "jest-junit" ],
 	transform: {
 		...tsjPreset.transform,
-	
+		'^.+\\.tsx?$': ['ts-jest', {
+			tsconfig: 'tsconfig.test.json',
+			babelConfig: 'babel.config.js'
+		  }]
 	},
 
 	"moduleNameMapper":{
@@ -38,12 +41,7 @@ module.exports = {
 		"./jest/testSetup.runner.ts"
 	],
 	"transformIgnorePatterns": [
+		"jest-runner",
 		"/node_modules/(?!native-base)/"
 	],
-	globals: {
-		'ts-jest': {
-			tsconfig: 'tsconfig.test.json',
-			babelConfig: 'babel.config.js'
-		}
-	},
 }
