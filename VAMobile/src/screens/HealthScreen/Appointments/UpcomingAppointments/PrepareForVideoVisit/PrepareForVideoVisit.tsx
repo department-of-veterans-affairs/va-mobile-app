@@ -31,7 +31,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('prepareForVideoVisit.beforeYourAppointment')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
           {t('prepareForVideoVisit.downloadBasedOnDevice')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true}>
@@ -44,7 +44,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('prepareForVideoVisit.toHaveBestExperience')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
           {t('prepareForVideoVisit.connectFromQuietPlace')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true}>
@@ -57,7 +57,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('prepareForVideoVisit.medicationReview')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
           {t('prepareForVideoVisit.reviewEverything')}
         </TextView>
         <TextView variant="MobileBody">{t('prepareForVideoVisit.beReadyToTalk')}</TextView>
