@@ -38,7 +38,6 @@ module.exports = {
 		"./jest/testSetup.runner.ts"
 	],
 	"transformIgnorePatterns": [
-		"jest-runner",
 		"/node_modules/(?!native-base)/"
 	],
 	globals: {
