@@ -150,7 +150,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     menuViewActions,
   }
   const fillStyle: ViewStyle = {
-    paddingTop: insets.top,
+    paddingTop: insets?.top,
     backgroundColor: theme.colors.background.main,
     flex: 1,
   }

@@ -105,8 +105,8 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
     borderBottomWidth: 1,
     py: theme?.dimensions?.buttonPadding,
     px: theme?.dimensions?.gutter,
-    ml: insets.left,
-    mr: insets.right,
+    ml: insets?.left,
+    mr: insets?.right,
   }
 
   const commonButtonProps: TextViewProps = {
@@ -157,8 +157,8 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
           setModalVisible(!modalVisible)
         }}>
         <Box flex={1} flexDirection="column" accessibilityViewIsModal={true}>
-          <Box backgroundColor={isAndroid() ? 'modalOverlay' : undefined} pt={insets.top} />
-          <Box backgroundColor="list" pb={insets.bottom} flex={1}>
+          <Box backgroundColor={isAndroid() ? 'modalOverlay' : undefined} pt={insets?.top} />
+          <Box backgroundColor="list" pb={insets?.bottom} flex={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancelPressed} {...cancelButtonProps}>
                 <TextView {...commonButtonProps}>{tc('cancel')}</TextView>

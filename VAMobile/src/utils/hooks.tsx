@@ -92,7 +92,7 @@ export const useTheme = (): VATheme => {
  */
 export const useHeaderStyles = (): StackNavigationOptions => {
   const insets = useSafeAreaInsets()
-  let headerStyles = getHeaderStyles(insets.top, useTheme())
+  let headerStyles = getHeaderStyles(insets?.top, useTheme())
 
   headerStyles = {
     ...headerStyles,
@@ -123,7 +123,7 @@ export const useTopPaddingAsHeaderStyles = (): StackNavigationOptions => {
     headerStyle: {
       backgroundColor: theme?.colors?.background?.main,
       shadowColor: 'transparent', // removes bottom border
-      height: insets.top,
+      height: insets?.top,
     },
   }
 }
