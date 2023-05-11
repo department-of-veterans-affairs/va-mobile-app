@@ -25,7 +25,7 @@ interface MenuItemViewProps {
  */
 export const MenuItem = ({
   disabled = false,
-  underlayColor = theme.colors.buttonBackground.overFlowMenuButton,
+  underlayColor = theme?.colors?.buttonBackground?.overFlowMenuButton,
   viewStyle,
   touchableStyle,
   disabledStyle,

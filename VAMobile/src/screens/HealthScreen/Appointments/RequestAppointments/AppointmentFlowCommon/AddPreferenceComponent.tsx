@@ -24,7 +24,7 @@ const AddPreferenceComponent: FC<AddPreferenceComponentProps> = ({ buttonText, o
     name: 'Add',
     height: 24,
     width: 24,
-    fill: theme.colors.buttonBackground.buttonPrimary,
+    fill: theme?.colors?.buttonBackground?.buttonPrimary,
   }
 
   return (
