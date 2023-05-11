@@ -1,5 +1,5 @@
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { StyleProp, TouchableOpacity, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
@@ -30,6 +30,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
   const { colors: themeColor } = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const fontScale = useWindowDimensions().fontScale
 
   useFocusEffect(setFocus)
 
@@ -100,6 +101,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     flexGrow: 1,
+    flexWrap: fontScale >= 3 ? 'wrap' : undefined,
   }
 
   const onActionPress = () => {
