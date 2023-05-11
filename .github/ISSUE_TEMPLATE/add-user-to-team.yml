@@ -2,6 +2,7 @@ name: Add User to VA Flagship Mobile Team
 description: Request to add a user to the Department of Veterans Affairs Flagship Mobile Team
 title: "Add User to Team: [username]"
 labels: [ add-team-member ]
+assignees: timwright12
 body:
 - type: markdown
   attributes:
