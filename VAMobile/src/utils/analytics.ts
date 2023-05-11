@@ -17,17 +17,17 @@ export type UserAnalytic = {
 export const logAnalyticsEvent = async (event: Event): Promise<void> => {
   const { name, params } = event
   console.debug(`logging analytics event ${name}`)
-  await analytics().logEvent(name, params)
+  await analytics()?.logEvent(name, params)
 }
 
 export const setAnalyticsUserProperty = async (property: UserAnalytic): Promise<void> => {
   const { name, value } = property
   console.debug(`setAnalyticsUserProperty ${name} ${value}`)
-  await analytics().setUserProperty(name, value)
+  await analytics()?.setUserProperty(name, value)
 }
 
 export const setAnalyticsUserProperties = async (properties: { [key: string]: string | null }): Promise<void> => {
-  await analytics().setUserProperties(properties)
+  await analytics()?.setUserProperties(properties)
 }
 
 export const getAnalyticsTimers = (state: RootState): [number, number, number] => {
@@ -66,6 +66,6 @@ export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
       errorObject = error
     }
 
-    crashlytics().recordError(errorObject, errorName)
+    crashlytics()?.recordError(errorObject, errorName)
   }
 }
