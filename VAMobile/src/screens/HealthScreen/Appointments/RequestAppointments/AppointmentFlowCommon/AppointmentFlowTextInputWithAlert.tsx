@@ -36,7 +36,6 @@ const AppointmentFlowTextInputWithAlert: FC<AppointmentFlowTextInputWithAlertPro
   ...boxProps
 }) => {
   const theme = useTheme()
-  const { condensedMarginBetween, standardMarginBetween } = theme?.dimensions
 
   const onEndEditing = () => {
     if (validationFunc) {
@@ -46,10 +45,10 @@ const AppointmentFlowTextInputWithAlert: FC<AppointmentFlowTextInputWithAlertPro
 
   return (
     <Box {...boxProps}>
-      <TextView mb={errorMessage ? 0 : condensedMarginBetween} variant="MobileBodyBold">
+      <TextView mb={errorMessage ? 0 : theme?.dimensions?.condensedMarginBetween} variant="MobileBodyBold">
         {inputLabel}
       </TextView>
-      <AppointmentFlowErrorAlert errorMessage={errorMessage} mb={standardMarginBetween} mt={standardMarginBetween} />
+      <AppointmentFlowErrorAlert errorMessage={errorMessage} mb={theme?.dimensions?.standardMarginBetween} mt={theme?.dimensions?.standardMarginBetween} />
       <VATextInput isTextArea={isTextArea} inputType={inputType} onChange={onChange} onEndEditing={onEndEditing} value={value} maxLength={maxLength} />
     </Box>
   )

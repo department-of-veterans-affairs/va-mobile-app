@@ -151,9 +151,9 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   ]
 
   const displayImages = (): ReactElement => {
-    const { condensedMarginBetween, gutter } = theme?.dimensions
     /** Need to subtract gutter margins and margins between pics before dividing screen width by 3 to get the width of each image*/
-    const calculatedWidth = ((isPortrait ? Dimensions.get('window').width : Dimensions.get('window').height) - 2 * gutter - 2 * condensedMarginBetween) / 3
+    const calculatedWidth =
+      ((isPortrait ? Dimensions.get('window').width : Dimensions.get('window').height) - 2 * theme?.dimensions?.gutter - 2 * theme?.dimensions?.condensedMarginBetween) / 3
 
     const uploadedImages = (): ReactElement[] => {
       return _.map(imagesList || [], (asset, index) => {
@@ -161,7 +161,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           /** Rightmost photo doesn't need right margin b/c of gutter margins
            * Every 3rd photo, right margin is changed to zero*/
 
-          <Box mt={condensedMarginBetween} mr={condensedMarginBetween} key={index}>
+          <Box mt={theme?.dimensions?.condensedMarginBetween} mr={theme?.dimensions?.condensedMarginBetween} key={index}>
             <PhotoPreview
               width={calculatedWidth}
               height={calculatedWidth}
@@ -181,10 +181,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     }
 
     return (
-      <Box display="flex" flexDirection="row" flexWrap="wrap" pl={gutter} pr={condensedMarginBetween}>
+      <Box display="flex" flexDirection="row" flexWrap="wrap" pl={theme?.dimensions?.gutter} pr={theme?.dimensions?.condensedMarginBetween}>
         {uploadedImages()}
         {(!imagesList || imagesList.length < MAX_NUM_PHOTOS) && (
-          <Box mt={condensedMarginBetween}>
+          <Box mt={theme?.dimensions?.condensedMarginBetween}>
             <PhotoAdd
               width={calculatedWidth}
               height={calculatedWidth}

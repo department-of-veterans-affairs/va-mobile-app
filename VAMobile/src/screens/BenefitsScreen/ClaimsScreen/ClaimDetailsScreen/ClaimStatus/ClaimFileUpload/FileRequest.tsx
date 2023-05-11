@@ -22,7 +22,6 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
   const { claimID } = route.params
   const { claim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
-  const { condensedMarginBetween, contentMarginBottom, contentMarginTop, standardMarginBetween, gutter } = theme?.dimensions
 
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
@@ -59,23 +58,33 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
 
   return (
     <ChildTemplate backLabel={t('claim.backLabel')} backLabelOnPress={navigation.goBack} title={t('fileRequest.title')}>
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" mt={standardMarginBetween} mb={condensedMarginBetween} mx={gutter}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+        <TextView
+          variant="MobileBodyBold"
+          accessibilityRole="header"
+          mt={theme?.dimensions?.standardMarginBetween}
+          mb={theme?.dimensions?.condensedMarginBetween}
+          mx={theme?.dimensions?.gutter}>
           {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
         </TextView>
         <Box>
           <SimpleList items={getRequests()} />
         </Box>
-        <TextView mt={condensedMarginBetween} mx={gutter} mb={contentMarginBottom} variant="HelperText" accessibilityRole="header">
+        <TextView
+          mt={theme?.dimensions?.condensedMarginBetween}
+          mx={theme?.dimensions?.gutter}
+          mb={theme?.dimensions?.contentMarginBottom}
+          variant="HelperText"
+          accessibilityRole="header">
           {t('fileRequest.weSentYouALaterText')}
         </TextView>
-        <Box mt={standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <TextArea>
-            <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+            <TextView mb={theme?.dimensions?.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
               {t('fileRequest.askForYourClaimEvaluationTitle')}
             </TextView>
             <TextView variant="MobileBody">{t('fileRequest.askForYourClaimEvaluationBody')}</TextView>
-            <Box mt={standardMarginBetween}>
+            <Box mt={theme?.dimensions?.standardMarginBetween}>
               <VAButton
                 onPress={navigateTo('AskForClaimDecision', { claimID })}
                 label={t('fileRequest.viewEvaluationDetails')}

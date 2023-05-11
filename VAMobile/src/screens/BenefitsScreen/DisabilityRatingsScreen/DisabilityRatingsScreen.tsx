@@ -40,7 +40,6 @@ const DisabilityRatingsScreen: FC = () => {
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
   const { loading, needsDataLoad, ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
-  const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme?.dimensions
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
   const totalCombinedRating = ratingData?.combinedDisabilityRating
@@ -197,20 +196,20 @@ const DisabilityRatingsScreen: FC = () => {
 
   const titleProps: TextViewProps = {
     variant: 'TableHeaderBold',
-    mx: gutter,
-    mb: condensedMarginBetween,
-    mt: standardMarginBetween,
+    mx: theme?.dimensions?.gutter,
+    mb: theme?.dimensions?.condensedMarginBetween,
+    mt: theme?.dimensions?.standardMarginBetween,
     accessibilityRole: 'header',
   }
 
   return (
     <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
       <Box>{getCombinedTotalSection()}</Box>
-      <Box mb={condensedMarginBetween}>
+      <Box mb={theme?.dimensions?.condensedMarginBetween}>
         <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
       </Box>
-      <Box mb={condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
-      <Box mb={contentMarginBottom}>{getNeedHelpSection()}</Box>
+      <Box mb={theme?.dimensions?.condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
+      <Box mb={theme?.dimensions?.contentMarginBottom}>{getNeedHelpSection()}</Box>
     </ChildTemplate>
   )
 }

@@ -35,7 +35,6 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const { submittedDecision, error, claim, loadingSubmitClaimDecision } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
-  const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme?.dimensions
   const requestEvalAlert = useDestructiveAlert()
 
   const navigateToClaimsDetailsPage = submittedDecision && !error
@@ -108,19 +107,19 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
 
   return (
     <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('askForClaimDecision.pageTitle')}>
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme?.dimensions?.standardMarginBetween}>
             {t('askForClaimDecision.title')}
           </TextView>
           <TextView variant="MobileBody">{t('askForClaimDecision.weSentYouALetter')}</TextView>
-          <TextView variant="MobileBody" my={standardMarginBetween}>
+          <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
             {t('askForClaimDecision.takingFull30Days')}
           </TextView>
           <VABulletList listOfText={bulletedListOfText} />
         </TextArea>
-        <Box mx={gutter}>
-          <Box my={standardMarginBetween}>
+        <Box mx={theme?.dimensions?.gutter}>
+          <Box my={theme?.dimensions?.standardMarginBetween}>
             <FormWrapper fieldsList={formFieldsList} onSave={onRequestEvaluation} setOnSaveClicked={setOnSaveClicked} onSaveClicked={onSaveClicked} />
           </Box>
           <VAButton

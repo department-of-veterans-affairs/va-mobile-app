@@ -17,7 +17,6 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { request } = route.params
-  const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme?.dimensions
   const { displayName, description, uploadDate, documents } = request
 
   const hasUploaded = hasUploadedOrReceived(request)
@@ -27,7 +26,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
     borderStyle: 'solid',
     borderTopWidth: 'default',
     borderTopColor: 'primary',
-    mt: contentMarginTop,
+    mt: theme?.dimensions?.contentMarginTop,
   }
 
   const getUploadedFileNames = (): JSX.Element[] | JSX.Element => {
@@ -53,20 +52,20 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
 
   return (
     <ChildTemplate backLabel={t('request.backLabel')} backLabelOnPress={navigation.goBack} title={displayName || ''}>
-      <Box mt={contentMarginTop} mb={contentMarginBottom} flex={1}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} flex={1}>
         {hasUploaded && (
-          <Box mb={standardMarginBetween}>
+          <Box mb={theme?.dimensions?.standardMarginBetween}>
             <TextArea>
               <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {t('fileRequestDetails.submittedTitle')}
               </TextView>
-              <TextView mb={standardMarginBetween} variant="MobileBody">
+              <TextView mb={theme?.dimensions?.standardMarginBetween} variant="MobileBody">
                 {getUploadedDate()}
               </TextView>
               <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {t('fileRequestDetails.fileTitle')}
               </TextView>
-              <Box mb={standardMarginBetween}>{getUploadedFileNames()}</Box>
+              <Box mb={theme?.dimensions?.standardMarginBetween}>{getUploadedFileNames()}</Box>
               <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {t('fileRequestDetails.typeTitle')}
               </TextView>
@@ -75,7 +74,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
           </Box>
         )}
         <TextArea>
-          <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+          <TextView mb={theme?.dimensions?.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
             {displayName}
           </TextView>
           <TextView variant="MobileBody">{description}</TextView>
@@ -83,7 +82,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
       </Box>
       {!hasUploaded && (
         <Box {...boxProps}>
-          <Box mt={standardMarginBetween} mx={gutter} mb={contentMarginBottom}>
+          <Box mt={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.contentMarginBottom}>
             <VAButton
               onPress={navigateTo('SelectFile', { request })}
               label={t('fileUpload.selectAFile')}

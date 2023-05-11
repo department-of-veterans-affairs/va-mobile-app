@@ -95,7 +95,6 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
-  const { condensedMarginBetween, standardMarginBetween } = theme?.dimensions
   const { eventsTimeline } = attributes
 
   const phaseLessThanEqualToCurrent = phase <= current
@@ -131,7 +130,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
 
   const getPhaseExpandedContent = (): ReactNode => {
     return (
-      <Box mt={condensedMarginBetween} {...testIdProps(detailsA11yLabel)} accessible={true}>
+      <Box mt={theme?.dimensions?.condensedMarginBetween} {...testIdProps(detailsA11yLabel)} accessible={true}>
         <TextView variant={'MobileBody'}>{detailsText}</TextView>
       </Box>
     )
@@ -161,11 +160,11 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   return (
     <AccordionCollapsible noBorder={true} header={getPhaseHeader()} expandedContent={getPhaseExpandedContent()} hideArrow={!phaseLessThanEqualToCurrent} testID={testID}>
       {phase === 3 && showClaimFileUploadBtn && (
-        <Box mt={standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <Box {...testIdProps(youHaveFileRequestsTextA11yHint)} accessible={true} accessibilityRole="header">
             <TextView variant={'MobileBodyBold'}>{youHaveFileRequestsText}</TextView>
           </Box>
-          <Box mt={standardMarginBetween}>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>
             <VAButton
               onPress={navigateTo('FileRequest', { claimID })}
               testID={t('claimPhase.fileRequests.button.label')}

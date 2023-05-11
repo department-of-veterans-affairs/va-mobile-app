@@ -22,7 +22,6 @@ type AppointmentModalTitleSectionProps = {
  * */
 const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ title, extraInformationText, errorMessage, titleMarginBottom, titleA11yLabel }) => {
   const theme = useTheme()
-  const { gutter, standardMarginBetween, condensedMarginBetween, contentMarginBottom } = theme?.dimensions
   const error = !!errorMessage
 
   return (
@@ -32,15 +31,15 @@ const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ ti
         variant={'BitterBoldHeading'}
         accessibilityLabel={titleA11yLabel}
         accessibilityRole={'header'}
-        mb={titleMarginBottom ? titleMarginBottom : !extraInformationText && !error ? contentMarginBottom : 0}>
+        mb={titleMarginBottom ? titleMarginBottom : !extraInformationText && !error ? theme?.dimensions?.contentMarginBottom : 0}>
         {title}
       </TextView>
       {!!extraInformationText && (
-        <TextView variant="HelperText" mt={condensedMarginBetween} mb={!error ? standardMarginBetween : 0} mx={gutter}>
+        <TextView variant="HelperText" mt={theme?.dimensions?.condensedMarginBetween} mb={!error ? theme?.dimensions?.standardMarginBetween : 0} mx={theme?.dimensions?.gutter}>
           {extraInformationText}
         </TextView>
       )}
-      <AppointmentFlowErrorAlert errorMessage={errorMessage} mb={standardMarginBetween} mt={standardMarginBetween} />
+      <AppointmentFlowErrorAlert errorMessage={errorMessage} mb={theme?.dimensions?.standardMarginBetween} mt={theme?.dimensions?.standardMarginBetween} />
     </>
   )
 }

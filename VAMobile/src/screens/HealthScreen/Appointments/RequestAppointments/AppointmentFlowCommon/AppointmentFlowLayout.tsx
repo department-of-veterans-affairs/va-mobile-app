@@ -40,7 +40,6 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { contentMarginBottom, gutter, condensedMarginBetween } = theme?.dimensions
 
   const getButtonSection = () => {
     const firstActionPress = firstActionButtonPress ? firstActionButtonPress : () => {}
@@ -82,11 +81,11 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
   }
 
   return (
-    <Box flex={1} backgroundColor={'main'} pt={condensedMarginBetween}>
+    <Box flex={1} backgroundColor={'main'} pt={theme?.dimensions?.condensedMarginBetween}>
       <VAScrollView contentContainerStyle={scrollViewStyle}>{children}</VAScrollView>
-      <Box mb={contentMarginBottom} mx={gutter} mt={30}>
+      <Box mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter} mt={30}>
         {!!linkText && (
-          <TextView variant="MobileBodyLink" onPress={onLinkPress} mb={contentMarginBottom}>
+          <TextView variant="MobileBodyLink" onPress={onLinkPress} mb={theme?.dimensions?.contentMarginBottom}>
             {linkText}
           </TextView>
         )}
