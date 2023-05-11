@@ -23,7 +23,7 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
 
   const containerStyles = {
     mt: 30,
-    mb: contentMarginBottom,
+    mb: theme?.dimensions?.contentMarginBottom,
   }
 
   const bulletOne = {

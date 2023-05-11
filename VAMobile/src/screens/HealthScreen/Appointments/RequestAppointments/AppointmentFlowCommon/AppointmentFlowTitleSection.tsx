@@ -27,7 +27,7 @@ const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ ti
   return (
     <>
       <TextView
-        mx={gutter}
+        mx={theme?.dimensions?.gutter}
         variant={'BitterBoldHeading'}
         accessibilityLabel={titleA11yLabel}
         accessibilityRole={'header'}

@@ -38,7 +38,7 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
     })
 
     return (
-      <Box mt={condensedMarginBetween}>
+      <Box mt={theme?.dimensions?.condensedMarginBetween}>
         <SimpleList items={toggleItems} />
       </Box>
     )
