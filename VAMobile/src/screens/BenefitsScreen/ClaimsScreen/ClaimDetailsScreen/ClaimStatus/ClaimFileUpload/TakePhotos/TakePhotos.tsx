@@ -75,7 +75,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('fileUpload.uploadFileUsingCamera', { displayName })}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
+        <TextView variant="MobileBody" paragraphSpacing={true} mt={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.takePhotoEachPage')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true} {...testIdProps(t('fileUpload.ifMoreThan10.a11y'))}>
