@@ -105,13 +105,13 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
               <TextView variant="MobileBody">{t('fileUpload.pleaseRequestFromPhoneFiles.pt2')}</TextView>
             </TextView>
           </TextView>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.maxFileSize')}
           </TextView>
           <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')} paragraphSpacing={true}>
             {t('fileUpload.50MB')}
           </TextView>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.acceptedFileTypes')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
