@@ -22,13 +22,12 @@ type ReloadButtonProps = {
 const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { dimensions, colors } = theme
 
   const reloadBoxProps: BoxProps = {
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    mr: dimensions.textIconMargin,
+    mr: theme?.dimensions?.textIconMargin,
     height: isIOS() ? 64 : 45, // this is done due to position difference between IOS and Android
   }
 
@@ -38,7 +37,7 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
         onPress={reloadPressed}
         disabled={false}
         icon={'WebviewRefresh'}
-        fill={colors.icon.webviewReload}
+        fill={theme?.colors?.icon?.webviewReload}
         testID={t('refresh')}
         a11yHint={t('refresh.a11yHint')}
       />
