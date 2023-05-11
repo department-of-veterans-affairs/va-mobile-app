@@ -38,7 +38,7 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
         <TextView variant="BitterBoldHeading" accessibilityRole="header" {...testIdProps(t('biometricsPreference.doYouWantToAllow.a11yLabel', { biometricsA11yLabel }))}>
           {t('biometricsPreference.doYouWantToAllow', { biometricsText })}
         </TextView>
-        <TextView paragraphSpacing={true} variant="MobileBody">
+        <TextView paragraphSpacing={true} variant="MobileBody" mt={theme.dimensions.textAndButtonLargeMargin}>
           {bodyText}
           {t('biometricsPreference.youCanAlwaysChangeThis')}
         </TextView>
