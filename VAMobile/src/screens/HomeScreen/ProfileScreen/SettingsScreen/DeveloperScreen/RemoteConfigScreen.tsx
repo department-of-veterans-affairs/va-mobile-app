@@ -78,7 +78,7 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
         <Box mb={theme?.dimensions?.condensedMarginBetween}>
           {Object.keys(getFeatureToggles()).map((key: string) => {
             const value = featureEnabled(key as FeatureToggleType).toString()
-            const isOverridden = override && featureEnabled(key as FeatureToggleType) !== remoteConfig().getValue(key).asBoolean()
+            const isOverridden = override && featureEnabled(key as FeatureToggleType) !== remoteConfig()?.getValue(key)?.asBoolean()
             return (
               <Box key={key} mt={theme?.dimensions?.condensedMarginBetween}>
                 <TextArea>

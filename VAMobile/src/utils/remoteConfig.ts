@@ -122,7 +122,7 @@ export const loadOverrides = async (): Promise<void> => {
  * we'll return the value of the key in devConfig, otherwise we return the remoteConfig value
  */
 export const featureEnabled = (feature: FeatureToggleType): boolean => {
-  return overrideRemote ? devConfig[feature] : remoteConfig().getValue(feature)?.asBoolean()
+  return overrideRemote ? devConfig[feature] : remoteConfig()?.getValue(feature)?.asBoolean()
 }
 
 /**
