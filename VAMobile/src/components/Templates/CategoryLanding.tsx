@@ -95,7 +95,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
 
   return (
     <View style={fillStyle}>
-      <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme?.colors?.background?.main} />
+      <StatusBar translucent barStyle={theme?.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme?.colors?.background?.main} />
       <HeaderBanner {...headerProps} />
       <VAScrollView scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
         <View onLayout={getTransitionHeaderHeight}>
