@@ -9,10 +9,9 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { standardMarginBetween } = theme?.dimensions
 
   const alertWrapperProps: BoxProps = {
-    mt: standardMarginBetween,
+    mt: theme?.dimensions?.standardMarginBetween,
     mb: theme?.dimensions?.contentMarginBottom,
   }
 
@@ -27,13 +26,13 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
     <VAScrollView>
       <Box {...alertWrapperProps}>
         <AlertBox border={'informational'} title={t('prescriptions.notFound.title')} titleA11yLabel={t('prescriptions.notFound.title.a11y')}>
-          <TextView pt={standardMarginBetween} accessibilityLabel={t('prescriptions.notFound.yourVA.a11y')}>
+          <TextView pt={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('prescriptions.notFound.yourVA.a11y')}>
             {t('prescriptions.notFound.yourVA')}
           </TextView>
-          <Box pt={standardMarginBetween}>
+          <Box pt={theme?.dimensions?.standardMarginBetween}>
             <VABulletList listOfText={bullets} />
           </Box>
-          <TextView pt={standardMarginBetween}>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
+          <TextView pt={theme?.dimensions?.standardMarginBetween}>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
           <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />
         </AlertBox>
       </Box>
