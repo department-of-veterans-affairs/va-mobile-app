@@ -229,7 +229,9 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('letters.benefitService.title')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>{t('letters.benefitService.summary')}</TextView>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+            {t('letters.benefitService.summary')}
+          </TextView>
         </TextArea>
 
         <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} accessibilityRole="header" paragraphSpacing={true}>
