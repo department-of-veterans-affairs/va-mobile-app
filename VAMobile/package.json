@@ -77,7 +77,6 @@
     "react-native-keychain": "^8.0.0",
     "react-native-localize": "^2.0.2",
     "react-native-notifications": "^4.2.4",
-    "react-native-reanimated": "^3.1.0",
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.20.0",
