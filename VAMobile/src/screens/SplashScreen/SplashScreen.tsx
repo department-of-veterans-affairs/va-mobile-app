@@ -10,7 +10,7 @@ const SplashScreen: FC<SplashScreenProps> = () => {
   const splashStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',
-    backgroundColor: theme.colors.background.splashScreen,
+    backgroundColor: theme?.colors?.background?.splashScreen,
   }
 
   return (

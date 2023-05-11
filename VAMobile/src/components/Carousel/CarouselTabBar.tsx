@@ -15,7 +15,7 @@ import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
 
 const StyledSafeAreaView = styled(SafeAreaView)`
-  background-color: ${themeFn((theme) => theme.colors.background.carousel)};
+  background-color: ${themeFn((theme) => theme?.colors?.background?.carousel)};
 `
 
 const StyledPressable = styled(Pressable)`

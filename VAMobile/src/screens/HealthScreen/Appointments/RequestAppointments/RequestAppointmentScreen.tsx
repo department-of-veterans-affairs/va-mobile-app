@@ -53,7 +53,7 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
 
   const headerStyles: StackNavigationOptions = {
     headerStyle: {
-      backgroundColor: theme.colors.background.main,
+      backgroundColor: theme?.colors?.background?.main,
       borderBottomWidth: 0,
       shadowColor: 'transparent',
       height: inset.top + theme?.dimensions?.headerHeight,

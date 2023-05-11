@@ -32,7 +32,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLo
 
   const containerStyle: ViewStyle = {
     flexGrow: 1,
-    backgroundColor: theme.colors.background.splashScreen,
+    backgroundColor: theme?.colors?.background?.splashScreen,
     justifyContent: 'center',
   }
 

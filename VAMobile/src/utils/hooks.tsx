@@ -568,9 +568,9 @@ export const usePanelHeaderStyles = (): StackNavigationOptions => {
     headerStyle: {
       height: 60,
       shadowColor: 'transparent', // removes bottom border
-      backgroundColor: theme.colors.background.panelHeader,
+      backgroundColor: theme?.colors?.background?.panelHeader,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border.menuDivider,
+      borderBottomColor: theme?.colors?.border?.menuDivider,
     },
     headerTitleAlign: 'center',
     headerLeft: (props) => (

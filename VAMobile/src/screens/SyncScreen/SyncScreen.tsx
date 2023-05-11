@@ -19,7 +19,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const splashStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',
-    backgroundColor: theme.colors.background.splashScreen,
+    backgroundColor: theme?.colors?.background?.splashScreen,
   }
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)

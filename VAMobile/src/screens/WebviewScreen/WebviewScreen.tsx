@@ -146,7 +146,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 
   return (
     <Box {...mainViewBoxProps} {...testIdProps('Webview-page', true)}>
-      <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
+      <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme?.colors?.background?.main} />
       <WebView
         startInLoadingState
         renderLoading={(): ReactElement => <WebviewLoading loadingMessage={loadingMessage} />}

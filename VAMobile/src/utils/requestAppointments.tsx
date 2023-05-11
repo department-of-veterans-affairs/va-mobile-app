@@ -32,9 +32,9 @@ export const useRequestAppointmentModalHeaderStyles = (): StackNavigationOptions
   const headerStyles: StackNavigationOptions = {
     headerStyle: {
       height: 60,
-      backgroundColor: theme.colors.background.main,
+      backgroundColor: theme?.colors?.background?.main,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.background.shadow,
+      borderBottomColor: theme?.colors?.background?.shadow,
     },
 
     headerLeft: (props) => (

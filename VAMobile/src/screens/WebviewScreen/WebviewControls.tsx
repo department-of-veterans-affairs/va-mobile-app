@@ -11,7 +11,7 @@ import WebviewControlButton from './WebviewControlButton'
 import styled from 'styled-components'
 
 const StyledSafeAreaView = styled(SafeAreaView)`
-  background-color: ${themeFn((theme) => theme.colors.background.webviewControls)};
+  background-color: ${themeFn((theme) => theme?.colors?.background?.webviewControls)};
 `
 
 /**

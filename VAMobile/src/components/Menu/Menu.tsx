@@ -381,7 +381,7 @@ export class Menu extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   shadowMenuContainer: {
     position: 'absolute',
-    backgroundColor: theme.colors.background.menu,
+    backgroundColor: theme?.colors?.background?.menu,
     borderRadius: 4,
     opacity: 0,
 
