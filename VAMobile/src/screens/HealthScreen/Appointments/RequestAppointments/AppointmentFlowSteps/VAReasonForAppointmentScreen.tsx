@@ -21,7 +21,6 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { gutter, contentMarginBottom } = theme?.dimensions
 
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { text } = appointmentFlowFormData.reasonCode || {}
@@ -85,11 +84,11 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
       />
 
       <AppointmentFlowTitleSection title={t('requestAppointment.whatReasonForCare')} errorMessage={noReasonSelectedError} />
-      <Box mb={contentMarginBottom}>
+      <Box mb={theme?.dimensions?.contentMarginBottom}>
         <RadioGroup options={getReasons()} onChange={onSetSelectedReason} value={text} isRadioList={true} />
       </Box>
       <AppointmentFlowTextInputWithAlert
-        mx={gutter}
+        mx={theme?.dimensions?.gutter}
         inputType={'none'}
         inputLabel={t('requestAppointment.additionaldetailsTitle')}
         onChange={onSetAdditionalDetails}
