@@ -50,22 +50,22 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
         <Box mt={theme?.dimensions?.condensedMarginBetween}>
           <TextArea>
             <TextView variant="MobileBodyBold">Last fetch status</TextView>
-            <TextView>{remoteConfig().lastFetchStatus}</TextView>
+            <TextView>{remoteConfig()?.lastFetchStatus}</TextView>
           </TextArea>
         </Box>
         <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween}>
           Remote Config Values
         </TextView>
         <Box mb={theme?.dimensions?.condensedMarginBetween}>
-          {Object.keys(remoteConfig().getAll()).map((key: string) => {
-            const val = remoteConfig().getValue(key)
+          {Object.keys(remoteConfig()?.getAll()).map((key: string) => {
+            const val = remoteConfig()?.getValue(key)
             return (
               <Box key={key} mt={theme?.dimensions?.condensedMarginBetween}>
                 <TextArea>
                   <TextView variant="MobileBodyBold">
-                    {key} ({val.getSource()})
+                    {key} ({val?.getSource()})
                   </TextView>
-                  <TextView>{val.asBoolean().toString()}</TextView>
+                  <TextView>{val?.asBoolean()?.toString()}</TextView>
                 </TextArea>
               </Box>
             )
