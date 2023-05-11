@@ -65,7 +65,7 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
     }
 
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={theme?.dimensions?.standardMarginBetween}>
         <VAButton
           onPress={onCancel}
           label={t('appointments.pending.cancelRequest')}

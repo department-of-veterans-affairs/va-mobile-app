@@ -39,7 +39,7 @@ export const getHeaderStyles = (insetsTop: number, theme: VATheme): StackNavigat
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
     headerStyle: {
       backgroundColor: theme?.colors?.background?.main,
-      height: insetsTop + theme.dimensions.headerHeight,
+      height: insetsTop + theme?.dimensions?.headerHeight,
       borderBottomWidth: 0,
       shadowColor: 'transparent',
     },

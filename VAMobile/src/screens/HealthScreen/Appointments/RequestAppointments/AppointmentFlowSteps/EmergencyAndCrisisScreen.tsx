@@ -33,8 +33,8 @@ const EmergencyAndCrisisScreen: FC<EmergencyAndCrisisScreenProps> = ({ navigatio
   return (
     <AppointmentFlowLayout firstActionButtonPress={navigateTo('TypeOfCareSelectionScreen')} firstActionButtonTitle={t('requestAppointment.continueToRequestBtn')}>
       <Box justifyContent="center" flex={1}>
-        <AppointmentFlowTitleSection title={t('requestAppointment.doYouNeedHelpRightNow')} titleMarginBottom={theme.dimensions.standardMarginBetween} />
-        <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween} accessibilityLabel={t('requestAppointment.lifeOrHealthInDangerLabel')}>
+        <AppointmentFlowTitleSection title={t('requestAppointment.doYouNeedHelpRightNow')} titleMarginBottom={theme?.dimensions?.standardMarginBetween} />
+        <TextView mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.condensedMarginBetween} accessibilityLabel={t('requestAppointment.lifeOrHealthInDangerLabel')}>
           {t('requestAppointment.lifeOrHealthInDangerText')}
         </TextView>
         <AppointmentFlowWhiteCtaButton
@@ -44,7 +44,7 @@ const EmergencyAndCrisisScreen: FC<EmergencyAndCrisisScreenProps> = ({ navigatio
           label={t('requestAppointments.call911Btnlabel')}
           hint={t('requestAppointments.call911BtnHint')}
         />
-        <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+        <TextView mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.condensedMarginBetween}>
           {t('requestAppointment.ifYouAreInCrisisText')}
         </TextView>
         <AppointmentFlowWhiteCtaButton

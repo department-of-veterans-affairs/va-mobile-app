@@ -61,7 +61,7 @@ const CCPreferredLanguageScreen: FC<CCPreferredLanguageScreenProps> = ({ navigat
       }}
       secondActionButtonPress={onContinue}>
       <AppointmentFlowTitleSection title={t('requestAppointments.langPrefPageTitle')} errorMessage={noLanguageSelectedError} />
-      <Box mx={theme.dimensions.gutter}>
+      <Box mx={theme?.dimensions?.gutter}>
         <VAModalPicker {...pickerProps} />
       </Box>
     </AppointmentFlowLayout>

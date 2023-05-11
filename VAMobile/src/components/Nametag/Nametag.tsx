@@ -40,11 +40,11 @@ export const Nametag: FC = () => {
   }
 
   return (
-    <Box width="100%" backgroundColor="profileBanner" minHeight={85} display="flex" justifyContent="center" mb={theme.dimensions.standardMarginBetween} accessible={true}>
-      <Box py={accessToMilitaryInfo ? theme.dimensions.cardPadding : 0} display="flex" flexDirection="row">
-        {accessToMilitaryInfo && <Box pl={theme.dimensions.cardPadding}>{getBranchSeal()}</Box>}
+    <Box width="100%" backgroundColor="profileBanner" minHeight={85} display="flex" justifyContent="center" mb={theme?.dimensions?.standardMarginBetween} accessible={true}>
+      <Box py={accessToMilitaryInfo ? theme?.dimensions?.cardPadding : 0} display="flex" flexDirection="row">
+        {accessToMilitaryInfo && <Box pl={theme?.dimensions?.cardPadding}>{getBranchSeal()}</Box>}
         <Box ml={20} flex={1}>
-          <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
+          <TextView textTransform="capitalize" mb={theme?.dimensions?.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
             {name()}
           </TextView>
           {accessToMilitaryInfo && (

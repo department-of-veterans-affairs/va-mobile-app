@@ -100,7 +100,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
     <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
       <ComposeMessageButton />
       <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+        <Box mb={theme?.dimensions?.standardMarginBetween} mt={theme?.dimensions?.contentMarginTop} mx={theme?.dimensions?.gutter}>
           <SegmentedControl
             values={controlValues}
             titles={controlLabels}
@@ -111,7 +111,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
         </Box>
         <CernerAlert />
         {serviceErrorAlert()}
-        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+        <Box flex={1} mb={theme?.dimensions?.contentMarginBottom}>
           {secureMessagingTab === SecureMessagingTabTypesConstants.INBOX && <Inbox />}
           {secureMessagingTab === SecureMessagingTabTypesConstants.FOLDERS && <Folders />}
         </Box>

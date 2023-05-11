@@ -45,14 +45,14 @@ const TrackingCard: FC<TrackingCardProps> = ({ onPress, a11yHint, title, dateShi
   const boxProps: BoxProps = {
     width: '100%',
     backgroundColor: 'textBox',
-    borderWidth: theme.dimensions.buttonBorderWidth,
+    borderWidth: theme?.dimensions?.buttonBorderWidth,
     borderRadius: 5,
     borderColor: buttonPressed ? 'trackingCardActive' : 'trackingCard',
   }
 
   const titleBoxProps: BoxProps = {
     p: 16,
-    borderBottomWidth: theme.dimensions.borderWidth,
+    borderBottomWidth: theme?.dimensions?.borderWidth,
     borderBottomColor: 'primary',
     flexDirection: 'row',
   }

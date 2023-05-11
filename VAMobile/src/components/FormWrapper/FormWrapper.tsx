@@ -240,7 +240,7 @@ const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors
   const generateForm = (): ReactElement[] => {
     return _.map(fieldsList, (field, index) => {
       return (
-        <Box mt={index === 0 ? 0 : theme.dimensions.formMarginBetween} key={index} display={field.hideField ? 'none' : undefined}>
+        <Box mt={index === 0 ? 0 : theme?.dimensions?.formMarginBetween} key={index} display={field.hideField ? 'none' : undefined}>
           {getFormComponent(field, index)}
         </Box>
       )

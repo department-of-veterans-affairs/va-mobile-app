@@ -76,12 +76,12 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
 
   return (
     <CategoryLanding title={tc('health')}>
-      <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box mb={!hasCernerFacilities ? theme?.dimensions?.contentMarginBottom : theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
         <LargeNavButton
           title={t('appointments.title')}
           a11yHint={t('appointments.a11yHint')}
           onPress={onAppointments}
-          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderWidth={theme?.dimensions?.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
@@ -90,7 +90,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           title={t('secureMessaging.title')}
           a11yHint={t('secureMessaging.a11yHint')}
           onPress={onSecureMessaging}
-          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderWidth={theme?.dimensions?.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
@@ -102,7 +102,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
             title={t('prescription.title')}
             a11yHint={t('prescription.A11yHint')}
             onPress={onPharmacy}
-            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderWidth={theme?.dimensions?.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
@@ -112,7 +112,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           title={t('vaVaccines.buttonTitle')}
           a11yHint={t('vaVaccines.a11yHint')}
           onPress={onVaVaccines}
-          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderWidth={theme?.dimensions?.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
@@ -121,13 +121,13 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           title={t('covid19Updates.title')}
           a11yHint={t('covid19Updates.a11yHint')}
           onPress={onCoronaVirusFAQ}
-          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderWidth={theme?.dimensions?.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
         />
       </Box>
-      <Box mb={hasCernerFacilities ? theme.dimensions.contentMarginBottom : 0}>
+      <Box mb={hasCernerFacilities ? theme?.dimensions?.contentMarginBottom : 0}>
         <CernerAlert />
       </Box>
     </CategoryLanding>

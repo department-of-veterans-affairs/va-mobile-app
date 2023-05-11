@@ -41,8 +41,8 @@ export const ClosePanelButton: FC<ClosePanelButton> = ({ onPress, a11yHint, focu
       accessibilityHint={a11yHint ? a11yHint : undefined}
       accessibilityRole="button"
       accessible={true}>
-      <Box display="flex" flexDirection="row" ml={16} height={theme.dimensions.headerHeight} width={80} alignItems={'center'}>
-        <TextView variant="MobileBody" color={buttonTextColor} ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
+      <Box display="flex" flexDirection="row" ml={16} height={theme?.dimensions?.headerHeight} width={80} alignItems={'center'}>
+        <TextView variant="MobileBody" color={buttonTextColor} ml={theme?.dimensions?.textIconMargin} allowFontScaling={false} accessible={false}>
           {buttonText}
         </TextView>
       </Box>

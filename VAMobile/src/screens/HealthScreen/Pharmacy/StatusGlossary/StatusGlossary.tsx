@@ -36,9 +36,9 @@ const StatusGlossary: FC<StatusGlossaryProps> = ({ navigation, route }) => {
 
   return (
     <LargePanel title={tc('statusGlossary')} rightButtonText={tc('close')}>
-      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         <TextView variant="MobileBodyBold">{display}</TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween} accessibilityLabel={a11yLabel}>
+        <TextView variant="MobileBody" mt={theme?.dimensions?.condensedMarginBetween} accessibilityLabel={a11yLabel}>
           {text}
         </TextView>
       </Box>

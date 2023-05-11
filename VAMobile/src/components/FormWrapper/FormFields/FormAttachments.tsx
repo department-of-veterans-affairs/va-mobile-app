@@ -43,11 +43,11 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
           justifyContent="space-between"
           alignItems="center"
           flexWrap="wrap"
-          mt={index !== 0 ? theme.dimensions.condensedMarginBetween : 0}
+          mt={index !== 0 ? theme?.dimensions?.condensedMarginBetween : 0}
           key={index}>
           <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap" justifyContent="space-between">
             <VAIcon name="PaperClip" width={16} height={16} fill="spinner" />
-            <TextView variant="MobileBodyBold" ml={theme.dimensions.textIconMargin} accessibilityLabel={fileSizeA11y ? [fileName, fileSizeA11y].join(' ').trim() : undefined}>
+            <TextView variant="MobileBodyBold" ml={theme?.dimensions?.textIconMargin} accessibilityLabel={fileSizeA11y ? [fileName, fileSizeA11y].join(' ').trim() : undefined}>
               {text}
             </TextView>
           </Box>
@@ -58,9 +58,9 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
             accessibilityRole="link"
             accessibilityHint={t('remove.a11yHint', { content: fileName })}
             accessibilityLabel={t('remove')}>
-            <Box display="flex" flexDirection="row" alignItems="center" minHeight={theme.dimensions.touchableMinHeight}>
+            <Box display="flex" flexDirection="row" alignItems="center" minHeight={theme?.dimensions?.touchableMinHeight}>
               <VAIcon name="Remove" {...iconProps} />
-              <TextView variant="HelperText" ml={theme.dimensions.textIconMargin} color="link" textDecoration="underline" textDecorationColor="link">
+              <TextView variant="HelperText" ml={theme?.dimensions?.textIconMargin} color="link" textDecoration="underline" textDecorationColor="link">
                 {t('remove')}
               </TextView>
             </Box>
@@ -85,15 +85,15 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
       <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" flexWrap="wrap">
         <TextView>{t('attachments')}</TextView>
         <Pressable onPress={goToFaq} accessible={true} accessibilityRole="link" accessibilityHint={a11yHint ? a11yHint : undefined} accessibilityLabel={t('howToAttachAFile')}>
-          <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" minHeight={theme.dimensions.touchableMinHeight}>
+          <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" minHeight={theme?.dimensions?.touchableMinHeight}>
             <VAIcon name="QuestionMark" {...iconProps} />
-            <TextView variant="HelperText" ml={theme.dimensions.textIconMargin} color="link" textDecoration="underline" textDecorationColor="link">
+            <TextView variant="HelperText" ml={theme?.dimensions?.textIconMargin} color="link" textDecoration="underline" textDecorationColor="link">
               {t('howToAttachAFile')}
             </TextView>
           </Box>
         </Pressable>
       </Box>
-      <Box mt={theme.dimensions.standardMarginBetween} mb={attachmentsDoNotExist || !largeButtonProps ? 0 : theme.dimensions.standardMarginBetween}>
+      <Box mt={theme?.dimensions?.standardMarginBetween} mb={attachmentsDoNotExist || !largeButtonProps ? 0 : theme?.dimensions?.standardMarginBetween}>
         {renderFileNames()}
       </Box>
       {!!largeButtonProps && <VAButton {...largeButtonProps} buttonType={ButtonTypesConstants.buttonSecondary} iconProps={{ ...iconProps, fill: 'active', name: 'PaperClip' }} />}

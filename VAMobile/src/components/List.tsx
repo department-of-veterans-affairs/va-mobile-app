@@ -77,7 +77,7 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
           </TextView>
         </Box>
       )}
-      <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
+      <Box borderTopWidth={theme?.dimensions?.borderWidth} borderStyle="solid" borderColor="primary">
         <Box backgroundColor={'list'}>{buttons}</Box>
       </Box>
     </Box>

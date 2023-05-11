@@ -112,7 +112,7 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
       }
 
       return (
-        <Box mb={theme.dimensions.standardMarginBetween}>
+        <Box mb={theme?.dimensions?.standardMarginBetween}>
           <AlertBox title={alertTitle} text={alertText} textA11yLabel={alertTextA11yLabel} border="error" />
         </Box>
       )
@@ -123,9 +123,9 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title}>
-      <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box flex={1} justifyContent="flex-start" mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         {!claimsAndAppealsServiceErrors && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+          <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.standardMarginBetween}>
             <SegmentedControl
               values={controlValues}
               titles={controlValues}

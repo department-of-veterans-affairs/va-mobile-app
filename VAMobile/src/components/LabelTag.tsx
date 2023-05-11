@@ -48,8 +48,8 @@ const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yL
   )
 
   let wrapperProps: BoxProps = {
-    minWidth: theme.dimensions.tagMinWidth,
-    minHeight: theme.dimensions.touchableMinHeight,
+    minWidth: theme?.dimensions?.tagMinWidth,
+    minHeight: theme?.dimensions?.touchableMinHeight,
     justifyContent: 'center',
     alignSelf: 'flex-start',
     alignItems: 'center',

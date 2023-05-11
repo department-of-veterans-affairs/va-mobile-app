@@ -96,8 +96,8 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   const boxProps: BoxProps = {
     minHeight: 81,
     borderRadius: 6,
-    p: theme.dimensions.cardPadding,
-    mb: theme.dimensions.condensedMarginBetween,
+    p: theme?.dimensions?.cardPadding,
+    mb: theme?.dimensions?.condensedMarginBetween,
     backgroundColor: getBackgroundColor(),
     borderWidth,
     borderColor: getBorderColor(),
@@ -125,8 +125,8 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         accessibilityLabel={accessibilityLabel}
         {...a11yHintProp(a11yHint || '')}>
         <Box flex={1}>
-          <Box flexDirection={'row'} flexWrap={'wrap'} mb={subText ? theme.dimensions.condensedMarginBetween : undefined}>
-            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
+          <Box flexDirection={'row'} flexWrap={'wrap'} mb={subText ? theme?.dimensions?.condensedMarginBetween : undefined}>
+            <TextView mr={theme?.dimensions?.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
               {title}
             </TextView>
             {!!tagCount && <MessagesCountTag unread={tagCount} />}
@@ -137,7 +137,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
             </TextView>
           )}
         </Box>
-        <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'largeNav'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
+        <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'largeNav'}`} width={10} height={15} ml={theme?.dimensions?.listItemDecoratorMarginLeft} />
       </Pressable>
     </Box>
   )

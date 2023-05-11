@@ -40,7 +40,7 @@ const AppointmentAlert: FC<AppointmentAlertProps> = ({ attributes }) => {
   }
 
   return (
-    <Box mb={theme.dimensions.standardMarginBetween}>
+    <Box mb={theme?.dimensions?.standardMarginBetween}>
       <AlertBox title={title} border={appointmentCanceled ? 'error' : 'warning'} />
     </Box>
   )

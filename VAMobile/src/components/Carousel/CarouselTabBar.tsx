@@ -19,7 +19,7 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 `
 
 const StyledPressable = styled(Pressable)`
-  min-height: ${themeFn((theme) => theme.dimensions.touchableMinHeight)}px;
+  min-height: ${themeFn((theme) => theme?.dimensions?.touchableMinHeight)}px;
   justify-content: center;
 `
 
@@ -129,12 +129,12 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
     flexDirection: 'row',
     accessibilityRole: 'progressbar',
     accessible: true,
-    minHeight: theme.dimensions.touchableMinHeight,
+    minHeight: theme?.dimensions?.touchableMinHeight,
   }
 
   return (
     <StyledSafeAreaView edges={['bottom']}>
-      <Box display="flex" flexDirection="row" height={70} backgroundColor="carousel" alignItems="center" mx={theme.dimensions.gutter}>
+      <Box display="flex" flexDirection="row" height={70} backgroundColor="carousel" alignItems="center" mx={theme?.dimensions?.gutter}>
         <Box flex={1} display="flex" justifyContent="center">
           {goBackOrSkipBtn()}
         </Box>

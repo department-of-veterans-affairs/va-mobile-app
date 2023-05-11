@@ -90,7 +90,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       },
     }
     return (
-      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+      <Box mx={theme?.dimensions?.buttonPadding} mt={theme?.dimensions?.buttonPadding}>
         <VAButton {...buttonProps} />
       </Box>
     )
@@ -123,7 +123,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       },
     }
     return (
-      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+      <Box mx={theme?.dimensions?.buttonPadding} mt={theme?.dimensions?.buttonPadding}>
         <VAButton {...requestRefillButtonProps} />
       </Box>
     )
@@ -160,7 +160,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
           <TextView color={'placeholder'} accessibilityLabel={rxNumberA11yLabel}>
             {rxNumber}
           </TextView>
-          <Box pt={theme.dimensions.standardMarginBetween}>
+          <Box pt={theme?.dimensions?.standardMarginBetween}>
             <RefillTag status={refillStatus} />
           </Box>
           <DetailsTextSections leftSectionTitle={t('prescription.details.instructionsHeader')} leftSectionValue={instructions || noneNoted} />

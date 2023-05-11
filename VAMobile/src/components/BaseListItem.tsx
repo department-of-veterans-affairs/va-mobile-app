@@ -157,8 +157,8 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
         <VAIcon
           name={'ArrowRight'}
           fill={theme.colors.icon.chevronListItem}
-          width={theme.dimensions.chevronListItemWidth}
-          height={theme.dimensions.chevronListItemHeight}
+          width={theme?.dimensions?.chevronListItemWidth}
+          height={theme?.dimensions?.chevronListItemHeight}
           {...decoratorProps}
         />
       )
@@ -235,10 +235,10 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
 
   const boxProps: BoxProps = {
     width: '100%',
-    minHeight: minHeight || theme.dimensions.touchableMinHeight,
-    py: theme.dimensions.buttonPadding,
-    px: theme.dimensions.gutter,
-    borderBottomWidth: theme.dimensions.borderWidth,
+    minHeight: minHeight || theme?.dimensions?.touchableMinHeight,
+    py: theme?.dimensions?.buttonPadding,
+    px: theme?.dimensions?.gutter,
+    borderBottomWidth: theme?.dimensions?.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
     justifyContent: 'space-between',
@@ -268,7 +268,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
         {claimsRequestNumber !== undefined ? <FileRequestNumberIndicator requestNumber={claimsRequestNumber} fileUploaded={fileUploaded} /> : <></>}
         {children}
         {showDecorator && (
-          <Box ml={theme.dimensions.listItemDecoratorMarginLeft} importantForAccessibility={'no-hide-descendants'}>
+          <Box ml={theme?.dimensions?.listItemDecoratorMarginLeft} importantForAccessibility={'no-hide-descendants'}>
             <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />
           </Box>
         )}

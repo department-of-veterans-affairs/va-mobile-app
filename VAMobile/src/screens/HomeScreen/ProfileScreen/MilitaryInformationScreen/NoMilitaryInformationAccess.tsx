@@ -12,11 +12,15 @@ const NoMilitaryInformationAccess: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (
-    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
+    <Box flex={1} justifyContent="center" mx={theme?.dimensions?.gutter} alignItems="center">
       <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
         {t('militaryInformation.noMilitaryInfoAccess.title')}
       </TextView>
-      <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween} {...testIdProps(t('militaryInformation.noMilitaryInfoAccess.body.a11yLabel'))}>
+      <TextView
+        variant="MobileBody"
+        textAlign="center"
+        my={theme?.dimensions?.standardMarginBetween}
+        {...testIdProps(t('militaryInformation.noMilitaryInfoAccess.body.a11yLabel'))}>
         {t('militaryInformation.noMilitaryInfoAccess.body')}
       </TextView>
     </Box>

@@ -77,7 +77,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   const linkOrPhone = phone ? (
     <ClickToCallPhoneNumber phone={phone} />
   ) : (
-    <Box mt={theme.dimensions.standardMarginBetween}>
+    <Box mt={theme?.dimensions?.standardMarginBetween}>
       <ClickForActionLink {...findYourVALocationProps} />
     </Box>
   )
@@ -124,11 +124,11 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(titleA11yLabel || title)}>
         {title}
       </TextView>
-      <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme?.dimensions?.standardMarginBetween}>
         {body}
       </TextView>
       {appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine ? (
-        <Box mt={theme.dimensions.standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <VAButton
             onPress={onCancelAppointment}
             label={t('upcomingAppointmentDetails.cancelAppointment')}
@@ -139,7 +139,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         </Box>
       ) : (
         <>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(name)} mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(name)} mt={theme?.dimensions?.standardMarginBetween}>
             {name}
           </TextView>
           {linkOrPhone}

@@ -44,9 +44,9 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         {letterType === LetterTypeConstants.serviceVerification && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
+          <Box mb={theme?.dimensions?.standardMarginBetween}>
             <AlertBox border="informational" text={t('letters.serviceVerificationLetter.informational')} />
           </Box>
         )}
@@ -54,7 +54,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {header}
           </TextView>
-          <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+          <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
             {description}
           </TextView>
           <VAButton

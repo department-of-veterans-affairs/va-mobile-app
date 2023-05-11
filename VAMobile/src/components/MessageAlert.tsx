@@ -33,7 +33,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
   }
 
   return (
-    <Box mb={theme.dimensions.standardMarginBetween}>
+    <Box mb={theme?.dimensions?.standardMarginBetween}>
       <AlertBox border={'error'} title={title} text={text} titleRole={'header'} scrollViewRef={scrollViewRef} focusOnError={focusOnError} />
     </Box>
   )

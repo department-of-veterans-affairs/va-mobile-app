@@ -31,11 +31,11 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
 
   return (
     <LargePanel title={tc('common:messagesHelp.title')} rightButtonText={tc('common:close')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
         <Box accessible={true} accessibilityRole={'header'}>
           <TextView variant={'MobileBodyBold'}>{t('secureMessaging.attachments.FAQ.howCanIAttach')}</TextView>
         </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <VABulletList
             listOfText={[
               t('secureMessaging.attachments.FAQ.howCanI.bullet1'),
@@ -44,16 +44,16 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
             ]}
           />
         </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <TextView>
             <TextView variant="MobileBodyBold">{t('secureMessaging.attachments.FAQ.note') + ' '}</TextView>
             <TextView variant="MobileBody">{t('secureMessaging.attachments.FAQ.noteText')}</TextView>
           </TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>
             <VABulletList listOfText={bulletedListOfText} />
           </Box>
         </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <TextView variant="MobileBody" accessibilityLabel={t('secureMessaging.attachments.FAQ.ifYourProblemA11y')}>
             {t('secureMessaging.attachments.FAQ.ifYourProblem')}
           </TextView>

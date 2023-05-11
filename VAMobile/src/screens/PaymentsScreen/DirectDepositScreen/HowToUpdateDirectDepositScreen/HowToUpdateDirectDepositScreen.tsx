@@ -15,7 +15,7 @@ type HowToUpdateDirectDepositScreenProps = StackScreenProps<PaymentsStackParamLi
 const HowToUpdateDirectDepositScreen: FC<HowToUpdateDirectDepositScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
+  const standardMarginBetween = theme?.dimensions?.standardMarginBetween
 
   return (
     <>
@@ -23,7 +23,7 @@ const HowToUpdateDirectDepositScreen: FC<HowToUpdateDirectDepositScreenProps> = 
         <Box mt={standardMarginBetween}>
           <AlertBox title={t('howToUpdateDirectDeposit.alert.title')} border="warning" text={t('howToUpdateDirectDeposit.alert.body')} />
         </Box>
-        <Box mt={standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>
+        <Box mt={standardMarginBetween} mb={theme?.dimensions?.contentMarginBottom}>
           <TextArea>
             <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
               {t('howToUpdateDirectDeposit.card.title')}

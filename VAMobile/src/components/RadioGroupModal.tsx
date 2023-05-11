@@ -86,7 +86,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
       if (group.title) {
         // When title is present, <List> component adds mt: standardMarginBetween. We want less margin
         // on the first group, and more on subsequent groups to differentiate them
-        mt = idx === 0 ? -theme.dimensions.condensedMarginBetween : theme.dimensions.condensedMarginBetween
+        mt = idx === 0 ? -theme?.dimensions?.condensedMarginBetween : theme?.dimensions?.condensedMarginBetween
       }
 
       return (
@@ -100,11 +100,11 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'list',
-    minHeight: theme.dimensions.touchableMinHeight,
+    minHeight: theme?.dimensions?.touchableMinHeight,
     borderBottomColor: 'menuDivider',
     borderBottomWidth: 1,
-    py: theme.dimensions.buttonPadding,
-    px: theme.dimensions.gutter,
+    py: theme?.dimensions?.buttonPadding,
+    px: theme?.dimensions?.gutter,
     ml: insets.left,
     mr: insets.right,
   }

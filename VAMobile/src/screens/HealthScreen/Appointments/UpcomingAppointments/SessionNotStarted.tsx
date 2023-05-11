@@ -15,9 +15,9 @@ const SessionNotStarted: FC<SessionNotStartedProps> = () => {
 
   return (
     <LargePanel title={t('appointmentsHelp')} rightButtonText={t('close')}>
-      <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mx={theme?.dimensions?.gutter}>
         <TextView variant="MobileBodyBold">{t('appointments.sessionNotStarted.title')}</TextView>
-        <TextView mt={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+        <TextView mt={theme?.dimensions?.condensedMarginBetween} variant="MobileBody">
           {t('appointments.joinVideoConnect')}
         </TextView>
       </Box>

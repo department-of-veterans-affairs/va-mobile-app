@@ -108,7 +108,7 @@ const AppealPhase: FC<AppealPhaseProps> = ({ event }) => {
   const dateText = event.date ? t('appealDetails.onDate', { date: formattedDate }) : ''
 
   return (
-    <Box borderBottomWidth={theme.dimensions.borderWidth} borderColor={'primary'}>
+    <Box borderBottomWidth={theme?.dimensions?.borderWidth} borderColor={'primary'}>
       <TextArea noBorder={true}>
         <Box flexDirection={'row'}>
           <PhaseIndicator phase={-1} current={0} />

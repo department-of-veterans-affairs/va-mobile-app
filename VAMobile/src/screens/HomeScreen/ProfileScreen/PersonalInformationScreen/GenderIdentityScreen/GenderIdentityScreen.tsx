@@ -115,8 +115,8 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={onSave}>
-      <Box mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBody" mb={error ? theme.dimensions.condensedMarginBetween : theme.dimensions.standardMarginBetween}>
+      <Box mx={theme?.dimensions?.gutter}>
+        <TextView variant="MobileBody" mb={error ? theme?.dimensions?.condensedMarginBetween : theme?.dimensions?.standardMarginBetween}>
           {t('personalInformation.genderIdentity.changeSelection')}
           <TextView variant="MobileBodyBold">{t('personalInformation.genderIdentity.preferNotToAnswer')}</TextView>
         </TextView>

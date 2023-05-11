@@ -30,7 +30,7 @@ const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('manageAccount.title')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('manageAccount.title')}

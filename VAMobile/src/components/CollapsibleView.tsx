@@ -65,13 +65,13 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
   const pressableStyles: ViewStyle = {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: theme.dimensions.touchableMinHeight,
+    minHeight: theme?.dimensions?.touchableMinHeight,
   }
 
   const childrenDisplayed = expanded && <Box>{children}</Box>
 
   const touchableRow = (
-    <Box minHeight={theme.dimensions.touchableMinHeight}>
+    <Box minHeight={theme?.dimensions?.touchableMinHeight}>
       <Pressable {...testIdProps(text)} {...a11yHintProp(a11yHint || '')} style={pressableStyles} {...pressableProps}>
         <Box {...boxStyles}>
           <TextView color={textColor} variant={'MobileBody'}>

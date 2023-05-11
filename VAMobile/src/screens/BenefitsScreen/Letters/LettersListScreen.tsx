@@ -137,7 +137,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
       backLabelOnPress={navigation.goBack}
       title={t('letters.overview.viewLetters')}
       {...testIdProps('Letters-list-page')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         <SimpleList items={letterButtons} />
       </Box>
     </FeatureLandingTemplate>

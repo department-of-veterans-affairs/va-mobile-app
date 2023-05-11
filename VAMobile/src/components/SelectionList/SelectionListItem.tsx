@@ -21,11 +21,11 @@ const SelectionListItem: FC<SelectionListItemProps> = ({ content, setSelectedFn,
   const theme = useTheme()
 
   const boxProps: BoxProps = {
-    borderBottomWidth: theme.dimensions.borderWidth,
+    borderBottomWidth: theme?.dimensions?.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
-    px: theme.dimensions.gutter,
-    py: theme.dimensions.condensedMarginBetween,
+    px: theme?.dimensions?.gutter,
+    py: theme?.dimensions?.condensedMarginBetween,
     backgroundColor: isSelected ? 'listActive' : 'list',
   }
 

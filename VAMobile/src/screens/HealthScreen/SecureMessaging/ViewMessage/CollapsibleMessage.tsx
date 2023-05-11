@@ -56,19 +56,19 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
             {body}
           </TextView>
           {loadingAttachments && !attachments?.length && attachment && (
-            <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+            <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
               <LoadingComponent justTheSpinnerIcon={true} />
             </Box>
           )}
         </Box>
         <Box>
           {attachments?.length && (
-            <Box mt={theme.dimensions.condensedMarginBetween} mr={theme.dimensions.gutter}>
+            <Box mt={theme?.dimensions?.condensedMarginBetween} mr={theme?.dimensions?.gutter}>
               <Box accessible={true} accessibilityRole="header">
                 <TextView variant={'MobileBodyBold'}>{t('secureMessaging.viewMessage.attachments')}</TextView>
               </Box>
               {attachments?.map((a, index) => (
-                <Box key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
+                <Box key={`attachment-${a.id}`} mt={theme?.dimensions?.condensedMarginBetween}>
                   <AttachmentLink
                     name={a.filename}
                     formattedSize={bytesToFinalSizeDisplay(a.size, tFunction)}
@@ -92,9 +92,9 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
         <TextView variant="MobileBodyBold" accessible={false}>
           {senderName}
         </TextView>
-        <Box flexDirection={'row'} mr={theme.dimensions.textIconMargin}>
+        <Box flexDirection={'row'} mr={theme?.dimensions?.textIconMargin}>
           {attachment && (
-            <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
+            <Box mt={theme?.dimensions?.attachmentIconTopMargin} mr={theme?.dimensions?.textIconMargin}>
               <VAIcon name={'PaperClip'} fill={'spinner'} width={16} height={16} />
             </Box>
           )}

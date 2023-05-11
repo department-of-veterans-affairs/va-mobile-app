@@ -36,7 +36,7 @@ const PreferredAppointmentType: FC<PreferredAppointmentTypeProps> = ({ attribute
         break
     }
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={theme?.dimensions?.standardMarginBetween}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('appointments.pending.preferredTypeOfAppointment')}
         </TextView>

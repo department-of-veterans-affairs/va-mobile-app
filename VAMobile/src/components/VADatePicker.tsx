@@ -39,9 +39,9 @@ const VADatePicker: FC<VADatePickerProps> = ({ defaultString, onChange }) => {
   // TODO: this is reused from VATexInput, should be globalized
   const wrapperProps: BoxProps = {
     width: '100%',
-    minHeight: theme.dimensions.touchableMinHeight,
-    px: theme.dimensions.gutter,
-    borderBottomWidth: theme.dimensions.borderWidth,
+    minHeight: theme?.dimensions?.touchableMinHeight,
+    px: theme?.dimensions?.gutter,
+    borderBottomWidth: theme?.dimensions?.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
     justifyContent: 'flex-start',

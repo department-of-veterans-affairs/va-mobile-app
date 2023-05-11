@@ -34,7 +34,7 @@ export const HeaderIconBtn: FC<HeaderIconBtnProps> = ({ onPress, accessibilityHi
 
   return (
     <TouchableWithoutFeedback onPress={onPress} accessibilityLabel={accessibilityLabel} accessibilityHint={accessibilityHint} accessibilityRole="button" accessible={true}>
-      <Box mr={20} height={theme.dimensions.headerHeight} alignItems={'center'} justifyContent={'center'} width={45}>
+      <Box mr={20} height={theme?.dimensions?.headerHeight} alignItems={'center'} justifyContent={'center'} width={45}>
         <VAIcon name={iconName} width={iconWidth ?? 20} height={iconHeight ?? 20} fill="primary" preventScaling={true} />
         {!!title && <TextView variant="HelperTextBold">{title}</TextView>}
       </Box>

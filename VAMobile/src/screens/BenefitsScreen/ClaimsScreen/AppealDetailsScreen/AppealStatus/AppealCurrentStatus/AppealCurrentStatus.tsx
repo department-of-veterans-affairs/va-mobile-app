@@ -306,7 +306,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
   const launchExternalLink = useExternalLink()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
-  const marginTop = theme.dimensions.condensedMarginBetween
+  const marginTop = theme?.dimensions?.condensedMarginBetween
   const statusHeadingAndTitle = getStatusHeadingAndTitle(status, aoj, appealType, profile?.fullName || '', t, docketName || 'UNDF DOCKET')
 
   const renderStatusDetails = (): ReactElement => {

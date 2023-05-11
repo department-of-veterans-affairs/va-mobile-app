@@ -23,11 +23,11 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
 
   return (
     <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
-      <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box mb={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
         <LargeNavButton
           title={t('claimsHistory.title')}
           onPress={navigateTo('ClaimsHistory')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderWidth={theme?.dimensions?.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
@@ -35,7 +35,7 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
         <LargeNavButton
           title={t('claimLetters.title')}
           onPress={onClaimLettersPress}
-          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderWidth={theme?.dimensions?.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}

@@ -35,7 +35,7 @@ const AppVersionAndBuild: FC<AppVersionAndBuildProps> = ({ textColor = 'bodyText
   }, [])
 
   return (
-    <Box mb={theme.dimensions.contentMarginBottom} justifyContent={'center'} alignItems={'center'}>
+    <Box mb={theme?.dimensions?.contentMarginBottom} justifyContent={'center'} alignItems={'center'}>
       <TextView variant={textWeight} flexDirection="row" color={textColor}>
         {t('versionAndBuild', { versionName, buildNumber })}
       </TextView>

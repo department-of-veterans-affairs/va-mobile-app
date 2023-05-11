@@ -43,7 +43,7 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
     alignItems: 'center',
     justifyContent: 'space-between',
     height: 56,
-    px: theme.dimensions.gutter,
+    px: theme?.dimensions?.gutter,
   }
 
   return (

@@ -45,7 +45,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes })
     // cancelled
     content = (
       <>
-        <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+        <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} mb={theme?.dimensions?.condensedMarginBetween}>
           {t('appointments.canceled.message', { date, time })}
         </TextView>
       </>
@@ -65,7 +65,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes })
   }
   return (
     <Box>
-      <TextView variant={'MobileBody'} mb={theme.dimensions.standardMarginBetween} {...testIdProps(isCovidVaccine ? covid19Text : appointmentTypeLabel)}>
+      <TextView variant={'MobileBody'} mb={theme?.dimensions?.standardMarginBetween} {...testIdProps(isCovidVaccine ? covid19Text : appointmentTypeLabel)}>
         {getTranslation(isCovidVaccine ? covid19Text : AppointmentTypeToID[appointmentType], t)}
       </TextView>
       {content}

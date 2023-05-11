@@ -37,10 +37,10 @@ const CtaButton: FC<CtaButtonProps> = ({ onPress, iconColor, backgroundColor, ch
     alignItems: alignItems || 'center',
     width: '100%',
     backgroundColor: backgroundColor || 'ctaButton',
-    minHeight: theme.dimensions.touchableMinHeight,
-    mb: theme.dimensions.standardMarginBetween,
-    py: py ?? theme.dimensions.buttonPadding,
-    px: px ?? theme.dimensions.cardPadding,
+    minHeight: theme?.dimensions?.touchableMinHeight,
+    mb: theme?.dimensions?.standardMarginBetween,
+    py: py ?? theme?.dimensions?.buttonPadding,
+    px: px ?? theme?.dimensions?.cardPadding,
   }
 
   return (
@@ -50,7 +50,7 @@ const CtaButton: FC<CtaButtonProps> = ({ onPress, iconColor, backgroundColor, ch
       {...testIdProps(accessibilityLabel || t('component.crisisLine.label'))}
       {...a11yHintProp(accessibilityHint || t('component.crisisLine.hint'))}>
       <Box {...boxProps}>
-        <TextView variant="MobileBody" display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
+        <TextView variant="MobileBody" display="flex" flexDirection="row" color="primaryContrast" mr={theme?.dimensions?.textIconMargin}>
           {children}
         </TextView>
         <VAIcon name="ArrowRight" fill={iconColor || theme.colors.icon.veteransCrisisLineArrow} width={10} height={15} />

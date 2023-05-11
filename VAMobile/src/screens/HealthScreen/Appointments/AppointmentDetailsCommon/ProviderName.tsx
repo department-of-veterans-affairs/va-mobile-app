@@ -28,7 +28,7 @@ const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
 
     // default to VA appointments
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={theme?.dimensions?.standardMarginBetween}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {header}
         </TextView>
@@ -49,7 +49,7 @@ const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
   return (
     <>
       {!!practitionerName && (
-        <Box mb={theme.dimensions.standardMarginBetween}>
+        <Box mb={theme?.dimensions?.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.provider')}
           </TextView>

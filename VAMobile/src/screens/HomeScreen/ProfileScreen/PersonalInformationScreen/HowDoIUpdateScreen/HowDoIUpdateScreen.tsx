@@ -27,7 +27,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
     accessibilityRole: 'link',
     accessibilityLabel: t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yLabel'),
     accessibilityHint: t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yHint'),
-    my: theme.dimensions.standardMarginBetween,
+    my: theme?.dimensions?.standardMarginBetween,
   }
 
   const linkNameProps: TextViewProps = {
@@ -68,15 +68,15 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
 
   const nameUpdateScreen = (): ReactElement => {
     return (
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('howDoIUpdate.name.title')}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
           {t('howDoIUpdate.name.legalName')}
         </TextView>
         <TextView {...linkNameProps}>{t('howDoIUpdate.learnToChangeLegalName')}</TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
           {t('howDoIUpdate.name.incorrectRecords')}
         </TextView>
         {renderVAMedicalCenterSection()}
@@ -86,11 +86,11 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
 
   const dateOfBirthUpdateScreen = (): ReactElement => {
     return (
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('howDoIUpdate.dateOfBirth.title')}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
           {t('howDoIUpdate.dateOfBirth.body')}
         </TextView>
         {renderVAMedicalCenterSection()}

@@ -91,7 +91,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
               buttonType={ButtonTypesConstants.buttonSecondary}
               a11yHint={t('fileUpload.selectAFileA11yHint')}
             />
-            <Box mt={theme.dimensions.condensedMarginBetween}>
+            <Box mt={theme?.dimensions?.condensedMarginBetween}>
               <VAButton
                 onPress={navigateTo('TakePhotos', { request })}
                 label={t('fileUpload.takePhotos')}

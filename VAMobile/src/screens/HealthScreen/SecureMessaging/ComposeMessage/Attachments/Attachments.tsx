@@ -124,7 +124,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     const text = [fileName, formattedFileSize].join(' ').trim()
     const textA11y = [fileName, formattedFileSizeA11y].join(' ').trim()
     return (
-      <TextView variant="MobileBodyBold" mb={theme.dimensions.standardMarginBetween} accessibilityLabel={textA11y}>
+      <TextView variant="MobileBodyBold" mb={theme?.dimensions?.standardMarginBetween} accessibilityLabel={textA11y}>
         {text}
       </TextView>
     )
@@ -142,27 +142,27 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={displaySelectFile ? t('secureMessaging.attachments.selectAFile') : t('secureMessaging.composeMessage.attach')}
       onPrimaryContentButtonPress={displaySelectFile ? onSelectAFile : onAttach}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
         {!!error && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
+          <Box mb={theme?.dimensions?.standardMarginBetween}>
             <AlertBox scrollViewRef={scrollViewRef} text={error} textA11yLabel={errorA11y} border="error" />
           </Box>
         )}
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('secureMessaging.attachments.fileAttachment')}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
           {t('secureMessaging.attachments.youMayAttach')} {t('secureMessaging.attachments.acceptedFileTypes')}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('secureMessaging.attachments.sizeRequirements.A11yLabel')}>
+        <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('secureMessaging.attachments.sizeRequirements.A11yLabel')}>
           {t('secureMessaging.attachments.sizeRequirements')}
         </TextView>
-        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" mb={theme?.dimensions?.standardMarginBetween}>
           {t('secureMessaging.attachments.attachmentsAreNotDrafts')}
         </TextView>
         {image && uri && (
           // need to set label has \ufeff so that samsung just says image and not unliable image
-          <Box mb={theme.dimensions.standardMarginBetween} accessibilityRole="image" accessible={true} accessibilityLabel={'\ufeff'}>
+          <Box mb={theme?.dimensions?.standardMarginBetween} accessibilityRole="image" accessible={true} accessibilityLabel={'\ufeff'}>
             <StyledImage source={{ uri }} height={imageMaxWidthAndHeight.height} maxWidth={imageMaxWidthAndHeight.maxWidth} />
           </Box>
         )}

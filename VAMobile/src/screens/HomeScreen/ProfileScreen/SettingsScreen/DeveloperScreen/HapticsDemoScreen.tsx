@@ -15,7 +15,7 @@ const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
+  const standardMarginBetween = theme?.dimensions?.standardMarginBetween
 
   const triggerHaptic = (impact: HapticFeedbackTypes) => {
     const options = {
@@ -83,7 +83,7 @@ const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
 
   return (
     <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={'Haptics Demo'}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             iOS and Android

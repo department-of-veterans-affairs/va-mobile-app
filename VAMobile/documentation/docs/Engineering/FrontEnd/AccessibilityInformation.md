@@ -58,7 +58,7 @@ To get round this, add in the unicode `\ufeff` in between letters(ex. `VA` -> `V
 ![Vaah](/img/accessibilityInformation/vaah.png)
 
 ## Touch Targets
-Most common components will have it setup so that the text or wrapper will use `theme.dimensions.touchableMinHeight` so pressable elements have a minimum of `44` height. We can add additional height without changing the font/styles by adding additional padding where it is needed. 
+Most common components will have it setup so that the text or wrapper will use `theme?.dimensions?.touchableMinHeight` so pressable elements have a minimum of `44` height. We can add additional height without changing the font/styles by adding additional padding where it is needed. 
 
 Work with QA or design if the default minimum height for touchable targets should be bigger. You can visually view the touch target size by going to [debug menu](https://reactnative.dev/docs/debugging) -> `Show Inspector` -> Toggle on `Touchable` -> select the element
 

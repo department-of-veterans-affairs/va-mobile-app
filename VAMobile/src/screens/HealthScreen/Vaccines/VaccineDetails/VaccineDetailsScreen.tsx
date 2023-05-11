@@ -95,7 +95,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
           <TextView variant="MobileBody" selectable={true}>
             {displaySeries}
           </TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>
             <TextView variant="MobileBodyBold">{t('vaccines.details.provider')}</TextView>
             {location?.attributes && (
               <>
@@ -120,7 +120,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
               </TextView>
             )}
           </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>
             <Box>
               <TextView variant="MobileBodyBold">{t('vaccines.details.reaction')}</TextView>
               <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
@@ -134,7 +134,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
           </Box>
         </TextArea>
         {isPartialData && (
-          <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+          <Box mt={theme?.dimensions?.contentMarginTop} mx={theme?.dimensions?.gutter}>
             <TextView variant="HelperText">{t('vaccines.details.weBaseThis')}</TextView>
           </Box>
         )}

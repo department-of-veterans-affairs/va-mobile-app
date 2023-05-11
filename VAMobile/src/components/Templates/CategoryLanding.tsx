@@ -54,9 +54,9 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
   const subtitleProps: TextViewProps = {
     variant: 'BitterBoldHeading',
     mt: 0,
-    ml: theme.dimensions.condensedMarginBetween,
-    mb: theme.dimensions.standardMarginBetween,
-    mr: theme.dimensions.condensedMarginBetween,
+    ml: theme?.dimensions?.condensedMarginBetween,
+    mb: theme?.dimensions?.standardMarginBetween,
+    mr: theme?.dimensions?.condensedMarginBetween,
     accessible: false,
     importantForAccessibility: 'no-hide-descendants',
   }
@@ -89,7 +89,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
   const getTransitionHeaderHeight = (event: LayoutChangeEvent) => {
     // Subtract out bottom padding and 1/3 scaled font line height to closely align transition before subtitle fully disappearing
     const partialFontHeight = (theme.fontSizes.BitterBoldHeading.lineHeight * fontScale) / 3
-    const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween - partialFontHeight
+    const height = event.nativeEvent.layout.height - theme?.dimensions?.standardMarginBetween - partialFontHeight
     setTransitionHeaderHeight(height)
   }
 

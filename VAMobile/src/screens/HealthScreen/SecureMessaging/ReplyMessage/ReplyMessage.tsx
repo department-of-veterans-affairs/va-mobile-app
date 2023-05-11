@@ -190,7 +190,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         originHeader: t('secureMessaging.reply'),
         removeOnPress: removeAttachment,
         largeButtonProps:
-          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
+          attachmentsList.length < theme?.dimensions?.maxNumMessageAttachments
             ? {
                 label: t('secureMessaging.formMessage.addFiles'),
                 a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
@@ -233,15 +233,15 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const renderForm = (): ReactNode => (
     <Box>
       <MessageAlert scrollViewRef={scrollViewRef} hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} focusOnError={onSendClicked} />
-      <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box mb={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
         <CollapsibleView
           text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
           showInTextArea={false}
           a11yHint={t('secureMessaging.composeMessage.whenWillIGetAReplyA11yHint')}>
-          <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
+          <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme?.dimensions?.condensedMarginBetween} accessible={true}>
             <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
           </Box>
-          <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+          <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme?.dimensions?.standardMarginBetween} accessible={true}>
             <TextView>
               <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
               <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
@@ -256,13 +256,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         <TextView variant="MobileBodyBold" accessible={true}>
           {receiverName}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessible={true}>
+        <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween} accessible={true}>
           {t('secureMessaging.formMessage.subject')}
         </TextView>
         <TextView variant="MobileBodyBold" accessible={true}>
           {subjectHeader}
         </TextView>
-        <Box mt={theme.dimensions.standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <FormWrapper
             fieldsList={formFieldsList}
             onSave={sendReplyOrSaveDraft}
@@ -273,7 +273,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
             setResetErrors={setResetErrors}
           />
         </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <VAButton
             label={t('secureMessaging.formMessage.send')}
             onPress={() => {
@@ -292,13 +292,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     return (
       <Box>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
+          <TextView ml={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween} variant={'MobileBodyBold'}>
             {t('secureMessaging.reply.messageConversation')}
           </TextView>
         </Box>
         {message && messagesById && thread && (
-          <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-            <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
+          <Box mt={theme?.dimensions?.standardMarginBetween} mb={theme?.dimensions?.condensedMarginBetween}>
+            <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme?.dimensions?.cardPadding}>
               <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
             </Box>
             {renderMessages(message, messagesById, thread)}
@@ -321,7 +321,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         setOnSendClicked(true)
       }}
       showCrisisLineCta={true}>
-      <Box mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme?.dimensions?.contentMarginBottom}>
         <Box>{renderForm()}</Box>
         <Box>{renderMessageThread()}</Box>
       </Box>

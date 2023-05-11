@@ -98,7 +98,7 @@ const ButtonWithIcon: FC<ButtonWithIconProps> = ({
     backgroundColor: setBackgroundColor(),
     p: 16,
     borderRadius: 6,
-    borderWidth: borderWidth || theme.dimensions.buttonBorderWidth,
+    borderWidth: borderWidth || theme?.dimensions?.buttonBorderWidth,
     borderColor: setBorderColor(),
     borderStyle: borderStyle || 'solid',
   }

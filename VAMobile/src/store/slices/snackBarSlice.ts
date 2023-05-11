@@ -8,7 +8,7 @@ export type SnackBarState = {
 }
 
 export const initialSnackBarState = {
-  bottomOffset: theme.dimensions.snackBarBottomOffset,
+  bottomOffset: theme?.dimensions?.snackBarBottomOffset,
 }
 
 /**

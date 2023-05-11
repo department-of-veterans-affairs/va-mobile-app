@@ -30,8 +30,8 @@ const NoFolderMessages: FC = () => {
     <>
       <VAScrollView contentContainerStyle={scrollStyles}>
         <ComposeMessageButton />
-        <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
-          <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+        <Box flex={1} justifyContent="center" mx={theme?.dimensions?.gutter} alignItems="center">
+          <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" mb={theme?.dimensions?.standardMarginBetween}>
             {t('secureMessaging.folders.noFolderMessages')}
           </TextView>
           <Box width={'100%'}>

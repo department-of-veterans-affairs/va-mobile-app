@@ -513,9 +513,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       onLeftButtonPress={cancelFn}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
         {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
+          <Box mb={theme?.dimensions?.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
               label={t('contactInformation.removeData', { pageName: lowerCaseTitle })}
@@ -525,7 +525,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           </Box>
         )}
         {formContainsError && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
+          <Box mb={theme?.dimensions?.standardMarginBetween}>
             <AlertBox title={t('editAddress.alertError')} border="error" scrollViewRef={scrollViewRef} focusOnError={onSaveClicked} />
           </Box>
         )}

@@ -46,11 +46,11 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
 
   return (
     <CategoryLanding title={t('benefits.title')}>
-      <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box mb={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
         <LargeNavButton
           title={t('disabilityRating.title')}
           onPress={navigateTo('DisabilityRatings')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderWidth={theme?.dimensions?.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
@@ -59,7 +59,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
         <LargeNavButton
           title={t('claims.title')}
           onPress={navigateTo(claimsDestination)}
-          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderWidth={theme?.dimensions?.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
@@ -67,7 +67,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
         <LargeNavButton
           title={t('lettersAndDocs.title')}
           onPress={navigateTo('LettersOverview')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderWidth={theme?.dimensions?.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}

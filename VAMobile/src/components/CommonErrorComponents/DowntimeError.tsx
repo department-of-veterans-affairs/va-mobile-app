@@ -25,8 +25,8 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   }
 
   const containerStyles = {
-    mt: theme.dimensions.contentMarginTop,
-    mb: theme.dimensions.contentMarginBottom,
+    mt: theme?.dimensions?.contentMarginTop,
+    mb: theme?.dimensions?.contentMarginBottom,
   }
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const feature = DowntimeScreenIDToFeature[screenID]

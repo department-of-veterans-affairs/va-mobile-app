@@ -76,10 +76,10 @@ const SyncScreen: FC<SyncScreenProps> = () => {
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
-      <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+      <Box justifyContent="center" mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} alignItems={'center'}>
         <VAIcon name={'Logo'} />
 
-        <Box alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={50}>
+        <Box alignItems={'center'} justifyContent={'center'} mx={theme?.dimensions?.gutter} mt={50}>
           <LoadingComponent justTheSpinnerIcon={true} spinnerColor={colors.grayLightest} />
           <TextView
             variant={'MobileBody'}
@@ -87,7 +87,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
             color={'primaryContrast'}
             alignItems={'center'}
             textAlign={'center'}
-            mt={theme.dimensions.standardMarginBetween}>
+            mt={theme?.dimensions?.standardMarginBetween}>
             {displayMessage}
           </TextView>
         </Box>

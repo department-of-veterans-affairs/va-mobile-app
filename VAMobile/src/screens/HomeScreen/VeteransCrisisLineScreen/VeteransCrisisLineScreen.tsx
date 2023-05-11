@@ -21,7 +21,7 @@ const VeteransCrisisLineScreen: FC = () => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
+  const standardMarginBetween = theme?.dimensions?.standardMarginBetween
 
   const fireAnalyticFn = (): void => {
     setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())
@@ -34,7 +34,7 @@ const VeteransCrisisLineScreen: FC = () => {
 
   return (
     <LargePanel title={tc('veteransCrisisLine.title')} rightButtonText={tc('done')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
@@ -75,7 +75,7 @@ const VeteransCrisisLineScreen: FC = () => {
           />
         </Box>
         <Box mt={standardMarginBetween}>
-          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween / 2}>
+          <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween / 2}>
             {t('contactVA.tty.body')}
           </TextView>
           <ClickForActionLink

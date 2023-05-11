@@ -139,7 +139,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
       title={t('personalInformation.preferredName.title')}
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
-      <Box mx={theme.dimensions.gutter}>
+      <Box mx={theme?.dimensions?.gutter}>
         <FormWrapper
           fieldsList={formFieldsList}
           onSave={onSave}

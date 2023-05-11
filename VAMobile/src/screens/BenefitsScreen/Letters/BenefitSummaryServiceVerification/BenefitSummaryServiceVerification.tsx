@@ -96,7 +96,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         },
       ]
       return (
-        <Box key={index} mb={mostRecentServices.length - 1 === index ? 0 : theme.dimensions.standardMarginBetween}>
+        <Box key={index} mb={mostRecentServices.length - 1 === index ? 0 : theme?.dimensions?.standardMarginBetween}>
           <DefaultList items={militaryServiceInfoList} title={t('letters.benefitService.militaryServiceInformation')} />
         </Box>
       )
@@ -224,21 +224,21 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       {...testIdProps('Letters: Benefit-Summary-Service-Verification-Letter-Page')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('letters.benefitService.title')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
             {t('letters.benefitService.summary')}
           </TextView>
         </TextArea>
 
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" mt={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter} accessibilityRole="header">
           {t('letters.benefitService.chooseIncludedInformation')}
         </TextView>
         {getListOfMilitaryService()}
-        <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="TableFooterLabel" mx={theme?.dimensions?.gutter} my={theme?.dimensions?.standardMarginBetween}>
           {t('letters.benefitService.ourRecordsShow')}
         </TextView>
         <SimpleList items={includeMilitaryServiceInfoList} />
@@ -249,11 +249,11 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           titleA11yLabel={t('letters.benefitService.benefitAndDisabilityInfoA11yLabel')}
         />
 
-        <TextView {...testIdProps(t('letters.benefitService.sendMessageIfIncorrectInfoA11yLabel'))} variant="MobileBody" m={theme.dimensions.standardMarginBetween}>
+        <TextView {...testIdProps(t('letters.benefitService.sendMessageIfIncorrectInfoA11yLabel'))} variant="MobileBody" m={theme?.dimensions?.standardMarginBetween}>
           {t('letters.benefitService.sendMessageIfIncorrectInfo')}
         </TextView>
 
-        <Box ml={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+        <Box ml={theme?.dimensions?.gutter} mb={theme?.dimensions?.standardMarginBetween}>
           <ClickForActionLink
             displayedText={t('letters.benefitService.sendMessage')}
             linkType={LinkTypeOptionsConstants.url}
@@ -264,7 +264,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           />
         </Box>
 
-        <Box mx={theme.dimensions.gutter}>
+        <Box mx={theme?.dimensions?.gutter}>
           <VAButton
             onPress={onViewLetter}
             label={t('letters.benefitService.viewLetter')}

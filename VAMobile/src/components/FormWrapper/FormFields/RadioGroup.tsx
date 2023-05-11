@@ -103,7 +103,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isR
               </TextView>
             </Box>
           )}
-          <Box mb={theme.dimensions.standardMarginBetween} key={index} mt={headerText ? theme.dimensions.contentMarginTop : 0}>
+          <Box mb={theme?.dimensions?.standardMarginBetween} key={index} mt={headerText ? theme?.dimensions?.contentMarginTop : 0}>
             {getOption(option)}
           </Box>
         </Box>
@@ -160,7 +160,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isR
   const getRadios = (): ReactElement => {
     return (
       <Box>
-        {!!error && <Box mb={theme.dimensions.condensedMarginBetween}>{renderInputError(error)}</Box>}
+        {!!error && <Box mb={theme?.dimensions?.condensedMarginBetween}>{renderInputError(error)}</Box>}
         {isRadioList ? getRadioGroupList() : getStandardRadioGroup()}
       </Box>
     )

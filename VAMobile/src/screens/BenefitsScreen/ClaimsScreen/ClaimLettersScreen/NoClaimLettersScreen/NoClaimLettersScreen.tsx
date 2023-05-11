@@ -17,7 +17,7 @@ const NoClaimLettersScreen: FC = () => {
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
-      <Box justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
+      <Box justifyContent="center" mx={theme?.dimensions?.gutter} alignItems="center">
         <TextView variant="MobileBodyBold" textAlign={'center'} accessibilityRole="header">
           {t('claimLetters.noClaimLetters')}
         </TextView>

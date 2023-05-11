@@ -24,7 +24,7 @@ const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID }) => {
   }
 
   return (
-    <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+    <Box mx={theme?.dimensions?.buttonPadding} mt={theme?.dimensions?.buttonPadding}>
       <VAButton {...replyButtonProps} />
     </Box>
   )

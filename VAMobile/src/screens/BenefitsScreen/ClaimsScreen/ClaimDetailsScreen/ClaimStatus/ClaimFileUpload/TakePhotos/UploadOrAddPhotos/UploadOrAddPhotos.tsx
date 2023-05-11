@@ -247,13 +247,13 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       onLeftButtonPress={() => {
         navigation.dispatch(StackActions.pop(2))
       }}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         {!!errorMessage && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
+          <Box mb={theme?.dimensions?.standardMarginBetween}>
             <AlertBox scrollViewRef={scrollViewRef} title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" focusOnError={onSaveClicked} />
           </Box>
         )}
-        <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme?.dimensions?.gutter}>
           {request.displayName}
         </TextView>
         <Box
@@ -262,8 +262,8 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           borderTopColor="primary"
           borderBottomWidth={1}
           borderBottomColor="primary"
-          pt={theme.dimensions.standardMarginBetween}
-          pb={theme.dimensions.standardMarginBetween}
+          pt={theme?.dimensions?.standardMarginBetween}
+          pb={theme?.dimensions?.standardMarginBetween}
           display="flex"
           flexDirection="row"
           flexWrap="wrap">
@@ -273,9 +273,9 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           justifyContent="space-between"
           flexDirection="row"
           flexWrap="wrap"
-          mx={theme.dimensions.gutter}
-          mt={theme.dimensions.condensedMarginBetween}
-          mb={theme.dimensions.standardMarginBetween}>
+          mx={theme?.dimensions?.gutter}
+          mt={theme?.dimensions?.condensedMarginBetween}
+          mb={theme?.dimensions?.standardMarginBetween}>
           <TextView variant="HelperText">{t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}</TextView>
           <TextView
             variant="HelperText"
@@ -283,9 +283,9 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
             {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
           </TextView>
         </Box>
-        <Box mx={theme.dimensions.gutter}>
+        <Box mx={theme?.dimensions?.gutter}>
           <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
-          <Box mt={theme.dimensions.textAndButtonLargeMargin}>
+          <Box mt={theme?.dimensions?.textAndButtonLargeMargin}>
             <VAButton
               onPress={() => {
                 setOnSaveClicked(true)

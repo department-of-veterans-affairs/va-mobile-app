@@ -67,7 +67,7 @@ const DemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => 
       <Modal animationType="fade" transparent={true} statusBarTranslucent={true} visible={visible} supportedOrientations={['portrait', 'landscape']} onRequestClose={onCancel}>
         <Box flex={1} width={'100%'} flexDirection="column" accessibilityViewIsModal={true} justifyContent={'center'}>
           <Box width={'100%'} height={'100%'} backgroundColor="modalOverlay" opacity={0.8} position={'absolute'} />
-          <Box backgroundColor={'alertBox'} borderRadius={3} p={20} ml={insets.left} mr={insets.right} mx={theme.dimensions.gutter}>
+          <Box backgroundColor={'alertBox'} borderRadius={3} p={20} ml={insets.left} mr={insets.right} mx={theme?.dimensions?.gutter}>
             <Box alignItems={'flex-start'}>
               <TextView variant="MobileBodyBold" textAlign={'center'} allowFontScaling={false}>
                 {'Enter Password'}
@@ -76,11 +76,11 @@ const DemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => 
                 {'Please enter the demo mode password'}
               </TextView>
             </Box>
-            <Box borderBottomColor={'secondary'} borderBottomWidth={2} my={theme.dimensions.standardMarginBetween}>
+            <Box borderBottomColor={'secondary'} borderBottomWidth={2} my={theme?.dimensions?.standardMarginBetween}>
               <TextInput {...inputProps} />
             </Box>
             <Box flexDirection={'row'} justifyContent={'flex-end'}>
-              <Box mr={theme.dimensions.standardMarginBetween}>
+              <Box mr={theme?.dimensions?.standardMarginBetween}>
                 <Pressable {...cancelButtonProps}>
                   <TextView allowFontScaling={false} variant="MobileBody" textTransform="uppercase" color="buttonSecondary">
                     {'Cancel'}

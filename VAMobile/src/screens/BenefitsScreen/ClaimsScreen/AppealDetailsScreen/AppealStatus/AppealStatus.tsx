@@ -31,7 +31,7 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
     }
 
     return (
-      <Box mt={theme.dimensions.condensedMarginBetween}>
+      <Box mt={theme?.dimensions?.condensedMarginBetween}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('appealDetails.appealsAheadOfYou')}
@@ -47,11 +47,11 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
       <CollapsibleView text={t('appealDetails.viewPastEvents')} contentInTextArea={false} a11yHint={t('appealDetails.viewPastEventsA11yHint')}>
         <AppealTimeline events={events} />
       </CollapsibleView>
-      <Box mt={theme.dimensions.condensedMarginBetween}>
+      <Box mt={theme?.dimensions?.condensedMarginBetween}>
         <AppealCurrentStatus status={status} aoj={aoj} appealType={appealType} docketName={docketName} programArea={programArea} />
       </Box>
       <NumAppealsAhead />
-      <Box mt={theme.dimensions.condensedMarginBetween}>
+      <Box mt={theme?.dimensions?.condensedMarginBetween}>
         <NeedHelpData isAppeal={true} />
       </Box>
     </Box>

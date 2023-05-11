@@ -39,7 +39,7 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ c
         <TextView textAlign={'center'} variant="MobileBodyBold">
           {t('prescription.history.empty.filtered.title')}
         </TextView>
-        <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" {...contenta11y}>
+        <TextView pt={theme?.dimensions?.condensedMarginBetween} textAlign={'center'} variant="MobileBody" {...contenta11y}>
           {getFilteredTabString()}
         </TextView>
       </>
@@ -58,7 +58,7 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ c
             <TextView textAlign={'center'} variant="MobileBodyBold">
               {t('prescription.history.empty.title')}
             </TextView>
-            <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" accessibilityLabel={t('prescription.history.empty.message.a11y')}>
+            <TextView pt={theme?.dimensions?.condensedMarginBetween} textAlign={'center'} variant="MobileBody" accessibilityLabel={t('prescription.history.empty.message.a11y')}>
               {t('prescription.history.empty.message')}
             </TextView>
           </>
@@ -70,7 +70,7 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ c
               {t('prescription.history.empty.pending.title')}
             </TextView>
             <TextView
-              pt={theme.dimensions.condensedMarginBetween}
+              pt={theme?.dimensions?.condensedMarginBetween}
               textAlign={'center'}
               variant="MobileBody"
               accessibilityLabel={t('prescription.history.empty.pending.message.a11y')}>
@@ -84,10 +84,14 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ c
             <TextView textAlign={'center'} variant="MobileBodyBold">
               {t('prescription.history.empty.tracking.title')}
             </TextView>
-            <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody">
+            <TextView pt={theme?.dimensions?.condensedMarginBetween} textAlign={'center'} variant="MobileBody">
               {t('prescription.history.empty.tracking.p1')}
             </TextView>
-            <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" accessibilityLabel={t('prescription.history.empty.tracking.p2.a11y')}>
+            <TextView
+              pt={theme?.dimensions?.condensedMarginBetween}
+              textAlign={'center'}
+              variant="MobileBody"
+              accessibilityLabel={t('prescription.history.empty.tracking.p2.a11y')}>
               {t('prescription.history.empty.tracking.p2')}
             </TextView>
           </>
@@ -102,8 +106,8 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ c
 
   return (
     <VAScrollView contentContainerStyle={noMatchScrollStyles}>
-      <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
-        <Box mt={theme.dimensions.condensedMarginBetween}>{getContent()}</Box>
+      <Box justifyContent="center" mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} alignItems={'center'}>
+        <Box mt={theme?.dimensions?.condensedMarginBetween}>{getContent()}</Box>
       </Box>
     </VAScrollView>
   )

@@ -66,9 +66,9 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
       <Box
         flexDirection="row"
         backgroundColor={'navButton'}
-        height={theme.dimensions.navBarHeight}
+        height={theme?.dimensions?.navBarHeight}
         borderTopColor="primary"
-        borderTopWidth={theme.dimensions.borderWidth}
+        borderTopWidth={theme?.dimensions?.borderWidth}
         accessibilityRole="toolbar">
         {state.routes.map((route: TabBarRoute, index: number) => {
           const isFocused = state.index === index
@@ -108,7 +108,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
               {...props}
               {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>
               <Box flex={1} display="flex" flexDirection="column" mt={7}>
-                <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
+                <Box alignSelf="center" position="absolute" mt={theme?.dimensions?.buttonBorderWidth}>
                   <VAIconWithText {...iconProps} />
                 </Box>
               </Box>

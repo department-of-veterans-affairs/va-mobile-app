@@ -31,10 +31,10 @@ const MultiTouchCard: FC<MultiTouchCardProps> = ({ orderIdentifier, mainContent,
 
   let mainBoxProps: BoxProps = {
     width: '100%',
-    minHeight: theme.dimensions.touchableMinHeight,
-    py: theme.dimensions.buttonPadding,
-    px: theme.dimensions.gutter,
-    borderWidth: theme.dimensions.borderWidth,
+    minHeight: theme?.dimensions?.touchableMinHeight,
+    py: theme?.dimensions?.buttonPadding,
+    px: theme?.dimensions?.gutter,
+    borderWidth: theme?.dimensions?.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
     backgroundColor: background,
@@ -54,12 +54,12 @@ const MultiTouchCard: FC<MultiTouchCardProps> = ({ orderIdentifier, mainContent,
   }
 
   let bottomBoxProps: BoxProps = {
-    py: theme.dimensions.buttonPadding,
-    px: theme.dimensions.gutter,
+    py: theme?.dimensions?.buttonPadding,
+    px: theme?.dimensions?.gutter,
     backgroundColor: background,
     borderRadiusBottom: 8,
     borderTopWidth: 0,
-    borderWidth: theme.dimensions.borderWidth,
+    borderWidth: theme?.dimensions?.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
   }

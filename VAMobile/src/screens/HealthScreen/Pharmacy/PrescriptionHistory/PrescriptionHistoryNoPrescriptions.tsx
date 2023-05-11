@@ -13,7 +13,7 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
 
   const alertWrapperProps: BoxProps = {
     mt: standardMarginBetween,
-    mb: theme.dimensions.contentMarginBottom,
+    mb: theme?.dimensions?.contentMarginBottom,
   }
 
   const bullets: string[] = [

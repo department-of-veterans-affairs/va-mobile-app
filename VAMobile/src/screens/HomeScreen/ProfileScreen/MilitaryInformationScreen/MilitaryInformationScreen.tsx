@@ -60,8 +60,8 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
   const linkProps: TextViewProps = {
     variant: 'MobileBody',
     color: 'link',
-    mx: theme.dimensions.gutter,
-    mb: theme.dimensions.contentMarginBottom,
+    mx: theme?.dimensions?.gutter,
+    mb: theme?.dimensions?.contentMarginBottom,
     accessibilityRole: 'link',
     ...testIdProps(t('militaryInformation.incorrectServiceInfo')),
     onPress: navigateTo('IncorrectServiceInfo'),
@@ -85,7 +85,7 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
         <NoMilitaryInformationAccess />
       ) : (
         <>
-          <Box mb={theme.dimensions.standardMarginBetween}>
+          <Box mb={theme?.dimensions?.standardMarginBetween}>
             <DefaultList items={historyItems} title={t('militaryInformation.periodOfService')} />
           </Box>
           <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>

@@ -15,16 +15,16 @@ const NoInboxMessages: FC = () => {
       {...testIdProps('Messages: No-messages-page')}
       flex={1}
       justifyContent="center"
-      mx={theme.dimensions.gutter}
+      mx={theme?.dimensions?.gutter}
       alignItems="center"
-      mt={theme.dimensions.standardMarginBetween}>
+      mt={theme?.dimensions?.standardMarginBetween}>
       <Box accessible={true} accessibilityRole={'header'}>
         <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
           {t('secureMessaging.inbox.noMessages.title')}
         </TextView>
       </Box>
       <Box accessible={true}>
-        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" textAlign="center" my={theme?.dimensions?.standardMarginBetween}>
           {t('secureMessaging.inbox.noMessages.body')}
         </TextView>
       </Box>

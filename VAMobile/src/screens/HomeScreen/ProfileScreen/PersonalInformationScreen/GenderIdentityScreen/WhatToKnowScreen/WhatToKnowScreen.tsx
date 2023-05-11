@@ -15,12 +15,12 @@ const WhatToKnowScreen: FC<WhatToKnowScreenProps> = () => {
 
   const bodyTextProps: TextViewProps = {
     variant: 'MobileBody',
-    mt: theme.dimensions.standardMarginBetween,
+    mt: theme?.dimensions?.standardMarginBetween,
   }
 
   return (
     <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('personalInformation.genderIdentity.whatToKnow.title')}
         </TextView>

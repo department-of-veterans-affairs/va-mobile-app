@@ -84,13 +84,13 @@ export const EncourageUpdateAlert = () => {
   ) {
     logAnalyticsEvent(Events.vama_eu_shown())
     return (
-      <Box mb={theme.dimensions.buttonPadding}>
+      <Box mb={theme?.dimensions?.buttonPadding}>
         <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="informational">
           <Box>
-            <Box my={theme.dimensions.gutter} accessibilityRole="button" mr={theme.dimensions.buttonPadding}>
+            <Box my={theme?.dimensions?.gutter} accessibilityRole="button" mr={theme?.dimensions?.buttonPadding}>
               <VAButton onPress={onUpdatePressed} label={t('encourageUpdate.update')} buttonType={ButtonTypesConstants.buttonPrimary} />
             </Box>
-            <Box mr={theme.dimensions.buttonPadding} accessibilityRole="button">
+            <Box mr={theme?.dimensions?.buttonPadding} accessibilityRole="button">
               <VAButton onPress={onSkipPressed} label={t('encourageUpdate.skip')} buttonType={ButtonTypesConstants.buttonSecondary} />
             </Box>
           </Box>

@@ -234,13 +234,13 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       ) : (
         <Box>
           <ComposeMessageButton />
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>
             <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')} />
           </Box>
         </Box>
       )}
-      <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-        <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
+      <Box mt={theme?.dimensions?.standardMarginBetween} mb={theme?.dimensions?.condensedMarginBetween}>
+        <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme?.dimensions?.cardPadding}>
           <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
             {formatSubject(category, subject, t)}
           </TextView>

@@ -14,7 +14,7 @@ const MessagesCountTag: FC<CountTagProps> = ({ unread }) => {
   const theme = useTheme()
   return (
     <Box
-      minWidth={theme.dimensions.tagMinWidth}
+      minWidth={theme?.dimensions?.tagMinWidth}
       justifyContent={'center'}
       alignSelf={'center'}
       backgroundColor="unreadMessagesTag"

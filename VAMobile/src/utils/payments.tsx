@@ -102,7 +102,7 @@ export const getGroupedPayments = (
     groupIdx = groupIdx + listItems.length
     const displayedDate = getFormattedDate(date, 'MMMM d, yyyy')
     return (
-      <Box key={date} mb={theme.dimensions.standardMarginBetween}>
+      <Box key={date} mb={theme?.dimensions?.standardMarginBetween}>
         <DefaultList items={listItems} title={displayedDate} />
       </Box>
     )

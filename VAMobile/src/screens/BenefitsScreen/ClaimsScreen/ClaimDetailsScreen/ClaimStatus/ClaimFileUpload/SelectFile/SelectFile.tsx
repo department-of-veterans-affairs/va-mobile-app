@@ -88,9 +88,9 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
 
   return (
     <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('fileUpload.selectFiles')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         {!!error && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
+          <Box mb={theme?.dimensions?.standardMarginBetween}>
             <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />
           </Box>
         )}
@@ -98,25 +98,25 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
             {t('fileUpload.pleaseRequestFromPhoneFiles')}
             <TextView variant="MobileBodyBold">
               {t('fileUpload.pleaseRequestFromPhoneFiles.bolded')}
               <TextView variant="MobileBody">{t('fileUpload.pleaseRequestFromPhoneFiles.pt2')}</TextView>
             </TextView>
           </TextView>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme?.dimensions?.standardMarginBetween}>
             {t('fileUpload.maxFileSize')}
           </TextView>
           <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')}>
             {t('fileUpload.50MB')}
           </TextView>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme?.dimensions?.standardMarginBetween}>
             {t('fileUpload.acceptedFileTypes')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
         </TextArea>
-        <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+        <Box mt={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
           <VAButton
             onPress={onSelectFile}
             label={t('fileUpload.selectAFile')}

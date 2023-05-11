@@ -82,7 +82,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
 
     if (noCurrentPayments) {
       return (
-        <Box mt={theme.dimensions.standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <></>
         </Box>
       )
@@ -112,7 +112,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
     }
 
     return (
-      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme?.dimensions?.paginationTopPadding} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     )

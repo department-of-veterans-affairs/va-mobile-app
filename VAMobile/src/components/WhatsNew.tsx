@@ -97,10 +97,10 @@ export const WhatsNew = () => {
     headerText: t('whatsNew.title'),
     body: (
       <>
-        <Box my={theme.dimensions.standardMarginBetween}>
+        <Box my={theme?.dimensions?.standardMarginBetween}>
           <TextView accessibilityLabel={bodyA11yLabel}>{body}</TextView>
           {bullets.length ? (
-            <Box mt={theme.dimensions.standardMarginBetween}>
+            <Box mt={theme?.dimensions?.standardMarginBetween}>
               <VABulletList listOfText={bullets} />
             </Box>
           ) : undefined}
@@ -116,7 +116,7 @@ export const WhatsNew = () => {
   if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== BODY_PREFIX) {
     whatsNewAppeared()
     return (
-      <Box mb={theme.dimensions.standardMarginBetween}>
+      <Box mb={theme?.dimensions?.standardMarginBetween}>
         <CollapsibleAlert {...props} />
       </Box>
     )

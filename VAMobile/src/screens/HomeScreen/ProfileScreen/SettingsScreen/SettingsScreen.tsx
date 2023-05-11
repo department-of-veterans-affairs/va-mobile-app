@@ -94,7 +94,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     ]
 
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={theme?.dimensions?.standardMarginBetween}>
         <SimpleList items={debugButton} />
       </Box>
     )
@@ -110,12 +110,12 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} flex={1}>
-        <Box mb={theme.dimensions.standardMarginBetween}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} flex={1}>
+        <Box mb={theme?.dimensions?.standardMarginBetween}>
           <SimpleList items={items} />
           {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
         </Box>
-        <Box px={theme.dimensions.gutter}>
+        <Box px={theme?.dimensions?.gutter}>
           <SignoutButton />
         </Box>
       </Box>

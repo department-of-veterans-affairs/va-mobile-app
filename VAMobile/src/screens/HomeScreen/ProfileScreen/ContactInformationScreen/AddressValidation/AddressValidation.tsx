@@ -40,7 +40,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   }
   const containerStyles = {
     flex: 0,
-    mx: theme.dimensions.gutter,
+    mx: theme?.dimensions?.gutter,
     mb: contentMarginBottom,
     mt: standardMarginBetween,
   }

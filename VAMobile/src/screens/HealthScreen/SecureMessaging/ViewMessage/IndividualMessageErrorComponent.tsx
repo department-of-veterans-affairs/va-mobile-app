@@ -18,7 +18,7 @@ const IndividualMessageErrorComponent: FC = () => {
 
   return (
     <VAScrollView>
-      <Box justifyContent="center" mt={theme.dimensions.gutter}>
+      <Box justifyContent="center" mt={theme?.dimensions?.gutter}>
         <AlertBox
           title={t('secureMessaging.viewMessage.errorTitle')}
           titleA11yLabel={t('secureMessaging.viewMessage.errorTitle')}

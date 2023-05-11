@@ -391,7 +391,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         originHeader: t('secureMessaging.drafts.edit'),
         removeOnPress: removeAttachment,
         largeButtonProps:
-          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
+          attachmentsList.length < theme?.dimensions?.maxNumMessageAttachments
             ? {
                 label: t('secureMessaging.formMessage.addFiles'),
                 a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
@@ -443,7 +443,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           textA11yLabel={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
           border="error"
           scrollViewRef={scrollViewRef}>
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>
             <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
           </Box>
         </AlertBox>
@@ -453,12 +453,12 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return (
       <Box>
         <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} scrollViewRef={scrollViewRef} focusOnError={onSendClicked} />
-        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+        <Box mb={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
-            <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
+            <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme?.dimensions?.condensedMarginBetween} accessible={true}>
               <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
             </Box>
-            <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+            <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme?.dimensions?.standardMarginBetween} accessible={true}>
               <TextView>
                 <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
@@ -473,7 +473,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
               <TextView variant="MobileBodyBold" accessible={true}>
                 {message?.recipientName}
               </TextView>
-              <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
+              <TextView mt={theme?.dimensions?.standardMarginBetween} accessible={true}>
                 {t('secureMessaging.formMessage.subject')}
               </TextView>
               <TextView variant="MobileBodyBold" accessible={true}>
@@ -481,7 +481,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
               </TextView>
             </>
           )}
-          <Box mt={isReplyDraft ? theme.dimensions.standardMarginBetween : 0}>
+          <Box mt={isReplyDraft ? theme?.dimensions?.standardMarginBetween : 0}>
             <FormWrapper
               fieldsList={formFieldsList}
               onSave={onMessageSendOrSave}
@@ -492,7 +492,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
               setResetErrors={setResetErrors}
             />
           </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>
             <VAButton
               label={t('secureMessaging.formMessage.send')}
               onPress={() => {
@@ -519,13 +519,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return (
       <Box>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
+          <TextView ml={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween} variant={'MobileBodyBold'}>
             {t('secureMessaging.reply.messageConversation')}
           </TextView>
         </Box>
         {message && messagesById && thread && (
-          <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-            <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
+          <Box mt={theme?.dimensions?.standardMarginBetween} mb={theme?.dimensions?.condensedMarginBetween}>
+            <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme?.dimensions?.cardPadding}>
               <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
             </Box>
             {renderMessages(message, messagesById, messageThread)}
@@ -543,7 +543,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       onLeftButtonPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
       menuViewActions={MenViewActions}
       showCrisisLineCta={true}>
-      <Box mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme?.dimensions?.contentMarginBottom}>
         <Box>{renderForm()}</Box>
         <Box>{isReplyDraft && renderMessageThread()}</Box>
       </Box>

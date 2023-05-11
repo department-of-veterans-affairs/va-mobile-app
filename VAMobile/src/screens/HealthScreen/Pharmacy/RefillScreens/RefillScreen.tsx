@@ -161,26 +161,26 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
           onSubmitPressed()
         }}>
         {showAlert && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>
             <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} scrollViewRef={scrollViewRef} />
           </Box>
         )}
-        <Box mx={theme.dimensions.gutter}>
-          <TextView my={theme.dimensions.standardMarginBetween} variant={'HelperText'}>
+        <Box mx={theme?.dimensions?.gutter}>
+          <TextView my={theme?.dimensions?.standardMarginBetween} variant={'HelperText'}>
             {t('prescriptions.refill.instructions.requestRefills')}
             <TextView variant={'HelperTextBold'}>
               {t('prescriptions.refill.instructions.fifteenDays')}
               <TextView variant={'HelperText'}>{t('prescriptions.refill.instructions.beforeYouNeed')}</TextView>
             </TextView>
           </TextView>
-          <TextView variant={'HelperText'} mb={theme.dimensions.standardMarginBetween}>
+          <TextView variant={'HelperText'} mb={theme?.dimensions?.standardMarginBetween}>
             {t('prescriptions.refill.weWillMailText')}
           </TextView>
-          <TextView mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+          <TextView mt={theme?.dimensions?.condensedMarginBetween} mb={theme?.dimensions?.condensedMarginBetween} variant={'MobileBodyBold'}>
             {t('prescriptions.refill.prescriptionsCount', { count: refillablePrescriptions?.length })}
           </TextView>
         </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
+        <Box mb={theme?.dimensions?.contentMarginBottom}>
           <SelectionList
             items={getListItems()}
             onSelectionChange={(items) => {

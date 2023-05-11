@@ -48,7 +48,7 @@ const AppealDecision: FC<AppealDecisionProps> = ({ issues, aoj, ama, boardDecisi
     }
 
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={theme?.dimensions?.standardMarginBetween}>
         <TextView variant="MobileBodyBold">{header}</TextView>
         <TextView variant="MobileBody">{subText}</TextView>
         <VABulletList listOfText={getIssuesListOfText(specificIssues)} />
@@ -80,18 +80,18 @@ const AppealDecision: FC<AppealDecisionProps> = ({ issues, aoj, ama, boardDecisi
     <Box>
       {allowedBlock}
       {allowedIssues.length > 0 && boardDecision && (
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
           {t('appealDetails.ifThisChangesRating')}
         </TextView>
       )}
       {deniedBlock}
       {remandBlock}
       {remandIssues.length > 0 && ama && (
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
           {t('appealDetails.willMakeNewDecision', { aojDesc })}
         </TextView>
       )}
-      <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
         {t('appealDetails.pleaseSeeYourDecision')}
       </TextView>
     </Box>

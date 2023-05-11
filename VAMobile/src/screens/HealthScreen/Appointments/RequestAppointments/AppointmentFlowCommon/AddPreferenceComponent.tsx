@@ -29,7 +29,7 @@ const AddPreferenceComponent: FC<AddPreferenceComponentProps> = ({ buttonText, o
 
   return (
     <TextArea>
-      <TextView variant="MobileBodyBold" mb={theme.dimensions.condensedMarginBetween}>
+      <TextView variant="MobileBodyBold" mb={theme?.dimensions?.condensedMarginBetween}>
         {preferenceTitle}
       </TextView>
       <TouchableWithoutFeedback onPress={onPress}>

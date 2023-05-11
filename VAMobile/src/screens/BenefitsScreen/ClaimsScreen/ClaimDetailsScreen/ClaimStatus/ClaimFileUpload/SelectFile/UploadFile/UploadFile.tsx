@@ -153,15 +153,15 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
       onLeftButtonPress={() => {
         navigation.dispatch(StackActions.pop(2))
       }}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}
         </TextView>
       </Box>
       <FileList files={[fileUploaded]} onDelete={onFileDelete} />
-      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
+      <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween}>
         <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
-        <Box mt={theme.dimensions.textAndButtonLargeMargin}>
+        <Box mt={theme?.dimensions?.textAndButtonLargeMargin}>
           <VAButton
             onPress={() => {
               setOnSaveClicked(true)

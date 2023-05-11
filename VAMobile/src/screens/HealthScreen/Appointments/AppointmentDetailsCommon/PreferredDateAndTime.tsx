@@ -25,7 +25,7 @@ const PreferredDateAndTime: FC<PreferredDateAndTimeProps> = ({ attributes }) => 
     })
 
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={theme?.dimensions?.standardMarginBetween}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('appointments.pending.preferredDateAndTime')}
         </TextView>

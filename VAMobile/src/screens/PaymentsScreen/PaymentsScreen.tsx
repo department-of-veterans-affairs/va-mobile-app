@@ -29,11 +29,11 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
 
   return (
     <CategoryLanding title={t('payments.title')}>
-      <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box mb={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
         <LargeNavButton
           title={t('vaPaymentHistory')}
           onPress={onPayments}
-          borderWidth={theme.dimensions.buttonBorderWidth}
+          borderWidth={theme?.dimensions?.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
@@ -42,7 +42,7 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
           <LargeNavButton
             title={t('directDeposit.information')}
             onPress={onDirectDeposit}
-            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderWidth={theme?.dimensions?.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}

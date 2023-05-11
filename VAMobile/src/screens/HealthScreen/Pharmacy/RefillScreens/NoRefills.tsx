@@ -17,11 +17,11 @@ const NoRefills: FC = () => {
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
-      <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
+      <Box flex={1} justifyContent="center" mx={theme?.dimensions?.gutter} alignItems="center">
         <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
           {t('prescriptions.noRefill.header')}
         </TextView>
-        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescriptions.noRefill.text.a11yLabel')}>
+        <TextView variant="MobileBody" textAlign="center" my={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('prescriptions.noRefill.text.a11yLabel')}>
           {t('prescriptions.noRefill.text')}
         </TextView>
       </Box>

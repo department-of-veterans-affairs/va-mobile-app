@@ -52,9 +52,9 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, sho
 
   return (
     <TouchableWithoutFeedback ref={focusRef} onPress={onPress} {...testIdProps(label)} {...a11yHintProp(a11yHintPropParam)} accessibilityRole="button" accessible={true}>
-      <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} alignItems={'center'}>
+      <Box display="flex" flexDirection="row" ml={theme?.dimensions?.headerButtonSpacing} height={theme?.dimensions?.headerHeight} alignItems={'center'}>
         {chevron}
-        <TextView variant="ActionBar" color={webview ? 'footerButton' : undefined} ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
+        <TextView variant="ActionBar" color={webview ? 'footerButton' : undefined} ml={theme?.dimensions?.textIconMargin} allowFontScaling={false} accessible={false}>
           {t(label)}
         </TextView>
       </Box>

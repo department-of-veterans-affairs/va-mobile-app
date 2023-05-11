@@ -104,19 +104,19 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   return (
     <CategoryLanding headerButton={headerButton}>
       <Box flex={1} justifyContent="flex-start">
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
+        <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.cardPadding}>
           <TextView variant={'MobileBodyBold'} accessibilityRole={'header'}>
             {heading}
           </TextView>
         </Box>
         <EncourageUpdateAlert />
         <Nametag />
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+        <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={tc('aboutVA.a11yLabel')}>
             {tc('aboutVA')}
           </TextView>
         </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
+        <Box mb={theme?.dimensions?.contentMarginBottom}>
           <SimpleList items={buttonDataList} />
         </Box>
       </Box>

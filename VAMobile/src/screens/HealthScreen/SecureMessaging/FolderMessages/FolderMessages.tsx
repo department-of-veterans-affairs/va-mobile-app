@@ -123,7 +123,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     }
 
     return (
-      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme?.dimensions?.paginationTopPadding} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     )
@@ -132,7 +132,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   return (
     <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
       <ComposeMessageButton />
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={theme?.dimensions?.standardMarginBetween}>
         <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} />
       </Box>
       {renderPagination()}

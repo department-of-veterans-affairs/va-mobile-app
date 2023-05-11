@@ -56,7 +56,7 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
       backgroundColor: theme.colors.background.main,
       borderBottomWidth: 0,
       shadowColor: 'transparent',
-      height: inset.top + theme.dimensions.headerHeight,
+      height: inset.top + theme?.dimensions?.headerHeight,
     },
   }
 

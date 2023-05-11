@@ -8,7 +8,7 @@ import { useTheme } from 'utils/hooks'
 const NoPaymentsScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
+  const standardMarginBetween = theme?.dimensions?.standardMarginBetween
 
   return (
     <VAScrollView>

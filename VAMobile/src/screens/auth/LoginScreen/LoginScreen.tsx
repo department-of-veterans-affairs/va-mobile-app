@@ -44,9 +44,9 @@ const LoginScreen: FC = () => {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    minHeight: theme.dimensions.touchableMinHeight,
-    mt: theme.dimensions.standardMarginBetween,
-    py: theme.dimensions.buttonPadding,
+    minHeight: theme?.dimensions?.touchableMinHeight,
+    mt: theme?.dimensions?.standardMarginBetween,
+    py: theme?.dimensions?.buttonPadding,
   }
 
   const dispatch = useAppDispatch()
@@ -76,10 +76,10 @@ const LoginScreen: FC = () => {
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
       <Box flex={1}>
-        <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween} testID="va-icon">
+        <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme?.dimensions?.standardMarginBetween} testID="va-icon">
           <VAIcon name={'Logo'} />
         </Box>
-        <Box mx={theme.dimensions.gutter} mb={80}>
+        <Box mx={theme?.dimensions?.gutter} mb={80}>
           <VAButton onPress={onLoginInit} label={t('common:signin')} a11yHint={t('common:signin.a11yHint')} buttonType={ButtonTypesConstants.buttonWhite} hideBorder={true} />
           <Pressable
             onPress={onFacilityLocator}
@@ -87,7 +87,7 @@ const LoginScreen: FC = () => {
             accessibilityHint={t('home:findLocation.a11yHint')}
             accessibilityRole="button">
             <Box {...findLocationProps}>
-              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
+              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme?.dimensions?.textIconMargin}>
                 {t('home:findLocation.title')}
               </TextView>
               <VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />

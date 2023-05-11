@@ -23,11 +23,11 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
+  const standardMarginBetween = theme?.dimensions?.standardMarginBetween / 2
 
   return (
     <FeatureLandingTemplate backLabel={tc('home')} backLabelOnPress={navigation.goBack} title={tc('contactVA')} titleA11y={tc('contactVA.a11y')}>
-      <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+      <Box flex={1} mb={theme?.dimensions?.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityLabel={t('contactVA.va411.callMy.a11yLabel')} accessibilityRole="header">

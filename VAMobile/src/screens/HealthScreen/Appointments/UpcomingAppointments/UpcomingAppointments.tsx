@@ -63,11 +63,11 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   return (
     <Box {...testIdProps('', false, 'Upcoming-appointments-page')}>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
+      <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>
       {getGroupedAppointments(currentPageUpcomingAppointmentsByYear || {}, theme, { t, tc }, onUpcomingAppointmentPress, false, paginationByTimeFrame.upcoming)}
-      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>

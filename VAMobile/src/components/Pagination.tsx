@@ -49,7 +49,7 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
 
   const boxProps: BoxProps = {
     backgroundColor: disabled ? 'buttonSecondaryDisabled' : 'buttonPrimary',
-    minHeight: theme.dimensions.touchableMinHeight,
+    minHeight: theme?.dimensions?.touchableMinHeight,
     p: 15,
     borderRadius: 5,
   }

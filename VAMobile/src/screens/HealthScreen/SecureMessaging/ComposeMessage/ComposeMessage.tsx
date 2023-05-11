@@ -294,7 +294,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         originHeader: t('secureMessaging.composeMessage.compose'),
         removeOnPress: removeAttachment,
         largeButtonProps:
-          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
+          attachmentsList.length < theme?.dimensions?.maxNumMessageAttachments
             ? {
                 label: t('secureMessaging.formMessage.addFiles'),
                 a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
@@ -353,7 +353,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           text={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolled')}
           textA11yLabel={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
           border="error">
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>
             <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
           </Box>
         </AlertBox>
@@ -363,12 +363,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     return (
       <Box>
         <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} scrollViewRef={scrollViewRef} focusOnError={onSendClicked} />
-        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+        <Box mb={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
           <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
-            <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
+            <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme?.dimensions?.condensedMarginBetween} accessible={true}>
               <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
             </Box>
-            <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+            <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme?.dimensions?.standardMarginBetween} accessible={true}>
               <TextView>
                 <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
@@ -386,7 +386,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
             resetErrors={resetErrors}
             setResetErrors={setResetErrors}
           />
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>
             <VAButton
               label={t('secureMessaging.formMessage.send')}
               onPress={() => {
@@ -415,7 +415,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         setOnSendClicked(true)
       }}
       showCrisisLineCta={true}>
-      <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
+      <Box mb={theme?.dimensions?.contentMarginBottom}>{renderContent()}</Box>
     </FullScreenSubtask>
   )
 }

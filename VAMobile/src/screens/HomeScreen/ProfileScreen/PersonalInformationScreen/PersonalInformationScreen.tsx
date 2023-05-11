@@ -95,10 +95,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const boxProps: BoxProps = {
     minHeight: 81,
     borderRadius: 6,
-    p: theme.dimensions.cardPadding,
-    mb: theme.dimensions.condensedMarginBetween,
+    p: theme?.dimensions?.cardPadding,
+    mb: theme?.dimensions?.condensedMarginBetween,
     backgroundColor: 'textBox',
-    borderWidth: theme.dimensions.buttonBorderWidth,
+    borderWidth: theme?.dimensions?.buttonBorderWidth,
     borderColor: 'secondary',
     borderStyle: 'solid',
   }
@@ -131,10 +131,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
       <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>
         <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
       </Pressable>
-      <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box my={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
         <Box {...boxProps}>
-          <Box flexDirection={'row'} flexWrap={'wrap'} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
-            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading">
+          <Box flexDirection={'row'} flexWrap={'wrap'} mb={birthdate ? theme?.dimensions?.condensedMarginBetween : undefined}>
+            <TextView mr={theme?.dimensions?.condensedMarginBetween} variant="BitterBoldHeading">
               {t('personalInformation.dateOfBirth')}
             </TextView>
           </Box>
@@ -147,7 +147,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
           <>
             <LargeNavButton
               title={t('personalInformation.preferredName.title')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
+              borderWidth={theme?.dimensions?.buttonBorderWidth}
               borderColor={'secondary'}
               borderColorActive={'primaryDarkest'}
               borderStyle={'solid'}
@@ -156,7 +156,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
             />
             <LargeNavButton
               title={t('personalInformation.genderIdentity.title')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
+              borderWidth={theme?.dimensions?.buttonBorderWidth}
               borderColor={'secondary'}
               borderColorActive={'primaryDarkest'}
               borderStyle={'solid'}

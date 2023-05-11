@@ -47,7 +47,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
       // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false
 
       return (
-        <Box mb={theme.dimensions.condensedMarginBetween}>
+        <Box mb={theme?.dimensions?.condensedMarginBetween}>
           {claim && <ClaimTimeline attributes={claim.attributes} claimID={claim.id} />}
           {false && <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} showCovidMessage={false} />}
           <Box>
@@ -88,7 +88,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
       }
 
       return (
-        <Box mb={theme.dimensions.condensedMarginBetween}>
+        <Box mb={theme?.dimensions?.condensedMarginBetween}>
           <TextArea>
             <Box {...testIdProps(claimDecidedOn)} accessibilityRole="header" accessible={true}>
               <TextView variant="MobileBodyBold">{claimDecidedOn}</TextView>
@@ -97,7 +97,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
               <TextView variant="MobileBody">{letterAvailable}</TextView>
             </Box>
             {showButton && (
-              <Box mt={theme.dimensions.condensedMarginBetween}>
+              <Box mt={theme?.dimensions?.condensedMarginBetween}>
                 <VAButton onPress={onPress} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} />
               </Box>
             )}

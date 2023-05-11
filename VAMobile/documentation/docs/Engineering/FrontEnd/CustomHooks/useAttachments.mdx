@@ -14,7 +14,7 @@ export const exampleString = `const [attachmentsList, addAttachment, removeAttac
     originHeader: t('secureMessaging.drafts.edit'),
     removeOnPress: removeAttachment,
     largeButtonProps:
-        attachmentsList.length < theme.dimensions.maxNumMessageAttachments
+        attachmentsList.length < theme?.dimensions?.maxNumMessageAttachments
         ? {
             label: t('secureMessaging.formMessage.addFiles'),
             a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),

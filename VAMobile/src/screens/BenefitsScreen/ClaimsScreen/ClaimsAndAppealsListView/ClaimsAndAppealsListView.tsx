@@ -64,7 +64,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
       ]
 
       if (featureEnabled('decisionLetters') && attributes.decisionLetterSent) {
-        const margin = theme.dimensions.condensedMarginBetween
+        const margin = theme?.dimensions?.condensedMarginBetween
         textLines.push({ text: t('claims.decisionLetterAvailable'), textTag: { labelType: LabelTagTypeConstants.tagBlue }, mt: margin, mb: margin })
       }
 
@@ -108,7 +108,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   return (
     <Box {...testIdProps('', false, `${claimType.toLowerCase()}-claims-page`)}>
       <DefaultList items={getListItemVals()} title={yourClaimsAndAppealsHeader} />
-      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme?.dimensions?.paginationTopPadding} mx={theme?.dimensions?.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>

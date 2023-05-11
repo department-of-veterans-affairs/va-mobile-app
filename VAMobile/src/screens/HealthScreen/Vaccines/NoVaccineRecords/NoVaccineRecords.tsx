@@ -8,7 +8,7 @@ import { useTheme } from 'utils/hooks'
 const NoVaccineRecords: FC = () => {
   const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
   const theme = useTheme()
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
+  const standardMarginBetween = theme?.dimensions?.standardMarginBetween
 
   return (
     <VAScrollView>

@@ -36,9 +36,9 @@ const ReplyTriageErrorScreen: FC<ReplyTriageErrorScreenProps> = ({ navigation })
   return (
     <VAScrollView {...testIdProps('Reply Triage Error: reply-triage-error-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
-      <Box mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme?.dimensions?.contentMarginBottom}>
         <AlertBox title={t('secureMessaging.sendError.title')} text={t('secureMessaging.reply.error.youCantSend')} border={'error'}>
-          <Box my={theme.dimensions.standardMarginBetween}>
+          <Box my={theme?.dimensions?.standardMarginBetween}>
             <TextView accessible={true} accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
               {t('secureMessaging.reply.error.ifYouThink')}
             </TextView>

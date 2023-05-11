@@ -36,7 +36,7 @@ const CernerAlert: FC = () => {
         <TextView
           variant="MobileBodyBold"
           key={facility.facilityId}
-          mt={theme.dimensions.standardMarginBetween}
+          mt={theme?.dimensions?.standardMarginBetween}
           selectable={true}
           {...testIdProps(`${facility.facilityName} (${t('cernerAlert.nowUsing')})`)}>
           {facility.facilityName}
@@ -54,10 +54,10 @@ const CernerAlert: FC = () => {
     }
 
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={theme?.dimensions?.standardMarginBetween}>
         <TextView variant="MobileBody">{t('cernerAlert.ourRecordsShow')}</TextView>
         {body}
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('cernerAlert.footer.a11yLabel')}>
+        <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('cernerAlert.footer.a11yLabel')}>
           {t('cernerAlert.footer')}
         </TextView>
         <ClickForActionLink {...linkToCallProps} />

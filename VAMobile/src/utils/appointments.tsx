@@ -141,7 +141,7 @@ export const getGroupedAppointments = (
       const displayedMonth = getFormattedDate(new Date(parseInt(year, 10), parseInt(month, 10)).toISOString(), 'MMMM')
 
       return (
-        <Box key={month} mb={theme.dimensions.standardMarginBetween}>
+        <Box key={month} mb={theme?.dimensions?.standardMarginBetween}>
           <DefaultList items={listItems} title={`${displayedMonth} ${year}`} />
         </Box>
       )

@@ -21,7 +21,7 @@ const ContactInformation: FC<ContactInformationProps> = ({ attributes }) => {
 
   if (isAppointmentPending) {
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={theme?.dimensions?.standardMarginBetween}>
         {(!!patientEmail || !!patientPhoneNumber || !!bestTimeToCall?.length) && (
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('appointments.pending.yourContactDetails')}

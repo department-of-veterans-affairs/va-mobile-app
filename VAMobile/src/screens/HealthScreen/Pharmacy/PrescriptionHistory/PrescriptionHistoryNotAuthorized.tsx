@@ -47,7 +47,7 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
       <Box {...alertWrapperProps}>
         <AlertBox border={'warning'} title={t('prescriptions.notAuthorized.warning')} titleA11yLabel={t('prescriptions.notAuthorized.warning.a11y')} />
       </Box>
-      <Box mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme?.dimensions?.contentMarginBottom}>
         <TextArea>
           <TextView>{t('prescriptions.notAuthorized.toAccess')}</TextView>
           <TextView pt={standardMarginBetween}>{t('prescriptions.notAuthorized.toUpgrade')}</TextView>

@@ -75,8 +75,8 @@ const VAFacilitiesScreen: FC<VAFacilitiesScreenProps> = ({ navigation }) => {
       secondActionButtonPress={onContinue}
       linkText={t('requestAppointment.facilityNotListed')}>
       <AppointmentFlowTitleSection title={t('requestAppointment.whichFacility')} titleA11yLabel={t('requestAppointment.whichFacilityLabel')} />
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
-        <TextView variant="HelperTextBold" mb={theme.dimensions.condensedMarginBetween}>
+      <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.contentMarginBottom}>
+        <TextView variant="HelperTextBold" mb={theme?.dimensions?.condensedMarginBetween}>
           {t('requestAppointment.sortFacilities')}
         </TextView>
         <VAModalPicker selectedValue={sortOption} onSelectionChange={onSortByChange} pickerOptions={getSortOptions()} />

@@ -15,7 +15,7 @@ type SandboxScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Sa
 const SandboxScreen: FC<SandboxScreenSettingsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
+  const standardMarginBetween = theme?.dimensions?.standardMarginBetween
 
   // Component Picker
   const defaultComponent = 'ClickForActionLink'
@@ -127,10 +127,10 @@ const SandboxScreen: FC<SandboxScreenSettingsScreenProps> = ({ navigation }) => 
 
   return (
     <FeatureLandingTemplate backLabel={t('debug.title')} backLabelOnPress={navigation.goBack} title={t('sandbox.title')}>
-      <Box mt={standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box mt={standardMarginBetween} mx={theme?.dimensions?.gutter}>
         {componentPicker()}
-        <Box my={theme.dimensions.standardMarginBetween}>{renderOptions()}</Box>
-        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+        <Box my={theme?.dimensions?.standardMarginBetween}>{renderOptions()}</Box>
+        <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
           {renderSandboxComponent()}
         </Box>
       </Box>

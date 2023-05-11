@@ -36,7 +36,7 @@ const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes, messages })
   }
 
   return (
-    <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
+    <Box mt={theme?.dimensions?.standardMarginBetween} mb={theme?.dimensions?.standardMarginBetween}>
       <TextView variant="MobileBodyBold" accessibilityRole="header">
         {t('upcomingAppointmentDetails.reason')}
       </TextView>
