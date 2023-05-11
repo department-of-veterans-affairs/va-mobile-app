@@ -124,7 +124,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(titleA11yLabel || title)}>
         {title}
       </TextView>
-      <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} paragraphSpacing={true}>
+      <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
         {body}
       </TextView>
       {appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine ? (
