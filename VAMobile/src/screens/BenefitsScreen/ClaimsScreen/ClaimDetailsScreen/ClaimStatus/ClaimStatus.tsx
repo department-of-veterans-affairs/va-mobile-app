@@ -91,7 +91,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
         <Box mb={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <Box {...testIdProps(claimDecidedOn)} accessibilityRole="header" accessible={true}>
-              <TextView variant="MobileBodyBold" paragraphSpacing={true}>
+              <TextView variant="MobileBodyBold">
                 {claimDecidedOn}
               </TextView>
             </Box>
