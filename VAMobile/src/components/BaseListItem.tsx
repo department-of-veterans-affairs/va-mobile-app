@@ -93,17 +93,17 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
     case ButtonDecoratorType.Switch:
       return <SwitchComponent onPress={switchOnPress} {...decoratorProps} />
     case ButtonDecoratorType.SelectedItem:
-      return <VAIcon name={'CheckMark'} height={13} width={16} fill={theme.colors.icon.pickerIcon} {...decoratorProps} />
+      return <VAIcon name={'CheckMark'} height={13} width={16} fill={theme?.colors?.icon?.pickerIcon} {...decoratorProps} />
     case ButtonDecoratorType.Delete:
-      return <VAIcon name={'TrashSolid'} height={16} width={14} fill={theme.colors.icon.error} {...decoratorProps} />
+      return <VAIcon name={'TrashSolid'} height={16} width={14} fill={theme?.colors?.icon?.error} {...decoratorProps} />
     case ButtonDecoratorType.FilledRadio:
       return (
         <VAIcon
           name={'FilledRadio'}
           height={radioBtnHeight}
           width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxEnabledPrimary}
-          stroke={theme.colors.icon.checkboxEnabledPrimary}
+          fill={theme?.colors?.icon?.checkboxEnabledPrimary}
+          stroke={theme?.colors?.icon?.checkboxEnabledPrimary}
           {...decoratorProps}
         />
       )
@@ -113,8 +113,8 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
           name={'EmptyRadio'}
           height={radioBtnHeight}
           width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxDisabledContrast}
-          stroke={theme.colors.icon.checkboxDisabled}
+          fill={theme?.colors?.icon?.checkboxDisabledContrast}
+          stroke={theme?.colors?.icon?.checkboxDisabled}
           {...decoratorProps}
         />
       )
@@ -124,8 +124,8 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
           name={'DisabledRadio'}
           height={radioBtnHeight}
           width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxDisabledContrast}
-          stroke={theme.colors.icon.checkboxDisabled}
+          fill={theme?.colors?.icon?.checkboxDisabledContrast}
+          stroke={theme?.colors?.icon?.checkboxDisabled}
           {...decoratorProps}
         />
       )
@@ -135,8 +135,8 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
           name={'FilledCheckBox'}
           height={radioBtnHeight}
           width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxEnabledPrimary}
-          stroke={theme.colors.icon.checkboxEnabledPrimary}
+          fill={theme?.colors?.icon?.checkboxEnabledPrimary}
+          stroke={theme?.colors?.icon?.checkboxEnabledPrimary}
           {...decoratorProps}
         />
       )
@@ -146,8 +146,8 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
           name={'EmptyCheckBox'}
           height={radioBtnHeight}
           width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxDisabledContrast}
-          stroke={theme.colors.icon.checkboxDisabled}
+          fill={theme?.colors?.icon?.checkboxDisabledContrast}
+          stroke={theme?.colors?.icon?.checkboxDisabled}
           {...decoratorProps}
         />
       )
@@ -156,7 +156,7 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
       return (
         <VAIcon
           name={'ArrowRight'}
-          fill={theme.colors.icon.chevronListItem}
+          fill={theme?.colors?.icon?.chevronListItem}
           width={theme?.dimensions?.chevronListItemWidth}
           height={theme?.dimensions?.chevronListItemHeight}
           {...decoratorProps}

@@ -322,7 +322,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
               </TextView>
               <VAIcon
                 name={'ArrowRight'}
-                fill={theme.colors.icon.chevronListItem}
+                fill={theme?.colors?.icon?.chevronListItem}
                 width={theme?.dimensions?.chevronListItemWidth}
                 height={theme?.dimensions?.chevronListItemHeight}
               />

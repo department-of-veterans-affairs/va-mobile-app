@@ -10,7 +10,7 @@ export const exampleString =`return (
             <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
               <NotificationManager>
                 <SafeAreaProvider>
-                  <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
+                  <StatusBar barStyle="light-content" backgroundColor={theme?.colors?.icon?.active} />
                   <AuthGuard />
                 </SafeAreaProvider>
               </NotificationManager>

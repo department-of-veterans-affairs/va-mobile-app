@@ -48,7 +48,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
 
   const getArrowIcon = (): React.ReactNode => {
     const iconProps: VAIconProps = {
-      fill: theme.colors.icon.chevronCollapsible,
+      fill: theme?.colors?.icon?.chevronCollapsible,
       name: expanded ? 'ArrowUp' : 'ArrowDown',
       width: 9,
       height: 7,
