@@ -206,8 +206,8 @@ export const AuthGuard: FC = () => {
     // check if analytics for staging enabled, or check if staging or Google Pre-Launch test, staging or test and turn off analytics if that is the case
     const toggle = firebaseDebugMode || !(utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST)
     crashlytics().setCrashlyticsCollectionEnabled(toggle)
-    analytics()?∂.setAnalyticsCollectionEnabled(toggle)
-    performance().setPerformanceCollectionEnabled(toggle)
+    analytics()?.setAnalyticsCollectionEnabled(toggle)
+    performance()?.setPerformanceCollectionEnabled(toggle)
   }, [firebaseDebugMode])
 
   useEffect(() => {

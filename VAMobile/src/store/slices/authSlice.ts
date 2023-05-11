@@ -232,7 +232,7 @@ const finishInitialize = async (dispatch: AppDispatch, loginPromptType: LOGIN_PR
   if (utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST) {
     await crashlytics().setCrashlyticsCollectionEnabled(false)
     await analytics()?.setAnalyticsCollectionEnabled(false)
-    await performance().setPerformanceCollectionEnabled(false)
+    await performance()?.setPerformanceCollectionEnabled(false)
   }
 
   dispatch(dispatchInitializeAction(payload))
