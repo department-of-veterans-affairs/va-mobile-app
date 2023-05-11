@@ -22,7 +22,7 @@ type AppointmentModalTitleSectionProps = {
  * */
 const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ title, extraInformationText, errorMessage, titleMarginBottom, titleA11yLabel }) => {
   const theme = useTheme()
-  const { gutter, standardMarginBetween, condensedMarginBetween, contentMarginBottom } = theme.dimensions
+  const { gutter, standardMarginBetween, condensedMarginBetween, contentMarginBottom } = theme?.dimensions?
   const error = !!errorMessage
 
   return (

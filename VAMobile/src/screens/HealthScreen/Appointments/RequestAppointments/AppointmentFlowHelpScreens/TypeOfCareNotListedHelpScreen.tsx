@@ -25,7 +25,7 @@ const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const { gutter, contentMarginTop, condensedMarginBetween, standardMarginBetween } = theme.dimensions
+  const { gutter, contentMarginTop, condensedMarginBetween, standardMarginBetween } = theme?.dimensions?
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
 
   const headerStyle = useRequestAppointmentModalHeaderStyles()

@@ -35,7 +35,7 @@ const DetailsTextSections: FC<DetailsTextSections> = ({
   children,
 }) => {
   const theme = useTheme()
-  const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
+  const { condensedMarginBetween, standardMarginBetween } = theme?.dimensions?
 
   const getTextElements = (headerText: string, valueText?: string | number, headerLabel?: string, valueLabel?: string) => {
     return (

@@ -23,7 +23,7 @@ const SubTypeHelpScreen: FC<SubTypeHelpScreenProps> = ({ navigation, route }) =>
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const { careTypeId } = route.params
-  const { gutter, contentMarginTop } = theme.dimensions
+  const { gutter, contentMarginTop } = theme?.dimensions?
   const headerStyle = useRequestAppointmentModalHeaderStyles()
 
   useLayoutEffect(() => {

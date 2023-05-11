@@ -29,7 +29,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const { t: tCom } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
   const dispatch = useAppDispatch()
-  const { condensedMarginBetween } = theme.dimensions
+  const { condensedMarginBetween } = theme?.dimensions?
   const { attachment, attachments, senderName, sentDate, body } = message
   const { loadingAttachments, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 

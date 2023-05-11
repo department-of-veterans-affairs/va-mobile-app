@@ -22,7 +22,7 @@ const ConfirmContactScreen: FC<ConfirmContactScreenProps> = ({ navigation }) => 
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { gutter, standardMarginBetween } = theme.dimensions
+  const { gutter, standardMarginBetween } = theme?.dimensions?
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { contact, preferredTimesForPhoneCall } = appointmentFlowFormData

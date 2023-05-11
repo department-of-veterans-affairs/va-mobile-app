@@ -30,7 +30,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   const navigation = useNavigation()
   const theme = useTheme()
 
-  const { standardMarginBetween, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
+  const { standardMarginBetween, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme?.dimensions?
   const { validationKey, confirmedSuggestedAddresses } = useSelector<RootState, PersonalInformationState>((storeState) => storeState.personalInformation)
   const [selectedSuggestedAddress, setSelectedSuggestedAddress] = useState<AddressData | SuggestedAddress>()
 

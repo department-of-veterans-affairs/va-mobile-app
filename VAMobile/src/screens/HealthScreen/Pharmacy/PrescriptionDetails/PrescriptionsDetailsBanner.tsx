@@ -11,7 +11,7 @@ const PrescriptionsDetailsBanner: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
-  const { contentMarginTop, standardMarginBetween } = theme.dimensions
+  const { contentMarginTop, standardMarginBetween } = theme?.dimensions?
 
   const getContent = () => {
     const bullets = [

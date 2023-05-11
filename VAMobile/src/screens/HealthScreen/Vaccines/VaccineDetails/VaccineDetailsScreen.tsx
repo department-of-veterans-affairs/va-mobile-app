@@ -24,7 +24,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme.dimensions
+  const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme?.dimensions?
   const dispatch = useAppDispatch()
 
   const vaccine = vaccinesById[vaccineId]

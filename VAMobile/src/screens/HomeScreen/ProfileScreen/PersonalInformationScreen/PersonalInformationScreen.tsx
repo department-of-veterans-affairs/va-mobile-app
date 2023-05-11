@@ -54,7 +54,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const { profile, loading, loadingGenderIdentityOptions, needsDataLoad, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>(
     (state) => state.personalInformation,
   )
-  const { gutter, condensedMarginBetween } = theme.dimensions
+  const { gutter, condensedMarginBetween } = theme?.dimensions?
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
   const navigateTo = useRouteNavigation()
 

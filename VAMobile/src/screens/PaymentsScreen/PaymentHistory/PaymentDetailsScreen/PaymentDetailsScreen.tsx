@@ -25,7 +25,7 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ navigation, route
   const navigateTo = useRouteNavigation()
 
   const placeHolder = t('noneNoted')
-  const { standardMarginBetween, contentMarginTop, contentMarginBottom, gutter } = theme.dimensions
+  const { standardMarginBetween, contentMarginTop, contentMarginBottom, gutter } = theme?.dimensions?
   const { payment } = useSelector<RootState, PaymentState>((state) => state.payments)
   const { date, paymentType, paymentMethod, bank, account, amount } = payment?.attributes || ({} as PaymentsAttributeData)
 

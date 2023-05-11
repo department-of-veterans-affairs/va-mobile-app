@@ -35,7 +35,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const { submittedDecision, error, claim, loadingSubmitClaimDecision } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
-  const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
+  const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme?.dimensions?
   const requestEvalAlert = useDestructiveAlert()
 
   const navigateToClaimsDetailsPage = submittedDecision && !error

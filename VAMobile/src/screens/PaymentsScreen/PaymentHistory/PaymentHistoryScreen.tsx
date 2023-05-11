@@ -24,7 +24,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
-  const { standardMarginBetween, gutter, contentMarginTop } = theme.dimensions
+  const { standardMarginBetween, gutter, contentMarginTop } = theme?.dimensions?
   const { currentPagePayments, currentPagePagination, loading, availableYears } = useSelector<RootState, PaymentState>((state) => state.payments)
   const newCurrentPagePayments = deepCopyObject<PaymentsByDate>(currentPagePayments)
   const noPayments = availableYears.length === 0

@@ -151,7 +151,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   ]
 
   const displayImages = (): ReactElement => {
-    const { condensedMarginBetween, gutter } = theme.dimensions
+    const { condensedMarginBetween, gutter } = theme?.dimensions?
     /** Need to subtract gutter margins and margins between pics before dividing screen width by 3 to get the width of each image*/
     const calculatedWidth = ((isPortrait ? Dimensions.get('window').width : Dimensions.get('window').height) - 2 * gutter - 2 * condensedMarginBetween) / 3
 

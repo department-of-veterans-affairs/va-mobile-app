@@ -22,7 +22,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
   const { claimID } = route.params
   const { claim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
-  const { condensedMarginBetween, contentMarginBottom, contentMarginTop, standardMarginBetween, gutter } = theme.dimensions
+  const { condensedMarginBetween, contentMarginBottom, contentMarginTop, standardMarginBetween, gutter } = theme?.dimensions?
 
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 

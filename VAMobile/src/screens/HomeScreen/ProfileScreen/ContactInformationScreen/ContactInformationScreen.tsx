@@ -80,7 +80,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   const theme = useTheme()
   const { profile, loading, needsDataLoad } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
-  const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
+  const { contentMarginBottom, gutter, condensedMarginBetween } = theme?.dimensions?
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
   const navigateTo = useRouteNavigation()
