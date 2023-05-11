@@ -16,12 +16,12 @@ export type TextLineWithIconProps = {
 
 /**Common component to show an icon with a line of text*/
 export const TextLineWithIcon: FC<TextLineWithIconProps> = ({ iconProps, text, variant, textAlign, color }) => {
-  const themes = useTheme()
+  const theme = useTheme()
   const iconNotOwnRow = !(iconProps && iconProps.isOwnLine)
 
   return (
     <Box flexDirection={'row'} alignItems={'center'}>
-      <Box ml={iconNotOwnRow ? 0 : themes.dimensions.listItemDecoratorMarginLeft} mr={themes.dimensions.condensedMarginBetween}>
+      <Box ml={iconNotOwnRow ? 0 : theme?.dimensions?.listItemDecoratorMarginLeft} mr={theme?.dimensions.condensedMarginBetween}>
         {iconProps && <VAIcon name={iconProps.name} width={iconProps.width} height={iconProps.height} fill={iconProps.fill} />}
         {!iconProps && <Box mr={16} />}
       </Box>
