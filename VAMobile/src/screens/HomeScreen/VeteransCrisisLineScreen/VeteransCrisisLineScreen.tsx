@@ -38,9 +38,11 @@ const VeteransCrisisLineScreen: FC = () => {
         <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
-          {t('veteransCrisisLine.connectWithResponders')}
-        </TextView>
+        <Box mt={standardMarginBetween}>
+          <TextView variant="MobileBody" paragraphSpacing={true}>
+            {t('veteransCrisisLine.connectWithResponders')}
+          </TextView>
+        </Box>
         <ClickForActionLink
           testID="veteransCrisisLineCrisisCallNumberTestID"
           displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
