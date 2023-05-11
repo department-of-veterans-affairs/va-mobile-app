@@ -33,7 +33,7 @@ const GeneralHelpScreen: FC<GeneralHelpScreenProps> = ({ navigation, route }) =>
   return (
     <Box flex={1} backgroundColor={'main'}>
       <Box mx={gutter}>
-        <TextView variant="MobileBodyBold" mt={contentMarginTop} paragraphSpacing={true}>
+        <TextView variant="MobileBodyBold" mt={contentMarginTop}>
           {title}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true}>
