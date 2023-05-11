@@ -25,7 +25,7 @@ const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const { gutter, contentMarginTop } = theme.dimensions
+  const { gutter, contentMarginTop, condensedMarginBetween } = theme.dimensions
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
 
   const headerStyle = useRequestAppointmentModalHeaderStyles()
@@ -67,10 +67,10 @@ const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({
   return (
     <Box flex={1} backgroundColor={'main'}>
       <Box mx={gutter}>
-        <TextView variant="MobileBodyBold" mt={contentMarginTop} accessibilityRole="header" paragraphSpacing={true}>
+        <TextView variant="MobileBodyBold" mt={contentMarginTop} accessibilityRole="header">
           {t('requestAppointment.typeOfCareNotListedCallToSchedule')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('requestAppointment.typeOfCareNotListedYoureNotLabel')}>
+        <TextView variant="MobileBody" mt={condensedMarginBetween} paragraphSpacing={true} accessibilityLabel={t('requestAppointment.typeOfCareNotListedYoureNotLabel')}>
           {t('requestAppointment.typeOfCareNotListedYoureNotDesc')}
         </TextView>
         {getNonEligibleCare()}
