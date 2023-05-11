@@ -187,7 +187,7 @@ export type VAIconProps = BoxProps & {
  * Example icons of each classification:
  *    - One layer: HomeSelected.svg
  *    - Duotone: CircleCheckMark.svg
- *    - Stroke: RadioEmpty
+ *    - Stroke: RadioEmpty.svg
  *
  * @returns VAIcon component
  */
