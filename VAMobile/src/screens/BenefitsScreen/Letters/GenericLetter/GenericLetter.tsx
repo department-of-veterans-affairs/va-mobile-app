@@ -54,7 +54,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {header}
           </TextView>
-          <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" paragraphSpacing={true}>
+          <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
             {description}
           </TextView>
           <VAButton
