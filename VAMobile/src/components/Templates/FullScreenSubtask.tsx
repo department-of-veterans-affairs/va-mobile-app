@@ -154,7 +154,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     backgroundColor: theme?.colors?.background?.main,
     flex: 1,
   }
-  const titleMarginTop = showCrisisLineCta ? 0 : theme?.dimensions?.buttonPadding
+  const titleMarginTop = showCrisisLineCta ? 0 : theme?.dimensions.buttonPadding
 
   return (
     <View {...fillStyle}>
@@ -162,23 +162,20 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
       <VAScrollView scrollViewRef={scrollViewRef}>
         {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
         {title && (
-          <Box mt={titleMarginTop} mb={theme?.dimensions?.buttonPadding} mx={theme?.dimensions?.gutter}>
+          <Box mt={titleMarginTop} mb={theme?.dimensions.buttonPadding} mx={theme?.dimensions.gutter}>
             <TextView {...titleTextProps}>{title}</TextView>
           </Box>
         )}
         {children}
       </VAScrollView>
       {primaryContentButtonText && onPrimaryContentButtonPress && (
-        <Box display="flex" flexDirection="row" mt={theme?.dimensions?.condensedMarginBetween} mb={theme?.dimensions?.contentMarginBottom} alignItems={'center'}>
+        <Box display="flex" flexDirection="row" mt={theme?.dimensions.condensedMarginBetween} mb={theme?.dimensions.contentMarginBottom} alignItems={'center'}>
           {secondaryContentButtonText && onSecondaryContentButtonPress && (
-            <Box ml={theme?.dimensions?.gutter} flex={1}>
+            <Box ml={theme?.dimensions.gutter} flex={1}>
               <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
             </Box>
           )}
-          <Box
-            ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme?.dimensions?.buttonPadding : theme?.dimensions?.gutter}
-            mr={theme?.dimensions?.gutter}
-            flex={1}>
+          <Box ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme?.dimensions.buttonPadding : theme?.dimensions.gutter} mr={theme?.dimensions.gutter} flex={1}>
             <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} />
           </Box>
         </Box>
