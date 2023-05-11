@@ -18,7 +18,7 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const { gutter } = theme?.dimensions?
+  const { gutter } = theme?.dimensions
   const dispatch = useAppDispatch()
 
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)

@@ -9,7 +9,7 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { standardMarginBetween } = theme?.dimensions?
+  const { standardMarginBetween } = theme?.dimensions
 
   const alertWrapperProps: BoxProps = {
     mt: standardMarginBetween,

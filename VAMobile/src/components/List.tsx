@@ -47,7 +47,7 @@ export type ListProps = {
  */
 const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
   const theme = useTheme()
-  const { gutter, condensedMarginBetween, standardMarginBetween } = theme?.dimensions?
+  const { gutter, condensedMarginBetween, standardMarginBetween } = theme?.dimensions
 
   const titleProps: TextViewProps = {
     variant: 'TableHeaderBold',

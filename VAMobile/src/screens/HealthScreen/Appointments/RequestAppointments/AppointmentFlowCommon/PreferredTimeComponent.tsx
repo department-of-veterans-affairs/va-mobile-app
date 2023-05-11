@@ -23,7 +23,7 @@ const PreferredTimeComponent: FC<PreferredTimeComponentProps> = ({ selectedTimes
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { gutter, standardMarginBetween, condensedMarginBetween } = theme?.dimensions?
+  const { gutter, standardMarginBetween, condensedMarginBetween } = theme?.dimensions
   const selectedList = new Set(selectedTimes || [])
 
   const timesList = [

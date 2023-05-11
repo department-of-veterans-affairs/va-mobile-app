@@ -17,7 +17,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { request } = route.params
-  const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme?.dimensions?
+  const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme?.dimensions
   const { displayName, description, uploadDate, documents } = request
 
   const hasUploaded = hasUploadedOrReceived(request)

@@ -36,7 +36,7 @@ const AppointmentFlowTextInputWithAlert: FC<AppointmentFlowTextInputWithAlertPro
   ...boxProps
 }) => {
   const theme = useTheme()
-  const { condensedMarginBetween, standardMarginBetween } = theme?.dimensions?
+  const { condensedMarginBetween, standardMarginBetween } = theme?.dimensions
 
   const onEndEditing = () => {
     if (validationFunc) {

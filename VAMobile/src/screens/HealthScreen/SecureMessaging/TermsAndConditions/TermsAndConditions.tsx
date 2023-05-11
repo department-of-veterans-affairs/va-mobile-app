@@ -12,7 +12,7 @@ const TermsAndConditions: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { contentMarginBottom, contentMarginTop, gutter, standardMarginBetween } = theme?.dimensions?
+  const { contentMarginBottom, contentMarginTop, gutter, standardMarginBetween } = theme?.dimensions
 
   return (
     <VAScrollView>

@@ -46,7 +46,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
   const accountNumRef = useRef<TextInput>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
-  const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme?.dimensions?
+  const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme?.dimensions
 
   const [routingNumber, setRoutingNumber] = useState('')
   const [accountNumber, setAccountNumber] = useState('')

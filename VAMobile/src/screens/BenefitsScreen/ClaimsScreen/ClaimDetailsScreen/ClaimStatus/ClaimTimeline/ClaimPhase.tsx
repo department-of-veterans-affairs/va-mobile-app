@@ -95,7 +95,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
-  const { condensedMarginBetween, standardMarginBetween } = theme?.dimensions?
+  const { condensedMarginBetween, standardMarginBetween } = theme?.dimensions
   const { eventsTimeline } = attributes
 
   const phaseLessThanEqualToCurrent = phase <= current

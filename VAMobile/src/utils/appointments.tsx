@@ -202,7 +202,7 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
   const { attributes } = appointment
   const { startDateUtc, timeZone, appointmentType, location, phoneOnly, isCovidVaccine, typeOfCare, healthcareProvider } = attributes
   const textLines: Array<TextLineWithIconProps> = []
-  const { condensedMarginBetween } = theme?.dimensions?
+  const { condensedMarginBetween } = theme?.dimensions
   const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
 
   if (attributes.status === AppointmentStatusConstants.CANCELLED) {

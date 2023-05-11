@@ -34,7 +34,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const noneNoted = tc('noneNoted')
 
-  const { contentMarginTop, contentMarginBottom } = theme?.dimensions?
+  const { contentMarginTop, contentMarginBottom } = theme?.dimensions
 
   const prescription = prescriptionsById[prescriptionId]
   const {
