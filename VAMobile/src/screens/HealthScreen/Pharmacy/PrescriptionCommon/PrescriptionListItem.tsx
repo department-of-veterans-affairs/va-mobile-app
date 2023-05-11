@@ -22,7 +22,6 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { condensedMarginBetween, standardMarginBetween } = theme?.dimensions
   const { instructions, refillRemaining, prescriptionName, prescriptionNumber, facilityName, refillDate } = prescription
   const noneNoted = tc('noneNoted')
 
@@ -36,8 +35,8 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
 
     const instructionsText = instructions || t('prescription.instructions.noneNoted')
     return (
-      <Box mt={condensedMarginBetween}>
-        <TextView variant={'HelperText'} my={condensedMarginBetween} accessibilityLabel={`${instructionsText}.`}>
+      <Box mt={theme?.dimensions?.condensedMarginBetween}>
+        <TextView variant={'HelperText'} my={theme?.dimensions?.condensedMarginBetween} accessibilityLabel={`${instructionsText}.`}>
           {instructionsText}
         </TextView>
       </Box>
@@ -60,13 +59,19 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
         </Box>
       )}
       {renderInstructions()}
-      <TextView accessibilityLabel={`${refillDateText}.`} variant={'HelperText'} mt={hideInstructions ? standardMarginBetween : condensedMarginBetween}>
+      <TextView
+        accessibilityLabel={`${refillDateText}.`}
+        variant={'HelperText'}
+        mt={hideInstructions ? theme?.dimensions?.standardMarginBetween : theme?.dimensions?.condensedMarginBetween}>
         {refillDateText}
       </TextView>
-      <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${t('prescriptions.sort.fillDate')} ${dateA11yLabel}.`}>
+      <TextView variant={'HelperText'} mt={theme?.dimensions?.condensedMarginBetween} accessibilityLabel={`${t('prescriptions.sort.fillDate')} ${dateA11yLabel}.`}>
         {`${t('prescriptions.sort.fillDate')}: ${dateMMddyyyy}`}
       </TextView>
-      <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${t('prescription.vaFacility.a11yLabel')} ${facilityName || noneNoted}.`}>
+      <TextView
+        variant={'HelperText'}
+        mt={theme?.dimensions?.condensedMarginBetween}
+        accessibilityLabel={`${t('prescription.vaFacility.a11yLabel')} ${facilityName || noneNoted}.`}>
         {`${t('prescription.vaFacility')} ${facilityName || noneNoted}`}
       </TextView>
     </Box>

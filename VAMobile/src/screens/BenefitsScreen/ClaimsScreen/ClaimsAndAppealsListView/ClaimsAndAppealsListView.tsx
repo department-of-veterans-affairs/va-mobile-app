@@ -64,8 +64,12 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
       ]
 
       if (featureEnabled('decisionLetters') && attributes.decisionLetterSent) {
-        const margin = theme?.dimensions?.condensedMarginBetween
-        textLines.push({ text: t('claims.decisionLetterAvailable'), textTag: { labelType: LabelTagTypeConstants.tagBlue }, mt: margin, mb: margin })
+        textLines.push({
+          text: t('claims.decisionLetterAvailable'),
+          textTag: { labelType: LabelTagTypeConstants.tagBlue },
+          mt: theme?.dimensions?.condensedMarginBetween,
+          mb: theme?.dimensions?.condensedMarginBetween,
+        })
       }
 
       const position = (currentPage - 1) * perPage + index + 1

@@ -12,11 +12,10 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { standardMarginBetween } = theme?.dimensions
   const launchExternalLink = useExternalLink()
 
   const alertWrapperProps: BoxProps = {
-    my: standardMarginBetween,
+    my: theme?.dimensions?.standardMarginBetween,
   }
 
   const bulletOne = {
@@ -50,15 +49,15 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
       <Box mb={theme?.dimensions?.contentMarginBottom}>
         <TextArea>
           <TextView>{t('prescriptions.notAuthorized.toAccess')}</TextView>
-          <TextView pt={standardMarginBetween}>{t('prescriptions.notAuthorized.toUpgrade')}</TextView>
-          <Box my={standardMarginBetween}>
+          <TextView pt={theme?.dimensions?.standardMarginBetween}>{t('prescriptions.notAuthorized.toUpgrade')}</TextView>
+          <Box my={theme?.dimensions?.standardMarginBetween}>
             <VABulletList listOfText={[bulletOne]} />
             <VABulletList listOfText={[bulletTwo]} />
           </Box>
-          <Box mt={standardMarginBetween}>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>
             <TextView {...linkProps}>{t('notEnrolledSM.learnHowTo')}</TextView>
           </Box>
-          <TextView mt={standardMarginBetween} accessibilityLabel={t('prescriptions.notAuthorized.pleaseCall.a11y')}>
+          <TextView mt={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('prescriptions.notAuthorized.pleaseCall.a11y')}>
             {t('prescriptions.notAuthorized.pleaseCall')}
           </TextView>
           <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />

@@ -54,7 +54,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const { profile, loading, loadingGenderIdentityOptions, needsDataLoad, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>(
     (state) => state.personalInformation,
   )
-  const { gutter, condensedMarginBetween } = theme?.dimensions
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
   const navigateTo = useRouteNavigation()
 
@@ -83,13 +82,13 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   const linkProps: TextViewProps = {
     variant: 'MobileBodyLink',
-    mx: gutter,
-    mt: condensedMarginBetween,
+    mx: theme?.dimensions?.gutter,
+    mt: theme?.dimensions?.condensedMarginBetween,
   }
 
   const dobLinkProps: TextViewProps = {
     variant: 'MobileBodyLink',
-    mb: condensedMarginBetween,
+    mb: theme?.dimensions?.condensedMarginBetween,
   }
 
   const boxProps: BoxProps = {
@@ -125,7 +124,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter}>
+      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={theme?.dimensions?.gutter}>
         {t('contactInformation.editNote')}
       </TextView>
       <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>

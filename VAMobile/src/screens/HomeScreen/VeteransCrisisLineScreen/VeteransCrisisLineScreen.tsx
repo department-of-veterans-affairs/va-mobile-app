@@ -21,7 +21,6 @@ const VeteransCrisisLineScreen: FC = () => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
-  const standardMarginBetween = theme?.dimensions?.standardMarginBetween
 
   const fireAnalyticFn = (): void => {
     setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())
@@ -38,10 +37,10 @@ const VeteransCrisisLineScreen: FC = () => {
         <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
-        <Box mt={standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <TextView variant="MobileBody">{t('veteransCrisisLine.connectWithResponders')}</TextView>
         </Box>
-        <Box mt={standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <ClickForActionLink
             testID="veteransCrisisLineCrisisCallNumberTestID"
             displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
@@ -52,7 +51,7 @@ const VeteransCrisisLineScreen: FC = () => {
             {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
           />
         </Box>
-        <Box mt={standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <ClickForActionLink
             testID="veteransCrisisLineTextNumberTestID"
             displayedText={t('veteransCrisisLine.textNumberDisplayed')}
@@ -63,7 +62,7 @@ const VeteransCrisisLineScreen: FC = () => {
             {...a11yHintProp(t('veteransCrisisLine.textA11yHint'))}
           />
         </Box>
-        <Box mt={standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <ClickForActionLink
             testID="veteransCrisisLineConfidentialChatTestID"
             displayedText={t('veteransCrisisLine.startConfidentialChat')}
@@ -74,7 +73,7 @@ const VeteransCrisisLineScreen: FC = () => {
             {...a11yHintProp(t('veteransCrisisLine.crisisUrlA11yHint'))}
           />
         </Box>
-        <Box mt={standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween / 2}>
             {t('contactVA.tty.body')}
           </TextView>
@@ -88,12 +87,12 @@ const VeteransCrisisLineScreen: FC = () => {
             {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
           />
         </Box>
-        <Box mt={standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('veteransCrisisLine.getMoreResources')}
           </TextView>
         </Box>
-        <Box mt={standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <TextView
             variant="MobileBody"
             color="link"

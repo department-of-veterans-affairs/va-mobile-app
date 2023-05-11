@@ -202,15 +202,14 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
   const { attributes } = appointment
   const { startDateUtc, timeZone, appointmentType, location, phoneOnly, isCovidVaccine, typeOfCare, healthcareProvider } = attributes
   const textLines: Array<TextLineWithIconProps> = []
-  const { condensedMarginBetween } = theme?.dimensions
   const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
 
   if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-    textLines.push({ text: t('appointments.canceled'), textTag: { labelType: LabelTagTypeConstants.tagInactive }, mb: condensedMarginBetween })
+    textLines.push({ text: t('appointments.canceled'), textTag: { labelType: LabelTagTypeConstants.tagInactive }, mb: theme?.dimensions?.condensedMarginBetween })
   } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
-    textLines.push({ text: t('appointments.confirmed'), textTag: { labelType: LabelTagTypeConstants.tagBlue }, mb: condensedMarginBetween })
+    textLines.push({ text: t('appointments.confirmed'), textTag: { labelType: LabelTagTypeConstants.tagBlue }, mb: theme?.dimensions?.condensedMarginBetween })
   } else if (isPendingAppointment) {
-    textLines.push({ text: t('appointments.pending'), textTag: { labelType: LabelTagTypeConstants.tagYellow }, mb: condensedMarginBetween })
+    textLines.push({ text: t('appointments.pending'), textTag: { labelType: LabelTagTypeConstants.tagYellow }, mb: theme?.dimensions?.condensedMarginBetween })
   }
 
   // pending appointments
@@ -229,7 +228,7 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
         textLines.push({
           text: t('common:text.raw', { text: location.name }),
           variant: 'HelperText',
-          mb: condensedMarginBetween,
+          mb: theme?.dimensions?.condensedMarginBetween,
         })
     }
     const youRequestedText = getPendingAppointmentRequestTypeText(appointmentType, t, phoneOnly)
@@ -243,13 +242,13 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
       textLines.push(
         { text: t('upcomingAppointments.covidVaccine'), variant: 'MobileBodyBold', mb: 5 },
         { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
+        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: theme?.dimensions?.condensedMarginBetween },
       )
     } else if (typeOfCare) {
       textLines.push(
         { text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 },
         { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
+        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: theme?.dimensions?.condensedMarginBetween },
       )
     } else {
       textLines.push(
@@ -264,7 +263,7 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
     textLines.push({
       text: t('common:text.raw', { text: healthcareProvider || location.name }),
       variant: 'HelperText',
-      mb: showAppointmentTypeIcon ? condensedMarginBetween : 0,
+      mb: showAppointmentTypeIcon ? theme?.dimensions?.condensedMarginBetween : 0,
     })
 
     if (showAppointmentTypeIcon) {

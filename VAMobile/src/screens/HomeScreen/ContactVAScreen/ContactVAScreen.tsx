@@ -23,8 +23,6 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  const standardMarginBetween = theme?.dimensions?.standardMarginBetween / 2
-
   return (
     <FeatureLandingTemplate backLabel={tc('home')} backLabelOnPress={navigation.goBack} title={tc('contactVA')} titleA11y={tc('contactVA.a11y')}>
       <Box flex={1} mb={theme?.dimensions?.contentMarginBottom}>
@@ -33,7 +31,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
           <TextView variant="MobileBodyBold" accessibilityLabel={t('contactVA.va411.callMy.a11yLabel')} accessibilityRole="header">
             {t('contactVA.va411.callMy')}
           </TextView>
-          <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('contactVA.va411.body.a11yLabel')}>
+          <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween / 2} accessibilityLabel={t('contactVA.va411.body.a11yLabel')}>
             {t('contactVA.va411.body')}
           </TextView>
           <ClickToCallPhoneNumber phone={t('contactVA.va411.numberDisplayed')} />

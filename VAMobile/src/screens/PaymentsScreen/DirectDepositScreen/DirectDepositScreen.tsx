@@ -28,8 +28,6 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
 
-  const { gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme?.dimensions
-
   useFocusEffect(
     useCallback(() => {
       if (ddNotInDowntime) {
@@ -89,7 +87,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   return (
     <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
       <Box>
-        <Box mx={gutter} mt={contentMarginTop}>
+        <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.contentMarginTop}>
           <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
             {t('directDeposit.viewAndEditText')}
           </TextView>
@@ -97,14 +95,14 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
       </Box>
       <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />
       <Box>
-        <Box mx={gutter} mt={condensedMarginBetween}>
+        <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.condensedMarginBetween}>
           <TextView>
             <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
             <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
           </TextView>
         </Box>
       </Box>
-      <Box mx={gutter} mb={contentMarginBottom}>
+      <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.contentMarginBottom}>
         <ClickToCallPhoneNumber phone={t('8008271000.displayText')} />
       </Box>
     </FeatureLandingTemplate>

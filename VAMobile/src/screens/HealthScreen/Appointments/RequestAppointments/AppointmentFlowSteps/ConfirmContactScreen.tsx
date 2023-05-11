@@ -22,7 +22,6 @@ const ConfirmContactScreen: FC<ConfirmContactScreenProps> = ({ navigation }) => 
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { gutter, standardMarginBetween } = theme?.dimensions
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { contact, preferredTimesForPhoneCall } = appointmentFlowFormData
@@ -121,22 +120,22 @@ const ConfirmContactScreen: FC<ConfirmContactScreenProps> = ({ navigation }) => 
       <AppointmentFlowTitleSection title={t('requestAppointment.confirmContactTitle')} extraInformationText={t('requestAppointment.confirmContactAdditionalText')} />
 
       <AppointmentFlowTextInputWithAlert
-        mx={gutter}
+        mx={theme?.dimensions?.gutter}
         inputType={'phone'}
         inputLabel={t('requestAppointment.confirmContactYourPhone')}
         onChange={(e) => {
           onPhoneChange(e, 'phone')
         }}
-        mb={standardMarginBetween}
+        mb={theme?.dimensions?.standardMarginBetween}
         value={phone}
         maxLength={MAX_DIGITS_AFTER_FORMAT}
         validationFunc={validatePhone}
         errorMessage={phoneError}
       />
       <AppointmentFlowTextInputWithAlert
-        mx={gutter}
+        mx={theme?.dimensions?.gutter}
         inputType={'email'}
-        mb={standardMarginBetween}
+        mb={theme?.dimensions?.standardMarginBetween}
         inputLabel={t('requestAppointment.confirmContactYourEmail')}
         onChange={(e) => {
           onEmailChange(e, 'email')

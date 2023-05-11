@@ -12,19 +12,23 @@ const TermsAndConditions: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { contentMarginBottom, contentMarginTop, gutter, standardMarginBetween } = theme?.dimensions
 
   return (
     <VAScrollView>
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
-        <Box {...testIdProps(t('termsAndConditions.title'))} accessibilityRole="header" accessible={true} mx={gutter} mb={standardMarginBetween}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+        <Box
+          {...testIdProps(t('termsAndConditions.title'))}
+          accessibilityRole="header"
+          accessible={true}
+          mx={theme?.dimensions?.gutter}
+          mb={theme?.dimensions?.standardMarginBetween}>
           <TextView variant="BitterBoldHeading">{t('termsAndConditions.title')}</TextView>
         </Box>
         <TextArea>
-          <TextView variant="MobileBody" mb={standardMarginBetween} {...testIdProps(t('termsAndConditions.toAccept.a11yLabel'))}>
+          <TextView variant="MobileBody" mb={theme?.dimensions?.standardMarginBetween} {...testIdProps(t('termsAndConditions.toAccept.a11yLabel'))}>
             {t('termsAndConditions.toAccept')}
           </TextView>
-          <Box mb={standardMarginBetween}>
+          <Box mb={theme?.dimensions?.standardMarginBetween}>
             <ClickForActionLink
               displayedText={t('termsAndConditions.goTo')}
               linkType={LinkTypeOptionsConstants.url}

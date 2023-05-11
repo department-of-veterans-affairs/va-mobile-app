@@ -80,7 +80,6 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   const theme = useTheme()
   const { profile, loading, needsDataLoad } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
-  const { contentMarginBottom, gutter, condensedMarginBetween } = theme?.dimensions
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
   const navigateTo = useRouteNavigation()
@@ -132,8 +131,8 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
 
   const linkProps: TextViewProps = {
     variant: 'MobileBodyLink',
-    mx: gutter,
-    mt: condensedMarginBetween,
+    mx: theme?.dimensions?.gutter,
+    mt: theme?.dimensions?.condensedMarginBetween,
   }
 
   const addressData: Array<addressDataField> = [
@@ -159,7 +158,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')}>
-      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter}>
+      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={theme?.dimensions?.gutter}>
         {t('contactInformation.editNote')}
       </TextView>
       <Pressable onPress={navigateTo('HowWillYou')} accessibilityRole="link" accessible={true}>
@@ -168,7 +167,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
       <AddressSummary addressData={addressData} title={t('contactInformation.addresses')} />
       <DefaultList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone)} title={t('contactInformation.phoneNumbers')} />
       <DefaultList items={getEmailAddressData(profile, t, onEmailAddress)} title={t('contactInformation.contactEmailAddress')} />
-      <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
+      <TextView variant="TableHeaderLabel" mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.condensedMarginBetween} mb={theme?.dimensions?.contentMarginBottom}>
         {t('contactInformation.thisIsEmailWeUseToContactNote')}
       </TextView>
     </FeatureLandingTemplate>

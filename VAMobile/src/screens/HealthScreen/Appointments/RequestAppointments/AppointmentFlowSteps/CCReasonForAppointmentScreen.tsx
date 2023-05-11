@@ -18,7 +18,6 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const { gutter } = theme?.dimensions
   const dispatch = useAppDispatch()
 
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
@@ -46,7 +45,7 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
       />
       <AppointmentFlowTitleSection title={t('requestAppointment.whatReasonForCare')} />
       <AppointmentFlowTextInputWithAlert
-        mx={gutter}
+        mx={theme?.dimensions?.gutter}
         inputType={'none'}
         inputLabel={t('requestAppointment.additionaldetailsTitle')}
         onChange={onSetAdditionalDetails}

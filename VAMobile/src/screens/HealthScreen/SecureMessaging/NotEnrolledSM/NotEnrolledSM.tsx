@@ -14,7 +14,6 @@ const NotEnrolledSM: FC = () => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
   const theme = useTheme()
-  const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme?.dimensions
 
   const bulletOne = {
     text: t('notEnrolledSM.youAreEnrolled'),
@@ -45,34 +44,34 @@ const NotEnrolledSM: FC = () => {
 
   return (
     <VAScrollView>
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
-        <Box {...testIdProps(t('notEnrolledSM.title'))} accessibilityRole="header" accessible={true} mx={theme?.dimensions?.gutter} mb={standardMarginBetween}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+        <Box {...testIdProps(t('notEnrolledSM.title'))} accessibilityRole="header" accessible={true} mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.standardMarginBetween}>
           <TextView variant="BitterBoldHeading">{t('notEnrolledSM.title')}</TextView>
         </Box>
         <Box>
           <TextArea>
-            <TextView variant="MobileBody" mb={standardMarginBetween}>
+            <TextView variant="MobileBody" mb={theme?.dimensions?.standardMarginBetween}>
               {t('notEnrolledSM.youMust')}
             </TextView>
-            <TextView variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
+            <TextView variant="MobileBody" mb={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
               {t('notEnrolledSM.withSM')}
             </TextView>
-            <TextView variant="MobileBody" mb={standardMarginBetween}>
+            <TextView variant="MobileBody" mb={theme?.dimensions?.standardMarginBetween}>
               {t('notEnrolledSM.toUpgrade')}
             </TextView>
-            <Box mb={standardMarginBetween}>
+            <Box mb={theme?.dimensions?.standardMarginBetween}>
               <VABulletList listOfText={[bulletOne]} />
             </Box>
-            <Box mb={standardMarginBetween}>
+            <Box mb={theme?.dimensions?.standardMarginBetween}>
               <VABulletList listOfText={[bulletTwo]} />
             </Box>
-            <Box mb={standardMarginBetween}>
+            <Box mb={theme?.dimensions?.standardMarginBetween}>
               <VABulletList listOfText={[bulletThree]} />
             </Box>
-            <Box mb={standardMarginBetween}>
+            <Box mb={theme?.dimensions?.standardMarginBetween}>
               <TextView {...textViewProps}>{t('notEnrolledSM.learnHowTo')}</TextView>
             </Box>
-            <Box mb={standardMarginBetween}>
+            <Box mb={theme?.dimensions?.standardMarginBetween}>
               <TextView>
                 <TextView variant="MobileBodyBold">{tc('note') + ' '}</TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.doNotUseSM')}</TextView>

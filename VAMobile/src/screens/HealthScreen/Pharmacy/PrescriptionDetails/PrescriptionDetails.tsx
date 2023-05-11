@@ -34,8 +34,6 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const noneNoted = tc('noneNoted')
 
-  const { contentMarginTop, contentMarginBottom } = theme?.dimensions
-
   const prescription = prescriptionsById[prescriptionId]
   const {
     refillStatus,
@@ -154,7 +152,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
     <ChildTemplate backLabel={tc('prescriptions')} backLabelOnPress={navigation.goBack} title={tc('prescriptionDetails')}>
       {getBanner()}
       {getRefillVAHealthButton()}
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         <TextArea>
           <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
           <TextView color={'placeholder'} accessibilityLabel={rxNumberA11yLabel}>

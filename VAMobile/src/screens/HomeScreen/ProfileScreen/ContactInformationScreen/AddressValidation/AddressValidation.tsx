@@ -30,7 +30,6 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   const navigation = useNavigation()
   const theme = useTheme()
 
-  const { standardMarginBetween, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme?.dimensions
   const { validationKey, confirmedSuggestedAddresses } = useSelector<RootState, PersonalInformationState>((storeState) => storeState.personalInformation)
   const [selectedSuggestedAddress, setSelectedSuggestedAddress] = useState<AddressData | SuggestedAddress>()
 
@@ -41,8 +40,8 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   const containerStyles = {
     flex: 0,
     mx: theme?.dimensions?.gutter,
-    mb: contentMarginBottom,
-    mt: standardMarginBetween,
+    mb: theme?.dimensions?.contentMarginBottom,
+    mt: theme?.dimensions?.standardMarginBetween,
   }
 
   useEffect(() => {
@@ -105,7 +104,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
 
   const getAlert = (): ReactNode => {
     return (
-      <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('editAddress.validation.verifyAddress.body.a11yLabel')}>
+      <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('editAddress.validation.verifyAddress.body.a11yLabel')}>
         {t('editAddress.validation.verifyAddress.body')}
       </TextView>
     )
@@ -159,7 +158,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
 
     return (
       <Box>
-        <Box mb={condensedMarginBetween}>
+        <Box mb={theme?.dimensions?.condensedMarginBetween}>
           <VAButton {...useThisAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
         </Box>
         <Box>
@@ -172,7 +171,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1}>
-        <Box mt={contentMarginTop}>
+        <Box mt={theme?.dimensions?.contentMarginTop}>
           <CollapsibleAlert
             border="warning"
             headerText={t('editAddress.validation.verifyAddress.title')}
@@ -180,7 +179,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
             a11yLabel={t('editAddress.validation.verifyAddress.title')}
           />
         </Box>
-        <Box mt={contentMarginTop}>{getSuggestedAddresses()}</Box>
+        <Box mt={theme?.dimensions?.contentMarginTop}>{getSuggestedAddresses()}</Box>
       </Box>
       <Box {...containerStyles}>{getFooterButtons()}</Box>
     </VAScrollView>

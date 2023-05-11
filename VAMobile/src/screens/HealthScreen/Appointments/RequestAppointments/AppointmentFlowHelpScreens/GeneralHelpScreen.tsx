@@ -20,7 +20,6 @@ const GeneralHelpScreen: FC<GeneralHelpScreenProps> = ({ navigation, route }) =>
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { title, description } = route.params
-  const { gutter, contentMarginTop } = theme?.dimensions
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
   const headerStyle = useRequestAppointmentModalHeaderStyles()
 
@@ -32,13 +31,13 @@ const GeneralHelpScreen: FC<GeneralHelpScreenProps> = ({ navigation, route }) =>
 
   return (
     <Box flex={1} backgroundColor={'main'}>
-      <Box mx={gutter}>
-        <TextView variant="MobileBodyBold" mt={contentMarginTop}>
+      <Box mx={theme?.dimensions?.gutter}>
+        <TextView variant="MobileBodyBold" mt={theme?.dimensions?.contentMarginTop}>
           {title}
         </TextView>
         <TextView variant="MobileBody">{description}</TextView>
         <TextView
-          mt={contentMarginTop}
+          mt={theme?.dimensions?.contentMarginTop}
           variant="MobileBodyLink"
           onPress={() => {
             navigation.goBack()

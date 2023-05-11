@@ -8,11 +8,10 @@ import { useTheme } from 'utils/hooks'
 const NoVaccineRecords: FC = () => {
   const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
   const theme = useTheme()
-  const standardMarginBetween = theme?.dimensions?.standardMarginBetween
 
   return (
     <VAScrollView>
-      <Box mt={standardMarginBetween}>
+      <Box mt={theme?.dimensions?.standardMarginBetween}>
         <AlertBox title={t('health:noVaccineRecords.alert.title')} border="informational" text={t('health:noVaccineRecords.alert.text')}>
           <ClickToCallPhoneNumber phone={t('common:8006982411')} displayedText={t('common:8006982411.displayText')} />
         </AlertBox>

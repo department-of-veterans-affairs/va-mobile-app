@@ -14,8 +14,6 @@ const IndividualMessageErrorComponent: FC = () => {
   const theme = useTheme()
   const { tryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
 
-  const { standardMarginBetween } = theme?.dimensions
-
   return (
     <VAScrollView>
       <Box justifyContent="center" mt={theme?.dimensions?.gutter}>
@@ -25,12 +23,12 @@ const IndividualMessageErrorComponent: FC = () => {
           text={tc('errors.callHelpCenter.sorryWithRefresh')}
           border="error">
           <Box>
-            <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
+            <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
               {t('secureMessaging.sendError.ifTheAppStill')}
             </TextView>
             <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />
             {tryAgain && (
-              <Box mt={standardMarginBetween} accessibilityRole="button">
+              <Box mt={theme?.dimensions?.standardMarginBetween} accessibilityRole="button">
                 <VAButton
                   onPress={tryAgain}
                   label={tc('refresh')}

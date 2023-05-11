@@ -15,7 +15,6 @@ const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
-  const standardMarginBetween = theme?.dimensions?.standardMarginBetween
 
   const triggerHaptic = (impact: HapticFeedbackTypes) => {
     const options = {
@@ -88,21 +87,21 @@ const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             iOS and Android
           </TextView>
-          <Box mt={standardMarginBetween}>{multiPlatformButtons}</Box>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>{multiPlatformButtons}</Box>
         </TextArea>
         <Box mt={20} />
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             iOS only
           </TextView>
-          <Box mt={standardMarginBetween}>{iOSButtons}</Box>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>{iOSButtons}</Box>
         </TextArea>
         <Box mt={20} />
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             Android Only
           </TextView>
-          <Box mt={standardMarginBetween}>{androidButtons}</Box>
+          <Box mt={theme?.dimensions?.standardMarginBetween}>{androidButtons}</Box>
         </TextArea>
       </Box>
     </ChildTemplate>

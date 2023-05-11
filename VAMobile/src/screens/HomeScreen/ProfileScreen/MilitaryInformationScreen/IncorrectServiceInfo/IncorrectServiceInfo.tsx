@@ -19,7 +19,6 @@ type IncorrectServiceInfoScreenProps = StackScreenProps<HomeStackParamList, 'Inc
 const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const standardMarginBetween = theme?.dimensions?.standardMarginBetween
 
   useEffect(() => {
     navigation.setOptions({
@@ -37,7 +36,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('militaryInformation.incorrectServiceInfo')}
         </TextView>
-        <TextView {...testIdProps(t('militaryInformation.incorrectServiceInfo.bodyA11yLabel'))} variant="MobileBody" my={standardMarginBetween}>
+        <TextView {...testIdProps(t('militaryInformation.incorrectServiceInfo.bodyA11yLabel'))} variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
           {t('militaryInformation.incorrectServiceInfo.body')}
         </TextView>
         <ClickForActionLink

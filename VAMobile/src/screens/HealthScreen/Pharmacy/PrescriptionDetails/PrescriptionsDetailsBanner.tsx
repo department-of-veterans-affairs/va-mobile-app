@@ -11,8 +11,6 @@ const PrescriptionsDetailsBanner: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
-  const { contentMarginTop, standardMarginBetween } = theme?.dimensions
-
   const getContent = () => {
     const bullets = [
       {
@@ -35,10 +33,10 @@ const PrescriptionsDetailsBanner: FC = () => {
 
     return (
       <>
-        <TextView variant="MobileBody" mb={standardMarginBetween} mt={standardMarginBetween}>
+        <TextView variant="MobileBody" mb={theme?.dimensions?.standardMarginBetween} mt={theme?.dimensions?.standardMarginBetween}>
           {t('prescription.details.banner.body1')}
         </TextView>
-        <TextView variant="MobileBody" mb={standardMarginBetween}>
+        <TextView variant="MobileBody" mb={theme?.dimensions?.standardMarginBetween}>
           {t('prescription.details.banner.body2')}
         </TextView>
         <Box>
@@ -54,7 +52,7 @@ const PrescriptionsDetailsBanner: FC = () => {
   }
   return (
     <VAScrollView>
-      <Box mt={contentMarginTop}>
+      <Box mt={theme?.dimensions?.contentMarginTop}>
         <CollapsibleAlert border="warning" headerText={t('prescription.details.banner.title')} body={getContent()} a11yLabel={t('prescription.details.banner.title')} />
       </Box>
     </VAScrollView>

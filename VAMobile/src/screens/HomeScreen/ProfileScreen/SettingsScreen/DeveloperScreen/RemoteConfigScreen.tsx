@@ -16,7 +16,6 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme?.dimensions
   const currentConfig = getFeatureToggles()
   const [toggles, setToggles] = useState({ ...currentConfig })
   const [override, setOverride] = useState(overrideRemote)
@@ -47,14 +46,14 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
 
   return (
     <FeatureLandingTemplate backLabel={t('debug.title')} backLabelOnPress={navigation.goBack} title={t('remoteConfig.title')}>
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         <Box mt={theme?.dimensions?.condensedMarginBetween}>
           <TextArea>
             <TextView variant="MobileBodyBold">Last fetch status</TextView>
             <TextView>{remoteConfig().lastFetchStatus}</TextView>
           </TextArea>
         </Box>
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter} mt={standardMarginBetween}>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween}>
           Remote Config Values
         </TextView>
         <Box mb={theme?.dimensions?.condensedMarginBetween}>
@@ -73,7 +72,7 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
           })}
         </Box>
 
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter} mt={standardMarginBetween}>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween}>
           App Values
         </TextView>
         <Box mb={theme?.dimensions?.condensedMarginBetween}>
@@ -92,7 +91,7 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
             )
           })}
         </Box>
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter} mt={standardMarginBetween}>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween}>
           Override Toggles
         </TextView>
         {toggleList()}

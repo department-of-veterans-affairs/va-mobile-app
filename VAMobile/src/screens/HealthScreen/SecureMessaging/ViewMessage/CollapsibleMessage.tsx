@@ -29,7 +29,6 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const { t: tCom } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
   const dispatch = useAppDispatch()
-  const { condensedMarginBetween } = theme?.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
   const { loadingAttachments, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
@@ -51,7 +50,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const getExpandedContent = (): ReactNode => {
     return (
       <Box>
-        <Box mt={condensedMarginBetween} accessible={true}>
+        <Box mt={theme?.dimensions?.condensedMarginBetween} accessible={true}>
           <TextView variant="MobileBody" selectable={true}>
             {body}
           </TextView>

@@ -35,8 +35,6 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA
     mb: theme?.dimensions?.contentMarginBottom,
   }
 
-  const standardMarginBetween = theme?.dimensions?.standardMarginBetween
-
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
@@ -46,7 +44,10 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA
           text={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
           border="error">
           <Box>
-            <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
+            <TextView
+              variant="MobileBody"
+              my={theme?.dimensions?.standardMarginBetween}
+              accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
               {errorText ? errorText : t('errors.callHelpCenter.informationLine')}
             </TextView>
             <ClickToCallPhoneNumber
@@ -54,7 +55,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA
               phone={callPhone ? callPhone : t('errors.callHelpCenter.informationLine.number')}
             />
             {onTryAgain && (
-              <Box mt={standardMarginBetween} accessibilityRole="button">
+              <Box mt={theme?.dimensions?.standardMarginBetween} accessibilityRole="button">
                 <VAButton
                   onPress={onTryAgain}
                   label={t('refresh')}

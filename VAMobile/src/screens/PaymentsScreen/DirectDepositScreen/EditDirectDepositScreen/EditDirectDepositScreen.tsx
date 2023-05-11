@@ -46,7 +46,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
   const accountNumRef = useRef<TextInput>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
-  const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme?.dimensions
 
   const [routingNumber, setRoutingNumber] = useState('')
   const [accountNumber, setAccountNumber] = useState('')
@@ -178,14 +177,14 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
         rightButtonText={t('save')}
         onRightButtonPress={() => setOnSaveClicked(true)}
         title={displayTitle}>
-        <Box mt={contentMarginTop} mb={contentMarginBottom}>
+        <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
           {formContainsError && (
-            <Box mb={standardMarginBetween}>
+            <Box mb={theme?.dimensions?.standardMarginBetween}>
               <AlertBox scrollViewRef={scrollViewRef} title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" focusOnError={onSaveClicked} />
             </Box>
           )}
           {invalidRoutingNumberError && (
-            <Box mb={standardMarginBetween}>
+            <Box mb={theme?.dimensions?.standardMarginBetween}>
               <AlertBox
                 scrollViewRef={scrollViewRef}
                 title={t('editDirectDeposit.error')}
@@ -195,15 +194,15 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
               />
             </Box>
           )}
-          <Box mx={gutter} accessible={true}>
+          <Box mx={theme?.dimensions?.gutter} accessible={true}>
             <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
           </Box>
-          <Box mt={condensedMarginBetween}>
+          <Box mt={theme?.dimensions?.condensedMarginBetween}>
             <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
-              <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
+              <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={theme?.dimensions?.gutter} />
             </CollapsibleView>
           </Box>
-          <Box mt={standardMarginBetween} mx={gutter}>
+          <Box mt={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
             <FormWrapper
               fieldsList={formFieldsList}
               onSave={onSave}

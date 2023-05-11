@@ -23,7 +23,6 @@ const SubTypeHelpScreen: FC<SubTypeHelpScreenProps> = ({ navigation, route }) =>
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const { careTypeId } = route.params
-  const { gutter, contentMarginTop } = theme?.dimensions
   const headerStyle = useRequestAppointmentModalHeaderStyles()
 
   useLayoutEffect(() => {
@@ -71,11 +70,11 @@ const SubTypeHelpScreen: FC<SubTypeHelpScreenProps> = ({ navigation, route }) =>
 
   return (
     <Box flex={1} backgroundColor={'main'}>
-      <Box mx={gutter}>
+      <Box mx={theme?.dimensions?.gutter}>
         {getSubTypeHelpContext().map((item, index) => {
           return (
             <Box key={index}>
-              <TextView variant="MobileBodyBold" mt={contentMarginTop} accessibilityRole={'header'}>
+              <TextView variant="MobileBodyBold" mt={theme?.dimensions?.contentMarginTop} accessibilityRole={'header'}>
                 {item.header}
               </TextView>
               <TextView variant="MobileBody">{item.description}</TextView>

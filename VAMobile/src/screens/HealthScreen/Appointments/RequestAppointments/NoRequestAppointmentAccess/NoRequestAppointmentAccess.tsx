@@ -18,7 +18,6 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const { contentMarginBottom, standardMarginBetween } = theme?.dimensions
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
   const navigation = useNavigation()
 
@@ -42,13 +41,13 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
     <ChildTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={t('requestAppointments.launchModalBtnTitle')}>
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox title={t('noRequestAppointmentAccess.title')} border="warning" text={t('noRequestAppointmentAccess.text')}>
-          <Box my={standardMarginBetween}>
+          <Box my={theme?.dimensions?.standardMarginBetween}>
             <VABulletList listOfText={[bulletOne]} />
           </Box>
-          <Box mb={standardMarginBetween}>
+          <Box mb={theme?.dimensions?.standardMarginBetween}>
             <VABulletList listOfText={[bulletTwo]} />
           </Box>
-          <Box mt={standardMarginBetween} accessibilityRole="button" mb={standardMarginBetween}>
+          <Box mt={theme?.dimensions?.standardMarginBetween} accessibilityRole="button" mb={theme?.dimensions?.standardMarginBetween}>
             <VAButton
               onPress={onFacilityLocator}
               label={t('noRequestAppointmentAccess.findFacilityBtnTitle')}

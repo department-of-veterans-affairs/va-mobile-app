@@ -24,7 +24,6 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme?.dimensions
   const dispatch = useAppDispatch()
 
   const vaccine = vaccinesById[vaccineId]
@@ -69,24 +68,24 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
 
   return (
     <FeatureLandingTemplate backLabel={tc('vaVaccines')} backLabelA11y={tc('vaVaccines.a11y')} backLabelOnPress={navigation.goBack} title={tc('details')}>
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBody" mb={standardMarginBetween}>
+          <TextView variant="MobileBody" mb={theme?.dimensions?.standardMarginBetween}>
             {displayDate}
           </TextView>
-          <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
+          <Box accessibilityRole="header" accessible={true} mb={theme?.dimensions?.standardMarginBetween}>
             <TextView variant="BitterBoldHeading">{displayName}</TextView>
           </Box>
           <TextView variant="MobileBodyBold" selectable={true}>
             {t('vaccines.details.typeAndDosage')}
           </TextView>
-          <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
+          <TextView variant="MobileBody" selectable={true} mb={theme?.dimensions?.standardMarginBetween}>
             {vaccine.attributes?.shortDescription || placeHolder}
           </TextView>
           {isCovidVaccine && (
             <>
               <TextView variant="MobileBodyBold">{t('vaccines.details.manufacturer')}</TextView>
-              <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
+              <TextView variant="MobileBody" selectable={true} mb={theme?.dimensions?.standardMarginBetween}>
                 {vaccine.attributes?.manufacturer || placeHolder}
               </TextView>
             </>
@@ -123,7 +122,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
           <Box mt={theme?.dimensions?.standardMarginBetween}>
             <Box>
               <TextView variant="MobileBodyBold">{t('vaccines.details.reaction')}</TextView>
-              <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
+              <TextView variant="MobileBody" selectable={true} mb={theme?.dimensions?.standardMarginBetween}>
                 {vaccine.attributes?.reaction || placeHolder}
               </TextView>
             </Box>

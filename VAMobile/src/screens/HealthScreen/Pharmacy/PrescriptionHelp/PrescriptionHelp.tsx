@@ -15,7 +15,6 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
-  const { gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween, standardMarginBetween } = theme?.dimensions
   const medicationNoIncludedList: Array<VABulletListText> = [
     {
       text: t('prescription.help.item1'),
@@ -38,12 +37,12 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
 
   return (
     <LargePanel title={tc('prescriptionsHelp')} rightButtonText={tc('close')}>
-      <Box mx={gutter} mt={contentMarginTop} mb={contentMarginBottom}>
+      <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
         <TextView variant="MobileBodyBold">{t('prescription.help.header')}</TextView>
-        <TextView mt={condensedMarginBetween} variant="MobileBody">
+        <TextView mt={theme?.dimensions?.condensedMarginBetween} variant="MobileBody">
           {t('prescription.help.listHeader')}
         </TextView>
-        <Box my={standardMarginBetween}>
+        <Box my={theme?.dimensions?.standardMarginBetween}>
           <VABulletList listOfText={medicationNoIncludedList} />
         </Box>
         <TextView variant="MobileBody" accessibilityLabel={t('prescription.help.footer.a11yLabel')}>

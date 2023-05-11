@@ -35,7 +35,6 @@ const DetailsTextSections: FC<DetailsTextSections> = ({
   children,
 }) => {
   const theme = useTheme()
-  const { condensedMarginBetween, standardMarginBetween } = theme?.dimensions
 
   const getTextElements = (headerText: string, valueText?: string | number, headerLabel?: string, valueLabel?: string) => {
     return (
@@ -61,7 +60,7 @@ const DetailsTextSections: FC<DetailsTextSections> = ({
     : {}
 
   return (
-    <Box mt={standardMarginBetween} borderTopWidth={1} borderTopColor={'prescriptionDivider'} pt={standardMarginBetween}>
+    <Box mt={theme?.dimensions?.standardMarginBetween} borderTopWidth={1} borderTopColor={'prescriptionDivider'} pt={theme?.dimensions?.standardMarginBetween}>
       <Box {...containerProps}>
         <Box accessible={hasRightText ? true : false}>{getTextElements(leftSectionTitle, leftSectionValue, leftSectionTitleLabel, leftSectionValueLabel)}</Box>
         {hasRightText && (
@@ -71,7 +70,7 @@ const DetailsTextSections: FC<DetailsTextSections> = ({
         )}
       </Box>
 
-      <Box mt={condensedMarginBetween}>{children}</Box>
+      <Box mt={theme?.dimensions?.condensedMarginBetween}>{children}</Box>
     </Box>
   )
 }
