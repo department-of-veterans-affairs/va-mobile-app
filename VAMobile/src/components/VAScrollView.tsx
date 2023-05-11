@@ -21,9 +21,9 @@ const VAScrollView: FC<VAScrollViewProps> = (props) => {
   const theme = useTheme()
 
   const style = {
-    paddingRight: props.removeInsets ? undefined : insets.right,
-    paddingLeft: props.removeInsets ? undefined : insets.left,
-    backgroundColor: props.backgroundColor ? theme.colors.background[props.backgroundColor as keyof VABackgroundColors] : theme.colors.background.main,
+    paddingRight: props.removeInsets ? undefined : insets?.right,
+    paddingLeft: props.removeInsets ? undefined : insets?.left,
+    backgroundColor: props.backgroundColor ? theme?.colors?.background[props.backgroundColor as keyof VABackgroundColors] : theme?.colors?.background?.main,
   }
 
   // Grow container so short children like loading indicators are vertically centered

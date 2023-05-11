@@ -71,14 +71,14 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    minHeight: theme.dimensions.touchableMinHeight,
+    minHeight: theme?.dimensions?.touchableMinHeight,
   }
 
   const previousProps: PaginationArrowProps = {
     onPress: onPrev,
     testID: 'previous-page',
     a11yHint: t('pagination.previous'),
-    iconProps: { name: 'ArrowLeft', fill: theme.colors.icon.pagination },
+    iconProps: { name: 'ArrowLeft', fill: theme?.colors?.icon?.pagination },
     disabled: page === 1,
   }
 
@@ -86,7 +86,7 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
     onPress: onNext,
     testID: 'next-page',
     a11yHint: t('pagination.next'),
-    iconProps: { name: 'ArrowRight', fill: theme.colors.icon.pagination },
+    iconProps: { name: 'ArrowRight', fill: theme?.colors?.icon?.pagination },
     disabled: page * pageSize >= totalEntries,
   }
   const beginIdx = (page - 1) * pageSize + 1
@@ -103,7 +103,7 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
   return (
     <Box {...boxProps}>
       <PaginationArrow {...previousProps} />
-      <TextView flex={1} variant={'MobileBody'} px={theme.dimensions.buttonPadding} textAlign={'center'}>
+      <TextView flex={1} variant={'MobileBody'} px={theme?.dimensions?.buttonPadding} textAlign={'center'}>
         {t('pagination.info', { beginIdx, endIdx, totalEntries })}
       </TextView>
       <PaginationArrow {...nextProps} />

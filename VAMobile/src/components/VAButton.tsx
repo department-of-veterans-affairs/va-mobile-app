@@ -101,8 +101,8 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
     borderRadius: 5,
     backgroundColor: getBorderOrBackgroundColor(),
     alignItems: 'center',
-    p: theme.dimensions.buttonPadding,
-    borderWidth: hideButtonBorder ? undefined : theme.dimensions.buttonBorderWidth,
+    p: theme?.dimensions?.buttonPadding,
+    borderWidth: hideButtonBorder ? undefined : theme?.dimensions?.buttonBorderWidth,
     borderColor: hideButtonBorder ? undefined : getBorderOrBackgroundColor(),
     minHeight: minHeight || undefined,
   }
@@ -130,7 +130,7 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
         <Box {...boxProps}>
           <Box display="flex" flexDirection="row" alignItems="center">
             {iconProps && (
-              <Box mr={theme.dimensions.textIconMargin}>
+              <Box mr={theme?.dimensions?.textIconMargin}>
                 <VAIcon {...iconProps} />
               </Box>
             )}
@@ -139,7 +139,7 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
         </Box>
       </Pressable>
       {showDisabledText && (
-        <Box my={theme.dimensions.condensedMarginBetween}>
+        <Box my={theme?.dimensions?.condensedMarginBetween}>
           <TextView {...disabledTextProps}>{disabledText}</TextView>
         </Box>
       )}

@@ -13,7 +13,7 @@ const NoMatchInRecords: FC = () => {
 
   const accordionContent = (textID: string, textA11yLabelID: string): ReactNode => {
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={theme?.dimensions?.standardMarginBetween}>
         <Box {...testIdProps(getTranslation(`noMatch.${textA11yLabelID}`, t))}>
           <TextView variant="MobileBody">{getTranslation(`noMatch.${textID}`, t)}</TextView>
         </Box>
@@ -32,13 +32,13 @@ const NoMatchInRecords: FC = () => {
 
   return (
     <VAScrollView {...testIdProps('Health care: No match in records')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <Box mx={theme.dimensions.gutter}>
+      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+        <Box mx={theme?.dimensions?.gutter}>
           <Box {...testIdProps(t('noMatch.titleA11yLabel'))} accessibilityRole="header" accessible={true}>
             <TextView variant="BitterBoldHeading">{t('noMatch.title')}</TextView>
           </Box>
           <Box {...testIdProps(t('noMatch.noMatchA11yLabel'))} accessible={true}>
-            <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+            <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
               {t('noMatch.noMatch')}
             </TextView>
           </Box>
@@ -46,21 +46,21 @@ const NoMatchInRecords: FC = () => {
             <TextView variant="MobileBodyBold">{t('noMatch.whatYouCanDo')}</TextView>
           </Box>
         </Box>
-        <Box mt={theme.dimensions.condensedMarginBetween}>
+        <Box mt={theme?.dimensions?.condensedMarginBetween}>
           <AccordionCollapsible
             header={accordionHeader('currentlyRegisteredPatient', 'currentlyRegisteredPatientA11yLabel')}
             expandedContent={accordionContent('currentlyRegisteredPatientContent', 'currentlyRegisteredPatientContentA11yLabel')}
             testID={t('noMatch.currentlyRegisteredPatientA11yLabel')}
           />
         </Box>
-        <Box mt={theme.dimensions.condensedMarginBetween}>
+        <Box mt={theme?.dimensions?.condensedMarginBetween}>
           <AccordionCollapsible
             header={accordionHeader('enrolledInHealthCare', 'enrolledInHealthCareA11yLabel')}
             expandedContent={accordionContent('enrolledInHealthCareContent', 'enrolledInHealthCareContentA11yLabel')}
             testID={t('noMatch.enrolledInHealthCareA11yLabel')}
           />
         </Box>
-        <Box mt={theme.dimensions.condensedMarginBetween}>
+        <Box mt={theme?.dimensions?.condensedMarginBetween}>
           <AccordionCollapsible
             header={accordionHeader('notEnrolled', 'notEnrolledA11yLabel')}
             expandedContent={accordionContent('notEnrolledContent', 'notEnrolledContentA11yLabel')}

@@ -72,8 +72,8 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
       <Box flexDirection="row">
         <Box flex={1}>{header}</Box>
         {!hideArrow && (
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <VAIcon name={iconName} fill={theme.colors.icon.chevronCollapsible} width={16} height={10} />
+          <Box mt={theme?.dimensions?.condensedMarginBetween}>
+            <VAIcon name={iconName} fill={theme?.colors?.icon?.chevronCollapsible} width={16} height={10} />
           </Box>
         )}
       </Box>
@@ -102,7 +102,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
 
   const boxProps: BoxProps = {
     borderBottomColor: 'primary',
-    borderBottomWidth: theme.dimensions.borderWidth,
+    borderBottomWidth: theme?.dimensions?.borderWidth,
     accessibilityRole: 'tablist',
   }
 

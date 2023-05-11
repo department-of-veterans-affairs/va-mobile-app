@@ -61,9 +61,9 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
     backgroundColor: backGroundColor ? backGroundColor : isPressed ? 'footerButtonActive' : 'navButton',
     borderTopColor: 'footerButton',
     borderTopWidth: 'default',
-    minHeight: theme.dimensions.navBarHeight,
-    py: theme.dimensions.buttonPadding,
-    px: theme.dimensions.cardPadding,
+    minHeight: theme?.dimensions?.navBarHeight,
+    py: theme?.dimensions?.buttonPadding,
+    px: theme?.dimensions?.cardPadding,
   }
 
   return (
@@ -71,11 +71,11 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
       <Pressable {...pressableProps} {...testIdProps(testID || text)} {...a11yHintProp(a11yHint || '')}>
         <Box {...boxProps}>
           {iconProps && (
-            <Box mr={theme.dimensions.condensedMarginBetween}>
+            <Box mr={theme?.dimensions?.condensedMarginBetween}>
               <VAIcon fill={isPressed ? 'footerButtonActive' : 'footerButton'} width={22} height={22} preventScaling={true} {...iconProps} />
             </Box>
           )}
-          <TextView variant="MobileBodyBold" allowFontScaling={false} color={getTextColor()} mr={theme.dimensions.textIconMargin}>
+          <TextView variant="MobileBodyBold" allowFontScaling={false} color={getTextColor()} mr={theme?.dimensions?.textIconMargin}>
             {text}
           </TextView>
         </Box>

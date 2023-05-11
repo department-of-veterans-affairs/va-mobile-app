@@ -220,7 +220,7 @@ export function useIsScreenReaderEnabled(withListener = false): boolean {
         }
       })
     }
-    AccessibilityInfo.isScreenReaderEnabled().then((isScreenReaderEnabled) => {
+    AccessibilityInfo.isScreenReaderEnabled()?.then((isScreenReaderEnabled) => {
       if (isMounted) {
         setScreenReaderEnabled(isScreenReaderEnabled)
       }

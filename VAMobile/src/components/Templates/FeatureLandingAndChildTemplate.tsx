@@ -53,8 +53,8 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
   const [transitionHeaderHeight, setTransitionHeaderHeight] = useState(0)
 
   const fillStyle: ViewStyle = {
-    paddingTop: insets.top,
-    backgroundColor: theme.colors.background.main,
+    paddingTop: insets?.top,
+    backgroundColor: theme?.colors?.background?.main,
     flex: 1,
   }
 
@@ -67,9 +67,9 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
   const subtitleProps: TextViewProps = {
     variant: 'BitterBoldHeading',
     mt: 0,
-    ml: theme.dimensions.condensedMarginBetween,
-    mb: theme.dimensions.standardMarginBetween,
-    mr: theme.dimensions.condensedMarginBetween,
+    ml: theme?.dimensions?.condensedMarginBetween,
+    mb: theme?.dimensions?.standardMarginBetween,
+    mr: theme?.dimensions?.condensedMarginBetween,
     accessible: false,
     importantForAccessibility: 'no-hide-descendants',
   }
@@ -92,14 +92,14 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
    */
   const getTransitionHeaderHeight = (event: LayoutChangeEvent) => {
     // Subtract out bottom padding and 1/3 scaled font line height to closely align transition before subtitle fully disappearing
-    const partialFontHeight = (theme.fontSizes.BitterBoldHeading.lineHeight * fontScale) / 3
-    const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween - partialFontHeight
+    const partialFontHeight = (theme?.fontSizes?.BitterBoldHeading?.lineHeight * fontScale) / 3
+    const height = event.nativeEvent.layout.height - theme?.dimensions?.standardMarginBetween - partialFontHeight
     setTransitionHeaderHeight(height)
   }
 
   return (
     <View style={fillStyle}>
-      <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
+      <StatusBar translucent barStyle={theme?.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme?.colors?.background?.main} />
       <HeaderBanner {...headerProps} />
 
       <>

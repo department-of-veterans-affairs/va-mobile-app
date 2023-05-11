@@ -195,7 +195,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
     if (appointmentsDoNotExist) {
       return (
-        <Box mt={theme.dimensions.standardMarginBetween}>
+        <Box mt={theme?.dimensions?.standardMarginBetween}>
           <NoAppointments subText={t('noAppointments.youDontHaveForDates')} />
         </Box>
       )
@@ -232,7 +232,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   return (
     <Box {...testIdProps('', false, 'Past-appointments-page')}>
-      <Box mx={theme.dimensions.gutter} accessible={true}>
+      <Box mx={theme?.dimensions?.gutter} accessible={true}>
         <VAModalPicker
           selectedValue={datePickerOption.value}
           onSelectionChange={setValuesOnPickerSelect}
@@ -241,7 +241,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         />
       </Box>
       {getAppointmentData()}
-      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme?.dimensions?.paginationTopPadding} mx={theme?.dimensions?.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>

@@ -198,7 +198,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
     return (
       <TouchableWithoutFeedback {...props} {...testIdProps(getTranslation(buttonText || '', t))} {...a11yHintProp(t('pickerLaunchBtn.a11yHint'))}>
-        <Box pr={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerLeftButtonFromTextPadding}>
+        <Box pr={theme?.dimensions?.headerButtonSpacing} height={theme?.dimensions?.headerHeight} justifyContent={'center'} pl={theme?.dimensions?.headerLeftButtonFromTextPadding}>
           <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
             {getTranslation(buttonText || '', t)}
           </TextView>
@@ -211,14 +211,14 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'pickerControls',
-    minHeight: theme.dimensions.touchableMinHeight,
-    py: theme.dimensions.buttonPadding,
-    px: theme.dimensions.gutter,
-    ml: insets.left,
-    mr: insets.right,
+    minHeight: theme?.dimensions?.touchableMinHeight,
+    py: theme?.dimensions?.buttonPadding,
+    px: theme?.dimensions?.gutter,
+    ml: insets?.left,
+    mr: insets?.right,
   }
 
-  const topPadding = insets.top + 60
+  const topPadding = insets?.top + 60
 
   const cancelLabel = t('cancel')
   const confirmLabel = getTranslation(confirmBtnText || 'common:done', t)
@@ -256,7 +256,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
         }}>
         <Box flex={1} flexDirection="column" accessibilityViewIsModal={true}>
           <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={topPadding} />
-          <Box backgroundColor="list" pb={insets.bottom} flexShrink={1}>
+          <Box backgroundColor="list" pb={insets?.bottom} flexShrink={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancel} {...cancelButtonProps}>
                 <TextView {...commonButtonProps}>{cancelLabel}</TextView>

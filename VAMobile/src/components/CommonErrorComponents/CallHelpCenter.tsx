@@ -31,11 +31,11 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA
   }
 
   const containerStyles = {
-    mt: theme.dimensions.contentMarginTop,
-    mb: theme.dimensions.contentMarginBottom,
+    mt: theme?.dimensions?.contentMarginTop,
+    mb: theme?.dimensions?.contentMarginBottom,
   }
 
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
+  const standardMarginBetween = theme?.dimensions?.standardMarginBetween
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>

@@ -156,7 +156,18 @@ context('AppointmentsScreen', () => {
     describe('when pastCcServiceError exist for past appointments', () => {
       describe('while on past appointments tab', () => {
         it('should display an AlertBox specifying some appointments are not available', async () => {
-          initializeTestInstance(undefined, { pastCcServiceError: true })
+          await waitFor(() => {
+            when(api.get as jest.Mock)
+              .calledWith(`/v0/appointments`, expect.anything())
+              .mockResolvedValue({
+                data: [],
+                meta: {
+                  errors: [{ source: AppointmentsErrorServiceTypesConstants.COMMUNITY_CARE }],
+                },
+              })
+            initializeTestInstance(undefined, { pastCcServiceError: true })
+          })
+          
           await waitFor(() => {
             const pastButton = testInstance.findAllByType(TouchableOpacity)[1]
             pastButton.props.onPress()

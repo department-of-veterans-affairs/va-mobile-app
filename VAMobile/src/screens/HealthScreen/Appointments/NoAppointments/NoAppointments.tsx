@@ -19,14 +19,14 @@ export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLa
   const theme = useTheme()
 
   return (
-    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('Appointments: No-appointments-page')} alignItems="center">
+    <Box flex={1} justifyContent="center" mx={theme?.dimensions?.gutter} {...testIdProps('Appointments: No-appointments-page')} alignItems="center">
       <Box {...testIdProps(t('noAppointments.youDontHave'))} accessibilityRole="header" accessible={true}>
         <TextView variant="MobileBodyBold" textAlign="center">
           {t('noAppointments.youDontHave')}
         </TextView>
       </Box>
       <Box {...testIdProps(subTextA11yLabel || subText)} accessible={true}>
-        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" textAlign="center" my={theme?.dimensions?.standardMarginBetween}>
           {subText}
         </TextView>
       </Box>

@@ -66,9 +66,9 @@ const LoadingComponent: FC<LoadingComponentProps> = ({ text, a11yLabel, justTheS
         </Box>
       ) : (
         <VAScrollView contentContainerStyle={scrollStyles}>
-          <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+          <Box justifyContent="center" mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} alignItems={'center'}>
             {getSpinner()}
-            <Box mt={theme.dimensions.condensedMarginBetween}>
+            <Box mt={theme?.dimensions?.condensedMarginBetween}>
               <TextView textAlign={'center'} variant="MobileBody" accessibilityLabel={a11yLabel}>
                 {text}
               </TextView>

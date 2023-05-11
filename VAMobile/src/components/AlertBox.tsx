@@ -45,7 +45,7 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, sc
 
   const boxProps: BoxProps = {
     backgroundColor: 'alertBox',
-    borderLeftWidth: theme.dimensions.alertBorderWidth,
+    borderLeftWidth: theme?.dimensions?.alertBorderWidth,
     borderLeftColor: border,
     py: boxPadding,
     px: boxPadding,
@@ -65,7 +65,7 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, sc
     <Box {...boxProps}>
       {!!title && (
         <View ref={viewRef} accessible={true} accessibilityLabel={titleA11yLabel || title} accessibilityRole={titleAccessibilityRole}>
-          <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.standardMarginBetween : 0}>
+          <TextView variant="MobileBodyBold" mb={text ? theme?.dimensions?.standardMarginBetween : 0}>
             {title}
           </TextView>
         </View>

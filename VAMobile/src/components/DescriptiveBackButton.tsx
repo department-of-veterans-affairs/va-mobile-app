@@ -39,12 +39,12 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label,
       <Box
         display="flex"
         flexDirection="row"
-        ml={theme.dimensions.headerButtonSpacing}
-        mt={theme.dimensions.buttonPadding}
-        height={theme.dimensions.headerHeight} // Uniform height ensures proper screen reader order in header
+        ml={theme?.dimensions?.headerButtonSpacing}
+        mt={theme?.dimensions?.buttonPadding}
+        height={theme?.dimensions?.headerHeight} // Uniform height ensures proper screen reader order in header
         alignItems={'center'}>
-        <VAIcon mt={1} name={'ArrowLeft'} fill={theme.colors.icon.link} height={13} />
-        <TextView variant="DescriptiveBackButton" color="descriptiveBackButton" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
+        <VAIcon mt={1} name={'ArrowLeft'} fill={theme?.colors?.icon?.link} height={13} />
+        <TextView variant="DescriptiveBackButton" color="descriptiveBackButton" ml={theme?.dimensions?.textIconMargin} allowFontScaling={false} accessible={false}>
           {label}
         </TextView>
       </Box>

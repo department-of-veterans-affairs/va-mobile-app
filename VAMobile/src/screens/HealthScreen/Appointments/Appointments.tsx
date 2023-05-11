@@ -97,7 +97,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     const upcomingAppointmentError = selectedTab === t('appointmentsTab.upcoming') && (upcomingVaServiceError || upcomingCcServiceError)
     if (pastAppointmentError || upcomingAppointmentError) {
       return (
-        <Box mb={theme.dimensions.standardMarginBetween}>
+        <Box mb={theme?.dimensions?.standardMarginBetween}>
           <AlertBox
             scrollViewRef={scrollViewRef}
             title={t('appointments.appointmentsStatusSomeUnavailable')}
@@ -132,14 +132,14 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
       scrollViewProps={scrollViewProps}
       footerContent={requestAppointmentsFooter}>
       <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+        <Box mb={theme?.dimensions?.standardMarginBetween} mt={theme?.dimensions?.contentMarginTop} mx={theme?.dimensions?.gutter}>
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}
-        <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
+        <Box mb={hasCernerFacilities ? theme?.dimensions?.standardMarginBetween : 0}>
           <CernerAlert />
         </Box>
-        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+        <Box flex={1} mb={theme?.dimensions?.contentMarginBottom}>
           {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
           {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
         </Box>
