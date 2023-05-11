@@ -211,7 +211,7 @@ context('ReplyMessage', () => {
       await waitFor(() => {
         navHeaderSpy.save.props.onSave()
 
-        testInstance.findByType(FormWrapper)?.props?.onSave(true)
+        testInstance.findByType(FormWrapper).props.onSave(true)
       })
     })
     describe('when a required field is not filled', () => {
@@ -233,7 +233,7 @@ context('ReplyMessage', () => {
     describe('when form fields are filled out correctly and saved', () => {
       it('should call saveDraft', async () => {
         await waitFor(() => {
-          testInstance.findByType(FormWrapper)?.props?.onSave(true)
+          testInstance.findByType(FormWrapper).props.onSave(true)
           expect(saveDraft).toHaveBeenCalled()
         })
       })
@@ -245,7 +245,7 @@ context('ReplyMessage', () => {
       beforeEach(async () => {
         await waitFor(() => {
           act(() => {
-            testInstance.findByProps({ label: 'Send' })?.props?.onPress()
+            testInstance.findByProps({ label: 'Send' }).props.onPress()
           })
         })
       })
