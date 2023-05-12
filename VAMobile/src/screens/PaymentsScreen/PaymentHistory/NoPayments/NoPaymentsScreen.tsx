@@ -17,7 +17,7 @@ const NoPaymentsScreen: FC = () => {
           <TextView variant="MobileBodyBold" accessibilityLabel={t('payments.noPayments.title.a11yLabel')}>
             {t('payments.noPayments.title')}
           </TextView>
-          <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.noPayments.body.1.a11yLabel')}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true} accessibilityLabel={t('payments.noPayments.body.1.a11yLabel')}>
             {t('payments.noPayments.body.1')}
           </TextView>
           <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.missingOrNoPayments.body.1.a11yLabel')}>
