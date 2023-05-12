@@ -36,7 +36,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('militaryInformation.incorrectServiceInfo')}
         </TextView>
-        <TextView accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.1')} variant="MobileBody" paragraphSpacing={true}>
+        <TextView accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.1')} variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
           {t('militaryInformation.incorrectServiceInfo.body.1')}
         </TextView>
         <TextView accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.2')} variant="MobileBody" paragraphSpacing={true}>
