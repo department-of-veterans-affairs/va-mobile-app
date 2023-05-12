@@ -151,7 +151,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('secureMessaging.attachments.fileAttachment')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
           {t('secureMessaging.attachments.youMayAttach')} {t('secureMessaging.attachments.acceptedFileTypes')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('secureMessaging.attachments.sizeRequirements.A11yLabel')}>
