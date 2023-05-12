@@ -13,10 +13,12 @@ import { useTheme } from 'utils/hooks'
 export type DowntimeErrorProps = {
   /**The screen id for the screen that has the errors*/
   screenID: ScreenIDTypes
+  /**Override the feature name in the event that a feature happens to share the same api error(ex:contact information and personal information) */
+  overrideFeatureName?: string
 }
 
 /**Common component to show an alert when the service is down*/
-const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
+const DowntimeError: FC<DowntimeErrorProps> = ({ screenID, overrideFeatureName }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -30,7 +32,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   }
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const feature = DowntimeScreenIDToFeature[screenID]
-  const featureName = downtimeWindowsByFeature[feature]?.featureName
+  const featureName = overrideFeatureName ? overrideFeatureName : downtimeWindowsByFeature[feature]?.featureName
   const endTime = downtimeWindowsByFeature[feature]?.endTime.toFormat('fff')
 
   return (
