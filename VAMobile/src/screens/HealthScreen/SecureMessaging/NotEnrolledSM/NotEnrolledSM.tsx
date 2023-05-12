@@ -14,7 +14,7 @@ const NotEnrolledSM: FC = () => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
   const theme = useTheme()
-  const { contentMarginBottom, contentMarginTop } = theme.dimensions
+  const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme.dimensions
 
   const bulletOne = {
     text: t('notEnrolledSM.youAreEnrolled'),
@@ -46,7 +46,7 @@ const NotEnrolledSM: FC = () => {
   return (
     <VAScrollView>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
-        <Box {...testIdProps(t('notEnrolledSM.title'))} accessibilityRole="header" accessible={true} mx={theme.dimensions.gutter}>
+        <Box {...testIdProps(t('notEnrolledSM.title'))} accessibilityRole="header" accessible={true} mx={theme.dimensions.gutter} mb={standardMarginBetween}>
           <TextView variant="BitterBoldHeading">{t('notEnrolledSM.title')}</TextView>
         </Box>
         <Box>
@@ -60,9 +60,7 @@ const NotEnrolledSM: FC = () => {
             <TextView variant="MobileBody" paragraphSpacing={true}>
               {t('notEnrolledSM.toUpgrade')}
             </TextView>
-            <VABulletList listOfText={[bulletOne]} />
-            <VABulletList listOfText={[bulletTwo]} />
-            <VABulletList listOfText={[bulletThree]} />
+            <VABulletList listOfText={[bulletOne, bulletTwo, bulletThree]} paragraphSpacing={true}/>
             <TextView {...textViewProps} paragraphSpacing={true}>
               {t('notEnrolledSM.learnHowTo')}
             </TextView>
