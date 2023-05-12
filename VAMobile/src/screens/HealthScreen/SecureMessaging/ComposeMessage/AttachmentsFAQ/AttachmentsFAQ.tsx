@@ -35,7 +35,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
         <Box accessible={true} accessibilityRole={'header'}>
           <TextView variant={'MobileBodyBold'}>{t('secureMessaging.attachments.FAQ.howCanIAttach')}</TextView>
         </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}></Box>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <VABulletList
             listOfText={[
               t('secureMessaging.attachments.FAQ.howCanI.bullet1'),
