@@ -22,6 +22,7 @@ import {
   TextArea,
   TextView,
   VAButton,
+  VAIconProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import {
@@ -402,18 +403,26 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     )
   }
 
+  const rightVAIconProps: VAIconProps = { name: 'Save' }
+
+  const rightButtonProps = noProviderError
+    ? undefined
+    : {
+        rightButtonText: tc('save'),
+        rightVAIconProps: rightVAIconProps,
+        onRightButtonPress: () => {
+          setOnSaveDraftClicked(true)
+          setOnSendClicked(true)
+        },
+      }
+
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
       title={t('secureMessaging.startNewMessage')}
       leftButtonText={tc('cancel')}
       onLeftButtonPress={navigation.goBack}
-      rightButtonText={tc('save')}
-      rightVAIconProps={{ name: 'Save' }}
-      onRightButtonPress={() => {
-        setOnSaveDraftClicked(true)
-        setOnSendClicked(true)
-      }}
+      {...rightButtonProps}
       showCrisisLineCta={true}>
       <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
     </FullScreenSubtask>
