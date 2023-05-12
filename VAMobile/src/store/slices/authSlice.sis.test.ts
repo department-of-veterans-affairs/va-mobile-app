@@ -573,6 +573,7 @@ context('authAction SIS', () => {
     })
 
     it('should set the keychain and preference when transitioning to true', async () => {
+      when(mockFeatureEnabled).calledWith('SIS').mockReturnValue(true)
       let storeState = store.getState().auth
       console.log(storeState)
       expect(storeState.loggedIn).toBeTruthy()
