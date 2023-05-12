@@ -60,7 +60,7 @@ const NotEnrolledSM: FC = () => {
             <TextView variant="MobileBody" paragraphSpacing={true}>
               {t('notEnrolledSM.toUpgrade')}
             </TextView>
-            <VABulletList listOfText={[bulletOne, bulletTwo, bulletThree]} paragraphSpacing={true}/>
+            <VABulletList listOfText={[bulletOne, bulletTwo, bulletThree]} paragraphSpacing={true} />
             <TextView {...textViewProps} paragraphSpacing={true}>
               {t('notEnrolledSM.learnHowTo')}
             </TextView>
