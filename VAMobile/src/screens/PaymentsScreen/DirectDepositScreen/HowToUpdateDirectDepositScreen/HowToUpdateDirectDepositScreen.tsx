@@ -36,7 +36,7 @@ const HowToUpdateDirectDepositScreen: FC<HowToUpdateDirectDepositScreenProps> = 
             <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
               {t('howToUpdateDirectDeposit.card.title')}
             </TextView>
-            <TextView variant="MobileBody" paragraphSpacing={true}>
+            <TextView mt={standardMarginBetween} variant="MobileBody" paragraphSpacing={true}>
               {t('howToUpdateDirectDeposit.card.callUs')}
             </TextView>
             <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />
