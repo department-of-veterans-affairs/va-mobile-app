@@ -27,7 +27,7 @@ You will need to delete the expiring profile and certificates from the Developer
 #### [Certificate](https://developer.apple.com/account/resources/certificates/list)
 | NAME                                   | TYPE         | PLATFORM | CREATED BY     | EXPIRATION |
 |----------------------------------------|--------------|----------|----------------|------------|
-| US Department of Veterans Affairs (VA) | Distribution | All      | Patrick Saxton | 07/13/2023 |
+| US Department of Veterans Affairs (VA) | Distribution | All      | UserName | 07/13/2023 |
 
 #### [Provisioning Profiles](https://developer.apple.com/account/resources/profiles/list)
 | NAME                              | PLATFORM | TYPE      | EXPIRATION |
