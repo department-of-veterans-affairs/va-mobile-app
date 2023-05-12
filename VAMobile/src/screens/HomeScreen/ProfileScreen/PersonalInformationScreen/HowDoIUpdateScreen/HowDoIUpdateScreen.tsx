@@ -73,7 +73,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('howDoIUpdate.name.title')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
           {t('howDoIUpdate.name.legalName')}
         </TextView>
         <TextView {...linkNameProps}>{t('howDoIUpdate.learnToChangeLegalName')}</TextView>
@@ -91,7 +91,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('howDoIUpdate.dateOfBirth.title')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
           {t('howDoIUpdate.dateOfBirth.body')}
         </TextView>
         {renderVAMedicalCenterSection()}
