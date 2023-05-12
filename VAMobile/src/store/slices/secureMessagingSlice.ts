@@ -512,8 +512,7 @@ export const sendMessage =
       await registerReviewEvent()
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
       dispatch(dispatchFinishSendMessage(undefined))
-      showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
-      // showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
+      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `sendMessage: ${secureMessagingNonFatalErrorString}`)
