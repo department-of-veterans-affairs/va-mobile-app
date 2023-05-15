@@ -732,6 +732,7 @@
   "prescriptions.refill.RequestRefillButtonTitle": "Request refill",
   "prescriptions.refill.RequestRefillButtonTitle_plural": "Request refills",
   "prescriptions.resetAnnouncement": "Successfully reset to {{ value }}",
+  "prescriptions.resetAnnouncementWithDirection": "Successfully reset to {{ value }}, sorted {{ direction }}",
   "editAddress.address": "{{ addressLines }}\n{{ city }}, {{ state }}, {{ postCode }}",
   "editAddress.alertError": "Please check your mailing address",
   "editAddress.city": "City",

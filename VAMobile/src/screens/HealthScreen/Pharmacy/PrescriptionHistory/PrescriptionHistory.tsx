@@ -406,10 +406,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     setTimeout(() => AccessibilityInfo.announceForAccessibility(announcement), announcementDelay)
   }
 
-  const sortDisplayValue = getDisplayForValue(sortByOptions, sortByToUse)
-  const sortButtonText = `${t('prescriptions.sort.by')}: ${sortDisplayValue}`
-  const sortAnnouncementText = tc('prescriptions.resetAnnouncement', { value: sortDisplayValue })
   const sortOrderRadioOptions = getSortOrderOptionsForSortBy(selectedSortBy, t)
+
+  const sortButtonText = `${t('prescriptions.sort.by')}: ${getDisplayForValue(sortByOptions, sortByToUse)}`
 
   const sortProps: RadioGroupModalProps = {
     groups: [
@@ -444,7 +443,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     onUpperRightAction: () => {
       setSelectedSortBy(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
       setSelectedSortOn(ASCENDING)
-      announceAfterDelay(sortAnnouncementText)
+      const value = getDisplayForValue(sortByOptions, PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
+      const direction = t('prescriptions.sort.atoz.a11y')
+      announceAfterDelay(tc('prescriptions.resetAnnouncementWithDirection', { value, direction }))
     },
     onCancel: () => {
       setSelectedSortBy(sortByToUse)
@@ -464,9 +465,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
   })
 
-  const filterDisplayValue = getDisplayForValue(filterOptionsForTab, filterToUse)
-  const filterButtonText = `${t('prescription.filter.by')}: ${filterDisplayValue}`
-  const filterAnnouncementText = tc('prescriptions.resetAnnouncement', { value: filterDisplayValue })
+  const filterButtonText = `${t('prescription.filter.by')}: ${getDisplayForValue(filterOptionsForTab, filterToUse)}`
 
   const filterProps: RadioGroupModalProps = {
     groups: [
@@ -491,7 +490,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     },
     onUpperRightAction: () => {
       setSelectedFilter('')
-      announceAfterDelay(filterAnnouncementText)
+      announceAfterDelay(tc('prescriptions.resetAnnouncement', { value: getDisplayForValue(filterOptionsForTab, '') }))
     },
     onCancel: () => {
       setSelectedFilter(filterToUse)
