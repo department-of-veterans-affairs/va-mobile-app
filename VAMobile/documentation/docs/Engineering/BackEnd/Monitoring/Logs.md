@@ -1,81 +1,26 @@
 # Logs
 
-This section goes over the process of how to access, search, and parse logs on Grafana
+This section goes over the process of how to access, search, and parse logs on Datadog
 
 ## How to Access and Search Logs
 
-The Grafana UI is used as the visualization interface for logs aggregated by Loki.
+Locate the [Logs section](https://vagov.ddog-gov.com/logs?query=&cols=host%2Cservice&index=%2A&messageDisplay=inline&stream_sort=desc&viz=stream&from_ts=1684258977199&to_ts=1684259877199&live=true) in the menu on the left, and select search. From this screen, you should be able to find all logs that you may need. A few things to keep note of:
+- At the top, DataDog defaults to searching for logs in the past 15 minutes. This may not be a wide enough window for you to find what you want
+- The "Search for" section does not allow you to search something as simple as `mobile` to find all mobile endpoints. It is best to select the `facets` you'd like from the menu on the left
+- When selecting options from the fields on the left, clicking the check box *unchecks* that options, clicking the text of the option itself *only* selects that option
+- You can customize the table columns for the results. Clicking the dropdown arrow next to a column header will show options to replace the column, or insert one to the left or right. Depending on the type of search, it may be helpful to add a column that for `@http.url_details.path`.
+- You will most likely want to select `vets-api` under the source option
+- The options on the left are populated by options DataDog found in the current timeframe. So, if you're looking for logs on an endpoint that is not used often, you may not find it in the options on the left until you change the time frame you're searching for in the top right corner
 
-To view logs, Log in to the [VFS Grafana instance](http://grafana.vfs.va.gov/?orgId=1) 🧦 ([Socks](../Testing/Prerequisites.md)
- needed; use GitHub account for auth; see image below)
 
-![](../../../../static/img/backend/grafana-login.png)
+## Example
 
-Go to Explore (the little compass icon on the left-hand navigation; see image below)
+Let's say we wanted to check for any errors in the past week for the endpoint `/mobile/v1/user`
 
-![](../../../../static/img/backend/grafana-explore.png)
+1. In the time select at the top right, change 15 Minutes to Past 7 days
+2. In the `URL Path` section, search for `/mobile/v1/user` and click on the word itself so that all other options are unchecked
+3. Click on any specific logs you want to view
 
-Select the Loki environment that you're interested in (from the drop-down near the top-left of the page; see image below)
-
-![](../../../../static/img/backend/grafana-loki.png)
-
-You'll now see a query interface for searching and analyzing log files:
-
-![](../../../../static/img/backend/grafana-loki-query.png)
-
-In the Log browser, enter a query  starting with an app label to view all logs for a given app.
-
-Many developers will be interested in vets-api logs:
-1. To use this use case as an example, click "Log browser"
-2. Make sure "app" is highlighted
-3. Scroll down and highlight "vets-api-server" or "vets-api-worker" depending on your need
-4. Click "Show logs"
-
-![](../../../../static/img/backend/grafana-loki-query-steps.png)
-
-Note: The query can be updated to include two labels such as the app and specific log file.
-```
-{app="vets-api-server", filename=~".+json.log"}
-```
-
-After selecting the labels for the data you are looking for, modify the query in the browser to include the text or the regex of the data you are looking for and then run the query. 
-
-A basic query example that searches for errors within the logs:
-```
-{ app=~"vets-api-server", filename=~".+json.log" } |~ "error"`
-```
-
-![](../../../../static/img/backend/grafana-loki-query-error.png)
-
-If searching for data that has a specific key and value, the data can be searched using regex. In the example below, The query is looking for log lines that contain a key of "message" with a value of "Mobile Request".
-
-![](../../../../static/img/backend/grafana-loki-query-mobile-request.png)
-
-##  How to Parse Logs
-
-LogQL can be used to parse data out of certain log formats such as JSON or traditional Apache log formats. To parse logs, you need to enter a query of the data that you are looking for, then include the regex expression to remove the prefixed timestamp, container name, and pipe symbol. Once you use regex to extract the JSON blob to an object, you can then parse it with the built-in JSON parser.
-
-The regex expression that needs to be included in the to extract JSON to an object is:
-```
-| regexp "(?P<time>\\d\\d:\\d\\d:\\d\\d) (?P<process_name>\\w+.\\d) \\s+ (\\|) (?P<json>.+)"
-```
-
-To parse JSON blob, also include in the query:
-```
-| line_format "{{.json}}" | json
-```
-
-The query end-result will look like:
-```
-{app="vets-api-server", filename=~".+json.log"} |~ "error" | regexp "(?P<time>\\d\\d:\\d\\d:\\d\\d) (?P<process_name>\\w+.\\d) \\s+ (\\|) (?P<json>.+)" | line_format "{{.json}}" | json
-```
-
-Where "error" can be replaced with any data that you are searching for within the logs.
-
-![](../../../../static/img/backend/grafana-loki-complex-example.png)
-
-In the resulting logs, click on one of the logs to see additional details, including extracted fields and other labels that are tagged onto that specific message. Within the list of labels will be the json label that contains the json blob.
-
-The contents of the json are then listed under "detected fields".
+There are a lot of options for visualizations that you can play around with that may be helpful to your unique searching. 
 
 ![](../../../../static/img/backend/grafana-loki-detected-fields.png)
