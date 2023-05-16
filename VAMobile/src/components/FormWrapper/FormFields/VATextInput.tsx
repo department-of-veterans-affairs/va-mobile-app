@@ -70,9 +70,9 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const [selection, setSelection] = useState<{ start: number; end?: number } | undefined>(setInputCursorToBeginning ? startTextPositon : undefined)
   const ref = useRef<TextInput>(null)
 
-  useEffect(() => {
-    updateInputErrorMessage(isFocused, isRequiredField, error, setError, value, focusUpdated, setFocusUpdated, validationList)
-  }, [isFocused, labelKey, value, error, setError, isRequiredField, t, focusUpdated, validationList])
+  // useEffect(() => {
+  //   updateInputErrorMessage(isFocused, isRequiredField, error, setError, value, focusUpdated, setFocusUpdated, validationList)
+  // }, [isFocused, labelKey, value, error, setError, isRequiredField, t, focusUpdated, validationList])
 
   let textContentType: 'emailAddress' | 'telephoneNumber' | 'none' = 'none'
   let keyboardType: KeyboardTypeOptions = 'default'

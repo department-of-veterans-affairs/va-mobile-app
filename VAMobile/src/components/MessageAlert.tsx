@@ -15,22 +15,32 @@ export type MessageAlertProps = {
   saveDraftAttempted?: boolean
   /** optional ref for parent scroll view */
   scrollViewRef?: RefObject<ScrollView>
+  errorList?: { [key: number]: string }
 }
 
 /**Common component to show a message alert when saving or sending a secure message */
-const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, scrollViewRef, focusOnError }) => {
+const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, scrollViewRef, focusOnError, errorList }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
 
   let title
   let text
 
+  let errorString = ''
+  if (errorList) {
+    for (const key in errorList) {
+      errorString += `• ${errorList[key as unknown as number]}\n`
+    }
+  }
+
   if (hasValidationError) {
     title = saveDraftAttempted ? t('secureMessaging.formMessage.saveDraft.validation.title') : t('secureMessaging.formMessage.checkYourMessage')
-    text = saveDraftAttempted ? t('secureMessaging.formMessage.saveDraft.validation.text') : undefined
+    text = saveDraftAttempted ? `${t('secureMessaging.formMessage.saveDraft.validation.text')}${errorString}` : errorString
   } else {
     return null
   }
+
+  errorList && console.log(errorList)
 
   return (
     <Box mb={theme.dimensions.standardMarginBetween}>

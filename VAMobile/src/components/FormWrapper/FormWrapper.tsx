@@ -68,10 +68,20 @@ type FormWrapperProps<T> = {
   resetErrors?: boolean
   /** optional callback to set the resetErrors prop. must be set when resetErrors is set. */
   setResetErrors?: (value: boolean) => void
+  setErrorList?: (errors: { [key: number]: string }) => void
 }
 
 /**A common component to wrap forms in that handles error states of each field*/
-const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors, setResetErrors, onSaveClicked, setOnSaveClicked }: FormWrapperProps<T>): ReactElement => {
+const FormWrapper = <T,>({
+  fieldsList,
+  onSave,
+  setFormContainsError,
+  resetErrors,
+  setResetErrors,
+  onSaveClicked,
+  setOnSaveClicked,
+  setErrorList,
+}: FormWrapperProps<T>): ReactElement => {
   const theme = useTheme()
   const [errors, setErrors] = useState<{ [key: number]: string }>({})
 
@@ -88,8 +98,9 @@ const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors
       setErrors({})
       updateFormContainsErrors(false)
       setResetErrors && setResetErrors(false)
+      setErrorList && setErrorList([])
     }
-  }, [resetErrors, setErrors, updateFormContainsErrors, setResetErrors])
+  }, [resetErrors, setErrors, updateFormContainsErrors, setResetErrors, setErrorList])
 
   // when onSaveClicked is true, it checks if all required fields are filled and if the validation functions pass. if true,
   // calls onSave callback, otherwise calls setErrorsOnFormSaveFailure to update the error messages for the required
@@ -133,6 +144,8 @@ const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors
       const updatedErrorsObj = { ...errors, ...errorsFromValidationFunctions, ...updatedErrors }
       if (!_.isEqual(errors, updatedErrorsObj)) {
         setErrors(updatedErrorsObj)
+        setErrorList && setErrorList(updatedErrorsObj)
+        console.log(updatedErrorsObj)
       }
     }
 
@@ -172,7 +185,7 @@ const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors
       updateFormContainsErrors(true)
       setErrorsOnFormSaveFailure(requiredFieldsNotFilled, errorsFromValidationFunctions)
     }
-  }, [onSave, updateFormContainsErrors, errors, fieldsList])
+  }, [onSave, updateFormContainsErrors, errors, fieldsList, setErrorList])
 
   useEffect(() => {
     if (onSaveClicked) {
