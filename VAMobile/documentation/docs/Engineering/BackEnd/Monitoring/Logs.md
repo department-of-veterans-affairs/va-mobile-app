@@ -24,6 +24,4 @@ Let's say we wanted to check for any errors in the past week for the endpoint `/
 2. In the `URL Path` section, search for `/mobile/v1/user` and click on the word itself so that all other options are unchecked ![](../../../../static/img/backend/datadog-select-path.png)
 3. Click on any specific logs you want to view
 
-There are a lot of options for visualizations that you can play around with that may be helpful to your unique searching. 
-
-![](../../../../static/img/backend/grafana-loki-detected-fields.png)
+There are a lot of options for visualizations that you can play around with that may be helpful to your unique searching.
