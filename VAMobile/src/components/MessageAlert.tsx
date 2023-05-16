@@ -23,29 +23,32 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
 
-  let title
-  let text
-
-  let errorString = ''
+  let errorString = '\n'
   if (errorList) {
     for (const key in errorList) {
-      errorString += `• ${errorList[key as unknown as number]}\n`
+      if (errorList[key] !== '') {
+        errorString += `\n• ${errorList[key as unknown as number]}`
+      }
     }
   }
 
-  if (hasValidationError) {
-    title = saveDraftAttempted ? t('secureMessaging.formMessage.saveDraft.validation.title') : t('secureMessaging.formMessage.checkYourMessage')
-    text = saveDraftAttempted ? `${t('secureMessaging.formMessage.saveDraft.validation.text')}${errorString}` : errorString
-  } else {
-    return null
-  }
+  const text = saveDraftAttempted
+    ? `${t('secureMessaging.formMessage.saveDraft.validation.text')}${errorString}`
+    : `${t('secureMessaging.formMessage.sendMessage.validation.text')}${errorString}`
 
-  errorList && console.log(errorList)
-
-  return (
+  return hasValidationError ? (
     <Box mb={theme.dimensions.standardMarginBetween}>
-      <AlertBox border={'error'} title={title} text={text} titleRole={'header'} scrollViewRef={scrollViewRef} focusOnError={focusOnError} />
+      <AlertBox
+        border={'error'}
+        title={t('secureMessaging.formMessage.weNeedMoreInfo')}
+        text={text}
+        titleRole={'header'}
+        scrollViewRef={scrollViewRef}
+        focusOnError={focusOnError}
+      />
     </Box>
+  ) : (
+    <></>
   )
 }
 export default MessageAlert

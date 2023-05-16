@@ -3,7 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react'
 
-import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
+import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView } from 'components'
 import { VAIconProps } from 'components/VAIcon'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from '../formFieldUtils'
@@ -46,8 +46,6 @@ export type VAModalPickerProps = {
   setError?: (error?: string) => void
   /** if this exists updated picker styles to error state */
   error?: string
-  /** optional list of validation functions to check against */
-  validationList?: Array<ValidationFunctionItems>
   /** If true, will include a blank option at the top of the list with a blank value */
   includeBlankPlaceholder?: boolean
   /** renders a button instead of form field */
@@ -73,7 +71,6 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   helperTextKey,
   setError,
   error,
-  validationList,
   includeBlankPlaceholder,
   displayButton = false,
   buttonText,
@@ -89,9 +86,9 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const [focusUpdated, setFocusUpdated] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
 
-  // useEffect(() => {
-  //   updateInputErrorMessage(isFocused, isRequiredField, error, setError, selectedValue, focusUpdated, setFocusUpdated, validationList)
-  // }, [isFocused, labelKey, selectedValue, error, setError, isRequiredField, t, focusUpdated, validationList])
+  useEffect(() => {
+    updateInputErrorMessage(isFocused, error, setError, focusUpdated, setFocusUpdated)
+  }, [isFocused, selectedValue, error, setError, focusUpdated])
 
   const showModal = useCallback((): void => {
     if (!disabled) {

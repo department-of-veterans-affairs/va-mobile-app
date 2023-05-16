@@ -142,11 +142,9 @@ const FormWrapper = <T,>({
       })
 
       const updatedErrorsObj = { ...errors, ...errorsFromValidationFunctions, ...updatedErrors }
-      if (!_.isEqual(errors, updatedErrorsObj)) {
-        setErrors(updatedErrorsObj)
-        setErrorList && setErrorList(updatedErrorsObj)
-        console.log(updatedErrorsObj)
-      }
+
+      setErrors(updatedErrorsObj)
+      setErrorList && setErrorList(updatedErrorsObj)
     }
 
     // Returns any errors to be set if a validation function failed
@@ -204,8 +202,6 @@ const FormWrapper = <T,>({
 
       if (errorStillExists) {
         updateFormContainsErrors(true)
-      } else {
-        updateFormContainsErrors(false)
       }
 
       return
@@ -220,26 +216,16 @@ const FormWrapper = <T,>({
 
   // returns the corresponding component based on the fields fieldType
   const getFormComponent = (field: FormFieldType<T>, index: number): ReactElement => {
-    const { fieldType, fieldProps, fieldErrorMessage, validationList } = field
+    const { fieldType, fieldProps, fieldErrorMessage } = field
 
     switch (fieldType) {
       case FieldType.Picker:
         return (
-          <VAModalPicker
-            {...(fieldProps as VAModalPickerProps)}
-            validationList={validationList}
-            setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)}
-            error={errors[index]}
-          />
+          <VAModalPicker {...(fieldProps as VAModalPickerProps)} setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)} error={errors[index]} />
         )
       case FieldType.TextInput:
         return (
-          <VATextInput
-            {...(fieldProps as VATextInputProps)}
-            validationList={validationList}
-            setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)}
-            error={errors[index]}
-          />
+          <VATextInput {...(fieldProps as VATextInputProps)} setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)} error={errors[index]} />
         )
       case FieldType.Selector:
         return <VASelector {...(fieldProps as VASelectorProps)} setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)} error={errors[index]} />
