@@ -1,0 +1,70 @@
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { FC, ReactNode } from 'react'
+
+import { Box, ClickForActionLink, CollapsibleAlert, LinkButtonProps, LinkTypeOptionsConstants, TextView, VABulletList, VABulletListText } from 'components'
+import { Facility } from 'store/api'
+import { NAMESPACE } from 'constants/namespaces'
+import { PatientState } from 'store/slices'
+import { RootState } from 'store'
+import { useTheme } from 'utils/hooks'
+import getEnv from 'utils/env'
+
+const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
+
+const CernerAlertSM: FC = () => {
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const theme = useTheme()
+  const { cernerFacilities } = useSelector<RootState, PatientState>((state) => state.patient)
+
+  // if no cerner facilities then do not show the alert
+  if (!cernerFacilities.length) {
+    return <></>
+  }
+
+  const hasMultipleFacilities = cernerFacilities.length > 1
+  const headerText = t('cernerAlertSM.header')
+
+  const accordionContent = (): ReactNode => {
+    let intro = t('cernerAlertSM.sendingAMessage', { facility: cernerFacilities[0].facilityName })
+    let thisFacility = t('cernerAlertSM.thisFacilityUses')
+    let thisFacilityA11y = t('cernerAlertSM.thisFacilityUses.a11y')
+    let bullets: VABulletListText[] = []
+
+    if (hasMultipleFacilities) {
+      intro = t('cernerAlertSM.sendingAMessageMultiple')
+      thisFacility = t('cernerAlertSM.theseFacilitiesUse')
+      thisFacilityA11y = t('cernerAlertSM.theseFacilitiesUse.a11y')
+      bullets = cernerFacilities.map((facility: Facility) => ({ text: facility.facilityName }))
+    }
+
+    const outro = `${thisFacility} ${t('cernerAlertSM.youllNeedToGoThere')}`
+    const outroA11y = `${thisFacilityA11y} ${t('cernerAlertSM.youllNeedToGoThere')}`
+
+    const linkToCallProps: LinkButtonProps = {
+      displayedText: t('goToMyVAHealth'),
+      linkType: LinkTypeOptionsConstants.externalLink,
+      numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
+      a11yLabel: t('goToMyVAHealth.a11yLabel'),
+    }
+
+    return (
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody">{intro}</TextView>
+        {hasMultipleFacilities && (
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <VABulletList listOfText={bullets} />
+          </Box>
+        )}
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={outroA11y}>
+          {outro}
+        </TextView>
+        <ClickForActionLink {...linkToCallProps} />
+      </Box>
+    )
+  }
+
+  return <CollapsibleAlert border="warning" headerText={headerText} body={accordionContent()} a11yLabel={headerText} />
+}
+
+export default CernerAlertSM
