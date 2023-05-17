@@ -7,7 +7,7 @@ import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/s
 
 import * as api from 'store/api'
 import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
-import ComposeMessage from './ComposeMessage'
+import StartNewMessage from './StartNewMessage'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState, saveDraft, updateSecureMessagingTab } from 'store/slices'
@@ -77,7 +77,7 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   }
 })
 
-context('ComposeMessage', () => {
+context('StartNewMessage', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let props: any
@@ -128,7 +128,7 @@ context('ComposeMessage', () => {
       { params: params },
     )
 
-    component = render(<ComposeMessage {...props} />, {
+    component = render(<StartNewMessage {...props} />, {
       preloadedState: {
         ...InitialState,
         secureMessaging: {
