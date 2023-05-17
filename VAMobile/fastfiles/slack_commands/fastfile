@@ -2,7 +2,7 @@
 def slack_build_success (buildNum, version, buildType, message, os, thread_ts = nil)
  puts "Send slack success message"
  post_to_slack(
-   channel: "#va-mobile-app",
+   channel: "#va-mobile-build-alerts",
    username: "VA App Builder",
    icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/build_bot.png?raw=true",
    message: message,
@@ -23,7 +23,7 @@ end
 def slack_build_error(e, buildType, message, os, thread_ts = nil)
   puts "Send slack build error message"
   post_to_slack(
-    channel: "#va-mobile-app",
+    channel: "#va-mobile-build-alerts",
     username: "VA App Builder",
     icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
     message: message,
@@ -43,7 +43,7 @@ end
 def slack_github_error(e, message, os, thread_ts = nil)
   puts "Send slack GitHub error message"
   post_to_slack(
-    channel: "#va-mobile-app",
+    channel: "#va-mobile-build-alerts",
     username: "VA App Builder",
     icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
     message: message,
@@ -95,7 +95,7 @@ end
 def slack_firebase_dist_error(os, e, thread_ts = nil)
   puts "Send slack message to indicate Firebase Distribution error"
   post_to_slack(
-     channel: "#va-mobile-app",
+     channel: "#va-mobile-build-alerts",
      username: "VA App Builders",
      icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
      message: "Firebase Distribution failed for #{os}",
@@ -134,7 +134,7 @@ end
 def slack_test()
   slack(
      message: "Build Bot Test :dancing_box_robot:",
-     channel: "#va-mobile-app",
+     channel: "#va-mobile-build-alerts",
      default_payloads: [],
   )
 end

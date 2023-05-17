@@ -125,66 +125,66 @@ export const getTagTypeForStatus = (status: string) => {
  * @param status - RefillStatus to key to pull in the correct text
  * @param t - translation function
  */
-export const getStatusGlossaryTextForRefillStatus = (status: RefillStatus, t: TFunction): { text: string; a11yLabel: string } => {
+export const getStatusDefinitionTextForRefillStatus = (status: RefillStatus, t: TFunction): { text: string; a11yLabel: string } => {
   switch (status) {
     case RefillStatusConstants.ACTIVE:
       return {
-        text: t('statusGlossary.active'),
-        a11yLabel: t('statusGlossary.active.a11yLabel'),
+        text: t('statusDefinition.active'),
+        a11yLabel: t('statusDefinition.active.a11yLabel'),
       }
     case RefillStatusConstants.REFILL_IN_PROCESS:
       return {
-        text: t('statusGlossary.active.inProgress'),
-        a11yLabel: t('statusGlossary.active.inProgress.a11yLabel'),
+        text: t('statusDefinition.active.inProgress'),
+        a11yLabel: t('statusDefinition.active.inProgress.a11yLabel'),
       }
     case RefillStatusConstants.HOLD:
     case RefillStatusConstants.PROVIDER_HOLD:
       return {
-        text: t('statusGlossary.active.hold'),
-        a11yLabel: t('statusGlossary.active.hold.a11yLabel'),
+        text: t('statusDefinition.active.hold'),
+        a11yLabel: t('statusDefinition.active.hold.a11yLabel'),
       }
     case RefillStatusConstants.ACTIVE_PARKED:
       return {
-        text: t('statusGlossary.active.parked'),
-        a11yLabel: t('statusGlossary.active.parked.a11yLabel'),
+        text: t('statusDefinition.active.parked'),
+        a11yLabel: t('statusDefinition.active.parked.a11yLabel'),
       }
     case RefillStatusConstants.SUBMITTED:
       return {
-        text: t('statusGlossary.active.submitted'),
-        a11yLabel: t('statusGlossary.active.submitted.a11yLabel'),
+        text: t('statusDefinition.active.submitted'),
+        a11yLabel: t('statusDefinition.active.submitted.a11yLabel'),
       }
     case RefillStatusConstants.SUSPENDED:
       return {
-        text: t('statusGlossary.active.suspended'),
-        a11yLabel: t('statusGlossary.active.suspended.a11yLabel'),
+        text: t('statusDefinition.active.suspended'),
+        a11yLabel: t('statusDefinition.active.suspended.a11yLabel'),
       }
     case RefillStatusConstants.TRANSFERRED:
       return {
-        text: t('statusGlossary.transferred'),
-        a11yLabel: t('statusGlossary.transferred.a11yLabel'),
+        text: t('statusDefinition.transferred'),
+        a11yLabel: t('statusDefinition.transferred.a11yLabel'),
       }
     case RefillStatusConstants.DISCONTINUED:
     case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
     case RefillStatusConstants.DISCONTINUED_EDIT:
       return {
-        text: t('statusGlossary.discontinued'),
-        a11yLabel: t('statusGlossary.discontinued.a11yLabel'),
+        text: t('statusDefinition.discontinued'),
+        a11yLabel: t('statusDefinition.discontinued.a11yLabel'),
       }
     case RefillStatusConstants.EXPIRED:
       return {
-        text: t('statusGlossary.expired'),
-        a11yLabel: t('statusGlossary.expired.a11yLabel'),
+        text: t('statusDefinition.expired'),
+        a11yLabel: t('statusDefinition.expired.a11yLabel'),
       }
     case RefillStatusConstants.DELETED:
     case RefillStatusConstants.UNKNOWN:
       return {
-        text: t('statusGlossary.unknown'),
-        a11yLabel: t('statusGlossary.unknown.a11yLabel'),
+        text: t('statusDefinition.unknown'),
+        a11yLabel: t('statusDefinition.unknown.a11yLabel'),
       }
     case RefillStatusConstants.NON_VERIFIED: {
       return {
-        text: t('statusGlossary.nonVerified'),
-        a11yLabel: t('statusGlossary.nonVerified.a11yLabel'),
+        text: t('statusDefinition.nonVerified'),
+        a11yLabel: t('statusDefinition.nonVerified.a11yLabel'),
       }
     }
     default:

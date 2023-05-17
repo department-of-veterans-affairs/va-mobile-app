@@ -1,6 +1,6 @@
 # Reusable workflow that sets up environment, installs depdendencies, and
 # runs iOS fastlane using provided inputs
-name: Build iOS
+name: '[Build] Reusable iOS Workflow'
 
 on:
   workflow_call:

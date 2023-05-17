@@ -1,4 +1,4 @@
-name: "Merge Release to Main and Create PR to Develop"
+name: '[Release] Merge to main and Create PR to develop'
 
 on:
   workflow_call:

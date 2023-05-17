@@ -10,7 +10,7 @@ If you need to create new keys because they were leaked or for any other reason 
 Android QA and other staging versions are distributed with Firebase Distribution and this file is also help in a base64 string in the CI
 
 ## Location in the CI
-Apple and Android certificates are stored in CircleCI as base64 strings that are decoded by the CI when they are needed.
+Apple and Android certificates are stored in GitHub as base64 strings that are decoded by the CI when they are needed.
 
 ### ENV Constants for the keys
 | Key Name                     | ENV String                | Location ENV String       | Decoded Location                                    | CI Command          |
