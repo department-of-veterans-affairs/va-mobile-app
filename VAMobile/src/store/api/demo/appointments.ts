@@ -1,4 +1,4 @@
-import { AppointmentGetMessagesData, AppointmentsGetData } from '../types'
+import { AppointmentsGetData } from '../types'
 import { DemoStore } from './store'
 import { Params } from '../api'
 
@@ -12,17 +12,6 @@ export type AppointmentsDemoStore = {
     past: AppointmentsGetData
     upcoming: AppointmentsGetData
   }
-
-  // pending appointments in past
-  '/v0/appointment_requests/8a48912a6d02b0fc016d20b4ccb9001b/messages': AppointmentGetMessagesData
-  '/v0/appointment_requests/8a48e8db6d70a38a016d72b354240003/messages': AppointmentGetMessagesData
-  '/v0/appointment_requests/6a48912a6d02b0fc016d20b4ccb9001d/messages': AppointmentGetMessagesData
-  // pending appointments in upcoming
-  '/v0/appointment_requests/9a48912a6d02b0fc016d20b4ccb9001a/messages': AppointmentGetMessagesData
-  '/v0/appointment_requests/9a48e8db6d70a38a016d72b354240002/messages': AppointmentGetMessagesData
-  '/v0/appointment_requests/7a48912a6d02b0fc016d20b4ccb9001a/messages': AppointmentGetMessagesData
-  '/v0/appointment_requests/6a48912a6d02b0fc016d20b4ccb9001a/messages': AppointmentGetMessagesData
-  '/v0/appointment_requests/6a48912a6d02b0fc016d20b4ccb9001z/messages': AppointmentGetMessagesData
 }
 
 /**
