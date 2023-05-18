@@ -312,7 +312,7 @@ context('StartNewMessage', () => {
 
       it('should display a field error for that field', async () => {
         await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Select a care team to message')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
         })
@@ -349,7 +349,7 @@ context('StartNewMessage', () => {
 
       it('should display a field error for that field', async () => {
         await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Select a care team to message')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
         })
@@ -370,7 +370,7 @@ context('StartNewMessage', () => {
         testInstance.findByProps({ label: 'Send' }).props.onPress()
       })
 
-      expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Select a care team to message')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
 
@@ -382,7 +382,7 @@ context('StartNewMessage', () => {
         testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.covid)
       })
 
-      expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeFalsy()
+      expect(findByTypeWithText(testInstance, TextView, 'Select a care team to message')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Attachments')).toBeTruthy()

@@ -189,9 +189,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
-            'The file type you are trying to upload is not allowed. Please confirm that your file is one of the following formats: doc, docx, gif, jpg, pdf, png, rtf, txt, xls, xlsx.',
-          )
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Attach a DOC, DOCX, GIF, PDF, JPG, PNG, RTF, TXT, XLS, or XLSX')
         })
       })
 
@@ -217,9 +215,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
-            'The file you are trying to upload exceeds the 6 MB limit. Please reduce the file size and try again.',
-          )
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(`Attach a file that's smaller than 6 MB`)
         })
       })
 
@@ -247,9 +243,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
-            'The sum of the file(s) you are trying to upload exceeds the 10 MB limit. Please reduce the file(s) size and try again.',
-          )
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('The total size of your attachments must be smaller than 10 MB')
         })
       })
 
@@ -277,7 +271,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('File already uploaded. Please select a different file.')
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('You already attached this file')
         })
       })
     })
