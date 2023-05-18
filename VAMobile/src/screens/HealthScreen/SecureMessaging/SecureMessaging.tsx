@@ -13,10 +13,10 @@ import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftCo
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlertSM from './CernerAlertSM/CernerAlertSM'
-import ComposeMessageButton from './ComposeMessageButton/ComposeMessageButton'
 import Folders from './Folders/Folders'
 import Inbox from './Inbox/Inbox'
 import NotEnrolledSM from './NotEnrolledSM/NotEnrolledSM'
+import StartNewMessageButton from './StartNewMessageButton/StartNewMessageButton'
 import TermsAndConditions from './TermsAndConditions/TermsAndConditions'
 
 type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessaging'>
@@ -98,7 +98,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
-      <ComposeMessageButton />
+      <StartNewMessageButton />
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
           <SegmentedControl

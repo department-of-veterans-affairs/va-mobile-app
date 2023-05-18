@@ -5,7 +5,7 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, render, RenderAPI } from 'testUtils'
-import ComposeMessageButton from './ComposeMessageButton'
+import StartNewMessageButton from './StartNewMessageButton'
 import { VAButton } from 'components'
 import { waitFor } from '@testing-library/react-native'
 
@@ -22,7 +22,7 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-context('ComposeMessageFooter', () => {
+context('StartNewMessageFooter', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let mockNavigateToSpy: jest.Mock
@@ -30,7 +30,7 @@ context('ComposeMessageFooter', () => {
   beforeEach(() => {
     mockNavigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
-    component = render(<ComposeMessageButton />)
+    component = render(<StartNewMessageButton />)
 
     testInstance = component.container
   })
@@ -43,7 +43,7 @@ context('ComposeMessageFooter', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findByType(VAButton).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalledWith('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+        expect(mockNavigationSpy).toHaveBeenCalledWith('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
         expect(mockNavigateToSpy).toHaveBeenCalled()
       })
     })
