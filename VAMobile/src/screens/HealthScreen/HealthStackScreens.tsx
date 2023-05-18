@@ -18,6 +18,7 @@ import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
 import RefillRequestSummary from './Pharmacy/RefillScreens/RefillRequestSummary'
 import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
 import RefillTrackingModal from './Pharmacy/RefillTrackingDetails/RefillTrackingDetails'
+import ReplyHelp from './SecureMessaging/ReplyHelp/ReplyHelp'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
 import RequestAppointmentScreen from './Appointments/RequestAppointments/RequestAppointmentScreen'
@@ -86,6 +87,7 @@ export type HealthStackParamList = WebviewStackParams & {
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
     messageID?: number
   }
+  ReplyHelp: undefined
   SendConfirmation: {
     originHeader: string
     messageData: SecureMessagingFormData
@@ -137,6 +139,7 @@ export const getHealthScreens = (t: TFunction) => {
     <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} options={LARGE_PANEL_OPTIONS} />,
+    <HealthStack.Screen key={'ReplyHelp'} name="ReplyHelp" component={ReplyHelp} options={LARGE_PANEL_OPTIONS} />,
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'NoRequestAppointmentAccess'} name="NoRequestAppointmentAccess" component={NoRequestAppointmentAccess} options={{ headerShown: false }} />,
     <HealthStack.Group
