@@ -5,7 +5,7 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components'
 
-import { AlertBox, BackButton, Box, FullScreenSubtask, TextView } from 'components'
+import { AlertBox, BackButton, Box, FullScreenSubtask, TextView, VABulletList } from 'components'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -134,6 +134,14 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const imageMaxWidthAndHeight = getMaxWidthAndHeightOfImage(image, 300)
   const { uri } = image.assets ? image.assets[0] : ({} as Asset)
 
+  const bullets = [
+    { text: tc('attachments.bulletOne') },
+    { text: tc('attachments.bulletTwo') },
+    { text: tc('attachments.bulletThree') },
+    { text: tc('attachments.bulletFour'), a11yLabel: tc('attachments.bulletFour.a11yLabel') },
+    { text: tc('attachments.bulletFive') },
+  ]
+
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
@@ -149,17 +157,9 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
           </Box>
         )}
         <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('secureMessaging.attachments.fileAttachment')}
+          {t('secureMessaging.attachments.whatToKnow')}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
-          {t('secureMessaging.attachments.youMayAttach')} {t('secureMessaging.attachments.acceptedFileTypes')}
-        </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('secureMessaging.attachments.sizeRequirements.A11yLabel')}>
-          {t('secureMessaging.attachments.sizeRequirements')}
-        </TextView>
-        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
-          {t('secureMessaging.attachments.attachmentsAreNotDrafts')}
-        </TextView>
+        <VABulletList listOfText={bullets} />
         {image && uri && (
           // need to set label has \ufeff so that samsung just says image and not unliable image
           <Box mb={theme.dimensions.standardMarginBetween} accessibilityRole="image" accessible={true} accessibilityLabel={'\ufeff'}>

@@ -12,24 +12,19 @@ import { getFileDisplay } from 'utils/common'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type FormAttachmentsProps = {
-  /** header for page title display */
-  originHeader: string
   /** callback called on click of remove link for an attachment */
   removeOnPress?: (attachment: ImagePickerResponse | DocumentPickerResponse) => void
   /** optional props for large button */
   largeButtonProps?: Omit<VAButtonProps, 'iconProps' | 'buttonType'>
   /** list of current attachments */
   attachmentsList?: Array<ImagePickerResponse | DocumentPickerResponse>
-  /** optional a11y Hint */
-  a11yHint?: string
 }
 
 /**A common component for form attachments, displays Attachments heading with helper link, already attached items with remove option, and an optional large button. */
-const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress, largeButtonProps, attachmentsList, a11yHint }) => {
+const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, largeButtonProps, attachmentsList }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
-  const navigateTo = useRouteNavigation()
 
   const renderFileNames = (): ReactNode => {
     return _.map(attachmentsList || [], (attachment, index) => {
@@ -78,21 +73,9 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
 
   const attachmentsDoNotExist = !attachmentsList || attachmentsList.length === 0
 
-  const goToFaq = navigateTo('AttachmentsFAQ', { originHeader: originHeader })
-
   return (
     <Box>
-      <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center" flexWrap="wrap">
-        <TextView>{t('attachments')}</TextView>
-        <Pressable onPress={goToFaq} accessible={true} accessibilityRole="link" accessibilityHint={a11yHint ? a11yHint : undefined} accessibilityLabel={t('howToAttachAFile')}>
-          <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" minHeight={theme.dimensions.touchableMinHeight}>
-            <VAIcon name="QuestionMark" {...iconProps} />
-            <TextView variant="HelperText" ml={theme.dimensions.textIconMargin} color="link" textDecoration="underline" textDecorationColor="link">
-              {t('howToAttachAFile')}
-            </TextView>
-          </Box>
-        </Pressable>
-      </Box>
+      <TextView>{t('attachments')}</TextView>
       <Box mt={theme.dimensions.standardMarginBetween} mb={attachmentsDoNotExist || !largeButtonProps ? 0 : theme.dimensions.standardMarginBetween}>
         {renderFileNames()}
       </Box>
