@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
@@ -50,13 +51,11 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { formatSubject } from 'utils/secureMessaging'
-import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
+import { SubjectLengthValidationFn, formatSubject, getComposeMessageCategoryPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { useSelector } from 'react-redux'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
@@ -361,7 +360,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           labelKey: 'health:secureMessaging.formMessage.category',
           selectedValue: category,
           onSelectionChange: onCategoryChange,
-          pickerOptions: getComposeMessageSubjectPickerOptions(t),
+          pickerOptions: getComposeMessageCategoryPickerOptions(t),
           includeBlankPlaceholder: true,
           isRequiredField: true,
         },
@@ -375,10 +374,15 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           value: subject,
           onChange: setSubject,
           helperTextKey: 'health:secureMessaging.composeMessage.subject.helperText',
-          maxLength: 50,
           isRequiredField: category === CategoryTypeFields.other,
         },
-        fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldError'),
+        fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldEmpty'),
+        validationList: [
+          {
+            validationFunction: SubjectLengthValidationFn(subject),
+            validationFunctionErrorMessage: t('secureMessaging.composeMessage.subject.tooManyCharacters'),
+          },
+        ],
       },
     ]
   }

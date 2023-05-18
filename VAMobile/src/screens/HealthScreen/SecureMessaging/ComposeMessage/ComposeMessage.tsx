@@ -49,7 +49,7 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
+import { SubjectLengthValidationFn, getComposeMessageCategoryPickerOptions } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import {
   useAppDispatch,
@@ -90,8 +90,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const { attachmentFileToAdd, saveDraftConfirmFailed } = route.params
 
   const [to, setTo] = useState('')
+  const [category, setCategory] = useState('')
   const [subject, setSubject] = useState('')
-  const [subjectLine, setSubjectLine] = useState('')
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
   const [message, setMessage] = useMessageWithSignature()
   const validateMessage = useValidateMessageWithSignature()
@@ -119,7 +119,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
   const goToCancel = () => {
-    const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine } as SecureMessagingFormData
+    const messageData = { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body: message, subject: subject } as SecureMessagingFormData
     composeCancelConfirmation({ origin: FormHeaderTypeConstants.compose, draftMessageID: savedDraftID, messageData, isFormValid })
   }
   useEffect(() => {
@@ -201,8 +201,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || validateMessage(message))
-  const isFormValid = !!(to && subject && validateMessage(message) && (subject !== CategoryTypeFields.other || subjectLine))
+  const isFormBlank = !(to || category || subject || attachmentsList.length || validateMessage(message))
+  const isFormValid = !!(to && category && validateMessage(message) && (category !== CategoryTypeFields.other || subject))
 
   if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature || isDiscarded) {
     const text = savingDraft
@@ -229,12 +229,11 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
   }
 
-  const onSubjectChange = (newSubject: string): void => {
-    setSubject(newSubject)
+  const onCategoryChange = (newCategory: string): void => {
+    setCategory(newCategory)
 
-    // if the subject used to be general and now its not, clear field errors because the subject line is now
-    // no longer a required field
-    if (isSetToGeneral(subject) && !isSetToGeneral(newSubject)) {
+    // Only "General" category requires a subject, reset errors changing away to clear potential subject error
+    if (isSetToGeneral(category) && !isSetToGeneral(newCategory)) {
       setResetErrors(true)
     }
   }
@@ -257,7 +256,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         labelKey: 'health:secureMessaging.formMessage.to',
         selectedValue: to,
         onSelectionChange: setTo,
-        // TODO: get real picker options for "To" section via api call
         pickerOptions: getToPickerOptions(),
         includeBlankPlaceholder: true,
         isRequiredField: true,
@@ -268,9 +266,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       fieldType: FieldType.Picker,
       fieldProps: {
         labelKey: 'health:secureMessaging.formMessage.category',
-        selectedValue: subject,
-        onSelectionChange: onSubjectChange,
-        pickerOptions: getComposeMessageSubjectPickerOptions(t),
+        selectedValue: category,
+        onSelectionChange: onCategoryChange,
+        pickerOptions: getComposeMessageCategoryPickerOptions(t),
         includeBlankPlaceholder: true,
         isRequiredField: true,
       },
@@ -281,13 +279,18 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       fieldProps: {
         inputType: 'none',
         labelKey: 'health:secureMessaging.composeMessage.subject',
-        value: subjectLine,
-        onChange: setSubjectLine,
+        value: subject,
+        onChange: setSubject,
         helperTextKey: 'health:secureMessaging.composeMessage.subject.helperText',
-        maxLength: 50,
-        isRequiredField: subject === CategoryTypeFields.other,
+        isRequiredField: category === CategoryTypeFields.other,
       },
-      fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldError'),
+      fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldEmpty'),
+      validationList: [
+        {
+          validationFunction: SubjectLengthValidationFn(subject),
+          validationFunctionErrorMessage: t('secureMessaging.composeMessage.subject.tooManyCharacters'),
+        },
+      ],
     },
     {
       fieldType: FieldType.FormAttachmentsList,
@@ -331,9 +334,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     dispatch(resetSendMessageFailed())
     const messageData = {
       recipient_id: parseInt(to, 10),
-      category: subject as CategoryTypes,
+      category: category as CategoryTypes,
       body: message,
-      subject: subjectLine,
+      subject: subject,
     } as SecureMessagingFormData
 
     if (savedDraftID) {

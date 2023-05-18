@@ -21,6 +21,8 @@ import { getFormattedMessageTime, stringToTitleCase } from 'utils/formattingUtil
 import { logNonFatalErrorToFirebase } from './analytics'
 import theme from 'styles/themes/standardTheme'
 
+const MAX_SUBJECT_LENGTH = 50
+
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
   t: TFunction,
@@ -106,9 +108,9 @@ export const translateSubjectCategory = (category: CategoryTypes, t: TFunction):
   return category
 }
 
-/** Given the raw subject category and subject line attributes, we need to translate the category and then display
+/** Given the raw category and subject attributes, we need to translate the category and then display
  * the two as separated by a colon and a space.
- * If there's no subjectLine, should only display subject category with no colon
+ * If there's no subject, should only display category with no colon
  *
  * @param category - message attribute of categoryTypes indicating what category the message belongs to
  * @param subject - string from message attribute
@@ -120,7 +122,7 @@ export const formatSubject = (category: CategoryTypes, subject: string, t: TFunc
   return `${subjectCategory}${subjectLine}`.trim()
 }
 
-export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<PickerItem> => {
+export const getComposeMessageCategoryPickerOptions = (t: TFunction): Array<PickerItem> => {
   return [
     {
       value: CategoryTypeFields.other,
@@ -147,6 +149,17 @@ export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<Picke
       label: t('secureMessaging.composeMessage.education'),
     },
   ]
+}
+
+/**
+ * Function to determine invalid subject length
+ * @returns Callback function that returns true if subject length invalid (over 50 characters)
+ */
+export const SubjectLengthValidationFn = (subject: string) => {
+  const InvalidSubjectLength = (): boolean => {
+    return subject.length > MAX_SUBJECT_LENGTH
+  }
+  return InvalidSubjectLength
 }
 
 /**
