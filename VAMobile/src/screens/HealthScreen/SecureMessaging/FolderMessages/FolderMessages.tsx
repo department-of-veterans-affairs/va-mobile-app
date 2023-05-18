@@ -12,8 +12,8 @@ import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessa
 import { getMessagesListItems } from 'utils/secureMessaging'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
+import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
@@ -131,7 +131,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
 
   return (
     <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
-      <ComposeMessageButton />
+      <StartNewMessageButton />
       <Box mt={theme.dimensions.standardMarginBetween}>
         <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} />
       </Box>
