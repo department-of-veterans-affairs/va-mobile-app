@@ -49,7 +49,7 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { SubjectLengthValidationFn, getComposeMessageCategoryPickerOptions } from 'utils/secureMessaging'
+import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import {
   useAppDispatch,
@@ -64,9 +64,9 @@ import {
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 
-type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
+type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
 
-const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
+const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -79,8 +79,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   const snackbarSentMessages: SnackbarMessages = {
-    successMsg: t('secureMessaging.composeMessage.sent'),
-    errorMsg: t('secureMessaging.composeMessage.sent.error'),
+    successMsg: t('secureMessaging.startNewMessage.sent'),
+    errorMsg: t('secureMessaging.startNewMessage.sent.error'),
   }
 
   const { sendingMessage, sendMessageComplete, savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, savingDraft, loadingSignature, signature } = useSelector<
@@ -195,7 +195,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
-      <FullScreenSubtask title={tc('compose')} leftButtonText={tc('cancel')}>
+      <FullScreenSubtask title={t('secureMessaging.startNewMessage')} leftButtonText={tc('cancel')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -209,7 +209,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       ? t('secureMessaging.formMessage.saveDraft.loading')
       : isDiscarded
       ? t('secureMessaging.deleteDraft.loading')
-      : t('secureMessaging.formMessage.composeMessage.loading')
+      : t('secureMessaging.formMessage.startNewMessage.loading')
     return (
       <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
         <LoadingComponent text={text} />
@@ -260,42 +260,42 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         includeBlankPlaceholder: true,
         isRequiredField: true,
       },
-      fieldErrorMessage: t('secureMessaging.composeMessage.to.fieldError'),
+      fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
     },
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'health:secureMessaging.formMessage.category',
+        labelKey: 'health:secureMessaging.startNewMessage.category',
         selectedValue: category,
         onSelectionChange: onCategoryChange,
-        pickerOptions: getComposeMessageCategoryPickerOptions(t),
+        pickerOptions: getStartNewMessageCategoryPickerOptions(t),
         includeBlankPlaceholder: true,
         isRequiredField: true,
       },
-      fieldErrorMessage: t('secureMessaging.composeMessage.category.fieldError'),
+      fieldErrorMessage: t('secureMessaging.startNewMessage.category.fieldError'),
     },
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'none',
-        labelKey: 'health:secureMessaging.composeMessage.subject',
+        labelKey: 'health:secureMessaging.startNewMessage.subject',
         value: subject,
         onChange: setSubject,
-        helperTextKey: 'health:secureMessaging.composeMessage.subject.helperText',
+        helperTextKey: 'health:secureMessaging.startNewMessage.subject.helperText',
         isRequiredField: category === CategoryTypeFields.other,
       },
-      fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldEmpty'),
+      fieldErrorMessage: t('secureMessaging.startNewMessage.subject.fieldEmpty'),
       validationList: [
         {
           validationFunction: SubjectLengthValidationFn(subject),
-          validationFunctionErrorMessage: t('secureMessaging.composeMessage.subject.tooManyCharacters'),
+          validationFunctionErrorMessage: t('secureMessaging.startNewMessage.subject.tooManyCharacters'),
         },
       ],
     },
     {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
-        originHeader: t('secureMessaging.composeMessage.compose'),
+        originHeader: t('secureMessaging.startNewMessage'),
         removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
@@ -353,9 +353,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     if (noProviderError) {
       return (
         <AlertBox
-          title={t('secureMessaging.composeMessage.noMatchWithProvider')}
-          text={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolled')}
-          textA11yLabel={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
+          title={t('secureMessaging.startNewMessage.noMatchWithProvider')}
+          text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
+          textA11yLabel={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
           border="error">
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
@@ -368,14 +368,14 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       <Box>
         <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} scrollViewRef={scrollViewRef} focusOnError={onSendClicked} />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <CollapsibleView text={t('secureMessaging.composeMessage.whenWillIGetAReply')} showInTextArea={false}>
-            <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
-              <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
+          <CollapsibleView text={t('secureMessaging.startNewMessage.whenWillIGetAReply')} showInTextArea={false}>
+            <Box {...testIdProps(t('secureMessaging.startNewMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
+              <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.threeDaysToReceiveResponse')}</TextView>
             </Box>
-            <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+            <Box {...testIdProps(t('secureMessaging.startNewMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
               <TextView>
-                <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
-                <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
+                <TextView variant="MobileBodyBold">{t('secureMessaging.startNewMessage.important')}</TextView>
+                <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.pleaseCallHealthProvider')}</TextView>
               </TextView>
             </Box>
           </CollapsibleView>
@@ -422,7 +422,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={tc('compose')}
+      title={t('secureMessaging.startNewMessage')}
       leftButtonText={tc('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
@@ -432,4 +432,4 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   )
 }
 
-export default ComposeMessage
+export default StartNewMessage

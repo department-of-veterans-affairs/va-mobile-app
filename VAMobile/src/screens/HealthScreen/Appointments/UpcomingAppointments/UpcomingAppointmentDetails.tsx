@@ -22,7 +22,7 @@ import {
   AppointmentTypeConstants,
   AppointmentTypeToID,
 } from 'store/api/types'
-import { AppointmentsState, clearAppointmentCancellation, getAppointmentMessages, trackAppointmentDetail } from 'store/slices'
+import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail } from 'store/slices'
 import {
   BackButton,
   Box,
@@ -61,9 +61,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
-  const { upcomingAppointmentsById, loadingAppointmentCancellation, appointmentCancellationStatus, appointmentMessagesById } = useSelector<RootState, AppointmentsState>(
-    (state) => state.appointments,
-  )
+  const { upcomingAppointmentsById, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
   const appointment = upcomingAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
@@ -71,17 +69,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { name, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
-  const messages = appointmentMessagesById[appointmentID]
 
   useEffect(() => {
     dispatch(trackAppointmentDetail(pendingAppointment))
   }, [dispatch, appointmentID, pendingAppointment])
-
-  useEffect(() => {
-    if (appointment && pendingAppointment && !appointmentMessagesById[appointmentID]) {
-      dispatch(getAppointmentMessages(appointmentID))
-    }
-  }, [dispatch, appointment, appointmentID, appointmentMessagesById, pendingAppointment])
 
   useEffect(() => {
     navigation.setOptions({
@@ -297,7 +288,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
-          <AppointmentReason attributes={attributes} messages={messages} />
+          <AppointmentReason attributes={attributes} />
           <ContactInformation attributes={attributes} />
           <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointment?.id} />
         </TextArea>
