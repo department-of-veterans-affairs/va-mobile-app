@@ -20,7 +20,6 @@ import {
   PickerItem,
   SaveButton,
   TextArea,
-  TextView,
   VAButton,
   VAIconProps,
 } from 'components'
@@ -50,7 +49,6 @@ import {
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
 import { getStartNewMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { testIdProps } from 'utils/accessibility'
 import {
   useAppDispatch,
   useAttachments,
@@ -375,8 +373,12 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
             setResetErrors={setResetErrors}
           />
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <Pressable onPress={navigateTo('ReplyHelp')}>
-              <Box pointerEvents="none">
+            <Pressable
+              onPress={navigateTo('ReplyHelp')}
+              accessibilityRole="button"
+              accessibilityLabel={t('secureMessaging.startNewMessage.whenWillIGetAReply')}
+              importantForAccessibility="yes">
+              <Box pointerEvents="none" accessible={false} importantForAccessibility="no-hide-descendants">
                 <CollapsibleView text={t('secureMessaging.startNewMessage.whenWillIGetAReply')} showInTextArea={false} />
               </Box>
             </Pressable>

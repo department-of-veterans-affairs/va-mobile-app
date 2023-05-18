@@ -257,8 +257,12 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           />
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <Pressable onPress={navigateTo('ReplyHelp')}>
-            <Box pointerEvents="none">
+          <Pressable
+            onPress={navigateTo('ReplyHelp')}
+            accessibilityRole="button"
+            accessibilityLabel={t('secureMessaging.startNewMessage.whenWillIGetAReply')}
+            importantForAccessibility="yes">
+            <Box pointerEvents="none" accessible={false} importantForAccessibility="no-hide-descendants">
               <CollapsibleView text={t('secureMessaging.startNewMessage.whenWillIGetAReply')} showInTextArea={false} />
             </Box>
           </Pressable>
