@@ -90,18 +90,18 @@ export const getMessagesListItems = (
 export const translateSubjectCategory = (category: CategoryTypes, t: TFunction): string => {
   switch (category) {
     case CategoryTypeFields.covid:
-      return t('secureMessaging.composeMessage.covid')
+      return t('secureMessaging.startNewMessage.covid')
     case CategoryTypeFields.test:
-      return t('secureMessaging.composeMessage.test')
+      return t('secureMessaging.startNewMessage.test')
     case CategoryTypeFields.medication:
-      return t('secureMessaging.composeMessage.medication')
+      return t('secureMessaging.startNewMessage.medication')
     case CategoryTypeFields.appointment:
       return t('appointments.appointment')
     case CategoryTypeFields.other:
     case CategoryTypeFields.general:
-      return t('secureMessaging.composeMessage.general')
+      return t('secureMessaging.startNewMessage.general')
     case CategoryTypeFields.education:
-      return t('secureMessaging.composeMessage.education')
+      return t('secureMessaging.startNewMessage.education')
   }
   return category
 }
@@ -120,15 +120,15 @@ export const formatSubject = (category: CategoryTypes, subject: string, t: TFunc
   return `${subjectCategory}${subjectLine}`.trim()
 }
 
-export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<PickerItem> => {
+export const getStartNewMessageSubjectPickerOptions = (t: TFunction): Array<PickerItem> => {
   return [
     {
       value: CategoryTypeFields.other,
-      label: t('secureMessaging.composeMessage.general'),
+      label: t('secureMessaging.startNewMessage.general'),
     },
     {
       value: CategoryTypeFields.covid,
-      label: t('secureMessaging.composeMessage.covid'),
+      label: t('secureMessaging.startNewMessage.covid'),
     },
     {
       value: CategoryTypeFields.appointment,
@@ -136,15 +136,15 @@ export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<Picke
     },
     {
       value: CategoryTypeFields.medication,
-      label: t('secureMessaging.composeMessage.medication'),
+      label: t('secureMessaging.startNewMessage.medication'),
     },
     {
       value: CategoryTypeFields.test,
-      label: t('secureMessaging.composeMessage.test'),
+      label: t('secureMessaging.startNewMessage.test'),
     },
     {
       value: CategoryTypeFields.education,
-      label: t('secureMessaging.composeMessage.education'),
+      label: t('secureMessaging.startNewMessage.education'),
     },
   ]
 }
