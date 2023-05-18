@@ -85,8 +85,8 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   }
 
   const snackbarSentMessages: SnackbarMessages = {
-    successMsg: t('secureMessaging.composeMessage.sent'),
-    errorMsg: t('secureMessaging.composeMessage.sent.error'),
+    successMsg: t('secureMessaging.startNewMessage.sent'),
+    errorMsg: t('secureMessaging.startNewMessage.sent.error'),
   }
 
   const goToCancel = () => {
@@ -235,16 +235,16 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       <MessageAlert scrollViewRef={scrollViewRef} hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} focusOnError={onSendClicked} />
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <CollapsibleView
-          text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
+          text={t('secureMessaging.startNewMessage.whenWillIGetAReply')}
           showInTextArea={false}
-          a11yHint={t('secureMessaging.composeMessage.whenWillIGetAReplyA11yHint')}>
-          <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
-            <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
+          a11yHint={t('secureMessaging.startNewMessage.whenWillIGetAReplyA11yHint')}>
+          <Box {...testIdProps(t('secureMessaging.startNewMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
+            <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.threeDaysToReceiveResponse')}</TextView>
           </Box>
-          <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+          <Box {...testIdProps(t('secureMessaging.startNewMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
             <TextView>
-              <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
-              <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
+              <TextView variant="MobileBodyBold">{t('secureMessaging.startNewMessage.important')}</TextView>
+              <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.pleaseCallHealthProvider')}</TextView>
             </TextView>
           </Box>
         </CollapsibleView>
@@ -257,7 +257,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           {receiverName}
         </TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessible={true}>
-          {t('secureMessaging.composeMessage.subject')}
+          {t('secureMessaging.startNewMessage.subject')}
         </TextView>
         <TextView variant="MobileBodyBold" accessible={true}>
           {subjectHeader}

@@ -52,7 +52,7 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
 
       const onSaveDraft = (): void => {
         if (!isFormValid) {
-          navigateTo('ComposeMessage', { saveDraftConfirmFailed: true })()
+          navigateTo('StartNewMessage', { saveDraftConfirmFailed: true })()
         } else {
           dispatch(saveDraft(messageData, snackbarMessages, draftMessageID, !!replyToID, replyToID, true))
           dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
@@ -72,8 +72,8 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
       }
 
       confirmationAlert({
-        title: t('secureMessaging.composeMessage.cancel.saveDraftQuestion'),
-        message: t('secureMessaging.composeMessage.cancel.saveDraftDescription'),
+        title: t('secureMessaging.startNewMessage.cancel.saveDraftQuestion'),
+        message: t('secureMessaging.startNewMessage.cancel.saveDraftDescription'),
         cancelButtonIndex: 0,
         destructiveButtonIndex: 1,
         buttons: [
@@ -81,11 +81,11 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
             text: tc('cancel'),
           },
           {
-            text: t('secureMessaging.composeMessage.cancel.discard'),
+            text: t('secureMessaging.startNewMessage.cancel.discard'),
             onPress: onDiscard,
           },
           {
-            text: t('secureMessaging.composeMessage.cancel.saveDraft'),
+            text: t('secureMessaging.startNewMessage.cancel.saveDraft'),
             onPress: onSaveDraft,
           },
         ],

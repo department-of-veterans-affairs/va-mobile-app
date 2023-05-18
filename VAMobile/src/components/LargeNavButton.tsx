@@ -110,7 +110,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
   }
-  const accessibilityLabel = `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText || ''}`.trim()
+  const accessibilityLabel = tagCount !== undefined ? `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText || ''}`.trim() : undefined
 
   return (
     <Box {...boxProps}>
