@@ -9,7 +9,7 @@ import { Box, ButtonTypesConstants, TextView, VAButton, VAButtonProps, VAIcon } 
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { getFileDisplay } from 'utils/common'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 export type FormAttachmentsProps = {
   /** callback called on click of remove link for an attachment */
