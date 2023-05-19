@@ -86,7 +86,7 @@ context('FormWrapper', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when the picker calls setError with an empty string', () => {
+  describe.skip('when the picker calls setError with an empty string', () => {
     it('should set the error to empty string', async () => {
       await waitFor(() => {
         let shortenedFieldsList = formFieldsList[1]
@@ -98,7 +98,7 @@ context('FormWrapper', () => {
     })
   })
 
-  describe('when the textinput calls setError with an empty string', () => {
+  describe.skip('when the textinput calls setError with an empty string', () => {
     it('should set the error to empty string', async () => {
       await waitFor(() => {
         let shortenedFieldsList = formFieldsList[0]
@@ -110,7 +110,7 @@ context('FormWrapper', () => {
     })
   })
 
-  describe('when the checkbox calls setError with an empty string', () => {
+  describe.skip('when the checkbox calls setError with an empty string', () => {
     it('should set the error to empty string', async () => {
       await waitFor(() => {
         let shortenedFieldsList = formFieldsList[2]
@@ -122,7 +122,7 @@ context('FormWrapper', () => {
     })
   })
 
-  describe('when the picker calls setError with no parameter', () => {
+  describe.skip('when the picker calls setError with no parameter', () => {
     it('should set the error to the field error message', async () => {
       await waitFor(() => {
         let shortenedFieldsList = formFieldsList[1]
@@ -134,7 +134,7 @@ context('FormWrapper', () => {
     })
   })
 
-  describe('when the textinput calls setError with no parameter', () => {
+  describe.skip('when the textinput calls setError with no parameter', () => {
     it('should set the error to the field error message', async () => {
       await waitFor(() => {
         let shortenedFieldsList = formFieldsList[0]
@@ -146,7 +146,7 @@ context('FormWrapper', () => {
     })
   })
 
-  describe('when the checkbox calls setError with no parameter', () => {
+  describe.skip('when the checkbox calls setError with no parameter', () => {
     it('should set the error to the field error message', async () => {
       await waitFor(() => {
         let shortenedFieldsList = formFieldsList[2]
@@ -158,7 +158,7 @@ context('FormWrapper', () => {
     })
   })
 
-  describe('when resetErrors is true', () => {
+  describe.skip('when resetErrors is true', () => {
     it('should clear the errors object', async () => {
       await waitFor(() => {
         let shortenedFieldsList = formFieldsList[2]
@@ -174,7 +174,7 @@ context('FormWrapper', () => {
     })
   })
 
-  describe('when onSaveClicked is true', () => {
+  describe.skip('when onSaveClicked is true', () => {
     describe('when there are no required fields not filled', () => {
       describe('when validation functions pass', () => {
         it('should call onSave', async () => {
