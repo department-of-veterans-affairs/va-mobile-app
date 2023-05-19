@@ -398,7 +398,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
               }
             : undefined,
         attachmentsList,
-        a11yHint: t('secureMessaging.attachments.howToAttachAFile.a11y'),
       },
     },
     {
