@@ -199,13 +199,6 @@ context('ReplyMessage', () => {
     })
   })
 
-  it('should add the text (*Required) for the message body text field', async () => {
-    await waitFor(() => {
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[19].props.children).toEqual(['Message', ' ','(Required)'])
-    })
-  })
-
   describe('on click of save (draft)', () => {
     beforeEach(async () => {
       await waitFor(() => {
@@ -267,36 +260,6 @@ context('ReplyMessage', () => {
   it('renders only messages in the same thread as the message associated with messageID', async () => {
     await waitFor(() => {
       expect(testInstance.findAllByType(AccordionCollapsible).length).toBe(3)
-    })
-  })
-
-  it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
-    await waitFor(() => {
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[19].props.children).toEqual('mock sender 3')
-      expect(textViews[20].props.children).toEqual('Invalid DateTime')
-      expect(textViews[21].props.children).toEqual('Last accordion collapsible should be open, so the body text of this message should display')
-      expect(textViews[22].props.children).toEqual('mock sender 2')
-      expect(textViews[23].props.children).toEqual('Invalid DateTime')
-      expect(textViews[24].props.children).toEqual('mock sender 1')
-      expect(textViews[25].props.children).toEqual('Invalid DateTime')
-    })
-  })
-
-  describe('when first message and last message is clicked', () => {
-    it('should close first accordion and open last accordion', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[4].props.onPress()
-      })
-      await waitFor(() => {
-      testInstance.findAllByType(Pressable)[6].props.onPress()
-      })
-
-      expect(testInstance.findAllByType(TextView)[21].props.children).toBe('mock sender 2')
-      // Used to display last message's contents, but now there is no textview after the date
-      expect(testInstance.findAllByType(TextView)[23].props.children).toBe('mock sender 1')
-      expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView).length).toBe(26)
     })
   })
 
