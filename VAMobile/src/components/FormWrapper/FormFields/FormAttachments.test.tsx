@@ -57,7 +57,6 @@ context('FormAttachments', () => {
 
     component = render(
       <FormAttachments
-        originHeader="test header"
         removeOnPress={removeOnPressSpy}
         largeButtonProps={{ label: 'add files', onPress: largeButtonSpy }}
         attachmentsList={attachments}
