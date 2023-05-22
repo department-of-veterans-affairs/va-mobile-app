@@ -117,6 +117,7 @@ context('ReplyMessage', () => {
   let navigateToVeteranCrisisLineSpy: jest.Mock
   let navigateToAttachmentsSpy: jest.Mock
   let navigateToAttachmentsFAQSpy: jest.Mock
+  let navigateToReplyHelpSpy: jest.Mock
 
   const initializeTestInstance = (
     mockMessagesById: SecureMessagingMessageMap,
@@ -128,12 +129,18 @@ context('ReplyMessage', () => {
     navigateToVeteranCrisisLineSpy = jest.fn()
     navigateToAttachmentsSpy = jest.fn()
     navigateToAttachmentsFAQSpy = jest.fn()
+    navigateToReplyHelpSpy = jest.fn()
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('VeteransCrisisLine').mockReturnValue(navigateToVeteranCrisisLineSpy)
-        .calledWith('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList: [], messageID: 3 }).mockReturnValue(navigateToAttachmentsSpy)
-        .calledWith('AttachmentsFAQ', { originHeader: 'Reply' } ).mockReturnValue(navigateToAttachmentsFAQSpy)
+      .mockReturnValue(() => {})
+      .calledWith('VeteransCrisisLine')
+      .mockReturnValue(navigateToVeteranCrisisLineSpy)
+      .calledWith('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList: [], messageID: 3 })
+      .mockReturnValue(navigateToAttachmentsSpy)
+      .calledWith('AttachmentsFAQ', { originHeader: 'Reply' })
+      .mockReturnValue(navigateToAttachmentsFAQSpy)
+      .calledWith('ReplyHelp')
+      .mockReturnValue(navigateToReplyHelpSpy)
 
     isIOSMock.mockReturnValue(false)
 
@@ -188,21 +195,18 @@ context('ReplyMessage', () => {
   })
 
   describe('on click of the collapsible view', () => {
-    it('should display the when will i get a reply children text', async () => {
-      waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
-
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual(
-          'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
-        )
+    it('should show the Reply Help panel', async () => {
+      await waitFor(() => {
+        testInstance.findByProps({ accessibilityLabel: 'When will I get a reply?' }).props.onPress()
       })
+      expect(navigateToReplyHelpSpy).toHaveBeenCalled()
     })
   })
 
   it('should add the text (*Required) for the message body text field', async () => {
     await waitFor(() => {
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[19].props.children).toEqual(['Message', ' ','(Required)'])
+      expect(textViews[14].props.children).toEqual(['Message', ' ', '(Required)'])
     })
   })
 
@@ -286,10 +290,10 @@ context('ReplyMessage', () => {
   describe('when first message and last message is clicked', () => {
     it('should close first accordion and open last accordion', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[4].props.onPress()
+        testInstance.findAllByType(Pressable)[5].props.onPress()
       })
       await waitFor(() => {
-      testInstance.findAllByType(Pressable)[6].props.onPress()
+        testInstance.findAllByType(Pressable)[7].props.onPress()
       })
 
       expect(testInstance.findAllByType(TextView)[21].props.children).toBe('mock sender 2')
