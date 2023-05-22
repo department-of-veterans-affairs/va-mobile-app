@@ -55,6 +55,7 @@ import {
   useAppDispatch,
   useAttachments,
   useBeforeNavBackListener,
+  useDestructiveAlert,
   useError,
   useMessageWithSignature,
   useRouteNavigation,
@@ -192,6 +193,28 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       navigation.navigate('SecureMessaging')
     }
   }, [sendMessageComplete, dispatch, navigation])
+
+  const draftAttachmentAlert = useDestructiveAlert()
+
+  const onSaveDraft = (messageData: SecureMessagingFormData): void => {
+    if (attachmentsList.length) {
+      draftAttachmentAlert({
+        title: t('secureMessaging.draft.cantSaveAttachments'),
+        cancelButtonIndex: 0,
+        buttons: [
+          {
+            text: t('secureMessaging.attachments.keepEditing'),
+          },
+          {
+            text: t('secureMessaging.startNewMessage.cancel.saveDraft'),
+            onPress: () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID)),
+          },
+        ],
+      })
+    } else {
+      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID))
+    }
+  }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
@@ -340,7 +363,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       messageData.draft_id = savedDraftID
     }
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID))
+      onSaveDraft(messageData)
     } else {
       dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList))
     }

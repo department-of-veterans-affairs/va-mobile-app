@@ -211,7 +211,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('secureMessaging.deleteDraft.keep'),
+          text: t('secureMessaging.attachments.keepEditing'),
         },
         {
           text: t('secureMessaging.deleteDraft.delete'),
@@ -235,7 +235,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       actionText: tc('save'),
       addDivider: true,
       iconName: 'FolderSolid',
-      accessibilityLabel: t('secureMessaging.saveDraft.menuBtnA11y'),
+      accessibilityLabel: t('secureMessaging.saveDraft'),
       onPress: () => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
@@ -251,6 +251,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       onPress: onDeletePressed,
     },
   ]
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props): ReactNode => (
@@ -272,6 +273,28 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       navigation.setParams({ attachmentFileToAdd: {} })
     }
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
+
+  const draftAttachmentAlert = useDestructiveAlert()
+
+  const onSaveDraft = (messageData: SecureMessagingFormData): void => {
+    if (attachmentsList.length) {
+      draftAttachmentAlert({
+        title: t('secureMessaging.draft.cantSaveAttachments'),
+        cancelButtonIndex: 0,
+        buttons: [
+          {
+            text: t('secureMessaging.attachments.keepEditing'),
+          },
+          {
+            text: t('secureMessaging.startNewMessage.cancel.saveDraft'),
+            onPress: () => dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true)),
+          },
+        ],
+      })
+    } else {
+      dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true))
+    }
+  }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
@@ -427,7 +450,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     const messageData = getMessageData()
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true))
+      onSaveDraft(messageData)
     } else {
       // TODO: send along composeType so API knows which endpoint to POST to
       dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, replyToID))

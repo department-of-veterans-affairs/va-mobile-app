@@ -412,7 +412,7 @@ export const getMessageSignature =
  * Redux action to save draft
  */
 export const saveDraft =
-  (messageData: SecureMessagingFormData, messages: SnackbarMessages, messageID?: number, isReply?: boolean, replyID?: number, refreshFolder?: boolean): AppThunk =>
+  (messageData: SecureMessagingFormData, messages: SnackbarMessages, messageID?: number, isReply?: boolean | null, replyID?: number, refreshFolder?: boolean): AppThunk =>
   async (dispatch, getState) => {
     const retryFunction = () => dispatch(saveDraft(messageData, messages, messageID, isReply, replyID, refreshFolder))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
