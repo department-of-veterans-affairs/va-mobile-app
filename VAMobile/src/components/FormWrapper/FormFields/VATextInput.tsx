@@ -101,10 +101,6 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
       } else {
         onChange(newVal)
       }
-      // if there was an error, remove when the user starts typing
-      if (newVal.length > 0 && setError && error !== '') {
-        setError('')
-      }
     },
     onEndEditing,
     style: {
