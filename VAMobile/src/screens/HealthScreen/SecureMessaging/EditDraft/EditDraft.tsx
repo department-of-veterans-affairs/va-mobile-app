@@ -53,7 +53,6 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { getStartNewMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
@@ -482,10 +481,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Pressable
               onPress={navigateTo('ReplyHelp')}
-              accessibilityRole="button"
+              accessibilityRole={'button'}
               accessibilityLabel={t('secureMessaging.startNewMessage.whenWillIGetAReply')}
-              importantForAccessibility="yes">
-              <Box pointerEvents="none" accessible={false} importantForAccessibility="no-hide-descendants">
+              importantForAccessibility={'yes'}>
+              <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
                 <CollapsibleView text={t('secureMessaging.startNewMessage.whenWillIGetAReply')} showInTextArea={false} />
               </Box>
             </Pressable>

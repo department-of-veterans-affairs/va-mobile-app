@@ -259,10 +259,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         <Box mt={theme.dimensions.standardMarginBetween}>
           <Pressable
             onPress={navigateTo('ReplyHelp')}
-            accessibilityRole="button"
+            accessibilityRole={'button'}
             accessibilityLabel={t('secureMessaging.startNewMessage.whenWillIGetAReply')}
-            importantForAccessibility="yes">
-            <Box pointerEvents="none" accessible={false} importantForAccessibility="no-hide-descendants">
+            importantForAccessibility={'yes'}>
+            <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
               <CollapsibleView text={t('secureMessaging.startNewMessage.whenWillIGetAReply')} showInTextArea={false} />
             </Box>
           </Pressable>
