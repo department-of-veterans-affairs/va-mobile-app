@@ -39,7 +39,7 @@ context('VeteransCrisisLineNumbers', () => {
   describe('when the call number and press 1 link is clicked', () => {
     it('should launch external link with the parameter tel:988', async () => {
       act(() => {
-        testInstance.findByProps({ accessibilityLabel: 'Call 988 and select 1' }).props.onPress()
+        testInstance.findByProps({ accessibilityLabel: 'Call 9 8 8 and select 1' }).props.onPress()
       })
       expect(mockExternalLinkSpy).toBeCalledWith('tel:988')
     })
