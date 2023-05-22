@@ -31,7 +31,7 @@ const VeteransCrisisLineNumbers: FC = () => {
         <ClickForActionLink
           testID="veteransCrisisLineCrisisCallNumberTestID"
           displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
-          a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed')}
+          a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed.a11y')}
           numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')}
           linkType={LinkTypeOptionsConstants.call}
           fireAnalytic={fireAnalyticFn}
