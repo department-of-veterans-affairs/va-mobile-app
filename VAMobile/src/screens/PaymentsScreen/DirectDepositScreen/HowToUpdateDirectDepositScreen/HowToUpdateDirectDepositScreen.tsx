@@ -22,7 +22,7 @@ const HowToUpdateDirectDepositScreen: FC<HowToUpdateDirectDepositScreenProps> = 
       <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
         <Box mt={standardMarginBetween}>
           <AlertBox border="warning">
-            <TextView variant="MobileBodyBold" accessibilityRole="header">
+            <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
               {t('howToUpdateDirectDeposit.alert.title')}
             </TextView>
             <TextView variant="MobileBody" paragraphSpacing={true}>

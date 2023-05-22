@@ -47,7 +47,9 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {letterType === LetterTypeConstants.serviceVerification && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox border="informational" text={t('letters.serviceVerificationLetter.informational')} />
+            <AlertBox border="informational">
+              <TextView variant="MobileBody">{t('letters.serviceVerificationLetter.informational')}</TextView>
+            </AlertBox>
           </Box>
         )}
         <TextArea>

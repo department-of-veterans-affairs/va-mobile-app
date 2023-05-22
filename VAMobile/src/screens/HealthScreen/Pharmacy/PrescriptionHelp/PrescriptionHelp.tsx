@@ -15,7 +15,7 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
-  const { gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween, standardMarginBetween } = theme.dimensions
+  const { gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const medicationNoIncludedList: Array<VABulletListText> = [
     {
       text: t('prescription.help.item1'),
@@ -43,9 +43,7 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
         <TextView mt={condensedMarginBetween} variant="MobileBody" paragraphSpacing={true}>
           {t('prescription.help.listHeader')}
         </TextView>
-        <Box my={standardMarginBetween}>
-          <VABulletList listOfText={medicationNoIncludedList} />
-        </Box>
+        <VABulletList listOfText={medicationNoIncludedList} />
         <TextView variant="MobileBody" accessibilityLabel={t('prescription.help.footer.a11yLabel')}>
           {t('prescription.help.footer')}
         </TextView>
