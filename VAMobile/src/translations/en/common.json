@@ -525,7 +525,7 @@
   "fileUpload.addPhoto.a11y": "Add a photo to your file",
   "fileUpload.addAnotherPhoto": "Add Another Photo",
   "fileUpload.addAnotherPhotoA11yHint": "Add another photo using your device's camera",
-  "fileUpload.acceptedFileTypeOptions": "pdf (unlocked), gif, jpeg, jpg, bmp, txt",
+  "fileUpload.acceptedFileTypeOptions": "PDF (unlocked), GIF, JPEG, JPG, BMP, TXT",
   "fileUpload.acceptedFileTypes": "Accepted file types:",
   "fileUpload.camera": "Camera",
   "fileUpload.confirmUpload": "Confirm upload",
