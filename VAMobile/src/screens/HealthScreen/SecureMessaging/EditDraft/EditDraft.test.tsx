@@ -302,7 +302,7 @@ context('EditDraft', () => {
   describe('on click of the collapsible view', () => {
     it('should show the Reply Help panel', async () => {
       await waitFor(() => {
-        testInstance.findByProps({ accessibilityLabel: 'When will I get a reply?' }).props.onPress()
+        testInstance.findByProps({ accessibilityLabel: 'Only use messages for non-urgent needs' }).props.onPress()
       })
       expect(navigateToReplyHelpSpy).toHaveBeenCalled()
     })
