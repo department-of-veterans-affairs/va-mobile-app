@@ -482,10 +482,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
             <Pressable
               onPress={navigateTo('ReplyHelp')}
               accessibilityRole={'button'}
-              accessibilityLabel={t('secureMessaging.startNewMessage.whenWillIGetAReply')}
+              accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
               importantForAccessibility={'yes'}>
               <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-                <CollapsibleView text={t('secureMessaging.startNewMessage.whenWillIGetAReply')} showInTextArea={false} />
+                <CollapsibleView text={tc('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
               </Box>
             </Pressable>
           </Box>
