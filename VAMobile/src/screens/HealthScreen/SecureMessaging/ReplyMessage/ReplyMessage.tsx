@@ -41,7 +41,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useMessageWithSignature, useRouteNavigation, useTheme, useValidateMessageWithSignature } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useDestructiveAlert, useMessageWithSignature, useRouteNavigation, useTheme, useValidateMessageWithSignature } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 
@@ -160,6 +160,28 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
   }, [sendMessageComplete, dispatch, navigation])
 
+  const draftAttachmentAlert = useDestructiveAlert()
+
+  const onSaveDraft = (messageData: SecureMessagingFormData): void => {
+    if (attachmentsList.length) {
+      draftAttachmentAlert({
+        title: t('secureMessaging.draft.cantSaveAttachments'),
+        cancelButtonIndex: 0,
+        buttons: [
+          {
+            text: t('secureMessaging.attachments.keepEditing'),
+          },
+          {
+            text: t('secureMessaging.startNewMessage.cancel.saveDraft'),
+            onPress: () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID)),
+          },
+        ],
+      })
+    } else {
+      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID))
+    }
+  }
+
   if (loading || savingDraft || loadingSignature || !isTransitionComplete || isDiscarded) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
@@ -224,7 +246,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID))
+      onSaveDraft(messageData)
     } else {
       receiverID && dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, messageID))
     }
