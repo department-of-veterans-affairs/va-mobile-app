@@ -137,7 +137,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const bullets = [
     { text: tc('attachments.bulletOne') },
     { text: tc('attachments.bulletTwo') },
-    { text: tc('attachments.bulletThree') },
+    { text: tc('attachments.bulletThree'), a11yLabel: (tc('attachments.bulletThree.a11yLabel') },
     { text: tc('attachments.bulletFour'), a11yLabel: tc('attachments.bulletFour.a11yLabel') },
     { text: tc('attachments.bulletFive') },
   ]
