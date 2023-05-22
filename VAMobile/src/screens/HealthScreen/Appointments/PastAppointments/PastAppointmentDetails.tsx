@@ -13,7 +13,7 @@ import {
   ProviderName,
 } from '../AppointmentDetailsCommon'
 import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
-import { AppointmentsState, getAppointmentMessages, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
+import { AppointmentsState, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
 import { Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -32,24 +32,17 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
-  const { pastAppointmentsById, appointmentMessagesById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { pastAppointmentsById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
   const appointment = pastAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, status } = attributes || ({} as AppointmentAttributes)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
-  const messages = appointmentMessagesById[appointmentID]
 
   useEffect(() => {
     dispatch(trackAppointmentDetail(pendingAppointment))
   }, [dispatch, appointmentID, pendingAppointment])
-
-  useEffect(() => {
-    if (appointment && isAPendingAppointment && !appointmentMessagesById[appointmentID]) {
-      dispatch(getAppointmentMessages(appointmentID))
-    }
-  }, [dispatch, appointment, appointmentID, appointmentMessagesById])
 
   const appointmentTypeAndDateIsLastItem =
     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME || appointmentIsCanceled
@@ -85,7 +78,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
 
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
-          <AppointmentReason attributes={attributes} messages={messages} />
+          <AppointmentReason attributes={attributes} />
           <ContactInformation attributes={attributes} />
         </TextArea>
 

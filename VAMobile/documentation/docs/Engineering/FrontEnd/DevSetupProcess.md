@@ -86,10 +86,22 @@ sidebar_position: 5
 
 - With your prefer IDE Open the `/Users/(your user folder/Workspace/va-mobile-app/VAMobile` folder.
 
-- In the `android/app` add a file named `google-services.json`. Please ask for the data that this file contains.
+- In the `android/app` directory add a file named `google-services.json`. You can download this `google-services.json` file from the [firebase console](https://console.firebase.google.com/u/0/project/va-mobile-app/settings/general/android:gov.va.mobileapp), under the "your apps" section. You can also download the corresponding `GoogleService-Info.plist` file you will need to later place in your in `VAMobile/ios`.
+
+### Download the files from Firebase
+
+#### Android
+
+![Firebase console apps section where you can find the google services file for Android](/img/devSetupImage/firebase-google-services_android.png)
+
+#### iOS
+
+![Firebase console apps section where you can find the google services file for iOS](/img/devSetupImage/firebase-google-services_ios.png)
+
+### Add file to proper directory
 
    ![Google services file](/img/devSetupImage/google-service-android-file.png)
-   
+
 - Open a terminal in the IDE and type `yarn` or `yarn install` and press enter to install the projects dependencies. This will create the `node_modules` folder.
 
 - After dependencies are installed type `cd ios && pod install && cd ..` and press enter to install pods on ios (This is done once unless you installed new dependencies that need pods created).

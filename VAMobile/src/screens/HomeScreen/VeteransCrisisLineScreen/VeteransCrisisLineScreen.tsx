@@ -75,9 +75,6 @@ const VeteransCrisisLineScreen: FC = () => {
           />
         </Box>
         <Box mt={standardMarginBetween}>
-          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween / 2}>
-            {t('contactVA.tty.body')}
-          </TextView>
           <ClickForActionLink
             testID="veteransCrisisLineHearingLossNumberTestID"
             displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}

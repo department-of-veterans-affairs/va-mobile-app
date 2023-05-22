@@ -51,7 +51,7 @@ import {
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
-import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
+import { getStartNewMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -78,8 +78,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   const snackbarSentMessages: SnackbarMessages = {
-    successMsg: t('secureMessaging.composeMessage.sent'),
-    errorMsg: t('secureMessaging.composeMessage.sent.error'),
+    successMsg: t('secureMessaging.startNewMessage.sent'),
+    errorMsg: t('secureMessaging.startNewMessage.sent.error'),
   }
 
   const {
@@ -353,32 +353,32 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           includeBlankPlaceholder: true,
           isRequiredField: true,
         },
-        fieldErrorMessage: t('secureMessaging.composeMessage.to.fieldError'),
+        fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
       },
       {
         fieldType: FieldType.Picker,
         fieldProps: {
-          labelKey: 'health:secureMessaging.formMessage.category',
+          labelKey: 'health:secureMessaging.startNewMessage.category',
           selectedValue: category,
           onSelectionChange: onCategoryChange,
-          pickerOptions: getComposeMessageSubjectPickerOptions(t),
+          pickerOptions: getStartNewMessageSubjectPickerOptions(t),
           includeBlankPlaceholder: true,
           isRequiredField: true,
         },
-        fieldErrorMessage: t('secureMessaging.composeMessage.category.fieldError'),
+        fieldErrorMessage: t('secureMessaging.startNewMessage.category.fieldError'),
       },
       {
         fieldType: FieldType.TextInput,
         fieldProps: {
           inputType: 'none',
-          labelKey: 'health:secureMessaging.composeMessage.subject',
+          labelKey: 'health:secureMessaging.startNewMessage.subject',
           value: subject,
           onChange: setSubject,
-          helperTextKey: 'health:secureMessaging.composeMessage.subject.helperText',
+          helperTextKey: 'health:secureMessaging.startNewMessage.subject.helperText',
           maxLength: 50,
           isRequiredField: category === CategoryTypeFields.other,
         },
-        fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldError'),
+        fieldErrorMessage: t('secureMessaging.startNewMessage.subject.fieldError'),
       },
     ]
   }
@@ -438,9 +438,9 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     if (noProviderError) {
       return (
         <AlertBox
-          title={t('secureMessaging.composeMessage.noMatchWithProvider')}
-          text={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolled')}
-          textA11yLabel={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
+          title={t('secureMessaging.startNewMessage.noMatchWithProvider')}
+          text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
+          textA11yLabel={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
           border="error"
           scrollViewRef={scrollViewRef}>
           <Box mt={theme.dimensions.standardMarginBetween}>
@@ -462,8 +462,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
             </Box>
             <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} accessible={true}>
               <TextView>
-                <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
-                <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
+                <TextView variant="MobileBodyBold">{t('secureMessaging.startNewMessage.important')}</TextView>
+                <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.pleaseCallHealthProvider')}</TextView>
               </TextView>
             </Box>
           </CollapsibleView>
@@ -476,7 +476,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
                 {message?.recipientName}
               </TextView>
               <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
-                {t('secureMessaging.composeMessage.subject')}
+                {t('secureMessaging.startNewMessage.subject')}
               </TextView>
               <TextView variant="MobileBodyBold" accessible={true}>
                 {subjectHeader}
