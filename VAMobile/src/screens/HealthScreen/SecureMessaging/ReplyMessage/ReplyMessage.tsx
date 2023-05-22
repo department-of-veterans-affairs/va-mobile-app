@@ -169,10 +169,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         cancelButtonIndex: 0,
         buttons: [
           {
-            text: t('secureMessaging.attachments.keepEditing'),
+            text: t('secureMessaging.keepEditing'),
           },
           {
-            text: t('secureMessaging.startNewMessage.cancel.saveDraft'),
+            text: t('secureMessaging.saveDraft'),
             onPress: () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID)),
           },
         ],

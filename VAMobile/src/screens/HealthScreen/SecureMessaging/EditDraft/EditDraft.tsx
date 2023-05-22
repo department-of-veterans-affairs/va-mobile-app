@@ -211,7 +211,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('secureMessaging.attachments.keepEditing'),
+          text: t('secureMessaging.keepEditing'),
         },
         {
           text: t('secureMessaging.deleteDraft.delete'),
@@ -220,7 +220,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           },
         },
         {
-          text: t('secureMessaging.deleteDraft.save'),
+          text: t('secureMessaging.saveDraft'),
           onPress: () => {
             setOnSaveDraftClicked(true)
             setOnSendClicked(true)
@@ -283,10 +283,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         cancelButtonIndex: 0,
         buttons: [
           {
-            text: t('secureMessaging.attachments.keepEditing'),
+            text: t('secureMessaging.keepEditing'),
           },
           {
-            text: t('secureMessaging.startNewMessage.cancel.saveDraft'),
+            text: t('secureMessaging.saveDraft'),
             onPress: () => dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true)),
           },
         ],
