@@ -423,6 +423,7 @@
   "secureMessaging.attachments.FAQ.ifYourProblemA11y": "If your problem persists, please contact the My Healthy Vet Help Desk. We're here Monday-Friday, 8:00 a.m.\ufeff8:00 p.m. E\ufeffT.",
   "secureMessaging.attachments.hasAttachment": "Has attachment",
   "secureMessaging.attachments.removeAttachment": "Remove attachment?",
+  "secureMessaging.attachments.keep": "Keep",
   "secureMessaging.attachments.selectAFile": "Select a file",
   "secureMessaging.attachments.sizeRequirements": "The file size for a single attachment cannot exceed 6 MB and the total size of the attachments cannot exceed 10 MB.",
   "secureMessaging.attachments.sizeRequirements.A11yLabel": "The file size for a single attachment cannot exceed 6 megabytes and the total size of the attachments cannot exceed 10 megabytes.",
