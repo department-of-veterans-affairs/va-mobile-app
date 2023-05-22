@@ -37,7 +37,8 @@
     "e2e:ios-test": "detox test -c ios --cleanup",
     "e2e:android-build": " yarn run bundle:android && detox build -c android",
     "e2e:android-test": "detox test -c android --cleanup",
-    "docs": "yarn && cd documentation && yarn && yarn start"
+    "docs": "yarn && cd documentation && yarn && yarn start",
+    "security-check": "node ./scripts/security-check.js"
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "^3.13.0",

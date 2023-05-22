@@ -17,6 +17,20 @@ defaults:
     working-directory: VAMobile
 
 jobs:
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn
+        timeout-minutes: 10
+
+      - name: Audit dependencies
+        run: yarn security-check
   lint:
     runs-on: ubuntu-latest
     steps:
