@@ -4,7 +4,7 @@ import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toas
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
-import { Box, TextViewProps } from 'components'
+import { Box, TextViewProps, VAScrollView } from 'components'
 import { BoxProps } from './Box'
 import { NAMESPACE } from 'constants/namespaces'
 import { triggerHaptic } from 'utils/haptics'
@@ -138,29 +138,31 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   return (
     <SafeAreaView edges={['left', 'right']} style={{ ...safeViewStyle }}>
-      <Box {...mainContainerProps}>
-        <View accessible={true} accessibilityRole={'alert'} ref={focusRef}>
-          <Box {...messageContainerProps}>
-            <Box {...iconWrapperBoxProps}>
-              <VAIcon {...snackBarIconProps} />
+      <VAScrollView>
+        <Box {...mainContainerProps}>
+          <View accessible={true} accessibilityRole={'alert'} ref={focusRef}>
+            <Box {...messageContainerProps}>
+              <Box {...iconWrapperBoxProps}>
+                <VAIcon {...snackBarIconProps} />
+              </Box>
+              <TextView {...messageProp}>{message}</TextView>
             </Box>
-            <TextView {...messageProp}>{message}</TextView>
-          </Box>
-        </View>
-        <Box {...btnContainerProps}>
-          {!isUndo && (
-            <TouchableOpacity onPress={onActionPress} style={confirmBtnStlye} accessible={true} accessibilityRole={'button'}>
-              <TextView variant={'SnackBarBtnText'} display={'flex'}>
-                {actionBtnText || isError ? t('snackbar.tryAgain') : t('snackbar.undo')}
-              </TextView>
+          </View>
+          <Box {...btnContainerProps}>
+            {!isUndo && (
+              <TouchableOpacity onPress={onActionPress} style={confirmBtnStlye} accessible={true} accessibilityRole={'button'}>
+                <TextView variant={'SnackBarBtnText'} display={'flex'}>
+                  {actionBtnText || isError ? t('snackbar.tryAgain') : t('snackbar.undo')}
+                </TextView>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity onPress={onDismissPress} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
+              <TextView variant={'SnackBarBtnText'}>{t('snackbar.dismiss')}</TextView>
             </TouchableOpacity>
-          )}
-          <TouchableOpacity onPress={onDismissPress} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
-            <TextView variant={'SnackBarBtnText'}>{t('snackbar.dismiss')}</TextView>
-          </TouchableOpacity>
+          </Box>
         </Box>
-      </Box>
-      {vibrate()}
+        {vibrate()}
+      </VAScrollView>
     </SafeAreaView>
   )
 }
