@@ -63,3 +63,6 @@ sidebar_position: 4
         * Add new design librarians by searching their name, selecting “can edit,” and sending an invite
         ![Figma screenshot of permissions](/img/figma/figma-permissions.png)
         * **Note**: The file “Navigation 2.0 Screen templates for designers” is currently available for anyone to edit. Once finalized, the permissions should be updated to restrict editing.
+
+        *For more information on permissions and sharing in Figma, check out [this page](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/figma-permissions) on the doc site.*
+
