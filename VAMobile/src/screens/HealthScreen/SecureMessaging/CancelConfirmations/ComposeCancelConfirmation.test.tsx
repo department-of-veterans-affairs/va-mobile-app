@@ -139,7 +139,7 @@ context('useComposeCancelConfirmation', () => {
   describe('Reply', () => {
     describe('on clicking discard', () => {
       it('should go back to the message the user was viewing', async () => {
-        initializeTestInstance({ body: 'test reply' }, undefined, true, FormHeaderTypeConstants.reply, 2)
+        initializeTestInstance({ body: 'test reply', category: 'APPOINTMENTS' }, undefined, true, FormHeaderTypeConstants.reply, 2)
         act(() => {
           discardButtonSpy()
         })
@@ -161,7 +161,7 @@ context('useComposeCancelConfirmation', () => {
   describe('Draft', () => {
     describe('on clicking discard', () => {
       it('should go back to drafts folder', async () => {
-        initializeTestInstance({ body: 'test reply' }, 1, true, FormHeaderTypeConstants.draft, undefined)
+        initializeTestInstance({ body: 'test reply', category: 'APPOINTMENTS' }, 1, true, FormHeaderTypeConstants.draft, undefined)
         act(() => {
           discardButtonSpy()
         })
