@@ -314,7 +314,7 @@ context('StartNewMessage', () => {
         await waitFor(() => {
           expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
         })
       })
 
@@ -351,7 +351,7 @@ context('StartNewMessage', () => {
         await waitFor(() => {
           expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
         })
       })
 
@@ -372,7 +372,7 @@ context('StartNewMessage', () => {
 
       expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
 
       await waitFor(() => {
         testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
@@ -384,7 +384,7 @@ context('StartNewMessage', () => {
 
       expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeFalsy()
-      expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeFalsy()
+      expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Attachments')).toBeTruthy()
     })
   })
