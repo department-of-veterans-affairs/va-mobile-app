@@ -51,18 +51,14 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.title')} {...testIdProps('Letters-page')}>
-      <Box {...testIdProps(t('letters.overview.documents'))} accessible={true}>
-        <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          {t('letters.overview.documents')}
-        </TextView>
-      </Box>
+      <TextView variant="MobileBody" mx={theme.dimensions.gutter} paragraphSpacing={true}>
+        {t('letters.overview.documents')}
+      </TextView>
       <AddressSummary addressData={addressData} />
-      <Box {...testIdProps(t('letters.overview.ifThisAddress'))} accessible={true}>
-        <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
-          {t('letters.overview.ifThisAddress')}
-        </TextView>
-      </Box>
-      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>
+      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+        {t('letters.overview.ifThisAddress')}
+      </TextView>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
         <VAButton
           onPress={onViewPressed}
           label={t('letters.overview.viewLetters')}

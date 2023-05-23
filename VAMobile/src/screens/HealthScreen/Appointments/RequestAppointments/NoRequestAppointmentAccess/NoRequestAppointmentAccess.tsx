@@ -42,13 +42,10 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
     <ChildTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={t('requestAppointments.launchModalBtnTitle')}>
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox title={t('noRequestAppointmentAccess.title')} border="warning" text={t('noRequestAppointmentAccess.text')}>
-          <Box my={standardMarginBetween}>
-            <VABulletList listOfText={[bulletOne]} />
+          <Box mt={standardMarginBetween}>
+            <VABulletList listOfText={[bulletOne, bulletTwo]} paragraphSpacing={true} />
           </Box>
-          <Box mb={standardMarginBetween}>
-            <VABulletList listOfText={[bulletTwo]} />
-          </Box>
-          <Box mt={standardMarginBetween} accessibilityRole="button" mb={standardMarginBetween}>
+          <Box accessibilityRole="button" mb={standardMarginBetween}>
             <VAButton
               onPress={onFacilityLocator}
               label={t('noRequestAppointmentAccess.findFacilityBtnTitle')}
