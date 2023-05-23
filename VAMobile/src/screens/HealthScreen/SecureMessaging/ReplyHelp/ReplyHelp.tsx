@@ -35,7 +35,15 @@ const ReplyHelp: FC = () => {
         </TextView>
 
         <Box mt={standardMarginBetween}>
-          <VABulletList listOfText={[{ boldedTextPrefix: t('secureMessaging.replyHelp.ifYoureInCrisis'), text: t('secureMessaging.replyHelp.connectWithOur') }]} />
+          <VABulletList
+            listOfText={[
+              {
+                boldedTextPrefix: t('secureMessaging.replyHelp.ifYoureInCrisis'),
+                text: t('secureMessaging.replyHelp.connectWithOur'),
+                a11yLabel: t('secureMessaging.replyHelp.ifYoureInCrisis') + t('secureMessaging.replyHelp.connectWithOur'),
+              },
+            ]}
+          />
         </Box>
 
         <Box mt={standardMarginBetween}>
@@ -43,7 +51,15 @@ const ReplyHelp: FC = () => {
         </Box>
 
         <Box mt={standardMarginBetween}>
-          <VABulletList listOfText={[{ boldedTextPrefix: t('secureMessaging.replyHelp.ifYouThink'), text: t('secureMessaging.replyHelp.call911OrGoTo') }]} />
+          <VABulletList
+            listOfText={[
+              {
+                boldedTextPrefix: t('secureMessaging.replyHelp.ifYouThink'),
+                text: t('secureMessaging.replyHelp.call911OrGoTo'),
+                a11yLabel: t('secureMessaging.replyHelp.ifYouThink') + t('secureMessaging.replyHelp.call911OrGoTo'),
+              },
+            ]}
+          />
         </Box>
 
         <Box mt={standardMarginBetween}>

@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 import _ from 'underscore'
 
 import { VATextColors } from 'styles/theme'
+import { testIdProps } from 'utils/accessibility'
 import { useExternalLink } from 'utils/hooks'
 import Box from './Box'
 import TextView, { FontVariant, TextViewProps } from './TextView'
@@ -73,7 +74,6 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
           variant: variant || 'MobileBody',
           color: color || 'bodyText',
           onPress: linkToRedirect ? async (): Promise<void> => onPress(linkToRedirect) : undefined,
-          accessibilityLabel: a11yLabel || undefined,
           flexWrap: 'wrap',
           flex: 1,
         }
@@ -83,7 +83,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
             <Box mr={20} mt={12}>
               <VAIcon name="Bullet" fill={color || 'bodyText'} />
             </Box>
-            <TextView {...textViewProps}>
+            <TextView {...textViewProps} {...testIdProps(a11yLabel || text)}>
               {!!boldedTextPrefix && <TextView variant="MobileBodyBold">{boldedTextPrefix}</TextView>}
               {text.trim()}
               {!!boldedText && <TextView variant="MobileBodyBold">{boldedText}</TextView>}
