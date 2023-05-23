@@ -30,6 +30,7 @@ import {
   SecureMessagingSystemFolderIdConstants,
   SecureMessagingTabTypesConstants,
 } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { InteractionManager, ScrollView } from 'react-native'
@@ -52,6 +53,7 @@ import {
 import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { getStartNewMessageSubjectPickerOptions } from 'utils/secureMessaging'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -188,7 +190,9 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   const getMessageData = (): SecureMessagingFormData => {
-    return isReplyDraft ? { body, draft_id: messageID } : { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject, draft_id: messageID }
+    return isReplyDraft
+      ? { body, draft_id: messageID, category: category as CategoryTypes }
+      : { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject, draft_id: messageID }
   }
 
   const goToCancel = (): void => {
@@ -320,6 +324,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const onCategoryChange = (newCategory: string): void => {
     setCategory(newCategory)
+    logAnalyticsEvent(Events.vama_sm_change_category(newCategory as CategoryTypes))
 
     // if the category used to be general and now its not, clear field errors because the category line is now
     // no longer a required field

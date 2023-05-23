@@ -218,7 +218,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const sendReplyOrSaveDraft = (): void => {
     dispatch(resetSendMessageFailed())
-    const messageData = { body: messageReply } as SecureMessagingFormData
+    const messageData = { body: messageReply, category } as SecureMessagingFormData
     if (savedDraftID) {
       messageData.draft_id = savedDraftID
     }

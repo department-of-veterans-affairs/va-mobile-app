@@ -1,3 +1,4 @@
+import { CategoryTypes } from 'store/api'
 import { Event, UserAnalytic } from 'utils/analytics'
 
 /**
@@ -56,21 +57,31 @@ export const Events = {
       },
     }
   },
-  vama_sm_save_draft: (totalTime: number, actionTime: number): Event => {
+  vama_sm_change_category: (messageCategory: CategoryTypes): Event => {
+    return {
+      name: 'vama_sm_change_category',
+      params: {
+        messageCategory,
+      },
+    }
+  },
+  vama_sm_save_draft: (totalTime: number, actionTime: number, messageCategory?: string): Event => {
     return {
       name: 'vama_sm_save_draft',
       params: {
         totalTime,
         actionTime,
+        messageCategory,
       },
     }
   },
-  vama_sm_send_message: (totalTime: number, actionTime: number): Event => {
+  vama_sm_send_message: (totalTime: number, actionTime: number, messageCategory?: CategoryTypes): Event => {
     return {
       name: 'vama_sm_send_message',
       params: {
         totalTime,
         actionTime,
+        messageCategory,
       },
     }
   },

@@ -2,18 +2,20 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, VAButton, VAButtonProps } from 'components'
+import { CategoryTypes } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type ReplyMessageButtonProps = {
   messageID: number
+  category: CategoryTypes
 }
 
-const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID }) => {
+const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID, category }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const onPress = navigateTo('ReplyMessage', { messageID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  const onPress = navigateTo('ReplyMessage', { messageID, category, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   const replyButtonProps: VAButtonProps = {
     label: t('secureMessaging.reply'),

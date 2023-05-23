@@ -16,7 +16,7 @@ export type UserAnalytic = {
 
 export const logAnalyticsEvent = async (event: Event): Promise<void> => {
   const { name, params } = event
-  console.debug(`logging analytics event ${name}`)
+  console.debug(`logging analytics event ${name}`, params)
   await analytics().logEvent(name, params)
 }
 
