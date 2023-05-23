@@ -65,7 +65,7 @@ export const Events = {
       },
     }
   },
-  vama_sm_save_draft: (totalTime: number, actionTime: number, messageCategory?: CategoryTypes): Event => {
+  vama_sm_save_draft: (totalTime: number, actionTime: number, messageCategory: CategoryTypes): Event => {
     return {
       name: 'vama_sm_save_draft',
       params: {

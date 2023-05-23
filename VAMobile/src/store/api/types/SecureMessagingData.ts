@@ -94,7 +94,7 @@ export type SecureMessagingMessageMap = {
 
 export type SecureMessagingFormData = {
   recipient_id?: number
-  category?: CategoryTypes
+  category: CategoryTypes
   body: string
   subject?: string
   draft_id?: number
