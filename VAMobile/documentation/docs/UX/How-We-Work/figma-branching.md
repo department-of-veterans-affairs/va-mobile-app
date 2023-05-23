@@ -23,7 +23,8 @@ In the future, we may consider branching for:
 * Development handoff of specific components or feature work
 
 ## Who will be able to do what in the design library?
-We’ll be updating permissions for the design library as follows:
+
+We’ll be updating [permissions](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/figma-permissions) for the design library as follows:
 
 * Owner (UX lead)
     * Able to adjust file and project permissions
