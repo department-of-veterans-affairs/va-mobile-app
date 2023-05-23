@@ -130,10 +130,13 @@ context('ReplyMessage', () => {
     navigateToAttachmentsFAQSpy = jest.fn()
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('VeteransCrisisLine').mockReturnValue(navigateToVeteranCrisisLineSpy)
-        .calledWith('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList: [], messageID: 3 }).mockReturnValue(navigateToAttachmentsSpy)
-        .calledWith('AttachmentsFAQ', { originHeader: 'Reply' } ).mockReturnValue(navigateToAttachmentsFAQSpy)
+      .mockReturnValue(() => {})
+      .calledWith('VeteransCrisisLine')
+      .mockReturnValue(navigateToVeteranCrisisLineSpy)
+      .calledWith('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList: [], messageID: 3 })
+      .mockReturnValue(navigateToAttachmentsSpy)
+      .calledWith('AttachmentsFAQ', { originHeader: 'Reply' })
+      .mockReturnValue(navigateToAttachmentsFAQSpy)
 
     isIOSMock.mockReturnValue(false)
 
@@ -202,7 +205,7 @@ context('ReplyMessage', () => {
   it('should add the text (*Required) for the message body text field', async () => {
     await waitFor(() => {
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[19].props.children).toEqual(['Message', ' ','(Required)'])
+      expect(textViews[19].props.children).toEqual(['Message', ' ', '(Required)'])
     })
   })
 
@@ -289,7 +292,7 @@ context('ReplyMessage', () => {
         testInstance.findAllByType(Pressable)[4].props.onPress()
       })
       await waitFor(() => {
-      testInstance.findAllByType(Pressable)[6].props.onPress()
+        testInstance.findAllByType(Pressable)[6].props.onPress()
       })
 
       expect(testInstance.findAllByType(TextView)[21].props.children).toBe('mock sender 2')
@@ -302,7 +305,7 @@ context('ReplyMessage', () => {
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance({}, [], true)
+      initializeTestInstance(mockMessagesById, [], true)
       await waitFor(() => {
         expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
       })
