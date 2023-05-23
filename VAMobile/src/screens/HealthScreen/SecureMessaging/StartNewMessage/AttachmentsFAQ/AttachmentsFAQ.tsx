@@ -42,23 +42,18 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
               t('secureMessaging.attachments.FAQ.howCanI.bullet2'),
               t('secureMessaging.attachments.FAQ.howCanI.bullet3'),
             ]}
+            paragraphSpacing={true}
           />
         </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <TextView>
-            <TextView variant="MobileBodyBold">{t('secureMessaging.attachments.FAQ.note') + ' '}</TextView>
-            <TextView variant="MobileBody">{t('secureMessaging.attachments.FAQ.noteText')}</TextView>
-          </TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VABulletList listOfText={bulletedListOfText} />
-          </Box>
-        </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBody" accessibilityLabel={t('secureMessaging.attachments.FAQ.ifYourProblemA11y')}>
-            {t('secureMessaging.attachments.FAQ.ifYourProblem')}
-          </TextView>
-          <ClickToCallPhoneNumber phone={tc('common:8773270022.displayText')} {...a11yHintProp(tc('home:veteransCrisisLine.callA11yHint'))} />
-        </Box>
+        <TextView variant="MobileBodyBold">{t('secureMessaging.attachments.FAQ.note') + ' '}</TextView>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {t('secureMessaging.attachments.FAQ.noteText')}
+        </TextView>
+        <VABulletList listOfText={bulletedListOfText} paragraphSpacing={true} />
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('secureMessaging.attachments.FAQ.ifYourProblemA11y')}>
+          {t('secureMessaging.attachments.FAQ.ifYourProblem')}
+        </TextView>
+        <ClickToCallPhoneNumber phone={tc('common:8773270022.displayText')} {...a11yHintProp(tc('home:veteransCrisisLine.callA11yHint'))} />
       </Box>
     </LargePanel>
   )

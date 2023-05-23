@@ -113,8 +113,10 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
           <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>
             {t('askForClaimDecision.title')}
           </TextView>
-          <TextView variant="MobileBody">{t('askForClaimDecision.weSentYouALetter')}</TextView>
-          <TextView variant="MobileBody" my={standardMarginBetween}>
+          <TextView variant="MobileBody" paragraphSpacing={true}>
+            {t('askForClaimDecision.weSentYouALetter')}
+          </TextView>
+          <TextView variant="MobileBody" mb={standardMarginBetween}>
             {t('askForClaimDecision.takingFull30Days')}
           </TextView>
           <VABulletList listOfText={bulletedListOfText} />
