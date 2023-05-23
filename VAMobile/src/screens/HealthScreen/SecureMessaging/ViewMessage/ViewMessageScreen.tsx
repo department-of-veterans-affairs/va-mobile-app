@@ -230,7 +230,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         />
       )}
       {!replyExpired ? (
-        <ReplyMessageButton messageID={messageID} category={message.category} />
+        <ReplyMessageButton messageID={messageID} />
       ) : (
         <Box>
           <StartNewMessageButton />
