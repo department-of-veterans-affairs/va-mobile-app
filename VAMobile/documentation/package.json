@@ -61,11 +61,11 @@
     ]
   },
   "resolutions": {
-    "svg-react-loader/loader-utils": "1.4.2",
     "@docusaurus/**/eta": "^2.0.0",
     "@docusaurus/**/trim": "^0.0.3",
     "@docusaurus/**/got": "^11.8.5",
     "babel-plugin-module-resolver/**/json5": "^1.0.2",
+    "svg-react-loader/loader-utils": "1.4.2",
     "svg-react-loader/xml2js": "^0.5.0"
   }
 }
