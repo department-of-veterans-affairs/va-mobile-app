@@ -28,6 +28,8 @@ jobs:
   test-build:
     name: Test Build for Documentation
     runs-on: ubuntu-latest
+    needs: [get-workflow-environment]
+    environment: ${{ needs.get-workflow-environment.outputs.environment_name }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
