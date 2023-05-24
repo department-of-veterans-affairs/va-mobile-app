@@ -24,31 +24,27 @@ const ReplyHelp: FC = () => {
           {t('secureMessaging.replyHelp.onlyUseMessages')}
         </TextView>
 
-        <TextView mt={theme.dimensions.condensedMarginBetween}>
+        <TextView mt={theme.dimensions.condensedMarginBetween} paragraphSpacing={true}>
           <TextView variant="MobileBody">{t('secureMessaging.replyHelp.yourCareTeam') + ' '}</TextView>
           <TextView variant="MobileBodyBold">{t('secureMessaging.replyHelp.3BusinessDays')}</TextView>
           <TextView variant="MobileBody">{' ' + t('secureMessaging.replyHelp.toReply')}</TextView>
         </TextView>
 
-        <TextView variant="MobileBody" mt={standardMarginBetween}>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
           {t('secureMessaging.replyHelp.ifYouNeedHelp')}
         </TextView>
 
-        <Box mt={standardMarginBetween}>
-          <VABulletList
-            listOfText={[
-              {
-                boldedTextPrefix: t('secureMessaging.replyHelp.ifYoureInCrisis'),
-                text: t('secureMessaging.replyHelp.connectWithOur'),
-                a11yLabel: t('secureMessaging.replyHelp.ifYoureInCrisis') + t('secureMessaging.replyHelp.connectWithOur'),
-              },
-            ]}
-          />
-        </Box>
+        <VABulletList
+          listOfText={[
+            {
+              boldedTextPrefix: t('secureMessaging.replyHelp.ifYoureInCrisis'),
+              text: t('secureMessaging.replyHelp.connectWithOur'),
+              a11yLabel: t('secureMessaging.replyHelp.ifYoureInCrisis') + t('secureMessaging.replyHelp.connectWithOur'),
+            },
+          ]}
+        />
 
-        <Box mt={standardMarginBetween}>
-          <VeteransCrisisLineNumbers />
-        </Box>
+        <VeteransCrisisLineNumbers />
 
         <Box mt={standardMarginBetween}>
           <VABulletList
@@ -62,15 +58,13 @@ const ReplyHelp: FC = () => {
           />
         </Box>
 
-        <Box mt={standardMarginBetween}>
-          <ClickForActionLink
-            displayedText={t('secureMessaging.replyHelp.call911')}
-            a11yLabel={t('secureMessaging.replyHelp.call911.a11y')}
-            numberOrUrlLink={t('secureMessaging.replyHelp.911')}
-            linkType={LinkTypeOptionsConstants.call}
-            {...a11yHintProp(t('secureMessaging.replyHelp.call911.a11yHint'))}
-          />
-        </Box>
+        <ClickForActionLink
+          displayedText={t('secureMessaging.replyHelp.call911')}
+          a11yLabel={t('secureMessaging.replyHelp.call911.a11y')}
+          numberOrUrlLink={t('secureMessaging.replyHelp.911')}
+          linkType={LinkTypeOptionsConstants.call}
+          {...a11yHintProp(t('secureMessaging.replyHelp.call911.a11yHint'))}
+        />
       </Box>
     </LargePanel>
   )
