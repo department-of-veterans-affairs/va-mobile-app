@@ -103,7 +103,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const messageID = Number(route.params?.messageID)
   const message = messageID ? messagesById?.[messageID] : null
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID)) || []
-  const isReplyDraft = thread.length === 1 ? false : thread.length > 1 ? true : null
+  const isReplyDraft = thread.length > 1
   const replyToID = thread?.find((id) => {
     const currentMessage = messagesById?.[id]
     return currentMessage?.messageId !== messageID && currentMessage?.senderId !== message?.senderId
@@ -304,7 +304,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     )
   }
 
-  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null || !isTransitionComplete || deletingDraft || isDiscarded) {
+  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || !isTransitionComplete || deletingDraft || isDiscarded) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
       : deletingDraft
