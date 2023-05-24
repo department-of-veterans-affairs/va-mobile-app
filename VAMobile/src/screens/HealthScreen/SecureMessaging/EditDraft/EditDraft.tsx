@@ -323,8 +323,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   const onCategoryChange = (newCategory: string): void => {
+    logAnalyticsEvent(Events.vama_sm_change_category(newCategory as CategoryTypes, category as CategoryTypes))
     setCategory(newCategory)
-    logAnalyticsEvent(Events.vama_sm_change_category(newCategory as CategoryTypes))
 
     // if the category used to be general and now its not, clear field errors because the category line is now
     // no longer a required field

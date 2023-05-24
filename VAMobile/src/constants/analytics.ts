@@ -57,11 +57,12 @@ export const Events = {
       },
     }
   },
-  vama_sm_change_category: (messageCategory: CategoryTypes): Event => {
+  vama_sm_change_category: (messageCategory: CategoryTypes, previousCategory: CategoryTypes): Event => {
     return {
       name: 'vama_sm_change_category',
       params: {
         messageCategory,
+        previousCategory,
       },
     }
   },

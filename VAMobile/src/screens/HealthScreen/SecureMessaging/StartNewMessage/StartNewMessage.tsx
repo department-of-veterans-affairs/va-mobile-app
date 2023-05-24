@@ -232,8 +232,8 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   }
 
   const onSubjectChange = (newCategory: string): void => {
+    logAnalyticsEvent(Events.vama_sm_change_category(newCategory as CategoryTypes, category as CategoryTypes))
     setCategory(newCategory)
-    logAnalyticsEvent(Events.vama_sm_change_category(newCategory as CategoryTypes))
 
     // if the category used to be general and now its not, clear field errors because the subject is now
     // no longer a required field
