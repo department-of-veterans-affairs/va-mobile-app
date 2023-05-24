@@ -127,7 +127,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
         <Box accessible={true}>
           {getLocationName()}
           {missingAddressMessage ? (
-            <TextView variant="MobileBody" accessibilityLabel={missingAddressA11yLabel || undefined} selectable={true} accessible={false}>
+            <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={missingAddressA11yLabel || undefined} selectable={true} accessible={false}>
               {missingAddressMessage}
             </TextView>
           ) : (
