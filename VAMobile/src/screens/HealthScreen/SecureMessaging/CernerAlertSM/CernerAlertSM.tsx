@@ -50,13 +50,11 @@ const CernerAlertSM: FC = () => {
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBody">{intro}</TextView>
-        {hasMultipleFacilities && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VABulletList listOfText={bullets} />
-          </Box>
-        )}
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={outroA11y}>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {intro}
+        </TextView>
+        {hasMultipleFacilities && <VABulletList listOfText={bullets} />}
+        <TextView variant="MobileBody" accessibilityLabel={outroA11y} paragraphSpacing={true}>
           {outro}
         </TextView>
         <ClickForActionLink {...linkToCallProps} />
