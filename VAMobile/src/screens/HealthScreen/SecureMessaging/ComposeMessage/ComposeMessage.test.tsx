@@ -14,6 +14,7 @@ import { initializeErrorsByScreenID, InitialState, saveDraft, updateSecureMessag
 import { CategoryTypeFields, ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { when } from 'jest-when'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -77,6 +78,8 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   }
 })
 
+jest.mock('react-native-safe-area-context', () => require('react-native-safe-area-context/jest/mock').default)
+
 context('ComposeMessage', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
@@ -128,49 +131,53 @@ context('ComposeMessage', () => {
       { params: params },
     )
 
-    component = render(<ComposeMessage {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        secureMessaging: {
-          ...InitialState.secureMessaging,
-          signature: {
-            signatureName: 'signatureName',
-            includeSignature: false,
-            signatureTitle: 'Title',
+    component = render(
+      <SafeAreaProvider>
+        <ComposeMessage {...props} />
+      </SafeAreaProvider>, {
+        preloadedState: {
+          ...InitialState,
+          secureMessaging: {
+            ...InitialState.secureMessaging,
+            signature: {
+              signatureName: 'signatureName',
+              includeSignature: false,
+              signatureTitle: 'Title',
+            },
+            sendMessageFailed: sendMessageFailed,
+            recipients: noRecipientsReturned
+              ? []
+              : [
+                  {
+                    id: 'id',
+                    type: 'type',
+                    attributes: {
+                      triageTeamId: 0,
+                      name: 'Doctor 1',
+                      relationType: 'PATIENT',
+                      preferredTeam: true,
+                    },
+                  },
+                  {
+                    id: 'id2',
+                    type: 'type',
+                    attributes: {
+                      triageTeamId: 1,
+                      name: 'Doctor 2',
+                      relationType: 'PATIENT',
+                      preferredTeam: true,
+                    },
+                  },
+                ],
+            hasLoadedRecipients,
           },
-          sendMessageFailed: sendMessageFailed,
-          recipients: noRecipientsReturned
-            ? []
-            : [
-                {
-                  id: 'id',
-                  type: 'type',
-                  attributes: {
-                    triageTeamId: 0,
-                    name: 'Doctor 1',
-                    relationType: 'PATIENT',
-                    preferredTeam: true,
-                  },
-                },
-                {
-                  id: 'id2',
-                  type: 'type',
-                  attributes: {
-                    triageTeamId: 1,
-                    name: 'Doctor 2',
-                    relationType: 'PATIENT',
-                    preferredTeam: true,
-                  },
-                },
-              ],
-          hasLoadedRecipients,
+          errors: {
+            ...InitialState.errors,
+            errorsByScreenID,
+          },
         },
-        errors: {
-          ...InitialState.errors,
-          errorsByScreenID,
-        },
-      },
-    })
+      }
+    )
 
     testInstance = component.container
   }
