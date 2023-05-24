@@ -112,28 +112,27 @@ export type VAIconColors = {
 }
 
 export type VATypographyThemeVariants = {
+  ActionBar: string
+  AppointmentRequestCtaBtnText: string
   BitterBoldHeading: string
+  ClaimPhase: string
   DescriptiveBackButton: string
+  HelperText: string
+  HelperTextBold: string
+  LabelTag: string
   MobileBody: string
-  MobileBodyTight: string
   MobileBodyBold: string
-  UnreadMessagesTag: string
+  MobileBodyLink: string
+  MobileBodyTight: string
+  SnackBarBtnText: string
   TableHeaderBold: string
   TableHeaderLabel: string
   TableFooterLabel: string
-  MobileBodyLink: string
-  ClaimPhase: string
-  ActionBar: string
-  VASelector: string
-  HelperText: string
-  HelperTextBold: string
-  SnackBarBtnText: string
-  AppointmentRequestCtaBtnText: string
-  LabelTag: string
-  LabelTagBold: string
   textWithIconButton: string
-  webviewTitle: string
+  UnreadMessagesTag: string
   VAHeader: string
+  VASelector: string
+  webviewTitle: string
 }
 
 export type VABackgroundColors = {
@@ -195,8 +194,6 @@ export type VABorderColors = {
   menuDivider: string
   tabSelectorInactive: string
   tabSelectorActive: string
-  trackingCard: string
-  trackingCardActive: string
   prescriptionDivider: string
   modalButton: string
   tagBlue: string
@@ -283,21 +280,26 @@ export type VATheme = {
   }
   fontSizes: {
     BitterBoldHeading: VAFontSizes
+    ClaimPhase: VAFontSizes
+    HelperText: VAFontSizes
+    LabelTag: VAFontSizes
     MobileBody: VAFontSizes
     MobileBodyTight: VAFontSizes
-    MobileBodyBold: VAFontSizes
-    UnreadMessagesTag: VAFontSizes
     TableHeaderBold: VAFontSizes
     TableHeaderLabel: VAFontSizes
     TableFooterLabel: VAFontSizes
-    MobileBodyLink: VAFontSizes
-    ClaimPhase: VAFontSizes
+    UnreadMessagesTag: VAFontSizes
     VASelector: VAFontSizes
-    LabelTag: VAFontSizes
-    LabelTagBold: VAFontSizes
-    HelperText: VAFontSizes
-    HelperTextBold: VAFontSizes
   }
   mode: ColorSchemeTypes
+  paragraphSpacing: {
+    spacing12FontSize: number
+    spacing14FontSize: number
+    spacing16FontSize: number
+    spacing18FontSize: number
+    spacing20FontSize: number
+    spacing26FontSize: number
+    spacing28FontSize: number
+  }
   typography: VATypographyThemeVariants
 }

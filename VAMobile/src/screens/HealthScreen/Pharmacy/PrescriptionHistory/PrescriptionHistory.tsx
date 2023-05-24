@@ -562,10 +562,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       headerText: t('prescription.history.transferred.title'),
       body: (
         <>
-          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')}>
+          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')} paragraphSpacing={true}>
             {t('prescription.history.transferred.instructions')}
           </TextView>
-          <TextView my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
+          <TextView paragraphSpacing={true} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
             {t('prescription.history.transferred.youCan')}
           </TextView>
           <ClickForActionLink {...linkProps} />

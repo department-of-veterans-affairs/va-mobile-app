@@ -124,22 +124,20 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(titleA11yLabel || title)}>
         {title}
       </TextView>
-      <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
         {body}
       </TextView>
       {appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine ? (
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <VAButton
-            onPress={onCancelAppointment}
-            label={t('upcomingAppointmentDetails.cancelAppointment')}
-            a11yHint={t('upcomingAppointmentDetails.cancelAppointment.a11yHint')}
-            buttonType={ButtonTypesConstants.buttonDestructive}
-            {...testIdProps(t('upcomingAppointmentDetails.cancelAppointment'))}
-          />
-        </Box>
+        <VAButton
+          onPress={onCancelAppointment}
+          label={t('upcomingAppointmentDetails.cancelAppointment')}
+          a11yHint={t('upcomingAppointmentDetails.cancelAppointment.a11yHint')}
+          buttonType={ButtonTypesConstants.buttonDestructive}
+          {...testIdProps(t('upcomingAppointmentDetails.cancelAppointment'))}
+        />
       ) : (
         <>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(name)} mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(name)}>
             {name}
           </TextView>
           {linkOrPhone}
