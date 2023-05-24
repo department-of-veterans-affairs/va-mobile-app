@@ -130,10 +130,13 @@ context('ReplyMessage', () => {
     navigateToAttachmentsFAQSpy = jest.fn()
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('VeteransCrisisLine').mockReturnValue(navigateToVeteranCrisisLineSpy)
-        .calledWith('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList: [], messageID: 3 }).mockReturnValue(navigateToAttachmentsSpy)
-        .calledWith('AttachmentsFAQ', { originHeader: 'Reply' } ).mockReturnValue(navigateToAttachmentsFAQSpy)
+      .mockReturnValue(() => {})
+      .calledWith('VeteransCrisisLine')
+      .mockReturnValue(navigateToVeteranCrisisLineSpy)
+      .calledWith('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList: [], messageID: 3 })
+      .mockReturnValue(navigateToAttachmentsSpy)
+      .calledWith('AttachmentsFAQ', { originHeader: 'Reply' })
+      .mockReturnValue(navigateToAttachmentsFAQSpy)
 
     isIOSMock.mockReturnValue(false)
 
@@ -202,7 +205,7 @@ context('ReplyMessage', () => {
   it('should add the text (*Required) for the message body text field', async () => {
     await waitFor(() => {
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[14].props.children).toEqual(['Message', ' ','(Required)'])
+      expect(textViews[14].props.children).toEqual(['Message', ' ', '(Required)'])
     })
   })
 
@@ -217,7 +220,7 @@ context('ReplyMessage', () => {
     describe('when a required field is not filled', () => {
       it('should display a field error for that field', async () => {
         await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
         })
       })
 
@@ -252,7 +255,7 @@ context('ReplyMessage', () => {
 
       it('should display a field error for that field', async () => {
         await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
         })
       })
       it('should display an AlertBox', async () => {
@@ -284,12 +287,12 @@ context('ReplyMessage', () => {
   })
 
   describe('when first message and last message is clicked', () => {
-    it('20-should close first accordion and open last accordion', async () => {
+    it('should close first accordion and open last accordion', async () => {
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[3].props.onPress()
       })
       await waitFor(() => {
-      testInstance.findAllByType(Pressable)[5].props.onPress()
+        testInstance.findAllByType(Pressable)[5].props.onPress()
       })
 
       expect(testInstance.findAllByType(TextView)[20].props.children).toBe('mock sender 2')

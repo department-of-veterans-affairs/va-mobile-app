@@ -237,9 +237,11 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           showInTextArea={false}
           a11yHint={t('secureMessaging.startNewMessage.whenWillIGetAReplyA11yHint')}>
           <Box {...testIdProps(t('secureMessaging.startNewMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
-            <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.threeDaysToReceiveResponse')}</TextView>
+            <TextView variant="MobileBody" paragraphSpacing={true}>
+              {t('secureMessaging.startNewMessage.threeDaysToReceiveResponse')}
+            </TextView>
           </Box>
-          <Box {...testIdProps(t('secureMessaging.startNewMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+          <Box {...testIdProps(t('secureMessaging.startNewMessage.pleaseCallHealthProviderA11yLabel'))} accessible={true}>
             <TextView>
               <TextView variant="MobileBodyBold">{t('secureMessaging.startNewMessage.important')}</TextView>
               <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.pleaseCallHealthProvider')}</TextView>
