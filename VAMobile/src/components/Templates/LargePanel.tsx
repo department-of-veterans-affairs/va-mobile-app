@@ -95,7 +95,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   }
 
   const fillStyle: ViewStyle = {
-    backgroundColor: theme.colors.background?.main,
+    backgroundColor: theme.colors.background.main,
     flex: 1,
   }
 

@@ -121,7 +121,7 @@ export const useTopPaddingAsHeaderStyles = (): StackNavigationOptions => {
     headerBackTitle: undefined,
     headerTitle: '',
     headerStyle: {
-      backgroundColor: theme.colors.background?.main,
+      backgroundColor: theme.colors.background.main,
       shadowColor: 'transparent', // removes bottom border
       height: insets?.top,
     },
@@ -568,9 +568,9 @@ export const usePanelHeaderStyles = (): StackNavigationOptions => {
     headerStyle: {
       height: 60,
       shadowColor: 'transparent', // removes bottom border
-      backgroundColor: theme.colors.background?.panelHeader,
+      backgroundColor: theme.colors.background.panelHeader,
       borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border?.menuDivider,
+      borderBottomColor: theme.colors.border.menuDivider,
     },
     headerTitleAlign: 'center',
     headerLeft: (props) => (

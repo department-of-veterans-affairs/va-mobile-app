@@ -29,7 +29,7 @@ const LoginScreen: FC = () => {
 
   const mainViewStyle: StyleProp<ViewStyle> = {
     flexGrow: 1,
-    backgroundColor: theme.colors.background?.splashScreen,
+    backgroundColor: theme.colors.background.splashScreen,
   }
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)

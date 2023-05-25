@@ -12,7 +12,7 @@ export interface MenuDividerProps {
 /**
  * Common menu item divider component.
  */
-export const MenuDivider = ({ color = theme.colors.border?.menuDivider }: MenuDividerProps): JSX.Element => {
+export const MenuDivider = ({ color = theme.colors.border.menuDivider }: MenuDividerProps): JSX.Element => {
   const dividerStyleProps: StyleProp<ViewStyle> = {
     flex: 1,
     borderBottomWidth: StyleSheet.hairlineWidth,
