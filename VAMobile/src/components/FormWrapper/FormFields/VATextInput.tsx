@@ -126,7 +126,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     },
     onEndEditing,
     style: {
-      fontSize: theme.fontSizes.MobileBody?fontSize,
+      fontSize: theme.fontSizes.MobileBody.fontSize,
       fontFamily: theme.fontFace.regular,
       marginRight: 40,
       color: isFocused ? theme.colors.text.inputFocused : theme.colors.text.input,
