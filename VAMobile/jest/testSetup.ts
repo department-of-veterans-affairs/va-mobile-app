@@ -61,12 +61,8 @@ jest.mock('../src/store/api', () => ({
 
 jest.mock('../src/utils/hooks', () => {
   let original = jest.requireActual('../src/utils/hooks')
-  // let theme = jest.requireActual('../src/styles/themes/standardTheme').default
   return {
     ...original,
-    // useTheme: jest.fn(() => {
-    //   return { ...theme }
-    // }),
     useRouteNavigation: () => {
       return jest.fn()
     },
