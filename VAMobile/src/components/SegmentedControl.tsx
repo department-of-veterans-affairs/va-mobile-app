@@ -38,7 +38,7 @@ const ButtonContainer = styled(TouchableOpacity)<ButtonContainerProps>`
   width: ${themeFn<ButtonContainerProps>((theme, props) => props.widthPct)};
   elevation: ${themeFn<ButtonContainerProps>((theme, props) => (props.isSelected ? 4 : 0))};
   background-color: ${themeFn<ButtonContainerProps>((theme, props) =>
-    props.isSelected ? theme?.colors?.segmentedControl?.buttonActive : theme?.colors?.segmentedControl?.buttonInactive,
+    props.isSelected ? theme.colors.segmentedControl?.buttonActive : theme.colors.segmentedControl?.buttonInactive,
   )};
 `
 /**A common component for filtering UI views by segments or lanes. Used for things like toggling between Active/Completed claims and Future/Past Appointments */

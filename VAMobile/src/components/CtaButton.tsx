@@ -53,7 +53,7 @@ const CtaButton: FC<CtaButtonProps> = ({ onPress, iconColor, backgroundColor, ch
         <TextView variant="MobileBody" display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
           {children}
         </TextView>
-        <VAIcon name="ArrowRight" fill={iconColor || theme?.colors?.icon?.veteransCrisisLineArrow} width={10} height={15} />
+        <VAIcon name="ArrowRight" fill={iconColor || theme.colors.icon?.veteransCrisisLineArrow} width={10} height={15} />
       </Box>
     </TouchableWithoutFeedback>
   )

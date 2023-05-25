@@ -38,12 +38,12 @@ export const getHeaderStyles = (insetsTop: number, theme: VATheme): StackNavigat
   return {
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
     headerStyle: {
-      backgroundColor: theme?.colors?.background?.main,
+      backgroundColor: theme.colors.background?.main,
       height: insetsTop + theme.dimensions.headerHeight,
       borderBottomWidth: 0,
       shadowColor: 'transparent',
     },
-    headerTintColor: theme?.colors?.text?.primaryContrast,
+    headerTintColor: theme.colors.text?.primaryContrast,
     headerTitleStyle: {
       fontSize: 20,
       letterSpacing: -0.2,

@@ -50,14 +50,14 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
 
   const boxProps: BoxProps = {
     backgroundColor: disabled ? 'buttonSecondaryDisabled' : 'buttonPrimary',
-    minHeight: theme?.dimensions?.touchableMinHeight,
+    minHeight: theme.dimensions.touchableMinHeight,
     p: 15,
     borderRadius: 5,
   }
   return (
     <Pressable {...pressableProps} {...testIdProps(testID)}>
       <Box {...boxProps}>
-        <VAIcon fill={theme?.colors?.icon?.pagination} width={16} height={16} preventScaling={true} {...iconProps} />
+        <VAIcon fill={theme.colors.icon?.pagination} width={16} height={16} preventScaling={true} {...iconProps} />
       </Box>
     </Pressable>
   )
@@ -72,14 +72,14 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    minHeight: theme?.dimensions?.touchableMinHeight,
+    minHeight: theme.dimensions.touchableMinHeight,
   }
 
   const previousProps: PaginationArrowProps = {
     onPress: onPrev,
     testID: 'previous-page',
     a11yHint: t('pagination.previous'),
-    iconProps: { name: 'ArrowLeft', fill: theme?.colors?.icon?.pagination },
+    iconProps: { name: 'ArrowLeft', fill: theme.colors.icon?.pagination },
     disabled: page === 1,
   }
 
@@ -87,7 +87,7 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
     onPress: onNext,
     testID: 'next-page',
     a11yHint: t('pagination.next'),
-    iconProps: { name: 'ArrowRight', fill: theme?.colors?.icon?.pagination },
+    iconProps: { name: 'ArrowRight', fill: theme.colors.icon?.pagination },
     disabled: page * pageSize >= totalEntries,
   }
   const beginIdx = (page - 1) * pageSize + 1
@@ -104,7 +104,7 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
   return (
     <Box {...boxProps}>
       <PaginationArrow {...previousProps} />
-      <TextView flex={1} variant={'MobileBody'} px={theme?.dimensions?.buttonPadding} textAlign={'center'}>
+      <TextView flex={1} variant={'MobileBody'} px={theme.dimensions.buttonPadding} textAlign={'center'}>
         {t('pagination.info', { beginIdx, endIdx, totalEntries })}
       </TextView>
       <PaginationArrow {...nextProps} />

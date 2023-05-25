@@ -182,9 +182,9 @@ const getBackgroundColor = (theme: VATheme, bgVariant: BackgroundVariant | undef
     return 'transparent'
   }
   return (
-    theme?.colors?.background[bgVariant as VABackgroundColorsVariant] ||
-    theme?.colors?.buttonBackground[bgVariant as VAButtonBackgroundColorsVariant] ||
-    theme?.colors?.listTag[bgVariant as VAListTagColorsVariant]
+    theme.colors.background[bgVariant as VABackgroundColorsVariant] ||
+    theme.colors.buttonBackground[bgVariant as VAButtonBackgroundColorsVariant] ||
+    theme.colors.listTag[bgVariant as VAListTagColorsVariant]
   )
 }
 
@@ -207,7 +207,7 @@ const generateBorderStyles = (
   }
 
   if (color) {
-    styles[`border${dir}-color`] = theme?.colors?.border[color as VABorderColorsVariant] || theme?.colors?.buttonBorder[color as VAButtonBorderColorsVariant]
+    styles[`border${dir}-color`] = theme.colors.border[color as VABorderColorsVariant] || theme.colors.buttonBorder[color as VAButtonBorderColorsVariant]
   }
   return styles
 }

@@ -54,7 +54,7 @@ export type TextViewProps = AccessibilityProps &
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
-  return theme?.colors?.text[props.color as keyof VATextColors] || theme?.colors?.buttonText[props.color as keyof VAButtonTextColors] || ''
+  return theme.colors.text[props.color as keyof VATextColors] || theme.colors.buttonText[props.color as keyof VAButtonTextColors] || ''
 }
 
 const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
@@ -62,7 +62,7 @@ const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
 }
 
 const getTextDecorationColor = (theme: VATheme, props: TextViewProps): string => {
-  return theme?.colors?.text[props.textDecorationColor as keyof VATextColors] || theme?.colors?.buttonText[props.textDecorationColor as keyof VAButtonTextColors] || ''
+  return theme.colors.text[props.textDecorationColor as keyof VATextColors] || theme.colors.buttonText[props.textDecorationColor as keyof VAButtonTextColors] || ''
 }
 
 const StyledText = styled(Text)`
@@ -93,7 +93,7 @@ const TextView: FC<TextViewProps> = ({ selectable = false, testID, ...props }) =
     )
   }
 
-  const selectToCopyProps = isVoiceOverTalkBackRunning ? {} : { selectable, selectionColor: theme?.colors?.selectCopyText }
+  const selectToCopyProps = isVoiceOverTalkBackRunning ? {} : { selectable, selectionColor: theme.colors.selectCopyText }
 
   return <StyledText testID={testID} {...selectToCopyProps} {...wrapperProps} />
 }

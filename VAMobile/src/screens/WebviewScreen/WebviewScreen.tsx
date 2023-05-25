@@ -38,7 +38,7 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
         onPress={reloadPressed}
         disabled={false}
         icon={'WebviewRefresh'}
-        fill={theme?.colors?.icon?.webviewReload}
+        fill={theme.colors.icon?.webviewReload}
         testID={t('refresh')}
         a11yHint={t('refresh.a11yHint')}
       />
@@ -146,7 +146,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 
   return (
     <Box {...mainViewBoxProps} {...testIdProps('Webview-page', true)}>
-      <StatusBar translucent barStyle={theme?.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme?.colors?.background?.main} />
+      <StatusBar translucent barStyle={theme?.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background?.main} />
       <WebView
         startInLoadingState
         renderLoading={(): ReactElement => <WebviewLoading loadingMessage={loadingMessage} />}

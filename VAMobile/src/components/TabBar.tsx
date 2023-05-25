@@ -44,7 +44,7 @@ const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
   }
 
   const getBorderColor = (isSelected: boolean): BorderColorVariant => {
-    return (isSelected ? theme?.colors?.border?.tabSelectorActive : theme?.colors?.border?.tabSelectorInactive) as BorderColorVariant
+    return (isSelected ? theme.colors.border?.tabSelectorActive : theme.colors.border?.tabSelectorInactive) as BorderColorVariant
   }
 
   return (

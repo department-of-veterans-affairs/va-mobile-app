@@ -118,7 +118,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         name: request.submitted ? 'WhiteCheckCircle' : 'WhiteCloseCircle',
         width: 20,
         height: 20,
-        fill: request.submitted ? theme?.colors?.icon?.success : theme?.colors?.icon?.error,
+        fill: request.submitted ? theme.colors.icon?.success : theme.colors.icon?.error,
       }
 
       const boxProps: BoxProps = {

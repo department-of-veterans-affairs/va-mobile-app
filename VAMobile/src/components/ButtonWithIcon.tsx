@@ -64,9 +64,9 @@ const ButtonWithIcon: FC<ButtonWithIconProps> = ({
 
   const setBorderColor = (): BorderColorVariant | undefined => {
     if (buttonPressed) {
-      return borderColorActive || (theme?.colors?.border?.primaryDarkest as BorderColorVariant)
+      return borderColorActive || (theme.colors.border?.primaryDarkest as BorderColorVariant)
     }
-    return borderColor || (theme?.colors?.border?.secondary as BorderColorVariant)
+    return borderColor || (theme.colors.border?.secondary as BorderColorVariant)
   }
 
   const setBackgroundColor = (): BackgroundVariant => {

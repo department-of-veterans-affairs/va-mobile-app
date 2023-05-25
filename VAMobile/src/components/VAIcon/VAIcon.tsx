@@ -210,11 +210,11 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventSca
   }, [dispatch, fontScale])
 
   if (fill) {
-    iconProps = Object.assign({}, iconProps, { fill: theme?.colors?.icon[fill as keyof VAIconColors] || theme?.colors?.text[fill as keyof VATextColors] || fill })
+    iconProps = Object.assign({}, iconProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || theme.colors.text[fill as keyof VATextColors] || fill })
   }
 
   if (stroke) {
-    iconProps = Object.assign({}, iconProps, { stroke: theme?.colors?.icon[stroke as keyof VAIconColors] || stroke })
+    iconProps = Object.assign({}, iconProps, { stroke: theme.colors.icon[stroke as keyof VAIconColors] || stroke })
   }
 
   const Icon: FC<SvgProps> | undefined = VA_ICON_MAP[name]

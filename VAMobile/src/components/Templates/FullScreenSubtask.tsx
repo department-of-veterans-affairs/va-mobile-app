@@ -153,7 +153,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   }
   const fillStyle: ViewStyle = {
     paddingTop: insets?.top,
-    backgroundColor: theme?.colors?.background?.main,
+    backgroundColor: theme.colors.background?.main,
     flex: 1,
   }
   const titleMarginTop = showCrisisLineCta ? 0 : theme?.dimensions.buttonPadding

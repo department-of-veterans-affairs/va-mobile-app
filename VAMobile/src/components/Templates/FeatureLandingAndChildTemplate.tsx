@@ -56,7 +56,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
 
   const fillStyle: ViewStyle = {
     paddingTop: insets?.top,
-    backgroundColor: theme?.colors?.background?.main,
+    backgroundColor: theme.colors.background?.main,
     flex: 1,
   }
 
@@ -101,7 +101,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
 
   return (
     <View style={fillStyle}>
-      <StatusBar translucent barStyle={theme?.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme?.colors?.background?.main} />
+      <StatusBar translucent barStyle={theme?.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background?.main} />
       <HeaderBanner {...headerProps} />
 
       <>

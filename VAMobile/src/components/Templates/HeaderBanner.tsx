@@ -132,7 +132,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const headerDropShadow: ShadowProps =
     titleShowing && !screenReaderEnabled
       ? {
-          startColor: theme?.colors?.background?.headerDropShadow,
+          startColor: theme.colors.background?.headerDropShadow,
           distance: 4,
           sides: { start: false, top: false, bottom: true, end: false },
         }
