@@ -1,7 +1,8 @@
-import { device, element, by, expect, waitFor } from 'detox'
+import { device, element, by, expect, waitFor, web } from 'detox'
 import getEnv from '../../src/utils/env'
 import { toMatchImageSnapshot } from 'jest-image-snapshot'
 import { expect as jestExpect } from '@jest/globals'
+import { setTimeout } from "timers/promises"
 
 const fs = require('fs')
 jestExpect.extend({ toMatchImageSnapshot })
@@ -15,6 +16,7 @@ export const CommonE2eIdConstants = {
   VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
+  APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
   SETTINGS_ROW_TEXT: 'Settings',
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
   SIGN_OUT_BTN_ID: 'Sign out',
@@ -22,7 +24,7 @@ export const CommonE2eIdConstants = {
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'You’re leaving the app',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
-  OK_UNIVERSAL_TEXT: 'OK',
+  OK_UNIVERSAL_TEXT: 'OK', 
 }
 
 
@@ -181,6 +183,10 @@ export async function openHealth() {
 	await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap() 
 }
 
+export async function openAppointments() {
+	await element(by.text(CommonE2eIdConstants.APPOINTMENTS_TAB_BUTTON_TEXT)).tap() 
+}
+
 /**
  * Going back on android and iOS
 */
@@ -191,5 +197,3 @@ export async function backButton() {
 	await element(by.traits(['button'])).atIndex(0).tap();
   }
 }
-
-
