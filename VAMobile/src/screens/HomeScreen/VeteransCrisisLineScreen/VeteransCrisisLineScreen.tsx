@@ -40,11 +40,13 @@ const VeteransCrisisLineScreen: FC = () => {
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
         <Box mt={standardMarginBetween}>
-          <TextView variant="MobileBody">{t('veteransCrisisLine.connectWithResponders')}</TextView>
+          <TextView variant="MobileBody" paragraphSpacing={true}>
+            {t('veteransCrisisLine.connectWithResponders')}
+          </TextView>
         </Box>
-        <Box mt={standardMarginBetween}>
-          <VeteransCrisisLineNumbers />
-        </Box>
+
+        <VeteransCrisisLineNumbers />
+
         <Box mt={standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('veteransCrisisLine.getMoreResources')}
