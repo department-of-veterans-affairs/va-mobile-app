@@ -106,7 +106,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       endTime: getEpochSecondsOfDate(endTime),
       location: name,
     },
-    testID: "addToCalendarTestID"
+    testID: 'addToCalendarTestID'
   }
 
   // TODO abstract some of these render functions into their own components - too many in one file
