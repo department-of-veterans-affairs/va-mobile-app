@@ -105,9 +105,14 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
 
   const getAlert = (): ReactNode => {
     return (
-      <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('editAddress.validation.verifyAddress.body.a11yLabel')}>
-        {t('editAddress.validation.verifyAddress.body')}
-      </TextView>
+      <Box>
+        <TextView variant="MobileBody" mt={standardMarginBetween} paragraphSpacing={true} accessibilityLabel={t('editAddress.validation.verifyAddress.body.1.a11yLabel')}>
+          {t('editAddress.validation.verifyAddress.body.1')}
+        </TextView>
+        <TextView variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('editAddress.validation.verifyAddress.body.2.a11yLabel')}>
+          {t('editAddress.validation.verifyAddress.body.2')}
+        </TextView>
+      </Box>
     )
   }
 

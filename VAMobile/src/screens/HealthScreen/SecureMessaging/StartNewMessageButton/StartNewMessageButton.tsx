@@ -5,25 +5,25 @@ import { Box, ButtonTypesConstants, VAButton, VAButtonProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-const ComposeMessageButton: FC = () => {
+const StartNewMessageButton: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const onPress = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  const onPress = navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
-  const composeMessageButtonProps: VAButtonProps = {
-    label: t('secureMessaging.composeMessage'),
+  const startNewMessageButtonProps: VAButtonProps = {
+    label: t('secureMessaging.startNewMessage'),
     buttonType: ButtonTypesConstants.buttonPrimary,
     onPress: onPress,
-    a11yHint: t('secureMessaging.composeMessage.a11yHint'),
+    a11yHint: t('secureMessaging.startNewMessage.a11yHint'),
     iconProps: { name: 'Compose', fill: 'navBar' },
   }
 
   return (
     <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
-      <VAButton {...composeMessageButtonProps} />
+      <VAButton {...startNewMessageButtonProps} />
     </Box>
   )
 }
 
-export default ComposeMessageButton
+export default StartNewMessageButton

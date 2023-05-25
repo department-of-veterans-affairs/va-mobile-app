@@ -110,7 +110,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const onAttach = (): void => {
     const attachmentFileToAdd = _.isEmpty(file) ? image : file
     if (origin === FormHeaderTypeConstants.compose) {
-      navigateTo('ComposeMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
+      navigateTo('StartNewMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
     } else if (origin === FormHeaderTypeConstants.reply) {
       navigateTo('ReplyMessage', { messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
     } else {
@@ -137,10 +137,10 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={tc('secureMessaging.composeMessage.attachments.title')}
+      title={tc('secureMessaging.startNewMessage.attachments.title')}
       leftButtonText={tc('cancel')}
       onLeftButtonPress={navigation.goBack}
-      primaryContentButtonText={displaySelectFile ? t('secureMessaging.attachments.selectAFile') : t('secureMessaging.composeMessage.attach')}
+      primaryContentButtonText={displaySelectFile ? t('secureMessaging.attachments.selectAFile') : t('secureMessaging.startNewMessage.attach')}
       onPrimaryContentButtonPress={displaySelectFile ? onSelectAFile : onAttach}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
@@ -151,13 +151,13 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('secureMessaging.attachments.fileAttachment')}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
           {t('secureMessaging.attachments.youMayAttach')} {t('secureMessaging.attachments.acceptedFileTypes')}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('secureMessaging.attachments.sizeRequirements.A11yLabel')}>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('secureMessaging.attachments.sizeRequirements.A11yLabel')}>
           {t('secureMessaging.attachments.sizeRequirements')}
         </TextView>
-        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
           {t('secureMessaging.attachments.attachmentsAreNotDrafts')}
         </TextView>
         {image && uri && (

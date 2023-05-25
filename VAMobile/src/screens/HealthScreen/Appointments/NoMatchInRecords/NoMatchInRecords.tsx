@@ -38,7 +38,7 @@ const NoMatchInRecords: FC = () => {
             <TextView variant="BitterBoldHeading">{t('noMatch.title')}</TextView>
           </Box>
           <Box {...testIdProps(t('noMatch.noMatchA11yLabel'))} accessible={true}>
-            <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
               {t('noMatch.noMatch')}
             </TextView>
           </Box>

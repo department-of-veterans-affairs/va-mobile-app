@@ -1,4 +1,4 @@
-import { Pressable, PressableProps, ScrollView } from 'react-native'
+import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
@@ -65,6 +65,9 @@ import getEnv from 'utils/env'
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
 const pageSize = DEFAULT_PAGE_SIZE
+
+// Delay custom screen reader announcements so they don't cut off native announcements
+const announcementDelay = 1000
 
 const sortByOptions = [
   { display: 'prescriptions.sort.facility', value: PrescriptionSortOptionConstants.FACILITY_NAME },
@@ -399,6 +402,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
   })
 
+  const announceAfterDelay = (announcement: string) => {
+    setTimeout(() => AccessibilityInfo.announceForAccessibility(announcement), announcementDelay)
+  }
+
   const sortOrderRadioOptions = getSortOrderOptionsForSortBy(selectedSortBy, t)
 
   const sortButtonText = `${t('prescriptions.sort.by')}: ${getDisplayForValue(sortByOptions, sortByToUse)}`
@@ -436,6 +443,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     onUpperRightAction: () => {
       setSelectedSortBy(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
       setSelectedSortOn(ASCENDING)
+      const value = getDisplayForValue(sortByOptions, PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
+      const direction = t('prescriptions.sort.atoz.a11y')
+      announceAfterDelay(tc('prescriptions.resetAnnouncementWithDirection', { value, direction }))
     },
     onCancel: () => {
       setSelectedSortBy(sortByToUse)
@@ -480,6 +490,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     },
     onUpperRightAction: () => {
       setSelectedFilter('')
+      announceAfterDelay(tc('prescriptions.resetAnnouncement', { value: getDisplayForValue(filterOptionsForTab, '') }))
     },
     onCancel: () => {
       setSelectedFilter(filterToUse)
@@ -546,10 +557,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       headerText: t('prescription.history.transferred.title'),
       body: (
         <>
-          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')}>
+          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')} paragraphSpacing={true}>
             {t('prescription.history.transferred.instructions')}
           </TextView>
-          <TextView my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
+          <TextView paragraphSpacing={true} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
             {t('prescription.history.transferred.youCan')}
           </TextView>
           <ClickForActionLink {...linkProps} />

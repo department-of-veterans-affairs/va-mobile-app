@@ -98,7 +98,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
             {t('fileUpload.pleaseRequestFromPhoneFiles')}
             <TextView variant="MobileBodyBold">
               {t('fileUpload.pleaseRequestFromPhoneFiles.bolded')}
@@ -108,7 +108,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
           <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.maxFileSize')}
           </TextView>
-          <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')}>
+          <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')} paragraphSpacing={true}>
             {t('fileUpload.50MB')}
           </TextView>
           <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
