@@ -22,12 +22,8 @@ import { LocaleOptions } from 'luxon/src/datetime'
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -191,7 +187,7 @@ context('ViewMessageScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -220,7 +216,6 @@ context('ViewMessageScreen', () => {
       expect(testInstance.findAllByType(TextView)[10].props.children).toBe('Invalid DateTime')
       expect(testInstance.findAllByType(TextView)[11].props.children).toBe('mock sender 1')
       expect(testInstance.findAllByType(TextView)[12].props.children).toBe('Invalid DateTime')
-      
     })
   })
 

@@ -12,15 +12,18 @@ context('StatusGlossary', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (routeMock?: { display: string, value: RefillStatus }) => {
-    const props = mockNavProps({}, {
-      setOptions: jest.fn(),
-      navigate: jest.fn(), },
-     { params: routeMock || { display: '', value: 'active'}
-    })
+  const initializeTestInstance = (routeMock?: { display: string; value: RefillStatus }) => {
+    const props = mockNavProps(
+      {},
+      {
+        setOptions: jest.fn(),
+        navigate: jest.fn(),
+      },
+      { params: routeMock || { display: '', value: 'active' } },
+    )
 
     component = render(<StatusGlossary {...props} />)
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
@@ -29,15 +32,15 @@ context('StatusGlossary', () => {
   })
 
   it('should display a glossary definition for a refill status', async () => {
-    initializeTestInstance(
-      {
-        display: 'Active',
-        value: RefillStatusConstants.ACTIVE,
-      }
-    )
+    initializeTestInstance({
+      display: 'Active',
+      value: RefillStatusConstants.ACTIVE,
+    })
 
     const texts = testInstance.findAllByType(TextView)
     expect(texts[2].props.children).toEqual('Active')
-    expect(texts[3].props.children).toEqual('A prescription that can be filled at the local VA pharmacy. If this prescription is refillable, you may request a refill of this VA prescription.')
+    expect(texts[3].props.children).toEqual(
+      'A prescription that can be filled at the local VA pharmacy. If this prescription is refillable, you may request a refill of this VA prescription.',
+    )
   })
 })

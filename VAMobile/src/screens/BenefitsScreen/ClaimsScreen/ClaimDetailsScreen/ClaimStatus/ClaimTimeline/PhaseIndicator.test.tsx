@@ -12,7 +12,7 @@ context('PhaseIndicator', () => {
   const initializeTextInstance = (phase: number, current: number) => {
     component = render(<PhaseIndicator phase={phase} current={current} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   // make sure the component works

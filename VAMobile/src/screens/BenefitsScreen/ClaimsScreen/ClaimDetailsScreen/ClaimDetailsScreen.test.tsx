@@ -67,7 +67,7 @@ context('ClaimDetailsScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('should initialize', async () => {

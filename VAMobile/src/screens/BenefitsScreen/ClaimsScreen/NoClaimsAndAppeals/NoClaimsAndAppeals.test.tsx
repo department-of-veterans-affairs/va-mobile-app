@@ -27,7 +27,7 @@ context('NoClaimsAndAppeals', () => {
       })
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(async () => {

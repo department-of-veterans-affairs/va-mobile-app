@@ -17,7 +17,6 @@ let discardButtonSpy: any
 let saveDraftButtonSpy: any
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useDestructiveAlert: () => {
@@ -105,7 +104,7 @@ context('useComposeCancelConfirmation', () => {
 
     component = render(<TestComponent />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

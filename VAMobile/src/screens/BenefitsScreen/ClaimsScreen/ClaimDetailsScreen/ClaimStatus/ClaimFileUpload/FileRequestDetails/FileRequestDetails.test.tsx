@@ -24,27 +24,23 @@ context('FileRequestDetails', () => {
     description: 'Need DD214',
   }
 
-  const mockNavigationSpy = jest.fn()
-  jest.mock('utils/hooks', () => {
-    const original = jest.requireActual('utils/hooks')
-    const theme = jest.requireActual('styles/themes/standardTheme').default
-    return {
-      ...original,
-      useTheme: jest.fn(() => {
-        return { ...theme }
-      }),
-      useRouteNavigation: () => {
-        return mockNavigationSpy
-      },
-    }
-  })
+  // const mockNavigationSpy = jest.fn()
+  // jest.mock('utils/hooks', () => {
+  //   const original = jest.requireActual('utils/hooks')
+  //   return {
+  //     ...original,
+  //     useRouteNavigation: () => {
+  //       return mockNavigationSpy
+  //     },
+  //   }
+  // })
 
   const initializeTestInstance = (request: ClaimEventData) => {
     props = mockNavProps(undefined, { setOptions: jest.fn() }, { params: { request } })
 
     component = render(<FileRequestDetails {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

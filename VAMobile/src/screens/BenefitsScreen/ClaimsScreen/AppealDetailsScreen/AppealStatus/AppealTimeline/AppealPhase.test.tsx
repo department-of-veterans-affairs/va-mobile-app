@@ -23,7 +23,7 @@ context('AppealPhase', () => {
 
     component = render(<AppealPhase {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

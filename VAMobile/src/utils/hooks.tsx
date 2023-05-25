@@ -15,7 +15,7 @@ import {
 } from 'react-native'
 import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
-import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { MutableRefObject, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { StackNavigationOptions, StackNavigationProp } from '@react-navigation/stack'
 import { useActionSheet } from '@expo/react-native-action-sheet'
@@ -35,12 +35,12 @@ import { DowntimeFeatureType, DowntimeScreenIDToFeature, ScreenIDTypes } from 's
 import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
-import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
 import { capitalizeFirstLetter, stringToTitleCase } from './formattingUtils'
 import { getHeaderStyles } from 'styles/common'
 import { isAndroid, isIOS } from './platform'
+import { useTheme as styledComponentsUseTheme } from 'styled-components'
 import HeaderTitle from 'components/HeaderTitle'
 
 /**
@@ -82,9 +82,7 @@ export const useFontScale = (): ((val: number) => number) => {
  * Hook to get the theme in a component
  * @returns the VATheme
  */
-export const useTheme = (): VATheme => {
-  return useContext<VATheme>(ThemeContext)
-}
+export const useTheme = styledComponentsUseTheme as () => VATheme
 
 /**
  * Hook to get the current header styles in a component

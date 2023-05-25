@@ -35,6 +35,7 @@ import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import { InitialState } from 'store/slices'
 import theme from 'styles/themes/standardTheme'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 export const findByTypeWithName = (testInstance: ReactTestInstance, type: ElementType, name: string): ReactTestInstance | null => {
   try {

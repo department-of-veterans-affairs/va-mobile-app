@@ -24,9 +24,6 @@ jest.mock('utils/hooks', () => {
         .mockReturnValueOnce(() => {})
         .mockReturnValue(() => {})
     },
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
   }
 })
 
@@ -38,12 +35,11 @@ context('HomeScreen', () => {
   let props: any
 
   const initializeTestInstance = () => {
-
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
     component = render(<HomeScreen {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

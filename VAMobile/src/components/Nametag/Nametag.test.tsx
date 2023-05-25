@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 import 'jest-styled-components'
-import { ReactTestInstance} from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 
 import { context, render, RenderAPI } from 'testUtils'
 import Nametag from './Nametag'
@@ -78,7 +78,7 @@ context('Nametag', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -139,7 +139,7 @@ context('Nametag', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
 
       expect(testInstance.findAllByType(TextView)).toHaveLength(1)
     })
@@ -157,7 +157,7 @@ context('Nametag', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
 
       expect(testInstance.findAllByType(TextView)).toHaveLength(1)
     })

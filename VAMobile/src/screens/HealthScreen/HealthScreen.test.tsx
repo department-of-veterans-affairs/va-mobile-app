@@ -19,16 +19,12 @@ jest.mock('utils/remoteConfig')
 
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
 
   return {
     ...original,
     useRouteNavigation: () => {
       return mockNavigateToSpy
     },
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
   }
 })
 
@@ -105,7 +101,7 @@ context('HealthScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
   beforeEach(() => {
     initializeTestInstance()

@@ -17,9 +17,6 @@ jest.mock('utils/hooks', () => {
   return {
     ...original,
     useExternalLink: () => mockExternalLinkSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
   }
 })
 
@@ -32,7 +29,7 @@ context('NeedHelpData', () => {
       component = render(<NeedHelpData isAppeal={isAppeal} />)
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(async () => {

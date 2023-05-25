@@ -26,19 +26,6 @@ NativeModules.RNInAppUpdate = {
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
-jest.mock('react-native-safe-area-context', () => {
-  let original = jest.requireActual('react-native-safe-area-context')
-  return {
-    ...original,
-    useSafeAreaInsets: jest.fn().mockReturnValue({
-      insets: {
-        right: 0,
-        left: 0,
-      },
-    }),
-  }
-})
-
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 jest.mock('react-native/Libraries/Linking/Linking', () => {
@@ -59,19 +46,27 @@ jest.mock('../src/store/api', () => ({
   setRefreshToken: jest.fn(),
 }))
 
-jest.mock('../src/utils/hooks', () => {
-  let original = jest.requireActual('../src/utils/hooks')
-  let theme = jest.requireActual('../src/styles/themes/standardTheme').default
+jest.mock('react-native-safe-area-context', () => {
+  const inset = { top: 0, right: 0, bottom: 0, left: 0 }
   return {
-    ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-    useRouteNavigation: () => {
-      return jest.fn()
-    },
+    ...jest.requireActual('react-native-safe-area-context'),
+    SafeAreaProvider: jest.fn(({ children }) => children),
+    SafeAreaConsumer: jest.fn(({ children }) => children(inset)),
+    useSafeAreaInsets: jest.fn(() => inset),
+    useSafeAreaFrame: jest.fn(() => ({ x: 0, y: 0, width: 390, height: 844 })),
   }
 })
+
+// jest.mock('../src/utils/hooks', () => {
+//   let original = jest.requireActual('../src/utils/hooks')
+//   console.debug(original)
+//   return {
+//     ...original,
+//     useRouteNavigation: () => {
+//       return jest.fn()
+//     },
+//   }
+// })
 
 jest.mock('../src/utils/platform', () => {
   let original = jest.requireActual('../src/utils/platform')

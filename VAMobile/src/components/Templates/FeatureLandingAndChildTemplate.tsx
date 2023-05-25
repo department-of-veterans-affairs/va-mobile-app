@@ -44,6 +44,7 @@ export type FeatureLandingProps = ChildTemplateProps // Passthrough to same prop
 
 export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y, backLabelOnPress, title, titleA11y, headerButton, children, footerContent, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
+  console.debug(insets)
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
@@ -53,7 +54,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
   const [transitionHeaderHeight, setTransitionHeaderHeight] = useState(0)
 
   const fillStyle: ViewStyle = {
-    paddingTop: insets.top,
+    paddingTop: insets?.top,
     backgroundColor: theme.colors.background.main,
     flex: 1,
   }
