@@ -23,9 +23,6 @@ At the top, you'll see the last time the pods were synced to HEAD. On the right,
 
 You'll see "TERMINAL" as a tab. From here, you have access to the console. You can run any commands you would in a local terminal here. For instance, run `bundle exec rails c` if you'd like to run a rails console. 
 
-
-open a terminal locally and enter 'mfa' followed by a code from a 2FA tool such as [Authy](https://authy.com/). Change into the devops repo dir, and run the SSM script with 'staging' as an argument. The script will return a numbered list of available instances.
-
 ### User Sign In
 You can then fetch an [api token](ApiTokens.md#fetching-api-tokens) and use that token to create either an IAM user session (deprecated):
 ```
