@@ -43,7 +43,7 @@ export const getHeaderStyles = (insetsTop: number, theme: VATheme): StackNavigat
       borderBottomWidth: 0,
       shadowColor: 'transparent',
     },
-    headerTintColor: theme.colors.text?.primaryContrast,
+    headerTintColor: theme.colors.text.primaryContrast,
     headerTitleStyle: {
       fontSize: 20,
       letterSpacing: -0.2,
