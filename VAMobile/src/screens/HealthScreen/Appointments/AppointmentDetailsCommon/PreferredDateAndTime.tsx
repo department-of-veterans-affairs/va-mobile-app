@@ -16,7 +16,7 @@ type PreferredDateAndTimeProps = {
 const PreferredDateAndTime: FC<PreferredDateAndTimeProps> = ({ attributes }) => {
   const isAppointmentPending = isAPendingAppointment(attributes)
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const { proposedTimes } = attributes || ({} as AppointmentAttributes)
 

@@ -38,7 +38,7 @@ export type BackButtonProps = {
  */
 export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, showCarat, a11yHint, focusOnButton = true, webview }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
 

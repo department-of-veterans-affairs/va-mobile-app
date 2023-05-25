@@ -16,7 +16,7 @@ type RemoteConfigScreenSettingsScreenProps = StackScreenProps<HomeStackParamList
 
 const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const currentConfig = getFeatureToggles()
   const [toggles, setToggles] = useState({ ...currentConfig })

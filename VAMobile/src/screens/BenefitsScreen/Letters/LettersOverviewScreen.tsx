@@ -22,7 +22,7 @@ type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOve
  */
 const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { loading, error } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 

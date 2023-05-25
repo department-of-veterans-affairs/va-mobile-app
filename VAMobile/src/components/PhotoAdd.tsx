@@ -18,7 +18,7 @@ type PhotoAddProps = {
 }
 
 const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const pressableProps: PressableProps = {

@@ -19,7 +19,7 @@ type AppealDecisionProps = {
 
 const AppealDecision: FC<AppealDecisionProps> = ({ issues, aoj, ama, boardDecision }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const getIssuesByDisposition = (stringToCompare: string): Array<AppealStatusDetailsIssue> => {
     return issues.filter((issue) => issue.disposition === stringToCompare)

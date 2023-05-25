@@ -73,7 +73,7 @@ type FormWrapperProps<T> = {
 
 /**A common component to wrap forms in that handles error states of each field*/
 const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors, setResetErrors, onSaveClicked, setOnSaveClicked }: FormWrapperProps<T>): ReactElement => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [errors, setErrors] = useState<{ [key: number]: string }>({})
 
   const updateFormContainsErrors = useCallback(

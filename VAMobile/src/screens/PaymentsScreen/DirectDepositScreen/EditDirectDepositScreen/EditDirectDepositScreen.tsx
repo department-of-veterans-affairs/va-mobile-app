@@ -44,7 +44,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation()
   const { displayTitle } = route.params
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)

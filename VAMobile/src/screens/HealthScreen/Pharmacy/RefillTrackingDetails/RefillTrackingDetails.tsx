@@ -44,7 +44,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   const dispatch = useAppDispatch()
   const { loadingTrackingInfo, trackingInfo } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const headerStyle = usePanelHeaderStyles()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)

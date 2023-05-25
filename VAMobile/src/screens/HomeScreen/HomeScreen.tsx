@@ -43,7 +43,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const name = profile?.preferredName ? profile.preferredName : profile?.firstName || ''
 

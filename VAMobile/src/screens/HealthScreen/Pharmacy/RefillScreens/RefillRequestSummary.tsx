@@ -28,7 +28,7 @@ const enum REQUEST_STATUS {
 type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
 
 const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)

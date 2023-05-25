@@ -24,7 +24,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const currentPageUpcomingAppointmentsByYear = deepCopyObject<AppointmentsGroupedByYear>(currentPageAppointmentsByYear?.upcoming)

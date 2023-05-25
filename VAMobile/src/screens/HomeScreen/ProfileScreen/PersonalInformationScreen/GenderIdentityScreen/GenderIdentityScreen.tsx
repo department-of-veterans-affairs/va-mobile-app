@@ -27,7 +27,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
     (state) => state.personalInformation,
   )
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 

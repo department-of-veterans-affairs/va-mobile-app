@@ -156,7 +156,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { prescriptions: prescriptionsAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()

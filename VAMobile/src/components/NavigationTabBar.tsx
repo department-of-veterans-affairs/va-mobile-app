@@ -40,7 +40,7 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 `
 /**Component for the bottom tab navigation*/
 const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, translation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const onPress = (route: TabBarRoute, isFocused: boolean): void => {

@@ -12,7 +12,7 @@ type ConsolidatedClaimsNoteProps = StackScreenProps<BenefitsStackParamList, 'Con
 
 const ConsolidatedClaimsNote: FC<ConsolidatedClaimsNoteProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   return (
     <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>

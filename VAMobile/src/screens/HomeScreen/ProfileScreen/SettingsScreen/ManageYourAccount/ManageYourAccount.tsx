@@ -14,7 +14,7 @@ type ManageYourAccountProps = StackScreenProps<HomeStackParamList, 'ManageYourAc
 
 const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   useEffect(() => {
     navigation.setOptions({

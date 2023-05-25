@@ -197,7 +197,7 @@ export type VAIconProps = BoxProps & {
  * @returns VAIcon component
  */
 const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventScaling, testID, ...boxProps }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const fs: (val: number) => number = useFontScale()
   const dispatch = useAppDispatch()
   const { fontScale } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)

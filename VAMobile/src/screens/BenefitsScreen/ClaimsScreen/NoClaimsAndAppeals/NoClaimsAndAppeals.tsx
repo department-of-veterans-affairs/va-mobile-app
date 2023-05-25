@@ -12,7 +12,7 @@ import { useTheme } from 'utils/hooks'
 
 const NoClaimsAndAppeals: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   let header = t('noClaims.youDontHaveAnyClaimsOrAppeals')

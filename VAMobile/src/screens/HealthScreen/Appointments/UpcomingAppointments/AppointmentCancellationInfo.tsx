@@ -24,7 +24,7 @@ type AppointmentCancellationInfoProps = {
 const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ appointment }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const confirmAlert = useDestructiveAlert()
   const dispatch = useAppDispatch()
   const isAndroidDevice = isAndroid()

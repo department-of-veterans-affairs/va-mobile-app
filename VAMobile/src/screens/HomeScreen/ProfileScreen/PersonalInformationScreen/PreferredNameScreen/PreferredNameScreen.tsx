@@ -21,7 +21,7 @@ const MAX_NAME_LENGTH = 25
 const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   const { profile, preferredNameSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const confirmAlert = useDestructiveAlert()
 

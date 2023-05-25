@@ -21,7 +21,7 @@ type SaveButtonProps = {
 /**A common component for the save button located at the header. */
 const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled, a11yHint }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const color = disabled ? 'actionBarDisabled' : 'actionBar'
 

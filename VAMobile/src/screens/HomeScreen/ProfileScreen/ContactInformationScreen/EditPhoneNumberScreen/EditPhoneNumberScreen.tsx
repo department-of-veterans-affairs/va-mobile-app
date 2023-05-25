@@ -23,7 +23,7 @@ type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNum
 
 const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { displayTitle, phoneType, phoneData } = route.params
   const deletePhoneAlert = useDestructiveAlert()

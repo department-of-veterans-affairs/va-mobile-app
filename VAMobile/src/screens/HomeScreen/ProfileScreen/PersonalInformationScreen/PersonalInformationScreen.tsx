@@ -52,7 +52,7 @@ type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'Pers
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { profile, loading, loadingGenderIdentityOptions, needsDataLoad, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>(
     (state) => state.personalInformation,
   )

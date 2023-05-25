@@ -19,7 +19,7 @@ type GenericLetterProps = StackScreenProps<BenefitsStackParamList, 'GenericLette
 
 const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { header, description, letterType, descriptionA11yLabel } = route.params
   const { downloading, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)

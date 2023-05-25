@@ -11,7 +11,7 @@ import getEnv from 'utils/env'
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
 
 const PrescriptionHistoryNotAuthorized: FC = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()

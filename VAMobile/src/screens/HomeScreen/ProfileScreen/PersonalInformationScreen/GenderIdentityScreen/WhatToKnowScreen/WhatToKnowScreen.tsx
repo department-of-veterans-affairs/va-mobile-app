@@ -11,7 +11,7 @@ import { useTheme } from 'utils/hooks'
 type WhatToKnowScreenProps = StackScreenProps<HomeStackParamList, 'WhatToKnow'>
 
 const WhatToKnowScreen: FC<WhatToKnowScreenProps> = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const bodyTextProps: TextViewProps = {

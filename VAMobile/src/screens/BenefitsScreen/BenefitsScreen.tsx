@@ -29,7 +29,7 @@ import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericL
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
 
 const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)

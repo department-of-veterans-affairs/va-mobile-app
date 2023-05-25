@@ -77,7 +77,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   navigationMultiStepCancelScreen,
   showCrisisLineCta = false,
 }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigation = useNavigation()
   const navigateTo = useRouteNavigation()
   const insets = useSafeAreaInsets()

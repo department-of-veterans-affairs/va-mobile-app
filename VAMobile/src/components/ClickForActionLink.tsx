@@ -77,7 +77,7 @@ export type LinkButtonProps = AccessibilityProps & {
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
 const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, a11yLabel, fireAnalytic, testID, ...props }) => {
-  const theme = useTheme() as VATheme as VATheme
+  const theme = useTheme() as VATheme
   const launchExternalLink = useExternalLink()
 
   const onCalendarPress = async (): Promise<void> => {

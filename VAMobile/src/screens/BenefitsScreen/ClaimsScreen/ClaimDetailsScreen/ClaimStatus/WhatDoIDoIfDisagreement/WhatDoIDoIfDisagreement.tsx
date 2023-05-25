@@ -17,7 +17,7 @@ type WhatDoIDoIfDisagreementProps = StackScreenProps<BenefitsStackParamList, 'Wh
 
 const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const launchExternalLink = useExternalLink()
 
   const onDecisionReview = async (): Promise<void> => {

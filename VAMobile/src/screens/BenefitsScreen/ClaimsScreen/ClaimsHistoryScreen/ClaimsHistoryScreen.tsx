@@ -20,7 +20,7 @@ type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
 const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)

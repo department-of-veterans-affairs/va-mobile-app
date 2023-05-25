@@ -19,7 +19,7 @@ export type SelectionListItemProps = {
 } & Partial<SelectionListItemObj>
 
 const SelectionListItem: FC<SelectionListItemProps> = ({ content, setSelectedFn, isSelected }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const boxProps: BoxProps = {
     borderBottomWidth: theme.dimensions.borderWidth,

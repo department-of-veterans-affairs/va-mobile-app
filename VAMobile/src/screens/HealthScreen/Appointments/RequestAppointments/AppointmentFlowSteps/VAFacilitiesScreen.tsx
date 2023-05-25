@@ -20,7 +20,7 @@ type VAFacilitiesScreenProps = StackScreenProps<AppointmentFlowModalStackParamLi
 const VAFacilitiesScreen: FC<VAFacilitiesScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [sortOption, setSortOption] = useState<FacilitiesFilterType>(FACILITY_FILTER.home)
   const [selectedFacility, setSelectedFacility] = useState<string>()
 

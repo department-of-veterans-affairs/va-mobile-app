@@ -56,7 +56,7 @@ const VASelector: FC<VASelectorProps> = ({
   setError,
   isRequiredField,
 }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation()
   const iconWidth = 22
 

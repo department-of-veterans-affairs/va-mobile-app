@@ -28,7 +28,7 @@ export type ClosePanelButton = {
  * Button used by the panel
  */
 export const ClosePanelButton: FC<ClosePanelButton> = ({ onPress, a11yHint, focusOnButton, buttonText, buttonTextColor }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
 

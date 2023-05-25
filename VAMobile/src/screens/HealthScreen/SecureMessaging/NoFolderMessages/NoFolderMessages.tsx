@@ -14,7 +14,7 @@ import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 
 const NoFolderMessages: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
 

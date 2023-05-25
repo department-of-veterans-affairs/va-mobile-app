@@ -94,7 +94,7 @@ export type ClaimPhaseProps = {
  */
 const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { eventsTimeline } = attributes

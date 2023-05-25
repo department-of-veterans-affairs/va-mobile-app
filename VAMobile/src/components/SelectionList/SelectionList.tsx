@@ -20,7 +20,7 @@ export type SelectionListProps = {
 
 const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => {
   const [numSelected, setNumSelected] = useState(0)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const [selectionVals, setSelectionVals] = useState<Record<string, boolean>>({})

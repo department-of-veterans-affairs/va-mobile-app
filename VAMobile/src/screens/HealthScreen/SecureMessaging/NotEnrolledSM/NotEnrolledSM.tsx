@@ -15,7 +15,7 @@ const NotEnrolledSM: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const bulletOne = {
     text: t('notEnrolledSM.youAreEnrolled'),

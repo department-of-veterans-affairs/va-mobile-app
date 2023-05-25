@@ -16,7 +16,7 @@ type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileReq
 
 const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { request } = route.params
   const { displayName, description, uploadDate, documents } = request

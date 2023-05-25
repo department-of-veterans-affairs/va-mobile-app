@@ -23,7 +23,7 @@ type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Vaccine
 const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation }) => {
   const { vaccineId } = route.params
   const { vaccinesById, vaccineLocationsById, detailsLoading } = useSelector<RootState, VaccineState>((state) => state.vaccine)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()

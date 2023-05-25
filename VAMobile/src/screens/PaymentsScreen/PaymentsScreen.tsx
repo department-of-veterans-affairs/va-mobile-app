@@ -22,7 +22,7 @@ type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
 const PaymentsScreen: FC<PaymentsScreenProps> = () => {
   const { directDepositBenefits, directDepositBenefitsUpdate } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 

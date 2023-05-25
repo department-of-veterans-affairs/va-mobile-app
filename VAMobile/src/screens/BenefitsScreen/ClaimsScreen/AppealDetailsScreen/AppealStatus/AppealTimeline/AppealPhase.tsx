@@ -102,7 +102,7 @@ type AppealPhaseProps = {
 
 const AppealPhase: FC<AppealPhaseProps> = ({ event }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const formattedDate = formatDateMMMMDDYYYY(event.date)
   const heading = getEventName(event.type, t)

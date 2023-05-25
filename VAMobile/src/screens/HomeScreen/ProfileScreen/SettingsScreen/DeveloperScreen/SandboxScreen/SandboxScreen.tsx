@@ -15,7 +15,7 @@ type SandboxScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Sa
 
 const SandboxScreen: FC<SandboxScreenSettingsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   // Component Picker
   const defaultComponent = 'ClickForActionLink'

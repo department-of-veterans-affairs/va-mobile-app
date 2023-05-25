@@ -17,7 +17,7 @@ type ReplyTriageErrorScreenProps = StackScreenProps<HealthStackParamList, 'Reply
 
 const ReplyTriageErrorScreen: FC<ReplyTriageErrorScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 

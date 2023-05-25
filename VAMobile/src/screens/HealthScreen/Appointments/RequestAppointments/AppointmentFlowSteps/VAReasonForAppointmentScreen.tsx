@@ -22,7 +22,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { text } = appointmentFlowFormData.reasonCode || {}

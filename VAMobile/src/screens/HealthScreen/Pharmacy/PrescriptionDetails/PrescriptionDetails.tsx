@@ -27,7 +27,7 @@ const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }) => {
   const { prescriptionId } = route.params
   const { loadingHistory, prescriptionsById, prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const launchExternalLink = useExternalLink()
   const submitRefillAlert = useDestructiveAlert()
   const dispatch = useAppDispatch()

@@ -18,7 +18,7 @@ export type VAScrollViewProps = {
 /**A common component that provides a scrollable view. Use this instead of ScrollView. This component is a wrapper for react-native ScrollView that has a scrollbar styling fix */
 const VAScrollView: FC<VAScrollViewProps> = (props) => {
   const insets = useSafeAreaInsets()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const style = {
     paddingRight: props.removeInsets ? undefined : insets?.right,

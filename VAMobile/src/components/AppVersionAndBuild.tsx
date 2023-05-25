@@ -19,7 +19,7 @@ export type AppVersionAndBuildProps = {
  */
 const AppVersionAndBuild: FC<AppVersionAndBuildProps> = ({ textColor = 'bodyText', textWeight = 'MobileBody' }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [versionName, setVersionName] = useState<string>()
   const [buildNumber, setBuildNumber] = useState<number>()
 

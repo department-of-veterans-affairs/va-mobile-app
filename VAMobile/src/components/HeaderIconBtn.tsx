@@ -31,7 +31,7 @@ export type HeaderIconBtnProps = {
  * Button used by the request appointment modal
  */
 export const HeaderIconBtn: FC<HeaderIconBtnProps> = ({ onPress, accessibilityHint, accessibilityLabel, iconName, iconHeight, iconWidth, title }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   return (
     <TouchableWithoutFeedback onPress={onPress} accessibilityLabel={accessibilityLabel} accessibilityHint={accessibilityHint} accessibilityRole="button" accessible={true}>

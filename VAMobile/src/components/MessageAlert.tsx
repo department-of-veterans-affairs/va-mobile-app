@@ -20,7 +20,7 @@ export type MessageAlertProps = {
 
 /**Common component to show a message alert when saving or sending a secure message */
 const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, scrollViewRef, focusOnError }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
 
   let title

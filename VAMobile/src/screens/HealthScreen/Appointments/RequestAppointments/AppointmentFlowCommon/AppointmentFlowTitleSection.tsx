@@ -22,7 +22,7 @@ type AppointmentModalTitleSectionProps = {
  * Will show title, optional extra information text, and an optional error alert.
  * */
 const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ title, extraInformationText, errorMessage, titleMarginBottom, titleA11yLabel }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const error = !!errorMessage
 
   return (

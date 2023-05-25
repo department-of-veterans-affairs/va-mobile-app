@@ -24,7 +24,7 @@ type UploadFileProps = StackScreenProps<BenefitsStackParamList, 'UploadFile'>
 
 const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { request: originalRequest, fileUploaded } = route.params
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const dispatch = useDispatch()

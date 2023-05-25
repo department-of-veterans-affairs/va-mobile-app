@@ -19,7 +19,7 @@ type InboxProps = Record<string, unknown>
 
 const Inbox: FC<InboxProps> = () => {
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
   const { inboxMessages, loadingInbox, paginationMetaByFolderId } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)

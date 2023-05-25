@@ -15,7 +15,7 @@ type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
 const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
   const onClaimLettersPress = () => {

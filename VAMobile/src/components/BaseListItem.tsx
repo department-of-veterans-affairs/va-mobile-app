@@ -84,7 +84,7 @@ export type BaseListItemProps = {
 }
 
 export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress?: () => void }> = ({ decorator, decoratorProps, onPress }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const radioBtnWidth = 22
   const radioBtnHeight = 22
 
@@ -187,7 +187,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     fileUploaded,
     minHeight,
   } = props
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const [isPressed, setIsPressed] = useState(false)
 

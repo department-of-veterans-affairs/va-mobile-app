@@ -52,7 +52,7 @@ const ButtonWithIcon: FC<ButtonWithIconProps> = ({
   borderWidth,
   buttonTextColor,
 }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [buttonPressed, setButtonPressed] = useState(false)
 
   const onPressIn = (): void => {

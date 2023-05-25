@@ -14,7 +14,7 @@ type EmergencyAndCrisisScreenProps = StackScreenProps<AppointmentFlowModalStackP
 
 const EmergencyAndCrisisScreen: FC<EmergencyAndCrisisScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const launchExternalLink = useExternalLink()

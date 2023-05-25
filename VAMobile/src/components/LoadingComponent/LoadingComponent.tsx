@@ -24,7 +24,7 @@ export type LoadingComponentProps = {
 
 /**A common component to show a loading spinner */
 const LoadingComponent: FC<LoadingComponentProps> = ({ text, a11yLabel, justTheSpinnerIcon, spinnerHeight, spinnerWidth, spinnerColor }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,

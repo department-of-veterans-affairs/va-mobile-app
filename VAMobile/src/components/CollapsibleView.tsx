@@ -31,7 +31,7 @@ export type CollapsibleViewProps = {
  * @returns CollapsibleView component
  */
 const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = true, showInTextArea = true, a11yHint, textColor, children }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
 
   const onPress = (): void => {

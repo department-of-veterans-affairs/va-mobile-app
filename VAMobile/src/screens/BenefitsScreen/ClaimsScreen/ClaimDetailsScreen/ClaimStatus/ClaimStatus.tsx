@@ -31,7 +31,7 @@ type ClaimStatusProps = {
  * Component for rendering the details area of a claim when selected on the ClaimDetailsScreen
  */
 const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const sentEvent = useRef(false)

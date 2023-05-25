@@ -18,7 +18,7 @@ export type AddPreferenceComponentProps = {
 
 /** common component to add a preference */
 const AddPreferenceComponent: FC<AddPreferenceComponentProps> = ({ buttonText, onPress, preferenceTitle }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const iconProps: VAIconProps = {

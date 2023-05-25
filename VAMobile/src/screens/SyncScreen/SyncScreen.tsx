@@ -17,7 +17,7 @@ import colors from 'styles/themes/VAColors'
 
 export type SyncScreenProps = Record<string, unknown>
 const SyncScreen: FC<SyncScreenProps> = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const splashStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',

@@ -29,7 +29,7 @@ export type DescBackButtonProps = {
  * Descriptive button used by the stack navigation to go back to the previous screen
  */
 export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label, labelA11y, focusOnButton = true }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()

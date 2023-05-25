@@ -22,7 +22,7 @@ export type AlertPromptProps = {
  */
 const DemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => {
   const insets = useSafeAreaInsets()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [input, setInput] = useState('')
 
   const onCancel = () => {

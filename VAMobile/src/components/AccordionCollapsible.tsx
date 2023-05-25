@@ -48,7 +48,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   headerRef,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [expanded, setExpanded] = useState(expandedInitialValue || false)
 
   const onPress = (): void => {

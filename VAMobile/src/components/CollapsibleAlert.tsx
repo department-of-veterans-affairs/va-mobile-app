@@ -25,7 +25,7 @@ export type CollapsibleAlertProps = {
 }
 
 const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel, onExpand, onCollapse }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 

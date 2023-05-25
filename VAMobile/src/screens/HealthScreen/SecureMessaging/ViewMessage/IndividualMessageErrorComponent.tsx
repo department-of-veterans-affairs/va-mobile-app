@@ -12,7 +12,7 @@ import { useTheme } from 'utils/hooks'
 const IndividualMessageErrorComponent: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { tryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
 
   return (

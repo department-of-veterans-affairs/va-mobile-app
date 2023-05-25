@@ -12,7 +12,7 @@ export type CountTagProps = {
 
 /**A common component to show a count of a particular item within a page before clicking to enter that page. For example, this tag would be used to display the number of unread messages in one's inbox. */
 const MessagesCountTag: FC<CountTagProps> = ({ unread }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   return (
     <Box
       minWidth={theme.dimensions.tagMinWidth}

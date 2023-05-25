@@ -22,7 +22,7 @@ type AppealStatusProps = {
 }
 
 const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, numAppealsAhead, isActiveAppeal, docketName, programArea }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const NumAppealsAhead = (): ReactElement => {

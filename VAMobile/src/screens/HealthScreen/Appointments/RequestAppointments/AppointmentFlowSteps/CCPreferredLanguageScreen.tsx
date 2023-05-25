@@ -19,7 +19,7 @@ type CCPreferredLanguageScreenProps = StackScreenProps<AppointmentFlowModalStack
 
 const CCPreferredLanguageScreen: FC<CCPreferredLanguageScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { preferredLanguage } = appointmentFlowFormData

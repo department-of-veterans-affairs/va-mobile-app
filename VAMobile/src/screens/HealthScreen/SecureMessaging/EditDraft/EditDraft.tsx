@@ -66,7 +66,7 @@ type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const goToDrafts = useGoToDrafts()

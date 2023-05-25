@@ -54,7 +54,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveAlert()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const message = t('areYouSure')
 
   const leftTitleButtonPress = () => {

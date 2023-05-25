@@ -11,7 +11,7 @@ import { useTheme } from 'utils/hooks'
 type LoaGateProps = Record<string, unknown>
 
 const LoaGate: FC<LoaGateProps> = ({}) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const navigation = useNavigation()

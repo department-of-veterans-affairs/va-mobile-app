@@ -8,7 +8,7 @@ import { useTheme } from 'utils/hooks'
 
 const NoVaccineRecords: FC = () => {
   const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   return (
     <VAScrollView>

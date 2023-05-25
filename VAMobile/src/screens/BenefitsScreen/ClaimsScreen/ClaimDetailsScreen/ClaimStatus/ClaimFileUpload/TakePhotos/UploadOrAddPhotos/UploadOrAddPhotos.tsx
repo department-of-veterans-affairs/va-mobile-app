@@ -28,7 +28,7 @@ type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOr
 
 const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const showActionSheetWithOptions = useShowActionSheet()
   const { request: originalRequest, firstImageResponse } = route.params

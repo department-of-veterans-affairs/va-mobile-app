@@ -64,7 +64,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     setInputCursorToBeginning,
   } = props
   const { t } = useTranslation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const startTextPositon = { start: 0, end: 0 }
   const [focusUpdated, setFocusUpdated] = useState(false)
   const [isFocused, setIsFocused] = useState(false)

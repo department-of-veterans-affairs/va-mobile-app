@@ -19,7 +19,7 @@ export type DowntimeErrorProps = {
 /**Common component to show an alert when the service is down*/
 const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
     justifyContent: 'center',

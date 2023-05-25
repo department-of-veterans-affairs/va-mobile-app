@@ -60,7 +60,7 @@ export type HeaderBannerProps = {
 }
 
 const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, divider: bannerDivider, menuViewActions }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
   const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'

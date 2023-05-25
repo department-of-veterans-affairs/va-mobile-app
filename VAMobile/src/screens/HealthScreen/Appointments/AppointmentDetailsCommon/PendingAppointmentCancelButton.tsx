@@ -23,7 +23,7 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const confirmAlert = useDestructiveAlert()
   const isAndroidDevice = isAndroid()
 

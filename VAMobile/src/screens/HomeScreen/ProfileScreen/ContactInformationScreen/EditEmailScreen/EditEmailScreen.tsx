@@ -23,7 +23,7 @@ type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
  */
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { profile, emailSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id

@@ -19,7 +19,7 @@ type IncorrectServiceInfoScreenProps = StackScreenProps<HomeStackParamList, 'Inc
  */
 const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   useEffect(() => {
     navigation.setOptions({

@@ -47,7 +47,7 @@ const Stack = createStackNavigator<AppointmentFlowModalStackParamList>()
 /** Component stack that will  house the appointment request flow steps screens */
 const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const inset = useSafeAreaInsets()

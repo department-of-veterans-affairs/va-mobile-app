@@ -15,7 +15,7 @@ type AppointmentReasonProps = {
 
 const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes, messages }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { reason } = attributes || ({} as AppointmentAttributes)
   const isPendingAppointment = isAPendingAppointment(attributes)
 

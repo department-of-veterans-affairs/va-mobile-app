@@ -15,7 +15,7 @@ type HowToUpdateDirectDepositScreenProps = StackScreenProps<PaymentsStackParamLi
  */
 const HowToUpdateDirectDepositScreen: FC<HowToUpdateDirectDepositScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   return (
     <>

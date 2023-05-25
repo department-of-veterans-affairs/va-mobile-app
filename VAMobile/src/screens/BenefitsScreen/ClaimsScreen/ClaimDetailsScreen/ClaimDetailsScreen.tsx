@@ -28,7 +28,7 @@ type ClaimDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimDe
 
 const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const controlValues = [t('claimDetails.status'), t('claimDetails.details')]

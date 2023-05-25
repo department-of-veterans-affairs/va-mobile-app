@@ -9,7 +9,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 const NoMilitaryInformationAccess: FC = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (

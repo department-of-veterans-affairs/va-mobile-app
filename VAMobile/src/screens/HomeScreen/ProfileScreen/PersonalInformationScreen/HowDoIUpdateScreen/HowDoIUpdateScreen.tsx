@@ -16,7 +16,7 @@ type HowDoIUpdateScreenProps = StackScreenProps<HomeStackParamList, 'HowDoIUpdat
 
 const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { screenType } = route.params
 

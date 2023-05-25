@@ -40,7 +40,7 @@ type CarouselTabBarProps = {
 
 /**A common component with the carousel tab bar content. Displays skip button, continue button, and a progress bar*/
 const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, screenList, translation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [currentScreenIndex, setCurrentScreenIndex] = useState(0)
   const a11yHints = screenList[currentScreenIndex].a11yHints
 

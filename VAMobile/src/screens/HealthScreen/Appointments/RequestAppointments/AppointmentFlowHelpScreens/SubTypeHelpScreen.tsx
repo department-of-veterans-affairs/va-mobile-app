@@ -22,7 +22,7 @@ type BodyTextType = Array<TextSectionType>
 /** Component for the sub type care help screen */
 const SubTypeHelpScreen: FC<SubTypeHelpScreenProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { careTypeId } = route.params
   const headerStyle = useRequestAppointmentModalHeaderStyles()
 

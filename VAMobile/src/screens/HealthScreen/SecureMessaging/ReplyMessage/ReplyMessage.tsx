@@ -51,7 +51,7 @@ type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
 

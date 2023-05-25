@@ -82,7 +82,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   showModalByDefault,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation()
   const insets = useSafeAreaInsets()
 

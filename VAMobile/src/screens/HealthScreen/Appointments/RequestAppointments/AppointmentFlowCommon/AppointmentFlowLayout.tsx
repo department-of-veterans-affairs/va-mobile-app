@@ -38,7 +38,7 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
   onLinkPress,
   children,
 }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 

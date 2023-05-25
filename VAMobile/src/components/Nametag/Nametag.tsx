@@ -13,7 +13,7 @@ export const Nametag: FC = () => {
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const name = (): string => {
     return profile?.fullName || ''

@@ -303,7 +303,7 @@ type AppealCurrentStatusProps = {
 }
 
 const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appealType, docketName, programArea }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)

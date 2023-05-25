@@ -62,7 +62,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   tagCount,
   tagCountA11y,
 }: HomeNavButtonProps) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [isPressed, setIsPressed] = useState(false)
 
   const _onPressIn = (): void => {

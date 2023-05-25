@@ -15,7 +15,7 @@ type ProviderNameProps = {
 
 const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const isAppointmentPending = isAPendingAppointment(attributes)
 
   const { appointmentType, practitioner, healthcareProvider, friendlyLocationName, location } = attributes || ({} as AppointmentAttributes)

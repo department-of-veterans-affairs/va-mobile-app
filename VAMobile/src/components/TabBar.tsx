@@ -28,7 +28,7 @@ export type TabBarProps = {
 }
 
 const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const mainContainerStyle: ViewStyle = {

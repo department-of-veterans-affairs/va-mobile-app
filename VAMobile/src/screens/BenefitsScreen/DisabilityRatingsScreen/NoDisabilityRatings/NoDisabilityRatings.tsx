@@ -9,7 +9,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 const NoDisabilityRatings: FC = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const bodyText = t('disabilityRating.noDisabilityRatings.body')
 

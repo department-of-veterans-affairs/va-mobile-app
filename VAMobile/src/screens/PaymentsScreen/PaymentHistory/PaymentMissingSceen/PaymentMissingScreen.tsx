@@ -12,7 +12,7 @@ type PaymentMissingScreenProps = StackScreenProps<PaymentsStackParamList, 'Payme
 
 const PaymentMissing: FC<PaymentMissingScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   return (
     <LargePanel title={t('paymentsHelp.title')} rightButtonText={t('close')}>

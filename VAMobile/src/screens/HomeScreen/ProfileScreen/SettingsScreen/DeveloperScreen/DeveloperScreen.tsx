@@ -30,7 +30,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
   const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
   const authorizedServices = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const [localVersionName, setVersionName] = useState<string>()

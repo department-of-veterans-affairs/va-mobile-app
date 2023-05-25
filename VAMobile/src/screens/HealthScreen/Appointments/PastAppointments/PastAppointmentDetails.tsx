@@ -30,7 +30,7 @@ type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastA
 const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
 
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()

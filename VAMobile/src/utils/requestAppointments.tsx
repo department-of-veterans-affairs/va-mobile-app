@@ -27,7 +27,7 @@ import { useAppDispatch, useRouteNavigation, useTheme } from './hooks'
 
 /** Header style for the modals in the request appointment flow */
 export const useRequestAppointmentModalHeaderStyles = (): StackNavigationOptions => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
 
   const headerStyles: StackNavigationOptions = {

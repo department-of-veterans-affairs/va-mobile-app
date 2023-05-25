@@ -34,7 +34,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
   const [error, setError] = useState('')

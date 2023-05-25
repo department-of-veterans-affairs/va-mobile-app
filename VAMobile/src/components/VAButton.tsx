@@ -55,7 +55,7 @@ export type VAButtonProps = {
  * A common component to show a button that takes the full width of the view with gutters
  */
 const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState, disabledText, iconProps, minHeight }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const textViewProps: TextViewProps = {
     variant: 'MobileBodyBold',

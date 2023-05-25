@@ -19,7 +19,7 @@ type GeneralHelpScreenProps = StackScreenProps<HealthStackParamList, 'GeneralHel
 const GeneralHelpScreen: FC<GeneralHelpScreenProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { title, description } = route.params
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })

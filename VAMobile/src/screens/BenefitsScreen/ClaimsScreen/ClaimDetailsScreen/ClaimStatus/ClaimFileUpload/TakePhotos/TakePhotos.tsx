@@ -23,7 +23,7 @@ type TakePhotosProps = StackScreenProps<BenefitsStackParamList, 'TakePhotos'>
 
 const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
   const { request } = route.params

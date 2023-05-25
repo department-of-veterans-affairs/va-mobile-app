@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 type HapticsDemoScreenProps = StackScreenProps<HomeStackParamList, 'HapticsDemoScreen'>
 
 const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
 

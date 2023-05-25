@@ -99,7 +99,7 @@ type FoldersProps = Record<string, unknown>
 
 const Folders: FC<FoldersProps> = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { folders, loadingFolders } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 

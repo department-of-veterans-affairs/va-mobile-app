@@ -24,7 +24,7 @@ export type MultiTouchCardProps = {
 }
 
 const MultiTouchCard: FC<MultiTouchCardProps> = ({ orderIdentifier, mainContent, bottomContent, bottomOnPress, bottomA11yHint, mainA11yLabel, bottomA11yLabel }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const hasBottomContent = !!bottomContent
 

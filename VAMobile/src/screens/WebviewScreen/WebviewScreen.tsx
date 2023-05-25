@@ -22,7 +22,7 @@ type ReloadButtonProps = {
 
 const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const reloadBoxProps: BoxProps = {
     alignItems: 'center',
@@ -83,7 +83,7 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
 const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const webviewRef = useRef() as MutableRefObject<WebView>
 
   const [canGoBack, setCanGoBack] = useState(false)

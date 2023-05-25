@@ -17,7 +17,7 @@ type AppointmentTypeAndDateProps = {
 
 const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { appointmentType, startDateUtc, timeZone, isCovidVaccine, typeOfCare, status } = attributes || ({} as AppointmentAttributes)
 
   const isAppointmentPending = isAPendingAppointment(attributes)

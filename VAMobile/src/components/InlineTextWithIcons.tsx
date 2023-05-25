@@ -20,7 +20,7 @@ export type InlineTextWithIconsProps = {
 
 /**Common component to show an icon with a line of text*/
 export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({ inlineIcon, leftIconProps, rightIconProps, leftTextProps, rightTextProps }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   return (
     <Box flexDirection={'row'} flexGrow={1}>
       <Box ml={leftIconProps ? 0 : 16} mt={7} mr={theme.dimensions.condensedMarginBetween}>

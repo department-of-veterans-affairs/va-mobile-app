@@ -9,7 +9,7 @@ import { useTheme } from 'utils/hooks'
 
 const NoInboxMessages: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   return (
     <Box

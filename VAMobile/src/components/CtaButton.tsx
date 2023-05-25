@@ -24,7 +24,7 @@ export type CtaButtonProps = {
  */
 const CtaButton: FC<CtaButtonProps> = ({ onPress, iconColor, backgroundColor, children, px, py, alignItems, justifyContent, accessibilityLabel, accessibilityHint }) => {
   const { t } = useTranslation(NAMESPACE.HOME)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const touchableProps: TouchableWithoutFeedbackProps = {
     accessibilityRole: 'button',

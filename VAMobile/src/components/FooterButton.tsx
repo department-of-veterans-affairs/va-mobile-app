@@ -33,7 +33,7 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 `
 /**A common component to show a button at the bottom of the screen that takes the full width of the display. Optional Icon can be passed in to render next to text */
 const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textColor, backGroundColor, testID, a11yHint }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const [isPressed, setIsPressed] = useState(false)
 

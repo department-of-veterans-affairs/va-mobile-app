@@ -17,7 +17,7 @@ type NoAppointmentsProps = {
 
 export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLabel }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   return (
     <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('Appointments: No-appointments-page')} alignItems="center">

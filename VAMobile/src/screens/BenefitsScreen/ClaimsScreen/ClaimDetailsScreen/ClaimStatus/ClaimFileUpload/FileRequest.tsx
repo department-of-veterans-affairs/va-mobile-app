@@ -18,7 +18,7 @@ import { useTheme } from 'utils/hooks'
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
 
 const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { claimID } = route.params

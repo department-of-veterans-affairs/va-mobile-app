@@ -20,7 +20,7 @@ export type PrescriptionListItemProps = {
 
 /** common component to show the prescription info on a list  */
 const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hideInstructions, includeRefillTag }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { instructions, refillRemaining, prescriptionName, prescriptionNumber, facilityName, refillDate } = prescription

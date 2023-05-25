@@ -28,7 +28,7 @@ export type FormAttachmentsProps = {
 
 /**A common component for form attachments, displays Attachments heading with helper link, already attached items with remove option, and an optional large button. */
 const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress, largeButtonProps, attachmentsList, a11yHint }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
   const navigateTo = useRouteNavigation()

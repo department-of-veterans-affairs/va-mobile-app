@@ -17,7 +17,7 @@ type PrescriptionHistoryNoMatchesProps = {
 
 const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ currentTab, isFiltered }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const getFilteredTabString = () => {
     switch (currentTab) {

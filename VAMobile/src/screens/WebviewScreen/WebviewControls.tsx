@@ -36,7 +36,7 @@ export type WebviewControlsProps = {
  */
 const WebviewControls: FC<WebviewControlsProps> = (props) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const controlsViewProps: BoxProps = {
     display: 'flex',

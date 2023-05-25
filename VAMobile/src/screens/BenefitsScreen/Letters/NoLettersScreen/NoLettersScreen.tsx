@@ -10,7 +10,7 @@ import { useTheme } from 'utils/hooks'
 
 const NoLettersScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,

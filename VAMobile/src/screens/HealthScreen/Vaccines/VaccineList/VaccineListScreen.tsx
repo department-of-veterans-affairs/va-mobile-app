@@ -26,7 +26,7 @@ type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineLis
 const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { vaccines, loading, vaccinePagination } = useSelector<RootState, VaccineState>((state) => state.vaccine)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()

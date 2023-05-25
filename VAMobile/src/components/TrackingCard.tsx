@@ -24,7 +24,7 @@ export type TrackingCardProps = {
  * A common component to show tracking information as a card
  */
 const TrackingCard: FC<TrackingCardProps> = ({ onPress, a11yHint, title, dateShipped }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [buttonPressed, setButtonPressed] = useState(false)
 

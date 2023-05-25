@@ -25,7 +25,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { lettersAndDocuments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const { letters, loading } = useSelector<RootState, LettersState>((state) => state.letters)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)

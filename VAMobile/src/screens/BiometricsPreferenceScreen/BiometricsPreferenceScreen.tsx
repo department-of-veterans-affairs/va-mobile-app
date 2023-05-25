@@ -15,7 +15,7 @@ import { useTheme } from 'utils/hooks'
 export type SyncScreenProps = Record<string, unknown>
 
 const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
 

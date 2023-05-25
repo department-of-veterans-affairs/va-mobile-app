@@ -36,7 +36,7 @@ import getEnv from 'utils/env'
 
 const DisabilityRatingsScreen: FC = () => {
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
 

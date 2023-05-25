@@ -54,7 +54,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { messagesById, threads, loading, loadingFile, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,

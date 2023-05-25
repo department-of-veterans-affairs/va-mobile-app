@@ -31,7 +31,7 @@ export const getInboxUnreadCount = (state: RootState): number => {
 const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   const inboxUnreadCount = useSelector<RootState, number>(getInboxUnreadCount)

@@ -24,7 +24,7 @@ type ClaimLettersScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimLe
 
 const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { loading, decisionLetters, downloading } = useSelector<RootState, DecisionLettersState>((state) => state.decisionLetters)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)

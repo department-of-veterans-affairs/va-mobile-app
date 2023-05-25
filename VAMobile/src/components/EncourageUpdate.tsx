@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'
 
 export const EncourageUpdateAlert = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HOME)
   const [localVersionName, setVersionName] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()

@@ -30,7 +30,7 @@ import { useTheme } from 'utils/hooks'
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
 
 const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { claimID } = route.params

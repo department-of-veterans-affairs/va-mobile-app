@@ -79,7 +79,7 @@ type ContactInformationScreenProps = StackScreenProps<HomeStackParamList, 'Conta
 const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { profile, loading, needsDataLoad } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)

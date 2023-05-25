@@ -22,7 +22,7 @@ type ConfirmContactScreenProps = StackScreenProps<AppointmentFlowModalStackParam
 const ConfirmContactScreen: FC<ConfirmContactScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)

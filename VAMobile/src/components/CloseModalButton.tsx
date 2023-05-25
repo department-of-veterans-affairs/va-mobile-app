@@ -26,7 +26,7 @@ export type CloseModalButton = {
  * Button used by the request appointment modal
  */
 export const CloseModalButton: FC<CloseModalButton> = ({ onPress, a11yHint, focusOnButton, buttonText }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
 

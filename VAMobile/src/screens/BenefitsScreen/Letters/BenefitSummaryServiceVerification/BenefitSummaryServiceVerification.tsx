@@ -41,7 +41,7 @@ type BenefitSummaryServiceVerificationProps = StackScreenProps<BenefitsStackPara
 
 const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)
 

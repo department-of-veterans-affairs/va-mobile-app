@@ -14,7 +14,7 @@ type PrepareForVideoVisitProps = StackScreenProps<HealthStackParamList, 'Prepare
 const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   useEffect(() => {
     navigation.setOptions({

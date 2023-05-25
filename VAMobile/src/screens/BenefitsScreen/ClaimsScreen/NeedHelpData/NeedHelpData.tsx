@@ -15,7 +15,7 @@ type NeedHelpDataProps = {
 }
 
 const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const AppealData = (): ReactElement => {

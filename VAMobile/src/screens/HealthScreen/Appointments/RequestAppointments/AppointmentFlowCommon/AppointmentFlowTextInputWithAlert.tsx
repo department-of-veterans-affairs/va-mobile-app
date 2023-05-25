@@ -36,7 +36,7 @@ const AppointmentFlowTextInputWithAlert: FC<AppointmentFlowTextInputWithAlertPro
   validationFunc,
   ...boxProps
 }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const onEndEditing = () => {
     if (validationFunc) {

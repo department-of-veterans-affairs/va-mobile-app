@@ -21,7 +21,7 @@ type SelectFilesProps = StackScreenProps<BenefitsStackParamList, 'SelectFile'>
 
 const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const [error, setError] = useState('')
   const scrollViewRef = useRef<ScrollView>(null)

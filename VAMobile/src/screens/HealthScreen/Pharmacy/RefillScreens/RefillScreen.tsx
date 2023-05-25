@@ -24,7 +24,7 @@ import SelectionList from 'components/SelectionList'
 type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
 
 export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const submitRefillAlert = useDestructiveAlert()
 

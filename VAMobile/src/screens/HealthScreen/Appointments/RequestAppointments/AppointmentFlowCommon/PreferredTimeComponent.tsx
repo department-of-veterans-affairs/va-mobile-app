@@ -23,7 +23,7 @@ type PreferredTimeComponentProps = {
 const PreferredTimeComponent: FC<PreferredTimeComponentProps> = ({ selectedTimes, onChange, errorMessage, selectionTitle }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const selectedList = new Set(selectedTimes || [])
 
   const timesList = [

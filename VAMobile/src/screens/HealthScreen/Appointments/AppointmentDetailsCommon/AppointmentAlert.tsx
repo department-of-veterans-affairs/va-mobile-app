@@ -14,7 +14,7 @@ type AppointmentAlertProps = {
 
 const AppointmentAlert: FC<AppointmentAlertProps> = ({ attributes }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const { status, statusDetail, location } = attributes || ({} as AppointmentAttributes)
   const appointmentBooked = status === AppointmentStatusConstants.BOOKED

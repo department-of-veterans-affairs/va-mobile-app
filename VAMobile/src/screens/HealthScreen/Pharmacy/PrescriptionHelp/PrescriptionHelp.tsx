@@ -12,7 +12,7 @@ import { useTheme } from 'utils/hooks'
 type PrescriptionHelpProps = StackScreenProps<HealthStackParamList, 'PrescriptionHelp'>
 
 const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const headerStyle = usePanelHeaderStyles()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)

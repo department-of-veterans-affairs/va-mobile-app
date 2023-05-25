@@ -21,7 +21,7 @@ export type TextAreaProps = {
  * @returns TextView component
  */
 const TextArea: FC<TextAreaProps> = ({ onPress, noBorder, children }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const borderProps: BoxProps = noBorder
     ? {}

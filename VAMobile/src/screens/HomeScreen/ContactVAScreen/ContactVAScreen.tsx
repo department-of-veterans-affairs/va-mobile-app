@@ -18,7 +18,7 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
  * Returns ContactVAScreen component
  */
 const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HOME)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()

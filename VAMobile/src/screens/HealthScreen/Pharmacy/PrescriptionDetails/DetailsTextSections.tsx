@@ -35,7 +35,7 @@ const DetailsTextSections: FC<DetailsTextSections> = ({
   rightSectionValueLabel,
   children,
 }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const getTextElements = (headerText: string, valueText?: string | number, headerLabel?: string, valueLabel?: string) => {
     return (

@@ -9,7 +9,7 @@ import { useTheme } from 'utils/hooks'
 
 const NoRefills: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,

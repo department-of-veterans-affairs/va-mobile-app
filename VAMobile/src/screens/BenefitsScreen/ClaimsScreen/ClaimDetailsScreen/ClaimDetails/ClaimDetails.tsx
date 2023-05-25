@@ -20,7 +20,7 @@ type ClaimDetailsProps = {
  */
 const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { attributes } = claim
 
   const formattedDateFiled = formatDateMMMMDDYYYY(attributes?.dateFiled || '')

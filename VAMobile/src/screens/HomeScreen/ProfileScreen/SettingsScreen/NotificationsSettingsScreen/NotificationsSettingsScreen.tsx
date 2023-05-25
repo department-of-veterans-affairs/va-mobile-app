@@ -20,7 +20,7 @@ type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'No
 const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { deviceToken, preferences, loadingPreferences, registeringDevice, systemNotificationsOn, settingPreference } = useSelector<RootState, NotificationsState>(
     (state) => state.notifications,
   )

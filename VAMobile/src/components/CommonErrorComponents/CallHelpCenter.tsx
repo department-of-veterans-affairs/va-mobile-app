@@ -25,7 +25,7 @@ export type CallHelpCenterProps = {
 /**A common component to show the help center contact info for when an error happens*/
 const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA11yHint, errorText, errorA11y, callPhone }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
     justifyContent: 'center',

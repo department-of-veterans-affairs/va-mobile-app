@@ -10,7 +10,7 @@ import { useTheme } from 'utils/hooks'
 
 const NoMatchInRecords: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const accordionContent = (textID: string, textA11yLabelID: string): ReactNode => {
     return (

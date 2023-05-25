@@ -34,7 +34,7 @@ export type CategoryLandingProps = {
 export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
 

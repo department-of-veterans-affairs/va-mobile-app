@@ -21,7 +21,7 @@ import AppealStatus from './AppealStatus/AppealStatus'
 type AppealDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'AppealDetailsScreen'>
 
 const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
 

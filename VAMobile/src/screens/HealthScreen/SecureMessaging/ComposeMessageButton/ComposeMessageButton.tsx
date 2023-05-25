@@ -10,7 +10,7 @@ import { useTheme } from 'utils/hooks'
 const ComposeMessageButton: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const onPress = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   const composeMessageButtonProps: VAButtonProps = {

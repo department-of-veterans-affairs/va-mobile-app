@@ -18,7 +18,7 @@ const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 const CernerAlert: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { cernerFacilities, facilities } = useSelector<RootState, PatientState>((state) => state.patient)
   const hasCernerFacilities = useHasCernerFacilities()
 

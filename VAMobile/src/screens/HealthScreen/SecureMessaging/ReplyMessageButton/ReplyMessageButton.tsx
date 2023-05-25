@@ -14,7 +14,7 @@ export type ReplyMessageButtonProps = {
 const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const onPress = navigateTo('ReplyMessage', { messageID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   const replyButtonProps: VAButtonProps = {

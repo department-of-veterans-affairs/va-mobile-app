@@ -56,7 +56,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   onShowAnalyticsFn,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const insets = useSafeAreaInsets()
 

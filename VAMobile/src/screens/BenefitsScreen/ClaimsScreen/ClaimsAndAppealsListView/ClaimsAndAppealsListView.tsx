@@ -31,7 +31,7 @@ type ClaimsAndAppealsListProps = {
 
 const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { claimsAndAppealsByClaimType, claimsAndAppealsMetaPagination } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)

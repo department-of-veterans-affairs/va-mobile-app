@@ -9,7 +9,7 @@ type WebviewTitleProps = {
   title: string
 }
 const WebviewTitle: FC<WebviewTitleProps> = ({ title }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const titleBoxProps: BoxProps = {
     display: 'flex',

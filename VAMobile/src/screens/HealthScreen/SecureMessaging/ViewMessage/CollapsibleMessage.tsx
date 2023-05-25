@@ -26,7 +26,7 @@ export type ThreadMessageProps = {
 }
 
 const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage, collapsibleMessageRef }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tCom } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()

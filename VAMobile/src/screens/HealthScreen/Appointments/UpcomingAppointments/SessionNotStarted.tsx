@@ -12,7 +12,7 @@ type SessionNotStartedProps = StackScreenProps<HealthStackParamList, 'SessionNot
 
 const SessionNotStarted: FC<SessionNotStartedProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   return (
     <LargePanel title={t('appointmentsHelp')} rightButtonText={t('close')}>

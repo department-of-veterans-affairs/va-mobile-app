@@ -23,7 +23,7 @@ type MilitaryInformationScreenProps = StackScreenProps<HomeStackParamList, 'Mili
 
 const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { serviceHistory, loading, needsDataLoad } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)

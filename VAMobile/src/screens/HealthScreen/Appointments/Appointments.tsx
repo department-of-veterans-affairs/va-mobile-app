@@ -37,7 +37,7 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
 const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]

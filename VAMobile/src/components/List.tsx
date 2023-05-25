@@ -47,7 +47,7 @@ export type ListProps = {
  * A common component for showing a list of <ListItem>.
  */
 const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const titleProps: TextViewProps = {
     variant: 'TableHeaderBold',

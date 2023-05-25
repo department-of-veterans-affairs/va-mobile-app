@@ -23,7 +23,7 @@ type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'Payme
 
 const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { currentPagePayments, currentPagePagination, loading, availableYears } = useSelector<RootState, PaymentState>((state) => state.payments)

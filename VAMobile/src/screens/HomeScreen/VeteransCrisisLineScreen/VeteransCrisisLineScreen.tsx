@@ -21,7 +21,7 @@ const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } 
 const VeteransCrisisLineScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.HOME)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const launchExternalLink = useExternalLink()
 
   const fireAnalyticFn = (): void => {

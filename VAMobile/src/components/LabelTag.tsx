@@ -40,7 +40,7 @@ export type LabelTagProps = {
 
 /**Common component to show a text inside a tag*/
 const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yLabel }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const textView = (
     <TextView flexWrap={'wrap'} color={'labelTag'} variant={'LabelTag'} px={12} py={4}>

@@ -50,7 +50,7 @@ export type RadioGroupProps<T> = {
 
 /**A common component to display radio button selectors for a list of selectable items*/
 const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isRadioList, radioListTitle }: RadioGroupProps<T>): ReactElement => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasSingleOption = options.length === 1
 

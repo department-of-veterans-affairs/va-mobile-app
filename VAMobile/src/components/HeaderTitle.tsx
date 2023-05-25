@@ -19,7 +19,7 @@ export type HeaderTitleProps = {
 
 /**Common component used for the navigation header title*/
 const HeaderTitle: FC<HeaderTitleProps> = ({ focusRef, headerTitle, testID, accessabilityLabel, accessible = true }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const combinestyle = StyleSheet.flatten([{ height: theme.dimensions.headerHeight }, defaultStyle.headerText])
   return (

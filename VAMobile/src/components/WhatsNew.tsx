@@ -15,7 +15,7 @@ import { useTheme } from 'utils/hooks'
 
 export const WhatsNew = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const componentMounted = useRef(true)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const [localVersion, setVersionName] = useState<string>()
