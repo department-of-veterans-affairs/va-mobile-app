@@ -57,7 +57,7 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
   return (
     <Pressable {...pressableProps} {...testIdProps(testID)}>
       <Box {...boxProps}>
-        <VAIcon fill={theme.colors.icon?.pagination} width={16} height={16} preventScaling={true} {...iconProps} />
+        <VAIcon fill={theme.colors.icon.pagination} width={16} height={16} preventScaling={true} {...iconProps} />
       </Box>
     </Pressable>
   )
@@ -79,7 +79,7 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
     onPress: onPrev,
     testID: 'previous-page',
     a11yHint: t('pagination.previous'),
-    iconProps: { name: 'ArrowLeft', fill: theme.colors.icon?.pagination },
+    iconProps: { name: 'ArrowLeft', fill: theme.colors.icon.pagination },
     disabled: page === 1,
   }
 
@@ -87,7 +87,7 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
     onPress: onNext,
     testID: 'next-page',
     a11yHint: t('pagination.next'),
-    iconProps: { name: 'ArrowRight', fill: theme.colors.icon?.pagination },
+    iconProps: { name: 'ArrowRight', fill: theme.colors.icon.pagination },
     disabled: page * pageSize >= totalEntries,
   }
   const beginIdx = (page - 1) * pageSize + 1

@@ -35,7 +35,7 @@ type ControlButtonProps = {
 const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled, width, height, fill, testID, a11yHint }) => {
   const theme = useTheme() as VATheme
 
-  fill = fill || theme.colors.icon?.active
+  fill = fill || theme.colors.icon.active
   width = width || 17
   height = height || 17
 

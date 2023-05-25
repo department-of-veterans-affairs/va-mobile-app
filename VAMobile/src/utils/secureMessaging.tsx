@@ -34,7 +34,7 @@ export const getMessagesListItems = (
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
 
-    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'UnreadIcon', width: 16, height: 16, fill: theme.colors.icon?.unreadMessage } as VAIconProps) : undefined
+    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'UnreadIcon', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps) : undefined
     const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
 
     const textLines: Array<InlineTextWithIconsProps> = [
@@ -64,7 +64,7 @@ export const getMessagesListItems = (
           name: 'ArrowRight',
           width: theme.dimensions.chevronListItemWidth,
           height: theme.dimensions.chevronListItemHeight,
-          fill: theme.colors.icon?.chevronListItem,
+          fill: theme.colors.icon.chevronListItem,
         } as VAIconProps,
       },
     ]

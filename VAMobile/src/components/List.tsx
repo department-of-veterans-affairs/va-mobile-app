@@ -51,9 +51,9 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
 
   const titleProps: TextViewProps = {
     variant: 'TableHeaderBold',
-    mx: theme?.dimensions?.gutter,
-    mb: theme?.dimensions?.condensedMarginBetween,
-    mt: theme?.dimensions?.standardMarginBetween,
+    mx: theme.dimensions.gutter,
+    mb: theme.dimensions.condensedMarginBetween,
+    mt: theme.dimensions.standardMarginBetween,
     accessibilityRole: 'header',
   }
 
@@ -77,7 +77,7 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
           </TextView>
         </Box>
       )}
-      <Box borderTopWidth={theme?.dimensions?.borderWidth} borderStyle="solid" borderColor="primary">
+      <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
         <Box backgroundColor={'list'}>{buttons}</Box>
       </Box>
     </Box>

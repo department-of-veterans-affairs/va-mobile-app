@@ -95,7 +95,7 @@ type RootTabNavParamList = {
   ProfileTab: undefined
 }
 ;`
-  background-color: ${theme.colors.icon?.active};
+  background-color: ${theme.colors.icon.active};
 `
 
 const MainApp: FC = () => {
