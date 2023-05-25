@@ -4,7 +4,7 @@ import React, { FC, Ref } from 'react'
 import { VABackgroundColors, VATheme } from 'styles/theme'
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type VAScrollViewProps = {
   /** Optional reference prop to determine scroll position */

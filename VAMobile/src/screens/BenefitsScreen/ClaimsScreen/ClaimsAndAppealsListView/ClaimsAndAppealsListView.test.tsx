@@ -13,21 +13,9 @@ import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 import { getClaimsAndAppeals } from 'store/slices'
 import { waitFor } from '@testing-library/react-native'
 import { when } from 'jest-when'
+import * as hooks from 'utils/hooks'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
-  return {
-    ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
-  }
-})
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
@@ -132,6 +120,7 @@ context('ClaimsAndAppealsListView', () => {
   }
 
   beforeEach(async () => {
+    jest.spyOn(hooks, 'useRouteNavigation').mockReturnValue(() => mockNavigationSpy)
     initializeTestInstance('ACTIVE')
   })
 

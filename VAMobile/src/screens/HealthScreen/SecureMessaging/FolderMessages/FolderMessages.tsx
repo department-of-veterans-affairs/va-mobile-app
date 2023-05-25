@@ -13,7 +13,7 @@ import { VATheme } from 'styles/theme'
 import { getMessagesListItems } from 'utils/secureMessaging'
 import { useAppDispatch, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 

@@ -9,7 +9,7 @@ import { VATheme } from 'styles/theme'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from '../formFieldUtils'
 import { getTranslation } from 'utils/formattingUtils'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import PickerList, { PickerListItemObj } from './PickerList'
 
 /**

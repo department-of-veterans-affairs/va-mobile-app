@@ -13,7 +13,7 @@ import { RootState } from 'store'
 import { States } from 'constants/states'
 import { VATheme } from 'styles/theme'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type VAFacilitiesScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'VAFacilitiesScreen'>
 

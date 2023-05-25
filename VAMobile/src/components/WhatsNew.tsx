@@ -11,7 +11,7 @@ import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export const WhatsNew = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)

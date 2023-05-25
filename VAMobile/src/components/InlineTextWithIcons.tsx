@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import { InlineText } from './types'
 import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'

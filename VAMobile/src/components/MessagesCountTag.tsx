@@ -1,6 +1,6 @@
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import React, { FC } from 'react'
 import TextView from './TextView'

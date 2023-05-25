@@ -15,7 +15,7 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
 import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
 type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineList'>

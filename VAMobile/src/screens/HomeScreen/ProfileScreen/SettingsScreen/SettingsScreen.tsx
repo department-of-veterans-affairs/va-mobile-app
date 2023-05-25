@@ -15,7 +15,7 @@ import { VATheme } from 'styles/theme'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useAppDispatch, useExternalLink, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 

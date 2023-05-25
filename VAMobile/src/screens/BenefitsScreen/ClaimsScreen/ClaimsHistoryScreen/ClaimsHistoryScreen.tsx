@@ -12,7 +12,7 @@ import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { useAppDispatch, useDowntime, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from '../NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 

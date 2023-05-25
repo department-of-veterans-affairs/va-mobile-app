@@ -15,7 +15,7 @@ import { VATheme } from 'styles/theme'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type PaymentDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentDetails'>
 

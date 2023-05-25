@@ -7,6 +7,9 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { context, render, RenderAPI, waitFor } from 'testUtils'
 import SignoutButton from './SignoutButton'
 import { VAButton } from './index'
+import * as hooks from 'utils/hooks'
+
+let mockAlertSpy = jest.fn()
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
@@ -21,27 +24,13 @@ jest.mock('store/slices', () => {
   }
 })
 
-const mockAlertSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-  return {
-    ...original,
-    useDestructiveAlert: () => mockAlertSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
-})
-
 context('SignoutButton', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
+    jest.spyOn(hooks, 'useDestructiveAlert').mockReturnValue(() => mockAlertSpy())
     component = render(<SignoutButton />)
-
     testInstance = component.UNSAFE_root
   })
 

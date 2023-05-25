@@ -7,7 +7,7 @@ import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { isAPendingAppointment } from 'utils/appointments'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type PreferredDateAndTimeProps = {
   attributes: AppointmentAttributes

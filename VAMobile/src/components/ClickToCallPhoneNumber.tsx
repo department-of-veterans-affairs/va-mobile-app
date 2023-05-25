@@ -7,7 +7,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'utils/formattingUtils'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type ClickToCallPhoneNumberProps = {
   /**sets the phone information */

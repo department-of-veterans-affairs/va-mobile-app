@@ -12,7 +12,7 @@ import { RootState } from 'store'
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import colors from 'styles/themes/VAColors'
 
 export type SyncScreenProps = Record<string, unknown>

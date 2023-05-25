@@ -6,29 +6,17 @@ import { ReactTestInstance } from 'react-test-renderer'
 
 import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
 import NotEnrolledSM from './NotEnrolledSM'
+import * as hooks from 'utils/hooks'
 
 const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
-})
 
 context('NotEnrolledSM', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
+    jest.spyOn(hooks, 'useExternalLink').mockReturnValue((url) => mockExternalLinkSpy(url))
     component = render(<NotEnrolledSM />)
-
     testInstance = component.UNSAFE_root
   })
 

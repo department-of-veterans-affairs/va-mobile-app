@@ -6,7 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { getTranslation } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 const NoMatchInRecords: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)

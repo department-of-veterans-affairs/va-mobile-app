@@ -33,7 +33,7 @@ import { VATheme } from 'styles/theme'
 import { profileAddressOptions } from '../AddressSummary'
 import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import AddressValidation from '../AddressValidation'
 
 const MAX_ADDRESS_LENGTH = 35

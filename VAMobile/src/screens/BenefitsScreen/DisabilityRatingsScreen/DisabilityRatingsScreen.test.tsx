@@ -10,23 +10,9 @@ import DisabilityRatingsScreen from './DisabilityRatingsScreen'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { RatingData, ScreenIDTypesConstants } from 'store/api/types'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
+import * as hooks from 'utils/hooks'
 
-let mockNavigationSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-    useRouteNavigation: () => {
-      return () => mockNavigationSpy
-    },
-  }
-})
+const mockNavigationSpy = jest.fn()
 
 context('DisabilityRatingsScreen', () => {
   let component: RenderAPI
@@ -75,6 +61,7 @@ context('DisabilityRatingsScreen', () => {
   }
 
   beforeEach(() => {
+    jest.spyOn(hooks, 'useRouteNavigation').mockReturnValue(() => mockNavigationSpy)
     initializeTestInstance()
   })
 

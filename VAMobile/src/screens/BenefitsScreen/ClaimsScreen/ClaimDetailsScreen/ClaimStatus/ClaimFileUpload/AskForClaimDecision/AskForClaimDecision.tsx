@@ -25,7 +25,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { VATheme } from 'styles/theme'
 import { useAppDispatch, useDestructiveAlert, useError } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
 

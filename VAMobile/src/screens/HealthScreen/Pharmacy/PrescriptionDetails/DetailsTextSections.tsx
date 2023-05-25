@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView } from 'components'
 import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type DetailsTextSections = {
   /** set the header for the text on the left */

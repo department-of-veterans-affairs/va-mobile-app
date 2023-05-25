@@ -7,7 +7,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import WebviewControlButton from './WebviewControlButton'
 import styled from 'styled-components'
 

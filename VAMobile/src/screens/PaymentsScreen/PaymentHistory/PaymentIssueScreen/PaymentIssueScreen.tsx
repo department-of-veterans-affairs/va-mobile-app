@@ -6,7 +6,7 @@ import { Box, ClickToCallPhoneNumber, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type PaymentIssueScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentIssue'>
 

@@ -10,7 +10,7 @@ import { VATheme } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { hasUploadedOrReceived } from 'utils/claims'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
 

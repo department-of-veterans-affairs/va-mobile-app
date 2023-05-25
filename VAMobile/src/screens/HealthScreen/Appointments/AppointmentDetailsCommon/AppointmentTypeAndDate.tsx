@@ -9,7 +9,7 @@ import { VATheme } from 'styles/theme'
 import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { isAPendingAppointment } from 'utils/appointments'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type AppointmentTypeAndDateProps = {
   attributes: AppointmentAttributes

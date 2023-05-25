@@ -5,7 +5,7 @@ import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, TextLine, Te
 import { NAMESPACE } from 'constants/namespaces'
 import { TimesForPhoneCallType } from 'store/api/types'
 import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import AppointmentFlowErrorAlert from './AppointmentFlowErrorAlert'
 
 type PreferredTimeComponentProps = {

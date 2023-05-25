@@ -13,7 +13,7 @@ import { CarouselScreen } from './Carousel'
 import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 const StyledSafeAreaView = styled(SafeAreaView)`
   background-color: ${themeFn((theme) => theme.colors.background.carousel)};

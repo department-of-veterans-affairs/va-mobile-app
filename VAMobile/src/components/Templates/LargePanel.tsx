@@ -7,7 +7,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { View, ViewStyle } from 'react-native'
 import { useDestructiveAlert } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /* To use this template to wrap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display

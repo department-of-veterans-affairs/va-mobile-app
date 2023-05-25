@@ -10,21 +10,9 @@ import { InitialState } from 'store/slices'
 import EstimatedDecisionDate from './EstimatedDecisionDate'
 import { AlertBox, TextView, VAButton } from 'components'
 import { RenderAPI } from '@testing-library/react-native'
+import * as hooks from 'utils/hooks'
 
 const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
-})
 
 context('EstimatedDecisionDate', () => {
   let store: any
@@ -34,7 +22,7 @@ context('EstimatedDecisionDate', () => {
 
   const initializeTestCase = (maxEstDate: string, showCovidMessage: boolean): void => {
     props = mockNavProps({ maxEstDate, showCovidMessage })
-
+    jest.spyOn(hooks, 'useExternalLink').mockReturnValue((url) => mockExternalLinkSpy(url))
     component = render(<EstimatedDecisionDate {...props} />, { preloadedState: { ...InitialState } })
     testInstance = component.UNSAFE_root
   }

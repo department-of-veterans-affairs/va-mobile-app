@@ -5,7 +5,7 @@ import { TextView } from './index'
 import { TextViewProps } from './TextView'
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import BaseListItem, { BaseListItemProps } from './BaseListItem'
 import Box from './Box'
 

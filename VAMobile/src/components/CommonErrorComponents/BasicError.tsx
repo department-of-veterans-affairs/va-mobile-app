@@ -6,7 +6,7 @@ import { Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'com
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type BasicErrorProps = {
   /** function called when the Try again button is pressed */

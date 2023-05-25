@@ -10,7 +10,7 @@ import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { useHeaderStyles, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { VATheme } from 'styles/theme'

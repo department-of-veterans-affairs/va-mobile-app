@@ -8,7 +8,7 @@ import { RootState } from 'store'
 import { VAButtonTextColors, VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { themeFn } from 'utils/theme'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 /** TextView font variants */
 export type FontVariant = keyof VATypographyThemeVariants
@@ -81,7 +81,7 @@ const StyledText = styled(Text)`
  */
 const TextView: FC<TextViewProps> = ({ selectable = false, testID, ...props }) => {
   const { isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
-  const theme = useTheme() as VATheme as VATheme
+  const theme = useTheme()
   const wrapperProps = { ...props }
 
   if (wrapperProps.onPress) {

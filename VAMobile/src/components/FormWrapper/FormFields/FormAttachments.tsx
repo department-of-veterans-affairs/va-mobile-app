@@ -11,7 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { getFileDisplay } from 'utils/common'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type FormAttachmentsProps = {
   /** header for page title display */

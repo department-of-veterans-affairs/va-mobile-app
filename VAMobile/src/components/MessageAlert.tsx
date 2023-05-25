@@ -5,7 +5,7 @@ import React, { FC, RefObject } from 'react'
 import { AlertBox, Box } from './index'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type MessageAlertProps = {
   /** Optional boolean for determining when to focus on error alert boxes. */

@@ -13,7 +13,7 @@ import { VATheme } from 'styles/theme'
 import { VaccineState, getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/slices/vaccineSlice'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'VaccineDetails'>
 

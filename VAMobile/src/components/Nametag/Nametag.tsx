@@ -7,7 +7,7 @@ import { MilitaryServiceState, PersonalInformationState } from 'store/slices'
 import { RootState } from 'store'
 import { VATheme } from 'styles/theme'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export const Nametag: FC = () => {
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)

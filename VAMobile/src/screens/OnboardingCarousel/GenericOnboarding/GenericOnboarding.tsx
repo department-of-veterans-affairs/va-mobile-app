@@ -6,7 +6,7 @@ import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useAccessibilityFocus } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type GenericOnboardingProps = {
   header: string

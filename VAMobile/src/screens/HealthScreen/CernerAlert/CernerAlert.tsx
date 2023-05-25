@@ -10,7 +10,7 @@ import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useHasCernerFacilities } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()

@@ -6,7 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionAttributeData } from 'store/api/types'
 import { VATheme } from 'styles/theme'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from './PrescriptionUtils'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import RefillTag from './RefillTag'
 
 export type PrescriptionListItemProps = {

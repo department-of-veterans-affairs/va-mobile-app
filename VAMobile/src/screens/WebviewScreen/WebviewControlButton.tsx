@@ -6,7 +6,7 @@ import { VAIcon } from 'components'
 import { VAIconColors } from 'styles/theme'
 import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 /**
  *  Signifies the props that need to be passed in to {@link WebviewControlButton}

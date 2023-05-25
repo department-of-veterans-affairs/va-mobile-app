@@ -7,20 +7,9 @@ import CernerAlert from './CernerAlert'
 import { initialPatientState, InitialState, PatientState } from 'store/slices'
 import { TextView } from 'components'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
+import * as hooks from 'utils/hooks'
 
 const mockExternalLinkSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
-})
 
 context('CernerAlert', () => {
   let component: any
@@ -50,6 +39,7 @@ context('CernerAlert', () => {
 
   const initializeTestInstance = (patient?: PatientState): void => {
     const mockPatient = patient || {}
+    jest.spyOn(hooks, 'useExternalLink').mockReturnValue((url) => mockExternalLinkSpy(url))
 
     component = render(<CernerAlert />, {
       preloadedState: {

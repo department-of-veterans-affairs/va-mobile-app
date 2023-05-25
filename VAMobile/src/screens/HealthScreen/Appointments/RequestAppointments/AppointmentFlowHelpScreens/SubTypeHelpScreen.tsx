@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { TypeOfCareWithSubCareIdType } from 'store/api'
 import { VATheme } from 'styles/theme'
 import { useRequestAppointmentModalHeaderStyles } from 'utils/requestAppointments'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type SubTypeHelpScreenProps = StackScreenProps<HealthStackParamList, 'SubTypeHelpScreen'>
 

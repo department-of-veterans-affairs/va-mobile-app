@@ -9,21 +9,9 @@ import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI, wait
 import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerification'
 import { ErrorsState, initialErrorsState, InitialState, downloadLetter } from 'store/slices'
 import { CharacterOfServiceConstants, LetterTypeConstants } from 'store/api/types'
+import * as hooks from 'utils/hooks'
 
 const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
-  return {
-    ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-    useRouteNavigation: () => jest.fn(),
-    useExternalLink: () => mockExternalLinkSpy,
-  }
-})
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
@@ -46,6 +34,7 @@ context('BenefitSummaryServiceVerification', () => {
 
   const initializeTestInstance = (monthlyAwardAmount?: number, awardEffectiveDate?: string, serviceConnectedPercentage?: number, downloading = false, hasDownloadError = false) => {
     const props = mockNavProps()
+    jest.spyOn(hooks, 'useExternalLink').mockReturnValue((url) => mockExternalLinkSpy(url))
 
     component = render(<BenefitSummaryServiceVerification {...props} />, {
       preloadedState: {

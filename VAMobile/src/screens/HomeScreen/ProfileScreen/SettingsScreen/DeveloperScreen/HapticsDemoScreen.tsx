@@ -7,7 +7,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps } from '@react-navigation/stack'
 import { VATheme } from 'styles/theme'
 import { useNavigation } from '@react-navigation/native'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
 type HapticsDemoScreenProps = StackScreenProps<HomeStackParamList, 'HapticsDemoScreen'>

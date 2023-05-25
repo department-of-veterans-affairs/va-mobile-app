@@ -2,7 +2,7 @@ import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { VATheme } from 'styles/theme'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import React, { FC } from 'react'
 
 type WebviewTitleProps = {

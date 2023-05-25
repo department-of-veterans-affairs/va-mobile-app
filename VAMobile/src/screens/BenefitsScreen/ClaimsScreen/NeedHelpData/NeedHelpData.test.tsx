@@ -7,21 +7,9 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import NeedHelpData from './NeedHelpData'
 import { TouchableWithoutFeedback } from 'react-native'
 import { waitFor } from '@testing-library/react-native'
+import * as hooks from 'utils/hooks'
 
 const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
-})
 
 context('NeedHelpData', () => {
   let component: RenderAPI
@@ -36,6 +24,7 @@ context('NeedHelpData', () => {
   }
 
   beforeEach(async () => {
+    jest.spyOn(hooks, 'useExternalLink').mockReturnValue((url) => mockExternalLinkSpy(url))
     await initializeTestInstance()
   })
 

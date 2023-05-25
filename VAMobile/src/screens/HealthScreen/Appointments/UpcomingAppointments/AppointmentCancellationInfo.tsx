@@ -11,7 +11,7 @@ import { getTranslation } from 'utils/formattingUtils'
 import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()

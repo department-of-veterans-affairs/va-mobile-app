@@ -5,7 +5,7 @@ import { Box, ButtonTypesConstants, VAButton, VAButtonProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 const ComposeMessageButton: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)

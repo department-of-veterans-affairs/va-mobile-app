@@ -16,7 +16,7 @@ import { getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCom
 import { isIOS } from 'utils/platform'
 import { useAppDispatch, useDowntime, useError, usePanelHeaderStyles } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { CARRIER_TRACKING_URL_USPS, CARRIER_TRACKING_URL_UPS, CARRIER_TRACKING_URL_FEDEX, CARRIER_TRACKING_URL_DHL } = getEnv()

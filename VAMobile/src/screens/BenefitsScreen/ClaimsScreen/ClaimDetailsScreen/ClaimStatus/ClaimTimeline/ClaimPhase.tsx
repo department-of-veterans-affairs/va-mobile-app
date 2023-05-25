@@ -13,7 +13,7 @@ import { sendClaimStep3Analytics, sendClaimStep3FileRequestAnalytics } from 'sto
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import PhaseIndicator from './PhaseIndicator'
 
 /** returns the heading string by phase */

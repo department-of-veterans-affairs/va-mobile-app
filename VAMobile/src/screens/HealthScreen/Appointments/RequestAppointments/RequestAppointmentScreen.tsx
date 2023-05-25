@@ -24,7 +24,7 @@ import { VATheme } from 'styles/theme'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { resetFormData } from 'store/slices/requestAppointmentSlice'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type AppointmentFlowModalStackParamList = WebviewStackParams & {
   TypeOfCareSelectionScreen: undefined

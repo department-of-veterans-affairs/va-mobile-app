@@ -6,27 +6,16 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 
 import WhatDoIDoIfDisagreement from './WhatDoIDoIfDisagreement'
 import { TextView } from 'components'
+import * as hooks from 'utils/hooks'
 
 const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
-})
 
 context('WhatDoIDoIfDisagreement', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
+    jest.spyOn(hooks, 'useExternalLink').mockReturnValue((url) => mockExternalLinkSpy(url))
     const props = mockNavProps({}, {}, { params: { display: '', value: 'active' } })
     component = render(<WhatDoIDoIfDisagreement {...props} />)
     testInstance = component.UNSAFE_root

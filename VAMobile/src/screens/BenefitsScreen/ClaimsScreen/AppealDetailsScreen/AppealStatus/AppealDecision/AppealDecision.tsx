@@ -8,7 +8,7 @@ import { Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { getAojDescription } from '../AppealCurrentStatus/AppealCurrentStatus'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type AppealDecisionProps = {
   issues: Array<AppealStatusDetailsIssue>

@@ -8,7 +8,7 @@ import { VATheme } from 'styles/theme'
 import { getStatusGlossaryTextForRefillStatus } from 'utils/prescriptions'
 import { isIOS } from 'utils/platform'
 import { usePanelHeaderStyles } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
 type StatusGlossaryProps = StackScreenProps<HealthStackParamList, 'StatusGlossary'>

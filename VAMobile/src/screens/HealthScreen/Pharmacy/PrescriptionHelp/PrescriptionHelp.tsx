@@ -7,7 +7,7 @@ import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { usePanelHeaderStyles } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type PrescriptionHelpProps = StackScreenProps<HealthStackParamList, 'PrescriptionHelp'>
 

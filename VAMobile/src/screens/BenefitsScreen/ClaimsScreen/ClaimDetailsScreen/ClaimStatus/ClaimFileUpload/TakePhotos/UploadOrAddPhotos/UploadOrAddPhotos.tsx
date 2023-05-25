@@ -21,7 +21,7 @@ import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/comm
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { useBeforeNavBackListener, useDestructiveAlert, useOrientation, useShowActionSheet } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOrAddPhotos'>

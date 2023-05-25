@@ -7,7 +7,7 @@ import { HealthStackParamList } from '../../../HealthStackScreens'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type PrepareForVideoVisitProps = StackScreenProps<HealthStackParamList, 'PrepareForVideoVisit'>
 

@@ -12,7 +12,7 @@ import { getMessagesListItems } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 
 type InboxProps = Record<string, unknown>

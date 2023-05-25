@@ -9,21 +9,9 @@ import { AppealAOJTypes, AppealStatusData, AppealTypes, EmailData, PhoneData } f
 import { TextView } from 'components'
 import { InitialState } from 'store/slices'
 import { RenderAPI } from '@testing-library/react-native'
+import * as hooks from 'utils/hooks'
 
 const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
-})
 
 context('AppealStatus', () => {
   let component: RenderAPI
@@ -36,6 +24,8 @@ context('AppealStatus', () => {
   }
 
   const initializeTestInstance = (status: AppealStatusData, aoj: AppealAOJTypes, appealType: AppealTypes, docketName: string, programArea: string) => {
+    jest.spyOn(hooks, 'useExternalLink').mockReturnValue((url) => mockExternalLinkSpy(url))
+
     props = mockNavProps({
       status,
       aoj,

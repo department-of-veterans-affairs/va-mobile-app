@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import colors from 'styles/themes/VAColors'
 
 export type LoadingComponentProps = {

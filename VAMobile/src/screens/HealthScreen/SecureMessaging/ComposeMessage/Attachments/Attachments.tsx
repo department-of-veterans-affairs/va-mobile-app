@@ -18,7 +18,7 @@ import { VATheme } from 'styles/theme'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { themeFn } from 'utils/theme'
 import { useRouteNavigation, useShowActionSheet } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()

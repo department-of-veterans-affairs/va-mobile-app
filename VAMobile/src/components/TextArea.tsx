@@ -1,5 +1,5 @@
 import { TouchableWithoutFeedback } from 'react-native'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import React, { FC } from 'react'
 
 import { VATheme } from 'styles/theme'

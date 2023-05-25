@@ -11,7 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useRouteNavigation, useShowActionSheet } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import getEnv from 'utils/env'
 

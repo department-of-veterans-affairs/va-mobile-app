@@ -6,7 +6,7 @@ import { Box, BoxProps, ValidationFunctionItems } from '../../index'
 import { VATheme } from 'styles/theme'
 import { getInputBorderColor, getInputBorderWidth, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
 import { isIOS } from 'utils/platform'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type VATextInputTypes = 'none' | 'email' | 'phone'
 

@@ -8,20 +8,9 @@ import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
 import ClickForActionLink, { LinkUrlIconType, LinkTypeOptionsConstants } from './ClickForActionLink'
 import VAIcon from './VAIcon'
 import Mock = jest.Mock
+import * as hooks from 'utils/hooks'
 
 const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
-})
 
 context('ClickForActionLink', () => {
   let component: RenderAPI
@@ -45,6 +34,7 @@ context('ClickForActionLink', () => {
   }
 
   beforeEach(() => {
+    jest.spyOn(hooks, 'useExternalLink').mockReturnValue((url) => mockExternalLinkSpy(url))
     initializeTestInstance('111-453-3234', '1114533234', LinkTypeOptionsConstants.call)
   })
 
@@ -69,7 +59,7 @@ context('ClickForActionLink', () => {
     beforeEach(() => {
       initializeTestInstance('111-453-3234', '1114533234', LinkTypeOptionsConstants.text)
     })
-    it('should call mockExternalLinkSpy with the parameter sms:number', async () => {
+    it('should call mockHookSpy with the parameter sms:number', async () => {
       await waitFor(() => {
         testInstance.findByProps({ accessibilityLabel: '111-453-3234' }).props.onPress()
         expect(mockExternalLinkSpy).toBeCalledWith('sms:1114533234')
@@ -85,7 +75,7 @@ context('ClickForActionLink', () => {
     beforeEach(() => {
       initializeTestInstance('click me to go to google', 'https://google.com', LinkTypeOptionsConstants.url)
     })
-    it('should call mockExternalLinkSpy with the parameter given to urlLink, https://google.com', async () => {
+    it('should call mockHookSpy with the parameter given to urlLink, https://google.com', async () => {
       await waitFor(() => {
         testInstance.findByProps({ accessibilityLabel: 'click me to go to google' }).props.onPress()
         expect(mockExternalLinkSpy).toBeCalledWith('https://google.com')

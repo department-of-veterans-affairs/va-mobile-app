@@ -9,6 +9,7 @@ import SettingsScreen from './index'
 import { InitialState } from 'store/slices'
 import { TextView } from 'components'
 import getEnv from 'utils/env'
+import * as hooks from 'utils/hooks'
 
 jest.mock('react-native/Libraries/Share/Share', () => {
   return {
@@ -19,20 +20,6 @@ jest.mock('react-native/Libraries/Share/Share', () => {
 })
 
 const mockExternalLinkSpy = jest.fn()
-
-jest.mock('../../../../utils/hooks', () => {
-  let original = jest.requireActual('../../../../utils/hooks')
-  let theme = jest.requireActual('../../../../styles/themes/standardTheme').default
-  return {
-    ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-    useRouteNavigation: () => jest.fn(),
-    useExternalLink: () => mockExternalLinkSpy,
-  }
-})
-
 const envMock = getEnv as jest.Mock
 
 const defaultEnvVars = {
@@ -72,6 +59,7 @@ context('SettingsScreen', () => {
   }
 
   beforeEach(() => {
+    jest.spyOn(hooks, 'useExternalLink').mockReturnValue((url) => mockExternalLinkSpy(url))
     initializeTestInstance()
   })
 

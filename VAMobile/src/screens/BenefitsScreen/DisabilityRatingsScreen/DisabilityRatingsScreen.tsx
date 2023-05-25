@@ -30,7 +30,7 @@ import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useError } from 'utils/hooks'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import getEnv from 'utils/env'
 

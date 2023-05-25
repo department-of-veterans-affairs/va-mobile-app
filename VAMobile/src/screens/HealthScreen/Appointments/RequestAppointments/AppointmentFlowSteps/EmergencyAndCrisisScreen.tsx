@@ -8,7 +8,7 @@ import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { useExternalLink, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type EmergencyAndCrisisScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'EmergencyAndCrisisScreen'>
 

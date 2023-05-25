@@ -19,7 +19,7 @@ import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
   if (profile && profile.birthDate) {

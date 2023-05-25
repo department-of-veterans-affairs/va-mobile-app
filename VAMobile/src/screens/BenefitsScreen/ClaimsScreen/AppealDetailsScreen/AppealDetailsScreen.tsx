@@ -14,7 +14,7 @@ import { VATheme } from 'styles/theme'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useBeforeNavBackListener, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import AppealIssues from './AppealIssues/AppealIssues'
 import AppealStatus from './AppealStatus/AppealStatus'
 

@@ -11,12 +11,8 @@ import { Linking, TouchableWithoutFeedback } from 'react-native'
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return () => mockNavigationSpy
     },

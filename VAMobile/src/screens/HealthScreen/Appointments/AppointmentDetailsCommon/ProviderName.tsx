@@ -7,7 +7,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { getAllFieldsThatExist } from 'utils/common'
 import { isAPendingAppointment } from 'utils/appointments'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type ProviderNameProps = {
   attributes: AppointmentAttributes

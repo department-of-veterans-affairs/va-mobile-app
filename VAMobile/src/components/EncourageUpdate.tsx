@@ -13,7 +13,7 @@ import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { requestStorePopup } from 'utils/rnInAppUpdate'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export const EncourageUpdateAlert = () => {
   const theme = useTheme() as VATheme

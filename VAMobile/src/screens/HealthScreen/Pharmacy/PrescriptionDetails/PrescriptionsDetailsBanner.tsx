@@ -5,7 +5,7 @@ import { Box, ClickToCallPhoneNumber, CollapsibleAlert, TextView, VABulletList, 
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 const PrescriptionsDetailsBanner: FC = () => {
   const theme = useTheme() as VATheme

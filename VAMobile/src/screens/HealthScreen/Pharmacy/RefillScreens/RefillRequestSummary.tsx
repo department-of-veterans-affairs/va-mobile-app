@@ -15,7 +15,7 @@ import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 

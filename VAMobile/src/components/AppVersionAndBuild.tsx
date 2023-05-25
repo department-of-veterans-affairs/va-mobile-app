@@ -5,7 +5,7 @@ import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { getBuildNumber, getVersionName } from 'utils/deviceData'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type AppVersionAndBuildProps = {
   /** color of the text */

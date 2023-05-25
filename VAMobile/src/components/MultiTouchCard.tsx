@@ -3,7 +3,7 @@ import React, { FC, ReactElement } from 'react'
 
 import { HiddenA11yElement } from 'styles/common'
 import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 
 export type MultiTouchCardProps = {

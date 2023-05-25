@@ -15,7 +15,7 @@ import { VATheme } from 'styles/theme'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { useAppDispatch } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type ConfirmContactScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'ConfirmContactScreen'>
 

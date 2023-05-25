@@ -17,7 +17,7 @@ import { getA11yLabelText } from 'utils/common'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import NoClaimLettersScreen from './NoClaimLettersScreen/NoClaimLettersScreen'
 
 type ClaimLettersScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimLettersScreen'>

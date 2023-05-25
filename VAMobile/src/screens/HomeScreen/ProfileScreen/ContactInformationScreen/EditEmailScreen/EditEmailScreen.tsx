@@ -14,7 +14,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { VATheme } from 'styles/theme'
 import { useAppDispatch, useDestructiveAlert, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 

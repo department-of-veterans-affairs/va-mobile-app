@@ -16,7 +16,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useBeforeNavBackListener, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 

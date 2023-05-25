@@ -5,7 +5,7 @@ import React, { FC, useState } from 'react'
 import { CrisisLineCta, TextView, TextViewProps, VAIconProps } from 'components'
 import { VATheme } from 'styles/theme'
 import { useIsScreenReaderEnabled, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 

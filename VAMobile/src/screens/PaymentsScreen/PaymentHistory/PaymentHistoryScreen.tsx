@@ -16,7 +16,7 @@ import { deepCopyObject } from 'utils/common'
 import { getGroupedPayments } from 'utils/payments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>

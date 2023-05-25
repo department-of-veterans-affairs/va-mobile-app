@@ -9,7 +9,7 @@ import { VATheme } from 'styles/theme'
 import { ViewStyle } from 'react-native'
 import { updateSecureMessagingTab } from 'store/slices'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 
 const NoFolderMessages: FC = () => {

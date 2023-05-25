@@ -6,29 +6,17 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, findByTestID, render, RenderAPI } from 'testUtils'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen'
+import * as hooks from 'utils/hooks'
 
 const mockExternalLinkSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useExternalLink: () => mockExternalLinkSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
-})
 
 context('VeteransCrisisLineScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
+    jest.spyOn(hooks, 'useExternalLink').mockReturnValue((url) => mockExternalLinkSpy(url))
     component = render(<VeteransCrisisLineScreen />)
-
     testInstance = component.UNSAFE_root
   })
 

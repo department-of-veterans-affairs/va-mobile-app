@@ -10,7 +10,7 @@ import { AuthState, setBiometricsPreference, setDisplayBiometricsPreferenceScree
 import { RootState } from 'store'
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
 

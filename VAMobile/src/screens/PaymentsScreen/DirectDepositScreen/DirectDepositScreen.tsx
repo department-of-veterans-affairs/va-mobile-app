@@ -15,7 +15,7 @@ import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils
 import { useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type DirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'DirectDeposit'>
 

@@ -6,7 +6,7 @@ import { TextView } from 'components'
 import { VABorderColors, VATheme } from 'styles/theme'
 import { isAndroid } from 'utils/platform'
 import { useAccessibilityFocus } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import TextArea from './TextArea'
 
 export type CollapsibleAlertProps = {

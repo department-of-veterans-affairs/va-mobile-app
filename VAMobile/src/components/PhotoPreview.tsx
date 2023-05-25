@@ -10,7 +10,7 @@ import { VATheme } from 'styles/theme'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { themeFn } from 'utils/theme'
 import { useDestructiveAlert } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView, { TextViewProps } from './TextView'
 

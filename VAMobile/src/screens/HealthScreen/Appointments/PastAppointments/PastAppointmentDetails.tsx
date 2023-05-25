@@ -23,7 +23,7 @@ import { isAPendingAppointment } from '../../../../utils/appointments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 

@@ -5,7 +5,7 @@ import React, { FC } from 'react'
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 const NoRefills: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)

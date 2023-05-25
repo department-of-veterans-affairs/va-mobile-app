@@ -15,7 +15,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { VATheme } from 'styles/theme'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIdentity'>
 

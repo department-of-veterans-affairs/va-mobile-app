@@ -6,7 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { StackScreenProps } from '@react-navigation/stack'
 import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type HowToUpdateDirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'HowToUpdateDirectDeposit'>
 

@@ -18,7 +18,7 @@ import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 type phoneType = 'homePhoneNumber' | 'workPhoneNumber' | 'mobilePhoneNumber'

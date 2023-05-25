@@ -12,7 +12,7 @@ import { RootState } from 'store'
 import { VATheme } from 'styles/theme'
 import { useRequestAppointmentModalHeaderStyles } from 'utils/requestAppointments'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 import getEnv from 'utils/env'
 

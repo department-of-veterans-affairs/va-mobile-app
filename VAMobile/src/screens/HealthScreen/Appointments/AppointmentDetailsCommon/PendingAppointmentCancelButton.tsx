@@ -11,7 +11,7 @@ import { isAPendingAppointment } from 'utils/appointments'
 import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type PendingAppointmentCancelButtonProps = {
   attributes: AppointmentAttributes

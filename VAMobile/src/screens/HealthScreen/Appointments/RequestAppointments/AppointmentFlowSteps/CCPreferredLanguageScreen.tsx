@@ -13,7 +13,7 @@ import { RootState } from 'store'
 import { VATheme } from 'styles/theme'
 import { useAppDispatch } from 'utils/hooks'
 import { usePreferredLanguageList } from 'utils/requestAppointments'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type CCPreferredLanguageScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'CCPreferredLanguageScreen'>
 

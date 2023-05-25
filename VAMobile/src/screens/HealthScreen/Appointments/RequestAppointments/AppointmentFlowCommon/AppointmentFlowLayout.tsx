@@ -5,7 +5,7 @@ import { Box, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { ViewStyle } from 'react-native'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type AppointmentFlowLayoutProps = {
   /** Optional action for the back or single button */

@@ -4,7 +4,7 @@ import React, { FC, useState } from 'react'
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAIconProps } from './index'
 import { VAButtonBackgroundColors, VAButtonTextColors, VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
 

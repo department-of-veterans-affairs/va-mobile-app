@@ -2,7 +2,7 @@ import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate,
 import { VATheme } from 'styles/theme'
 import { logout } from 'store/slices/authSlice'
 import { useAppDispatch } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useState } from 'react'
 import remoteConfig from '@react-native-firebase/remote-config'
 

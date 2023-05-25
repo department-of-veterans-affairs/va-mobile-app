@@ -48,7 +48,7 @@ import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
 import { isAPendingAppointment } from 'utils/appointments'
 import { useAppDispatch, useExternalLink, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
 

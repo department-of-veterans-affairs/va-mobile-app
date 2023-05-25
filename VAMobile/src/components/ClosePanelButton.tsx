@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 
 import { VATextColors, VATheme } from 'styles/theme'
 import { useAccessibilityFocus } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import TextView from './TextView'
 

@@ -13,7 +13,7 @@ import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/comm
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
 export type ThreadMessageProps = {

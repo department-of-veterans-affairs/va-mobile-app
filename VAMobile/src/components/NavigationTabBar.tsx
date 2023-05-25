@@ -12,7 +12,7 @@ import { VATheme } from 'styles/theme'
 import { VA_ICON_MAP } from './VAIcon'
 import { a11yValueProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import VAIconWithText, { VAIconWithTextProps } from './VAIconWithText/VAIconWithText'
 

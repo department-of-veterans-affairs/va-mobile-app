@@ -5,7 +5,7 @@ import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, Lin
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()

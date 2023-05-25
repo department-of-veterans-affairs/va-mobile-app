@@ -7,7 +7,7 @@ import { VAIconColors, VATextColors, VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
 import { renderInputError } from './formFieldUtils'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export enum SelectorType {
   Checkbox = 'Checkbox',

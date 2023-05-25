@@ -5,7 +5,7 @@ import React, { FC } from 'react'
 import { VATheme } from 'styles/theme'
 import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
 import { useExternalLink } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import TextView, { TextViewProps } from './TextView'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'
 

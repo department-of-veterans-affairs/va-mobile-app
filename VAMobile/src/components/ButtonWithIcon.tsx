@@ -2,7 +2,7 @@ import { Pressable, PressableProps } from 'react-native'
 import React, { FC, useState } from 'react'
 
 import { VAIconColors, VATextColors, VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import Box, { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, BoxProps } from './Box'
 import TextView, { TextViewProps } from './TextView'
 import VAIcon, { VAIconProps, VA_ICON_MAP } from './VAIcon'

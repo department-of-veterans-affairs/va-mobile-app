@@ -9,7 +9,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { VATheme } from 'styles/theme'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
   /**The screen id for the screen that has the errors*/

@@ -6,7 +6,7 @@ import { ClaimData } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type ClaimDetailsProps = {
   claim: ClaimData

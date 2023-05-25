@@ -18,12 +18,8 @@ import { RenderAPI } from '@testing-library/react-native'
 const mockNavigationSpy = jest.fn()
 jest.mock('/utils/hooks', () => {
   const original = jest.requireActual('/utils/hooks')
-  const theme = jest.requireActual('/styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return () => mockNavigationSpy
     },

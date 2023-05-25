@@ -13,13 +13,9 @@ import { VAButton } from 'components'
 const mockAlertSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useDestructiveAlert: () => mockAlertSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
   }
 })
 

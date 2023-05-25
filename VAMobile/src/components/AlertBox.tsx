@@ -5,7 +5,7 @@ import { Box, BoxProps, TextView } from './index'
 import { VABorderColors, VATheme } from 'styles/theme'
 import { triggerHaptic } from 'utils/haptics'
 import { useAutoScrollToElement } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type AlertBoxProps = {
   /** color of the border */

@@ -9,7 +9,7 @@ import { VATheme } from 'styles/theme'
 import { getTranslation } from 'utils/formattingUtils'
 import { isIOS } from 'utils/platform'
 import { renderInputError } from './formFieldUtils'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type radioOption<T> = {
   /** translated text displayed next to the checkbox/radio */

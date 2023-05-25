@@ -5,7 +5,7 @@ import React, { FC } from 'react'
 import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type CallHelpCenterProps = {
   /** optional function called when the Try again button is pressed */

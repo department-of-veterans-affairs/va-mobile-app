@@ -6,7 +6,7 @@ import { Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 const NoLettersScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)

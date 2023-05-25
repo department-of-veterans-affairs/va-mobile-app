@@ -11,7 +11,7 @@ import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { updateSecureMessagingTab } from 'store/slices'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type ReplyTriageErrorScreenProps = StackScreenProps<HealthStackParamList, 'ReplyTriageErrorScreen'>
 

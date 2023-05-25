@@ -5,7 +5,7 @@ import { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, Box,
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { VATheme } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import MessagesCountTag from './MessagesCountTag'
 
 interface HomeNavButtonProps {

@@ -8,7 +8,7 @@ import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 

@@ -16,7 +16,7 @@ import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem
 import { VATheme } from 'styles/theme'
 import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useDowntime, usePrevious } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import NoRefills from './NoRefills'
 import SelectionList from 'components/SelectionList'

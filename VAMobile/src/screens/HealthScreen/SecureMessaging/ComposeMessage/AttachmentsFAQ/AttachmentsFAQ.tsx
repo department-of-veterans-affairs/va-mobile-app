@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps } from '@react-navigation/stack'
 import { VATheme } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type AttachmentsFAQProps = StackScreenProps<HealthStackParamList, 'AttachmentsFAQ'>
 

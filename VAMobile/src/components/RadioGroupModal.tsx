@@ -7,7 +7,7 @@ import { Box, BoxProps, FooterButton, RadioGroup, TextView, TextViewProps, VAScr
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { isAndroid } from 'utils/platform'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type RadioPickerGroup = {
   /** Optional title appearing over the radio grouping, used if there are multiple groups in one modal */

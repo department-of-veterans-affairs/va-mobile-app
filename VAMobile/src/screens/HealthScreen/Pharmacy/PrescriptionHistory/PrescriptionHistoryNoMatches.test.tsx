@@ -11,14 +11,6 @@ import { TextView } from 'components'
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
 })
 
 context('PrescriptionHistoryNoMatches', () => {

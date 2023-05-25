@@ -58,7 +58,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>

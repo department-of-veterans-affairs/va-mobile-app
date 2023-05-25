@@ -6,7 +6,7 @@ import React, { FC, useEffect, useReducer, useState } from 'react'
 import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIconProps, VAIconWithText } from 'components'
 import { VATheme } from 'styles/theme'
 import { useAccessibilityFocus, useIsScreenReaderEnabled } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
 export type HeaderLeftButtonProps = {

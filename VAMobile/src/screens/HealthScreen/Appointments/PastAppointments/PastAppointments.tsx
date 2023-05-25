@@ -17,7 +17,7 @@ import { getGroupedAppointments, getTextLinesForAppointmentListItem, getYearsToS
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = Record<string, unknown>

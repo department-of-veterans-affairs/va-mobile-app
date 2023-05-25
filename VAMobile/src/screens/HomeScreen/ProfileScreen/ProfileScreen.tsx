@@ -13,7 +13,7 @@ import { RootState } from 'store'
 import { VATheme } from 'styles/theme'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 

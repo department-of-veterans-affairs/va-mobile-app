@@ -8,7 +8,7 @@ import { VATheme } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useExternalLink } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_COMPENSATION_CLAIM_EXAM } = getEnv()

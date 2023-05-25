@@ -15,7 +15,7 @@ import { getUpcomingAppointmentDateRange } from '../Appointments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type UpcomingAppointmentsProps = Record<string, unknown>

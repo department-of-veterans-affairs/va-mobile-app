@@ -13,7 +13,7 @@ import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftCo
 import { VATheme } from 'styles/theme'
 import { useAppDispatch, useDowntime, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import CernerAlert from '../CernerAlert'
 import ComposeMessageButton from './ComposeMessageButton/ComposeMessageButton'
 import Folders from './Folders/Folders'

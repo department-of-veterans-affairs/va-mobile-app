@@ -5,7 +5,7 @@ import React, { FC } from 'react'
 import { BorderColorVariant, Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 export type TabsValuesType = Array<{
   /** value of the tab */

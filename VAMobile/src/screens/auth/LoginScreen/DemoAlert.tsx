@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react'
 import { Alert, Modal, Pressable, PressableProps, TextInput, TextInputProps, View } from 'react-native'
 import { Box, TextView } from 'components'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 const { DEMO_PASSWORD } = getEnv()
 import { VATheme } from 'styles/theme'

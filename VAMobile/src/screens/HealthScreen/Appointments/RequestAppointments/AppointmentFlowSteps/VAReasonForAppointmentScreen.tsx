@@ -13,7 +13,7 @@ import { RootState } from 'store'
 import { VATheme } from 'styles/theme'
 import { setReasonCode } from 'utils/requestAppointments'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type VAReasonForAppointmentScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'VAReasonForAppointmentScreen'>
 

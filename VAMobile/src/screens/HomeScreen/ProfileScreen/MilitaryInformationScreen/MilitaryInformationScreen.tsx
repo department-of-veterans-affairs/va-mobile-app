@@ -16,7 +16,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
 type MilitaryInformationScreenProps = StackScreenProps<HomeStackParamList, 'MilitaryInformation'>

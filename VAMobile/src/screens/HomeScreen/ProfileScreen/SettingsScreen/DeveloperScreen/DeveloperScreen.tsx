@@ -20,7 +20,7 @@ import { resetReviewActionCount } from 'utils/inAppReviews'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import getEnv, { EnvVars } from 'utils/env'
 
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>

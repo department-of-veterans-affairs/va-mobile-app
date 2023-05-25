@@ -12,7 +12,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { VATheme } from 'styles/theme'
 import { useAppDispatch, useDestructiveAlert } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 

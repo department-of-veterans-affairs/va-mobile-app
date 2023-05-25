@@ -6,7 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionHistoryTabs } from 'store/api/types'
 import { VATheme } from 'styles/theme'
 import { ViewStyle } from 'react-native'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 
 type PrescriptionHistoryNoMatchesProps = {
   /** currently selected tab */

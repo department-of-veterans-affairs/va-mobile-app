@@ -16,7 +16,7 @@ import { RootState } from 'store'
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks'
 import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = StackScreenProps<BenefitsStackParamList, 'LettersList'>
