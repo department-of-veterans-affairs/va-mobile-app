@@ -6,7 +6,7 @@ import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, 
 import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 
 const IndividualMessageErrorComponent: FC = () => {

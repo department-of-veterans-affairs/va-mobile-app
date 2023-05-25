@@ -10,9 +10,8 @@ import { NotificationsState, loadPushPreferences, registerDevice, setPushPref } 
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
-import { VATheme } from 'styles/theme'
-import { useAppDispatch, useError, useOnResumeForeground } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+
+import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'NotificationsSettings'>

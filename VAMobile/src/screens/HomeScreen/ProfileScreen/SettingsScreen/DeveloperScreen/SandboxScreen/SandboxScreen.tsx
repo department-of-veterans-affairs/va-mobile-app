@@ -6,7 +6,7 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { OnPressOptions } from './PickerOptions'
 import { StackScreenProps } from '@react-navigation/stack'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 import CommonComponentWhiteList, { PropOptionType } from './CommonComponentWhiteList'

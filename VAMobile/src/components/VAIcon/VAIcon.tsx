@@ -3,9 +3,8 @@ import { SvgProps } from 'react-native-svg'
 import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
-import { VAIconColors, VATextColors, VATheme } from 'styles/theme'
-import { useAppDispatch, useFontScale } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { VAIconColors, VATextColors } from 'styles/theme'
+import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
 
 import { Box, BoxProps } from 'components'
 // New svgs need to set `fill` to `#000` and `stroke` to `#00F`. See /svgs for examples

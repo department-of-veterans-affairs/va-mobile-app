@@ -11,9 +11,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
 import { States } from 'constants/states'
-import { VATheme } from 'styles/theme'
-import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type VAFacilitiesScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'VAFacilitiesScreen'>
 

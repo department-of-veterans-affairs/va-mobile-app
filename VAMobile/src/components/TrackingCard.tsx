@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'

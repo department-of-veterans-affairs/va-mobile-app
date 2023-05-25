@@ -6,7 +6,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 const { DEMO_PASSWORD } = getEnv()
-import { VATheme } from 'styles/theme'
 
 export type AlertPromptProps = {
   /** Boolean to show or hide the modal */

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView, VAIcon, VAIconProps } from '../../index'
-import { VAIconColors, VATextColors, VATheme } from 'styles/theme'
+import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
 import { renderInputError } from './formFieldUtils'

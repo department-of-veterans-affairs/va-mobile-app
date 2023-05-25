@@ -7,12 +7,11 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, fetchInboxMessages } from 'store/slices'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types/SecureMessagingData'
-import { VATheme } from 'styles/theme'
+
 import { getMessagesListItems } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 
 type InboxProps = Record<string, unknown>

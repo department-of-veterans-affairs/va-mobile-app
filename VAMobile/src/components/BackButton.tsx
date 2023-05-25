@@ -5,10 +5,9 @@ import React, { FC } from 'react'
 
 import { BackButtonLabel } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useAccessibilityFocus } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'

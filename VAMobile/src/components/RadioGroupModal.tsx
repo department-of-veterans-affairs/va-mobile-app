@@ -5,7 +5,7 @@ import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, FooterButton, RadioGroup, TextView, TextViewProps, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { isAndroid } from 'utils/platform'
 import { useTheme } from 'utils/hooks'
 

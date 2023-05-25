@@ -5,7 +5,7 @@ import { Box, ChildTemplate, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../../../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps } from '@react-navigation/stack'
-import { VATheme } from 'styles/theme'
+
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'

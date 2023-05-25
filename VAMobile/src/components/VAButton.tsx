@@ -2,7 +2,7 @@ import { AccessibilityState, Pressable } from 'react-native'
 import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAIconProps } from './index'
-import { VAButtonBackgroundColors, VAButtonTextColors, VATheme } from 'styles/theme'
+import { VAButtonBackgroundColors, VAButtonTextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 

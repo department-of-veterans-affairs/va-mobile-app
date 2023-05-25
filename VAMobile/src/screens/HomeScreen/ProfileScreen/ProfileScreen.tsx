@@ -10,10 +10,9 @@ import { MilitaryServiceState, getServiceHistory } from 'store/slices/militarySe
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
+
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 

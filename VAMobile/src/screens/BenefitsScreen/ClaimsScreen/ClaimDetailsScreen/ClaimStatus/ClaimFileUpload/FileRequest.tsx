@@ -10,10 +10,9 @@ import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { VATheme } from 'styles/theme'
+
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { useError, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
 

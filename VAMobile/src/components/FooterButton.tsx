@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react'
 
 import { Pressable, PressableProps } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { VAButtonTextColors, VATextColors, VATheme } from '../styles/theme'
+import { VAButtonTextColors, VATextColors } from '../styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'

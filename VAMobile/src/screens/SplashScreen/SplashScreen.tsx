@@ -1,5 +1,5 @@
 import { Box, VAIcon, VAScrollView } from 'components'
-import { VATheme } from 'styles/theme'
+
 import { ViewStyle } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'

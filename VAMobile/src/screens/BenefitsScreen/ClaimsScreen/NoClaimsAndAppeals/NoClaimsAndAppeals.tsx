@@ -5,7 +5,7 @@ import { Box, TextView } from 'components'
 import { ClaimsAndAppealsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
+
 import { testIdProps } from 'utils/accessibility'
 import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'

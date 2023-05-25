@@ -6,7 +6,7 @@ import _ from 'underscore'
 import { AppealAOJTypes, AppealStatusDetailsIssue } from 'store/api/types'
 import { Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { getAojDescription } from '../AppealCurrentStatus/AppealCurrentStatus'
 import { useTheme } from 'utils/hooks'
 

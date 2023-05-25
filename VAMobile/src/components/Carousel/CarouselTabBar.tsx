@@ -10,7 +10,7 @@ import styled from 'styled-components'
 
 import { Box, BoxProps, TextView } from '../index'
 import { CarouselScreen } from './Carousel'
-import { VATheme } from 'styles/theme'
+
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'

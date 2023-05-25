@@ -8,10 +8,9 @@ import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } fro
 import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { useRouteNavigation, useShowActionSheet } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import getEnv from 'utils/env'
 

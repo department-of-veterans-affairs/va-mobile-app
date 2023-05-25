@@ -2,7 +2,6 @@ import { TouchableWithoutFeedback } from 'react-native'
 import { useTheme } from 'utils/hooks'
 import React, { FC } from 'react'
 
-import { VATheme } from 'styles/theme'
 import Box, { BoxProps } from './Box'
 
 /**

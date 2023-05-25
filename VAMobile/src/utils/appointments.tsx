@@ -84,7 +84,7 @@ export const getPendingAppointmentRequestTypeText = (appointmentType: Appointmen
  * @returns VAIconProps or undefined
  */
 export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOnly: boolean, theme: VATheme): VAIconProps | undefined => {
-  const iconProp = { fill: theme.colors.icon.defaultMenuItem, height: theme.fontSizes.HelperText.fontSize, width: theme.fontSizes.HelperText.fontSize } as VAIconProps
+  const iconProp = { fill: theme.colors.icon.defaultMenuItem, height: theme?.fontSizes.HelperText.fontSize, width: theme.fontSizes.HelperText.fontSize } as VAIconProps
 
   switch (appointmentType) {
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:

@@ -12,10 +12,9 @@ import { PersonalInformationState, dispatchFinishEditGenderIdentity, getGenderId
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
+
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIdentity'>
 

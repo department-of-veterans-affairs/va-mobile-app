@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react'
 
 import { ColorVariant, TextArea } from './index'
 import { Pressable, PressableProps, ViewStyle } from 'react-native'
-import { VATheme } from 'styles/theme'
+
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'

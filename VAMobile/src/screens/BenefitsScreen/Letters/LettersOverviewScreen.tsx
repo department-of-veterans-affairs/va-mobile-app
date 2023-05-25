@@ -7,11 +7,10 @@ import { Box, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, Te
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState } from 'store/slices'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
+
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import NoLettersScreen from './NoLettersScreen'
 

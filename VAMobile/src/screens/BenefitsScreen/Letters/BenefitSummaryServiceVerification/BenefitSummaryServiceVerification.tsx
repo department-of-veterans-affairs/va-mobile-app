@@ -28,11 +28,10 @@ import { LettersState, downloadLetter, getLetterBeneficiaryData } from 'store/sl
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { VATheme } from 'styles/theme'
+
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
-import { useAppDispatch } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_ASK_VA_GOV } = getEnv()

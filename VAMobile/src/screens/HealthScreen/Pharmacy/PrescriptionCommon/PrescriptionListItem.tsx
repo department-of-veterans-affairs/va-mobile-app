@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionAttributeData } from 'store/api/types'
-import { VATheme } from 'styles/theme'
+
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from './PrescriptionUtils'
 import { useTheme } from 'utils/hooks'
 import RefillTag from './RefillTag'

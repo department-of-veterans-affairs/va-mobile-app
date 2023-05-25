@@ -11,11 +11,10 @@ import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/s
 import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { RootState } from 'store'
 import { UserAnalytics } from 'constants/analytics'
-import { VATheme } from 'styles/theme'
+
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useAppDispatch, useDestructiveAlert, useDowntime, useExternalLink } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useDowntime, useExternalLink, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
-import { useTheme } from 'utils/hooks'
 import DetailsTextSections from './DetailsTextSections'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 import getEnv from 'utils/env'

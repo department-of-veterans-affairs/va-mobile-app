@@ -9,10 +9,9 @@ import { DemoState } from 'store/slices/demoSlice'
 import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, checkForDowntimeErrors, getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
+
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 import colors from 'styles/themes/VAColors'
 
 export type SyncScreenProps = Record<string, unknown>

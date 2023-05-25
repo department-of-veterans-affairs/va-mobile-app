@@ -4,9 +4,8 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
-import { useAccessibilityFocus } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'

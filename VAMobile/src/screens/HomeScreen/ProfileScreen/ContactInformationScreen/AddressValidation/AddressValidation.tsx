@@ -9,12 +9,11 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, finishValidateAddress, updateAddress } from 'store/slices'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
+
 import { ViewStyle } from 'react-native'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
-import { useAppDispatch } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
 import CollapsibleAlert from 'components/CollapsibleAlert'
 
 /**

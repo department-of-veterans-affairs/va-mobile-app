@@ -13,10 +13,9 @@ import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
+
 import { showSnackBar } from 'utils/common'
-import { useBeforeNavBackListener, useDestructiveAlert } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveAlert, useTheme } from 'utils/hooks'
 import FileList from 'components/FileList'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 

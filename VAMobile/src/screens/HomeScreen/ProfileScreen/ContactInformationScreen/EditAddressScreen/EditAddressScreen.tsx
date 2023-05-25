@@ -29,11 +29,10 @@ import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
-import { VATheme } from 'styles/theme'
+
 import { profileAddressOptions } from '../AddressSummary'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
 import AddressValidation from '../AddressValidation'
 
 const MAX_ADDRESS_LENGTH = 35

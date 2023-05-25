@@ -4,7 +4,7 @@ import React, { FC, RefObject } from 'react'
 
 import { AlertBox, Box } from './index'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 
 export type MessageAlertProps = {

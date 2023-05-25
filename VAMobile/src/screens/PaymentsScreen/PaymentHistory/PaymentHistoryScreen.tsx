@@ -11,12 +11,11 @@ import { PaymentState, getPayments } from 'store/slices'
 import { PaymentsByDate, ScreenIDTypesConstants } from 'store/api/types'
 import { PaymentsStackParamList } from '../PaymentsStackScreens'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
+
 import { deepCopyObject } from 'utils/common'
 import { getGroupedPayments } from 'utils/payments'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>

@@ -5,13 +5,12 @@ import { AppointmentAttributes } from 'store/api'
 import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { Box, ButtonTypesConstants, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { cancelAppointment } from 'store/slices'
 import { isAPendingAppointment } from 'utils/appointments'
 import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveAlert } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
 
 type PendingAppointmentCancelButtonProps = {
   attributes: AppointmentAttributes

@@ -1,7 +1,6 @@
 import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, PressableProps } from 'react-native'
 import React, { FC, ReactElement, useState } from 'react'
 
-import { VATheme } from 'styles/theme'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { triggerHaptic } from 'utils/haptics'
 import { useTheme } from 'utils/hooks'

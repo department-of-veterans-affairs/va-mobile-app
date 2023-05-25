@@ -1,7 +1,6 @@
 import { Pressable, PressableProps } from 'react-native'
 import React, { FC } from 'react'
 
-import { VATheme } from 'styles/theme'
 import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'

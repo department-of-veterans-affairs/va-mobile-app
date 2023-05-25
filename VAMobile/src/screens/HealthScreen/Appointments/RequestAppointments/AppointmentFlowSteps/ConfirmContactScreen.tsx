@@ -11,11 +11,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState } from 'store/slices'
 import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
+
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
-import { useAppDispatch } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type ConfirmContactScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'ConfirmContactScreen'>
 

@@ -2,7 +2,7 @@ import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
 import { TextView } from 'components'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'

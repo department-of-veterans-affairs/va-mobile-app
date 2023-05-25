@@ -17,11 +17,10 @@ import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'compone
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState } from 'store/slices'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
+
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useExternalLink } from 'utils/hooks'
+import { useExternalLink, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
 import AppealDecision from '../AppealDecision/AppealDecision'
 import getEnv from 'utils/env'
 

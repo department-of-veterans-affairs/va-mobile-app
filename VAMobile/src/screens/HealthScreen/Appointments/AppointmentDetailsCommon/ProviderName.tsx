@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { getAllFieldsThatExist } from 'utils/common'
 import { isAPendingAppointment } from 'utils/appointments'
 import { useTheme } from 'utils/hooks'

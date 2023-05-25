@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import { TextView } from 'components'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 import React, { FC, Ref } from 'react'
 

@@ -4,7 +4,7 @@ import React, { FC, ReactNode, Ref, useState } from 'react'
 
 import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 

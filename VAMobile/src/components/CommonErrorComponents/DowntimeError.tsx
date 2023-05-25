@@ -7,7 +7,7 @@ import { DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
+
 import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'
 

@@ -6,10 +6,9 @@ import { BenefitsStackParamList } from '../BenefitsStackScreens'
 import { Box, FeatureLandingTemplate, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
 

@@ -5,7 +5,7 @@ import { AlertBox, Box } from 'components'
 import { AppointmentAttributes } from 'store/api'
 import { AppointmentStatusConstants, AppointmentStatusDetailTypeConsts } from 'store/api/types/AppointmentData'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 
 type AppointmentAlertProps = {

@@ -9,10 +9,9 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState } from 'store/slices'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
+
 import { useRequestAppointmentModalHeaderStyles } from 'utils/requestAppointments'
-import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 import getEnv from 'utils/env'
 

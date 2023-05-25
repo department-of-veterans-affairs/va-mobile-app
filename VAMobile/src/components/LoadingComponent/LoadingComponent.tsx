@@ -3,7 +3,7 @@ import LottieView from 'lottie-react-native'
 import React, { FC } from 'react'
 
 import { Box, TextView, VAScrollView } from 'components'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 import colors from 'styles/themes/VAColors'
 

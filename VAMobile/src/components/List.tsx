@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import { SwitchProps } from './Switch'
 import { TextView } from './index'
 import { TextViewProps } from './TextView'
-import { VATheme } from 'styles/theme'
+
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import BaseListItem, { BaseListItemProps } from './BaseListItem'

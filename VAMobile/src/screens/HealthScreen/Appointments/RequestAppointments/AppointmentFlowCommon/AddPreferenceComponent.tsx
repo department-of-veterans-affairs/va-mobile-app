@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { TextArea, TextLineWithIcon, TextView, VAIconProps } from 'components'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 
 export type AddPreferenceComponentProps = {

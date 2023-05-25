@@ -5,7 +5,7 @@ import React, { ReactElement, useEffect } from 'react'
 
 import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, SelectorType, TextLine, TextView, VASelector } from '../../index'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { getTranslation } from 'utils/formattingUtils'
 import { isIOS } from 'utils/platform'
 import { renderInputError } from './formFieldUtils'

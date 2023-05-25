@@ -2,10 +2,9 @@ import { AccessibilityRole, ScrollView, View } from 'react-native'
 import React, { FC, RefObject, useEffect, useState } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
-import { VABorderColors, VATheme } from 'styles/theme'
+import { VABorderColors } from 'styles/theme'
 import { triggerHaptic } from 'utils/haptics'
-import { useAutoScrollToElement } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useAutoScrollToElement, useTheme } from 'utils/hooks'
 
 export type AlertBoxProps = {
   /** color of the border */

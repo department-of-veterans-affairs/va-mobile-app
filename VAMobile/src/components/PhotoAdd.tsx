@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 
 import { Box, BoxProps, VAIcon } from './index'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 import TextView, { TextViewProps } from './TextView'
 

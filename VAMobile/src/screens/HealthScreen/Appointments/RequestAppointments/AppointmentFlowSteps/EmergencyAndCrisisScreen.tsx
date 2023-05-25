@@ -6,9 +6,8 @@ import { AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhit
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
-import { useExternalLink, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+
+import { useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type EmergencyAndCrisisScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'EmergencyAndCrisisScreen'>
 

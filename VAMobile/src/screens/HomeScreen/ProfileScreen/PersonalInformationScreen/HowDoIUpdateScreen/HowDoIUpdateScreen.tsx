@@ -5,9 +5,8 @@ import React, { FC, ReactElement } from 'react'
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView, TextViewProps } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
-import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CHANGE_LEGAL_NAME, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()

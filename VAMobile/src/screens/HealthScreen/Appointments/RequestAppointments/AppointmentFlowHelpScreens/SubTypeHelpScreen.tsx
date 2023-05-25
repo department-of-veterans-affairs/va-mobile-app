@@ -6,7 +6,7 @@ import { Box, TextView } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { TypeOfCareWithSubCareIdType } from 'store/api'
-import { VATheme } from 'styles/theme'
+
 import { useRequestAppointmentModalHeaderStyles } from 'utils/requestAppointments'
 import { useTheme } from 'utils/hooks'
 

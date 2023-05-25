@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionHistoryTabs } from 'store/api/types'
-import { VATheme } from 'styles/theme'
+
 import { ViewStyle } from 'react-native'
 import { useTheme } from 'utils/hooks'
 

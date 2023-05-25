@@ -3,9 +3,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useState } from 'react'
 
 import { TextView, TextViewProps, VAIconProps } from 'components'
-import { VATheme } from 'styles/theme'
-import { useIsScreenReaderEnabled } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+
+import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 

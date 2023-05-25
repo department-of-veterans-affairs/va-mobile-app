@@ -20,11 +20,10 @@ import { CloseModalButton, HeaderIconBtn } from 'components'
 import { DateTime } from 'luxon'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { resetFormData } from 'store/slices/requestAppointmentSlice'
-import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type AppointmentFlowModalStackParamList = WebviewStackParams & {
   TypeOfCareSelectionScreen: undefined

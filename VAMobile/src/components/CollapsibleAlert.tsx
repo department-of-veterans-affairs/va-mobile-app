@@ -3,10 +3,9 @@ import React, { FC, ReactNode, useState } from 'react'
 
 import { Box, BoxProps, VAIcon, VA_ICON_MAP } from './index'
 import { TextView } from 'components'
-import { VABorderColors, VATheme } from 'styles/theme'
+import { VABorderColors } from 'styles/theme'
 import { isAndroid } from 'utils/platform'
-import { useAccessibilityFocus } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import TextArea from './TextArea'
 
 export type CollapsibleAlertProps = {

@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { StyleProp, ViewStyle } from 'react-native'
-import { VATheme } from 'styles/theme'
+
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 

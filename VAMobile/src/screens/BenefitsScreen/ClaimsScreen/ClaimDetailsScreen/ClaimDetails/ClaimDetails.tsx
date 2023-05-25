@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { Box, TextArea, TextView, VABulletList } from 'components'
 import { ClaimData } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 

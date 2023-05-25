@@ -9,11 +9,10 @@ import { DisabilityRatingState } from 'store/slices'
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { useHeaderStyles, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { VATheme } from 'styles/theme'
+
 import { featureEnabled } from 'utils/remoteConfig'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'

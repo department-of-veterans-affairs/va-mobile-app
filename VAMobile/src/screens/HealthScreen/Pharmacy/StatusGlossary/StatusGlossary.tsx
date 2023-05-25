@@ -4,11 +4,10 @@ import React, { FC, useLayoutEffect } from 'react'
 import { Box, ClosePanelButton, LargePanel, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { getStatusGlossaryTextForRefillStatus } from 'utils/prescriptions'
 import { isIOS } from 'utils/platform'
-import { usePanelHeaderStyles } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { usePanelHeaderStyles, useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
 type StatusGlossaryProps = StackScreenProps<HealthStackParamList, 'StatusGlossary'>

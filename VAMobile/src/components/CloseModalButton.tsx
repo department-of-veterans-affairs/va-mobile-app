@@ -2,9 +2,7 @@ import { TouchableWithoutFeedback } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
-import { VATheme } from 'styles/theme'
-import { useAccessibilityFocus } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import Box from './Box'
 import TextView from './TextView'
 

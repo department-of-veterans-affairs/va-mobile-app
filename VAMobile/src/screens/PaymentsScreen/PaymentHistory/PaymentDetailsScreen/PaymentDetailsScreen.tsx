@@ -11,11 +11,10 @@ import { PaymentsAttributeData } from 'store/api'
 import { PaymentsStackParamList } from '../../PaymentsStackScreens'
 import { Pressable } from 'react-native'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
+
 import { formatDateUtc } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type PaymentDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentDetails'>
 

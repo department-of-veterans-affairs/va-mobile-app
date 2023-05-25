@@ -1,8 +1,7 @@
 import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
-import { VATheme } from 'styles/theme'
+
 import { logout } from 'store/slices/authSlice'
-import { useAppDispatch } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useState } from 'react'
 import remoteConfig from '@react-native-firebase/remote-config'
 

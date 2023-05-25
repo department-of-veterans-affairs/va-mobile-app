@@ -15,7 +15,7 @@ import {
   VATextInput,
   VATextInputProps,
 } from '../index'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 
 /** enum to determine field input type */

@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView, VATextInput, VATextInputTypes } from 'components'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 import AppointmentFlowErrorAlert from './AppointmentFlowErrorAlert'
 

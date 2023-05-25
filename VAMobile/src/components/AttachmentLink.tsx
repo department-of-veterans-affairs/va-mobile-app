@@ -1,5 +1,5 @@
 import { AccessibilityProps, Pressable, PressableProps } from 'react-native'
-import { VATheme } from 'styles/theme'
+
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'

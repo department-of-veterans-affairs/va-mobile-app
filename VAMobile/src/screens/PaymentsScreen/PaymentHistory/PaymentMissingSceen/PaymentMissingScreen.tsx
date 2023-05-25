@@ -5,7 +5,7 @@ import React, { FC } from 'react'
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 
 type PaymentMissingScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentMissing'>

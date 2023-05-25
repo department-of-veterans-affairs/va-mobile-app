@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextView, VABulletList, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 
 const PrescriptionHistoryNoPrescriptions: FC = () => {

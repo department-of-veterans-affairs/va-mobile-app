@@ -3,10 +3,9 @@ import React, { FC } from 'react'
 
 import { Box, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useExternalLink } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useExternalLink, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()

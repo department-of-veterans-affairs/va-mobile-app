@@ -4,11 +4,10 @@ import React, { FC } from 'react'
 import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { UserAnalytics } from 'constants/analytics'
-import { VATheme } from 'styles/theme'
+
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useExternalLink } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
+import { useExternalLink, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } = getEnv()

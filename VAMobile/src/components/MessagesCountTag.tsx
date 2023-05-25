@@ -1,4 +1,3 @@
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'

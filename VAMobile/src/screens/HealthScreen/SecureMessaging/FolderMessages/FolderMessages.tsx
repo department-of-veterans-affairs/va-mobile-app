@@ -9,11 +9,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
-import { VATheme } from 'styles/theme'
+
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { useAppDispatch, useError } from 'utils/hooks'
+import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
 import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 

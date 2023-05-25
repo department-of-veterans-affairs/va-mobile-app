@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 
 import { Box } from './index'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import TextView from './TextView'

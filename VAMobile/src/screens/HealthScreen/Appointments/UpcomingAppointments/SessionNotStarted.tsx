@@ -5,7 +5,7 @@ import React, { FC } from 'react'
 import { Box, LargePanel, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 
 type SessionNotStartedProps = StackScreenProps<HealthStackParamList, 'SessionNotStarted'>

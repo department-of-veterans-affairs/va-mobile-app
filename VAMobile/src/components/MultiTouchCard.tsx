@@ -2,7 +2,7 @@ import { Pressable, PressableProps } from 'react-native'
 import React, { FC, ReactElement } from 'react'
 
 import { HiddenA11yElement } from 'styles/common'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 

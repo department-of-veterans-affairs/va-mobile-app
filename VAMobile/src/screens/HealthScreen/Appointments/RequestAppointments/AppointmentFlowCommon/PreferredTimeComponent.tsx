@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimesForPhoneCallType } from 'store/api/types'
-import { VATheme } from 'styles/theme'
+
 import { useTheme } from 'utils/hooks'
 import AppointmentFlowErrorAlert from './AppointmentFlowErrorAlert'
 

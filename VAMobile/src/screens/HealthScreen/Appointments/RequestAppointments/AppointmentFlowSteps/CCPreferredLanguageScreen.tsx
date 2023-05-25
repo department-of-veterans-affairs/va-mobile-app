@@ -10,10 +10,9 @@ import { Box, PickerItem, VAModalPicker, VAModalPickerProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
-import { useAppDispatch } from 'utils/hooks'
+
+import { useAppDispatch, useTheme } from 'utils/hooks'
 import { usePreferredLanguageList } from 'utils/requestAppointments'
-import { useTheme } from 'utils/hooks'
 
 type CCPreferredLanguageScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'CCPreferredLanguageScreen'>
 

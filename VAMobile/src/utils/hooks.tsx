@@ -15,7 +15,7 @@ import {
 } from 'react-native'
 import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
-import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { MutableRefObject, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { StackNavigationOptions, StackNavigationProp } from '@react-navigation/stack'
 import { useActionSheet } from '@expo/react-native-action-sheet'
