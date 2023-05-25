@@ -89,8 +89,8 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
       const icon = {
         fill: 'defaultMenuItem',
-        height: theme?.fontSizes?.MobileBody?.fontSize,
-        width: theme?.fontSizes?.MobileBody?.fontSize,
+        height: theme.fontSizes.MobileBody.fontSize,
+        width: theme.fontSizes.MobileBody.fontSize,
         name: 'FolderSolid',
       } as VAIconProps
 

@@ -32,8 +32,8 @@ const Switch: FC<SwitchProps> = (props) => {
   const theme = useTheme() as VATheme
   return (
     <StyledRNSwitch
-      trackColor={{ false: theme.colors.control?.switchOffTrack, true: theme.colors.control?.switchOnTrack }}
-      thumbColor={theme.colors.control?.switchOnThumb}
+      trackColor={{ false: theme.colors.control.switchOffTrack, true: theme.colors.control.switchOnTrack }}
+      thumbColor={theme.colors.control.switchOnThumb}
       onValueChange={onPress}
       value={!!on}
       testID={testID}

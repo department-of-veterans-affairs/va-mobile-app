@@ -58,7 +58,7 @@ const getColor = (theme: VATheme, props: TextViewProps): string => {
 }
 
 const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
-  return theme?.typography[props.variant as keyof VATypographyThemeVariants] || theme?.typography?.MobileBody
+  return theme.typography[props.variant as keyof VATypographyThemeVariants] || theme.typography.MobileBody
 }
 
 const getTextDecorationColor = (theme: VATheme, props: TextViewProps): string => {
