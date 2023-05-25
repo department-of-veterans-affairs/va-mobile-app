@@ -3,9 +3,10 @@ import React, { FC, ReactNode, useState } from 'react'
 
 import { Box, BoxProps, VAIcon, VA_ICON_MAP } from './index'
 import { TextView } from 'components'
-import { VABorderColors } from 'styles/theme'
+import { VABorderColors, VATheme } from 'styles/theme'
 import { isAndroid } from 'utils/platform'
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import TextArea from './TextArea'
 
 export type CollapsibleAlertProps = {
@@ -24,7 +25,7 @@ export type CollapsibleAlertProps = {
 }
 
 const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel, onExpand, onCollapse }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const [expanded, setExpanded] = useState(false)
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
@@ -59,7 +60,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
         <Box flex={1}>
           <TextView variant="MobileBodyBold">{headerText}</TextView>
         </Box>
-        <Box mt={theme?.dimensions?.condensedMarginBetween} ml={10}>
+        <Box mt={theme.dimensions.condensedMarginBetween} ml={10}>
           <VAIcon name={iconName} fill={theme?.colors?.icon?.chevronCollapsible} width={16} height={10} />
         </Box>
       </Box>
@@ -73,14 +74,14 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
   }
 
   const leftBorderProps = {
-    borderLeftWidth: theme?.dimensions?.alertBorderWidth,
+    borderLeftWidth: theme.dimensions.alertBorderWidth,
     borderLeftColor: border,
   }
 
   const boxProps: BoxProps = {
     ...leftBorderProps,
     borderBottomColor: 'primary',
-    borderBottomWidth: theme?.dimensions?.borderWidth,
+    borderBottomWidth: theme.dimensions.borderWidth,
     accessibilityRole: 'tablist',
   }
 

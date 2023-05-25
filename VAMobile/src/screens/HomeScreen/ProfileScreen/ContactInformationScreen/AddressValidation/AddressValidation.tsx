@@ -9,10 +9,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, finishValidateAddress, updateAddress } from 'store/slices'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
+import { VATheme } from 'styles/theme'
 import { ViewStyle } from 'react-native'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import CollapsibleAlert from 'components/CollapsibleAlert'
 
 /**
@@ -28,7 +30,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const { validationKey, confirmedSuggestedAddresses } = useSelector<RootState, PersonalInformationState>((storeState) => storeState.personalInformation)
   const [selectedSuggestedAddress, setSelectedSuggestedAddress] = useState<AddressData | SuggestedAddress>()
@@ -39,9 +41,9 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   }
   const containerStyles = {
     flex: 0,
-    mx: theme?.dimensions?.gutter,
-    mb: theme?.dimensions?.contentMarginBottom,
-    mt: theme?.dimensions?.standardMarginBetween,
+    mx: theme.dimensions.gutter,
+    mb: theme.dimensions.contentMarginBottom,
+    mt: theme.dimensions.standardMarginBetween,
   }
 
   useEffect(() => {
@@ -104,7 +106,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
 
   const getAlert = (): ReactNode => {
     return (
-      <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('editAddress.validation.verifyAddress.body.a11yLabel')}>
+      <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('editAddress.validation.verifyAddress.body.a11yLabel')}>
         {t('editAddress.validation.verifyAddress.body')}
       </TextView>
     )
@@ -158,7 +160,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
 
     return (
       <Box>
-        <Box mb={theme?.dimensions?.condensedMarginBetween}>
+        <Box mb={theme.dimensions.condensedMarginBetween}>
           <VAButton {...useThisAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
         </Box>
         <Box>
@@ -171,7 +173,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1}>
-        <Box mt={theme?.dimensions?.contentMarginTop}>
+        <Box mt={theme.dimensions.contentMarginTop}>
           <CollapsibleAlert
             border="warning"
             headerText={t('editAddress.validation.verifyAddress.title')}
@@ -179,7 +181,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
             a11yLabel={t('editAddress.validation.verifyAddress.title')}
           />
         </Box>
-        <Box mt={theme?.dimensions?.contentMarginTop}>{getSuggestedAddresses()}</Box>
+        <Box mt={theme.dimensions.contentMarginTop}>{getSuggestedAddresses()}</Box>
       </Box>
       <Box {...containerStyles}>{getFooterButtons()}</Box>
     </VAScrollView>

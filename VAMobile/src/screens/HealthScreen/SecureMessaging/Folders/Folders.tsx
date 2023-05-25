@@ -11,8 +11,9 @@ import { SecureMessagingFolderList } from 'store/api/types'
 import { SecureMessagingState } from 'store/slices'
 import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 
 const getListItemsForFolders = (
   listOfFolders: SecureMessagingFolderList,
@@ -98,7 +99,7 @@ type FoldersProps = Record<string, unknown>
 
 const Folders: FC<FoldersProps> = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const navigateTo = useRouteNavigation()
   const { folders, loadingFolders } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 

@@ -38,7 +38,10 @@ context('ClaimStatus', () => {
   const initializeTestInstance = (maxEstDate: string, claimType: ClaimType): void => {
     mockNavigateToConsolidatedClaimsNoteSpy = jest.fn()
     mockNavigateToWhatDoIDoIfDisagreementSpy = jest.fn()
-    mockNavigationSpy.mockReturnValue(() => {}).mockReturnValueOnce(mockNavigateToConsolidatedClaimsNoteSpy).mockReturnValueOnce(mockNavigateToWhatDoIDoIfDisagreementSpy)
+    mockNavigationSpy
+      .mockReturnValue(() => {})
+      .mockReturnValueOnce(mockNavigateToConsolidatedClaimsNoteSpy)
+      .mockReturnValueOnce(mockNavigateToWhatDoIDoIfDisagreementSpy)
     props = mockNavProps({
       claim: { ...claim, attributes: { ...claim.attributes, maxEstDate: maxEstDate } },
       claimType,
@@ -49,7 +52,7 @@ context('ClaimStatus', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -94,7 +97,7 @@ context('ClaimStatus', () => {
 
   describe('on click of the call click for action link', () => {
     it('should call Linking openURL', async () => {
-      testInstance.findByProps({accessibilityLabel: '8 0 0 8 2 7 1 0 0 0'}).props.onPress()
+      testInstance.findByProps({ accessibilityLabel: '8 0 0 8 2 7 1 0 0 0' }).props.onPress()
       expect(Linking.openURL).toHaveBeenCalled()
     })
   })

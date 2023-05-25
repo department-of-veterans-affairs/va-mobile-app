@@ -44,7 +44,7 @@ context('FileRequestDetails', () => {
 
     component = render(<FileRequestDetails {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

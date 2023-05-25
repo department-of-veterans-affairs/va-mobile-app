@@ -4,7 +4,8 @@ import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { TextArea, TextLineWithIcon, TextView, VAIconProps } from 'components'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 
 export type AddPreferenceComponentProps = {
   /** On press method that would be triggered when clicking the add link */
@@ -17,7 +18,7 @@ export type AddPreferenceComponentProps = {
 
 /** common component to add a preference */
 const AddPreferenceComponent: FC<AddPreferenceComponentProps> = ({ buttonText, onPress, preferenceTitle }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const iconProps: VAIconProps = {
@@ -29,7 +30,7 @@ const AddPreferenceComponent: FC<AddPreferenceComponentProps> = ({ buttonText, o
 
   return (
     <TextArea>
-      <TextView variant="MobileBodyBold" mb={theme?.dimensions?.condensedMarginBetween}>
+      <TextView variant="MobileBodyBold" mb={theme.dimensions.condensedMarginBetween}>
         {preferenceTitle}
       </TextView>
       <TouchableWithoutFeedback onPress={onPress}>

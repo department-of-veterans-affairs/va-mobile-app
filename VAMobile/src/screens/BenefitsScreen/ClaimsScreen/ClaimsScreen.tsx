@@ -6,14 +6,16 @@ import { BenefitsStackParamList } from '../BenefitsStackScreens'
 import { Box, FeatureLandingTemplate, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
 const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const navigateTo = useRouteNavigation()
 
   const onClaimLettersPress = () => {
@@ -23,11 +25,11 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
 
   return (
     <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
-      <Box mb={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
+      <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('claimsHistory.title')}
           onPress={navigateTo('ClaimsHistory')}
-          borderWidth={theme?.dimensions?.buttonBorderWidth}
+          borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
@@ -35,7 +37,7 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
         <LargeNavButton
           title={t('claimLetters.title')}
           onPress={onClaimLettersPress}
-          borderWidth={theme?.dimensions?.buttonBorderWidth}
+          borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}

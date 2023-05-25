@@ -3,8 +3,9 @@ import React, { FC } from 'react'
 import { SwitchProps } from './Switch'
 import { TextView } from './index'
 import { TextViewProps } from './TextView'
+import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import BaseListItem, { BaseListItemProps } from './BaseListItem'
 import Box from './Box'
 
@@ -46,7 +47,7 @@ export type ListProps = {
  * A common component for showing a list of <ListItem>.
  */
 const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const titleProps: TextViewProps = {
     variant: 'TableHeaderBold',

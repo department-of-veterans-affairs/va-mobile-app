@@ -4,8 +4,9 @@ import React, { FC } from 'react'
 
 import { Box } from './index'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import TextView from './TextView'
 
 type SaveButtonProps = {
@@ -20,7 +21,7 @@ type SaveButtonProps = {
 /**A common component for the save button located at the header. */
 const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled, a11yHint }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const color = disabled ? 'actionBarDisabled' : 'actionBar'
 
@@ -34,7 +35,7 @@ const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled, a11yHint }) => {
 
   return (
     <TouchableWithoutFeedback {...props} {...testIdProps('save')} {...a11yHintProp(a11yHint || t('save.a11yHint'))}>
-      <Box pr={theme?.dimensions?.headerButtonSpacing} height={theme?.dimensions?.headerHeight} justifyContent={'center'} pl={theme?.dimensions?.headerLeftButtonFromTextPadding}>
+      <Box pr={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerLeftButtonFromTextPadding}>
         <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
           {t('save')}
         </TextView>

@@ -6,9 +6,11 @@ import { Facility } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { PatientState } from 'store/slices'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useHasCernerFacilities, useTheme } from 'utils/hooks'
+import { useHasCernerFacilities } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
@@ -16,7 +18,7 @@ const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 const CernerAlert: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { cernerFacilities, facilities } = useSelector<RootState, PatientState>((state) => state.patient)
   const hasCernerFacilities = useHasCernerFacilities()
 
@@ -36,7 +38,7 @@ const CernerAlert: FC = () => {
         <TextView
           variant="MobileBodyBold"
           key={facility.facilityId}
-          mt={theme?.dimensions?.standardMarginBetween}
+          mt={theme.dimensions.standardMarginBetween}
           selectable={true}
           {...testIdProps(`${facility.facilityName} (${t('cernerAlert.nowUsing')})`)}>
           {facility.facilityName}
@@ -54,10 +56,10 @@ const CernerAlert: FC = () => {
     }
 
     return (
-      <Box mt={theme?.dimensions?.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBody">{t('cernerAlert.ourRecordsShow')}</TextView>
         {body}
-        <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('cernerAlert.footer.a11yLabel')}>
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('cernerAlert.footer.a11yLabel')}>
           {t('cernerAlert.footer')}
         </TextView>
         <ClickForActionLink {...linkToCallProps} />

@@ -153,7 +153,7 @@ context('LettersListScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
@@ -279,7 +279,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-      
+
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[7].props.onPress()
       })

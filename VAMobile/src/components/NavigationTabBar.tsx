@@ -8,10 +8,11 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { VA_ICON_MAP } from './VAIcon'
 import { a11yValueProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import Box from './Box'
 import VAIconWithText, { VAIconWithTextProps } from './VAIconWithText/VAIconWithText'
 
@@ -39,7 +40,7 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 `
 /**Component for the bottom tab navigation*/
 const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, translation }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const onPress = (route: TabBarRoute, isFocused: boolean): void => {
@@ -66,9 +67,9 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
       <Box
         flexDirection="row"
         backgroundColor={'navButton'}
-        height={theme?.dimensions?.navBarHeight}
+        height={theme.dimensions.navBarHeight}
         borderTopColor="primary"
-        borderTopWidth={theme?.dimensions?.borderWidth}
+        borderTopWidth={theme.dimensions.borderWidth}
         accessibilityRole="toolbar">
         {state.routes.map((route: TabBarRoute, index: number) => {
           const isFocused = state.index === index
@@ -108,7 +109,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
               {...props}
               {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>
               <Box flex={1} display="flex" flexDirection="column" mt={7}>
-                <Box alignSelf="center" position="absolute" mt={theme?.dimensions?.buttonBorderWidth}>
+                <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
                   <VAIconWithText {...iconProps} />
                 </Box>
               </Box>

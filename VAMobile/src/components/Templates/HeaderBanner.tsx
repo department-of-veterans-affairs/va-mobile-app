@@ -4,7 +4,9 @@ import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect, useReducer, useState } from 'react'
 
 import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIconProps, VAIconWithText } from 'components'
-import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useAccessibilityFocus, useIsScreenReaderEnabled } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
 export type HeaderLeftButtonProps = {
@@ -58,7 +60,7 @@ export type HeaderBannerProps = {
 }
 
 const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, divider: bannerDivider, menuViewActions }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
   const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
@@ -140,21 +142,21 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    minHeight: theme?.dimensions?.headerHeight,
+    minHeight: theme.dimensions.headerHeight,
   }
 
   const titleBannerBoxProps: BoxProps = {
     ...titleBannerViewProps,
     backgroundColor: bannerDivider ? 'largePanelHeader' : 'main',
-    borderBottomWidth: bannerDivider ? theme?.dimensions?.borderWidth : 0,
+    borderBottomWidth: bannerDivider ? theme.dimensions.borderWidth : 0,
     borderBottomColor: 'menuDivider',
   }
 
   const commonBoxProps: BoxProps = {
     alignItems: 'center',
     justifyContent: 'center',
-    p: theme?.dimensions?.buttonPadding,
-    minHeight: theme?.dimensions?.headerHeight,
+    p: theme.dimensions.buttonPadding,
+    minHeight: theme.dimensions.headerHeight,
   }
 
   let leftTextViewProps: TextViewProps = {}
@@ -180,7 +182,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
   const titleBoxProps: BoxProps = {
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: theme?.dimensions?.headerHeight,
+    minHeight: theme.dimensions.headerHeight,
     accessibilityElementsHidden: true,
     importantForAccessibility: 'no-hide-descendants',
   }
@@ -242,7 +244,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
               {leftButton?.descriptiveBack ? (
                 <DescriptiveBackButton label={leftButton.text} onPress={leftButton.onPress} focusOnButton={focus === 'Left'} />
               ) : leftButton ? (
-                <Box ml={theme?.dimensions?.buttonPadding} mt={theme?.dimensions?.buttonPadding}>
+                <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
                   <TouchableWithoutFeedback ref={focus === 'Left' ? focusRef : () => {}} onPress={leftButton.onPress} accessibilityRole="button">
                     <Box {...commonBoxProps}>
                       <Box display="flex" flexDirection="row" alignItems="center">
@@ -255,14 +257,14 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
             </Box>
 
             {title && (
-              <Box mt={theme?.dimensions?.buttonPadding} flex={constrainTitle ? 5 : undefined}>
+              <Box mt={theme.dimensions.buttonPadding} flex={constrainTitle ? 5 : undefined}>
                 <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>
                   <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
                 </View>
               </Box>
             )}
 
-            <Box mr={theme?.dimensions?.buttonPadding} mt={theme?.dimensions?.buttonPadding} flex={4} alignItems={'flex-end'}>
+            <Box mr={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding} flex={4} alignItems={'flex-end'}>
               {rightButton && (
                 <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
                   <Box {...commonBoxProps}>

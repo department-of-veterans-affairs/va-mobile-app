@@ -6,9 +6,11 @@ import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
+import { VATheme } from 'styles/theme'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { themeFn } from 'utils/theme'
-import { useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useDestructiveAlert } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import Box, { BoxProps } from './Box'
 import TextView, { TextViewProps } from './TextView'
 
@@ -43,7 +45,7 @@ const StyledImage = styled(Image)<StyledImageProps>`
 `
 
 const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, photoPosition }) => {
-  const { colors: themeColor } = useTheme()
+  const { colors: themeColor } = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [selected, setSelected] = useState(false)
   const uri = image.uri

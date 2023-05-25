@@ -11,10 +11,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
+import { VATheme } from 'styles/theme'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -41,7 +43,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
   const navigateTo = useRouteNavigation()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const name = profile?.preferredName ? profile.preferredName : profile?.firstName || ''
 
@@ -104,19 +106,19 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   return (
     <CategoryLanding headerButton={headerButton}>
       <Box flex={1} justifyContent="flex-start">
-        <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.cardPadding}>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
           <TextView variant={'MobileBodyBold'} accessibilityRole={'header'}>
             {heading}
           </TextView>
         </Box>
         <EncourageUpdateAlert />
         <Nametag />
-        <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.condensedMarginBetween}>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={tc('aboutVA.a11yLabel')}>
             {tc('aboutVA')}
           </TextView>
         </Box>
-        <Box mb={theme?.dimensions?.contentMarginBottom}>
+        <Box mb={theme.dimensions.contentMarginBottom}>
           <SimpleList items={buttonDataList} />
         </Box>
       </Box>

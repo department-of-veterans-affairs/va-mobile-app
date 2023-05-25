@@ -7,9 +7,11 @@ import { Box, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, Te
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState } from 'store/slices'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import NoLettersScreen from './NoLettersScreen'
 
@@ -20,7 +22,7 @@ type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOve
  */
 const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const navigateTo = useRouteNavigation()
   const { loading, error } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
@@ -52,17 +54,17 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   return (
     <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.title')} {...testIdProps('Letters-page')}>
       <Box {...testIdProps(t('letters.overview.documents'))} accessible={true}>
-        <TextView variant="MobileBody" mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
           {t('letters.overview.documents')}
         </TextView>
       </Box>
       <AddressSummary addressData={addressData} />
       <Box {...testIdProps(t('letters.overview.ifThisAddress'))} accessible={true}>
-        <TextView variant="MobileBody" mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
           {t('letters.overview.ifThisAddress')}
         </TextView>
       </Box>
-      <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>
         <VAButton
           onPress={onViewPressed}
           label={t('letters.overview.viewLetters')}

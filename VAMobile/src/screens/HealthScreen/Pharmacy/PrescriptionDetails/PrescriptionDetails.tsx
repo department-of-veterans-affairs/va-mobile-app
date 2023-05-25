@@ -11,9 +11,11 @@ import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/s
 import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { RootState } from 'store'
 import { UserAnalytics } from 'constants/analytics'
+import { VATheme } from 'styles/theme'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useAppDispatch, useDestructiveAlert, useDowntime, useExternalLink, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useDowntime, useExternalLink } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
+import { useTheme } from 'styled-components'
 import DetailsTextSections from './DetailsTextSections'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 import getEnv from 'utils/env'
@@ -25,7 +27,7 @@ const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }) => {
   const { prescriptionId } = route.params
   const { loadingHistory, prescriptionsById, prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const launchExternalLink = useExternalLink()
   const submitRefillAlert = useDestructiveAlert()
   const dispatch = useAppDispatch()
@@ -88,7 +90,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       },
     }
     return (
-      <Box mx={theme?.dimensions?.buttonPadding} mt={theme?.dimensions?.buttonPadding}>
+      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
         <VAButton {...buttonProps} />
       </Box>
     )
@@ -121,7 +123,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       },
     }
     return (
-      <Box mx={theme?.dimensions?.buttonPadding} mt={theme?.dimensions?.buttonPadding}>
+      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
         <VAButton {...requestRefillButtonProps} />
       </Box>
     )
@@ -152,13 +154,13 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
     <ChildTemplate backLabel={tc('prescriptions')} backLabelOnPress={navigation.goBack} title={tc('prescriptionDetails')}>
       {getBanner()}
       {getRefillVAHealthButton()}
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
           <TextView color={'placeholder'} accessibilityLabel={rxNumberA11yLabel}>
             {rxNumber}
           </TextView>
-          <Box pt={theme?.dimensions?.standardMarginBetween}>
+          <Box pt={theme.dimensions.standardMarginBetween}>
             <RefillTag status={refillStatus} />
           </Box>
           <DetailsTextSections leftSectionTitle={t('prescription.details.instructionsHeader')} leftSectionValue={instructions || noneNoted} />

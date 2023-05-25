@@ -6,9 +6,9 @@ import { Menu, Position } from './Menu'
 import { MenuDivider } from './MenuDivider'
 import { MenuItem } from './MenuItem'
 import { NAMESPACE } from 'constants/namespaces'
-import { VAIconColors, VATextColors } from 'styles/theme'
+import { VAIconColors, VATextColors, VATheme } from 'styles/theme'
 import { isIOS } from 'utils/platform'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import TextView from 'components/TextView'
 import VAIcon, { VA_ICON_MAP } from 'components/VAIcon'
 import VAIconWithText from 'components/VAIconWithText'
@@ -55,7 +55,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   let menuRef: Menu | null = null
   const setMenuRef: (instance: Menu | null) => void = (ref) => (menuRef = ref)
 
-  const currentTheme = useTheme()
+  const currentTheme = useTheme() as VATheme
 
   const hideMenu = () => menuRef?.hide()
 
@@ -70,7 +70,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
     })
 
     return () => {
-      sub.remove()
+      sub?.remove()
     }
   })
 

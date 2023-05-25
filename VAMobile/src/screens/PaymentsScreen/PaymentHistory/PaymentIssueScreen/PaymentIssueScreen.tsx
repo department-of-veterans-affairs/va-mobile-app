@@ -5,17 +5,18 @@ import React, { FC } from 'react'
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 
 type PaymentIssueScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentIssue'>
 
 const PaymentIssue: FC<PaymentIssueScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   return (
     <LargePanel title={t('paymentsHelp.title')} rightButtonText={t('close')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('payments.ifMyPaymentDoesNotLookRight')}
         </TextView>

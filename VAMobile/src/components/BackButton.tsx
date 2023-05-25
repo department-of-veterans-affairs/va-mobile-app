@@ -5,8 +5,10 @@ import React, { FC } from 'react'
 
 import { BackButtonLabel } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -36,7 +38,7 @@ export type BackButtonProps = {
  */
 export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, showCarat, a11yHint, focusOnButton = true, webview }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
 
@@ -52,9 +54,9 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, sho
 
   return (
     <TouchableWithoutFeedback ref={focusRef} onPress={onPress} {...testIdProps(label)} {...a11yHintProp(a11yHintPropParam)} accessibilityRole="button" accessible={true}>
-      <Box display="flex" flexDirection="row" ml={theme?.dimensions?.headerButtonSpacing} height={theme?.dimensions?.headerHeight} alignItems={'center'}>
+      <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} alignItems={'center'}>
         {chevron}
-        <TextView variant="ActionBar" color={webview ? 'footerButton' : undefined} ml={theme?.dimensions?.textIconMargin} allowFontScaling={false} accessible={false}>
+        <TextView variant="ActionBar" color={webview ? 'footerButton' : undefined} ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {t(label)}
         </TextView>
       </Box>

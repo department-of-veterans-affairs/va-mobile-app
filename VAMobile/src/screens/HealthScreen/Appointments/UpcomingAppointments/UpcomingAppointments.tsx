@@ -8,12 +8,14 @@ import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'co
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { TimeFrameTypeConstants } from 'constants/appointments'
+import { VATheme } from 'styles/theme'
 import { deepCopyObject } from 'utils/common'
 import { getGroupedAppointments } from 'utils/appointments'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type UpcomingAppointmentsProps = Record<string, unknown>
@@ -22,7 +24,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const navigateTo = useRouteNavigation()
   const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const currentPageUpcomingAppointmentsByYear = deepCopyObject<AppointmentsGroupedByYear>(currentPageAppointmentsByYear?.upcoming)
@@ -63,11 +65,11 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   return (
     <Box {...testIdProps('', false, 'Upcoming-appointments-page')}>
-      <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>
       {getGroupedAppointments(currentPageUpcomingAppointmentsByYear || {}, theme, { t, tc }, onUpcomingAppointmentPress, false, paginationByTimeFrame.upcoming)}
-      <Box flex={1} mt={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
+      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>

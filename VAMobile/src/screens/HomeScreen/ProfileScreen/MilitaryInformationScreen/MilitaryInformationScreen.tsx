@@ -11,17 +11,19 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackScreenProps } from '@react-navigation/stack'
+import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
 type MilitaryInformationScreenProps = StackScreenProps<HomeStackParamList, 'MilitaryInformation'>
 
 const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { serviceHistory, loading, needsDataLoad } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
@@ -60,8 +62,8 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
   const linkProps: TextViewProps = {
     variant: 'MobileBody',
     color: 'link',
-    mx: theme?.dimensions?.gutter,
-    mb: theme?.dimensions?.contentMarginBottom,
+    mx: theme.dimensions.gutter,
+    mb: theme.dimensions.contentMarginBottom,
     accessibilityRole: 'link',
     ...testIdProps(t('militaryInformation.incorrectServiceInfo')),
     onPress: navigateTo('IncorrectServiceInfo'),
@@ -85,7 +87,7 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
         <NoMilitaryInformationAccess />
       ) : (
         <>
-          <Box mb={theme?.dimensions?.standardMarginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <DefaultList items={historyItems} title={t('militaryInformation.periodOfService')} />
           </Box>
           <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>

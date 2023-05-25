@@ -6,11 +6,13 @@ import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 's
 import { ClaimsAndAppealsState, getClaimsAndAppeals } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
 export const ClaimTypeConstants: {
@@ -29,7 +31,7 @@ type ClaimsAndAppealsListProps = {
 
 const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { claimsAndAppealsByClaimType, claimsAndAppealsMetaPagination } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
@@ -67,8 +69,8 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
         textLines.push({
           text: t('claims.decisionLetterAvailable'),
           textTag: { labelType: LabelTagTypeConstants.tagBlue },
-          mt: theme?.dimensions?.condensedMarginBetween,
-          mb: theme?.dimensions?.condensedMarginBetween,
+          mt: theme.dimensions.condensedMarginBetween,
+          mb: theme.dimensions.condensedMarginBetween,
         })
       }
 
@@ -112,7 +114,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   return (
     <Box {...testIdProps('', false, `${claimType.toLowerCase()}-claims-page`)}>
       <DefaultList items={getListItemVals()} title={yourClaimsAndAppealsHeader} />
-      <Box flex={1} mt={theme?.dimensions?.paginationTopPadding} mx={theme?.dimensions?.gutter}>
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>

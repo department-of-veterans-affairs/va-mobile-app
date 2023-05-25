@@ -57,7 +57,7 @@ context('ReplyTriageErrorScreen', () => {
 
     component = render(<ReplyTriageErrorScreen {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

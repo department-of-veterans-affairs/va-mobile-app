@@ -4,7 +4,8 @@ import React, { FC } from 'react'
 
 import { Box, BoxProps, VAIcon } from './index'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 import TextView, { TextViewProps } from './TextView'
 
 type PhotoAddProps = {
@@ -17,7 +18,7 @@ type PhotoAddProps = {
 }
 
 const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const pressableProps: PressableProps = {

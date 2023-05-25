@@ -4,9 +4,10 @@ import React, { FC } from 'react'
 import { AppointmentPhone } from 'store/api/types'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type ClickToCallPhoneNumberProps = {
   /**sets the phone information */
@@ -22,7 +23,7 @@ type ClickToCallPhoneNumberProps = {
 /**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
 const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center, a11yLabel }) => {
   const { t } = useTranslation(NAMESPACE.HOME)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme as VATheme
 
   if (!phone) {
     return <></>
@@ -45,7 +46,7 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
   }
 
   return (
-    <Box alignItems={center ? 'center' : undefined} mt={theme?.dimensions?.standardMarginBetween}>
+    <Box alignItems={center ? 'center' : undefined} mt={theme.dimensions.standardMarginBetween}>
       <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
       <ClickForActionLink {...ttyProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
     </Box>

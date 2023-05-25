@@ -10,8 +10,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PURPOSE_TEXT } from 'store/api'
 import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { setReasonCode } from 'utils/requestAppointments'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type VAReasonForAppointmentScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'VAReasonForAppointmentScreen'>
 
@@ -20,7 +22,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const dispatch = useAppDispatch()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { text } = appointmentFlowFormData.reasonCode || {}
@@ -84,11 +86,11 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
       />
 
       <AppointmentFlowTitleSection title={t('requestAppointment.whatReasonForCare')} errorMessage={noReasonSelectedError} />
-      <Box mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         <RadioGroup options={getReasons()} onChange={onSetSelectedReason} value={text} isRadioList={true} />
       </Box>
       <AppointmentFlowTextInputWithAlert
-        mx={theme?.dimensions?.gutter}
+        mx={theme.dimensions.gutter}
         inputType={'none'}
         inputLabel={t('requestAppointment.additionaldetailsTitle')}
         onChange={onSetAdditionalDetails}

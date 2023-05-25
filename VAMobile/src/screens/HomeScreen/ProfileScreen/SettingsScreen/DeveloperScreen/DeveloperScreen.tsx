@@ -15,10 +15,12 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { StackScreenProps } from '@react-navigation/stack'
+import { VATheme } from 'styles/theme'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import getEnv, { EnvVars } from 'utils/env'
 
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
@@ -28,7 +30,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
   const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
   const authorizedServices = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const [localVersionName, setVersionName] = useState<string>()
@@ -148,7 +150,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
           <VAButton onPress={navigateTo('RemoteConfig')} label={'Remote Config'} buttonType={ButtonTypesConstants.buttonPrimary} />
         </TextArea>
       </Box>
-      <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
           <TextView variant="BitterBoldHeading">Auth Tokens</TextView>
         </TextArea>
@@ -156,7 +158,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
       {Object.keys(tokenInfo).map((key: string) => {
         const val = tokenInfo[key]
         return (
-          <Box key={key} mt={theme?.dimensions?.condensedMarginBetween}>
+          <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
             <TextArea
               onPress={(): void => {
                 onCopy(val)
@@ -167,19 +169,19 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
           </Box>
         )
       })}
-      <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
           <TextView variant="BitterBoldHeading">Authorized Services</TextView>
         </TextArea>
       </Box>
-      <Box mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         {Object.keys(authorizedServices).map((key: string) => {
           if (key === 'error') {
             return null
           }
           const val = (authorizedServices[key as keyof AuthorizedServicesState] || 'false').toString()
           return (
-            <Box key={key} mt={theme?.dimensions?.condensedMarginBetween}>
+            <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
               <TextArea
                 onPress={(): void => {
                   onCopy(val)
@@ -191,16 +193,16 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
           )
         })}
       </Box>
-      <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
           <TextView variant="BitterBoldHeading">Environment Variables</TextView>
         </TextArea>
       </Box>
-      <Box mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         {Object.keys(envVars).map((key: string) => {
           const val = (envVars[key as keyof EnvVars] || '').toString()
           return (
-            <Box key={key} mt={theme?.dimensions?.condensedMarginBetween}>
+            <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
               <TextArea
                 onPress={(): void => {
                   onCopy(val)
@@ -212,7 +214,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
           )
         })}
       </Box>
-      <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
           <TextView variant="BitterBoldHeading">Encouraged Update and What's New Versions</TextView>
           <TextView variant="MobileBodyBold">Encourage Update Local Version</TextView>
@@ -251,7 +253,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
               }
             }}
           />
-          <Box mt={theme?.dimensions?.condensedMarginBetween}>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
             <VAButton
               onPress={() => {
                 setSkippedVersionHomeScreen('0.0')
@@ -269,13 +271,13 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
           </Box>
         </TextArea>
       </Box>
-      <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
           <TextView variant="BitterBoldHeading">Push Notifications</TextView>
         </TextArea>
       </Box>
-      <Box mb={theme?.dimensions?.contentMarginBottom}>
-        <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea
             onPress={(): void => {
               onCopy(deviceToken || '')
@@ -285,8 +287,8 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
           </TextArea>
         </Box>
       </Box>
-      <Box mb={theme?.dimensions?.contentMarginBottom}>
-        <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea
             onPress={(): void => {
               onCopy(deviceToken || '')

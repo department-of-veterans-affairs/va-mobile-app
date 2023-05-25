@@ -25,16 +25,18 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError } from 'utils/hooks'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import getEnv from 'utils/env'
 
 const DisabilityRatingsScreen: FC = () => {
   const dispatch = useAppDispatch()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
 
@@ -196,20 +198,20 @@ const DisabilityRatingsScreen: FC = () => {
 
   const titleProps: TextViewProps = {
     variant: 'TableHeaderBold',
-    mx: theme?.dimensions?.gutter,
-    mb: theme?.dimensions?.condensedMarginBetween,
-    mt: theme?.dimensions?.standardMarginBetween,
+    mx: theme.dimensions.gutter,
+    mb: theme.dimensions.condensedMarginBetween,
+    mt: theme.dimensions.standardMarginBetween,
     accessibilityRole: 'header',
   }
 
   return (
     <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
       <Box>{getCombinedTotalSection()}</Box>
-      <Box mb={theme?.dimensions?.condensedMarginBetween}>
+      <Box mb={theme.dimensions.condensedMarginBetween}>
         <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
       </Box>
-      <Box mb={theme?.dimensions?.condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
-      <Box mb={theme?.dimensions?.contentMarginBottom}>{getNeedHelpSection()}</Box>
+      <Box mb={theme.dimensions.condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
+      <Box mb={theme.dimensions.contentMarginBottom}>{getNeedHelpSection()}</Box>
     </ChildTemplate>
   )
 }

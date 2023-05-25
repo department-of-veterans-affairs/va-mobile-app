@@ -10,12 +10,14 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
+import { VATheme } from 'styles/theme'
 import { deepCopyObject } from 'utils/common'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { getGroupedAppointments, getTextLinesForAppointmentListItem, getYearsToSortedMonths, isAPendingAppointment } from 'utils/appointments'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = Record<string, unknown>
@@ -23,7 +25,7 @@ type PastAppointmentsProps = Record<string, unknown>
 const PastAppointments: FC<PastAppointmentsProps> = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
@@ -195,7 +197,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
     if (appointmentsDoNotExist) {
       return (
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <NoAppointments subText={t('noAppointments.youDontHaveForDates')} />
         </Box>
       )
@@ -232,7 +234,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   return (
     <Box {...testIdProps('', false, 'Past-appointments-page')}>
-      <Box mx={theme?.dimensions?.gutter} accessible={true}>
+      <Box mx={theme.dimensions.gutter} accessible={true}>
         <VAModalPicker
           selectedValue={datePickerOption.value}
           onSelectionChange={setValuesOnPickerSelect}
@@ -241,7 +243,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         />
       </Box>
       {getAppointmentData()}
-      <Box flex={1} mt={theme?.dimensions?.paginationTopPadding} mx={theme?.dimensions?.gutter}>
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>

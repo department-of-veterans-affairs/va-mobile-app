@@ -5,13 +5,14 @@ import { Box, TextView } from 'components'
 import { ClaimsAndAppealsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 const NoClaimsAndAppeals: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   let header = t('noClaims.youDontHaveAnyClaimsOrAppeals')
@@ -26,14 +27,14 @@ const NoClaimsAndAppeals: FC = () => {
   }
 
   return (
-    <Box flex={1} justifyContent="center" mx={theme?.dimensions?.gutter} {...testIdProps('Claims: No-claims-page')} alignItems="center">
+    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('Claims: No-claims-page')} alignItems="center">
       <Box {...testIdProps(header)} accessible={true}>
         <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
           {header}
         </TextView>
       </Box>
       <Box {...testIdProps(text)} accessible={true}>
-        <TextView variant="MobileBody" textAlign="center" my={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween}>
           {text}
         </TextView>
       </Box>

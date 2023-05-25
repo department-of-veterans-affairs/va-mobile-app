@@ -1,7 +1,8 @@
 import React, { FC } from 'react'
 
 import { TextView } from 'components'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 import AppointmentFlowErrorAlert from './AppointmentFlowErrorAlert'
 
 type AppointmentModalTitleSectionProps = {
@@ -21,25 +22,25 @@ type AppointmentModalTitleSectionProps = {
  * Will show title, optional extra information text, and an optional error alert.
  * */
 const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ title, extraInformationText, errorMessage, titleMarginBottom, titleA11yLabel }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const error = !!errorMessage
 
   return (
     <>
       <TextView
-        mx={theme?.dimensions?.gutter}
+        mx={theme.dimensions.gutter}
         variant={'BitterBoldHeading'}
         accessibilityLabel={titleA11yLabel}
         accessibilityRole={'header'}
-        mb={titleMarginBottom ? titleMarginBottom : !extraInformationText && !error ? theme?.dimensions?.contentMarginBottom : 0}>
+        mb={titleMarginBottom ? titleMarginBottom : !extraInformationText && !error ? theme.dimensions.contentMarginBottom : 0}>
         {title}
       </TextView>
       {!!extraInformationText && (
-        <TextView variant="HelperText" mt={theme?.dimensions?.condensedMarginBetween} mb={!error ? theme?.dimensions?.standardMarginBetween : 0} mx={theme?.dimensions?.gutter}>
+        <TextView variant="HelperText" mt={theme.dimensions.condensedMarginBetween} mb={!error ? theme.dimensions.standardMarginBetween : 0} mx={theme.dimensions.gutter}>
           {extraInformationText}
         </TextView>
       )}
-      <AppointmentFlowErrorAlert errorMessage={errorMessage} mb={theme?.dimensions?.standardMarginBetween} mt={theme?.dimensions?.standardMarginBetween} />
+      <AppointmentFlowErrorAlert errorMessage={errorMessage} mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.standardMarginBetween} />
     </>
   )
 }

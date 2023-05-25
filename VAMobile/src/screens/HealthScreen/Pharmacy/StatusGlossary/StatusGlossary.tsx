@@ -4,9 +4,11 @@ import React, { FC, useLayoutEffect } from 'react'
 import { Box, ClosePanelButton, LargePanel, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { getStatusGlossaryTextForRefillStatus } from 'utils/prescriptions'
 import { isIOS } from 'utils/platform'
-import { usePanelHeaderStyles, useTheme } from 'utils/hooks'
+import { usePanelHeaderStyles } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 
 type StatusGlossaryProps = StackScreenProps<HealthStackParamList, 'StatusGlossary'>
@@ -16,7 +18,7 @@ const StatusGlossary: FC<StatusGlossaryProps> = ({ navigation, route }) => {
   const headerStyle = usePanelHeaderStyles()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const { text, a11yLabel } = getStatusGlossaryTextForRefillStatus(value, t)
 
@@ -36,9 +38,9 @@ const StatusGlossary: FC<StatusGlossaryProps> = ({ navigation, route }) => {
 
   return (
     <LargePanel title={tc('statusGlossary')} rightButtonText={tc('close')}>
-      <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextView variant="MobileBodyBold">{display}</TextView>
-        <TextView variant="MobileBody" mt={theme?.dimensions?.condensedMarginBetween} accessibilityLabel={a11yLabel}>
+        <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween} accessibilityLabel={a11yLabel}>
           {text}
         </TextView>
       </Box>

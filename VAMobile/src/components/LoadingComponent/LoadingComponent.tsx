@@ -3,7 +3,8 @@ import LottieView from 'lottie-react-native'
 import React, { FC } from 'react'
 
 import { Box, TextView, VAScrollView } from 'components'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 import colors from 'styles/themes/VAColors'
 
 export type LoadingComponentProps = {
@@ -23,7 +24,7 @@ export type LoadingComponentProps = {
 
 /**A common component to show a loading spinner */
 const LoadingComponent: FC<LoadingComponentProps> = ({ text, a11yLabel, justTheSpinnerIcon, spinnerHeight, spinnerWidth, spinnerColor }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
@@ -66,9 +67,9 @@ const LoadingComponent: FC<LoadingComponentProps> = ({ text, a11yLabel, justTheS
         </Box>
       ) : (
         <VAScrollView contentContainerStyle={scrollStyles}>
-          <Box justifyContent="center" mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} alignItems={'center'}>
+          <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
             {getSpinner()}
-            <Box mt={theme?.dimensions?.condensedMarginBetween}>
+            <Box mt={theme.dimensions.condensedMarginBetween}>
               <TextView textAlign={'center'} variant="MobileBody" accessibilityLabel={a11yLabel}>
                 {text}
               </TextView>

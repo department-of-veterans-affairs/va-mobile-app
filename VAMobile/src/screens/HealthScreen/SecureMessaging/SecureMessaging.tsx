@@ -10,8 +10,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useAppDispatch, useDowntime, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import CernerAlert from '../CernerAlert'
 import ComposeMessageButton from './ComposeMessageButton/ComposeMessageButton'
 import Folders from './Folders/Folders'
@@ -29,7 +31,7 @@ export const getInboxUnreadCount = (state: RootState): number => {
 const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   const inboxUnreadCount = useSelector<RootState, number>(getInboxUnreadCount)
@@ -100,7 +102,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
     <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
       <ComposeMessageButton />
       <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme?.dimensions?.standardMarginBetween} mt={theme?.dimensions?.contentMarginTop} mx={theme?.dimensions?.gutter}>
+        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
           <SegmentedControl
             values={controlValues}
             titles={controlLabels}
@@ -111,7 +113,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
         </Box>
         <CernerAlert />
         {serviceErrorAlert()}
-        <Box flex={1} mb={theme?.dimensions?.contentMarginBottom}>
+        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
           {secureMessagingTab === SecureMessagingTabTypesConstants.INBOX && <Inbox />}
           {secureMessagingTab === SecureMessagingTabTypesConstants.FOLDERS && <Folders />}
         </Box>

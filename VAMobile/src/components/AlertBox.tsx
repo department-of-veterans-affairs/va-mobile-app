@@ -2,9 +2,10 @@ import { AccessibilityRole, ScrollView, View } from 'react-native'
 import React, { FC, RefObject, useEffect, useState } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
-import { VABorderColors } from 'styles/theme'
+import { VABorderColors, VATheme } from 'styles/theme'
 import { triggerHaptic } from 'utils/haptics'
-import { useAutoScrollToElement, useTheme } from 'utils/hooks'
+import { useAutoScrollToElement } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 export type AlertBoxProps = {
   /** color of the border */
@@ -29,7 +30,7 @@ export type AlertBoxProps = {
  * Displays content in a box styled as an alert
  */
 const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, scrollViewRef, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const [scrollRef, viewRef, scrollToAlert] = useAutoScrollToElement()
   const [shouldFocus, setShouldFocus] = useState(true)
 

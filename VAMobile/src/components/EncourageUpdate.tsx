@@ -7,15 +7,16 @@ import { Events } from 'constants/analytics'
 import { FeatureConstants, getLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { requestStorePopup } from 'utils/rnInAppUpdate'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 export const EncourageUpdateAlert = () => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.HOME)
   const [localVersionName, setVersionName] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
@@ -84,13 +85,13 @@ export const EncourageUpdateAlert = () => {
   ) {
     logAnalyticsEvent(Events.vama_eu_shown())
     return (
-      <Box mb={theme?.dimensions?.buttonPadding}>
+      <Box mb={theme.dimensions.buttonPadding}>
         <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="informational">
           <Box>
-            <Box my={theme?.dimensions?.gutter} accessibilityRole="button" mr={theme?.dimensions?.buttonPadding}>
+            <Box my={theme.dimensions.gutter} accessibilityRole="button" mr={theme.dimensions.buttonPadding}>
               <VAButton onPress={onUpdatePressed} label={t('encourageUpdate.update')} buttonType={ButtonTypesConstants.buttonPrimary} />
             </Box>
-            <Box mr={theme?.dimensions?.buttonPadding} accessibilityRole="button">
+            <Box mr={theme.dimensions.buttonPadding} accessibilityRole="button">
               <VAButton onPress={onSkipPressed} label={t('encourageUpdate.skip')} buttonType={ButtonTypesConstants.buttonSecondary} />
             </Box>
           </Box>

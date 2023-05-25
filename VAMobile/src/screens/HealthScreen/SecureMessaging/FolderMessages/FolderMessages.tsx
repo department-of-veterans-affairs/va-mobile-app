@@ -9,9 +9,11 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
+import { VATheme } from 'styles/theme'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { useAppDispatch, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
@@ -23,7 +25,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
@@ -123,7 +125,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     }
 
     return (
-      <Box flex={1} mt={theme?.dimensions?.paginationTopPadding} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     )
@@ -132,7 +134,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   return (
     <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
       <ComposeMessageButton />
-      <Box mt={theme?.dimensions?.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} />
       </Box>
       {renderPagination()}

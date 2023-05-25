@@ -6,8 +6,10 @@ import React, { FC } from 'react'
 
 import { Box, TextViewProps } from 'components'
 import { BoxProps } from './Box'
+import { VATheme } from 'styles/theme'
 import { triggerHaptic } from 'utils/haptics'
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 import colors from '../styles/themes/VAColors'
@@ -25,7 +27,7 @@ export type SnackbarMessages = {
 const SnackBar: FC<ToastProps> = (toast) => {
   const { message, data } = toast
   const { onActionPressed, isError, actionBtnText, isUndo } = data || {}
-  const { colors: themeColor } = useTheme()
+  const { colors: themeColor } = useTheme() as VATheme
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
   useFocusEffect(setFocus)

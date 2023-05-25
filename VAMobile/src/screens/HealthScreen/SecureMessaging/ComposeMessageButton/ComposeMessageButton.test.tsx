@@ -18,7 +18,9 @@ jest.mock('utils/hooks', () => {
     useTheme: jest.fn(() => {
       return { ...theme }
     }),
-    useRouteNavigation: () => { return mockNavigationSpy },
+    useRouteNavigation: () => {
+      return mockNavigationSpy
+    },
   }
 })
 
@@ -32,7 +34,7 @@ context('ComposeMessageFooter', () => {
     mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
     component = render(<ComposeMessageButton />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, render, RenderAPI } from 'testUtils'
 
 import { InitialState } from 'store/slices'
@@ -29,10 +29,10 @@ context('PendingAppointmentCancelButton', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (): void => {
-    props ={
+    props = {
       ...defaultAppointmentAttributes,
       isPending: true,
-      status: AppointmentStatusConstants.SUBMITTED
+      status: AppointmentStatusConstants.SUBMITTED,
     }
 
     component = render(<PendingAppointmentCancelButton attributes={props} />, {
@@ -41,7 +41,7 @@ context('PendingAppointmentCancelButton', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

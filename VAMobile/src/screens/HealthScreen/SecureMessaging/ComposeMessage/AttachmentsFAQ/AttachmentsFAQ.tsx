@@ -6,13 +6,14 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps } from '@react-navigation/stack'
+import { VATheme } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type AttachmentsFAQProps = StackScreenProps<HealthStackParamList, 'AttachmentsFAQ'>
 
 const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation([NAMESPACE.HOME, NAMESPACE.COMMON])
   const { originHeader } = route.params
@@ -31,11 +32,11 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
 
   return (
     <LargePanel title={tc('common:messagesHelp.title')} rightButtonText={tc('common:close')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Box accessible={true} accessibilityRole={'header'}>
           <TextView variant={'MobileBodyBold'}>{t('secureMessaging.attachments.FAQ.howCanIAttach')}</TextView>
         </Box>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <VABulletList
             listOfText={[
               t('secureMessaging.attachments.FAQ.howCanI.bullet1'),
@@ -44,16 +45,16 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
             ]}
           />
         </Box>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView>
             <TextView variant="MobileBodyBold">{t('secureMessaging.attachments.FAQ.note') + ' '}</TextView>
             <TextView variant="MobileBody">{t('secureMessaging.attachments.FAQ.noteText')}</TextView>
           </TextView>
-          <Box mt={theme?.dimensions?.standardMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <VABulletList listOfText={bulletedListOfText} />
           </Box>
         </Box>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBody" accessibilityLabel={t('secureMessaging.attachments.FAQ.ifYourProblemA11y')}>
             {t('secureMessaging.attachments.FAQ.ifYourProblem')}
           </TextView>

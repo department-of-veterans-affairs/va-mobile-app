@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useAccessibilityFocus } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -27,7 +29,7 @@ export type DescBackButtonProps = {
  * Descriptive button used by the stack navigation to go back to the previous screen
  */
 export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label, labelA11y, focusOnButton = true }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
@@ -39,12 +41,12 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label,
       <Box
         display="flex"
         flexDirection="row"
-        ml={theme?.dimensions?.headerButtonSpacing}
-        mt={theme?.dimensions?.buttonPadding}
-        height={theme?.dimensions?.headerHeight} // Uniform height ensures proper screen reader order in header
+        ml={theme.dimensions.headerButtonSpacing}
+        mt={theme.dimensions.buttonPadding}
+        height={theme.dimensions.headerHeight} // Uniform height ensures proper screen reader order in header
         alignItems={'center'}>
         <VAIcon mt={1} name={'ArrowLeft'} fill={theme?.colors?.icon?.link} height={13} />
-        <TextView variant="DescriptiveBackButton" color="descriptiveBackButton" ml={theme?.dimensions?.textIconMargin} allowFontScaling={false} accessible={false}>
+        <TextView variant="DescriptiveBackButton" color="descriptiveBackButton" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {label}
         </TextView>
       </Box>

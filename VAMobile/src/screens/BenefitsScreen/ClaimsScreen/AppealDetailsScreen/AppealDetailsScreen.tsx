@@ -10,16 +10,18 @@ import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { VATheme } from 'styles/theme'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
-import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import AppealIssues from './AppealIssues/AppealIssues'
 import AppealStatus from './AppealStatus/AppealStatus'
 
 type AppealDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'AppealDetailsScreen'>
 
 const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -102,14 +104,14 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
 
   return (
     <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')}>
-      <Box mb={theme?.dimensions?.contentMarginBottom}>
-        <Box mx={theme?.dimensions?.gutter}>
-          <TextView variant="BitterBoldHeading" mb={theme?.dimensions?.condensedMarginBetween} accessibilityRole="header">
+      <Box mb={theme.dimensions.contentMarginBottom}>
+        <Box mx={theme.dimensions.gutter}>
+          <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
             {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
           </TextView>
           <TextView variant="MobileBody">{t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}</TextView>
           <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
-          <Box mt={theme?.dimensions?.standardMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <SegmentedControl
               values={controlValues}
               titles={controlValues}
@@ -119,7 +121,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
             />
           </Box>
         </Box>
-        <Box mt={theme?.dimensions?.condensedMarginBetween}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           {appeal && selectedTab === t('claimDetails.status') && (
             <AppealStatus
               events={events}

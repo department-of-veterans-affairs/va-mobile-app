@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 import Box, { BoxProps } from '../Box'
 import SelectionListItem, { SelectionListItemObj } from './SelectionListItem'
 import TextView from '../TextView'
@@ -19,7 +20,7 @@ export type SelectionListProps = {
 
 const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => {
   const [numSelected, setNumSelected] = useState(0)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const [selectionVals, setSelectionVals] = useState<Record<string, boolean>>({})
@@ -104,11 +105,11 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
   }
 
   const headerWrapperProps: BoxProps = {
-    borderTopWidth: theme?.dimensions?.borderWidth,
-    borderBottomWidth: theme?.dimensions?.borderWidth,
+    borderTopWidth: theme.dimensions.borderWidth,
+    borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
-    px: theme?.dimensions?.gutter,
+    px: theme.dimensions.gutter,
     py: 16,
     display: 'flex',
     flexDirection: 'row',

@@ -18,17 +18,19 @@ import { Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { isAPendingAppointment } from '../../../../utils/appointments'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 
 const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
 
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
@@ -60,7 +62,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
     }
 
     return (
-      <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
           <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
             {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
@@ -72,10 +74,10 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
 
   return (
     <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <AppointmentAlert attributes={attributes} />
         <TextArea>
-          <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme?.dimensions?.standardMarginBetween}>
+          <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
             <AppointmentTypeAndDate attributes={attributes} />
           </Box>
 

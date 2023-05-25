@@ -9,8 +9,10 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState } from 'store/slices'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { useRequestAppointmentModalHeaderStyles } from 'utils/requestAppointments'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 import getEnv from 'utils/env'
 
@@ -22,7 +24,7 @@ type TypeOfCareNotListedHelpScreenProps = StackScreenProps<HealthStackParamList,
 const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const navigateTo = useRouteNavigation()
 
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
@@ -57,7 +59,7 @@ const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({
     }
 
     return (
-      <Box mx={theme?.dimensions?.gutter}>
+      <Box mx={theme.dimensions.gutter}>
         <VABulletList listOfText={bulletedListOfText} />
       </Box>
     )
@@ -65,19 +67,19 @@ const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({
 
   return (
     <Box flex={1} backgroundColor={'main'}>
-      <Box mx={theme?.dimensions?.gutter}>
-        <TextView variant="MobileBodyBold" mt={theme?.dimensions?.contentMarginTop} accessibilityRole="header">
+      <Box mx={theme.dimensions.gutter}>
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.contentMarginTop} accessibilityRole="header">
           {t('requestAppointment.typeOfCareNotListedCallToSchedule')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme?.dimensions?.condensedMarginBetween} accessibilityLabel={t('requestAppointment.typeOfCareNotListedYoureNotLabel')}>
+        <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween} accessibilityLabel={t('requestAppointment.typeOfCareNotListedYoureNotLabel')}>
           {t('requestAppointment.typeOfCareNotListedYoureNotDesc')}
         </TextView>
         {getNonEligibleCare()}
-        <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('requestAppointment.typeOfCareNotListedForTheseTypeOfCareLabel')}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('requestAppointment.typeOfCareNotListedForTheseTypeOfCareLabel')}>
           {t('requestAppointment.typeOfCareNotListedForTheseTypeOfCareDesc')}
         </TextView>
         <TextView
-          mt={theme?.dimensions?.condensedMarginBetween}
+          mt={theme.dimensions.condensedMarginBetween}
           variant="MobileBodyLink"
           accessibilityLabel={t('requestAppointment.typeOfCareNotListedFindfVaLinkLabel')}
           onPress={() => {

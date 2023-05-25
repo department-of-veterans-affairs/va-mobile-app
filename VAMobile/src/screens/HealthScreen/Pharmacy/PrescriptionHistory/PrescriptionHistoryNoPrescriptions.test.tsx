@@ -5,7 +5,7 @@ import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
 
 import { context, render, RenderAPI } from 'testUtils'
-import PrescriptionHistoryNoPrescriptions from "./PrescriptionHistoryNoPrescriptions";
+import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 
 const mockExternalLinkSpy = jest.fn()
 
@@ -29,7 +29,7 @@ context('PrescriptionHistoryNoPrescriptions', () => {
   beforeEach(() => {
     component = render(<PrescriptionHistoryNoPrescriptions />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

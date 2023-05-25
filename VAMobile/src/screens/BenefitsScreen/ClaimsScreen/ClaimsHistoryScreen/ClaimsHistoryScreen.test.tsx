@@ -175,7 +175,7 @@ context('ClaimsHistoryScreen', () => {
       preloadedState,
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   afterEach(cleanup)
@@ -266,7 +266,7 @@ context('ClaimsHistoryScreen', () => {
           },
         },
       })
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
@@ -296,7 +296,7 @@ context('ClaimsHistoryScreen', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
       await waitFor(() => {
         expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
       })
@@ -318,7 +318,7 @@ context('ClaimsHistoryScreen', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
 
       await waitFor(() => {
         expect(testInstance.findAllByType(NoClaimsAndAppealsAccess)).toHaveLength(0)
@@ -341,7 +341,7 @@ context('ClaimsHistoryScreen', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
 
       await waitFor(() => {
         expect(testInstance.findAllByType(NoClaimsAndAppealsAccess)).toHaveLength(0)
@@ -366,7 +366,7 @@ context('ClaimsHistoryScreen', () => {
         })
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
 
       expect(testInstance.findAllByType(NoClaimsAndAppealsAccess)).toHaveLength(1)
     })

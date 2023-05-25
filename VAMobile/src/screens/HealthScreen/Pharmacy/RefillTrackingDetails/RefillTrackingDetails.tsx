@@ -10,11 +10,13 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, getTrackingInfo } from 'store/slices'
 import { PrescriptionTrackingInfoAttributeData, PrescriptionTrackingInfoOtherItem } from 'store/api'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { a11yLabelID } from 'utils/a11yLabel'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { isIOS } from 'utils/platform'
-import { useAppDispatch, useDowntime, useError, usePanelHeaderStyles, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, usePanelHeaderStyles } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import getEnv from 'utils/env'
 
 const { CARRIER_TRACKING_URL_USPS, CARRIER_TRACKING_URL_UPS, CARRIER_TRACKING_URL_FEDEX, CARRIER_TRACKING_URL_DHL } = getEnv()
@@ -42,7 +44,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   const dispatch = useAppDispatch()
   const { loadingTrackingInfo, trackingInfo } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const headerStyle = usePanelHeaderStyles()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
@@ -103,7 +105,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
 
     if (noOtherPrescriptions) {
       otherPrescriptionItems = (
-        <Box mt={theme?.dimensions?.condensedMarginBetween}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextView variant="HelperText">{t('prescriptions.refillTracking.otherPrescription.none')}</TextView>
         </Box>
       )
@@ -113,7 +115,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
         const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
 
         return (
-          <Box key={prescriptionName} mt={theme?.dimensions?.condensedMarginBetween}>
+          <Box key={prescriptionName} mt={theme.dimensions.condensedMarginBetween}>
             <TextView variant="MobileBodyBold">{prescriptionName}</TextView>
             <TextView accessibilityLabel={rxNumberA11yLabel} variant="HelperText" color="placeholder">
               {rxNumber}
@@ -125,7 +127,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
 
     return (
       <>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant={'HelperText'}>{`${t('prescriptions.refillTracking.otherPrescription')}:`}</TextView>
         </Box>
         {otherPrescriptionItems}
@@ -152,7 +154,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
               {trackingNumber || noneNoted}
             </TextView>
           )}
-          <Box mt={theme?.dimensions?.standardMarginBetween} mb={theme?.dimensions?.condensedMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <TextView variant="HelperText">{`${t('prescriptions.refillTracking.deliveryService')}: ${deliveryService || noneNoted}`}</TextView>
           </Box>
           <TextView variant="HelperText" accessibilityLabel={`${t('prescriptions.refillTracking.dateShipped')}: ${shippedDateA11yLabel}`}>{`${t(
@@ -168,7 +170,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
       return (
         <Box key={index} mt={30}>
           {trackingInfo?.length > 1 ? (
-            <Box mb={theme?.dimensions?.condensedMarginBetween}>
+            <Box mb={theme.dimensions.condensedMarginBetween}>
               <TextView variant={'MobileBodyBold'}>{`${tc('package')} ${tc('listPosition', { position: index + 1, total: totalTracking })}`}</TextView>
             </Box>
           ) : (
@@ -196,9 +198,9 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
 
   return (
     <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
-      <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {renderHeader()}
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="HelperText">{t('prescriptions.refillTracking.upTo15Days')}</TextView>
         </Box>
         {renderTrackingCards()}

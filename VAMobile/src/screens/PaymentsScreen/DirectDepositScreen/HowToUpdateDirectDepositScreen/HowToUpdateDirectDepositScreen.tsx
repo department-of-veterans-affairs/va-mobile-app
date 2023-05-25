@@ -5,7 +5,8 @@ import { AlertBox, Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { StackScreenProps } from '@react-navigation/stack'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 
 type HowToUpdateDirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'HowToUpdateDirectDeposit'>
 
@@ -14,20 +15,20 @@ type HowToUpdateDirectDepositScreenProps = StackScreenProps<PaymentsStackParamLi
  */
 const HowToUpdateDirectDepositScreen: FC<HowToUpdateDirectDepositScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   return (
     <>
       <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <AlertBox title={t('howToUpdateDirectDeposit.alert.title')} border="warning" text={t('howToUpdateDirectDeposit.alert.body')} />
         </Box>
-        <Box mt={theme?.dimensions?.standardMarginBetween} mb={theme?.dimensions?.contentMarginBottom}>
+        <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>
           <TextArea>
             <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
               {t('howToUpdateDirectDeposit.card.title')}
             </TextView>
-            <Box mt={theme?.dimensions?.standardMarginBetween}>
+            <Box mt={theme.dimensions.standardMarginBetween}>
               <TextView variant="MobileBody">{t('howToUpdateDirectDeposit.card.callUs')}</TextView>
             </Box>
             <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />

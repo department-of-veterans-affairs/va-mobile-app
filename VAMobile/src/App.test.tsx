@@ -56,8 +56,8 @@ context('App', () => {
       })
 
       expect(component).toBeTruthy()
-      expect(() => component.container.findByType(LoginScreen)).toThrow()
-      expect(() => component.container.findByType(AuthedApp)).toThrow()
+      expect(() => component.UNSAFE_root.findByType(LoginScreen)).toThrow()
+      expect(() => component.UNSAFE_root.findByType(AuthedApp)).toThrow()
     })
 
     it('should initilize by registering for linking', async () => {
@@ -125,19 +125,19 @@ context('App', () => {
 
     it('should render Login when not authorized', async () => {
       await waitFor(() => {
-        let { container } = render(<AuthGuard />, {
+        let { UNSAFE_root } = render(<AuthGuard />, {
           preloadedState: {
             auth: { ...initialAuthState, initializing: false },
           },
         })
-        expect(container).toBeTruthy()
-        expect(container.findByType(LoginScreen)).toBeTruthy()
+        expect(UNSAFE_root).toBeTruthy()
+        expect(UNSAFE_root.findByType(LoginScreen)).toBeTruthy()
       })
     })
 
     it('should render AuthedApp when authorized', async () => {
       await waitFor(() => {
-        let { container } = render(<AuthGuard />, {
+        let { UNSAFE_root } = render(<AuthGuard />, {
           preloadedState: {
             auth: {
               ...initialAuthState,
@@ -153,7 +153,7 @@ context('App', () => {
           },
         })
 
-        expect(container.findByType(AuthedApp)).toBeTruthy()
+        expect(UNSAFE_root.findByType(AuthedApp)).toBeTruthy()
       })
     })
   })

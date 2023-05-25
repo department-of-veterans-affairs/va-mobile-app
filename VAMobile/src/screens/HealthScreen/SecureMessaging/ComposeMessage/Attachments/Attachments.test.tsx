@@ -59,7 +59,7 @@ context('Attachments', () => {
 
     component = render(<Attachments {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

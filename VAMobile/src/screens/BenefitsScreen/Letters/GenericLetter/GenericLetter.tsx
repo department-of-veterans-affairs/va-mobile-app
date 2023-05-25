@@ -8,16 +8,18 @@ import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, downloadLetter } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 
 type GenericLetterProps = StackScreenProps<BenefitsStackParamList, 'GenericLetter'>
 
 const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const { header, description, letterType, descriptionA11yLabel } = route.params
   const { downloading, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)
@@ -44,9 +46,9 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {letterType === LetterTypeConstants.serviceVerification && (
-          <Box mb={theme?.dimensions?.standardMarginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox border="informational" text={t('letters.serviceVerificationLetter.informational')} />
           </Box>
         )}
@@ -54,7 +56,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {header}
           </TextView>
-          <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
+          <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {description}
           </TextView>
           <VAButton

@@ -11,16 +11,18 @@ import { PaymentsAttributeData } from 'store/api'
 import { PaymentsStackParamList } from '../../PaymentsStackScreens'
 import { Pressable } from 'react-native'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type PaymentDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentDetails'>
 
 const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ navigation, route }) => {
   const { paymentID } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 
@@ -57,18 +59,18 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ navigation, route
 
   return (
     <FeatureLandingTemplate backLabel={t('history.title')} backLabelOnPress={navigation.goBack} title={t('paymentDetails.title')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBody" mb={theme?.dimensions?.standardMarginBetween}>
+          <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
             {formatDateUtc(date, 'MMMM d, yyyy')}
           </TextView>
-          <Box accessibilityRole="header" accessible={true} mb={theme?.dimensions?.standardMarginBetween}>
+          <Box accessibilityRole="header" accessible={true} mb={theme.dimensions.standardMarginBetween}>
             <TextView variant="BitterBoldHeading">{paymentType}</TextView>
           </Box>
           <TextView variant="MobileBodyBold" selectable={true}>
             {t('paymentDetails.amount')}
           </TextView>
-          <TextView variant="MobileBody" selectable={true} mb={theme?.dimensions?.standardMarginBetween}>
+          <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.standardMarginBetween}>
             {amount}
           </TextView>
           <TextView variant="MobileBodyBold" selectable={true}>
@@ -79,10 +81,10 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ navigation, route
           </TextView>
           {isDirectDeposit && (
             <>
-              <TextView variant="MobileBodyBold" mt={theme?.dimensions?.standardMarginBetween}>
+              <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
                 {t('paymentDetails.bank')}
               </TextView>
-              <TextView variant="MobileBody" selectable={true} mb={theme?.dimensions?.standardMarginBetween}>
+              <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.standardMarginBetween}>
                 {bank || placeHolder}
               </TextView>
               <TextView variant="MobileBodyBold">{t('paymentDetails.account')}</TextView>
@@ -92,7 +94,7 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ navigation, route
             </>
           )}
         </TextArea>
-        <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.contentMarginTop}>
+        <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop}>
           <Pressable onPress={navigateTo('PaymentIssue')} {...testIdProps(t('payments.ifMyPaymentDoesNotLookRight'))} accessibilityRole="link" accessible={true}>
             <TextView {...textViewProps}>{t('payments.ifMyPaymentDoesNotLookRight')}</TextView>
           </Pressable>

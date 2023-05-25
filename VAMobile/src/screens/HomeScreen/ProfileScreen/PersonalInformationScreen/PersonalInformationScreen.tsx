@@ -12,12 +12,14 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getGenderIdentityOptions, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { UserDataProfile } from 'store/api/types'
+import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 
 const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
   if (profile && profile.birthDate) {
@@ -50,7 +52,7 @@ type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'Pers
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { profile, loading, loadingGenderIdentityOptions, needsDataLoad, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>(
     (state) => state.personalInformation,
   )
@@ -82,22 +84,22 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   const linkProps: TextViewProps = {
     variant: 'MobileBodyLink',
-    mx: theme?.dimensions?.gutter,
-    mt: theme?.dimensions?.condensedMarginBetween,
+    mx: theme.dimensions.gutter,
+    mt: theme.dimensions.condensedMarginBetween,
   }
 
   const dobLinkProps: TextViewProps = {
     variant: 'MobileBodyLink',
-    mb: theme?.dimensions?.condensedMarginBetween,
+    mb: theme.dimensions.condensedMarginBetween,
   }
 
   const boxProps: BoxProps = {
     minHeight: 81,
     borderRadius: 6,
-    p: theme?.dimensions?.cardPadding,
-    mb: theme?.dimensions?.condensedMarginBetween,
+    p: theme.dimensions.cardPadding,
+    mb: theme.dimensions.condensedMarginBetween,
     backgroundColor: 'textBox',
-    borderWidth: theme?.dimensions?.buttonBorderWidth,
+    borderWidth: theme.dimensions.buttonBorderWidth,
     borderColor: 'secondary',
     borderStyle: 'solid',
   }
@@ -124,16 +126,16 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={theme?.dimensions?.gutter}>
+      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={theme.dimensions.gutter}>
         {t('contactInformation.editNote')}
       </TextView>
       <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>
         <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
       </Pressable>
-      <Box my={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
+      <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <Box {...boxProps}>
-          <Box flexDirection={'row'} flexWrap={'wrap'} mb={birthdate ? theme?.dimensions?.condensedMarginBetween : undefined}>
-            <TextView mr={theme?.dimensions?.condensedMarginBetween} variant="BitterBoldHeading">
+          <Box flexDirection={'row'} flexWrap={'wrap'} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
+            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading">
               {t('personalInformation.dateOfBirth')}
             </TextView>
           </Box>
@@ -146,7 +148,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
           <>
             <LargeNavButton
               title={t('personalInformation.preferredName.title')}
-              borderWidth={theme?.dimensions?.buttonBorderWidth}
+              borderWidth={theme.dimensions.buttonBorderWidth}
               borderColor={'secondary'}
               borderColorActive={'primaryDarkest'}
               borderStyle={'solid'}
@@ -155,7 +157,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
             />
             <LargeNavButton
               title={t('personalInformation.genderIdentity.title')}
-              borderWidth={theme?.dimensions?.buttonBorderWidth}
+              borderWidth={theme.dimensions.buttonBorderWidth}
               borderColor={'secondary'}
               borderColorActive={'primaryDarkest'}
               borderStyle={'solid'}

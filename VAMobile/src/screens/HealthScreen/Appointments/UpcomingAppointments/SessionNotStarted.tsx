@@ -5,19 +5,20 @@ import React, { FC } from 'react'
 import { Box, LargePanel, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 
 type SessionNotStartedProps = StackScreenProps<HealthStackParamList, 'SessionNotStarted'>
 
 const SessionNotStarted: FC<SessionNotStartedProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   return (
     <LargePanel title={t('appointmentsHelp')} rightButtonText={t('close')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold">{t('appointments.sessionNotStarted.title')}</TextView>
-        <TextView mt={theme?.dimensions?.condensedMarginBetween} variant="MobileBody">
+        <TextView mt={theme.dimensions.condensedMarginBetween} variant="MobileBody">
           {t('appointments.joinVideoConnect')}
         </TextView>
       </Box>

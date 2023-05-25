@@ -1,9 +1,10 @@
 import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, PressableProps } from 'react-native'
 import React, { FC, ReactElement, useState } from 'react'
 
+import { VATheme } from 'styles/theme'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { triggerHaptic } from 'utils/haptics'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import Box, { BackgroundVariant, BoxProps } from './Box'
 import FileRequestNumberIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
 import SwitchComponent, { SwitchProps } from './Switch'
@@ -83,7 +84,7 @@ export type BaseListItemProps = {
 }
 
 export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress?: () => void }> = ({ decorator, decoratorProps, onPress }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const radioBtnWidth = 22
   const radioBtnHeight = 22
 
@@ -157,8 +158,8 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
         <VAIcon
           name={'ArrowRight'}
           fill={theme?.colors?.icon?.chevronListItem}
-          width={theme?.dimensions?.chevronListItemWidth}
-          height={theme?.dimensions?.chevronListItemHeight}
+          width={theme.dimensions.chevronListItemWidth}
+          height={theme.dimensions.chevronListItemHeight}
           {...decoratorProps}
         />
       )
@@ -186,7 +187,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     fileUploaded,
     minHeight,
   } = props
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const [isPressed, setIsPressed] = useState(false)
 
@@ -235,10 +236,10 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
 
   const boxProps: BoxProps = {
     width: '100%',
-    minHeight: minHeight || theme?.dimensions?.touchableMinHeight,
-    py: theme?.dimensions?.buttonPadding,
-    px: theme?.dimensions?.gutter,
-    borderBottomWidth: theme?.dimensions?.borderWidth,
+    minHeight: minHeight || theme.dimensions.touchableMinHeight,
+    py: theme.dimensions.buttonPadding,
+    px: theme.dimensions.gutter,
+    borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
     justifyContent: 'space-between',
@@ -268,7 +269,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
         {claimsRequestNumber !== undefined ? <FileRequestNumberIndicator requestNumber={claimsRequestNumber} fileUploaded={fileUploaded} /> : <></>}
         {children}
         {showDecorator && (
-          <Box ml={theme?.dimensions?.listItemDecoratorMarginLeft} importantForAccessibility={'no-hide-descendants'}>
+          <Box ml={theme.dimensions.listItemDecoratorMarginLeft} importantForAccessibility={'no-hide-descendants'}>
             <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />
           </Box>
         )}

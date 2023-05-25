@@ -6,7 +6,8 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { OnPressOptions } from './PickerOptions'
 import { StackScreenProps } from '@react-navigation/stack'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import CommonComponentWhiteList, { PropOptionType } from './CommonComponentWhiteList'
 
@@ -14,7 +15,7 @@ type SandboxScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Sa
 
 const SandboxScreen: FC<SandboxScreenSettingsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   // Component Picker
   const defaultComponent = 'ClickForActionLink'
@@ -126,10 +127,10 @@ const SandboxScreen: FC<SandboxScreenSettingsScreenProps> = ({ navigation }) => 
 
   return (
     <FeatureLandingTemplate backLabel={t('debug.title')} backLabelOnPress={navigation.goBack} title={t('sandbox.title')}>
-      <Box mt={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         {componentPicker()}
-        <Box my={theme?.dimensions?.standardMarginBetween}>{renderOptions()}</Box>
-        <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+        <Box my={theme.dimensions.standardMarginBetween}>{renderOptions()}</Box>
+        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
           {renderSandboxComponent()}
         </Box>
       </Box>

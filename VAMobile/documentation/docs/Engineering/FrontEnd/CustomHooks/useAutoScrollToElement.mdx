@@ -24,8 +24,8 @@ export const renderMessages = (message: SecureMessagingMessageAttributes, messag
 return (
 <>
     <VAScrollView {...testIdProps('ViewMessage-page')} scrollViewRef={scrollRef}>
-    <Box mt={theme?.dimensions?.standardMarginBetween} mb={theme?.dimensions?.condensedMarginBetween}>
-        <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme?.dimensions?.cardPadding}>
+    <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+        <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
         <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
             {formatSubject(category, subject, t)}
         </TextView>
@@ -33,9 +33,9 @@ return (
         {renderMessages(message, messagesById, thread, messageRef)}
     </Box>
     {replyExpired && (
-        <Box mt={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.contentMarginBottom}>
+        <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
         <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')}>
-            <Box mt={theme?.dimensions?.standardMarginBetween}>
+            <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
                 label={t('secureMessaging.composeMessage.new')}
                 onPress={onPressCompose}

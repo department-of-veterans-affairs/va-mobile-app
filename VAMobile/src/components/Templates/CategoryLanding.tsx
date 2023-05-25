@@ -3,7 +3,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, useState } from 'react'
 
 import { CrisisLineCta, TextView, TextViewProps, VAIconProps } from 'components'
-import { useIsScreenReaderEnabled, useRouteNavigation, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useIsScreenReaderEnabled, useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 
@@ -32,7 +34,7 @@ export type CategoryLandingProps = {
 export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const navigateTo = useRouteNavigation()
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
 
@@ -54,9 +56,9 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
   const subtitleProps: TextViewProps = {
     variant: 'BitterBoldHeading',
     mt: 0,
-    ml: theme?.dimensions?.condensedMarginBetween,
-    mb: theme?.dimensions?.standardMarginBetween,
-    mr: theme?.dimensions?.condensedMarginBetween,
+    ml: theme.dimensions.condensedMarginBetween,
+    mb: theme.dimensions.standardMarginBetween,
+    mr: theme.dimensions.condensedMarginBetween,
     accessible: false,
     importantForAccessibility: 'no-hide-descendants',
   }
@@ -89,7 +91,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
   const getTransitionHeaderHeight = (event: LayoutChangeEvent) => {
     // Subtract out bottom padding and 1/3 scaled font line height to closely align transition before subtitle fully disappearing
     const partialFontHeight = (theme?.fontSizes?.BitterBoldHeading?.lineHeight * fontScale) / 3
-    const height = event.nativeEvent.layout.height - theme?.dimensions?.standardMarginBetween - partialFontHeight
+    const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween - partialFontHeight
     setTransitionHeaderHeight(height)
   }
 

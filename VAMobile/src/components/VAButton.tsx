@@ -2,9 +2,9 @@ import { AccessibilityState, Pressable } from 'react-native'
 import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAIconProps } from './index'
-import { VAButtonBackgroundColors, VAButtonTextColors } from 'styles/theme'
+import { VAButtonBackgroundColors, VAButtonTextColors, VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 export type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
 
@@ -55,7 +55,7 @@ export type VAButtonProps = {
  * A common component to show a button that takes the full width of the view with gutters
  */
 const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState, disabledText, iconProps, minHeight }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const textViewProps: TextViewProps = {
     variant: 'MobileBodyBold',
@@ -101,8 +101,8 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
     borderRadius: 5,
     backgroundColor: getBorderOrBackgroundColor(),
     alignItems: 'center',
-    p: theme?.dimensions?.buttonPadding,
-    borderWidth: hideButtonBorder ? undefined : theme?.dimensions?.buttonBorderWidth,
+    p: theme.dimensions.buttonPadding,
+    borderWidth: hideButtonBorder ? undefined : theme.dimensions.buttonBorderWidth,
     borderColor: hideButtonBorder ? undefined : getBorderOrBackgroundColor(),
     minHeight: minHeight || undefined,
   }
@@ -130,7 +130,7 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
         <Box {...boxProps}>
           <Box display="flex" flexDirection="row" alignItems="center">
             {iconProps && (
-              <Box mr={theme?.dimensions?.textIconMargin}>
+              <Box mr={theme.dimensions.textIconMargin}>
                 <VAIcon {...iconProps} />
               </Box>
             )}
@@ -139,7 +139,7 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
         </Box>
       </Pressable>
       {showDisabledText && (
-        <Box my={theme?.dimensions?.condensedMarginBetween}>
+        <Box my={theme.dimensions.condensedMarginBetween}>
           <TextView {...disabledTextProps}>{disabledText}</TextView>
         </Box>
       )}

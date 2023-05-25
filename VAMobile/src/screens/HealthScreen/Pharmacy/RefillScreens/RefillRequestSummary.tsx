@@ -9,11 +9,13 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/types'
 import { PrescriptionState, requestRefills } from 'store/slices'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useBeforeNavBackListener, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
@@ -26,7 +28,7 @@ const enum REQUEST_STATUS {
 type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
 
 const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
@@ -83,10 +85,10 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         break
     }
     return (
-      <Box mb={theme?.dimensions?.standardMarginBetween}>
+      <Box mb={theme.dimensions.standardMarginBetween}>
         <AlertBox {...alertBoxProps}>
           {status !== REQUEST_STATUS.SUCCESS && (
-            <Box mt={theme?.dimensions?.standardMarginBetween}>
+            <Box mt={theme.dimensions.standardMarginBetween}>
               <VAButton
                 onPress={() => {
                   dispatch(requestRefills(requestFailed))
@@ -106,8 +108,8 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const borderProps: BoxProps = {
     borderTopWidth: 1,
     borderTopColor: 'prescriptionDivider',
-    mt: theme?.dimensions?.standardMarginBetween,
-    pt: theme?.dimensions?.standardMarginBetween,
+    mt: theme.dimensions.standardMarginBetween,
+    pt: theme.dimensions.standardMarginBetween,
   }
 
   const getRequestSummaryItem = () => {
@@ -123,7 +125,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
-        mb: index < refillRequestSummaryItems.length - 1 ? theme?.dimensions?.condensedMarginBetween : 0,
+        mb: index < refillRequestSummaryItems.length - 1 ? theme.dimensions.condensedMarginBetween : 0,
       }
 
       const { prescriptionName, prescriptionNumber } = request.data.attributes
@@ -170,11 +172,11 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
     return (
       <Box {...borderProps}>
         <TextView variant="HelperTextBold">{t('prescriptions.refillRequestSummary.whatsNext')}</TextView>
-        <Box mb={theme?.dimensions?.standardMarginBetween}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.successPt1.a11y')}>
             {t('prescriptions.refillRequestSummary.yourRefills.successPt1')}
           </TextView>
-          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.successPt2.a11y')} mt={theme?.dimensions?.standardMarginBetween}>
+          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.successPt2.a11y')} mt={theme.dimensions.standardMarginBetween}>
             {t('prescriptions.refillRequestSummary.yourRefills.successPt2')}
           </TextView>
         </Box>
@@ -211,7 +213,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
           navigation.dispatch(StackActions.pop(2))
         }}
         title={tc('refillRequest')}>
-        <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
           {renderAlert()}
           <TextArea>
             {renderRequestSummary()}

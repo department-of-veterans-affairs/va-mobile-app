@@ -1,6 +1,8 @@
 import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
+import { VATheme } from 'styles/theme'
 import { logout } from 'store/slices/authSlice'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import React, { FC, ReactNode, useState } from 'react'
 import remoteConfig from '@react-native-firebase/remote-config'
 
@@ -14,7 +16,7 @@ type RemoteConfigScreenSettingsScreenProps = StackScreenProps<HomeStackParamList
 
 const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const currentConfig = getFeatureToggles()
   const [toggles, setToggles] = useState({ ...currentConfig })
@@ -38,7 +40,7 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
     })
 
     return (
-      <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mt={theme.dimensions.condensedMarginBetween}>
         <SimpleList items={toggleItems} />
       </Box>
     )
@@ -46,21 +48,21 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
 
   return (
     <FeatureLandingTemplate backLabel={t('debug.title')} backLabelOnPress={navigation.goBack} title={t('remoteConfig.title')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
-        <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="MobileBodyBold">Last fetch status</TextView>
             <TextView>{remoteConfig()?.lastFetchStatus}</TextView>
           </TextArea>
         </Box>
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
           Remote Config Values
         </TextView>
-        <Box mb={theme?.dimensions?.condensedMarginBetween}>
+        <Box mb={theme.dimensions.condensedMarginBetween}>
           {Object.keys(remoteConfig()?.getAll()).map((key: string) => {
             const val = remoteConfig()?.getValue(key)
             return (
-              <Box key={key} mt={theme?.dimensions?.condensedMarginBetween}>
+              <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
                 <TextArea>
                   <TextView variant="MobileBodyBold">
                     {key} ({val?.getSource()})
@@ -72,15 +74,15 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
           })}
         </Box>
 
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
           App Values
         </TextView>
-        <Box mb={theme?.dimensions?.condensedMarginBetween}>
+        <Box mb={theme.dimensions.condensedMarginBetween}>
           {Object.keys(getFeatureToggles()).map((key: string) => {
             const value = featureEnabled(key as FeatureToggleType).toString()
             const isOverridden = override && featureEnabled(key as FeatureToggleType) !== remoteConfig()?.getValue(key)?.asBoolean()
             return (
-              <Box key={key} mt={theme?.dimensions?.condensedMarginBetween}>
+              <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
                 <TextArea>
                   <TextView variant="MobileBodyBold">
                     {key} {isOverridden && '(overridden)'}
@@ -91,11 +93,11 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
             )
           })}
         </Box>
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
           Override Toggles
         </TextView>
         {toggleList()}
-        <Box mt={theme?.dimensions?.contentMarginTop}>
+        <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
             <VAButton
               onPress={() => {

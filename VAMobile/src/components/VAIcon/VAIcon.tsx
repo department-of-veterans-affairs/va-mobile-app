@@ -3,8 +3,9 @@ import { SvgProps } from 'react-native-svg'
 import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
-import { VAIconColors, VATextColors } from 'styles/theme'
-import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
+import { VAIconColors, VATextColors, VATheme } from 'styles/theme'
+import { useAppDispatch, useFontScale } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 import { Box, BoxProps } from 'components'
 // New svgs need to set `fill` to `#000` and `stroke` to `#00F`. See /svgs for examples
@@ -196,7 +197,7 @@ export type VAIconProps = BoxProps & {
  * @returns VAIcon component
  */
 const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventScaling, testID, ...boxProps }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const fs: (val: number) => number = useFontScale()
   const dispatch = useAppDispatch()
   const { fontScale } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
@@ -205,7 +206,7 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventSca
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
-    return (): void => sub.remove()
+    return (): void => sub?.remove()
   }, [dispatch, fontScale])
 
   if (fill) {

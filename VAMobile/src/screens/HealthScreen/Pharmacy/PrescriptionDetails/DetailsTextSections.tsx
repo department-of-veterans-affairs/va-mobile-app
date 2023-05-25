@@ -1,7 +1,8 @@
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView } from 'components'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 
 type DetailsTextSections = {
   /** set the header for the text on the left */
@@ -34,7 +35,7 @@ const DetailsTextSections: FC<DetailsTextSections> = ({
   rightSectionValueLabel,
   children,
 }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const getTextElements = (headerText: string, valueText?: string | number, headerLabel?: string, valueLabel?: string) => {
     return (
@@ -60,7 +61,7 @@ const DetailsTextSections: FC<DetailsTextSections> = ({
     : {}
 
   return (
-    <Box mt={theme?.dimensions?.standardMarginBetween} borderTopWidth={1} borderTopColor={'prescriptionDivider'} pt={theme?.dimensions?.standardMarginBetween}>
+    <Box mt={theme.dimensions.standardMarginBetween} borderTopWidth={1} borderTopColor={'prescriptionDivider'} pt={theme.dimensions.standardMarginBetween}>
       <Box {...containerProps}>
         <Box accessible={hasRightText ? true : false}>{getTextElements(leftSectionTitle, leftSectionValue, leftSectionTitleLabel, leftSectionValueLabel)}</Box>
         {hasRightText && (
@@ -70,7 +71,7 @@ const DetailsTextSections: FC<DetailsTextSections> = ({
         )}
       </Box>
 
-      <Box mt={theme?.dimensions?.condensedMarginBetween}>{children}</Box>
+      <Box mt={theme.dimensions.condensedMarginBetween}>{children}</Box>
     </Box>
   )
 }

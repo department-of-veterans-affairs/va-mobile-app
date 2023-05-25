@@ -10,14 +10,16 @@ import { Box, PickerItem, VAModalPicker, VAModalPickerProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useAppDispatch } from 'utils/hooks'
 import { usePreferredLanguageList } from 'utils/requestAppointments'
+import { useTheme } from 'styled-components'
 
 type CCPreferredLanguageScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'CCPreferredLanguageScreen'>
 
 const CCPreferredLanguageScreen: FC<CCPreferredLanguageScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { preferredLanguage } = appointmentFlowFormData
@@ -61,7 +63,7 @@ const CCPreferredLanguageScreen: FC<CCPreferredLanguageScreenProps> = ({ navigat
       }}
       secondActionButtonPress={onContinue}>
       <AppointmentFlowTitleSection title={t('requestAppointments.langPrefPageTitle')} errorMessage={noLanguageSelectedError} />
-      <Box mx={theme?.dimensions?.gutter}>
+      <Box mx={theme.dimensions.gutter}>
         <VAModalPicker {...pickerProps} />
       </Box>
     </AppointmentFlowLayout>

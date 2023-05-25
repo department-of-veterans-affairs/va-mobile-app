@@ -44,11 +44,14 @@ context('NoFolderMessages', () => {
   const mockNavigateToSpy = jest.fn()
 
   const initializeTestInstance = () => {
-    when(mockNavigationSpy).mockReturnValue(() => {}).calledWith('SecureMessaging').mockReturnValue(mockNavigateToSpy)
+    when(mockNavigationSpy)
+      .mockReturnValue(() => {})
+      .calledWith('SecureMessaging')
+      .mockReturnValue(mockNavigateToSpy)
     mockNavigationSpy.mockReturnValueOnce(() => {}).mockReturnValueOnce(mockNavigateToSpy)
     component = render(<NoFolderMessages />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -79,9 +82,12 @@ context('NoDrafts', () => {
   const mockNavigateToSpy = jest.fn()
 
   const initializeTestInstance = () => {
-    when(mockNavigationSpy).mockReturnValue(() => {}).calledWith('SecureMessaging').mockReturnValue(mockNavigateToSpy)
+    when(mockNavigationSpy)
+      .mockReturnValue(() => {})
+      .calledWith('SecureMessaging')
+      .mockReturnValue(mockNavigateToSpy)
     component = render(<NoFolderMessages />)
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

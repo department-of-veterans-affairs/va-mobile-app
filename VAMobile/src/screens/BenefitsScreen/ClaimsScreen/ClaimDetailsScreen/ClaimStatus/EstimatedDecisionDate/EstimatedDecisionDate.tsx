@@ -4,9 +4,11 @@ import React, { FC, ReactElement } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { useExternalLink } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import getEnv from 'utils/env'
 
 const { LINK_URL_COMPENSATION_CLAIM_EXAM } = getEnv()
@@ -17,7 +19,7 @@ type EstimatedDecisionDateProps = {
 }
 
 const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, showCovidMessage }): ReactElement => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
 
@@ -29,7 +31,7 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
   if (showCovidMessage) {
     return (
       <AlertBox border="warning" text={t('claimDetails.covidMessage')}>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <VAButton
             onPress={onAlertLinkPress}
             testID={t('claimDetails.reviewLocations')}
@@ -72,7 +74,7 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
       </Box>
       {!!maxEstDate && !maxEstDateIsMoreThanTwoYearsOut && (
         <Box {...testIdProps(subText)} accessible={true}>
-          <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {subText}
           </TextView>
         </Box>

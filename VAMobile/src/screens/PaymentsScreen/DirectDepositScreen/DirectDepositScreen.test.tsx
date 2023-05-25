@@ -75,7 +75,7 @@ context('DirectDepositScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -122,7 +122,7 @@ context('DirectDepositScreen', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
       await waitFor(() => {
         expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Add your bank account information')
       })
@@ -139,7 +139,7 @@ context('DirectDepositScreen', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
       await waitFor(() => {
         expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Add your bank account information')
       })

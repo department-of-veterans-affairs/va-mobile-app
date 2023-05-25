@@ -3,8 +3,9 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { ViewStyle } from 'react-native'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type AppointmentFlowLayoutProps = {
   /** Optional action for the back or single button */
@@ -37,7 +38,7 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
   onLinkPress,
   children,
 }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
@@ -81,11 +82,11 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
   }
 
   return (
-    <Box flex={1} backgroundColor={'main'} pt={theme?.dimensions?.condensedMarginBetween}>
+    <Box flex={1} backgroundColor={'main'} pt={theme.dimensions.condensedMarginBetween}>
       <VAScrollView contentContainerStyle={scrollViewStyle}>{children}</VAScrollView>
-      <Box mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter} mt={30}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter} mt={30}>
         {!!linkText && (
-          <TextView variant="MobileBodyLink" onPress={onLinkPress} mb={theme?.dimensions?.contentMarginBottom}>
+          <TextView variant="MobileBodyLink" onPress={onLinkPress} mb={theme.dimensions.contentMarginBottom}>
             {linkText}
           </TextView>
         )}

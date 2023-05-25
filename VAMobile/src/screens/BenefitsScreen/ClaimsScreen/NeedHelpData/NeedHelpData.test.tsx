@@ -32,7 +32,7 @@ context('NeedHelpData', () => {
       component = render(<NeedHelpData isAppeal={isAppeal} />)
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(async () => {

@@ -6,7 +6,9 @@ import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea, TextView
 import { CrisisLineCta } from 'components'
 import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 
@@ -16,7 +18,7 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
  * Returns ContactVAScreen component
  */
 const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.HOME)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -25,13 +27,13 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={tc('home')} backLabelOnPress={navigation.goBack} title={tc('contactVA')} titleA11y={tc('contactVA.a11y')}>
-      <Box flex={1} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityLabel={t('contactVA.va411.callMy.a11yLabel')} accessibilityRole="header">
             {t('contactVA.va411.callMy')}
           </TextView>
-          <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween / 2} accessibilityLabel={t('contactVA.va411.body.a11yLabel')}>
+          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween / 2} accessibilityLabel={t('contactVA.va411.body.a11yLabel')}>
             {t('contactVA.va411.body')}
           </TextView>
           <ClickToCallPhoneNumber phone={t('contactVA.va411.numberDisplayed')} />

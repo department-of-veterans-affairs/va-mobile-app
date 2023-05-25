@@ -12,9 +12,11 @@ import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { VAScrollViewProps } from 'components/VAScrollView'
+import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
-import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from './PastAppointments/PastAppointments'
@@ -35,7 +37,7 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
 const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
@@ -97,7 +99,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     const upcomingAppointmentError = selectedTab === t('appointmentsTab.upcoming') && (upcomingVaServiceError || upcomingCcServiceError)
     if (pastAppointmentError || upcomingAppointmentError) {
       return (
-        <Box mb={theme?.dimensions?.standardMarginBetween}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <AlertBox
             scrollViewRef={scrollViewRef}
             title={t('appointments.appointmentsStatusSomeUnavailable')}
@@ -132,14 +134,14 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
       scrollViewProps={scrollViewProps}
       footerContent={requestAppointmentsFooter}>
       <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme?.dimensions?.standardMarginBetween} mt={theme?.dimensions?.contentMarginTop} mx={theme?.dimensions?.gutter}>
+        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}
-        <Box mb={hasCernerFacilities ? theme?.dimensions?.standardMarginBetween : 0}>
+        <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
           <CernerAlert />
         </Box>
-        <Box flex={1} mb={theme?.dimensions?.contentMarginBottom}>
+        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
           {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
           {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
         </Box>

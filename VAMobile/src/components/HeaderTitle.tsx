@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { TextView } from 'components'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 import React, { FC, Ref } from 'react'
 
 export type HeaderTitleProps = {
@@ -18,11 +19,9 @@ export type HeaderTitleProps = {
 
 /**Common component used for the navigation header title*/
 const HeaderTitle: FC<HeaderTitleProps> = ({ focusRef, headerTitle, testID, accessabilityLabel, accessible = true }) => {
-  const {
-    dimensions: { headerHeight },
-  } = useTheme()
+  const theme = useTheme() as VATheme
 
-  const combinestyle = StyleSheet.flatten([{ height: headerHeight }, defaultStyle.headerText])
+  const combinestyle = StyleSheet.flatten([{ height: theme.dimensions.headerHeight }, defaultStyle.headerText])
   return (
     <View ref={focusRef} accessibilityRole="header" accessible={accessible} style={combinestyle} testID={testID} accessibilityLabel={accessabilityLabel}>
       <TextView accessible={false} importantForAccessibility={'no'} color={'primaryContrast'} allowFontScaling={false}>

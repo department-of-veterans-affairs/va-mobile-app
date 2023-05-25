@@ -7,14 +7,15 @@ import { Events } from 'constants/analytics'
 import { FeatureConstants, getLocalVersion, getVersionSkipped, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 export const WhatsNew = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const componentMounted = useRef(true)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const [localVersion, setVersionName] = useState<string>()
@@ -97,10 +98,10 @@ export const WhatsNew = () => {
     headerText: t('whatsNew.title'),
     body: (
       <>
-        <Box my={theme?.dimensions?.standardMarginBetween}>
+        <Box my={theme.dimensions.standardMarginBetween}>
           <TextView accessibilityLabel={bodyA11yLabel}>{body}</TextView>
           {bullets.length ? (
-            <Box mt={theme?.dimensions?.standardMarginBetween}>
+            <Box mt={theme.dimensions.standardMarginBetween}>
               <VABulletList listOfText={bullets} />
             </Box>
           ) : undefined}
@@ -116,7 +117,7 @@ export const WhatsNew = () => {
   if (featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== BODY_PREFIX) {
     whatsNewAppeared()
     return (
-      <Box mb={theme?.dimensions?.standardMarginBetween}>
+      <Box mb={theme.dimensions.standardMarginBetween}>
         <CollapsibleAlert {...props} />
       </Box>
     )

@@ -5,11 +5,13 @@ import { AppointmentAttributes } from 'store/api'
 import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { Box, ButtonTypesConstants, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { cancelAppointment } from 'store/slices'
 import { isAPendingAppointment } from 'utils/appointments'
 import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type PendingAppointmentCancelButtonProps = {
   attributes: AppointmentAttributes
@@ -21,7 +23,7 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const confirmAlert = useDestructiveAlert()
   const isAndroidDevice = isAndroid()
 
@@ -65,7 +67,7 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
     }
 
     return (
-      <Box mt={theme?.dimensions?.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <VAButton
           onPress={onCancel}
           label={t('appointments.pending.cancelRequest')}

@@ -45,7 +45,7 @@ context('ClaimPhase', () => {
 
     component = render(<ClaimPhase {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   // make sure the component works

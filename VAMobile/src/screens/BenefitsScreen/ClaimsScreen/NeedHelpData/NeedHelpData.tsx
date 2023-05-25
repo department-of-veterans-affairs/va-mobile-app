@@ -3,8 +3,9 @@ import React, { FC, ReactElement } from 'react'
 
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import getEnv from 'utils/env'
 
 const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
@@ -14,7 +15,7 @@ type NeedHelpDataProps = {
 }
 
 const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const AppealData = (): ReactElement => {
@@ -31,11 +32,11 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
     }
 
     return (
-      <Box mt={theme?.dimensions?.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBody" {...testIdProps(t('appealDetails.viewMoreDetailsA11yLabel'))}>
           {t('appealDetails.viewMoreDetails')}
         </TextView>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink {...clickToRedirectProps} {...a11yHintProp(t('appealDetails.visitVAGovA11yHint'))} />
         </Box>
       </Box>
@@ -59,7 +60,7 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
       <Box {...testIdProps(t('claimDetails.callVA.a11yLabel'))} accessible={true}>
         <TextView variant="MobileBody">{t('claimDetails.callVA')}</TextView>
       </Box>
-      <Box mt={theme?.dimensions?.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('claimDetails.VANumberA11yHint'))} />
       </Box>
       <AppealData />

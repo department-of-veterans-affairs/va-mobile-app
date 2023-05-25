@@ -10,7 +10,9 @@ import { NotificationsState, loadPushPreferences, registerDevice, setPushPref } 
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
-import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useAppDispatch, useError, useOnResumeForeground } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'NotificationsSettings'>
@@ -18,7 +20,7 @@ type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'No
 const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { deviceToken, preferences, loadingPreferences, registeringDevice, systemNotificationsOn, settingPreference } = useSelector<RootState, NotificationsState>(
     (state) => state.notifications,
   )
@@ -48,7 +50,7 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
   const alert = (): ReactNode => {
     return (
       <AlertBox border={'informational'} title={t('notifications.settings.alert.title')} text={t('notifications.settings.alert.text')}>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <VAButton onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} buttonType={'buttonPrimary'} />
         </Box>
       </AlertBox>
@@ -98,23 +100,23 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
       }
     })
     return (
-      <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mt={theme.dimensions.condensedMarginBetween}>
         <SimpleList items={prefsItems} />
       </Box>
     )
   }
   return (
     <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.settings.title')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!systemNotificationsOn && alert()}
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
           {t('notifications.settings.personalize.heading')}
         </TextView>
-        <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.condensedMarginBetween}>
+        <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={theme.dimensions.gutter} mt={theme.dimensions.condensedMarginBetween}>
           {personalizeText}
         </TextView>
         {preferenceList()}
-        <TextView variant={'TableFooterLabel'} mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.condensedMarginBetween}>
+        <TextView variant={'TableFooterLabel'} mx={theme.dimensions.gutter} mt={theme.dimensions.condensedMarginBetween}>
           {t('notifications.settings.privacy')}
         </TextView>
       </Box>

@@ -2,7 +2,9 @@ import { TouchableWithoutFeedback } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useAccessibilityFocus } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import Box from './Box'
 import TextView from './TextView'
 
@@ -24,7 +26,7 @@ export type CloseModalButton = {
  * Button used by the request appointment modal
  */
 export const CloseModalButton: FC<CloseModalButton> = ({ onPress, a11yHint, focusOnButton, buttonText }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
 
@@ -34,8 +36,8 @@ export const CloseModalButton: FC<CloseModalButton> = ({ onPress, a11yHint, focu
 
   return (
     <TouchableWithoutFeedback ref={focusRef} onPress={onPress} accessibilityLabel={buttonText} accessibilityHint={a11yHintPropParam} accessibilityRole="button" accessible={true}>
-      <Box display="flex" flexDirection="row" ml={16} height={theme?.dimensions?.headerHeight} width={80} alignItems={'center'}>
-        <TextView variant="MobileBody" ml={theme?.dimensions?.textIconMargin} allowFontScaling={false} accessible={false}>
+      <Box display="flex" flexDirection="row" ml={16} height={theme.dimensions.headerHeight} width={80} alignItems={'center'}>
+        <TextView variant="MobileBody" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {buttonText}
         </TextView>
       </Box>

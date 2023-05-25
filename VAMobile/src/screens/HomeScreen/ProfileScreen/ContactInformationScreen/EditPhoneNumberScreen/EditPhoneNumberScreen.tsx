@@ -11,17 +11,19 @@ import { PersonalInformationState, deleteUsersNumber, editUsersNumber, finishEdi
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
+import { VATheme } from 'styles/theme'
 import { dispatchClearErrors } from 'store/slices/errorSlice'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveAlert, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
 
 const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { displayTitle, phoneType, phoneData } = route.params
   const deletePhoneAlert = useDestructiveAlert()
@@ -179,9 +181,9 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       onLeftButtonPress={goBack}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {getFormattedPhoneNumber(phoneData) !== '' && (
-          <Box mb={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
+          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <VAButton
               onPress={onDeletePressed}
               label={t('contactInformation.removeData', { pageName: buttonTitle })}
@@ -192,11 +194,11 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
         )}
         <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />
         {formContainsError && (
-          <Box mt={theme?.dimensions?.standardMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <AlertBox scrollViewRef={scrollViewRef} title={t('editPhoneNumber.checkPhoneNumber')} border="error" focusOnError={onSaveClicked} />
           </Box>
         )}
-        <Box mt={theme?.dimensions?.formMarginBetween} mx={theme?.dimensions?.gutter}>
+        <Box mt={theme.dimensions.formMarginBetween} mx={theme.dimensions.gutter}>
           <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         </Box>
       </Box>

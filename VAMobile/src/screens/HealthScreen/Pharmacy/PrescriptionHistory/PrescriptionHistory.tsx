@@ -51,11 +51,13 @@ import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { VATheme } from 'styles/theme'
 import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
+import { useTheme } from 'styled-components'
 import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
@@ -154,7 +156,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { prescriptions: prescriptionsAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -195,7 +197,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     navigation.setOptions({
       headerRight: (): ReactNode => (
         <Pressable {...pressableProps}>
-          <Box px={23} height={theme?.dimensions?.headerHeight} flexDirection={'row'} alignItems={'center'}>
+          <Box px={23} height={theme.dimensions.headerHeight} flexDirection={'row'} alignItems={'center'}>
             <VAIcon mr={5} preventScaling={true} name="QuestionMark" width={16} height={16} fill={'prescriptionHelper'} />
             <TextView variant="ActionBar" allowFontScaling={false}>
               {t('prescription.help.button.text')}
@@ -316,15 +318,15 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         <>
           <PrescriptionListItem prescription={prescription.attributes} includeRefillTag={true} />
           <Pressable {...detailsPressableProps}>
-            <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} minHeight={theme?.dimensions?.touchableMinHeight} pt={5}>
+            <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} minHeight={theme.dimensions.touchableMinHeight} pt={5}>
               <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
               <VAIcon
                 name={'ArrowRight'}
                 fill={theme?.colors?.icon?.chevronListItem}
-                width={theme?.dimensions?.chevronListItemWidth}
-                height={theme?.dimensions?.chevronListItemHeight}
+                width={theme.dimensions.chevronListItemWidth}
+                height={theme.dimensions.chevronListItemHeight}
               />
             </Box>
           </Pressable>
@@ -547,10 +549,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       headerText: t('prescription.history.transferred.title'),
       body: (
         <>
-          <TextView mt={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')}>
+          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')}>
             {t('prescription.history.transferred.instructions')}
           </TextView>
-          <TextView my={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
+          <TextView my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
             {t('prescription.history.transferred.youCan')}
           </TextView>
           <ClickForActionLink {...linkProps} />
@@ -560,7 +562,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
 
     return (
-      <Box mt={theme?.dimensions?.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <CollapsibleAlert {...props} />
       </Box>
     )
@@ -577,7 +579,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       onPress: navigateTo('RefillScreenModal'),
     }
     return (
-      <Box mx={theme?.dimensions?.buttonPadding} mt={theme?.dimensions?.buttonPadding}>
+      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
         <VAButton {...requestRefillButtonProps} />
       </Box>
     )
@@ -601,17 +603,17 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       return (
         <>
           {getTransferAlert()}
-          <Box mx={theme?.dimensions?.gutter} pt={theme?.dimensions?.contentMarginTop}>
-            <TextView mb={theme?.dimensions?.standardMarginBetween} variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
+          <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
+            <TextView mb={theme.dimensions.standardMarginBetween} variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
               {getInstructions()}
             </TextView>
-            <TextView mt={theme?.dimensions?.condensedMarginBetween} mb={theme?.dimensions?.condensedMarginBetween} variant={'MobileBodyBold'}>
+            <TextView mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
               {getHistoryListHeader()}
             </TextView>
           </Box>
-          <Box mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
             {prescriptionItems()}
-            <Box mt={theme?.dimensions?.paginationTopPadding}>{renderPagination()}</Box>
+            <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
           </Box>
         </>
       )

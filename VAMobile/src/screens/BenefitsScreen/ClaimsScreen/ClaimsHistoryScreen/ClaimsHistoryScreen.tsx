@@ -8,9 +8,11 @@ import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScre
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from '../NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
@@ -18,7 +20,7 @@ type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
 const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
@@ -112,7 +114,7 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
       }
 
       return (
-        <Box mb={theme?.dimensions?.standardMarginBetween}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <AlertBox title={alertTitle} text={alertText} textA11yLabel={alertTextA11yLabel} border="error" />
         </Box>
       )
@@ -123,9 +125,9 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title}>
-      <Box flex={1} justifyContent="flex-start" mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!claimsAndAppealsServiceErrors && (
-          <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.standardMarginBetween}>
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
             <SegmentedControl
               values={controlValues}
               titles={controlValues}

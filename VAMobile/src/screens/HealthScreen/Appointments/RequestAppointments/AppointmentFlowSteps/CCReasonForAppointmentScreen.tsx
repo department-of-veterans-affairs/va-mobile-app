@@ -8,8 +8,10 @@ import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { setReasonCode } from 'utils/requestAppointments'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type CCReasonForAppointmentScreen = StackScreenProps<AppointmentFlowModalStackParamList, 'CCReasonForAppointmentScreen'>
 
@@ -17,7 +19,7 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
 
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
@@ -45,7 +47,7 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
       />
       <AppointmentFlowTitleSection title={t('requestAppointment.whatReasonForCare')} />
       <AppointmentFlowTextInputWithAlert
-        mx={theme?.dimensions?.gutter}
+        mx={theme.dimensions.gutter}
         inputType={'none'}
         inputLabel={t('requestAppointment.additionaldetailsTitle')}
         onChange={onSetAdditionalDetails}

@@ -3692,7 +3692,7 @@ SOFTWARE.
 
 The MIT License (MIT)
 
-Copyright (c) 2016 Krzysztof Magiera
+Copyright (c) 2016 Software Mansion <swmansion.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -3818,7 +3818,7 @@ SOFTWARE.
 
 The MIT License (MIT)
 
-Copyright (c) 2018 Krzysztof Magiera
+Copyright (c) 2018 Software Mansion <swmansion.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -5,10 +5,11 @@ import React, { ReactElement, useEffect } from 'react'
 
 import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, SelectorType, TextLine, TextView, VASelector } from '../../index'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { getTranslation } from 'utils/formattingUtils'
 import { isIOS } from 'utils/platform'
 import { renderInputError } from './formFieldUtils'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 export type radioOption<T> = {
   /** translated text displayed next to the checkbox/radio */
@@ -49,7 +50,7 @@ export type RadioGroupProps<T> = {
 
 /**A common component to display radio button selectors for a list of selectable items*/
 const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isRadioList, radioListTitle }: RadioGroupProps<T>): ReactElement => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasSingleOption = options.length === 1
 
@@ -103,7 +104,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isR
               </TextView>
             </Box>
           )}
-          <Box mb={theme?.dimensions?.standardMarginBetween} key={index} mt={headerText ? theme?.dimensions?.contentMarginTop : 0}>
+          <Box mb={theme.dimensions.standardMarginBetween} key={index} mt={headerText ? theme.dimensions.contentMarginTop : 0}>
             {getOption(option)}
           </Box>
         </Box>
@@ -160,7 +161,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isR
   const getRadios = (): ReactElement => {
     return (
       <Box>
-        {!!error && <Box mb={theme?.dimensions?.condensedMarginBetween}>{renderInputError(error)}</Box>}
+        {!!error && <Box mb={theme.dimensions.condensedMarginBetween}>{renderInputError(error)}</Box>}
         {isRadioList ? getRadioGroupList() : getStandardRadioGroup()}
       </Box>
     )

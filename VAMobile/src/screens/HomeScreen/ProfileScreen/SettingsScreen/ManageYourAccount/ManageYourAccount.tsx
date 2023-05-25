@@ -7,13 +7,14 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HiddenTitle } from 'styles/common'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 
 type ManageYourAccountProps = StackScreenProps<HomeStackParamList, 'ManageYourAccount'>
 
 const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   useEffect(() => {
     navigation.setOptions({
@@ -30,7 +31,7 @@ const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('manageAccount.title')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('manageAccount.title')}

@@ -8,12 +8,14 @@ import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { VATheme } from 'styles/theme'
 import { Vaccine } from 'store/api/types'
 import { VaccineState, getVaccines } from 'store/slices/vaccineSlice'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
 type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineList'>
@@ -24,7 +26,7 @@ type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineLis
 const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { vaccines, loading, vaccinePagination } = useSelector<RootState, VaccineState>((state) => state.vaccine)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -69,7 +71,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
     }
 
     return (
-      <Box flex={1} mt={theme?.dimensions?.paginationTopPadding} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     )
@@ -105,7 +107,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <DefaultList items={vaccineButtons} />
       </Box>
       {renderPagination()}

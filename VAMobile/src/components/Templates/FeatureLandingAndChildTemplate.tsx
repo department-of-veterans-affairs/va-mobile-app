@@ -3,7 +3,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useState } from 'react'
 
 import { TextView, TextViewProps, VAIconProps } from 'components'
-import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useIsScreenReaderEnabled } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 
@@ -45,7 +47,7 @@ export type FeatureLandingProps = ChildTemplateProps // Passthrough to same prop
 export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y, backLabelOnPress, title, titleA11y, headerButton, children, footerContent, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
 
   const [scrollOffset, setScrollOffset] = useState(0)
@@ -67,9 +69,9 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
   const subtitleProps: TextViewProps = {
     variant: 'BitterBoldHeading',
     mt: 0,
-    ml: theme?.dimensions?.condensedMarginBetween,
-    mb: theme?.dimensions?.standardMarginBetween,
-    mr: theme?.dimensions?.condensedMarginBetween,
+    ml: theme.dimensions.condensedMarginBetween,
+    mb: theme.dimensions.standardMarginBetween,
+    mr: theme.dimensions.condensedMarginBetween,
     accessible: false,
     importantForAccessibility: 'no-hide-descendants',
   }
@@ -93,7 +95,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
   const getTransitionHeaderHeight = (event: LayoutChangeEvent) => {
     // Subtract out bottom padding and 1/3 scaled font line height to closely align transition before subtitle fully disappearing
     const partialFontHeight = (theme?.fontSizes?.BitterBoldHeading?.lineHeight * fontScale) / 3
-    const height = event.nativeEvent.layout.height - theme?.dimensions?.standardMarginBetween - partialFontHeight
+    const height = event.nativeEvent.layout.height - theme.dimensions.standardMarginBetween - partialFontHeight
     setTransitionHeaderHeight(height)
   }
 

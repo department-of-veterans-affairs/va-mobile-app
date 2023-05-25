@@ -11,17 +11,19 @@ import { PaymentState, getPayments } from 'store/slices'
 import { PaymentsByDate, ScreenIDTypesConstants } from 'store/api/types'
 import { PaymentsStackParamList } from '../PaymentsStackScreens'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { deepCopyObject } from 'utils/common'
 import { getGroupedPayments } from 'utils/payments'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>
 
 const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { currentPagePayments, currentPagePagination, loading, availableYears } = useSelector<RootState, PaymentState>((state) => state.payments)
@@ -81,7 +83,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
 
     if (noCurrentPayments) {
       return (
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <></>
         </Box>
       )
@@ -111,7 +113,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
     }
 
     return (
-      <Box flex={1} mt={theme?.dimensions?.paginationTopPadding} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     )
@@ -158,12 +160,12 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   return (
     <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
       <Box {...testIdProps('', false, 'payments-page')}>
-        <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.standardMarginBetween} mt={theme?.dimensions?.contentMarginTop}>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop}>
           <Pressable onPress={navigateTo('PaymentMissing')} {...testIdProps(t('payments.ifIAmMissingPayemt'))} accessibilityRole="link" accessible={true}>
             <TextView {...textViewProps}>{t('payments.ifIAmMissingPayemt')}</TextView>
           </Pressable>
         </Box>
-        <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.standardMarginBetween}>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
           <VAModalPicker {...pickerProps} key={yearPickerOption?.value} />
         </Box>
       </Box>

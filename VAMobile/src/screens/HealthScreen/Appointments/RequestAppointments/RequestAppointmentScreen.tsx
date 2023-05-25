@@ -20,9 +20,11 @@ import { CloseModalButton, HeaderIconBtn } from 'components'
 import { DateTime } from 'luxon'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { resetFormData } from 'store/slices/requestAppointmentSlice'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 export type AppointmentFlowModalStackParamList = WebviewStackParams & {
   TypeOfCareSelectionScreen: undefined
@@ -45,7 +47,7 @@ const Stack = createStackNavigator<AppointmentFlowModalStackParamList>()
 /** Component stack that will  house the appointment request flow steps screens */
 const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const inset = useSafeAreaInsets()
@@ -56,7 +58,7 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
       backgroundColor: theme?.colors?.background?.main,
       borderBottomWidth: 0,
       shadowColor: 'transparent',
-      height: inset.top + theme?.dimensions?.headerHeight,
+      height: inset.top + theme.dimensions.headerHeight,
     },
   }
 

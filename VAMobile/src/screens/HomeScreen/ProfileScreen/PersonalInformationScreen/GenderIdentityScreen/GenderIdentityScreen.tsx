@@ -12,8 +12,10 @@ import { PersonalInformationState, dispatchFinishEditGenderIdentity, getGenderId
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
+import { VATheme } from 'styles/theme'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIdentity'>
 
@@ -25,7 +27,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
     (state) => state.personalInformation,
   )
   const dispatch = useAppDispatch()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
@@ -115,8 +117,8 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={onSave}>
-      <Box mx={theme?.dimensions?.gutter}>
-        <TextView variant="MobileBody" mb={error ? theme?.dimensions?.condensedMarginBetween : theme?.dimensions?.standardMarginBetween}>
+      <Box mx={theme.dimensions.gutter}>
+        <TextView variant="MobileBody" mb={error ? theme.dimensions.condensedMarginBetween : theme.dimensions.standardMarginBetween}>
           {t('personalInformation.genderIdentity.changeSelection')}
           <TextView variant="MobileBodyBold">{t('personalInformation.genderIdentity.preferNotToAnswer')}</TextView>
         </TextView>

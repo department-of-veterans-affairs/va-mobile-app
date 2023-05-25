@@ -17,9 +17,11 @@ import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'compone
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState } from 'store/slices'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { useExternalLink } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import AppealDecision from '../AppealDecision/AppealDecision'
 import getEnv from 'utils/env'
 
@@ -301,7 +303,7 @@ type AppealCurrentStatusProps = {
 }
 
 const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appealType, docketName, programArea }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
@@ -318,10 +320,10 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
         if (details.length > 1) {
           return (
             <Box>
-              <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 {details[0]}
               </TextView>
-              <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 <TextView variant="MobileBodyBold">{details[1]}</TextView>
                 {details[2]}
               </TextView>
@@ -332,10 +334,10 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.pending_certification_ssoc:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
-            <Box mt={theme?.dimensions?.standardMarginBetween}>
+            <Box mt={theme.dimensions.standardMarginBetween}>
               <VABulletList listOfText={[details[1], details[2]]} />
             </Box>
           </Box>
@@ -354,13 +356,13 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
         ]
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[1]}
             </TextView>
-            <Box mt={theme?.dimensions?.standardMarginBetween}>
+            <Box mt={theme.dimensions.standardMarginBetween}>
               <VABulletList listOfText={bulletList} />
             </Box>
           </Box>
@@ -368,10 +370,10 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.merged:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
-            <TextView mt={theme?.dimensions?.standardMarginBetween} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
+            <TextView mt={theme.dimensions.standardMarginBetween} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
               <TextView variant="MobileBody">{details[1]}</TextView>
               <TextView variant="MobileBodyLink">{details[2]}</TextView>
               <TextView variant="MobileBody">{details[3]}</TextView>
@@ -381,10 +383,10 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.statutory_opt_in:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
-            <TextView mt={theme?.dimensions?.standardMarginBetween} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
+            <TextView mt={theme.dimensions.standardMarginBetween} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
               <TextView variant="MobileBody">{details[1]}</TextView>
               <TextView variant="MobileBodyLink">{details[2]}</TextView>
               <TextView variant="MobileBody">{details[3]}</TextView>
@@ -400,7 +402,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.bva_decision:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
             <AppealDecision aoj={aoj} boardDecision={true} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
@@ -409,10 +411,10 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.evidentiary_period:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[1]}
             </TextView>
             <TextView variant="MobileBody">{details[2]}</TextView>
@@ -423,11 +425,11 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.post_bva_dta_decision:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
             <AppealDecision aoj={aoj} boardDecision={true} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[1]}
             </TextView>
           </Box>
@@ -435,10 +437,10 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.bva_decision_effectuation:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[1]}
             </TextView>
           </Box>
@@ -447,20 +449,20 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
         if (programArea === AppealProgramAreaTypesConstants.compensation) {
           return (
             <Box>
-              <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 {details[0]}
               </TextView>
-              <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 {details[2]}
               </TextView>
-              <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 {details[3]}
               </TextView>
               <TextView variant="MobileBody">{details[4]}</TextView>
               <TextView variant="MobileBody">{details[5]}</TextView>
               <TextView variant="MobileBody">{details[6]}</TextView>
               <TextView variant="MobileBody">{details[7]}</TextView>
-              <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 {details[8]}
               </TextView>
             </Box>
@@ -469,13 +471,13 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
 
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[1]}
             </TextView>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[8]}
             </TextView>
           </Box>
@@ -483,7 +485,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.sc_decision:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
             <AppealDecision aoj={aoj} boardDecision={false} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
@@ -492,7 +494,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.sc_closed:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
           </Box>
@@ -501,13 +503,13 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
         if (details.length > 3) {
           return (
             <Box>
-              <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 {details[0]}
               </TextView>
-              <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 {details[3]}
               </TextView>
-              <TextView variant="MobileBodyBold" mt={theme?.dimensions?.standardMarginBetween}>
+              <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
                 {details[1]}
               </TextView>
               <TextView variant="MobileBody">{details[2]}</TextView>
@@ -516,10 +518,10 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
         }
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
-            <TextView variant="MobileBodyBold" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
               {details[1]}
             </TextView>
             <TextView variant="MobileBody">{details[2]}</TextView>
@@ -528,7 +530,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.hlr_decision:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
             <AppealDecision aoj={aoj} boardDecision={false} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
@@ -537,7 +539,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.hlr_dta_error:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
           </Box>
@@ -545,7 +547,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.hlr_closed:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
           </Box>
@@ -553,7 +555,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.remand_return:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
               {details[0]}
             </TextView>
           </Box>
@@ -564,7 +566,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       <Box>
         {_.map(details, (detail, index) => {
           return (
-            <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween} key={index}>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} key={index}>
               {detail}
             </TextView>
           )
@@ -578,7 +580,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       <TextView variant="BitterBoldHeading" accessibilityRole="header">
         {t('appealDetails.currentStatus')}
       </TextView>
-      <TextView variant="MobileBodyBold" mt={theme?.dimensions?.standardMarginBetween} accessibilityRole="header">
+      <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween} accessibilityRole="header">
         {statusHeadingAndTitle.title}
       </TextView>
       {renderStatusDetails()}

@@ -61,12 +61,12 @@ jest.mock('../src/store/api', () => ({
 
 jest.mock('../src/utils/hooks', () => {
   let original = jest.requireActual('../src/utils/hooks')
-  let theme = jest.requireActual('../src/styles/themes/standardTheme').default
+  // let theme = jest.requireActual('../src/styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
+    // useTheme: jest.fn(() => {
+    //   return { ...theme }
+    // }),
     useRouteNavigation: () => {
       return jest.fn()
     },
@@ -292,5 +292,12 @@ jest.mock('utils/homeScreenAlerts', () => {
     getVersionSkipped: jest.fn(),
     getStoreVersion: jest.fn(),
     getEncourageUpdateLocalVersion: jest.fn(),
+  }
+})
+
+jest.mock('react-native-webview', () => {
+  const { View } = require('react-native')
+  return {
+    WebView: View,
   }
 })

@@ -1,7 +1,8 @@
 import { Pressable } from 'react-native'
 import React, { FC } from 'react'
 
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 import Box, { BoxProps } from '../Box'
 import VAIcon, { VAIconProps, VA_ICON_MAP } from '../VAIcon'
 
@@ -18,14 +19,14 @@ export type SelectionListItemProps = {
 } & Partial<SelectionListItemObj>
 
 const SelectionListItem: FC<SelectionListItemProps> = ({ content, setSelectedFn, isSelected }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const boxProps: BoxProps = {
-    borderBottomWidth: theme?.dimensions?.borderWidth,
+    borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
-    px: theme?.dimensions?.gutter,
-    py: theme?.dimensions?.condensedMarginBetween,
+    px: theme.dimensions.gutter,
+    py: theme.dimensions.condensedMarginBetween,
     backgroundColor: isSelected ? 'listActive' : 'list',
   }
 

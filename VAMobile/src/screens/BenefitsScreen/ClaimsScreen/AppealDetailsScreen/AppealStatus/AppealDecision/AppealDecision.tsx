@@ -6,8 +6,9 @@ import _ from 'underscore'
 import { AppealAOJTypes, AppealStatusDetailsIssue } from 'store/api/types'
 import { Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { getAojDescription } from '../AppealCurrentStatus/AppealCurrentStatus'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type AppealDecisionProps = {
   issues: Array<AppealStatusDetailsIssue>
@@ -18,7 +19,7 @@ type AppealDecisionProps = {
 
 const AppealDecision: FC<AppealDecisionProps> = ({ issues, aoj, ama, boardDecision }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const getIssuesByDisposition = (stringToCompare: string): Array<AppealStatusDetailsIssue> => {
     return issues.filter((issue) => issue.disposition === stringToCompare)
@@ -48,7 +49,7 @@ const AppealDecision: FC<AppealDecisionProps> = ({ issues, aoj, ama, boardDecisi
     }
 
     return (
-      <Box mt={theme?.dimensions?.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBodyBold">{header}</TextView>
         <TextView variant="MobileBody">{subText}</TextView>
         <VABulletList listOfText={getIssuesListOfText(specificIssues)} />
@@ -80,18 +81,18 @@ const AppealDecision: FC<AppealDecisionProps> = ({ issues, aoj, ama, boardDecisi
     <Box>
       {allowedBlock}
       {allowedIssues.length > 0 && boardDecision && (
-        <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('appealDetails.ifThisChangesRating')}
         </TextView>
       )}
       {deniedBlock}
       {remandBlock}
       {remandIssues.length > 0 && ama && (
-        <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('appealDetails.willMakeNewDecision', { aojDesc })}
         </TextView>
       )}
-      <TextView variant="MobileBody" mt={theme?.dimensions?.standardMarginBetween}>
+      <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
         {t('appealDetails.pleaseSeeYourDecision')}
       </TextView>
     </Box>

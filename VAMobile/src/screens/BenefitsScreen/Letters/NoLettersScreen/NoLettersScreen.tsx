@@ -4,12 +4,13 @@ import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 const NoLettersScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
@@ -18,7 +19,7 @@ const NoLettersScreen: FC = () => {
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles} {...testIdProps('Letters: No-letters-page')}>
-      <Box justifyContent="center" mx={theme?.dimensions?.gutter} alignItems="center">
+      <Box justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
         <TextView variant="MobileBodyBold" textAlign={'center'} accessibilityRole="header">
           {t('noLetters.header')}
         </TextView>

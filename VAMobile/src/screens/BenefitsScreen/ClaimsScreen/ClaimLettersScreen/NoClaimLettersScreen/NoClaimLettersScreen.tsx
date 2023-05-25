@@ -4,11 +4,12 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 
 const NoClaimLettersScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
@@ -17,7 +18,7 @@ const NoClaimLettersScreen: FC = () => {
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
-      <Box justifyContent="center" mx={theme?.dimensions?.gutter} alignItems="center">
+      <Box justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
         <TextView variant="MobileBodyBold" textAlign={'center'} accessibilityRole="header">
           {t('claimLetters.noClaimLetters')}
         </TextView>

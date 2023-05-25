@@ -1,14 +1,15 @@
 import { Box, BoxProps, TextView, VAIcon } from 'components'
+import { VATheme } from 'styles/theme'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import React, { FC } from 'react'
 
 type WebviewTitleProps = {
   title: string
 }
 const WebviewTitle: FC<WebviewTitleProps> = ({ title }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const titleBoxProps: BoxProps = {
     display: 'flex',
@@ -21,7 +22,7 @@ const WebviewTitle: FC<WebviewTitleProps> = ({ title }) => {
 
   return (
     <Box {...testIdProps(title)} {...titleBoxProps}>
-      <Box mr={theme?.dimensions?.textIconMargin}>
+      <Box mr={theme.dimensions.textIconMargin}>
         <VAIcon name={'Lock'} height={20} width={17} fill={theme?.colors?.text?.webviewTitle} preventScaling={true} />
       </Box>
       <TextView color="webviewTitle" allowFontScaling={false}>

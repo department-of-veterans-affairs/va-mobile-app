@@ -4,8 +4,9 @@ import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 export type BasicErrorProps = {
   /** function called when the Try again button is pressed */
@@ -25,7 +26,7 @@ export type BasicErrorProps = {
 /**A common component to show an error*/
 const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yLabel, label }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const buttonText: string = label || t('tryAgain')
 
   const scrollStyles: ViewStyle = {
@@ -35,9 +36,9 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
 
   const containerStyles = {
     flex: 1,
-    mx: theme?.dimensions?.gutter,
-    mt: theme?.dimensions?.contentMarginTop,
-    mb: theme?.dimensions?.contentMarginBottom,
+    mx: theme.dimensions.gutter,
+    mt: theme.dimensions.contentMarginTop,
+    mb: theme.dimensions.contentMarginBottom,
   }
 
   return (
@@ -49,7 +50,7 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
           </TextView>
         )}
         <TextView textAlign="center">{messageText}</TextView>
-        <Box mt={theme?.dimensions?.standardMarginBetween} accessibilityRole="button">
+        <Box mt={theme.dimensions.standardMarginBetween} accessibilityRole="button">
           <VAButton onPress={onTryAgain} label={buttonText} buttonType={ButtonTypesConstants.buttonPrimary} a11yHint={buttonA11yHint} testID={buttonText} />
         </Box>
       </Box>

@@ -64,7 +64,7 @@ context('FormAttachments', () => {
       />,
     )
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -83,7 +83,7 @@ context('FormAttachments', () => {
     describe('when the remove link is clicked for an attachment', () => {
       it('should call the removeOnPress', async () => {
         await waitFor(() => {
-          testInstance.findAllByProps({ accessibilityLabel: 'Remove'})[0].props.onPress()
+          testInstance.findAllByProps({ accessibilityLabel: 'Remove' })[0].props.onPress()
           expect(removeOnPressSpy).toHaveBeenCalled()
         })
       })
@@ -113,7 +113,7 @@ context('FormAttachments', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalledWith('AttachmentsFAQ', { 'originHeader': 'test header' })
+        expect(mockNavigationSpy).toHaveBeenCalledWith('AttachmentsFAQ', { originHeader: 'test header' })
         expect(mockNavigateToSpy).toHaveBeenCalled()
       })
     })

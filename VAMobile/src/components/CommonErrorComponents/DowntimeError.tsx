@@ -7,8 +7,9 @@ import { DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 export type DowntimeErrorProps = {
   /**The screen id for the screen that has the errors*/
@@ -18,15 +19,15 @@ export type DowntimeErrorProps = {
 /**Common component to show an alert when the service is down*/
 const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const scrollStyles: ViewStyle = {
     justifyContent: 'center',
   }
 
   const containerStyles = {
-    mt: theme?.dimensions?.contentMarginTop,
-    mb: theme?.dimensions?.contentMarginBottom,
+    mt: theme.dimensions.contentMarginTop,
+    mb: theme.dimensions.contentMarginBottom,
   }
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const feature = DowntimeScreenIDToFeature[screenID]

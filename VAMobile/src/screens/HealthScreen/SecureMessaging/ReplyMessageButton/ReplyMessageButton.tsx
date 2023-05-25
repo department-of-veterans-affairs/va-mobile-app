@@ -3,7 +3,9 @@ import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, VAButton, VAButtonProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 export type ReplyMessageButtonProps = {
   messageID: number
@@ -12,7 +14,7 @@ export type ReplyMessageButtonProps = {
 const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const onPress = navigateTo('ReplyMessage', { messageID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   const replyButtonProps: VAButtonProps = {
@@ -24,7 +26,7 @@ const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID }) => {
   }
 
   return (
-    <Box mx={theme?.dimensions?.buttonPadding} mt={theme?.dimensions?.buttonPadding}>
+    <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
       <VAButton {...replyButtonProps} />
     </Box>
   )

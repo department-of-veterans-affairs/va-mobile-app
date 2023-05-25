@@ -4,7 +4,8 @@ import React, { FC, RefObject } from 'react'
 
 import { AlertBox, Box } from './index'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 
 export type MessageAlertProps = {
   /** Optional boolean for determining when to focus on error alert boxes. */
@@ -19,7 +20,7 @@ export type MessageAlertProps = {
 
 /**Common component to show a message alert when saving or sending a secure message */
 const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, scrollViewRef, focusOnError }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.HEALTH)
 
   let title
@@ -33,7 +34,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
   }
 
   return (
-    <Box mb={theme?.dimensions?.standardMarginBetween}>
+    <Box mb={theme.dimensions.standardMarginBetween}>
       <AlertBox border={'error'} title={title} text={text} titleRole={'header'} scrollViewRef={scrollViewRef} focusOnError={focusOnError} />
     </Box>
   )

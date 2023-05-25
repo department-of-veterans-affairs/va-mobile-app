@@ -5,7 +5,9 @@ import React, { FC, ReactElement } from 'react'
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView, TextViewProps } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CHANGE_LEGAL_NAME, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -14,7 +16,7 @@ type HowDoIUpdateScreenProps = StackScreenProps<HomeStackParamList, 'HowDoIUpdat
 
 const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const navigateTo = useRouteNavigation()
   const { screenType } = route.params
 
@@ -27,7 +29,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
     accessibilityRole: 'link',
     accessibilityLabel: t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yLabel'),
     accessibilityHint: t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yHint'),
-    my: theme?.dimensions?.standardMarginBetween,
+    my: theme.dimensions.standardMarginBetween,
   }
 
   const linkNameProps: TextViewProps = {
@@ -68,15 +70,15 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
 
   const nameUpdateScreen = (): ReactElement => {
     return (
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('howDoIUpdate.name.title')}
         </TextView>
-        <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('howDoIUpdate.name.legalName')}
         </TextView>
         <TextView {...linkNameProps}>{t('howDoIUpdate.learnToChangeLegalName')}</TextView>
-        <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('howDoIUpdate.name.incorrectRecords')}
         </TextView>
         {renderVAMedicalCenterSection()}
@@ -86,11 +88,11 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
 
   const dateOfBirthUpdateScreen = (): ReactElement => {
     return (
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('howDoIUpdate.dateOfBirth.title')}
         </TextView>
-        <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('howDoIUpdate.dateOfBirth.body')}
         </TextView>
         {renderVAMedicalCenterSection()}

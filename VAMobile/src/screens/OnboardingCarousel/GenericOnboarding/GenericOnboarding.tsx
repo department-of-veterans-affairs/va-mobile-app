@@ -2,9 +2,11 @@ import { Dimensions, View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAScrollView } from 'components'
+import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
+import { useTheme } from 'styled-components'
 
 export type GenericOnboardingProps = {
   header: string
@@ -18,7 +20,7 @@ export type GenericOnboardingProps = {
 }
 
 const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
   useFocusEffect(setFocus)
@@ -27,7 +29,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLo
     variant: 'MobileBodyBold',
     color: 'primaryContrast',
     accessibilityRole: 'header',
-    mt: displayLogo ? theme?.dimensions?.standardMarginBetween : 0,
+    mt: displayLogo ? theme.dimensions.standardMarginBetween : 0,
   }
 
   const containerStyle: ViewStyle = {
@@ -43,9 +45,9 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLo
 
   return (
     <VAScrollView contentContainerStyle={containerStyle} alwaysBounceVertical={false} removeInsets={true}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={isPortrait() ? theme?.dimensions?.gutter : theme?.dimensions?.headerHeight}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait() ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         {displayLogo && (
-          <Box my={theme?.dimensions?.standardMarginBetween} alignItems={'center'}>
+          <Box my={theme.dimensions.standardMarginBetween} alignItems={'center'}>
             <VAIcon name="Logo" />
           </Box>
         )}
@@ -57,12 +59,12 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLo
           </View>
         </Box>
         {text && (
-          <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody" color="primaryContrast" mt={theme?.dimensions?.standardMarginBetween}>
+          <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody" color="primaryContrast" mt={theme.dimensions.standardMarginBetween}>
             {text}
           </TextView>
         )}
         {listOfText && (
-          <Box mt={theme?.dimensions?.standardMarginBetween} ml={theme?.dimensions?.gutter}>
+          <Box mt={theme.dimensions.standardMarginBetween} ml={theme.dimensions.gutter}>
             <VABulletList listOfText={listOfText} />
           </Box>
         )}

@@ -54,7 +54,7 @@ context('EditPhoneNumberScreen', () => {
 
     component = render(<EditPhoneNumberScreen {...props} />, { preloadedState: store })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -137,7 +137,7 @@ context('EditPhoneNumberScreen', () => {
         component = render(<EditPhoneNumberScreen {...props} />, { preloadedState: store })
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
 
       expect(props.navigation.goBack).toBeCalled()
     })

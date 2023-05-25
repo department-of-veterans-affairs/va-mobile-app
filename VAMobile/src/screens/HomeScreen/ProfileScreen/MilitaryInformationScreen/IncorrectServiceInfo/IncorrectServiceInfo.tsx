@@ -6,8 +6,9 @@ import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView
 import { HiddenTitle } from 'styles/common'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type IncorrectServiceInfoScreenProps = StackScreenProps<HomeStackParamList, 'IncorrectServiceInfo'>
 
@@ -18,7 +19,7 @@ type IncorrectServiceInfoScreenProps = StackScreenProps<HomeStackParamList, 'Inc
  */
 const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   useEffect(() => {
     navigation.setOptions({
@@ -32,11 +33,11 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
 
   return (
     <LargePanel title={t('profile.help.title')} rightButtonText={t('close')} testID="IncorrectServiceTestID">
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('militaryInformation.incorrectServiceInfo')}
         </TextView>
-        <TextView {...testIdProps(t('militaryInformation.incorrectServiceInfo.bodyA11yLabel'))} variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
+        <TextView {...testIdProps(t('militaryInformation.incorrectServiceInfo.bodyA11yLabel'))} variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('militaryInformation.incorrectServiceInfo.body')}
         </TextView>
         <ClickForActionLink

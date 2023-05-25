@@ -4,8 +4,9 @@ import React, { FC } from 'react'
 import { Box, BoxProps, VA_ICON_MAP } from 'components'
 import { VAIcon } from 'components'
 import { VAIconColors } from 'styles/theme'
+import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 /**
  *  Signifies the props that need to be passed in to {@link WebviewControlButton}
@@ -32,7 +33,7 @@ type ControlButtonProps = {
  * Button used on the Webview screen to interact with webview controls such as forward, back, open or refresh
  */
 const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled, width, height, fill, testID, a11yHint }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   fill = fill || theme?.colors?.icon?.active
   width = width || 17

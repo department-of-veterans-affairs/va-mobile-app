@@ -29,7 +29,7 @@ context('WhatDoIDoIfDisagreement', () => {
   beforeEach(() => {
     const props = mockNavProps({}, {}, { params: { display: '', value: 'active' } })
     component = render(<WhatDoIDoIfDisagreement {...props} />)
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

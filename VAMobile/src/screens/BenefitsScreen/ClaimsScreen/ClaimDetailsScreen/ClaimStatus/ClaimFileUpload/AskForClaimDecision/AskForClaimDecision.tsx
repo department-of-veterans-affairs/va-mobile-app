@@ -23,12 +23,14 @@ import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useAppDispatch, useDestructiveAlert, useError } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
 
 const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { claimID } = route.params
@@ -107,19 +109,19 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
 
   return (
     <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('askForClaimDecision.pageTitle')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme?.dimensions?.standardMarginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
             {t('askForClaimDecision.title')}
           </TextView>
           <TextView variant="MobileBody">{t('askForClaimDecision.weSentYouALetter')}</TextView>
-          <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween}>
+          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {t('askForClaimDecision.takingFull30Days')}
           </TextView>
           <VABulletList listOfText={bulletedListOfText} />
         </TextArea>
-        <Box mx={theme?.dimensions?.gutter}>
-          <Box my={theme?.dimensions?.standardMarginBetween}>
+        <Box mx={theme.dimensions.gutter}>
+          <Box my={theme.dimensions.standardMarginBetween}>
             <FormWrapper fieldsList={formFieldsList} onSave={onRequestEvaluation} setOnSaveClicked={setOnSaveClicked} onSaveClicked={onSaveClicked} />
           </Box>
           <VAButton

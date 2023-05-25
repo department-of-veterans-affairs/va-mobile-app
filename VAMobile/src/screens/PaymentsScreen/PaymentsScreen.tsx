@@ -8,8 +8,10 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from './PaymentsStackScreens'
 import { RootState } from 'store'
-import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useHeaderStyles, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentDetailsScreen from './PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
@@ -20,7 +22,7 @@ type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
 const PaymentsScreen: FC<PaymentsScreenProps> = () => {
   const { directDepositBenefits, directDepositBenefitsUpdate } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
@@ -29,11 +31,11 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
 
   return (
     <CategoryLanding title={t('payments.title')}>
-      <Box mb={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
+      <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('vaPaymentHistory')}
           onPress={onPayments}
-          borderWidth={theme?.dimensions?.buttonBorderWidth}
+          borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
@@ -42,7 +44,7 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
           <LargeNavButton
             title={t('directDeposit.information')}
             onPress={onDirectDeposit}
-            borderWidth={theme?.dimensions?.buttonBorderWidth}
+            borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}

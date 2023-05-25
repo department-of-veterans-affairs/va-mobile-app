@@ -10,13 +10,15 @@ import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { VATheme } from 'styles/theme'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useError, useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
 
 const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { claimID } = route.params
@@ -58,33 +60,33 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
 
   return (
     <ChildTemplate backLabel={t('claim.backLabel')} backLabelOnPress={navigation.goBack} title={t('fileRequest.title')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextView
           variant="MobileBodyBold"
           accessibilityRole="header"
-          mt={theme?.dimensions?.standardMarginBetween}
-          mb={theme?.dimensions?.condensedMarginBetween}
-          mx={theme?.dimensions?.gutter}>
+          mt={theme.dimensions.standardMarginBetween}
+          mb={theme.dimensions.condensedMarginBetween}
+          mx={theme.dimensions.gutter}>
           {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
         </TextView>
         <Box>
           <SimpleList items={getRequests()} />
         </Box>
         <TextView
-          mt={theme?.dimensions?.condensedMarginBetween}
-          mx={theme?.dimensions?.gutter}
-          mb={theme?.dimensions?.contentMarginBottom}
+          mt={theme.dimensions.condensedMarginBetween}
+          mx={theme.dimensions.gutter}
+          mb={theme.dimensions.contentMarginBottom}
           variant="HelperText"
           accessibilityRole="header">
           {t('fileRequest.weSentYouALaterText')}
         </TextView>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <TextArea>
-            <TextView mb={theme?.dimensions?.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+            <TextView mb={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
               {t('fileRequest.askForYourClaimEvaluationTitle')}
             </TextView>
             <TextView variant="MobileBody">{t('fileRequest.askForYourClaimEvaluationBody')}</TextView>
-            <Box mt={theme?.dimensions?.standardMarginBetween}>
+            <Box mt={theme.dimensions.standardMarginBetween}>
               <VAButton
                 onPress={navigateTo('AskForClaimDecision', { claimID })}
                 label={t('fileRequest.viewEvaluationDetails')}

@@ -5,14 +5,15 @@ import { Box, ChildTemplate, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../../../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps } from '@react-navigation/stack'
+import { VATheme } from 'styles/theme'
 import { useNavigation } from '@react-navigation/native'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import { useTranslation } from 'react-i18next'
 
 type HapticsDemoScreenProps = StackScreenProps<HomeStackParamList, 'HapticsDemoScreen'>
 
 const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
 
@@ -82,26 +83,26 @@ const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
 
   return (
     <ChildTemplate backLabel={t('back')} backLabelOnPress={navigation.goBack} title={'Haptics Demo'}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             iOS and Android
           </TextView>
-          <Box mt={theme?.dimensions?.standardMarginBetween}>{multiPlatformButtons}</Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>{multiPlatformButtons}</Box>
         </TextArea>
         <Box mt={20} />
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             iOS only
           </TextView>
-          <Box mt={theme?.dimensions?.standardMarginBetween}>{iOSButtons}</Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>{iOSButtons}</Box>
         </TextArea>
         <Box mt={20} />
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             Android Only
           </TextView>
-          <Box mt={theme?.dimensions?.standardMarginBetween}>{androidButtons}</Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>{androidButtons}</Box>
         </TextArea>
       </Box>
     </ChildTemplate>

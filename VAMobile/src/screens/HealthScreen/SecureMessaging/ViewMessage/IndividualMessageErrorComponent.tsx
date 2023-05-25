@@ -6,29 +6,30 @@ import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, 
 import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 
 const IndividualMessageErrorComponent: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { tryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
 
   return (
     <VAScrollView>
-      <Box justifyContent="center" mt={theme?.dimensions?.gutter}>
+      <Box justifyContent="center" mt={theme.dimensions.gutter}>
         <AlertBox
           title={t('secureMessaging.viewMessage.errorTitle')}
           titleA11yLabel={t('secureMessaging.viewMessage.errorTitle')}
           text={tc('errors.callHelpCenter.sorryWithRefresh')}
           border="error">
           <Box>
-            <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
+            <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
               {t('secureMessaging.sendError.ifTheAppStill')}
             </TextView>
             <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />
             {tryAgain && (
-              <Box mt={theme?.dimensions?.standardMarginBetween} accessibilityRole="button">
+              <Box mt={theme.dimensions.standardMarginBetween} accessibilityRole="button">
                 <VAButton
                   onPress={tryAgain}
                   label={tc('refresh')}

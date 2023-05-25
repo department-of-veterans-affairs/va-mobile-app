@@ -191,7 +191,7 @@ context('ViewMessageScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -220,7 +220,6 @@ context('ViewMessageScreen', () => {
       expect(testInstance.findAllByType(TextView)[10].props.children).toBe('Invalid DateTime')
       expect(testInstance.findAllByType(TextView)[11].props.children).toBe('mock sender 1')
       expect(testInstance.findAllByType(TextView)[12].props.children).toBe('Invalid DateTime')
-      
     })
   })
 

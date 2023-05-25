@@ -56,7 +56,7 @@ context('FileList', () => {
 
     component = render(<FileList files={files} onDelete={onDeleteSpy} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

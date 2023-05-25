@@ -6,9 +6,9 @@ import { ReactTestInstance } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import { context, render, RenderAPI, waitFor } from 'testUtils'
-import {TextLine} from './types'
-import MultiTouchCard, {MultiTouchCardProps} from './MultiTouchCard'
-import {TextLines} from './TextLines'
+import { TextLine } from './types'
+import MultiTouchCard, { MultiTouchCardProps } from './MultiTouchCard'
+import { TextLines } from './TextLines'
 
 context('MultiTouchCard', () => {
   let component: RenderAPI
@@ -44,7 +44,7 @@ context('MultiTouchCard', () => {
 
     component = render(<MultiTouchCard {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

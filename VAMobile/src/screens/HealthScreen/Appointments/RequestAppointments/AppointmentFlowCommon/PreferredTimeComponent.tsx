@@ -4,7 +4,8 @@ import React, { FC } from 'react'
 import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimesForPhoneCallType } from 'store/api/types'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 import AppointmentFlowErrorAlert from './AppointmentFlowErrorAlert'
 
 type PreferredTimeComponentProps = {
@@ -22,7 +23,7 @@ type PreferredTimeComponentProps = {
 const PreferredTimeComponent: FC<PreferredTimeComponentProps> = ({ selectedTimes, onChange, errorMessage, selectionTitle }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const selectedList = new Set(selectedTimes || [])
 
   const timesList = [
@@ -61,10 +62,10 @@ const PreferredTimeComponent: FC<PreferredTimeComponentProps> = ({ selectedTimes
 
     return (
       <Box>
-        <TextView mx={theme?.dimensions?.gutter} mb={errorMessage ? 0 : theme?.dimensions?.condensedMarginBetween} variant="MobileBodyBold">
+        <TextView mx={theme.dimensions.gutter} mb={errorMessage ? 0 : theme.dimensions.condensedMarginBetween} variant="MobileBodyBold">
           {selectionTitle}
         </TextView>
-        <AppointmentFlowErrorAlert errorMessage={errorMessage} mb={theme?.dimensions?.standardMarginBetween} mt={theme?.dimensions?.standardMarginBetween} />
+        <AppointmentFlowErrorAlert errorMessage={errorMessage} mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.standardMarginBetween} />
         <DefaultList items={listItems} />
       </Box>
     )

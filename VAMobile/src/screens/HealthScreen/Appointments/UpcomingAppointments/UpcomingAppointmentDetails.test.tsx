@@ -83,7 +83,9 @@ context('UpcomingAppointmentDetails', () => {
             status === 'BOOKED'
               ? phoneData === null
                 ? { '1': bookedAppointmentsList[8] }
-                : hasUrl ? { '1': bookedAppointmentsList[9] } : {
+                : hasUrl
+                ? { '1': bookedAppointmentsList[9] }
+                : {
                     '1': bookedAppointmentsList.filter((obj) => {
                       return obj.attributes.appointmentType === appointmentType && obj.attributes.isCovidVaccine === isCovid ? true : false
                     })[0],
@@ -107,7 +109,7 @@ context('UpcomingAppointmentDetails', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(async () => {
@@ -169,7 +171,7 @@ context('UpcomingAppointmentDetails', () => {
         initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME, undefined, undefined, undefined, undefined, undefined, true)
       })
 
-      jest.spyOn(Alert, 'alert');
+      jest.spyOn(Alert, 'alert')
       const buttons = testInstance.findAllByType(Pressable)
 
       await waitFor(() => {

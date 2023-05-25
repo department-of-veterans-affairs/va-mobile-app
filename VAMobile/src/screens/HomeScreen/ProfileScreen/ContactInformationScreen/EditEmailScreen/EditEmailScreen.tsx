@@ -11,8 +11,10 @@ import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } f
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useAppDispatch, useDestructiveAlert, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 
@@ -21,7 +23,7 @@ type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
  */
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { profile, emailSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id
@@ -151,9 +153,9 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}
       rightButtonDisabled={saveDisabled}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {profile?.contactEmail?.emailAddress && (
-          <Box mb={theme?.dimensions?.standardMarginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
               label={t('contactInformation.removeData', { pageName: emailTitle })}
@@ -163,7 +165,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
           </Box>
         )}
         {formContainsError && (
-          <Box mb={theme?.dimensions?.standardMarginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox scrollViewRef={scrollViewRef} title={t('editEmail.alertError')} border="error" focusOnError={onSaveClicked} />
           </Box>
         )}

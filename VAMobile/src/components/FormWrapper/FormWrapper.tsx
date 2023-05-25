@@ -15,7 +15,8 @@ import {
   VATextInput,
   VATextInputProps,
 } from '../index'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 
 /** enum to determine field input type */
 export enum FieldType {
@@ -72,7 +73,7 @@ type FormWrapperProps<T> = {
 
 /**A common component to wrap forms in that handles error states of each field*/
 const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors, setResetErrors, onSaveClicked, setOnSaveClicked }: FormWrapperProps<T>): ReactElement => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const [errors, setErrors] = useState<{ [key: number]: string }>({})
 
   const updateFormContainsErrors = useCallback(
@@ -240,7 +241,7 @@ const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors
   const generateForm = (): ReactElement[] => {
     return _.map(fieldsList, (field, index) => {
       return (
-        <Box mt={index === 0 ? 0 : theme?.dimensions?.formMarginBetween} key={index} display={field.hideField ? 'none' : undefined}>
+        <Box mt={index === 0 ? 0 : theme.dimensions.formMarginBetween} key={index} display={field.hideField ? 'none' : undefined}>
           {getFormComponent(field, index)}
         </Box>
       )

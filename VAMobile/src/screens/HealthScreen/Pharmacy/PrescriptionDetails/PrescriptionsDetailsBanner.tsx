@@ -3,11 +3,12 @@ import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, CollapsibleAlert, TextView, VABulletList, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 const PrescriptionsDetailsBanner: FC = () => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
@@ -33,10 +34,10 @@ const PrescriptionsDetailsBanner: FC = () => {
 
     return (
       <>
-        <TextView variant="MobileBody" mb={theme?.dimensions?.standardMarginBetween} mt={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.standardMarginBetween}>
           {t('prescription.details.banner.body1')}
         </TextView>
-        <TextView variant="MobileBody" mb={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
           {t('prescription.details.banner.body2')}
         </TextView>
         <Box>
@@ -52,7 +53,7 @@ const PrescriptionsDetailsBanner: FC = () => {
   }
   return (
     <VAScrollView>
-      <Box mt={theme?.dimensions?.contentMarginTop}>
+      <Box mt={theme.dimensions.contentMarginTop}>
         <CollapsibleAlert border="warning" headerText={t('prescription.details.banner.title')} body={getContent()} a11yLabel={t('prescription.details.banner.title')} />
       </Box>
     </VAScrollView>

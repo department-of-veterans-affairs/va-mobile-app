@@ -5,8 +5,10 @@ import React, { FC, useLayoutEffect } from 'react'
 import { Box, TextView } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { useRequestAppointmentModalHeaderStyles } from 'utils/requestAppointments'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -17,7 +19,7 @@ type GeneralHelpScreenProps = StackScreenProps<HealthStackParamList, 'GeneralHel
 const GeneralHelpScreen: FC<GeneralHelpScreenProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const navigateTo = useRouteNavigation()
   const { title, description } = route.params
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
@@ -31,13 +33,13 @@ const GeneralHelpScreen: FC<GeneralHelpScreenProps> = ({ navigation, route }) =>
 
   return (
     <Box flex={1} backgroundColor={'main'}>
-      <Box mx={theme?.dimensions?.gutter}>
-        <TextView variant="MobileBodyBold" mt={theme?.dimensions?.contentMarginTop}>
+      <Box mx={theme.dimensions.gutter}>
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.contentMarginTop}>
           {title}
         </TextView>
         <TextView variant="MobileBody">{description}</TextView>
         <TextView
-          mt={theme?.dimensions?.contentMarginTop}
+          mt={theme.dimensions.contentMarginTop}
           variant="MobileBodyLink"
           onPress={() => {
             navigation.goBack()

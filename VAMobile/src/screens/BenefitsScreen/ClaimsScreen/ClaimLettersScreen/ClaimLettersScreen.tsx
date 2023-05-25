@@ -11,19 +11,20 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATypographyThemeVariants } from 'styles/theme'
+import { VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import NoClaimLettersScreen from './NoClaimLettersScreen/NoClaimLettersScreen'
 
 type ClaimLettersScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimLettersScreen'>
 
 const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const { loading, decisionLetters, downloading } = useSelector<RootState, DecisionLettersState>((state) => state.decisionLetters)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
@@ -94,10 +95,10 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
   return (
     <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-      <TextView variant="MobileBody" mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.standardMarginBetween}>
+      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
         {t('claimLetters.overview')}
       </TextView>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <DefaultList items={letterButtons} />
       </Box>
     </FeatureLandingTemplate>

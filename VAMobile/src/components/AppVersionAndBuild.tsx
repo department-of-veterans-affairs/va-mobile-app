@@ -3,9 +3,9 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATextColors, VATypographyThemeVariants } from 'styles/theme'
+import { VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { getBuildNumber, getVersionName } from 'utils/deviceData'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 export type AppVersionAndBuildProps = {
   /** color of the text */
@@ -19,7 +19,7 @@ export type AppVersionAndBuildProps = {
  */
 const AppVersionAndBuild: FC<AppVersionAndBuildProps> = ({ textColor = 'bodyText', textWeight = 'MobileBody' }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const [versionName, setVersionName] = useState<string>()
   const [buildNumber, setBuildNumber] = useState<number>()
 
@@ -35,7 +35,7 @@ const AppVersionAndBuild: FC<AppVersionAndBuildProps> = ({ textColor = 'bodyText
   }, [])
 
   return (
-    <Box mb={theme?.dimensions?.contentMarginBottom} justifyContent={'center'} alignItems={'center'}>
+    <Box mb={theme.dimensions.contentMarginBottom} justifyContent={'center'} alignItems={'center'}>
       <TextView variant={textWeight} flexDirection="row" color={textColor}>
         {t('versionAndBuild', { versionName, buildNumber })}
       </TextView>

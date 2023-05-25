@@ -8,9 +8,10 @@ import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Box, BoxProps, LoadingComponent } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import WebviewControlButton from './WebviewControlButton'
 import WebviewControls, { WebviewControlsProps } from './WebviewControls'
 import WebviewTitle from './WebviewTitle'
@@ -21,13 +22,13 @@ type ReloadButtonProps = {
 
 const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const reloadBoxProps: BoxProps = {
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    mr: theme?.dimensions?.textIconMargin,
+    mr: theme.dimensions.textIconMargin,
     height: isIOS() ? 64 : 45, // this is done due to position difference between IOS and Android
   }
 
@@ -82,7 +83,7 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
 const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const webviewRef = useRef() as MutableRefObject<WebView>
 
   const [canGoBack, setCanGoBack] = useState(false)

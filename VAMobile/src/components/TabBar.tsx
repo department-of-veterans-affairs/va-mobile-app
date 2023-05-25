@@ -4,7 +4,8 @@ import React, { FC } from 'react'
 
 import { BorderColorVariant, Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 
 export type TabsValuesType = Array<{
   /** value of the tab */
@@ -27,7 +28,7 @@ export type TabBarProps = {
 }
 
 const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const mainContainerStyle: ViewStyle = {

@@ -6,11 +6,13 @@ import { ClaimData } from 'store/api/types'
 import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
 import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
@@ -29,7 +31,7 @@ type ClaimStatusProps = {
  * Component for rendering the details area of a claim when selected on the ClaimDetailsScreen
  */
 const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const sentEvent = useRef(false)
@@ -47,7 +49,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
       // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false
 
       return (
-        <Box mb={theme?.dimensions?.condensedMarginBetween}>
+        <Box mb={theme.dimensions.condensedMarginBetween}>
           {claim && <ClaimTimeline attributes={claim.attributes} claimID={claim.id} />}
           {false && <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} showCovidMessage={false} />}
           <Box>
@@ -88,7 +90,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
       }
 
       return (
-        <Box mb={theme?.dimensions?.condensedMarginBetween}>
+        <Box mb={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <Box {...testIdProps(claimDecidedOn)} accessibilityRole="header" accessible={true}>
               <TextView variant="MobileBodyBold">{claimDecidedOn}</TextView>
@@ -97,7 +99,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
               <TextView variant="MobileBody">{letterAvailable}</TextView>
             </Box>
             {showButton && (
-              <Box mt={theme?.dimensions?.condensedMarginBetween}>
+              <Box mt={theme.dimensions.condensedMarginBetween}>
                 <VAButton onPress={onPress} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} />
               </Box>
             )}

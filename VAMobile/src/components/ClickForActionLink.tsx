@@ -2,8 +2,10 @@ import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackP
 import Box from './Box'
 import React, { FC } from 'react'
 
+import { VATheme } from 'styles/theme'
 import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { useExternalLink } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import TextView, { TextViewProps } from './TextView'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'
 
@@ -75,7 +77,7 @@ export type LinkButtonProps = AccessibilityProps & {
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
 const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, a11yLabel, fireAnalytic, testID, ...props }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme as VATheme
   const launchExternalLink = useExternalLink()
 
   const onCalendarPress = async (): Promise<void> => {
@@ -159,7 +161,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
 
   return (
     <TouchableWithoutFeedback {...pressableProps}>
-      <Box flexDirection={'row'} py={theme?.dimensions?.buttonPadding} alignItems={'center'}>
+      <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} alignItems={'center'}>
         <VAIcon name={getIconName()} fill={'link'} width={25} height={25} />
         <Box flexShrink={1}>
           <TextView testID={testID} {...textViewProps}>

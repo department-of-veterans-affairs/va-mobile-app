@@ -16,9 +16,11 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
+import { VATheme } from 'styles/theme'
 import { formatSubject, getfolderName } from 'utils/secureMessaging'
-import { useAppDispatch, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import CollapsibleMessage from './CollapsibleMessage'
 import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
@@ -52,7 +54,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const { messagesById, threads, loading, loadingFile, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
@@ -234,13 +236,13 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       ) : (
         <Box>
           <ComposeMessageButton />
-          <Box mt={theme?.dimensions?.standardMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')} />
           </Box>
         </Box>
       )}
-      <Box mt={theme?.dimensions?.standardMarginBetween} mb={theme?.dimensions?.condensedMarginBetween}>
-        <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme?.dimensions?.cardPadding}>
+      <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+        <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
           <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
             {formatSubject(category, subject, t)}
           </TextView>

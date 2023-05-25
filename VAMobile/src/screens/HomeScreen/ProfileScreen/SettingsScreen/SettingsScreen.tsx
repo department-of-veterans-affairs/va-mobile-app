@@ -11,9 +11,11 @@ import { DemoState } from 'store/slices/demoSlice'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useExternalLink, useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
@@ -25,7 +27,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const launchExternalLink = useExternalLink()
   const { canStoreWithBiometric, shouldStoreWithBiometric, settingBiometricPreference, supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -94,7 +96,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     ]
 
     return (
-      <Box mt={theme?.dimensions?.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <SimpleList items={debugButton} />
       </Box>
     )
@@ -110,12 +112,12 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} flex={1}>
-        <Box mb={theme?.dimensions?.standardMarginBetween}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} flex={1}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <SimpleList items={items} />
           {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
         </Box>
-        <Box px={theme?.dimensions?.gutter}>
+        <Box px={theme.dimensions.gutter}>
           <SignoutButton />
         </Box>
       </Box>

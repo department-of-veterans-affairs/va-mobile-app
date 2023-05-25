@@ -32,9 +32,16 @@ context('ClickForActionLink', () => {
     analyticFn = jest.fn()
 
     component = render(
-      <ClickForActionLink displayedText={displayedText} a11yLabel={displayedText} numberOrUrlLink={numberOrUrlLink} linkType={linkType} linkUrlIconType={linkIconType} fireAnalytic={analyticFn} />,
+      <ClickForActionLink
+        displayedText={displayedText}
+        a11yLabel={displayedText}
+        numberOrUrlLink={numberOrUrlLink}
+        linkType={linkType}
+        linkUrlIconType={linkIconType}
+        fireAnalytic={analyticFn}
+      />,
     )
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -48,7 +55,7 @@ context('ClickForActionLink', () => {
   describe('when linkType is call', () => {
     it('should launch external link with the parameter tel:number', async () => {
       await waitFor(() => {
-        testInstance.findByProps({accessibilityLabel: '111-453-3234'}).props.onPress()
+        testInstance.findByProps({ accessibilityLabel: '111-453-3234' }).props.onPress()
         expect(mockExternalLinkSpy).toBeCalledWith('tel:1114533234')
       })
     })
@@ -64,7 +71,7 @@ context('ClickForActionLink', () => {
     })
     it('should call mockExternalLinkSpy with the parameter sms:number', async () => {
       await waitFor(() => {
-        testInstance.findByProps({accessibilityLabel: '111-453-3234'}).props.onPress()
+        testInstance.findByProps({ accessibilityLabel: '111-453-3234' }).props.onPress()
         expect(mockExternalLinkSpy).toBeCalledWith('sms:1114533234')
       })
     })
@@ -80,7 +87,7 @@ context('ClickForActionLink', () => {
     })
     it('should call mockExternalLinkSpy with the parameter given to urlLink, https://google.com', async () => {
       await waitFor(() => {
-        testInstance.findByProps({accessibilityLabel: 'click me to go to google'}).props.onPress()
+        testInstance.findByProps({ accessibilityLabel: 'click me to go to google' }).props.onPress()
         expect(mockExternalLinkSpy).toBeCalledWith('https://google.com')
       })
     })
@@ -113,7 +120,7 @@ context('ClickForActionLink', () => {
     it('should be fired on press', async () => {
       initializeTestInstance('click me to go to google', 'https://google.com', LinkTypeOptionsConstants.url)
       await waitFor(() => {
-        testInstance.findByProps({accessibilityLabel: 'click me to go to google'}).props.onPress()
+        testInstance.findByProps({ accessibilityLabel: 'click me to go to google' }).props.onPress()
         expect(analyticFn).toBeCalled()
       })
     })

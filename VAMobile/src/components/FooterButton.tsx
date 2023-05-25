@@ -2,10 +2,10 @@ import React, { FC, useState } from 'react'
 
 import { Pressable, PressableProps } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { VAButtonTextColors, VATextColors } from '../styles/theme'
+import { VAButtonTextColors, VATextColors, VATheme } from '../styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import Box, { BackgroundVariant, BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -33,7 +33,7 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 `
 /**A common component to show a button at the bottom of the screen that takes the full width of the display. Optional Icon can be passed in to render next to text */
 const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textColor, backGroundColor, testID, a11yHint }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const [isPressed, setIsPressed] = useState(false)
 
@@ -61,9 +61,9 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
     backgroundColor: backGroundColor ? backGroundColor : isPressed ? 'footerButtonActive' : 'navButton',
     borderTopColor: 'footerButton',
     borderTopWidth: 'default',
-    minHeight: theme?.dimensions?.navBarHeight,
-    py: theme?.dimensions?.buttonPadding,
-    px: theme?.dimensions?.cardPadding,
+    minHeight: theme.dimensions.navBarHeight,
+    py: theme.dimensions.buttonPadding,
+    px: theme.dimensions.cardPadding,
   }
 
   return (
@@ -71,11 +71,11 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
       <Pressable {...pressableProps} {...testIdProps(testID || text)} {...a11yHintProp(a11yHint || '')}>
         <Box {...boxProps}>
           {iconProps && (
-            <Box mr={theme?.dimensions?.condensedMarginBetween}>
+            <Box mr={theme.dimensions.condensedMarginBetween}>
               <VAIcon fill={isPressed ? 'footerButtonActive' : 'footerButton'} width={22} height={22} preventScaling={true} {...iconProps} />
             </Box>
           )}
-          <TextView variant="MobileBodyBold" allowFontScaling={false} color={getTextColor()} mr={theme?.dimensions?.textIconMargin}>
+          <TextView variant="MobileBodyBold" allowFontScaling={false} color={getTextColor()} mr={theme.dimensions.textIconMargin}>
             {text}
           </TextView>
         </Box>

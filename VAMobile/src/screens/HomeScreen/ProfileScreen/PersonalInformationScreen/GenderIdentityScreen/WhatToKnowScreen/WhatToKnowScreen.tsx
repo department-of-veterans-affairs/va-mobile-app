@@ -5,22 +5,23 @@ import React, { FC } from 'react'
 import { Box, LargePanel, TextView, TextViewProps } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 
 type WhatToKnowScreenProps = StackScreenProps<HomeStackParamList, 'WhatToKnow'>
 
 const WhatToKnowScreen: FC<WhatToKnowScreenProps> = () => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const bodyTextProps: TextViewProps = {
     variant: 'MobileBody',
-    mt: theme?.dimensions?.standardMarginBetween,
+    mt: theme.dimensions.standardMarginBetween,
   }
 
   return (
     <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('personalInformation.genderIdentity.whatToKnow.title')}
         </TextView>

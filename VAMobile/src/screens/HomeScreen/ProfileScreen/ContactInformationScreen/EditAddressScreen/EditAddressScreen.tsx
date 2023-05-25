@@ -29,9 +29,11 @@ import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
+import { VATheme } from 'styles/theme'
 import { profileAddressOptions } from '../AddressSummary'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import AddressValidation from '../AddressValidation'
 
 const MAX_ADDRESS_LENGTH = 35
@@ -81,7 +83,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     (state) => state.personalInformation,
   )
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
   const destructiveAlert = useDestructiveAlert()
@@ -513,9 +515,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       onLeftButtonPress={cancelFn}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
-          <Box mb={theme?.dimensions?.standardMarginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
               label={t('contactInformation.removeData', { pageName: lowerCaseTitle })}
@@ -525,7 +527,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           </Box>
         )}
         {formContainsError && (
-          <Box mb={theme?.dimensions?.standardMarginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox title={t('editAddress.alertError')} border="error" scrollViewRef={scrollViewRef} focusOnError={onSaveClicked} />
           </Box>
         )}

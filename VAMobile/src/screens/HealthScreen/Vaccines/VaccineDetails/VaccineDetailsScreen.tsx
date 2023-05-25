@@ -9,9 +9,11 @@ import { COVID19 } from 'constants/common'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { VaccineState, getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/slices/vaccineSlice'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'VaccineDetails'>
 
@@ -21,7 +23,7 @@ type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Vaccine
 const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation }) => {
   const { vaccineId } = route.params
   const { vaccinesById, vaccineLocationsById, detailsLoading } = useSelector<RootState, VaccineState>((state) => state.vaccine)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
@@ -68,24 +70,24 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
 
   return (
     <FeatureLandingTemplate backLabel={tc('vaVaccines')} backLabelA11y={tc('vaVaccines.a11y')} backLabelOnPress={navigation.goBack} title={tc('details')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBody" mb={theme?.dimensions?.standardMarginBetween}>
+          <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
             {displayDate}
           </TextView>
-          <Box accessibilityRole="header" accessible={true} mb={theme?.dimensions?.standardMarginBetween}>
+          <Box accessibilityRole="header" accessible={true} mb={theme.dimensions.standardMarginBetween}>
             <TextView variant="BitterBoldHeading">{displayName}</TextView>
           </Box>
           <TextView variant="MobileBodyBold" selectable={true}>
             {t('vaccines.details.typeAndDosage')}
           </TextView>
-          <TextView variant="MobileBody" selectable={true} mb={theme?.dimensions?.standardMarginBetween}>
+          <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.standardMarginBetween}>
             {vaccine.attributes?.shortDescription || placeHolder}
           </TextView>
           {isCovidVaccine && (
             <>
               <TextView variant="MobileBodyBold">{t('vaccines.details.manufacturer')}</TextView>
-              <TextView variant="MobileBody" selectable={true} mb={theme?.dimensions?.standardMarginBetween}>
+              <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.standardMarginBetween}>
                 {vaccine.attributes?.manufacturer || placeHolder}
               </TextView>
             </>
@@ -94,7 +96,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
           <TextView variant="MobileBody" selectable={true}>
             {displaySeries}
           </TextView>
-          <Box mt={theme?.dimensions?.standardMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <TextView variant="MobileBodyBold">{t('vaccines.details.provider')}</TextView>
             {location?.attributes && (
               <>
@@ -119,10 +121,10 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
               </TextView>
             )}
           </Box>
-          <Box mt={theme?.dimensions?.standardMarginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <Box>
               <TextView variant="MobileBodyBold">{t('vaccines.details.reaction')}</TextView>
-              <TextView variant="MobileBody" selectable={true} mb={theme?.dimensions?.standardMarginBetween}>
+              <TextView variant="MobileBody" selectable={true} mb={theme.dimensions.standardMarginBetween}>
                 {vaccine.attributes?.reaction || placeHolder}
               </TextView>
             </Box>
@@ -133,7 +135,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
           </Box>
         </TextArea>
         {isPartialData && (
-          <Box mt={theme?.dimensions?.contentMarginTop} mx={theme?.dimensions?.gutter}>
+          <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
             <TextView variant="HelperText">{t('vaccines.details.weBaseThis')}</TextView>
           </Box>
         )}

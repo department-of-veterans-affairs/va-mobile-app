@@ -9,11 +9,13 @@ import { PaymentsStackParamList } from '../PaymentsStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackScreenProps } from '@react-navigation/stack'
+import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 
 type DirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'DirectDeposit'>
 
@@ -25,7 +27,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
 
   useFocusEffect(
@@ -87,7 +89,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   return (
     <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
       <Box>
-        <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.contentMarginTop}>
+        <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop}>
           <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
             {t('directDeposit.viewAndEditText')}
           </TextView>
@@ -95,14 +97,14 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
       </Box>
       <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />
       <Box>
-        <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.condensedMarginBetween}>
+        <Box mx={theme.dimensions.gutter} mt={theme.dimensions.condensedMarginBetween}>
           <TextView>
             <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
             <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
           </TextView>
         </Box>
       </Box>
-      <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
         <ClickToCallPhoneNumber phone={t('8008271000.displayText')} />
       </Box>
     </FeatureLandingTemplate>

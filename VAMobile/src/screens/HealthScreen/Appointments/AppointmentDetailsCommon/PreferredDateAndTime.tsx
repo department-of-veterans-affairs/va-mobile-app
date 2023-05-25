@@ -5,8 +5,9 @@ import { AppointmentAttributes } from 'store/api'
 import { AppointmentProposedTimesPeriodConstant } from 'store/api/types/AppointmentData'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { isAPendingAppointment } from 'utils/appointments'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type PreferredDateAndTimeProps = {
   attributes: AppointmentAttributes
@@ -15,7 +16,7 @@ type PreferredDateAndTimeProps = {
 const PreferredDateAndTime: FC<PreferredDateAndTimeProps> = ({ attributes }) => {
   const isAppointmentPending = isAPendingAppointment(attributes)
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const { proposedTimes } = attributes || ({} as AppointmentAttributes)
 
@@ -25,7 +26,7 @@ const PreferredDateAndTime: FC<PreferredDateAndTimeProps> = ({ attributes }) => 
     })
 
     return (
-      <Box mt={theme?.dimensions?.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('appointments.pending.preferredDateAndTime')}
         </TextView>

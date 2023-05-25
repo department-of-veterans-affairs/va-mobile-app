@@ -10,8 +10,10 @@ import { MilitaryServiceState, getServiceHistory } from 'store/slices/militarySe
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
@@ -24,7 +26,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
 
   const dispatch = useAppDispatch()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
@@ -63,7 +65,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
           <LargeNavButton
             title={t('personalInformation.title')}
             onPress={navigateTo('PersonalInformation')}
-            borderWidth={theme?.dimensions?.buttonBorderWidth}
+            borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
@@ -71,7 +73,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
           <LargeNavButton
             title={t('contactInformation.title')}
             onPress={navigateTo('ContactInformation')}
-            borderWidth={theme?.dimensions?.buttonBorderWidth}
+            borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
@@ -88,11 +90,11 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     return (
       <ChildTemplate title={t('profile.title')} backLabel={t('home')} backLabelOnPress={navigation.goBack}>
         <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
-        <Box mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+        <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
           <LargeNavButton
             title={t('settings.title')}
             onPress={navigateTo('Settings')}
-            borderWidth={theme?.dimensions?.buttonBorderWidth}
+            borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
@@ -114,12 +116,12 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   return (
     <ChildTemplate title={t('profile.title')} backLabel={t('home')} backLabelOnPress={navigation.goBack}>
       <NameTag />
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         {getProfileButtons()}
         <LargeNavButton
           title={t('militaryInformation.title')}
           onPress={navigateTo('MilitaryInformation')}
-          borderWidth={theme?.dimensions?.buttonBorderWidth}
+          borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
@@ -127,7 +129,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
         <LargeNavButton
           title={t('settings.title')}
           onPress={navigateTo('Settings')}
-          borderWidth={theme?.dimensions?.buttonBorderWidth}
+          borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}

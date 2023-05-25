@@ -1,6 +1,7 @@
 import { AccessibilityProps, Pressable, PressableProps } from 'react-native'
+import { VATheme } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import Box from './Box'
 import React, { FC } from 'react'
 import TextView from './TextView'
@@ -25,7 +26,7 @@ export type AttachmentLinkProps = {
  * A common component for an attachment link display. Can be used to show file attachments in a message thread.
  */
 const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, formattedSizeA11y, onPress, a11yHint, a11yValue }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const pressableProps: PressableProps = {
     onPress: onPress,
@@ -44,11 +45,11 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, formatte
 
   return (
     <Pressable {...a11yProps} {...pressableProps}>
-      <Box flexDirection={'row'} mr={theme?.dimensions?.gutter}>
-        <Box mt={theme?.dimensions?.attachmentIconTopMargin} mr={theme?.dimensions?.textIconMargin}>
+      <Box flexDirection={'row'} mr={theme.dimensions.gutter}>
+        <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
           <VAIcon name="PaperClip" width={16} height={16} fill={'link'} />
         </Box>
-        <TextView mr={theme?.dimensions?.textIconMargin} variant={'MobileBodyLink'} accessible={true}>
+        <TextView mr={theme.dimensions.textIconMargin} variant={'MobileBodyLink'} accessible={true}>
           {text}
         </TextView>
       </Box>

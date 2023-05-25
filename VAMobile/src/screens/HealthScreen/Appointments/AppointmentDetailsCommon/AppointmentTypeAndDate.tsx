@@ -5,10 +5,11 @@ import React from 'react'
 import { AppointmentAttributes, AppointmentStatusConstants, AppointmentTypeToA11yLabel, AppointmentTypeToID } from 'store/api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { isAPendingAppointment } from 'utils/appointments'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type AppointmentTypeAndDateProps = {
   attributes: AppointmentAttributes
@@ -16,7 +17,7 @@ type AppointmentTypeAndDateProps = {
 
 const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { appointmentType, startDateUtc, timeZone, isCovidVaccine, typeOfCare, status } = attributes || ({} as AppointmentAttributes)
 
   const isAppointmentPending = isAPendingAppointment(attributes)
@@ -45,7 +46,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes })
     // cancelled
     content = (
       <>
-        <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} mb={theme?.dimensions?.condensedMarginBetween}>
+        <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
           {t('appointments.canceled.message', { date, time })}
         </TextView>
       </>
@@ -65,7 +66,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes })
   }
   return (
     <Box>
-      <TextView variant={'MobileBody'} mb={theme?.dimensions?.standardMarginBetween} {...testIdProps(isCovidVaccine ? covid19Text : appointmentTypeLabel)}>
+      <TextView variant={'MobileBody'} mb={theme.dimensions.standardMarginBetween} {...testIdProps(isCovidVaccine ? covid19Text : appointmentTypeLabel)}>
         {getTranslation(isCovidVaccine ? covid19Text : AppointmentTypeToID[appointmentType], t)}
       </TextView>
       {content}

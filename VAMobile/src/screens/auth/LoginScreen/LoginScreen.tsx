@@ -7,9 +7,11 @@ import { AuthState, loginStart } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
@@ -18,7 +20,7 @@ const LoginScreen: FC = () => {
   const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HOME])
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 20
   let demoTaps = 0
@@ -44,9 +46,9 @@ const LoginScreen: FC = () => {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    minHeight: theme?.dimensions?.touchableMinHeight,
-    mt: theme?.dimensions?.standardMarginBetween,
-    py: theme?.dimensions?.buttonPadding,
+    minHeight: theme.dimensions.touchableMinHeight,
+    mt: theme.dimensions.standardMarginBetween,
+    py: theme.dimensions.buttonPadding,
   }
 
   const dispatch = useAppDispatch()
@@ -76,10 +78,10 @@ const LoginScreen: FC = () => {
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
       <Box flex={1}>
-        <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme?.dimensions?.standardMarginBetween} testID="va-icon">
+        <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween} testID="va-icon">
           <VAIcon name={'Logo'} />
         </Box>
-        <Box mx={theme?.dimensions?.gutter} mb={80}>
+        <Box mx={theme.dimensions.gutter} mb={80}>
           <VAButton onPress={onLoginInit} label={t('common:signin')} a11yHint={t('common:signin.a11yHint')} buttonType={ButtonTypesConstants.buttonWhite} hideBorder={true} />
           <Pressable
             onPress={onFacilityLocator}
@@ -87,7 +89,7 @@ const LoginScreen: FC = () => {
             accessibilityHint={t('home:findLocation.a11yHint')}
             accessibilityRole="button">
             <Box {...findLocationProps}>
-              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme?.dimensions?.textIconMargin}>
+              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
                 {t('home:findLocation.title')}
               </TextView>
               <VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />

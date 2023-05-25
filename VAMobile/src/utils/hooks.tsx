@@ -554,7 +554,7 @@ export function useOnResumeForeground(callback: () => void): void {
     })
 
     return () => {
-      subscription.remove()
+      subscription?.remove()
     }
   }, [callback])
 }

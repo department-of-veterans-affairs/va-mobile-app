@@ -34,7 +34,7 @@ context('ReplyMessageButton', () => {
     mockNavigationSpy.mockReturnValue(navigateToSpy)
     component = render(<ReplyMessageButton messageID={1} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
@@ -44,7 +44,7 @@ context('ReplyMessageButton', () => {
   describe('on click of the footer button', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findByType(VAButton).props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalledWith('ReplyMessage', {'attachmentFileToAdd': {}, 'attachmentFileToRemove': {}, 'messageID': 1})
+      expect(mockNavigationSpy).toHaveBeenCalledWith('ReplyMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {}, messageID: 1 })
       expect(navigateToSpy).toHaveBeenCalled()
     })
   })

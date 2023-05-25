@@ -55,7 +55,7 @@ context('AppointmentsScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -167,7 +167,7 @@ context('AppointmentsScreen', () => {
               })
             initializeTestInstance(undefined, { pastCcServiceError: true })
           })
-          
+
           await waitFor(() => {
             const pastButton = testInstance.findAllByType(TouchableOpacity)[1]
             pastButton.props.onPress()

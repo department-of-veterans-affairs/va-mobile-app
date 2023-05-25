@@ -4,9 +4,11 @@ import React, { FC } from 'react'
 import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { UserAnalytics } from 'constants/analytics'
+import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { useExternalLink } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import getEnv from 'utils/env'
 
 const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
@@ -19,7 +21,7 @@ const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } 
 const VeteransCrisisLineScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.HOME)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const launchExternalLink = useExternalLink()
 
   const fireAnalyticFn = (): void => {
@@ -33,14 +35,14 @@ const VeteransCrisisLineScreen: FC = () => {
 
   return (
     <LargePanel title={tc('veteransCrisisLine.title')} rightButtonText={tc('done')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBody">{t('veteransCrisisLine.connectWithResponders')}</TextView>
         </Box>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink
             testID="veteransCrisisLineCrisisCallNumberTestID"
             displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
@@ -51,7 +53,7 @@ const VeteransCrisisLineScreen: FC = () => {
             {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
           />
         </Box>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink
             testID="veteransCrisisLineTextNumberTestID"
             displayedText={t('veteransCrisisLine.textNumberDisplayed')}
@@ -62,7 +64,7 @@ const VeteransCrisisLineScreen: FC = () => {
             {...a11yHintProp(t('veteransCrisisLine.textA11yHint'))}
           />
         </Box>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink
             testID="veteransCrisisLineConfidentialChatTestID"
             displayedText={t('veteransCrisisLine.startConfidentialChat')}
@@ -73,8 +75,8 @@ const VeteransCrisisLineScreen: FC = () => {
             {...a11yHintProp(t('veteransCrisisLine.crisisUrlA11yHint'))}
           />
         </Box>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
-          <TextView variant="MobileBody" my={theme?.dimensions?.standardMarginBetween / 2}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween / 2}>
             {t('contactVA.tty.body')}
           </TextView>
           <ClickForActionLink
@@ -87,12 +89,12 @@ const VeteransCrisisLineScreen: FC = () => {
             {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
           />
         </Box>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('veteransCrisisLine.getMoreResources')}
           </TextView>
         </Box>
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView
             variant="MobileBody"
             color="link"

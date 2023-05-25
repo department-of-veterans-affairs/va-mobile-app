@@ -178,7 +178,7 @@ export const AuthGuard: FC = () => {
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
-    return (): void => sub.remove()
+    return (): void => sub?.remove()
   }, [dispatch, fontScale])
 
   useEffect(() => {
@@ -199,7 +199,7 @@ export const AuthGuard: FC = () => {
     // Listener for the current app state, updates isVoiceOverTalkBackRunning when app state is active and voice over/talk back
     // was turned on or off
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
-    return (): void => sub.remove()
+    return (): void => sub?.remove()
   }, [dispatch, isVoiceOverTalkBackRunning])
 
   useEffect(() => {

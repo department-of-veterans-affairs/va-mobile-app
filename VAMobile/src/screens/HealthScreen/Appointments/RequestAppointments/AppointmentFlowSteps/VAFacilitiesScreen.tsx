@@ -11,14 +11,16 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
 import { States } from 'constants/states'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type VAFacilitiesScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'VAFacilitiesScreen'>
 
 const VAFacilitiesScreen: FC<VAFacilitiesScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const [sortOption, setSortOption] = useState<FacilitiesFilterType>(FACILITY_FILTER.home)
   const [selectedFacility, setSelectedFacility] = useState<string>()
 
@@ -75,8 +77,8 @@ const VAFacilitiesScreen: FC<VAFacilitiesScreenProps> = ({ navigation }) => {
       secondActionButtonPress={onContinue}
       linkText={t('requestAppointment.facilityNotListed')}>
       <AppointmentFlowTitleSection title={t('requestAppointment.whichFacility')} titleA11yLabel={t('requestAppointment.whichFacilityLabel')} />
-      <Box mx={theme?.dimensions?.gutter} mb={theme?.dimensions?.contentMarginBottom}>
-        <TextView variant="HelperTextBold" mb={theme?.dimensions?.condensedMarginBetween}>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
+        <TextView variant="HelperTextBold" mb={theme.dimensions.condensedMarginBetween}>
           {t('requestAppointment.sortFacilities')}
         </TextView>
         <VAModalPicker selectedValue={sortOption} onSelectionChange={onSortByChange} pickerOptions={getSortOptions()} />

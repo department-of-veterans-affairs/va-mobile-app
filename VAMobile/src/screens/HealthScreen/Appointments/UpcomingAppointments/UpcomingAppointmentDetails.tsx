@@ -42,11 +42,13 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
 import { isAPendingAppointment } from 'utils/appointments'
-import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useExternalLink, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
 
@@ -57,7 +59,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
@@ -121,7 +123,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const SpecialInstructions = (): ReactElement => {
     if (comment) {
       return (
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.specialInstructions')}
           </TextView>
@@ -152,7 +154,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
     if (isVideoAppt && !isAppointmentCanceled) {
       return (
-        <Box mb={isGFE ? 0 : theme?.dimensions?.standardMarginBetween}>
+        <Box mb={isGFE ? 0 : theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoin')}
           </TextView>
@@ -194,7 +196,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       }
 
       const prepareForVideoVisitLinkProps: TextViewProps = {
-        py: theme?.dimensions?.buttonPadding,
+        py: theme.dimensions.buttonPadding,
         variant: 'MobileBodyLink',
         onPress: onPrepareForVideoVisit,
         accessibilityRole: 'link',
@@ -207,7 +209,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
 
-          <Box my={theme?.dimensions?.standardMarginBetween}>
+          <Box my={theme.dimensions.standardMarginBetween}>
             <VAButton {...joinSessionButtonProps} />
           </Box>
 
@@ -224,7 +226,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const Atlas_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS && !isAppointmentCanceled && code) {
       return (
-        <Box mt={theme?.dimensions?.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.appointmentCode', { code: code })}
           </TextView>
@@ -239,7 +241,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const AddToCalendar = (): ReactElement => {
     if (!isAppointmentCanceled && !pendingAppointment) {
       return (
-        <Box my={theme?.dimensions?.standardMarginBetween}>
+        <Box my={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
         </Box>
       )
@@ -254,7 +256,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     }
 
     return (
-      <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mt={theme.dimensions.condensedMarginBetween}>
         {!isAppointmentCanceled ? (
           <AppointmentCancellationInfo appointment={appointment} goBack={goBack} />
         ) : (
@@ -278,7 +280,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   return (
     <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <AppointmentAlert attributes={attributes} />
         <TextArea>
           <AppointmentTypeAndDate attributes={attributes} />

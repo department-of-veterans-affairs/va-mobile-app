@@ -2,8 +2,9 @@ import { TouchableWithoutFeedback } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
-import { VATextColors } from 'styles/theme'
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { VATextColors, VATheme } from 'styles/theme'
+import { useAccessibilityFocus } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import Box from './Box'
 import TextView from './TextView'
 
@@ -27,7 +28,7 @@ export type ClosePanelButton = {
  * Button used by the panel
  */
 export const ClosePanelButton: FC<ClosePanelButton> = ({ onPress, a11yHint, focusOnButton, buttonText, buttonTextColor }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
 
@@ -41,8 +42,8 @@ export const ClosePanelButton: FC<ClosePanelButton> = ({ onPress, a11yHint, focu
       accessibilityHint={a11yHint ? a11yHint : undefined}
       accessibilityRole="button"
       accessible={true}>
-      <Box display="flex" flexDirection="row" ml={16} height={theme?.dimensions?.headerHeight} width={80} alignItems={'center'}>
-        <TextView variant="MobileBody" color={buttonTextColor} ml={theme?.dimensions?.textIconMargin} allowFontScaling={false} accessible={false}>
+      <Box display="flex" flexDirection="row" ml={16} height={theme.dimensions.headerHeight} width={80} alignItems={'center'}>
+        <TextView variant="MobileBody" color={buttonTextColor} ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {buttonText}
         </TextView>
       </Box>

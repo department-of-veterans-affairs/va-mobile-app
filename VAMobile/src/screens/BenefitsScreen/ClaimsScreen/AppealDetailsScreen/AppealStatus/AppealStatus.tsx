@@ -4,7 +4,8 @@ import React, { FC, ReactElement } from 'react'
 import { AppealAOJTypes, AppealEventData, AppealStatusData, AppealTypes } from 'store/api/types'
 import { Box, CollapsibleView, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 import AppealCurrentStatus from './AppealCurrentStatus/AppealCurrentStatus'
 import AppealTimeline from './AppealTimeline/AppealTimeline'
 import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
@@ -21,7 +22,7 @@ type AppealStatusProps = {
 }
 
 const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, numAppealsAhead, isActiveAppeal, docketName, programArea }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const NumAppealsAhead = (): ReactElement => {
@@ -31,7 +32,7 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
     }
 
     return (
-      <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('appealDetails.appealsAheadOfYou')}
@@ -47,11 +48,11 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
       <CollapsibleView text={t('appealDetails.viewPastEvents')} contentInTextArea={false} a11yHint={t('appealDetails.viewPastEventsA11yHint')}>
         <AppealTimeline events={events} />
       </CollapsibleView>
-      <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mt={theme.dimensions.condensedMarginBetween}>
         <AppealCurrentStatus status={status} aoj={aoj} appealType={appealType} docketName={docketName} programArea={programArea} />
       </Box>
       <NumAppealsAhead />
-      <Box mt={theme?.dimensions?.condensedMarginBetween}>
+      <Box mt={theme.dimensions.condensedMarginBetween}>
         <NeedHelpData isAppeal={true} />
       </Box>
     </Box>

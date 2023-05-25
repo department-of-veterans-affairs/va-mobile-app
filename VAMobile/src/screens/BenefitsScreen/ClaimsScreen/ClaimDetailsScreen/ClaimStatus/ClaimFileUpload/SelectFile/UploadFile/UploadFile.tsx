@@ -13,8 +13,10 @@ import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
+import { VATheme } from 'styles/theme'
 import { showSnackBar } from 'utils/common'
-import { useBeforeNavBackListener, useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveAlert } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import FileList from 'components/FileList'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
@@ -22,7 +24,7 @@ type UploadFileProps = StackScreenProps<BenefitsStackParamList, 'UploadFile'>
 
 const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { request: originalRequest, fileUploaded } = route.params
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const dispatch = useDispatch()
@@ -153,15 +155,15 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
       onLeftButtonPress={() => {
         navigation.dispatch(StackActions.pop(2))
       }}>
-      <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}
         </TextView>
       </Box>
       <FileList files={[fileUploaded]} onDelete={onFileDelete} />
-      <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.standardMarginBetween}>
+      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
         <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
-        <Box mt={theme?.dimensions?.textAndButtonLargeMargin}>
+        <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
             onPress={() => {
               setOnSaveClicked(true)

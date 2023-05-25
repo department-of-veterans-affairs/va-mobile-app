@@ -19,7 +19,7 @@ context('AppealIssues', () => {
 
     component = render(<AppealIssues issues={issues} {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('should initialize', async () => {

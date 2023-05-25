@@ -7,17 +7,19 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, fetchInboxMessages } from 'store/slices'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types/SecureMessagingData'
+import { VATheme } from 'styles/theme'
 import { getMessagesListItems } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 
 type InboxProps = Record<string, unknown>
 
 const Inbox: FC<InboxProps> = () => {
   const dispatch = useAppDispatch()
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
   const { inboxMessages, loadingInbox, paginationMetaByFolderId } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
@@ -60,7 +62,7 @@ const Inbox: FC<InboxProps> = () => {
   return (
     <Box {...testIdProps('', false, 'Inbox-page')}>
       <MessageList items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress)} title={t('secureMessaging.inbox')} />
-      <Box mt={theme?.dimensions?.paginationTopPadding} mx={theme?.dimensions?.gutter}>
+      <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>

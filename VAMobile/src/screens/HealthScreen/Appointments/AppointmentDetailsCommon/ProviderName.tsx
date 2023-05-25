@@ -4,9 +4,10 @@ import React, { FC } from 'react'
 import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { getAllFieldsThatExist } from 'utils/common'
 import { isAPendingAppointment } from 'utils/appointments'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type ProviderNameProps = {
   attributes: AppointmentAttributes
@@ -14,7 +15,7 @@ type ProviderNameProps = {
 
 const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const isAppointmentPending = isAPendingAppointment(attributes)
 
   const { appointmentType, practitioner, healthcareProvider, friendlyLocationName, location } = attributes || ({} as AppointmentAttributes)
@@ -28,7 +29,7 @@ const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
 
     // default to VA appointments
     return (
-      <Box mt={theme?.dimensions?.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {header}
         </TextView>
@@ -49,7 +50,7 @@ const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
   return (
     <>
       {!!practitionerName && (
-        <Box mb={theme?.dimensions?.standardMarginBetween}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.provider')}
           </TextView>

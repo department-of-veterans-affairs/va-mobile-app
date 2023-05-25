@@ -11,16 +11,18 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState } from 'store/slices'
 import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
+import { VATheme } from 'styles/theme'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type ConfirmContactScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'ConfirmContactScreen'>
 
 const ConfirmContactScreen: FC<ConfirmContactScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
@@ -120,22 +122,22 @@ const ConfirmContactScreen: FC<ConfirmContactScreenProps> = ({ navigation }) => 
       <AppointmentFlowTitleSection title={t('requestAppointment.confirmContactTitle')} extraInformationText={t('requestAppointment.confirmContactAdditionalText')} />
 
       <AppointmentFlowTextInputWithAlert
-        mx={theme?.dimensions?.gutter}
+        mx={theme.dimensions.gutter}
         inputType={'phone'}
         inputLabel={t('requestAppointment.confirmContactYourPhone')}
         onChange={(e) => {
           onPhoneChange(e, 'phone')
         }}
-        mb={theme?.dimensions?.standardMarginBetween}
+        mb={theme.dimensions.standardMarginBetween}
         value={phone}
         maxLength={MAX_DIGITS_AFTER_FORMAT}
         validationFunc={validatePhone}
         errorMessage={phoneError}
       />
       <AppointmentFlowTextInputWithAlert
-        mx={theme?.dimensions?.gutter}
+        mx={theme.dimensions.gutter}
         inputType={'email'}
-        mb={theme?.dimensions?.standardMarginBetween}
+        mb={theme.dimensions.standardMarginBetween}
         inputLabel={t('requestAppointment.confirmContactYourEmail')}
         onChange={(e) => {
           onEmailChange(e, 'email')

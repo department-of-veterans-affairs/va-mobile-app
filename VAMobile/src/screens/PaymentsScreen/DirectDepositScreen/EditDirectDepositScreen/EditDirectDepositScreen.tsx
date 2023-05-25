@@ -25,9 +25,11 @@ import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
+import { VATheme } from 'styles/theme'
 import { getTranslation } from 'utils/formattingUtils'
-import { useAppDispatch, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 
 const MAX_ROUTING_DIGITS = 9
 const MAX_ACCOUNT_DIGITS = 17
@@ -42,7 +44,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation()
   const { displayTitle } = route.params
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const accountNumRef = useRef<TextInput>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
@@ -177,14 +179,14 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
         rightButtonText={t('save')}
         onRightButtonPress={() => setOnSaveClicked(true)}
         title={displayTitle}>
-        <Box mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
           {formContainsError && (
-            <Box mb={theme?.dimensions?.standardMarginBetween}>
+            <Box mb={theme.dimensions.standardMarginBetween}>
               <AlertBox scrollViewRef={scrollViewRef} title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" focusOnError={onSaveClicked} />
             </Box>
           )}
           {invalidRoutingNumberError && (
-            <Box mb={theme?.dimensions?.standardMarginBetween}>
+            <Box mb={theme.dimensions.standardMarginBetween}>
               <AlertBox
                 scrollViewRef={scrollViewRef}
                 title={t('editDirectDeposit.error')}
@@ -194,15 +196,15 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
               />
             </Box>
           )}
-          <Box mx={theme?.dimensions?.gutter} accessible={true}>
+          <Box mx={theme.dimensions.gutter} accessible={true}>
             <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
           </Box>
-          <Box mt={theme?.dimensions?.condensedMarginBetween}>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
             <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
-              <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={theme?.dimensions?.gutter} />
+              <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={theme.dimensions.gutter} />
             </CollapsibleView>
           </Box>
-          <Box mt={theme?.dimensions?.standardMarginBetween} mx={theme?.dimensions?.gutter}>
+          <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <FormWrapper
               fieldsList={formFieldsList}
               onSave={onSave}

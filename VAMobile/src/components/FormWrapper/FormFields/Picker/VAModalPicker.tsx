@@ -5,10 +5,11 @@ import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react
 
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
 import { VAIconProps } from 'components/VAIcon'
+import { VATheme } from 'styles/theme'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from '../formFieldUtils'
 import { getTranslation } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 import PickerList, { PickerListItemObj } from './PickerList'
 
 /**
@@ -81,7 +82,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   showModalByDefault,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { t } = useTranslation()
   const insets = useSafeAreaInsets()
 
@@ -198,7 +199,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
     return (
       <TouchableWithoutFeedback {...props} {...testIdProps(getTranslation(buttonText || '', t))} {...a11yHintProp(t('pickerLaunchBtn.a11yHint'))}>
-        <Box pr={theme?.dimensions?.headerButtonSpacing} height={theme?.dimensions?.headerHeight} justifyContent={'center'} pl={theme?.dimensions?.headerLeftButtonFromTextPadding}>
+        <Box pr={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerLeftButtonFromTextPadding}>
           <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
             {getTranslation(buttonText || '', t)}
           </TextView>
@@ -211,9 +212,9 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'pickerControls',
-    minHeight: theme?.dimensions?.touchableMinHeight,
-    py: theme?.dimensions?.buttonPadding,
-    px: theme?.dimensions?.gutter,
+    minHeight: theme.dimensions.touchableMinHeight,
+    py: theme.dimensions.buttonPadding,
+    px: theme.dimensions.gutter,
     ml: insets?.left,
     mr: insets?.right,
   }

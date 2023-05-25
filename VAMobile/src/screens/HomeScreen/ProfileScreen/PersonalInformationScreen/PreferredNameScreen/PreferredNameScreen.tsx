@@ -9,8 +9,10 @@ import { PersonalInformationState, finishUpdatePreferredName, updatePreferredNam
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api'
 import { SnackbarMessages } from 'components/SnackBar'
-import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useAppDispatch, useDestructiveAlert } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'styled-components'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 
@@ -19,7 +21,7 @@ const MAX_NAME_LENGTH = 25
 const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   const { profile, preferredNameSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const dispatch = useAppDispatch()
   const confirmAlert = useDestructiveAlert()
 
@@ -139,7 +141,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
       title={t('personalInformation.preferredName.title')}
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
-      <Box mx={theme?.dimensions?.gutter}>
+      <Box mx={theme.dimensions.gutter}>
         <FormWrapper
           fieldsList={formFieldsList}
           onSave={onSave}

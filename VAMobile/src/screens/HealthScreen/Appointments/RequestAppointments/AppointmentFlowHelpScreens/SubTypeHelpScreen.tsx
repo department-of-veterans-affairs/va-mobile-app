@@ -6,8 +6,9 @@ import { Box, TextView } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { TypeOfCareWithSubCareIdType } from 'store/api'
+import { VATheme } from 'styles/theme'
 import { useRequestAppointmentModalHeaderStyles } from 'utils/requestAppointments'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type SubTypeHelpScreenProps = StackScreenProps<HealthStackParamList, 'SubTypeHelpScreen'>
 
@@ -21,7 +22,7 @@ type BodyTextType = Array<TextSectionType>
 /** Component for the sub type care help screen */
 const SubTypeHelpScreen: FC<SubTypeHelpScreenProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { careTypeId } = route.params
   const headerStyle = useRequestAppointmentModalHeaderStyles()
 
@@ -70,11 +71,11 @@ const SubTypeHelpScreen: FC<SubTypeHelpScreenProps> = ({ navigation, route }) =>
 
   return (
     <Box flex={1} backgroundColor={'main'}>
-      <Box mx={theme?.dimensions?.gutter}>
+      <Box mx={theme.dimensions.gutter}>
         {getSubTypeHelpContext().map((item, index) => {
           return (
             <Box key={index}>
-              <TextView variant="MobileBodyBold" mt={theme?.dimensions?.contentMarginTop} accessibilityRole={'header'}>
+              <TextView variant="MobileBodyBold" mt={theme.dimensions.contentMarginTop} accessibilityRole={'header'}>
                 {item.header}
               </TextView>
               <TextView variant="MobileBody">{item.description}</TextView>

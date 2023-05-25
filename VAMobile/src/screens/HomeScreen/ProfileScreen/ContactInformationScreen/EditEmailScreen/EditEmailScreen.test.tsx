@@ -83,7 +83,7 @@ context('EditEmailScreen', () => {
 
     component = render(<EditEmailScreen {...props} />, { preloadedState: store })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

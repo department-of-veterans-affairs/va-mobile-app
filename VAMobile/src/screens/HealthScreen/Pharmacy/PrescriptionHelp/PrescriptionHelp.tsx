@@ -5,12 +5,14 @@ import React, { FC, useEffect } from 'react'
 import { Box, ClosePanelButton, LargePanel, TextView, VABulletList, VABulletListText } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { usePanelHeaderStyles, useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { usePanelHeaderStyles } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type PrescriptionHelpProps = StackScreenProps<HealthStackParamList, 'PrescriptionHelp'>
 
 const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const headerStyle = usePanelHeaderStyles()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
@@ -37,12 +39,12 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
 
   return (
     <LargePanel title={tc('prescriptionsHelp')} rightButtonText={tc('close')}>
-      <Box mx={theme?.dimensions?.gutter} mt={theme?.dimensions?.contentMarginTop} mb={theme?.dimensions?.contentMarginBottom}>
+      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextView variant="MobileBodyBold">{t('prescription.help.header')}</TextView>
-        <TextView mt={theme?.dimensions?.condensedMarginBetween} variant="MobileBody">
+        <TextView mt={theme.dimensions.condensedMarginBetween} variant="MobileBody">
           {t('prescription.help.listHeader')}
         </TextView>
-        <Box my={theme?.dimensions?.standardMarginBetween}>
+        <Box my={theme.dimensions.standardMarginBetween}>
           <VABulletList listOfText={medicationNoIncludedList} />
         </Box>
         <TextView variant="MobileBody" accessibilityLabel={t('prescription.help.footer.a11yLabel')}>

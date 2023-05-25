@@ -2,16 +2,15 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import {ReactTestInstance} from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 import Mock = jest.Mock
 import { Pressable } from 'react-native'
 
 import { context, render, RenderAPI, waitFor } from 'testUtils'
 import SelectionList from './SelectionList'
-import {Box, TextView, VAButton} from "../index";
-import LoginScreen from "../../screens/auth/LoginScreen";
-import SelectionListItem from "./SelectionListItem";
-
+import { Box, TextView, VAButton } from '../index'
+import LoginScreen from '../../screens/auth/LoginScreen'
+import SelectionListItem from './SelectionListItem'
 
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
@@ -30,10 +29,10 @@ context('SelectionList', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (useImage = false) => {
-    const listContent = [{ content: <TextView>item 1</TextView> }, { content:<TextView>item 2</TextView> }]
+    const listContent = [{ content: <TextView>item 1</TextView> }, { content: <TextView>item 2</TextView> }]
 
     component = render(<SelectionList items={listContent} />)
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

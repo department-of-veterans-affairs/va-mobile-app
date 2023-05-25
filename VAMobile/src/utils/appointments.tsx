@@ -141,7 +141,7 @@ export const getGroupedAppointments = (
       const displayedMonth = getFormattedDate(new Date(parseInt(year, 10), parseInt(month, 10)).toISOString(), 'MMMM')
 
       return (
-        <Box key={month} mb={theme?.dimensions?.standardMarginBetween}>
+        <Box key={month} mb={theme.dimensions.standardMarginBetween}>
           <DefaultList items={listItems} title={`${displayedMonth} ${year}`} />
         </Box>
       )
@@ -205,11 +205,11 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
   const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
 
   if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-    textLines.push({ text: t('appointments.canceled'), textTag: { labelType: LabelTagTypeConstants.tagInactive }, mb: theme?.dimensions?.condensedMarginBetween })
+    textLines.push({ text: t('appointments.canceled'), textTag: { labelType: LabelTagTypeConstants.tagInactive }, mb: theme.dimensions.condensedMarginBetween })
   } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
-    textLines.push({ text: t('appointments.confirmed'), textTag: { labelType: LabelTagTypeConstants.tagBlue }, mb: theme?.dimensions?.condensedMarginBetween })
+    textLines.push({ text: t('appointments.confirmed'), textTag: { labelType: LabelTagTypeConstants.tagBlue }, mb: theme.dimensions.condensedMarginBetween })
   } else if (isPendingAppointment) {
-    textLines.push({ text: t('appointments.pending'), textTag: { labelType: LabelTagTypeConstants.tagYellow }, mb: theme?.dimensions?.condensedMarginBetween })
+    textLines.push({ text: t('appointments.pending'), textTag: { labelType: LabelTagTypeConstants.tagYellow }, mb: theme.dimensions.condensedMarginBetween })
   }
 
   // pending appointments
@@ -228,7 +228,7 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
         textLines.push({
           text: t('common:text.raw', { text: location.name }),
           variant: 'HelperText',
-          mb: theme?.dimensions?.condensedMarginBetween,
+          mb: theme.dimensions.condensedMarginBetween,
         })
     }
     const youRequestedText = getPendingAppointmentRequestTypeText(appointmentType, t, phoneOnly)
@@ -242,13 +242,13 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
       textLines.push(
         { text: t('upcomingAppointments.covidVaccine'), variant: 'MobileBodyBold', mb: 5 },
         { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: theme?.dimensions?.condensedMarginBetween },
+        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: theme.dimensions.condensedMarginBetween },
       )
     } else if (typeOfCare) {
       textLines.push(
         { text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 },
         { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: theme?.dimensions?.condensedMarginBetween },
+        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: theme.dimensions.condensedMarginBetween },
       )
     } else {
       textLines.push(
@@ -263,7 +263,7 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
     textLines.push({
       text: t('common:text.raw', { text: healthcareProvider || location.name }),
       variant: 'HelperText',
-      mb: showAppointmentTypeIcon ? theme?.dimensions?.condensedMarginBetween : 0,
+      mb: showAppointmentTypeIcon ? theme.dimensions.condensedMarginBetween : 0,
     })
 
     if (showAppointmentTypeIcon) {

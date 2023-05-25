@@ -4,8 +4,9 @@ import React, { FC } from 'react'
 import { Box, TextArea, TextView, VABulletList } from 'components'
 import { ClaimData } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 type ClaimDetailsProps = {
   claim: ClaimData
@@ -19,7 +20,7 @@ type ClaimDetailsProps = {
  */
 const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const { attributes } = claim
 
   const formattedDateFiled = formatDateMMMMDDYYYY(attributes?.dateFiled || '')
@@ -29,7 +30,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
       <TextArea>
         <TextView variant="MobileBodyBold">{t('claimDetails.claimType')}</TextView>
         <TextView variant="MobileBody">{attributes?.claimType || t('noneNoted')}</TextView>
-        <TextView variant="MobileBodyBold" mt={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
           {t('claimDetails.whatYouHaveClaimed')}
         </TextView>
         {attributes?.contentionList && attributes.contentionList.length > 0 ? (
@@ -37,11 +38,11 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
         ) : (
           <TextView variant="MobileBody">{t('noneNoted')}</TextView>
         )}
-        <TextView variant="MobileBodyBold" mt={theme?.dimensions?.standardMarginBetween}>
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
           {t('claimDetails.dateReceived')}
         </TextView>
         <TextView variant="MobileBody">{formattedDateFiled}</TextView>
-        <TextView accessibilityLabel={t('claimDetails.yourRepresentative.a11yLabel')} variant="MobileBodyBold" mt={theme?.dimensions?.standardMarginBetween}>
+        <TextView accessibilityLabel={t('claimDetails.yourRepresentative.a11yLabel')} variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
           {t('claimDetails.yourRepresentative')}
         </TextView>
         <TextView variant="MobileBody">{attributes?.vaRepresentative || t('noneNoted')}</TextView>

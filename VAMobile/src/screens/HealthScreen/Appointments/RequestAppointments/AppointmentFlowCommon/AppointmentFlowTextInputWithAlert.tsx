@@ -1,7 +1,8 @@
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView, VATextInput, VATextInputTypes } from 'components'
-import { useTheme } from 'utils/hooks'
+import { VATheme } from 'styles/theme'
+import { useTheme } from 'styled-components'
 import AppointmentFlowErrorAlert from './AppointmentFlowErrorAlert'
 
 type AppointmentFlowTextInputWithAlertProps = BoxProps & {
@@ -35,7 +36,7 @@ const AppointmentFlowTextInputWithAlert: FC<AppointmentFlowTextInputWithAlertPro
   validationFunc,
   ...boxProps
 }) => {
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
 
   const onEndEditing = () => {
     if (validationFunc) {
@@ -45,10 +46,10 @@ const AppointmentFlowTextInputWithAlert: FC<AppointmentFlowTextInputWithAlertPro
 
   return (
     <Box {...boxProps}>
-      <TextView mb={errorMessage ? 0 : theme?.dimensions?.condensedMarginBetween} variant="MobileBodyBold">
+      <TextView mb={errorMessage ? 0 : theme.dimensions.condensedMarginBetween} variant="MobileBodyBold">
         {inputLabel}
       </TextView>
-      <AppointmentFlowErrorAlert errorMessage={errorMessage} mb={theme?.dimensions?.standardMarginBetween} mt={theme?.dimensions?.standardMarginBetween} />
+      <AppointmentFlowErrorAlert errorMessage={errorMessage} mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.standardMarginBetween} />
       <VATextInput isTextArea={isTextArea} inputType={inputType} onChange={onChange} onEndEditing={onEndEditing} value={value} maxLength={maxLength} />
     </Box>
   )

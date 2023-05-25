@@ -36,7 +36,7 @@ context('EstimatedDecisionDate', () => {
     props = mockNavProps({ maxEstDate, showCovidMessage })
 
     component = render(<EstimatedDecisionDate {...props} />, { preloadedState: { ...InitialState } })
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

@@ -4,8 +4,9 @@ import React, { FC, ReactNode, Ref, useState } from 'react'
 
 import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme } from 'styled-components'
 
 export type AccordionCollapsibleProps = {
   /** component to display as header of accordion */
@@ -47,7 +48,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   headerRef,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
+  const theme = useTheme() as VATheme
   const [expanded, setExpanded] = useState(expandedInitialValue || false)
 
   const onPress = (): void => {
@@ -72,7 +73,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
       <Box flexDirection="row">
         <Box flex={1}>{header}</Box>
         {!hideArrow && (
-          <Box mt={theme?.dimensions?.condensedMarginBetween}>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
             <VAIcon name={iconName} fill={theme?.colors?.icon?.chevronCollapsible} width={16} height={10} />
           </Box>
         )}
@@ -102,7 +103,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
 
   const boxProps: BoxProps = {
     borderBottomColor: 'primary',
-    borderBottomWidth: theme?.dimensions?.borderWidth,
+    borderBottomWidth: theme.dimensions.borderWidth,
     accessibilityRole: 'tablist',
   }
 
