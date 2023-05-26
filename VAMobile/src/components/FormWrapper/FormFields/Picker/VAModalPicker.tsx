@@ -214,11 +214,11 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     minHeight: theme.dimensions.touchableMinHeight,
     py: theme.dimensions.buttonPadding,
     px: theme.dimensions.gutter,
-    ml: insets?.left,
-    mr: insets?.right,
+    ml: insets.left,
+    mr: insets.right,
   }
 
-  const topPadding = insets?.top + 60
+  const topPadding = insets.top + 60
 
   const cancelLabel = t('cancel')
   const confirmLabel = getTranslation(confirmBtnText || 'common:done', t)
@@ -256,7 +256,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
         }}>
         <Box flex={1} flexDirection="column" accessibilityViewIsModal={true}>
           <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={topPadding} />
-          <Box backgroundColor="list" pb={insets?.bottom} flexShrink={1}>
+          <Box backgroundColor="list" pb={insets.bottom} flexShrink={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancel} {...cancelButtonProps}>
                 <TextView {...commonButtonProps}>{cancelLabel}</TextView>
