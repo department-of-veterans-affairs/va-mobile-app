@@ -19,7 +19,6 @@ import RefillRequestSummary from './Pharmacy/RefillScreens/RefillRequestSummary'
 import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
 import RefillTrackingModal from './Pharmacy/RefillTrackingDetails/RefillTrackingDetails'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
-import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
 import RequestAppointmentScreen from './Appointments/RequestAppointments/RequestAppointmentScreen'
 import SessionNotStarted from './Appointments/UpcomingAppointments/SessionNotStarted'
 import StartNewMessage from './SecureMessaging/StartNewMessage/StartNewMessage'
@@ -93,7 +92,6 @@ export type HealthStackParamList = WebviewStackParams & {
     replyToID?: number
   }
   SuccessfulSendScreen: undefined
-  ReplyTriageErrorScreen: undefined
   VaccineList: undefined
   VaccineDetails: {
     vaccineId: string
@@ -137,7 +135,6 @@ export const getHealthScreens = (t: TFunction) => {
     <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} options={LARGE_PANEL_OPTIONS} />,
-    <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'NoRequestAppointmentAccess'} name="NoRequestAppointmentAccess" component={NoRequestAppointmentAccess} options={{ headerShown: false }} />,
     <HealthStack.Group
       key={'ModalsScreens'}
