@@ -65,9 +65,9 @@ export const getBankData =
 export const updateBankInfo =
   (accountNumber: string, routingNumber: string, accountType: AccountTypes, snackbarMessages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
-    // const retryFunction = () => dispatch(updateBankInfo(accountNumber, routingNumber, accountType, snackbarMessages, screenID))
-    // dispatch(dispatchClearErrors(screenID))
-    // dispatch(dispatchSetTryAgainFunction(retryFunction))
+    const retryFunction = () => dispatch(updateBankInfo(accountNumber, routingNumber, accountType, snackbarMessages, screenID))
+    dispatch(dispatchClearErrors(screenID))
+    dispatch(dispatchSetTryAgainFunction(retryFunction))
 
     try {
       dispatch(dispatchStartSaveBankInfo())
@@ -79,26 +79,26 @@ export const updateBankInfo =
       }
       const bankInfo = await api.put<api.DirectDepositData>('/v0/payment-information/benefits', params)
 
-      // await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
-      // const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      // await logAnalyticsEvent(Events.vama_update_dir_dep(totalTime, actionTime))
-      // await dispatch(resetAnalyticsActionStart())
-      // await dispatch(setAnalyticsTotalTimeStart())
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+      const [totalTime, actionTime] = getAnalyticsTimers(getState())
+      await logAnalyticsEvent(Events.vama_update_dir_dep(totalTime, actionTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveBankInfo({ paymentAccount: bankInfo?.data.attributes.paymentAccount }))
-      // showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
+      showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
     } catch (error) {
-      // if (isErrorObject(error)) {
-      //   logNonFatalErrorToFirebase(error, `updateBankInfo: ${directDepositNonFatalErrorString}`)
-      //   const invalidRoutingNumberError = checkIfRoutingNumberIsInvalid(error)
-      //   dispatch(dispatchFinishSaveBankInfo({ error, invalidRoutingNumberError }))
-      //   // both invalidRoutingNumber error and common app level errors share the same status codes
-      //   // invalidRoutingNumber error is more specific and takes priority over common error
-      //   if (!invalidRoutingNumberError) {
-      //     dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
-      //     // added here becuase if it is a routing number error there is no point of retrying and showing snackbar there is already an error shown
-      //     showSnackBar(snackbarMessages.errorMsg, dispatch, retryFunction, false, true)
-      //   }
-      // }
+      if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `updateBankInfo: ${directDepositNonFatalErrorString}`)
+        const invalidRoutingNumberError = checkIfRoutingNumberIsInvalid(error)
+        dispatch(dispatchFinishSaveBankInfo({ error, invalidRoutingNumberError }))
+        // both invalidRoutingNumber error and common app level errors share the same status codes
+        // invalidRoutingNumber error is more specific and takes priority over common error
+        if (!invalidRoutingNumberError) {
+          dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+          // added here becuase if it is a routing number error there is no point of retrying and showing snackbar there is already an error shown
+          showSnackBar(snackbarMessages.errorMsg, dispatch, retryFunction, false, true)
+        }
+      }
     }
   }
 
