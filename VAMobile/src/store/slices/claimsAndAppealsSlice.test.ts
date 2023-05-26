@@ -172,6 +172,10 @@ context('claimsAndAppeals', () => {
     },
   ]
 
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
   describe('prefetchClaimsAndAppeals', () => {
     const mockPagination: ClaimsAndAppealsGetDataMeta = {
       dataFromStore: false,

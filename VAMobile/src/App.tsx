@@ -227,7 +227,7 @@ export const AuthGuard: FC = () => {
     }
     const sub = Linking.addEventListener('url', listener)
     return (): void => {
-      sub.remove()
+      sub?.remove()
     }
   }, [dispatch])
 

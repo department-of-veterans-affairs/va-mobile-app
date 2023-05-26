@@ -220,7 +220,7 @@ export function useIsScreenReaderEnabled(withListener = false): boolean {
     return () => {
       isMounted = false
       if (withListener) {
-        screenReaderChangedSubscription.remove()
+        screenReaderChangedSubscription?.remove()
       }
     }
   }, [screenReaderEnabled, withListener])
@@ -499,7 +499,7 @@ export function useOrientation(): boolean {
     })
 
     return () => {
-      sub.remove()
+      sub?.remove()
     }
   }, [])
 

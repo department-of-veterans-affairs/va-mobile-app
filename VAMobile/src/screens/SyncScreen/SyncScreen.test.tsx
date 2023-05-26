@@ -64,6 +64,7 @@ context('SyncScreen', () => {
   }
 
   beforeEach(() => {
+    jest.clearAllMocks()
     initializeTestInstance()
   })
 

@@ -67,7 +67,7 @@ const defaultEnvParams = {
   AUTH_IAM_REVOKE_URL: 'https://test.gov/oauth/revoke',
 }
 
-const sampleIdToken = 'TEST_TOKEN';
+const sampleIdToken = 'TEST_TOKEN'
 
 context('authAction IAM', () => {
   let testAccessToken: string
@@ -95,6 +95,10 @@ context('authAction IAM', () => {
           },
         },
       })
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('startWebLogin', () => {

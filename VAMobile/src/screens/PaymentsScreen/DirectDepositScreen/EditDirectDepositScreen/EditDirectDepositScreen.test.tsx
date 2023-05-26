@@ -11,25 +11,6 @@ import { updateBankInfo, InitialState, initialDirectDepositState, ErrorsState, i
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
-jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    updateBankInfo: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    finishEditBankInfo: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
-
 context('EditDirectDepositScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
@@ -43,6 +24,25 @@ context('EditDirectDepositScreen', () => {
   const getSaveButton = () => testInstance.findAllByType(TouchableWithoutFeedback)[1]
 
   const initializeTestInstance = (saving = false, errorsState: ErrorsState = initialErrorsState) => {
+    jest.mock('store/slices', () => {
+      let actual = jest.requireActual('store/slices')
+      return {
+        ...actual,
+        updateBankInfo: jest.fn(() => {
+          return {
+            type: '',
+            payload: '',
+          }
+        }),
+        finishEditBankInfo: jest.fn(() => {
+          return {
+            type: '',
+            payload: '',
+          }
+        }),
+      }
+    })
+
     props = mockNavProps(
       {},
       {

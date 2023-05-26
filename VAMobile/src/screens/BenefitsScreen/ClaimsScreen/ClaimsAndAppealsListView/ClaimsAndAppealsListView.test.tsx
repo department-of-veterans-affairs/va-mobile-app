@@ -10,7 +10,7 @@ import { InitialState } from 'store/slices'
 import { TextView } from 'components'
 import { ClaimsAndAppealsList } from 'store/api/types'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
-import { getClaimsAndAppeals } from 'store/slices'
+import * as slices from 'store/slices/claimsAndAppealsSlice'
 import { waitFor } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
@@ -29,29 +29,18 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    getClaimsAndAppeals: jest.fn(() => {
-      return {
-        type: '',
-        payload: {},
-      }
-    }),
-  }
-})
-
 context('ClaimsAndAppealsListView', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
   let mockNavigateToClaimDetailsScreenSpy: jest.Mock
   let mockNavigateToAppealDetailsScreenSpy: jest.Mock
+  let getClaimsAndAppealsSpy: jest.SpyInstance
 
   const initializeTestInstance = (claimType: ClaimType, isEmpty?: boolean): void => {
     mockNavigateToClaimDetailsScreenSpy = jest.fn()
     mockNavigateToAppealDetailsScreenSpy = jest.fn()
+    getClaimsAndAppealsSpy = jest.spyOn(slices, 'getClaimsAndAppeals')
 
     when(mockNavigationSpy)
       .mockReturnValue(() => {})
@@ -197,13 +186,13 @@ context('ClaimsAndAppealsListView', () => {
     it('should call getClaimsAndAppeals for previous arrow', async () => {
       findByTestID(testInstance, 'previous-page').props.onPress()
       // was 2 now 1
-      expect(getClaimsAndAppeals).toHaveBeenCalledWith(ClaimTypeConstants.ACTIVE, expect.anything(), 1)
+      expect(getClaimsAndAppealsSpy).toHaveBeenCalledWith(ClaimTypeConstants.ACTIVE, expect.anything(), 1)
     })
 
     it('should call getClaimsAndAppeals for next arrow', async () => {
       findByTestID(testInstance, 'next-page').props.onPress()
       // was 2 now 3
-      expect(getClaimsAndAppeals).toHaveBeenCalledWith(ClaimTypeConstants.ACTIVE, expect.anything(), 3)
+      expect(getClaimsAndAppealsSpy).toHaveBeenCalledWith(ClaimTypeConstants.ACTIVE, expect.anything(), 3)
     })
   })
 })

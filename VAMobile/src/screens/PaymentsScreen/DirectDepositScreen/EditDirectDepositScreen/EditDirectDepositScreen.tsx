@@ -69,6 +69,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
   })
 
   const goBack = useCallback(() => {
+    console.debug(finishEditBankInfo)
     dispatch(finishEditBankInfo(ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID))
     navigation.goBack()
   }, [dispatch, navigation])

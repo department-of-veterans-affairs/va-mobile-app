@@ -4,7 +4,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
-
+import { fireEvent, screen } from '@testing-library/react-native'
 import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import EditDraft from './EditDraft'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
@@ -260,7 +260,7 @@ context('EditDraft', () => {
     describe('on click of the go to inbox button', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
         await waitFor(() => {
-          testInstance.findByProps({ label: 'Go to inbox' }).props.onPress()
+          fireEvent.press(screen.getByText('Go to inbox'))
           expect(navigateSpy).toHaveBeenCalled()
           expect(updateSecureMessagingTab).toHaveBeenCalled()
         })
@@ -289,6 +289,7 @@ context('EditDraft', () => {
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
+        fireEvent.press(screen.getByText('Veterans Crisis Line'))
         testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
         expect(navigateToVeteransCrisisLineSpy).toHaveBeenCalled()
       })
@@ -297,9 +298,12 @@ context('EditDraft', () => {
 
   describe('on click of the collapsible view', () => {
     it('should display the when will i get a reply children text', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[1].props.onPress()
-      })
+      await waitFor(
+        () => {
+          fireEvent.press(screen.getByText('When will I get a reply?'))
+        },
+        { timeout: 2000 },
+      )
 
       expect(
         findByTypeWithText(
@@ -325,7 +329,7 @@ context('EditDraft', () => {
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
-        testInstance.findByProps({ label: 'Add Files' }).props.onPress()
+        fireEvent.press(screen.getByText('Add Files'))
         expect(navigateToAddToFilesSpy).toHaveBeenCalled()
       })
     })

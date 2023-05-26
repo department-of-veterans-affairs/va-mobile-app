@@ -8,19 +8,6 @@ import { context, render, RenderAPI, waitFor } from 'testUtils'
 import SignoutButton from './SignoutButton'
 import { VAButton } from './index'
 
-jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    logout: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
-
 const mockAlertSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
@@ -40,6 +27,19 @@ context('SignoutButton', () => {
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
+    jest.mock('store/slices', () => {
+      let actual = jest.requireActual('store/slices')
+      return {
+        ...actual,
+        logout: jest.fn(() => {
+          return {
+            type: '',
+            payload: '',
+          }
+        }),
+      }
+    })
+
     component = render(<SignoutButton />)
 
     testInstance = component.UNSAFE_root
