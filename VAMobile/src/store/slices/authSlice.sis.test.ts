@@ -70,6 +70,9 @@ context('authAction SIS', () => {
   let encryptedComponent: string
   let nonce: string
   let testRefreshToken: string
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
   beforeEach(() => {
     testAccessToken = generateRandomString()
     encryptedComponent = generateRandomString()
