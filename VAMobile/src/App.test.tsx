@@ -28,6 +28,10 @@ jest.mock('react-native-keyboard-manager', () => ({
 }))
 
 context('App', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+  
   it('initializes correctly', async () => {
     let component: any
     jest.mock('./store', () => ({
