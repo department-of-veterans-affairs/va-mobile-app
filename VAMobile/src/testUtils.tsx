@@ -243,7 +243,9 @@ function render(ui, { preloadedState, navigationProvided = false, ...renderOptio
       return (
         <Provider store={store}>
           <I18nextProvider i18n={i18nReal}>
-            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+            <ThemeProvider theme={theme}>
+              <SafeAreaProvider>{children}</SafeAreaProvider>
+            </ThemeProvider>
           </I18nextProvider>
         </Provider>
       )
@@ -252,7 +254,9 @@ function render(ui, { preloadedState, navigationProvided = false, ...renderOptio
       <Provider store={store}>
         <I18nextProvider i18n={i18nReal}>
           <NavigationContainer>
-            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+            <ThemeProvider theme={theme}>
+              <SafeAreaProvider>{children}</SafeAreaProvider>
+            </ThemeProvider>
           </NavigationContainer>
         </I18nextProvider>
       </Provider>
