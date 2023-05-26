@@ -11,46 +11,17 @@ curl --request GET \
 
 ## Console Access
 
-To connect to a staging instance, open a terminal locally and enter 'mfa' followed by a code from a 2FA tool such as [Authy](https://authy.com/). Change into the devops repo dir, and run the SSM script with 'staging' as an argument. The script will return a numbered list of available instances.
+To connect to a staging instance, first ensure you have [requested access to EKS](https://github.com/department-of-veterans-affairs/va.gov-team/issues/new?assignees=&labels=external-request%2Cplatform-tech-team-support%2Cops-access-request&projects=&template=vetsapi-argo-terminal-access.yaml&title=Vets-api+terminal+access+for+%5Bindividual%5D).
 
-```
-mfa {2fa code}
-AWS Session credentials saved. Will expire in 12 hours
-cd {path to devops checkout dir}
-sh utilities/ssm.sh vets-api-server staging
-Finding apps for vets-api-server staging
--e Found the following instances:
-Instance ID        Private Ip    Name
-i-0cb43936846956681    10.247.34.198    dsva-vagov-staging-deployment-vagov-staging-vets-api-server-20211201-221337-asg
-i-002a2d845a9bbfb47    10.247.34.238    dsva-vagov-staging-deployment-vagov-staging-vets-api-server-20211201-221337-asg
-i-09bf54f2024d20400    10.247.34.61    dsva-vagov-staging-deployment-vagov-staging-vets-api-server-20211201-221337-asg
-i-0900c0675f349b4b5    10.247.34.15    dsva-vagov-staging-deployment-vagov-staging-vets-api-server-20211201-221337-asg
-i-0304e9c0fc5d4c4e3    10.247.35.117    dsva-vagov-staging-deployment-vagov-staging-vets-api-server-20211201-221337-asg
-i-0a9d52a236730155f    10.247.35.40    dsva-vagov-staging-deployment-vagov-staging-vets-api-server-20211201-221337-asg
+After you have access, you can see the staging pods through the [web](https://argocd.vfs.va.gov/applications/vets-api-staging?resource=). After signing in with your account and visiting the link, you will see several things
 
-What instance do you want to connect to? (input only the number eg: 1, 2, 4)
-Type 'q' to exit
-1) -n              5) -n               9) -n
-2) i-0cb43936846956681      6) i-09bf54f2024d20400  10) i-0304e9c0fc5d4c4e3
-3) -n              7) -n              11) -n
-4) i-002a2d845a9bbfb47      8) i-0900c0675f349b4b5  12) i-0a9d52a236730155f
-#?
-```
+![](../../../../static/img/backend/eks-staging.png)
 
-Select an instance by typing its number, e.g. 2. Then change to a super user and run the Docker command to launch the Rails console.
+At the top, you'll see the last time the pods were synced to HEAD. On the right, you'll see a long list of pods running the staging site. Click on one that has `vets-api-web` in the name.
 
-```
-#? 2
-Starting session to:  i-0cb43936846956681
+![](../../../../static/img/backend/eks-terminal.png)
 
-Starting session with SessionId: First.Last-09fdb960f34e99c93
-sh-4.2$ sudo su
-[root@ip-10-247-34-198 /]# docker exec -it vets-api bundle exec rails c
-{"host":"0fca69c2c0fa","application":"vets-api-server","environment":"production","timestamp":"2021-12-02T16:32:05.979827Z","level":"info","level_index":2,"pid":632,"thread":"65000","name":"Rails","message":"Raven 2.13.0 ready to catch errors"}
-2021-12-02 16:32:08.420676 W [632:65000] SemanticLogger::Appenders -- Ignoring attempt to add a second console appender: SemanticLogger::Appender::File since it would result in duplicate console output.
-Loading production environment (Rails 6.1.4.1)
-irb(main):001:0>
-```
+You'll see "TERMINAL" as a tab. From here, you have access to the console. You can run any commands you would in a local terminal here. For instance, run `bundle exec rails c` if you'd like to run a rails console. 
 
 ### User Sign In
 You can then fetch an [api token](ApiTokens.md#fetching-api-tokens) and use that token to create either an IAM user session (deprecated):
