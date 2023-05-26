@@ -28,7 +28,7 @@ context('PastAppointmentDetails', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
-
+  
   const runAfterTransition = (testToRun: () => void) => {
     InteractionManager.runAfterInteractions(() => {
       testToRun()

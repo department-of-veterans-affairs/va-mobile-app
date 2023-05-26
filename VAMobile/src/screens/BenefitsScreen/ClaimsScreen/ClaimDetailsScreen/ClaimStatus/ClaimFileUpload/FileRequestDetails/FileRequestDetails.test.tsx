@@ -11,8 +11,6 @@ context('FileRequestDetails', () => {
   let component: RenderAPI
   let testInstance: any
   let props: any
-  let mockNavigateToTakeOrSelectPhotoSpy: jest.Mock
-  let mockNavigateToSelectFileSpy: jest.Mock
 
   let request = {
     type: 'still_need_from_you_list',
@@ -23,17 +21,6 @@ context('FileRequestDetails', () => {
     displayName: 'Request 1',
     description: 'Need DD214',
   }
-
-  // const mockNavigationSpy = jest.fn()
-  // jest.mock('utils/hooks', () => {
-  //   const original = jest.requireActual('utils/hooks')
-  //   return {
-  //     ...original,
-  //     useRouteNavigation: () => {
-  //       return mockNavigationSpy
-  //     },
-  //   }
-  // })
 
   const initializeTestInstance = (request: ClaimEventData) => {
     props = mockNavProps(undefined, { setOptions: jest.fn() }, { params: { request } })

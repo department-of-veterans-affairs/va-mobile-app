@@ -31,6 +31,7 @@ context('App', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
+  
   it('initializes correctly', async () => {
     let component: any
     jest.mock('./store', () => ({

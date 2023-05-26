@@ -41,7 +41,7 @@ context('GenderIdentityScreen', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
-
+  
   const initializeTestInstance = (preloadGenderIdentityOptions?: boolean, errorsState: ErrorsState = initialErrorsState) => {
     const props = mockNavProps()
     const store = {
