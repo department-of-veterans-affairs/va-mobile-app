@@ -49,15 +49,16 @@ jest.mock('../src/store/api', () => ({
   setRefreshToken: jest.fn(),
 }))
 
-// jest.mock('../src/utils/hooks', () => {
-//   let original = jest.requireActual('../src/utils/hooks')
-//   return {
-//     ...original,
-//     useRouteNavigation: () => {
-//       return jest.fn()
-//     },
-//   }
-// })
+jest.mock('../src/utils/hooks', () => {
+  let original = jest.requireActual('../src/utils/hooks')
+
+  return {
+    ...original,
+    useRouteNavigation: () => {
+      return jest.fn()
+    },
+  }
+})
 
 jest.mock('../src/utils/platform', () => {
   let original = jest.requireActual('../src/utils/platform')

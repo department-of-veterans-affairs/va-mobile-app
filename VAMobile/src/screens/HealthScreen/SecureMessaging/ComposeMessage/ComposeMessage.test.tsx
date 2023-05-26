@@ -18,7 +18,6 @@ import { when } from 'jest-when'
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual('../../../../utils/hooks')
-  console.debug(original)
   return {
     ...original,
     useRouteNavigation: () => {
