@@ -10,15 +10,14 @@ import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { VATheme } from 'styles/theme'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { useError, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
 
 const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { claimID } = route.params

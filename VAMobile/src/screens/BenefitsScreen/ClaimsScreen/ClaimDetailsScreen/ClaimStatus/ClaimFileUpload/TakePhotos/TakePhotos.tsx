@@ -8,11 +8,10 @@ import { AlertBox, Box, ButtonTypesConstants, ClickForActionLink, LinkButtonProp
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useShowActionSheet } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import CollapsibleAlert from 'components/CollapsibleAlert'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import getEnv from 'utils/env'
@@ -23,7 +22,7 @@ type TakePhotosProps = StackScreenProps<BenefitsStackParamList, 'TakePhotos'>
 
 const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
   const { request } = route.params

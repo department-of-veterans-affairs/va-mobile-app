@@ -17,11 +17,10 @@ import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'compone
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState } from 'store/slices'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useExternalLink } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import AppealDecision from '../AppealDecision/AppealDecision'
 import getEnv from 'utils/env'
 
@@ -303,7 +302,7 @@ type AppealCurrentStatusProps = {
 }
 
 const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appealType, docketName, programArea }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)

@@ -6,15 +6,14 @@ import { AppointmentFlowLayout, AppointmentFlowTitleSection, AppointmentFlowWhit
 import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { useExternalLink, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type EmergencyAndCrisisScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'EmergencyAndCrisisScreen'>
 
 const EmergencyAndCrisisScreen: FC<EmergencyAndCrisisScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const launchExternalLink = useExternalLink()

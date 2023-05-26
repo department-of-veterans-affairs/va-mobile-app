@@ -25,11 +25,10 @@ import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
 import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 const MAX_ROUTING_DIGITS = 9
 const MAX_ACCOUNT_DIGITS = 17
@@ -44,7 +43,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation()
   const { displayTitle } = route.params
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)

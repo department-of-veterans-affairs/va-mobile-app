@@ -3,9 +3,8 @@ import React, { FC, ReactElement } from 'react'
 
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import getEnv from 'utils/env'
 
 const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
@@ -15,7 +14,7 @@ type NeedHelpDataProps = {
 }
 
 const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const AppealData = (): ReactElement => {

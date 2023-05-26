@@ -4,10 +4,9 @@ import React, { FC } from 'react'
 import { AppointmentPhone } from 'store/api/types'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'utils/formattingUtils'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type ClickToCallPhoneNumberProps = {
   /**sets the phone information */
@@ -23,7 +22,7 @@ type ClickToCallPhoneNumberProps = {
 /**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
 const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center, a11yLabel }) => {
   const { t } = useTranslation(NAMESPACE.HOME)
-  const theme = useTheme() as VATheme as VATheme
+  const theme = useTheme()
 
   if (!phone) {
     return <></>

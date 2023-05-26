@@ -6,8 +6,7 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { OnPressOptions } from './PickerOptions'
 import { StackScreenProps } from '@react-navigation/stack'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import { useTranslation } from 'react-i18next'
 import CommonComponentWhiteList, { PropOptionType } from './CommonComponentWhiteList'
 
@@ -15,7 +14,7 @@ type SandboxScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Sa
 
 const SandboxScreen: FC<SandboxScreenSettingsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   // Component Picker
   const defaultComponent = 'ClickForActionLink'

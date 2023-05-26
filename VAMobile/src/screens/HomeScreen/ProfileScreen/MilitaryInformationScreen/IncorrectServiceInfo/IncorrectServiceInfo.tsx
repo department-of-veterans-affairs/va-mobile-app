@@ -6,9 +6,8 @@ import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView
 import { HiddenTitle } from 'styles/common'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type IncorrectServiceInfoScreenProps = StackScreenProps<HomeStackParamList, 'IncorrectServiceInfo'>
 
@@ -19,7 +18,7 @@ type IncorrectServiceInfoScreenProps = StackScreenProps<HomeStackParamList, 'Inc
  */
 const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   useEffect(() => {
     navigation.setOptions({

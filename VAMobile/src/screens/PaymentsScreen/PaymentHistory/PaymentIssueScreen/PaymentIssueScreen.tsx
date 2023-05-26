@@ -5,14 +5,13 @@ import React, { FC } from 'react'
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type PaymentIssueScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentIssue'>
 
 const PaymentIssue: FC<PaymentIssueScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   return (
     <LargePanel title={t('paymentsHelp.title')} rightButtonText={t('close')}>

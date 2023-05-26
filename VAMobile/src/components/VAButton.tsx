@@ -2,9 +2,9 @@ import { AccessibilityState, Pressable } from 'react-native'
 import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAIconProps } from './index'
-import { VAButtonBackgroundColors, VAButtonTextColors, VATheme } from 'styles/theme'
+import { VAButtonBackgroundColors, VAButtonTextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
 
@@ -55,7 +55,7 @@ export type VAButtonProps = {
  * A common component to show a button that takes the full width of the view with gutters
  */
 const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState, disabledText, iconProps, minHeight }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const textViewProps: TextViewProps = {
     variant: 'MobileBodyBold',

@@ -21,13 +21,13 @@ import { CloseModalButton, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState, finishCheckingCCEligibility, getUserCommunityCareEligibility, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
-import { isIOS } from './platform'
-import { useAppDispatch, useRouteNavigation, useTheme } from './hooks'
+import { isIOS } from 'utils/platform'
+import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
+import { useTheme } from 'utils/hooks/useTheme'
 
 /** Header style for the modals in the request appointment flow */
 export const useRequestAppointmentModalHeaderStyles = (): StackNavigationOptions => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
 
   const headerStyles: StackNavigationOptions = {

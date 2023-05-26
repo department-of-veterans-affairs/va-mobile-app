@@ -1,8 +1,7 @@
 import { Pressable, PressableProps } from 'react-native'
 import React, { FC } from 'react'
 
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -40,7 +39,7 @@ export type LabelTagProps = {
 
 /**Common component to show a text inside a tag*/
 const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yLabel }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const textView = (
     <TextView flexWrap={'wrap'} color={'labelTag'} variant={'LabelTag'} px={12} py={4}>

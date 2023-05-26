@@ -1,8 +1,8 @@
 import { Pressable, PressableProps } from 'react-native'
 import React, { FC, useState } from 'react'
 
-import { VAIconColors, VATextColors, VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { VAIconColors, VATextColors } from 'styles/theme'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box, { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, BoxProps } from './Box'
 import TextView, { TextViewProps } from './TextView'
 import VAIcon, { VAIconProps, VA_ICON_MAP } from './VAIcon'
@@ -52,7 +52,7 @@ const ButtonWithIcon: FC<ButtonWithIconProps> = ({
   borderWidth,
   buttonTextColor,
 }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [buttonPressed, setButtonPressed] = useState(false)
 
   const onPressIn = (): void => {

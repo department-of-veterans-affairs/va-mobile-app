@@ -8,11 +8,10 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { VA_ICON_MAP } from './VAIcon'
 import { a11yValueProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box from './Box'
 import VAIconWithText, { VAIconWithTextProps } from './VAIconWithText/VAIconWithText'
 
@@ -40,7 +39,7 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 `
 /**Component for the bottom tab navigation*/
 const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, translation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const onPress = (route: TabBarRoute, isFocused: boolean): void => {

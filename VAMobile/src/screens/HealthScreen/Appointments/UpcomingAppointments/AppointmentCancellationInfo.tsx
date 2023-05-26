@@ -4,14 +4,13 @@ import React, { FC } from 'react'
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToA11yLabel } from 'store/api/types'
 import { Box, ButtonTypesConstants, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { cancelAppointment } from 'store/slices'
 import { formatDateMMDDYYYY } from 'utils/formattingUtils'
 import { getTranslation } from 'utils/formattingUtils'
 import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -24,7 +23,7 @@ type AppointmentCancellationInfoProps = {
 const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ appointment }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const confirmAlert = useDestructiveAlert()
   const dispatch = useAppDispatch()
   const isAndroidDevice = isAndroid()

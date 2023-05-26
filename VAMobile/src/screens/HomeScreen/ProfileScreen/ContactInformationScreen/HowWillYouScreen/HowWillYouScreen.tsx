@@ -6,14 +6,13 @@ import { Box, LargePanel, TextView } from 'components'
 import { HiddenTitle } from 'styles/common'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type HowWillYouScreenProps = StackScreenProps<HomeStackParamList, 'HowWillYou'>
 
 const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   useEffect(() => {
     navigation.setOptions({

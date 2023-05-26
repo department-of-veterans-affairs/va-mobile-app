@@ -5,10 +5,9 @@ import React, { FC } from 'react'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { useExternalLink } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import getEnv from 'utils/env'
 
 const { LINK_URL_DECISION_REVIEWS } = getEnv()
@@ -17,7 +16,7 @@ type WhatDoIDoIfDisagreementProps = StackScreenProps<BenefitsStackParamList, 'Wh
 
 const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const launchExternalLink = useExternalLink()
 
   const onDecisionReview = async (): Promise<void> => {

@@ -4,10 +4,9 @@ import React, { FC } from 'react'
 
 import { FooterButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { View, ViewStyle } from 'react-native'
 import { useDestructiveAlert } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /* To use this template to wrap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
@@ -54,7 +53,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveAlert()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const message = t('areYouSure')
 
   const leftTitleButtonPress = () => {

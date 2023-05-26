@@ -13,10 +13,9 @@ import { LettersState, getLetters } from 'store/slices/lettersSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { OnPressHandler, useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = StackScreenProps<BenefitsStackParamList, 'LettersList'>
@@ -25,7 +24,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { lettersAndDocuments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const { letters, loading } = useSelector<RootState, LettersState>((state) => state.letters)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)

@@ -8,10 +8,9 @@ import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } fro
 import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useRouteNavigation, useShowActionSheet } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import getEnv from 'utils/env'
 
@@ -21,7 +20,7 @@ type SelectFilesProps = StackScreenProps<BenefitsStackParamList, 'SelectFile'>
 
 const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const [error, setError] = useState('')
   const scrollViewRef = useRef<ScrollView>(null)

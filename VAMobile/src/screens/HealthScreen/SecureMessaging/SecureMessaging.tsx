@@ -10,10 +10,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices'
-import { VATheme } from 'styles/theme'
 import { useAppDispatch, useDowntime, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import CernerAlert from '../CernerAlert'
 import ComposeMessageButton from './ComposeMessageButton/ComposeMessageButton'
 import Folders from './Folders/Folders'
@@ -31,7 +30,7 @@ export const getInboxUnreadCount = (state: RootState): number => {
 const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   const inboxUnreadCount = useSelector<RootState, number>(getInboxUnreadCount)

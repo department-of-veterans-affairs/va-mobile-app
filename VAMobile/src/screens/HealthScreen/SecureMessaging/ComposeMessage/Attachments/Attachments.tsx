@@ -14,11 +14,10 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { Image } from 'react-native'
 import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y, getMaxWidthAndHeightOfImage } from 'utils/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { themeFn } from 'utils/theme'
 import { useRouteNavigation, useShowActionSheet } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -34,7 +33,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
   const [error, setError] = useState('')

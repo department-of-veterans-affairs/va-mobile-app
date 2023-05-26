@@ -8,11 +8,10 @@ import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScre
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { useAppDispatch, useDowntime, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from '../NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
@@ -20,7 +19,7 @@ type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
 const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)

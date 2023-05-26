@@ -9,13 +9,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/types'
 import { PrescriptionState, requestRefills } from 'store/slices'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import { useTranslation } from 'react-i18next'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
@@ -28,7 +27,7 @@ const enum REQUEST_STATUS {
 type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
 
 const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)

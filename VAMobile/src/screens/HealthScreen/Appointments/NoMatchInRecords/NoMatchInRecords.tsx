@@ -3,14 +3,13 @@ import React, { FC, ReactNode } from 'react'
 
 import { AccordionCollapsible, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { getTranslation } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 const NoMatchInRecords: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const accordionContent = (textID: string, textA11yLabelID: string): ReactNode => {
     return (

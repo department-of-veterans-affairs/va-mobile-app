@@ -7,15 +7,14 @@ import { Events } from 'constants/analytics'
 import { FeatureConstants, getLocalVersion, getVersionSkipped, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export const WhatsNew = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const componentMounted = useRef(true)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const [localVersion, setVersionName] = useState<string>()

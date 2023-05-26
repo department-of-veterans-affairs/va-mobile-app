@@ -3,16 +3,15 @@ import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_MY_HEALTHEVET } = getEnv()
 const TermsAndConditions: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   return (
     <VAScrollView>

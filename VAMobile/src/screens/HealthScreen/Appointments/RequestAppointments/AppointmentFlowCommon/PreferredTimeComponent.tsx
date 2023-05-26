@@ -4,8 +4,7 @@ import React, { FC } from 'react'
 import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimesForPhoneCallType } from 'store/api/types'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import AppointmentFlowErrorAlert from './AppointmentFlowErrorAlert'
 
 type PreferredTimeComponentProps = {
@@ -23,7 +22,7 @@ type PreferredTimeComponentProps = {
 const PreferredTimeComponent: FC<PreferredTimeComponentProps> = ({ selectedTimes, onChange, errorMessage, selectionTitle }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const selectedList = new Set(selectedTimes || [])
 
   const timesList = [

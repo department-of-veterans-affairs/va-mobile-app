@@ -4,9 +4,8 @@ import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export type BasicErrorProps = {
   /** function called when the Try again button is pressed */
@@ -26,7 +25,7 @@ export type BasicErrorProps = {
 /**A common component to show an error*/
 const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yLabel, label }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const buttonText: string = label || t('tryAgain')
 
   const scrollStyles: ViewStyle = {

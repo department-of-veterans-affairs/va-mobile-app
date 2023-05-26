@@ -4,9 +4,8 @@ import React, { FC } from 'react'
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionHistoryTabs } from 'store/api/types'
-import { VATheme } from 'styles/theme'
 import { ViewStyle } from 'react-native'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type PrescriptionHistoryNoMatchesProps = {
   /** currently selected tab */
@@ -17,7 +16,7 @@ type PrescriptionHistoryNoMatchesProps = {
 
 const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ currentTab, isFiltered }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const getFilteredTabString = () => {
     switch (currentTab) {

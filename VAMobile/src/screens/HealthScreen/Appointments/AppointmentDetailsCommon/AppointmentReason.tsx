@@ -4,9 +4,8 @@ import React, { FC } from 'react'
 import { AppointmentAttributes, AppointmentMessages } from 'store/api'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { isAPendingAppointment } from 'utils/appointments'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type AppointmentReasonProps = {
   attributes: AppointmentAttributes
@@ -15,7 +14,7 @@ type AppointmentReasonProps = {
 
 const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes, messages }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { reason } = attributes || ({} as AppointmentAttributes)
   const isPendingAppointment = isAPendingAppointment(attributes)
 

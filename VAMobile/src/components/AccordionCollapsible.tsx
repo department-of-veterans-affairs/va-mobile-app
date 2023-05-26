@@ -4,9 +4,8 @@ import React, { FC, ReactNode, Ref, useState } from 'react'
 
 import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export type AccordionCollapsibleProps = {
   /** component to display as header of accordion */
@@ -48,7 +47,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   headerRef,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [expanded, setExpanded] = useState(expandedInitialValue || false)
 
   const onPress = (): void => {

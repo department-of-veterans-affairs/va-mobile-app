@@ -3,15 +3,14 @@ import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, CollapsibleView, CrisisLineCta, FullScreenSubtask, TextView, TextViewProps, VABulletList, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { useNavigation } from '@react-navigation/native'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type LoaGateProps = Record<string, unknown>
 
 const LoaGate: FC<LoaGateProps> = ({}) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const navigation = useNavigation()

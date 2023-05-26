@@ -5,8 +5,7 @@ import { AlertBox, Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { StackScreenProps } from '@react-navigation/stack'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type HowToUpdateDirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'HowToUpdateDirectDeposit'>
 
@@ -15,7 +14,7 @@ type HowToUpdateDirectDepositScreenProps = StackScreenProps<PaymentsStackParamLi
  */
 const HowToUpdateDirectDepositScreen: FC<HowToUpdateDirectDepositScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   return (
     <>

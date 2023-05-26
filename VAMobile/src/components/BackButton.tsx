@@ -5,10 +5,9 @@ import React, { FC } from 'react'
 
 import { BackButtonLabel } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useAccessibilityFocus } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -38,7 +37,7 @@ export type BackButtonProps = {
  */
 export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, showCarat, a11yHint, focusOnButton = true, webview }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
 

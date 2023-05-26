@@ -8,12 +8,11 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
-import { VATheme } from 'styles/theme'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
 export type ThreadMessageProps = {
@@ -26,7 +25,7 @@ export type ThreadMessageProps = {
 }
 
 const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage, collapsibleMessageRef }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tCom } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()

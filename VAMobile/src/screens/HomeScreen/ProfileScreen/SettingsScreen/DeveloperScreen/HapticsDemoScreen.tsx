@@ -5,15 +5,14 @@ import { Box, ChildTemplate, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../../../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps } from '@react-navigation/stack'
-import { VATheme } from 'styles/theme'
 import { useNavigation } from '@react-navigation/native'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import { useTranslation } from 'react-i18next'
 
 type HapticsDemoScreenProps = StackScreenProps<HomeStackParamList, 'HapticsDemoScreen'>
 
 const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
 

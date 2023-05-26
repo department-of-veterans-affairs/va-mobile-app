@@ -1,10 +1,10 @@
 import { ScrollView, ScrollViewProps, ViewStyle } from 'react-native'
 import React, { FC, Ref } from 'react'
 
-import { VABackgroundColors, VATheme } from 'styles/theme'
+import { VABackgroundColors } from 'styles/theme'
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export type VAScrollViewProps = {
   /** Optional reference prop to determine scroll position */
@@ -18,7 +18,7 @@ export type VAScrollViewProps = {
 /**A common component that provides a scrollable view. Use this instead of ScrollView. This component is a wrapper for react-native ScrollView that has a scrollbar styling fix */
 const VAScrollView: FC<VAScrollViewProps> = (props) => {
   const insets = useSafeAreaInsets()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const style = {
     paddingRight: props.removeInsets ? undefined : insets?.right,

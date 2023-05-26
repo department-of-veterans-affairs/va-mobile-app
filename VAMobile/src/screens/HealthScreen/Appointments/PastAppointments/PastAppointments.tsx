@@ -10,14 +10,13 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
-import { VATheme } from 'styles/theme'
 import { deepCopyObject } from 'utils/common'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { getGroupedAppointments, getTextLinesForAppointmentListItem, getYearsToSortedMonths, isAPendingAppointment } from 'utils/appointments'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = Record<string, unknown>
@@ -25,7 +24,7 @@ type PastAppointmentsProps = Record<string, unknown>
 const PastAppointments: FC<PastAppointmentsProps> = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>((state) => state.appointments)

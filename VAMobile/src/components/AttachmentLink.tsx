@@ -1,7 +1,6 @@
 import { AccessibilityProps, Pressable, PressableProps } from 'react-native'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box from './Box'
 import React, { FC } from 'react'
 import TextView from './TextView'
@@ -26,7 +25,7 @@ export type AttachmentLinkProps = {
  * A common component for an attachment link display. Can be used to show file attachments in a message thread.
  */
 const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, formattedSizeA11y, onPress, a11yHint, a11yValue }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const pressableProps: PressableProps = {
     onPress: onPress,

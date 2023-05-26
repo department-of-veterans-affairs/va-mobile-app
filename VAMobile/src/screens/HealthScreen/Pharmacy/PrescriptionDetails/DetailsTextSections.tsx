@@ -1,8 +1,7 @@
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView } from 'components'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type DetailsTextSections = {
   /** set the header for the text on the left */
@@ -35,7 +34,7 @@ const DetailsTextSections: FC<DetailsTextSections> = ({
   rightSectionValueLabel,
   children,
 }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const getTextElements = (headerText: string, valueText?: string | number, headerLabel?: string, valueLabel?: string) => {
     return (

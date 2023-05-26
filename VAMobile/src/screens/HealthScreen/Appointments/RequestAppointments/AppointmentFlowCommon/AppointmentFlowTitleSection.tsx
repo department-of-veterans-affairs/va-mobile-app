@@ -1,8 +1,7 @@
 import React, { FC } from 'react'
 
 import { TextView } from 'components'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import AppointmentFlowErrorAlert from './AppointmentFlowErrorAlert'
 
 type AppointmentModalTitleSectionProps = {
@@ -22,7 +21,7 @@ type AppointmentModalTitleSectionProps = {
  * Will show title, optional extra information text, and an optional error alert.
  * */
 const AppointmentFlowTitleSection: FC<AppointmentModalTitleSectionProps> = ({ title, extraInformationText, errorMessage, titleMarginBottom, titleA11yLabel }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const error = !!errorMessage
 
   return (

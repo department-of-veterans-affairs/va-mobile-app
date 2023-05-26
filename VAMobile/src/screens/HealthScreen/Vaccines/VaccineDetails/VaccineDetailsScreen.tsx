@@ -9,11 +9,10 @@ import { COVID19 } from 'constants/common'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { VaccineState, getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/slices/vaccineSlice'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'VaccineDetails'>
 
@@ -23,7 +22,7 @@ type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Vaccine
 const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation }) => {
   const { vaccineId } = route.params
   const { vaccinesById, vaccineLocationsById, detailsLoading } = useSelector<RootState, VaccineState>((state) => state.vaccine)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()

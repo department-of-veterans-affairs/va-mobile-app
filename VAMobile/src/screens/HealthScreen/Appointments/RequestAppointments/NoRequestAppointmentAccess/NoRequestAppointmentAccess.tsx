@@ -5,10 +5,9 @@ import React, { FC } from 'react'
 import { AlertBox, Box, ButtonTypesConstants, ChildTemplate, VABulletList, VAButton } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { useNavigation } from '@react-navigation/native'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -19,7 +18,7 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
   const navigation = useNavigation()
 

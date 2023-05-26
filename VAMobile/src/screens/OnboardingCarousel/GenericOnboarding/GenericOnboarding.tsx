@@ -2,11 +2,10 @@ import { Dimensions, View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAScrollView } from 'components'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useAccessibilityFocus } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export type GenericOnboardingProps = {
   header: string
@@ -20,7 +19,7 @@ export type GenericOnboardingProps = {
 }
 
 const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 
   useFocusEffect(setFocus)

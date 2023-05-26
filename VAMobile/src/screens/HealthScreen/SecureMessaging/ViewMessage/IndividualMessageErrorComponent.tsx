@@ -6,13 +6,12 @@ import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, 
 import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 const IndividualMessageErrorComponent: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { tryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
 
   return (

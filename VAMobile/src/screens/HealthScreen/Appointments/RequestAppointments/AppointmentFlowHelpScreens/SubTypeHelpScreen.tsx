@@ -6,9 +6,8 @@ import { Box, TextView } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { TypeOfCareWithSubCareIdType } from 'store/api'
-import { VATheme } from 'styles/theme'
 import { useRequestAppointmentModalHeaderStyles } from 'utils/requestAppointments'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type SubTypeHelpScreenProps = StackScreenProps<HealthStackParamList, 'SubTypeHelpScreen'>
 
@@ -22,7 +21,7 @@ type BodyTextType = Array<TextSectionType>
 /** Component for the sub type care help screen */
 const SubTypeHelpScreen: FC<SubTypeHelpScreenProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { careTypeId } = route.params
   const headerStyle = useRequestAppointmentModalHeaderStyles()
 

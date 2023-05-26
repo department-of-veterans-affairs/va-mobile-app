@@ -11,12 +11,11 @@ import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSl
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useBeforeNavBackListener, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
@@ -28,7 +27,7 @@ type ClaimDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimDe
 
 const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const controlValues = [t('claimDetails.status'), t('claimDetails.details')]

@@ -13,10 +13,9 @@ import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
-import { VATheme } from 'styles/theme'
 import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useDowntime, usePrevious } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import NoRefills from './NoRefills'
 import SelectionList from 'components/SelectionList'
@@ -24,7 +23,7 @@ import SelectionList from 'components/SelectionList'
 type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
 
 export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const submitRefillAlert = useDestructiveAlert()
 

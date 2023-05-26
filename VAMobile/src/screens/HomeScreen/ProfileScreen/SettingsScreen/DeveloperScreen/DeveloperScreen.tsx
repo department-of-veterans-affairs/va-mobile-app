@@ -15,12 +15,11 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { StackScreenProps } from '@react-navigation/stack'
-import { VATheme } from 'styles/theme'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import getEnv, { EnvVars } from 'utils/env'
 
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
@@ -30,7 +29,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
   const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
   const authorizedServices = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const [localVersionName, setVersionName] = useState<string>()

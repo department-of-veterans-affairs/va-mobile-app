@@ -3,11 +3,10 @@ import React, { FC } from 'react'
 
 import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextView, VABulletList, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 const PrescriptionHistoryNoPrescriptions: FC = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 

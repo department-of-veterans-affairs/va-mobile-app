@@ -9,15 +9,14 @@ import { DemoState } from 'store/slices/demoSlice'
 import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, checkForDowntimeErrors, getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import colors from 'styles/themes/VAColors'
 
 export type SyncScreenProps = Record<string, unknown>
 const SyncScreen: FC<SyncScreenProps> = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const splashStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',

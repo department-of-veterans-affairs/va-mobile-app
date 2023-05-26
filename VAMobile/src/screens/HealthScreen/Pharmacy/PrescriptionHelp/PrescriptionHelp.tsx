@@ -5,14 +5,13 @@ import React, { FC, useEffect } from 'react'
 import { Box, ClosePanelButton, LargePanel, TextView, VABulletList, VABulletListText } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { usePanelHeaderStyles } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type PrescriptionHelpProps = StackScreenProps<HealthStackParamList, 'PrescriptionHelp'>
 
 const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const headerStyle = usePanelHeaderStyles()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)

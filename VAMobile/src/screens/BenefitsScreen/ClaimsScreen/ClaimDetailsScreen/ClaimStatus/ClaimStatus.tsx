@@ -6,13 +6,12 @@ import { ClaimData } from 'store/api/types'
 import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
 import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
@@ -31,7 +30,7 @@ type ClaimStatusProps = {
  * Component for rendering the details area of a claim when selected on the ClaimDetailsScreen
  */
 const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const sentEvent = useRef(false)

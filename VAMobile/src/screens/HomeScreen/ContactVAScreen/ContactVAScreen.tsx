@@ -6,9 +6,8 @@ import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea, TextView
 import { CrisisLineCta } from 'components'
 import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 
@@ -18,7 +17,7 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
  * Returns ContactVAScreen component
  */
 const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HOME)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()

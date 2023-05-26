@@ -11,12 +11,11 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
-import { VATheme } from 'styles/theme'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -43,7 +42,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const name = profile?.preferredName ? profile.preferredName : profile?.firstName || ''
 

@@ -7,10 +7,9 @@ import { MenuViewActionsType } from 'components/Menu'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScrollView, View, ViewStyle } from 'react-native'
 import { VAIconProps } from 'components/VAIcon'
-import { VATheme } from 'styles/theme'
 import { useDestructiveAlert, useRouteNavigation } from 'utils/hooks'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
@@ -77,7 +76,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   navigationMultiStepCancelScreen,
   showCrisisLineCta = false,
 }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigation = useNavigation()
   const navigateTo = useRouteNavigation()
   const insets = useSafeAreaInsets()

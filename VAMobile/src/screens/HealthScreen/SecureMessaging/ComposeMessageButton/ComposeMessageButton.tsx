@@ -3,14 +3,13 @@ import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, VAButton, VAButtonProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 const ComposeMessageButton: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const onPress = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   const composeMessageButtonProps: VAButtonProps = {

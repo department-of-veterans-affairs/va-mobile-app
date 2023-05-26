@@ -10,10 +10,9 @@ import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { useHeaderStyles, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
@@ -29,7 +28,7 @@ import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericL
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
 
 const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)

@@ -8,10 +8,9 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from './PaymentsStackScreens'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { useHeaderStyles, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentDetailsScreen from './PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
@@ -22,7 +21,7 @@ type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
 const PaymentsScreen: FC<PaymentsScreenProps> = () => {
   const { directDepositBenefits, directDepositBenefitsUpdate } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 

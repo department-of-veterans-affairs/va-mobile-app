@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -37,7 +36,7 @@ type PaginationArrowProps = {
 }
 
 export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, iconProps, testID, disabled }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const pressableProps: PressableProps = {
     onPress: onPress,
@@ -64,7 +63,7 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
 }
 /**A common component for showing pagination on the page. Displays previous arrow, next arrow, and copy message based on current page and item. */
 const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev, onNext }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const boxProps: BoxProps = {

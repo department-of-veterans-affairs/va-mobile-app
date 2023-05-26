@@ -4,9 +4,8 @@ import React, { FC } from 'react'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionAttributeData } from 'store/api/types'
-import { VATheme } from 'styles/theme'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from './PrescriptionUtils'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import RefillTag from './RefillTag'
 
 export type PrescriptionListItemProps = {
@@ -20,7 +19,7 @@ export type PrescriptionListItemProps = {
 
 /** common component to show the prescription info on a list  */
 const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hideInstructions, includeRefillTag }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { instructions, refillRemaining, prescriptionName, prescriptionNumber, facilityName, refillDate } = prescription

@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 
 import { Box, BoxProps, ValidationFunctionItems } from '../../index'
-import { VATheme } from 'styles/theme'
 import { getInputBorderColor, getInputBorderWidth, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
 import { isIOS } from 'utils/platform'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export type VATextInputTypes = 'none' | 'email' | 'phone'
 
@@ -64,7 +63,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     setInputCursorToBeginning,
   } = props
   const { t } = useTranslation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const startTextPositon = { start: 0, end: 0 }
   const [focusUpdated, setFocusUpdated] = useState(false)
   const [isFocused, setIsFocused] = useState(false)

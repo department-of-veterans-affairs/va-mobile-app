@@ -6,16 +6,15 @@ import { BenefitsStackParamList } from '../BenefitsStackScreens'
 import { Box, FeatureLandingTemplate, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
 const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
   const onClaimLettersPress = () => {

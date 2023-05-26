@@ -2,8 +2,7 @@ import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
 import { TextView } from 'components'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box from './Box'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'
 
@@ -31,7 +30,7 @@ export type HeaderIconBtnProps = {
  * Button used by the request appointment modal
  */
 export const HeaderIconBtn: FC<HeaderIconBtnProps> = ({ onPress, accessibilityHint, accessibilityLabel, iconName, iconHeight, iconWidth, title }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   return (
     <TouchableWithoutFeedback onPress={onPress} accessibilityLabel={accessibilityLabel} accessibilityHint={accessibilityHint} accessibilityRole="button" accessible={true}>

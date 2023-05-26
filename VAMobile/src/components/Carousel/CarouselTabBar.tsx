@@ -10,10 +10,9 @@ import styled from 'styled-components'
 
 import { Box, BoxProps, TextView } from '../index'
 import { CarouselScreen } from './Carousel'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 const StyledSafeAreaView = styled(SafeAreaView)`
   background-color: ${themeFn((theme) => theme.colors.background.carousel)};
@@ -40,7 +39,7 @@ type CarouselTabBarProps = {
 
 /**A common component with the carousel tab bar content. Displays skip button, continue button, and a progress bar*/
 const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, screenList, translation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [currentScreenIndex, setCurrentScreenIndex] = useState(0)
   const a11yHints = screenList[currentScreenIndex].a11yHints
 

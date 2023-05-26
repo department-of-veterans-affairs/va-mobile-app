@@ -36,9 +36,9 @@ import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { WebProtocolTypesConstants } from 'constants/common'
-import { capitalizeFirstLetter, stringToTitleCase } from './formattingUtils'
+import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { getHeaderStyles } from 'styles/common'
-import { isAndroid, isIOS } from './platform'
+import { isAndroid, isIOS } from 'utils/platform'
 import { useTheme } from 'utils/hooks/useTheme'
 import HeaderTitle from 'components/HeaderTitle'
 
@@ -83,7 +83,7 @@ export const useFontScale = (): ((val: number) => number) => {
  */
 export const useHeaderStyles = (): StackNavigationOptions => {
   const insets = useSafeAreaInsets()
-  let headerStyles = getHeaderStyles(insets?.top, useTheme())
+  let headerStyles = getHeaderStyles(insets.top, useTheme())
 
   headerStyles = {
     ...headerStyles,
@@ -112,9 +112,9 @@ export const useTopPaddingAsHeaderStyles = (): StackNavigationOptions => {
     headerBackTitle: undefined,
     headerTitle: '',
     headerStyle: {
-      backgroundColor: theme.colors.background.main,
+      backgroundColor: theme?.colors?.background?.main,
       shadowColor: 'transparent', // removes bottom border
-      height: insets?.top,
+      height: insets.top,
     },
   }
 }
@@ -211,7 +211,7 @@ export function useIsScreenReaderEnabled(withListener = false): boolean {
         }
       })
     }
-    AccessibilityInfo.isScreenReaderEnabled()?.then((isScreenReaderEnabled) => {
+    AccessibilityInfo.isScreenReaderEnabled().then((isScreenReaderEnabled) => {
       if (isMounted) {
         setScreenReaderEnabled(isScreenReaderEnabled)
       }
@@ -545,7 +545,7 @@ export function useOnResumeForeground(callback: () => void): void {
     })
 
     return () => {
-      subscription?.remove()
+      subscription.remove()
     }
   }, [callback])
 }

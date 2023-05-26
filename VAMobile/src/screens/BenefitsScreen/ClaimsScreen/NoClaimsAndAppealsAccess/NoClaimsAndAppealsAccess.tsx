@@ -3,12 +3,11 @@ import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, TextArea, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 const NoClaimsAndAppealsAccess: FC = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (

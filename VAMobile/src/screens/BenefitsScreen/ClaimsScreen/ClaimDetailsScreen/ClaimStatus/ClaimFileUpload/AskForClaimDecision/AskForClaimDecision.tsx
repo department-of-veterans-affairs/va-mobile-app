@@ -23,14 +23,13 @@ import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { VATheme } from 'styles/theme'
 import { useAppDispatch, useDestructiveAlert, useError } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
 
 const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { claimID } = route.params

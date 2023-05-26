@@ -2,8 +2,7 @@ import { Pressable, PressableProps } from 'react-native'
 import React, { FC, ReactElement } from 'react'
 
 import { HiddenA11yElement } from 'styles/common'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box, { BoxProps } from './Box'
 
 export type MultiTouchCardProps = {
@@ -24,7 +23,7 @@ export type MultiTouchCardProps = {
 }
 
 const MultiTouchCard: FC<MultiTouchCardProps> = ({ orderIdentifier, mainContent, bottomContent, bottomOnPress, bottomA11yHint, mainA11yLabel, bottomA11yLabel }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const hasBottomContent = !!bottomContent
 

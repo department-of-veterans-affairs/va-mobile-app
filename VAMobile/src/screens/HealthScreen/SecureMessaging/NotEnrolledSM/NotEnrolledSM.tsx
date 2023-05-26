@@ -3,10 +3,9 @@ import React, { FC } from 'react'
 
 import { Box, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useExternalLink } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import getEnv from 'utils/env'
 
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
@@ -15,7 +14,7 @@ const NotEnrolledSM: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const bulletOne = {
     text: t('notEnrolledSM.youAreEnrolled'),

@@ -11,20 +11,20 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme, VATypographyThemeVariants } from 'styles/theme'
+import { VATypographyThemeVariants } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import NoClaimLettersScreen from './NoClaimLettersScreen/NoClaimLettersScreen'
 
 type ClaimLettersScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimLettersScreen'>
 
 const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { loading, decisionLetters, downloading } = useSelector<RootState, DecisionLettersState>((state) => state.decisionLetters)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)

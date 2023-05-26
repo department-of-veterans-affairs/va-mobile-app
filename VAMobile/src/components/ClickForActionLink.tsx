@@ -2,10 +2,9 @@ import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackP
 import Box from './Box'
 import React, { FC } from 'react'
 
-import { VATheme } from 'styles/theme'
 import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
 import { useExternalLink } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import TextView, { TextViewProps } from './TextView'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'
 
@@ -77,7 +76,7 @@ export type LinkButtonProps = AccessibilityProps & {
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
 const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, a11yLabel, fireAnalytic, testID, ...props }) => {
-  const theme = useTheme() as VATheme as VATheme
+  const theme = useTheme()
   const launchExternalLink = useExternalLink()
 
   const onCalendarPress = async (): Promise<void> => {

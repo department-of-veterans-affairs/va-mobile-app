@@ -51,13 +51,12 @@ import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { VATheme } from 'styles/theme'
 import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
@@ -156,7 +155,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { prescriptions: prescriptionsAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()

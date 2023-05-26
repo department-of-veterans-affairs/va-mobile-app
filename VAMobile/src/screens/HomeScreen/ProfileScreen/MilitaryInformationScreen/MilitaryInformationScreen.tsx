@@ -11,19 +11,18 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackScreenProps } from '@react-navigation/stack'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
 type MilitaryInformationScreenProps = StackScreenProps<HomeStackParamList, 'MilitaryInformation'>
 
 const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { serviceHistory, loading, needsDataLoad } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)

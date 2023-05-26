@@ -6,14 +6,13 @@ import React, { FC, ReactNode, useEffect } from 'react'
 import { AccordionCollapsible, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { getTranslation } from 'utils/formattingUtils'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { sendClaimStep3Analytics, sendClaimStep3FileRequestAnalytics } from 'store/slices/claimsAndAppealsSlice'
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import PhaseIndicator from './PhaseIndicator'
 
 /** returns the heading string by phase */
@@ -94,7 +93,7 @@ export type ClaimPhaseProps = {
  */
 const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { eventsTimeline } = attributes

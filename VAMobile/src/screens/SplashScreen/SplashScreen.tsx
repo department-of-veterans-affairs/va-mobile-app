@@ -1,13 +1,12 @@
 import { Box, VAIcon, VAScrollView } from 'components'
-import { VATheme } from 'styles/theme'
 import { ViewStyle } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import React, { FC } from 'react'
 
 export type SplashScreenProps = Record<string, unknown>
 const SplashScreen: FC<SplashScreenProps> = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const splashStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',

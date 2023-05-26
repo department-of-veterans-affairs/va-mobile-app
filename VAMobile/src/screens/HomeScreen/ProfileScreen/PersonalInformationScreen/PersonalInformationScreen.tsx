@@ -12,14 +12,13 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getGenderIdentityOptions, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { UserDataProfile } from 'store/api/types'
-import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
   if (profile && profile.birthDate) {
@@ -52,7 +51,7 @@ type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'Pers
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { profile, loading, loadingGenderIdentityOptions, needsDataLoad, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>(
     (state) => state.personalInformation,
   )

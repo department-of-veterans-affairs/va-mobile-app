@@ -6,17 +6,16 @@ import React, { FC } from 'react'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, BoxProps, ButtonTypesConstants, ChildTemplate, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { hasUploadedOrReceived } from 'utils/claims'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
 
 const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { request } = route.params
   const { displayName, description, uploadDate, documents } = request

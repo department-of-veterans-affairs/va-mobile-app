@@ -11,19 +11,18 @@ import { PaymentState, getPayments } from 'store/slices'
 import { PaymentsByDate, ScreenIDTypesConstants } from 'store/api/types'
 import { PaymentsStackParamList } from '../PaymentsStackScreens'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { deepCopyObject } from 'utils/common'
 import { getGroupedPayments } from 'utils/payments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>
 
 const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { currentPagePayments, currentPagePagination, loading, availableYears } = useSelector<RootState, PaymentState>((state) => state.payments)

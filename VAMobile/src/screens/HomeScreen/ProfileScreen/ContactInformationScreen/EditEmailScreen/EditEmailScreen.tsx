@@ -11,10 +11,9 @@ import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } f
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
 import { useAppDispatch, useDestructiveAlert, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 
@@ -23,7 +22,7 @@ type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
  */
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { profile, emailSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id

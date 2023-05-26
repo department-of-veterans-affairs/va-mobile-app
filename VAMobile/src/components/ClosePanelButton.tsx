@@ -2,9 +2,9 @@ import { TouchableWithoutFeedback } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
-import { VATextColors, VATheme } from 'styles/theme'
+import { VATextColors } from 'styles/theme'
 import { useAccessibilityFocus } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box from './Box'
 import TextView from './TextView'
 
@@ -28,7 +28,7 @@ export type ClosePanelButton = {
  * Button used by the panel
  */
 export const ClosePanelButton: FC<ClosePanelButton> = ({ onPress, a11yHint, focusOnButton, buttonText, buttonTextColor }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
 

@@ -1,9 +1,8 @@
 import { AccessibilityProps, Switch as RNSwitch } from 'react-native'
 import React, { FC } from 'react'
 
-import { VATheme } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import styled from 'styled-components'
 
 const StyledRNSwitch = styled(RNSwitch)`
@@ -29,7 +28,7 @@ export type SwitchProps = AccessibilityProps & {
 /**A common component for the react native switch component*/
 const Switch: FC<SwitchProps> = (props) => {
   const { onPress, on, testID, a11yHint } = props
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   return (
     <StyledRNSwitch
       trackColor={{ false: theme.colors.control.switchOffTrack, true: theme.colors.control.switchOnTrack }}

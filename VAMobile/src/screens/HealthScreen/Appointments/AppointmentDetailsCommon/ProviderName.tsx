@@ -4,10 +4,9 @@ import React, { FC } from 'react'
 import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { getAllFieldsThatExist } from 'utils/common'
 import { isAPendingAppointment } from 'utils/appointments'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type ProviderNameProps = {
   attributes: AppointmentAttributes
@@ -15,7 +14,7 @@ type ProviderNameProps = {
 
 const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const isAppointmentPending = isAPendingAppointment(attributes)
 
   const { appointmentType, practitioner, healthcareProvider, friendlyLocationName, location } = attributes || ({} as AppointmentAttributes)

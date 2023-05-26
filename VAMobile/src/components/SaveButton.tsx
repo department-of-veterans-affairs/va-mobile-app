@@ -4,9 +4,8 @@ import React, { FC } from 'react'
 
 import { Box } from './index'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import TextView from './TextView'
 
 type SaveButtonProps = {
@@ -21,7 +20,7 @@ type SaveButtonProps = {
 /**A common component for the save button located at the header. */
 const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled, a11yHint }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const color = disabled ? 'actionBarDisabled' : 'actionBar'
 

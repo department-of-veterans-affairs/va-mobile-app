@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { VAIconColors, VATextColors, VATheme } from 'styles/theme'
+import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -24,7 +24,7 @@ export type CtaButtonProps = {
  */
 const CtaButton: FC<CtaButtonProps> = ({ onPress, iconColor, backgroundColor, children, px, py, alignItems, justifyContent, accessibilityLabel, accessibilityHint }) => {
   const { t } = useTranslation(NAMESPACE.HOME)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const touchableProps: TouchableWithoutFeedbackProps = {
     accessibilityRole: 'button',

@@ -5,13 +5,12 @@ import { AppointmentAttributes } from 'store/api'
 import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { Box, ButtonTypesConstants, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { cancelAppointment } from 'store/slices'
 import { isAPendingAppointment } from 'utils/appointments'
 import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type PendingAppointmentCancelButtonProps = {
   attributes: AppointmentAttributes
@@ -23,7 +22,7 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const confirmAlert = useDestructiveAlert()
   const isAndroidDevice = isAndroid()
 

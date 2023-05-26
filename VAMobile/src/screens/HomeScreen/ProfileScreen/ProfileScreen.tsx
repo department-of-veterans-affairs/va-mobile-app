@@ -10,10 +10,9 @@ import { MilitaryServiceState, getServiceHistory } from 'store/slices/militarySe
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
@@ -26,7 +25,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
 
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 

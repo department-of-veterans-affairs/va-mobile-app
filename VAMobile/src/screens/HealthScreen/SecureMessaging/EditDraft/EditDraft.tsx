@@ -50,7 +50,6 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
 import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
@@ -58,7 +57,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
@@ -66,7 +65,7 @@ type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const goToDrafts = useGoToDrafts()

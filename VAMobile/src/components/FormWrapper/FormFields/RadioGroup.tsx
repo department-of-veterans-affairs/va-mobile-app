@@ -5,11 +5,10 @@ import React, { ReactElement, useEffect } from 'react'
 
 import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, SelectorType, TextLine, TextView, VASelector } from '../../index'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { getTranslation } from 'utils/formattingUtils'
 import { isIOS } from 'utils/platform'
 import { renderInputError } from './formFieldUtils'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export type radioOption<T> = {
   /** translated text displayed next to the checkbox/radio */
@@ -50,7 +49,7 @@ export type RadioGroupProps<T> = {
 
 /**A common component to display radio button selectors for a list of selectable items*/
 const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isRadioList, radioListTitle }: RadioGroupProps<T>): ReactElement => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasSingleOption = options.length === 1
 

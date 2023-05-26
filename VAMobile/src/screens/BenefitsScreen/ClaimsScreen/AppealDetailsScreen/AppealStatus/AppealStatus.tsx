@@ -4,8 +4,7 @@ import React, { FC, ReactElement } from 'react'
 import { AppealAOJTypes, AppealEventData, AppealStatusData, AppealTypes } from 'store/api/types'
 import { Box, CollapsibleView, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import AppealCurrentStatus from './AppealCurrentStatus/AppealCurrentStatus'
 import AppealTimeline from './AppealTimeline/AppealTimeline'
 import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
@@ -22,7 +21,7 @@ type AppealStatusProps = {
 }
 
 const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, numAppealsAhead, isActiveAppeal, docketName, programArea }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const NumAppealsAhead = (): ReactElement => {

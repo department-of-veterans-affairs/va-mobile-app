@@ -13,10 +13,9 @@ import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
 import { showSnackBar } from 'utils/common'
 import { useBeforeNavBackListener, useDestructiveAlert } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import FileList from 'components/FileList'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
@@ -24,7 +23,7 @@ type UploadFileProps = StackScreenProps<BenefitsStackParamList, 'UploadFile'>
 
 const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { request: originalRequest, fileUploaded } = route.params
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const dispatch = useDispatch()

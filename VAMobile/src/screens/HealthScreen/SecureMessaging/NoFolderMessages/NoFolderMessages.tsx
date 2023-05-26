@@ -5,16 +5,15 @@ import React, { FC } from 'react'
 import { Box, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
-import { VATheme } from 'styles/theme'
 import { ViewStyle } from 'react-native'
 import { updateSecureMessagingTab } from 'store/slices'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 
 const NoFolderMessages: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
 

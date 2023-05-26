@@ -8,18 +8,17 @@ import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, downloadLetter } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type GenericLetterProps = StackScreenProps<BenefitsStackParamList, 'GenericLetter'>
 
 const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { header, description, letterType, descriptionA11yLabel } = route.params
   const { downloading, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)

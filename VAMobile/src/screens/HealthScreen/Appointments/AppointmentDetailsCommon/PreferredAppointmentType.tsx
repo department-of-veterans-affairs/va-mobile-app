@@ -5,9 +5,8 @@ import { AppointmentAttributes } from 'store/api'
 import { AppointmentTypeConstants } from 'store/api/types/AppointmentData'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { isAPendingAppointment } from 'utils/appointments'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type PreferredAppointmentTypeProps = {
   attributes: AppointmentAttributes
@@ -16,7 +15,7 @@ type PreferredAppointmentTypeProps = {
 const PreferredAppointmentType: FC<PreferredAppointmentTypeProps> = ({ attributes }) => {
   const isAppointmentPending = isAPendingAppointment(attributes)
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const { appointmentType, phoneOnly } = attributes || ({} as AppointmentAttributes)
 

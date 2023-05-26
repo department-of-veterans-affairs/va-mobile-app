@@ -5,14 +5,13 @@ import React, { FC } from 'react'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type ConsolidatedClaimsNoteProps = StackScreenProps<BenefitsStackParamList, 'ConsolidatedClaimsNote'>
 
 const ConsolidatedClaimsNote: FC<ConsolidatedClaimsNoteProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   return (
     <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>

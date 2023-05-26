@@ -4,8 +4,7 @@ import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { TextArea, TextLineWithIcon, TextView, VAIconProps } from 'components'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export type AddPreferenceComponentProps = {
   /** On press method that would be triggered when clicking the add link */
@@ -18,7 +17,7 @@ export type AddPreferenceComponentProps = {
 
 /** common component to add a preference */
 const AddPreferenceComponent: FC<AddPreferenceComponentProps> = ({ buttonText, onPress, preferenceTitle }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const iconProps: VAIconProps = {

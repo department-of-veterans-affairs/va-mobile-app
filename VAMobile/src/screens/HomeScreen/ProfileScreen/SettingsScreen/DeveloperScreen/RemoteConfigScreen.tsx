@@ -1,8 +1,7 @@
 import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
-import { VATheme } from 'styles/theme'
 import { logout } from 'store/slices/authSlice'
 import { useAppDispatch } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import React, { FC, ReactNode, useState } from 'react'
 import remoteConfig from '@react-native-firebase/remote-config'
 
@@ -16,7 +15,7 @@ type RemoteConfigScreenSettingsScreenProps = StackScreenProps<HomeStackParamList
 
 const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const currentConfig = getFeatureToggles()
   const [toggles, setToggles] = useState({ ...currentConfig })

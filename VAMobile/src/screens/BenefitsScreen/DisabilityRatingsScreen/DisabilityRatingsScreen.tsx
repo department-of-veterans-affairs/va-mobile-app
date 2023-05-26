@@ -25,18 +25,17 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useError } from 'utils/hooks'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import getEnv from 'utils/env'
 
 const DisabilityRatingsScreen: FC = () => {
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
 

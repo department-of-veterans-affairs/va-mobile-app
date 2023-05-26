@@ -5,14 +5,13 @@ import { Box, TextView } from 'components'
 import { ClaimsAndAppealsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 const NoClaimsAndAppeals: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   let header = t('noClaims.youDontHaveAnyClaimsOrAppeals')

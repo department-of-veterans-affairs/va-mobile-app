@@ -6,11 +6,10 @@ import { Facility } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { PatientState } from 'store/slices'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useHasCernerFacilities } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
@@ -18,7 +17,7 @@ const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 const CernerAlert: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { cernerFacilities, facilities } = useSelector<RootState, PatientState>((state) => state.patient)
   const hasCernerFacilities = useHasCernerFacilities()
 

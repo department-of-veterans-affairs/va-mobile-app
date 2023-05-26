@@ -4,9 +4,8 @@ import React, { FC } from 'react'
 import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types/AppointmentData'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { isAPendingAppointment } from 'utils/appointments'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type ContactInformationProps = {
   attributes: AppointmentAttributes
@@ -16,7 +15,7 @@ const ContactInformation: FC<ContactInformationProps> = ({ attributes }) => {
   const isAppointmentPending = isAPendingAppointment(attributes)
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const { patientEmail, patientPhoneNumber, bestTimeToCall, appointmentType } = attributes || ({} as AppointmentAttributes)
 

@@ -5,11 +5,10 @@ import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react
 
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
 import { VAIconProps } from 'components/VAIcon'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from '../formFieldUtils'
 import { getTranslation } from 'utils/formattingUtils'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import PickerList, { PickerListItemObj } from './PickerList'
 
 /**
@@ -82,7 +81,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   showModalByDefault,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation()
   const insets = useSafeAreaInsets()
 

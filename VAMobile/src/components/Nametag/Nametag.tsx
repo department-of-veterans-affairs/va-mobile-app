@@ -5,15 +5,14 @@ import { Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
 import { MilitaryServiceState, PersonalInformationState } from 'store/slices'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export const Nametag: FC = () => {
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const name = (): string => {
     return profile?.fullName || ''

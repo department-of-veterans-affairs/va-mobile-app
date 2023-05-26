@@ -5,8 +5,7 @@ import { AlertBox, Box } from 'components'
 import { AppointmentAttributes } from 'store/api'
 import { AppointmentStatusConstants, AppointmentStatusDetailTypeConsts } from 'store/api/types/AppointmentData'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type AppointmentAlertProps = {
   attributes: AppointmentAttributes
@@ -14,7 +13,7 @@ type AppointmentAlertProps = {
 
 const AppointmentAlert: FC<AppointmentAlertProps> = ({ attributes }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const { status, statusDetail, location } = attributes || ({} as AppointmentAttributes)
   const appointmentBooked = status === AppointmentStatusConstants.BOOKED

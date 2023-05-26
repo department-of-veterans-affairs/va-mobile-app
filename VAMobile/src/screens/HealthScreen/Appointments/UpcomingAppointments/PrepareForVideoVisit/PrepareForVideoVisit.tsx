@@ -6,15 +6,14 @@ import { Box, LargePanel, TextView } from 'components'
 import { HealthStackParamList } from '../../../HealthStackScreens'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type PrepareForVideoVisitProps = StackScreenProps<HealthStackParamList, 'PrepareForVideoVisit'>
 
 const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   useEffect(() => {
     navigation.setOptions({

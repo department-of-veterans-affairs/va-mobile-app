@@ -7,11 +7,10 @@ import { AuthState, loginStart } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
@@ -20,7 +19,7 @@ const LoginScreen: FC = () => {
   const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HOME])
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 20
   let demoTaps = 0

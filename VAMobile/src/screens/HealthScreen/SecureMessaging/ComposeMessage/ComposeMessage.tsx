@@ -48,28 +48,19 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import {
-  useAppDispatch,
-  useAttachments,
-  useBeforeNavBackListener,
-  useError,
-  useMessageWithSignature,
-  useRouteNavigation,
-  useTheme,
-  useValidateMessageWithSignature,
-} from 'utils/hooks'
+import { useAppDispatch, useAttachments, useBeforeNavBackListener, useError, useMessageWithSignature, useRouteNavigation, useValidateMessageWithSignature } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
 
 const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
 

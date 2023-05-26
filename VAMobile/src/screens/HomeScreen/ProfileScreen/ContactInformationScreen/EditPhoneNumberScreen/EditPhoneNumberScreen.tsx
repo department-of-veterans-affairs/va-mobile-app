@@ -11,19 +11,18 @@ import { PersonalInformationState, deleteUsersNumber, editUsersNumber, finishEdi
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
 import { dispatchClearErrors } from 'store/slices/errorSlice'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { useAppDispatch, useDestructiveAlert, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
 
 const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { displayTitle, phoneType, phoneData } = route.params
   const deletePhoneAlert = useDestructiveAlert()

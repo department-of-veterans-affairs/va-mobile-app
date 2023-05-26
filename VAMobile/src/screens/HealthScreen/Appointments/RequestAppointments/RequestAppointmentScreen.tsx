@@ -20,11 +20,10 @@ import { CloseModalButton, HeaderIconBtn } from 'components'
 import { DateTime } from 'luxon'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { resetFormData } from 'store/slices/requestAppointmentSlice'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export type AppointmentFlowModalStackParamList = WebviewStackParams & {
   TypeOfCareSelectionScreen: undefined
@@ -47,7 +46,7 @@ const Stack = createStackNavigator<AppointmentFlowModalStackParamList>()
 /** Component stack that will  house the appointment request flow steps screens */
 const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const inset = useSafeAreaInsets()

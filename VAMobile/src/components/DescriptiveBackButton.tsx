@@ -4,9 +4,8 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { useAccessibilityFocus } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -29,7 +28,7 @@ export type DescBackButtonProps = {
  * Descriptive button used by the stack navigation to go back to the previous screen
  */
 export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label, labelA11y, focusOnButton = true }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()

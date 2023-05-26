@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box, { BoxProps } from '../Box'
 import SelectionListItem, { SelectionListItemObj } from './SelectionListItem'
 import TextView from '../TextView'
@@ -20,7 +19,7 @@ export type SelectionListProps = {
 
 const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => {
   const [numSelected, setNumSelected] = useState(0)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const [selectionVals, setSelectionVals] = useState<Record<string, boolean>>({})

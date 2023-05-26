@@ -11,16 +11,15 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
 import { States } from 'constants/states'
-import { VATheme } from 'styles/theme'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type VAFacilitiesScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'VAFacilitiesScreen'>
 
 const VAFacilitiesScreen: FC<VAFacilitiesScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [sortOption, setSortOption] = useState<FacilitiesFilterType>(FACILITY_FILTER.home)
   const [selectedFacility, setSelectedFacility] = useState<string>()
 

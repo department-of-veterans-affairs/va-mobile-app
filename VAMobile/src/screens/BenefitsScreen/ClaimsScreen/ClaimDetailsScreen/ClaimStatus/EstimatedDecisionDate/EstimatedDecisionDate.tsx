@@ -4,11 +4,10 @@ import React, { FC, ReactElement } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useExternalLink } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import getEnv from 'utils/env'
 
 const { LINK_URL_COMPENSATION_CLAIM_EXAM } = getEnv()
@@ -19,7 +18,7 @@ type EstimatedDecisionDateProps = {
 }
 
 const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, showCovidMessage }): ReactElement => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
 

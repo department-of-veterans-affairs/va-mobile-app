@@ -1,5 +1,7 @@
 import React from 'react'
+import * as hsAlerts from 'utils/homeScreenAlerts'
 
+jest.spyOn(hsAlerts, 'getLocalVersion').mockResolvedValue('0.0')
 import { context, render, act, RenderAPI, waitFor } from 'testUtils'
 
 import { Linking } from 'react-native'

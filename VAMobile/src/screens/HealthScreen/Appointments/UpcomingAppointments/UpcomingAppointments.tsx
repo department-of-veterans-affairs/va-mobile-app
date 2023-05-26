@@ -8,14 +8,13 @@ import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'co
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { TimeFrameTypeConstants } from 'constants/appointments'
-import { VATheme } from 'styles/theme'
 import { deepCopyObject } from 'utils/common'
 import { getGroupedAppointments } from 'utils/appointments'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type UpcomingAppointmentsProps = Record<string, unknown>
@@ -24,7 +23,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const currentPageUpcomingAppointmentsByYear = deepCopyObject<AppointmentsGroupedByYear>(currentPageAppointmentsByYear?.upcoming)

@@ -9,10 +9,9 @@ import { PersonalInformationState, finishUpdatePreferredName, updatePreferredNam
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
 import { useAppDispatch, useDestructiveAlert } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 
@@ -21,7 +20,7 @@ const MAX_NAME_LENGTH = 25
 const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   const { profile, preferredNameSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const confirmAlert = useDestructiveAlert()
 

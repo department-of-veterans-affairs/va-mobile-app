@@ -3,10 +3,10 @@ import React, { FC, ReactNode, useState } from 'react'
 
 import { Box, BoxProps, VAIcon, VA_ICON_MAP } from './index'
 import { TextView } from 'components'
-import { VABorderColors, VATheme } from 'styles/theme'
+import { VABorderColors } from 'styles/theme'
 import { isAndroid } from 'utils/platform'
 import { useAccessibilityFocus } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import TextArea from './TextArea'
 
 export type CollapsibleAlertProps = {
@@ -25,7 +25,7 @@ export type CollapsibleAlertProps = {
 }
 
 const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel, onExpand, onCollapse }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
 

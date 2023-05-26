@@ -9,10 +9,9 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState } from 'store/slices'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { useRequestAppointmentModalHeaderStyles } from 'utils/requestAppointments'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 import getEnv from 'utils/env'
 
@@ -24,7 +23,7 @@ type TypeOfCareNotListedHelpScreenProps = StackScreenProps<HealthStackParamList,
 const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })

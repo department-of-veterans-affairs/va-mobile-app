@@ -3,9 +3,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, useState } from 'react'
 
 import { CrisisLineCta, TextView, TextViewProps, VAIconProps } from 'components'
-import { VATheme } from 'styles/theme'
 import { useIsScreenReaderEnabled, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 
@@ -34,7 +33,7 @@ export type CategoryLandingProps = {
 export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
 

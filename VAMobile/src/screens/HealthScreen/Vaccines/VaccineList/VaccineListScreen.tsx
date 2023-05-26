@@ -8,14 +8,13 @@ import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { VATheme } from 'styles/theme'
 import { Vaccine } from 'store/api/types'
 import { VaccineState, getVaccines } from 'store/slices/vaccineSlice'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
 import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
 type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineList'>
@@ -26,7 +25,7 @@ type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineLis
 const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { vaccines, loading, vaccinePagination } = useSelector<RootState, VaccineState>((state) => state.vaccine)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()

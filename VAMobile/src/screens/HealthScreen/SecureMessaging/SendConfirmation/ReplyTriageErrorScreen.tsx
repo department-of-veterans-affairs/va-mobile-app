@@ -7,17 +7,16 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { updateSecureMessagingTab } from 'store/slices'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type ReplyTriageErrorScreenProps = StackScreenProps<HealthStackParamList, 'ReplyTriageErrorScreen'>
 
 const ReplyTriageErrorScreen: FC<ReplyTriageErrorScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 

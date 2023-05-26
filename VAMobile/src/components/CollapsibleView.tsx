@@ -2,9 +2,8 @@ import React, { FC, useState } from 'react'
 
 import { ColorVariant, TextArea } from './index'
 import { Pressable, PressableProps, ViewStyle } from 'react-native'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -31,7 +30,7 @@ export type CollapsibleViewProps = {
  * @returns CollapsibleView component
  */
 const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = true, showInTextArea = true, a11yHint, textColor, children }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
 
   const onPress = (): void => {

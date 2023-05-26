@@ -1,8 +1,7 @@
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView, VATextInput, VATextInputTypes } from 'components'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import AppointmentFlowErrorAlert from './AppointmentFlowErrorAlert'
 
 type AppointmentFlowTextInputWithAlertProps = BoxProps & {
@@ -36,7 +35,7 @@ const AppointmentFlowTextInputWithAlert: FC<AppointmentFlowTextInputWithAlertPro
   validationFunc,
   ...boxProps
 }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const onEndEditing = () => {
     if (validationFunc) {

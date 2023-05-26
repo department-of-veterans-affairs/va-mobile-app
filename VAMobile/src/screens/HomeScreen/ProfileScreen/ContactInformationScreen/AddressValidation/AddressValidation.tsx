@@ -9,12 +9,11 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, finishValidateAddress, updateAddress } from 'store/slices'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
 import { ViewStyle } from 'react-native'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import CollapsibleAlert from 'components/CollapsibleAlert'
 
 /**
@@ -30,7 +29,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const { validationKey, confirmedSuggestedAddresses } = useSelector<RootState, PersonalInformationState>((storeState) => storeState.personalInformation)
   const [selectedSuggestedAddress, setSelectedSuggestedAddress] = useState<AddressData | SuggestedAddress>()

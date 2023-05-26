@@ -12,10 +12,9 @@ import { PersonalInformationState, dispatchFinishEditGenderIdentity, getGenderId
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useError, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIdentity'>
 
@@ -27,7 +26,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
     (state) => state.personalInformation,
   )
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 

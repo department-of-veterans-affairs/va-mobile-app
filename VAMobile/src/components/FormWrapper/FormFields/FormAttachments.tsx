@@ -8,10 +8,9 @@ import _ from 'underscore'
 import { Box, ButtonTypesConstants, TextView, VAButton, VAButtonProps, VAIcon } from 'components/index'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { getFileDisplay } from 'utils/common'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export type FormAttachmentsProps = {
   /** header for page title display */
@@ -28,7 +27,7 @@ export type FormAttachmentsProps = {
 
 /**A common component for form attachments, displays Attachments heading with helper link, already attached items with remove option, and an optional large button. */
 const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress, largeButtonProps, attachmentsList, a11yHint }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
   const navigateTo = useRouteNavigation()

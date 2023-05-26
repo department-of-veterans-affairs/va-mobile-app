@@ -8,10 +8,9 @@ import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Box, BoxProps, LoadingComponent } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import WebviewControlButton from './WebviewControlButton'
 import WebviewControls, { WebviewControlsProps } from './WebviewControls'
 import WebviewTitle from './WebviewTitle'
@@ -22,7 +21,7 @@ type ReloadButtonProps = {
 
 const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const reloadBoxProps: BoxProps = {
     alignItems: 'center',
@@ -83,7 +82,7 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
 const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const webviewRef = useRef() as MutableRefObject<WebView>
 
   const [canGoBack, setCanGoBack] = useState(false)

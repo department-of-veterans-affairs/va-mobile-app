@@ -6,14 +6,13 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps } from '@react-navigation/stack'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type AttachmentsFAQProps = StackScreenProps<HealthStackParamList, 'AttachmentsFAQ'>
 
 const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation([NAMESPACE.HOME, NAMESPACE.COMMON])
   const { originHeader } = route.params

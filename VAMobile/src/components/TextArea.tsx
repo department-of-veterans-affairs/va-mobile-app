@@ -1,8 +1,7 @@
 import { TouchableWithoutFeedback } from 'react-native'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import React, { FC } from 'react'
 
-import { VATheme } from 'styles/theme'
 import Box, { BoxProps } from './Box'
 
 /**
@@ -21,7 +20,7 @@ export type TextAreaProps = {
  * @returns TextView component
  */
 const TextArea: FC<TextAreaProps> = ({ onPress, noBorder, children }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const borderProps: BoxProps = noBorder
     ? {}

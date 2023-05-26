@@ -3,10 +3,9 @@ import React, { FC, useState } from 'react'
 import { Alert, Modal, Pressable, PressableProps, TextInput, TextInputProps, View } from 'react-native'
 import { Box, TextView } from 'components'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import getEnv from 'utils/env'
 const { DEMO_PASSWORD } = getEnv()
-import { VATheme } from 'styles/theme'
 
 export type AlertPromptProps = {
   /** Boolean to show or hide the modal */
@@ -22,7 +21,7 @@ export type AlertPromptProps = {
  */
 const DemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => {
   const insets = useSafeAreaInsets()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [input, setInput] = useState('')
 
   const onCancel = () => {

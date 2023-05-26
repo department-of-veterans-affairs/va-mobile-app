@@ -9,14 +9,13 @@ import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, loadAllPrescriptions } from 'store/slices'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { useAppDispatch, useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Appointments from './Appointments'
 import CernerAlert from './CernerAlert'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
@@ -35,7 +34,7 @@ const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
 export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)

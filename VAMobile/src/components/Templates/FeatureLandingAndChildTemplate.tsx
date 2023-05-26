@@ -3,9 +3,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useState } from 'react'
 
 import { TextView, TextViewProps, VAIconProps } from 'components'
-import { VATheme } from 'styles/theme'
 import { useIsScreenReaderEnabled } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 
@@ -47,7 +46,7 @@ export type FeatureLandingProps = ChildTemplateProps // Passthrough to same prop
 export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y, backLabelOnPress, title, titleA11y, headerButton, children, footerContent, scrollViewProps }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
 
   const [scrollOffset, setScrollOffset] = useState(0)

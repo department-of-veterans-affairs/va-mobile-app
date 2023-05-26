@@ -12,11 +12,10 @@ import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { VAScrollViewProps } from 'components/VAScrollView'
-import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from './PastAppointments/PastAppointments'
@@ -37,7 +36,7 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
 const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]

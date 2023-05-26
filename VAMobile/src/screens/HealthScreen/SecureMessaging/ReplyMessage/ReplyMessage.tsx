@@ -38,20 +38,20 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useMessageWithSignature, useRouteNavigation, useTheme, useValidateMessageWithSignature } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useMessageWithSignature, useRouteNavigation, useValidateMessageWithSignature } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
 const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
 

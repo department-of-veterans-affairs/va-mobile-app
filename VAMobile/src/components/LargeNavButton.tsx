@@ -3,9 +3,8 @@ import React, { FC, useState } from 'react'
 
 import { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, Box, BoxProps, TextView, VAIcon } from 'components'
 import { VAIconColors, VATextColors } from 'styles/theme'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import MessagesCountTag from './MessagesCountTag'
 
 interface HomeNavButtonProps {
@@ -62,7 +61,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   tagCount,
   tagCountA11y,
 }: HomeNavButtonProps) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const [isPressed, setIsPressed] = useState(false)
 
   const _onPressIn = (): void => {

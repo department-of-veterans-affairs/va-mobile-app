@@ -5,9 +5,8 @@ import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, FooterButton, RadioGroup, TextView, TextViewProps, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { isAndroid } from 'utils/platform'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export type RadioPickerGroup = {
   /** Optional title appearing over the radio grouping, used if there are multiple groups in one modal */
@@ -56,7 +55,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   onShowAnalyticsFn,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const insets = useSafeAreaInsets()
 

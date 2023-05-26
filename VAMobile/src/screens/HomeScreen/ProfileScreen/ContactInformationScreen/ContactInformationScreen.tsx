@@ -12,13 +12,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { getA11yLabelText } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 type phoneType = 'homePhoneNumber' | 'workPhoneNumber' | 'mobilePhoneNumber'
@@ -79,7 +78,7 @@ type ContactInformationScreenProps = StackScreenProps<HomeStackParamList, 'Conta
 const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { profile, loading, needsDataLoad } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)

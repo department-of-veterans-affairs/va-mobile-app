@@ -1,8 +1,7 @@
 import React, { FC } from 'react'
 
 import { TextLine } from './types'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -17,7 +16,7 @@ export type TextLineWithIconProps = {
 
 /**Common component to show an icon with a line of text*/
 export const TextLineWithIcon: FC<TextLineWithIconProps> = ({ iconProps, text, variant, textAlign, color }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const iconNotOwnRow = !(iconProps && iconProps.isOwnLine)
 
   return (

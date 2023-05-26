@@ -4,10 +4,9 @@ import React, { FC } from 'react'
 
 import { Box, BoxProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import WebviewControlButton from './WebviewControlButton'
 import styled from 'styled-components'
 
@@ -36,7 +35,7 @@ export type WebviewControlsProps = {
  */
 const WebviewControls: FC<WebviewControlsProps> = (props) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const controlsViewProps: BoxProps = {
     display: 'flex',

@@ -16,19 +16,18 @@ import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
-import { VATheme } from 'styles/theme'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { useBeforeNavBackListener, useDestructiveAlert, useOrientation, useShowActionSheet } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOrAddPhotos'>
 
 const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const showActionSheetWithOptions = useShowActionSheet()
   const { request: originalRequest, firstImageResponse } = route.params

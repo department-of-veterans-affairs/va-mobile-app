@@ -29,11 +29,10 @@ import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
-import { VATheme } from 'styles/theme'
 import { profileAddressOptions } from '../AddressSummary'
 import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import AddressValidation from '../AddressValidation'
 
 const MAX_ADDRESS_LENGTH = 35
@@ -83,7 +82,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     (state) => state.personalInformation,
   )
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
   const destructiveAlert = useDestructiveAlert()

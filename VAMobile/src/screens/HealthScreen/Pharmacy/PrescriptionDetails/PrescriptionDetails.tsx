@@ -11,11 +11,10 @@ import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/s
 import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { RootState } from 'store'
 import { UserAnalytics } from 'constants/analytics'
-import { VATheme } from 'styles/theme'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useAppDispatch, useDestructiveAlert, useDowntime, useExternalLink } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import DetailsTextSections from './DetailsTextSections'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 import getEnv from 'utils/env'
@@ -27,7 +26,7 @@ const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }) => {
   const { prescriptionId } = route.params
   const { loadingHistory, prescriptionsById, prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const launchExternalLink = useExternalLink()
   const submitRefillAlert = useDestructiveAlert()
   const dispatch = useAppDispatch()

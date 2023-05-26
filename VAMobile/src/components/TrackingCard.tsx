@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -24,7 +23,7 @@ export type TrackingCardProps = {
  * A common component to show tracking information as a card
  */
 const TrackingCard: FC<TrackingCardProps> = ({ onPress, a11yHint, title, dateShipped }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [buttonPressed, setButtonPressed] = useState(false)
 

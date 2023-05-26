@@ -5,9 +5,8 @@ import React, { FC, ReactElement } from 'react'
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView, TextViewProps } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CHANGE_LEGAL_NAME, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -16,7 +15,7 @@ type HowDoIUpdateScreenProps = StackScreenProps<HomeStackParamList, 'HowDoIUpdat
 
 const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { screenType } = route.params
 

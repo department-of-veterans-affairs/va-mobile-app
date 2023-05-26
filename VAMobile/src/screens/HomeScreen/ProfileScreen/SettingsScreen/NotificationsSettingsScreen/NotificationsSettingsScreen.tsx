@@ -10,9 +10,8 @@ import { NotificationsState, loadPushPreferences, registerDevice, setPushPref } 
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
-import { VATheme } from 'styles/theme'
 import { useAppDispatch, useError, useOnResumeForeground } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'NotificationsSettings'>
@@ -20,7 +19,7 @@ type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'No
 const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { deviceToken, preferences, loadingPreferences, registeringDevice, systemNotificationsOn, settingPreference } = useSelector<RootState, NotificationsState>(
     (state) => state.notifications,
   )

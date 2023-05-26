@@ -11,18 +11,17 @@ import { PaymentsAttributeData } from 'store/api'
 import { PaymentsStackParamList } from '../../PaymentsStackScreens'
 import { Pressable } from 'react-native'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type PaymentDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentDetails'>
 
 const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ navigation, route }) => {
   const { paymentID } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 

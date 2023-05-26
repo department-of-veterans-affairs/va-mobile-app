@@ -5,10 +5,9 @@ import React, { FC } from 'react'
 import { AppealEventData, AppealEventTypes, AppealEventTypesConstants } from 'store/api/types'
 import { Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import PhaseIndicator from '../../../ClaimDetailsScreen/ClaimStatus/ClaimTimeline/PhaseIndicator'
 
 const getEventName = (type: AppealEventTypes, translation: TFunction): string => {
@@ -102,7 +101,7 @@ type AppealPhaseProps = {
 
 const AppealPhase: FC<AppealPhaseProps> = ({ event }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const formattedDate = formatDateMMMMDDYYYY(event.date)
   const heading = getEventName(event.type, t)

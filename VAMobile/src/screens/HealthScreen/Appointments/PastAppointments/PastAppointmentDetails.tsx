@@ -18,19 +18,18 @@ import { Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { isAPendingAppointment } from '../../../../utils/appointments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 
 const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
 
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()

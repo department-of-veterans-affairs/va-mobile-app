@@ -3,9 +3,9 @@ import { SvgProps } from 'react-native-svg'
 import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
-import { VAIconColors, VATextColors, VATheme } from 'styles/theme'
+import { VAIconColors, VATextColors } from 'styles/theme'
 import { useAppDispatch, useFontScale } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 import { Box, BoxProps } from 'components'
 // New svgs need to set `fill` to `#000` and `stroke` to `#00F`. See /svgs for examples
@@ -197,7 +197,7 @@ export type VAIconProps = BoxProps & {
  * @returns VAIcon component
  */
 const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventScaling, testID, ...boxProps }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const fs: (val: number) => number = useFontScale()
   const dispatch = useAppDispatch()
   const { fontScale } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)

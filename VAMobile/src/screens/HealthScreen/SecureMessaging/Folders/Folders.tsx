@@ -13,7 +13,7 @@ import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 const getListItemsForFolders = (
   listOfFolders: SecureMessagingFolderList,

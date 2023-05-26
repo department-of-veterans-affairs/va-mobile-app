@@ -9,13 +9,12 @@ import { PaymentsStackParamList } from '../PaymentsStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackScreenProps } from '@react-navigation/stack'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation } from 'utils/hooks'
 import { useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type DirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'DirectDeposit'>
 
@@ -27,7 +26,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
 
   useFocusEffect(

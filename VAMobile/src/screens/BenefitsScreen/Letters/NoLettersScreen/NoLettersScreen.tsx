@@ -4,13 +4,12 @@ import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 const NoLettersScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,

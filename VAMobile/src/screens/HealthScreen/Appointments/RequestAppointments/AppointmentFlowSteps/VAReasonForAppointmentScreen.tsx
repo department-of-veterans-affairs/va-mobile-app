@@ -10,10 +10,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PURPOSE_TEXT } from 'store/api'
 import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { setReasonCode } from 'utils/requestAppointments'
 import { useAppDispatch, useRouteNavigation } from 'utils/hooks'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type VAReasonForAppointmentScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'VAReasonForAppointmentScreen'>
 
@@ -22,7 +21,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: th } = useTranslation(NAMESPACE.HOME)
   const dispatch = useAppDispatch()
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const { text } = appointmentFlowFormData.reasonCode || {}

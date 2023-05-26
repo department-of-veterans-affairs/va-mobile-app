@@ -42,13 +42,12 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
 import { isAPendingAppointment } from 'utils/appointments'
 import { useAppDispatch, useExternalLink, useRouteNavigation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
 
@@ -59,7 +58,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()

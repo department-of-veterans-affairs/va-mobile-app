@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { VAButtonTextColors, VATextColors, VATheme } from '../styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import Box, { BackgroundVariant, BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -33,7 +33,7 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 `
 /**A common component to show a button at the bottom of the screen that takes the full width of the display. Optional Icon can be passed in to render next to text */
 const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textColor, backGroundColor, testID, a11yHint }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const [isPressed, setIsPressed] = useState(false)
 

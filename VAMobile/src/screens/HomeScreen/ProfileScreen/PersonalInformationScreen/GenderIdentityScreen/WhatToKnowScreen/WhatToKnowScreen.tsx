@@ -5,13 +5,12 @@ import React, { FC } from 'react'
 import { Box, LargePanel, TextView, TextViewProps } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 type WhatToKnowScreenProps = StackScreenProps<HomeStackParamList, 'WhatToKnow'>
 
 const WhatToKnowScreen: FC<WhatToKnowScreenProps> = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const bodyTextProps: TextViewProps = {

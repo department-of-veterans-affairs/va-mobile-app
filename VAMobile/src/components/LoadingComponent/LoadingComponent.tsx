@@ -3,8 +3,7 @@ import LottieView from 'lottie-react-native'
 import React, { FC } from 'react'
 
 import { Box, TextView, VAScrollView } from 'components'
-import { VATheme } from 'styles/theme'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 import colors from 'styles/themes/VAColors'
 
 export type LoadingComponentProps = {
@@ -24,7 +23,7 @@ export type LoadingComponentProps = {
 
 /**A common component to show a loading spinner */
 const LoadingComponent: FC<LoadingComponentProps> = ({ text, a11yLabel, justTheSpinnerIcon, spinnerHeight, spinnerWidth, spinnerColor }) => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,

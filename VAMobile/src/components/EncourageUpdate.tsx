@@ -7,16 +7,15 @@ import { Events } from 'constants/analytics'
 import { FeatureConstants, getLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { VATheme } from 'styles/theme'
 import { featureEnabled } from 'utils/remoteConfig'
 import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { requestStorePopup } from 'utils/rnInAppUpdate'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'styled-components'
+import { useTheme } from 'utils/hooks/useTheme'
 
 export const EncourageUpdateAlert = () => {
-  const theme = useTheme() as VATheme
+  const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HOME)
   const [localVersionName, setVersionName] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()

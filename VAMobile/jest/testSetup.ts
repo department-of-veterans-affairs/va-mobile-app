@@ -26,18 +26,8 @@ NativeModules.RNInAppUpdate = {
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
-jest.mock('react-native-safe-area-context', () => {
-  let original = jest.requireActual('react-native-safe-area-context')
-  return {
-    ...original,
-    useSafeAreaInsets: jest.fn().mockReturnValue({
-      insets: {
-        right: 0,
-        left: 0,
-      },
-    }),
-  }
-})
+import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock'
+jest.mock('react-native-safe-area-context', () => mockSafeAreaContext)
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
