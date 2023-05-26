@@ -1,20 +1,20 @@
-import { ReactComponent as ChevronLeft} from '@componentsDocs/VAIcon/svgs/webview/chevron-left-solid.svg';
-import { ReactComponent as ChevronRight} from '@componentsDocs/VAIcon/svgs/webview/chevron-right-solid.svg';
-import { ReactComponent as ExternalLink} from '@componentsDocs/VAIcon/svgs/webview/external-link-alt-solid.svg';
-import { ReactComponent as Lock} from '@componentsDocs/VAIcon/svgs/webview/lock-solid.svg';
-import { ReactComponent as Redo} from '@componentsDocs/VAIcon/svgs/webview/redo-solid.svg';
+import { ReactComponent as ChevronLeft} from '@componentsDocs/VAIcon/svgs/ChevronLeft.svg';
+import { ReactComponent as ChevronRight} from '@componentsDocs/VAIcon/svgs/ChevronRight.svg';
+import { ReactComponent as ExternalLink} from '@componentsDocs/VAIcon/svgs/ExternalLink.svg';
+import { ReactComponent as Lock} from '@componentsDocs/VAIcon/svgs/Lock.svg';
+import { ReactComponent as Redo} from '@componentsDocs/VAIcon/svgs/Redo.svg';
 import IconsPathSection from '@site/src/components/IconsPathSection'
 
 # Webview
 
 :::info
-<IconsPathSection folder={"webView"}/>
+<IconsPathSection />
 :::
 
 Name | Icon | File Name 
 :---: | :---: | :---: 
-Chevron Left | <ChevronLeft  className="icons"/> | chevron-left-solid.svg 
-Chevron Right | <ChevronRight  className="icons"/> | chevron-right-solid.svg 
-External Link | <ExternalLink className="icons"/> | external-link-alt-solid.svg 
-Lock | <Lock  className="icons"/> | lock-solid.svg 
-Redo | <Redo  className="icons"/> | redo-solid.svg 
+Chevron Left | <ChevronLeft  className="icons"/> | ChevronLeft.svg 
+Chevron Right | <ChevronRight  className="icons"/> | ChevronRight.svg 
+External Link | <ExternalLink className="icons"/> | ExternalLink.svg 
+Lock | <Lock  className="icons"/> | Lock.svg 
+Redo | <Redo  className="icons"/> | Redo.svg 
