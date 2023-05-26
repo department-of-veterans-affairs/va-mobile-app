@@ -1,1 +1,1 @@
-You can now add and edit your preferred name and gender identity in your Profile section.
+We added general improvements and fixed a few bugs.
