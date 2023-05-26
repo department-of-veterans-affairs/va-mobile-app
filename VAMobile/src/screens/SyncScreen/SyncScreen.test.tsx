@@ -67,6 +67,10 @@ context('SyncScreen', () => {
     initializeTestInstance()
   })
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
   })
