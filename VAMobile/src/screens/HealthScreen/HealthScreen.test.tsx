@@ -215,6 +215,7 @@ context('HealthScreen', () => {
 
   it('should render messagesCountTag with the correct count number', async () => {
     await waitFor(() => {
+      initializeTestInstance(13)
       expect(testInstance.findByType(MessagesCountTag)).toBeTruthy()
       expect(testInstance.findAllByType(TextView)[8].props.children).toBe(13)
     })
