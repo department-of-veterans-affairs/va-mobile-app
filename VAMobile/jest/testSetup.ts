@@ -276,6 +276,7 @@ jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
 jest.mock('utils/homeScreenAlerts', () => {
   return {
+    FeatureConstants: jest.fn(),
     getVersionSkipped: jest.fn(),
     getStoreVersion: jest.fn(),
     getLocalVersion: jest.fn(),
