@@ -53,6 +53,10 @@ context('HealthScreen', () => {
   let mockNavigateToPharmacySpy: jest.Mock
   let mockFeatureEnabled = featureEnabled as jest.Mock
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   //mockList:  SecureMessagingMessageList --> for inboxMessages
   const initializeTestInstance = (unreadCount = 13, hasLoadedInbox = true, prescriptionsEnabled = false, prescriptionsNeedLoad = false) => {
     mockNavigateToCrisisLineSpy = jest.fn()

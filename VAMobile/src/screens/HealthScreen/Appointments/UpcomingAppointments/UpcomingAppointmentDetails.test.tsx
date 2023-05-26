@@ -114,6 +114,10 @@ context('UpcomingAppointmentDetails', () => {
     })
   })
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   it('initializes correctly', async () => {
     await waitFor(() => {
       expect(component).toBeTruthy()
