@@ -277,7 +277,7 @@ jest.mock('utils/homeScreenAlerts', () => {
   return {
     getVersionSkipped: jest.fn(),
     getStoreVersion: jest.fn(),
-    getEncourageUpdateLocalVersion: jest.fn(),
+    getLocalVersion: jest.fn(),
   }
 })
 
