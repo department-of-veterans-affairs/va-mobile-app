@@ -97,6 +97,10 @@ context('authAction IAM', () => {
       })
   })
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   describe('startWebLogin', () => {
     it('should set authUrl to be launched', async () => {
       const store = realStore()
