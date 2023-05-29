@@ -112,7 +112,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   })
 
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
-  const [category, setCategory] = useState(message?.category || '')
+  const [category, setCategory] = useState<CategoryTypes>((message?.category as CategoryTypes) || '')
   const [subject, setSubject] = useState(message?.subject || '')
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
   const [body, setBody] = useState(message?.body || '')
@@ -190,9 +190,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   const getMessageData = (): SecureMessagingFormData => {
-    return isReplyDraft
-      ? { body, draft_id: messageID, category: category as CategoryTypes }
-      : { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject, draft_id: messageID }
+    return isReplyDraft ? { body, draft_id: messageID, category } : { recipient_id: parseInt(to, 10), category, body, subject, draft_id: messageID }
   }
 
   const goToCancel = (): void => {
@@ -322,8 +320,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
   }
 
-  const onCategoryChange = (newCategory: string): void => {
-    logAnalyticsEvent(Events.vama_sm_change_category(newCategory as CategoryTypes, category as CategoryTypes))
+  const onCategoryChange = (newCategory: CategoryTypes): void => {
+    logAnalyticsEvent(Events.vama_sm_change_category(newCategory, category))
     setCategory(newCategory)
 
     // if the category used to be general and now its not, clear field errors because the category line is now
@@ -365,7 +363,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         fieldProps: {
           labelKey: 'health:secureMessaging.startNewMessage.category',
           selectedValue: category,
-          onSelectionChange: onCategoryChange,
+          onSelectionChange: onCategoryChange as () => string,
           pickerOptions: getStartNewMessageSubjectPickerOptions(t),
           includeBlankPlaceholder: true,
           isRequiredField: true,
