@@ -595,6 +595,7 @@ context('authAction SIS', () => {
       expect(storeState.loggedIn).toBeTruthy()
       // expect(storeState.canStoreWithBiometric).toBeTruthy()
       // expect(storeState.shouldStoreWithBiometric).toBeTruthy()
+      when(mockFeatureEnabled).calledWith('SIS').mockReturnValue(true)
       await store.dispatch(setBiometricsPreference(true))
       storeState = store.getState().auth
       // expect(storeState.canStoreWithBiometric).toBeTruthy()
