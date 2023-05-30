@@ -4,16 +4,15 @@ import { DateTime, Settings } from 'luxon'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
+import { screen } from '@testing-library/react-native'
 
 import { context, findByTypeWithSubstring, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HomeScreen } from './HomeScreen'
-import { TextView } from 'components'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
 
   return {
     ...original,
@@ -68,28 +67,24 @@ context('HomeScreen', () => {
 
   describe('when showing the greeting', () => {
     it('should have the correct one for the morning', async () => {
-      await waitFor(() => {
-        const expectNow = DateTime.local(2021, 8, 10, 10)
-        Settings.now = () => expectNow.toMillis()
-
-        expect(findByTypeWithSubstring(testInstance, TextView, 'morning')).toBeTruthy()
-      })
+      const expectNow = DateTime.local(2021, 8, 10, 10)
+      Settings.now = () => expectNow.toMillis()
+      initializeTestInstance()
+      expect(screen.getByText('Good morning')).toBeTruthy()
     })
 
     it('should have the correct one for the afternoon', async () => {
-      await waitFor(() => {
-        const expectNow = DateTime.local(2021, 8, 10, 14)
-        Settings.now = () => expectNow.toMillis()
-        expect(findByTypeWithSubstring(testInstance, TextView, 'afternoon')).toBeTruthy()
-      })
+      const expectNow = DateTime.local(2021, 8, 10, 14)
+      Settings.now = () => expectNow.toMillis()
+      initializeTestInstance()
+      expect(screen.getByText('Good afternoon')).toBeTruthy()
     })
 
     it('should have the correct one for the evening', async () => {
-      await waitFor(() => {
-        const expectNow = DateTime.local(2021, 8, 10, 20)
-        Settings.now = () => expectNow.toMillis()
-        expect(findByTypeWithSubstring(testInstance, TextView, 'evening')).toBeTruthy()
-      })
+      const expectNow = DateTime.local(2021, 8, 10, 20)
+      Settings.now = () => expectNow.toMillis()
+      initializeTestInstance()
+      expect(screen.getByText('Good evening')).toBeTruthy()
     })
   })
 })
