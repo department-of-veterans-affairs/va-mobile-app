@@ -93,8 +93,9 @@ const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yL
     }
 
     const infoIconProps: VAIconProps = {
-      name: 'InfoIcon',
+      name: 'Info',
       fill: 'tagInfoIcon',
+      fill2: 'transparent',
       height: 16,
       width: 16,
       mr: 10,

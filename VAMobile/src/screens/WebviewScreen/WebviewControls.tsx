@@ -49,15 +49,15 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
   return (
     <StyledSafeAreaView edges={['bottom']}>
       <Box {...controlsViewProps}>
-        <WebviewControlButton icon={'WebviewBack'} onPress={props.onBackPressed} disabled={!props.canGoBack} a11yHint={t('back.a11yHint')} {...testIdProps(t('back'))} />
+        <WebviewControlButton icon={'ChevronLeft'} onPress={props.onBackPressed} disabled={!props.canGoBack} a11yHint={t('back.a11yHint')} {...testIdProps(t('back'))} />
         <WebviewControlButton
-          icon={'WebviewForward'}
+          icon={'ChevronRight'}
           onPress={props.onForwardPressed}
           disabled={!props.canGoForward}
           a11yHint={t('forward.a11yHint')}
           {...testIdProps(t('forward'))}
         />
-        <WebviewControlButton icon={'WebviewOpen'} onPress={props.onOpenPressed} a11yHint={t('openInBrowser.a11yHint')} {...testIdProps(t('openInBrowser'))} />
+        <WebviewControlButton icon={'ExternalLink'} onPress={props.onOpenPressed} a11yHint={t('openInBrowser.a11yHint')} {...testIdProps(t('openInBrowser'))} />
       </Box>
     </StyledSafeAreaView>
   )
