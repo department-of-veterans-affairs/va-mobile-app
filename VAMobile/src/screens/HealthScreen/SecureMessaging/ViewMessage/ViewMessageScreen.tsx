@@ -89,19 +89,19 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         fill: 'defaultMenuItem',
         height: theme.fontSizes.MobileBody.fontSize,
         width: theme.fontSizes.MobileBody.fontSize,
-        name: 'FolderSolid',
+        name: 'Folder',
       } as VAIconProps
 
       if (label === FolderNameTypeConstants.deleted) {
         label = TRASH_FOLDER_NAME
         icon.fill = 'error'
-        icon.name = 'TrashSolid'
+        icon.name = 'Trash'
         indexOfDeleted = index
       }
 
       if (label === FolderNameTypeConstants.inbox) {
         icon.fill = 'defaultMenuItem'
-        icon.name = 'InboxSolid'
+        icon.name = 'Inbox'
       }
 
       return {
@@ -202,7 +202,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   }
 
   const moveIconProps: VAIconProps = {
-    name: 'FolderSolid',
+    name: 'Folder',
   }
 
   const headerButton =
