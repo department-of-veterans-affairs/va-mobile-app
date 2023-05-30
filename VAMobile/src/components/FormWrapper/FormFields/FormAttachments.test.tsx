@@ -57,7 +57,6 @@ context('FormAttachments', () => {
 
     component = render(
       <FormAttachments
-        originHeader="test header"
         removeOnPress={removeOnPressSpy}
         largeButtonProps={{ label: 'add files', onPress: largeButtonSpy }}
         attachmentsList={attachments}
@@ -77,7 +76,7 @@ context('FormAttachments', () => {
 
   describe('when there are attachments', () => {
     it('should display a remove link', async () => {
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Remove')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Remove')
     })
 
     describe('when the remove link is clicked for an attachment', () => {
@@ -94,8 +93,7 @@ context('FormAttachments', () => {
     it('should not display a remove link', async () => {
       initializeTestInstance([])
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Attachments')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('How to attach a file')
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('add files')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('add files')
     })
   })
 
@@ -105,16 +103,6 @@ context('FormAttachments', () => {
         const pressables = testInstance.findAllByType(Pressable)
         pressables[pressables.length - 1].props.onPress()
         expect(largeButtonSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
-  describe('on click of the "How to attach a file" link', () => {
-    it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalledWith('AttachmentsFAQ', { 'originHeader': 'test header' })
-        expect(mockNavigateToSpy).toHaveBeenCalled()
       })
     })
   })
