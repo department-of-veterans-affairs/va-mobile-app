@@ -721,6 +721,7 @@
   "messages": "Messages",
   "contactInformation.title": "Contact information",
   "secureMessaging.startNewMessage.attachments.title": "Attach file",
+  "secureMessaging.replyHelp.title": "Messages help",
   "secureMessaging.replyHelp.onlyUseMessages": "Only use messages for non-urgent needs",
   "secureMessaging.replyHelp.yourCareTeam": "Your care team may take up to",
   "secureMessaging.replyHelp.3BusinessDays": "3 business days",
