@@ -8,7 +8,7 @@ import Mock = jest.Mock
 import { context, render, RenderAPI } from 'testUtils'
 import FooterButton from './FooterButton'
 import { TextView, VAIcon } from './index'
-import Compose from 'components/VAIcon/svgs/compose.svg'
+import Compose from 'components/VAIcon/svgs/Compose.svg'
 
 context('FooterButton', () => {
   let component: RenderAPI

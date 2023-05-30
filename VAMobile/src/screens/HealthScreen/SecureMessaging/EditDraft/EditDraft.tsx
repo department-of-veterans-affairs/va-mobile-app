@@ -233,7 +233,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     {
       actionText: tc('save'),
       addDivider: true,
-      iconName: 'FolderSolid',
+      iconName: 'Folder',
       accessibilityLabel: t('secureMessaging.saveDraft.menuBtnA11y'),
       onPress: () => {
         setOnSaveDraftClicked(true)
@@ -243,7 +243,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     {
       actionText: tc('delete'),
       addDivider: false,
-      iconName: 'TrashSolid',
+      iconName: 'Trash',
       accessibilityLabel: t('secureMessaging.deleteDraft.menuBtnA11y'),
       iconColor: 'error',
       textColor: 'error',
