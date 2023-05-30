@@ -107,6 +107,15 @@ const mockMessagesById: SecureMessagingMessageMap = {
   },
 }
 
+let mockUseComposeCancelConfirmationSpy = jest.fn()
+jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
+  let original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
+  }
+})
+
 context('ReplyMessage', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
@@ -143,6 +152,7 @@ context('ReplyMessage', () => {
     props = mockNavProps(
       undefined,
       {
+        addListener: mockUseComposeCancelConfirmationSpy,
         goBack,
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
