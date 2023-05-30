@@ -272,6 +272,15 @@ jest.mock('@react-native-firebase/remote-config', () => {
   })
 })
 
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native')
+  RN.InteractionManager.runAfterInteractions = (callback: () => void) => {
+    callback()
+  }
+
+  return RN
+})
+
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
 jest.mock('utils/homeScreenAlerts', () => {
