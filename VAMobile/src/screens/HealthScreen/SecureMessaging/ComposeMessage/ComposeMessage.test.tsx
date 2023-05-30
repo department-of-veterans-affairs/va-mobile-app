@@ -63,6 +63,15 @@ jest.mock('store/slices', () => {
   }
 })
 
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native')
+  RN.InteractionManager.runAfterInteractions = (callback: () => void) => {
+    callback()
+  }
+
+  return RN
+})
+
 let mockUseComposeCancelConfirmationSpy = jest.fn()
 jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   let original = jest.requireActual('utils/hooks')

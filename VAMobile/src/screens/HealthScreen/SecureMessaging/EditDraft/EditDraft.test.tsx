@@ -73,6 +73,15 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   }
 })
 
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native')
+  RN.InteractionManager.runAfterInteractions = (callback: () => void) => {
+    callback()
+  }
+
+  return RN
+})
+
 // Contains message Ids grouped together by thread
 const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
 
