@@ -1,13 +1,14 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { Linking, Pressable, Switch as RNSwitch, TouchableWithoutFeedback } from 'react-native'
+import { ReactTestInstance } from 'react-test-renderer'
+import { Pressable, Switch as RNSwitch, TouchableWithoutFeedback } from 'react-native'
+import { fireEvent, screen } from '@testing-library/react-native'
 
-import { BasicError, ErrorComponent, LoadingComponent, Switch, TextView } from 'components'
-import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
+import { BasicError, LoadingComponent, Switch, TextView } from 'components'
+import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerification'
-import { ErrorsState, initialErrorsState, InitialState, downloadLetter } from 'store/slices'
+import { InitialState, downloadLetter } from 'store/slices'
 import { CharacterOfServiceConstants, LetterTypeConstants } from 'store/api/types'
 
 const mockExternalLinkSpy = jest.fn()
@@ -26,6 +27,12 @@ jest.mock('store/slices', () => {
   return {
     ...actual,
     downloadLetter: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    getLetterBeneficiaryData: jest.fn(() => {
       return {
         type: '',
         payload: '',
@@ -211,19 +218,17 @@ context('BenefitSummaryServiceVerification', () => {
     })
   })
 
-  describe('when view letter is pressed', () => {
+  describe('when Review letter is pressed', () => {
     it('should call downloadLetter', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[5].props.onPress()
-        const letterOptions = {
-          chapter35Eligibility: true,
-          militaryService: true,
-          monthlyAward: true,
-          serviceConnectedDisabilities: true,
-          serviceConnectedEvaluation: true,
-        }
-        expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions)
-      })
+      fireEvent.press(screen.getByText('Review letter'))
+      const letterOptions = {
+        chapter35Eligibility: true,
+        militaryService: true,
+        monthlyAward: true,
+        serviceConnectedDisabilities: true,
+        serviceConnectedEvaluation: true,
+      }
+      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions)
     })
   })
 
