@@ -4,11 +4,11 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, findByTypeWithText, mockNavProps, render, RenderAPI } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 import { initialAuthState, initialPaymentsState } from 'store/slices'
-import { TextView } from 'components'
 import PaymentDetailsScreen from './PaymentDetailsScreen'
-import { getFormattedDate } from 'utils/formattingUtils'
+import { formatDateUtc } from 'utils/formattingUtils'
+import { screen } from '@testing-library/react-native'
 
 context('PaymentDetailsScreen', () => {
   let component: RenderAPI
@@ -27,7 +27,7 @@ context('PaymentDetailsScreen', () => {
       { params: { paymentID: pId } },
     )
     paymentDate = '2021-02-01T00:00:00.000-07:00'
-    formattedDate = getFormattedDate(paymentDate, 'MMMM d, yyyy')
+    formattedDate = formatDateUtc(paymentDate, 'MMMM d, yyyy')
 
     component = render(<PaymentDetailsScreen {...props} />, {
       preloadedState: {
@@ -74,28 +74,29 @@ context('PaymentDetailsScreen', () => {
   describe('when showing payment info', () => {
     it('should show payment details information when direct deposit', async () => {
       initializeTestInstance()
-      expect(findByTypeWithText(testInstance, TextView, formattedDate)).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Compensation & Pension - Recurring')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Amount')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, '$3,746.20')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Method')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Direct Deposit')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Bank')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'BANK OF AMERICA, N.A.')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Account')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, '********0567')).toBeTruthy()
+      expect(screen.getByText(formattedDate)).toBeTruthy()
+      expect(screen.getByText(formattedDate)).toBeTruthy()
+      expect(screen.getByText('Compensation & Pension - Recurring')).toBeTruthy()
+      expect(screen.getByText('Amount')).toBeTruthy()
+      expect(screen.getByText('$3,746.20')).toBeTruthy()
+      expect(screen.getByText('Method')).toBeTruthy()
+      expect(screen.getByText('Direct Deposit')).toBeTruthy()
+      expect(screen.getByText('Bank')).toBeTruthy()
+      expect(screen.getByText('BANK OF AMERICA, N.A.')).toBeTruthy()
+      expect(screen.getByText('Account')).toBeTruthy()
+      expect(screen.getByText('********0567')).toBeTruthy()
     })
 
     it('should show payment details information when paper check', async () => {
       initializeTestInstance('2')
-      expect(findByTypeWithText(testInstance, TextView, formattedDate)).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Compensation & Pension - Recurring')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Amount')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, '$3,746.20')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Method')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Paper Check')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Bank')).toBeFalsy()
-      expect(findByTypeWithText(testInstance, TextView, 'Account')).toBeFalsy()
+      expect(screen.getByText(formattedDate)).toBeTruthy()
+      expect(screen.getByText('Compensation & Pension - Recurring')).toBeTruthy()
+      expect(screen.getByText('Amount')).toBeTruthy()
+      expect(screen.getByText('$3,746.20')).toBeTruthy()
+      expect(screen.getByText('Method')).toBeTruthy()
+      expect(screen.getByText('Paper Check')).toBeTruthy()
+      expect(screen.queryByText('Bank')).toBeNull()
+      expect(screen.queryByText('Account')).toBeNull()
     })
   })
 })
