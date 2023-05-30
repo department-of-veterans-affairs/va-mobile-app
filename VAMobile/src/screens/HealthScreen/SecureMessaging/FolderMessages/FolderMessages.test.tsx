@@ -202,7 +202,7 @@ context('FolderMessages', () => {
     it('should not show unread icons', async () => {
       await waitFor(() => {
         initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
-        expect(findByTypeWithName(testInstance, VAIcon, 'UnreadIcon')).toBeFalsy()
+        expect(findByTypeWithName(testInstance, VAIcon, 'Unread')).toBeFalsy()
       })
     })
 
