@@ -20,7 +20,7 @@ Name | Icon | File Name
 Calendar | <Calendar  className="linkIcons"/> | Calendar.svg
 Chat | <Chat  className="linkIcons"/> | Chat.svg
 Directions | <Directions  className="linkIcons iconDirection"/> | Directions.svg
-External Link in Circle | <CircleExternalLink  className="icons"/> | CircleExternalLink.svg
+External Link in Circle | <CircleExternalLink  className="linkIcons"/> | CircleExternalLink.svg
 Phone in Circle | <CirclePhone  className="linkIcons"/> | CirclePhone.svg
 Phone TTY | <PhoneTTY  className="linkIcons"/> | PhoneTTY.svg
 Right Arrow Blue Circle | <RightArrowBlueCircle  className="linkIcons"/> | right-arrow-blue-circle.svg
