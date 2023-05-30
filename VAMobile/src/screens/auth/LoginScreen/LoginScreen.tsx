@@ -90,7 +90,7 @@ const LoginScreen: FC = () => {
               <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
                 {t('home:findLocation.title')}
               </TextView>
-              <VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />
+              <VAIcon name="ChevronRight" fill="#FFF" width={10} height={15} />
             </Box>
           </Pressable>
         </Box>

@@ -3,167 +3,147 @@ import { SvgProps } from 'react-native-svg'
 import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
-import { VAIconColors, VATextColors } from 'styles/theme'
-import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
-
+import { AccessibilityState } from 'store/slices'
 import { Box, BoxProps } from 'components'
-// New svgs need to set `fill` to `#000` and `stroke` to `#00F`. See /svgs for examples
+import { RootState } from 'store'
+import { VAIconColors, VATextColors } from 'styles/theme'
+import { updateFontScale } from 'utils/accessibility'
+import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
+
+// See VAIcon function documentation below for guidance on adding new SVGs
+
 // Navigation
-import BenefitsSelected from './svgs/navIcon/benefitsSelected.svg'
-import BenefitsUnselected from './svgs/navIcon/benefitsUnselected.svg'
-import HealthSelected from './svgs/navIcon/healthSelected.svg'
-import HealthUnselected from './svgs/navIcon/healthUnselected.svg'
-import HomeSelected from './svgs/navIcon/homeSelected.svg'
-import HomeUnselected from './svgs/navIcon/homeUnselected.svg'
-import PaymentsSelected from './svgs/navIcon/paymentsSelected.svg'
-import PaymentsUnselected from './svgs/navIcon/paymentsUnselected.svg'
-import ProfileSelected from './svgs/navIcon/profileSelected.svg'
-import ProfileUnselected from './svgs/navIcon/profileUnselected.svg'
+import BenefitsSelected from './svgs/navIcon/BenefitsSelected.svg'
+import BenefitsUnselected from './svgs/navIcon/BenefitsUnselected.svg'
+import HealthSelected from './svgs/navIcon/HealthSelected.svg'
+import HealthUnselected from './svgs/navIcon/HealthUnselected.svg'
+import HomeSelected from './svgs/navIcon/HomeSelected.svg'
+import HomeUnselected from './svgs/navIcon/HomeUnselected.svg'
+import PaymentsSelected from './svgs/navIcon/PaymentsSelected.svg'
+import PaymentsUnselected from './svgs/navIcon/PaymentsUnselected.svg'
+import ProfileSelected from './svgs/navIcon/ProfileSelected.svg'
 
-// Arrows
-import ArrowDown from './svgs/chevron-down.svg'
-import ArrowLeft from './svgs/chevron-left.svg'
-import ArrowRight from './svgs/chevron-right.svg'
-import ArrowUp from './svgs/chevron-up.svg'
+// Chevrons
+import ChevronDown from './svgs/ChevronDown.svg'
+import ChevronLeft from './svgs/ChevronLeft.svg'
+import ChevronRight from './svgs/ChevronRight.svg'
+import ChevronUp from './svgs/ChevronUp.svg'
 
-// forces icons
-
-import Airforce from './svgs/dodBranch/air-force.svg'
-import Army from './svgs/dodBranch/army.svg'
-import CoastGuard from './svgs/dodBranch/coast-guard.svg'
-import Marines from './svgs/dodBranch/marine.svg'
-import Navy from './svgs/dodBranch/navy.svg'
+// Branch icons
+import AirForce from './svgs/dodBranch/AirForce.svg'
+import Army from './svgs/dodBranch/Army.svg'
+import CoastGuard from './svgs/dodBranch/CoastGuard.svg'
+import MarineCorps from './svgs/dodBranch/MarineCorps.svg'
+import Navy from './svgs/dodBranch/Navy.svg'
 
 // Links
-import Calendar from './svgs/links/calendar.svg'
-import Chat from './svgs/links/chat.svg'
-import Directions from './svgs/links/directions.svg'
-import ExternalLink from './svgs/links/circle_external_link.svg'
-import Phone from './svgs/links/phone.svg'
-import PhoneTTY from './svgs/links/phone-tty.svg'
+import Calendar from './svgs/links/Calendar.svg'
+import Chat from './svgs/links/Chat.svg'
+import CircleExternalLink from './svgs/links/CircleExternalLink.svg'
+import CirclePhone from './svgs/links/CirclePhone.svg'
+import Directions from './svgs/links/Directions.svg'
+import PhoneTTY from './svgs/links/PhoneTTY.svg'
 import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
-import Text from './svgs/links/text.svg'
-
-// Webview
-import WebviewBack from './svgs/webview/chevron-left-solid.svg'
-import WebviewForward from './svgs/webview/chevron-right-solid.svg'
-import WebviewOpen from './svgs/webview/external-link-alt-solid.svg'
-import WebviewRefresh from './svgs/webview/redo-solid.svg'
+import Text from './svgs/links/Text.svg'
 
 // VASelector
-import DisabledRadio from './svgs/radio/radioDisabled.svg'
-import EmptyCheckBox from './svgs/checkbox/checkBoxEmpty.svg'
-import EmptyRadio from './svgs/radio/radioEmpty.svg'
-import ErrorCheckBox from './svgs/checkbox/checkBoxError.svg'
-import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
-import FilledRadio from './svgs/radio/radioFilled.svg'
-import IntermediateCheckBox from './svgs/checkbox/checkBoxIntermediate.svg'
-
-// white icons with changeable filled circle
-import WhiteCheckCircle from './svgs/circleWhiteIcon/white-check-circle.svg'
-import WhiteCloseCircle from './svgs/circleWhiteIcon/white-close-circle.svg'
+import CheckBoxEmpty from './svgs/checkbox/CheckBoxEmpty.svg'
+import CheckBoxError from './svgs/checkbox/CheckBoxError.svg'
+import CheckBoxFilled from './svgs/checkbox/CheckBoxFilled.svg'
+import CheckBoxIntermediate from './svgs/checkbox/CheckBoxIntermediate.svg'
+import RadioEmpty from './svgs/radio/RadioEmpty.svg'
+import RadioFilled from './svgs/radio/RadioFilled.svg'
 
 // Misc
-
-import { AccessibilityState } from 'store/slices'
-import { RootState } from 'store'
-import { updateFontScale } from 'utils/accessibility'
-import { useSelector } from 'react-redux'
-import Add from './svgs/add.svg'
-import BuildingSolid from './svgs/buildingSolid.svg'
-import Bullet from './svgs/bullet.svg'
-import CheckMark from './svgs/check-mark.svg'
-import CircleCheckMark from './svgs/checkmark-in-circle.svg'
-import Compose from './svgs/compose.svg'
-import DatePickerArrows from './svgs/date-picker-arrows.svg'
-import Delete from './svgs/delete.svg'
-import EllipsisSolid from './svgs/ellipsisSolid.svg'
-import ExclamationTriangleSolid from './svgs/exclamationTriangleSolid.svg'
-import FolderSolid from './svgs/folder-solid.svg'
-import InboxSolid from './svgs/inbox-solid.svg'
-import InfoIcon from './svgs/info-circle.svg'
-import Lock from './svgs/webview/lock-solid.svg'
-import Logo from './svgs/vaParentLogo/logo.svg'
-import Minus from './svgs/minus.svg'
-import PaperClip from './svgs/paperClip.svg'
-import PhoneSolid from './svgs/phoneSolid.svg'
-import QuestionMark from './svgs/questionMark.svg'
-import Remove from './svgs/remove.svg'
-import Reply from './svgs/reply.svg'
-import Save from './svgs/folder-medical-solid.svg'
-import TrashSolid from './svgs/trash-solid.svg'
-import Truck from './svgs/truck.svg'
-import UnreadIcon from './svgs/unread_icon.svg'
-import VideoCamera from './svgs/videoCamera.svg'
+import Add from './svgs/Add.svg'
+import Building from './svgs/Building.svg'
+import Bullet from './svgs/Bullet.svg'
+import CheckMark from './svgs/CheckMark.svg'
+import CircleCheckMark from './svgs/CircleCheckMark.svg'
+import Compose from './svgs/Compose.svg'
+import Ellipsis from './svgs/Ellipsis.svg'
+import ExclamationTriangle from './svgs/ExclamationTriangle.svg'
+import ExternalLink from './svgs/ExternalLink.svg'
+import Folder from './svgs/Folder.svg'
+import Inbox from './svgs/Inbox.svg'
+import Info from './svgs/Info.svg'
+import Lock from './svgs/Lock.svg'
+import Logo from './svgs/vaParentLogo/Logo.svg'
+import Minus from './svgs/Minus.svg'
+import PaperClip from './svgs/PaperClip.svg'
+import Phone from './svgs/Phone.svg'
+import QuestionMark from './svgs/QuestionMark.svg'
+import Redo from './svgs/Redo.svg'
+import Remove from './svgs/Remove.svg'
+import Reply from './svgs/Reply.svg'
+import Sort from './svgs/Sort.svg'
+import Trash from './svgs/Trash.svg'
+import Truck from './svgs/Truck.svg'
+import Unread from './svgs/Unread.svg'
+import VideoCamera from './svgs/VideoCamera.svg'
 
 export const VA_ICON_MAP = {
-  HomeSelected,
-  HomeUnselected,
-  HealthSelected,
-  HealthUnselected,
+  Add,
+  AirForce,
+  Army,
   BenefitsSelected,
   BenefitsUnselected,
-  ProfileSelected,
-  ProfileUnselected,
-  PaymentsSelected,
-  PaymentsUnselected,
-  Add,
-  ArrowDown,
-  ArrowUp,
-  ArrowLeft,
-  ArrowRight,
-  Airforce,
-  Army,
+  Building,
   Bullet,
   Calendar,
-  Compose,
+  Chat,
+  CheckBoxEmpty,
+  CheckBoxError,
+  CheckBoxFilled,
+  CheckBoxIntermediate,
+  CheckMark,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
   CircleCheckMark,
+  CircleExternalLink,
+  CirclePhone,
   CoastGuard,
-  Delete,
+  Compose,
   Directions,
-  EmptyCheckBox,
-  FilledCheckBox,
-  IntermediateCheckBox,
-  FolderSolid,
-  EmptyRadio,
-  EllipsisSolid,
-  FilledRadio,
-  DisabledRadio,
-  Marines,
+  Ellipsis,
+  ExclamationTriangle,
+  ExternalLink,
+  Folder,
+  HealthSelected,
+  HealthUnselected,
+  HomeSelected,
+  HomeUnselected,
+  Inbox,
+  Info,
+  Lock,
+  Logo,
+  MarineCorps,
   Minus,
   Navy,
   PaperClip,
+  PaymentsSelected,
+  PaymentsUnselected,
   Phone,
   PhoneTTY,
-  Chat,
-  Text,
-  RightArrowInCircle,
-  Reply,
-  WebviewBack,
-  WebviewForward,
-  WebviewOpen,
-  WebviewRefresh,
-  Lock,
-  DatePickerArrows,
-  CheckMark,
-  Logo,
-  ErrorCheckBox,
+  ProfileSelected,
   QuestionMark,
+  RadioEmpty, // Also used for RadioDisabled content--same icon, different colors
+  RadioFilled,
+  Redo,
   Remove,
-  UnreadIcon,
-  VideoCamera,
-  PhoneSolid,
-  ExclamationTriangleSolid,
-  TrashSolid,
-  InboxSolid,
-  BuildingSolid,
-  InfoIcon,
-  WhiteCheckCircle,
-  WhiteCloseCircle,
+  Reply,
+  RightArrowInCircle, // TODO: Ticket 3402 (or separate implementation ticket) to remove this icon
+  Sort,
+  Text,
+  Trash,
   Truck,
-  ExternalLink,
-  Save,
+  Unread,
+  VideoCamera,
 }
+
 /**
  *  Props that need to be passed in to {@link VAIcon}
  */
@@ -173,6 +153,9 @@ export type VAIconProps = BoxProps & {
 
   /** Fill color for the icon */
   fill?: keyof VAIconColors | keyof VATextColors | string
+
+  /** Secondary fill color for duotone icons--fills icons inside main fill, defaults white */
+  fill2?: keyof VAIconColors | keyof VATextColors | string
 
   /** Stroke color of the icon */
   stroke?: keyof VAIconColors | string
@@ -191,11 +174,24 @@ export type VAIconProps = BoxProps & {
 }
 
 /**
- * A common component to display assets(svgs). Svgs need to place in VAIcon/svgs folder. Set fill to #000 and stroke to #00F in the svg so VAIcon component can set the fill/stroke color. Examples/details can be found in VAIcon component.
+ * A common component to display assets (SVGs).
+ *
+ * For all icons in the SVG definitions, on the primary/only path:
+ *    - Set `fill` to `#000` to inherit VAIcon's fill color prop
+ * If the SVG icon is duotone, additionally:
+ *    - Set `color` to `#fff` on the top level svg (not path)
+ *    - Set `fill` to `currentColor` on the secondary path to inherit VAIcon's fill2 color prop
+ * If the SVG icon uses stroke, additionally:
+ *    - Set `stroke` to `#00F` to inherit VAIcon's stroke color prop
+ *
+ * Example icons of each classification:
+ *    - One layer: HomeSelected.svg
+ *    - Duotone: CircleCheckMark.svg
+ *    - Stroke: RadioEmpty.svg
  *
  * @returns VAIcon component
  */
-const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventScaling, testID, ...boxProps }) => {
+const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, fill2, stroke, preventScaling, testID, ...boxProps }) => {
   const theme = useTheme()
   const fs: (val: number) => number = useFontScale()
   const dispatch = useAppDispatch()
@@ -210,6 +206,10 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventSca
 
   if (fill) {
     iconProps = Object.assign({}, iconProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || theme.colors.text[fill as keyof VATextColors] || fill })
+  }
+
+  if (fill2) {
+    iconProps = Object.assign({}, iconProps, { color: theme.colors.icon[fill2 as keyof VAIconColors] || theme.colors.text[fill2 as keyof VATextColors] || fill2 })
   }
 
   if (stroke) {
