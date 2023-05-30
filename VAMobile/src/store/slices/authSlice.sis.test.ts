@@ -51,6 +51,20 @@ jest.mock('../../utils/env', () =>
   })),
 )
 
+jest.mock('@react-native-firebase/analytics', () => {
+  return () => ({
+    logEvent: jest.fn(),
+    setUserProperty: jest.fn(),
+    setAnalyticsCollectionEnabled: jest.fn(),
+  })
+})
+
+jest.mock('@react-native-firebase/perf', () => {
+  return () => ({
+    setPerformanceCollectionEnabled: jest.fn(),
+  })
+})
+
 const defaultEnvParams = {
   AUTH_SIS_ENDPOINT: 'https://test.gov/sign-in',
   AUTH_SIS_REVOKE_URL: 'https://test.gov/v0/sign_in/revoke',

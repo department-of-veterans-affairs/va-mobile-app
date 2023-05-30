@@ -54,6 +54,20 @@ jest.mock('../../utils/env', () =>
   })),
 )
 
+jest.mock('@react-native-firebase/analytics', () => {
+  return () => ({
+    logEvent: jest.fn(),
+    setUserProperty: jest.fn(),
+    setAnalyticsCollectionEnabled: jest.fn(),
+  })
+})
+
+jest.mock('@react-native-firebase/perf', () => {
+  return () => ({
+    setPerformanceCollectionEnabled: jest.fn(),
+  })
+})
+
 const getItemMock = AsyncStorage.getItem as jest.Mock
 const mockFeatureEnabled = featureEnabled as jest.Mock
 
