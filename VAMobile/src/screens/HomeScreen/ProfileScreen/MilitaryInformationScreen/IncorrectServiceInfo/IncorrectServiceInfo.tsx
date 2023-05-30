@@ -6,7 +6,7 @@ import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView
 import { HiddenTitle } from 'styles/common'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 type IncorrectServiceInfoScreenProps = StackScreenProps<HomeStackParamList, 'IncorrectServiceInfo'>
@@ -19,7 +19,6 @@ type IncorrectServiceInfoScreenProps = StackScreenProps<HomeStackParamList, 'Inc
 const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   useEffect(() => {
     navigation.setOptions({
@@ -37,8 +36,18 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('militaryInformation.incorrectServiceInfo')}
         </TextView>
-        <TextView {...testIdProps(t('militaryInformation.incorrectServiceInfo.bodyA11yLabel'))} variant="MobileBody" my={standardMarginBetween}>
-          {t('militaryInformation.incorrectServiceInfo.body')}
+        <TextView
+          accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.1')}
+          variant="MobileBody"
+          mt={theme.dimensions.standardMarginBetween}
+          paragraphSpacing={true}>
+          {t('militaryInformation.incorrectServiceInfo.body.1')}
+        </TextView>
+        <TextView accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.2')} variant="MobileBody" paragraphSpacing={true}>
+          {t('militaryInformation.incorrectServiceInfo.body.2')}
+        </TextView>
+        <TextView accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.3')} variant="MobileBody" paragraphSpacing={true}>
+          {t('militaryInformation.incorrectServiceInfo.body.3')}
         </TextView>
         <ClickForActionLink
           testID="incorrectServiceDMDCNumberTestID"

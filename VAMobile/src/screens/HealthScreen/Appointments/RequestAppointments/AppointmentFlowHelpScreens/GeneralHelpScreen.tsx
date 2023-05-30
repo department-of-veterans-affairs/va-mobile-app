@@ -36,9 +36,10 @@ const GeneralHelpScreen: FC<GeneralHelpScreenProps> = ({ navigation, route }) =>
         <TextView variant="MobileBodyBold" mt={contentMarginTop}>
           {title}
         </TextView>
-        <TextView variant="MobileBody">{description}</TextView>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {description}
+        </TextView>
         <TextView
-          mt={contentMarginTop}
           variant="MobileBodyLink"
           onPress={() => {
             navigation.goBack()

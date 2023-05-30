@@ -66,7 +66,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     }
 
     return (
-      <TextView variant="MobileBody" selectable={true}>
+      <TextView variant="MobileBody" selectable={true} accessible={false}>
         {location.name}
       </TextView>
     )
@@ -76,12 +76,12 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     return (
       <>
         {!!address?.street && (
-          <TextView variant="MobileBody" selectable={true}>
+          <TextView variant="MobileBody" selectable={true} accessible={false}>
             {address.street}
           </TextView>
         )}
         {!!address?.city && address?.state && address?.zipCode && (
-          <TextView variant="MobileBody" selectable={true}>
+          <TextView variant="MobileBody" selectable={true} accessible={false}>
             {`${address.city}, ${address.state} ${address.zipCode}`}
           </TextView>
         )}
@@ -127,7 +127,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
         <Box accessible={true}>
           {getLocationName()}
           {missingAddressMessage ? (
-            <TextView variant="MobileBody" accessibilityLabel={missingAddressA11yLabel || undefined}>
+            <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={missingAddressA11yLabel || undefined} selectable={true} accessible={false}>
               {missingAddressMessage}
             </TextView>
           ) : (
