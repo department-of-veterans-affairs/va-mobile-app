@@ -400,7 +400,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
-        originHeader: t('secureMessaging.drafts.edit'),
         removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
@@ -411,7 +410,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
               }
             : undefined,
         attachmentsList,
-        a11yHint: t('secureMessaging.attachments.howToAttachAFile.a11y'),
       },
     },
     {
