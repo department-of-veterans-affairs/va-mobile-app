@@ -74,6 +74,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
     width: 16,
     height: 16,
     fill: 'link',
+    fill2: theme.colors.icon.transparent,
   }
 
   const attachmentsDoNotExist = !attachmentsList || attachmentsList.length === 0

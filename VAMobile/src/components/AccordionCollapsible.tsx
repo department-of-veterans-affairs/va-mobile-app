@@ -65,7 +65,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
     accessibilityRole: 'tab',
   }
 
-  const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ArrowUp' : 'ArrowDown'
+  const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ChevronUp' : 'ChevronDown'
 
   const renderHeader = () => {
     const data = (
