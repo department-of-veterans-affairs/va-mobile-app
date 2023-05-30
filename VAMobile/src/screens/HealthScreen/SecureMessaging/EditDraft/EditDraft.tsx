@@ -54,7 +54,7 @@ import { formatSubject } from 'utils/secureMessaging'
 import { getStartNewMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
@@ -234,7 +234,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     {
       actionText: tc('save'),
       addDivider: true,
-      iconName: 'FolderSolid',
+      iconName: 'Folder',
       accessibilityLabel: t('secureMessaging.saveDraft.menuBtnA11y'),
       onPress: () => {
         setOnSaveDraftClicked(true)
@@ -244,7 +244,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     {
       actionText: tc('delete'),
       addDivider: false,
-      iconName: 'TrashSolid',
+      iconName: 'Trash',
       accessibilityLabel: t('secureMessaging.deleteDraft.menuBtnA11y'),
       iconColor: 'error',
       textColor: 'error',
@@ -263,6 +263,18 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       ),
       headerRight: () => (!noRecipientsReceived || isReplyDraft) && <MenuView actions={MenViewActions} />,
     })
+  })
+
+  /**
+   * Intercept navigation action before leaving the screen, used the handle OS swipe/hardware back behavior
+   */
+  useBeforeNavBackListener(navigation, (e) => {
+    if (noProviderError || isFormBlank || !draftChanged()) {
+      goToDrafts(false)
+    } else {
+      e.preventDefault()
+      goToCancel()
+    }
   })
 
   useEffect(() => {

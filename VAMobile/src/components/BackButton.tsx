@@ -46,7 +46,7 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, sho
     return null
   }
 
-  const chevron = showCarat ? <VAIcon mt={1} name={'ArrowLeft'} fill="backButton" /> : <></>
+  const chevron = showCarat ? <VAIcon mt={1} name={'ChevronLeft'} fill="backButton" /> : <></>
 
   const a11yHintPropParam = a11yHint ? a11yHint : t(`${label}.a11yHint`)
 
