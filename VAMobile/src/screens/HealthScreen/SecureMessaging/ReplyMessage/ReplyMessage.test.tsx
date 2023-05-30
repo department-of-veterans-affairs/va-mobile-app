@@ -216,7 +216,7 @@ context('ReplyMessage', () => {
   it('should add the text (*Required) for the message body text field', async () => {
     await waitFor(() => {
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[14].props.children).toEqual(['Message', ' ', '(Required)'])
+      expect(textViews[13].props.children).toEqual(['Message', ' ', '(Required)'])
     })
   })
 
