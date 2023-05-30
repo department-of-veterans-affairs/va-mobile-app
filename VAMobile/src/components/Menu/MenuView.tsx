@@ -131,7 +131,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
     <>
       <ElementToStick ref={elementRef} style={elementToStickStyle} />
       <Pressable onPress={showMenu} style={launchBtnStyle} accessibilityLabel={'menu'} accessibilityRole={'button'}>
-        <VAIconWithText name="EllipsisSolid" label={t('more')} />
+        <VAIconWithText name="Ellipsis" label={t('more')} />
       </Pressable>
 
       <Menu ref={setMenuRef} style={{ backgroundColor: currentTheme.colors.background.menu }}>

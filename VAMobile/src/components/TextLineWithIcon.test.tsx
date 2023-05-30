@@ -19,7 +19,7 @@ context('TextLineWithIcon', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
     const testLine1 = { text: 'line1', iconProps: { name: 'PaperClip', width: 16, height: 16 } as VAIconProps }
-    const testLine2 = { text: 'another line2', iconProps: { name: 'UnreadIcon', width: 16, height: 16, isOwnLine: true } as VAIconProps }
+    const testLine2 = { text: 'another line2', iconProps: { name: 'Unread', width: 16, height: 16, isOwnLine: true } as VAIconProps }
     const testLine3 = { text: 'line3 no iconProps' }
 
     component = render(
@@ -39,7 +39,7 @@ context('TextLineWithIcon', () => {
 
   it('should render correct VAIcons and not show icon for component with undefined iconProps', async () => {
     expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('PaperClip')
-    expect(testInstance.findAllByType(VAIcon)[1].props.name).toEqual('UnreadIcon')
+    expect(testInstance.findAllByType(VAIcon)[1].props.name).toEqual('Unread')
     expect(testInstance.findAllByType(VAIcon).length).toEqual(2)
   })
 

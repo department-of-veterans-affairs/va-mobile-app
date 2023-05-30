@@ -64,7 +64,7 @@ context('ClaimPhase', () => {
     it('should render with an icon', async () => {
       const icon = testInstance.findAllByType(VAIcon)[1]
       expect(icon).toBeTruthy()
-      expect(icon.props.name).toEqual('ArrowDown')
+      expect(icon.props.name).toEqual('ChevronDown')
     })
 
     // TODO: need a way to test component state. So far jest + enzyme doesnt seem the work in RN
@@ -76,7 +76,7 @@ context('ClaimPhase', () => {
         pressable.props.onPress()
         expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('June 6, 2019')
         expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Thank you. VA received your claim')
-        expect(icon.props.name).toEqual('ArrowUp')
+        expect(icon.props.name).toEqual('ChevronUp')
       })
     })
   })
@@ -86,10 +86,10 @@ context('ClaimPhase', () => {
       initializeTestInstance(2, 2)
     })
 
-    it('should render with an arrow icon', async () => {
+    it('should render with an chevron icon', async () => {
       const icon = testInstance.findAllByType(VAIcon)[0]
       expect(icon).toBeTruthy()
-      expect(icon.props.name).toEqual('ArrowDown')
+      expect(icon.props.name).toEqual('ChevronDown')
     })
 
     it('should render text details after pressing icon', async () => {
@@ -99,7 +99,7 @@ context('ClaimPhase', () => {
         pressable.props.onPress()
         expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('June 6, 2019')
         expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Your claim has been assigned to a reviewer who is determining if additional information is needed.')
-        expect(icon.props.name).toEqual('ArrowUp')
+        expect(icon.props.name).toEqual('ChevronUp')
       })
     })
   })
