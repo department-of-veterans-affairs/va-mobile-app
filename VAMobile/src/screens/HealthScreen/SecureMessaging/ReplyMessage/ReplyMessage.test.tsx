@@ -1,5 +1,6 @@
 import 'react-native'
 import React from 'react'
+import { fireEvent, screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
@@ -36,6 +37,24 @@ jest.mock('store/slices', () => {
         payload: '',
       }
     }),
+  }
+})
+
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native')
+  RN.InteractionManager.runAfterInteractions = (callback: () => void) => {
+    callback()
+  }
+
+  return RN
+})
+
+let mockUseComposeCancelConfirmationSpy = jest.fn()
+jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
+  let original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
   }
 })
 
@@ -190,18 +209,14 @@ context('ReplyMessage', () => {
     it('should display the when will i get a reply children text', async () => {
       waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
-
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual(
-          'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
-        )
+        expect(screen.getByText('It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.')).toBeTruthy()
       })
     })
   })
 
   it('should add the text (*Required) for the message body text field', async () => {
     await waitFor(() => {
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[19].props.children).toEqual(['Message', ' ', '(Required)'])
+      expect(screen.getByText('Message (Required)')).toBeTruthy()
     })
   })
 
