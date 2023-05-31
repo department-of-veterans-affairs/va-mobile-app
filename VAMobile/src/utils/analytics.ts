@@ -51,7 +51,7 @@ export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
     if ('json' in error && error.json) {
       const { text, json, networkError, status } = error
       // if the json's errors array has data if not than it creates an error object with the service call status
-      if (json.errors.length > 0) {
+      if (json.errors?.length > 0) {
         const { detail, title } = json.errors[0]
         errorObject.message = detail
         errorObject.name = title
