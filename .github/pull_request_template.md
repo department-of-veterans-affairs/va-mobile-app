@@ -34,3 +34,7 @@ situations that could not be tested during development. -->
 - [ ] No secrets or API keys are checked in
 - [ ] All imports are absolute (no relative imports)
 - [ ] New functions and Redux work have proper TSDoc annotations
+
+## For QA
+
+[Run a build for this branch](https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/on_demand_build.yml)

@@ -94,10 +94,10 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
   return (
     <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBody" mx={theme.dimensions.gutter} paragraphSpacing={true}>
         {t('claimLetters.overview')}
       </TextView>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         <DefaultList items={letterButtons} />
       </Box>
     </FeatureLandingTemplate>

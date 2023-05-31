@@ -3,7 +3,6 @@ import { defaultAppoinment, defaultAppointmentAttributes, defaultAppointmentLoca
 import { context, realStore, when } from 'testUtils'
 import {
   AppointmentsDateRange,
-  getAppointmentMessages,
   getAppointmentsInDateRange,
   groupAppointmentsByYear,
   initialAppointmentsState,
@@ -14,7 +13,7 @@ import {
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import _ from 'underscore'
-import { AppointmentMessages, AppointmentsList, AppointmentsMetaPagination } from '../api'
+import { AppointmentsList, AppointmentsMetaPagination } from '../api'
 import { AppointmentTypeConstants, AppointmentStatusConstants, AppointmentStatusDetailTypeConsts } from 'store/api/types'
 import { InitialState } from 'store/slices'
 
@@ -23,15 +22,11 @@ export const ActionTypes: {
   APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: string
   APPOINTMENTS_START_PREFETCH_APPOINTMENTS: string
   APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: string
-  APPOINTMENTS_START_GET_APPOINTMENT_MESSAGES: string
-  APPOINTMENTS_FINISH_GET_APPOINTMENT_MESSAGES: string
 } = {
   APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE: 'appointments/dispatchStartGetAppointmentsInDateRange',
   APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: 'appointments/dispatchFinishGetAppointmentsInDateRange',
   APPOINTMENTS_START_PREFETCH_APPOINTMENTS: 'appointments/dispatchStartPrefetchAppointments',
   APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: 'appointments/dispatchFinishPrefetchAppointments',
-  APPOINTMENTS_START_GET_APPOINTMENT_MESSAGES: 'appointments/dispatchStartGetAppointmentMessages',
-  APPOINTMENTS_FINISH_GET_APPOINTMENT_MESSAGES: 'appointments/dispatchFinishGetAppointmentMessages'
 }
 
 export const bookedAppointmentsList: AppointmentsList = [
@@ -808,40 +803,6 @@ context('appointments', () => {
 
       const { appointments } = store.getState()
       expect(appointments.error).toEqual(error)
-    })
-  })
-
-  describe('getAppointmentMessages', () => {
-    it('should get appointment messages for an appointmentID', async () => {
-
-      const mockMessageData: Array<AppointmentMessages> = [
-        {
-          attributes: {
-            messageText: 'Testing',
-            messageDateTime: '11/11/2019 12:26:13',
-            appointmentRequestId: '8a4886886e4c8e22016e5bee49c30007',
-            date: '2019-11-11T12:26:13.931+0000'
-          }
-        }
-      ]
-      when(api.get as jest.Mock)
-          .calledWith('/v0/appointment_requests/1/messages')
-          .mockResolvedValue({ data: mockMessageData })
-
-      const store = realStore()
-      await store.dispatch(getAppointmentMessages('1'))
-      const actions = store.getActions()
-
-      const startAction = _.find(actions, { type: ActionTypes.APPOINTMENTS_START_GET_APPOINTMENT_MESSAGES })
-      expect(startAction).toBeTruthy()
-      expect(startAction?.state.appointments.messagesLoading).toBeTruthy()
-
-      const finishAction = _.find(actions, { type: ActionTypes.APPOINTMENTS_FINISH_GET_APPOINTMENT_MESSAGES })
-      expect(finishAction).toBeTruthy()
-      expect(finishAction?.state.appointments.messagesLoading).toBeFalsy()
-
-      const { appointments } = store.getState()
-      expect(appointments.appointmentMessagesById['1']).toEqual(mockMessageData)
     })
   })
 })

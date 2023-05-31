@@ -125,7 +125,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
   const getIconName = (): keyof typeof VA_ICON_MAP => {
     switch (linkType) {
       case 'call':
-        return 'Phone'
+        return 'CirclePhone'
       case 'callTTY':
         return 'PhoneTTY'
       case 'text':
@@ -137,7 +137,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
       case 'directions':
         return 'Directions'
       case 'externalLink':
-        return 'ExternalLink'
+        return 'CircleExternalLink'
     }
   }
 

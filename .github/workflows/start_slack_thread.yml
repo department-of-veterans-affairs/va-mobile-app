@@ -1,5 +1,5 @@
 # Reusable workflow for starting a Slack thread in the provided channel
-name: Start Slack Thread
+name: '[Utils] Start Slack Thread'
 
 on:
   workflow_call:
@@ -7,7 +7,7 @@ on:
       channel_name:
         description: 'Name of the Slack channel where the thread should be started.'
         type: string
-        default: 'va-mobile-app'
+        default: 'va-mobile-build-alerts'
       message:
         description: 'Text to display for the message starting the thread.'
         type: string

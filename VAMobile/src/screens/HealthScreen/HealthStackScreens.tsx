@@ -9,9 +9,7 @@ import { FormHeaderType } from 'constants/secureMessaging'
 import { GeneralHelpScreen, SubTypeHelpScreen, TypeOfCareNotListedHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
 import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
-import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/AttachmentsFAQ'
-import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
+import Attachments from './SecureMessaging/StartNewMessage/Attachments/Attachments'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
 import NoRequestAppointmentAccess from './Appointments/RequestAppointments/NoRequestAppointmentAccess/NoRequestAppointmentAccess'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
@@ -23,7 +21,8 @@ import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
 import RequestAppointmentScreen from './Appointments/RequestAppointments/RequestAppointmentScreen'
 import SessionNotStarted from './Appointments/UpcomingAppointments/SessionNotStarted'
-import StatusGlossary from './Pharmacy/StatusGlossary/StatusGlossary'
+import StartNewMessage from './SecureMessaging/StartNewMessage/StartNewMessage'
+import StatusDefinition from './Pharmacy/StatusDefinition/StatusDefinition'
 
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
@@ -58,7 +57,7 @@ export type HealthStackParamList = WebviewStackParams & {
     currentPage?: number
     messagesLeft?: number
   }
-  ComposeMessage: {
+  StartNewMessage: {
     attachmentFileToAdd?: ImagePickerResponse | DocumentPickerResponse
     attachmentFileToRemove?: ImagePickerResponse | DocumentPickerResponse
     saveDraftConfirmFailed?: boolean
@@ -77,9 +76,6 @@ export type HealthStackParamList = WebviewStackParams & {
     origin: FormHeaderType
     attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse>
     messageID?: number
-  }
-  AttachmentsFAQ: {
-    originHeader: string
   }
   RemoveAttachment: {
     origin: FormHeaderType
@@ -119,7 +115,7 @@ export type HealthStackParamList = WebviewStackParams & {
   RefillTrackingModal: {
     prescription: PrescriptionData
   }
-  StatusGlossary: {
+  StatusDefinition: {
     display: string
     value: RefillStatus
   }
@@ -132,11 +128,10 @@ const HealthStack = createStackNavigator<HealthStackParamList>()
 export const getHealthScreens = (t: TFunction) => {
   return [
     <HealthStack.Screen key={'PrepareForVideoVisit'} name="PrepareForVideoVisit" component={PrepareForVideoVisit} options={LARGE_PANEL_OPTIONS} />,
-    <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HealthStack.Screen key={'StartNewMessage'} name="StartNewMessage" component={StartNewMessage} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} options={LARGE_PANEL_OPTIONS} />,
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'NoRequestAppointmentAccess'} name="NoRequestAppointmentAccess" component={NoRequestAppointmentAccess} options={{ headerShown: false }} />,
     <HealthStack.Group
@@ -181,7 +176,7 @@ export const getHealthScreens = (t: TFunction) => {
     <HealthStack.Screen key={'RefillScreenModal'} name="RefillScreenModal" component={RefillScreenModal} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'RefillTrackingModal'} name="RefillTrackingModal" component={RefillTrackingModal} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'PrescriptionHelp'} name="PrescriptionHelp" component={PrescriptionHelp} options={LARGE_PANEL_OPTIONS} />,
-    <HealthStack.Screen key={'StatusGlossary'} name="StatusGlossary" component={StatusGlossary} options={LARGE_PANEL_OPTIONS} />,
+    <HealthStack.Screen key={'StatusDefinition'} name="StatusDefinition" component={StatusDefinition} options={LARGE_PANEL_OPTIONS} />,
     <HealthStack.Screen key={'SessionNotStarted'} name="SessionNotStarted" component={SessionNotStarted} options={LARGE_PANEL_OPTIONS} />,
   ]
 }

@@ -57,8 +57,8 @@ context('AppointmentTypeAndDate', () => {
   })
 
   describe('when isAppointmentCanceled is false', () => {
-    it('should only render 3 TextViews', async () => {
-      expect(testInstance.findAllByType(TextView).length).toEqual(3)
+    it('should only render 2 TextViews', async () => {
+      expect(testInstance.findAllByType(TextView).length).toEqual(2)
     })
   })
 

@@ -26,7 +26,7 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
     text: statusText,
     a11yLabel: statusText,
     labelType: getTagTypeForStatus(status),
-    onPress: navigateTo('StatusGlossary', { display: statusText, value: status }),
+    onPress: navigateTo('StatusDefinition', { display: statusText, value: status }),
     a11yHint: t('prescription.history.a11yHint.status'),
   }
 

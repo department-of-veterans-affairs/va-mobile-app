@@ -39,19 +39,19 @@ const VeteransCrisisLineScreen: FC = () => {
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
         <Box mt={standardMarginBetween}>
-          <TextView variant="MobileBody">{t('veteransCrisisLine.connectWithResponders')}</TextView>
+          <TextView variant="MobileBody" paragraphSpacing={true}>
+            {t('veteransCrisisLine.connectWithResponders')}
+          </TextView>
         </Box>
-        <Box mt={standardMarginBetween}>
-          <ClickForActionLink
-            testID="veteransCrisisLineCrisisCallNumberTestID"
-            displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
-            a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed')}
-            numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')}
-            linkType={LinkTypeOptionsConstants.call}
-            fireAnalytic={fireAnalyticFn}
-            {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
-          />
-        </Box>
+        <ClickForActionLink
+          testID="veteransCrisisLineCrisisCallNumberTestID"
+          displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
+          a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed')}
+          numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')}
+          linkType={LinkTypeOptionsConstants.call}
+          fireAnalytic={fireAnalyticFn}
+          {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
+        />
         <Box mt={standardMarginBetween}>
           <ClickForActionLink
             testID="veteransCrisisLineTextNumberTestID"
@@ -75,9 +75,6 @@ const VeteransCrisisLineScreen: FC = () => {
           />
         </Box>
         <Box mt={standardMarginBetween}>
-          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween / 2}>
-            {t('contactVA.tty.body')}
-          </TextView>
           <ClickForActionLink
             testID="veteransCrisisLineHearingLossNumberTestID"
             displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}

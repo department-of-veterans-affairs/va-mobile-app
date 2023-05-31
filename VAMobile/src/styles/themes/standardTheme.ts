@@ -39,13 +39,33 @@ export const getTheme = (): VATheme => {
 }
 
 const fontSizes = {
+  ActionBar: {
+    fontSize: 20,
+    lineHeight: 30,
+  },
+  AppointmentRequestCtaBtnText: {
+    fontSize: 18,
+    lineHeight: 27,
+  },
   BitterBoldHeading: {
     fontSize: 26,
     lineHeight: 32,
   },
+  ClaimPhase: {
+    fontSize: 20,
+    lineHeight: 30,
+  },
   DescriptiveBackButton: {
     fontSize: 16,
     lineHeight: 22,
+  },
+  HelperText: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  LabelTag: {
+    fontSize: 16,
+    lineHeight: 24,
   },
   MobileBody: {
     fontSize: 20,
@@ -55,13 +75,9 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 24,
   },
-  MobileBodyBold: {
-    fontSize: 20,
-    lineHeight: 30,
-  },
-  UnreadMessagesTag: {
-    fontSize: 20,
-    lineHeight: 20,
+  SnackBarBtnText: {
+    fontSize: 16,
+    lineHeight: 24,
   },
   TableHeaderBold: {
     fontSize: 20,
@@ -73,60 +89,28 @@ const fontSizes = {
   },
   TableFooterLabel: {
     fontSize: 14,
-    lineHeight: 18,
-  },
-  MobileBodyLink: {
-    fontSize: 20,
-    lineHeight: 30,
-  },
-  ClaimPhase: {
-    fontSize: 20,
-    lineHeight: 25,
-  },
-  ActionBar: {
-    fontSize: 20,
-    lineHeight: 30,
-  },
-  VASelector: {
-    fontSize: 20,
-    lineHeight: 24,
-  },
-  HelperText: {
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  LabelTag: {
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  LabelTagBold: {
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  HelperTextBold: {
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  SnackBarBtnText: {
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  AppointmentRequestCtaBtnText: {
-    fontSize: 18,
-    lineHeight: 25,
+    lineHeight: 21,
   },
   textWithIconButton: {
     fontSize: 12,
     lineHeight: 15,
   },
-  webviewTitle: {
-    fontSize: 12,
-    lineHeight: 12,
+  UnreadMessagesTag: {
+    fontSize: 20,
+    lineHeight: 30,
   },
   VAHeader: {
     fontSize: 28,
     lineHeight: 32,
     letterSpacing: -1.7,
+  },
+  VASelector: {
+    fontSize: 20,
+    lineHeight: 30,
+  },
+  webviewTitle: {
+    fontSize: 12,
+    lineHeight: 12,
   },
 }
 
@@ -148,28 +132,27 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
 
 const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
   return {
+    ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
+    AppointmentRequestCtaBtnText: buildFont('SourceSansPro-Bold', fontSizes.AppointmentRequestCtaBtnText, scheme.text.AppointmentRequestCtaBtnText),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
+    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
     DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.descriptiveBackButton),
-    MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
-    MobileBodyTight: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyTight, scheme.text.bodyText),
-    MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold, scheme.text.primary),
-    UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
+    HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
+    HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperText, scheme.text.primary),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
-    LabelTagBold: buildFont('SourceSansPro-Bold', fontSizes.LabelTagBold, scheme.text.primaryContrast),
+    MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
+    MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBody, scheme.text.primary),
+    MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.link, true),
+    MobileBodyTight: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyTight, scheme.text.bodyText),
+    SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold, scheme.text.primary),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel, scheme.text.bodyText),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel, scheme.text.bodyText),
-    MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, scheme.text.link, true),
-    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
-    ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
-    VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector, scheme.text.bodyText),
-    HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
-    HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperTextBold, scheme.text.primary),
-    SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
-    AppointmentRequestCtaBtnText: buildFont('SourceSansPro-Bold', fontSizes.AppointmentRequestCtaBtnText, scheme.text.AppointmentRequestCtaBtnText),
     textWithIconButton: buildFont('SourceSansPro-Regular', fontSizes.textWithIconButton, scheme.text.textWithIconButton),
-    webviewTitle: buildFont('SourceSansPro-Regular', fontSizes.webviewTitle, scheme.text.webviewTitle),
+    UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
     VAHeader: buildFont('SourceSansPro-Bold', fontSizes.VAHeader, scheme.text.primary),
+    VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector, scheme.text.bodyText),
+    webviewTitle: buildFont('SourceSansPro-Regular', fontSizes.webviewTitle, scheme.text.webviewTitle),
   }
 }
 
@@ -218,22 +201,27 @@ let theme: VATheme = {
 
   fontSizes: {
     BitterBoldHeading: fontSizes.BitterBoldHeading,
+    ClaimPhase: fontSizes.ClaimPhase,
+    HelperText: fontSizes.HelperText,
+    LabelTag: fontSizes.LabelTag,
     MobileBody: fontSizes.MobileBody,
     MobileBodyTight: fontSizes.MobileBodyTight,
-    MobileBodyBold: fontSizes.MobileBodyBold,
     TableHeaderBold: fontSizes.TableHeaderBold,
     TableHeaderLabel: fontSizes.TableHeaderLabel,
     TableFooterLabel: fontSizes.TableFooterLabel,
-    MobileBodyLink: fontSizes.MobileBodyLink,
-    ClaimPhase: fontSizes.ClaimPhase,
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
     VASelector: fontSizes.VASelector,
-    HelperText: fontSizes.HelperText,
-    HelperTextBold: fontSizes.HelperTextBold,
-    LabelTag: fontSizes.LabelTag,
-    LabelTagBold: fontSizes.LabelTagBold,
   },
   mode: Appearance.getColorScheme() === ColorSchemeConstantType.dark ? 'dark' : 'light',
+  paragraphSpacing: {
+    spacing12FontSize: 24,
+    spacing14FontSize: 28,
+    spacing16FontSize: 32,
+    spacing18FontSize: 36,
+    spacing20FontSize: 40,
+    spacing26FontSize: 52,
+    spacing28FontSize: 56,
+  },
   typography: buildTypography(colorScheme),
 }
 

@@ -42,7 +42,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
   const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
 
-  const claimsDestination = featureEnabled('decisionLetters') ? 'Claims' : 'ClaimsHistory'
+  const claimsDestination = featureEnabled('decisionLettersWaygate') ? 'Claims' : 'ClaimsHistory'
 
   return (
     <CategoryLanding title={t('benefits.title')}>

@@ -99,7 +99,9 @@ context('AddressValidation', () => {
       expect(alertTitle).toBeTruthy()
       expect(alertBody).toBeTruthy()
       expect(alertTitle.props.children).toEqual('Verify your address')
-      expect(alertBody.props.children).toEqual("We can't confirm the address you entered with the U.S. Postal Service.\n\nSelect which address you'd like us to use.")
+      expect(alertBody.props.children).toEqual(
+        "We can't confirm the address you entered with the U.S. Postal Service.",
+      )
     })
   })
 
