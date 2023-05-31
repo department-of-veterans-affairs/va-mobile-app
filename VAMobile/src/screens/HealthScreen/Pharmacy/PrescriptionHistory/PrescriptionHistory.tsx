@@ -199,7 +199,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       headerRight: (): ReactNode => (
         <Pressable {...pressableProps}>
           <Box px={23} height={theme.dimensions.headerHeight} flexDirection={'row'} alignItems={'center'}>
-            <VAIcon mr={5} preventScaling={true} name="QuestionMark" width={16} height={16} fill={'prescriptionHelper'} />
+            <VAIcon mr={5} preventScaling={true} name="QuestionMark" width={16} height={16} fill={'prescriptionHelper'} fill2={theme.colors.icon.transparent} />
             <TextView variant="ActionBar" allowFontScaling={false}>
               {t('prescription.help.button.text')}
             </TextView>
@@ -323,7 +323,12 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
               <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
-              <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={theme.dimensions.chevronListItemWidth} height={theme.dimensions.chevronListItemHeight} />
+              <VAIcon
+                name={'ChevronRight'}
+                fill={theme.colors.icon.chevronListItem}
+                width={theme.dimensions.chevronListItemWidth}
+                height={theme.dimensions.chevronListItemHeight}
+              />
             </Box>
           </Pressable>
         </>
@@ -557,10 +562,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       headerText: t('prescription.history.transferred.title'),
       body: (
         <>
-          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')}>
+          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')} paragraphSpacing={true}>
             {t('prescription.history.transferred.instructions')}
           </TextView>
-          <TextView my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
+          <TextView paragraphSpacing={true} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
             {t('prescription.history.transferred.youCan')}
           </TextView>
           <ClickForActionLink {...linkProps} />
@@ -630,6 +635,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const helpIconProps: VAIconProps = {
     name: 'QuestionMark',
+    fill2: theme.colors.icon.transparent,
   }
 
   const headerButton = {
