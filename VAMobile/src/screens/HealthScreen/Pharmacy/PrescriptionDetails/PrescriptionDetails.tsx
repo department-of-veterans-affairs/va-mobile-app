@@ -82,7 +82,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: redirectLink,
       iconProps: {
-        name: 'WebviewOpen',
+        name: 'ExternalLink',
         height: 15,
         width: 15,
         fill: 'navBar',

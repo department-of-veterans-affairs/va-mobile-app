@@ -49,6 +49,9 @@ export type TextViewProps = AccessibilityProps &
     /** Max size for font when user adjusts their font scaling */
     maxFontSizeMultiplier?: number
 
+    /** if true apply paragraphSpacing, it overrides the mb if supplied*/
+    paragraphSpacing?: boolean
+
     /** Optional TestID */
     testID?: string
   }
@@ -59,6 +62,20 @@ const getColor = (theme: VATheme, props: TextViewProps): string => {
 
 const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
   return theme.typography[props.variant as keyof VATypographyThemeVariants] || theme.typography.MobileBody
+}
+
+/** function to get fontsize from variant string:
+ *  1.It matches to the part font-size:..px in the string and extracts that part out for the next step
+ *  2.It then replaces all non number instances with an empty string
+ *  3.The + operator coerces it to a number type so that we can use it to multiply and get the spacing needed
+ */
+const getFontSize = (variant: string) => {
+  return +(
+    variant
+      .match(/font-size:..px/)
+      ?.toString()
+      .replace(/[^0-9]/g, '') || 0
+  )
 }
 
 const getTextDecorationColor = (theme: VATheme, props: TextViewProps): string => {
@@ -79,10 +96,16 @@ const StyledText = styled(Text)`
  *
  * @returns TextView component
  */
-const TextView: FC<TextViewProps> = ({ selectable = false, testID, ...props }) => {
+const TextView: FC<TextViewProps> = ({ selectable = false, paragraphSpacing = false, testID, ...props }) => {
   const { isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const theme = useTheme()
   const wrapperProps = { ...props }
+
+  if (paragraphSpacing) {
+    const variant = getFontFamily(theme, wrapperProps)
+    const fontSize = getFontSize(variant)
+    wrapperProps.mb = fontSize * 2
+  }
 
   if (wrapperProps.onPress) {
     const { onPress, ...remainingProps } = wrapperProps

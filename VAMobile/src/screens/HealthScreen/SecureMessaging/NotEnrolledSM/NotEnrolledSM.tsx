@@ -51,28 +51,20 @@ const NotEnrolledSM: FC = () => {
         </Box>
         <Box>
           <TextArea>
-            <TextView variant="MobileBody" mb={standardMarginBetween}>
+            <TextView variant="MobileBody" paragraphSpacing={true}>
               {t('notEnrolledSM.youMust')}
             </TextView>
-            <TextView variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
+            <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
               {t('notEnrolledSM.withSM')}
             </TextView>
-            <TextView variant="MobileBody" mb={standardMarginBetween}>
+            <TextView variant="MobileBody" paragraphSpacing={true}>
               {t('notEnrolledSM.toUpgrade')}
             </TextView>
-            <Box mb={standardMarginBetween}>
-              <VABulletList listOfText={[bulletOne]} />
-            </Box>
-            <Box mb={standardMarginBetween}>
-              <VABulletList listOfText={[bulletTwo]} />
-            </Box>
-            <Box mb={standardMarginBetween}>
-              <VABulletList listOfText={[bulletThree]} />
-            </Box>
-            <Box mb={standardMarginBetween}>
-              <TextView {...textViewProps}>{t('notEnrolledSM.learnHowTo')}</TextView>
-            </Box>
-            <Box mb={standardMarginBetween}>
+            <VABulletList listOfText={[bulletOne, bulletTwo, bulletThree]} paragraphSpacing={true} />
+            <TextView {...textViewProps} paragraphSpacing={true}>
+              {t('notEnrolledSM.learnHowTo')}
+            </TextView>
+            <Box>
               <TextView>
                 <TextView variant="MobileBodyBold">{tc('note') + ' '}</TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.doNotUseSM')}</TextView>

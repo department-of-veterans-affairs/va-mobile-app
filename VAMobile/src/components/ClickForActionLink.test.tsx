@@ -57,8 +57,8 @@ context('ClickForActionLink', () => {
       })
     })
 
-    it('should render the VAIcon with name Phone', async () => {
-      expect(testInstance.findByType(VAIcon).props.name).toEqual('Phone')
+    it('should render the VAIcon with name CirclePhone', async () => {
+      expect(testInstance.findByType(VAIcon).props.name).toEqual('CirclePhone')
     })
   })
 

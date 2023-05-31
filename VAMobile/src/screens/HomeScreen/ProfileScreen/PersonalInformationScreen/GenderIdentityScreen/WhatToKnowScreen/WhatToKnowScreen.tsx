@@ -15,7 +15,6 @@ const WhatToKnowScreen: FC<WhatToKnowScreenProps> = () => {
 
   const bodyTextProps: TextViewProps = {
     variant: 'MobileBody',
-    mt: theme.dimensions.standardMarginBetween,
   }
 
   return (
@@ -24,8 +23,12 @@ const WhatToKnowScreen: FC<WhatToKnowScreenProps> = () => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('personalInformation.genderIdentity.whatToKnow.title')}
         </TextView>
-        <TextView {...bodyTextProps}>{t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare')}</TextView>
-        <TextView {...bodyTextProps}>{t('personalInformation.genderIdentity.whatToKnow.whoCanAccess')}</TextView>
+        <TextView {...bodyTextProps} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+          {t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare')}
+        </TextView>
+        <TextView {...bodyTextProps} paragraphSpacing={true}>
+          {t('personalInformation.genderIdentity.whatToKnow.whoCanAccess')}
+        </TextView>
         <TextView {...bodyTextProps}>{t('personalInformation.genderIdentity.whatToKnow.privacy')}</TextView>
       </Box>
     </LargePanel>

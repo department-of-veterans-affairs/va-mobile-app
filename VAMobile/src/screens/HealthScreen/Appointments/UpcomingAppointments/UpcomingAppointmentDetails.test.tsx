@@ -136,12 +136,12 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should display the appointment code', async () => {
-      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Appointment code: 654321')
+      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Appointment code: 654321')
     })
 
     it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Special instructions')
+      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
   })
 
@@ -155,8 +155,8 @@ context('UpcomingAppointmentDetails', () => {
       expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('VA Video Connect\r\nHome')
     })
     it('should display the how to join your virtual session text', async () => {
-      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('How to join your virtual session')
-      expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('You can join VA Video Connect 30 minutes prior to the start time.')
+      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('How to join your virtual session')
+      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('You can join VA Video Connect 30 minutes prior to the start time.')
     })
 
     it('should display the join session button', async () => {
@@ -196,8 +196,8 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Special instructions')
+      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
   })
 
@@ -213,16 +213,16 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should state that the video meeting must be joined from the listed location', async () => {
-      expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('You must join this video meeting from the VA location listed below.')
+      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('You must join this video meeting from the VA location listed below.')
     })
 
     it('should display the provider', async () => {
-      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Larry R. TestDoctor')
+      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Larry R. TestDoctor')
     })
 
     it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[19].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+      expect(testInstance.findAllByType(TextView)[17].props.children).toEqual('Special instructions')
+      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
   })
 
@@ -237,12 +237,12 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should state that the video meeting must be joined using a VA device', async () => {
-      expect(testInstance.findAllByType(TextView)[8].props.children).toEqual("To join this video appointment, you'll need to use a device we provide.")
+      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual("To join this video appointment, you'll need to use a device we provide.")
     })
 
     it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+      expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('Special instructions')
+      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
   })
 
@@ -258,20 +258,20 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Special instructions')
+      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
   })
 
   describe('when the appointment type is va', () => {
     it('should display the name of the facility location', async () => {
       expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('VA appointment')
-      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Blind Rehabilitation Center')
+      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Blind Rehabilitation Center')
     })
 
     it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Special instructions')
+      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
   })
 
@@ -286,12 +286,12 @@ context('UpcomingAppointmentDetails', () => {
       expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('COVID-19 vaccine')
     })
     it('should display the name of the facility location', async () => {
-      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('COVID-19 vaccine')
+      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('COVID-19 vaccine')
     })
 
     it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Special instructions')
+      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
   })
 

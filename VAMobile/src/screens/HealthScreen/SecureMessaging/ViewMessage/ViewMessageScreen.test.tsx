@@ -9,7 +9,7 @@ import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads }
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
 import { AccordionCollapsible, AlertBox, LoadingComponent, TextView } from 'components'
 import ViewMessageScreen from './ViewMessageScreen'
-import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
+import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 import Mock = jest.Mock
 import { Pressable } from 'react-native'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
@@ -169,7 +169,7 @@ context('ViewMessageScreen', () => {
     navigateToSpy = jest.fn()
     when(mockNavigationSpy)
       .mockReturnValue(() => {})
-      .calledWith('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+      .calledWith('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
       .mockReturnValue(navigateToSpy)
     onPressSpy = jest.fn(() => {})
 
@@ -290,7 +290,7 @@ context('ViewMessageScreen', () => {
     it('should show AlertBox with Compose button', async () => {
       await waitFor(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
-        expect(testInstance.findByType(ComposeMessageButton)).toBeTruthy()
+        expect(testInstance.findByType(StartNewMessageButton)).toBeTruthy()
       })
     })
   })

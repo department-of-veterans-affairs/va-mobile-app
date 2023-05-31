@@ -1,4 +1,4 @@
 ---
-title: Alerts and Progress
+title: Alerts and progress
 ---
 

@@ -116,13 +116,16 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={onSave}>
       <Box mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBody" mb={error ? theme.dimensions.condensedMarginBetween : theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" mb={error ? theme.dimensions.condensedMarginBetween : undefined} paragraphSpacing={error ? false : true}>
           {t('personalInformation.genderIdentity.changeSelection')}
           <TextView variant="MobileBodyBold">{t('personalInformation.genderIdentity.preferNotToAnswer')}</TextView>
+          <TextView variant="MobileBody">.</TextView>
         </TextView>
         <RadioGroup {...radioGroupProps} />
         <Pressable onPress={goToHelp} accessibilityRole="link" accessible={true}>
-          <TextView variant="MobileBodyLink">{t('personalInformation.genderIdentity.whatToKnow')}</TextView>
+          <TextView variant="MobileBodyLink" paragraphSpacing={true}>
+            {t('personalInformation.genderIdentity.whatToKnow')}
+          </TextView>
         </Pressable>
       </Box>
     </FullScreenSubtask>

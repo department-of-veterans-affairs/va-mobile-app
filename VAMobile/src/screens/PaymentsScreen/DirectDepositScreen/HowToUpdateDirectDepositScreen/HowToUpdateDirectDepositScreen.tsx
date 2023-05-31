@@ -21,16 +21,24 @@ const HowToUpdateDirectDepositScreen: FC<HowToUpdateDirectDepositScreenProps> = 
     <>
       <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
         <Box mt={standardMarginBetween}>
-          <AlertBox title={t('howToUpdateDirectDeposit.alert.title')} border="warning" text={t('howToUpdateDirectDeposit.alert.body')} />
+          <AlertBox border="warning">
+            <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+              {t('howToUpdateDirectDeposit.alert.title')}
+            </TextView>
+            <TextView variant="MobileBody" paragraphSpacing={true}>
+              {t('howToUpdateDirectDeposit.alert.body.1')}
+            </TextView>
+            <TextView variant="MobileBody">{t('howToUpdateDirectDeposit.alert.body.2')}</TextView>
+          </AlertBox>
         </Box>
         <Box mt={standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>
           <TextArea>
             <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
               {t('howToUpdateDirectDeposit.card.title')}
             </TextView>
-            <Box mt={standardMarginBetween}>
-              <TextView variant="MobileBody">{t('howToUpdateDirectDeposit.card.callUs')}</TextView>
-            </Box>
+            <TextView mt={standardMarginBetween} variant="MobileBody" paragraphSpacing={true}>
+              {t('howToUpdateDirectDeposit.card.callUs')}
+            </TextView>
             <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />
           </TextArea>
         </Box>

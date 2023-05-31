@@ -78,7 +78,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
       let letterAvailable = t('claimDetails.decisionLetterMailed')
       let showButton = false
 
-      if (featureEnabled('decisionLetters') && claim.attributes.decisionLetterSent) {
+      if (featureEnabled('decisionLettersWaygate') && claim.attributes.decisionLetterSent) {
         letterAvailable = t('claimDetails.youCanDownload')
         showButton = true
         if (!sentEvent.current) {
@@ -94,13 +94,11 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
               <TextView variant="MobileBodyBold">{claimDecidedOn}</TextView>
             </Box>
             <Box {...testIdProps(letterAvailable)} accessible={true}>
-              <TextView variant="MobileBody">{letterAvailable}</TextView>
+              <TextView variant="MobileBody" paragraphSpacing={showButton ? true : false}>
+                {letterAvailable}
+              </TextView>
             </Box>
-            {showButton && (
-              <Box mt={theme.dimensions.condensedMarginBetween}>
-                <VAButton onPress={onPress} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} />
-              </Box>
-            )}
+            {showButton && <VAButton onPress={onPress} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} />}
           </TextArea>
         </Box>
       )

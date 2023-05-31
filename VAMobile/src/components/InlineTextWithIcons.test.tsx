@@ -24,7 +24,7 @@ context('InlineTextWithIcons', () => {
         variant: 'MobileBodyBold',
         textAlign: 'left',
       },
-      leftIconProps: { name: 'UnreadIcon', width: 16, height: 16, isOwnLine: true } as VAIconProps,
+      leftIconProps: { name: 'Unread', width: 16, height: 16, isOwnLine: true } as VAIconProps,
       rightTextProps: {
         text: '9/10/2022',
         variant: 'MobileBody',
@@ -40,7 +40,7 @@ context('InlineTextWithIcons', () => {
         color: 'primary',
       },
       leftIconProps: { name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps,
-      rightIconProps: { name: 'ArrowRight', width: 16, height: 16, fill: 'spinner' } as VAIconProps,
+      rightIconProps: { name: 'ChevronRight', width: 16, height: 16, fill: 'spinner' } as VAIconProps,
     } as InlineTextWithIconsProps
 
     component = render(
@@ -58,9 +58,9 @@ context('InlineTextWithIcons', () => {
   })
 
   it('should render correct VAIcons and not show icon for component with undefined iconProps', async () => {
-    expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('UnreadIcon')
+    expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Unread')
     expect(testInstance.findAllByType(VAIcon)[1].props.name).toEqual('PaperClip')
-    expect(testInstance.findAllByType(VAIcon)[2].props.name).toEqual('ArrowRight')
+    expect(testInstance.findAllByType(VAIcon)[2].props.name).toEqual('ChevronRight')
     expect(testInstance.findAllByType(VAIcon).length).toEqual(3)
   })
 })
