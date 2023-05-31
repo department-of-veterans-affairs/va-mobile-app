@@ -68,6 +68,7 @@ type FormWrapperProps<T> = {
   resetErrors?: boolean
   /** optional callback to set the resetErrors prop. must be set when resetErrors is set. */
   setResetErrors?: (value: boolean) => void
+  /** optional callback to return a list of errors and keys for alertBox functionality  */
   setErrorList?: (errors: { [key: number]: string }) => void
 }
 

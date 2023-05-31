@@ -6,7 +6,7 @@ import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView } from 'components'
 import { VAIconProps } from 'components/VAIcon'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
-import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from '../formFieldUtils'
+import { generateA11yValue, generateInputTestID, getInputWrapperProps, removeInputErrorMessage, renderInputError, renderInputLabelSection } from '../formFieldUtils'
 import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 import PickerList, { PickerListItemObj } from './PickerList'
@@ -87,7 +87,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const [isFocused, setIsFocused] = useState(false)
 
   useEffect(() => {
-    updateInputErrorMessage(isFocused, error, setError, focusUpdated, setFocusUpdated)
+    removeInputErrorMessage(isFocused, error, setError, focusUpdated, setFocusUpdated)
   }, [isFocused, selectedValue, error, setError, focusUpdated])
 
   const showModal = useCallback((): void => {

@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, RefObject } from 'react'
 
-import { AlertBox, Box } from './index'
+import { AlertBox, Box, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
@@ -23,29 +23,24 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
 
-  let errorString = '\n'
+  const bulletedListOfText = []
   if (errorList) {
     for (const key in errorList) {
       if (errorList[key] !== '') {
-        errorString += `\n• ${errorList[key as unknown as number]}`
+        bulletedListOfText.push(`${errorList[key as unknown as number]}`)
       }
     }
   }
 
-  const text = saveDraftAttempted
-    ? `${t('secureMessaging.formMessage.saveDraft.validation.text')}${errorString}`
-    : `${t('secureMessaging.formMessage.sendMessage.validation.text')}${errorString}`
+  const text = saveDraftAttempted ? t('secureMessaging.formMessage.saveDraft.validation.text') : t('secureMessaging.formMessage.sendMessage.validation.text')
 
   return hasValidationError ? (
     <Box mb={theme.dimensions.standardMarginBetween}>
-      <AlertBox
-        border={'error'}
-        title={t('secureMessaging.formMessage.weNeedMoreInfo')}
-        text={text}
-        titleRole={'header'}
-        scrollViewRef={scrollViewRef}
-        focusOnError={focusOnError}
-      />
+      <AlertBox border={'error'} title={t('secureMessaging.formMessage.weNeedMoreInfo')} text={text} titleRole={'header'} scrollViewRef={scrollViewRef} focusOnError={focusOnError}>
+        <Box>
+          <VABulletList listOfText={bulletedListOfText} />
+        </Box>
+      </AlertBox>
     </Box>
   ) : (
     <></>

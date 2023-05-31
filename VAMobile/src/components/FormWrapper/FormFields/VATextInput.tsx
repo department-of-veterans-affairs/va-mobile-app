@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 
 import { Box, BoxProps } from '../../index'
-import { getInputBorderColor, getInputBorderWidth, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
+import { getInputBorderColor, getInputBorderWidth, getInputWrapperProps, removeInputErrorMessage, renderInputError, renderInputLabelSection } from './formFieldUtils'
 import { isIOS } from 'utils/platform'
 import { useTheme } from 'utils/hooks'
 
@@ -54,7 +54,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const ref = useRef<TextInput>(null)
 
   useEffect(() => {
-    updateInputErrorMessage(isFocused, error, setError, focusUpdated, setFocusUpdated)
+    removeInputErrorMessage(isFocused, error, setError, focusUpdated, setFocusUpdated)
   }, [isFocused, error, setError, focusUpdated])
 
   let textContentType: 'emailAddress' | 'telephoneNumber' | 'none' = 'none'

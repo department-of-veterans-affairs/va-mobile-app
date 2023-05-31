@@ -85,10 +85,9 @@ export const renderInputError = (error: string): ReactElement => {
 }
 
 /**
- * Updates the error message for the picker and text input components. Sets an error message if the component
- * no longer has focus, the focus was updated, and the components value is undefined
+ * Clears errors on focus for VAModalPicker and VATextInput components
  */
-export const updateInputErrorMessage = (
+export const removeInputErrorMessage = (
   isFocused: boolean,
   error: string | undefined,
   setError: ((value?: string) => void) | undefined,
