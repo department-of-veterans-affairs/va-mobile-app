@@ -113,7 +113,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const getRequestSummaryItem = () => {
     return refillRequestSummaryItems.map((request, index) => {
       const vaIconProps: VAIconProps = {
-        name: request.submitted ? 'WhiteCheckCircle' : 'WhiteCloseCircle',
+        name: request.submitted ? 'CircleCheckMark' : 'Remove',
         width: 20,
         height: 20,
         fill: request.submitted ? theme.colors.icon.success : theme.colors.icon.error,
@@ -171,11 +171,11 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       <Box {...borderProps}>
         <TextView variant="HelperTextBold">{t('prescriptions.refillRequestSummary.whatsNext')}</TextView>
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.successPt1.a11y')}>
-            {t('prescriptions.refillRequestSummary.yourRefills.successPt1')}
+          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.success.1.a11y')} paragraphSpacing={true}>
+            {t('prescriptions.refillRequestSummary.yourRefills.success.1')}
           </TextView>
-          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.successPt2.a11y')} mt={theme.dimensions.standardMarginBetween}>
-            {t('prescriptions.refillRequestSummary.yourRefills.successPt2')}
+          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.success.2.a11y')}>
+            {t('prescriptions.refillRequestSummary.yourRefills.success.2')}
           </TextView>
         </Box>
         <VAButton

@@ -134,7 +134,7 @@ const DisabilityRatingsScreen: FC = () => {
           </TextView>
         </Box>
         <Box accessible={true}>
-          <TextView variant="MobileBody" accessibilityRole="text" selectable={false} accessibilityLabel={t('disabilityRating.learnAboutSummary.a11yLabel')}>
+          <TextView variant="MobileBody" accessibilityRole="text" selectable={false} accessibilityLabel={t('disabilityRating.learnAboutSummary.a11yLabel')} paragraphSpacing={true}>
             {t('disabilityRating.learnAboutSummary')}
           </TextView>
         </Box>
@@ -152,11 +152,10 @@ const DisabilityRatingsScreen: FC = () => {
           </TextView>
         </Box>
         <Box accessible={true}>
-          <TextView variant="MobileBody" selectable={false} accessibilityLabel={t('claimDetails.callVA.a11yLabel')}>
+          <TextView variant="MobileBody" selectable={false} accessibilityLabel={t('claimDetails.callVA.a11yLabel')} paragraphSpacing={true}>
             {t('claimDetails.callVA')}
           </TextView>
         </Box>
-
         <ClickToCallPhoneNumber phone={t('8008271000.displayText')} />
       </TextArea>
     )

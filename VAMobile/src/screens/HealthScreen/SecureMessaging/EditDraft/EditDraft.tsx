@@ -56,7 +56,7 @@ import { getStartNewMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
@@ -236,7 +236,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     {
       actionText: tc('save'),
       addDivider: true,
-      iconName: 'FolderSolid',
+      iconName: 'Folder',
       accessibilityLabel: t('secureMessaging.saveDraft.menuBtnA11y'),
       onPress: () => {
         setOnSaveDraftClicked(true)
@@ -246,7 +246,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     {
       actionText: tc('delete'),
       addDivider: false,
-      iconName: 'TrashSolid',
+      iconName: 'Trash',
       accessibilityLabel: t('secureMessaging.deleteDraft.menuBtnA11y'),
       iconColor: 'error',
       textColor: 'error',
@@ -265,6 +265,18 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       ),
       headerRight: () => (!noRecipientsReceived || isReplyDraft) && <MenuView actions={MenViewActions} />,
     })
+  })
+
+  /**
+   * Intercept navigation action before leaving the screen, used the handle OS swipe/hardware back behavior
+   */
+  useBeforeNavBackListener(navigation, (e) => {
+    if (noProviderError || isFormBlank || !draftChanged()) {
+      goToDrafts(false)
+    } else {
+      e.preventDefault()
+      goToCancel()
+    }
   })
 
   useEffect(() => {
@@ -391,7 +403,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
-        originHeader: t('secureMessaging.drafts.edit'),
         removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
@@ -402,7 +413,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
               }
             : undefined,
         attachmentsList,
-        a11yHint: t('secureMessaging.attachments.howToAttachAFile.a11y'),
       },
     },
     {
@@ -459,9 +469,11 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView text={t('secureMessaging.startNewMessage.whenWillIGetAReply')} showInTextArea={false}>
             <Box {...testIdProps(t('secureMessaging.startNewMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
-              <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.threeDaysToReceiveResponse')}</TextView>
+              <TextView variant="MobileBody" paragraphSpacing={true}>
+                {t('secureMessaging.startNewMessage.threeDaysToReceiveResponse')}
+              </TextView>
             </Box>
-            <Box {...testIdProps(t('secureMessaging.startNewMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+            <Box {...testIdProps(t('secureMessaging.startNewMessage.pleaseCallHealthProviderA11yLabel'))} accessible={true}>
               <TextView>
                 <TextView variant="MobileBodyBold">{t('secureMessaging.startNewMessage.important')}</TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.pleaseCallHealthProvider')}</TextView>
