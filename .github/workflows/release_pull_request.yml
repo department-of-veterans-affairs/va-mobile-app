@@ -31,7 +31,7 @@ jobs:
       releaseHash: ${{steps.urls.outputs.release}}
     steps:
       - name: 'Checkout repo'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_ACTIONS_PAT }}
