@@ -41,7 +41,16 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useDestructiveAlert, useBeforeNavBackListener, useMessageWithSignature, useRouteNavigation, useTheme, useValidateMessageWithSignature } from 'utils/hooks'
+import {
+  useAppDispatch,
+  useAttachments,
+  useBeforeNavBackListener,
+  useDestructiveAlert,
+  useMessageWithSignature,
+  useRouteNavigation,
+  useTheme,
+  useValidateMessageWithSignature,
+} from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 
