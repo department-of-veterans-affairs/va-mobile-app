@@ -16,9 +16,6 @@ jest.mock('utils/hooks', () => {
   const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -45,7 +42,7 @@ context('ClaimPhase', () => {
 
     component = render(<ClaimPhase {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   // make sure the component works

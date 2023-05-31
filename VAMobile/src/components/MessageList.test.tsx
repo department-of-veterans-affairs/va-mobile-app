@@ -17,7 +17,7 @@ context('MessageList', () => {
   let onPressSpy: Mock
 
   beforeEach(() => {
-    onPressSpy = jest.fn(() => { })
+    onPressSpy = jest.fn(() => {})
     const items = [
       {
         inlineTextWithIcons: [
@@ -34,17 +34,16 @@ context('MessageList', () => {
         onPress: onPressSpy,
       },
       {
-        inlineTextWithIcons:
-          [
-            {
-              leftTextProps: { text: 'test2-sender' },
-              leftIconProps: { name: 'UnreadIcon', width: 16, height: 16 }
-            },
-            {
-              leftTextProps: { text: 'test2-subject-line' },
-              leftIconProps: { name: 'PaperClip', width: 16, height: 16 }
-            }
-          ],
+        inlineTextWithIcons: [
+          {
+            leftTextProps: { text: 'test2-sender' },
+            leftIconProps: { name: 'UnreadIcon', width: 16, height: 16 },
+          },
+          {
+            leftTextProps: { text: 'test2-subject-line' },
+            leftIconProps: { name: 'PaperClip', width: 16, height: 16 },
+          },
+        ],
         isSentFolder: false,
         a11yHintText: 'hint2',
         onPress: onPressSpy,
@@ -67,7 +66,7 @@ context('MessageList', () => {
 
     component = render(<MessageList items={items} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

@@ -205,7 +205,7 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, stroke, preventSca
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
-    return (): void => sub.remove()
+    return (): void => sub?.remove()
   }, [dispatch, fontScale])
 
   if (fill) {

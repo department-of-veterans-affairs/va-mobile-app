@@ -5,7 +5,8 @@ import React, { FC, useEffect } from 'react'
 import { Box, ClosePanelButton, LargePanel, TextView, VABulletList, VABulletListText } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { usePanelHeaderStyles, useTheme } from 'utils/hooks'
+import { usePanelHeaderStyles } from 'utils/hooks/headerStyles'
+import { useTheme } from 'utils/hooks'
 
 type PrescriptionHelpProps = StackScreenProps<HealthStackParamList, 'PrescriptionHelp'>
 

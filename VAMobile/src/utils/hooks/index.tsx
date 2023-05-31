@@ -15,33 +15,28 @@ import {
 } from 'react-native'
 import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
-import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
-import { StackNavigationOptions, StackNavigationProp } from '@react-navigation/stack'
+import { StackNavigationProp } from '@react-navigation/stack'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import { useDispatch, useSelector } from 'react-redux'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
 import { AppDispatch, RootState } from 'store'
-import { BackButton, ClosePanelButton, TextView } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureType, DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
-import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
-import { capitalizeFirstLetter, stringToTitleCase } from './formattingUtils'
-import { getHeaderStyles } from 'styles/common'
-import { isAndroid, isIOS } from './platform'
-import HeaderTitle from 'components/HeaderTitle'
+import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
+import { isAndroid, isIOS } from 'utils/platform'
+import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
 /**
  * Hook to determine if an error should be shown for a given screen id
@@ -82,51 +77,7 @@ export const useFontScale = (): ((val: number) => number) => {
  * Hook to get the theme in a component
  * @returns the VATheme
  */
-export const useTheme = (): VATheme => {
-  return useContext<VATheme>(ThemeContext)
-}
-
-/**
- * Hook to get the current header styles in a component
- * @returns header style object for the top nav
- */
-export const useHeaderStyles = (): StackNavigationOptions => {
-  const insets = useSafeAreaInsets()
-  let headerStyles = getHeaderStyles(insets.top, useTheme())
-
-  headerStyles = {
-    ...headerStyles,
-    headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />,
-    headerTitle: (header) => <HeaderTitle headerTitle={header.children} />,
-  }
-  return headerStyles
-}
-
-/**
- * Hook to recreate SafeArea top padding through header styles:
- * This is for screens that are meant to look header-less (no headerTitle, or right/left buttons), since the SafeArea
- * top padding is already included in useHeaderStyles above.
- *
- * We are recreating SafeArea top padding through the header rather than just wrapping the app in a SafeArea with top padding, because
- * the latter method causes misalignment issues between the left/right header buttons and the center title for screens with headers.
- *
- * @returns the header style with padding
- */
-export const useTopPaddingAsHeaderStyles = (): StackNavigationOptions => {
-  const insets = useSafeAreaInsets()
-  const theme = useTheme()
-
-  return {
-    headerBackTitleVisible: false,
-    headerBackTitle: undefined,
-    headerTitle: '',
-    headerStyle: {
-      backgroundColor: theme?.colors?.background?.main,
-      shadowColor: 'transparent', // removes bottom border
-      height: insets.top,
-    },
-  }
-}
+export const useTheme = styledComponentsUseTheme as () => VATheme
 
 export type OnPressHandler = () => void
 export type RouteNavigationFunction<T extends ParamListBase> = (routeName: keyof T, args?: RouteNavParams<T>) => OnPressHandler
@@ -229,7 +180,7 @@ export function useIsScreenReaderEnabled(withListener = false): boolean {
     return () => {
       isMounted = false
       if (withListener) {
-        screenReaderChangedSubscription.remove()
+        screenReaderChangedSubscription?.remove()
       }
     }
   }, [screenReaderEnabled, withListener])
@@ -508,7 +459,7 @@ export function useOrientation(): boolean {
     })
 
     return () => {
-      sub.remove()
+      sub?.remove()
     }
   }, [])
 
@@ -554,41 +505,9 @@ export function useOnResumeForeground(callback: () => void): void {
     })
 
     return () => {
-      subscription.remove()
+      subscription?.remove()
     }
   }, [callback])
-}
-
-/** Header style for the panels*/
-export const usePanelHeaderStyles = (): StackNavigationOptions => {
-  const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.COMMON)
-
-  const headerStyles: StackNavigationOptions = {
-    headerStyle: {
-      height: 60,
-      shadowColor: 'transparent', // removes bottom border
-      backgroundColor: theme.colors.background.panelHeader,
-      borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border.menuDivider,
-    },
-    headerTitleAlign: 'center',
-    headerLeft: (props) => (
-      <ClosePanelButton
-        buttonText={t('cancel')}
-        onPress={props.onPress}
-        buttonTextColor={'closePanel'}
-        a11yHint={t('cancel.panelA11yHint')}
-        focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on the panel
-      />
-    ),
-    headerTitle: (header) => (
-      <TextView variant="MobileBodyBold" allowFontScaling={false}>
-        {header.children}
-      </TextView>
-    ),
-  }
-  return headerStyles
 }
 
 /**

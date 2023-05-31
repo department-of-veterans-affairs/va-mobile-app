@@ -16,14 +16,10 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
+jest.mock('../../../../utils/hooks', () => {
+  let original = jest.requireActual('../../../../utils/hooks')
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -67,10 +63,18 @@ jest.mock('store/slices', () => {
   }
 })
 
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native')
+  RN.InteractionManager.runAfterInteractions = (callback: () => void) => {
+    callback()
+  }
+
+  return RN
+})
+
 let mockUseComposeCancelConfirmationSpy = jest.fn()
 jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
@@ -172,7 +176,7 @@ context('ComposeMessage', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

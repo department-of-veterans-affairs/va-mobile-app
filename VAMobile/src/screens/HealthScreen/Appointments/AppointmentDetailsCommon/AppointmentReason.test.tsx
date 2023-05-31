@@ -17,36 +17,35 @@ context('AppointmentReason', () => {
   let reasonText = 'New Issue: 22.4.55'
   let messages = [
     {
-      "id": "9a48e8db6d70a38a016d72b354240002",
-      "type": "messages",
-      "attributes": {
-        "messageText": "Testing",
-        "messageDateTime": "11/11/2019 12:26:13",
-        "appointmentRequestId": "9a48e8db6d70a38a016d72b354240002",
-        "date": "2019-11-11T12:26:13.931+0000"
-      }
+      id: '9a48e8db6d70a38a016d72b354240002',
+      type: 'messages',
+      attributes: {
+        messageText: 'Testing',
+        messageDateTime: '11/11/2019 12:26:13',
+        appointmentRequestId: '9a48e8db6d70a38a016d72b354240002',
+        date: '2019-11-11T12:26:13.931+0000',
+      },
     },
     {
-      "id": "9a48e8db6d70a38a016d72b354240002",
-      "type": "messages",
-      "attributes": {
-        "messageText": "Possible check up",
-        "messageDateTime": "11/11/2019 12:26:13",
-        "appointmentRequestId": "9a48e8db6d70a38a016d72b354240002",
-        "date": "2019-11-11T12:26:13.931+0000"
-      }
-    }
+      id: '9a48e8db6d70a38a016d72b354240002',
+      type: 'messages',
+      attributes: {
+        messageText: 'Possible check up',
+        messageDateTime: '11/11/2019 12:26:13',
+        appointmentRequestId: '9a48e8db6d70a38a016d72b354240002',
+        date: '2019-11-11T12:26:13.931+0000',
+      },
+    },
   ]
 
-
-  const initializeTestInstance = (isPendingAppointment?: boolean, reason?: string , messages?: Array<AppointmentMessages>): void => {
+  const initializeTestInstance = (isPendingAppointment?: boolean, reason?: string, messages?: Array<AppointmentMessages>): void => {
     props = {
       attributes: {
-        status: !!isPendingAppointment ?  AppointmentStatusConstants.SUBMITTED : AppointmentStatusConstants.BOOKED,
+        status: !!isPendingAppointment ? AppointmentStatusConstants.SUBMITTED : AppointmentStatusConstants.BOOKED,
         isPending: !!isPendingAppointment,
         reason: reason || null,
       },
-      messages
+      messages,
     }
 
     component = render(<AppointmentReason {...props} />, {
@@ -55,7 +54,7 @@ context('AppointmentReason', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {

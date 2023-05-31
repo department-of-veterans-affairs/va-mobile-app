@@ -16,9 +16,6 @@ jest.mock('utils/hooks', () => {
   return {
     ...original,
     useExternalLink: () => mockExternalLinkSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
   }
 })
 
@@ -29,7 +26,7 @@ context('VeteransCrisisLineScreen', () => {
   beforeEach(() => {
     component = render(<VeteransCrisisLineScreen />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
@@ -39,7 +36,7 @@ context('VeteransCrisisLineScreen', () => {
   describe('when the call number and press 1 link is clicked', () => {
     it('should launch external link with the parameter tel:8002738255', async () => {
       act(() => {
-        testInstance.findByProps({accessibilityLabel: 'Call 800-273-8255 and select 1'}).props.onPress()
+        testInstance.findByProps({ accessibilityLabel: 'Call 800-273-8255 and select 1' }).props.onPress()
       })
       expect(mockExternalLinkSpy).toBeCalledWith('tel:8002738255')
     })
@@ -48,7 +45,7 @@ context('VeteransCrisisLineScreen', () => {
   describe('when the text 838255 link is clicked', () => {
     it('should launch external link with the parameter sms:838255', async () => {
       act(() => {
-        testInstance.findByProps({accessibilityLabel: 'text 8 3 8 2 5 5'}).props.onPress()
+        testInstance.findByProps({ accessibilityLabel: 'text 8 3 8 2 5 5' }).props.onPress()
       })
       expect(mockExternalLinkSpy).toBeCalledWith('sms:838255')
     })
@@ -57,7 +54,7 @@ context('VeteransCrisisLineScreen', () => {
   describe('when the start confidential chat link is clicked', () => {
     it('should launch external link with the parameter https://www.veteranscrisisline.net/get-help/chat', async () => {
       act(() => {
-        testInstance.findByProps({accessibilityLabel: 'Start a confidential chat'}).props.onPress()
+        testInstance.findByProps({ accessibilityLabel: 'Start a confidential chat' }).props.onPress()
       })
       expect(mockExternalLinkSpy).toBeCalledWith('https://www.veteranscrisisline.net/get-help/chat')
     })
@@ -65,7 +62,7 @@ context('VeteransCrisisLineScreen', () => {
   describe('when the 800-799-4889 link is clicked', () => {
     it('should launch external link with the parameter tel:8007994889', async () => {
       act(() => {
-        testInstance.findByProps({accessibilityLabel: '800-799-4889'}).props.onPress()
+        testInstance.findByProps({ accessibilityLabel: '800-799-4889' }).props.onPress()
       })
       expect(mockExternalLinkSpy).toBeCalledWith('tel:8007994889')
     })
@@ -74,7 +71,7 @@ context('VeteransCrisisLineScreen', () => {
   describe('when the veteransCrisisLine.net link is clicked', () => {
     it('should launch external link with the parameter https://www.veteranscrisisline.net/', async () => {
       act(() => {
-        testInstance.findByProps({accessibilityLabel: 'Veterans Crisis Line .net'}).props.onPress()
+        testInstance.findByProps({ accessibilityLabel: 'Veterans Crisis Line .net' }).props.onPress()
       })
       expect(mockExternalLinkSpy).toBeCalledWith('https://www.veteranscrisisline.net/')
     })

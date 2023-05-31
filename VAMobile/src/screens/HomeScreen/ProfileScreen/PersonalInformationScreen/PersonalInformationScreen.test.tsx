@@ -24,12 +24,8 @@ import { when } from 'jest-when'
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual('../../../../utils/hooks')
-  let theme = jest.requireActual('../../../../styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
@@ -168,7 +164,7 @@ context('PersonalInformationScreen', () => {
 
     component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -209,7 +205,7 @@ context('PersonalInformationScreen', () => {
         component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
 
       expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('This information is not available right now')
     })

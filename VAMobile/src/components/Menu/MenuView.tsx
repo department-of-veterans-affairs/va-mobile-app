@@ -70,7 +70,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
     })
 
     return () => {
-      sub.remove()
+      sub?.remove()
     }
   })
 

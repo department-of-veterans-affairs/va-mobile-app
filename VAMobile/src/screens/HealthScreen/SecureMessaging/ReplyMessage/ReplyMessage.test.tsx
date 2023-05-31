@@ -1,5 +1,6 @@
 import 'react-native'
 import React from 'react'
+import { fireEvent, screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
@@ -18,12 +19,8 @@ import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -40,6 +37,24 @@ jest.mock('store/slices', () => {
         payload: '',
       }
     }),
+  }
+})
+
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native')
+  RN.InteractionManager.runAfterInteractions = (callback: () => void) => {
+    callback()
+  }
+
+  return RN
+})
+
+let mockUseComposeCancelConfirmationSpy = jest.fn()
+jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
+  let original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
   }
 })
 
@@ -130,10 +145,13 @@ context('ReplyMessage', () => {
     navigateToAttachmentsFAQSpy = jest.fn()
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('VeteransCrisisLine').mockReturnValue(navigateToVeteranCrisisLineSpy)
-        .calledWith('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList: [], messageID: 3 }).mockReturnValue(navigateToAttachmentsSpy)
-        .calledWith('AttachmentsFAQ', { originHeader: 'Reply' } ).mockReturnValue(navigateToAttachmentsFAQSpy)
+      .mockReturnValue(() => {})
+      .calledWith('VeteransCrisisLine')
+      .mockReturnValue(navigateToVeteranCrisisLineSpy)
+      .calledWith('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList: [], messageID: 3 })
+      .mockReturnValue(navigateToAttachmentsSpy)
+      .calledWith('AttachmentsFAQ', { originHeader: 'Reply' })
+      .mockReturnValue(navigateToAttachmentsFAQSpy)
 
     isIOSMock.mockReturnValue(false)
 
@@ -165,7 +183,7 @@ context('ReplyMessage', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -191,18 +209,14 @@ context('ReplyMessage', () => {
     it('should display the when will i get a reply children text', async () => {
       waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
-
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual(
-          'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
-        )
+        expect(screen.getByText('It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.')).toBeTruthy()
       })
     })
   })
 
   it('should add the text (*Required) for the message body text field', async () => {
     await waitFor(() => {
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[19].props.children).toEqual(['Message', ' ','(Required)'])
+      expect(screen.getByText('Message (Required)')).toBeTruthy()
     })
   })
 
@@ -289,7 +303,7 @@ context('ReplyMessage', () => {
         testInstance.findAllByType(Pressable)[4].props.onPress()
       })
       await waitFor(() => {
-      testInstance.findAllByType(Pressable)[6].props.onPress()
+        testInstance.findAllByType(Pressable)[6].props.onPress()
       })
 
       expect(testInstance.findAllByType(TextView)[21].props.children).toBe('mock sender 2')

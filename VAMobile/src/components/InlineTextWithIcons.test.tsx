@@ -50,7 +50,7 @@ context('InlineTextWithIcons', () => {
       </Box>,
     )
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

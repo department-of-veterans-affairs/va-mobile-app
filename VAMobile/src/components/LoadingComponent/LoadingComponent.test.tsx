@@ -16,7 +16,7 @@ context('LoadingComponent', () => {
   beforeEach(() => {
     component = render(<LoadingComponent text={'This is a loading component'} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

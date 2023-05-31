@@ -5,13 +5,8 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { Switch as RNSwitch } from 'react-native'
 
 import { ErrorComponent } from 'components'
-import { context, mockNavProps , render, RenderAPI } from 'testUtils'
-import {
-  ErrorsState,
-  initialErrorsState,
-  initializeErrorsByScreenID,
-  InitialState
-} from 'store/slices'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { PushPreference } from 'store/api'
 import NotificationsSettingsScreen from './NotificationsSettingsScreen'
 import { waitFor } from '@testing-library/react-native'
@@ -75,7 +70,7 @@ context('NotificationsSettingsScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
   beforeEach(async () => {
     initializeTestInstance(false, true, [apptPrefOn])

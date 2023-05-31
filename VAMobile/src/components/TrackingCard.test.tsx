@@ -12,11 +12,10 @@ context('TrackingCard', () => {
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
-
   const initializeTestInstance = (title: string = 'Acetaminophen 25MG TAB', dateShipped: string = '01/01/2022') => {
     onPressSpy = jest.fn()
-    component = render(<TrackingCard title={title} dateShipped={dateShipped} onPress={onPressSpy}/>)
-    testInstance = component.container
+    component = render(<TrackingCard title={title} dateShipped={dateShipped} onPress={onPressSpy} />)
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
