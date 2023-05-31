@@ -97,6 +97,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     deletingDraft,
   } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const destructiveAlert = useDestructiveAlert()
+  const draftAttachmentAlert = useSaveDraftAttachmentAlert()
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
   const { attachmentFileToAdd } = route.params
@@ -287,15 +288,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     }
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
-  const draftAttachmentAlert = useSaveDraftAttachmentAlert()
-
-  const onSaveDraft = (messageData: SecureMessagingFormData): void => {
-    draftAttachmentAlert({
-      attachments: attachmentsList,
-      onConfirm: () => dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true)),
-    })
-  }
-
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
       <FullScreenSubtask title={tc('editDraft')} leftButtonText={tc('cancel')} menuViewActions={MenViewActions}>
@@ -448,7 +440,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     const messageData = getMessageData()
 
     if (onSaveDraftClicked) {
-      onSaveDraft(messageData)
+      draftAttachmentAlert({
+        attachments: attachmentsList,
+        onConfirm: () => dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true)),
+      })
     } else {
       // TODO: send along composeType so API knows which endpoint to POST to
       dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, replyToID))

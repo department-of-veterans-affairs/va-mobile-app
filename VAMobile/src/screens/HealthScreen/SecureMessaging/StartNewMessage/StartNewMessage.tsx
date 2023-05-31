@@ -72,6 +72,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
+  const draftAttachmentAlert = useSaveDraftAttachmentAlert()
 
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.draft.saved'),
@@ -192,15 +193,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       navigation.navigate('SecureMessaging')
     }
   }, [sendMessageComplete, dispatch, navigation])
-
-  const draftAttachmentAlert = useSaveDraftAttachmentAlert()
-
-  const onSaveDraft = (messageData: SecureMessagingFormData): void => {
-    draftAttachmentAlert({
-      attachments: attachmentsList,
-      onConfirm: () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID)),
-    })
-  }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
@@ -347,7 +339,10 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       messageData.draft_id = savedDraftID
     }
     if (onSaveDraftClicked) {
-      onSaveDraft(messageData)
+      draftAttachmentAlert({
+        attachments: attachmentsList,
+        onConfirm: () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID)),
+      })
     } else {
       dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList))
     }

@@ -54,6 +54,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
+  const draftAttachmentAlert = useSaveDraftAttachmentAlert()
 
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
@@ -173,15 +174,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
   }, [sendMessageComplete, dispatch, navigation])
 
-  const draftAttachmentAlert = useSaveDraftAttachmentAlert()
-
-  const onSaveDraft = (messageData: SecureMessagingFormData): void => {
-    draftAttachmentAlert({
-      attachments: attachmentsList,
-      onConfirm: () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID)),
-    })
-  }
-
   if (loading || savingDraft || loadingSignature || !isTransitionComplete || isDiscarded) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
@@ -244,7 +236,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
 
     if (onSaveDraftClicked) {
-      onSaveDraft(messageData)
+      draftAttachmentAlert({
+        attachments: attachmentsList,
+        onConfirm: () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID)),
+      })
     } else {
       receiverID && dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, messageID))
     }
