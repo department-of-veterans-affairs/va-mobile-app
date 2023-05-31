@@ -57,9 +57,11 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
         </TextView>
       </Box>
       <Box {...testIdProps(t('claimDetails.callVA.a11yLabel'))} accessible={true}>
-        <TextView variant="MobileBody">{t('claimDetails.callVA')}</TextView>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {t('claimDetails.callVA')}
+        </TextView>
       </Box>
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box>
         <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('claimDetails.VANumberA11yHint'))} />
       </Box>
       <AppealData />

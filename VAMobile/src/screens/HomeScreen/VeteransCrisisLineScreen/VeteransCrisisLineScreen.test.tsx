@@ -34,11 +34,15 @@ context('VeteransCrisisLineScreen', () => {
   })
 
   describe('when the call number and press 1 link is clicked', () => {
-    it('should launch external link with the parameter tel:8002738255', async () => {
+    it('should launch external link with the parameter tel:988', async () => {
       act(() => {
+<<<<<<< HEAD
         testInstance.findByProps({ accessibilityLabel: 'Call 800-273-8255 and select 1' }).props.onPress()
+=======
+        testInstance.findByProps({accessibilityLabel: 'Call 988 and select 1'}).props.onPress()
+>>>>>>> b81ac0cf6f3ff532255eae425950e494af78a2af
       })
-      expect(mockExternalLinkSpy).toBeCalledWith('tel:8002738255')
+      expect(mockExternalLinkSpy).toBeCalledWith('tel:988')
     })
   })
 
@@ -62,7 +66,11 @@ context('VeteransCrisisLineScreen', () => {
   describe('when the 800-799-4889 link is clicked', () => {
     it('should launch external link with the parameter tel:8007994889', async () => {
       act(() => {
+<<<<<<< HEAD
         testInstance.findByProps({ accessibilityLabel: '800-799-4889' }).props.onPress()
+=======
+        testInstance.findByProps({accessibilityLabel: 'TTY: 800-799-4889'}).props.onPress()
+>>>>>>> b81ac0cf6f3ff532255eae425950e494af78a2af
       })
       expect(mockExternalLinkSpy).toBeCalledWith('tel:8007994889')
     })

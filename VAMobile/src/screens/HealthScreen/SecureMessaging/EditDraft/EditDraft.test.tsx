@@ -181,6 +181,7 @@ context('EditDraft', () => {
     props = mockNavProps(
       undefined,
       {
+        addListener: mockUseComposeCancelConfirmationSpy,
         navigate: navigateSpy,
         goBack,
         setOptions: (options: Partial<StackNavigationOptions>) => {

@@ -1,5 +1,4 @@
 import * as api from 'store/api'
-import { APIError, AppointmentGetMessagesData, AppointmentMessages, AppointmentMessagesMap, Params } from 'store/api'
 import { AppThunk } from 'store'
 import {
   AppointmentCancellationStatusConstants,
@@ -18,6 +17,7 @@ import {
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Events, UserAnalytics } from 'constants/analytics'
+import { Params } from 'store/api'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
@@ -96,7 +96,6 @@ export type AppointmentsState = {
   loadedAppointmentsByTimeFrame: LoadedAppointments
   paginationByTimeFrame: AppointmentsPaginationByTimeFrame
   messagesLoading: boolean
-  appointmentMessagesById: AppointmentMessagesMap
 }
 
 export const initialPaginationState = {
@@ -143,7 +142,6 @@ export const initialAppointmentsState: AppointmentsState = {
     pastAllLastYear: {},
   },
   messagesLoading: false,
-  appointmentMessagesById: {} as AppointmentMessagesMap,
 }
 
 // Issue#2273 Tracks and logs pagination warning if there are discrepancies in the total entries of appointments
@@ -357,31 +355,6 @@ export const cancelAppointment =
   }
 
 /**
- * Gets the message/reason for an appointment detail. Does not use the standard error path because in the case of a failure
- * @param appointmentID - Id of the appointment
- */
-export const getAppointmentMessages =
-  (appointmentID?: string): AppThunk =>
-  async (dispatch) => {
-    if (!appointmentID) {
-      dispatch(dispatchFinishGetAppointmentMessages({}))
-      return
-    }
-
-    try {
-      dispatch(dispatchStartGetAppointmentMessages())
-
-      const messageData = await api.get<AppointmentGetMessagesData>(`/v0/appointment_requests/${appointmentID}/messages`)
-
-      dispatch(dispatchFinishGetAppointmentMessages({ appointmentID, messages: messageData?.data }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        dispatch(dispatchFinishGetAppointmentMessages({ appointmentID: undefined, messages: undefined, error }))
-      }
-    }
-  }
-
-/**
  * Redux action to track appointment details
  */
 export const trackAppointmentDetail =
@@ -543,19 +516,6 @@ const appointmentsSlice = createSlice({
     dispatchClearLoadedAppointments: () => {
       return { ...initialAppointmentsState }
     },
-
-    dispatchStartGetAppointmentMessages: (state) => {
-      state.messagesLoading = true
-    },
-    dispatchFinishGetAppointmentMessages: (state, action: PayloadAction<{ appointmentID?: string; messages?: Array<AppointmentMessages>; error?: APIError }>) => {
-      const { appointmentID, messages, error } = action.payload
-
-      if (!error && appointmentID && messages) {
-        state.appointmentMessagesById[appointmentID] = messages
-      }
-
-      state.messagesLoading = false
-    },
   },
 })
 
@@ -568,8 +528,6 @@ export const {
   dispatchClearAppointmentCancellation,
   dispatchClearLoadedAppointments,
   dispatchFinishCancelAppointment,
-  dispatchStartGetAppointmentMessages,
-  dispatchFinishGetAppointmentMessages,
 } = appointmentsSlice.actions
 
 export default appointmentsSlice.reducer

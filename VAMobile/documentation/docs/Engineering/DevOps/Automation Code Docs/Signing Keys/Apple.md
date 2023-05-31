@@ -11,7 +11,7 @@ Apple Certificates expire every year and need to be renewed. This process is lin
 
 
 ## Fastlane Match and Apple Signing
-Apple Signing in our build system is managed with [Fastlane match]. Match manages and stores the certificates so that a single Distribution certificate can be shared with the team through GitHub authorization to the [private, encrypted repository](https://github.com/department-of-veterans-affairs/va-mobile-app-private).
+Apple Signing in our build system is managed with [Fastlane match](https://docs.fastlane.tools/actions/match/). Match manages and stores the certificates so that a single Distribution certificate can be shared with the team through GitHub authorization to the [private, encrypted repository](https://github.com/department-of-veterans-affairs/va-mobile-app-private).
 
 Match can be called from a local machine to download the certificates and provisioning profiles for distribution or development. It is also used to sign certificates in the CI during Fastlane scripts. 
 ## Renewing Certificates
@@ -27,7 +27,7 @@ You will need to delete the expiring profile and certificates from the Developer
 #### [Certificate](https://developer.apple.com/account/resources/certificates/list)
 | NAME                                   | TYPE         | PLATFORM | CREATED BY     | EXPIRATION |
 |----------------------------------------|--------------|----------|----------------|------------|
-| US Department of Veterans Affairs (VA) | Distribution | All      | Patrick Saxton | 07/13/2023 |
+| US Department of Veterans Affairs (VA) | Distribution | All      | UserName | 07/13/2023 |
 
 #### [Provisioning Profiles](https://developer.apple.com/account/resources/profiles/list)
 | NAME                              | PLATFORM | TYPE      | EXPIRATION |

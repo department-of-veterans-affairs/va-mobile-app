@@ -34,6 +34,7 @@ context('MessageList', () => {
         onPress: onPressSpy,
       },
       {
+<<<<<<< HEAD
         inlineTextWithIcons: [
           {
             leftTextProps: { text: 'test2-sender' },
@@ -44,6 +45,19 @@ context('MessageList', () => {
             leftIconProps: { name: 'PaperClip', width: 16, height: 16 },
           },
         ],
+=======
+        inlineTextWithIcons:
+          [
+            {
+              leftTextProps: { text: 'test2-sender' },
+              leftIconProps: { name: 'Unread', width: 16, height: 16 }
+            },
+            {
+              leftTextProps: { text: 'test2-subject-line' },
+              leftIconProps: { name: 'PaperClip', width: 16, height: 16 }
+            }
+          ],
+>>>>>>> b81ac0cf6f3ff532255eae425950e494af78a2af
         isSentFolder: false,
         a11yHintText: 'hint2',
         onPress: onPressSpy,
@@ -88,7 +102,7 @@ context('MessageList', () => {
   })
 
   it('should render the VAIcon components for unread item with attachment', async () => {
-    expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('UnreadIcon')
+    expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Unread')
     expect(testInstance.findAllByType(VAIcon)[1].props.name).toEqual('PaperClip')
   })
 })

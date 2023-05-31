@@ -1,3 +1,3 @@
 ---
-title: Selection and Input
+title: Selection and input
 ---

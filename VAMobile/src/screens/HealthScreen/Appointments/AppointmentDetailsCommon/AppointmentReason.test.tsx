@@ -7,7 +7,7 @@ import { context, render, RenderAPI } from 'testUtils'
 import { InitialState } from 'store/slices'
 import { TextView } from 'components'
 import AppointmentReason from './AppointmentReason'
-import { AppointmentMessages, AppointmentType } from 'store/api'
+import { AppointmentType } from 'store/api'
 import { AppointmentTypeConstants, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 
 context('AppointmentReason', () => {
@@ -15,6 +15,7 @@ context('AppointmentReason', () => {
   let props: any
   let testInstance: ReactTestInstance
   let reasonText = 'New Issue: 22.4.55'
+<<<<<<< HEAD
   let messages = [
     {
       id: '9a48e8db6d70a38a016d72b354240002',
@@ -39,13 +40,20 @@ context('AppointmentReason', () => {
   ]
 
   const initializeTestInstance = (isPendingAppointment?: boolean, reason?: string, messages?: Array<AppointmentMessages>): void => {
+=======
+
+  const initializeTestInstance = (isPendingAppointment?: boolean, reason?: string): void => {
+>>>>>>> b81ac0cf6f3ff532255eae425950e494af78a2af
     props = {
       attributes: {
         status: !!isPendingAppointment ? AppointmentStatusConstants.SUBMITTED : AppointmentStatusConstants.BOOKED,
         isPending: !!isPendingAppointment,
         reason: reason || null,
       },
+<<<<<<< HEAD
       messages,
+=======
+>>>>>>> b81ac0cf6f3ff532255eae425950e494af78a2af
     }
 
     component = render(<AppointmentReason {...props} />, {
@@ -77,26 +85,6 @@ context('AppointmentReason', () => {
         const texts = testInstance.findAllByType(TextView)
         expect(texts[0].props.children).toBe('You shared these details about your concern')
         expect(texts[1].props.children).toBe(reasonText)
-      })
-    })
-  })
-
-  describe('Pending Appointment', () => {
-    describe('when no message is provided', () => {
-      it('should not display any text', async () => {
-        initializeTestInstance(true, undefined, [])
-        const texts = testInstance.findAllByType(TextView)
-        expect(texts.length).toBe(0)
-      })
-    })
-
-    describe('when a message is provided', () => {
-      it('should display message', async () => {
-        initializeTestInstance(true, undefined, messages)
-        const texts = testInstance.findAllByType(TextView)
-        const messageText = messages[0].attributes.messageText
-        expect(texts[0].props.children).toBe('You shared these details about your concern')
-        expect(texts[1].props.children).toBe(messageText)
       })
     })
   })

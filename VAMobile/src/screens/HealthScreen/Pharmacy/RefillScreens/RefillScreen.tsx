@@ -166,7 +166,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
           </Box>
         )}
         <Box mx={theme.dimensions.gutter}>
-          <TextView my={theme.dimensions.standardMarginBetween} variant={'HelperText'}>
+          <TextView mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true} variant={'HelperText'}>
             {t('prescriptions.refill.instructions.requestRefills')}
             <TextView variant={'HelperTextBold'}>
               {t('prescriptions.refill.instructions.fifteenDays')}

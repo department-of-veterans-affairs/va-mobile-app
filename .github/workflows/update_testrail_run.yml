@@ -1,4 +1,4 @@
-name: "Update Testrail Run"
+name: "[TestRail] Update Run"
 
 on:
   repository_dispatch:
@@ -15,7 +15,7 @@ jobs:
           - 'latest'
     steps:
       - run: echo "Received web hook"
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - run: gh auth login --with-token < token.txt
       - name: 'Update Ticket with Testrail data'
