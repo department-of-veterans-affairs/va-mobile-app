@@ -46,10 +46,10 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
     borderBottomColor: 'photoAdd', // todo rename photoAdd border color to be more abstract (talk to design)
   }
 
-  const getArrowIcon = (): React.ReactNode => {
+  const getChevronIcon = (): React.ReactNode => {
     const iconProps: VAIconProps = {
       fill: theme.colors.icon.chevronCollapsible,
-      name: expanded ? 'ArrowUp' : 'ArrowDown',
+      name: expanded ? 'ChevronUp' : 'ChevronDown',
       width: 9,
       height: 7,
     }
@@ -78,7 +78,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
             {text}
           </TextView>
         </Box>
-        {getArrowIcon()}
+        {getChevronIcon()}
       </Pressable>
     </Box>
   )

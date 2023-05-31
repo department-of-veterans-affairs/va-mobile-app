@@ -48,8 +48,10 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
             {headerText}
           </TextView>
         )}
-        <TextView textAlign="center">{messageText}</TextView>
-        <Box mt={theme.dimensions.standardMarginBetween} accessibilityRole="button">
+        <TextView paragraphSpacing={true} textAlign="center">
+          {messageText}
+        </TextView>
+        <Box accessibilityRole="button">
           <VAButton onPress={onTryAgain} label={buttonText} buttonType={ButtonTypesConstants.buttonPrimary} a11yHint={buttonA11yHint} testID={buttonText} />
         </Box>
       </Box>

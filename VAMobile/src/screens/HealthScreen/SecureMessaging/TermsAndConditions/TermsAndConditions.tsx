@@ -21,10 +21,10 @@ const TermsAndConditions: FC = () => {
           <TextView variant="BitterBoldHeading">{t('termsAndConditions.title')}</TextView>
         </Box>
         <TextArea>
-          <TextView variant="MobileBody" mb={standardMarginBetween} {...testIdProps(t('termsAndConditions.toAccept.a11yLabel'))}>
+          <TextView variant="MobileBody" paragraphSpacing={true} {...testIdProps(t('termsAndConditions.toAccept.a11yLabel'))}>
             {t('termsAndConditions.toAccept')}
           </TextView>
-          <Box mb={standardMarginBetween}>
+          <Box mb={theme.paragraphSpacing.spacing20FontSize}>
             <ClickForActionLink
               displayedText={t('termsAndConditions.goTo')}
               linkType={LinkTypeOptionsConstants.url}
