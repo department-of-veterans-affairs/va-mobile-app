@@ -112,7 +112,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   })
 
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
-  const [category, setCategory] = useState<CategoryTypes>((message?.category as CategoryTypes) || '')
+  const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
   const [subject, setSubject] = useState(message?.subject || '')
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
   const [body, setBody] = useState(message?.body || '')
@@ -328,7 +328,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const isFormBlank = !(to || category || subject || attachmentsList.length || body)
 
-  const isSetToGeneral = (text: string): boolean => {
+  const isSetToGeneral = (text: CategoryTypes): boolean => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
   }
 

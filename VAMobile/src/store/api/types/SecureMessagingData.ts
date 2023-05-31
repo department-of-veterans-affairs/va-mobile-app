@@ -32,7 +32,7 @@ export type SecureMessagingMessageAttributes = {
   readReceipt?: string
 }
 
-export type CategoryTypes = 'COVID' | 'TEST_RESULTS' | 'MEDICATIONS' | 'APPOINTMENTS' | 'OTHER' | 'GENERAL' | 'EDUCATION'
+export type CategoryTypes = 'COVID' | 'TEST_RESULTS' | 'MEDICATIONS' | 'APPOINTMENTS' | 'OTHER' | 'GENERAL' | 'EDUCATION' | ''
 
 export const CategoryTypeFields: {
   covid: CategoryTypes
