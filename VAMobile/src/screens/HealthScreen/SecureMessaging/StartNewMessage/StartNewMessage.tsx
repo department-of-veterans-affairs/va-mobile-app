@@ -54,7 +54,6 @@ import {
   useAppDispatch,
   useAttachments,
   useBeforeNavBackListener,
-  useDestructiveAlert,
   useError,
   useMessageWithSignature,
   useRouteNavigation,
@@ -62,6 +61,7 @@ import {
   useValidateMessageWithSignature,
 } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
+import { useSaveDraftAttachmentAlert } from 'utils/hooks/secureMessaging'
 import { useSelector } from 'react-redux'
 
 type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
@@ -193,26 +193,13 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     }
   }, [sendMessageComplete, dispatch, navigation])
 
-  const draftAttachmentAlert = useDestructiveAlert()
+  const draftAttachmentAlert = useSaveDraftAttachmentAlert()
 
   const onSaveDraft = (messageData: SecureMessagingFormData): void => {
-    if (attachmentsList.length) {
-      draftAttachmentAlert({
-        title: t('secureMessaging.draft.cantSaveAttachments'),
-        cancelButtonIndex: 0,
-        buttons: [
-          {
-            text: t('secureMessaging.keepEditing'),
-          },
-          {
-            text: t('secureMessaging.saveDraft'),
-            onPress: () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID)),
-          },
-        ],
-      })
-    } else {
-      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID))
-    }
+    draftAttachmentAlert({
+      attachments: attachmentsList,
+      onConfirm: () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID)),
+    })
   }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {

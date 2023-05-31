@@ -41,17 +41,9 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
-import {
-  useAppDispatch,
-  useAttachments,
-  useBeforeNavBackListener,
-  useDestructiveAlert,
-  useMessageWithSignature,
-  useRouteNavigation,
-  useTheme,
-  useValidateMessageWithSignature,
-} from 'utils/hooks'
+import { useAppDispatch, useAttachments, useBeforeNavBackListener, useMessageWithSignature, useRouteNavigation, useTheme, useValidateMessageWithSignature } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
+import { useSaveDraftAttachmentAlert } from 'utils/hooks/secureMessaging'
 import { useSelector } from 'react-redux'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
@@ -181,26 +173,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
   }, [sendMessageComplete, dispatch, navigation])
 
-  const draftAttachmentAlert = useDestructiveAlert()
+  const draftAttachmentAlert = useSaveDraftAttachmentAlert()
 
   const onSaveDraft = (messageData: SecureMessagingFormData): void => {
-    if (attachmentsList.length) {
-      draftAttachmentAlert({
-        title: t('secureMessaging.draft.cantSaveAttachments'),
-        cancelButtonIndex: 0,
-        buttons: [
-          {
-            text: t('secureMessaging.keepEditing'),
-          },
-          {
-            text: t('secureMessaging.saveDraft'),
-            onPress: () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID)),
-          },
-        ],
-      })
-    } else {
-      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID))
-    }
+    draftAttachmentAlert({
+      attachments: attachmentsList,
+      onConfirm: () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID)),
+    })
   }
 
   if (loading || savingDraft || loadingSignature || !isTransitionComplete || isDiscarded) {

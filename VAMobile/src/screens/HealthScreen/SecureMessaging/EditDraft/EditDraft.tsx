@@ -56,6 +56,7 @@ import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
+import { useSaveDraftAttachmentAlert } from 'utils/hooks/secureMessaging'
 import { useSelector } from 'react-redux'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
@@ -286,26 +287,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     }
   }, [attachmentFileToAdd, attachmentsList, addAttachment, navigation])
 
-  const draftAttachmentAlert = useDestructiveAlert()
+  const draftAttachmentAlert = useSaveDraftAttachmentAlert()
 
   const onSaveDraft = (messageData: SecureMessagingFormData): void => {
-    if (attachmentsList.length) {
-      draftAttachmentAlert({
-        title: t('secureMessaging.draft.cantSaveAttachments'),
-        cancelButtonIndex: 0,
-        buttons: [
-          {
-            text: t('secureMessaging.keepEditing'),
-          },
-          {
-            text: t('secureMessaging.saveDraft'),
-            onPress: () => dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true)),
-          },
-        ],
-      })
-    } else {
-      dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true))
-    }
+    draftAttachmentAlert({
+      attachments: attachmentsList,
+      onConfirm: () => dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true)),
+    })
   }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
