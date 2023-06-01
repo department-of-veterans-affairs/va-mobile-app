@@ -243,19 +243,60 @@ export const Events = {
       },
     }
   },
-  vama_rx_refill_success: (): Event => {
+  vama_rx_refill_success: (rx_ids: string[]): Event => {
     return {
       name: 'vama_rx_refill_success',
+      params: {
+        rx_ids: rx_ids,
+      },
     }
   },
-  vama_rx_refill_fail: (): Event => {
+  vama_rx_refill_fail: (rx_ids: string[]): Event => {
     return {
       name: 'vama_rx_refill_fail',
+      params: {
+        rx_ids: rx_ids,
+      },
     }
   },
-  vama_rx_refill_retry: (): Event => {
+  vama_rx_refill_retry: (rx_ids: string[]): Event => {
     return {
       name: 'vama_rx_refill_retry',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_request_start: (rx_ids: string[]): Event => {
+    return {
+      name: 'vama_rx_request_start',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_request_confirm: (rx_ids: string[]): Event => {
+    return {
+      name: 'vama_rx_request_confirm',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_request_cancel: (rx_ids: string[]): Event => {
+    return {
+      name: 'vama_rx_request_cancel ',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_details: (rx_ids: string): Event => {
+    return {
+      name: 'vama_rx_details ',
+      params: {
+        rx_ids: rx_ids,
+      },
     }
   },
   vama_rx_filter: (): Event => {
