@@ -8,7 +8,7 @@ import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/s
 import * as api from 'store/api'
 import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import StartNewMessage from './StartNewMessage'
-import { Pressable, TouchableWithoutFeedback } from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native'
 import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState, saveDraft, updateSecureMessagingTab } from 'store/slices'
 import { CategoryTypeFields, ScreenIDTypesConstants } from 'store/api/types'
@@ -91,6 +91,7 @@ context('StartNewMessage', () => {
   let navigateToAddToFilesSpy: jest.Mock
   let navigateToHowToAttachSpy: jest.Mock
   let navigateToVeteransCrisisLineSpy: jest.Mock
+  let navigateToReplyHelpSpy: jest.Mock
 
   const initializeTestInstance = (
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
@@ -104,6 +105,7 @@ context('StartNewMessage', () => {
     navigateToAddToFilesSpy = jest.fn()
     navigateToHowToAttachSpy = jest.fn()
     navigateToVeteransCrisisLineSpy = jest.fn()
+    navigateToReplyHelpSpy = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -115,6 +117,8 @@ context('StartNewMessage', () => {
       .mockReturnValue(navigateToHowToAttachSpy)
       .calledWith('VeteransCrisisLine')
       .mockReturnValue(navigateToVeteransCrisisLineSpy)
+      .calledWith('ReplyHelp')
+      .mockReturnValue(navigateToReplyHelpSpy)
 
     props = mockNavProps(
       undefined,
@@ -256,18 +260,11 @@ context('StartNewMessage', () => {
   })
 
   describe('on click of the collapsible view', () => {
-    it('should display the when will i get a reply children text', async () => {
+    it('should show the Reply Help panel', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
-
-        expect(
-          findByTypeWithText(
-            testInstance,
-            TextView,
-            'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
-          ),
-        ).toBeTruthy()
+        testInstance.findByProps({ accessibilityLabel: 'Only use messages for non-urgent needs' }).props.onPress()
       })
+      expect(navigateToReplyHelpSpy).toHaveBeenCalled()
     })
   })
 
@@ -279,7 +276,7 @@ context('StartNewMessage', () => {
 
       const textViews = testInstance.findAllByType(TextView)
 
-      expect(textViews[12].props.children).toEqual(['Subject', ' ', '(Required)'])
+      expect(textViews[11].props.children).toEqual(['Subject', ' ', '(Required)'])
     })
   })
 
