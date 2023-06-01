@@ -2,10 +2,10 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, findByTestID, render, RenderAPI } from 'testUtils'
-import VeteransCrisisLineScreen from './VeteransCrisisLineScreen'
+import { context, render, RenderAPI } from 'testUtils'
+import ReplyHelpScreen from './ReplyHelp'
 
 const mockExternalLinkSpy = jest.fn()
 
@@ -22,13 +22,12 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-context('VeteransCrisisLineScreen', () => {
+context('ReplyHelpScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    component = render(<VeteransCrisisLineScreen />)
-
+    component = render(<ReplyHelpScreen />)
     testInstance = component.container
   })
 
@@ -36,12 +35,10 @@ context('VeteransCrisisLineScreen', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when the veteransCrisisLine.net link is clicked', () => {
-    it('should launch external link with the parameter https://www.veteranscrisisline.net/', async () => {
-      act(() => {
-        testInstance.findByProps({accessibilityLabel: 'Veterans Crisis Line .net'}).props.onPress()
-      })
-      expect(mockExternalLinkSpy).toBeCalledWith('https://www.veteranscrisisline.net/')
+  describe('when the Call 911 link is clicked', () => {
+    it('should launch external link', async () => {
+      testInstance.findByProps({ accessibilityLabel: 'Call 9 1 1' }).props.onPress()
+      expect(mockExternalLinkSpy).toBeCalledWith('tel:911')
     })
   })
 })
