@@ -1,4 +1,4 @@
-import { InteractionManager, ScrollView } from 'react-native'
+import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
@@ -20,7 +20,6 @@ import {
   PickerItem,
   SaveButton,
   TextArea,
-  TextView,
   VAButton,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
@@ -49,7 +48,6 @@ import {
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
 import { getStartNewMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { testIdProps } from 'utils/accessibility'
 import {
   useAppDispatch,
   useAttachments,
@@ -364,21 +362,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     return (
       <Box>
         <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} scrollViewRef={scrollViewRef} focusOnError={onSendClicked} />
-        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <CollapsibleView text={t('secureMessaging.startNewMessage.whenWillIGetAReply')} showInTextArea={false}>
-            <Box {...testIdProps(t('secureMessaging.startNewMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
-              <TextView variant="MobileBody" paragraphSpacing={true}>
-                {t('secureMessaging.startNewMessage.threeDaysToReceiveResponse')}
-              </TextView>
-            </Box>
-            <Box {...testIdProps(t('secureMessaging.startNewMessage.pleaseCallHealthProviderA11yLabel'))} accessible={true}>
-              <TextView>
-                <TextView variant="MobileBodyBold">{t('secureMessaging.startNewMessage.important')}</TextView>
-                <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.pleaseCallHealthProvider')}</TextView>
-              </TextView>
-            </Box>
-          </CollapsibleView>
-        </Box>
         <TextArea>
           <FormWrapper
             fieldsList={formFieldsList}
@@ -389,6 +372,17 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
             resetErrors={resetErrors}
             setResetErrors={setResetErrors}
           />
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <Pressable
+              onPress={navigateTo('ReplyHelp')}
+              accessibilityRole={'button'}
+              accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
+              importantForAccessibility={'yes'}>
+              <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
+                <CollapsibleView text={tc('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
+              </Box>
+            </Pressable>
+          </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               label={t('secureMessaging.formMessage.send')}

@@ -12,7 +12,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import CernerAlert from '../CernerAlert'
+import CernerAlertSM from './CernerAlertSM/CernerAlertSM'
 import Folders from './Folders/Folders'
 import Inbox from './Inbox/Inbox'
 import NotEnrolledSM from './NotEnrolledSM/NotEnrolledSM'
@@ -109,7 +109,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
             accessibilityHints={a11yHints}
           />
         </Box>
-        <CernerAlert />
+        <CernerAlertSM />
         {serviceErrorAlert()}
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
           {secureMessagingTab === SecureMessagingTabTypesConstants.INBOX && <Inbox />}
