@@ -101,7 +101,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       label: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
       buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: () => {
-        const prescriptionIds = [prescription].map((prescription) => prescription.id)
+        const prescriptionIds = [prescription].map((prescriptions) => prescriptions.id)
         logAnalyticsEvent(Events.vama_rx_request_start(prescriptionIds))
         submitRefillAlert({
           title: t('prescriptions.refill.confirmationTitle', { count: 1 }),
