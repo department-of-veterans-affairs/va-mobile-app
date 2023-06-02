@@ -63,9 +63,6 @@ jest.mock('utils/hooks', () => {
   return {
     ...original,
     useDestructiveAlert: () => mockAlertSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
   }
 })
 
@@ -129,7 +126,7 @@ context('EditAddressScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

@@ -29,6 +29,8 @@ jobs:
     needs: [get_workflow_environment]
     environment: ${{ needs.get_workflow_environment.outputs.environment_name }}
     runs-on: ubuntu-latest
+    steps:
+      - run: echo "foo"
 
   ios:
     name: iOS Go Live

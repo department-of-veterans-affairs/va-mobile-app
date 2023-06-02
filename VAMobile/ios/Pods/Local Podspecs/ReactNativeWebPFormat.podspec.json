@@ -1,13 +1,13 @@
 {
   "name": "ReactNativeWebPFormat",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "summary": "WebP integration for React Native apps",
   "license": "MIT",
   "homepage": "https://github.com/Aleksefo/react-native-webp-format#readme",
   "authors": "Alex Fomushkin",
   "source": {
     "git": "git+https://github.com/Aleksefo/react-native-webp-format.git",
-    "tag": "1.1.2"
+    "tag": "1.2.0"
   },
   "source_files": "ios/*.{h,m}",
   "requires_arc": true,
@@ -15,7 +15,7 @@
     "ios": "9.0"
   },
   "dependencies": {
-    "React": [
+    "React-Core": [
 
     ],
     "SDWebImageWebPCoder": [

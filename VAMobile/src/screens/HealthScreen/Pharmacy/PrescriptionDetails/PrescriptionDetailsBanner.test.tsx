@@ -12,8 +12,8 @@ context('PrescriptionsDetailsBanner', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = () => {
-    component =  render((<PrescriptionsDetailsBanner/>))
-    testInstance = component.container
+    component = render(<PrescriptionsDetailsBanner />)
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
