@@ -24,12 +24,8 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
@@ -75,7 +71,7 @@ context('DirectDepositScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -122,7 +118,7 @@ context('DirectDepositScreen', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
       await waitFor(() => {
         expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Add your bank account information')
       })
@@ -139,7 +135,7 @@ context('DirectDepositScreen', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
       await waitFor(() => {
         expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Add your bank account information')
       })
