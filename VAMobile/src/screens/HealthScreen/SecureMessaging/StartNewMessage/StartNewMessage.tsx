@@ -357,7 +357,13 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} scrollViewRef={scrollViewRef} focusOnError={onSendClicked} errorList={errorList}/>
+        <MessageAlert
+          hasValidationError={formContainsError}
+          saveDraftAttempted={onSaveDraftClicked}
+          scrollViewRef={scrollViewRef}
+          focusOnError={onSendClicked}
+          errorList={errorList}
+        />
         <TextArea>
           <FormWrapper
             fieldsList={formFieldsList}

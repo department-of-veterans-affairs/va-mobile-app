@@ -37,9 +37,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
   return hasValidationError ? (
     <Box mb={theme.dimensions.standardMarginBetween}>
       <AlertBox border={'error'} title={t('secureMessaging.formMessage.weNeedMoreInfo')} text={text} titleRole={'header'} scrollViewRef={scrollViewRef} focusOnError={focusOnError}>
-        <Box>
-          <VABulletList listOfText={bulletedListOfText} />
-        </Box>
+        <VABulletList listOfText={bulletedListOfText} />
       </AlertBox>
     </Box>
   ) : (
