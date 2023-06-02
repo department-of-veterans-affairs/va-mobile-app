@@ -15,7 +15,7 @@ context('IncorrectServiceInfo', () => {
     const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
     component = render(<IncorrectServiceInfo {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
@@ -23,7 +23,7 @@ context('IncorrectServiceInfo', () => {
   })
 
   it('should call DMDC on press', async () => {
-    testInstance.findByProps({accessibilityLabel: '8 0 0 5 3 8 9 5 5 2'}).props.onPress()
+    testInstance.findByProps({ accessibilityLabel: '8 0 0 5 3 8 9 5 5 2' }).props.onPress()
     expect(Linking.openURL).toHaveBeenCalledWith('tel:8005389552')
   })
 })

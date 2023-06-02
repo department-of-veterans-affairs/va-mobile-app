@@ -27,7 +27,7 @@ context('ClickToCallPhoneNumber', () => {
 
     component = render(<ClickToCallPhoneNumber {...props} />, { preloadedState: { ...InitialState } })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

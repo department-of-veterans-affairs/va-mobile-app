@@ -29,7 +29,7 @@ context('VeteransCrisisLineNumbers', () => {
   beforeEach(() => {
     component = render(<VeteransCrisisLineNumbers />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

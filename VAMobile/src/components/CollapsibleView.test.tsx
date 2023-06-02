@@ -17,7 +17,7 @@ context('CollapsibleView', () => {
   beforeEach(() => {
     component = render(<CollapsibleView text={'Where can I find these numbers?'} children={<TextView>Revealed text</TextView>} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

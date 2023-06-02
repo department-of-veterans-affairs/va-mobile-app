@@ -19,7 +19,7 @@ export function useColorScheme(delay = 250): NonNullable<ColorSchemeName> {
 
     return () => {
       resetCurrentTimeout()
-      appearanceEvent.remove()
+      appearanceEvent?.remove()
     }
   })
 

@@ -18,7 +18,7 @@ context('Switch', () => {
     onPressSpy = jest.fn(() => {})
 
     component = render(<Switch onPress={onPressSpy} />)
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

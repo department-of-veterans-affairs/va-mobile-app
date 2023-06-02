@@ -38,8 +38,9 @@ import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
-import { useAppDispatch, useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks'
+import { useAppDispatch } from 'utils/hooks'
 import { useColorScheme } from 'styles/themes/colorScheme'
+import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -178,7 +179,7 @@ export const AuthGuard: FC = () => {
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
-    return (): void => sub.remove()
+    return (): void => sub?.remove()
   }, [dispatch, fontScale])
 
   useEffect(() => {
@@ -199,7 +200,7 @@ export const AuthGuard: FC = () => {
     // Listener for the current app state, updates isVoiceOverTalkBackRunning when app state is active and voice over/talk back
     // was turned on or off
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
-    return (): void => sub.remove()
+    return (): void => sub?.remove()
   }, [dispatch, isVoiceOverTalkBackRunning])
 
   useEffect(() => {
@@ -227,7 +228,7 @@ export const AuthGuard: FC = () => {
     }
     const sub = Linking.addEventListener('url', listener)
     return (): void => {
-      sub.remove()
+      sub?.remove()
     }
   }, [dispatch])
 

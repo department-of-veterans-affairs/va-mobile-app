@@ -16,9 +16,6 @@ jest.mock('utils/hooks', () => {
   return {
     ...original,
     useExternalLink: () => mockExternalLinkSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
   }
 })
 
@@ -29,17 +26,17 @@ context('VeteransCrisisLineScreen', () => {
   beforeEach(() => {
     component = render(<VeteransCrisisLineScreen />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
   })
-
+  
   describe('when the veteransCrisisLine.net link is clicked', () => {
     it('should launch external link with the parameter https://www.veteranscrisisline.net/', async () => {
       act(() => {
-        testInstance.findByProps({accessibilityLabel: 'Veterans Crisis Line .net'}).props.onPress()
+        testInstance.findByProps({ accessibilityLabel: 'Veterans Crisis Line .net' }).props.onPress()
       })
       expect(mockExternalLinkSpy).toBeCalledWith('https://www.veteranscrisisline.net/')
     })
