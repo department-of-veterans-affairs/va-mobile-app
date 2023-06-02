@@ -22,28 +22,21 @@ jobs:
           else
             echo ::set-output name=env_name::''
           fi
-
-  # This is a separate job because the build_ios & build_android workflows are already reserving "environment"
-  check_environment:
-    name: Check environment protections
-    needs: [get_workflow_environment]
-    environment: ${{ needs.get_workflow_environment.outputs.environment_name }}
-    runs-on: ubuntu-latest
-
   ios:
     name: iOS Go Live
-    needs: [get_workflow_environment, check_environment]
+    needs: [get_workflow_environment]
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
     with:
       lane: release
       ref: main
-
+      gha_environment: ${{ needs.get-workflow-environment.outputs.environment_name }}
   android:
     name: Android Go Live
-    needs: [get_workflow_environment, check_environment]
+    needs: [get_workflow_environment]
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
     with:
       lane: release
       ref: main
+      gha_environment: ${{ needs.get-workflow-environment.outputs.environment_name }}
