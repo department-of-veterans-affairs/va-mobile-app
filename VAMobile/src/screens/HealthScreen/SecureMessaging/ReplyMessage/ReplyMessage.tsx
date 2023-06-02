@@ -38,11 +38,19 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { formatSubject } from 'utils/secureMessaging'
+import { formatSubject, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
-import { useAppDispatch, useAttachments, useBeforeNavBackListener, useMessageWithSignature, useRouteNavigation, useTheme, useValidateMessageWithSignature } from 'utils/hooks'
+import {
+  useAppDispatch,
+  useAttachments,
+  useBeforeNavBackListener,
+  useDestructiveAlert,
+  useMessageWithSignature,
+  useRouteNavigation,
+  useTheme,
+  useValidateMessageWithSignature,
+} from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { useSaveDraftAttachmentAlert } from 'utils/hooks/secureMessaging'
 import { useSelector } from 'react-redux'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
@@ -53,7 +61,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
-  const draftAttachmentAlert = useSaveDraftAttachmentAlert()
+  const draftAttachmentAlert = useDestructiveAlert()
 
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
@@ -235,10 +243,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
 
     if (onSaveDraftClicked) {
-      draftAttachmentAlert({
-        attachments: attachmentsList,
-        onConfirm: () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID)),
-      })
+      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID)))
     } else {
       receiverID && dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, messageID))
     }

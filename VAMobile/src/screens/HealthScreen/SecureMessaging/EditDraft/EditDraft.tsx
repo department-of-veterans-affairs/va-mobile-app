@@ -51,11 +51,10 @@ import {
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
-import { getStartNewMessageSubjectPickerOptions } from 'utils/secureMessaging'
+import { getStartNewMessageSubjectPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { useSaveDraftAttachmentAlert } from 'utils/hooks/secureMessaging'
 import { useSelector } from 'react-redux'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
@@ -96,7 +95,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     deletingDraft,
   } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const destructiveAlert = useDestructiveAlert()
-  const draftAttachmentAlert = useSaveDraftAttachmentAlert()
+  const draftAttachmentAlert = useDestructiveAlert()
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
   const { attachmentFileToAdd } = route.params
@@ -439,10 +438,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     const messageData = getMessageData()
 
     if (onSaveDraftClicked) {
-      draftAttachmentAlert({
-        attachments: attachmentsList,
-        onConfirm: () => dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true)),
-      })
+      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true)))
     } else {
       // TODO: send along composeType so API knows which endpoint to POST to
       dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, replyToID))

@@ -47,11 +47,12 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { getStartNewMessageSubjectPickerOptions } from 'utils/secureMessaging'
+import { getStartNewMessageSubjectPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import {
   useAppDispatch,
   useAttachments,
   useBeforeNavBackListener,
+  useDestructiveAlert,
   useError,
   useMessageWithSignature,
   useRouteNavigation,
@@ -59,7 +60,6 @@ import {
   useValidateMessageWithSignature,
 } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { useSaveDraftAttachmentAlert } from 'utils/hooks/secureMessaging'
 import { useSelector } from 'react-redux'
 
 type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
@@ -70,7 +70,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
-  const draftAttachmentAlert = useSaveDraftAttachmentAlert()
+  const draftAttachmentAlert = useDestructiveAlert()
 
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.draft.saved'),
@@ -337,10 +337,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       messageData.draft_id = savedDraftID
     }
     if (onSaveDraftClicked) {
-      draftAttachmentAlert({
-        attachments: attachmentsList,
-        onConfirm: () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID)),
-      })
+      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID)))
     } else {
       dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList))
     }
