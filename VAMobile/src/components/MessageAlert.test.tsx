@@ -21,14 +21,9 @@ context('MessageAlert', () => {
     savingDraft?: boolean
     errorList?: { [key: number]: string }
   }): void => {
-    component = render(
-      <MessageAlert
-        hasValidationError={hasValidationError}
-        saveDraftAttempted={saveDraftAttempted}
-      />,
-    )
+    component = render(<MessageAlert hasValidationError={hasValidationError} saveDraftAttempted={saveDraftAttempted} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('displays save draft validation', async () => {

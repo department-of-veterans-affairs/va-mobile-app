@@ -17,12 +17,8 @@ import { when } from 'jest-when'
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -75,6 +71,15 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
     useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
     useGoToDrafts: () => mockUseGoToDraftSpy,
   }
+})
+
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native')
+  RN.InteractionManager.runAfterInteractions = (callback: () => void) => {
+    callback()
+  }
+
+  return RN
 })
 
 // Contains message Ids grouped together by thread
@@ -234,7 +239,7 @@ context('EditDraft', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

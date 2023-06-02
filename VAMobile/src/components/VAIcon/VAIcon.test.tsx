@@ -37,7 +37,7 @@ context('VAIconTests', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
@@ -57,7 +57,7 @@ context('VAIconTests', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
       const icon: ReactTestInstance = testInstance.findByType(HomeSelected)
       expect(icon).toBeTruthy()
       expect(icon.props).toEqual(

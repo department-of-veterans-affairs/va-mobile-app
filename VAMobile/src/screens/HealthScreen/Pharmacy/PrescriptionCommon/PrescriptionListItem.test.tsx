@@ -6,10 +6,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 
 import PrescriptionListItem, { PrescriptionListItemProps } from './PrescriptionListItem'
 import { PrescriptionAttributeData } from 'store/api'
-import {
-  defaultPrescriptionsList as mockData,
-  emptyStatePrescriptionList as emptyMockData,
-} from 'utils/tests/prescription'
+import { defaultPrescriptionsList as mockData, emptyStatePrescriptionList as emptyMockData } from 'utils/tests/prescription'
 import { TextView } from 'components'
 
 context('PrescriptionListItem', () => {
@@ -26,7 +23,7 @@ context('PrescriptionListItem', () => {
     } as PrescriptionListItemProps
 
     component = render(<PrescriptionListItem {...props} />)
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
@@ -40,10 +37,13 @@ context('PrescriptionListItem', () => {
     describe('and hideInstructions is set to true', () => {
       it('should show None noted for everything besides instructions', async () => {
         await waitFor(() => {
-          initializeTestInstance({
-            ...emptyMockData[0].attributes,
-            refillRemaining: undefined
-          }, true)
+          initializeTestInstance(
+            {
+              ...emptyMockData[0].attributes,
+              refillRemaining: undefined,
+            },
+            true,
+          )
         })
 
         const texts = testInstance.findAllByType(TextView)

@@ -14,7 +14,7 @@ context('VABulletList', () => {
   beforeEach(() => {
     component = render(<VABulletList listOfText={['first line', 'second line']} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

@@ -5,7 +5,7 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 
 import { InitialState } from 'store/slices'
-import {AppointmentAttributes, AppointmentStatusConstants, AppointmentTypeConstants} from 'store/api/types'
+import { AppointmentAttributes, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
 import { TextView } from 'components'
 import ProviderName from './ProviderName'
 
@@ -22,7 +22,7 @@ context('ProviderName', () => {
   }
 
   const initializeTestInstance = async (attributes?: Partial<AppointmentAttributes>): Promise<void> => {
-    props ={
+    props = {
       appointmentType: 'VA_VIDEO_CONNECT_ONSITE',
       ...(attributes || {}),
     }
@@ -35,11 +35,11 @@ context('ProviderName', () => {
       })
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
-    await initializeTestInstance({ practitioner: practitionerData})
+    await initializeTestInstance({ practitioner: practitionerData })
     expect(component).toBeTruthy()
     expect(testInstance.findAllByType(TextView).length).toEqual(2)
   })
@@ -57,7 +57,7 @@ context('ProviderName', () => {
         appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
         status: AppointmentStatusConstants.SUBMITTED,
         isPending: true,
-        healthcareProvider: "MyHealthCareProvider"
+        healthcareProvider: 'MyHealthCareProvider',
       })
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('MyHealthCareProvider')
     })
@@ -68,8 +68,8 @@ context('ProviderName', () => {
         status: AppointmentStatusConstants.SUBMITTED,
         isPending: true,
         location: {
-          name: 'LocationName'
-        }
+          name: 'LocationName',
+        },
       })
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('LocationName')
     })
@@ -81,8 +81,8 @@ context('ProviderName', () => {
           status: AppointmentStatusConstants.SUBMITTED,
           isPending: true,
           location: {
-            name: ''
-          }
+            name: '',
+          },
         })
         expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('No provider selected')
       })

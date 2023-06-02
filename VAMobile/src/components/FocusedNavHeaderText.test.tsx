@@ -18,7 +18,7 @@ context('FocusedNavHeaderText', () => {
 
     component = render(<FocusedNavHeaderText headerTitle={''} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
