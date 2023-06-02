@@ -15,13 +15,13 @@ context('ContactInformation', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (): void => {
-    props ={
+    props = {
       patientEmail: 'test@test.com',
       patientPhoneNumber: '145-141-2523',
       bestTimeToCall: ['Noon'],
       isPending: true,
       status: AppointmentStatusConstants.SUBMITTED,
-      appointmentType: AppointmentTypeConstants.COMMUNITY_CARE
+      appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
     }
 
     component = render(<ContactInformation attributes={props} />, {
@@ -30,7 +30,7 @@ context('ContactInformation', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

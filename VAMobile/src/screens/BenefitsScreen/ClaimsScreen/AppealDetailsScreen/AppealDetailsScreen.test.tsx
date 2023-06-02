@@ -75,7 +75,7 @@ context('AppealDetailsScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('should initialize', async () => {
@@ -103,7 +103,7 @@ context('AppealDetailsScreen', () => {
 
       await waitFor(() => {
         testInstance.findByType(SegmentedControl).props.onChange('Status')
-        expect(component.container.findAllByType(AppealStatus).length).toEqual(1)
+        expect(component.UNSAFE_root.findAllByType(AppealStatus).length).toEqual(1)
       })
     })
   })
@@ -116,9 +116,9 @@ context('AppealDetailsScreen', () => {
       })
 
       await waitFor(async () => {
-        component.container.findByType(SegmentedControl).props.onChange('Issues')
+        component.UNSAFE_root.findByType(SegmentedControl).props.onChange('Issues')
       })
-      expect(component.container.findAllByType(AppealIssues).length).toEqual(1)
+      expect(component.UNSAFE_root.findAllByType(AppealIssues).length).toEqual(1)
     })
   })
 

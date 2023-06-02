@@ -35,8 +35,8 @@ context('api', () => {
   })
 
   it('should handle >399 errors correctly', async () => {
-    fetch.mockResolvedValue({ status: 400, text: () => Promise.resolve('status test') })
-    expect(async () => get('/foo')).rejects.toBeCalled()
+    fetch.mockResolvedValue({ status: 400, text: () => Promise.resolve('status test'), clone: () => Promise.resolve() })
+    expect(async () => get('/foo')).rejects.toThrow()
   })
 
   it('should handle POST correctly if contentType not specified', async () => {
