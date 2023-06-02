@@ -17,9 +17,9 @@ context('PhotoAdd', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
 
-    component = render(<PhotoAdd width={110} height={110} onPress={(onPressSpy)}/>)
+    component = render(<PhotoAdd width={110} height={110} onPress={onPressSpy} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

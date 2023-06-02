@@ -34,12 +34,8 @@ jest.mock('store/slices/', () => {
 })
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -153,7 +149,7 @@ context('LettersListScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
@@ -279,7 +275,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-      
+
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[7].props.onPress()
       })
