@@ -15,6 +15,7 @@ export type MessageAlertProps = {
   saveDraftAttempted?: boolean
   /** optional ref for parent scroll view */
   scrollViewRef?: RefObject<ScrollView>
+  /** optional list of alertbox failed reasons, supplied by FormWrapper component */
   errorList?: { [key: number]: string }
 }
 
@@ -27,7 +28,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
   if (errorList) {
     for (const key in errorList) {
       if (errorList[key] !== '') {
-        bulletedListOfText.push(`${errorList[key as unknown as number]}`)
+        bulletedListOfText.push(`${errorList[key]}`)
       }
     }
   }
