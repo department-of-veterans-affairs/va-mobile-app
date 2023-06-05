@@ -59,6 +59,11 @@ const snackbarMessages: SnackbarMessages = {
 }
 
 context('claimsAndAppeals', () => {
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+  
   const claimEventData: ClaimEventData = {
     description: 'need proof of something',
     type: 'eventType',

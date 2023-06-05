@@ -19,16 +19,12 @@ jest.mock('utils/remoteConfig')
 
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
 
   return {
     ...original,
     useRouteNavigation: () => {
       return mockNavigateToSpy
     },
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
   }
 })
 
@@ -56,6 +52,10 @@ context('HealthScreen', () => {
   let mockNavigateToVAVaccinesSpy: jest.Mock
   let mockNavigateToPharmacySpy: jest.Mock
   let mockFeatureEnabled = featureEnabled as jest.Mock
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
 
   //mockList:  SecureMessagingMessageList --> for inboxMessages
   const initializeTestInstance = (unreadCount = 13, hasLoadedInbox = true, prescriptionsEnabled = false, prescriptionsNeedLoad = false, smAuthorized = true) => {
@@ -106,7 +106,7 @@ context('HealthScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
   beforeEach(() => {
     initializeTestInstance()
@@ -216,6 +216,7 @@ context('HealthScreen', () => {
 
   it('should render messagesCountTag with the correct count number', async () => {
     await waitFor(() => {
+      initializeTestInstance(13)
       expect(testInstance.findByType(MessagesCountTag)).toBeTruthy()
       expect(testInstance.findAllByType(TextView)[8].props.children).toBe(13)
     })

@@ -54,7 +54,7 @@ context('VAModalPicker', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
 
     await waitFor(() => {
       const showButton = testInstance.findByProps({ accessibilityRole: 'spinbutton' })

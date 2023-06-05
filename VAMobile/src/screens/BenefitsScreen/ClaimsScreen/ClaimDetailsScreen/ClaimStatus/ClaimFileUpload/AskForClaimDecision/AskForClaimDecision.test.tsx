@@ -69,7 +69,7 @@ context('AskForClaimDecision', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

@@ -60,7 +60,7 @@ context('MilitaryInformationScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(async () => {
@@ -145,7 +145,7 @@ context('MilitaryInformationScreen', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
 
       await waitFor(() => {
         expect(testInstance.findByType(NoMilitaryInformationAccess)).toBeTruthy()
@@ -170,7 +170,7 @@ context('MilitaryInformationScreen', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
       await waitFor(() => {
         expect(testInstance.findByType(NoMilitaryInformationAccess)).toBeTruthy()
       })
@@ -194,7 +194,7 @@ context('MilitaryInformationScreen', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
 
       await waitFor(() => {
         expect(testInstance.findAllByType(NoMilitaryInformationAccess)).toHaveLength(0)

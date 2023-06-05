@@ -17,7 +17,7 @@ context('VAIconTests', () => {
 
   beforeEach(() => {
     component = render(<VAImage name={'PaperCheck'} a11yLabel={'testId'} marginX={10} />)
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
