@@ -25,6 +25,7 @@ const AddPreferenceComponent: FC<AddPreferenceComponentProps> = ({ buttonText, o
     height: 24,
     width: 24,
     fill: theme.colors.buttonBackground.buttonPrimary,
+    fill2: theme.colors.icon.transparent,
   }
 
   return (

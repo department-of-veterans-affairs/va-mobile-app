@@ -11,7 +11,6 @@ context('AccordionCollapsible', () => {
   let testInstance: RenderAPI
 
   const initializeTestInstance = (hideArrow = false) => {
-
     component = render(
       <AccordionCollapsible
         hideArrow={hideArrow}
@@ -34,30 +33,30 @@ context('AccordionCollapsible', () => {
 
   describe('when hideArrow is false', () => {
     it('should render a Pressable', async () => {
-      expect(testInstance.container.findAllByType(Pressable).length).toEqual(1)
+      expect(testInstance.UNSAFE_root.findAllByType(Pressable).length).toEqual(1)
     })
   })
 
   describe('when hideArrow is true', () => {
     it('should not render a Pressable', async () => {
       initializeTestInstance(true)
-      expect(testInstance.container.findAllByType(Pressable).length).toEqual(0)
+      expect(testInstance.UNSAFE_root.findAllByType(Pressable).length).toEqual(0)
     })
   })
 
   describe('when expanded is true', () => {
     it('should render the expandedContent', async () => {
       await waitFor(() => {
-        testInstance.container.findByType(Pressable).props.onPress()
+        testInstance.UNSAFE_root.findByType(Pressable).props.onPress()
 
-        expect(testInstance.container.findAllByType(TextView)[1].props.children).toEqual('EXPANDED')
+        expect(testInstance.UNSAFE_root.findAllByType(TextView)[1].props.children).toEqual('EXPANDED')
       })
     })
   })
 
   describe('when expanded is false', () => {
     it('should render the collapsedContent', async () => {
-      expect(testInstance.container.findAllByType(TextView)[1].props.children).toEqual('COLLAPSED')
+      expect(testInstance.UNSAFE_root.findAllByType(TextView)[1].props.children).toEqual('COLLAPSED')
     })
   })
 })

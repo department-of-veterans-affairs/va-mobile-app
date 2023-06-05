@@ -17,7 +17,7 @@ context('MessageList', () => {
   let onPressSpy: Mock
 
   beforeEach(() => {
-    onPressSpy = jest.fn(() => { })
+    onPressSpy = jest.fn(() => {})
     const items = [
       {
         inlineTextWithIcons: [
@@ -38,7 +38,7 @@ context('MessageList', () => {
           [
             {
               leftTextProps: { text: 'test2-sender' },
-              leftIconProps: { name: 'UnreadIcon', width: 16, height: 16 }
+              leftIconProps: { name: 'Unread', width: 16, height: 16 }
             },
             {
               leftTextProps: { text: 'test2-subject-line' },
@@ -67,7 +67,7 @@ context('MessageList', () => {
 
     component = render(<MessageList items={items} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
@@ -89,7 +89,7 @@ context('MessageList', () => {
   })
 
   it('should render the VAIcon components for unread item with attachment', async () => {
-    expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('UnreadIcon')
+    expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Unread')
     expect(testInstance.findAllByType(VAIcon)[1].props.name).toEqual('PaperClip')
   })
 })

@@ -2,6 +2,8 @@
  * This file holds official VA Color palette, found here: https://design.va.gov/design/color-palette
  */
 export default {
+  // Transparent
+  transparent: 'transparent',
   // base colors
   base: '#212121',
   white: '#ffffff',

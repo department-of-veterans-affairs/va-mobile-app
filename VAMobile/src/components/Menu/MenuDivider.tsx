@@ -18,5 +18,6 @@ export const MenuDivider = ({ color = theme.colors.border.menuDivider }: MenuDiv
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: color,
   }
+  //@ts-ignore
   return <View {...dividerStyleProps} />
 }

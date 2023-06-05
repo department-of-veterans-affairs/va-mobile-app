@@ -25,6 +25,10 @@ context('PastAppointmentDetails', () => {
   let testInstance: ReactTestInstance
   let props: any
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+  
   const runAfterTransition = (testToRun: () => void) => {
     InteractionManager.runAfterInteractions(() => {
       testToRun()
@@ -76,7 +80,7 @@ context('PastAppointmentDetails', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {

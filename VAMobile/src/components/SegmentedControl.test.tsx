@@ -18,7 +18,7 @@ context('SegmentedControl', () => {
 
     component = render(<SegmentedControl values={['0', '1']} titles={['tab0', 'tab1']} onChange={onChangeSpy} selected={0} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

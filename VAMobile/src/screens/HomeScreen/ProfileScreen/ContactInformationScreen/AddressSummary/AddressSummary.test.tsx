@@ -19,7 +19,7 @@ const initializeWithUpdatedData = (component: RenderAPI, profile: UserDataProfil
     },
   })
 
-  return component.container
+  return component.UNSAFE_root
 }
 
 context('AddressSummary', () => {
@@ -112,7 +112,7 @@ context('AddressSummary', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

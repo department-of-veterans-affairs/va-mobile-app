@@ -3,6 +3,7 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
+import { screen, fireEvent } from '@testing-library/react-native'
 
 import * as api from 'store/api'
 import { context, mockNavProps, render, RenderAPI, waitFor, when } from 'testUtils'
@@ -44,7 +45,7 @@ context('SecureMessaging', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -103,7 +104,8 @@ context('SecureMessaging', () => {
   describe('on click of a segmented control tab', () => {
     it('should call updateSecureMessagingTab', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(TouchableOpacity)[0].props.onPress()
+        initializeTestInstance()
+        fireEvent.press(screen.getByText('Folders'))
       })
 
       expect(updateSecureMessagingTab).toHaveBeenCalled()

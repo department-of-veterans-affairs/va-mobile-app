@@ -16,7 +16,7 @@ context('TextArea', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
     component = render(<TextArea onPress={onPressSpy} />)
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
@@ -39,7 +39,7 @@ context('TextArea', () => {
   describe('when onPress does not exist', () => {
     it('should not render a TouchableWithoutFeedback', async () => {
       component = render(<TextArea />)
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
       expect(testInstance.findAllByType(TouchableWithoutFeedback).length).toEqual(0)
     })
   })

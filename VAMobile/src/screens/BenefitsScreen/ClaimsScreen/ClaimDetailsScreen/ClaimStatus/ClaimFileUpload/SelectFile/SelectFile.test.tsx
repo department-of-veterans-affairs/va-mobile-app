@@ -40,11 +40,11 @@ context('SelectFile', () => {
   }
 
   const initializeTestInstance = () => {
-    props = mockNavProps(undefined, {addListener: jest.fn(), setOptions: jest.fn() }, { params: { request } })
+    props = mockNavProps(undefined, { addListener: jest.fn(), setOptions: jest.fn() }, { params: { request } })
 
     component = render(<SelectFile {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
