@@ -21,7 +21,7 @@ context('ClaimTimeline', () => {
 
     component = render(<ClaimTimeline {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   // make sure the component works

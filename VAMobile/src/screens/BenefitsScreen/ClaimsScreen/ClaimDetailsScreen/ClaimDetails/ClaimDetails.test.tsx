@@ -64,7 +64,7 @@ context('ClaimDetails', () => {
 
     component = render(<ClaimDetails {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

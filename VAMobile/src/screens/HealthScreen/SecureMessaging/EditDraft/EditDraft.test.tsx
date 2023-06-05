@@ -5,10 +5,10 @@ import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import EditDraft from './EditDraft'
-import { Pressable, TouchableWithoutFeedback } from 'react-native'
-import { AlertBox, ErrorComponent, LoadingComponent, TextView, VATextInput } from 'components'
+import { TouchableWithoutFeedback } from 'react-native'
+import { AlertBox, ErrorComponent, LoadingComponent, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState, updateSecureMessagingTab } from 'store/slices'
 import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -17,12 +17,8 @@ import { when } from 'jest-when'
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -75,6 +71,15 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
     useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
     useGoToDrafts: () => mockUseGoToDraftSpy,
   }
+})
+
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native')
+  RN.InteractionManager.runAfterInteractions = (callback: () => void) => {
+    callback()
+  }
+
+  return RN
 })
 
 // Contains message Ids grouped together by thread
@@ -146,6 +151,7 @@ context('EditDraft', () => {
   let navigateToVeteransCrisisLineSpy: jest.Mock
   let navigateToAddToFilesSpy: jest.Mock
   let navigateToAttachAFileSpy: jest.Mock
+  let navigateToReplyHelpSpy: jest.Mock
 
   const initializeTestInstance = ({
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
@@ -161,6 +167,7 @@ context('EditDraft', () => {
     navigateToVeteransCrisisLineSpy = jest.fn()
     navigateToAddToFilesSpy = jest.fn()
     navigateToAttachAFileSpy = jest.fn()
+    navigateToReplyHelpSpy = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -172,6 +179,8 @@ context('EditDraft', () => {
       .mockReturnValue(navigateToAddToFilesSpy)
       .calledWith('AttachmentsFAQ', { originHeader: 'Edit Draft' })
       .mockReturnValue(navigateToAttachAFileSpy)
+      .calledWith('ReplyHelp')
+      .mockReturnValue(navigateToReplyHelpSpy)
 
     props = mockNavProps(
       undefined,
@@ -230,7 +239,7 @@ context('EditDraft', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -297,18 +306,11 @@ context('EditDraft', () => {
   })
 
   describe('on click of the collapsible view', () => {
-    it('should display the when will i get a reply children text', async () => {
+    it('should show the Reply Help panel', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[1].props.onPress()
+        testInstance.findByProps({ accessibilityLabel: 'Only use messages for non-urgent needs' }).props.onPress()
       })
-
-      expect(
-        findByTypeWithText(
-          testInstance,
-          TextView,
-          'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
-        ),
-      ).toBeTruthy()
+      expect(navigateToReplyHelpSpy).toHaveBeenCalled()
     })
   })
 

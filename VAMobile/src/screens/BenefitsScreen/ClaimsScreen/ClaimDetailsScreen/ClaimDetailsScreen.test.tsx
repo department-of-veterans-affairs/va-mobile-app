@@ -1,5 +1,6 @@
 import 'react-native'
 import React from 'react'
+import { fireEvent, screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, render, RenderAPI, waitFor, when } from 'testUtils'
@@ -67,7 +68,7 @@ context('ClaimDetailsScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('should initialize', async () => {
@@ -116,6 +117,7 @@ context('ClaimDetailsScreen', () => {
       await waitFor(() => {
         testInstance.findByType(SegmentedControl).props.onChange('Details')
       })
+      fireEvent.press(screen.getByText('Details'))
       expect(testInstance.findAllByType(ClaimDetails).length).toEqual(1)
     })
   })

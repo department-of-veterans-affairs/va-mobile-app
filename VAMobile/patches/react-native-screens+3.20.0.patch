@@ -1,0 +1,22 @@
+diff --git a/node_modules/react-native-screens/lib/typescript/types.d.ts b/node_modules/react-native-screens/lib/typescript/types.d.ts
+index bcfb012..0863ba0 100644
+--- a/node_modules/react-native-screens/lib/typescript/types.d.ts
++++ b/node_modules/react-native-screens/lib/typescript/types.d.ts
+@@ -18,9 +18,15 @@ export type GestureResponseDistanceType = {
+     top?: number;
+     bottom?: number;
+ };
++
++// Animated.AnimatedInterpolation has been converted to a generic type
++// in @types/react-native 0.70. This way we can maintain compatibility
++// with all versions of @types/react-native`
++type AnimatedInterpolation = ReturnType<Animated.Value['interpolate']>;
++
+ export interface ScreenProps extends ViewProps {
+-    active?: 0 | 1 | Animated.AnimatedInterpolation;
+-    activityState?: 0 | 1 | 2 | Animated.AnimatedInterpolation;
++    active?: 0 | 1 | AnimatedInterpolation;
++    activityState?: 0 | 1 | 2 | AnimatedInterpolation;
+     children?: React.ReactNode;
+     /**
+      * Boolean indicating that swipe dismissal should trigger animation provided by `stackAnimation`. Defaults to `false`.
