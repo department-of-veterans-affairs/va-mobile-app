@@ -21,7 +21,7 @@ context('BackButton', () => {
 
     component = render(<BackButton onPress={onPressSpy} label={label || BackButtonLabelConstants.back} canGoBack={canGoBack} showCarat={showCarat} a11yHint={a11yHint} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -36,7 +36,7 @@ context('BackButton', () => {
     it('should return null', async () => {
       initializeTestInstance(false)
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
       expect(component.toJSON()).toBeFalsy()
     })
   })

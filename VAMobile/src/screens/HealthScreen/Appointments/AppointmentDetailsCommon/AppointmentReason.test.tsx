@@ -7,8 +7,7 @@ import { context, render, RenderAPI } from 'testUtils'
 import { InitialState } from 'store/slices'
 import { TextView } from 'components'
 import AppointmentReason from './AppointmentReason'
-import { AppointmentType } from 'store/api'
-import { AppointmentTypeConstants, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
+import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 
 context('AppointmentReason', () => {
   let component: RenderAPI
@@ -19,7 +18,7 @@ context('AppointmentReason', () => {
   const initializeTestInstance = (isPendingAppointment?: boolean, reason?: string): void => {
     props = {
       attributes: {
-        status: !!isPendingAppointment ?  AppointmentStatusConstants.SUBMITTED : AppointmentStatusConstants.BOOKED,
+        status: !!isPendingAppointment ? AppointmentStatusConstants.SUBMITTED : AppointmentStatusConstants.BOOKED,
         isPending: !!isPendingAppointment,
         reason: reason || null,
       },
@@ -31,7 +30,7 @@ context('AppointmentReason', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {

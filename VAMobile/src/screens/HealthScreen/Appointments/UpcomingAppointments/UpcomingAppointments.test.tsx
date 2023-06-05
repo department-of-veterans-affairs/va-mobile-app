@@ -8,19 +8,15 @@ import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI } fro
 import UpcomingAppointments from './UpcomingAppointments'
 import NoAppointments from '../NoAppointments'
 import { initialAppointmentsState, InitialState, getAppointmentsInDateRange } from 'store/slices'
-import {AppointmentsGroupedByYear, AppointmentStatusConstants} from 'store/api/types'
+import { AppointmentsGroupedByYear, AppointmentStatusConstants } from 'store/api/types'
 import { LoadingComponent, TextView } from 'components'
 import { defaultAppoinment, defaultAppointmentAttributes, defaultAppointmentLocation, defaultAppointmentAddress, defaultAppointmentPhone } from 'utils/tests/appointments'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual('../../../../utils/hooks')
-  let theme = jest.requireActual('../../../../styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -135,7 +131,7 @@ context('UpcomingAppointments', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -163,7 +159,7 @@ context('UpcomingAppointments', () => {
   describe('on appointment press', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalledWith('UpcomingAppointmentDetails', {'appointmentID': '1'})
+      expect(mockNavigationSpy).toHaveBeenCalledWith('UpcomingAppointmentDetails', { appointmentID: '1' })
       expect(navigateToSpy).toHaveBeenCalled()
     })
   })

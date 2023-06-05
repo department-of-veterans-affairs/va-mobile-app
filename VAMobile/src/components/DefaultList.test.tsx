@@ -22,7 +22,7 @@ context('DefaultList', () => {
 
     component = render(<DefaultList items={items} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

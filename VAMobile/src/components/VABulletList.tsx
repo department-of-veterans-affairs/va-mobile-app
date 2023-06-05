@@ -20,6 +20,9 @@ export type VABulletListText = {
   /** optional parameter that if exists, will make the text a link */
   linkToRedirect?: string
 
+  /** optional parameter to display given bolded text before main text */
+  boldedTextPrefix?: string
+
   /** optional parameter to display given bolded text after main text */
   boldedText?: string
 
@@ -70,7 +73,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }, paragraphSpacing) =
   return (
     <Box mb={paragraphSpacing ? theme.paragraphSpacing.spacing20FontSize : undefined}>
       {_.map(getUpdatedListOfText(), (textItem, index) => {
-        const { variant, color, linkToRedirect, text, boldedText, a11yLabel } = textItem
+        const { variant, color, linkToRedirect, text, boldedTextPrefix, boldedText, a11yLabel } = textItem
 
         const textViewProps: TextViewProps = {
           variant: variant || 'MobileBody',
@@ -86,6 +89,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }, paragraphSpacing) =
               <VAIcon name="Bullet" fill={color || 'bodyText'} height={6} width={6} />
             </Box>
             <TextView {...textViewProps} {...testIdProps(a11yLabel || text)}>
+              {!!boldedTextPrefix && <TextView variant="MobileBodyBold">{boldedTextPrefix}</TextView>}
               {text.trim()}
               {!!boldedText && <TextView variant="MobileBodyBold">{boldedText}</TextView>}
             </TextView>

@@ -16,7 +16,7 @@ context('NoClaimsAndAppealsAccess', () => {
   beforeEach(() => {
     component = render(<NoClaimsAndAppealsAccess />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

@@ -10,7 +10,6 @@ import { GeneralHelpScreen, SubTypeHelpScreen, TypeOfCareNotListedHelpScreen } f
 import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import Attachments from './SecureMessaging/StartNewMessage/Attachments/Attachments'
-import AttachmentsFAQ from './SecureMessaging/StartNewMessage/AttachmentsFAQ/AttachmentsFAQ'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
 import NoRequestAppointmentAccess from './Appointments/RequestAppointments/NoRequestAppointmentAccess/NoRequestAppointmentAccess'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
@@ -18,6 +17,7 @@ import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
 import RefillRequestSummary from './Pharmacy/RefillScreens/RefillRequestSummary'
 import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
 import RefillTrackingModal from './Pharmacy/RefillTrackingDetails/RefillTrackingDetails'
+import ReplyHelp from './SecureMessaging/ReplyHelp/ReplyHelp'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import RequestAppointmentScreen from './Appointments/RequestAppointments/RequestAppointmentScreen'
 import SessionNotStarted from './Appointments/UpcomingAppointments/SessionNotStarted'
@@ -77,14 +77,12 @@ export type HealthStackParamList = WebviewStackParams & {
     attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse>
     messageID?: number
   }
-  AttachmentsFAQ: {
-    originHeader: string
-  }
   RemoveAttachment: {
     origin: FormHeaderType
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
     messageID?: number
   }
+  ReplyHelp: undefined
   SendConfirmation: {
     originHeader: string
     messageData: SecureMessagingFormData
@@ -134,7 +132,7 @@ export const getHealthScreens = (t: TFunction) => {
     <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} options={LARGE_PANEL_OPTIONS} />,
+    <HealthStack.Screen key={'ReplyHelp'} name="ReplyHelp" component={ReplyHelp} options={LARGE_PANEL_OPTIONS} />,
     <HealthStack.Screen key={'NoRequestAppointmentAccess'} name="NoRequestAppointmentAccess" component={NoRequestAppointmentAccess} options={{ headerShown: false }} />,
     <HealthStack.Group
       key={'ModalsScreens'}

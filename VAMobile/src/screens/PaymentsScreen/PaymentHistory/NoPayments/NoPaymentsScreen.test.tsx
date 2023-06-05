@@ -13,7 +13,7 @@ context('NoPaymentsScreen', () => {
   beforeEach(() => {
     component = render(<NoPaymentsScreen />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

@@ -5,7 +5,7 @@ import { render, context, RenderAPI, waitFor, mockNavProps } from 'testUtils'
 
 import * as api from 'store/api'
 import RefillTrackingDetails from './RefillTrackingDetails'
-import {ReactTestInstance} from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 import { ErrorsState, initialErrorsState } from 'store/slices'
 import { RootState } from 'store'
 import { ErrorComponent, TextView } from 'components'
@@ -25,19 +25,23 @@ context('RefillTrackingDetails', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (errorState?: Partial<ErrorsState>, paramPrescription?: PrescriptionData) => {
-    const props = mockNavProps({}, {
-      setOptions: jest.fn(),
-      navigate: jest.fn()
-    }, { params: { prescription:  paramPrescription ? paramPrescription : mockData[0] } })
+    const props = mockNavProps(
+      {},
+      {
+        setOptions: jest.fn(),
+        navigate: jest.fn(),
+      },
+      { params: { prescription: paramPrescription ? paramPrescription : mockData[0] } },
+    )
     const store: Partial<RootState> = {
       errors: {
         ...initialErrorsState,
         ...errorState,
-      }
+      },
     }
 
-    component = render(<RefillTrackingDetails {...props} />, {preloadedState: store})
-    testInstance = component.container
+    component = render(<RefillTrackingDetails {...props} />, { preloadedState: store })
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
@@ -50,8 +54,8 @@ context('RefillTrackingDetails', () => {
   describe('when there is no data provided', () => {
     it('should show None Noted for applicable properties', async () => {
       when(api.get as jest.Mock)
-      .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
-      .mockResolvedValue({ data: emptyTrackingMockData })
+        .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
+        .mockResolvedValue({ data: emptyTrackingMockData })
 
       await waitFor(() => {
         initializeTestInstance(undefined, emptyMockData[0] as PrescriptionData)
@@ -64,7 +68,7 @@ context('RefillTrackingDetails', () => {
       expect(texts[3].props.children).toEqual('Rx #: None noted')
 
       // Disclaimer
-      expect(texts[4].props.children).toEqual('We share tracking information here for up to 15 days, even if you\'ve received your prescription.')
+      expect(texts[4].props.children).toEqual("We share tracking information here for up to 15 days, even if you've received your prescription.")
 
       // Tracking Information
       expect(texts[5].props.children).toEqual('Tracking number')
@@ -79,10 +83,10 @@ context('RefillTrackingDetails', () => {
   })
 
   describe('when there are one tracking for a prescription', () => {
-    it('should show tracking information', async  () => {
+    it('should show tracking information', async () => {
       when(api.get as jest.Mock)
-      .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
-      .mockResolvedValue({ data: [multipleTrackingInfoData[0]] })
+        .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
+        .mockResolvedValue({ data: [multipleTrackingInfoData[0]] })
 
       await waitFor(() => {
         initializeTestInstance(undefined, mockData[0] as PrescriptionData)
@@ -95,7 +99,7 @@ context('RefillTrackingDetails', () => {
       expect(texts[3].props.children).toEqual('Rx #: 3636691')
 
       // Disclaimer
-      expect(texts[4].props.children).toEqual('We share tracking information here for up to 15 days, even if you\'ve received your prescription.')
+      expect(texts[4].props.children).toEqual("We share tracking information here for up to 15 days, even if you've received your prescription.")
 
       // Tracking Information
       expect(texts[5].props.children).toEqual('Tracking number')
@@ -112,10 +116,10 @@ context('RefillTrackingDetails', () => {
   })
 
   describe('when there are multiple tracking for a prescription', () => {
-    it('should show information for each tracking with "x of total" header ', async  () => {
+    it('should show information for each tracking with "x of total" header ', async () => {
       when(api.get as jest.Mock)
-      .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
-      .mockResolvedValue({ data: multipleTrackingInfoData })
+        .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
+        .mockResolvedValue({ data: multipleTrackingInfoData })
 
       await waitFor(() => {
         initializeTestInstance(undefined, mockData[0] as PrescriptionData)
@@ -128,7 +132,7 @@ context('RefillTrackingDetails', () => {
       expect(texts[3].props.children).toEqual('Rx #: 3636691')
 
       // Disclaimer
-      expect(texts[4].props.children).toEqual('We share tracking information here for up to 15 days, even if you\'ve received your prescription.')
+      expect(texts[4].props.children).toEqual("We share tracking information here for up to 15 days, even if you've received your prescription.")
 
       // Tracking Information #1
       expect(texts[5].props.children).toEqual('Package 1 of 2')
@@ -161,14 +165,14 @@ context('RefillTrackingDetails', () => {
   describe('when there is a downtime message for rx refill', () => {
     it('should show PRESCRIPTION_SCREEN downtime message', async () => {
       await waitFor(() => {
-        initializeTestInstance( {
+        initializeTestInstance({
           downtimeWindowsByFeature: {
             rx_refill: {
               featureName: 'VA Prescriptions',
               startTime: DateTime.now().plus({ days: -1 }),
               endTime: DateTime.now().plus({ days: 1 }),
-            }
-          }
+            },
+          },
         })
       })
 
@@ -181,8 +185,8 @@ context('RefillTrackingDetails', () => {
   describe('when there is an error', () => {
     it('should show PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID error', async () => {
       when(api.get as jest.Mock)
-      .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
-      .mockRejectedValue({ networkError: 500})
+        .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
+        .mockRejectedValue({ networkError: 500 })
       await waitFor(() => {
         initializeTestInstance()
       })

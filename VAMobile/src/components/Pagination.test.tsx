@@ -14,7 +14,7 @@ context('Pagination', () => {
   const initializeTestInstance = (paginationProps: PaginationProps): void => {
     component = render(<Pagination {...paginationProps} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
