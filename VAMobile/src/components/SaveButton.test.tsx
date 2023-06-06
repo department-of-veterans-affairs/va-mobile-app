@@ -19,7 +19,7 @@ context('SaveButton', () => {
 
     component = render(<SaveButton onSave={onSaveSpy} disabled={false} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

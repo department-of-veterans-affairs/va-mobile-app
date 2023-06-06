@@ -1,14 +1,14 @@
 import 'react-native'
-import {Pressable, Switch as RNSwitch} from 'react-native'
+import { Pressable, Switch as RNSwitch } from 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import {context, findByOnPressFunction, findByTypeWithText, render, RenderAPI, waitFor} from 'testUtils'
-import RadioGroupModal, {RadioGroupModalProps, RadioPickerGroup} from "./RadioGroupModal";
-import {TextView} from "./index";
+import { context, findByOnPressFunction, findByTypeWithText, render, RenderAPI, waitFor } from 'testUtils'
+import RadioGroupModal, { RadioGroupModalProps, RadioPickerGroup } from './RadioGroupModal'
+import { TextView } from './index'
 
 context('RadioGroupModal', () => {
   let component: RenderAPI
@@ -41,7 +41,7 @@ context('RadioGroupModal', () => {
     }
 
     component = render(<RadioGroupModal {...modalProps} />)
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
@@ -52,7 +52,7 @@ context('RadioGroupModal', () => {
     expect(findByTypeWithText(testInstance, TextView, 'modal button')).toBeTruthy()
     expect(findByOnPressFunction(testInstance, Pressable, 'showModal')).toBeTruthy()
   })
-  
+
   // TODO: Issue 4283 should ensure these 3 unit tests are fixed
   // it('should have a functional upper right button', async () => {
   //   expect(findByTypeWithText(testInstance, TextView, 'reset')).toBeTruthy()

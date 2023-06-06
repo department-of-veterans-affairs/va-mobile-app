@@ -1,0 +1,186 @@
+diff --git a/node_modules/@react-navigation/stack/lib/typescript/src/types.d.ts b/node_modules/@react-navigation/stack/lib/typescript/src/types.d.ts
+index 48c62f9..498df8c 100644
+--- a/node_modules/@react-navigation/stack/lib/typescript/src/types.d.ts
++++ b/node_modules/@react-navigation/stack/lib/typescript/src/types.d.ts
+@@ -2,6 +2,12 @@ import type { HeaderBackButton, HeaderBackButtonProps, HeaderOptions, HeaderTitl
+ import type { Descriptor, NavigationHelpers, NavigationProp, ParamListBase, Route, RouteProp, StackActionHelpers, StackNavigationState } from '@react-navigation/native';
+ import type * as React from 'react';
+ import type { Animated, StyleProp, TextStyle, ViewStyle } from 'react-native';
++
++// Animated.AnimatedInterpolation has been converted to a generic type
++// in @types/react-native 0.70. This way we can maintain compatibility
++// with all versions of @types/react-native`
++type AnimatedInterpolation = ReturnType<Animated.Value['interpolate']>;
++
+ export declare type StackNavigationEventMap = {
+     /**
+      * Event which fires when a transition animation starts.
+@@ -75,17 +81,17 @@ export declare type SceneProgress = {
+     /**
+      * Progress value of the current screen.
+      */
+-    current: Animated.AnimatedInterpolation;
++    current: AnimatedInterpolation;
+     /**
+      * Progress value for the screen after this one in the stack.
+      * This can be `undefined` in case the screen animating is the last one.
+      */
+-    next?: Animated.AnimatedInterpolation;
++    next?: AnimatedInterpolation;
+     /**
+      * Progress value for the screen before this one in the stack.
+      * This can be `undefined` in case the screen animating is the first one.
+      */
+-    previous?: Animated.AnimatedInterpolation;
++    previous?: AnimatedInterpolation;
+ };
+ export declare type StackHeaderMode = 'float' | 'screen';
+ export declare type StackPresentationMode = 'card' | 'modal';
+@@ -307,7 +313,7 @@ export declare type StackCardInterpolationProps = {
+         /**
+          * Animated node representing the progress value of the current screen.
+          */
+-        progress: Animated.AnimatedInterpolation;
++        progress: AnimatedInterpolation;
+     };
+     /**
+      * Values for the screen after this one in the stack.
+@@ -317,7 +323,7 @@ export declare type StackCardInterpolationProps = {
+         /**
+          * Animated node representing the progress value of the next screen.
+          */
+-        progress: Animated.AnimatedInterpolation;
++        progress: AnimatedInterpolation;
+     };
+     /**
+      * The index of the card with this interpolation in the stack.
+@@ -326,15 +332,15 @@ export declare type StackCardInterpolationProps = {
+     /**
+      * Animated node representing whether the card is closing (1 - closing, 0 - not closing).
+      */
+-    closing: Animated.AnimatedInterpolation;
++    closing: AnimatedInterpolation;
+     /**
+      * Animated node representing whether the card is being swiped (1 - swiping, 0 - not swiping).
+      */
+-    swiping: Animated.AnimatedInterpolation;
++    swiping: AnimatedInterpolation;
+     /**
+      * Animated node representing multiplier when direction is inverted (-1 - inverted, 1 - normal).
+      */
+-    inverted: Animated.AnimatedInterpolation;
++    inverted: AnimatedInterpolation;
+     /**
+      * Layout measurements for various items we use for animation.
+      */
+@@ -381,7 +387,7 @@ export declare type StackHeaderInterpolationProps = {
+         /**
+          * Animated node representing the progress value of the current screen.
+          */
+-        progress: Animated.AnimatedInterpolation;
++        progress: AnimatedInterpolation;
+     };
+     /**
+      * Values for the screen after this one in the stack.
+@@ -391,7 +397,7 @@ export declare type StackHeaderInterpolationProps = {
+         /**
+          * Animated node representing the progress value of the next screen.
+          */
+-        progress: Animated.AnimatedInterpolation;
++        progress: AnimatedInterpolation;
+     };
+     /**
+      * Layout measurements for various items we use for animation.
+diff --git a/node_modules/@react-navigation/stack/src/types.tsx b/node_modules/@react-navigation/stack/src/types.tsx
+index 5bafc6e..cd2b8e7 100644
+--- a/node_modules/@react-navigation/stack/src/types.tsx
++++ b/node_modules/@react-navigation/stack/src/types.tsx
+@@ -40,6 +40,12 @@ export type StackNavigationEventMap = {
+   gestureCancel: { data: undefined };
+ };
+ 
++// Animated.AnimatedInterpolation has been converted to a generic type
++// in @types/react-native 0.70. This way we can maintain compatibility
++// with all versions of @types/react-native`
++type AnimatedInterpolation = ReturnType<Animated.Value['interpolate']>;
++
++
+ export type StackNavigationHelpers = NavigationHelpers<
+   ParamListBase,
+   StackNavigationEventMap
+@@ -103,17 +109,17 @@ export type SceneProgress = {
+   /**
+    * Progress value of the current screen.
+    */
+-  current: Animated.AnimatedInterpolation;
++  current: AnimatedInterpolation;
+   /**
+    * Progress value for the screen after this one in the stack.
+    * This can be `undefined` in case the screen animating is the last one.
+    */
+-  next?: Animated.AnimatedInterpolation;
++  next?: AnimatedInterpolation;
+   /**
+    * Progress value for the screen before this one in the stack.
+    * This can be `undefined` in case the screen animating is the first one.
+    */
+-  previous?: Animated.AnimatedInterpolation;
++  previous?: AnimatedInterpolation;
+ };
+ 
+ export type StackHeaderMode = 'float' | 'screen';
+@@ -361,7 +367,7 @@ export type StackCardInterpolationProps = {
+     /**
+      * Animated node representing the progress value of the current screen.
+      */
+-    progress: Animated.AnimatedInterpolation;
++    progress: AnimatedInterpolation;
+   };
+   /**
+    * Values for the screen after this one in the stack.
+@@ -371,7 +377,7 @@ export type StackCardInterpolationProps = {
+     /**
+      * Animated node representing the progress value of the next screen.
+      */
+-    progress: Animated.AnimatedInterpolation;
++    progress: AnimatedInterpolation;
+   };
+   /**
+    * The index of the card with this interpolation in the stack.
+@@ -380,15 +386,15 @@ export type StackCardInterpolationProps = {
+   /**
+    * Animated node representing whether the card is closing (1 - closing, 0 - not closing).
+    */
+-  closing: Animated.AnimatedInterpolation;
++  closing: AnimatedInterpolation;
+   /**
+    * Animated node representing whether the card is being swiped (1 - swiping, 0 - not swiping).
+    */
+-  swiping: Animated.AnimatedInterpolation;
++  swiping: AnimatedInterpolation;
+   /**
+    * Animated node representing multiplier when direction is inverted (-1 - inverted, 1 - normal).
+    */
+-  inverted: Animated.AnimatedInterpolation;
++  inverted: AnimatedInterpolation;
+   /**
+    * Layout measurements for various items we use for animation.
+    */
+@@ -440,7 +446,7 @@ export type StackHeaderInterpolationProps = {
+     /**
+      * Animated node representing the progress value of the current screen.
+      */
+-    progress: Animated.AnimatedInterpolation;
++    progress: AnimatedInterpolation;
+   };
+   /**
+    * Values for the screen after this one in the stack.
+@@ -450,7 +456,7 @@ export type StackHeaderInterpolationProps = {
+     /**
+      * Animated node representing the progress value of the next screen.
+      */
+-    progress: Animated.AnimatedInterpolation;
++    progress: AnimatedInterpolation;
+   };
+   /**
+    * Layout measurements for various items we use for animation.

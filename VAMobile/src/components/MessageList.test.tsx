@@ -17,7 +17,7 @@ context('MessageList', () => {
   let onPressSpy: Mock
 
   beforeEach(() => {
-    onPressSpy = jest.fn(() => { })
+    onPressSpy = jest.fn(() => {})
     const items = [
       {
         inlineTextWithIcons: [
@@ -67,7 +67,7 @@ context('MessageList', () => {
 
     component = render(<MessageList items={items} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
