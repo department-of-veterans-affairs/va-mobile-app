@@ -2,29 +2,36 @@ name: Feature Request
 description: Use this template to formally request a feature for the VA Mobile App team to evaluate.
 title: "Feature Request: [name of feature]"
 labels: [ feature-request ]
-assignees: timwright12
+assignees: [ timwright12, Hallm13 ]
 body:
 - type: input
   id: fullname
   attributes:
     label: Full Name
     description: Add your full name here
-    placeholder: Alex Smith
+    placeholder: Example Name
   validations:
     required: true
 - type: input
   id: email
   attributes:
     label: Email
-    description: Your email address so we can contact you about this feature.
-    placeholder: 'example.alex.smith@va.gov'
+    description: Your email address so we can contact you with any follow-up questions.
+    placeholder: 'example@va.gov'
+  validations:
+    required: true
+- type: input
+  id: featurelabel
+  attributes:
+    label: What would you like to add as a new feature?
+    description: Give us a short name or description for this feature, so we know what to call it.
   validations:
     required: true
 - type: textarea
   id: description
   attributes:
-    label: Description
-    description: Please describe the feature you are requesting
+    label: Please explain how it would work.
+    description: Giving us an explanation of how you feel this feature should work will help us better in planning and scoping the request.
   validations:
     required: true
 
