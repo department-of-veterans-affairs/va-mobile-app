@@ -119,7 +119,7 @@
         "contentionList": [
           "Low back strain (New)"
         ],
-        "vaRepresentative": null,
+        "vaRepresentative": "Contact your VA regional office for more information.",
         "eventsTimeline": [
           {
             "type": "never_received_from_you_list",
@@ -487,7 +487,7 @@
           "Hearing loss (New)",
           " ringing in ears (New)"
         ],
-        "vaRepresentative": null,
+        "vaRepresentative": "Contact your VA regional office for more information.",
         "eventsTimeline": [
           {
             "type": "phase7",
@@ -709,7 +709,7 @@
           "hearing loss (Increase)",
           " kidney removal of (New)"
         ],
-        "vaRepresentative": "PATRICIA E ROBERTS",
+        "vaRepresentative": "Contact your VA regional office for more information.",
         "eventsTimeline": [
           {
             "trackedItemId": null,
@@ -1833,7 +1833,7 @@
         "requestedDecision": false,
         "claimType": "Dependency",
         "contentionList": [],
-        "vaRepresentative": "PATRICIA E ROBERTS",
+        "vaRepresentative": null,
         "eventsTimeline": [
           {
             "type": "phase1",
