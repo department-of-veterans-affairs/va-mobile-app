@@ -21,7 +21,7 @@ context('BasicError', () => {
       component = render(<BasicError onTryAgain={onTryAgainSpy} messageText={'message body'} />)
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

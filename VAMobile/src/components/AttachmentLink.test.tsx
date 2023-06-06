@@ -17,8 +17,8 @@ context('AttachmentLink', () => {
 
   const initializeTestInstance = () => {
     onPressSpy = jest.fn(() => {})
-    component = render(<AttachmentLink name={'Test.png'} formattedSize={'(234 KB)'} onPress={onPressSpy}/>)
-    testInstance = component.container
+    component = render(<AttachmentLink name={'Test.png'} formattedSize={'(234 KB)'} onPress={onPressSpy} />)
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

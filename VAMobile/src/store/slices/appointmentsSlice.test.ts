@@ -262,6 +262,11 @@ export const canceledAppointmentList: AppointmentsList = [
 ]
 
 context('appointments', () => {
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+  
   describe('getAppointmentsInDateRange', () => {
     it('should dispatch the correct actions', async () => {
       const startDate = '2021-02-06T04:30:00.000+00:00'

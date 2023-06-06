@@ -16,9 +16,6 @@ jest.mock('utils/hooks', () => {
   return {
     ...original,
     useExternalLink: () => mockExternalLinkSpy,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
   }
 })
 
@@ -29,7 +26,7 @@ context('PrescriptionHistoryNotAuthorized', () => {
   beforeEach(() => {
     component = render(<PrescriptionHistoryNotAuthorized />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

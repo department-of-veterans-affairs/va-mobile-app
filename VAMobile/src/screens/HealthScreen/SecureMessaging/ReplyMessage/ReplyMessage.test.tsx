@@ -1,5 +1,6 @@
 import 'react-native'
 import React from 'react'
+import { fireEvent, screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
@@ -18,12 +19,8 @@ import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -40,6 +37,24 @@ jest.mock('store/slices', () => {
         payload: '',
       }
     }),
+  }
+})
+
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native')
+  RN.InteractionManager.runAfterInteractions = (callback: () => void) => {
+    callback()
+  }
+
+  return RN
+})
+
+let mockUseComposeCancelConfirmationSpy = jest.fn()
+jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
+  let original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
   }
 })
 
@@ -107,15 +122,6 @@ const mockMessagesById: SecureMessagingMessageMap = {
   },
 }
 
-let mockUseComposeCancelConfirmationSpy = jest.fn()
-jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
-  let original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
-  }
-})
-
 context('ReplyMessage', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
@@ -182,7 +188,7 @@ context('ReplyMessage', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -205,6 +211,7 @@ context('ReplyMessage', () => {
   })
 
   describe('on click of the collapsible view', () => {
+
     it('should show the Reply Help panel', async () => {
       await waitFor(() => {
         testInstance.findByProps({ accessibilityLabel: 'Only use messages for non-urgent needs' }).props.onPress()
@@ -215,8 +222,7 @@ context('ReplyMessage', () => {
 
   it('should add the text (*Required) for the message body text field', async () => {
     await waitFor(() => {
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[13].props.children).toEqual(['Message', ' ', '(Required)'])
+      expect(screen.getByText('Message (Required)')).toBeTruthy()
     })
   })
 
@@ -316,7 +322,7 @@ context('ReplyMessage', () => {
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance({}, [], true)
+      initializeTestInstance(mockMessagesById, [], true)
       await waitFor(() => {
         expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
       })

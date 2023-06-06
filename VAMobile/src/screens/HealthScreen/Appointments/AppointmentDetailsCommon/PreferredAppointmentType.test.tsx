@@ -16,12 +16,12 @@ context('PreferredAppointmentType', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (appointmentType: AppointmentType, phoneOnly: boolean = false): void => {
-    props ={
+    props = {
       ...defaultAppointmentAttributes,
       appointmentType,
       phoneOnly,
       isPending: true,
-      status: AppointmentStatusConstants.SUBMITTED
+      status: AppointmentStatusConstants.SUBMITTED,
     }
 
     component = render(<PreferredAppointmentType attributes={props} />, {
@@ -30,7 +30,7 @@ context('PreferredAppointmentType', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {

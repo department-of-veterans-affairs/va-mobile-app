@@ -40,7 +40,7 @@ context('AppointmentCancellationInfo', () => {
 
     component = render(<AppointmentCancellationInfo appointment={mockAppointment} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
