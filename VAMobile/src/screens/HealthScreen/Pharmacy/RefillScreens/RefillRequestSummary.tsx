@@ -90,7 +90,8 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
               <VAButton
                 onPress={() => {
                   dispatch(requestRefills(requestFailed))
-                  logAnalyticsEvent(Events.vama_rx_refill_retry())
+                  const prescriptionIds = requestFailed.map((prescription) => prescription.id)
+                  logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
                 }}
                 label={tc('tryAgain')}
                 buttonType="buttonPrimary"
