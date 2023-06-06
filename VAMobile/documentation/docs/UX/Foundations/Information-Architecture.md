@@ -59,7 +59,7 @@ The VA Health and Benefits app’s IA contains four top level categories: Home, 
 
 
 
-## Adding new items to the app’s Information Architecture
+### Adding new items to the app’s Information Architecture
 1. **A feature’s placement within the app’s navigation and taxonomy should take user mental models, business goals, and the feature type into account.** [Determining Navigation and Information Architecture Placement for New VA Mobile App Features](https://docs.google.com/document/d/1XQcYxnCifloaBFNKL2C9JNS7KIj6wEhb4VokPGxBZU8/edit#) is a guide intended to help teams decide where a new feature belongs in this app’s sitemap and navigation model. 
 1. **Always try to find a placement in an existing category first** before proposing a new top-level category for a feature. Confirm new category names and contents with card sort research before adding to the app.
 1. **Within a category, keep the hierarchy as flat as possible** in terms of screens (limit the levels it’s possible to drill down through in order to get to child screens), but without inlcuding too many options on a single screen. 
@@ -67,7 +67,7 @@ The VA Health and Benefits app’s IA contains four top level categories: Home, 
 1. **All features in the VA mobile app should have a primary placement within the app’s taxonomy**, even if there are multiple entry points for it at different locations within the app (example of secondary entry points: personalized home screen content, cross-references within other sections).
 1. **When content outgrows the current category structure, conduct card sort research** to determine new category names and contents (Avoid using “hamburger” and “more” menus as primary navigation).
 
-### Background
+## Background
 The VA Health and Benefits app’s Information Architecture and navigation model are based on the findings and output from a multi-stage, collaborative and cross-functional design and research process: [Information Architecture and Navigation - High Level Project Summary](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/ux-design/information-architecture-navigation/High%20Level%20Project%20Summary.md)
 * [**Phase I:** Two rounds of card sorting](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-research/information-architecture) (open and closed) with Veterans
 * [**Phase II:** Navigation model design exploration](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-design/information-architecture-navigation#phase-ii---navigation-model-exploration--implementation), audit and comparative analysis
