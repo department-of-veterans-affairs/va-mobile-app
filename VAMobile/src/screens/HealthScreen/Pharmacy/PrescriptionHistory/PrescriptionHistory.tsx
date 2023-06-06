@@ -182,8 +182,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   useEffect(() => {
     if (startingTab) {
       onTabChange(startingTab)
+      navigation.setParams({ startingTab: undefined })
     }
-  }, [startingTab])
+  }, [startingTab, navigation])
 
   // scrollViewRef is leveraged by renderPagination to reset scroll position to the top on page change
   const scrollViewRef = useRef<ScrollView | null>(null)
