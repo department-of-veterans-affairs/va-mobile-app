@@ -237,7 +237,6 @@ context('PrescriptionHistory', () => {
     const props = mockNavProps(
       undefined,
       {
-        setParams: jest.fn(),
         setOptions: jest.fn(),
       },
       { params: { startingTab } },
