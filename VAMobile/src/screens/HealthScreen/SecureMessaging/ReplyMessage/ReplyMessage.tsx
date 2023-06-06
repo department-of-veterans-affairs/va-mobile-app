@@ -72,7 +72,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
   const subject = message ? message.subject : ''
-  const category = message ? message.category : 'OTHER'
+  const category = message.category
   // Receiver is the sender of the message user is replying to
   const receiverName = message ? message.senderName : ''
   const receiverID = message?.senderId
@@ -92,7 +92,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     replyCancelConfirmation({
       origin: FormHeaderTypeConstants.reply,
       replyToID: messageID,
-      messageData: { body: messageReply },
+      messageData: { body: messageReply, category },
       isFormValid: true,
     })
   }
@@ -227,7 +227,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const sendReplyOrSaveDraft = (): void => {
     dispatch(resetSendMessageFailed())
-    const messageData = { body: messageReply } as SecureMessagingFormData
+    const messageData = { body: messageReply, category } as SecureMessagingFormData
     if (savedDraftID) {
       messageData.draft_id = savedDraftID
     }

@@ -30,6 +30,7 @@ import {
   SecureMessagingSystemFolderIdConstants,
   SecureMessagingTabTypesConstants,
 } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { InteractionManager, Pressable, ScrollView } from 'react-native'
@@ -52,6 +53,7 @@ import {
 import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject } from 'utils/secureMessaging'
 import { getStartNewMessageSubjectPickerOptions } from 'utils/secureMessaging'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
@@ -109,7 +111,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   })
 
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
-  const [category, setCategory] = useState(message?.category || '')
+  const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
   const [subject, setSubject] = useState(message?.subject || '')
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
   const [body, setBody] = useState(message?.body || '')
@@ -187,7 +189,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   const getMessageData = (): SecureMessagingFormData => {
-    return isReplyDraft ? { body, draft_id: messageID } : { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject, draft_id: messageID }
+    return isReplyDraft ? { body, draft_id: messageID, category } : { recipient_id: parseInt(to, 10), category, body, subject, draft_id: messageID }
   }
 
   const goToCancel = (): void => {
@@ -325,11 +327,12 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const isFormBlank = !(to || category || subject || attachmentsList.length || body)
 
-  const isSetToGeneral = (text: string): boolean => {
+  const isSetToGeneral = (text: CategoryTypes): boolean => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
   }
 
-  const onCategoryChange = (newCategory: string): void => {
+  const onCategoryChange = (newCategory: CategoryTypes): void => {
+    logAnalyticsEvent(Events.vama_sm_change_category(newCategory, category))
     setCategory(newCategory)
 
     // if the category used to be general and now its not, clear field errors because the category line is now
@@ -371,7 +374,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         fieldProps: {
           labelKey: 'health:secureMessaging.startNewMessage.category',
           selectedValue: category,
-          onSelectionChange: onCategoryChange,
+          onSelectionChange: onCategoryChange as () => string,
           pickerOptions: getStartNewMessageSubjectPickerOptions(t),
           includeBlankPlaceholder: true,
           isRequiredField: true,
