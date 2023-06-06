@@ -113,18 +113,26 @@ const call = async function <T>(
     const SISEnabled = featureEnabled('SIS')
 
     try {
+      if (endpoint === '/v0/appointments') {
+        console.log(`making ${method} request for ${endpoint}`)
+      }
       response = await doRequest(method, endpoint, params, contentType, abortSignal)
+      console.log('received response: ', response)
     } catch (networkError) {
       // networkError coming back as `AbortError` means abortController.abort() was called
       // @ts-ignore
+      console.log('doRequest threw an error: ', networkError)
       if (networkError?.name === 'AbortError') {
+        console.log('networkError.name is "AbortError". call() function returning void')
         return
       }
+      console.log('throwing { networkError: true }')
       throw { networkError: true }
     }
 
     // For SIS, a 403 alone doesn't indicate that the token has expired. We also need to check the response body for a specific message.
     if (SISEnabled && response.status === 403) {
+      console.log('received 403 response with SIS enabled. Getting response body')
       responseBody = await response.json()
     }
 
@@ -149,27 +157,38 @@ const call = async function <T>(
           // networkError coming back as `AbortError` means abortController.abort() was called
           // @ts-ignore
           if (networkError?.name === 'AbortError') {
+            console.log('received AbortError when attempting to refresh access token')
             return
           }
+          console.log('throwing { networkError: true } when refreshing access token')
           throw { networkError: true }
         }
       } else {
+        console.log('dispatching logout action')
         _store?.dispatch(logout())
       }
     }
     if (response.status === 204) {
+      console.log('received response status code of ', response.status, '. returning void from call() function')
       return
     }
     if (response.status > 399) {
+      console.log('received response status code of ', response.status)
       // clone response to access the response stream twice
       const clonedResponse = await response.clone()
+      console.log('cloned response')
       const json = await clonedResponse.json()
+      console.log('got json from cloned response')
       const text = await response.text()
+      console.log('got text from cloned response')
+      console.log('call() function going to throw error with: ', { status: response.status, text, json })
 
       throw { status: response.status, text, json }
     }
+    console.log('no errors in call() function. about to return response.json()')
     return await response.json()
   } else {
+    console.log('in demo mode. returning mock instead of making request')
     // we are in demo and need to transform the request from the demo store
     return new Promise((resolve) => {
       setTimeout(async () => {

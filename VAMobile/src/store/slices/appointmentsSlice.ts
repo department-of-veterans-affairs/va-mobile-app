@@ -242,10 +242,13 @@ export const prefetchAppointments =
       let pastAppointments
 
       // use loaded data if we have it
+      console.log('attempting to load past appointments')
       const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, pastPagination, 1, DEFAULT_PAGE_SIZE)
       if (loadedPastAppointments) {
+        console.log('loadedPastAppointments found, using them')
         pastAppointments = loadedPastAppointments
       } else {
+        console.log('loadedPastAppointments not found, fetching instead')
         pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
           startDate: past.startDate,
           endDate: past.endDate,
@@ -257,10 +260,13 @@ export const prefetchAppointments =
       }
 
       // use loaded data if we have it
+      console.log('attempting to load upcoming appointments')
       const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, upcomingPagination, 1, DEFAULT_PAGE_SIZE)
       if (loadedUpcomingAppointments) {
+        console.log('loadedUpcomingAppointments found, using them')
         upcomingAppointments = loadedUpcomingAppointments
       } else {
+        console.log('loadedUpcomingAppointments not found, fetching instead')
         upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
           startDate: upcoming.startDate,
           endDate: upcoming.endDate,
@@ -273,9 +279,13 @@ export const prefetchAppointments =
 
       dispatch(dispatchFinishPrefetchAppointments({ upcoming: upcomingAppointments, past: pastAppointments }))
     } catch (error) {
+      console.log('prefetchAppointments() caught an error:', error)
       if (isErrorObject(error)) {
+        console.log('this is an error object. calling logNonFatalErrorToFirebase')
         logNonFatalErrorToFirebase(error, `prefetchAppointments: ${appointmenNonFatalErrorString}`)
+        console.log('calling dispatchFinishPrefetchAppointments')
         dispatch(dispatchFinishPrefetchAppointments({ upcoming: undefined, past: undefined, error }))
+        console.log('calling dispatchSetError with ', { errorType: CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD, screenID })
         dispatch(dispatchSetError({ errorType: CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD, screenID }))
       }
     }
@@ -416,10 +426,13 @@ const appointmentsSlice = createSlice({
     },
 
     dispatchStartPrefetchAppointments: (state) => {
+      console.log('dispatchStartPrefetchAppointments called. setting state.loading to true')
       state.loading = true
     },
 
     dispatchFinishPrefetchAppointments: (state, action: PayloadAction<{ upcoming?: AppointmentsGetData; past?: AppointmentsGetData; error?: Error }>) => {
+      console.log('dispatchFinishPrefetchAppointments called. setting state.loading to false. state.error is', state.error)
+
       const { upcoming, past, error } = action.payload
       const upcomingAppointments = upcoming?.data || []
       const pastAppointments = past?.data || []

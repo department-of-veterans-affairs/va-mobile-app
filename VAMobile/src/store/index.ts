@@ -51,7 +51,7 @@ const store = configureStore({
     prescriptions: prescriptionsReducer,
     settings: settingsReducer,
   },
-  middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }).concat(logger),
+  middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
   devTools: process.env.NODE_ENV !== 'production',
 })
 
