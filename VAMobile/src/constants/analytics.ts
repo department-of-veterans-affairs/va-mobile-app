@@ -291,11 +291,11 @@ export const Events = {
       },
     }
   },
-  vama_rx_details: (rx_ids: string): Event => {
+  vama_rx_details: (rx_id: string): Event => {
     return {
       name: 'vama_rx_details ',
       params: {
-        rx_ids: rx_ids,
+        rx_id: rx_id,
       },
     }
   },
