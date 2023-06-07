@@ -6,6 +6,7 @@ import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
 import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { HiddenA11yElement } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -13,6 +14,7 @@ import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useDowntime, usePrevious, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
@@ -62,6 +64,14 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   })
 
   const onSubmitPressed = () => {
+    const prescriptionsToRefill: PrescriptionsList = []
+    Object.values(selectedValues).forEach((isSelected, index) => {
+      if (isSelected) {
+        prescriptionsToRefill.push(refillable[index])
+      }
+    })
+    const prescriptionIds = prescriptionsToRefill.map((prescription) => prescription.id)
+    logAnalyticsEvent(Events.vama_rx_request_start(prescriptionIds))
     submitRefillAlert({
       title:
         selectedPrescriptionsCount === refillablePrescriptions?.length
@@ -71,6 +81,9 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
       buttons: [
         {
           text: tc('cancel'),
+          onPress: () => {
+            logAnalyticsEvent(Events.vama_rx_request_cancel(prescriptionIds))
+          },
         },
         {
           text:
@@ -78,13 +91,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
               ? t('prescriptions.refill.RequestRefillButtonTitle.all')
               : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount }),
           onPress: () => {
-            const prescriptionsToRefill: PrescriptionsList = []
-            Object.values(selectedValues).forEach((isSelected, index) => {
-              if (isSelected) {
-                prescriptionsToRefill.push(refillable[index])
-              }
-            })
-
+            logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
             dispatch(requestRefills(prescriptionsToRefill))
           },
         },
