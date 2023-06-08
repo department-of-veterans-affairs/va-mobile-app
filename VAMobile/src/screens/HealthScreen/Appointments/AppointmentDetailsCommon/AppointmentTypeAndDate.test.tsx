@@ -5,11 +5,7 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, findByTypeWithSubstring, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
 
 import { InitialState } from 'store/slices'
-import {
-  AppointmentStatusDetailType,
-  AppointmentStatus,
-  AppointmentStatusConstants
-} from 'store/api/types'
+import { AppointmentStatusDetailType, AppointmentStatus, AppointmentStatusConstants } from 'store/api/types'
 import AppointmentTypeAndDate from './AppointmentTypeAndDate'
 import { TextView } from 'components'
 
@@ -18,7 +14,11 @@ context('AppointmentTypeAndDate', () => {
   let props: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = async (status: AppointmentStatus = AppointmentStatusConstants.BOOKED, statusDetail: AppointmentStatusDetailType | null = null, isPending: boolean = false): Promise<void> => {
+  const initializeTestInstance = async (
+    status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
+    statusDetail: AppointmentStatusDetailType | null = null,
+    isPending: boolean = false,
+  ): Promise<void> => {
     props = {
       appointmentType: 'VA',
       startDateUtc: '2021-02-06T19:53:14.000+00:00',
@@ -27,7 +27,7 @@ context('AppointmentTypeAndDate', () => {
       status,
       statusDetail,
       isPending,
-      typeOfCare: 'typeOfCare'
+      typeOfCare: 'typeOfCare',
     }
 
     await waitFor(() => {
@@ -38,7 +38,7 @@ context('AppointmentTypeAndDate', () => {
       })
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(async () => {
@@ -57,8 +57,8 @@ context('AppointmentTypeAndDate', () => {
   })
 
   describe('when isAppointmentCanceled is false', () => {
-    it('should only render 3 TextViews', async () => {
-      expect(testInstance.findAllByType(TextView).length).toEqual(3)
+    it('should only render 2 TextViews', async () => {
+      expect(testInstance.findAllByType(TextView).length).toEqual(2)
     })
   })
 

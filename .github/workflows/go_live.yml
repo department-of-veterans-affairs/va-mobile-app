@@ -3,13 +3,38 @@
 name: '[Release] Go Live'
 
 on:
+  workflow_dispatch:
   # Tuesdays 14:00 UTC, 10AM ET, 7AM PT
   schedule:
     - cron: '0 14 * * 2'
 
 jobs:
+  get_workflow_environment:
+    runs-on: ubuntu-latest
+    outputs:
+      environment_name: ${{ steps.check-environment.outputs.env_name }}
+    steps:
+      - name: Check environment
+        id: check-environment
+        run: |
+          if [[ ${{ github.event_name }} == 'workflow_dispatch' ]]; then
+            echo ::set-output name=env_name::'manual-release'
+          else
+            echo ::set-output name=env_name::''
+          fi
+
+  # This is a separate job because the build_ios & build_android workflows are already reserving "environment"
+  check_environment:
+    name: Check environment protections
+    needs: [get_workflow_environment]
+    environment: ${{ needs.get_workflow_environment.outputs.environment_name }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "foo"
+
   ios:
     name: iOS Go Live
+    needs: [get_workflow_environment, check_environment]
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
     with:
@@ -18,6 +43,7 @@ jobs:
 
   android:
     name: Android Go Live
+    needs: [get_workflow_environment, check_environment]
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
     with:

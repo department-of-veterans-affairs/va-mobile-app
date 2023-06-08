@@ -8,6 +8,7 @@ import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 import { useComposeCancelConfirmation } from './ComposeCancelConfirmation'
 import { SecureMessagingFormData } from 'store/api'
 import { FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { CategoryTypeFields } from 'store/api/types'
 import { UseDestructiveAlertProps } from 'utils/hooks'
 import { when } from 'jest-when'
 
@@ -17,7 +18,6 @@ let discardButtonSpy: any
 let saveDraftButtonSpy: any
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useDestructiveAlert: () => {
@@ -60,7 +60,7 @@ context('useComposeCancelConfirmation', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let navigateToSecureMessagingSpy: jest.Mock
-  let navigateToComposeMessageSpy: jest.Mock
+  let navigateToStartNewMessageSpy: jest.Mock
   let navigateToViewMessageScreenSpy: jest.Mock
   let navigateToDraftFolderNotSavedSpy: jest.Mock
   let navigateToDraftFolderSavedSpy: jest.Mock
@@ -73,7 +73,7 @@ context('useComposeCancelConfirmation', () => {
     replyToID?: number,
   ) => {
     navigateToSecureMessagingSpy = jest.fn()
-    navigateToComposeMessageSpy = jest.fn()
+    navigateToStartNewMessageSpy = jest.fn()
     navigateToViewMessageScreenSpy = jest.fn()
     navigateToDraftFolderNotSavedSpy = jest.fn()
     navigateToDraftFolderSavedSpy = jest.fn()
@@ -82,8 +82,8 @@ context('useComposeCancelConfirmation', () => {
       .mockReturnValue(() => {})
       .calledWith('SecureMessaging')
       .mockReturnValue(navigateToSecureMessagingSpy)
-      .calledWith('ComposeMessage', expect.objectContaining({ saveDraftConfirmFailed: true }))
-      .mockReturnValue(navigateToComposeMessageSpy)
+      .calledWith('StartNewMessage', expect.objectContaining({ saveDraftConfirmFailed: true }))
+      .mockReturnValue(navigateToStartNewMessageSpy)
       .calledWith('FolderMessages', expect.objectContaining({ draftSaved: true }))
       .mockReturnValue(navigateToDraftFolderSavedSpy)
       .calledWith('ViewMessageScreen', { messageID: 2 })
@@ -105,7 +105,7 @@ context('useComposeCancelConfirmation', () => {
 
     component = render(<TestComponent />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -131,7 +131,7 @@ context('useComposeCancelConfirmation', () => {
         act(() => {
           saveDraftButtonSpy()
         })
-        expect(navigateToComposeMessageSpy).toHaveBeenCalled()
+        expect(navigateToStartNewMessageSpy).toHaveBeenCalled()
       })
     })
   })
@@ -139,7 +139,7 @@ context('useComposeCancelConfirmation', () => {
   describe('Reply', () => {
     describe('on clicking discard', () => {
       it('should go back to the message the user was viewing', async () => {
-        initializeTestInstance({ body: 'test reply' }, undefined, true, FormHeaderTypeConstants.reply, 2)
+        initializeTestInstance({ body: 'test reply', category: CategoryTypeFields.appointment }, undefined, true, FormHeaderTypeConstants.reply, 2)
         act(() => {
           discardButtonSpy()
         })
@@ -153,7 +153,7 @@ context('useComposeCancelConfirmation', () => {
         act(() => {
           saveDraftButtonSpy()
         })
-        expect(navigateToComposeMessageSpy).toHaveBeenCalled()
+        expect(navigateToStartNewMessageSpy).toHaveBeenCalled()
       })
     })
   })
@@ -161,7 +161,7 @@ context('useComposeCancelConfirmation', () => {
   describe('Draft', () => {
     describe('on clicking discard', () => {
       it('should go back to drafts folder', async () => {
-        initializeTestInstance({ body: 'test reply' }, 1, true, FormHeaderTypeConstants.draft, undefined)
+        initializeTestInstance({ body: 'test reply', category: CategoryTypeFields.appointment }, 1, true, FormHeaderTypeConstants.draft, undefined)
         act(() => {
           discardButtonSpy()
         })
@@ -175,7 +175,7 @@ context('useComposeCancelConfirmation', () => {
         act(() => {
           saveDraftButtonSpy()
         })
-        expect(navigateToComposeMessageSpy).toHaveBeenCalled()
+        expect(navigateToStartNewMessageSpy).toHaveBeenCalled()
       })
     })
   })

@@ -25,6 +25,10 @@ context('PastAppointmentDetails', () => {
   let testInstance: ReactTestInstance
   let props: any
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+  
   const runAfterTransition = (testToRun: () => void) => {
     InteractionManager.runAfterInteractions(() => {
       testToRun()
@@ -76,7 +80,7 @@ context('PastAppointmentDetails', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
@@ -95,7 +99,7 @@ context('PastAppointmentDetails', () => {
       let allTextViews: ReactTestInstance[]
 
       allTextViews = testInstance.findAllByType(TextView)
-      expect(allTextViews.length).toEqual(7)
+      expect(allTextViews.length).toEqual(6)
       expect(allTextViews[3].props.children).toEqual('VA Video Connect\r\nusing a VA device')
 
       await waitFor(() => {
@@ -103,7 +107,7 @@ context('PastAppointmentDetails', () => {
       })
 
       allTextViews = testInstance.findAllByType(TextView)
-      expect(allTextViews.length).toEqual(7)
+      expect(allTextViews.length).toEqual(6)
       expect(allTextViews[3].props.children).toEqual('VA Video Connect\r\nHome')
     })
   })
@@ -115,7 +119,7 @@ context('PastAppointmentDetails', () => {
           initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE)
         })
 
-        expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Larry R. TestDoctor')
+        expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Larry R. TestDoctor')
       })
     })
   })
@@ -162,7 +166,7 @@ context('PastAppointmentDetails', () => {
       expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('COVID-19 vaccine')
     })
     it('should display the name of the facility location', async () => {
-      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('COVID-19 vaccine')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('COVID-19 vaccine')
     })
   })
 })

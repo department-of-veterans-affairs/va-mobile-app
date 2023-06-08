@@ -1,9 +1,9 @@
 ---
 name: QA Test Plan
 about: Template for creating QA test plan, cases, and data prep
-title: QA: Test Plan
+title: 'QA: Test Plan'
 labels: qa
-assignees:
+assignees: ''
 ---
 
 

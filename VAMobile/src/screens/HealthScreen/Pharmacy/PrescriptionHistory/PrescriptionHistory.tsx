@@ -1,4 +1,4 @@
-import { Pressable, PressableProps, ScrollView } from 'react-native'
+import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
@@ -65,6 +65,9 @@ import getEnv from 'utils/env'
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
 const pageSize = DEFAULT_PAGE_SIZE
+
+// Delay custom screen reader announcements so they don't cut off native announcements
+const announcementDelay = 1000
 
 const sortByOptions = [
   { display: 'prescriptions.sort.facility', value: PrescriptionSortOptionConstants.FACILITY_NAME },
@@ -196,7 +199,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       headerRight: (): ReactNode => (
         <Pressable {...pressableProps}>
           <Box px={23} height={theme.dimensions.headerHeight} flexDirection={'row'} alignItems={'center'}>
-            <VAIcon mr={5} preventScaling={true} name="QuestionMark" width={16} height={16} fill={'prescriptionHelper'} />
+            <VAIcon mr={5} preventScaling={true} name="QuestionMark" width={16} height={16} fill={'prescriptionHelper'} fill2={theme.colors.icon.transparent} />
             <TextView variant="ActionBar" allowFontScaling={false}>
               {t('prescription.help.button.text')}
             </TextView>
@@ -304,12 +307,17 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     selected: currentTab,
   }
 
+  const prescriptionDetailsClicked = (prescriptionID: string) => {
+    logAnalyticsEvent(Events.vama_rx_details(prescriptionID))
+    return navigation.navigate('PrescriptionDetails', { prescriptionId: prescriptionID })
+  }
+
   const prescriptionItems = () => {
     const total = currentPrescriptions?.length
 
     const listItems: Array<ReactNode> = (currentPrescriptions || []).map((prescription, idx) => {
       const detailsPressableProps: PressableProps = {
-        onPress: navigateTo('PrescriptionDetails', { prescriptionId: prescription.id }),
+        onPress: () => prescriptionDetailsClicked(prescription.id),
         accessible: true,
         accessibilityRole: 'button',
         accessibilityLabel: t('prescription.history.getDetails'),
@@ -323,7 +331,12 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
               <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
-              <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={theme.dimensions.chevronListItemWidth} height={theme.dimensions.chevronListItemHeight} />
+              <VAIcon
+                name={'ChevronRight'}
+                fill={theme.colors.icon.chevronListItem}
+                width={theme.dimensions.chevronListItemWidth}
+                height={theme.dimensions.chevronListItemHeight}
+              />
             </Box>
           </Pressable>
         </>
@@ -402,7 +415,13 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
   })
 
+  const announceAfterDelay = (announcement: string) => {
+    setTimeout(() => AccessibilityInfo.announceForAccessibility(announcement), announcementDelay)
+  }
+
   const sortOrderRadioOptions = getSortOrderOptionsForSortBy(selectedSortBy, t)
+
+  const sortButtonText = `${t('prescriptions.sort.by')}: ${getDisplayForValue(sortByOptions, sortByToUse)}`
 
   const sortProps: RadioGroupModalProps = {
     groups: [
@@ -423,7 +442,8 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         title: t('prescriptions.sort.order'),
       },
     ],
-    buttonText: `${t('prescriptions.sort.by')}: ${getDisplayForValue(sortByOptions, sortByToUse)}`,
+    buttonText: sortButtonText,
+    buttonA11yLabel: sortButtonText, // so Android reads button text
     buttonA11yHint: t('prescription.filter.sort.a11y'),
     buttonTestID: 'openSortTestID',
     headerText: t('prescription.filter.sort'),
@@ -439,6 +459,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     onUpperRightAction: () => {
       setSelectedSortBy(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
       setSelectedSortOn(ASCENDING)
+      const value = getDisplayForValue(sortByOptions, PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
+      const direction = t('prescriptions.sort.atoz.a11y')
+      announceAfterDelay(tc('prescriptions.resetAnnouncementWithDirection', { value, direction }))
     },
     onCancel: () => {
       setSelectedSortBy(sortByToUse)
@@ -471,6 +494,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       },
     ],
     buttonText: filterButtonText,
+    buttonA11yLabel: filterButtonText, // so Android reads button text
     buttonA11yHint: t('prescription.filter.by.a11y'),
     buttonTestID: 'openFilterTestID',
     headerText: t('prescription.filter.status'),
@@ -485,6 +509,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     },
     onUpperRightAction: () => {
       setSelectedFilter('')
+      announceAfterDelay(tc('prescriptions.resetAnnouncement', { value: getDisplayForValue(filterOptionsForTab, '') }))
     },
     onCancel: () => {
       setSelectedFilter(filterToUse)
@@ -552,10 +577,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       headerText: t('prescription.history.transferred.title'),
       body: (
         <>
-          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')}>
+          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')} paragraphSpacing={true}>
             {t('prescription.history.transferred.instructions')}
           </TextView>
-          <TextView my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
+          <TextView paragraphSpacing={true} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
             {t('prescription.history.transferred.youCan')}
           </TextView>
           <ClickForActionLink {...linkProps} />
@@ -625,6 +650,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const helpIconProps: VAIconProps = {
     name: 'QuestionMark',
+    fill2: theme.colors.icon.transparent,
   }
 
   const headerButton = {

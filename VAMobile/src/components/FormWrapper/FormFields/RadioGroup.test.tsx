@@ -35,7 +35,7 @@ context('RadioGroup', () => {
 
     component = render(<RadioGroup<number> onChange={setSelected} value={selected} options={mockOptions} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

@@ -2,18 +2,19 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
+import { AuthorizedServicesState, PrescriptionState, loadAllPrescriptions } from 'store/slices'
 import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionState, loadAllPrescriptions } from 'store/slices'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { useAppDispatch, useDowntime, useHasCernerFacilities, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useHeaderStyles } from 'utils/hooks/headerStyles'
 import { useSelector } from 'react-redux'
 import Appointments from './Appointments'
 import CernerAlert from './CernerAlert'
@@ -43,6 +44,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const hasCernerFacilities = useHasCernerFacilities()
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { secureMessaging } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
@@ -59,6 +61,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
     dispatch(logCOVIDClickAnalytics('health_screen'))
     navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.covidUpdates.loading') })
   }
+
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
@@ -94,7 +97,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
-          tagCount={unreadCount}
+          tagCount={secureMessaging && smNotInDowntime ? unreadCount : undefined}
           tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
         />
         {featureEnabled('prescriptions') && (

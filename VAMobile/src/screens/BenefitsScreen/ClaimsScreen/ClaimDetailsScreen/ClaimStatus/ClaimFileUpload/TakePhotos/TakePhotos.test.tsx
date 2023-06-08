@@ -23,7 +23,7 @@ context('TakePhotos', () => {
 
     component = render(<TakePhotos {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

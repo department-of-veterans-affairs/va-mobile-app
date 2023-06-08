@@ -15,7 +15,7 @@ context('PaymentMissing', () => {
     const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
     component = render(<PaymentMissing {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
@@ -29,7 +29,7 @@ context('PaymentMissing', () => {
         findByTypeWithText(
           testInstance,
           TextView,
-          'V\ufeffA pays benefits on the first day of the month for the previous month. Please wait at least 3 business days (Monday through Friday) before reporting non-receipt of a payment.\n\nTo report a missing payment, contact the Veterans Help Line. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.',
+          'VA pays benefits on the first day of the month for the previous month. Please wait at least 3 business days (Monday through Friday) before reporting non-receipt of a payment.',
         ),
       ).toBeTruthy()
     })

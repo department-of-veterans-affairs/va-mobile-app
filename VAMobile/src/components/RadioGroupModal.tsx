@@ -31,6 +31,8 @@ export type RadioGroupModalProps = {
   headerText: string
   /** Text to appear on the button that launches the modal */
   buttonText: string
+  /** Accessibility label for the button that launches the modal */
+  buttonA11yLabel?: string
   /** Accessibility hint for the button that launches the modal */
   buttonA11yHint?: string
   /** Optional TestID for the button  */
@@ -54,6 +56,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   onConfirm,
   onUpperRightAction,
   onCancel,
+  buttonA11yLabel,
   buttonA11yHint,
   buttonTestID,
   topRightButtonText,
@@ -140,6 +143,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
     onPress: showModal,
     accessibilityRole: 'button',
     accessible: true,
+    accessibilityLabel: buttonA11yLabel,
     accessibilityHint: buttonA11yHint,
   }
 

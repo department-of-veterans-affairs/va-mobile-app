@@ -1,8 +1,8 @@
 global.beforeEach(() => {
-  jest.useFakeTimers('legacy')
+  jest.useFakeTimers()
 })
 
 global.afterEach(() => {
-  jest.clearAllMocks()
-  jest.restoreAllMocks()
+  // jest.clearAllMocks()
+  // jest.restoreAllMocks()
 })

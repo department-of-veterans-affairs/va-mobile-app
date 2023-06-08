@@ -20,8 +20,8 @@ import { formatSubject, getfolderName } from 'utils/secureMessaging'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
-import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
 import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
+import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
 
@@ -89,19 +89,19 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         fill: 'defaultMenuItem',
         height: theme.fontSizes.MobileBody.fontSize,
         width: theme.fontSizes.MobileBody.fontSize,
-        name: 'FolderSolid',
+        name: 'Folder',
       } as VAIconProps
 
       if (label === FolderNameTypeConstants.deleted) {
         label = TRASH_FOLDER_NAME
         icon.fill = 'error'
-        icon.name = 'TrashSolid'
+        icon.name = 'Trash'
         indexOfDeleted = index
       }
 
       if (label === FolderNameTypeConstants.inbox) {
         icon.fill = 'defaultMenuItem'
-        icon.name = 'InboxSolid'
+        icon.name = 'Inbox'
       }
 
       return {
@@ -202,7 +202,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   }
 
   const moveIconProps: VAIconProps = {
-    name: 'FolderSolid',
+    name: 'Folder',
   }
 
   const headerButton =
@@ -233,7 +233,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         <ReplyMessageButton messageID={messageID} />
       ) : (
         <Box>
-          <ComposeMessageButton />
+          <StartNewMessageButton />
           <Box mt={theme.dimensions.standardMarginBetween}>
             <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')} />
           </Box>

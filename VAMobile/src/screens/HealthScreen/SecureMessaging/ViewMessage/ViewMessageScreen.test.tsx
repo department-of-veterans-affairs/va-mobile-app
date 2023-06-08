@@ -9,7 +9,7 @@ import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads }
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
 import { AccordionCollapsible, AlertBox, LoadingComponent, TextView } from 'components'
 import ViewMessageScreen from './ViewMessageScreen'
-import ComposeMessageButton from '../ComposeMessageButton/ComposeMessageButton'
+import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 import Mock = jest.Mock
 import { Pressable } from 'react-native'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
@@ -22,12 +22,8 @@ import { LocaleOptions } from 'luxon/src/datetime'
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -173,7 +169,7 @@ context('ViewMessageScreen', () => {
     navigateToSpy = jest.fn()
     when(mockNavigationSpy)
       .mockReturnValue(() => {})
-      .calledWith('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+      .calledWith('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
       .mockReturnValue(navigateToSpy)
     onPressSpy = jest.fn(() => {})
 
@@ -191,7 +187,7 @@ context('ViewMessageScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -220,7 +216,6 @@ context('ViewMessageScreen', () => {
       expect(testInstance.findAllByType(TextView)[10].props.children).toBe('Invalid DateTime')
       expect(testInstance.findAllByType(TextView)[11].props.children).toBe('mock sender 1')
       expect(testInstance.findAllByType(TextView)[12].props.children).toBe('Invalid DateTime')
-      
     })
   })
 
@@ -295,7 +290,7 @@ context('ViewMessageScreen', () => {
     it('should show AlertBox with Compose button', async () => {
       await waitFor(() => {
         expect(testInstance.findByType(AlertBox)).toBeTruthy()
-        expect(testInstance.findByType(ComposeMessageButton)).toBeTruthy()
+        expect(testInstance.findByType(StartNewMessageButton)).toBeTruthy()
       })
     })
   })
