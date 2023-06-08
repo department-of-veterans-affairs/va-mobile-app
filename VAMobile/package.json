@@ -157,5 +157,17 @@
     "classNameTemplate": "vamobile.\"{classname}\"",
     "outputDirectory": "./coverage/junit",
     "addFileAttribute": "true"
+  },
+  "resolutions": {
+    "@react-native-firebase/app/**/simple-plist": "^1.3.1",
+    "@react-native-firebase/app/**/minimist": "^1.2.6",
+    "@types/detox/minimist": "^1.2.6",
+    "@wdio/cli/**/minimist": "^1.2.6",
+    "@wdio/cli/ejs": "^3.1.7",
+    "appium/**/minimist": "^0.2.4",
+    "appium/**/plist": "^3.0.5",
+    "appium/**/xmldom": "0.6.0",
+    "detox/minimist": "^1.2.6",
+    "react-devtools/**/minimist": "^1.2.6"
   }
 }
