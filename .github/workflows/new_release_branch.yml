@@ -6,10 +6,6 @@ on:
     # 06:00 UTC, 2:00AM ET, 11:00PM (Tues) PT every Wednesday
     - cron: '00 6 * * 3'
 
-defaults:
-  run:
-    working-directory: VAMobile
-
 jobs:
   get-workflow-environment:
     runs-on: ubuntu-latest
@@ -29,6 +25,9 @@ jobs:
     needs: [get-workflow-environment]
     environment: ${{ needs.get-workflow-environment.outputs.environment_name }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: VAMobile
     steps:
       - name: Checkout
         uses: actions/checkout@v3
