@@ -161,10 +161,20 @@ const call = async function <T>(
       return
     }
     if (response.status > 399) {
-      // clone response to access the response stream twice
-      const clonedResponse = await response.clone()
-      const json = await clonedResponse.json()
-      const text = await response.text()
+      let json
+      let text
+      if (response.headers.get('content-type')?.startsWith('application/json')) {
+        json = await response.json()
+
+        // Create stringified error as well. Handle vamfBody separately since JSON.stringify chokes on it
+        const { source, ...otherErrorProps } = json?.errors[0]
+        const { vamfBody, ...otherSourceProps } = source || {}
+        const vamfBodyText = vamfBody ? `\nvamfBody: ${vamfBody}` : ''
+        text = `${JSON.stringify(otherErrorProps)}\n${JSON.stringify(otherSourceProps)}${vamfBodyText}`
+      } else {
+        text = await response.text()
+        json = {}
+      }
 
       throw { status: response.status, text, json }
     }
