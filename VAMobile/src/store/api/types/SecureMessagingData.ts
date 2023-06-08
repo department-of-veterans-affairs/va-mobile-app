@@ -32,7 +32,7 @@ export type SecureMessagingMessageAttributes = {
   readReceipt?: string
 }
 
-export type CategoryTypes = 'COVID' | 'TEST_RESULTS' | 'MEDICATIONS' | 'APPOINTMENTS' | 'OTHER' | 'GENERAL' | 'EDUCATION'
+export type CategoryTypes = 'COVID' | 'TEST_RESULTS' | 'MEDICATIONS' | 'APPOINTMENTS' | 'OTHER' | 'GENERAL' | 'EDUCATION' | ''
 
 export const CategoryTypeFields: {
   covid: CategoryTypes
@@ -94,7 +94,7 @@ export type SecureMessagingMessageMap = {
 
 export type SecureMessagingFormData = {
   recipient_id?: number
-  category?: CategoryTypes
+  category: CategoryTypes
   body: string
   subject?: string
   draft_id?: number
