@@ -49,7 +49,7 @@ const PreferredTimeComponent: FC<PreferredTimeComponentProps> = ({ selectedTimes
 
       const checkBox: DefaultListItemObj = {
         textLines,
-        decorator: selected ? ButtonDecoratorType.FilledCheckBox : ButtonDecoratorType.EmptyCheckBox,
+        decorator: selected ? ButtonDecoratorType.CheckBoxFilled : ButtonDecoratorType.CheckBoxEmpty,
         onPress: onValueChanged,
         minHeight: 64,
         a11yValue: selected ? tc('selected') : undefined,

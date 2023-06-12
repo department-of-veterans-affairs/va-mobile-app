@@ -17,7 +17,7 @@ context('VAIconWithText', () => {
 
   beforeEach(() => {
     component = render(<VAIconWithText name="HomeSelected" label="Home" />)
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

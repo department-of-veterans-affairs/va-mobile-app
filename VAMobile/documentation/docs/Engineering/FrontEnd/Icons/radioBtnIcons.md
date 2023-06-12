@@ -1,6 +1,5 @@
-import { ReactComponent as RadioEmpty} from '@componentsDocs/VAIcon/svgs/radio/radioEmpty.svg';
-import { ReactComponent as RadioDisabled} from '@componentsDocs/VAIcon/svgs/radio/radioDisabled.svg';
-import { ReactComponent as RadioFilled} from '@componentsDocs/VAIcon/svgs/radio/radioFilled.svg';
+import { ReactComponent as RadioEmpty} from '@componentsDocs/VAIcon/svgs/radio/RadioEmpty.svg';
+import { ReactComponent as RadioFilled} from '@componentsDocs/VAIcon/svgs/radio/RadioFilled.svg';
 import IconsPathSection from '@site/src/components/IconsPathSection'
 
 
@@ -12,6 +11,5 @@ import IconsPathSection from '@site/src/components/IconsPathSection'
 
 Name | Icon | File Name 
 :---: | :---: | :---: 
-Radio Disabled | <RadioDisabled className="icons customCircle" /> | radioDisabled.svg 
-Radio Empty | <RadioEmpty className="icons customCircle" /> | radioEmpty.svg 
-Radio Filled | <RadioFilled className="icons iconDirection" /> | radioFilled.svg 
+Radio Empty/Disabled | <RadioEmpty className="icons customCircle" /> | RadioEmpty.svg 
+Radio Filled | <RadioFilled className="icons iconDirection" /> | RadioFilled.svg 

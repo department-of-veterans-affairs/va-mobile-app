@@ -14,16 +14,16 @@ context('PhotoPreview', () => {
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
   let image: Asset = {
-    uri:"testing",
-    fileSize:1234
+    uri: 'testing',
+    fileSize: 1234,
   }
 
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
 
-    component = render(<PhotoPreview width={110} height={110} image={image} onDeleteCallback={(onPressSpy)}/>)
+    component = render(<PhotoPreview width={110} height={110} image={image} onDeleteCallback={onPressSpy} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

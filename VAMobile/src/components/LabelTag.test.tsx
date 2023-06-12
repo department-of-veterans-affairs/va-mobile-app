@@ -18,7 +18,7 @@ context('LabelTag', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
     component = render(<LabelTag text={'Read'} labelType={'tagGreen'} onPress={onPressSpy} />)
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
@@ -31,8 +31,8 @@ context('LabelTag', () => {
     expect(texts[0].props.children).toBe('Read')
   })
 
-  it ("should call the press action if it exists", async () => {
-      testInstance.findByType(Pressable).props.onPress()
-      expect(onPressSpy).toBeCalled()
+  it('should call the press action if it exists', async () => {
+    testInstance.findByType(Pressable).props.onPress()
+    expect(onPressSpy).toBeCalled()
   })
 })

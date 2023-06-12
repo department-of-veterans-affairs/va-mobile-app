@@ -1,4 +1,4 @@
-import { InteractionManager, ScrollView } from 'react-native'
+import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
@@ -20,9 +20,7 @@ import {
   PickerItem,
   SaveButton,
   TextArea,
-  TextView,
   VAButton,
-  VAIconProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import {
@@ -33,6 +31,7 @@ import {
   SecureMessagingSystemFolderIdConstants,
   SecureMessagingTabTypesConstants,
 } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -50,7 +49,7 @@ import {
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
 import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions } from 'utils/secureMessaging'
-import { testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
 import {
   useAppDispatch,
   useAttachments,
@@ -99,6 +98,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+  const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
 
@@ -119,7 +119,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
   const goToCancel = () => {
-    const messageData = { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body: message, subject: subject } as SecureMessagingFormData
+    const messageData = { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body: message, subject } as SecureMessagingFormData
     composeCancelConfirmation({ origin: FormHeaderTypeConstants.compose, draftMessageID: savedDraftID, messageData, isFormValid })
   }
   useEffect(() => {
@@ -230,6 +230,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   }
 
   const onCategoryChange = (newCategory: string): void => {
+    logAnalyticsEvent(Events.vama_sm_change_category(newCategory as CategoryTypes, category as CategoryTypes))
     setCategory(newCategory)
 
     // Only "General" category requires a subject, reset errors changing away to clear potential subject error
@@ -295,7 +296,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
-        originHeader: t('secureMessaging.startNewMessage'),
         removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
@@ -306,7 +306,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
               }
             : undefined,
         attachmentsList,
-        a11yHint: t('secureMessaging.attachments.howToAttachAFile.a11y'),
       },
     },
     {
@@ -336,7 +335,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       recipient_id: parseInt(to, 10),
       category: category as CategoryTypes,
       body: message,
-      subject: subject,
+      subject,
     } as SecureMessagingFormData
 
     if (savedDraftID) {
@@ -357,29 +356,20 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
           text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
           textA11yLabel={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
           border="error">
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
-          </Box>
+          <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
         </AlertBox>
       )
     }
 
     return (
       <Box>
-        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} scrollViewRef={scrollViewRef} focusOnError={onSendClicked} />
-        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <CollapsibleView text={t('secureMessaging.startNewMessage.whenWillIGetAReply')} showInTextArea={false}>
-            <Box {...testIdProps(t('secureMessaging.startNewMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
-              <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.threeDaysToReceiveResponse')}</TextView>
-            </Box>
-            <Box {...testIdProps(t('secureMessaging.startNewMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
-              <TextView>
-                <TextView variant="MobileBodyBold">{t('secureMessaging.startNewMessage.important')}</TextView>
-                <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.pleaseCallHealthProvider')}</TextView>
-              </TextView>
-            </Box>
-          </CollapsibleView>
-        </Box>
+        <MessageAlert
+          hasValidationError={formContainsError}
+          saveDraftAttempted={onSaveDraftClicked}
+          scrollViewRef={scrollViewRef}
+          focusOnError={onSendClicked}
+          errorList={errorList}
+        />
         <TextArea>
           <FormWrapper
             fieldsList={formFieldsList}
@@ -389,7 +379,19 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
             setFormContainsError={setFormContainsError}
             resetErrors={resetErrors}
             setResetErrors={setResetErrors}
+            setErrorList={setErrorList}
           />
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <Pressable
+              onPress={navigateTo('ReplyHelp')}
+              accessibilityRole={'button'}
+              accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
+              importantForAccessibility={'yes'}>
+              <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
+                <CollapsibleView text={tc('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
+              </Box>
+            </Pressable>
+          </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               label={t('secureMessaging.formMessage.send')}
@@ -406,13 +408,10 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  const rightVAIconProps: VAIconProps = { name: 'Save' }
-
   const rightButtonProps = noProviderError
     ? undefined
     : {
         rightButtonText: tc('save'),
-        rightVAIconProps: rightVAIconProps,
         onRightButtonPress: () => {
           setOnSaveDraftClicked(true)
           setOnSendClicked(true)

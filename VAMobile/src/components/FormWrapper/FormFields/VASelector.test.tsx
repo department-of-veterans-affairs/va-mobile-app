@@ -18,7 +18,7 @@ context('VASelector', () => {
   let errorMessage: string
   let setErrorMessage: Mock
 
-  const initializeTestInstance = (selectedValue: boolean, disabled?: boolean, error?: string, isRequiredField?: boolean, selectorType = SelectorType.Checkbox): void => {
+  const initializeTestInstance = (selectedValue: boolean, disabled?: boolean, error?: string, selectorType = SelectorType.Checkbox): void => {
     selected = selectedValue
     setSelected = jest.fn((updatedSelected) => (selected = updatedSelected))
 
@@ -39,12 +39,11 @@ context('VASelector', () => {
         onSelectionChange={setSelected}
         error={errorMessage}
         setError={setErrorMessage}
-        isRequiredField={isRequiredField}
         selectorType={selectorType}
       />,
     )
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -63,34 +62,21 @@ context('VASelector', () => {
         expect(selected).toEqual(true)
       })
     })
-
-    describe('when the checkbox is required and is being unchecked', () => {
-      it('should set the error message', async () => {
-        initializeTestInstance(true, false, '', true)
-
-        await waitFor(() => {
-          expect(errorMessage).toEqual('')
-          testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-          expect(errorMessage).toEqual('This is the default error message')
-        })
-      })
-    })
   })
 
   describe('when selected is true', () => {
     it('should display the filled checkbox icon', async () => {
       initializeTestInstance(true)
-      const filledCheckBox = findByTestID(testInstance, 'FilledCheckBox')
+      const filledCheckBox = findByTestID(testInstance, 'CheckBoxFilled')
 
       expect(filledCheckBox).toBeTruthy()
       expect(filledCheckBox.props.fill).toEqual('checkboxEnabledPrimary')
-      expect(filledCheckBox.props.stroke).toEqual('checkboxEnabledPrimary')
     })
   })
 
   describe('when selected is false', () => {
     it('should display the empty checkbox icon', async () => {
-      const emptyCheckBox = findByTestID(testInstance, 'EmptyCheckBox')
+      const emptyCheckBox = findByTestID(testInstance, 'CheckBoxEmpty')
 
       expect(emptyCheckBox).toBeTruthy()
       expect(emptyCheckBox.props.fill).toEqual('checkboxDisabledContrast')
@@ -110,19 +96,19 @@ context('VASelector', () => {
   })
 
   describe('when disabled is true and the selector type is radio', () => {
-    it('should display the DisabledRadio icon', async () => {
-      initializeTestInstance(false, true, '', false, SelectorType.Radio)
-      const disabledRadio = findByTestID(testInstance, 'DisabledRadio')
-      expect(disabledRadio).toBeTruthy()
+    it('should display the RadioEmpty icon', async () => {
+      initializeTestInstance(false, true, '', SelectorType.Radio)
+      const radioDisabled = findByTestID(testInstance, 'RadioEmpty')
+      expect(radioDisabled).toBeTruthy()
     })
   })
 
   describe('when there is an error and the selector type is checkbox', () => {
-    it('should display the ErrorCheckBox and the error message', async () => {
+    it('should display the CheckBoxError and the error message', async () => {
       initializeTestInstance(false, false, 'ERROR MESSAGE')
 
-      const errorCheckBox = findByTestID(testInstance, 'ErrorCheckBox')
-      expect(errorCheckBox).toBeTruthy()
+      const checkBoxError = findByTestID(testInstance, 'CheckBoxError')
+      expect(checkBoxError).toBeTruthy()
 
       const textViews = testInstance.findAllByType(TextView)
       expect(textViews[textViews.length - 2].props.children).toEqual('ERROR MESSAGE')

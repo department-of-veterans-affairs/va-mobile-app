@@ -33,7 +33,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
   const getUploadedFileNames = (): JSX.Element[] | JSX.Element => {
     const uploadedFileNames = map(documents || [], (item, index) => {
       return (
-        <TextView variant="MobileBody" key={index}>
+        <TextView paragraphSpacing={true} variant="MobileBody" key={index}>
           {item.filename}
         </TextView>
       )
@@ -60,13 +60,13 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
               <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {t('fileRequestDetails.submittedTitle')}
               </TextView>
-              <TextView mb={standardMarginBetween} variant="MobileBody">
+              <TextView paragraphSpacing={true} variant="MobileBody">
                 {getUploadedDate()}
               </TextView>
               <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {t('fileRequestDetails.fileTitle')}
               </TextView>
-              <Box mb={standardMarginBetween}>{getUploadedFileNames()}</Box>
+              {getUploadedFileNames()}
               <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {t('fileRequestDetails.typeTitle')}
               </TextView>

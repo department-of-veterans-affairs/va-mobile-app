@@ -94,13 +94,11 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
               <TextView variant="MobileBodyBold">{claimDecidedOn}</TextView>
             </Box>
             <Box {...testIdProps(letterAvailable)} accessible={true}>
-              <TextView variant="MobileBody">{letterAvailable}</TextView>
+              <TextView variant="MobileBody" paragraphSpacing={showButton ? true : false}>
+                {letterAvailable}
+              </TextView>
             </Box>
-            {showButton && (
-              <Box mt={theme.dimensions.condensedMarginBetween}>
-                <VAButton onPress={onPress} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} />
-              </Box>
-            )}
+            {showButton && <VAButton onPress={onPress} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} />}
           </TextArea>
         </Box>
       )
