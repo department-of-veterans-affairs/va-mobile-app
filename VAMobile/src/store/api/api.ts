@@ -163,14 +163,19 @@ const call = async function <T>(
     if (response.status > 399) {
       let json
       let text
-      if (response.headers.get('content-type')?.startsWith('application/json')) {
+      if (response.headers.get('Content-Type')?.startsWith('application/json')) {
         json = await response.json()
+        const vamfBody = json?.errors?.[0].source?.vamfBody
 
-        // Create stringified error as well. Handle vamfBody separately since JSON.stringify chokes on it
-        const { source, ...otherErrorProps } = json?.errors[0]
-        const { vamfBody, ...otherSourceProps } = source || {}
-        const vamfBodyText = vamfBody ? `\nvamfBody: ${vamfBody}` : ''
-        text = `${JSON.stringify(otherErrorProps)}\n${JSON.stringify(otherSourceProps)}${vamfBodyText}`
+        if (vamfBody) {
+          // Handle vamfBody separately since JSON.stringify chokes on it
+          json.errors[0].source.vamfBody = ''
+          text = JSON.stringify(json)
+          const escaped = vamfBody.replace(/"/g, '\\"')
+          text = text.replace('"vamfBody":""', `"vamfBody":"${escaped}"`)
+        } else {
+          text = JSON.stringify(json)
+        }
       } else {
         text = await response.text()
         json = {}
@@ -178,6 +183,8 @@ const call = async function <T>(
 
       throw { status: response.status, text, json }
     }
+
+    // No errors found, return the response
     return await response.json()
   } else {
     // we are in demo and need to transform the request from the demo store
