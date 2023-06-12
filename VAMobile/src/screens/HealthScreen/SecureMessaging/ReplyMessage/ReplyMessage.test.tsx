@@ -323,7 +323,7 @@ context('ReplyMessage', () => {
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance({}, [], true)
+      initializeTestInstance(mockMessagesById, [], true)
       await waitFor(() => {
         expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
       })

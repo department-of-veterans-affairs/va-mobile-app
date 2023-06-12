@@ -201,8 +201,13 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
       <Box mx={gutter} mt={contentMarginTop} mb={contentMarginBottom}>
         {renderHeader()}
         <Box mt={standardMarginBetween}>
-          <TextView variant="HelperText">{t('prescriptions.refillTracking.upTo15Days')}</TextView>
+          <TextView variant="HelperText" paragraphSpacing={true}>
+            {t('prescriptions.refillTracking.upTo15Days')}
+          </TextView>
         </Box>
+        <TextView variant="HelperText" accessibilityLabel={tc('prescriptions.refillTracking.deliveryChanges.a11yLabel')}>
+          {tc('prescriptions.refillTracking.deliveryChanges')}
+        </TextView>
         {renderTrackingCards()}
       </Box>
     </FullScreenSubtask>

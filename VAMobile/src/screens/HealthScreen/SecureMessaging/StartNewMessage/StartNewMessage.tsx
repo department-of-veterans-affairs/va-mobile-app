@@ -31,6 +31,7 @@ import {
   SecureMessagingSystemFolderIdConstants,
   SecureMessagingTabTypesConstants,
 } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -48,6 +49,7 @@ import {
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
 import { getStartNewMessageSubjectPickerOptions } from 'utils/secureMessaging'
+import { logAnalyticsEvent } from 'utils/analytics'
 import {
   useAppDispatch,
   useAttachments,
@@ -87,8 +89,8 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const { attachmentFileToAdd, saveDraftConfirmFailed } = route.params
 
   const [to, setTo] = useState('')
+  const [category, setCategory] = useState('')
   const [subject, setSubject] = useState('')
-  const [subjectLine, setSubjectLine] = useState('')
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
   const [message, setMessage] = useMessageWithSignature()
   const validateMessage = useValidateMessageWithSignature()
@@ -117,7 +119,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
   const goToCancel = () => {
-    const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine } as SecureMessagingFormData
+    const messageData = { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body: message, subject } as SecureMessagingFormData
     composeCancelConfirmation({ origin: FormHeaderTypeConstants.compose, draftMessageID: savedDraftID, messageData, isFormValid })
   }
   useEffect(() => {
@@ -199,8 +201,8 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || validateMessage(message))
-  const isFormValid = !!(to && subject && validateMessage(message) && (subject !== CategoryTypeFields.other || subjectLine))
+  const isFormBlank = !(to || category || subject || attachmentsList.length || validateMessage(message))
+  const isFormValid = !!(to && category && validateMessage(message) && (category !== CategoryTypeFields.other || subject))
 
   if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature || isDiscarded) {
     const text = savingDraft
@@ -227,12 +229,13 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
   }
 
-  const onSubjectChange = (newSubject: string): void => {
-    setSubject(newSubject)
+  const onSubjectChange = (newCategory: string): void => {
+    logAnalyticsEvent(Events.vama_sm_change_category(newCategory as CategoryTypes, category as CategoryTypes))
+    setCategory(newCategory)
 
-    // if the subject used to be general and now its not, clear field errors because the subject line is now
+    // if the category used to be general and now its not, clear field errors because the subject is now
     // no longer a required field
-    if (isSetToGeneral(subject) && !isSetToGeneral(newSubject)) {
+    if (isSetToGeneral(category) && !isSetToGeneral(newCategory)) {
       setResetErrors(true)
     }
   }
@@ -266,7 +269,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       fieldType: FieldType.Picker,
       fieldProps: {
         labelKey: 'health:secureMessaging.startNewMessage.category',
-        selectedValue: subject,
+        selectedValue: category,
         onSelectionChange: onSubjectChange,
         pickerOptions: getStartNewMessageSubjectPickerOptions(t),
         includeBlankPlaceholder: true,
@@ -279,11 +282,11 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       fieldProps: {
         inputType: 'none',
         labelKey: 'health:secureMessaging.startNewMessage.subject',
-        value: subjectLine,
-        onChange: setSubjectLine,
+        value: subject,
+        onChange: setSubject,
         helperTextKey: 'health:secureMessaging.startNewMessage.subject.helperText',
         maxLength: 50,
-        isRequiredField: subject === CategoryTypeFields.other,
+        isRequiredField: category === CategoryTypeFields.other,
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.subject.fieldError'),
     },
@@ -327,9 +330,9 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     dispatch(resetSendMessageFailed())
     const messageData = {
       recipient_id: parseInt(to, 10),
-      category: subject as CategoryTypes,
+      category: category as CategoryTypes,
       body: message,
-      subject: subjectLine,
+      subject,
     } as SecureMessagingFormData
 
     if (savedDraftID) {
