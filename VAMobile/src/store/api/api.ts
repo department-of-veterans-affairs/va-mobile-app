@@ -171,7 +171,7 @@ const call = async function <T>(
           // Handle vamfBody separately since JSON.stringify chokes on it
           json.errors[0].source.vamfBody = ''
           text = JSON.stringify(json)
-          const escaped = vamfBody.replace(/"/g, '\\"')
+          const escaped = vamfBody.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
           text = text.replace('"vamfBody":""', `"vamfBody":"${escaped}"`)
         } else {
           text = JSON.stringify(json)
