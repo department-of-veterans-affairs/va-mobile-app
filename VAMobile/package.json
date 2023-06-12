@@ -159,14 +159,28 @@
     "addFileAttribute": "true"
   },
   "resolutions": {
-    "@react-native-firebase/app/**/simple-plist": "^1.3.1",
+    "@react-native-firebase/app/**/json5": "^1.0.2",
     "@react-native-firebase/app/**/minimist": "^1.2.6",
+    "@react-native-firebase/app/**/simple-plist": "^1.3.1",
     "@types/detox/minimist": "^1.2.6",
+    "@types/detox/minimatch": "^3.0.5",
     "@wdio/cli/**/minimist": "^1.2.6",
     "@wdio/cli/ejs": "^3.1.7",
+    "@wdio/**/minimatch": "^3.0.5 ",
+    "appium/**/jpeg-js": "^0.4.4",
     "appium/**/minimist": "^0.2.4",
+    "appium/**/minimatch": "^3.0.5",
     "appium/**/plist": "^3.0.5",
-    "detox/minimist": "^1.2.6",
-    "react-devtools/**/minimist": "^1.2.6"
+    "appium/**/ansi-regex": "^3.0.1",
+    "appium/**/webdriverio/archiver/async": "^2.6.4",
+    "babel-plugin-module-resolver/**/json5": "^1.0.2",
+    "chromedriver/axios/follow-redirects": "^1.14.7",
+    "detox/**/minimatch": "^3.0.5",
+    "detox/**/minimist": "^1.2.6",
+    "react-devtools/**/minimist": "^1.2.6",
+    "react-native-svg/**/nth-check": "^2.0.1",
+    "react-native/@react-native-community/**/fast-xml-parser": "^4.2.4",
+    "watch/**/merge": "^2.1.1",
+    "webdriverio/devtools/ua-parser-js": "^1.0.33"
   }
 }
