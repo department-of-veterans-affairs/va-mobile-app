@@ -18,7 +18,7 @@ context('VASelector', () => {
   let errorMessage: string
   let setErrorMessage: Mock
 
-  const initializeTestInstance = (selectedValue: boolean, disabled?: boolean, error?: string, isRequiredField?: boolean, selectorType = SelectorType.Checkbox): void => {
+  const initializeTestInstance = (selectedValue: boolean, disabled?: boolean, error?: string, selectorType = SelectorType.Checkbox): void => {
     selected = selectedValue
     setSelected = jest.fn((updatedSelected) => (selected = updatedSelected))
 
@@ -39,7 +39,6 @@ context('VASelector', () => {
         onSelectionChange={setSelected}
         error={errorMessage}
         setError={setErrorMessage}
-        isRequiredField={isRequiredField}
         selectorType={selectorType}
       />,
     )
@@ -61,18 +60,6 @@ context('VASelector', () => {
         testInstance.findByType(TouchableWithoutFeedback).props.onPress()
         expect(setSelected).toBeCalled()
         expect(selected).toEqual(true)
-      })
-    })
-
-    describe('when the checkbox is required and is being unchecked', () => {
-      it('should set the error message', async () => {
-        initializeTestInstance(true, false, '', true)
-
-        await waitFor(() => {
-          expect(errorMessage).toEqual('')
-          testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-          expect(errorMessage).toEqual('This is the default error message')
-        })
       })
     })
   })
@@ -110,7 +97,7 @@ context('VASelector', () => {
 
   describe('when disabled is true and the selector type is radio', () => {
     it('should display the RadioEmpty icon', async () => {
-      initializeTestInstance(false, true, '', false, SelectorType.Radio)
+      initializeTestInstance(false, true, '', SelectorType.Radio)
       const radioDisabled = findByTestID(testInstance, 'RadioEmpty')
       expect(radioDisabled).toBeTruthy()
     })

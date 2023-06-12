@@ -98,6 +98,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+  const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
 
@@ -359,7 +360,13 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} scrollViewRef={scrollViewRef} focusOnError={onSendClicked} />
+        <MessageAlert
+          hasValidationError={formContainsError}
+          saveDraftAttempted={onSaveDraftClicked}
+          scrollViewRef={scrollViewRef}
+          focusOnError={onSendClicked}
+          errorList={errorList}
+        />
         <TextArea>
           <FormWrapper
             fieldsList={formFieldsList}
@@ -369,6 +376,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
             setFormContainsError={setFormContainsError}
             resetErrors={resetErrors}
             setResetErrors={setResetErrors}
+            setErrorList={setErrorList}
           />
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Pressable
