@@ -6,7 +6,7 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTypeWithSubstring, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import ReplyMessage from './ReplyMessage'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState, saveDraft } from 'store/slices'
@@ -244,8 +244,8 @@ context('ReplyMessage', () => {
       it('should display an AlertBox', async () => {
         await waitFor(() => {
           expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-          expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'In order to save this draft, all of the required fields must be filled.')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
+          expect(findByTypeWithSubstring(testInstance, TextView, 'To save this message, provide this information:')).toBeTruthy()
         })
       })
     })
@@ -278,7 +278,8 @@ context('ReplyMessage', () => {
       it('should display an AlertBox', async () => {
         await waitFor(() => {
           expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-          expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
+          expect(findByTypeWithSubstring(testInstance, TextView, 'To send this message, provide this information:')).toBeTruthy()
         })
       })
     })

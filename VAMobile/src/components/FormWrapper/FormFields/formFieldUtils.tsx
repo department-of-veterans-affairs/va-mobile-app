@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react'
 
 import { TFunction } from 'i18next'
 
-import { BorderColorVariant, Box, BoxProps, TextView, ValidationFunctionItems } from '../../index'
+import { BorderColorVariant, Box, BoxProps, TextView } from '../../index'
 import { VATheme } from '../../../styles/theme'
 
 /**
@@ -85,42 +85,20 @@ export const renderInputError = (error: string): ReactElement => {
 }
 
 /**
- * Updates the error message for the picker and text input components. Sets an error message if the component
- * no longer has focus, the focus was updated, and the components value is undefined
+ * Clears errors on focus for VAModalPicker and VATextInput components
  */
-export const updateInputErrorMessage = (
+export const removeInputErrorMessage = (
   isFocused: boolean,
-  isRequiredField: boolean | undefined,
   error: string | undefined,
   setError: ((value?: string) => void) | undefined,
-  value: string | undefined,
   focusUpdated: boolean,
   setFocusUpdated: (value: boolean) => void,
-  validationList: Array<ValidationFunctionItems> | undefined,
 ): void => {
-  // only continue check if the focus was just updated
+  if (isFocused && setError && error) {
+    setError('')
+  }
   if (focusUpdated) {
     setFocusUpdated(false)
-    // first check if its not currently focused, if its a required field, and if there is a setError function
-    if (!isFocused && isRequiredField && setError) {
-      // if the selected value does not exist, set the error
-      if (!value) {
-        setError()
-      } else if (validationList) {
-        const result = validationList.filter((el) => {
-          return el.validationFunction()
-        })
-
-        // if one of the validation functions failed show the first error message
-        if (result.length > 0) {
-          setError(result[0].validationFunctionErrorMessage)
-        } else if (error !== '') {
-          setError('')
-        }
-      } else if (error !== '') {
-        setError('')
-      }
-    }
   }
 }
 
