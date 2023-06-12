@@ -54,7 +54,6 @@ const VASelector: FC<VASelectorProps> = ({
   a11yHint,
   error,
   setError,
-  isRequiredField,
 }) => {
   const theme = useTheme()
   const { t } = useTranslation()
@@ -63,12 +62,6 @@ const VASelector: FC<VASelectorProps> = ({
   const selectorOnPress = (): void => {
     if (!disabled) {
       setError && setError('')
-
-      // if its a required checkbox and its being unchecked, display the error
-      if (isRequiredField && selected && setError && selectorType === SelectorType.Checkbox) {
-        setError()
-      }
-
       onSelectionChange(!selected)
     }
   }

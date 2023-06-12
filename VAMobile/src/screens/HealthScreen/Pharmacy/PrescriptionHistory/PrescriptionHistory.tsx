@@ -304,12 +304,17 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     selected: currentTab,
   }
 
+  const prescriptionDetailsClicked = (prescriptionID: string) => {
+    logAnalyticsEvent(Events.vama_rx_details(prescriptionID))
+    return navigation.navigate('PrescriptionDetails', { prescriptionId: prescriptionID })
+  }
+
   const prescriptionItems = () => {
     const total = currentPrescriptions?.length
 
     const listItems: Array<ReactNode> = (currentPrescriptions || []).map((prescription, idx) => {
       const detailsPressableProps: PressableProps = {
-        onPress: navigateTo('PrescriptionDetails', { prescriptionId: prescription.id }),
+        onPress: () => prescriptionDetailsClicked(prescription.id),
         accessible: true,
         accessibilityRole: 'button',
         accessibilityLabel: t('prescription.history.getDetails'),
