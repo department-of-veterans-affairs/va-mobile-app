@@ -19,7 +19,7 @@ context('AppealIssues', () => {
 
     component = render(<AppealIssues issues={issues} {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('should initialize', async () => {
@@ -30,8 +30,8 @@ context('AppealIssues', () => {
     const textViews = testInstance.findAllByType(TextView)
     expect(textViews.length).toEqual(4)
 
-    expect(textViews[1].props.children[0]).toEqual('Service connection, Post-traumatic stress disorder')
-    expect(textViews[2].props.children[0]).toEqual('Eligibility for loan guaranty benefits')
-    expect(textViews[3].props.children[0]).toEqual('Service connected')
+    expect(textViews[1].props.children[1]).toEqual('Service connection, Post-traumatic stress disorder')
+    expect(textViews[2].props.children[1]).toEqual('Eligibility for loan guaranty benefits')
+    expect(textViews[3].props.children[1]).toEqual('Service connected')
   })
 })

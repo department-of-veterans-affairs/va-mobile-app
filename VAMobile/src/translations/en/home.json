@@ -49,6 +49,7 @@
   "veteransCrisisLine.connectWithResponders": "If you're a Veteran in crisis or concerned about one, connect with our caring, qualified responders for confidential help. Many of them are Veterans themselves.",
   "veteransCrisisLine.crisisCallNumber": "988",
   "veteransCrisisLine.crisisCallNumberDisplayed": "Call 988 and select 1",
+  "veteransCrisisLine.crisisCallNumberDisplayed.a11y": "Call 9 8 8 and select 1",
   "veteransCrisisLine.crisisUrlA11yHint": "Takes you to a crisis chat web page. This page will open in your device's browser",
   "veteransCrisisLine.getMoreResources": "Get more resources",
   "veteransCrisisLine.hearingLossNumber": "8007994889",

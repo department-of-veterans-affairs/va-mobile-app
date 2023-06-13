@@ -8,7 +8,7 @@ import Mock = jest.Mock
 import { context, render, RenderAPI } from 'testUtils'
 import FooterButton from './FooterButton'
 import { TextView, VAIcon } from './index'
-import Compose from 'components/VAIcon/svgs/compose.svg'
+import Compose from 'components/VAIcon/svgs/Compose.svg'
 
 context('FooterButton', () => {
   let component: RenderAPI
@@ -20,7 +20,7 @@ context('FooterButton', () => {
 
     component = render(<FooterButton text="test" />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
@@ -37,7 +37,7 @@ context('FooterButton', () => {
     it('should render the compose svg', async () => {
       component = render(<FooterButton text="test" iconProps={{ name: 'Compose' }} />)
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
       const icon: ReactTestInstance = testInstance.findByType(Compose)
       expect(icon).toBeTruthy()
     })

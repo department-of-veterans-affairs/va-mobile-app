@@ -6,6 +6,11 @@ import { render, context, mockNavProps, waitFor } from 'testUtils'
 import WebviewLogin from './WebviewLogin'
 import { initialAuthState } from 'store/slices'
 
+jest.mock('utils/analytics', () => ({
+  logAnalyticsEvent: jest.fn(),
+  logNonFatalErrorToFirebase: jest.fn(),
+}))
+
 context('WebviewLogin', () => {
   let component: any
 

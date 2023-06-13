@@ -78,7 +78,7 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
     onPress: onPrev,
     testID: 'previous-page',
     a11yHint: t('pagination.previous'),
-    iconProps: { name: 'ArrowLeft', fill: theme.colors.icon.pagination },
+    iconProps: { name: 'ChevronLeft', fill: theme.colors.icon.pagination },
     disabled: page === 1,
   }
 
@@ -86,7 +86,7 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
     onPress: onNext,
     testID: 'next-page',
     a11yHint: t('pagination.next'),
-    iconProps: { name: 'ArrowRight', fill: theme.colors.icon.pagination },
+    iconProps: { name: 'ChevronRight', fill: theme.colors.icon.pagination },
     disabled: page * pageSize >= totalEntries,
   }
   const beginIdx = (page - 1) * pageSize + 1
