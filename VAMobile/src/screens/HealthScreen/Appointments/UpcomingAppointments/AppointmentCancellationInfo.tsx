@@ -64,9 +64,15 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         body = t('upcomingAppointmentDetails.cancelCommunityCareAppointment.body')
         break
       case AppointmentTypeConstants.VA:
-        title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
-        body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
-        break
+        if (cancelId) {
+          title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
+          body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
+          break
+        } else {
+          title = t('upcomingAppointmentDetails.doYouNeedToCancel')
+          body = t('upcomingAppointmentDetails.cancelCommunityCareAppointment.body')
+          break
+        }
       default:
         title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
         body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
@@ -127,7 +133,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
         {body}
       </TextView>
-      {appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine ? (
+      {appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine && cancelId ? (
         <VAButton
           onPress={onCancelAppointment}
           label={t('upcomingAppointmentDetails.cancelAppointment')}
