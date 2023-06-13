@@ -265,7 +265,7 @@ dependencies {
     // kotlin
     implementation "androidx.core:core-ktx:1.7.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$KOTLIN_VERSION"
-
+    
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
@@ -288,6 +288,7 @@ dependencies {
     // playstore core for in-app reviews
     implementation 'com.google.android.play:core:1.10.0'
     implementation 'com.google.android.play:core-ktx:1.8.1'
+    implementation 'androidx.browser:browser:1.5.0'
 
     implementation 'androidx.appcompat:appcompat:1.3.1'
     androidTestImplementation('com.wix:detox:+')
