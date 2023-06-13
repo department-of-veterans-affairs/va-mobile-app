@@ -85,7 +85,7 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
             onPress: onDiscard,
           },
           {
-            text: t('secureMessaging.startNewMessage.cancel.saveDraft'),
+            text: t('secureMessaging.saveDraft'),
             onPress: onSaveDraft,
           },
         ],
