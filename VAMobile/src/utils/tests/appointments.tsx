@@ -54,6 +54,7 @@ export const defaultAppointmentAttributes: AppointmentAttributes = {
   reason: null,
   isCovidVaccine: false,
   isPending: false,
+  cancelId: '12',
 }
 
 export const defaultAppoinment: AppointmentData = {
