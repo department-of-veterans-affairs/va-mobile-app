@@ -16,6 +16,7 @@ import {
   TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
 import { InlineTextWithIconsProps, MessageListItemObj, PickerItem, VAIconProps } from 'components'
+import { UseDestructiveAlertProps, imageDocumentResponseType } from './hooks'
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
 import { getFormattedMessageTime, stringToTitleCase } from 'utils/formattingUtils'
 import { logNonFatalErrorToFirebase } from './analytics'
@@ -361,4 +362,37 @@ export const getfolderName = (id: string, folders: SecureMessagingFolderList): s
   })[0]?.attributes.name
 
   return folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName
+}
+
+/**
+ * Checks if the message has attachments before saving a draft and displays a message to the
+ * user letting them know that the attachments wouldn't be saved with the draft
+ * @param alert - Alert from useDestructiveAlert() hook
+ * @param attachmentsList - List of attachments
+ * @param t - Traslation function
+ * @param dispatchSaveDraft - Dispatch save draft callback
+ */
+export const saveDraftWithAttachmentAlert = (
+  alert: (props: UseDestructiveAlertProps) => void,
+  attachmentsList: Array<imageDocumentResponseType>,
+  t: TFunction,
+  dispatchSaveDraft: () => void,
+) => {
+  if (attachmentsList.length) {
+    alert({
+      title: t('secureMessaging.draft.cantSaveAttachments'),
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('secureMessaging.keepEditing'),
+        },
+        {
+          text: t('secureMessaging.saveDraft'),
+          onPress: dispatchSaveDraft,
+        },
+      ],
+    })
+  } else {
+    dispatchSaveDraft()
+  }
 }

@@ -48,12 +48,13 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions } from 'utils/secureMessaging'
+import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
   useAppDispatch,
   useAttachments,
   useBeforeNavBackListener,
+  useDestructiveAlert,
   useError,
   useMessageWithSignature,
   useRouteNavigation,
@@ -71,6 +72,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
+  const draftAttachmentAlert = useDestructiveAlert()
 
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.draft.saved'),
@@ -342,7 +344,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       messageData.draft_id = savedDraftID
     }
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID))
+      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID)))
     } else {
       dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList))
     }
