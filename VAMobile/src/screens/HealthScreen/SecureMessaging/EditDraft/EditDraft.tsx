@@ -1,4 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
@@ -51,13 +52,11 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { formatSubject } from 'utils/secureMessaging'
-import { getStartNewMessageSubjectPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
+import { SubjectLengthValidationFn, formatSubject, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { useSelector } from 'react-redux'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
@@ -377,7 +376,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           labelKey: 'health:secureMessaging.startNewMessage.category',
           selectedValue: category,
           onSelectionChange: onCategoryChange as () => string,
-          pickerOptions: getStartNewMessageSubjectPickerOptions(t),
+          pickerOptions: getStartNewMessageCategoryPickerOptions(t),
           includeBlankPlaceholder: true,
           isRequiredField: true,
         },
@@ -391,10 +390,15 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           value: subject,
           onChange: setSubject,
           helperTextKey: 'health:secureMessaging.startNewMessage.subject.helperText',
-          maxLength: 50,
           isRequiredField: category === CategoryTypeFields.other,
         },
-        fieldErrorMessage: t('secureMessaging.startNewMessage.subject.fieldError'),
+        fieldErrorMessage: t('secureMessaging.startNewMessage.subject.fieldEmpty'),
+        validationList: [
+          {
+            validationFunction: SubjectLengthValidationFn(subject),
+            validationFunctionErrorMessage: t('secureMessaging.startNewMessage.subject.tooManyCharacters'),
+          },
+        ],
       },
     ]
   }
