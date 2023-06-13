@@ -48,7 +48,7 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { getStartNewMessageSubjectPickerOptions } from 'utils/secureMessaging'
+import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions } from 'utils/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
   useAppDispatch,
@@ -229,12 +229,11 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
   }
 
-  const onSubjectChange = (newCategory: string): void => {
+  const onCategoryChange = (newCategory: string): void => {
     logAnalyticsEvent(Events.vama_sm_change_category(newCategory as CategoryTypes, category as CategoryTypes))
     setCategory(newCategory)
 
-    // if the category used to be general and now its not, clear field errors because the subject is now
-    // no longer a required field
+    // Only "General" category requires a subject, reset errors changing away to clear potential subject error
     if (isSetToGeneral(category) && !isSetToGeneral(newCategory)) {
       setResetErrors(true)
     }
@@ -258,7 +257,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
         labelKey: 'health:secureMessaging.formMessage.to',
         selectedValue: to,
         onSelectionChange: setTo,
-        // TODO: get real picker options for "To" section via api call
         pickerOptions: getToPickerOptions(),
         includeBlankPlaceholder: true,
         isRequiredField: true,
@@ -270,8 +268,8 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       fieldProps: {
         labelKey: 'health:secureMessaging.startNewMessage.category',
         selectedValue: category,
-        onSelectionChange: onSubjectChange,
-        pickerOptions: getStartNewMessageSubjectPickerOptions(t),
+        onSelectionChange: onCategoryChange,
+        pickerOptions: getStartNewMessageCategoryPickerOptions(t),
         includeBlankPlaceholder: true,
         isRequiredField: true,
       },
@@ -285,10 +283,15 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
         value: subject,
         onChange: setSubject,
         helperTextKey: 'health:secureMessaging.startNewMessage.subject.helperText',
-        maxLength: 50,
         isRequiredField: category === CategoryTypeFields.other,
       },
-      fieldErrorMessage: t('secureMessaging.startNewMessage.subject.fieldError'),
+      fieldErrorMessage: t('secureMessaging.startNewMessage.subject.fieldEmpty'),
+      validationList: [
+        {
+          validationFunction: SubjectLengthValidationFn(subject),
+          validationFunctionErrorMessage: t('secureMessaging.startNewMessage.subject.tooManyCharacters'),
+        },
+      ],
     },
     {
       fieldType: FieldType.FormAttachmentsList,
