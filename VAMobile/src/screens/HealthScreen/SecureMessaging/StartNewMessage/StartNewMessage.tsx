@@ -48,7 +48,7 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert  } from 'utils/secureMessaging'
+import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
   useAppDispatch,
