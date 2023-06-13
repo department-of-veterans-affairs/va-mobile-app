@@ -4,7 +4,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, findByTypeWithText, render, RenderAPI } from 'testUtils'
+import { context, findByTypeWithText, findByTypeWithSubstring, render, RenderAPI } from 'testUtils'
 import { AlertBox, MessageAlert, TextView } from 'components'
 
 context('MessageAlert', () => {
@@ -19,6 +19,7 @@ context('MessageAlert', () => {
     hasValidationError?: boolean
     saveDraftAttempted?: boolean
     savingDraft?: boolean
+    errorList?: { [key: number]: string }
   }): void => {
     component = render(<MessageAlert hasValidationError={hasValidationError} saveDraftAttempted={saveDraftAttempted} />)
 
@@ -28,13 +29,14 @@ context('MessageAlert', () => {
   it('displays save draft validation', async () => {
     initializeTestInstance({ hasValidationError: true, saveDraftAttempted: true })
     expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-    expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
-    expect(findByTypeWithText(testInstance, TextView, 'In order to save this draft, all of the required fields must be filled.')).toBeTruthy()
+    expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
+    expect(findByTypeWithSubstring(testInstance, TextView, 'To save this message, provide this information:')).toBeTruthy()
   })
 
   it('displays send validation', async () => {
-    initializeTestInstance({ hasValidationError: true })
+    initializeTestInstance({ hasValidationError: true, saveDraftAttempted: false })
     expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-    expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
+    expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
+    expect(findByTypeWithSubstring(testInstance, TextView, 'To send this message, provide this information:')).toBeTruthy()
   })
 })
