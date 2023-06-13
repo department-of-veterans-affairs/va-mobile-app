@@ -52,7 +52,7 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { SubjectLengthValidationFn, formatSubject, getStartNewMessageCategoryPickerOptions } from 'utils/secureMessaging'
+import { SubjectLengthValidationFn, formatSubject, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -96,6 +96,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     deletingDraft,
   } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const destructiveAlert = useDestructiveAlert()
+  const draftAttachmentAlert = useDestructiveAlert()
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
   const { attachmentFileToAdd } = route.params
@@ -103,7 +104,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const messageID = Number(route.params?.messageID)
   const message = messageID ? messagesById?.[messageID] : null
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID)) || []
-  const isReplyDraft = thread.length === 1 ? false : thread.length > 1 ? true : null
+  const isReplyDraft = thread.length > 1
   const replyToID = thread?.find((id) => {
     const currentMessage = messagesById?.[id]
     return currentMessage?.messageId !== messageID && currentMessage?.senderId !== message?.senderId
@@ -211,7 +212,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('secureMessaging.deleteDraft.keep'),
+          text: t('secureMessaging.keepEditing'),
         },
         {
           text: t('secureMessaging.deleteDraft.delete'),
@@ -220,7 +221,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           },
         },
         {
-          text: t('secureMessaging.deleteDraft.save'),
+          text: t('secureMessaging.saveDraft'),
           onPress: () => {
             setOnSaveDraftClicked(true)
             setOnSendClicked(true)
@@ -235,7 +236,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       actionText: tc('save'),
       addDivider: true,
       iconName: 'Folder',
-      accessibilityLabel: t('secureMessaging.saveDraft.menuBtnA11y'),
+      accessibilityLabel: t('secureMessaging.saveDraft'),
       onPress: () => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
@@ -251,6 +252,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       onPress: onDeletePressed,
     },
   ]
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props): ReactNode => (
@@ -293,7 +295,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     )
   }
 
-  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null || !isTransitionComplete || deletingDraft || isDiscarded) {
+  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || !isTransitionComplete || deletingDraft || isDiscarded) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
       : deletingDraft
@@ -443,7 +445,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     const messageData = getMessageData()
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true))
+      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => dispatch(saveDraft(messageData, saveSnackbarMessages, messageID, isReplyDraft, replyToID, true)))
     } else {
       // TODO: send along composeType so API knows which endpoint to POST to
       dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, replyToID))
