@@ -39,18 +39,24 @@ export const getAnalyticsTimers = (state: RootState): [number, number, number] =
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
+export const logNonFatalErrorToFirebase = async (error: any, errorName?: string) => {
   let errorObject: Error = Error()
+  let attributes: { [key: string]: string } | undefined
 
-  // if the error is a string
   if (typeof error === 'string') {
     errorObject.message = error
     errorObject.name = error
   } else if (typeof error === 'object' && isErrorObject(error)) {
-    // checks if json is in the object for api error
+    // if json property is present, this is an API error
     if ('json' in error && error.json) {
-      const { text, json, networkError, status } = error
-      // if the json's errors array has data if not than it creates an error object with the service call status
+      const { text, json, networkError, status, headers } = error
+      attributes = {
+        text: String(text),
+        networkError: String(networkError),
+        status: String(status),
+        headers: String(headers),
+      }
+      // if json errors array has data, use it. otherwise create error object with API call status
       if (json.errors?.length > 0) {
         const { detail, title } = json.errors[0]
         errorObject.message = detail
@@ -61,11 +67,16 @@ export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
         errorObject.message = errorString
       }
       errorObject.stack = text
-      // checks if stack is in the object for non api error
     } else if ('stack' in error) {
+      // non-api error contains stack property. pass it along
       errorObject = error
     }
 
-    crashlytics().recordError(errorObject, errorName)
+    // record additional info about the error if we have it
+    if (attributes) {
+      await crashlytics().setAttributes(attributes)
+    }
+
+    return crashlytics().recordError(errorObject, errorName)
   }
 }

@@ -181,7 +181,10 @@ const call = async function <T>(
         json = {}
       }
 
-      throw { status: response.status, text, json }
+      let headers = ''
+      response.headers.forEach((value: string, key: string) => (headers += `${key}: ${value}\n`))
+
+      throw { status: response.status, headers, text, json }
     }
 
     // No errors found, return the response

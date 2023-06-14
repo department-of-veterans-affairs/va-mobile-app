@@ -6,6 +6,7 @@ import { invert } from 'underscore'
 
 export type APIError = {
   status?: number
+  headers?: string
   text?: string
   networkError?: boolean
   json?: {
