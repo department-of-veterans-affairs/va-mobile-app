@@ -7,6 +7,10 @@
  * Try to merge in your PR with adequate time to check that it works in staging. Because Staging and Production both use the master branch, once your PR is merged, you only have until the next production deploy to test your changes and revert them if necessary. Your code can occasionally get pulled into an off cycle deploy hotfix that can happen outside the regularly scheduled daily deploys. You can test changes on your branch without merging into master through review instances but this is not commonly used due to erractic behavior and hacky workarounds required to get a SIS user token. See [Review Instances](../Testing/ReviewInstances.md)
  * Checking when production was last re-deployed can be done at through [Argo](https://argocd.vfs.va.gov/applications/vets-api-prod?resource=) via the last sync result section.
 
+## Staging Deployment
+
+  * Staging automatically redeploys after every new commit to Master (only during business hours). This typically takes up to 20 minutes. 
+
 ## Pull Request Continuous Integration  
 
   * When a PR is created, multiple checks are done before it is allowed to merge. 
