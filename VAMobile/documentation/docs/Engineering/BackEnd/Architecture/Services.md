@@ -9,6 +9,7 @@
 | ----------- | ----------- | ----------- |
 | Caseflow | [#caseflow-support-team](https://dsva.slack.com/archives/C0200QGKPKR) | |
 | CDC | N/A | iisinfo@cdc.gov |
+| Check-in | [#check-in-experience](https://dsva.slack.com/archives/C022AC2STBM)| |
 | DSLogon | [#vsp-identity](https://dsva.slack.com/archives/CSFV4QTKN) | |
 | EVSS | [#evss-prod](https://dsva.slack.com/archives/C8R3JS8BU) | |
 | ID.ME | [#vsp-identity](https://dsva.slack.com/archives/CSFV4QTKN) | |
