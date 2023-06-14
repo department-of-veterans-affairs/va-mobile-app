@@ -3,8 +3,9 @@
 
 ## Production Deployment
 
- *  Vets-API daily deploy is at 3PM EST but is manual process so if there's issues, it can be deployed before or after this time. 
- *  Try not to merge in your PR without adequate time to check that it does not cause any issues in staging. Because Staging and Production both use the master branch, once your PR is merged, you only have until the next production deploy to test your changes and revert them if necessary. You can test changes on your branch without merging into master through review instances but this is not commonly used due to erractic behavior and hacky workarounds required to get a SIS user token. See [Review Instances](../Testing/ReviewInstances.md)
+ * Vets-API daily deploy is at 3PM EST but is manual process so if there's issues, it can be deployed before or after this time. 
+ * Try not to merge in your PR without adequate time to check that it does not cause any issues in staging. Because Staging and Production both use the master branch, once your PR is merged, you only have until the next production deploy to test your changes and revert them if necessary. You can test changes on your branch without merging into master through review instances but this is not commonly used due to erractic behavior and hacky workarounds required to get a SIS user token. See [Review Instances](../Testing/ReviewInstances.md)
+ * Checking when production was last re-deployed can be done at through [Argo](https://argocd.vfs.va.gov/applications/vets-api-prod?resource=) 
 
 ## Pull Request Continuous Integration  
 
