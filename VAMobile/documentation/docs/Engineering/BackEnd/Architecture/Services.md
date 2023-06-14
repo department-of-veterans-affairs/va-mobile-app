@@ -9,12 +9,12 @@
 | ----------- | ----------- | ----------- |
 | Caseflow | [#caseflow-support-team](https://dsva.slack.com/archives/C0200QGKPKR) | |
 | CDC | N/A | iisinfo@cdc.gov |
-| DSLogon | [#vsa-authd-exp](https://dsva.slack.com/archives/C909ZG2BB) | |
-| EMIS | [#vsa-authd-exp](https://dsva.slack.com/archives/C909ZG2BB) | |
+| DSLogon | [#vsp-identity](https://dsva.slack.com/archives/CSFV4QTKN) | |
 | EVSS | [#evss-prod](https://dsva.slack.com/archives/C8R3JS8BU) | |
-| ID.ME | [#idme-va-gov](https://dsva.slack.com/archives/C6WGBD0SW) | |
+| ID.ME | [#vsp-identity](https://dsva.slack.com/archives/CSFV4QTKN) | |
 | Lighthouse | [#lighthouse-infrastructure](https://dsva.slack.com/archives/C013VCQKSE7) | |
-| MHV | [#mhv-vetsgov](https://dsva.slack.com/archives/C94V69685), [#vsa-authd-exp](https://dsva.slack.com/archives/C909ZG2BB) | |
-| VAOS | [#vaos-team](https://dsva.slack.com/archives/CMNQT72LX) | |
+| MHV | [#mhv-secure-messaging](https://dsva.slack.com/archives/C03ECSBGSKX), [#mhv-medical-records](https://dsva.slack.com/archives/C03Q2UQL1AS), [#vsp-identity](https://dsva.slack.com/archives/CSFV4QTKN) | |
+| SIS | [#vsp-identity](https://dsva.slack.com/archives/CSFV4QTKN) | |
+| VAOS | [appointments-team](https://dsva.slack.com/archives/CMNQT72LX), [#vaos-engineering](https://dsva.slack.com/archives/C023EFZPX4K) | |
+| VA Profile | [va-profile](https://dsva.slack.com/archives/C7TE0PFTL)| |
 | VEText | [#va-mobile-app-push-notifications](https://dsva.slack.com/archives/C01CSM3EZGT) | |
-| Vet360 | [#vsa-authd-exp](https://dsva.slack.com/archives/C909ZG2BB) | |
