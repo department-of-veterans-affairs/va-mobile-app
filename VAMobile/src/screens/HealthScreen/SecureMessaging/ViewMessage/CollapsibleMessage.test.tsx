@@ -55,7 +55,7 @@ context('CollapsibleMessage', () => {
   }
   let mockProps = {
     message: messageAttributes,
-    isInitialMessage: true,
+    isInitialMessage: false,
   }
 
   const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState) => {

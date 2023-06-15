@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, Ref, useState } from 'react'
+import React, { FC, ReactNode, Ref } from 'react'
 
 import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, LoadingComponent, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
