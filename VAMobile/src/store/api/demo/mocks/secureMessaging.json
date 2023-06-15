@@ -431,7 +431,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2092809/thread": {
+  "/v1/messaging/health/messages/2092809/thread": {
     "data": []
   },
   "/v0/messaging/health/messages/2092803": {
@@ -480,7 +480,7 @@
       }
     ]
   },
-  "/v0/messaging/health/messages/2092803/thread": {
+  "/v1/messaging/health/messages/2092803/thread": {
     "data": []
   },
   "/v0/messaging/health/messages/2092789": {
@@ -510,7 +510,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2092789/thread": {
+  "/v1/messaging/health/messages/2092789/thread": {
     "data": []
   },
   "/v0/messaging/health/messages/2092775": {
@@ -540,7 +540,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2092775/thread": {
+  "/v1/messaging/health/messages/2092775/thread": {
     "data": []
   },
   "/v0/messaging/health/messages/2088259": {
@@ -570,7 +570,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2088259/thread": {
+  "/v1/messaging/health/messages/2088259/thread": {
     "data": []
   },
   "/v0/messaging/health/messages/2088250": {
@@ -600,7 +600,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2088250/thread": {
+  "/v1/messaging/health/messages/2088250/thread": {
     "data": [
       {
         "id": "2084703",
@@ -671,7 +671,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2060125/thread": {
+  "/v1/messaging/health/messages/2060125/thread": {
     "data": []
   },
   "/v0/messaging/health/messages/2060114": {
@@ -701,7 +701,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2060114/thread": {
+  "/v1/messaging/health/messages/2060114/thread": {
     "data": []
   },
   "/v0/messaging/health/messages/2060047": {
@@ -731,7 +731,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2060047/thread": {
+  "/v1/messaging/health/messages/2060047/thread": {
     "data": []
   },
   "/v0/messaging/health/messages/2060025": {
@@ -761,7 +761,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2060025/thread": {
+  "/v1/messaging/health/messages/2060025/thread": {
     "data": []
   },
   "/v0/messaging/health/messages/2060013": {
@@ -791,7 +791,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2060013/thread": {
+  "/v1/messaging/health/messages/2060013/thread": {
     "data": []
   },
   "/v0/messaging/health/messages/2060006": {
@@ -821,7 +821,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2060006/thread": {
+  "/v1/messaging/health/messages/2060006/thread": {
     "data": []
   },
   "/v0/messaging/health/folders/-1": {
@@ -991,7 +991,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2113100/thread": {
+  "/v1/messaging/health/messages/2113100/thread": {
     "data": [
       {
         "id": "2109451",
@@ -1102,7 +1102,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2098942/thread": {
+  "/v1/messaging/health/messages/2098942/thread": {
     "data": [
       {
         "id": "2098903",
@@ -1212,7 +1212,7 @@
       }
     ]
   },
-  "/v0/messaging/health/messages/2098929/thread": {
+  "/v1/messaging/health/messages/2098929/thread": {
     "data": []
   },
   "/v0/messaging/health/messages/2098888": {
@@ -1261,7 +1261,7 @@
       }
     ]
   },
-  "/v0/messaging/health/messages/2098888/thread": {
+  "/v1/messaging/health/messages/2098888/thread": {
     "data": []
   },
   "/v0/messaging/health/messages/2095016": {
@@ -1291,7 +1291,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2095016/thread": {
+  "/v1/messaging/health/messages/2095016/thread": {
     "data": []
   },
   "/v0/messaging/health/folders/-2": {
@@ -1419,7 +1419,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2113141/thread": {
+  "/v1/messaging/health/messages/2113141/thread": {
     "data": []
   },
   "/v0/messaging/health/messages/2112896": {
@@ -1449,7 +1449,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2112896/thread": {
+  "/v1/messaging/health/messages/2112896/thread": {
     "data": [
       {
         "id": "2092803",
@@ -1500,7 +1500,7 @@
       }
     }
   },
-  "/v0/messaging/health/messages/2113020/thread": {
+  "/v1/messaging/health/messages/2113020/thread": {
     "data": [
       {
         "id": "2098942",

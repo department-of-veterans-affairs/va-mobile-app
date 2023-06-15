@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, Ref } from 'react'
+import React, { FC, ReactNode, Ref, useState } from 'react'
 
 import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, LoadingComponent, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -18,7 +18,7 @@ export type ThreadMessageProps = {
   /* message object */
   message: SecureMessagingMessageAttributes
   /* if it is the message selected */
-  isInitialMessage: boolean
+  isInitialMessage?: boolean
   /* ref for the message */
   collapsibleMessageRef?: Ref<View>
 }
@@ -106,17 +106,29 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     )
   }
 
+  const getCollapsedContent = (): ReactNode => {
+    return (
+      <Box>
+        <TextView mt={condensedMarginBetween} variant="MobileBody" numberOfLines={2} accessible={false}>
+          {body}
+        </TextView>
+      </Box>
+    )
+  }
+
   const loadMessageError = messageIDsOfError?.includes(message.messageId)
 
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,
     expandedContent: loadMessageError ? <IndividualMessageErrorComponent /> : getExpandedContent(),
+    collapsedContent: getCollapsedContent(),
     customOnPress: onPress,
-    expandedInitialValue: isInitialMessage,
     noBorder: true,
     headerRef: collapsibleMessageRef,
   }
+
+  //ToDo: in future ticket when updating the top card of the review messages screen to return <></> if it is the initial message as it is not supposed to be in the list
 
   return <AccordionCollapsible {...accordionProps} />
 }
