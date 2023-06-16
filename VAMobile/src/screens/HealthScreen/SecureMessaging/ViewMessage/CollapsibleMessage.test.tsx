@@ -1,18 +1,13 @@
 import 'react-native'
 import React from 'react'
+import { fireEvent, screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
-
-import { context, render, RenderAPI } from 'testUtils'
+import { context, render } from 'testUtils'
 import { downloadFileAttachment } from 'store/slices'
-import { Pressable } from 'react-native'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/slices'
 import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import CollapsibleMessage from './CollapsibleMessage'
 import Mock = jest.Mock
-import { TextView } from 'components'
-import { waitFor } from '@testing-library/react-native'
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
@@ -28,10 +23,7 @@ jest.mock('store/slices', () => {
 })
 
 context('CollapsibleMessage', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let onPressSpy: Mock
-
   let listOfAttachments: Array<SecureMessagingAttachment> = [
     {
       id: 1,
@@ -40,65 +32,54 @@ context('CollapsibleMessage', () => {
       link: 'key',
     },
   ]
-  let messageAttributes: SecureMessagingMessageAttributes = {
-    messageId: 1,
-    category: CategoryTypeFields.education,
-    subject: 'Test Message Subject',
-    body: 'Test Message Body',
-    attachment: true,
-    attachments: listOfAttachments,
-    sentDate: '2013-06-06T04:00:00.000+00:00',
-    senderId: 11,
-    senderName: 'John Smith',
-    recipientId: 2,
-    recipientName: 'Jane Smith',
-  }
-  let mockProps = {
-    message: messageAttributes,
-    isInitialMessage: false,
-  }
 
-  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState) => {
+  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, isInitialMessage: boolean = false) => {
     onPressSpy = jest.fn(() => {})
 
-    component = render(<CollapsibleMessage {...mockProps} />, {
+    let messageAttributes: SecureMessagingMessageAttributes = {
+      messageId: 1,
+      category: CategoryTypeFields.education,
+      subject: 'Test Message Subject',
+      body: 'Test Message Body',
+      attachment: true,
+      attachments: listOfAttachments,
+      sentDate: '2013-06-06T04:00:00.000+00:00',
+      senderId: 11,
+      senderName: 'John Smith',
+      recipientId: 2,
+      recipientName: 'Jane Smith',
+    }
+    let mockProps = {
+      message: messageAttributes,
+      isInitialMessage: isInitialMessage,
+    }
+
+    render(<CollapsibleMessage {...mockProps} />, {
       preloadedState: {
         ...InitialState,
         errors: errorsState,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  it('should render message  contents correctly', async () => {
-    const texts = testInstance.findAllByType(TextView)
-    expect(texts.length).toBe(5)
-    expect(texts[0].props.children).toBe('John Smith')
+  it('renders CollapsibleMessage when it is not the initialMessage', () => {
+    expect(screen.getByText('John Smith')).toBeTruthy()
     // cannot test date textView - date display is dependent on viewer's current time zone
-    expect(texts[2].props.children).toBe('Test Message Body')
-    expect(texts[3].props.children).toBe('Attachments')
+    expect(screen.getByText('Test Message Body')).toBeTruthy()
   })
 
-  it('should render AttachmentLink content correctly', async () => {
-    const linkText = testInstance.findAllByType(Pressable)[1].findByType(TextView)
-    expect(linkText.props.children).toBe('testAttachment (1 MB)')
+  it('does not render CollapsibleMessage when it is the initialMessage', () => {
+    //ToDo when the ticket for the card is completed #6056
   })
 
-  describe('when an attachment link is clicked', () => {
-    it('should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[1].props.onPress()
-        expect(downloadFileAttachment).toBeCalledWith(listOfAttachments[0], 'attachment-1')
-      })
-    })
+  it('should render AttachmentLink content correctly when collapsibleMessage is expanded and should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', async () => {
+    fireEvent.press(screen.getByText('John Smith'))
+    expect(screen.getByText('testAttachment (1 MB)')).toBeTruthy()
+    fireEvent.press(screen.getByText('testAttachment (1 MB)'))
+    expect(downloadFileAttachment).toBeCalledWith(listOfAttachments[0], 'attachment-1')
   })
 })
