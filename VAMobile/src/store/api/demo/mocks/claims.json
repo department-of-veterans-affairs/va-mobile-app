@@ -119,7 +119,7 @@
         "contentionList": [
           "Low back strain (New)"
         ],
-        "vaRepresentative": "Contact your VA regional office for more information.",
+        "vaRepresentative": null,
         "eventsTimeline": [
           {
             "type": "never_received_from_you_list",
@@ -487,7 +487,7 @@
           "Hearing loss (New)",
           " ringing in ears (New)"
         ],
-        "vaRepresentative": "Contact your VA regional office for more information.",
+        "vaRepresentative": null,
         "eventsTimeline": [
           {
             "type": "phase7",
@@ -709,7 +709,7 @@
           "hearing loss (Increase)",
           " kidney removal of (New)"
         ],
-        "vaRepresentative": "Contact your VA regional office for more information.",
+        "vaRepresentative": "Checking this is pronounced",
         "eventsTimeline": [
           {
             "trackedItemId": null,

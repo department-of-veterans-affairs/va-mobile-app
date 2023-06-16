@@ -44,7 +44,9 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
         <TextView accessibilityLabel={t('claimDetails.yourRepresentative.a11yLabel')} variant="MobileBodyBold">
           {t('claimDetails.yourRepresentative')}
         </TextView>
-        <TextView variant="MobileBody">{attributes?.vaRepresentative}</TextView>
+        <TextView variant="MobileBody" accessibilityLabel={attributes?.vaRepresentative ? undefined : t('contactYourVA.a11yLabel')}>
+          {attributes?.vaRepresentative || t('contactYourVA')}
+        </TextView>
       </TextArea>
     </Box>
   )
