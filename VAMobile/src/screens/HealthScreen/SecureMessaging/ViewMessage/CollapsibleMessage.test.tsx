@@ -24,6 +24,8 @@ jest.mock('store/slices', () => {
   }
 })
 
+const mockDateISO = DateTime.fromMillis(1643402338567).toISO()
+
 context('CollapsibleMessage', () => {
   let onPressSpy: Mock
   let listOfAttachments: Array<SecureMessagingAttachment> = [
@@ -34,7 +36,6 @@ context('CollapsibleMessage', () => {
       link: 'key',
     },
   ]
-  const mockDateISO = DateTime.fromMillis(1643402338567).toISO()
 
   const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, isInitialMessage: boolean = false) => {
     onPressSpy = jest.fn(() => {})
