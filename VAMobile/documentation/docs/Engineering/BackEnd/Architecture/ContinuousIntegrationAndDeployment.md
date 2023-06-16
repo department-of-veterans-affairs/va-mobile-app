@@ -10,6 +10,7 @@
 ## Staging Deployment
 
   * Staging automatically redeploys after every new commit to Master (only during business hours). This typically takes up to 20 minutes. 
+  * Checking when staging was last re-deployed can be done at through [Argo](https://argocd.vfs.va.gov/applications/vets-api-staging?resource=) via the last sync result section.
 
 ## Pull Request Continuous Integration  
   
@@ -17,7 +18,7 @@
   * When a PR is created, multiple checks are done before it is allowed to merge. 
     * Rubocop, all changes must comply with the linter, see [Rubocop](#Rubocop). 
     * All specs must pass. There are some specs (non-mobile) that do not pass consistently. This typically get disabled for this check but can occasionally slip through and fail your specs. If this check does fail, it may be a transient issue with the CI pipeline and just needs to be re-run. Occassionally, bad code gets merged into master that eventually gets corrected. You may need to re-merge with master to bring in these fixes to get this job to succeed (use re-merge master button on PR github page, don't have to do it manually). If after about 4 to 5 re-runs and re-merges of master into your branch, if it is still not passing, reach out to DSVA Platform Support (https://dsva.slack.com/archives/CBU0KDSB1).
-    * Total lines of change is under 500. If it is above 500 and cannot realistically be reduced, you can request an exception through DSVA Platform Support (See above link). 
+    * Total lines of change (LOC) is under 500. If it is above 500 and cannot realistically be reduced, you can request an exception through DSVA Platform Support (See above link). JSON and YML files such as VCR cassettes used in specs do not count towards LOC.
     * Approved review by a Mobile team member. (Technically, a VA API Engineer from platform support approval will allow you to merge but as an internal policy, we require at least one mobile engineer to approve.)
     * If there are changes outside the mobile module, an additional review will be required by VA API Engineers group. This can also be requested by the DSVA Platform support (see above link).
   
