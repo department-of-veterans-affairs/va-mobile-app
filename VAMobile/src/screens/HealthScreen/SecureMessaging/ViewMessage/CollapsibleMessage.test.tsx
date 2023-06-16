@@ -8,6 +8,8 @@ import { ErrorsState, initialErrorsState, InitialState } from 'store/slices'
 import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import CollapsibleMessage from './CollapsibleMessage'
 import Mock = jest.Mock
+import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
+import { DateTime } from 'luxon'
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
@@ -32,6 +34,7 @@ context('CollapsibleMessage', () => {
       link: 'key',
     },
   ]
+  const mockDateISO = DateTime.fromMillis(1643402338567).toISO()
 
   const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, isInitialMessage: boolean = false) => {
     onPressSpy = jest.fn(() => {})
@@ -43,7 +46,7 @@ context('CollapsibleMessage', () => {
       body: 'Test Message Body',
       attachment: true,
       attachments: listOfAttachments,
-      sentDate: '2013-06-06T04:00:00.000+00:00',
+      sentDate: mockDateISO,
       senderId: 11,
       senderName: 'John Smith',
       recipientId: 2,
@@ -68,7 +71,7 @@ context('CollapsibleMessage', () => {
 
   it('renders CollapsibleMessage when it is not the initialMessage', () => {
     expect(screen.getByText('John Smith')).toBeTruthy()
-    // cannot test date textView - date display is dependent on viewer's current time zone
+    expect(screen.getByText(getFormattedDateAndTimeZone(mockDateISO))).toBeTruthy()
     expect(screen.getByText('Test Message Body')).toBeTruthy()
   })
 
