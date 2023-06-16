@@ -29,57 +29,9 @@ When it comes to haptics, less is more. Too much vibration can become annoying, 
 - Haptics are implemented on a component level.
 - We use a 3 pattern since it is available in our React Native library and available across multiple operating systems.
 
-<table>
-  <tr>
-   <td>
-<strong>Component</strong>
-   </td>
-   <td><strong>Occurrence</strong>
-   </td>
-   <td><strong>Pattern</strong>
-   </td>
-   <td><strong>OS</strong>
-   </td>
-  </tr>
-  <tr>
-   <td>Snackbar
-   </td>
-   <td>Appearance
-   </td>
-   <td>3 Pattern
-   </td>
-   <td>Android / iOS
-   </td>
-  </tr>
-  <tr>
-   <td>Toggle
-   </td>
-   <td>Interaction
-   </td>
-   <td>Heavy Toggle
-   </td>
-   <td>Android / iOS
-   </td>
-  </tr>
-  <tr>
-   <td>Error Alert Box
-   </td>
-   <td>Appearance
-   </td>
-   <td>3 Pattern
-   </td>
-   <td>Android / iOS
-   </td>
-  </tr>
-  <tr>
-   <td>Warning Alert Box
-   </td>
-   <td>Appearance
-   </td>
-   <td>3 Pattern
-   </td>
-   <td>Android / iOS
-   </td>
-  </tr>
-</table>
-
+| Component | Occurrence | Pattern | OS |
+|-----------|------------|---------|----|
+| Snackbar | Appearance | 3 Pattern | Android / iOS |
+| Toggle | Interaction | Heavy Toggle | Android / iOS |
+| Error Alert Box| Appearance | 3 Pattern | Android / iOS |
+| Warning Alert Box | Appearance | 3 Pattern | Android / iOS |
