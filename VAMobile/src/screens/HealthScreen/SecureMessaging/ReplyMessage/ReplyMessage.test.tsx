@@ -286,13 +286,11 @@ context('ReplyMessage', () => {
   })
 
   it('should render the correct number of accordions', async () => {
-    await waitFor(() => {
-      expect(screen.getAllByRole('tab').length).toBe(3)
-      expect(screen.getByText('mock sender 1')).toBeTruthy()
-      expect(screen.getByText('mock sender 2')).toBeTruthy()
-      expect(screen.getAllByText('mock sender 3').length).toBe(2)
-      expect(screen.queryByText('mock sender 45')).toBeFalsy()
-    })
+    expect(screen.getAllByRole('tab').length).toBe(3)
+    expect(screen.getByText('mock sender 1')).toBeTruthy()
+    expect(screen.getByText('mock sender 2')).toBeTruthy()
+    expect(screen.getAllByText('mock sender 3').length).toBe(2)
+    expect(screen.queryByText('mock sender 45')).toBeFalsy()
   })
 
   describe('when loading is set to true', () => {
