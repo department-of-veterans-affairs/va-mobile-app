@@ -285,15 +285,9 @@ context('ReplyMessage', () => {
     })
   })
 
-  it('renders only messages in the same thread as the message associated with messageID', async () => {
-    await waitFor(() => {
-      expect(testInstance.findAllByType(AccordionCollapsible).length).toBe(3)
-    })
-  })
-
   it('should render the correct number of accordions', async () => {
     await waitFor(() => {
-      expect(screen.UNSAFE_getAllByType(AccordionCollapsible).length).toBe(3)
+      expect(screen.getAllByRole('tab').length).toBe(3)
       expect(screen.getByText('mock sender 1')).toBeTruthy()
       expect(screen.getByText('mock sender 2')).toBeTruthy()
       expect(screen.getAllByText('mock sender 3').length).toBe(2)
