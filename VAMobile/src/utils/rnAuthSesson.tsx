@@ -24,7 +24,6 @@ export const startAuthSession = async (codeChallenge: string, stateParam: string
       SISEnabled,
     )
   } else {
-    console.debug('custom tabs')
     return CustomTabs.openGoogle(
       SISEnabled ? AUTH_SIS_ENDPOINT : AUTH_IAM_ENDPOINT,
       AUTH_IAM_CLIENT_ID,
