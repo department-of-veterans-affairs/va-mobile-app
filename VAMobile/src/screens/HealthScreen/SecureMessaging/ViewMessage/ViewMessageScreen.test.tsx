@@ -128,7 +128,7 @@ context('ViewMessageScreen', () => {
     })
 
     it('renders correct amount of CollapsibleMessages', () => {
-      expect(screen.UNSAFE_getAllByType(AccordionCollapsible).length).toBe(3)
+      expect(screen.getAllByRole('tab').length).toBe(3)
       expect(screen.getByText('mock sender 1')).toBeTruthy()
       expect(screen.getByText('mock sender 2')).toBeTruthy()
       expect(screen.getByText('mock sender 3')).toBeTruthy()
