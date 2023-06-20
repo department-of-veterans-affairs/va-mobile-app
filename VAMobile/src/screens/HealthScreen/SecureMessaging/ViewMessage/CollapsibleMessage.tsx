@@ -109,7 +109,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const getCollapsedContent = (): ReactNode => {
     return (
       <Box>
-        <TextView mt={condensedMarginBetween} variant="MobileBody" numberOfLines={2} accessible={false}>
+        <TextView mt={condensedMarginBetween} variant="MobileBody" numberOfLines={2}>
           {body}
         </TextView>
       </Box>
