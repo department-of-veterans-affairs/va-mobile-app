@@ -28,8 +28,6 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) : Rea
                   appendQueryParameter("response_type", "code")
                   appendQueryParameter("response_mode", "query")
                   appendQueryParameter("state", state)
-                  // appendQueryParameter("login", "prompt")
-                  // appendQueryParameter("forceAuthn", "true")
                 }
             }
         }.build()
