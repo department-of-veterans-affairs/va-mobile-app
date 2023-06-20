@@ -1,36 +1,47 @@
 # Unit Tests
 
-Unit tests surface regressions in our components while serving as a form of documentation for how components should function. This document describes practices to help create simple, easy to maintain, solid, user-focused tests.
+Unit tests should provide confidence that components perform as expected, surfacing regressions quickly whenever an issue occurs. Unit tests also serve as a form of documentation for engineers about how components should function. This document describes practices to help create simple, easy to maintain, solid, user-focused tests.
 
 ## Frameworks
 
-We run our unit tests with [Jest](https://jestjs.io/). Going further, [React Native Testing Library](https://callstack.github.io/react-native-testing-library/) provides a set of utility functions that make React Native component testing easier and more robust. RNTL enables many of the best practices described here.
+We run our unit tests with [Jest](https://jestjs.io/) and [React Native Testing Library](https://callstack.github.io/react-native-testing-library/). RNTL provides a set of utility functions that make React Native component testing easier and more robust. RNTL enables many of the best practices described here.
 
 ## Test coverage
 
-All React components should have at least one unit test. The ideal quantity of test coverage depends on component type. Examining types from most coverage to least:
+All React components should have at least one unit test. The ideal quantity of test coverage depends on component type. Examining component types from most coverage to least:
 
-- **Shared components** are isolated bundles of code which many other components consume. Because of this, unit tests should exercise shared components thoroughly, including checking all edge cases and error states. (Maximum coverage)
-- **Screen child components** are usually not shared and are tightly bound to other components in the screen. Unit tests should cover complicated logic that's prone to regressions, while avoiding duplicate coverage in parent and child components. Tests should cover edge cases and error states, but need not check every possible combination of props and state. (Medium to high coverage)
-- **Entire screens** are typically complex, integrating multiple components along with Redux state, routing, and 3rd party modules. E2E tests are the best way to fully test screens. Unit tests for entire screens should be limited in scope to avoid duplicating E2E test coverage. (Low coverage)
+- **Shared components** are isolated bundles of code which many other components consume. Because shared components are widely used, unit tests should exercise them very thorougly, including checking all edge cases and error states. (Maximum coverage)
+- **Screen child components** are usually not shared and are tightly bound to other components in the screen. Unit tests should focus on complicated logic that's prone to regressions, while avoiding duplicate coverage in parent and child components. Tests should cover edge cases and error states, but need not check every possible combination of props and state. (High coverage)
+- **Entire screens** are typically complex, integrating multiple components along with Redux state, routing, and 3rd party modules. We lean on E2E tests to fully cover screens, so unit tests for screens should be limited in scope to avoid duplicating E2E test coverage. Also if a child component of a screen already has its own unit tests, there's no need to duplicate those tests in the screen itself. (Medium coverage)
 
-Note that while a high coverage percentage is generally good, it doesn't tell the whole story. It's important to think critically and implement tests that cover the key cases a user might encounter.
+Note that while a high coverage percentage is good, it doesn't ensure tests are complete and correct. It's important to think critically and implement tests that cover the key cases a user might encounter.
 
-## Targeting rendered text
+### More information
+- Google's [Code Coverage Best Practices](https://testing.googleblog.com/2020/08/code-coverage-best-practices.html)
+- [How to know what to test](https://kentcdodds.com/blog/how-to-know-what-to-test) (Kent C Dodds)
+
+## Targeting by rendered text, label, or role
 
 &#10060; Avoid targeting child props based on numeric order:
 ```tsx
 expect(textView[5].props.children).toEqual('Rx #: 3636691')
 ```
 
-&#9989; Instead, target rendered text or labelText:
+&#9989; Instead, target rendered text, role, or accessibility label:
 
 ```tsx
 expect(screen.getByText('Rx #: 3636691')).toBeTruthy()
+expect(screen.getByLabelText('Prescription number 3636691')).toBeTruthy()
+expect(screen.getByRole('checkbox', { name: 'Prescription 1 of 3', checked: true })).toBeTruthy()
 ```
 
 ### Why?
-Targeting rendered text reduces test fragility because moving text into/out of a child component, changing props, or adding/removing sibling components does not break the test. This type of test is also simpler to read and write because it ignores implementation details, focusing instead on what the user expects to see in rendered output.
+Targeting rendered text, role, or accessibility label reduces test fragility because moving an element into/out of a child component, changing props, or adding/removing sibling components does not break the test. This type of test is simpler to read and write because it ignores implementation details, focusing instead on what the user expects to see in rendered output. Further, targeting accessibility label or role ensures screen readers read the correct label and/or role to the user, preventing a11y regressions.
+
+### More information
+- React Testing Library's [guiding principles](https://testing-library.com/docs/guiding-principles)
+- [Some thoughts](https://www.boyney.io/blog/2019-05-21-my-experience-moving-from-enzyme-to-react-testing-library) on why this RTL approach is an improvement over Enzyme
+- [The Dangers of Shallow Rendering](https://mskelton.medium.com/the-dangers-of-shallow-rendering-343e48fe5f28)
 
 ## Firing events
 &#10060; Avoid calling a callback function in a prop to simulate user interaction:
