@@ -11,7 +11,7 @@ We run our unit tests with [Jest](https://jestjs.io/) and [React Native Testing 
 All React components should have at least one unit test. The ideal quantity of test coverage depends on component type. Examining component types from most coverage to least:
 
 - **Shared components** are isolated bundles of code which many other components consume. Because shared components are widely used, unit tests should exercise them very thorougly, including checking all edge cases and error states. (Maximum coverage)
-- **Screen child components** are usually not shared and are tightly bound to other components in the screen. Unit tests should focus on complicated logic that's prone to regressions, while avoiding duplicate coverage in parent and child components. Tests should cover edge cases and error states, but need not check every possible combination of props and state. (High coverage)
+- **Screen child components** are usually not shared and are tightly bound to other components in the screen. Unit tests for these child components should focus on complicated logic that's prone to regressions, while avoiding duplicate coverage between parent and child components. Tests should cover edge cases and error states, but need not check every possible combination of props and state. (High coverage)
 - **Entire screens** are typically complex, integrating multiple components along with Redux state, routing, and 3rd party modules. We lean on E2E tests to fully cover screens, so unit tests for screens should be limited in scope to avoid duplicating E2E test coverage. Also if a child component of a screen already has its own unit tests, there's no need to duplicate those tests in the screen itself. (Medium coverage)
 
 Note that while a high coverage percentage is good, it doesn't ensure tests are complete and correct. It's important to think critically and implement tests that cover the key cases a user might encounter.
@@ -36,7 +36,7 @@ expect(screen.getByRole('checkbox', { name: 'Prescription 1 of 3', checked: true
 ```
 
 ### Why?
-Targeting rendered text, role, or accessibility label reduces test fragility because moving an element into/out of a child component, changing props, or adding/removing sibling components does not break the test. This type of test is simpler to read and write because it ignores implementation details, focusing instead on what the user expects to see in rendered output. Further, targeting accessibility label or role ensures screen readers read the correct label and/or role to the user, preventing a11y regressions.
+This method reduces test fragility because moving an element into/out of a child component, changing props, or adding/removing sibling components does not break the test. Targeting accessibility label or role ensures screen readers read the correct label and/or role to the user, preventing a11y regressions. Finally, this type of test is simpler to read and write because it ignores implementation details, focusing instead on what the user expects to see in rendered output. 
 
 ### More information
 - React Testing Library's [guiding principles](https://testing-library.com/docs/guiding-principles)
@@ -71,7 +71,7 @@ fireEvent.scroll(screen.getByText('scroll-view'), {
 ```
 
 ### Why?
-Calling a callback function in a prop only checks that the function runs. It doesn’t test that the element is visible to the user and that it’s wired up correctly. It’s also fragile because refactoring the component might change the props and break the test. Firing an event resolves these concerns, which apply equally to text fields and scrolling.
+Calling a callback function in a prop only checks that the function runs. It doesn’t test that the element is visible to the user and that it’s wired up correctly. It’s also fragile because refactoring the component might change the props and break the test. Firing an event resolves these concerns, which also apply to text fields and scrolling.
 
 ## Exercising key functionality
 &#10060; Avoid tests that just check large quantities of static props:
@@ -95,12 +95,15 @@ describe('on click of the "Go to inbox" button', () => {
 ```
 
 ### Why?
-Testing that a sequence of TextViews renders certain text doesn't tell us much. Testing important and/or complex logic is more beneficial because that’s where high-impact regressions typically occur. Failures might come from breaking changes in upgraded modules, modified shared components, or engineer error, but regardless, tests should provide confidence that the component still functions correctly. In addition, tests for complicated logic serve as a form of documentation, letting engineers know how the code is supposed to function.
+Each test should add value by serving as a focused warning that something important has failed. Testing that a sequence of TextViews renders certain text doesn't tell us much. It's also fragile because the smallest text change breaks the test. Testing important and/or complex logic is more beneficial because that’s where high-impact regressions typically occur. In addition, tests for complicated logic serve as a form of documentation, letting engineers know how the code is supposed to function.
+
+### More information
+- See #2 of [The 7 Sins of Unit Testing](https://www.testrail.com/blog/the-7-sins-of-unit-testing/) about why more assertions can be worse, not better
 
 ## Testing from the user’s perspective
 Consider what the user expects to do and see, then write tests that simulate it. For example, let's say the user expects to press “Select all”, then see two checked checkboxes and relevant text.
 
-&#9989; This test is sufficient:
+&#9989; This test tells the user's story and checks it at the same time:
 
 ```tsx
 it('toggles items when "Select all" is pressed', () => {
@@ -112,7 +115,10 @@ it('toggles items when "Select all" is pressed', () => {
 ```
 
 ### Why?
-This type of test checks for regressions in user functionality, which are the most important regressions to prevent because they directly affect app usability. Further, this approach allows a wide variety of refactoring and layout changes under the hood without breaking the test.
+By taking the user's point of view, user-focused tests help prevent the most damaging regressions, ones which prevent users from completing their desired tasks. But because implementation details aren't baked into the test, engineers retain the flexibility to refactor as needed without causing test failures.
+
+### More information
+- Why it's important to focus on the [end user](https://kentcdodds.com/blog/avoid-the-test-user) and avoid the "test user"
 
 ## Test File Naming
 
