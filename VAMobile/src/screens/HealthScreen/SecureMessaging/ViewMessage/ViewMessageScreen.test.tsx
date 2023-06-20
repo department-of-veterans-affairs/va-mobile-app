@@ -9,6 +9,7 @@ import { AccordionCollapsible} from 'components'
 import ViewMessageScreen from './ViewMessageScreen'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 import { DateTime } from 'luxon'
+import MessageCard from './MessageCard'
 
 // Contains message Ids grouped together by thread
 const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
@@ -124,17 +125,15 @@ context('ViewMessageScreen', () => {
     })
 
     it('renders CollapsibleMessage card for the initialMessage', () => {
-      //ToDo with 6056
+      expect(screen.UNSAFE_getAllByType(MessageCard).length).toBe(1)
+      expect(screen.getByText('mock sender 3')).toBeTruthy()
     })
 
     it('renders correct amount of CollapsibleMessages', () => {
-      expect(screen.UNSAFE_getAllByType(AccordionCollapsible).length).toBe(3)
+      expect(screen.UNSAFE_getAllByType(AccordionCollapsible).length).toBe(2)
       expect(screen.getByText('mock sender 1')).toBeTruthy()
       expect(screen.getByText('mock sender 2')).toBeTruthy()
-      expect(screen.getByText('mock sender 3')).toBeTruthy()
       expect(screen.queryByText('mock sender 45')).toBeFalsy()
-
-      //ToDO with 6056 make it not render the initialMessage for collapsible messages
     })
     it('should have the reply button since the latest message is within 45 days', () => {
       expect(screen.getByText('Reply')).toBeTruthy()

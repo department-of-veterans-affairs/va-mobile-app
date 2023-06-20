@@ -128,11 +128,11 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     headerRef: collapsibleMessageRef,
   }
 
-  //ToDo: in future ticket when updating the top card of the review messages screen to return <></> if it is the initial message as it is not supposed to be in the list
   if (isInitialMessage) {
+    return <></>
   } else {
+    return <AccordionCollapsible {...accordionProps} />
   }
-  return <AccordionCollapsible {...accordionProps} />
 }
 
 export default CollapsibleMessage

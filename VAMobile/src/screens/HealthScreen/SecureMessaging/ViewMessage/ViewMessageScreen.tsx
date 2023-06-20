@@ -16,12 +16,11 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
-import { formatSubject, getfolderName } from 'utils/secureMessaging'
+import { getfolderName } from 'utils/secureMessaging'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
-import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
-import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
+import MessageCard from './MessageCard'
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
 
@@ -60,8 +59,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
-  const subject = message ? message.subject : ''
-  const category = message ? message.category : 'OTHER'
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   // have to use uselayout due to the screen showing in white or showing the previouse data
@@ -229,24 +226,26 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
           showModalByDefault={true}
         />
       )}
-      {!replyExpired ? (
-        <ReplyMessageButton messageID={messageID} />
-      ) : (
-        <Box>
-          <StartNewMessageButton />
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')} />
-          </Box>
+      {replyExpired && (
+        <Box my={theme.dimensions.standardMarginBetween}>
+          <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')}>
+            <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
+              {t('secureMessaging.reply.olderThan45Days')}
+            </TextView>
+          </AlertBox>
         </Box>
       )}
-      <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-        <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-          <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
-            {formatSubject(category, subject, t)}
-          </TextView>
+      <MessageCard message={message} />
+      {thread.length > 1 && (
+        <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+          <Box accessible={true} accessibilityRole={'header'}>
+            <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
+              {t('secureMessaging.reply.messageConversation')}
+            </TextView>
+          </Box>
+          {renderMessages(message, messagesById, thread)}
         </Box>
-        {renderMessages(message, messagesById, thread)}
-      </Box>
+      )}
     </ChildTemplate>
   )
 }
