@@ -10,7 +10,7 @@ import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'sto
 import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
@@ -32,7 +32,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
   const { loadingAttachments, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-
+  const screenReaderEnabled = useIsScreenReaderEnabled(true)
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const attachLabel = (attachment && 'has attachment') || ''
 
@@ -122,7 +122,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,
     expandedContent: loadMessageError ? <IndividualMessageErrorComponent /> : getExpandedContent(),
-    collapsedContent: getCollapsedContent(),
+    collapsedContent: !screenReaderEnabled ? getCollapsedContent() : undefined,
     customOnPress: onPress,
     noBorder: true,
     headerRef: collapsibleMessageRef,
