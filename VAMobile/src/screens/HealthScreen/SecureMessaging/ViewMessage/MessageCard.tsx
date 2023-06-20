@@ -95,12 +95,12 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
           </Box>
         )}
         {attachments?.length && (
-          <Box mt={theme.dimensions.condensedMarginBetween} mr={theme.dimensions.gutter}>
+          <Box mb={theme.dimensions.condensedMarginBetween} mr={theme.dimensions.gutter}>
             <Box accessible={true} accessibilityRole="header">
               <TextView variant={'MobileBodyBold'}>{t('secureMessaging.viewMessage.attachments')}</TextView>
             </Box>
             {attachments?.map((a, index) => (
-              <Box key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
+              <Box key={`attachment-${a.id}`} mb={theme.dimensions.condensedMarginBetween}>
                 <AttachmentLink
                   name={a.filename}
                   formattedSize={bytesToFinalSizeDisplay(a.size, tFunction)}
@@ -126,8 +126,8 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
       <Box mx={theme.dimensions.gutter}>
         {getHeader()}
         {getContent()}
-        {getMessageHelp()}
         {attachment && getAttachment()}
+        {getMessageHelp()}
         {getReplyOrStartNewMessageButton()}
       </Box>
     </Box>
