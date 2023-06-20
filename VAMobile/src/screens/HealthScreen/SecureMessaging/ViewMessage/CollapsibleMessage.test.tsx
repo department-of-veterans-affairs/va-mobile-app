@@ -24,7 +24,7 @@ jest.mock('store/slices', () => {
   }
 })
 
-const mockDateISO = DateTime.fromMillis(1643402338567).toISO()
+const mockDateISO = DateTime.local().toISO()
 
 context('CollapsibleMessage', () => {
   let onPressSpy: Mock

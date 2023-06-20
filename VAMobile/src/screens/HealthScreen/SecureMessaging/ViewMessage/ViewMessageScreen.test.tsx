@@ -149,7 +149,7 @@ context('ViewMessageScreen', () => {
       it('should show AlertBox with "Message could not be found" title', async () => {
         expect(screen.getByText('mock sender 1')).toBeTruthy()
         fireEvent.press(screen.getByText('mock sender 1'))
-        expect(screen.UNSAFE_getAllByType(IndividualMessageErrorComponent)).toBeTruthy()
+        expect(screen.getByText("If the app still doesn't work, call the My HealtheVet Help Desk. We're here Monday-Friday, 8:00 a.m.-8:00 p.m. ET.")).toBeTruthy()
         expect(screen.getByText('Message could not be found')).toBeTruthy()
       })
     })
