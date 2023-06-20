@@ -28,10 +28,10 @@ type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessag
  * Accepts a message, map of all messages, and array of messageIds in the current thread.  Gets each messageId from the message map, sorts by
  * sentDate ascending, and returns an array of <CollapsibleMessages/>
  */
-export const renderMessages = (message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>): ReactNode => {
+export const renderMessages = (message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>, hideMessage = false): ReactNode => {
   const threadMessages = thread.map((messageID) => messagesById[messageID]).sort((message1, message2) => (message1.sentDate > message2.sentDate ? -1 : 1))
 
-  return threadMessages.map((m) => m && m.messageId && <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={m.messageId === message.messageId} />)
+  return threadMessages.map((m) => m && m.messageId && <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={hideMessage && m.messageId === message.messageId} />)
 }
 
 const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) => {
@@ -243,7 +243,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
               {t('secureMessaging.reply.messageConversation')}
             </TextView>
           </Box>
-          {renderMessages(message, messagesById, thread)}
+          {renderMessages(message, messagesById, thread, true)}
         </Box>
       )}
     </ChildTemplate>
