@@ -67,7 +67,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   const buttonDataList: Array<SimpleListItemObj> = [
-    { text: t('contactVA.title'), a11yHintText: a11yLabelVA(t('contactVA')), onPress: onContactVA, testId: a11yLabelVA(t('contactVA.title')) },
+    { text: t('contactVA.title'), a11yHintText: a11yLabelVA(t('contactVA.a11yHint')), onPress: onContactVA, testId: a11yLabelVA(t('contactVA.title')) },
     {
       text: t('findLocation.title'),
       a11yHintText: a11yLabelVA(t('findLocation.a11yHint')),

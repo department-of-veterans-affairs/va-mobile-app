@@ -34,7 +34,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
           <TextView variant="MobileBodyBold" accessibilityLabel={a11yLabelVA(t('contactVA.va411.callMy.a11yLabel'))} accessibilityRole="header">
             {t('contactVA.va411.callMy')}
           </TextView>
-          <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={a11yLabelVA(t('contactVA.va411.body.a11yLabel'))}>
+          <TextView variant="MobileBody" mt={standardMarginBetween} paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('contactVA.va411.body.a11yLabel'))}>
             {t('contactVA.va411.body')}
           </TextView>
           <ClickToCallPhoneNumber phone={t('contactVA.va411.numberDisplayed')} />
