@@ -69,8 +69,8 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
           body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
           break
         } else {
-          title = t('upcomingAppointmentDetails.doYouNeedToCancel')
-          body = t('upcomingAppointmentDetails.cancelCommunityCareAppointment.body')
+          title = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')
+          body = t('upcomingAppointmentDetails.cancelCompensationAndPension.body', { facility: name })
           break
         }
       default:
