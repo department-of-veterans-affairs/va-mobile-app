@@ -14,8 +14,6 @@
   "contactVA.tty.number": "711",
   "contactVA.tty.displayText": "TTY: 711",
   "contactVA.tty.number.a11yLabel": "TTY: 7 1 1",
-  "contactVA.va411": "Call VA411",
-  "contactVA.va411.a11yLabel": "Call V-A 4 1 1",
   "contactVA.va411.body": "MyVA411 is our main VA information line. We can help connect you to any of our VA contact centers.",
   "contactVA.va411.body.a11yLabel": "My VA 4 1 1 is our main VA information line. We can help connect you to any of our VA contact centers.",
   "contactVA.va411.callMy": "Call MyVA411",
