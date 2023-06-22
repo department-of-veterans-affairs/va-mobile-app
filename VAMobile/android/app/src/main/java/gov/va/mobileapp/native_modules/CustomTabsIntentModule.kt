@@ -87,7 +87,7 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
                             }
 
             context.currentActivity?.apply { customTabsIntent.launchUrl(this, authURI) }
-            promise.resolve(authURI.toString())
+            promise.resolve(true)
         } catch (e: Throwable) {
             promise.reject("Custom Tabs Error", e)
         }
