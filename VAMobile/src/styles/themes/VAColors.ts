@@ -64,7 +64,7 @@ export default {
   hubFamilyMember: '#003e73',
   hubServiceMember: '#003e73',
   // va-mobile-app specific colors
-  blackWithOpacity: '#00000050',
+  blackWith30PercentOpacity: '#0000004D',
   crisisLineRed: '#b51c08',
   toolbarBackgroundGray: '#f9f9f9',
   whiteWith70PercentOpacity: '#ffffffb3',
