@@ -10,11 +10,10 @@ const { AUTH_IAM_ENDPOINT, AUTH_SIS_ENDPOINT, AUTH_IAM_CLIENT_ID, AUTH_IAM_REDIR
 /**
  * This function fires the native iOS ASWebAuthenticationSession and Custom Tabs
  * in the case of Android
- * @returns Promise<string | boolean> For iOS, returns a promise with the callback
- * url for log in with the OAuth exchange code query param. For Android it returns
- * a boolean if the custom tab laucnhed successfully
+ * @returns Promise<string> For iOS, returns a promise with the callback
+ * url for log in with the OAuth exchange code query param.
  */
-export const startAuthSession = async (codeChallenge: string, stateParam: string): Promise<string | undefined> => {
+export const startAuthSession = async (codeChallenge: string, stateParam: string): Promise<string> => {
   const SISEnabled = featureEnabled('SIS')
   if (isIOS()) {
     return await RnAuthSession.beginAuthSession(

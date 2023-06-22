@@ -7,6 +7,10 @@ import { startAuthSession } from 'utils/rnAuthSesson'
 import { useAppDispatch } from '.'
 import { useSelector } from 'react-redux'
 
+/**
+ * Launches the native auth implementation and navigates to VA.gov login
+ * @returns Promise<void>
+ */
 export const useStartAuth = (): (() => Promise<void>) => {
   const dispatch = useAppDispatch()
   const { codeChallenge, authorizeStateParam } = useSelector<RootState, AuthState>((state) => state.auth)
