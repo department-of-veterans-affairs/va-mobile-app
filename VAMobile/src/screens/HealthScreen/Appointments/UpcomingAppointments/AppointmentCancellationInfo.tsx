@@ -28,7 +28,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   const isAndroidDevice = isAndroid()
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, isCovidVaccine, cancelId, startDateUtc } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, location, isCovidVaccine, cancelId, startDateUtc, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
   const { name, phone } = location || ({} as AppointmentLocation)
 
   const findYourVALocationProps: LinkButtonProps = {
@@ -68,9 +68,13 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
           title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
           body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
           break
-        } else {
+        } else if (serviceCategoryName === 'COMPENSATION & PENSION') {
           title = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')
           body = t('upcomingAppointmentDetails.cancelCompensationAndPension.body', { facility: name })
+          break
+        } else {
+          title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
+          body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
           break
         }
       default:
