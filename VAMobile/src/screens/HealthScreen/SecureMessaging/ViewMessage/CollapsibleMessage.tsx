@@ -110,7 +110,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     return (
       <Box>
         <TextView mt={condensedMarginBetween} variant="MobileBody" numberOfLines={2}>
-          {body}
+          {body?.trimStart()}
         </TextView>
       </Box>
     )
