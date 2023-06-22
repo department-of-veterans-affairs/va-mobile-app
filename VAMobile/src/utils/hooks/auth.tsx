@@ -13,18 +13,20 @@ export const useStartAuth = (): (() => Promise<void>) => {
 
   const startAuth = async () => {
     dispatch(sendLoginStartAnalytics())
+    const iOS = isIOS()
     try {
       const callbackUrl = await startAuthSession(codeChallenge || '', authorizeStateParam || '')
-      if (isIOS()) {
+      if (iOS) {
         dispatch(handleTokenCallbackUrl(callbackUrl))
       }
     } catch (e) {
-      // code "000" comes back from the RCT bridge if the user cancelled the log in, all other errors are code '001'
+      // For iOS, code "000" comes back from the RCT bridge if the user cancelled the log in
+      // all other errors are code '001'
       if (isErrorObject(e)) {
-        if (e.code === '000') {
+        if (iOS && e.code === '000') {
           dispatch(cancelWebLogin())
         } else {
-          logNonFatalErrorToFirebase(e, 'iOS Login Error')
+          logNonFatalErrorToFirebase(e, `${iOS ? 'iOS' : 'Android'} Login Error`)
           dispatch(sendLoginFailedAnalytics(e))
         }
       }
