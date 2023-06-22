@@ -59,6 +59,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   }, [navigation])
 
   useBeforeNavBackListener(navigation, () => {
+    dispatch(dispatchSetPrescriptionsNeedLoad())
     dispatch(dispatchClearLoadingRequestRefills())
   })
 
@@ -197,7 +198,9 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       <FullScreenSubtask
         leftButtonText={tc('close')}
         onLeftButtonPress={() => {
-          navigation.dispatch(StackActions.pop(2))
+          dispatch(dispatchSetPrescriptionsNeedLoad())
+          dispatch(dispatchClearLoadingRequestRefills())
+          navigation.navigate('PrescriptionHistory', {})
         }}>
         <LoadingComponent text={t('prescriptions.refill.send', { count: 1 })} />
       </FullScreenSubtask>
@@ -209,7 +212,9 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       <FullScreenSubtask
         leftButtonText={tc('close')}
         onLeftButtonPress={() => {
-          navigation.dispatch(StackActions.pop(2))
+          dispatch(dispatchSetPrescriptionsNeedLoad())
+          dispatch(dispatchClearLoadingRequestRefills())
+          navigation.navigate('PrescriptionHistory', {})
         }}
         title={tc('refillRequest')}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
