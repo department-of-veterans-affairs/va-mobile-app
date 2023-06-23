@@ -45,7 +45,7 @@ context('CollapsibleMessage', () => {
       category: CategoryTypeFields.education,
       subject: 'Test Message Subject',
       body: 'Test Message Body',
-      attachment: true,
+      hasAttachments: true,
       attachments: listOfAttachments,
       sentDate: mockDateISO,
       senderId: 11,

@@ -22,7 +22,7 @@ export type SecureMessagingMessageAttributes = {
   category: CategoryTypes
   subject: string
   body?: string
-  attachment: boolean
+  hasAttachments: boolean
   attachments?: Array<SecureMessagingAttachment>
   sentDate: string
   senderId: number

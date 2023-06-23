@@ -62,7 +62,7 @@ context('Inbox', () => {
                 category: category,
                 subject: subjectLine ? subjectLine : '',
                 body: 'test',
-                attachment: false,
+                hasAttachments: false,
                 sentDate: '1-1-21',
                 senderId: 2,
                 senderName: 'mock sender',
