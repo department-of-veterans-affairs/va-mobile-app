@@ -30,7 +30,7 @@ import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
 import { profileAddressOptions } from '../AddressSummary'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAlert, useAppDispatch, useBeforeNavBackListener, useError, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressValidation from '../AddressValidation'
 
@@ -84,7 +84,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
-  const destructiveAlert = useDestructiveAlert()
+  const deleteAddressAlert = useAlert()
   const scrollViewRef = useRef<ScrollView>(null)
 
   const [deleting, setDeleting] = useState(false)
@@ -488,9 +488,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const lowerCaseTitle = displayTitle.toLowerCase()
 
   const onDeletePressed = (): void => {
-    destructiveAlert({
-      title: t('contactInformation.areYouSureYouWantToDelete', { alertText: lowerCaseTitle }),
-      message: t('contactInformation.deleteDataInfo', { alertText: lowerCaseTitle }),
+    const screenReaderEnabled = useIsScreenReaderEnabled()
+    deleteAddressAlert({
+      title: t('contactInformation.removeInformation.title', { info: lowerCaseTitle }),
+      message: t('contactInformation.removeInformation.body', { info: lowerCaseTitle }),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
@@ -502,6 +503,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           onPress: onDelete,
         },
       ],
+      screenReaderEnabled: screenReaderEnabled,
     })
   }
 
