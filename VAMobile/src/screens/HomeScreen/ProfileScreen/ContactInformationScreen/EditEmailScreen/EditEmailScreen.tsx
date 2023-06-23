@@ -26,7 +26,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const { profile, emailSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id
   const deleteEmailAlert = useAlert()
-
+  const screenReaderEnabled = useIsScreenReaderEnabled()
   const [email, setEmail] = useState(profile?.contactEmail?.emailAddress || '')
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
@@ -125,7 +125,6 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const emailTitle = t('contactInformation.emailAddress').toLowerCase()
 
   const onDeletePressed = (): void => {
-    const screenReaderEnabled = useIsScreenReaderEnabled()
     deleteEmailAlert({
       title: t('contactInformation.removeInformation.title', { info: emailTitle }),
       message: t('contactInformation.removeInformation.body', { info: emailTitle }),

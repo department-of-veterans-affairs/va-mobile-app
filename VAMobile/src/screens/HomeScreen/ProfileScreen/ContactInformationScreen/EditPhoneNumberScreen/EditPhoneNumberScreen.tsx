@@ -25,7 +25,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { displayTitle, phoneType, phoneData } = route.params
   const deletePhoneAlert = useAlert()
-
+  const screenReaderEnabled = useIsScreenReaderEnabled()
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
   const [formContainsError, setFormContainsError] = useState(false)
@@ -154,7 +154,6 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const buttonTitle = displayTitle.toLowerCase()
 
   const onDeletePressed = (): void => {
-    const screenReaderEnabled = useIsScreenReaderEnabled()
     deletePhoneAlert({
       title: t('contactInformation.removeInformation.title', { info: buttonTitle }),
       message: t('contactInformation.removeInformation.body', { info: buttonTitle }),

@@ -86,7 +86,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const { displayTitle, addressType } = route.params
   const deleteAddressAlert = useAlert()
   const scrollViewRef = useRef<ScrollView>(null)
-
+  const screenReaderEnabled = useIsScreenReaderEnabled()
   const [deleting, setDeleting] = useState(false)
 
   const addressLine1Ref = useRef<TextInput>(null)
@@ -488,7 +488,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const lowerCaseTitle = displayTitle.toLowerCase()
 
   const onDeletePressed = (): void => {
-    const screenReaderEnabled = useIsScreenReaderEnabled()
     deleteAddressAlert({
       title: t('contactInformation.removeInformation.title', { info: lowerCaseTitle }),
       message: t('contactInformation.removeInformation.body', { info: lowerCaseTitle }),
