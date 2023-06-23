@@ -57,9 +57,11 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
     })
   }, [navigation])
 
-  useBeforeNavBackListener(navigation, () => {
+  useBeforeNavBackListener(navigation, (e) => {
     dispatch(dispatchSetPrescriptionsNeedLoad())
     dispatch(dispatchClearLoadingRequestRefills())
+    e.preventDefault()
+    navigation.navigate('PrescriptionHistory', {})
   })
 
   const renderAlert = (): ReactElement => {
