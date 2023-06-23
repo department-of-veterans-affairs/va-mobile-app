@@ -148,7 +148,7 @@ export type AppointmentAttributes = {
   phoneOnly: boolean
   reason: string | null
   isCovidVaccine: boolean
-  serviceCategoryName: any
+  serviceCategoryName: string | null
   // pending appointment props
   isPending: boolean
   typeOfCare?: string // unclear if this always undefined for confirmed appointments that was a pending appointment
