@@ -237,6 +237,7 @@ export type UseDestructiveAlertProps = {
  * @returns an action sheet for ios and an alert for android
  */
 export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void {
+  const { showActionSheetWithOptions } = useActionSheet()
   if (isIOS()) {
     return (props: UseDestructiveAlertProps) => {
       const { buttons, cancelButtonIndex, destructiveButtonIndex, ...remainingProps } = props
@@ -268,7 +269,6 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
       )
     }
   } else {
-    const { showActionSheetWithOptions } = useActionSheet()
     return (props: UseDestructiveAlertProps) => {
       showActionSheetWithOptions(
         {
