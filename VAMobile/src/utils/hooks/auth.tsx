@@ -8,7 +8,9 @@ import { useAppDispatch } from '.'
 import { useSelector } from 'react-redux'
 
 /**
- * Launches the native auth implementation and navigates to VA.gov login
+ * Launches the native auth implementation and navigates to VA.gov login. For iOS,
+ * promise lasts the duration of the WebView being open, whereas on Android it lasts
+ * only for the launching of Custom Tab
  * @returns Promise<void>
  */
 export const useStartAuth = (): (() => Promise<void>) => {
