@@ -1,18 +1,4 @@
-import {
-  AccessibilityInfo,
-  ActionSheetIOS,
-  Alert,
-  AlertButton,
-  AppState,
-  Dimensions,
-  EmitterSubscription,
-  Linking,
-  PixelRatio,
-  ScrollView,
-  UIManager,
-  View,
-  findNodeHandle,
-} from 'react-native'
+import { AccessibilityInfo, ActionSheetIOS, Alert, AppState, Dimensions, EmitterSubscription, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
 import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
@@ -251,8 +237,8 @@ export type UseDestructiveAlertProps = {
  * @returns an action sheet for ios and an alert for android
  */
 export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void {
-  return (props: UseDestructiveAlertProps) => {
-    if (isIOS()) {
+  if (isIOS()) {
+    return (props: UseDestructiveAlertProps) => {
       const { buttons, cancelButtonIndex, destructiveButtonIndex, ...remainingProps } = props
 
       // Ensure cancel button is always last for UX consisency
@@ -280,8 +266,28 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
           }
         },
       )
-    } else {
-      Alert.alert(props.title, props.message, props.buttons as AlertButton[])
+    }
+  } else {
+    const { showActionSheetWithOptions } = useActionSheet()
+    return (props: UseDestructiveAlertProps) => {
+      showActionSheetWithOptions(
+        {
+          title: props.title,
+          titleTextStyle: { fontWeight: 'bold' },
+          message: props.message,
+          options: props.buttons.map((button) => stringToTitleCase(button.text)),
+          cancelButtonIndex: props.cancelButtonIndex,
+          destructiveButtonIndex: props.destructiveButtonIndex,
+        },
+        (buttonIndex) => {
+          if (buttonIndex) {
+            const onPress = props.buttons[buttonIndex]?.onPress
+            if (onPress) {
+              onPress()
+            }
+          }
+        },
+      )
     }
   }
 }
