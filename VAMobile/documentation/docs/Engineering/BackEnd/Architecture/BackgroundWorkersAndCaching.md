@@ -1,4 +1,4 @@
-# Background Processes
+# Background Workers and Caching
 
 ## Background Workers
 
@@ -14,8 +14,3 @@
  * If caching is implemented within Mobile, add a `useCache` parameter to enable/disable caching. This is useful for debugging issues.
  * Cached data within Mobile typically has a Time to Live (TTL) of 30 minutes (session caches are much shorter)
  * Cache TTL can be found in `config/redis.yml`
-
-## Parallel Processes
-
- * To improve performance, if multiple upstream calls need to be made and do not need to be made in a sequence, it's recommended to make both calls concurrently using the `parallel` gem.
- * An example of this can be found in the Mobile claims and appeals index call.
