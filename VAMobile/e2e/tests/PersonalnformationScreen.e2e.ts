@@ -14,6 +14,7 @@ export const PersonalInfoConstants = {
   PREFERRED_NAME_ROW_TEXT: 'Preferred name',
   PREFERRED_NAME_ID: 'preferredNameTestID',
   GENDER_IDENTITY_ROW_TEXT: 'Gender identity',
+  GENDER_IDENTITY_WHAT_TO_KNOW_TEXT: 'What to know before you decide to share your gender identity',
   PREFER_NOT_TEXT: 'Prefer not to answer',
 }
 
@@ -129,6 +130,14 @@ describe('Personal Information Screen', () => {
     await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
     await expect(element(by.text('Gender identity saved'))).not.toExist()
     await expect(element(by.label(PersonalInfoConstants.PREFER_NOT_TEXT + ' ').withDescendant(by.id('RadioFilled')))).toExist()
+    await element(by.text('Cancel')).tap()
+  })
+
+  it('should show "What to know" large panel in gender identity section', async () => {
+    await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
+    await scrollToThenTap(PersonalInfoConstants.GENDER_IDENTITY_WHAT_TO_KNOW_TEXT)
+    await expect(element(by.text('Profile help'))).toExist()
+    await element(by.text('Close')).tap()
     await element(by.text('Cancel')).tap()
   })
 })
