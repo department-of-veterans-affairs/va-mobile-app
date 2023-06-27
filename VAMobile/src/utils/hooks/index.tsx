@@ -272,16 +272,16 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
     } else {
       showActionSheetWithOptions(
         {
+          textStyle: { color: currentTheme.colors.text.primary },
           title: props.title,
-          titleTextStyle: { fontWeight: 'bold', textAlign: 'center' },
+          titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
           message: props.message,
-          messageTextStyle: { textAlign: 'center' },
+          messageTextStyle: { textAlign: 'center', color: currentTheme.colors.text.primary },
           showSeparators: true,
-          separatorStyle: { borderWidth: 2 },
-          options: newButtons.map((button) => stringToTitleCase(button.text)),
-          cancelButtonIndex: props.cancelButtonIndex,
+          separatorStyle: { borderWidth: 1, borderColor: currentTheme.colors.border.primary },
           destructiveButtonIndex: newDestructiveButtonIndex,
-          userInterfaceStyle: currentTheme.mode === 'dark' ? 'dark' : 'light',
+          options: newButtons.map((button) => stringToTitleCase(button.text)),
+          containerStyle: { backgroundColor: currentTheme.colors.background.main },
         },
         (buttonIndex) => {
           if (buttonIndex) {
