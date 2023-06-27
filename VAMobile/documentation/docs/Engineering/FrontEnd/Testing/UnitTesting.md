@@ -10,7 +10,7 @@ We run our unit tests with [Jest](https://jestjs.io/) and [React Native Testing 
 
 All React components should have at least one unit test. The ideal quantity of test coverage depends on component type. Examining component types from most coverage to least:
 
-- **Shared components** are isolated bundles of code which many other components consume. Because shared components are widely used, unit tests should exercise them very thorougly, including checking all edge cases and error states. (Maximum coverage)
+- **Shared components** are isolated bundles of code which many other components consume. Because shared components are widely used, unit tests should exercise them very thoroughly, including checking all edge cases and error states. (Maximum coverage)
 - **Screen child components** are usually not shared and are tightly bound to other components in the screen. Unit tests for these child components should focus on complicated logic that's prone to regressions, while avoiding duplicate coverage between parent and child components. Tests should cover edge cases and error states, but need not check every possible combination of props and state. (High coverage)
 - **Entire screens** are typically complex, integrating multiple components along with Redux state, routing, and 3rd party modules. We lean on E2E tests to fully cover screens, so unit tests for screens should be limited in scope to avoid duplicating E2E test coverage. Also if a child component of a screen already has its own unit tests, there's no need to duplicate those tests in the screen itself. (Medium coverage)
 
