@@ -3,6 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
+import { AppointmentsState } from 'store/slices'
 import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DateTime } from 'luxon'
@@ -44,6 +45,10 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const name = profile?.preferredName ? profile.preferredName : profile?.firstName || ''
+
+  const appts = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+
+  console.log(`appointmentsData: ${JSON.stringify(appts)}`)
 
   useEffect(() => {
     // Fetch the profile information

@@ -1,6 +1,7 @@
+import { DateTime } from 'luxon'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect } from 'react'
+import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import {
   AppointmentAddressAndNumber,
@@ -70,6 +71,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
 
+  const [date, setDate] = useState(new Date().toLocaleString())
+  const [checkInEnabled, setCheckInEnabled] = useState(false)
+  const [checkInLabel, setCheckInLabel] = useState('Check in')
+
   useEffect(() => {
     dispatch(trackAppointmentDetail(pendingAppointment))
   }, [dispatch, appointmentID, pendingAppointment])
@@ -88,6 +93,44 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       navigation.goBack()
     }
   }, [appointmentCancellationStatus, dispatch, navigation])
+
+  /**
+   * useEffect proving out being able to conditionalize based on appointment start time (tested changing demo mode appointment datetime)
+   *
+   * In case of the user leaving the app open, was tentatively thinking to queue up the next week to month of upcoming appointments and not just a single day
+   */
+  useEffect(() => {
+    const todaysDate = DateTime.local()
+    const oneMonthForward = todaysDate.plus({ months: 1 })
+    if (appointment?.attributes.startDateLocal) {
+      const appointmentDate = DateTime.fromISO(appointment.attributes.startDateLocal)
+      if (todaysDate < appointmentDate && appointmentDate < oneMonthForward) {
+        console.log(`appointment start time 6: ${appointment.attributes.startDateLocal}`)
+      }
+    }
+  })
+
+  /**
+   * useEffect proving out being able to pop in/out button based on a time condition
+   */
+  useEffect(() => {
+    const counter = setInterval(() => {
+      const dateTime = DateTime.now()
+      // setDate(new Date().toLocaleString())
+      setDate(dateTime.toLocaleString(DateTime.DATETIME_FULL_WITH_SECONDS))
+      // console.log(`second: ${dateTime.second}`)
+      if (dateTime.second <= 45) {
+        setCheckInEnabled(true)
+        // console.log(`check in enabled: ${checkInEnabled}`)
+      } else {
+        setCheckInEnabled(false)
+        setCheckInLabel('Check in')
+        // console.log(`check in enabled: ${checkInEnabled}`)
+      }
+    }, 1000)
+
+    return () => clearInterval(counter)
+  }, [checkInEnabled])
 
   const goBack = (): void => {
     dispatch(clearAppointmentCancellation())
@@ -273,6 +316,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         <AppointmentAlert attributes={attributes} />
         <TextArea>
           <AppointmentTypeAndDate attributes={attributes} />
+          <TextView>{date}</TextView>
+          <TextView>Button visible: 1-45 seconds</TextView>
+          <TextView paragraphSpacing={true}>Cycle resets check in status</TextView>
+          {checkInEnabled ? (
+            <VAButton label={checkInLabel} buttonType={checkInLabel === 'Checked in' ? 'buttonDestructive' : 'buttonPrimary'} onPress={() => setCheckInLabel('Checked in')} />
+          ) : null}
           <AddToCalendar />
 
           <VideoAppointment_HowToJoin />
