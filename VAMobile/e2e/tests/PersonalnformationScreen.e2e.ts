@@ -11,6 +11,8 @@ export const PersonalInfoConstants = {
   NEAREST_CENTER_LINK_TEXT: 'Find nearest VA medical center',
   PHONE_LINK_TEXT: '800-827-1000',
   TTY_LINK_TEXT: 'TTY: 711',
+  PREFERRED_NAME_ROW_TEXT: 'Preferred name',
+  PREFERRED_NAME_ID: 'preferredNameTestID',
 }
 
 const scrollToThenTap = async (text: string) => {
@@ -18,7 +20,6 @@ const scrollToThenTap = async (text: string) => {
     .toBeVisible()
     .whileElement(by.id('PersonalInformationTestID'))
     .scroll(500, 'down')
-
   await element(by.text(text)).tap()
 }
 
@@ -94,5 +95,21 @@ describe('Personal Information Screen', () => {
     }
 
     await element(by.text('Close')).tap()
+  })
+
+  it('should update preferred name', async () => {
+    await element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT)).tap()
+    await expect(element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT))).toExist()
+    await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).typeText('Kimberlee')
+    await element(by.text('Save')).tap()
+
+    await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT))).toExist()
+    await expect(element(by.text('Preferred name saved'))).toExist()
+    await expect(element(by.text('Kimberlee'))).toExist()
+
+    await element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT)).tap()
+    await expect(element(by.text('Preferred name saved'))).not.toExist()
+    await expect(element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID))).toHaveValue('Kimberlee')
+    await element(by.text('Cancel')).tap()
   })
 })
