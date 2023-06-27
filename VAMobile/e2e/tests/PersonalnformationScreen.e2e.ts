@@ -101,23 +101,23 @@ describe('Personal Information Screen', () => {
 
   it('should update preferred name', async () => {
     await element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT)).tap()
-    await expect(element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT))).toExist()
-    await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).typeText('Kimberlee')
+    await expect(element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT)).atIndex(0)).toExist()
+    await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).typeText('Kimberlee\n')
     await element(by.text('Save')).tap()
 
-    await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT))).toExist()
+    await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT)).atIndex(0)).toExist()
     await expect(element(by.text('Preferred name saved'))).toExist()
     await expect(element(by.text('Kimberlee'))).toExist()
 
     await element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT)).tap()
     await expect(element(by.text('Preferred name saved'))).not.toExist()
-    await expect(element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID))).toHaveValue('Kimberlee')
+    await expect(element(by.text('Kimberlee')).atIndex(0)).toExist()
     await element(by.text('Cancel')).tap()
   })
 
   it('should update gender identity', async () => {
     await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
-    await expect(element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT))).toExist()
+    await expect(element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).atIndex(0)).toExist()
     await element(by.text(PersonalInfoConstants.PREFER_NOT_TEXT)).tap()
     await element(by.text('Save')).tap()
 
