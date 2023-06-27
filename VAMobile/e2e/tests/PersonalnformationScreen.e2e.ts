@@ -6,6 +6,7 @@ import { loginToDemoMode, openPersonalInformation, openProfile } from './utils'
 export const PersonalInfoConstants = {
   PERSONAL_INFORMATION_TEXT: 'Personal information',
   HOW_TO_UPDATE_LINK_TEXT: 'How to update or fix an error in your legal name',
+  HOW_TO_FIX_LINK_TEXT: 'How to fix an error in your date of birth',
   LEARN_HOW_LINK_TEXT: 'Learn how to change your legal name on file with the VA',
   NEAREST_CENTER_LINK_TEXT: 'Find nearest VA medical center',
   PHONE_LINK_TEXT: '800-827-1000',
@@ -65,6 +66,33 @@ describe('Personal Information Screen', () => {
       await scrollToThenTap(PersonalInfoConstants.TTY_LINK_TEXT)
       await setTimeout(5000)
       await device.takeScreenshot('PersonalInformationTTY')
+      await device.launchApp({ newInstance: false })
     }
+
+    await element(by.text('Close')).tap()
+  })
+
+  it('should tap links in "How to fix an error" large panel', async () => {
+    await element(by.text(PersonalInfoConstants.HOW_TO_FIX_LINK_TEXT)).tap()
+    await expect(element(by.text('Profile help'))).toExist()
+
+    await scrollToThenTap(PersonalInfoConstants.NEAREST_CENTER_LINK_TEXT)
+    await setTimeout(5000)
+    await device.takeScreenshot('PersonalInformationFindVACenterLink')
+    await element(by.text('Done')).tap()
+
+    if (device.getPlatform() === 'android') {
+      await scrollToThenTap(PersonalInfoConstants.PHONE_LINK_TEXT)
+      await setTimeout(5000)
+      await device.takeScreenshot('PersonalInformationPhoneNumber')
+      await device.launchApp({ newInstance: false })
+
+      await scrollToThenTap(PersonalInfoConstants.TTY_LINK_TEXT)
+      await setTimeout(5000)
+      await device.takeScreenshot('PersonalInformationTTY')
+      await device.launchApp({ newInstance: false })
+    }
+
+    await element(by.text('Close')).tap()
   })
 })
