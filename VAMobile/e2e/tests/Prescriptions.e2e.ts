@@ -37,6 +37,8 @@ export const PrescriptionsE2eIdConstants = {
 	PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_LABEL: 'Go to all pending refills',
 }
 
+var tempPath
+
 beforeAll(async () => {
   await loginToDemoMode()
   await openHealth()
