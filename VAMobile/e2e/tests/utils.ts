@@ -1,8 +1,9 @@
 import { device, element, by, expect, waitFor } from 'detox'
 import getEnv from '../../src/utils/env'
-import { toMatchImageSnapshot } from 'jest-image-snapshot'
 import { expect as jestExpect } from '@jest/globals'
+import { setTimeout } from "timers/promises"
 
+const { toMatchImageSnapshot } = require('jest-image-snapshot')
 const fs = require('fs')
 jestExpect.extend({ toMatchImageSnapshot })
 
@@ -31,14 +32,17 @@ export const CommonE2eIdConstants = {
 /** Log the automation into demo mode
  * */
 export async function loginToDemoMode() {
+  await setTimeout(5000)
   try {
 	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
 	await element(by.text('Dismiss')).tap()
-  } catch (e) {}
-  const { DEMO_PASSWORD } = getEnv()
+  } catch (e) {} 
+  const { DEMO_PASSWORD } = getEnv() 
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(21)
-  await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
-
+  if (DEMO_PASSWORD != undefined) {
+    await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
+  }
+  
   // due to keyboard being open one tap to close keyboard second to tap demo btn
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
@@ -156,8 +160,8 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
  * @param screenshotPath: png returned from detox getScreenshot function
 */
 export async function checkImages(screenshotPath) {
-	image = fs.readFileSync(screenshotPath)
-	await jestExpect(image).toMatchImageSnapshot({
+	var image = fs.readFileSync(screenshotPath)
+	await (jestExpect(image) as any).toMatchImageSnapshot({
 		comparisonMethod: 'ssim',
 		failureThreshold: 0.01,
 		failureThresholdType: 'percent'})

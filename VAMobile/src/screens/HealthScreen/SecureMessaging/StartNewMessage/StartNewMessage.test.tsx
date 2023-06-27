@@ -6,7 +6,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
 import * as api from 'store/api'
-import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTypeWithSubstring, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import StartNewMessage from './StartNewMessage'
 import { TouchableWithoutFeedback } from 'react-native'
 import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker, VATextInput } from 'components'
@@ -254,7 +254,7 @@ context('StartNewMessage', () => {
         navHeaderSpy.save.props.onSave()
 
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-        expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
       })
     })
   })
@@ -313,7 +313,7 @@ context('StartNewMessage', () => {
 
       it('should display a field error for that field', async () => {
         await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Select a care team to message')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
         })
@@ -322,8 +322,8 @@ context('StartNewMessage', () => {
       it('should display an AlertBox', async () => {
         await waitFor(() => {
           expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-          expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'In order to save this draft, all of the required fields must be filled.')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
+          expect(findByTypeWithSubstring(testInstance, TextView, 'To save this message, provide this information:')).toBeTruthy()
         })
       })
     })
@@ -350,7 +350,7 @@ context('StartNewMessage', () => {
 
       it('should display a field error for that field', async () => {
         await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Select a care team to message')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
         })
@@ -359,7 +359,8 @@ context('StartNewMessage', () => {
       it('should display an AlertBox', async () => {
         await waitFor(() => {
           expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-          expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
+          expect(findByTypeWithSubstring(testInstance, TextView, 'To send this message, provide this information:')).toBeTruthy()
         })
       })
     })
@@ -371,7 +372,7 @@ context('StartNewMessage', () => {
         testInstance.findByProps({ label: 'Send' }).props.onPress()
       })
 
-      expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Select a care team to message')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
 
@@ -383,7 +384,7 @@ context('StartNewMessage', () => {
         testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.covid)
       })
 
-      expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeFalsy()
+      expect(findByTypeWithText(testInstance, TextView, 'Select a care team to message')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Attachments')).toBeTruthy()
