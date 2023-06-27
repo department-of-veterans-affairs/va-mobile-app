@@ -21,6 +21,7 @@ import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
+import { getTheme } from 'styles/themes/standardTheme'
 import { isAndroid, isIOS } from 'utils/platform'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
@@ -238,22 +239,23 @@ export type UseDestructiveAlertProps = {
  */
 export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void {
   const { showActionSheetWithOptions } = useActionSheet()
-  if (isIOS()) {
-    return (props: UseDestructiveAlertProps) => {
-      const { buttons, cancelButtonIndex, destructiveButtonIndex, ...remainingProps } = props
+  const currentTheme = getTheme()
+  return (props: UseDestructiveAlertProps) => {
+    const { buttons, cancelButtonIndex, destructiveButtonIndex, ...remainingProps } = props
 
-      // Ensure cancel button is always last for UX consisency
-      const newButtons = [...buttons]
-      if (cancelButtonIndex < buttons.length - 1) {
-        newButtons.push(newButtons.splice(cancelButtonIndex, 1)[0])
-      }
+    // Ensure cancel button is always last for UX consisency
+    const newButtons = [...buttons]
+    if (cancelButtonIndex < buttons.length - 1) {
+      newButtons.push(newButtons.splice(cancelButtonIndex, 1)[0])
+    }
 
-      let newDestructiveButtonIndex = destructiveButtonIndex
-      if (destructiveButtonIndex && cancelButtonIndex < destructiveButtonIndex) {
-        newDestructiveButtonIndex = destructiveButtonIndex - 1
-      }
+    let newDestructiveButtonIndex = destructiveButtonIndex
+    if (destructiveButtonIndex && cancelButtonIndex < destructiveButtonIndex) {
+      newDestructiveButtonIndex = destructiveButtonIndex - 1
+    }
 
-      // Don't pass cancelButtonIndex because doing so would hide the button on iPad
+    // Don't pass cancelButtonIndex because doing so would hide the button on iPad
+    if (isIOS()) {
       ActionSheetIOS.showActionSheetWithOptions(
         {
           ...remainingProps,
@@ -267,17 +269,19 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
           }
         },
       )
-    }
-  } else {
-    return (props: UseDestructiveAlertProps) => {
+    } else {
       showActionSheetWithOptions(
         {
           title: props.title,
-          titleTextStyle: { fontWeight: 'bold' },
+          titleTextStyle: { fontWeight: 'bold', textAlign: 'center' },
           message: props.message,
-          options: props.buttons.map((button) => stringToTitleCase(button.text)),
+          messageTextStyle: { textAlign: 'center' },
+          showSeparators: true,
+          separatorStyle: { borderWidth: 2 },
+          options: newButtons.map((button) => stringToTitleCase(button.text)),
           cancelButtonIndex: props.cancelButtonIndex,
-          destructiveButtonIndex: props.destructiveButtonIndex,
+          destructiveButtonIndex: newDestructiveButtonIndex,
+          userInterfaceStyle: currentTheme.mode === 'dark' ? 'dark' : 'light',
         },
         (buttonIndex) => {
           if (buttonIndex) {
