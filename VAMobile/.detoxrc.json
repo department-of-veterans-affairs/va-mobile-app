@@ -1,6 +1,7 @@
 {
   "testRunner": "jest",
-  "runnerConfig": "e2e/config.json",
+  "runnerConfig": "detoxconfig.js",
+  
   "skipLegacyWorkersInjection": true,
   "apps": {
     "ios": {
