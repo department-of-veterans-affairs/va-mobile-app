@@ -1,3 +1,4 @@
+import { CategoryTypes } from 'store/api'
 import { Event, UserAnalytic } from 'utils/analytics'
 
 /**
@@ -56,21 +57,32 @@ export const Events = {
       },
     }
   },
-  vama_sm_save_draft: (totalTime: number, actionTime: number): Event => {
+  vama_sm_change_category: (messageCategory: CategoryTypes, previousCategory: CategoryTypes): Event => {
+    return {
+      name: 'vama_sm_change_category',
+      params: {
+        messageCategory,
+        previousCategory,
+      },
+    }
+  },
+  vama_sm_save_draft: (totalTime: number, actionTime: number, messageCategory: CategoryTypes): Event => {
     return {
       name: 'vama_sm_save_draft',
       params: {
         totalTime,
         actionTime,
+        messageCategory,
       },
     }
   },
-  vama_sm_send_message: (totalTime: number, actionTime: number): Event => {
+  vama_sm_send_message: (totalTime: number, actionTime: number, messageCategory: CategoryTypes): Event => {
     return {
       name: 'vama_sm_send_message',
       params: {
         totalTime,
         actionTime,
+        messageCategory,
       },
     }
   },
@@ -243,19 +255,60 @@ export const Events = {
       },
     }
   },
-  vama_rx_refill_success: (): Event => {
+  vama_rx_refill_success: (rx_ids: string[]): Event => {
     return {
       name: 'vama_rx_refill_success',
+      params: {
+        rx_ids: rx_ids,
+      },
     }
   },
-  vama_rx_refill_fail: (): Event => {
+  vama_rx_refill_fail: (rx_ids: string[]): Event => {
     return {
       name: 'vama_rx_refill_fail',
+      params: {
+        rx_ids: rx_ids,
+      },
     }
   },
-  vama_rx_refill_retry: (): Event => {
+  vama_rx_refill_retry: (rx_ids: string[]): Event => {
     return {
       name: 'vama_rx_refill_retry',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_request_start: (rx_ids: string[]): Event => {
+    return {
+      name: 'vama_rx_request_start',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_request_confirm: (rx_ids: string[]): Event => {
+    return {
+      name: 'vama_rx_request_confirm',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_request_cancel: (rx_ids: string[]): Event => {
+    return {
+      name: 'vama_rx_request_cancel ',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_details: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_details ',
+      params: {
+        rx_id: rx_id,
+      },
     }
   },
   vama_rx_filter: (): Event => {

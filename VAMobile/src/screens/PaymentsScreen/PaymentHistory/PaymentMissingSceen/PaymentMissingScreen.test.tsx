@@ -15,7 +15,7 @@ context('PaymentMissing', () => {
     const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
     component = render(<PaymentMissing {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

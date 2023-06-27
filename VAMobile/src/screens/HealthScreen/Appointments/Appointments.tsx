@@ -24,11 +24,11 @@ type AppointmentsScreenProps = StackScreenProps<HealthStackParamList, 'Appointme
 
 export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
   const todaysDate = DateTime.local()
-  const twelveMonthsFromToday = todaysDate.plus({ months: 12 })
+  const futureDate = todaysDate.plus({ days: 390 })
 
   return {
     startDate: todaysDate.startOf('day').toISO(),
-    endDate: twelveMonthsFromToday.endOf('day').toISO(),
+    endDate: futureDate.endOf('day').toISO(),
   }
 }
 

@@ -16,10 +16,13 @@ import {
   TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
 import { InlineTextWithIconsProps, MessageListItemObj, PickerItem, VAIconProps } from 'components'
+import { UseDestructiveAlertProps, imageDocumentResponseType } from './hooks'
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
 import { getFormattedMessageTime, stringToTitleCase } from 'utils/formattingUtils'
 import { logNonFatalErrorToFirebase } from './analytics'
 import theme from 'styles/themes/standardTheme'
+
+const MAX_SUBJECT_LENGTH = 50
 
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
@@ -34,7 +37,7 @@ export const getMessagesListItems = (
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
 
-    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'UnreadIcon', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps) : undefined
+    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'Unread', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps) : undefined
     const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
 
     const textLines: Array<InlineTextWithIconsProps> = [
@@ -61,7 +64,7 @@ export const getMessagesListItems = (
         },
         leftIconProps: paperClipProps,
         rightIconProps: {
-          name: 'ArrowRight',
+          name: 'ChevronRight',
           width: theme.dimensions.chevronListItemWidth,
           height: theme.dimensions.chevronListItemHeight,
           fill: theme.colors.icon.chevronListItem,
@@ -106,9 +109,9 @@ export const translateSubjectCategory = (category: CategoryTypes, t: TFunction):
   return category
 }
 
-/** Given the raw subject category and subject line attributes, we need to translate the category and then display
+/** Given the raw category and subject attributes, we need to translate the category and then display
  * the two as separated by a colon and a space.
- * If there's no subjectLine, should only display subject category with no colon
+ * If there's no subject, should only display category with no colon
  *
  * @param category - message attribute of categoryTypes indicating what category the message belongs to
  * @param subject - string from message attribute
@@ -120,7 +123,7 @@ export const formatSubject = (category: CategoryTypes, subject: string, t: TFunc
   return `${subjectCategory}${subjectLine}`.trim()
 }
 
-export const getStartNewMessageSubjectPickerOptions = (t: TFunction): Array<PickerItem> => {
+export const getStartNewMessageCategoryPickerOptions = (t: TFunction): Array<PickerItem> => {
   return [
     {
       value: CategoryTypeFields.other,
@@ -147,6 +150,17 @@ export const getStartNewMessageSubjectPickerOptions = (t: TFunction): Array<Pick
       label: t('secureMessaging.startNewMessage.education'),
     },
   ]
+}
+
+/**
+ * Function to determine invalid subject length
+ * @returns Callback function that returns true if subject length invalid (over 50 characters)
+ */
+export const SubjectLengthValidationFn = (subject: string) => {
+  const InvalidSubjectLength = (): boolean => {
+    return subject.length > MAX_SUBJECT_LENGTH
+  }
+  return InvalidSubjectLength
 }
 
 /**
@@ -348,4 +362,37 @@ export const getfolderName = (id: string, folders: SecureMessagingFolderList): s
   })[0]?.attributes.name
 
   return folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName
+}
+
+/**
+ * Checks if the message has attachments before saving a draft and displays a message to the
+ * user letting them know that the attachments wouldn't be saved with the draft
+ * @param alert - Alert from useDestructiveAlert() hook
+ * @param attachmentsList - List of attachments
+ * @param t - Traslation function
+ * @param dispatchSaveDraft - Dispatch save draft callback
+ */
+export const saveDraftWithAttachmentAlert = (
+  alert: (props: UseDestructiveAlertProps) => void,
+  attachmentsList: Array<imageDocumentResponseType>,
+  t: TFunction,
+  dispatchSaveDraft: () => void,
+) => {
+  if (attachmentsList.length) {
+    alert({
+      title: t('secureMessaging.draft.cantSaveAttachments'),
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('secureMessaging.keepEditing'),
+        },
+        {
+          text: t('secureMessaging.saveDraft'),
+          onPress: dispatchSaveDraft,
+        },
+      ],
+    })
+  } else {
+    dispatchSaveDraft()
+  }
 }

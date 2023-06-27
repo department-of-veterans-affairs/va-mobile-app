@@ -13,18 +13,6 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 import { deleteEmail, updateEmail } from 'store/slices'
 
-jest.mock('../../../../../utils/hooks', () => {
-  let original = jest.requireActual('../../../../../utils/hooks')
-  let theme = jest.requireActual('../../../../../styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
-})
-
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
   return {
@@ -83,7 +71,7 @@ context('EditEmailScreen', () => {
 
     component = render(<EditEmailScreen {...props} />, { preloadedState: store })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

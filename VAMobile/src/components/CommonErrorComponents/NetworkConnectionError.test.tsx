@@ -16,7 +16,7 @@ context('NetworkConnectionError', () => {
   beforeEach(() => {
     component = render(<NetworkConnectionError onTryAgain={onTryAgainPressSpy} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

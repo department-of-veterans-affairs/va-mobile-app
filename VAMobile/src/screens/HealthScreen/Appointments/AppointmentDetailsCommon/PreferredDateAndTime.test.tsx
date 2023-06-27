@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
-import {context, findByTypeWithSubstring, render, RenderAPI} from 'testUtils'
+import { context, findByTypeWithSubstring, render, RenderAPI } from 'testUtils'
 
 import { InitialState } from 'store/slices'
 import PreferredDateAndTime from './PreferredDateAndTime'
@@ -10,31 +10,30 @@ import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { TextView } from 'components'
 
-
 context('PreferredDateAndTime', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (): void => {
-    props ={
+    props = {
       ...defaultAppointmentAttributes,
       isPending: true,
       status: AppointmentStatusConstants.SUBMITTED,
       proposedTimes: [
         {
-          date: "10/01/2021",
-          time: "PM"
+          date: '10/01/2021',
+          time: 'PM',
         },
         {
-          date: "",
-          time: "AM"
+          date: '',
+          time: 'AM',
         },
         {
-          date: "11/03/2021",
-          time: "AM"
-        }
-      ]
+          date: '11/03/2021',
+          time: 'AM',
+        },
+      ],
     }
 
     component = render(<PreferredDateAndTime attributes={props} />, {
@@ -43,7 +42,7 @@ context('PreferredDateAndTime', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

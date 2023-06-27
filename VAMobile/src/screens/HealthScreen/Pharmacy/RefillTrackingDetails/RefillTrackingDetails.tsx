@@ -13,7 +13,8 @@ import { RootState } from 'store'
 import { a11yLabelID } from 'utils/a11yLabel'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { isIOS } from 'utils/platform'
-import { useAppDispatch, useDowntime, useError, usePanelHeaderStyles, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { usePanelHeaderStyles } from 'utils/hooks/headerStyles'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
@@ -200,8 +201,13 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
       <Box mx={gutter} mt={contentMarginTop} mb={contentMarginBottom}>
         {renderHeader()}
         <Box mt={standardMarginBetween}>
-          <TextView variant="HelperText">{t('prescriptions.refillTracking.upTo15Days')}</TextView>
+          <TextView variant="HelperText" paragraphSpacing={true}>
+            {t('prescriptions.refillTracking.upTo15Days')}
+          </TextView>
         </Box>
+        <TextView variant="HelperText" accessibilityLabel={tc('prescriptions.refillTracking.deliveryChanges.a11yLabel')}>
+          {tc('prescriptions.refillTracking.deliveryChanges')}
+        </TextView>
         {renderTrackingCards()}
       </Box>
     </FullScreenSubtask>

@@ -237,6 +237,7 @@ context('PrescriptionHistory', () => {
     const props = mockNavProps(
       undefined,
       {
+        setParams: jest.fn(),
         setOptions: jest.fn(),
       },
       { params: { startingTab } },
@@ -293,7 +294,7 @@ context('PrescriptionHistory', () => {
         },
       },
     })
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

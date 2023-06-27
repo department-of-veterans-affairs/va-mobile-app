@@ -6,9 +6,9 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
 import * as api from 'store/api'
-import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTypeWithSubstring, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import StartNewMessage from './StartNewMessage'
-import { Pressable, TouchableWithoutFeedback } from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native'
 import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState, saveDraft, updateSecureMessagingTab } from 'store/slices'
 import { CategoryTypeFields, ScreenIDTypesConstants } from 'store/api/types'
@@ -16,14 +16,10 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
+jest.mock('../../../../utils/hooks', () => {
+  let original = jest.requireActual('../../../../utils/hooks')
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -67,10 +63,18 @@ jest.mock('store/slices', () => {
   }
 })
 
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native')
+  RN.InteractionManager.runAfterInteractions = (callback: () => void) => {
+    callback()
+  }
+
+  return RN
+})
+
 let mockUseComposeCancelConfirmationSpy = jest.fn()
 jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
@@ -87,6 +91,7 @@ context('StartNewMessage', () => {
   let navigateToAddToFilesSpy: jest.Mock
   let navigateToHowToAttachSpy: jest.Mock
   let navigateToVeteransCrisisLineSpy: jest.Mock
+  let navigateToReplyHelpSpy: jest.Mock
 
   const initializeTestInstance = (
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
@@ -100,6 +105,7 @@ context('StartNewMessage', () => {
     navigateToAddToFilesSpy = jest.fn()
     navigateToHowToAttachSpy = jest.fn()
     navigateToVeteransCrisisLineSpy = jest.fn()
+    navigateToReplyHelpSpy = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -111,6 +117,8 @@ context('StartNewMessage', () => {
       .mockReturnValue(navigateToHowToAttachSpy)
       .calledWith('VeteransCrisisLine')
       .mockReturnValue(navigateToVeteransCrisisLineSpy)
+      .calledWith('ReplyHelp')
+      .mockReturnValue(navigateToReplyHelpSpy)
 
     props = mockNavProps(
       undefined,
@@ -172,7 +180,7 @@ context('StartNewMessage', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -246,24 +254,17 @@ context('StartNewMessage', () => {
         navHeaderSpy.save.props.onSave()
 
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-        expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
       })
     })
   })
 
   describe('on click of the collapsible view', () => {
-    it('should display the when will i get a reply children text', async () => {
+    it('should show the Reply Help panel', async () => {
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
-
-        expect(
-          findByTypeWithText(
-            testInstance,
-            TextView,
-            'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
-          ),
-        ).toBeTruthy()
+        testInstance.findByProps({ accessibilityLabel: 'Only use messages for non-urgent needs' }).props.onPress()
       })
+      expect(navigateToReplyHelpSpy).toHaveBeenCalled()
     })
   })
 
@@ -275,7 +276,7 @@ context('StartNewMessage', () => {
 
       const textViews = testInstance.findAllByType(TextView)
 
-      expect(textViews[12].props.children).toEqual(['Subject', ' ', '(Required)'])
+      expect(textViews[11].props.children).toEqual(['Subject', ' ', '(Required)'])
     })
   })
 
@@ -312,7 +313,7 @@ context('StartNewMessage', () => {
 
       it('should display a field error for that field', async () => {
         await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Select a care team to message')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
         })
@@ -321,8 +322,8 @@ context('StartNewMessage', () => {
       it('should display an AlertBox', async () => {
         await waitFor(() => {
           expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-          expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'In order to save this draft, all of the required fields must be filled.')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
+          expect(findByTypeWithSubstring(testInstance, TextView, 'To save this message, provide this information:')).toBeTruthy()
         })
       })
     })
@@ -349,7 +350,7 @@ context('StartNewMessage', () => {
 
       it('should display a field error for that field', async () => {
         await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Select a care team to message')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
           expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
         })
@@ -358,7 +359,8 @@ context('StartNewMessage', () => {
       it('should display an AlertBox', async () => {
         await waitFor(() => {
           expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-          expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
+          expect(findByTypeWithSubstring(testInstance, TextView, 'To send this message, provide this information:')).toBeTruthy()
         })
       })
     })
@@ -370,7 +372,7 @@ context('StartNewMessage', () => {
         testInstance.findByProps({ label: 'Send' }).props.onPress()
       })
 
-      expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Select a care team to message')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeTruthy()
       expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
 
@@ -382,7 +384,7 @@ context('StartNewMessage', () => {
         testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.covid)
       })
 
-      expect(findByTypeWithText(testInstance, TextView, 'Select a recipient')).toBeFalsy()
+      expect(findByTypeWithText(testInstance, TextView, 'Select a care team to message')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Select a category')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeFalsy()
       expect(findByTypeWithText(testInstance, TextView, 'Attachments')).toBeTruthy()

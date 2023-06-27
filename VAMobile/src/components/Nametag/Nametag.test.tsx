@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 import 'jest-styled-components'
-import { ReactTestInstance} from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 
 import { context, render, RenderAPI } from 'testUtils'
 import Nametag from './Nametag'
@@ -78,7 +78,7 @@ context('Nametag', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -90,8 +90,8 @@ context('Nametag', () => {
   })
 
   describe('when the military branch is United States Air Force', () => {
-    it('should display the Air_Force component', async () => {
-      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Airforce')
+    it('should display the AirForce component', async () => {
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('AirForce')
     })
   })
 
@@ -103,16 +103,16 @@ context('Nametag', () => {
   })
 
   describe('when the military branch is United States Coast Guard', () => {
-    it('should display the Coastal_Guard component', async () => {
+    it('should display the CoastGuard component', async () => {
       prepInstanceWithStore('United States Coast Guard')
       expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('CoastGuard')
     })
   })
 
   describe('when the military branch is United States Marine Corps', () => {
-    it('should display the Marine_Corps component', async () => {
+    it('should display the MarineCorps component', async () => {
       prepInstanceWithStore('United States Marine Corps')
-      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Marines')
+      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('MarineCorps')
     })
   })
 
@@ -139,7 +139,7 @@ context('Nametag', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
 
       expect(testInstance.findAllByType(TextView)).toHaveLength(1)
     })
@@ -157,7 +157,7 @@ context('Nametag', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
 
       expect(testInstance.findAllByType(TextView)).toHaveLength(1)
     })

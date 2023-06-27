@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { InteractionManager, ScrollView } from 'react-native'
+import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
@@ -38,10 +38,18 @@ import {
   updateSecureMessagingTab,
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
-import { formatSubject } from 'utils/secureMessaging'
+import { formatSubject, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
-import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useAttachments, useMessageWithSignature, useRouteNavigation, useTheme, useValidateMessageWithSignature } from 'utils/hooks'
+import {
+  useAppDispatch,
+  useAttachments,
+  useBeforeNavBackListener,
+  useDestructiveAlert,
+  useMessageWithSignature,
+  useRouteNavigation,
+  useTheme,
+  useValidateMessageWithSignature,
+} from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
 
@@ -53,6 +61,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
+  const draftAttachmentAlert = useDestructiveAlert()
 
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
@@ -73,7 +82,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
   const subject = message ? message.subject : ''
-  const category = message ? message.category : 'OTHER'
+  const category = message.category
   // Receiver is the sender of the message user is replying to
   const receiverName = message ? message.senderName : ''
   const receiverID = message?.senderId
@@ -93,10 +102,22 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     replyCancelConfirmation({
       origin: FormHeaderTypeConstants.reply,
       replyToID: messageID,
-      messageData: { body: messageReply },
+      messageData: { body: messageReply, category },
       isFormValid: true,
     })
   }
+
+  /**
+   * Intercept navigation action before leaving the screen, used the handle OS swipe/hardware back behavior
+   */
+  useBeforeNavBackListener(navigation, (e) => {
+    if (validateMessage(messageReply)) {
+      e.preventDefault()
+      goToCancel()
+    } else {
+      navigation.goBack
+    }
+  })
 
   useEffect(() => {
     dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
@@ -187,7 +208,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
-        originHeader: t('secureMessaging.reply'),
         removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
@@ -198,7 +218,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
               }
             : undefined,
         attachmentsList,
-        a11yHint: t('secureMessaging.attachments.howToAttachAFile.a11y'),
       },
     },
     {
@@ -218,13 +237,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const sendReplyOrSaveDraft = (): void => {
     dispatch(resetSendMessageFailed())
-    const messageData = { body: messageReply } as SecureMessagingFormData
+    const messageData = { body: messageReply, category } as SecureMessagingFormData
     if (savedDraftID) {
       messageData.draft_id = savedDraftID
     }
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID))
+      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID)))
     } else {
       receiverID && dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, messageID))
     }
@@ -233,24 +252,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const renderForm = (): ReactNode => (
     <Box>
       <MessageAlert scrollViewRef={scrollViewRef} hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} focusOnError={onSendClicked} />
-      <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-        <CollapsibleView
-          text={t('secureMessaging.startNewMessage.whenWillIGetAReply')}
-          showInTextArea={false}
-          a11yHint={t('secureMessaging.startNewMessage.whenWillIGetAReplyA11yHint')}>
-          <Box {...testIdProps(t('secureMessaging.startNewMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
-            <TextView variant="MobileBody" paragraphSpacing={true}>
-              {t('secureMessaging.startNewMessage.threeDaysToReceiveResponse')}
-            </TextView>
-          </Box>
-          <Box {...testIdProps(t('secureMessaging.startNewMessage.pleaseCallHealthProviderA11yLabel'))} accessible={true}>
-            <TextView>
-              <TextView variant="MobileBodyBold">{t('secureMessaging.startNewMessage.important')}</TextView>
-              <TextView variant="MobileBody">{t('secureMessaging.startNewMessage.pleaseCallHealthProvider')}</TextView>
-            </TextView>
-          </Box>
-        </CollapsibleView>
-      </Box>
       <TextArea>
         <TextView variant="MobileBody" accessible={true}>
           {t('secureMessaging.formMessage.to')}
@@ -274,6 +275,17 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
             resetErrors={resetErrors}
             setResetErrors={setResetErrors}
           />
+        </Box>
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <Pressable
+            onPress={navigateTo('ReplyHelp')}
+            accessibilityRole={'button'}
+            accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
+            importantForAccessibility={'yes'}>
+            <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
+              <CollapsibleView text={tc('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
+            </Box>
+          </Pressable>
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <VAButton
@@ -317,7 +329,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       leftButtonText={tc('cancel')}
       onLeftButtonPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
       rightButtonText={tc('save')}
-      rightVAIconProps={{ name: 'Save' }}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)

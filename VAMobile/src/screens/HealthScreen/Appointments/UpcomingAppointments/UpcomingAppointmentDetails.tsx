@@ -104,7 +104,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       title: getTranslation(isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType], t),
       startTime: getEpochSecondsOfDate(startDateUtc),
       endTime: getEpochSecondsOfDate(endTime),
-      location: name,
+      location: name || '',
     },
     testID: 'addToCalendarTestID',
   }

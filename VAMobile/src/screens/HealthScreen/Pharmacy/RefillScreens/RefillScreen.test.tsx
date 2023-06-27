@@ -18,11 +18,14 @@ context('RefillScreen', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (prescriptionState?: Partial<PrescriptionState>, errorState?: Partial<ErrorsState>) => {
-    const props = mockNavProps({}, {
-      setOptions: jest.fn(),
-      navigate: jest.fn(),
-      addListener: jest.fn()
-    })
+    const props = mockNavProps(
+      {},
+      {
+        setOptions: jest.fn(),
+        navigate: jest.fn(),
+        addListener: jest.fn(),
+      },
+    )
     const store: Partial<RootState> = {
       prescriptions: {
         ...initialPrescriptionState,
@@ -31,11 +34,11 @@ context('RefillScreen', () => {
       errors: {
         ...initialErrorsState,
         ...errorState,
-      }
+      },
     }
 
-    component = render(<RefillScreen {...props} />, {preloadedState: store})
-    testInstance = component.container
+    component = render(<RefillScreen {...props} />, { preloadedState: store })
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
@@ -49,7 +52,7 @@ context('RefillScreen', () => {
     it('should show NoRefills component', async () => {
       await waitFor(() => {
         initializeTestInstance({
-          refillablePrescriptions: []
+          refillablePrescriptions: [],
         })
       })
       expect(testInstance.findByType(NoRefills)).toBeTruthy()
@@ -59,12 +62,10 @@ context('RefillScreen', () => {
   describe('if no prescription is selected', () => {
     it('should show alert for no prescription selected', async () => {
       await waitFor(() => {
-        initializeTestInstance(
-          {
-            prescriptionsNeedLoad: false,
-            refillablePrescriptions: mockData
-          }
-        )
+        initializeTestInstance({
+          prescriptionsNeedLoad: false,
+          refillablePrescriptions: mockData,
+        })
       })
 
       await waitFor(() => {
@@ -81,15 +82,18 @@ context('RefillScreen', () => {
   describe('when there is a downtime message for rx refill', () => {
     it('should show PRESCRIPTION_REFILL_SCREEN_ID downtime message', async () => {
       await waitFor(() => {
-        initializeTestInstance( {}, {
-          downtimeWindowsByFeature: {
-            rx_refill: {
-              featureName: 'VA Prescriptions',
-              startTime: DateTime.now().plus({ days: -1 }),
-              endTime: DateTime.now().plus({ days: 1 }),
-            }
-          }
-        })
+        initializeTestInstance(
+          {},
+          {
+            downtimeWindowsByFeature: {
+              rx_refill: {
+                featureName: 'VA Prescriptions',
+                startTime: DateTime.now().plus({ days: -1 }),
+                endTime: DateTime.now().plus({ days: 1 }),
+              },
+            },
+          },
+        )
       })
 
       const error = testInstance.findByType(ErrorComponent)

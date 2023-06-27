@@ -90,7 +90,8 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
               <VAButton
                 onPress={() => {
                   dispatch(requestRefills(requestFailed))
-                  logAnalyticsEvent(Events.vama_rx_refill_retry())
+                  const prescriptionIds = requestFailed.map((prescription) => prescription.id)
+                  logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
                 }}
                 label={tc('tryAgain')}
                 buttonType="buttonPrimary"
@@ -113,7 +114,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const getRequestSummaryItem = () => {
     return refillRequestSummaryItems.map((request, index) => {
       const vaIconProps: VAIconProps = {
-        name: request.submitted ? 'WhiteCheckCircle' : 'WhiteCloseCircle',
+        name: request.submitted ? 'CircleCheckMark' : 'Remove',
         width: 20,
         height: 20,
         fill: request.submitted ? theme.colors.icon.success : theme.colors.icon.error,

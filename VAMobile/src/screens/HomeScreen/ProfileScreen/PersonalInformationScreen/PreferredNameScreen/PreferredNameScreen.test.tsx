@@ -15,7 +15,7 @@ context('PreferredNameScreen', () => {
     const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
     component = render(<PreferredNameScreen {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
@@ -25,6 +25,6 @@ context('PreferredNameScreen', () => {
   it('text input is setup correctly', async () => {
     const textInput = testInstance.findAllByType(VATextInput)[0]
     expect(textInput.props.value).toEqual('')
-    expect(textInput.props.labelKey).toEqual("personalInformation.preferredNameScreen.body")
+    expect(textInput.props.labelKey).toEqual('personalInformation.preferredNameScreen.body')
   })
 })

@@ -14,7 +14,7 @@ context('GenericOnboarding', () => {
   const initializeTestInstance = (displayLogo: boolean = false) => {
     component = render(<GenericOnboarding header={'header'} text={'text'} displayLogo={displayLogo} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
