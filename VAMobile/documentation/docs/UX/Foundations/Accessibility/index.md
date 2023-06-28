@@ -1,6 +1,5 @@
 ---
 title: Accessibility
-sidebar_position: 2
 ---
 
 We strive to create a product that is usable for all Veterans, no matter their abilities.
@@ -66,7 +65,8 @@ Section 508 is a federal law that requires all U.S. government agencies to make 
 
 ## Resources
 
-* [Accessibility Checklist for UX Designers](https://docs.google.com/document/d/1wEz5Oa6v_i_AgwX_j4qOnuu7c15IhuLoo6f5x2xOMZ0/edit?usp=sharing)
-* [Accessibility Checklist for Content Designers](https://docs.google.com/document/d/1vIzUNWoioANH7Nxyn5fdOyCdPaLt9H8rKhMwwkweOzU/edit?usp=sharing)
+* [Accessibility Checklist for UX Designers](/docs/UX/Foundations/Accessibility/a11y-checklist-ux-designers)
+* [Accessibility Checklist for Content Designers](/docs/UX/Foundations/Accessibility/a11y-checklist-content-designers)
+* [Haptic Feedback](/docs/UX/Patterns/haptics)
 * [VA.gov Mobile Accessibility Testing Plan on Github](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/Foundations/Accessibility#:~:text=VA.gov%20Mobile%20Accessibility%20Testing%20Plan%20on%20Github)
 * [Draft Native Mobile Accessibility (A11y) Resources & Articles on Google Docs](https://docs.google.com/document/d/1D2PFg7Am9FkTt4HgMK2leEh_AliiSSf7MCWu-FLf9fI/edit#heading=h.t09yqccug4vs)
