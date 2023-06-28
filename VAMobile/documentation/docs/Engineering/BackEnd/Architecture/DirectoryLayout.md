@@ -13,7 +13,27 @@ directory. The module is laid out much like the root of a standard rails project
 ```
 /modules/mobile/app/models  
 ```
-Description of what we lump in the models directory
+The models directory contains several specific types of classes. 
+
+#### Adapters 
+Adapters are used whenever we need to _massage_ data from one schema to another. For instance, if we're upgrading to a new
+upstream endpoint and the data from the new endpoint changed names and/or is in a different format, we use adapters
+so that the new data is backwards compatible.
+
+#### Contracts
+TODO
+
+## Policies
+TODO
+
+## Serializers
+TODO
+
+## Services
+TODO
+
+## Workers
+TODO
 
 ## Testing
 The various paths for testing are as follows
