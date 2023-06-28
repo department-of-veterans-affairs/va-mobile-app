@@ -128,8 +128,6 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     deleteEmailAlert({
       title: t('contactInformation.removeInformation.title', { info: emailTitle }),
       message: t('contactInformation.removeInformation.body', { info: emailTitle }),
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
       buttons: [
         {
           text: t('keep'),
