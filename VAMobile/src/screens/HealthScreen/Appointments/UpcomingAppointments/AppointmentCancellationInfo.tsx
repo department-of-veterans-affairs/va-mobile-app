@@ -68,19 +68,17 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         if (cancelId) {
           title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
           body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
-          break
         } else if (serviceCategoryName === 'COMPENSATION & PENSION') {
           title = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')
           body = t('upcomingAppointmentDetails.cancelCompensationAndPension.body', { facility: name })
-          break
         } else {
           title = t('upcomingAppointmentDetails.doYouNeedToCancel')
           body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: getTranslation(AppointmentTypeToA11yLabel[appointmentType], t) })
           bodyA11yLabel = a11yLabelVA(
             t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: getTranslation(AppointmentTypeToA11yLabel[appointmentType], t) }),
           )
-          break
         }
+        break
       default:
         title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
         body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
