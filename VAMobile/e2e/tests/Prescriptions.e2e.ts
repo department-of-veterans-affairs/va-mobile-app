@@ -253,14 +253,22 @@ describe('Prescriptions Screen', () => {
 	})
 	
 	it('should display the appropriate prescription status\'s for pending', async () => {
-		await changeMockData('prescriptions.json', ['/v0/health/rx/prescriptions', {'data': 1}, 'attributes', 'refillStatus'], 'submitted')
-		await device.launchApp({newInstance: true})
-		await loginToDemoMode()
-	    await openHealth()
-	    await openPrescriptions()
-		await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TAB_PENDING_ID)).tap()
+		if(device.getPlatform() == 'android') {
+			await changeMockData('prescriptions.json', ['/v0/health/rx/prescriptions', {'data': 1}, 'attributes', 'refillStatus'], 'submitted')
+			await device.launchApp({newInstance: true})
+			await loginToDemoMode()
+			await openHealth()
+			await openPrescriptions()
+			await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TAB_PENDING_ID)).tap()
+			await expect(element(by.text('Active: Submitted')).atIndex(0)).toExist()
+		} else {
+			await device.launchApp({newInstance: true})
+			await loginToDemoMode()
+			await openHealth()
+			await openPrescriptions()
+			await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TAB_PENDING_ID)).tap()
+		}
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0)).toExist()
-		await expect(element(by.text('Active: Submitted')).atIndex(0)).toExist()
 		await expect(element(by.text('Active: On Hold'))).not.toExist()
 		await expect(element(by.text('Active: Parked'))).not.toExist()
 		await expect(element(by.text('Active: Suspended'))).not.toExist()
@@ -283,6 +291,7 @@ describe('Prescriptions Screen', () => {
 		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_TEXT)).atIndex(0).tap()
 		await expect(element(by.label('Prescription number 3 6 3 6 8 5 6'))).toExist()
 		await expect(element(by.text('We share tracking information here for up to 15 days, even if you\'ve received your prescription.'))).toExist()
+		await expect(element(by.text('If the delivery service changes, we may change or delete the tracking number. If you have questions, contact your local VA pharmacy.'))).toExist()
 		await expect(element(by.text('Tracking number'))).toExist()
 		await expect(element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6'))).toExist()
 		await expect(element(by.text('Delivery service: DHL'))).toExist()

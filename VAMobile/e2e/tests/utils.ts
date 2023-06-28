@@ -122,29 +122,21 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 
 		const jsonParsed = JSON.parse(data)
 		//const jsonFirstObject = source[jsonProperty[0]]
-		var value
-		var key
+		var mockDataVariable
+		var mockDataKeyValue
 		for(var x=0; x<jsonProperty.length; x++) {
 			if (x == 0) {
-				var mockDataVariable = jsonParsed[jsonProperty[x]]
+				mockDataVariable = jsonParsed[jsonProperty[x]]
 			} else if (x == jsonProperty.length - 1) {
 				mockDataVariable[jsonProperty[x]] = newJsonValue
 			} else {
 				if (jsonProperty[x].constructor == Object) {
-					key = String(Object.keys(jsonProperty[x]))
-					value = jsonProperty[x][key]
-					mockDataVariable = mockDataVariable[key[0]]
-					mockDataVariable = mockDataVariable[value]
+					var key = String(Object.keys(jsonProperty[x]))
+					var value = jsonProperty[x][key]
+					mockDataKeyValue = mockDataVariable[key]
+					mockDataVariable = mockDataKeyValue[value]
 				} else {
-					if (jsonProperty[x].constructor == Object) {
-						key = String(Object.keys(jsonProperty[x]))
-						value = jsonProperty[x][key]
-						mockDataVariable = mockDataVariable[key[0]]
-						mockDataVariable = mockDataVariable[value]
-					} else {
-						mockDataVariable = mockDataVariable[jsonProperty[x]]
-					}
-					//mockDataVariable = mockDataVariable[jsonProperty[x]]
+					mockDataVariable = mockDataVariable[jsonProperty[x]]
 				}
 			}
 				
