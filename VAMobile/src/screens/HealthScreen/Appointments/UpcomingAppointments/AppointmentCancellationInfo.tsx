@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToA11yLabel } from 'store/api/types'
 import { Box, ButtonTypesConstants, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { cancelAppointment } from 'store/slices'
 import { formatDateMMDDYYYY } from 'utils/formattingUtils'
 import { getTranslation } from 'utils/formattingUtils'
@@ -55,9 +56,9 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
         title = t('upcomingAppointmentDetails.doYouNeedToCancel')
         body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: getTranslation(AppointmentTypeToA11yLabel[appointmentType], t) })
-        bodyA11yLabel = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.A11yLabel', {
-          appointmentType: getTranslation(AppointmentTypeToA11yLabel[appointmentType], t),
-        })
+        bodyA11yLabel = a11yLabelVA(
+          t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: getTranslation(AppointmentTypeToA11yLabel[appointmentType], t) }),
+        )
         break
       case AppointmentTypeConstants.COMMUNITY_CARE:
         title = t('upcomingAppointmentDetails.doYouNeedToCancel')
@@ -73,8 +74,11 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
           body = t('upcomingAppointmentDetails.cancelCompensationAndPension.body', { facility: name })
           break
         } else {
-          title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
-          body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
+          title = t('upcomingAppointmentDetails.doYouNeedToCancel')
+          body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: getTranslation(AppointmentTypeToA11yLabel[appointmentType], t) })
+          bodyA11yLabel = a11yLabelVA(
+            t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: getTranslation(AppointmentTypeToA11yLabel[appointmentType], t) }),
+          )
           break
         }
       default:
