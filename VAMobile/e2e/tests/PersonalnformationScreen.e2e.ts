@@ -1,5 +1,4 @@
 import { by, device, element, expect, waitFor, web } from 'detox'
-import { setTimeout } from 'timers/promises'
 
 import { loginToDemoMode, openPersonalInformation, openProfile } from './utils'
 
@@ -32,12 +31,10 @@ const checkLocatorAndContactLinks = async () => {
   await element(by.text('Done')).tap()
 
   await scrollToThenTap(PersonalInfoConstants.PHONE_LINK_TEXT)
-  await setTimeout(1000)
   await device.takeScreenshot('PersonalInformationPhoneNumber')
   await device.launchApp({ newInstance: false })
 
   await scrollToThenTap(PersonalInfoConstants.TTY_LINK_TEXT)
-  await setTimeout(1000)
   await device.takeScreenshot('PersonalInformationTTY')
   await device.launchApp({ newInstance: false })
 }
