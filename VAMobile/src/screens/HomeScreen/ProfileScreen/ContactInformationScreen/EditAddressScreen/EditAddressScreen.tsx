@@ -492,14 +492,12 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     deleteAddressAlert({
       title: t('contactInformation.removeInformation.title', { info: lowerCaseTitle }),
       message: t('contactInformation.removeInformation.body', { info: lowerCaseTitle }),
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
       buttons: [
         {
           text: t('cancel'),
         },
         {
-          text: t('remove'),
+          text: t('keep'),
           onPress: onDelete,
         },
       ],

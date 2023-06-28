@@ -292,22 +292,15 @@ export type UseAlertProps = {
   title: string
   /** message of alert */
   message?: string // message for the alert
-  /** ios destructive index */
-  destructiveButtonIndex?: number
-  /** ios cancel index */
-  cancelButtonIndex: number
   /** options to show in alert */
   buttons: Array<UseDestructiveAlertButtonProps>
   /** screenReaderEnabled boolean */
   screenReaderEnabled: boolean
 }
 /**
- * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
- * TODO: consolidate this and useShowActionSheet into a single hook
+ * Hook to create standard alert for a destructive event
  * @param title - title of the alert
  * @param message - optional message for the alert
- * @param destructiveButtonIndex - ios destructive index
- * @param cancelButtonIndex - ios cancel index
  * @param buttons - options to show in the alert
  * @param screenReaderEnabled - apply a11yLabelNeededForScreenReader will have the side effect of visually displaying V-A since the alert used does not have a separate accessibility Label
  * @returns an action sheet for ios and an alert for android

@@ -157,14 +157,12 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     deletePhoneAlert({
       title: t('contactInformation.removeInformation.title', { info: buttonTitle }),
       message: t('contactInformation.removeInformation.body', { info: buttonTitle }),
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
       buttons: [
         {
           text: t('cancel'),
         },
         {
-          text: t('remove'),
+          text: t('keep'),
           onPress: onDelete,
         },
       ],
