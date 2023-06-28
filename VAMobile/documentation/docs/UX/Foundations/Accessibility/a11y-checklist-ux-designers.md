@@ -1,8 +1,8 @@
 ---
-title: Checklist for UX Designers
+title: Checklist for UX designers
 ---
 
-# Accessibility Checklist for UX Designers
+# Accessibility checklist for UX designers
 
 ## **Adaptable UI**
 An adaptable user interface (UI) works for everyone. Someone’s screen size or text settings should never stop them from seeing and using anything.
@@ -15,22 +15,22 @@ An adaptable user interface (UI) works for everyone. Someone’s screen size or 
 - [ ] Do not use horizontal scrolling and ensure that none of the app elements are broken that would allow for horizontal scrolling. 
 <br />
 
-## **Color Contrast**
+## **Color contrast**
 A minimum contrast between two colors is necessary so that a user can perceive both colors separately.
 
-### **Text / Copy**
+### **Text / copy**
 - [ ]  Ensure regular-sized text has a minimum contrast ratio of 4.5:1.
 - [ ] Ensure large-sized text has a minimum contrast ratio of 3:1.
 - [ ] Check that text placed over images or gradient backgrounds still has sufficient contrast in all viewports.
 
-### **UI Elements**
+### **UI elements**
 - [ ] Ensure visual states, like hover or focus, on UI components have a minimum contrast ratio of 3:1.
 - [ ] Ensure that form field borders and custom form elements have a minimum contrast ratio of 3:1.
 - [ ] Ensure charts, diagrams, and other graphics have a minimum contrast ratio of 3:1 between important parts.
 - [ ] Ensure that icons have a minimum contrast ratio of 3:1.
 <br />
 
-## **Target Size**
+## **Target size**
 When targets are small, it is difficult for users with hand tremors and those who have difficulty with fine motor movement to activate them accurately. Providing sufficient size, or sufficient spacing between targets, will reduce the likelihood of accidentally activating the wrong control.
 
 - [ ] Ensure that the size of the target for pointer inputs is at least 24 by 24 CSS pixels, except when:
@@ -39,7 +39,7 @@ When targets are small, it is difficult for users with hand tremors and those wh
   * The target is in a sentence, or is in a bulleted or numbered list, or its’ size is otherwise constrained by the line-height of non-target text
 <br />
 
-## **Content Structure**
+## **Content structure**
 Structuring content helps people group information and work out what's important and what they need to read first. This structure must be shown visually and using code.
 - [ ] Provide easily identifiable feedback (i.e. confirmation of a form submission, alerting the user when something goes wrong, notify the user of changes on the page, etc.). Instructions should be easy to identify.
 
@@ -68,8 +68,8 @@ Clear instructions for entering or fixing information will help a user complete 
 - [ ] Let people review the information they’ve entered in a form and fix any mistakes before they complete a legal or financial transaction, change saved data, or submit a test answer.
 
 ### **Avoid redundant entries**
-- [ ]  Ensure that information previously entered by or provided to the user that is required to be entered again in the same process is either auto-populated or available for the user to select.
-    * Except when: re-entering the information is essential, the information is required to ensure the security of the content, or previously entered information is no longer valid.
+- [ ] Ensure that information previously entered by or provided to the user that is required to be entered again in the same process is either auto-populated or available for the user to select.
+  * Except when: re-entering the information is essential, the information is required to ensure the security of the content, or previously entered information is no longer valid.
 <br />
 
 ## **Images**
@@ -112,12 +112,12 @@ Users want to navigate around the app easily. A user’s confidence in an app wi
 - [ ] Give users more than one way to find content on the app.
 <br />
 
-## **Dragging Movement**
+## **Dragging movement**
 Some people cannot perform dragging movements in a precise manner. Others use a specialized or adapted input device, such as a trackball, head pointer, eye-gaze system, or speech-controlled mouse emulator, which may make dragging cumbersome and error-prone.
 - [ ] Ensure that all functionality that uses a dragging movement for operation can be achieved by a single pointer without dragging, unless dragging is essential or the functionality is determined by the user agent and not modified by the author.
 <br />
 
-## **Motion Interaction**
+## **Motion interaction**
 Content and functions that rely on gestures, motion, or a focus state to work, should have alternative ways to access them.
 
 ### **Content should always be visible.**
@@ -148,7 +148,7 @@ Tables help users interpret information with a structural relationship between h
 - [ ] Don't include too much white space between columns.
 <br />
 
-## **Timed Events**
+## **Timed events**
 Time limits must consider people who may need more time to read or complete tasks.
 
 ### **Time limits should be reasonable and adjustable.**
@@ -157,7 +157,7 @@ Time limits must consider people who may need more time to read or complete task
 - [ ] Warn users before time expires and give them at least 20 seconds to easily extend the time limit.
 <br />
 
-## **Text Styles**
+## **Text styles**
 Text on web pages must be easy to read, see and scan. Accessible text makes the reading experience better for everyone.
 
 ### **Text should be easy to scan and read.**
@@ -176,12 +176,12 @@ Multimedia content can offer users an alternative to text. Users can watch or li
 - [ ] Put a link to audio-described video close to video location.
 <br />
 
-## **Consistent Help**
+## **Consistent help**
 When the placement of the help mechanism is kept consistent across a set of screens, users looking for help will find it easier to identify.
 - [ ] If a help option (contact form, chat box, etc.) is available to a user, ensure that the placement / location of this option is consistent across screens.
 <br />
 
-## **Audio and Moving Content**
+## **Audio and moving content**
 Content that moves or starts playing automatically grabs people's attention. Giving people an option to control this, creates a more comfortable experience.
 
 ### **Flashing content can cause seizures.**

@@ -1,17 +1,17 @@
 ---
-title: Checklist for Content Designers
+title: Checklist for content designers
 ---
 
-# Accessibility Checklist for Content Designers
+# Accessibility checklist for content designers
 
-## **Code Quality**
+## **Code quality**
 Good quality code is resilient which makes it compatible with a wider range of browsers and assistive technologies.
 
 ### **Language changes in the content should be identified.**
 - [ ] Identify language changes within the content and identify for developers to markup.
 <br />
 
-## **Content Structure**
+## **Content structure**
 Structuring content helps people group information and work out what's important and what they need to read first. This structure must be shown visually and using code.
 - [ ] All content on the app should use plain language and avoid figures of speech, idioms, and complicated metaphors.
 - [ ] All buttons, links, and labels should be unique and descriptive of what a user will find on the following screen.
@@ -117,7 +117,7 @@ Tables help users interpret information with a structural relationship between h
 - [ ] Give complex tables a text summary.
 <br />
 
-## **Text Styles**
+## **Text styles**
 Text on web pages must be easy to read, see and scan. Accessible text makes the reading experience better for everyone.
 
 ### **Text should be easy to scan and read.**
