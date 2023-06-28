@@ -23,7 +23,6 @@ import { WebProtocolTypesConstants } from 'constants/common'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { getTheme } from 'styles/themes/standardTheme'
 import { isAndroid, isIOS } from 'utils/platform'
-import { isNumericLiteral } from 'typescript'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
 /**
