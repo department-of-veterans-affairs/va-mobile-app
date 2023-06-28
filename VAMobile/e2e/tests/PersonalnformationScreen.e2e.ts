@@ -1,4 +1,4 @@
-import { by, device, element, expect, waitFor } from 'detox'
+import { by, device, element, expect, waitFor, web } from 'detox'
 import { setTimeout } from 'timers/promises'
 
 import { loginToDemoMode, openPersonalInformation, openProfile } from './utils'
@@ -26,6 +26,22 @@ const scrollToThenTap = async (text: string) => {
   await element(by.text(text)).tap()
 }
 
+const checkLocatorAndContactLinks = async () => {
+  await scrollToThenTap(PersonalInfoConstants.NEAREST_CENTER_LINK_TEXT)
+  await expect(web.element(by.web.className('title-section'))).toHaveText('Find VA locations')
+  await element(by.text('Done')).tap()
+
+  await scrollToThenTap(PersonalInfoConstants.PHONE_LINK_TEXT)
+  await setTimeout(1000)
+  await device.takeScreenshot('PersonalInformationPhoneNumber')
+  await device.launchApp({ newInstance: false })
+
+  await scrollToThenTap(PersonalInfoConstants.TTY_LINK_TEXT)
+  await setTimeout(1000)
+  await device.takeScreenshot('PersonalInformationTTY')
+  await device.launchApp({ newInstance: false })
+}
+
 beforeAll(async () => {
   await loginToDemoMode()
   await openProfile()
@@ -51,26 +67,12 @@ describe('Personal Information Screen', () => {
     await element(by.text(PersonalInfoConstants.HOW_TO_UPDATE_LINK_TEXT)).tap()
     await expect(element(by.text('Profile help'))).toExist()
 
-    await element(by.text(PersonalInfoConstants.LEARN_HOW_LINK_TEXT)).tap()
-    await setTimeout(5000)
-    await device.takeScreenshot('PersonalInformationChangeNameLink')
-    await element(by.text('Done')).tap()
-
-    await scrollToThenTap(PersonalInfoConstants.NEAREST_CENTER_LINK_TEXT)
-    await setTimeout(5000)
-    await device.takeScreenshot('PersonalInformationFindVACenterLink')
-    await element(by.text('Done')).tap()
-
     if (device.getPlatform() === 'android') {
-      await scrollToThenTap(PersonalInfoConstants.PHONE_LINK_TEXT)
-      await setTimeout(5000)
-      await device.takeScreenshot('PersonalInformationPhoneNumber')
-      await device.launchApp({ newInstance: false })
+      await element(by.text(PersonalInfoConstants.LEARN_HOW_LINK_TEXT)).tap()
+      await expect(web.element(by.web.tag('article'))).toHaveText('How to change your legal name on file with VA')
+      await element(by.text('Done')).tap()
 
-      await scrollToThenTap(PersonalInfoConstants.TTY_LINK_TEXT)
-      await setTimeout(5000)
-      await device.takeScreenshot('PersonalInformationTTY')
-      await device.launchApp({ newInstance: false })
+      await checkLocatorAndContactLinks()
     }
 
     await element(by.text('Close')).tap()
@@ -80,21 +82,8 @@ describe('Personal Information Screen', () => {
     await element(by.text(PersonalInfoConstants.HOW_TO_FIX_LINK_TEXT)).tap()
     await expect(element(by.text('Profile help'))).toExist()
 
-    await scrollToThenTap(PersonalInfoConstants.NEAREST_CENTER_LINK_TEXT)
-    await setTimeout(5000)
-    await device.takeScreenshot('PersonalInformationFindVACenterLink')
-    await element(by.text('Done')).tap()
-
     if (device.getPlatform() === 'android') {
-      await scrollToThenTap(PersonalInfoConstants.PHONE_LINK_TEXT)
-      await setTimeout(5000)
-      await device.takeScreenshot('PersonalInformationPhoneNumber')
-      await device.launchApp({ newInstance: false })
-
-      await scrollToThenTap(PersonalInfoConstants.TTY_LINK_TEXT)
-      await setTimeout(5000)
-      await device.takeScreenshot('PersonalInformationTTY')
-      await device.launchApp({ newInstance: false })
+      await checkLocatorAndContactLinks()
     }
 
     await element(by.text('Close')).tap()
