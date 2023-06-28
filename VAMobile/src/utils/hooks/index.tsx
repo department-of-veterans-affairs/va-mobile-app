@@ -23,6 +23,7 @@ import { WebProtocolTypesConstants } from 'constants/common'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { getTheme } from 'styles/themes/standardTheme'
 import { isAndroid, isIOS } from 'utils/platform'
+import { isNumericLiteral } from 'typescript'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
 /**
@@ -272,20 +273,19 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
     } else {
       showActionSheetWithOptions(
         {
-          textStyle: { color: currentTheme.colors.text.primary },
           title: props.title,
           titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
           message: props.message,
           messageTextStyle: { textAlign: 'center', color: currentTheme.colors.text.primary },
-          showSeparators: true,
-          separatorStyle: { borderWidth: 1, borderColor: currentTheme.colors.border.primary },
+          textStyle: { color: currentTheme.colors.text.primary },
           destructiveButtonIndex: newDestructiveButtonIndex,
+          destructiveColor: currentTheme.colors.text.error,
           options: newButtons.map((button) => stringToTitleCase(button.text)),
           containerStyle: { backgroundColor: currentTheme.colors.background.main },
         },
         (buttonIndex) => {
-          if (buttonIndex) {
-            const onPress = props.buttons[buttonIndex]?.onPress
+          if (buttonIndex || buttonIndex === 0) {
+            const onPress = newButtons[buttonIndex]?.onPress
             if (onPress) {
               onPress()
             }
