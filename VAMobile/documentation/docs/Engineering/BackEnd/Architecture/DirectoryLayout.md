@@ -5,10 +5,15 @@ majority of the code can be found in the [/modules/mobile/](https://github.com/d
 directory. The module is laid out much like the root of a standard rails project, for instance, it has `app/controllers` and
 `app/models` directories. With that knowledge, you can usually navigate to the code you want fairly easily.
 
+
+# TODO
+Why do some directorys have no v# namespace, some have v0, some have v0 and v2, some have v0 and v1
+
 ## Controllers Directory
 ```
 /modules/mobile/app/controllers  
 ```
+
 ## Models Directory
 ```
 /modules/mobile/app/models  
