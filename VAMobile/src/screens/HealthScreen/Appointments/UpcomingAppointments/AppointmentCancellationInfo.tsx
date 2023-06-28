@@ -149,16 +149,16 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         />
       ) : (
         <>
-        {(serviceCategoryName === 'COMPENSATION & PENSION') ? (
-          <></>
-        ) : (
-          <>
-            <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(name)}>
-              {name}
-            </TextView>
-            {linkOrPhone}
-          </>
-        )}
+          {serviceCategoryName === 'COMPENSATION & PENSION' ? (
+            <></>
+          ) : (
+            <>
+              <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(name)}>
+                {name}
+              </TextView>
+              {linkOrPhone}
+            </>
+          )}
         </>
       )}
     </TextArea>
