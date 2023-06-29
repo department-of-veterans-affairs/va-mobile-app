@@ -21,7 +21,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: 'mock subject 1: The initial message sets the overall thread subject header',
     body: 'message 1 body text',
-    attachment: false,
+    hasAttachments: false,
     sentDate: '1',
     senderId: 2,
     senderName: 'mock sender 1',
@@ -34,7 +34,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: '',
     body: 'test 2',
-    attachment: false,
+    hasAttachments: false,
     sentDate: '2',
     senderId: 2,
     senderName: 'mock sender 2',
@@ -47,7 +47,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: '',
     body: 'First accordion collapsible should be open, so the body text of this message should display',
-    attachment: false,
+    hasAttachments: false,
     sentDate: DateTime.local().toISO(),
     senderId: 2,
     senderName: 'mock sender 3',
@@ -60,7 +60,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: 'This message should not display because it has different thread ID',
     body: 'test',
-    attachment: false,
+    hasAttachments: false,
     sentDate: '2013-06-06T04:00:00.000+00:00',
     senderId: 2,
     senderName: 'mock sender 45',
@@ -130,7 +130,7 @@ context('ViewMessageScreen', () => {
     })
 
     it('renders correct amount of CollapsibleMessages', () => {
-      expect(screen.UNSAFE_getAllByType(AccordionCollapsible).length).toBe(2)
+      expect(screen.getAllByRole('tab').length).toBe(3)
       expect(screen.getByText('mock sender 1')).toBeTruthy()
       expect(screen.getByText('mock sender 2')).toBeTruthy()
       expect(screen.queryByText('mock sender 45')).toBeFalsy()
@@ -148,7 +148,7 @@ context('ViewMessageScreen', () => {
       it('should show AlertBox with "Message could not be found" title', async () => {
         expect(screen.getByText('mock sender 1')).toBeTruthy()
         fireEvent.press(screen.getByText('mock sender 1'))
-        expect(screen.UNSAFE_getAllByType(IndividualMessageErrorComponent)).toBeTruthy()
+        expect(screen.getByText("If the app still doesn't work, call the My HealtheVet Help Desk. We're here Monday-Friday, 8:00 a.m.-8:00 p.m. ET.")).toBeTruthy()
         expect(screen.getByText('Message could not be found')).toBeTruthy()
       })
     })

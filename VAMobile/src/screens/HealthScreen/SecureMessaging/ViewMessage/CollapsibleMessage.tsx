@@ -10,7 +10,7 @@ import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'sto
 import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
@@ -30,16 +30,16 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const { t: tFunction } = useTranslation()
   const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
-  const { attachment, attachments, senderName, sentDate, body } = message
+  const { hasAttachments, attachments, senderName, sentDate, body } = message
   const { loadingAttachments, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-
+  const screenReaderEnabled = useIsScreenReaderEnabled(true)
   const dateTime = getFormattedDateAndTimeZone(sentDate)
-  const attachLabel = (attachment && 'has attachment') || ''
+  const attachLabel = hasAttachments ? t('secureMessaging.attachments.hasAttachment').toLowerCase() : ''
 
   const onPress = (expandedValue?: boolean): void => {
     // Fetching a message thread only includes a summary of the message, and no attachments.
     // If the message has an attachment but we only have the summary, fetch the message details
-    if (expandedValue && attachment && !attachments?.length) {
+    if (expandedValue && hasAttachments && !attachments?.length) {
       dispatch(getMessage(message.messageId, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, true, true))
     }
   }
@@ -55,7 +55,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
           <TextView variant="MobileBody" selectable={true}>
             {body}
           </TextView>
-          {loadingAttachments && !attachments?.length && attachment && (
+          {loadingAttachments && !attachments?.length && hasAttachments && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
               <LoadingComponent justTheSpinnerIcon={true} />
             </Box>
@@ -93,7 +93,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
           {senderName}
         </TextView>
         <Box flexDirection={'row'} mr={theme.dimensions.textIconMargin}>
-          {attachment && (
+          {hasAttachments && (
             <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
               <VAIcon name={'PaperClip'} fill={'spinner'} width={16} height={16} />
             </Box>
@@ -109,8 +109,8 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const getCollapsedContent = (): ReactNode => {
     return (
       <Box>
-        <TextView mt={condensedMarginBetween} variant="MobileBody" numberOfLines={2} accessible={false}>
-          {body}
+        <TextView mt={condensedMarginBetween} variant="MobileBody" numberOfLines={2}>
+          {body?.trimStart()}
         </TextView>
       </Box>
     )
@@ -122,7 +122,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,
     expandedContent: loadMessageError ? <IndividualMessageErrorComponent /> : getExpandedContent(),
-    collapsedContent: getCollapsedContent(),
+    collapsedContent: !screenReaderEnabled ? getCollapsedContent() : undefined,
     customOnPress: onPress,
     noBorder: true,
     headerRef: collapsibleMessageRef,

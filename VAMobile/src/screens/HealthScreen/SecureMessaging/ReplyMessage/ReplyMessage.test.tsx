@@ -73,7 +73,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: 'mock subject 1: The initial message sets the overall thread subject header',
     body: 'message 1 body text',
-    attachment: false,
+    hasAttachments: false,
     sentDate: '1',
     senderId: 2,
     senderName: 'mock sender 1',
@@ -86,7 +86,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: '',
     body: 'test 2',
-    attachment: false,
+    hasAttachments: false,
     sentDate: '2',
     senderId: 2,
     senderName: 'mock sender 2',
@@ -99,7 +99,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: '',
     body: 'Last accordion collapsible should be open, so the body text of this message should display',
-    attachment: false,
+    hasAttachments: false,
     sentDate: '3',
     senderId: 2,
     senderName: 'mock sender 3',
@@ -112,7 +112,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: 'This message should not display because it has different thread ID',
     body: 'test',
-    attachment: false,
+    hasAttachments: false,
     sentDate: '1-1-21',
     senderId: 2,
     senderName: 'mock sender 45',
@@ -285,20 +285,12 @@ context('ReplyMessage', () => {
     })
   })
 
-  it('renders only messages in the same thread as the message associated with messageID', async () => {
-    await waitFor(() => {
-      expect(testInstance.findAllByType(AccordionCollapsible).length).toBe(3)
-    })
-  })
-
   it('should render the correct number of accordions', async () => {
-    await waitFor(() => {
-      expect(screen.UNSAFE_getAllByType(AccordionCollapsible).length).toBe(3)
-      expect(screen.getByText('mock sender 1')).toBeTruthy()
-      expect(screen.getByText('mock sender 2')).toBeTruthy()
-      expect(screen.getAllByText('mock sender 3').length).toBe(2)
-      expect(screen.queryByText('mock sender 45')).toBeFalsy()
-    })
+    expect(screen.getAllByRole('tab').length).toBe(3)
+    expect(screen.getByText('mock sender 1')).toBeTruthy()
+    expect(screen.getByText('mock sender 2')).toBeTruthy()
+    expect(screen.getAllByText('mock sender 3').length).toBe(2)
+    expect(screen.queryByText('mock sender 45')).toBeFalsy()
   })
 
   describe('when loading is set to true', () => {

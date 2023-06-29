@@ -24,7 +24,7 @@ jest.mock('store/slices', () => {
   }
 })
 
-const mockDateISO = DateTime.fromMillis(1643402338567).toISO()
+const mockDateISO = DateTime.local().toISO()
 
 context('CollapsibleMessage', () => {
   let onPressSpy: Mock
@@ -45,7 +45,7 @@ context('CollapsibleMessage', () => {
       category: CategoryTypeFields.education,
       subject: 'Test Message Subject',
       body: 'Test Message Body',
-      attachment: true,
+      hasAttachments: true,
       attachments: listOfAttachments,
       sentDate: mockDateISO,
       senderId: 11,
