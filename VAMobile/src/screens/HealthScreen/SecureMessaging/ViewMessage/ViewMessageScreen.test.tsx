@@ -10,7 +10,6 @@ import ViewMessageScreen from './ViewMessageScreen'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 import { DateTime } from 'luxon'
 import MessageCard from './MessageCard'
-
 // Contains message Ids grouped together by thread
 const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
 
