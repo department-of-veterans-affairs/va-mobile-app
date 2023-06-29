@@ -28,7 +28,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
-  const { attachment, attachments, senderName, sentDate, body, messageId } = message
+  const { hasAttachments, attachments, senderName, sentDate, body, messageId } = message
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const subject = message ? message.subject : ''
   const category = message ? message.category : 'OTHER'
@@ -89,7 +89,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
   const getAttachment = (): ReactNode => {
     return (
       <Box>
-        {loadingAttachments && !attachments?.length && attachment && (
+        {loadingAttachments && !attachments?.length && hasAttachments && (
           <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
             <LoadingComponent justTheSpinnerIcon={true} />
           </Box>
@@ -126,7 +126,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
       <Box mx={theme.dimensions.gutter}>
         {getHeader()}
         {getContent()}
-        {attachment && getAttachment()}
+        {hasAttachments && getAttachment()}
         {getMessageHelp()}
         {getReplyOrStartNewMessageButton()}
       </Box>
