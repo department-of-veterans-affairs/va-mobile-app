@@ -34,7 +34,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const { loadingAttachments, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
   const dateTime = getFormattedDateAndTimeZone(sentDate)
-  const attachLabel = (hasAttachments && 'has attachment') || ''
+  const attachLabel = hasAttachments ? t('secureMessaging.attachments.hasAttachment').toLowerCase() : ''
 
   const onPress = (expandedValue?: boolean): void => {
     // Fetching a message thread only includes a summary of the message, and no attachments.
