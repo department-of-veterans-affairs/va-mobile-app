@@ -74,9 +74,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         } else {
           title = t('upcomingAppointmentDetails.doYouNeedToCancel')
           body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.alternative')
-          bodyA11yLabel = a11yLabelVA(
-            t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.alternative')
-          )
+          bodyA11yLabel = a11yLabelVA(t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.alternative'))
         }
         break
       default:
