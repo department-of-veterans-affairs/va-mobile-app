@@ -159,10 +159,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       message: t('contactInformation.removeInformation.body', { info: buttonTitle }),
       buttons: [
         {
-          text: t('cancel'),
+          text: t('keep'),
         },
         {
-          text: t('keep'),
+          text: t('remove'),
           onPress: onDelete,
         },
       ],

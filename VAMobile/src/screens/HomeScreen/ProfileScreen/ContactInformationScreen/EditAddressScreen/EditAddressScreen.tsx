@@ -494,10 +494,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       message: t('contactInformation.removeInformation.body', { info: lowerCaseTitle }),
       buttons: [
         {
-          text: t('cancel'),
+          text: t('keep'),
         },
         {
-          text: t('keep'),
+          text: t('remove'),
           onPress: onDelete,
         },
       ],

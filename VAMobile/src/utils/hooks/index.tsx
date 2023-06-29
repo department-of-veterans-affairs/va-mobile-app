@@ -291,9 +291,9 @@ export type UseAlertProps = {
   /** title of alert */
   title: string
   /** message of alert */
-  message?: string // message for the alert
+  message?: string
   /** options to show in alert */
-  buttons: Array<UseDestructiveAlertButtonProps>
+  buttons: Array<AlertButton>
   /** screenReaderEnabled boolean */
   screenReaderEnabled: boolean
 }
@@ -303,14 +303,14 @@ export type UseAlertProps = {
  * @param message - optional message for the alert
  * @param buttons - options to show in the alert
  * @param screenReaderEnabled - apply a11yLabelNeededForScreenReader will have the side effect of visually displaying V-A since the alert used does not have a separate accessibility Label
- * @returns an action sheet for ios and an alert for android
+ * @returns returns an alert for ios and android
  */
 export function useAlert(): (props: UseAlertProps) => void {
   return (props: UseAlertProps) => {
     Alert.alert(
       props.screenReaderEnabled ? a11yLabelVA(props.title) : props.title,
       props.screenReaderEnabled && props.message ? a11yLabelVA(props.message) : props.message,
-      props.buttons as AlertButton[],
+      props.buttons,
     )
   }
 }
