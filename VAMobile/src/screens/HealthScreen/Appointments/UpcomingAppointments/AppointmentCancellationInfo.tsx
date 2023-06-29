@@ -78,8 +78,14 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         }
         break
       default:
-        title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
-        body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
+        if (cancelId) {
+          title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
+          body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
+        } else {
+          title = t('upcomingAppointmentDetails.doYouNeedToCancel')
+          body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.alternative')
+          bodyA11yLabel = a11yLabelVA(t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.alternative'))
+        }
         break
     }
   }
