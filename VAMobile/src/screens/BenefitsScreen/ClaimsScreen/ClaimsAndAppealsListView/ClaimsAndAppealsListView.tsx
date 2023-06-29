@@ -4,11 +4,13 @@ import React, { FC } from 'react'
 import { Box, DefaultList, DefaultListItemObj, LabelTagTypeConstants, Pagination, PaginationProps, TextLine } from 'components'
 import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { ClaimsAndAppealsState, getClaimsAndAppeals } from 'store/slices'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
@@ -70,7 +72,14 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
       const position = (currentPage - 1) * perPage + index + 1
       const a11yValue = t('listPosition', { position, total: totalEntries })
-      const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetailsScreen', { claimID: id, claimType }) : navigateTo('AppealDetailsScreen', { appealID: id })
+      const onPress = () => {
+        logAnalyticsEvent(Events.vama_claim_details_open(id, attributes.subtype, formatDateMMMMDDYYYY(attributes.updatedAt), formattedDateFiled))
+        if (type === ClaimOrAppealConstants.claim) {
+          navigateTo('ClaimDetailsScreen', { claimID: id, claimType })()
+        } else {
+          navigateTo('AppealDetailsScreen', { appealID: id })()
+        }
+      }
       listItems.push({
         textLines,
         a11yValue,

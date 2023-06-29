@@ -5,9 +5,11 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 import { AccordionCollapsible, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTranslation } from 'utils/formattingUtils'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { sendClaimStep3Analytics, sendClaimStep3FileRequestAnalytics } from 'store/slices/claimsAndAppealsSlice'
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
@@ -158,8 +160,18 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const youHaveFileRequestsText = t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })
   const youHaveFileRequestsTextA11yHint = getTranslation(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}A11yHint`, t, { numberOfRequests })
 
+  const accordionPress = (isExpanded: boolean | undefined) => {
+    logAnalyticsEvent(Events.vama_claim_details_expnd(claimID, attributes.claimType, phase, isExpanded || false, heading, updatedLastDate))
+  }
+
   return (
-    <AccordionCollapsible noBorder={true} header={getPhaseHeader()} expandedContent={getPhaseExpandedContent()} hideArrow={!phaseLessThanEqualToCurrent} testID={testID}>
+    <AccordionCollapsible
+      noBorder={true}
+      header={getPhaseHeader()}
+      expandedContent={getPhaseExpandedContent()}
+      hideArrow={!phaseLessThanEqualToCurrent}
+      customOnPress={accordionPress}
+      testID={testID}>
       {phase === 3 && showClaimFileUploadBtn && (
         <Box mt={standardMarginBetween}>
           <Box {...testIdProps(youHaveFileRequestsTextA11yHint)} accessible={true} accessibilityRole="header">

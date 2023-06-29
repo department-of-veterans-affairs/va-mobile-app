@@ -172,6 +172,50 @@ export const Events = {
       },
     }
   },
+  vama_claim_call: (claim_id: string, claim_type: string, claim_step: number): Event => {
+    return {
+      name: 'vama_claim_call',
+      params: {
+        claim_id,
+        claim_type,
+        claim_step,
+      },
+    }
+  },
+  vama_claim_count: (closed_claims: number, open_claims: number, claims_tab: string): Event => {
+    return {
+      name: 'vama_claim_count',
+      params: {
+        closed_claims,
+        open_claims,
+        claims_tab,
+      },
+    }
+  },
+  vama_claim_details_expnd: (claim_id: string, claim_type: string, claim_step: number, step_expanded: boolean, claim_step_change: string, claim_submitted_date: string): Event => {
+    return {
+      name: 'vama_claim_details_expnd',
+      params: {
+        claim_id,
+        claim_type,
+        claim_step,
+        step_expanded,
+        claim_step_change,
+        claim_submitted_date,
+      },
+    }
+  },
+  vama_claim_details_open: (claim_id: string, claim_type: string, claim_step_change: string, claim_submitted_date: string): Event => {
+    return {
+      name: 'vama_claim_details_open',
+      params: {
+        claim_id,
+        claim_type,
+        claim_step_change,
+        claim_submitted_date,
+      },
+    }
+  },
   vama_claim_step_three: (): Event => {
     return {
       name: 'vama_claim_step_three',
