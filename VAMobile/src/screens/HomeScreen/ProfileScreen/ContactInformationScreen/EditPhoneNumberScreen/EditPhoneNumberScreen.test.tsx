@@ -160,4 +160,50 @@ context('EditPhoneNumberScreen', () => {
       expect(findByTypeWithText(testInstance, TextView, 'Enter a valid phone number')).toBeTruthy()
     })
   })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async () => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
+      const errorState: ErrorsState = {
+        ...initialErrorsState,
+        errorsByScreenID,
+      }
+
+      initializeTestInstance(
+        {
+          id: 0,
+          areaCode: '858',
+          phoneNumber: '123',
+          countryCode: '1',
+          phoneType: 'HOME',
+        },
+        errorState,
+      )
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async () => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
+      const errorState: ErrorsState = {
+        ...initialErrorsState,
+        errorsByScreenID,
+      }
+
+      initializeTestInstance(
+        {
+          id: 0,
+          areaCode: '858',
+          phoneNumber: '123',
+          countryCode: '1',
+          phoneType: 'HOME',
+        },
+        errorState,
+      )
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+    })
+  })
 })
