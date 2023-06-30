@@ -27,6 +27,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const submitRefillAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveAlert()
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
@@ -58,9 +59,31 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   const scrollViewRef = useRef<ScrollView>(null)
 
-  useBeforeNavBackListener(navigation, () => {
-    dispatch(dispatchSetPrescriptionsNeedLoad())
-    dispatch(dispatchClearLoadingRequestRefills())
+  useBeforeNavBackListener(navigation, (e) => {
+    if (selectedPrescriptionsCount === 0) {
+      dispatch(dispatchSetPrescriptionsNeedLoad())
+      dispatch(dispatchClearLoadingRequestRefills())
+      return
+    }
+    e.preventDefault()
+    confirmAlert({
+      title: tc('prescriptions.refillRequest.cancelMessage'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: tc('prescriptions.refillRequest.continueRequest'),
+        },
+        {
+          text: tc('prescriptions.refillRequest.cancelRequest'),
+          onPress: () => {
+            dispatch(dispatchSetPrescriptionsNeedLoad())
+            dispatch(dispatchClearLoadingRequestRefills())
+            navigation.dispatch(e.data.action)
+          },
+        },
+      ],
+    })
   })
 
   const onSubmitPressed = () => {

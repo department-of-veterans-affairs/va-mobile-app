@@ -14,7 +14,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors } from 'store/slices/errorSlice'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAlert, useAppDispatch, useError, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
@@ -24,8 +24,8 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { displayTitle, phoneType, phoneData } = route.params
-  const deletePhoneAlert = useDestructiveAlert()
-
+  const deletePhoneAlert = useAlert()
+  const screenReaderEnabled = useIsScreenReaderEnabled()
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
   const [formContainsError, setFormContainsError] = useState(false)
@@ -155,19 +155,18 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   const onDeletePressed = (): void => {
     deletePhoneAlert({
-      title: t('editPhoneNumber.remove.title', { numberType: buttonTitle }),
-      message: t('editPhoneNumber.remove.message', { numberType: buttonTitle }),
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
+      title: t('contactInformation.removeInformation.title', { info: buttonTitle }),
+      message: t('contactInformation.removeInformation.body', { info: buttonTitle }),
       buttons: [
         {
-          text: t('cancel'),
+          text: t('keep'),
         },
         {
           text: t('remove'),
           onPress: onDelete,
         },
       ],
+      screenReaderEnabled: screenReaderEnabled,
     })
   }
 
