@@ -44,7 +44,22 @@ export type VATextInputProps = {
  * Text input with a label
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
-  const { inputType, value, labelKey, onChange, maxLength, onEndEditing, inputRef, isRequiredField, helperTextKey, setError, error, isTextArea, setInputCursorToBeginning } = props
+  const {
+    inputType,
+    value,
+    labelKey,
+    onChange,
+    maxLength,
+    onEndEditing,
+    inputRef,
+    isRequiredField,
+    helperTextKey,
+    setError,
+    error,
+    isTextArea,
+    setInputCursorToBeginning,
+    testID,
+  } = props
   const { t } = useTranslation()
   const theme = useTheme()
   const startTextPositon = { start: 0, end: 0 }
@@ -113,6 +128,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onFocus,
     onBlur,
     selection,
+    testID,
     multiline: isTextArea ? true : false,
   }
 
