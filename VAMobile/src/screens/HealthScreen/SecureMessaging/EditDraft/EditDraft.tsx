@@ -212,7 +212,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('secureMessaging.keepEditing'),
+          text: t('keepEditing'),
         },
         {
           text: t('secureMessaging.deleteDraft.delete'),

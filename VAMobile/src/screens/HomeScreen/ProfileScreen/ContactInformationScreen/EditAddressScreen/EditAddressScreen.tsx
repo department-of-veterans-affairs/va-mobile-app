@@ -123,35 +123,47 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const onConfirmCancel = (): void => {
+    const title =
+      addressType === profileAddressOptions.RESIDENTIAL_ADDRESS ? t('editAddress.validation.cancelConfirm.home.title') : t('editAddress.validation.cancelConfirm.mailing.title')
+
     destructiveAlert({
-      title: t('editAddress.validation.cancelConfirm.title'),
+      title,
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('cancel'),
+          text: t('keepEditing'),
         },
         {
-          text: t('editAddress.validation.cancelConfirm.confirm'),
+          text: t('deleteChanges'),
           onPress: onCancel,
         },
       ],
     })
   }
 
-  const [checkboxSelected, setCheckboxSelected] = useState(getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType))
-  const [country, setCountry] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.countryCodeIso3, Countries))
-  const [addressLine1, setAddressLine1] = useState(getInitialState(AddressDataEditedFieldValues.addressLine1))
-  const [addressLine2, setAddressLine2] = useState(getInitialState(AddressDataEditedFieldValues.addressLine2))
-  const [addressLine3, setAddressLine3] = useState(getInitialState(AddressDataEditedFieldValues.addressLine3))
-  const [militaryPostOffice, setMilitaryPostOffice] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.city, MilitaryPostOffices))
-  const [city, setCity] = useState(getInitialState(AddressDataEditedFieldValues.city))
-  const [state, setState] = useState(
+  const initialCheckbox = getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType)
+  const initialCountry = getInitialStateForPicker(AddressDataEditedFieldValues.countryCodeIso3, Countries)
+  const initialAddressLine1 = getInitialState(AddressDataEditedFieldValues.addressLine1)
+  const initialAddressLine2 = getInitialState(AddressDataEditedFieldValues.addressLine2)
+  const initialAddressLine3 = getInitialState(AddressDataEditedFieldValues.addressLine3)
+  const initialMilitaryPostOffice = getInitialStateForPicker(AddressDataEditedFieldValues.city, MilitaryPostOffices)
+  const initialCity = getInitialState(AddressDataEditedFieldValues.city)
+  const initialState =
     profile?.[addressType]?.countryCodeIso3 === USA_VALUE
       ? getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States)
-      : getInitialState(AddressDataEditedFieldValues.stateCode) || getInitialState(AddressDataEditedFieldValues.province),
-  )
-  const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode) || getInitialState(AddressDataEditedFieldValues.internationalPostalCode))
+      : getInitialState(AddressDataEditedFieldValues.stateCode) || getInitialState(AddressDataEditedFieldValues.province)
+  const initialZipCode = getInitialState(AddressDataEditedFieldValues.zipCode) || getInitialState(AddressDataEditedFieldValues.internationalPostalCode)
+
+  const [checkboxSelected, setCheckboxSelected] = useState(initialCheckbox)
+  const [country, setCountry] = useState(initialCountry)
+  const [addressLine1, setAddressLine1] = useState(initialAddressLine1)
+  const [addressLine2, setAddressLine2] = useState(initialAddressLine2)
+  const [addressLine3, setAddressLine3] = useState(initialAddressLine3)
+  const [militaryPostOffice, setMilitaryPostOffice] = useState(initialMilitaryPostOffice)
+  const [city, setCity] = useState(initialCity)
+  const [state, setState] = useState(initialState)
+  const [zipCode, setZipCode] = useState(initialZipCode)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
@@ -246,7 +258,18 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
   }, [addressSaved, navigation, dispatch])
 
-  const cancelFn = showValidation ? onConfirmCancel : onCancel
+  const formChanged = (): boolean =>
+    checkboxSelected !== initialCheckbox ||
+    country !== initialCountry ||
+    addressLine1 !== initialAddressLine1 ||
+    addressLine2 !== initialAddressLine2 ||
+    addressLine3 !== initialAddressLine3 ||
+    militaryPostOffice !== initialMilitaryPostOffice ||
+    city !== initialCity ||
+    state !== initialState ||
+    zipCode !== initialZipCode
+
+  const cancelFn = formChanged() ? onConfirmCancel : onCancel
 
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
     return (
