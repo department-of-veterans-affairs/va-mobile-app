@@ -20,7 +20,7 @@ Note: The "data" field should include any variable data for the alert title or b
 ```
 
 3. Connect your system to VANotify API to trigger push and test pre-app triggering in staging. [General VANotify Docs](https://notifications.va.gov/)
-4. Get access to testflight app from mobile team to test notifications and notification preferences in staging. [Testflight & App Tester](../../../QA/Resources.md/#testflight--apptester)
+4. Get access to testflight app from mobile team to test notifications and notification preferences in staging. [Testflight & App Tester](../../../QA/Resources.md#testflight--apptester)
 5. Do a Prod test if possible
 6. Mobile will update store info to acknowledge new notifications if necessary
 7. Go live
