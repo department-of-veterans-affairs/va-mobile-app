@@ -4,7 +4,7 @@ import React from 'react'
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 
-import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTypeWithText, fireEvent, mockNavProps, render, RenderAPI, screen, waitFor } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
 import { UserDataProfile } from 'store/api/types'
 import { VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton } from 'components'
@@ -228,6 +228,49 @@ context('EditAddressScreen', () => {
 
       initializeTestInstance(profileInfo, undefined, undefined, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+    })
+  })
+
+  describe('cancel confirm', () => {
+    it('should go back and not display confirm cancel if there are no changes', () => {
+      fireEvent.press(screen.getByText('Cancel'))
+      expect(goBackSpy).toBeCalled()
+      expect(mockAlertSpy).not.toHaveBeenCalled()
+    })
+
+    it.only('should display confirm cancel if checkbox checked', () => {
+      fireEvent.press(screen.getByRole('checkbox'))
+      fireEvent.press(screen.getByText('Cancel'))
+      expect(mockAlertSpy).toBeCalled()
+      expect(goBackSpy).not.toHaveBeenCalled()
+    })
+
+    it('should display confirm cancel if address line 1 changed', () => {
+      fireEvent.changeText(screen.getByTestId('editAddressLine1TestId'), 'abc')
+      fireEvent.press(screen.getByText('Cancel'))
+      expect(mockAlertSpy).toBeCalled()
+      expect(goBackSpy).not.toHaveBeenCalled()
+    })
+
+    it('should display confirm cancel if address line 2 changed', () => {
+      fireEvent.changeText(screen.getByTestId('editAddressLine2TestId'), 'abc')
+      fireEvent.press(screen.getByText('Cancel'))
+      expect(mockAlertSpy).toBeCalled()
+      expect(goBackSpy).not.toHaveBeenCalled()
+    })
+
+    it('should display confirm cancel if address line 3 changed', () => {
+      fireEvent.changeText(screen.getByTestId('editAddressLine3TestId'), 'abc')
+      fireEvent.press(screen.getByText('Cancel'))
+      expect(mockAlertSpy).toBeCalled()
+      expect(goBackSpy).not.toHaveBeenCalled()
+    })
+
+    it('should display confirm cancel if zip changed', () => {
+      fireEvent.changeText(screen.getByTestId('editAddressZipTestId'), 'abc')
+      fireEvent.press(screen.getByText('Cancel'))
+      expect(mockAlertSpy).toBeCalled()
+      expect(goBackSpy).not.toHaveBeenCalled()
     })
   })
 

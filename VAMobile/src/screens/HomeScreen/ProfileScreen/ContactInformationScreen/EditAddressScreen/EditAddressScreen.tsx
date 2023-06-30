@@ -359,6 +359,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         onChange: setCity,
         inputRef: cityRef,
         isRequiredField: true,
+        testID: 'editAddressCityTestId',
       },
       fieldErrorMessage: t('editAddress.cityFieldError'),
     }
@@ -377,6 +378,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           labelKey: 'editAddress.state',
           includeBlankPlaceholder: true,
           isRequiredField: true,
+          testID: 'editAddressStateTestId',
         },
         fieldErrorMessage: checkboxSelected ? t('editAddress.validOptionFieldError') : t('editAddress.stateFieldError'),
       }
@@ -389,6 +391,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: 'editAddress.state',
         value: state,
         onChange: setState,
+        testID: 'editAddressStateTestId',
       },
     }
   }
@@ -461,6 +464,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         onChange: setAddressLine1,
         maxLength: MAX_ADDRESS_LENGTH,
         inputRef: addressLine1Ref,
+        testID: 'editAddressLine1TestId',
         isRequiredField: true,
         helperTextKey: 'editAddress.streetAddress.helperText',
       },
@@ -475,6 +479,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         onChange: setAddressLine2,
         maxLength: MAX_ADDRESS_LENGTH,
         helperTextKey: 'editAddress.streetAddress.helperText',
+        testID: 'editAddressLine2TestId',
       },
     },
     {
@@ -487,6 +492,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         maxLength: MAX_ADDRESS_LENGTH,
         inputRef: addressLine3Ref,
         helperTextKey: 'editAddress.streetAddress.helperText',
+        testID: 'editAddressLine3TestId',
       },
     },
     getCityOrMilitaryBaseFormFieldType(),
@@ -500,6 +506,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         onChange: setZipCode,
         inputRef: zipCodeRef,
         isRequiredField: true,
+        testID: 'editAddressZipTestId',
       },
       fieldErrorMessage: zipCodeFieldError,
       validationList: zipCodeValidationList,
