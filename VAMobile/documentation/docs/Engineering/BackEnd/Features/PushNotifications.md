@@ -6,7 +6,7 @@
 
 ## Getting Your Push In The App
 
-1. Contact VANotify and VEText to get onboarded to their API and get a push template created. Reach out in slack: [#va-notify-public](https://dsva.slack.com/archives/C01CSM3EZGT) or by email [oitoctovanotify@va.gov](oitoctovanotify@va.gov)
+1. Contact VANotify and VEText to get onboarded to their API and get a push template created. Reach out in slack: [#va-notify-public](https://dsva.slack.com/archives/C01CSM3EZGT) or by email oitoctovanotify@va.gov
 2. Get your push template content approved by mobile. Ex:
 ```
 {
