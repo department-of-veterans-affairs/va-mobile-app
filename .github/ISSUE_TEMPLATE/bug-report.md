@@ -27,7 +27,7 @@ assignees:
 
 ## Bug Severity - BE SURE TO ADD THE SEVERITY LABEL
 <!-- How bad is it? --> 
-See [Bug Tracking](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/testing/VA%20Mobile%20App%20Test%20Plan.md#issue-severity) for details on severity levels
+See [Bug Tracking](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA#issue-severity) for details on severity levels
 <!-- Pick high or low for each category, using definitions in the link above if needed. -->
 - Impact: High Low 
 - Frequency: High Low 
