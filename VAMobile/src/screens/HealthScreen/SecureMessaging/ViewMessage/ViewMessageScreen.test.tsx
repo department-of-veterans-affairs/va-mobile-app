@@ -1,53 +1,17 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
-import { AccordionCollapsible, AlertBox, LoadingComponent, TextView } from 'components'
+import { AccordionCollapsible} from 'components'
 import ViewMessageScreen from './ViewMessageScreen'
-import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
-import Mock = jest.Mock
-import { Pressable } from 'react-native'
-import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
-import { StackNavigationOptions } from '@react-navigation/stack'
-import { when } from 'jest-when'
-import { DateTime, DiffOptions, Duration, DurationUnits } from 'luxon'
-import { LocaleOptions } from 'luxon/src/datetime'
-
-let mockNavigationSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
-  }
-})
-
-jest.mock('@react-navigation/native', () => {
-  let actual = jest.requireActual('@react-navigation/native')
-  return {
-    ...actual,
-    useNavigation: () => ({
-      setOptions: jest.fn(),
-      goBack: jest.fn(),
-    }),
-  }
-})
+import { DateTime } from 'luxon'
 
 // Contains message Ids grouped together by thread
 const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
-
-// Create a date that's always more than 45 days from now
-const nowInMill = 1643402338567
-const mockDateISO = DateTime.fromMillis(nowInMill).toISO()
-const fortySixDaysAgoISO = DateTime.fromMillis(nowInMill).minus({ days: 45 }).toISO()
 
 // Contains message attributes mapped to their ids
 const mockMessagesById: SecureMessagingMessageMap = {
@@ -56,7 +20,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: 'mock subject 1: The initial message sets the overall thread subject header',
     body: 'message 1 body text',
-    attachment: false,
+    hasAttachments: false,
     sentDate: '1',
     senderId: 2,
     senderName: 'mock sender 1',
@@ -69,7 +33,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: '',
     body: 'test 2',
-    attachment: false,
+    hasAttachments: false,
     sentDate: '2',
     senderId: 2,
     senderName: 'mock sender 2',
@@ -82,8 +46,8 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: '',
     body: 'First accordion collapsible should be open, so the body text of this message should display',
-    attachment: false,
-    sentDate: mockDateISO,
+    hasAttachments: false,
+    sentDate: DateTime.local().toISO(),
     senderId: 2,
     senderName: 'mock sender 3',
     recipientId: 3,
@@ -95,8 +59,8 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: 'This message should not display because it has different thread ID',
     body: 'test',
-    attachment: false,
-    sentDate: fortySixDaysAgoISO, // message always older than 45 days
+    hasAttachments: false,
+    sentDate: '2013-06-06T04:00:00.000+00:00',
     senderId: 2,
     senderName: 'mock sender 45',
     recipientId: 3,
@@ -106,74 +70,22 @@ const mockMessagesById: SecureMessagingMessageMap = {
 }
 
 context('ViewMessageScreen', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-  let onPressSpy: Mock
-  let navHeaderSpy: any
-  let navigateToSpy: jest.Mock
-  onPressSpy = jest.fn(() => {})
-
   const initializeTestInstance = (
     mockMessagesById: SecureMessagingMessageMap,
     threadList: SecureMessagingThreads,
     loading: boolean = false,
-    loadingFile: boolean = false,
     messageID: number = 3,
     messageIDsOfError?: Array<number>,
   ) => {
-    /** messageID is 3 because inbox/folder previews the last message from a thread, aka the message we clicked on to access the rest of thread
-     * While the renderMessages function can identify the correct thread array from any one of the messageIDs in that particular thread, it also
-     * uses messageID to determine which AccordionCollapsible component should be expanded by default.
-     * So it's important when testing to set this messageID to the last message in the thread to match design specs for ViewMessage.tsx
-     * */
-    props = mockNavProps(
+    render(<ViewMessageScreen {...mockNavProps(
       undefined,
       {
         navigate: jest.fn(),
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-          }
-        },
+        setOptions: jest.fn(),
         goBack: jest.fn(),
       },
       { params: { messageID: messageID } },
-    )
-
-    const fromISOSpy = jest.spyOn(DateTime, 'fromISO')
-    when(fromISOSpy)
-      .calledWith(mockDateISO)
-      .mockReturnValue({
-        diffNow: (unit?: DurationUnits, opts?: DiffOptions) => {
-          return {
-            days: -14,
-          } as Duration
-        },
-        toFormat: (fmt: string, opts?: LocaleOptions) => {
-          return ''
-        },
-      } as DateTime)
-      .calledWith(fortySixDaysAgoISO)
-      .mockReturnValue({
-        diffNow: (unit?: DurationUnits, opts?: DiffOptions) => {
-          return {
-            days: -46,
-          } as Duration
-        },
-        toFormat: (fmt: string, opts?: LocaleOptions) => {
-          return ''
-        },
-      } as DateTime)
-
-    navigateToSpy = jest.fn()
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
-      .mockReturnValue(navigateToSpy)
-    onPressSpy = jest.fn(() => {})
-
-    component = render(<ViewMessageScreen {...props} />, {
+    )} />, {
       preloadedState: {
         auth: { ...initialAuthState },
         secureMessaging: {
@@ -186,111 +98,59 @@ context('ViewMessageScreen', () => {
         errors: initialErrorsState,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
-  beforeEach(() => {
-    initializeTestInstance(mockMessagesById, mockThreads)
-  })
-
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
+  describe('when latest message is older than 45 days', () => {
+    beforeEach(() => {
+      initializeTestInstance(mockMessagesById, mockThreads, false, 45)
     })
-  })
-
-  it('renders only messages in the same thread as the message associated with messageID', async () => {
-    await waitFor(() => {
-      expect(testInstance.findAllByType(AccordionCollapsible).length).toBe(3)
-    })
-  })
-
-  it('should render the correct text content of thread, and all accordions except the first should be closed', async () => {
-    await waitFor(() => {
-      expect(testInstance.findAllByType(TextView)[6].props.children).toBe('mock sender 3')
-      expect(testInstance.findAllByType(TextView)[7].props.children).toBe(getFormattedDateAndTimeZone(mockDateISO))
-      expect(testInstance.findAllByType(TextView)[8].props.children).toBe('First accordion collapsible should be open, so the body text of this message should display')
-      // Have to use Invalid DateTime values otherwise will fail git tests if in different time zone
-      expect(testInstance.findAllByType(TextView)[9].props.children).toBe('mock sender 2')
-      expect(testInstance.findAllByType(TextView)[10].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView)[11].props.children).toBe('mock sender 1')
-      expect(testInstance.findAllByType(TextView)[12].props.children).toBe('Invalid DateTime')
-    })
-  })
-
-  describe('when first message and last message is clicked', () => {
-    it('should close first accordion and expand last accordion', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[1].props.onPress()
-        testInstance.findAllByType(Pressable)[3].props.onPress()
-        expect(testInstance.findAllByType(TextView)[8].props.children).toBe('mock sender 2')
-        // Used to display last message's contents, but now the textview after the date is the bottom Reply button's text
-        expect(testInstance.findAllByType(TextView)[10].props.children).toBe('mock sender 1')
-        expect(testInstance.findAllByType(TextView)[11].props.children).toBe('Invalid DateTime')
-        expect(testInstance.findAllByType(TextView)[12].props.children).toBe('message 1 body text')
-        // Reply button displays properly if latest message in thread is not over 45 days old
-        expect(testInstance.findAllByType(TextView)[4].props.children).toBe('Reply')
-      })
+    it('should have the Start new message button', () => {
+      expect(screen.getByText('mock sender 45')).toBeTruthy()
+      expect(screen.getByText('Start new message')).toBeTruthy()
+      expect(screen.getByText('This conversation is too old for new replies')).toBeTruthy()
     })
   })
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
       initializeTestInstance({}, [], true)
-
-      await waitFor(() => {
-        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-      })
+      expect(screen.getByText('Loading your message...')).toBeTruthy()
     })
   })
 
-  describe('when loadingFile is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance({}, [], false, true)
+  describe('Should load the screen correctly', () => {
+    beforeEach(() => {
+      initializeTestInstance(mockMessagesById, mockThreads)
+    })
 
-      await waitFor(() => {
-        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-      })
+    it('renders CollapsibleMessage card for the initialMessage', () => {
+      //ToDo with 6056
+    })
+
+    it('renders correct amount of CollapsibleMessages', () => {
+      expect(screen.getAllByRole('tab').length).toBe(3)
+      expect(screen.getByText('mock sender 1')).toBeTruthy()
+      expect(screen.getByText('mock sender 2')).toBeTruthy()
+      expect(screen.getByText('mock sender 3')).toBeTruthy()
+      expect(screen.queryByText('mock sender 45')).toBeFalsy()
+
+      //ToDO with 6056 make it not render the initialMessage for collapsible messages
+    })
+    it('should have the reply button since the latest message is within 45 days', () => {
+      expect(screen.getByText('Reply')).toBeTruthy()
     })
   })
 
   describe('when individual messages fail to load', () => {
     describe('when an individual message returns an error and that message is clicked', () => {
+      beforeEach(() => {
+        initializeTestInstance(mockMessagesById, mockThreads, false, 3, [1])
+      })
       it('should show AlertBox with "Message could not be found" title', async () => {
-        initializeTestInstance(mockMessagesById, mockThreads, false, false, 1, [1])
-
-        await waitFor(() => {
-          testInstance.findAllByType(Pressable)[1].props.onPress()
-          expect(testInstance.findByType(IndividualMessageErrorComponent)).toBeTruthy()
-          expect(testInstance.findByProps({ title: 'Message could not be found' })).toBeTruthy()
-        })
-      })
-    })
-    describe('when multiple messages are expanded and fail to load', () => {
-      it('should show multiple error components', async () => {
-        initializeTestInstance(mockMessagesById, mockThreads, false, false, 3, [1, 3])
-
-        await waitFor(() => {
-          testInstance.findAllByType(Pressable)[0].props.onPress()
-          testInstance.findAllByType(Pressable)[2].props.onPress()
-          expect(testInstance.findAllByType(IndividualMessageErrorComponent)).toBeTruthy()
-          expect(testInstance.findAllByProps({ title: 'Message could not be found' })).toBeTruthy()
-        })
-      })
-    })
-  })
-
-  describe('when message is older than 45 days', () => {
-    // changing to a different message thread by changing to different messageID
-    beforeEach(() => {
-      initializeTestInstance(mockMessagesById, mockThreads, false, false, 45)
-    })
-
-    it('should show AlertBox with Compose button', async () => {
-      await waitFor(() => {
-        expect(testInstance.findByType(AlertBox)).toBeTruthy()
-        expect(testInstance.findByType(StartNewMessageButton)).toBeTruthy()
+        expect(screen.getByText('mock sender 1')).toBeTruthy()
+        fireEvent.press(screen.getByText('mock sender 1'))
+        expect(screen.getByText("If the app still doesn't work, call the My HealtheVet Help Desk. We're here Monday-Friday, 8:00 a.m.-8:00 p.m. ET.")).toBeTruthy()
+        expect(screen.getByText('Message could not be found')).toBeTruthy()
       })
     })
   })

@@ -1,8 +1,9 @@
 import { device, element, by, expect, waitFor } from 'detox'
 import getEnv from '../../src/utils/env'
-import { toMatchImageSnapshot } from 'jest-image-snapshot'
 import { expect as jestExpect } from '@jest/globals'
+import { setTimeout } from "timers/promises"
 
+const { toMatchImageSnapshot } = require('jest-image-snapshot')
 const fs = require('fs')
 jestExpect.extend({ toMatchImageSnapshot })
 
@@ -29,14 +30,17 @@ export const CommonE2eIdConstants = {
 /** Log the automation into demo mode
  * */
 export async function loginToDemoMode() {
+  await setTimeout(5000)
   try {
 	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
 	await element(by.text('Dismiss')).tap()
-  } catch (e) {}
-  const { DEMO_PASSWORD } = getEnv()
+  } catch (e) {} 
+  const { DEMO_PASSWORD } = getEnv() 
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(21)
-  await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
-
+  if (DEMO_PASSWORD != undefined) {
+    await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
+  }
+  
   // due to keyboard being open one tap to close keyboard second to tap demo btn
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
@@ -107,7 +111,7 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
  * @param jsonProperty - array of strings and dictionaries: should match the path to get to the json ob you want changed that matches the path to get to the object you want changed
  * @param newJsonValue - string or boolean: new value for the json object
  */
-export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue: string | boolean | dictionary) {
+export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue: string | boolean) {
 			
 	fs.readFile('./src/store/api/demo/mocks/' + mockFileName, 'utf8', (error, data) => {
 		 if(error){
@@ -117,16 +121,15 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 
 		const jsonParsed = JSON.parse(data)
 		//const jsonFirstObject = source[jsonProperty[0]]
-		var key
 		var value
-		for(x=0; x<jsonProperty.length; x++) {
+		for(var x=0; x<jsonProperty.length; x++) {
 			if (x == 0) {
-				mockDataVariable = jsonParsed[jsonProperty[x]]
+				var mockDataVariable = jsonParsed[jsonProperty[x]]
 			} else if (x == jsonProperty.length - 1) {
 				mockDataVariable[jsonProperty[x]] = newJsonValue
 			} else {
 				if (jsonProperty[x].constructor == Object) {
-					key = Object.keys(jsonProperty[x])
+					var key = String(Object.keys(jsonProperty[x]))
 					value = jsonProperty[x][key]
 					mockDataVariable = mockDataVariable[key[0]]
 					mockDataVariable = mockDataVariable[value]
@@ -148,8 +151,8 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
  * @param screenshotPath: png returned from detox getScreenshot function
 */
 export async function checkImages(screenshotPath) {
-	image = fs.readFileSync(screenshotPath)
-	await jestExpect(image).toMatchImageSnapshot({
+	var image = fs.readFileSync(screenshotPath)
+	await (jestExpect(image) as any).toMatchImageSnapshot({
 		comparisonMethod: 'ssim',
 		failureThreshold: 0.01,
 		failureThresholdType: 'percent'})

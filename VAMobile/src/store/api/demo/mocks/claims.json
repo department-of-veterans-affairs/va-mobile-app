@@ -709,7 +709,7 @@
           "hearing loss (Increase)",
           " kidney removal of (New)"
         ],
-        "vaRepresentative": "PATRICIA E ROBERTS",
+        "vaRepresentative": "Checking this is pronounced",
         "eventsTimeline": [
           {
             "trackedItemId": null,
@@ -1833,7 +1833,7 @@
         "requestedDecision": false,
         "claimType": "Dependency",
         "contentionList": [],
-        "vaRepresentative": "PATRICIA E ROBERTS",
+        "vaRepresentative": null,
         "eventsTimeline": [
           {
             "type": "phase1",
