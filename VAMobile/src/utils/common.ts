@@ -393,13 +393,13 @@ export function halfPanelCardStyleInterpolator({ current, inverted }: StackCardI
   }
 }
 
-export function fullPanelCardStyleInterpolator({ current, inverted }: StackCardInterpolationProps): StackCardInterpolatedStyle {
-  const windowHeight = Dimensions.get('window').height
+export function fullPanelCardStyleInterpolator({ current, inverted, layouts }: StackCardInterpolationProps): StackCardInterpolatedStyle {
+  const screenHeight = layouts.screen.height
 
   const translateY = Animated.multiply(
     current.progress.interpolate({
       inputRange: [0, 1],
-      outputRange: [windowHeight, windowHeight / 7], // modify constant for size of panel, higher the number more of the screen it covers
+      outputRange: [screenHeight, screenHeight / 7], // modify constant for size of panel, higher the number more of the screen it covers
       extrapolate: 'clamp',
     }),
     inverted,
@@ -411,7 +411,7 @@ export function fullPanelCardStyleInterpolator({ current, inverted }: StackCardI
   return {
     cardStyle: {
       transform: [{ translateY }],
-      maxHeight: (windowHeight / 7) * 6, //must fill the remaining screen with modal(since top part was 1/7 this part is 6/7)
+      maxHeight: (screenHeight / 7) * 6, //must fill the remaining screen with modal(since top part was 1/7 this part is 6/7)
     },
     overlayStyle: { opacity: overlayOpacity },
   }
