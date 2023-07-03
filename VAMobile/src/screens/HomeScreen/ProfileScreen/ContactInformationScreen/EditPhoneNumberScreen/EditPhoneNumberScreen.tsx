@@ -50,7 +50,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }
 
   useBeforeNavBackListener(navigation, (e) => {
-    if (getNumbersFromString(phoneNumber) === getNumbersFromString(getFormattedPhoneNumber(phoneData))) {
+    if (noPageChanges()) {
       return
     }
     e.preventDefault()
@@ -71,6 +71,17 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       ],
     })
   })
+
+  const noPageChanges = (): boolean => {
+    if (getNumbersFromString(phoneNumber) === getNumbersFromString(getFormattedPhoneNumber(phoneData))) {
+      if (phoneData.extension && phoneData.extension === extension) {
+        return true
+      } else if (!phoneData.extension && !extension) {
+        return true
+      }
+    }
+    return false
+  }
 
   const onSave = (): void => {
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
