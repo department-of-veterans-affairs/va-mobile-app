@@ -242,7 +242,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
   const { showActionSheetWithOptions } = useActionSheet()
   const currentTheme = getTheme()
   return (props: useDestructiveActionSheetProps) => {
-    const { buttons, cancelButtonIndex, destructiveButtonIndex} = props
+    const { buttons, cancelButtonIndex, destructiveButtonIndex } = props
 
     // Ensure cancel button is always last for UX consisency
     const newButtons = [...buttons]
