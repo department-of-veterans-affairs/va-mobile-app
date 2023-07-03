@@ -16,9 +16,9 @@ import {
   TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
 import { InlineTextWithIconsProps, MessageListItemObj, PickerItem, VAIconProps } from 'components'
-import { useDestructiveActionSheetProps, imageDocumentResponseType } from './hooks'
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
 import { getFormattedMessageTime, stringToTitleCase } from 'utils/formattingUtils'
+import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
 import { logNonFatalErrorToFirebase } from './analytics'
 import theme from 'styles/themes/standardTheme'
 
