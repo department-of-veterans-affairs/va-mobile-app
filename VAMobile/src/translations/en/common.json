@@ -497,7 +497,7 @@
   "contactInformation.mobile": "Mobile",
   "contactInformation.mobilePhoneNumber": "cell phone number",
   "contactInformation.phoneNumbers": "Phone numbers",
-  "contactInformation.phoneNumber.deleteChanges": "Delete changes to your {{type}} phone number?",
+  "contactInformation.phoneNumber.deleteChanges": "Delete changes to your {{type}} number?",
   "contactInformation.phoneNumber.removed": "{{type}} removed",
   "contactInformation.phoneNumber.not.removed": "{{type}} could not be removed",
   "contactInformation.phoneNumber.saved": "{{type}} saved",
