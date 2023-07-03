@@ -7,10 +7,12 @@ import React, { FC } from 'react'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ButtonTypesConstants, ChildTemplate, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
 import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
@@ -57,6 +59,13 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
     )
   }
 
+  const viewEvaluationDetailsPress = () => {
+    if (claim) {
+      logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase))
+    }
+    navigateTo('AskForClaimDecision', { claimID })()
+  }
+
   return (
     <ChildTemplate backLabel={t('claim.backLabel')} backLabelOnPress={navigation.goBack} title={t('fileRequest.title')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
@@ -78,7 +87,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
               {t('fileRequest.askForYourClaimEvaluationBody')}
             </TextView>
             <VAButton
-              onPress={navigateTo('AskForClaimDecision', { claimID })}
+              onPress={viewEvaluationDetailsPress}
               label={t('fileRequest.viewEvaluationDetails')}
               testID={t('fileRequest.viewEvaluationDetails')}
               buttonType={ButtonTypesConstants.buttonPrimary}

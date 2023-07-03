@@ -164,6 +164,11 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
     logAnalyticsEvent(Events.vama_claim_details_expnd(claimID, attributes.claimType, phase, isExpanded || false, heading, updatedLastDate))
   }
 
+  const fileRequestsPress = () => {
+    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, attributes.phase))
+    navigateTo('FileRequest', { claimID })()
+  }
+
   return (
     <AccordionCollapsible
       noBorder={true}
@@ -179,7 +184,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
           </Box>
           <Box mt={standardMarginBetween}>
             <VAButton
-              onPress={navigateTo('FileRequest', { claimID })}
+              onPress={fileRequestsPress}
               testID={t('claimPhase.fileRequests.button.label')}
               label={t('claimPhase.fileRequests.button.label')}
               buttonType={ButtonTypesConstants.buttonPrimary}

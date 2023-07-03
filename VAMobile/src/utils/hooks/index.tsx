@@ -30,12 +30,14 @@ import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureType, DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { isAndroid, isIOS } from 'utils/platform'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
 /**
@@ -193,17 +195,22 @@ export function useIsScreenReaderEnabled(withListener = false): boolean {
  *
  * @returns an alert showing user they are leaving the app
  */
-export function useExternalLink(): (url: string) => void {
+export function useExternalLink(): (url: string, analyticsProps?: { [key: string]: string | number }) => void {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  return (url: string) => {
+  return (url: string, analyticsProps?: { [key: string]: string | number }) => {
+    const onOKPress = () => {
+      logAnalyticsEvent(Events.vama_link_confirm({ url, ...analyticsProps }))
+      return Linking.openURL(url)
+    }
+
     if (url.startsWith(WebProtocolTypesConstants.http)) {
       Alert.alert(t('leavingApp.title'), t('leavingApp.body'), [
         {
           text: t('cancel'),
           style: 'cancel',
         },
-        { text: t('leavingApp.ok'), onPress: (): Promise<void> => Linking.openURL(url), style: 'default' },
+        { text: t('leavingApp.ok'), onPress: (): Promise<void> => onOKPress(), style: 'default' },
       ])
     } else {
       Linking.openURL(url)

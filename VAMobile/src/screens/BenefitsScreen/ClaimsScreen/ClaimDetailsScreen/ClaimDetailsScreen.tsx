@@ -8,11 +8,13 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
 import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
@@ -82,6 +84,14 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
     )
   }
 
+  const onTabChange = (tab: string) => {
+    if (tab !== selectedTab && claim) {
+      const analyticsEvent = tab === 'Status' ? Events.vama_claim_status_tab : Events.vama_claim_details_tab
+      logAnalyticsEvent(analyticsEvent(claim.id, claim.attributes.claimType, claim.attributes.phase, claim.attributes.dateFiled))
+    }
+    setSelectedTab(tab)
+  }
+
   const formattedReceivedDate = formatDateMMMMDDYYYY(dateFiled || '')
   const a11yHints = [t('claimDetails.viewYourClaim', { tabName: t('claimDetails.status') }), t('claimDetails.viewYourClaim', { tabName: t('claimDetails.details') })]
 
@@ -94,13 +104,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
           </TextView>
           <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl
-              values={controlValues}
-              titles={controlValues}
-              onChange={setSelectedTab}
-              selected={controlValues.indexOf(selectedTab)}
-              accessibilityHints={a11yHints}
-            />
+            <SegmentedControl values={controlValues} titles={controlValues} onChange={onTabChange} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
           </Box>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>

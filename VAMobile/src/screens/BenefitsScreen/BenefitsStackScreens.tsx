@@ -46,7 +46,11 @@ export type BenefitsStackParamList = {
   }
   ClaimLettersScreen: undefined
   ConsolidatedClaimsNote: undefined
-  WhatDoIDoIfDisagreement: undefined
+  WhatDoIDoIfDisagreement: {
+    claimID: string
+    claimType: string
+    claimStep: number
+  }
   AppealDetailsScreen: {
     appealID: string
   }

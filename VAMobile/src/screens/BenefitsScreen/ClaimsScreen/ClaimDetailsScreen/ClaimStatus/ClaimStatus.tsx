@@ -38,10 +38,19 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
     // alternative check if need to update: isClosedClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
     const isActiveClaim = claimType === ClaimTypeConstants.ACTIVE
 
+    const whatShouldOnPress = () => {
+      logAnalyticsEvent(Events.vama_claim_disag(claim.id, claim.attributes.claimType, claim.attributes.phase))
+      navigateTo('WhatDoIDoIfDisagreement', {
+        claimID: claim.id,
+        claimType: claim.attributes.claimType,
+        claimStep: claim.attributes.phase,
+      })()
+    }
+
     if (isActiveClaim) {
       const detailsFAQListItems: Array<SimpleListItemObj> = [
         { text: t('claimDetails.whyWeCombine'), onPress: navigateTo('ConsolidatedClaimsNote'), testId: t('claimDetails.whyWeCombine.a11yLabel') },
-        { text: t('claimDetails.whatShouldIDoIfDisagree'), onPress: navigateTo('WhatDoIDoIfDisagreement'), testId: t('claimDetails.whatShouldIDoIfDisagree.a11yLabel') },
+        { text: t('claimDetails.whatShouldIDoIfDisagree'), onPress: whatShouldOnPress, testId: t('claimDetails.whatShouldIDoIfDisagree.a11yLabel') },
       ]
 
       // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false
