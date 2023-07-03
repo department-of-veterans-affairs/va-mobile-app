@@ -7,7 +7,7 @@ import { MenuViewActionsType } from 'components/Menu'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScrollView, View, ViewStyle } from 'react-native'
 import { VAIconProps } from 'components/VAIcon'
-import { useDestructiveAlert, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
@@ -80,7 +80,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const navigateTo = useRouteNavigation()
   const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
 
   const titleTextProps: TextViewProps = {
     variant: 'BitterBoldHeading',

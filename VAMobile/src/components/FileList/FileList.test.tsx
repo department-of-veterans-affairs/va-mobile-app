@@ -16,7 +16,7 @@ jest.mock('utils/hooks', () => {
 
   return {
     ...original,
-    useDestructiveAlert: () => mockAlertSpy,
+    useDestructiveActionSheet: () => mockAlertSpy,
   }
 })
 
