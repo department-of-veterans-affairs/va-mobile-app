@@ -72,16 +72,31 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     })
   })
 
+  //returns true when no edits have been made.
   const noPageChanges = (): boolean => {
-    if (getNumbersFromString(phoneNumber) === getNumbersFromString(getFormattedPhoneNumber(phoneData))) {
-      if (phoneData.extension && phoneData.extension === extension) {
-        return true
-      } else if (!phoneData.extension && !extension) {
-        return true
+    if (phoneData) {
+      if (getNumbersFromString(phoneNumber) === getNumbersFromString(getFormattedPhoneNumber(phoneData))) {
+        if (phoneData.extension && phoneData.extension === extension) {
+          return true
+        } else if (!phoneData.extension && !extension) {
+          return true
+        }
       }
+    } else if (!extension && !phoneNumber) {
+      return true
     }
     return false
   }
+
+  //   if (getNumbersFromString(phoneNumber) === getNumbersFromString(getFormattedPhoneNumber(phoneData))) {
+  //     if (phoneData && phoneData.extension && phoneData.extension === extension) {
+  //       return true
+  //     } else if (phoneData && !phoneData.extension && !extension) {
+  //       return true
+  //     }
+  //   }
+  //   return false
+  // }
 
   const onSave = (): void => {
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
