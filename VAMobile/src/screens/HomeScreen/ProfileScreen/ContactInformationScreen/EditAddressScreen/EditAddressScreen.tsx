@@ -122,26 +122,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     navigation.goBack()
   }
 
-  const onConfirmCancel = (): void => {
-    const title =
-      addressType === profileAddressOptions.RESIDENTIAL_ADDRESS ? t('editAddress.validation.cancelConfirm.home.title') : t('editAddress.validation.cancelConfirm.mailing.title')
-
-    destructiveAlert({
-      title,
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('keepEditing'),
-        },
-        {
-          text: t('deleteChanges'),
-          onPress: onCancel,
-        },
-      ],
-    })
-  }
-
   const initialCheckbox = getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType)
   const initialCountry = getInitialStateForPicker(AddressDataEditedFieldValues.countryCodeIso3, Countries)
   const initialAddressLine1 = getInitialState(AddressDataEditedFieldValues.addressLine1)
@@ -168,10 +148,35 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const [resetErrors, setResetErrors] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
 
-  useBeforeNavBackListener(navigation, () => {
+  useBeforeNavBackListener(navigation, (e) => {
     // if saving still when canceling then abort
     if (savingAddress) {
       validateAddressAbortController?.abort()
+    }
+
+    if (!formChanged()) {
+      return
+    } else {
+      e.preventDefault()
+      const title =
+        addressType === profileAddressOptions.RESIDENTIAL_ADDRESS ? t('editAddress.validation.cancelConfirm.home.title') : t('editAddress.validation.cancelConfirm.mailing.title')
+
+      destructiveAlert({
+        title,
+        destructiveButtonIndex: 1,
+        cancelButtonIndex: 0,
+        buttons: [
+          {
+            text: t('keepEditing'),
+          },
+          {
+            text: t('deleteChanges'),
+            onPress: () => {
+              navigation.dispatch(e.data.action)
+            },
+          },
+        ],
+      })
     }
   })
 
@@ -269,11 +274,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     state !== initialState ||
     zipCode !== initialZipCode
 
-  const cancelFn = formChanged() ? onConfirmCancel : onCancel
-
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
     return (
-      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn}>
+      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={onCancel}>
         <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -283,7 +286,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     const loadingText = deleting ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')
 
     return (
-      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn}>
+      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={onCancel}>
         <LoadingComponent text={loadingText} />
       </FullScreenSubtask>
     )
@@ -296,7 +299,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       snackbarMessages: snackbarMessages,
     }
     return (
-      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={cancelFn}>
+      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={onCancel}>
         <AddressValidation {...addressValidationProps} />
       </FullScreenSubtask>
     )
@@ -540,7 +543,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       scrollViewRef={scrollViewRef}
       title={displayTitle}
       leftButtonText={t('cancel')}
-      onLeftButtonPress={cancelFn}
+      onLeftButtonPress={onCancel}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>

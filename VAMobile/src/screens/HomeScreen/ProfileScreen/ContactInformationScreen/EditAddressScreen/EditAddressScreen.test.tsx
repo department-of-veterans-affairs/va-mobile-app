@@ -238,7 +238,7 @@ context('EditAddressScreen', () => {
       expect(mockAlertSpy).not.toHaveBeenCalled()
     })
 
-    it.only('should display confirm cancel if checkbox checked', () => {
+    it('should display confirm cancel if checkbox checked', () => {
       fireEvent.press(screen.getByRole('checkbox'))
       fireEvent.press(screen.getByText('Cancel'))
       expect(mockAlertSpy).toBeCalled()
