@@ -235,7 +235,7 @@ export type useDestructiveActionSheetProps = {
  * @param destructiveButtonIndex - optional destructive index
  * @param cancelButtonIndex - ios cancel index
  * @param buttons - options to show in the ActionSheet
- * @returns an action sheet for ios and an alert for android
+ * @returns an action sheet
  */
 export function useDestructiveActionSheet(): (props: useDestructiveActionSheetProps) => void {
   const { showActionSheetWithOptions } = useActionSheet()
