@@ -2,7 +2,22 @@
 
 ## The request lifecycle
 
-When requests are made by the VA mobile app, they're received by the vets-api and routed to controllers in the mobile module
+The vets-api mobile endpoints generally follow the pattern that can be roughly broken up into the following sections.
+
+## Mobile controller before upstream request
+
+When mobile requests are received by the vets-api, they're routed to controllers in the mobile module, which can include data access checks and request validations that can return errors. The mobile code then utilizes outbound service objects to communicate with upstream services. These service objects can also impose their own validity and access checks. In general, those will match ours because ours are generally written to match theirs, but it's also possible for those validations to drift due to code changes in the outbound services objects and due to mobile-specific business requirements that may cause us to add different validations. This is an area where the vets-api's lack of centralization prevents a more robust solution that prevents this drift through shared validations.
+
+
+## Outbound Service Objects and Upstream Servers
+
+The mobile controllers use a variety of service objects to communicate with upstream servers. Those service objects consist of two parts:
+
+1. the service itself. These are subclasses of `Common::Client::Base`. That class is intended to provide a common interface through which all upstream requests are made. This makes it relatively easy to add new service objects that will behave predictably and handle common errors.
+
+2. the configuration. Each of those service objects must also define a configuration, which must be a subclass of `Common::Client::Configuration`.
+
+The configuration is primarily responsible for making a connection to the upstream service using values, such as URLs and api keys, defined within the configuration file. The service object is responsible for using that connection to make upstream requests and for processing the response. Both can have a role in error handling.
 
 ## Outbound Requests, Integrated Error Handling, and Deep Coupling
 
@@ -16,18 +31,6 @@ Any errors during that process then go through the mobile app's exception handli
 
 In addition, errors can arise from the sign-in process.
 
-
-## Outbound Service Objects
-
-Subclasses of Common::Client::Base
-
-## Vets-Api Before Upstream Request
-
-When mobile requests are received by the vets-api, they're routed to controllers in the mobile module, which can include data access checks and request validations that can return errors. The mobile code then utilizes outbound service objects to communicate with upstream services. These service objects can also impose their own validity and access checks. In general, those will match ours because ours are generally written to match theirs, but it's also possible for those validations to drift due to code changes in the outbound services objects and due to mobile-specific business requirements that may cause us to add different validations. This is an area where the vets-api's lack of centralization prevents a more robust solution that prevents this drift through shared validations.
-
-## Upstream Services and Outbound Service Objects
-
-The back 
 
 ## Mobile Module Errors
 
