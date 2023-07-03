@@ -349,6 +349,114 @@ export const Events = {
       name: 'vama_claim_upload_fail',
     }
   },
+  vama_claim_why_combine: (claim_id: string, claim_type: string, claim_step: number): Event => {
+    return {
+      name: 'vama_claim_why_combine',
+      params: {
+        claim_id,
+        claim_type,
+        claim_step,
+      },
+    }
+  },
+  vama_evidence_cancel_1: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+    return {
+      name: 'vama_claim_cancel_1',
+      params: {
+        claim_id,
+        claim_request_id,
+        claim_request_type,
+        evidence_method,
+      },
+    }
+  },
+  vama_evidence_cancel_2: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+    return {
+      name: 'vama_claim_cancel_2',
+      params: {
+        claim_id,
+        claim_request_id,
+        claim_request_type,
+        evidence_method,
+      },
+    }
+  },
+  vama_evidence_conf: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+    return {
+      name: 'vama_evidence_conf',
+      params: {
+        claim_id,
+        claim_request_id,
+        claim_request_type,
+        evidence_method,
+      },
+    }
+  },
+  vama_evidence_cont_1: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+    return {
+      name: 'vama_evidence_cont_1',
+      params: {
+        claim_id,
+        claim_request_id,
+        claim_request_type,
+        evidence_method,
+      },
+    }
+  },
+  vama_evidence_cont_2: (
+    claim_id: string,
+    claim_request_id: number | null,
+    claim_request_type: string,
+    evidence_method: string,
+    upload_size: number,
+    num_photos: number,
+  ): Event => {
+    return {
+      name: 'vama_evidence_cont_2',
+      params: {
+        claim_id,
+        claim_request_id,
+        claim_request_type,
+        evidence_method,
+        upload_size,
+        num_photos,
+      },
+    }
+  },
+  vama_evidence_cont_3: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+    return {
+      name: 'vama_evidence_cont_3',
+      params: {
+        claim_id,
+        claim_request_id,
+        claim_request_type,
+        evidence_method,
+      },
+    }
+  },
+  vama_evidence_start: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+    return {
+      name: 'vama_evidence_start',
+      params: {
+        claim_id,
+        claim_request_id,
+        claim_request_type,
+        evidence_method,
+      },
+    }
+  },
+  vama_evidence_type: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string, evidence_type: string): Event => {
+    return {
+      name: 'vama_evidence_type',
+      params: {
+        claim_id,
+        claim_request_id,
+        claim_request_type,
+        evidence_method,
+        evidence_type,
+      },
+    }
+  },
   vama_ddl_button_shown: (): Event => {
     return {
       name: 'vama_ddl_button_shown',
@@ -404,6 +512,16 @@ export const Events = {
       name: 'vama_appt_cancel',
       params: {
         isPending: isPendingAppointment,
+      },
+    }
+  },
+  vama_request_details: (claim_id: string, claim_request_id: number | null, claim_request_type: string): Event => {
+    return {
+      name: 'vama_request_details',
+      params: {
+        claim_id,
+        claim_request_id,
+        claim_request_type,
       },
     }
   },

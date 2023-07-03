@@ -38,6 +38,11 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
     // alternative check if need to update: isClosedClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
     const isActiveClaim = claimType === ClaimTypeConstants.ACTIVE
 
+    const whyWeCombineOnPress = () => {
+      logAnalyticsEvent(Events.vama_claim_why_combine(claim.id, claim.attributes.claimType, claim.attributes.phase))
+      navigateTo('ConsolidatedClaimsNote')()
+    }
+
     const whatShouldOnPress = () => {
       logAnalyticsEvent(Events.vama_claim_disag(claim.id, claim.attributes.claimType, claim.attributes.phase))
       navigateTo('WhatDoIDoIfDisagreement', {
@@ -49,7 +54,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
 
     if (isActiveClaim) {
       const detailsFAQListItems: Array<SimpleListItemObj> = [
-        { text: t('claimDetails.whyWeCombine'), onPress: navigateTo('ConsolidatedClaimsNote'), testId: t('claimDetails.whyWeCombine.a11yLabel') },
+        { text: t('claimDetails.whyWeCombine'), onPress: whyWeCombineOnPress, testId: t('claimDetails.whyWeCombine.a11yLabel') },
         { text: t('claimDetails.whatShouldIDoIfDisagree'), onPress: whatShouldOnPress, testId: t('claimDetails.whatShouldIDoIfDisagree.a11yLabel') },
       ]
 

@@ -58,16 +58,19 @@ export type BenefitsStackParamList = {
     claimID: string
   }
   FileRequestDetails: {
+    claimID: string
     request: ClaimEventData
   }
   AskForClaimDecision: {
     claimID: string
   }
   TakePhotos: {
+    claimID: string
     request: ClaimEventData
     focusOnSnackbar?: boolean
   }
   SelectFile: {
+    claimID: string
     request: ClaimEventData
     focusOnSnackbar?: boolean
   }
