@@ -30,7 +30,7 @@ import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
 import { profileAddressOptions } from '../AddressSummary'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressValidation from '../AddressValidation'
 
@@ -84,7 +84,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
-  const destructiveAlert = useDestructiveAlert()
+  const destructiveAlert = useDestructiveActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
 
   const [deleting, setDeleting] = useState(false)

@@ -15,7 +15,7 @@ import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPresc
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveAlert, useDowntime, usePrevious, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useDowntime, usePrevious, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import NoRefills from './NoRefills'
@@ -26,7 +26,7 @@ type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenMod
 export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const submitRefillAlert = useDestructiveAlert()
+  const submitRefillAlert = useDestructiveActionSheet()
 
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)

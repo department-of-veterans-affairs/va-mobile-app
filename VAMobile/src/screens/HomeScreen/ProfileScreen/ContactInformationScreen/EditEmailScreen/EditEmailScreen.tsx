@@ -11,7 +11,7 @@ import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } f
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
@@ -25,7 +25,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { profile, emailSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id
-  const deleteEmailAlert = useDestructiveAlert()
+  const deleteEmailAlert = useDestructiveActionSheet()
 
   const [email, setEmail] = useState(profile?.contactEmail?.emailAddress || '')
   const [formContainsError, setFormContainsError] = useState(false)
