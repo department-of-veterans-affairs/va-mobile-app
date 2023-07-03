@@ -75,7 +75,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
           text: tc('prescriptions.refillRequest.continueRequest'),
         },
         {
-          text: tc('prescriptions.refillRequest.cancelRequest'),
+          text: tc('cancelRequest'),
           onPress: () => {
             dispatch(dispatchSetPrescriptionsNeedLoad())
             dispatch(dispatchClearLoadingRequestRefills())

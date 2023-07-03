@@ -5,9 +5,7 @@ import { AppointmentAttributes, AppointmentData, AppointmentLocation, Appointmen
 import { Box, ButtonTypesConstants, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { cancelAppointment } from 'store/slices'
-import { formatDateMMDDYYYY } from 'utils/formattingUtils'
 import { getTranslation } from 'utils/formattingUtils'
-import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -25,10 +23,9 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   const theme = useTheme()
   const confirmAlert = useDestructiveAlert()
   const dispatch = useAppDispatch()
-  const isAndroidDevice = isAndroid()
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, isCovidVaccine, cancelId, startDateUtc } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, location, isCovidVaccine, cancelId } = attributes || ({} as AppointmentAttributes)
   const { name, phone } = location || ({} as AppointmentLocation)
 
   const findYourVALocationProps: LinkButtonProps = {
@@ -83,39 +80,23 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   )
 
   const onCancelAppointment = () => {
-    const appointmentDate = formatDateMMDDYYYY(startDateUtc)
     const onPress = () => {
       dispatch(cancelAppointment(cancelId, appointment?.id))
     }
 
-    const androidButtons = [
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.android.noKeep'),
-      },
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.android.yesCancel'),
-        onPress,
-      },
-    ]
-    const iosButtons = [
-      {
-        text: tc('cancel'),
-      },
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.yesCancelAppointment'),
-        onPress,
-      },
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.noCancelAppointment'),
-      },
-    ]
-
     confirmAlert({
-      title: '',
-      message: t('upcomingAppointmentDetails.cancelAppointment.message', { appointmentDate }),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: isAndroidDevice ? androidButtons : iosButtons,
+      title: tc('appointments.cancelThisAppointment'),
+      cancelButtonIndex: 1,
+      destructiveButtonIndex: 0,
+      buttons: [
+        {
+          text: tc('appointments.cancelAppointment'),
+          onPress: onPress,
+        },
+        {
+          text: tc('appointments.keepAppointment'),
+        },
+      ],
     })
   }
 

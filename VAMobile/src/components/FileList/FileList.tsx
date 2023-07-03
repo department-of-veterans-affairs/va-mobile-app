@@ -34,15 +34,15 @@ const FileList: FC<FileListProps> = ({ files, onDelete }) => {
       decorator: ButtonDecoratorType.Delete,
       onPress: () => {
         deleteFileAlert({
-          title: t('file.removeConfirm'),
+          title: t('file.removeFile'),
           destructiveButtonIndex: 1,
           cancelButtonIndex: 0,
           buttons: [
             {
-              text: t('cancel'),
+              text: t('keep'),
             },
             {
-              text: t('delete'),
+              text: t('remove'),
               onPress: () => {
                 onDelete(file)
               },

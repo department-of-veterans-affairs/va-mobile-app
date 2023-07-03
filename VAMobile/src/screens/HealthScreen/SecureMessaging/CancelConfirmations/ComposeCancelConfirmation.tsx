@@ -72,20 +72,25 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
       }
 
       confirmationAlert({
-        title: t('secureMessaging.startNewMessage.cancel.saveDraftQuestion'),
-        message: t('secureMessaging.startNewMessage.cancel.saveDraftDescription'),
+        title:
+          origin === 'Compose'
+            ? tc('composeCancelConfirmation.compose.title')
+            : origin === 'Draft'
+            ? tc('composeCancelConfirmation.draft.title')
+            : tc('composeCancelConfirmation.reply.title'),
+        message: origin === 'Draft' ? tc('composeCancelConfirmation.draft.body') : tc('composeCancelConfirmation.body'),
         cancelButtonIndex: 0,
         destructiveButtonIndex: 1,
         buttons: [
           {
-            text: tc('cancel'),
+            text: tc('keepEditing'),
           },
           {
-            text: t('secureMessaging.startNewMessage.cancel.discard'),
+            text: origin === 'Draft' ? tc('deleteChanges') : tc('delete'),
             onPress: onDiscard,
           },
           {
-            text: t('secureMessaging.saveDraft'),
+            text: origin === 'Draft' ? tc('saveChanges') : tc('save'),
             onPress: onSaveDraft,
           },
         ],
