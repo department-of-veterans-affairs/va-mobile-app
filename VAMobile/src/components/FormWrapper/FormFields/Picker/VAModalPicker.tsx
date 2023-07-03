@@ -157,7 +157,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     const valueBox = (
       <Box {...wrapperProps}>
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <TextView variant="MobileBody" flex={1}>
+          <TextView testID={testID} variant="MobileBody" flex={1}>
             {currentlySelectedOption?.label}
           </TextView>
           <Box mr={8} ml={16} my={16}>
@@ -241,7 +241,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   }
 
   return (
-    <View testID={testID}>
+    <View>
       <Modal
         animationType="slide"
         transparent={true}

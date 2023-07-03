@@ -1,6 +1,6 @@
 import { expect, device, by, element, waitFor } from 'detox'
 import { isTypedArray } from 'util/types'
-import { loginToDemoMode, openHealth, CommonE2eIdConstants, backButton, openAppointments, changeMockData, loginToApp } from './utils'
+import { loginToDemoMode, openHealth, CommonE2eIdConstants, backButton, openAppointments, changeMockData } from './utils'
 import { log } from 'console'
 import { setTimeout } from "timers/promises"
 import { DateTime } from 'luxon'
@@ -30,16 +30,16 @@ export const Appointmentse2eConstants = {
 
 const todaysDate = DateTime.local()
 
-var fiveMonthsEarlier = todaysDate.minus({ months: 5 }).startOf('month').startOf('day')
-var threeMonthsEarlier = todaysDate.minus({ months: 3 })
-var eightMonthsEarlier = todaysDate.minus({ months: 8 }).startOf('month').startOf('day')
-var sixMonthsEarlier = todaysDate.minus({ months: 6 }).endOf('month').endOf('day')
-var elevenMonthsEarlier = todaysDate.minus({ months: 11 }).startOf('month').startOf('day')
-var nineMonthsEarlier = todaysDate.minus({ months: 9 }).endOf('month').endOf('day')
-var currentYear = todaysDate.get('year')
-var firstDayCurrentYear = todaysDate.set({ month: 1, day: 1, hour: 0, minute: 0, millisecond: 0 })
-var lastYearDateTime = todaysDate.minus({ years: 1 })
-var lastYear = lastYearDateTime.get('year')
+const fiveMonthsEarlier = todaysDate.minus({ months: 5 }).startOf('month').startOf('day')
+const threeMonthsEarlier = todaysDate.minus({ months: 3 })
+const eightMonthsEarlier = todaysDate.minus({ months: 8 }).startOf('month').startOf('day')
+const sixMonthsEarlier = todaysDate.minus({ months: 6 }).endOf('month').endOf('day')
+const elevenMonthsEarlier = todaysDate.minus({ months: 11 }).startOf('month').startOf('day')
+const nineMonthsEarlier = todaysDate.minus({ months: 9 }).endOf('month').endOf('day')
+const currentYear = todaysDate.get('year')
+const firstDayCurrentYear = todaysDate.set({ month: 1, day: 1, hour: 0, minute: 0, millisecond: 0 })
+const lastYearDateTime = todaysDate.minus({ years: 1 })
+const lastYear = lastYearDateTime.get('year')
   
 beforeAll(async () => {
   await loginToDemoMode()
@@ -78,37 +78,31 @@ describe('Appointments Screen', () => {
 	})
 	
 	it('should tap and open the appointment details links', async() => {
-		if (device.getPlatform() == 'android') {
+		if (device.getPlatform() === 'android') {
 			await element(by.id(Appointmentse2eConstants.ADD_TO_CALENDAR_ID)).atIndex(0).tap()
-			await setTimeout(5000)
 			await device.takeScreenshot('appointmentCalendar')
 			await device.launchApp({newInstance: false})
 			
 			await element(by.id(Appointmentse2eConstants.GET_DIRECTIONS_ID)).atIndex(0).tap()
 			await element(by.text(CommonE2eIdConstants.OK_UNIVERSAL_TEXT)).tap()
-			await setTimeout(5000)
 			await device.takeScreenshot('appointmentGetDirections')
 			await device.launchApp({newInstance: false})
 			
 			await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(0).tap()
-			await setTimeout(5000)
 			await device.takeScreenshot('appointmentVALocationPhoneNumber')
 			await device.launchApp({newInstance: false})
 			
 			await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ASSISTANCE_LINK_ID)).atIndex(0).tap()
-			await setTimeout(5000)
 			await device.takeScreenshot('apointmentVALocationTTY')
 			await device.launchApp({newInstance: false})
 			
 			await element(by.id('UpcomingApptDetailsTestID')).scrollTo('bottom')
 			
 			await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(1).tap()
-			await setTimeout(5000)
 			await device.takeScreenshot('appointmentCancelPhoneNumber')
 			await device.launchApp({newInstance: false})
 			
 			await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ASSISTANCE_LINK_ID)).atIndex(1).tap()
-			await setTimeout(5000)
 			await device.takeScreenshot('appointmentCancelTTY')
 			await device.launchApp({newInstance: false})
 		}		
@@ -116,11 +110,11 @@ describe('Appointments Screen', () => {
 	
 	it('should cancel an appointment and dismiss the dialog', async() => {
 		await element(by.text('Appointments')).tap()
-		await waitFor(element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID))).toBeVisible().whileElement(by.id('appointmentsTestID')).scroll(50, 'down')
+		await waitFor(element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID))).toBeVisible().whileElement(by.id('appointmentsTestID')).scroll(100, 'down')
 		await element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID)).tap()
 		await element(by.id('UpcomingApptDetailsTestID')).scrollTo('bottom')
 		await element(by.id('Cancel request')).tap()
-		if (device.getPlatform() == 'android') {
+		if (device.getPlatform() === 'android') {
 			await element(by.text('YES, CANCEL')).tap()
 		} else {
 			await element(by.text('Yes, Cancel Request')).tap()
@@ -143,8 +137,6 @@ describe('Appointments Screen', () => {
 			await setTimeout(5000)
 			await device.takeScreenshot('appointmentGetDirections')
 			await device.launchApp({newInstance: false})
-			
-			//await element(by.text('703-652-0000')).atIndex(0).tap()
 			await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(0)).toExist()
 			await setTimeout(5000)
 			await device.takeScreenshot('appointmentVALocationPhoneNumber')
@@ -175,14 +167,23 @@ describe('Appointments Screen', () => {
 		await element(by.id('Past')).tap()
 		await expect(element(by.id(Appointmentse2eConstants.PAST_APPOINTMENT_1_ID))).toExist()
 		await expect(element(by.id(Appointmentse2eConstants.PAST_APPOINTMENT_2_ID))).toExist()
-		await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
+		if (device.getPlatform() === 'android') {
+		  await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
+	    } else {
+		  await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT))).toExist()
+		}
 	})
 	
 	it('should show the same date field after cancelling', async() => {		
 		await element(by.id('getDateRangeTestID')).tap()
-		await element(by.text('Past 3 months')).atIndex(0).tap()
-		await element(by.text('Cancel')).tap()
-		await expect(element(by.text('Past 3 months')).atIndex(0)).toExist()
+		if(device.getPlatform() === 'android') {
+			await element(by.text('Past 3 months')).atIndex(0).tap()
+			await element(by.text('Cancel')).tap()
+		    await expect(element(by.text('Past 3 months')).atIndex(0)).toExist()
+		} else {
+			await element(by.text('Cancel')).tap()
+			await expect(element(by.text('Past 3 months'))).toExist()
+		}
 	})
 	
 	it('should show appointments from three months earlier to five months earlier', async() => {		
