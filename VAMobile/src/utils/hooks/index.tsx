@@ -1,4 +1,4 @@
-import { AccessibilityInfo, ActionSheetIOS, Alert, AppState, Dimensions, EmitterSubscription, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
+import { AccessibilityInfo, Alert, AlertButton, AppState, Dimensions, EmitterSubscription, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
 import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
@@ -242,7 +242,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
   const { showActionSheetWithOptions } = useActionSheet()
   const currentTheme = getTheme()
   return (props: useDestructiveActionSheetProps) => {
-    const { buttons, cancelButtonIndex, destructiveButtonIndex, ...remainingProps } = props
+    const { buttons, cancelButtonIndex, destructiveButtonIndex} = props
 
     // Ensure cancel button is always last for UX consisency
     const newButtons = [...buttons]
