@@ -85,7 +85,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
   const deleteAddressAlert = useAlert()
-  const destructiveAlert = useDestructiveActionSheet()
+  const destructiveActionSheet = useDestructiveActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const [deleting, setDeleting] = useState(false)
@@ -162,7 +162,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       const title =
         addressType === profileAddressOptions.RESIDENTIAL_ADDRESS ? t('editAddress.validation.cancelConfirm.home.title') : t('editAddress.validation.cancelConfirm.mailing.title')
 
-      destructiveAlert({
+      destructiveActionSheet({
         title,
         destructiveButtonIndex: 1,
         cancelButtonIndex: 0,
