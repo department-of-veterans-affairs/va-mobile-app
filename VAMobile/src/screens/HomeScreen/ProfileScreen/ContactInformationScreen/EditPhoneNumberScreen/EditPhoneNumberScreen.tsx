@@ -88,16 +88,6 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     return false
   }
 
-  //   if (getNumbersFromString(phoneNumber) === getNumbersFromString(getFormattedPhoneNumber(phoneData))) {
-  //     if (phoneData && phoneData.extension && phoneData.extension === extension) {
-  //       return true
-  //     } else if (phoneData && !phoneData.extension && !extension) {
-  //       return true
-  //     }
-  //   }
-  //   return false
-  // }
-
   const onSave = (): void => {
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
     const numberId = phoneData && phoneData.id ? phoneData.id : 0
