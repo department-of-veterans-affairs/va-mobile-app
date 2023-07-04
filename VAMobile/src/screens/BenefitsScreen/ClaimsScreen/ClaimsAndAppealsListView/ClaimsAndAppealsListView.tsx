@@ -72,14 +72,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
       const position = (currentPage - 1) * perPage + index + 1
       const a11yValue = t('listPosition', { position, total: totalEntries })
-      const onPress = () => {
-        logAnalyticsEvent(Events.vama_claim_details_open(id, attributes.subtype, formatDateMMMMDDYYYY(attributes.updatedAt), formattedDateFiled))
-        if (type === ClaimOrAppealConstants.claim) {
-          navigateTo('ClaimDetailsScreen', { claimID: id, claimType })()
-        } else {
-          navigateTo('AppealDetailsScreen', { appealID: id })()
-        }
-      }
+      const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetailsScreen', { claimID: id, claimType }) : navigateTo('AppealDetailsScreen', { appealID: id })
       listItems.push({
         textLines,
         a11yValue,

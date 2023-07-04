@@ -198,9 +198,9 @@ export const Events = {
       },
     }
   },
-  vama_claim_details_expnd: (claim_id: string, claim_type: string, claim_step: number, step_expanded: boolean, claim_step_change: string, claim_submitted_date: string): Event => {
+  vama_claim_details_exp: (claim_id: string, claim_type: string, claim_step: number, step_expanded: boolean, claim_step_change: string, claim_submitted_date: string): Event => {
     return {
-      name: 'vama_claim_details_expnd',
+      name: 'vama_claim_details_exp',
       params: {
         claim_id,
         claim_type,
@@ -211,12 +211,13 @@ export const Events = {
       },
     }
   },
-  vama_claim_details_open: (claim_id: string, claim_type: string, claim_step_change: string, claim_submitted_date: string): Event => {
+  vama_claim_details_open: (claim_id: string, claim_type: string, claim_step: number, claim_step_change: string, claim_submitted_date: string): Event => {
     return {
       name: 'vama_claim_details_open',
       params: {
         claim_id,
         claim_type,
+        claim_step,
         claim_step_change,
         claim_submitted_date,
       },

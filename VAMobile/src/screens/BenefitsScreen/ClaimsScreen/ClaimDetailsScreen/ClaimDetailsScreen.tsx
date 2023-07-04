@@ -33,6 +33,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
 
   const controlValues = [t('claimDetails.status'), t('claimDetails.details')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
+  const [loggedEvent, setLoggedEvent] = useState(false)
 
   const { claimID, claimType, focusOnSnackbar } = route.params
   const { claim, loadingClaim, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
@@ -65,6 +66,13 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   useEffect(() => {
     dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
   }, [dispatch, claimID])
+
+  useEffect(() => {
+    if (claimID === claim?.id && !loggedEvent) {
+      logAnalyticsEvent(Events.vama_claim_details_open(claim.id, attributes.claimType, attributes.phase, attributes.phaseChangeDate || '', attributes.dateFiled))
+      setLoggedEvent(true)
+    }
+  }, [claimID, claim, attributes, loggedEvent])
 
   const backLabel = featureEnabled('decisionLettersWaygate') ? t('claimsHistory.title') : t('claims.title')
 

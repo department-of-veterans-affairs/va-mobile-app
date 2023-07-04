@@ -161,7 +161,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const youHaveFileRequestsTextA11yHint = getTranslation(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}A11yHint`, t, { numberOfRequests })
 
   const accordionPress = (isExpanded: boolean | undefined) => {
-    logAnalyticsEvent(Events.vama_claim_details_expnd(claimID, attributes.claimType, phase, isExpanded || false, heading, updatedLastDate))
+    logAnalyticsEvent(Events.vama_claim_details_exp(claimID, attributes.claimType, phase, isExpanded || false, attributes.phaseChangeDate || '', attributes.dateFiled))
   }
 
   const fileRequestsPress = () => {
