@@ -35,6 +35,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { isAndroid, isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -290,6 +291,34 @@ export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void
     } else {
       Alert.alert(props.title, props.message, props.buttons as AlertButton[])
     }
+  }
+}
+
+export type UseAlertProps = {
+  /** title of alert */
+  title: string
+  /** message of alert */
+  message?: string
+  /** options to show in alert */
+  buttons: Array<AlertButton>
+  /** screenReaderEnabled boolean */
+  screenReaderEnabled: boolean
+}
+/**
+ * Hook to create standard alert for a destructive event
+ * @param title - title of the alert
+ * @param message - optional message for the alert
+ * @param buttons - options to show in the alert
+ * @param screenReaderEnabled - apply a11yLabelNeededForScreenReader will have the side effect of visually displaying V-A since the alert used does not have a separate accessibility Label
+ * @returns returns an alert for ios and android
+ */
+export function useAlert(): (props: UseAlertProps) => void {
+  return (props: UseAlertProps) => {
+    Alert.alert(
+      props.screenReaderEnabled ? a11yLabelVA(props.title) : props.title,
+      props.screenReaderEnabled && props.message ? a11yLabelVA(props.message) : props.message,
+      props.buttons,
+    )
   }
 }
 
