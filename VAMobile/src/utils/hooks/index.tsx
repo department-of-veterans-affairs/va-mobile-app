@@ -266,7 +266,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
         destructiveButtonIndex: newDestructiveButtonIndex,
         destructiveColor: currentTheme.colors.text.error,
         options: newButtons.map((button) => stringToTitleCase(button.text)),
-        containerStyle: { backgroundColor: currentTheme.colors.background.modalOverlay },
+        containerStyle: { backgroundColor: currentTheme.colors.background.main },
       },
       (buttonIndex) => {
         if (buttonIndex || buttonIndex === 0) {
