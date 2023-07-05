@@ -17,6 +17,7 @@ export const CommonE2eIdConstants = {
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
+  LETTERS_ROW_TEXT: 'VA letters and documents',
   SETTINGS_ROW_TEXT: 'Settings',
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
   SIGN_OUT_BTN_ID: 'Sign out',
@@ -187,6 +188,10 @@ export async function openHealth() {
 
 export async function openBenefits() {
 	await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap() 
+}
+
+export async function openLetters() {
+  await element(by.text(CommonE2eIdConstants.LETTERS_ROW_TEXT)).tap() 
 }
 
 /**
