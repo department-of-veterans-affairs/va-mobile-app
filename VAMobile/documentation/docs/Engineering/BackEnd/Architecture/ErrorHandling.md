@@ -35,7 +35,9 @@ In addition, errors can arise from the sign-in process.
 
 ## Exception Handling
 
-Errors raised in outbound service objects and in the mobile module ruby code are handled by the ExceptionHandling module, which is included in every vets-api controller.
+Errors raised in processing requests made to the vets-api are handled by the `ExceptionHandling` module, which is included in every vets-api controller. This module catches any errors that arise during a request, remaps any unknown errors (i.e., instances of error classes not defined in the vets-api), then renders the error using the status code and details defined in the error class. The status code and details can vary per instance of a given error class.
+
+For example, if an OSO raised an error class called `InvalidLighthouseResponseError`, that would stop all further processing of the request and the error would be captured by the exception handler mounted in the controller. The `InvalidLighthouseResponseError` class will be defined somewhere in the app as a subclass of `Common::Exceptions::BaseError`. These error classes define the status code and error details. Those values can be hard-coded or defined upon error initialization. Those values are then used to render a response to the client.
 
 This tight coupling also means that it's critical to write integration tests. Errors raised in the outbound service objects will be caught in the ExceptionHandling module, which will then use portions of the outbound service object configuration to determine how to handle the error. For example, the OSOs can define how its errors should be logged and ExceptionHandling uses those logging configurations. This coupling can also make it difficult to fully test OSO code in isolation, which makes it very important to write thorough integration tests because ExceptionHandling can call methods that exist in the OSOs that might not otherwise be called. In other words, bugs can exist in OSOs that will not be revealed without integration testing with the ExceptionHandling class.
 
