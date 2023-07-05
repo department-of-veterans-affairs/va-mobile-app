@@ -11,6 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -66,14 +67,14 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   const buttonDataList: Array<SimpleListItemObj> = [
-    { text: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA, testId: t('contactVA.title.a11yLabel') },
+    { text: t('contactVA.title'), a11yHintText: a11yLabelVA(t('contactVA.a11yHint')), onPress: onContactVA, testId: a11yLabelVA(t('contactVA.title')) },
     {
       text: t('findLocation.title'),
-      a11yHintText: t('findLocation.a11yHint'),
+      a11yHintText: a11yLabelVA(t('findLocation.a11yHint')),
       onPress: onFacilityLocator,
-      testId: t('findLocation.titleA11yLabel'),
+      testId: a11yLabelVA(t('findLocation.title')),
     },
-    { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ, testId: t('coronavirusFaqs.title') },
+    { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ, testId: a11yLabelVA(t('coronavirusFaqs.title')) },
   ]
 
   let greeting
@@ -112,7 +113,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
         <EncourageUpdateAlert />
         <Nametag />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-          <TextView variant={'MobileBodyBold'} accessibilityLabel={tc('aboutVA.a11yLabel')}>
+          <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
             {tc('aboutVA')}
           </TextView>
         </Box>
