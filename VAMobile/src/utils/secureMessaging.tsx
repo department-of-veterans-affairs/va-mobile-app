@@ -32,13 +32,13 @@ export const getMessagesListItems = (
 ): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
     const { attributes } = message
-    const { recipientName, senderName, subject, sentDate, readReceipt, hasAttachments, category } = attributes
+    const { attachment, recipientName, senderName, subject, sentDate, readReceipt, hasAttachments, category } = attributes
     const isSentFolder = folderName === FolderNameTypeConstants.sent
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
 
     const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'Unread', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps) : undefined
-    const paperClipProps = hasAttachments ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
+    const paperClipProps = hasAttachments || attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
 
     const textLines: Array<InlineTextWithIconsProps> = [
       {

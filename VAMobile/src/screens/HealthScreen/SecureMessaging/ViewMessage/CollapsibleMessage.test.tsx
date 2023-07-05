@@ -46,6 +46,7 @@ context('CollapsibleMessage', () => {
       subject: 'Test Message Subject',
       body: 'Test Message Body',
       hasAttachments: true,
+      attachment: true,
       attachments: listOfAttachments,
       sentDate: mockDateISO,
       senderId: 11,
