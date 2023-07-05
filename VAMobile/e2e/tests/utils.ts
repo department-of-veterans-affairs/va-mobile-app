@@ -64,7 +64,7 @@ export async function loginToDemoMode() {
  * @param timeOut - time to wait for the element
  * */
 
-const checkIfElementIsPresent = async (matchString: string, findbyText = false, waitForElement = false, timeOut = 2000) => {
+export async function checkIfElementIsPresent(matchString: string, findbyText = false, waitForElement = false, timeOut = 2000) {
   try {
     if (findbyText) {
       if (waitForElement) {
