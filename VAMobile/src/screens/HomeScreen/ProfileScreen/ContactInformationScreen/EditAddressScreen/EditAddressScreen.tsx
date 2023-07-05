@@ -364,7 +364,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         onChange: setCity,
         inputRef: cityRef,
         isRequiredField: true,
-        testID: 'editAddressCityTestId',
       },
       fieldErrorMessage: t('editAddress.cityFieldError'),
     }
@@ -383,7 +382,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           labelKey: 'editAddress.state',
           includeBlankPlaceholder: true,
           isRequiredField: true,
-          testID: 'editAddressStateTestId',
         },
         fieldErrorMessage: checkboxSelected ? t('editAddress.validOptionFieldError') : t('editAddress.stateFieldError'),
       }
@@ -396,7 +394,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: 'editAddress.state',
         value: state,
         onChange: setState,
-        testID: 'editAddressStateTestId',
       },
     }
   }
