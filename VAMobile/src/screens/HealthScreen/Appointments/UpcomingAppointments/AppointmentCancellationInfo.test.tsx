@@ -35,6 +35,7 @@ context('AppointmentCancellationInfo', () => {
           name: appointmentLocationName,
           phone: phoneData,
         },
+        cancelId: '12',
       },
     }
 
