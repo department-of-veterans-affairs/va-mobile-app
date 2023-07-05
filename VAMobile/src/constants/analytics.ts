@@ -234,6 +234,19 @@ export const Events = {
       },
     }
   },
+  vama_claim_details_ttv: (claim_id: string, claim_type: string, claim_step: number, claim_step_change: string, claim_submitted_date: string, ttv_claim_details: number): Event => {
+    return {
+      name: 'vama_claim_details_ttv',
+      params: {
+        claim_id,
+        claim_type,
+        claim_step,
+        claim_step_change,
+        claim_submitted_date,
+        ttv_claim_details,
+      },
+    }
+  },
   vama_claim_disag: (claim_id: string, claim_type: string, claim_step: number): Event => {
     return {
       name: 'vama_claim_disag',

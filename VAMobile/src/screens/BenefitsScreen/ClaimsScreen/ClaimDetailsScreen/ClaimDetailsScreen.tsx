@@ -7,7 +7,7 @@ import { BackButton, Box, ErrorComponent, FeatureLandingTemplate, LoadingCompone
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
-import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
+import { ClaimsAndAppealsState, getClaim, trackClaimDetailsTime } from 'store/slices/claimsAndAppealsSlice'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -33,7 +33,6 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
 
   const controlValues = [t('claimDetails.status'), t('claimDetails.details')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
-  const [loggedEvent, setLoggedEvent] = useState(false)
 
   const { claimID, claimType, focusOnSnackbar } = route.params
   const { claim, loadingClaim, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
@@ -41,6 +40,9 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
 
   useBeforeNavBackListener(navigation, () => {
+    // track how long user was on this screen
+    dispatch(trackClaimDetailsTime())
+
     // if claim is still loading cancel it
     if (loadingClaim) {
       cancelLoadingDetailScreen?.abort()
@@ -66,13 +68,6 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   useEffect(() => {
     dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
   }, [dispatch, claimID])
-
-  useEffect(() => {
-    if (claimID === claim?.id && !loggedEvent) {
-      logAnalyticsEvent(Events.vama_claim_details_open(claim.id, attributes.claimType, attributes.phase, attributes.phaseChangeDate || '', attributes.dateFiled))
-      setLoggedEvent(true)
-    }
-  }, [claimID, claim, attributes, loggedEvent])
 
   const backLabel = featureEnabled('decisionLettersWaygate') ? t('claimsHistory.title') : t('claims.title')
 
