@@ -2,11 +2,25 @@
 
 ## The request lifecycle
 
-The vets-api mobile endpoints generally follow the pattern that can be roughly broken up into the following sections.
+The vets-api mobile endpoints generally follow the following pattern:
+- request is received and routed to the controller
+- the controller verifies the validity of the user's bearer token
+- the controller runs any other necessary validations, such as confirming the user has access to the content and that parameters make sense.
+- the controller then uses service objects to communicate with other servers in the vets-api ecosystem
+- those service objects may perform their own validations. These will generally be the same as the ones performed in the controller but may occasionally be different.
+- the service object makes the request
+- the upstream server processes that request and either responds or times out
+- the the service object processes the response.
+- when the request fails (status is >= 400), the service objects will raise corresponding errors. These errors are handled by the controller's `ExceptionHandling` module (link to below).
+- when the request is successful (status is < 400), this usually involves mapping the response data to a vets-api model but may at times involve more complex processing.
+- the data is then returned to the controller.
+- the controller then performs any additional modifications that are necessary, serializes the data, and returns it to the client with an appropriate status code.
 
-## Mobile controller before upstream request
+Errors can arise during any part of the lifecycle.
 
-When mobile requests are received by the vets-api, they're routed to controllers in the mobile module, which can include data access checks and request validations that can return errors. The mobile code then utilizes outbound service objects to communicate with upstream services. These service objects can also impose their own validity and access checks. In general, those will match ours because ours are generally written to match theirs, but it's also possible for those validations to drift due to code changes in the outbound services objects and due to mobile-specific business requirements that may cause us to add different validations. This is an area where the vets-api's lack of centralization prevents a more robust solution that prevents this drift through shared validations.
+<!-- ## Mobile controller before upstream request
+
+When mobile requests are received by the vets-api, they're routed to controllers in the mobile module, which can include data access checks and request validations that can return errors. The mobile code then utilizes outbound service objects to communicate with upstream services. These service objects can also impose their own validity and access checks. In general, those will match ours because ours are generally written to match theirs, but it's also possible for those validations to drift due to code changes in the outbound services objects and due to mobile-specific business requirements that may cause us to add different validations. This is an area where the vets-api's lack of centralization prevents a more robust solution that prevents this drift through shared validations. -->
 
 
 ## Outbound Service Objects and Upstream Servers
