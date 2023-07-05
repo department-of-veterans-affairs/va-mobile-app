@@ -13,11 +13,10 @@ When mobile requests are received by the vets-api, they're routed to controllers
 
 The mobile controllers use a variety of service objects to communicate with upstream servers. Those service objects consist of two parts:
 
-1. the service itself. These are subclasses of `Common::Client::Base`. That class is intended to provide a common interface through which all upstream requests are made. This makes it relatively easy to add new service objects that will behave predictably and handle common errors.
+1. the configuration. Each of those service objects must also define a configuration, which must be a subclass of `Common::Client::Configuration`. The configuration is primarily responsible for setting values necessary for connecting to the upstream–such as URLs and api keys–and for establishing that connection. It also adds a variety of plugs that requests and responses are processed. Some of these plugs are very simple built-ins, such as the json plug used to process the response as json and the snakecase plug used to specify that the response keys will be in snakecase format. Other plugs are custom-written within the vets-api and can raise or modify errors.
 
-2. the configuration. Each of those service objects must also define a configuration, which must be a subclass of `Common::Client::Configuration`.
+2. the service itself. These are subclasses of `Common::Client::Base`. That class is intended to provide a common interface through which all upstream requests are made. This makes it relatively easy to add new service objects that will behave predictably and handle common errors. The service object is responsible for using the connection created by the configuration to make upstream requests and for processing the response. These often process the response by modifying status codes and by adapting data to models.
 
-The configuration is primarily responsible for making a connection to the upstream service using values, such as URLs and api keys, defined within the configuration file. The service object is responsible for using that connection to make upstream requests and for processing the response. Both can have a role in error handling.
 
 ## Outbound Requests, Integrated Error Handling, and Deep Coupling
 
