@@ -165,7 +165,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   }
 
   const fileRequestsPress = () => {
-    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, attributes.phase))
+    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, numberOfRequests))
     navigateTo('FileRequest', { claimID })()
   }
 

@@ -25,6 +25,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
@@ -43,6 +44,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const navigateToClaimsDetailsPage = submittedDecision && !error
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
   const claimType = isClosedClaim ? ClaimTypeConstants.CLOSED : ClaimTypeConstants.ACTIVE
+  const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
   useEffect(() => {
     if (navigateToClaimsDetailsPage) {
@@ -60,14 +62,14 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
 
   const onCancelPress = () => {
     if (claim) {
-      logAnalyticsEvent(Events.vama_claim_eval_cancel(claim.id, claim.attributes.claimType, claim.attributes.phase))
+      logAnalyticsEvent(Events.vama_claim_eval_cancel(claim.id, claim.attributes.claimType, claim.attributes.phase, numberOfRequests))
     }
     navigation.goBack()
   }
 
   const onSelectionChange = (value: boolean) => {
     if (claim && value) {
-      logAnalyticsEvent(Events.vama_claim_eval_check(claim.id, claim.attributes.claimType, claim.attributes.phase))
+      logAnalyticsEvent(Events.vama_claim_eval_check(claim.id, claim.attributes.claimType, numberOfRequests))
     }
     setHaveSubmittedEvidence(value)
   }
@@ -89,14 +91,14 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
 
   const onSubmit = (): void => {
     if (claim) {
-      logAnalyticsEvent(Events.vama_claim_eval_submit(claim.id, claim.attributes.claimType, claim.attributes.phase))
+      logAnalyticsEvent(Events.vama_claim_eval_submit(claim.id, claim.attributes.claimType, numberOfRequests))
     }
     dispatch(submitClaimDecision(claimID, ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID))
   }
 
   const onRequestEvaluation = (): void => {
     if (claim) {
-      logAnalyticsEvent(Events.vama_claim_eval_conf(claim.id, claim.attributes.claimType, claim.attributes.phase))
+      logAnalyticsEvent(Events.vama_claim_eval_conf(claim.id, claim.attributes.claimType, numberOfRequests))
     }
     requestEvalAlert({
       title: t('askForClaimDecision.alertTitle'),

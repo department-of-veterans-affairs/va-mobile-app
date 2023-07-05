@@ -267,63 +267,65 @@ export const Events = {
       },
     }
   },
-  vama_claim_eval: (claim_id: string, claim_type: string, claim_step: number): Event => {
+  vama_claim_eval: (claim_id: string, claim_type: string, claim_step: number, num_requests: number): Event => {
     return {
       name: 'vama_claim_eval',
       params: {
         claim_id,
         claim_type,
         claim_step,
+        num_requests,
       },
     }
   },
-  vama_claim_eval_cancel: (claim_id: string, claim_type: string, claim_step: number): Event => {
+  vama_claim_eval_cancel: (claim_id: string, claim_type: string, claim_step: number, num_requests: number): Event => {
     return {
       name: 'vama_claim_eval_cancel',
       params: {
         claim_id,
         claim_type,
         claim_step,
+        num_requests,
       },
     }
   },
-  vama_claim_eval_check: (claim_id: string, claim_type: string, claim_step: number): Event => {
+  vama_claim_eval_check: (claim_id: string, claim_type: string, num_requests: number): Event => {
     return {
       name: 'vama_claim_eval_check',
       params: {
         claim_id,
         claim_type,
-        claim_step,
+        num_requests,
       },
     }
   },
-  vama_claim_eval_conf: (claim_id: string, claim_type: string, claim_step: number): Event => {
+  vama_claim_eval_conf: (claim_id: string, claim_type: string, num_requests: number): Event => {
     return {
       name: 'vama_claim_eval_conf',
       params: {
         claim_id,
         claim_type,
-        claim_step,
+        num_requests,
       },
     }
   },
-  vama_claim_eval_submit: (claim_id: string, claim_type: string, claim_step: number): Event => {
+  vama_claim_eval_submit: (claim_id: string, claim_type: string, num_requests: number): Event => {
     return {
       name: 'vama_claim_eval_submit',
       params: {
         claim_id,
         claim_type,
-        claim_step,
+        num_requests,
       },
     }
   },
-  vama_claim_review: (claim_id: string, claim_type: string, claim_step: number): Event => {
+  vama_claim_review: (claim_id: string, claim_type: string, num_requests: number): Event => {
     return {
       name: 'vama_claim_review',
       params: {
         claim_id,
         claim_type,
-        claim_step,
+        num_requests,
       },
     }
   },

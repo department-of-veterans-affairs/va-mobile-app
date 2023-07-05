@@ -69,7 +69,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
 
   const viewEvaluationDetailsPress = () => {
     if (claim) {
-      logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase))
+      logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, numberOfRequests))
     }
     navigateTo('AskForClaimDecision', { claimID })()
   }
