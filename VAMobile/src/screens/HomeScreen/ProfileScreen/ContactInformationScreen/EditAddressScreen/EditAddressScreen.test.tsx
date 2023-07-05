@@ -55,7 +55,6 @@ jest.mock('store/slices', () => {
   }
 })
 
-const mockActionSheetSpy = jest.fn()
 const mockAlertSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
@@ -63,7 +62,7 @@ jest.mock('utils/hooks', () => {
   const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useDestructiveActionSheet: () => mockActionSheetSpy,
+    useDestructiveActionSheet: () => mockAlertSpy,
   }
 })
 

@@ -150,7 +150,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   useBeforeNavBackListener(navigation, (e) => {
     // if saving still when canceling then abort
-    console.debug('==== useBeforeNavBackListener ====')
     if (savingAddress) {
       validateAddressAbortController?.abort()
     }
