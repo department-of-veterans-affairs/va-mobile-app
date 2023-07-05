@@ -262,7 +262,7 @@ export const getThread =
     dispatch(dispatchStartGetThread())
 
     try {
-      const response = await api.get<SecureMessagingThreadGetData>(`/v1/messaging/health/messages/${messageID}/thread`)
+      const response = await api.get<SecureMessagingThreadGetData>(`/v0/messaging/health/messages/${messageID}/thread`)
       dispatch(dispatchFinishGetThread({ threadData: response, messageID }))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
     } catch (error) {

@@ -120,7 +120,7 @@ context('secureMessaging', () => {
               messageId: 1, // ID of the message you just read
               category: 'COVID',
               subject: '',
-              hasAttachments: false,
+              attachment: false,
               sentDate: '1/1/2021',
               senderId: 200,
               senderName: 'Alana P.',
@@ -256,7 +256,7 @@ context('secureMessaging', () => {
               messageId: 1, // ID of the message you just read
               category: 'COVID',
               subject: '',
-              hasAttachments: false,
+              attachment: false,
               sentDate: '1/1/2021',
               senderId: 200,
               senderName: 'Alana P.',
