@@ -6,17 +6,104 @@ import { Event, UserAnalytic } from 'utils/analytics'
  */
 /*eslint id-length: ["error", { "max": 24 }]*/
 export const Events = {
+  vama_appt_cancel: (isPendingAppointment: boolean): Event => {
+    return {
+      name: 'vama_appt_cancel',
+      params: {
+        isPending: isPendingAppointment,
+      },
+    }
+  },
+  vama_appt_view_details: (isPendingAppointment: boolean): Event => {
+    return {
+      name: 'vama_appt_view_details',
+      params: {
+        isPending: isPendingAppointment,
+      },
+    }
+  },
+  // Issue#2273 Track appointment pagination discrepancies
+  vama_appts_page_warning: (): Event => {
+    return {
+      name: 'vama_appts_page_warning',
+    }
+  },
   vama_auth_completed: (): Event => {
     return {
       name: 'vama_auth_completed',
     }
   },
-  vama_login_closed: (isSIS = false): Event => {
+  vama_claim_file_request: (): Event => {
     return {
-      name: 'vama_login_closed',
+      name: 'vama_claim_file_request',
+    }
+  },
+  vama_claim_step_three: (): Event => {
+    return {
+      name: 'vama_claim_step_three',
+    }
+  },
+  vama_claim_upload_compl: (): Event => {
+    return {
+      name: 'vama_claim_upload_compl',
+    }
+  },
+  vama_claim_upload_fail: (): Event => {
+    return {
+      name: 'vama_claim_upload_fail',
+    }
+  },
+  vama_claim_upload_start: (): Event => {
+    return {
+      name: 'vama_claim_upload_start',
+    }
+  },
+  vama_covid_links: (referringScreen: string): Event => {
+    return {
+      name: 'vama_covid_links',
       params: {
-        sis: isSIS.toString(),
+        referringScreen,
       },
+    }
+  },
+  vama_ddl_button_shown: (): Event => {
+    return {
+      name: 'vama_ddl_button_shown',
+    }
+  },
+  vama_ddl_landing_click: (): Event => {
+    return {
+      name: 'vama_ddl_landing_click',
+    }
+  },
+  vama_ddl_letter_view: (): Event => {
+    return {
+      name: 'vama_ddl_letter_view',
+    }
+  },
+  vama_ddl_status_click: (): Event => {
+    return {
+      name: 'vama_ddl_status_click',
+    }
+  },
+  vama_eu_skipped: (): Event => {
+    return {
+      name: 'vama_eu_skipped',
+    }
+  },
+  vama_eu_shown: (): Event => {
+    return {
+      name: 'vama_eu_shown',
+    }
+  },
+  vama_eu_updated: (): Event => {
+    return {
+      name: 'vama_eu_updated',
+    }
+  },
+  vama_eu_updated_success: (): Event => {
+    return {
+      name: 'vama_eu_updated_success',
     }
   },
   vama_exchange_failed: (): Event => {
@@ -29,6 +116,23 @@ export const Events = {
       name: 'vama_letter_download',
       params: {
         letterName,
+      },
+    }
+  },
+  vama_login_closed: (isSIS = false): Event => {
+    return {
+      name: 'vama_login_closed',
+      params: {
+        sis: isSIS.toString(),
+      },
+    }
+  },
+  vama_login_fail: (error: Error, isSIS = false): Event => {
+    return {
+      name: 'vama_login_fail',
+      params: {
+        error: JSON.stringify(error),
+        sis: isSIS.toString(),
       },
     }
   },
@@ -48,13 +152,422 @@ export const Events = {
       },
     }
   },
-  vama_login_fail: (error: Error, isSIS = false): Event => {
+  vama_gender_id_fail: (): Event => {
     return {
-      name: 'vama_login_fail',
+      name: 'vama_gender_id_fail',
+    }
+  },
+  vama_gender_id_help: (): Event => {
+    return {
+      name: 'vama_gender_id_help',
+    }
+  },
+  vama_gender_id_success: (): Event => {
+    return {
+      name: 'vama_gender_id_success',
+    }
+  },
+  vama_pref_name_fail: (): Event => {
+    return {
+      name: 'vama_pref_name_fail',
+    }
+  },
+  vama_pref_name_success: (): Event => {
+    return {
+      name: 'vama_pref_name_success',
+    }
+  },
+  vama_prof_update_address: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_prof_update_address',
       params: {
-        error: JSON.stringify(error),
-        sis: isSIS.toString(),
+        totalTime,
+        actionTime,
       },
+    }
+  },
+  vama_prof_update_email: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_prof_update_email',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
+  vama_prof_update_gender: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_prof_update_gender',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
+  vama_prof_update_phone: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_prof_update_phone',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
+  vama_rx_cerner_exp: (rx_ids: string[]): Event => {
+    return {
+      name: 'vama_rx_cerner_exp ',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_cerner_nav: (): Event => {
+    return {
+      name: 'vama_rx_cerner_nav',
+    }
+  },
+  vama_rx_cerner_nav_conf: (): Event => {
+    return {
+      name: 'vama_rx_cerner_nav_conf',
+    }
+  },
+  vama_rx_cerner_ph: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_cerner_ph ',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_cerner_ph_conf: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_cerner_ph_conf ',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_cerner_tty: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_cerner_tty ',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_cerner_tty_conf: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_cerner_tty_conf ',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_det_open_tt: (pages_touched: number, totalTime: number): Event => {
+    return {
+      name: 'vama_rx_det_open_tt',
+      params: {
+        pages_touched: pages_touched,
+        totalTime: totalTime,
+      },
+    }
+  },
+  vama_rx_details: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_details ',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_help: (): Event => {
+    return {
+      name: 'vama_rx_help',
+    }
+  },
+  vama_rx_facility_ph: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_facility_ph ',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_facility_tty: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_facility_tty ',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_fail: (): Event => {
+    return {
+      name: 'vama_rx_fail',
+    }
+  },
+  vama_rx_fail_ph: (): Event => {
+    return {
+      name: 'vama_rx_fail_ph',
+    }
+  },
+  vama_rx_fail_ph_conf: (): Event => {
+    return {
+      name: 'vama_rx_fail_ph_conf',
+    }
+  },
+  vama_rx_fail_ph_x: (): Event => {
+    return {
+      name: 'vama_rx_fail_ph_x',
+    }
+  },
+  vama_rx_fail_refresh: (): Event => {
+    return {
+      name: 'vama_rx_fail_refresh',
+    }
+  },
+  vama_rx_fail_tty: (): Event => {
+    return {
+      name: 'vama_rx_fail_tty',
+    }
+  },
+  vama_rx_fail_tty_conf: (): Event => {
+    return {
+      name: 'vama_rx_fail_tty_conf',
+    }
+  },
+  vama_rx_fail_tty_x: (): Event => {
+    return {
+      name: 'vama_rx_fail_tty_x',
+    }
+  },
+  vama_rx_filter: (): Event => {
+    return {
+      name: 'vama_rx_filter',
+    }
+  },
+  vama_rx_filter_sel: (filter: string): Event => {
+    return {
+      name: 'vama_rx_filter_sel',
+      params: {
+        filter,
+      },
+    }
+  },
+  vama_rx_first_refill_ttc: (totalTime: number): Event => {
+    return {
+      name: 'vama_rx_first_refill_ttc',
+      params: {
+        totalTime: totalTime,
+      },
+    }
+  },
+  vama_rx_myva_nav: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_myva_nav ',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_myva_nav_conf: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_myva_nav_conf ',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_na: (): Event => {
+    return {
+      name: 'vama_rx_na',
+    }
+  },
+  vama_rx_na_ph: (): Event => {
+    return {
+      name: 'vama_rx_na_ph',
+    }
+  },
+  vama_rx_na_ph_conf: (): Event => {
+    return {
+      name: 'vama_rx_na_ph_conf',
+    }
+  },
+  vama_rx_na_tty: (): Event => {
+    return {
+      name: 'vama_rx_na_tty',
+    }
+  },
+  vama_rx_na_tty_conf: (): Event => {
+    return {
+      name: 'vama_rx_na_tty_conf',
+    }
+  },
+  vama_rx_noauth: (): Event => {
+    return {
+      name: 'vama_rx_noauth',
+    }
+  },
+  vama_rx_noauth_ph: (): Event => {
+    return {
+      name: 'vama_rx_noauth_ph',
+    }
+  },
+  vama_rx_noauth_ph_conf: (): Event => {
+    return {
+      name: 'vama_rx_noauth_ph_conf',
+    }
+  },
+  vama_rx_noauth_ph_x: (): Event => {
+    return {
+      name: 'vama_rx_noauth_ph_x',
+    }
+  },
+  vama_rx_noauth_tty: (): Event => {
+    return {
+      name: 'vama_rx_noauth_tty',
+    }
+  },
+  vama_rx_noauth_tty_conf: (): Event => {
+    return {
+      name: 'vama_rx_noauth_tty_conf',
+    }
+  },
+  vama_rx_noauth_tty_x: (): Event => {
+    return {
+      name: 'vama_rx_noauth_tty_x',
+    }
+  },
+  vama_rx_pagination: (pages: number, to_page: number, tab: string): Event => {
+    return {
+      name: 'vama_rx_pagination',
+      params: {
+        pages: pages,
+        to_page: to_page,
+        tab: tab,
+      },
+    }
+  },
+  vama_rx_pendingtab: (): Event => {
+    return {
+      name: 'vama_rx_pendingtab',
+    }
+  },
+  vama_rx_refill_cerner: (): Event => {
+    return {
+      name: 'vama_rx_refill_cerner',
+    }
+  },
+  vama_rx_refill_fail: (rx_ids: string[]): Event => {
+    return {
+      name: 'vama_rx_refill_fail',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_refill_retry: (rx_ids: string[]): Event => {
+    return {
+      name: 'vama_rx_refill_retry',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_refill_success: (rx_ids: string[]): Event => {
+    return {
+      name: 'vama_rx_refill_success',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_request_cancel: (rx_ids: string[]): Event => {
+    return {
+      name: 'vama_rx_request_cancel ',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_request_confirm: (rx_ids: string[]): Event => {
+    return {
+      name: 'vama_rx_request_confirm',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_request_start: (rx_ids: string[]): Event => {
+    return {
+      name: 'vama_rx_request_start',
+      params: {
+        rx_ids: rx_ids,
+      },
+    }
+  },
+  vama_rx_select_all: (): Event => {
+    return {
+      name: 'vama_rx_select_all',
+    }
+  },
+  vama_rx_sort: (): Event => {
+    return {
+      name: 'vama_rx_sort',
+    }
+  },
+  vama_rx_sort_sel: (sort: string): Event => {
+    return {
+      name: 'vama_rx_sort_sel',
+      params: {
+        sort,
+      },
+    }
+  },
+  vama_rx_status: (status: string, ttv: number): Event => {
+    return {
+      name: 'vama_rx_status',
+      params: {
+        status: status,
+        ttv: ttv,
+      },
+    }
+  },
+  vama_rx_trackdet: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_trackdet',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_trackdetnum: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_trackdetnum',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_trackdetnum_conf: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_trackdetnum_conf',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_trackdet_close: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_trackdet_close',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_trackingtab: (): Event => {
+    return {
+      name: 'vama_rx_trackingtab',
     }
   },
   vama_sm_change_category: (messageCategory: CategoryTypes, previousCategory: CategoryTypes): Event => {
@@ -86,14 +599,6 @@ export const Events = {
       },
     }
   },
-  vama_ttv_cap_details: (totalTime: number): Event => {
-    return {
-      name: 'vama_ttv_cap_details',
-      params: {
-        totalTime,
-      },
-    }
-  },
   vama_ttv_appt_details: (totalTime: number): Event => {
     return {
       name: 'vama_ttv_appt_details',
@@ -102,65 +607,12 @@ export const Events = {
       },
     }
   },
-  vama_prof_update_phone: (totalTime: number, actionTime: number): Event => {
+  vama_ttv_cap_details: (totalTime: number): Event => {
     return {
-      name: 'vama_prof_update_phone',
+      name: 'vama_ttv_cap_details',
       params: {
         totalTime,
-        actionTime,
       },
-    }
-  },
-  vama_prof_update_email: (totalTime: number, actionTime: number): Event => {
-    return {
-      name: 'vama_prof_update_email',
-      params: {
-        totalTime,
-        actionTime,
-      },
-    }
-  },
-  vama_prof_update_address: (totalTime: number, actionTime: number): Event => {
-    return {
-      name: 'vama_prof_update_address',
-      params: {
-        totalTime,
-        actionTime,
-      },
-    }
-  },
-  vama_prof_update_gender: (totalTime: number, actionTime: number): Event => {
-    return {
-      name: 'vama_prof_update_gender',
-      params: {
-        totalTime,
-        actionTime,
-      },
-    }
-  },
-  vama_pref_name_success: (): Event => {
-    return {
-      name: 'vama_pref_name_success',
-    }
-  },
-  vama_pref_name_fail: (): Event => {
-    return {
-      name: 'vama_pref_name_fail',
-    }
-  },
-  vama_gender_id_success: (): Event => {
-    return {
-      name: 'vama_gender_id_success',
-    }
-  },
-  vama_gender_id_fail: (): Event => {
-    return {
-      name: 'vama_gender_id_fail',
-    }
-  },
-  vama_gender_id_help: (): Event => {
-    return {
-      name: 'vama_gender_id_help',
     }
   },
   vama_update_dir_dep: (totalTime: number, actionTime: number): Event => {
@@ -172,51 +624,6 @@ export const Events = {
       },
     }
   },
-  vama_claim_step_three: (): Event => {
-    return {
-      name: 'vama_claim_step_three',
-    }
-  },
-  vama_claim_file_request: (): Event => {
-    return {
-      name: 'vama_claim_file_request',
-    }
-  },
-  vama_claim_upload_start: (): Event => {
-    return {
-      name: 'vama_claim_upload_start',
-    }
-  },
-  vama_claim_upload_compl: (): Event => {
-    return {
-      name: 'vama_claim_upload_compl',
-    }
-  },
-  vama_claim_upload_fail: (): Event => {
-    return {
-      name: 'vama_claim_upload_fail',
-    }
-  },
-  vama_ddl_button_shown: (): Event => {
-    return {
-      name: 'vama_ddl_button_shown',
-    }
-  },
-  vama_ddl_status_click: (): Event => {
-    return {
-      name: 'vama_ddl_status_click',
-    }
-  },
-  vama_ddl_landing_click: (): Event => {
-    return {
-      name: 'vama_ddl_landing_click',
-    }
-  },
-  vama_ddl_letter_view: (): Event => {
-    return {
-      name: 'vama_ddl_letter_view',
-    }
-  },
   vama_vaccine_details: (groupName: string): Event => {
     return {
       name: 'vama_vaccine_details',
@@ -225,151 +632,9 @@ export const Events = {
       },
     }
   },
-  vama_covid_links: (referringScreen: string): Event => {
+  vama_whatsnew_alert: (): Event => {
     return {
-      name: 'vama_covid_links',
-      params: {
-        referringScreen,
-      },
-    }
-  },
-  // Issue#2273 Track appointment pagination discrepancies
-  vama_appts_page_warning: (): Event => {
-    return {
-      name: 'vama_appts_page_warning',
-    }
-  },
-  vama_appt_view_details: (isPendingAppointment: boolean): Event => {
-    return {
-      name: 'vama_appt_view_details',
-      params: {
-        isPending: isPendingAppointment,
-      },
-    }
-  },
-  vama_appt_cancel: (isPendingAppointment: boolean): Event => {
-    return {
-      name: 'vama_appt_cancel',
-      params: {
-        isPending: isPendingAppointment,
-      },
-    }
-  },
-  vama_rx_refill_success: (rx_ids: string[]): Event => {
-    return {
-      name: 'vama_rx_refill_success',
-      params: {
-        rx_ids: rx_ids,
-      },
-    }
-  },
-  vama_rx_refill_fail: (rx_ids: string[]): Event => {
-    return {
-      name: 'vama_rx_refill_fail',
-      params: {
-        rx_ids: rx_ids,
-      },
-    }
-  },
-  vama_rx_refill_retry: (rx_ids: string[]): Event => {
-    return {
-      name: 'vama_rx_refill_retry',
-      params: {
-        rx_ids: rx_ids,
-      },
-    }
-  },
-  vama_rx_request_start: (rx_ids: string[]): Event => {
-    return {
-      name: 'vama_rx_request_start',
-      params: {
-        rx_ids: rx_ids,
-      },
-    }
-  },
-  vama_rx_request_confirm: (rx_ids: string[]): Event => {
-    return {
-      name: 'vama_rx_request_confirm',
-      params: {
-        rx_ids: rx_ids,
-      },
-    }
-  },
-  vama_rx_request_cancel: (rx_ids: string[]): Event => {
-    return {
-      name: 'vama_rx_request_cancel ',
-      params: {
-        rx_ids: rx_ids,
-      },
-    }
-  },
-  vama_rx_details: (rx_id: string): Event => {
-    return {
-      name: 'vama_rx_details ',
-      params: {
-        rx_id: rx_id,
-      },
-    }
-  },
-  vama_rx_filter: (): Event => {
-    return {
-      name: 'vama_rx_filter',
-    }
-  },
-  vama_rx_filter_sel: (filter: string): Event => {
-    return {
-      name: 'vama_rx_filter_sel',
-      params: {
-        filter,
-      },
-    }
-  },
-  vama_rx_sort: (): Event => {
-    return {
-      name: 'vama_rx_sort',
-    }
-  },
-  vama_rx_sort_sel: (sort: string): Event => {
-    return {
-      name: 'vama_rx_sort_sel',
-      params: {
-        sort,
-      },
-    }
-  },
-  vama_rx_pendingtab: (): Event => {
-    return {
-      name: 'vama_rx_pendingtab',
-    }
-  },
-  vama_rx_trackingtab: (): Event => {
-    return {
-      name: 'vama_rx_trackingtab',
-    }
-  },
-  vama_eu_shown: (): Event => {
-    return {
-      name: 'vama_eu_shown',
-    }
-  },
-  vama_eu_skipped: (): Event => {
-    return {
-      name: 'vama_eu_skipped',
-    }
-  },
-  vama_eu_updated_success: (): Event => {
-    return {
-      name: 'vama_eu_updated_success',
-    }
-  },
-  vama_eu_updated: (): Event => {
-    return {
-      name: 'vama_eu_updated',
-    }
-  },
-  vama_whatsnew_more: (): Event => {
-    return {
-      name: 'vama_whatsnew_more',
+      name: 'vama_whatsnew_alert',
     }
   },
   vama_whatsnew_close: (): Event => {
@@ -382,9 +647,9 @@ export const Events = {
       name: 'vama_whatsnew_dont_show',
     }
   },
-  vama_whatsnew_alert: (): Event => {
+  vama_whatsnew_more: (): Event => {
     return {
-      name: 'vama_whatsnew_alert',
+      name: 'vama_whatsnew_more',
     }
   },
 }
