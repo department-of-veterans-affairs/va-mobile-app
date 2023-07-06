@@ -59,6 +59,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     totalEntries: totalEntries,
     pageSize: perPage,
     page: currentPage,
+    tab: 'upcoming appointments',
   }
 
   return (

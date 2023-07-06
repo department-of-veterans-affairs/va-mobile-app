@@ -5,7 +5,7 @@ import React, { FC } from 'react'
 import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, VAButton, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { analyticsToLog, logAnalyticsEvent } from 'utils/analytics'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useEffect } from 'react'
 import { useTheme } from 'utils/hooks'
 

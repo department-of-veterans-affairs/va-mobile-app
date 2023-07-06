@@ -349,11 +349,6 @@ export const Events = {
       },
     }
   },
-  vama_rx_select_all: (): Event => {
-    return {
-      name: 'vama_rx_select_all',
-    }
-  },
   vama_rx_sort: (): Event => {
     return {
       name: 'vama_rx_sort',
@@ -384,14 +379,6 @@ export const Events = {
       },
     }
   },
-  vama_rx_trackdetnum: (rx_id: string): Event => {
-    return {
-      name: 'vama_rx_trackdetnum',
-      params: {
-        rx_id: rx_id,
-      },
-    }
-  },
   vama_rx_trackdet_close: (rx_id: string): Event => {
     return {
       name: 'vama_rx_trackdet_close',
@@ -403,6 +390,11 @@ export const Events = {
   vama_rx_trackingtab: (): Event => {
     return {
       name: 'vama_rx_trackingtab',
+    }
+  },
+  vama_select_all: (): Event => {
+    return {
+      name: 'vama_select_all',
     }
   },
   vama_sm_change_category: (messageCategory: CategoryTypes, previousCategory: CategoryTypes): Event => {

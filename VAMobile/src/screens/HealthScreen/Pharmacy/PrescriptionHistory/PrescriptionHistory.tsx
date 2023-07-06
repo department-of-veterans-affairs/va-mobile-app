@@ -350,9 +350,14 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           </Box>
         )
 
-        const bottomOnPress = navigateTo('RefillTrackingModal', { prescription: prescription })
-
-        cardProps = { ...cardProps, bottomContent, bottomOnPress }
+        cardProps = {
+          ...cardProps,
+          bottomContent,
+          bottomOnPress() {
+            logAnalyticsEvent(Events.vama_rx_trackdet(prescription.id))
+            navigation.navigate('RefillTrackingModal', { prescription: prescription })
+          },
+        }
       }
 
       return (
@@ -378,6 +383,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       totalEntries: prescriptions?.length || 0,
       pageSize: pageSize,
       page,
+      tab: currentTab,
     }
 
     return <Pagination {...paginationProps} />
