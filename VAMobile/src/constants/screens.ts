@@ -15,7 +15,7 @@ export const LARGE_PANEL_OPTIONS: StackNavigationOptions = {
   cardOverlayEnabled: true,
   headerStatusBarHeight: 0,
   // Manually set styles for screen readers to prevent a race condition that causes announcements to fail, mainly in VoiceOver
-  ...(store.getState().accessibility.isVoiceOverTalkBackRunning
+  ...(isIOS() && store.getState().accessibility.isVoiceOverTalkBackRunning
     ? {
         ...TransitionPresets.ModalSlideFromBottomIOS,
         cardStyle: { borderRadius: 0, paddingTop: '30%', backgroundColor: theme.colors.background.overlayOpacity },
