@@ -25,3 +25,14 @@ Let's say we wanted to check for any errors in the past week for the endpoint `/
 3. Click on any specific logs you want to view
 
 There are a lot of options for visualizations that you can play around with that may be helpful to your unique searching.
+
+### Worker Logs
+
+If you wanted to search for worker logs, you can paste the following in the `Search for` field:
+
+```
+@application:vets-api-worker @named_tags.class:*ClassNameOfLogger* @message_content:Mobile*
+```
+
+# Links
+- [Lighthouse Upstream Dependencies](https://github.com/department-of-veterans-affairs/leeroy-jenkles/wiki/API-Backend-Systems#api-to-va-backend-mapping)
