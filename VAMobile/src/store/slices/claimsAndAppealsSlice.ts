@@ -417,18 +417,6 @@ export const sendClaimStep3FileRequestAnalytics = (): AppThunk => async () => {
   await logAnalyticsEvent(Events.vama_claim_file_request())
 }
 
-/**
- * Redux action to track time on claim details screen
- */
-export const trackClaimDetailsTime = (): AppThunk => async (dispatch, getState) => {
-  const claim = getState().claimsAndAppeals.claim
-  if (claim) {
-    const { attributes } = claim
-    const [totalTime] = getAnalyticsTimers(getState())
-    await logAnalyticsEvent(Events.vama_claim_details_ttv(claim.id, attributes.claimType, attributes.phase, attributes.phaseChangeDate || '', attributes.dateFiled, totalTime))
-  }
-}
-
 // creates the documents array after submitting a file request
 const createFileRequestDocumentsArray = (
   files: Array<Asset> | Array<DocumentPickerResponse>,

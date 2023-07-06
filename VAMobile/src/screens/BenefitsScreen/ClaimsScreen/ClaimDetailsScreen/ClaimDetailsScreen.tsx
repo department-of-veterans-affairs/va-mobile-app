@@ -1,13 +1,15 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
+import { useFocusEffect } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 
 import { BackButton, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SegmentedControl, TextView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
-import { ClaimsAndAppealsState, getClaim, trackClaimDetailsTime } from 'store/slices/claimsAndAppealsSlice'
+import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -16,7 +18,6 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
@@ -40,9 +41,6 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
 
   useBeforeNavBackListener(navigation, () => {
-    // track how long user was on this screen
-    dispatch(trackClaimDetailsTime())
-
     // if claim is still loading cancel it
     if (loadingClaim) {
       cancelLoadingDetailScreen?.abort()
@@ -68,6 +66,19 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   useEffect(() => {
     dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
   }, [dispatch, claimID])
+
+  // Track how long user maintains focus on this screen
+  useFocusEffect(
+    useCallback(() => {
+      const startTime = Date.now()
+      return () => {
+        if (claim && claim.id === claimID) {
+          const elapsedTime = Date.now() - startTime
+          logAnalyticsEvent(Events.vama_claim_details_ttv(claim.id, attributes.claimType, attributes.phase, attributes.phaseChangeDate || '', attributes.dateFiled, elapsedTime))
+        }
+      }
+    }, [claimID, claim, attributes]),
+  )
 
   const backLabel = featureEnabled('decisionLettersWaygate') ? t('claimsHistory.title') : t('claims.title')
 
