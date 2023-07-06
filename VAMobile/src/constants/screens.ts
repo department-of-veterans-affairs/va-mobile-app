@@ -14,7 +14,7 @@ export const LARGE_PANEL_OPTIONS: StackNavigationOptions = {
   presentation: 'transparentModal',
   cardOverlayEnabled: true,
   headerStatusBarHeight: 0,
-  // Manually set styles for screen readers to prevent a race condition that causes announcements to fail, mainly in VoiceOver
+  // Hardcode card style for VoiceOver to prevent a race condition that causes announcements to fail when using interpolator
   ...(isIOS() && store.getState().accessibility.isVoiceOverTalkBackRunning
     ? {
         ...TransitionPresets.ModalSlideFromBottomIOS,
