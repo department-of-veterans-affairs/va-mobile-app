@@ -126,7 +126,6 @@ context('ViewMessageScreen', () => {
     })
 
     it('renders CollapsibleMessage card for the initialMessage', () => {
-      expect(screen.getAllByRole('none').length).toBe(1)
       expect(screen.getByText('mock sender 3')).toBeTruthy()
     })
 
@@ -134,7 +133,6 @@ context('ViewMessageScreen', () => {
       expect(screen.getAllByRole('tab').length).toBe(3)
       expect(screen.getByText('mock sender 1')).toBeTruthy()
       expect(screen.getByText('mock sender 2')).toBeTruthy()
-      expect(screen.getByText('mock sender 3')).toBeTruthy()
       expect(screen.queryByText('mock sender 45')).toBeFalsy()
 
       //ToDO with 6056 make it not render the initialMessage for collapsible messages

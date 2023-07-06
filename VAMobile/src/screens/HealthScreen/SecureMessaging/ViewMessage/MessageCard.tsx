@@ -123,7 +123,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
 
   return (
     <Box backgroundColor={'contentBox'}>
-      <Box mx={theme.dimensions.gutter} accessibilityRole={'none'}>
+      <Box mx={theme.dimensions.gutter}>
         {getHeader()}
         {getContent()}
         {(hasAttachments || attachment) && getAttachment()}
