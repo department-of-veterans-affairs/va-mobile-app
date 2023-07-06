@@ -180,6 +180,12 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const [currentTab, setCurrentTab] = useState<string>(PrescriptionHistoryTabConstants.ALL)
 
   useEffect(() => {
+    if (hasTransferred) {
+      logAnalyticsEvent(Events.vama_rx_refill_cerner())
+    }
+  }, [hasTransferred])
+
+  useEffect(() => {
     if (startingTab) {
       onTabChange(startingTab)
       navigation.setParams({ startingTab: undefined })
@@ -188,27 +194,6 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   // scrollViewRef is leveraged by renderPagination to reset scroll position to the top on page change
   const scrollViewRef = useRef<ScrollView | null>(null)
-
-  const pressableProps: PressableProps = {
-    onPress: navigateTo('PrescriptionHelp'),
-    accessibilityRole: 'button',
-    accessibilityLabel: t('prescription.help.button.a11yLabel'),
-  }
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: (): ReactNode => (
-        <Pressable {...pressableProps}>
-          <Box px={23} height={theme.dimensions.headerHeight} flexDirection={'row'} alignItems={'center'}>
-            <VAIcon mr={5} preventScaling={true} name="QuestionMark" width={16} height={16} fill={'prescriptionHelper'} fill2={theme.colors.icon.transparent} />
-            <TextView variant="ActionBar" allowFontScaling={false}>
-              {t('prescription.help.button.text')}
-            </TextView>
-          </Box>
-        </Pressable>
-      ),
-    })
-  })
 
   useEffect(() => {
     const filters = getFilterArgsForFilter(filterToUse)
@@ -578,6 +563,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         </>
       ),
       a11yLabel: t('prescription.history.transferred.title'),
+      onExpand() {
+        logAnalyticsEvent(Events.vama_rx_cerner_exp())
+      },
     }
 
     return (
@@ -647,7 +635,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const headerButton = {
     label: tc('help'),
     icon: helpIconProps,
-    onPress: navigateTo('PrescriptionHelp'),
+    onPress: () => {
+      logAnalyticsEvent(Events.vama_rx_help())
+      navigation.navigate('PrescriptionHelp')
+    },
   }
 
   return (

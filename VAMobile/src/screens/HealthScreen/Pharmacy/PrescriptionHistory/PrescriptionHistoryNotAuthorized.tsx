@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useExternalLink, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -14,6 +16,10 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { standardMarginBetween } = theme.dimensions
   const launchExternalLink = useExternalLink()
+
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_rx_noauth())
+  })
 
   const alertWrapperProps: BoxProps = {
     my: standardMarginBetween,

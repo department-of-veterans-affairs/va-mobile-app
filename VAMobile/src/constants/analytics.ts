@@ -111,6 +111,31 @@ export const Events = {
       name: 'vama_exchange_failed',
     }
   },
+  vama_fail: (): Event => {
+    return {
+      name: 'vama_fail',
+    }
+  },
+  vama_fail_refresh: (): Event => {
+    return {
+      name: 'vama_fail_refresh',
+    }
+  },
+  vama_gender_id_fail: (): Event => {
+    return {
+      name: 'vama_gender_id_fail',
+    }
+  },
+  vama_gender_id_help: (): Event => {
+    return {
+      name: 'vama_gender_id_help',
+    }
+  },
+  vama_gender_id_success: (): Event => {
+    return {
+      name: 'vama_gender_id_success',
+    }
+  },
   vama_letter_download: (letterName: string): Event => {
     return {
       name: 'vama_letter_download',
@@ -152,19 +177,14 @@ export const Events = {
       },
     }
   },
-  vama_gender_id_fail: (): Event => {
+  vama_pagination: (pages: number, to_page: number, tab: string): Event => {
     return {
-      name: 'vama_gender_id_fail',
-    }
-  },
-  vama_gender_id_help: (): Event => {
-    return {
-      name: 'vama_gender_id_help',
-    }
-  },
-  vama_gender_id_success: (): Event => {
-    return {
-      name: 'vama_gender_id_success',
+      name: 'vama_pagination',
+      params: {
+        pages: pages,
+        to_page: to_page,
+        tab: tab,
+      },
     }
   },
   vama_pref_name_fail: (): Event => {
@@ -213,54 +233,9 @@ export const Events = {
       },
     }
   },
-  vama_rx_cerner_exp: (rx_ids: string[]): Event => {
+  vama_rx_cerner_exp: (): Event => {
     return {
       name: 'vama_rx_cerner_exp ',
-      params: {
-        rx_ids: rx_ids,
-      },
-    }
-  },
-  vama_rx_cerner_nav: (): Event => {
-    return {
-      name: 'vama_rx_cerner_nav',
-    }
-  },
-  vama_rx_cerner_nav_conf: (): Event => {
-    return {
-      name: 'vama_rx_cerner_nav_conf',
-    }
-  },
-  vama_rx_cerner_ph: (rx_id: string): Event => {
-    return {
-      name: 'vama_rx_cerner_ph ',
-      params: {
-        rx_id: rx_id,
-      },
-    }
-  },
-  vama_rx_cerner_ph_conf: (rx_id: string): Event => {
-    return {
-      name: 'vama_rx_cerner_ph_conf ',
-      params: {
-        rx_id: rx_id,
-      },
-    }
-  },
-  vama_rx_cerner_tty: (rx_id: string): Event => {
-    return {
-      name: 'vama_rx_cerner_tty ',
-      params: {
-        rx_id: rx_id,
-      },
-    }
-  },
-  vama_rx_cerner_tty_conf: (rx_id: string): Event => {
-    return {
-      name: 'vama_rx_cerner_tty_conf ',
-      params: {
-        rx_id: rx_id,
-      },
     }
   },
   vama_rx_det_open_tt: (pages_touched: number, totalTime: number): Event => {
@@ -285,62 +260,6 @@ export const Events = {
       name: 'vama_rx_help',
     }
   },
-  vama_rx_facility_ph: (rx_id: string): Event => {
-    return {
-      name: 'vama_rx_facility_ph ',
-      params: {
-        rx_id: rx_id,
-      },
-    }
-  },
-  vama_rx_facility_tty: (rx_id: string): Event => {
-    return {
-      name: 'vama_rx_facility_tty ',
-      params: {
-        rx_id: rx_id,
-      },
-    }
-  },
-  vama_rx_fail: (): Event => {
-    return {
-      name: 'vama_rx_fail',
-    }
-  },
-  vama_rx_fail_ph: (): Event => {
-    return {
-      name: 'vama_rx_fail_ph',
-    }
-  },
-  vama_rx_fail_ph_conf: (): Event => {
-    return {
-      name: 'vama_rx_fail_ph_conf',
-    }
-  },
-  vama_rx_fail_ph_x: (): Event => {
-    return {
-      name: 'vama_rx_fail_ph_x',
-    }
-  },
-  vama_rx_fail_refresh: (): Event => {
-    return {
-      name: 'vama_rx_fail_refresh',
-    }
-  },
-  vama_rx_fail_tty: (): Event => {
-    return {
-      name: 'vama_rx_fail_tty',
-    }
-  },
-  vama_rx_fail_tty_conf: (): Event => {
-    return {
-      name: 'vama_rx_fail_tty_conf',
-    }
-  },
-  vama_rx_fail_tty_x: (): Event => {
-    return {
-      name: 'vama_rx_fail_tty_x',
-    }
-  },
   vama_rx_filter: (): Event => {
     return {
       name: 'vama_rx_filter',
@@ -362,90 +281,14 @@ export const Events = {
       },
     }
   },
-  vama_rx_myva_nav: (rx_id: string): Event => {
-    return {
-      name: 'vama_rx_myva_nav ',
-      params: {
-        rx_id: rx_id,
-      },
-    }
-  },
-  vama_rx_myva_nav_conf: (rx_id: string): Event => {
-    return {
-      name: 'vama_rx_myva_nav_conf ',
-      params: {
-        rx_id: rx_id,
-      },
-    }
-  },
   vama_rx_na: (): Event => {
     return {
       name: 'vama_rx_na',
     }
   },
-  vama_rx_na_ph: (): Event => {
-    return {
-      name: 'vama_rx_na_ph',
-    }
-  },
-  vama_rx_na_ph_conf: (): Event => {
-    return {
-      name: 'vama_rx_na_ph_conf',
-    }
-  },
-  vama_rx_na_tty: (): Event => {
-    return {
-      name: 'vama_rx_na_tty',
-    }
-  },
-  vama_rx_na_tty_conf: (): Event => {
-    return {
-      name: 'vama_rx_na_tty_conf',
-    }
-  },
   vama_rx_noauth: (): Event => {
     return {
       name: 'vama_rx_noauth',
-    }
-  },
-  vama_rx_noauth_ph: (): Event => {
-    return {
-      name: 'vama_rx_noauth_ph',
-    }
-  },
-  vama_rx_noauth_ph_conf: (): Event => {
-    return {
-      name: 'vama_rx_noauth_ph_conf',
-    }
-  },
-  vama_rx_noauth_ph_x: (): Event => {
-    return {
-      name: 'vama_rx_noauth_ph_x',
-    }
-  },
-  vama_rx_noauth_tty: (): Event => {
-    return {
-      name: 'vama_rx_noauth_tty',
-    }
-  },
-  vama_rx_noauth_tty_conf: (): Event => {
-    return {
-      name: 'vama_rx_noauth_tty_conf',
-    }
-  },
-  vama_rx_noauth_tty_x: (): Event => {
-    return {
-      name: 'vama_rx_noauth_tty_x',
-    }
-  },
-  vama_rx_pagination: (pages: number, to_page: number, tab: string): Event => {
-    return {
-      name: 'vama_rx_pagination',
-      params: {
-        pages: pages,
-        to_page: to_page,
-        tab: tab,
-      },
     }
   },
   vama_rx_pendingtab: (): Event => {
@@ -544,14 +387,6 @@ export const Events = {
   vama_rx_trackdetnum: (rx_id: string): Event => {
     return {
       name: 'vama_rx_trackdetnum',
-      params: {
-        rx_id: rx_id,
-      },
-    }
-  },
-  vama_rx_trackdetnum_conf: (rx_id: string): Event => {
-    return {
-      name: 'vama_rx_trackdetnum_conf',
       params: {
         rx_id: rx_id,
       },

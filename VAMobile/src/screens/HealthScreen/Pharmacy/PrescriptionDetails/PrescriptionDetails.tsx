@@ -139,7 +139,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
     if (refillStatus !== RefillStatusConstants.TRANSFERRED) {
       return <></>
     }
-
+    logAnalyticsEvent(Events.vama_rx_refill_cerner())
     return <PrescriptionsDetailsBanner />
   }
 
