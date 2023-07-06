@@ -177,7 +177,7 @@ export const Events = {
       },
     }
   },
-  vama_pagination: (pages: number, to_page: number, tab: string): Event => {
+  vama_pagination: (pages: number, to_page: number, tab?: string): Event => {
     return {
       name: 'vama_pagination',
       params: {
