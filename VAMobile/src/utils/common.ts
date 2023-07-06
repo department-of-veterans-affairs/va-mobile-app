@@ -408,7 +408,6 @@ export function fullPanelCardStyleInterpolator({ current, inverted }: StackCardI
     inputRange: [0, 1, 1.0001, 2],
     outputRange: [0, 0.3, 0.3, 0.3],
   })
-
   return {
     cardStyle: {
       transform: [{ translateY }],
