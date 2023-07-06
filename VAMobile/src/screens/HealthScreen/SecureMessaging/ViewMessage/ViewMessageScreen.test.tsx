@@ -5,9 +5,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { context, mockNavProps, render } from 'testUtils'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
-import { AccordionCollapsible} from 'components'
 import ViewMessageScreen from './ViewMessageScreen'
-import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 import { DateTime } from 'luxon'
 
 // Contains message Ids grouped together by thread
@@ -128,7 +126,8 @@ context('ViewMessageScreen', () => {
     })
 
     it('renders CollapsibleMessage card for the initialMessage', () => {
-      //ToDo with 6056
+      expect(screen.getAllByRole('none').length).toBe(1)
+      expect(screen.getByText('mock sender 3')).toBeTruthy()
     })
 
     it('renders correct amount of CollapsibleMessages', () => {
