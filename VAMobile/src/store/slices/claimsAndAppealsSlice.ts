@@ -404,13 +404,6 @@ export const fileUploadSuccess = (): AppThunk => async (dispatch) => {
 }
 
 /**
- * Redux action to track when a user is on step 3 of claims
- */
-export const sendClaimStep3Analytics = (): AppThunk => async () => {
-  await logAnalyticsEvent(Events.vama_claim_step_three())
-}
-
-/**
  * Redux action to track when a user is on step 3 of claims and has a file request
  */
 export const sendClaimStep3FileRequestAnalytics = (): AppThunk => async () => {

@@ -336,11 +336,6 @@ export const Events = {
       },
     }
   },
-  vama_claim_step_three: (): Event => {
-    return {
-      name: 'vama_claim_step_three',
-    }
-  },
   vama_claim_file_request: (): Event => {
     return {
       name: 'vama_claim_file_request',

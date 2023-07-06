@@ -10,7 +10,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { getTranslation } from 'utils/formattingUtils'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { sendClaimStep3Analytics, sendClaimStep3FileRequestAnalytics } from 'store/slices/claimsAndAppealsSlice'
+import { sendClaimStep3FileRequestAnalytics } from 'store/slices/claimsAndAppealsSlice'
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -104,12 +104,6 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const heading = getHeading(phase, t)
   const updatedLastDate = phaseLessThanEqualToCurrent ? updatedLast(eventsTimeline, phase) : ''
   const showClaimFileUploadBtn = needItemsFromVet(attributes) && !attributes.waiverSubmitted
-
-  useEffect(() => {
-    if (phase === 3 && current === 3) {
-      dispatch(sendClaimStep3Analytics())
-    }
-  }, [dispatch, phase, current])
 
   useEffect(() => {
     if (phase === 3 && current === 3 && showClaimFileUploadBtn) {
