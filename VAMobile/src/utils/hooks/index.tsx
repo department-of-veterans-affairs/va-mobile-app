@@ -30,6 +30,7 @@ import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureType, DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
+import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
@@ -38,7 +39,6 @@ import { WebProtocolTypesConstants } from 'constants/common'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { isAndroid, isIOS } from 'utils/platform'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
 /**
@@ -196,12 +196,14 @@ export function useIsScreenReaderEnabled(withListener = false): boolean {
  *
  * @returns an alert showing user they are leaving the app
  */
-export function useExternalLink(): (url: string, analyticsProps?: { [key: string]: string | number }) => void {
+export function useExternalLink(): (url: string, eventParams?: EventParams) => void {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  return (url: string, analyticsProps?: { [key: string]: string | number }) => {
+  return (url: string, eventParams?: EventParams) => {
+    logAnalyticsEvent(Events.vama_link_click({ url, ...eventParams }))
+
     const onOKPress = () => {
-      logAnalyticsEvent(Events.vama_link_confirm({ url, ...analyticsProps }))
+      logAnalyticsEvent(Events.vama_link_confirm({ url, ...eventParams }))
       return Linking.openURL(url)
     }
 

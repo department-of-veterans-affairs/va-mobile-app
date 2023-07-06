@@ -1,5 +1,5 @@
 import { CategoryTypes } from 'store/api'
-import { Event, UserAnalytic } from 'utils/analytics'
+import { Event, EventParams, UserAnalytic } from 'utils/analytics'
 
 /**
  * Firebase strings have to be less than 24 chars or it doesn't go through. this lint rule enforces that.
@@ -19,7 +19,13 @@ export const Events = {
       },
     }
   },
-  vama_link_confirm: (params: { [key: string]: string | number }): Event => {
+  vama_link_click: (params: EventParams): Event => {
+    return {
+      name: 'vama_link_click',
+      params,
+    }
+  },
+  vama_link_confirm: (params: EventParams): Event => {
     return {
       name: 'vama_link_confirm',
       params,
@@ -250,16 +256,6 @@ export const Events = {
   vama_claim_disag: (claim_id: string, claim_type: string, claim_step: number): Event => {
     return {
       name: 'vama_claim_disag',
-      params: {
-        claim_id,
-        claim_type,
-        claim_step,
-      },
-    }
-  },
-  vama_claim_disaglink: (claim_id: string, claim_type: string, claim_step: number): Event => {
-    return {
-      name: 'vama_claim_disaglink',
       params: {
         claim_id,
         claim_type,

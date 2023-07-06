@@ -4,9 +4,11 @@ import { isErrorObject } from './common'
 import analytics from '@react-native-firebase/analytics'
 import crashlytics from '@react-native-firebase/crashlytics'
 
+export type EventParams = { [key: string]: unknown }
+
 export type Event = {
   name: string
-  params?: undefined | { [key: string]: unknown }
+  params?: EventParams
 }
 
 export type UserAnalytic = {

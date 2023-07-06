@@ -4,10 +4,8 @@ import React, { FC } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, LargePanel, TextView } from 'components'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { useExternalLink, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -22,7 +20,6 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ route }) =>
   const { claimID, claimType, claimStep } = route.params
 
   const onDecisionReview = async (): Promise<void> => {
-    logAnalyticsEvent(Events.vama_claim_disaglink(claimID, claimType, claimStep))
     launchExternalLink(LINK_URL_DECISION_REVIEWS, { claim_id: claimID, claim_type: claimType, claim_step: claimStep })
   }
 
