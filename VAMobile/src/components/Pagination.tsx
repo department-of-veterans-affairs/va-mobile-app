@@ -79,13 +79,11 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
   }
 
   const onPrevPress = () => {
-    console.debug('prevPressed')
     logAnalyticsEvent(Events.vama_pagination(page, page - 1, tab))
     onPrev()
   }
 
   const onNextPress = () => {
-    console.debug('nextPressed')
     logAnalyticsEvent(Events.vama_pagination(page, page + 1, tab))
     onNext()
   }
