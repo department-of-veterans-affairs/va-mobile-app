@@ -181,7 +181,7 @@ const call = async function <T>(
         json = {}
       }
 
-      throw { status: response.status, text, json }
+      throw { status: response.status, endpoint, text, json }
     }
 
     // No errors found, return the response

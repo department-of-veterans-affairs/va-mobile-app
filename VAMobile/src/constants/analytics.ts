@@ -384,6 +384,18 @@ export const Events = {
       },
     }
   },
+  vama_error: (errorName: string, errorMessage: string, callStack?: string, statusCode?: number, endpoint?: string): Event => {
+    return {
+      name: 'vama_error',
+      params: {
+        errorName,
+        errorMessage,
+        callStack,
+        statusCode,
+        endpoint,
+      },
+    }
+  },
   vama_evidence_cancel_1: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
     return {
       name: 'vama_claim_cancel_1',
