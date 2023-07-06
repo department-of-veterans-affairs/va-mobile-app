@@ -8,7 +8,7 @@ The vets-api mobile endpoints generally follow the following pattern:
 - the controller runs any other necessary validations, such as confirming the user has access to the content and that parameters make sense.
 - the controller then uses service objects to communicate with other servers in the vets-api ecosystem
 - those service objects may perform their own validations. These will generally be the same as the ones performed in the controller but may occasionally be different.
-- the service object makes the request
+- the service object makes the upstream request
 - the upstream server processes that request and either responds or times out
 - the the service object processes the response.
 - when the request fails (status is >= 400), the service objects will raise corresponding errors. These errors are handled by the controller's `ExceptionHandling` module (link to below).
@@ -18,34 +18,13 @@ The vets-api mobile endpoints generally follow the following pattern:
 
 Errors can arise during any part of the lifecycle.
 
-<!-- ## Mobile controller before upstream request
-
-When mobile requests are received by the vets-api, they're routed to controllers in the mobile module, which can include data access checks and request validations that can return errors. The mobile code then utilizes outbound service objects to communicate with upstream services. These service objects can also impose their own validity and access checks. In general, those will match ours because ours are generally written to match theirs, but it's also possible for those validations to drift due to code changes in the outbound services objects and due to mobile-specific business requirements that may cause us to add different validations. This is an area where the vets-api's lack of centralization prevents a more robust solution that prevents this drift through shared validations. -->
-
-
 ## Outbound Service Objects and Upstream Servers
 
 The mobile controllers use a variety of service objects to communicate with upstream servers. Those service objects consist of two parts:
 
-1. the configuration. Each of those service objects must also define a configuration, which must be a subclass of `Common::Client::Configuration`. The configuration is primarily responsible for setting values necessary for connecting to the upstream–such as URLs and api keys–and for establishing that connection. It also adds a variety of plugs that requests and responses are processed. Some of these plugs are very simple built-ins, such as the json plug used to process the response as json and the snakecase plug used to specify that the response keys will be in snakecase format. Other plugs are custom-written within the vets-api and can raise or modify errors.
+1. the configuration. The configuration must be a subclass of `Common::Client::Configuration`. The configuration is primarily responsible for setting values necessary for connecting to the upstream server–such as URLs and api keys–and for establishing that connection. It also adds a variety of plugs that determine how requests and responses are processed. Some of these plugs are very simple built-ins, such as the json plug used to process the response as json and the snakecase plug used to specify that the response keys will be in snakecase format. Other plugs are custom-written within the vets-api. These plugs can raise or modify errors. For example, if the configuration specifies a json plug but the response is not parsable json, it will raise an error.
 
 2. the service itself. These are subclasses of `Common::Client::Base`. That class is intended to provide a common interface through which all upstream requests are made. This makes it relatively easy to add new service objects that will behave predictably and handle common errors. The service object is responsible for using the connection created by the configuration to make upstream requests and for processing the response. These often process the response by modifying status codes and by adapting data to models.
-
-
-## Outbound Requests, Integrated Error Handling, and Deep Coupling
-
-Error handling in the vets-api mobile module falls broadly into a few categories. Requests received by the backend use code written by other teams (called outbound service objects) for communication with other servers. The responses from those upstream servers are then processed by those same service objects and then by the mobile team's backend code, which then responds to the mobile client. There are four places errors can occur or be modified:
-- in the backend code before the outbound service object is called. This includes mobile code but can also be other code in the vets-api.
-- in the upstream service
-- in the outbound service object's handling of the upstream service's response
-- in the mobile team's vets-api code
-
-Any errors during that process then go through the mobile app's exception handling code before it's returned to the client.
-
-In addition, errors can arise from the sign-in process.
-
-
-## Mobile Module Errors
 
 ## Exception Handling
 
