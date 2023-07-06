@@ -6,7 +6,7 @@ import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView } from 'components'
 import { VAIconProps } from 'components/VAIcon'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
-import { generateA11yValue, generateInputTestID, getInputWrapperProps, removeInputErrorMessage, renderInputError, renderInputLabelSection } from '../formFieldUtils'
+import { generateA11yValue, getInputWrapperProps, removeInputErrorMessage, renderInputError, renderInputLabelSection } from '../formFieldUtils'
 import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 import PickerList, { PickerListItemObj } from './PickerList'
@@ -144,7 +144,6 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   })
 
   const currentlySelectedOption = allPickerOptions.find((el) => el.value === selectedValue)
-  const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:picker')
 
   const parentProps: AccessibilityProps = {
     ...a11yValueProp({ text: generateA11yValue(currentlySelectedOption?.label, isFocused, t) }),
@@ -156,7 +155,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
     const valueBox = (
       <Box {...wrapperProps}>
-        <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+        <Box testID={testID} width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
           <TextView variant="MobileBody" flex={1}>
             {currentlySelectedOption?.label}
           </TextView>
@@ -176,7 +175,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     )
 
     return (
-      <Pressable onPress={showModal} accessible={true} {...testIdProps(resultingTestID)} {...parentProps}>
+      <Pressable onPress={showModal} accessible={true} {...parentProps}>
         {content}
       </Pressable>
     )

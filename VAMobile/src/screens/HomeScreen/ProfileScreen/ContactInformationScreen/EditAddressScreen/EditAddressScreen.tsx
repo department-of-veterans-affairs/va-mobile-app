@@ -323,6 +323,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           includeBlankPlaceholder: true,
           labelKey: 'editAddress.militaryPostOffices',
           isRequiredField: true,
+          testID: 'militaryPostOfficeTestID',
         },
         fieldErrorMessage: t('editAddress.validOptionFieldError'),
       }
@@ -337,6 +338,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         onChange: setCity,
         inputRef: cityRef,
         isRequiredField: true,
+        testID: 'cityTestID',
       },
       fieldErrorMessage: t('editAddress.cityFieldError'),
     }
@@ -355,6 +357,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           labelKey: 'editAddress.state',
           includeBlankPlaceholder: true,
           isRequiredField: true,
+          testID: 'stateTestID',
         },
         fieldErrorMessage: checkboxSelected ? t('editAddress.validOptionFieldError') : t('editAddress.stateFieldError'),
       }
@@ -367,6 +370,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: 'editAddress.state',
         value: state,
         onChange: setState,
+        testID: 'stateTestID',
       },
     }
   }
@@ -414,6 +418,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         selected: checkboxSelected,
         onSelectionChange: onCheckboxChange,
         a11yHint: t('editAddress.liveOnMilitaryBaseA11yHint'),
+        testID: 'USMilitaryBaseCheckboxTestID',
       },
     },
     {
@@ -426,6 +431,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         includeBlankPlaceholder: true,
         isRequiredField: true,
         disabled: checkboxSelected,
+        testID: 'countryPickerTestID',
       },
       fieldErrorMessage: t('editAddress.countryFieldError'),
       hideField: checkboxSelected,
@@ -441,6 +447,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         inputRef: addressLine1Ref,
         isRequiredField: true,
         helperTextKey: 'editAddress.streetAddress.helperText',
+        testID: 'streetAddressLine1TestID',
       },
       fieldErrorMessage: t('editAddress.streetAddressLine1FieldError'),
     },
@@ -453,6 +460,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         onChange: setAddressLine2,
         maxLength: MAX_ADDRESS_LENGTH,
         helperTextKey: 'editAddress.streetAddress.helperText',
+        testID: 'streetAddressLine2TestID',
       },
     },
     {
@@ -465,6 +473,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         maxLength: MAX_ADDRESS_LENGTH,
         inputRef: addressLine3Ref,
         helperTextKey: 'editAddress.streetAddress.helperText',
+        testID: 'streetAddressLine3TestID',
       },
     },
     getCityOrMilitaryBaseFormFieldType(),
@@ -478,6 +487,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         onChange: setZipCode,
         inputRef: zipCodeRef,
         isRequiredField: true,
+        testID: 'zipCodeTestID',
       },
       fieldErrorMessage: zipCodeFieldError,
       validationList: zipCodeValidationList,
@@ -512,7 +522,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       leftButtonText={t('cancel')}
       onLeftButtonPress={cancelFn}
       rightButtonText={t('save')}
-      onRightButtonPress={() => setOnSaveClicked(true)}>
+      onRightButtonPress={() => setOnSaveClicked(true)}
+      testID="EditAddressTestID">
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -521,6 +532,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
               label={t('contactInformation.removeData', { pageName: lowerCaseTitle })}
               buttonType={ButtonTypesConstants.buttonDestructive}
               a11yHint={t('contactInformation.removeData.a11yHint', { pageName: lowerCaseTitle })}
+              testID="EditAddressSaveTestID"
             />
           </Box>
         )}

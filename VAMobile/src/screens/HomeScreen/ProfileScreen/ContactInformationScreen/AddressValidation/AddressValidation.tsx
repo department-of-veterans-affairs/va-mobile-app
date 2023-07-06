@@ -124,6 +124,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
       labelKey: 'editAddress.address',
       labelArgs: getSuggestedAddressLabelArgs(addressEntered),
       headerText: t('editAddress.validation.youEntered'),
+      testID: 'youEnteredTestID',
     })
 
     if (confirmedSuggestedAddresses) {
@@ -135,6 +136,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
             labelArgs: getSuggestedAddressLabelArgs(address),
             addHeader: index === 0 ? true : false,
             headerText: t('editAddress.validation.suggestedAddresses'),
+            testID: 'suggestedAddressTestID',
           }
         }),
       )
@@ -175,7 +177,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   }
 
   return (
-    <VAScrollView contentContainerStyle={scrollStyles}>
+    <VAScrollView testID="AddressVerificationTestID" contentContainerStyle={scrollStyles}>
       <Box flex={1}>
         <Box mt={contentMarginTop}>
           <CollapsibleAlert
@@ -183,6 +185,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
             headerText={t('editAddress.validation.verifyAddress.title')}
             body={getAlert()}
             a11yLabel={t('editAddress.validation.verifyAddress.title')}
+            testID="verifyYourAddressTestID"
           />
         </Box>
         <Box mt={contentMarginTop}>{getSuggestedAddresses()}</Box>
