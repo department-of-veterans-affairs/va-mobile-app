@@ -341,19 +341,37 @@ export const Events = {
       name: 'vama_claim_file_request',
     }
   },
-  vama_claim_upload_start: (): Event => {
+  vama_claim_upload_start: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
     return {
       name: 'vama_claim_upload_start',
+      params: {
+        claim_id,
+        claim_request_id,
+        claim_request_type,
+        evidence_method,
+      },
     }
   },
-  vama_claim_upload_compl: (): Event => {
+  vama_claim_upload_compl: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
     return {
       name: 'vama_claim_upload_compl',
+      params: {
+        claim_id,
+        claim_request_id,
+        claim_request_type,
+        evidence_method,
+      },
     }
   },
-  vama_claim_upload_fail: (): Event => {
+  vama_claim_upload_fail: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
     return {
       name: 'vama_claim_upload_fail',
+      params: {
+        claim_id,
+        claim_request_id,
+        claim_request_type,
+        evidence_method,
+      },
     }
   },
   vama_claim_why_combine: (claim_id: string, claim_type: string, claim_step: number): Event => {

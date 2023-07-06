@@ -108,7 +108,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
   const onUploadConfirmed = () => {
     logAnalyticsEvent(Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
-    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, imagesList || []))
+    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, imagesList || [], 'photo'))
   }
 
   const onUpload = (): void => {

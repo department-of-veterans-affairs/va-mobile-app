@@ -98,7 +98,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
   const onUploadConfirmed = () => {
     logAnalyticsEvent(Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'file'))
-    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, filesList))
+    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, filesList, 'file'))
   }
 
   const onUpload = (): void => {
