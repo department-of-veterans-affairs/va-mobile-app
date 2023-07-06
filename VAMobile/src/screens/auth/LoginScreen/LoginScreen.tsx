@@ -20,7 +20,7 @@ const LoginScreen: FC = () => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
-  const TAPS_FOR_DEMO = 0
+  const TAPS_FOR_DEMO = 20
   let demoTaps = 0
 
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()

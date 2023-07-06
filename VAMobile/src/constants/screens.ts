@@ -1,4 +1,4 @@
-import { StackNavigationOptions, TransitionPresets, TransitionSpecs } from '@react-navigation/stack'
+import { StackNavigationOptions, TransitionPresets } from '@react-navigation/stack'
 import { fullPanelCardStyleInterpolator } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import store from 'store'
