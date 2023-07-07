@@ -1,26 +1,126 @@
 # Unit Tests
 
+Unit tests should provide confidence that components perform as expected, surfacing regressions quickly whenever an issue occurs. Unit tests also serve as a form of documentation for engineers about how components should function. This document describes practices to help create simple, easy to maintain, solid, user-focused tests.
+
 ## Frameworks
 
-Our tests primarily use [Jest](https://jestjs.io/) and [React Test Renderer](https://reactjs.org/docs/test-renderer.html)
+We run our unit tests with [Jest](https://jestjs.io/) and [React Native Testing Library](https://callstack.github.io/react-native-testing-library/). RNTL provides a set of utility functions that make React Native component testing easier and more robust. RNTL enables many of the best practices described here.
 
-## What to Test
+## Test coverage
 
-All React components including common components and screens should have an associated unit test. The test should cover the visible effects of logic within the component as well as any output from the component passed through events like buttons where possible.
-Examples of this include:
-- Verifying expected results when pressing a button including showing/hiding elements or calling actions
-- Verifying props are having the expected effect within the component
-- Error states displaying as expected
-- Edge cases that may not be noticed in day to day development or regular QA cycles
-- Validation on forms
+All React components should have at least one unit test. The ideal quantity of test coverage depends on component type. Examining component types from most coverage to least:
 
-### What Not To Test
+- **Shared components** are isolated bundles of code which many other components consume. Because shared components are widely used, unit tests should exercise them very thoroughly, including checking all edge cases and error states. (Maximum coverage)
+- **Screen child components** are usually not shared and are tightly bound to other components in the screen. Unit tests for these child components should focus on complicated logic that's prone to regressions, while avoiding duplicate coverage between parent and child components. Tests should cover edge cases and error states, but need not check every possible combination of props and state. (High coverage)
+- **Entire screens** are typically complex, integrating multiple components along with Redux state, routing, and 3rd party modules. We lean on E2E tests to fully cover screens, so unit tests for screens should be limited in scope to avoid duplicating E2E test coverage. Also if a child component of a screen already has its own unit tests, there's no need to duplicate those tests in the screen itself. (Medium coverage)
 
-- Interactions with or effects within other components or screens that require pulling in those screens or components.
-- The actions being called (such as API calls), it should only be testing that the actions are called with the correct parameters. These actions should be tested in their own set of unit tests.
-- Functionality of third party libraries that the component is not directly responsible for. These should be mocked appropriately to isolate the test to logic within the component.
+Note that while a high coverage percentage is good, it doesn't ensure tests are complete and correct. It's important to think critically and implement tests that cover the key cases a user might encounter.
 
-## Test Files
+### More information
+- Google's [Code Coverage Best Practices](https://testing.googleblog.com/2020/08/code-coverage-best-practices.html)
+- [How to know what to test](https://kentcdodds.com/blog/how-to-know-what-to-test) (Kent C Dodds)
+
+## Targeting by rendered text, label, or role
+
+&#10060; Avoid targeting child props based on numeric order:
+```tsx
+expect(textView[5].props.children).toEqual('Rx #: 3636691')
+```
+
+&#9989; Instead, target rendered text, role, or accessibility label:
+
+```tsx
+expect(screen.getByText('Rx #: 3636691')).toBeTruthy()
+expect(screen.getByLabelText('Prescription number 3636691')).toBeTruthy()
+expect(screen.getByRole('checkbox', { name: 'Prescription 1 of 3', checked: true })).toBeTruthy()
+```
+
+### Why?
+This method reduces test fragility because moving an element into/out of a child component, changing props, or adding/removing sibling components does not break the test. Targeting accessibility label or role ensures screen readers read the correct label and/or role to the user, preventing a11y regressions. Finally, this type of test is simpler to read and write because it ignores implementation details, focusing instead on what the user expects to see in rendered output. 
+
+### More information
+- React Testing Library's [guiding principles](https://testing-library.com/docs/guiding-principles)
+- [Some thoughts](https://www.boyney.io/blog/2019-05-21-my-experience-moving-from-enzyme-to-react-testing-library) on why this RTL approach is an improvement over Enzyme
+- [The Dangers of Shallow Rendering](https://mskelton.medium.com/the-dangers-of-shallow-rendering-343e48fe5f28)
+
+## Firing events
+&#10060; Avoid calling a callback function in a prop to simulate user interaction:
+
+```tsx
+testInstance.findByType(Pressable).props.onPress()
+```
+
+&#9989; Instead, fire a press event:
+
+```tsx
+fireEvent.press(screen.getByText('Cancel'))
+```
+
+&#9989; Fire a changeText event:
+
+```tsx
+fireEvent.changeText(screen.getByText('Phone'), '123-456-7890');
+```
+
+&#9989; Fire a scroll event:
+
+```tsx
+fireEvent.scroll(screen.getByText('scroll-view'), {
+  nativeEvent: { contentOffset: { y: 200 } }
+})
+```
+
+### Why?
+Calling a callback function in a prop only checks that the function runs. It doesn’t test that the element is visible to the user and that it’s wired up correctly. It’s also fragile because refactoring the component might change the props and break the test. Firing an event resolves these concerns, which also apply to text fields and scrolling.
+
+## Exercising key functionality
+&#10060; Avoid tests that just check large quantities of static props:
+
+```tsx
+expect(textView[6].props.children).toEqual('What’s next')
+expect(textView[7].props.children).toEqual("We're reviewing your refill request. Once approved, the VA pharmacy will process your refill.")
+expect(textView[8].props.children).toEqual('If you have questions about the status of your refill, contact your provider or local VA pharmacy.')
+```
+
+&#9989; Instead, focus on tests that check important functionality:
+
+```tsx
+describe('on click of the "Go to inbox" button', () => {
+  it('calls useRouteNavigation and updateSecureMessagingTab', () => {
+    fireEvent.press(screen.getByText('Go to inbox'))
+    expect(navigate).toHaveBeenCalled()
+    expect(updateSecureMessagingTab).toHaveBeenCalled()
+  })
+})
+```
+
+### Why?
+Each test should add value by serving as a focused warning that something important has failed. Testing that a sequence of TextViews renders certain text doesn't tell us much. It's also fragile because the smallest text change breaks the test. Testing important and/or complex logic is more beneficial because that’s where high-impact regressions typically occur. In addition, tests for complicated logic serve as a form of documentation, letting engineers know how the code is supposed to function.
+
+### More information
+- See #2 of [The 7 Sins of Unit Testing](https://www.testrail.com/blog/the-7-sins-of-unit-testing/) about why more assertions can be worse, not better
+
+## Testing from the user’s perspective
+Consider what the user expects to do and see, then write tests that simulate it. For example, let's say the user expects to press “Select all”, then see two checked checkboxes and relevant text.
+
+&#9989; This test tells the user's story and checks it at the same time:
+
+```tsx
+it('toggles items when "Select all" is pressed', () => {
+    fireEvent.press(screen.getByText('Select all'))
+    expect(screen.getByRole('checkbox', { name: 'One', checked: true })).toBeTruthy()
+    expect(screen.getByRole('checkbox', { name: 'Two', checked: true })).toBeTruthy()
+    expect(screen.getByText('2/2 selected')).toBeTruthy()
+})
+```
+
+### Why?
+By taking the user's point of view, user-focused tests help prevent the most damaging regressions, ones which prevent users from completing their desired tasks. But because implementation details aren't baked into the test, engineers retain the flexibility to refactor as needed without causing test failures.
+
+### More information
+- Why it's important to focus on the [end user](https://kentcdodds.com/blog/avoid-the-test-user) and avoid the "test user"
+
+## Test File Naming
 
 The test file should live in the same location as its associated component with the same file name with .test included after the component name.
 

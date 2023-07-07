@@ -42,5 +42,7 @@ export const getCommonErrorFromAPIError = (error: APIError, screenID?: ScreenIDT
     return CommonErrorTypesConstants.APP_LEVEL_ERROR
   } else if (includes(appLevelErrorWithRefreshStatusCodes, error.status)) {
     return CommonErrorTypesConstants.APP_LEVEL_ERROR_WITH_REFRESH
+  } else {
+    return CommonErrorTypesConstants.APP_LEVEL_ERROR
   }
 }
