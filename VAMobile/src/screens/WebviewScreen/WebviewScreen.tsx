@@ -8,6 +8,7 @@ import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Box, BoxProps, LoadingComponent } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -52,9 +53,11 @@ const WebviewLoading: FC<WebviewLoadingProps> = ({ loadingMessage }) => {
     bottom: 0,
   }
 
+  const loadingMessageA11y = loadingMessage ? a11yLabelVA(loadingMessage) : undefined
+
   return (
     <Box style={spinnerStyle}>
-      <LoadingComponent text={loadingMessage} />
+      <LoadingComponent text={loadingMessage} a11yLabel={loadingMessageA11y} />
     </Box>
   )
 }

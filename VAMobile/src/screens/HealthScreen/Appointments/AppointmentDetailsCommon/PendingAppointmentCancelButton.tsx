@@ -27,7 +27,7 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
 
   const { cancelId, typeOfCare, status } = attributes || ({} as AppointmentAttributes)
 
-  if (isAppointmentPending && status !== AppointmentStatusConstants.CANCELLED) {
+  if (isAppointmentPending && cancelId && status !== AppointmentStatusConstants.CANCELLED) {
     const onPress = () => {
       dispatch(cancelAppointment(cancelId, appointmentID, true))
     }
