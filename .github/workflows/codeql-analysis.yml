@@ -22,8 +22,6 @@ jobs:
       fail-fast: false
       matrix:
         language:
-          - java
-          - swift
           - ruby
           - javascript
           - python
