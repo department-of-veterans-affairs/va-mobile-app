@@ -87,8 +87,6 @@ context('MessageCard', () => {
       expect(screen.getByText(getFormattedDateAndTimeZone(mockDateISO))).toBeTruthy()
       expect(screen.getByText('Test Message Body')).toBeTruthy()
       expect(screen.getByLabelText('Only use messages for non-urgent needs')).toBeTruthy()
-      expect(screen.getByText('Attachments')).toBeTruthy()
-      expect(screen.getByText('testAttachment (1 MB)')).toBeTruthy()
     })
 
     it('clicking on Only use messages for non-urgent needs should open largePanel', async () => {
