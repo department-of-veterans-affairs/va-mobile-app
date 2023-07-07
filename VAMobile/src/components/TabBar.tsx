@@ -15,6 +15,8 @@ export type TabsValuesType = Array<{
   a11yLabel?: string
   /** accessibility hint of the tab */
   a11yHint?: string
+  /** Optional TestID */
+  testID?: string
 }>
 
 export type TabBarProps = {
@@ -49,7 +51,7 @@ const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
   return (
     <Box style={mainContainerStyle}>
       {tabs.map((tab, index) => {
-        const { a11yHint, title, a11yLabel, value } = tab
+        const { a11yHint, title, a11yLabel, value, testID } = tab
         const isSelected = selected === value
 
         const a11yProps: AccessibilityProps = {
@@ -61,7 +63,7 @@ const TabBar: FC<TabBarProps> = ({ onChange, tabs, selected }) => {
         }
         return (
           <Box key={index} flexGrow={1} flexShrink={0} borderBottomColor={getBorderColor(isSelected)} borderBottomWidth={2.5}>
-            <Pressable {...a11yProps} onPress={() => onChange(value)} style={tabButtonStyle}>
+            <Pressable testID={testID} {...a11yProps} onPress={() => onChange(value)} style={tabButtonStyle}>
               <TextView
                 maxFontSizeMultiplier={1.5}
                 variant={isSelected ? 'MobileBodyBold' : 'MobileBody'}

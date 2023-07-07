@@ -7,6 +7,7 @@ import { AuthState, loginStart } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -83,8 +84,8 @@ const LoginScreen: FC = () => {
           <VAButton onPress={onLoginInit} label={t('common:signin')} a11yHint={t('common:signin.a11yHint')} buttonType={ButtonTypesConstants.buttonWhite} hideBorder={true} />
           <Pressable
             onPress={onFacilityLocator}
-            {...testIdProps(t('home:findLocation.titleA11yLabel'))}
-            accessibilityHint={t('home:findLocation.a11yHint')}
+            {...testIdProps(a11yLabelVA(t('home:findLocation.title')))}
+            accessibilityHint={a11yLabelVA(t('home:findLocation.a11yHint'))}
             accessibilityRole="button">
             <Box {...findLocationProps}>
               <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>

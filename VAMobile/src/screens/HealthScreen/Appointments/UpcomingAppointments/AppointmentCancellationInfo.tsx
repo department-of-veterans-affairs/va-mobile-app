@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToA11yLabel } from 'store/api/types'
 import { Box, ButtonTypesConstants, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { cancelAppointment } from 'store/slices'
 import { formatDateMMDDYYYY } from 'utils/formattingUtils'
 import { getTranslation } from 'utils/formattingUtils'
@@ -28,7 +29,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   const isAndroidDevice = isAndroid()
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, isCovidVaccine, cancelId, startDateUtc } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, location, isCovidVaccine, cancelId, startDateUtc, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
   const { name, phone } = location || ({} as AppointmentLocation)
 
   const findYourVALocationProps: LinkButtonProps = {
@@ -55,21 +56,36 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
         title = t('upcomingAppointmentDetails.doYouNeedToCancel')
         body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: getTranslation(AppointmentTypeToA11yLabel[appointmentType], t) })
-        bodyA11yLabel = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.A11yLabel', {
-          appointmentType: getTranslation(AppointmentTypeToA11yLabel[appointmentType], t),
-        })
+        bodyA11yLabel = a11yLabelVA(
+          t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: getTranslation(AppointmentTypeToA11yLabel[appointmentType], t) }),
+        )
         break
       case AppointmentTypeConstants.COMMUNITY_CARE:
         title = t('upcomingAppointmentDetails.doYouNeedToCancel')
         body = t('upcomingAppointmentDetails.cancelCommunityCareAppointment.body')
         break
       case AppointmentTypeConstants.VA:
-        title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
-        body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
+        if (cancelId) {
+          title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
+          body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
+        } else if (serviceCategoryName === 'COMPENSATION & PENSION') {
+          title = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')
+          body = t('upcomingAppointmentDetails.cancelCompensationAndPension.body', { facility: name })
+        } else {
+          title = t('upcomingAppointmentDetails.doYouNeedToCancel')
+          body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.alternative')
+          bodyA11yLabel = a11yLabelVA(t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.alternative'))
+        }
         break
       default:
-        title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
-        body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
+        if (cancelId) {
+          title = t('upcomingAppointmentDetails.cancelVAAppointment.title')
+          body = t('upcomingAppointmentDetails.cancelVAAppointment.body')
+        } else {
+          title = t('upcomingAppointmentDetails.doYouNeedToCancel')
+          body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.alternative')
+          bodyA11yLabel = a11yLabelVA(t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.alternative'))
+        }
         break
     }
   }
@@ -127,7 +143,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
         {body}
       </TextView>
-      {appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine ? (
+      {appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine && cancelId ? (
         <VAButton
           onPress={onCancelAppointment}
           label={t('upcomingAppointmentDetails.cancelAppointment')}
@@ -137,10 +153,16 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         />
       ) : (
         <>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(name)}>
-            {name}
-          </TextView>
-          {linkOrPhone}
+          {serviceCategoryName === 'COMPENSATION & PENSION' ? (
+            <></>
+          ) : (
+            <>
+              <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(name)}>
+                {name}
+              </TextView>
+              {linkOrPhone}
+            </>
+          )}
         </>
       )}
     </TextArea>

@@ -26,6 +26,7 @@ context('EditPhoneNumberScreen', () => {
       {
         navigate: jest.fn(),
         goBack: jest.fn(),
+        addListener: jest.fn(),
       },
       {
         params: {
