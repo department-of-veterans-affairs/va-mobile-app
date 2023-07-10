@@ -229,8 +229,8 @@ export type useDestructiveActionSheetProps = {
   buttons: Array<useDestructiveActionSheetButtonProps>
 }
 /**
- * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
- * TODO: consolidate this and useShowActionSheet into a single hook
+ * Hook to create appropriate actionSheet for a destructive event
+ * TODO: 6269-Combine useDestructiveActionSheet and useShowActionSheet
  * @param title - optional title of the ActionSheet
  * @param message - optional message for the ActionSheet
  * @param destructiveButtonIndex - optional destructive index
