@@ -5,14 +5,14 @@
 The vets-api mobile endpoints generally follow the following pattern:
 - request is received and routed to the controller
 - the controller verifies the validity of the user's bearer token
-- the controller runs any other necessary validations, such as confirming the user has access to the content and that parameters make sense.
+- the controller runs any other necessary validations, such as confirming the user has access to the content and that parameters make sense
 - the controller then uses service objects to communicate with other servers in the vets-api ecosystem
-- those service objects may perform their own validations. These will generally be the same as the ones performed in the controller but may occasionally be different.
+- those service objects may perform their own validations. These will generally be the same as the ones performed in the controller but may occasionally differ.
 - the service object makes the upstream request
 - the upstream server processes that request and either responds or times out
 - the the service object processes the response.
-- when the request fails (status is >= 400), the service objects will raise corresponding errors. These errors are handled by the controller's `ExceptionHandling` module (link to below).
-- when the request is successful (status is < 400), this usually involves mapping the response data to a vets-api model but may at times involve more complex processing.
+- when the request fails (status is >= 400), the service objects will raise corresponding errors. These errors are rescued by [ExceptionHandling](#exception-handling).
+- when the request is successful (status is < 400), any additional business logic will be applied by the service object. This often includes parsing and converting the data to vets-api models.
 - the data is then returned to the controller.
 - the controller then performs any additional modifications that are necessary, serializes the data, and returns it to the client with an appropriate status code.
 
@@ -28,26 +28,28 @@ The mobile controllers use a variety of service objects to communicate with upst
 
 Nearly all data returned from the vets-api comes from external servers within the VA digital ecosystem. Some of the endpoints we consume are not well documented. As a result, it's sometimes impossible to fully know what response statuses and bodies to expect from these servers. We are usually able to find out most of this information by talking to the product owners of these APIs, but we don't always receive an exhaustive list and often aren't told what all of the errors mean. Also, these services can also change without our knowledge. As a result, these external services can be a bit of a black box. Thankfully, this is improving with newer APIs, such as those provided by lighthouse, which are now being documented as part of the development process.
 
-## Exception Handling
-
-All controllers in the vets-api mobile module include the `ExceptionHandling` module, which catches any errors that arise during a request, remaps any unknown errors to [known errors](#error-classes), then renders the error to the user with the status code and details defined in the error class. Any errors that are not otherwise explicitly handled will be mapped to `Common::Exceptions::InternalServerError` and will return 500 to the client.
-
 ## Error Classes
 
 All errors in the vets-api will ultimately be subclasses of `Common::Exceptions::BaseError`, either because they were explicitly raised within the vets-api or because they were converted to known error classes within the mobile app module, the [service object](#outbound-request-service-objects), or [Exception Handling](#exception-handling). This is useful for providing a common interface for errors, which allows error classes to define their own response statuses and logging.
 
+The error classes work in coordination with values set in config/locales/exceptions.en.yml. The error classes implement an `i18n_key` method that matches an entry in that yaml file that can include additional error details, such as messages and statuses, that can be used by ExceptionHandling.
+
+## Exception Handling
+
+All controllers in the vets-api mobile module include the `ExceptionHandling` module, which catches any errors that arise during a request, remaps any unknown errors to [known errors](#error-classes), then renders the error to the user with the status code and details defined in the error class. Any errors that are not otherwise explicitly handled will be mapped to `Common::Exceptions::InternalServerError` and will return 500 to the client.
+
 ## Coupling between Service Objects, Exception Handling, and Error Classes
 
-The [request lifestyle](#the-request-lifecycle) both begins and ends with the controller, which includes the [Exception Handling module](#exception-handling). This means that any errors encountered in our service objects will be rescued by ExceptionHandling and converted to known error classes with a common interface that's used in determining the response to the user. Moreover, ExceptionHandling has handling for errors that are specific to outbound services. For example, ExceptionHandling rescues `Common::Client::Errors::ClientError`, which is the error that `Common::Client::Base` raises when it encounters `Faraday::ClientError` or `Faraday::Error`. In other words, ExceptionHandling, vets-api error classes, and outbound service objects are coupled.
+Because ExceptionHandling is included in all mobile controllers, any errors encountered in our service objects will be rescued by it and converted to known error classes that are used in determining the response to the user. ExceptionHandling also handles errors that are specific to outbound services. For example, ExceptionHandling rescues `Common::Client::Errors::ClientError`, which is the error that `Common::Client::Base` raises when it encounters `Faraday::ClientError` or `Faraday::Error`. In other words, ExceptionHandling, vets-api error classes, and outbound service objects are coupled.
 
 This coupling prevents us from recreating the wheel with each service object but can also make it difficult to fully test service object code in isolation, which makes it important to write thorough integration tests because ExceptionHandling can call methods on error classes that might not be called in service specs. Bugs can exist in service objects and error classes that will not be revealed without integration testing with the ExceptionHandling class.
 
-## Where errors arise and why it's hard to know which errors are possible
+## The Big Picture
 
 Errors can arise during any portion of the [request lifestyle](#the-request-lifecycle) above. Errors that arise in the mobile module are generally predictable. For example, we know that failure to authenticate the user will result in a 401, failure to authorize the user to access the resource will result in a 403, invalid request data will typically result in a 422, and an error within the code itself will result in a 500.
 
-Once we leave the mobile module, the possible errors become inherently less predictable because they can be rescued and modified in the service object or within ExceptionHandling. Code outside of the mobile module can also be changed without our knowledge, potentially removing, changing, or introducing errors.
+Once we leave the mobile module, the possible errors become more difficult fully know due code complexity and coupling between our service objects and ExceptionHandling. Code outside of the mobile module can also be changed without our knowledge, potentially removing, changing, or introducing errors.
 
 Once we make a request to an external service, the errors become even less predictable, due to a combination of poor documentation, poor interteam communication, and ongoing changes being made to the upstream code.
 
-As a result, errors may at times be possible that aren't listed in our api documentation. We could partially address this by writing our docs more defensively and adding error types are plausible but we have no reason to believe would occur. But our api docuementation is also not intended for public use. It's only for use by the mobile client. Much as the vets-api has an `ExceptionHandler` to ensure that all errors encountered in the vets-api will be processed correctly, the mobile app has built-in error handling for common cases like 403 and 422. The more critical thing is that our documents should list out all cases that convey information about what went wrong and how the app should handle it. For example, if we know any endpoint can return 207 if only some records are received, that should be clearly conveyed to others and included in the api documentation so we can design the mobile UX to inform the user that some records are mising.
+As a result, errors may at times be possible that aren't listed in our api documentation. But much as the vets-api has `ExceptionHandling` to ensure that all errors encountered in the vets-api will be handled gracefully even if we don't know anything about that error, the mobile app has built-in error handling for common cases like 403 and 422 but also rescues any 400+ error so there should be no inherent problem with an occasional unexpected error. The most important thing is to document any known errors that change behavior in the mobile app. For example, a few endpoints can return 207 with detailed messages when only partial data was received. This must be communicated to the user, so coordination is needed between frontend, backend, and product to ensure a smooth user experience.
