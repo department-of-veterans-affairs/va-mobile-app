@@ -6,7 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { SnackbarMessages } from 'components/SnackBar'
 import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
-import { useDestructiveAlert, useRouteNavigation } from 'utils/hooks'
+import { useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
 import { useState } from 'react'
 
 type ComposeCancelConfirmationProps = {
@@ -27,7 +27,7 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const confirmationAlert = useDestructiveAlert()
+  const confirmationAlert = useDestructiveActionSheet()
   const goToDrafts = useGoToDrafts()
   const [isDiscarded, setIsDiscarded] = useState(false)
 
