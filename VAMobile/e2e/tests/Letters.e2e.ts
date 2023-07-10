@@ -1,4 +1,4 @@
-import { by, element, expect } from 'detox'
+import { by, device, element, expect } from 'detox'
 import { checkIfElementIsPresent, loginToDemoMode, openBenefits, openLetters } from './utils'
 
 export const LettersConstants = {
@@ -74,16 +74,19 @@ describe('VA Letters and Documents Screen', () => {
       await element(by.text(letterType.name)).tap()
       await expect(element(by.text(letterType.name))).toExist()
       await expect(element(by.text(letterType.description))).toExist()
+
+      if(device.getPlatform() === 'ios') {
+        const isBenefitSummaryLetter = await checkIfElementIsPresent('BenefitSummaryServiceVerificationTestID')
+
+        if (isBenefitSummaryLetter) {
+          await element(by.id('BenefitSummaryServiceVerificationTestID')).scrollTo('bottom');
+        }
   
-      const isBenefitSummaryLetter = await checkIfElementIsPresent('BenefitSummaryServiceVerificationTestID')
-      if (isBenefitSummaryLetter) {
-        await element(by.id('BenefitSummaryServiceVerificationTestID')).scrollTo('bottom');
+        await element(by.text('Review letter')).tap()
+        await expect(element(by.text(LettersConstants.LETTER_FILE_NAME))).toExist()
+        await element(by.text('Done')).tap()
       }
   
-      await element(by.text('Review letter')).tap()
-      await expect(element(by.text(LettersConstants.LETTER_FILE_NAME))).toExist()
-  
-      await element(by.text('Done')).tap()
       await element(by.text('Review letters')).tap()
     })
   }
