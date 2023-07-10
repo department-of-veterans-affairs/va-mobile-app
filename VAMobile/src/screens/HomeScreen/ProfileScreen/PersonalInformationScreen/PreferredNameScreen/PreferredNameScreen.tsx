@@ -54,11 +54,11 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
         destructiveButtonIndex: 1,
         buttons: [
           {
-            text: t('personalInformation.preferredName.keepEditing'),
+            text: t('keepEditing'),
             onPress: () => {},
           },
           {
-            text: t('personalInformation.preferredName.deleteChanges'),
+            text: t('deleteChanges'),
             onPress: () => {
               navigation.goBack()
             },

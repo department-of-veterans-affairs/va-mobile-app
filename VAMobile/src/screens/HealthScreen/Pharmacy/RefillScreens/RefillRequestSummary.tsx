@@ -1,4 +1,3 @@
-import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 
@@ -34,6 +33,12 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
   const { refillRequestSummaryItems, showLoadingScreenRequestRefillsRetry } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
 
+  const onNavToHistory = () => {
+    dispatch(dispatchSetPrescriptionsNeedLoad())
+    dispatch(dispatchClearLoadingRequestRefills())
+    navigation.navigate('PrescriptionHistory', {})
+  }
+
   useEffect(() => {
     const requestSubmittedItems = []
     const requestFailedItems: PrescriptionsList = []
@@ -58,8 +63,9 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
     })
   }, [navigation])
 
-  useBeforeNavBackListener(navigation, () => {
-    dispatch(dispatchClearLoadingRequestRefills())
+  useBeforeNavBackListener(navigation, (e) => {
+    e.preventDefault()
+    onNavToHistory()
   })
 
   const renderAlert = (): ReactElement => {
@@ -197,7 +203,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       <FullScreenSubtask
         leftButtonText={tc('close')}
         onLeftButtonPress={() => {
-          navigation.dispatch(StackActions.pop(2))
+          onNavToHistory()
         }}>
         <LoadingComponent text={t('prescriptions.refill.send', { count: 1 })} />
       </FullScreenSubtask>
@@ -209,7 +215,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       <FullScreenSubtask
         leftButtonText={tc('close')}
         onLeftButtonPress={() => {
-          navigation.dispatch(StackActions.pop(2))
+          onNavToHistory()
         }}
         title={tc('refillRequest')}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
