@@ -1,18 +1,4 @@
-import {
-  AccessibilityInfo,
-  ActionSheetIOS,
-  Alert,
-  AlertButton,
-  AppState,
-  Dimensions,
-  EmitterSubscription,
-  Linking,
-  PixelRatio,
-  ScrollView,
-  UIManager,
-  View,
-  findNodeHandle,
-} from 'react-native'
+import { AccessibilityInfo, Alert, AlertButton, AppState, Dimensions, EmitterSubscription, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
 import { EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
@@ -36,6 +22,7 @@ import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
+import { getTheme } from 'styles/themes/standardTheme'
 import { isAndroid, isIOS } from 'utils/platform'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
@@ -222,14 +209,14 @@ export const useHasCernerFacilities = (): boolean => {
   return cernerFacilities.length > 0
 }
 
-export type UseDestructiveAlertButtonProps = {
+export type useDestructiveActionSheetButtonProps = {
   /** text of button */
   text: string
   /** handler for onClick */
   onPress?: () => void
 }
 
-export type UseDestructiveAlertProps = {
+export type useDestructiveActionSheetProps = {
   /** title of alert */
   title: string
   /** message of alert */
@@ -239,51 +226,54 @@ export type UseDestructiveAlertProps = {
   /** ios cancel index */
   cancelButtonIndex: number
   /** options to show in alert */
-  buttons: Array<UseDestructiveAlertButtonProps>
+  buttons: Array<useDestructiveActionSheetButtonProps>
 }
 /**
- * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
- * TODO: consolidate this and useShowActionSheet into a single hook
- * @param title - title of the alert
- * @param message - optional message for the alert
- * @param destructiveButtonIndex - ios destructive index
+ * Hook to create appropriate actionSheet for a destructive event
+ * TODO: 6269-Combine useDestructiveActionSheet and useShowActionSheet
+ * @param title - optional title of the ActionSheet
+ * @param message - optional message for the ActionSheet
+ * @param destructiveButtonIndex - optional destructive index
  * @param cancelButtonIndex - ios cancel index
- * @param buttons - options to show in the alert
- * @returns an action sheet for ios and an alert for android
+ * @param buttons - options to show in the ActionSheet
+ * @returns an action sheet
  */
-export function useDestructiveAlert(): (props: UseDestructiveAlertProps) => void {
-  return (props: UseDestructiveAlertProps) => {
-    if (isIOS()) {
-      const { buttons, cancelButtonIndex, destructiveButtonIndex, ...remainingProps } = props
+export function useDestructiveActionSheet(): (props: useDestructiveActionSheetProps) => void {
+  const { showActionSheetWithOptions } = useActionSheet()
+  const currentTheme = getTheme()
+  return (props: useDestructiveActionSheetProps) => {
+    const { buttons, cancelButtonIndex, destructiveButtonIndex } = props
 
-      // Ensure cancel button is always last for UX consisency
-      const newButtons = [...buttons]
-      if (cancelButtonIndex < buttons.length - 1) {
-        newButtons.push(newButtons.splice(cancelButtonIndex, 1)[0])
-      }
-
-      let newDestructiveButtonIndex = destructiveButtonIndex
-      if (destructiveButtonIndex && cancelButtonIndex < destructiveButtonIndex) {
-        newDestructiveButtonIndex = destructiveButtonIndex - 1
-      }
-
-      // Don't pass cancelButtonIndex because doing so would hide the button on iPad
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          ...remainingProps,
-          destructiveButtonIndex: newDestructiveButtonIndex,
-          options: newButtons.map((button) => stringToTitleCase(button.text)),
-        },
-        (buttonIndex) => {
-          const onPress = newButtons[buttonIndex]?.onPress
-          if (onPress) {
-            onPress()
-          }
-        },
-      )
-    } else {
-      Alert.alert(props.title, props.message, props.buttons as AlertButton[])
+    // Ensure cancel button is always last for UX consisency
+    const newButtons = [...buttons]
+    if (cancelButtonIndex < buttons.length - 1) {
+      newButtons.push(newButtons.splice(cancelButtonIndex, 1)[0])
     }
+
+    let newDestructiveButtonIndex = destructiveButtonIndex
+    if (destructiveButtonIndex && cancelButtonIndex < destructiveButtonIndex) {
+      newDestructiveButtonIndex = destructiveButtonIndex - 1
+    }
+
+    // Don't pass cancelButtonIndex because doing so would hide the button on iPad
+    showActionSheetWithOptions(
+      {
+        title: props.title,
+        titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
+        message: props.message,
+        messageTextStyle: { textAlign: 'center', color: currentTheme.colors.text.primary },
+        textStyle: { color: currentTheme.colors.text.primary },
+        destructiveButtonIndex: newDestructiveButtonIndex,
+        destructiveColor: currentTheme.colors.text.error,
+        options: newButtons.map((button) => stringToTitleCase(button.text)),
+        containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
+      },
+      (buttonIndex) => {
+        if (buttonIndex || buttonIndex === 0) {
+          newButtons[buttonIndex]?.onPress?.()
+        }
+      },
+    )
   }
 }
 
@@ -409,7 +399,7 @@ export function useAttachments(): [
   (attachmentFileToRemove: imageDocumentResponseType) => void,
 ] {
   const [attachmentsList, setAttachmentsList] = useState<Array<imageDocumentResponseType>>([])
-  const destructiveAlert = useDestructiveAlert()
+  const destructiveAlert = useDestructiveActionSheet()
   const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
 
   const addAttachment = (attachmentFileToAdd: imageDocumentResponseType) => {
@@ -446,7 +436,7 @@ export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()
 
 /**
  * Returns a wrapper to showActionSheetWithOptions that converts iOS options to title case
- * TODO: consolidate this and useDestructiveAlert into a single hook
+ * TODO: consolidate this and useDestructiveActionSheet into a single hook
  */
 export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void {
   const { showActionSheetWithOptions } = useActionSheet()

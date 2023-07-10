@@ -9,7 +9,7 @@ import { useComposeCancelConfirmation } from './ComposeCancelConfirmation'
 import { SecureMessagingFormData } from 'store/api'
 import { FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { CategoryTypeFields } from 'store/api/types'
-import { UseDestructiveAlertProps } from 'utils/hooks'
+import { useDestructiveActionSheetProps } from 'utils/hooks'
 import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
@@ -20,9 +20,9 @@ jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useDestructiveAlert: () => {
+    useDestructiveActionSheet: () => {
       // grab a reference to the parameters passed in to test cancel and discard functionality
-      return (props: UseDestructiveAlertProps) => {
+      return (props: useDestructiveActionSheetProps) => {
         discardButtonSpy = props.buttons[1].onPress
         saveDraftButtonSpy = props.buttons[2].onPress
       }
