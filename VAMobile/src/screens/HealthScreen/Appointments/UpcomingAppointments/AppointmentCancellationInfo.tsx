@@ -8,7 +8,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { cancelAppointment } from 'store/slices'
 import { getTranslation } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -22,7 +22,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
   const dispatch = useAppDispatch()
 
   const { attributes } = (appointment || {}) as AppointmentData

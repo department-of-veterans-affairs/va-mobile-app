@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { cancelAppointment } from 'store/slices'
 import { isAPendingAppointment } from 'utils/appointments'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 type PendingAppointmentCancelButtonProps = {
   attributes: AppointmentAttributes
@@ -21,7 +21,7 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
 
   const { cancelId, status } = attributes || ({} as AppointmentAttributes)
 

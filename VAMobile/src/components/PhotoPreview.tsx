@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { themeFn } from 'utils/theme'
-import { useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView, { TextViewProps } from './TextView'
 
@@ -45,7 +45,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [selected, setSelected] = useState(false)
   const uri = image.uri
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
   const photoPreviewIconSize = 24
   const photoPreviewBorderRadius = 5
   const photoPreviewIconPadding = 5
