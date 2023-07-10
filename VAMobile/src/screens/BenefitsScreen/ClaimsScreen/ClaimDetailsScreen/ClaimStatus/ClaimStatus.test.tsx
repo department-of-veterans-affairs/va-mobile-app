@@ -2,16 +2,17 @@ import 'react-native'
 import { Linking, Pressable } from 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, findByTestID, mockNavProps, render, RenderAPI } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 import { ClaimType } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { InitialState } from 'store/slices'
 import { TextView } from 'components'
 import { claim } from '../../claimData'
 import ClaimStatus from './ClaimStatus'
 
-const mockNavigationSpy = jest.fn()
+const mockNavigationResultSpy = jest.fn()
+const mockNavigationSpy = jest.fn(() => mockNavigationResultSpy)
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   const theme = jest.requireActual('styles/themes/standardTheme').default
@@ -27,18 +28,10 @@ context('ClaimStatus', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
-  let mockNavigateToConsolidatedClaimsNoteSpy: jest.Mock
-  let mockNavigateToWhatDoIDoIfDisagreementSpy: jest.Mock
 
   const maxEstDate = '2019-12-11'
 
   const initializeTestInstance = (maxEstDate: string, claimType: ClaimType): void => {
-    mockNavigateToConsolidatedClaimsNoteSpy = jest.fn()
-    mockNavigateToWhatDoIDoIfDisagreementSpy = jest.fn()
-    mockNavigationSpy
-      .mockReturnValue(() => {})
-      .mockReturnValueOnce(mockNavigateToConsolidatedClaimsNoteSpy)
-      .mockReturnValueOnce(mockNavigateToWhatDoIDoIfDisagreementSpy)
     props = mockNavProps({
       claim: { ...claim, attributes: { ...claim.attributes, maxEstDate: maxEstDate } },
       claimType,
@@ -53,6 +46,7 @@ context('ClaimStatus', () => {
   }
 
   beforeEach(() => {
+    jest.clearAllMocks()
     initializeTestInstance(maxEstDate, 'ACTIVE')
   })
 
@@ -64,16 +58,16 @@ context('ClaimStatus', () => {
     describe('on click of Find out why we sometimes combine claims. list item', () => {
       it('should call useRouteNavigation', async () => {
         testInstance.findAllByType(Pressable)[4].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenNthCalledWith(1, 'ConsolidatedClaimsNote')
-        expect(mockNavigateToConsolidatedClaimsNoteSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote')
+        expect(mockNavigationResultSpy).toHaveBeenCalledWith()
       })
     })
 
     describe('on click of What should I do if I disagree with VA’s decision on my disability claim? list item', () => {
       it('should call useRouteNavigation', async () => {
         testInstance.findAllByType(Pressable)[5].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenNthCalledWith(2, 'WhatDoIDoIfDisagreement')
-        expect(mockNavigateToWhatDoIDoIfDisagreementSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('WhatDoIDoIfDisagreement', { claimID: '600156928', claimStep: 3, claimType: 'Compensation' })
+        expect(mockNavigationResultSpy).toHaveBeenCalledWith()
       })
     })
   })

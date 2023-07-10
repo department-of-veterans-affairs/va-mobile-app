@@ -326,7 +326,7 @@ export const submitClaimDecision =
  * Redux action to upload a file to a claim
  */
 export const uploadFileToClaim =
-  (claimID: string, messages: SnackbarMessages, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>, evidenceMethod: string): AppThunk =>
+  (claimID: string, messages: SnackbarMessages, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>, evidenceMethod: 'file' | 'photo'): AppThunk =>
   async (dispatch) => {
     const retryFunction = () => dispatch(uploadFileToClaim(claimID, messages, request, files, evidenceMethod))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
