@@ -25,6 +25,7 @@ export const CommonE2eIdConstants = {
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'You’re leaving the app',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
+  PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
 }
 
@@ -123,18 +124,19 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 
 		const jsonParsed = JSON.parse(data)
 		//const jsonFirstObject = source[jsonProperty[0]]
-		var value
+		var mockDataVariable
+		var mockDataKeyValue
 		for(var x=0; x<jsonProperty.length; x++) {
 			if (x == 0) {
-				var mockDataVariable = jsonParsed[jsonProperty[x]]
+				mockDataVariable = jsonParsed[jsonProperty[x]]
 			} else if (x == jsonProperty.length - 1) {
 				mockDataVariable[jsonProperty[x]] = newJsonValue
 			} else {
 				if (jsonProperty[x].constructor == Object) {
 					var key = String(Object.keys(jsonProperty[x]))
-					value = jsonProperty[x][key]
-					mockDataVariable = mockDataVariable[key[0]]
-					mockDataVariable = mockDataVariable[value]
+					var value = jsonProperty[x][key]
+					mockDataKeyValue = mockDataVariable[key]
+					mockDataVariable = mockDataKeyValue[value]
 				} else {
 					mockDataVariable = mockDataVariable[jsonProperty[x]]
 				}
@@ -159,6 +161,7 @@ export async function checkImages(screenshotPath) {
 		failureThreshold: 0.01,
 		failureThresholdType: 'percent'})
 }
+
 
 /**
  * Single-source collection for 'open this screen' functions
@@ -186,6 +189,10 @@ export async function openHealth() {
 	await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap() 
 }
 
+export async function openPrescriptions() {
+	await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
+}
+
 export async function openBenefits() {
 	await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap() 
 }
@@ -204,5 +211,4 @@ export async function backButton() {
 	await element(by.traits(['button'])).atIndex(0).tap();
   }
 }
-
 

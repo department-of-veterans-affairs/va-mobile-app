@@ -14,7 +14,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors } from 'store/slices/errorSlice'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useError, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
@@ -24,8 +24,9 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { displayTitle, phoneType, phoneData } = route.params
-  const deletePhoneAlert = useDestructiveAlert()
-
+  const deletePhoneAlert = useAlert()
+  const confirmAlert = useDestructiveActionSheet()
+  const screenReaderEnabled = useIsScreenReaderEnabled()
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
   const [formContainsError, setFormContainsError] = useState(false)
@@ -46,6 +47,45 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const saveSnackbarMessages: SnackbarMessages = {
     successMsg: t('contactInformation.phoneNumber.saved', { type: displayTitle }),
     errorMsg: t('contactInformation.phoneNumber.not.saved', { type: displayTitle }),
+  }
+
+  useBeforeNavBackListener(navigation, (e) => {
+    if (noPageChanges()) {
+      return
+    }
+    e.preventDefault()
+    confirmAlert({
+      title: t('contactInformation.phoneNumber.deleteChanges', { type: displayTitle.toLowerCase() }),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('keepEditing'),
+        },
+        {
+          text: t('deleteChanges'),
+          onPress: () => {
+            navigation.dispatch(e.data.action)
+          },
+        },
+      ],
+    })
+  })
+
+  //returns true when no edits have been made.
+  const noPageChanges = (): boolean => {
+    if (phoneData) {
+      if (getNumbersFromString(phoneNumber) === getNumbersFromString(getFormattedPhoneNumber(phoneData))) {
+        if (phoneData.extension && phoneData.extension === extension) {
+          return true
+        } else if (!phoneData.extension && !extension) {
+          return true
+        }
+      }
+    } else if (!extension && !phoneNumber) {
+      return true
+    }
+    return false
   }
 
   const onSave = (): void => {
@@ -155,19 +195,18 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   const onDeletePressed = (): void => {
     deletePhoneAlert({
-      title: t('editPhoneNumber.remove.title', { numberType: buttonTitle }),
-      message: t('editPhoneNumber.remove.message', { numberType: buttonTitle }),
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
+      title: t('contactInformation.removeInformation.title', { info: buttonTitle }),
+      message: t('contactInformation.removeInformation.body', { info: buttonTitle }),
       buttons: [
         {
-          text: t('cancel'),
+          text: t('keep'),
         },
         {
           text: t('remove'),
           onPress: onDelete,
         },
       ],
+      screenReaderEnabled: screenReaderEnabled,
     })
   }
 

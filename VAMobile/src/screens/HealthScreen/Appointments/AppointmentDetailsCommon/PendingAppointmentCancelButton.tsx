@@ -9,7 +9,7 @@ import { cancelAppointment } from 'store/slices'
 import { isAPendingAppointment } from 'utils/appointments'
 import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 type PendingAppointmentCancelButtonProps = {
   attributes: AppointmentAttributes
@@ -22,12 +22,12 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
   const isAndroidDevice = isAndroid()
 
   const { cancelId, typeOfCare, status } = attributes || ({} as AppointmentAttributes)
 
-  if (isAppointmentPending && status !== AppointmentStatusConstants.CANCELLED) {
+  if (isAppointmentPending && cancelId && status !== AppointmentStatusConstants.CANCELLED) {
     const onPress = () => {
       dispatch(cancelAppointment(cancelId, appointmentID, true))
     }

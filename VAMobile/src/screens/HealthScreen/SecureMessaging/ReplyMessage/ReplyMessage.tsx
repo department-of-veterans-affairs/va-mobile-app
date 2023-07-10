@@ -44,7 +44,7 @@ import {
   useAppDispatch,
   useAttachments,
   useBeforeNavBackListener,
-  useDestructiveAlert,
+  useDestructiveActionSheet,
   useMessageWithSignature,
   useRouteNavigation,
   useTheme,
@@ -61,7 +61,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
-  const draftAttachmentAlert = useDestructiveAlert()
+  const draftAttachmentAlert = useDestructiveActionSheet()
 
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
