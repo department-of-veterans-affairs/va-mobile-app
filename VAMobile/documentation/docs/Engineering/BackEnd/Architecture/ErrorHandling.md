@@ -6,7 +6,7 @@ The vets-api mobile endpoints generally follow the following pattern:
 - request is received and routed to the controller
 - the controller verifies the validity of the user's bearer token
 - the controller runs any other necessary validations, such as confirming the user has access to the content and that parameters make sense
-- the controller then uses service objects to communicate with other servers in the vets-api ecosystem
+- the controller then uses [service objects](#outbound-request-service-objects) to communicate with other servers in the vets-api ecosystem
 - those service objects may perform their own validations. These will generally be the same as the ones performed in the controller but may occasionally differ.
 - the service object makes the upstream request
 - the upstream server processes that request and either responds or times out
@@ -40,16 +40,20 @@ All controllers in the vets-api mobile module include the `ExceptionHandling` mo
 
 ## Coupling between Service Objects, Exception Handling, and Error Classes
 
-Because ExceptionHandling is included in all mobile controllers, any errors encountered in our service objects will be rescued by it and converted to known error classes that are used in determining the response to the user. ExceptionHandling also handles errors that are specific to outbound services. For example, ExceptionHandling rescues `Common::Client::Errors::ClientError`, which is the error that `Common::Client::Base` raises when it encounters `Faraday::ClientError` or `Faraday::Error`. In other words, ExceptionHandling, vets-api error classes, and outbound service objects are coupled.
+The service objects need ExceptionHandling to rescue its errors. ExceptionHandling needs errors to be subclasses of `BaseError` because it relies on methods in `BaseError` to respond to the client with the appropriate information. These three components are coupled.
 
-This coupling prevents us from recreating the wheel with each service object but can also make it difficult to fully test service object code in isolation, which makes it important to write thorough integration tests because ExceptionHandling can call methods on error classes that might not be called in service specs. Bugs can exist in service objects and error classes that will not be revealed without integration testing with the ExceptionHandling class.
+This coupling provides a great deal of value. It prevents us from recreating the wheel with every new endpoint. Without it, each controller would have to have explicit handling for each potential error case. But it also comes at a cost. That cost is that it's difficult to know exactly which errors the controller can return because to know that you have to know which errors the upstream can return, which errors the service can produce, and how those errors can be modified by the service object, error class, and ExceptionHandling.
 
-## The Big Picture
+It also makes it difficult to fully test service object code in isolation, which makes it important to write thorough integration tests because ExceptionHandling can call methods on error classes that might not be called in service object unit tests. Bugs can exist in service objects and error classes that will not be revealed without integration testing with the ExceptionHandling class.
 
-Errors can arise during any portion of the [request lifestyle](#the-request-lifecycle) above. Errors that arise in the mobile module are generally predictable. For example, we know that failure to authenticate the user will result in a 401, failure to authorize the user to access the resource will result in a 403, invalid request data will typically result in a 422, and an error within the code itself will result in a 500.
+## Wrapup
 
-Once we leave the mobile module, the possible errors become more difficult fully know due code complexity and coupling between our service objects and ExceptionHandling. Code outside of the mobile module can also be changed without our knowledge, potentially removing, changing, or introducing errors.
+Errors can arise during any portion of the [request lifestyle](#the-request-lifecycle). Errors that arise in the mobile module are generally predictable. For example, we know that failure to authenticate the user will result in a 401, failure to authorize the user to access the resource will result in a 403, invalid request data will typically result in a 422, and an error within the code itself will result in a 500.
+
+Once we leave the mobile module, the possible errors become more difficult fully know due code complexity and coupling between our service objects, errors, and ExceptionHandling. Code outside of the mobile module can also be changed without our knowledge, potentially removing, changing, or introducing errors.
 
 Once we make a request to an external service, the errors become even less predictable, due to a combination of poor documentation, poor interteam communication, and ongoing changes being made to the upstream code.
 
-As a result, errors may at times be possible that aren't listed in our api documentation. But much as the vets-api has `ExceptionHandling` to ensure that all errors encountered in the vets-api will be handled gracefully even if we don't know anything about that error, the mobile app has built-in error handling for common cases like 403 and 422 but also rescues any 400+ error so there should be no inherent problem with an occasional unexpected error. The most important thing is to document any known errors that change behavior in the mobile app. For example, a few endpoints can return 207 with detailed messages when only partial data was received. This must be communicated to the user, so coordination is needed between frontend, backend, and product to ensure a smooth user experience.
+As a result, errors may at times be possible that aren't listed in our api documentation. But much as the vets-api has `ExceptionHandling` to ensure that all errors encountered in the vets-api will be handled gracefully even if we don't know anything about that error, the mobile app has built-in error handling for common cases like 401 and 403 but also handles any unknown 400+ error so there should be no inherent problem with an occasional unexpected error.
+
+While it may not be possible to know every possible error that can occur, what is more important is that we document any errors that change behavior in the mobile app. For example, a few endpoints can return 207 with detailed messages when only partial data was received. This must be communicated to the user, so coordination is needed between frontend, backend, and product to ensure a smooth user experience.
