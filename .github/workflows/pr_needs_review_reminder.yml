@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Get count of PRs needing review
         id: get_count
-        run: GH_TOKEN=${{ secrets.GITHUB_TOKEN }} echo "pr_count=$(gh pr list -l 'FE-Needs Review' --json id | jq length)" >> "$GITHUB_OUTPUT" 
+        run: echo "pr_count=$(GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr list -l 'FE-Needs Review' --json id | jq length)" >> "$GITHUB_OUTPUT" 
       - name: Start Slack thread
         uses: ./.github/workflows/start_slack_thread.yml
         with:
