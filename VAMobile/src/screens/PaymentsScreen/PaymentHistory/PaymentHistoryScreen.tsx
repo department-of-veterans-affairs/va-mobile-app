@@ -161,7 +161,12 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
     <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')} testID="paymentHistoryTestID">
       <Box {...testIdProps('', false, 'payments-page')}>
         <Box mx={gutter} mb={standardMarginBetween} mt={contentMarginTop}>
-          <Pressable onPress={navigateTo('PaymentMissing')} accessibilityRole="link" accessible={true} testID="missingPaymentsTestID">
+          <Pressable
+            onPress={navigateTo('PaymentMissing')}
+            accessibilityRole="link"
+            accessible={true}
+            {...testIdProps(t('payments.ifIAmMissingPayemt'))}
+            testID="missingPaymentsTestID">
             <TextView {...textViewProps}>{t('payments.ifIAmMissingPayemt')}</TextView>
           </Pressable>
         </Box>
