@@ -6,7 +6,6 @@ import { Event, EventParams, UserAnalytic } from 'utils/analytics'
  */
 /*eslint id-length: ["error", { "max": 24 }]*/
 export const Events = {
-  // Issue#2273 Track appointment pagination discrepancies
   vama_appt_cancel: (isPendingAppointment: boolean): Event => {
     return {
       name: 'vama_appt_cancel',
@@ -23,6 +22,7 @@ export const Events = {
       },
     }
   },
+  // Issue#2273 Track appointment pagination discrepancies
   vama_appts_page_warning: (): Event => {
     return {
       name: 'vama_appts_page_warning',
