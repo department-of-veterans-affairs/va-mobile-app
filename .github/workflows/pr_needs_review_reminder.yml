@@ -1,0 +1,17 @@
+name: '[Utils] FE PR Needs Review Reminder'
+
+on:
+  workflow_dispatch
+
+jobs:
+  send_pr_reminder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get count of PRs needing review
+        id: get_count
+        run: echo "pr_count=$(gh pr list -l 'FE-Needs Review' --json id | jq length)" >> "$GITHUB_OUTPUT" 
+      - name: Start Slack thread
+        uses: ./.github/workflows/start_slack_thread.yml
+        with:
+          channel_name: va-mobile-fe-engineers
+          message: '(Please disregard) test count ${{ steps.get_count.outputs.pr_count }}'
