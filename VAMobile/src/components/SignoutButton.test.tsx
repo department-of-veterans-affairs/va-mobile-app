@@ -28,7 +28,7 @@ jest.mock('utils/hooks', () => {
   const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useDestructiveAlert: () => mockAlertSpy,
+    useDestructiveActionSheet: () => mockAlertSpy,
   }
 })
 
@@ -47,7 +47,7 @@ context('SignoutButton', () => {
   })
 
   describe('when the sign out button is pressed', () => {
-    it('should call useDestructiveAlert', async () => {
+    it('should call useDestructiveActionSheet', async () => {
       await waitFor(() => {
         testInstance.findByType(VAButton).props.onPress()
       })

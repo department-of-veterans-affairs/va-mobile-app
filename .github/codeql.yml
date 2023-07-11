@@ -1,0 +1,5 @@
+ excluded_languages:
+   - name: java
+     reason: "Code is not independently buildable"
+   - name: swift
+     reason: "Code is not independently buildable"

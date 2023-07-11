@@ -158,6 +158,7 @@ export type VABackgroundColors = {
   unreadMessagesTag: string
   navHeader: string
   modalOverlay: string
+  overlayOpacity: string
   pickerSelectedItem: string
   navButton: string
   brandedMainBackground: string
