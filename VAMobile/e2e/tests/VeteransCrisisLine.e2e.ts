@@ -27,7 +27,7 @@ beforeAll(async () => {
   await openVeteransCrisisLine()
 })
 
-describe('Personal Information Screen', () => {
+describe('Veterans Crisis Line', () => {
   it('should match design', async () => {
     await expect(element(by.text(VCLConstants.HEADING_TEXT))).toExist()
     await expect(element(by.text(VCLConstants.SUBHEADING_TEXT))).toExist()
