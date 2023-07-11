@@ -7,7 +7,6 @@ import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'com
 import { LoadedPayments, PaymentsByDate, PaymentsGetData, PaymentsList, PaymentsMap, PaymentsMetaPagination, PaymentsPaginationByYearAndPage } from 'store/api'
 import { VATheme } from 'styles/theme'
 import { formatDateUtc, getFormattedDate } from './formattingUtils'
-import { getTestIDFromTextLines } from './accessibility'
 
 /**
  * @param paymentList - type PaymentsList, list of payments
@@ -132,6 +131,7 @@ const getListItemsForPayments = (
 
   forEach(listOfPayments, (payment, index) => {
     const { paymentType, amount } = payment.attributes
+    const formattedDate = formatDateUtc(payment.attributes.date, 'yyyy-MM-dd')
     const textLines: Array<TextLineWithIconProps> = []
 
     textLines.push({ text: t('text.raw', { text: paymentType }), variant: 'MobileBodyBold' }, { text: t('text.raw', { text: amount }), variant: 'MobileBody' })
@@ -144,7 +144,7 @@ const getListItemsForPayments = (
       a11yValue,
       onPress: () => onPaymentPress(payment.id),
       a11yHintText: t('payments.viewDetails'),
-      testId: getTestIDFromTextLines(textLines),
+      testId: formattedDate + ' ' + paymentType + ' ' + amount,
     })
   })
 
