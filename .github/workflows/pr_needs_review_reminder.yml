@@ -12,8 +12,10 @@ jobs:
       - name: Get count of PRs needing review
         id: get_count
         run: echo "pr_count=$(GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr list -l 'FE-Needs Review' --json id | jq length)" >> "$GITHUB_OUTPUT" 
-      - name: Start Slack thread
-        uses: ./.github/workflows/start_slack_thread.yml
-        with:
-          channel_name: va-mobile-fe-engineers
-          message: '(Please disregard) test count ${{ steps.get_count.outputs.pr_count }}'
+  send_slack_msg:
+    name: Start Slack thread
+    needs: send_pr_reminder
+    uses: ./.github/workflows/start_slack_thread.yml
+    with:
+      channel_name: va-mobile-fe-engineers
+      message: '(Please disregard) test count ${{ steps.get_count.outputs.pr_count }}'
