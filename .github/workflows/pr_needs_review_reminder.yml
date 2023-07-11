@@ -7,11 +7,9 @@ jobs:
   send_pr_reminder:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Set up GH CLI secret'
-        run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - name: Get count of PRs needing review
         id: get_count
-        run: echo "pr_count=$(gh pr list -l 'FE-Needs Review' --json id | jq length)" >> "$GITHUB_OUTPUT" 
+        run: GH_TOKEN=${{ secrets.GITHUB_TOKEN }} echo "pr_count=$(gh pr list -l 'FE-Needs Review' --json id | jq length)" >> "$GITHUB_OUTPUT" 
       - name: Start Slack thread
         uses: ./.github/workflows/start_slack_thread.yml
         with:
