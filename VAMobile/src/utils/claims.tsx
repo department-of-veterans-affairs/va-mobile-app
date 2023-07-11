@@ -213,7 +213,9 @@ export const onAddPhotos = (
   callbackIfUri: (response: ImagePickerResponse) => void,
   totalBytesUsed: number,
 ): void => {
-  const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('common:cancel')]
+  const options = isIOS()
+    ? [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('common:cancel')]
+    : [t('fileUpload.camera') + ' ', t('fileUpload.photoGallery') + ' ', t('common:cancel') + ' ']
 
   showActionSheetWithOptions(
     {
