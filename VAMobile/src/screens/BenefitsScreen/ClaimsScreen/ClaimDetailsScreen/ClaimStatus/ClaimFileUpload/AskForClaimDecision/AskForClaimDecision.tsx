@@ -26,7 +26,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
 
@@ -39,7 +39,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
-  const requestEvalAlert = useDestructiveAlert()
+  const requestEvalAlert = useDestructiveActionSheet()
 
   const navigateToClaimsDetailsPage = submittedDecision && !error
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open

@@ -16,7 +16,7 @@ import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
-import { useBeforeNavBackListener, useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import FileList from 'components/FileList'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
@@ -29,7 +29,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const dispatch = useDispatch()
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('fileUpload.submitted'),
