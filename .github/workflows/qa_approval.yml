@@ -4,11 +4,16 @@
 
 name: '[Code Quality] QA Approval'
 
-on:
+'on':
   push:
-    branches: [ develop ]
+    branches:
+      - develop
   pull_request:
-    branches: [ develop ]
+    branches:
+      - develop
+  schedule:
+    - cron: 47 14 * * 1
+  workflow_dispatch: null
 
 jobs:
   approval:
