@@ -23,7 +23,7 @@ jest.mock('utils/hooks', () => {
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
-    useDestructiveAlert: () => mockAlertSpy,
+    useDestructiveActionSheet: () => mockAlertSpy,
   }
 })
 
