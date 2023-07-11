@@ -16,7 +16,7 @@ Within the VA Mobile project, our top-level test case folders to be familiar wit
 ### TestFlight & AppTester
 We distribute testing builds through TestFlight for iOS, and Firebase's AppTester for Android. Pretty much all of the manual testing we do, is done with builds you will find in TestFlight and AppTester, including: release candidate builds for release testing, builds based on the develop branch that are updated daily (for visual QA or backend testing), on-demand builds of branches not yet merged to develop for ticket testing, etc.
 
-To get access, follow the platform-specific instructions on the Tool Setup page for your testing device.
+To get access, follow the platform-specific instructions on the [Tool Setup page](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/Tool%20Setup) for your testing device.
 
 ### Charles Proxy
 We use Charles Proxy as a key tool for things like error state testing, mocking data we don't have access to, and downtime window testing. We've got guides for [setting up Charles Proxy](https://docs.google.com/document/d/1nUJCIfGTap6RJK_E6xqiKF0OQ4yH-gmi/edit?usp=sharing&ouid=116379542377954476916&rtpof=true&sd=true), and [how to mock response data](https://docs.google.com/document/d/10qeXwn55uGnx9wXj0FmKdLyh-dxwDNWj/edit?usp=sharing&ouid=116379542377954476916&rtpof=true&sd=true) or [set exclusions](https://docs.google.com/document/d/1_obvBLHnTTNZGb5N1Rezq8duZhy-rZ1g/edit).
