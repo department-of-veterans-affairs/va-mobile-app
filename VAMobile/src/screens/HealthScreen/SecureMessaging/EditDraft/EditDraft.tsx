@@ -55,7 +55,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { SubjectLengthValidationFn, formatSubject, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
-import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
@@ -95,8 +95,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     deleteDraftComplete,
     deletingDraft,
   } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-  const destructiveAlert = useDestructiveAlert()
-  const draftAttachmentAlert = useDestructiveAlert()
+  const destructiveAlert = useDestructiveActionSheet()
+  const draftAttachmentAlert = useDestructiveActionSheet()
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
   const { attachmentFileToAdd } = route.params
