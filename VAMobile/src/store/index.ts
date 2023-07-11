@@ -11,7 +11,6 @@ import directDepositReducer from 'store/slices/directDepositSlice'
 import disabilityRatingReducer from 'store/slices/disabilityRatingSlice'
 import errorReducer from 'store/slices/errorSlice'
 import lettersReducer from 'store/slices/lettersSlice'
-import logger from 'redux-logger'
 import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
 import patientReducer from 'store/slices/patientSlice'
@@ -51,7 +50,7 @@ const store = configureStore({
     prescriptions: prescriptionsReducer,
     settings: settingsReducer,
   },
-  middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }).concat(logger),
+  middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
   devTools: process.env.NODE_ENV !== 'production',
 })
 
