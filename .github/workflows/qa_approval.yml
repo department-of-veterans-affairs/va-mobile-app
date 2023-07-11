@@ -1,0 +1,19 @@
+#
+# Lint and Unit Test jobs that runs our lint:ci and test npm scripts
+#
+
+name: '[Code Quality] QA Approval'
+
+on:
+  pull_request:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  approval:
+    if: github.event.review.state == 'approved'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Do the thing
+        run: echo ${{ github.event.review }}
