@@ -14,7 +14,7 @@ const PrescriptionsDetailsBanner: FC = () => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
   const { contentMarginTop, standardMarginBetween } = theme.dimensions
-  
+
   useEffect(() => {
     logAnalyticsEvent(Events.vama_rx_refill_cerner())
   }, [])
