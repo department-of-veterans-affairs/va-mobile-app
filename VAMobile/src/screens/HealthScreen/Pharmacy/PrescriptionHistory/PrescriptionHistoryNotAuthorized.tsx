@@ -19,7 +19,7 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
 
   useEffect(() => {
     logAnalyticsEvent(Events.vama_rx_noauth())
-  })
+  }, [])
 
   const alertWrapperProps: BoxProps = {
     my: standardMarginBetween,

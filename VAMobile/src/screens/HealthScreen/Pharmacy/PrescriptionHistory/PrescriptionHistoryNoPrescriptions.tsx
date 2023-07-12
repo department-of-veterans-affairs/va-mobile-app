@@ -15,7 +15,7 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
 
   useEffect(() => {
     logAnalyticsEvent(Events.vama_rx_na())
-  })
+  }, [])
 
   const alertWrapperProps: BoxProps = {
     mt: standardMarginBetween,
