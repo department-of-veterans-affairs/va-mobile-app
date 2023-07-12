@@ -4,6 +4,7 @@ import React, { FC, ReactNode, Ref, useState } from 'react'
 
 import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
 import { NAMESPACE } from 'constants/namespaces'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 export type AccordionCollapsibleProps = {
@@ -106,7 +107,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   }
 
   return (
-    <Box {...boxProps} testID={testID} importantForAccessibility={'no'}>
+    <Box {...boxProps} {...testIdProps('accordion-wrapper', true)} testID={testID} importantForAccessibility={'no'}>
       <TextArea noBorder={noBorder}>
         {renderHeader()}
         {!expanded && collapsedContent}

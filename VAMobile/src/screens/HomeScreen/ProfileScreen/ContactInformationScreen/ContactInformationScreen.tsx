@@ -14,6 +14,7 @@ import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfi
 import { RootState } from 'store'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { stringToTitleCase } from 'utils/formattingUtils'
+import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
@@ -158,7 +159,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')} testID="ContactInfoTestID">
-      <TextView variant="MobileBody" mx={gutter}>
+      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter}>
         {t('contactInformation.editNote')}
       </TextView>
       <Pressable onPress={navigateTo('HowWillYou')} accessibilityRole="link" accessible={true}>

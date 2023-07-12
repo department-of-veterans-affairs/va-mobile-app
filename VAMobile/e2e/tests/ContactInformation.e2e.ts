@@ -1,8 +1,5 @@
 import { expect, device, by, element, waitFor } from 'detox'
 import { loginToDemoMode, openContactInfo, openProfile, loginToApp } from './utils'
-import { setTimeout } from "timers/promises"
-import { useTranslation } from 'react-i18next'
-import { NAMESPACE } from 'constants/namespaces'
 
 export const ContactInfoE2eIdConstants = {
   MAILING_ADDRESS_ID: 'Mailing address 3101 N Fort Valley Rd Flagstaff, AZ, 86001',
@@ -53,7 +50,7 @@ describe('Contact Info Screen', () => {
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
   })
 
-  it('should tap on the save button and verify a verify your address screen is displayed', async () => {
+  it('should tap on the save button and verify your address screen is displayed', async () => {
     await element(by.text('Save')).tap()
     await expect(element(by.id('verifyYourAddressTestID'))).toExist()
     await element(by.id('verifyYourAddressTestID')).tap()
@@ -71,7 +68,7 @@ describe('Contact Info Screen', () => {
     await expect(element(by.text('86001'))).toExist()
   })
 
-  it('should tap on the save button and verify a verify your address screen is displayed', async () => {
+  it('should tap on the save button and verify your address screen is displayed', async () => {
     await element(by.text('Save')).tap()
     await expect(element(by.id('verifyYourAddressTestID'))).toExist()
   })

@@ -1,4 +1,4 @@
-import { device, element, by, expect, waitFor } from 'detox'
+import { device, element, by, expect, waitFor, web } from 'detox'
 import getEnv from '../../src/utils/env'
 import { expect as jestExpect } from '@jest/globals'
 import { setTimeout } from "timers/promises"
@@ -6,6 +6,8 @@ import { setTimeout } from "timers/promises"
 const { toMatchImageSnapshot } = require('jest-image-snapshot')
 const fs = require('fs')
 jestExpect.extend({ toMatchImageSnapshot })
+
+const { DEMO_PASSWORD, LOGIN_PASSWORD, LOGIN_USERNAME } = getEnv() 
 
 export const CommonE2eIdConstants = {
   VA_LOGO_ICON_ID: 'va-icon',
@@ -25,6 +27,7 @@ export const CommonE2eIdConstants = {
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
+  CONTACT_INFORMATION_TEXT: 'Contact information',
 }
 
 
@@ -36,13 +39,11 @@ export async function loginToDemoMode() {
 	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
 	await element(by.text('Dismiss')).tap()
   } catch (e) {} 
-  const { DEMO_PASSWORD } = getEnv() 
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(21)
   if (DEMO_PASSWORD != undefined) {
     await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
   }
   
-  // due to keyboard being open one tap to close keyboard second to tap demo btn
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
   await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
@@ -88,7 +89,33 @@ const checkIfElementIsPresent = async (matchString: string, findbyText = false, 
   }
 }
 
-/** This function will open, check for, and dismiss the leaving app popup from a specified launching point
+/** Log the automation into a staging
+ * */
+export async function loginToApp() {
+	try {
+	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
+	await element(by.text('Dismiss')).tap()
+  } catch (e) {}
+  await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
+
+  await expect(web.element(by.web.xpath('//*[@id="sign-in-wrapper"]/button[2]'))).toExist()
+  await web.element(by.web.xpath('//*[@id="sign-in-wrapper"]/button[2]')).tap()
+  await expect(web.element(by.web.name('user[email]'))).toExist()
+  await web.element(by.web.name('user[email]')).replaceText(LOGIN_USERNAME)
+  await web.element(by.web.name('user[password]')).replaceText(LOGIN_PASSWORD)
+  await web.element(by.web.className('btn')).tap()
+  await expect(web.element(by.web.name('button'))).toExist()
+  await web.element(by.web.name('button')).tap()
+  await expect(web.element(by.web.name('button'))).toExist()
+  await web.element(by.web.name('button')).tap()
+  try {
+	  await waitFor(element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT))).toExist().withTimeout(60000)
+	  await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
+  } catch (error) {
+  }	
+}
+
+/*This function will open, check for, and dismiss the leaving app popup from a specified launching point
  * 
  * @param matchString - string of the text or id to match
  * @param findbyText - boolean to search by testID or Text
@@ -112,6 +139,7 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
  * @param jsonProperty - array of strings and dictionaries: should match the path to get to the json ob you want changed that matches the path to get to the object you want changed
  * @param newJsonValue - string or boolean: new value for the json object
  */
+
 export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue: string | boolean) {
 			
 	fs.readFile('./src/store/api/demo/mocks/' + mockFileName, 'utf8', (error, data) => {
@@ -121,7 +149,6 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 		 }
 
 		const jsonParsed = JSON.parse(data)
-		//const jsonFirstObject = source[jsonProperty[0]]
 		var mockDataVariable
 		var mockDataKeyValue
 		for(var x=0; x<jsonProperty.length; x++) {
@@ -138,10 +165,8 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 				} else {
 					mockDataVariable = mockDataVariable[jsonProperty[x]]
 				}
-			}
-				
+			}				
 		}
-		//log(JSON.stringify(jsonParsed, null, 2))
 	
 		fs.writeFile('./src/store/api/demo/mocks/' + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
 			if (err) { return console.log(err) }
@@ -159,7 +184,6 @@ export async function checkImages(screenshotPath) {
 		failureThreshold: 0.01,
 		failureThresholdType: 'percent'})
 }
-
 
 /**
  * Single-source collection for 'open this screen' functions
@@ -191,6 +215,9 @@ export async function openPrescriptions() {
 	await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
 }
 
+export async function openContactInfo() {
+  await element(by.text(CommonE2eIdConstants.CONTACT_INFORMATION_TEXT)).tap()
+}
 /**
  * Going back on android and iOS
 */
@@ -201,4 +228,3 @@ export async function backButton() {
 	await element(by.traits(['button'])).atIndex(0).tap();
   }
 }
-

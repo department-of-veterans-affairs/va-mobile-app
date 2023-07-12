@@ -40,7 +40,6 @@ export type VASelectorProps = {
   setError?: (value?: string) => void
   /** optional boolean that marks the component as required */
   isRequiredField?: boolean
-  lectableRadioBtn?: boolean
   /** Optional TestID */
   testID?: string
 }
