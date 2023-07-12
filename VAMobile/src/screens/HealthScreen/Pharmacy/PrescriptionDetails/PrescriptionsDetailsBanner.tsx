@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { Box, ClickToCallPhoneNumber, CollapsibleAlert, TextView, VABulletList, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
@@ -14,6 +14,10 @@ const PrescriptionsDetailsBanner: FC = () => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
   const { contentMarginTop, standardMarginBetween } = theme.dimensions
+  
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_rx_refill_cerner())
+  }, [])
 
   const getContent = () => {
     const bullets = [
