@@ -36,7 +36,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const attachmentBoolean = hasAttachments || attachment
   const attachLabel = attachmentBoolean ? t('secureMessaging.attachments.hasAttachment').toLowerCase() : ''
-  
+
   if (isInitialMessage) {
     return <></>
   }
