@@ -55,11 +55,11 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       destructiveButtonIndex: 1,
       buttons: [
         {
-          text: t('cancel'),
+          text: t('fileUpload.continueUpload'),
         },
 
         {
-          text: t('fileUpload.discard.photos'),
+          text: t('fileUpload.cancelUpload'),
           onPress: () => {
             navigation.dispatch(e.data.action)
           },
@@ -173,7 +173,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
                 photoNum: index + 1,
                 totalPhotos: imagesList?.length,
               })}
-              lastPhoto={imagesList?.length === 1 ? true : undefined}
             />
           </Box>
         )
@@ -223,7 +222,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const deleteCallbackIfUri = (response: Asset[]): void => {
     if (response.length === 0) {
       setImagesList([])
-      showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
+      showSnackBar(t('photoRemoved'), dispatch, undefined, true, false, false)
       navigation.navigate('TakePhotos', { request, focusOnSnackbar: true })
     } else {
       setErrorMessage('')
@@ -235,7 +234,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         }
       })
       setTotalBytesUsed(bytesUsed)
-      showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
+      showSnackBar(t('photoRemoved'), dispatch, undefined, true, false, false)
     }
   }
 
