@@ -12,7 +12,7 @@ import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/s
 import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { RootState } from 'store'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { useAppDispatch, useDestructiveAlert, useDowntime, useExternalLink, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useDowntime, useExternalLink, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import DetailsTextSections from './DetailsTextSections'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
@@ -27,7 +27,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const { loadingHistory, prescriptionsById, prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
-  const submitRefillAlert = useDestructiveAlert()
+  const submitRefillAlert = useDestructiveActionSheet()
   const dispatch = useAppDispatch()
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const { t } = useTranslation(NAMESPACE.HEALTH)

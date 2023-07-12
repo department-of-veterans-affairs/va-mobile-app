@@ -112,7 +112,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   //ToDo add feature flag display logic for preferredName and genderIdentity cards once it is merged into the nav update
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')} testID="PersonalInformationTestID">
       <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter}>
         {t('contactInformation.editNote')}
       </TextView>

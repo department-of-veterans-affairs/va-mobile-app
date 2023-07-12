@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { themeFn } from 'utils/theme'
-import { useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView, { TextViewProps } from './TextView'
 
@@ -21,8 +21,6 @@ type PhotoPreviewProps = {
   image: Asset
   /** function callback for if deletion is selected */
   onDeleteCallback: () => void
-  /** flag for whether this is the last photo available for deletion */
-  lastPhoto?: boolean
   /** Photo Position in array */
   photoPosition?: string
 }
@@ -42,12 +40,12 @@ const StyledImage = styled(Image)<StyledImageProps>`
   border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius)}px;
 `
 
-const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, lastPhoto, photoPosition }) => {
+const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, photoPosition }) => {
   const { colors: themeColor } = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [selected, setSelected] = useState(false)
   const uri = image.uri
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
   const photoPreviewIconSize = 24
   const photoPreviewBorderRadius = 5
   const photoPreviewIconPadding = 5
@@ -58,22 +56,20 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
 
   const onPress = (): void => {
     setSelected(true)
-    const message = lastPhoto ? t('fileUpload.deletePopupNavWarning') : undefined
 
     confirmAlert({
-      title: t('fileUpload.deletePopup'),
-      message,
+      title: t('removePhoto'),
       cancelButtonIndex: 0,
       destructiveButtonIndex: 1,
       buttons: [
         {
-          text: t('cancel'),
+          text: t('keep'),
           onPress: () => {
             setSelected(false)
           },
         },
         {
-          text: t('fileUpload.delete'),
+          text: t('remove'),
           onPress: () => {
             setSelected(false)
             onDeleteCallback()

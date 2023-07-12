@@ -23,7 +23,7 @@ import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
 
@@ -36,7 +36,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
-  const requestEvalAlert = useDestructiveAlert()
+  const requestEvalAlert = useDestructiveActionSheet()
 
   const navigateToClaimsDetailsPage = submittedDecision && !error
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
@@ -81,7 +81,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('cancel'),
+          text: t('cancelRequest'),
         },
         {
           text: t('askForClaimDecision.alertBtnTitle'),

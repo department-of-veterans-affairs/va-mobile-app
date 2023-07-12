@@ -134,9 +134,8 @@ context('ViewMessageScreen', () => {
       expect(screen.getByText('mock sender 1')).toBeTruthy()
       expect(screen.getByText('mock sender 2')).toBeTruthy()
       expect(screen.queryByText('mock sender 45')).toBeFalsy()
-
-      //ToDO with 6056 make it not render the initialMessage for collapsible messages
     })
+    
     it('should have the reply button since the latest message is within 45 days', () => {
       expect(screen.getByText('Reply')).toBeTruthy()
     })
