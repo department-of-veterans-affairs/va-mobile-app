@@ -119,6 +119,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+  const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const scrollViewRef = useRef<ScrollView>(null)
 
   const [isDiscarded, editCancelConfirmation] = useComposeCancelConfirmation()
@@ -470,7 +471,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} scrollViewRef={scrollViewRef} focusOnError={onSendClicked} />
+        <MessageAlert
+          hasValidationError={formContainsError}
+          saveDraftAttempted={onSaveDraftClicked}
+          scrollViewRef={scrollViewRef}
+          focusOnError={onSendClicked}
+          errorList={errorList}
+        />
         <TextArea>
           {message && isReplyDraft && (
             <>
@@ -495,6 +502,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
               setFormContainsError={setFormContainsError}
               resetErrors={resetErrors}
               setResetErrors={setResetErrors}
+              setErrorList={setErrorList}
             />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
