@@ -22,7 +22,7 @@ export type PaginationProps = {
   onPrev: () => void
   /** function to be called when next is selected */
   onNext: () => void
-  /** optional tab if screen has tabs */
+  /** optional tab if screen has tabs for analytics */
   tab?: string
 }
 
