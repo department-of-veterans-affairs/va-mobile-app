@@ -7,7 +7,7 @@ import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScre
 import { NAMESPACE } from 'constants/namespaces'
 import { TextLine } from 'components/types'
 import { getA11yLabelText, getFileDisplay } from 'utils/common'
-import { useDestructiveAlert } from 'utils/hooks'
+import { useDestructiveActionSheet } from 'utils/hooks'
 import DefaultList, { DefaultListItemObj } from 'components/DefaultList'
 
 export type FileListProps = {
@@ -19,7 +19,7 @@ export type FileListProps = {
 
 const FileList: FC<FileListProps> = ({ files, onDelete }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const deleteFileAlert = useDestructiveAlert()
+  const deleteFileAlert = useDestructiveActionSheet()
 
   const listObjs: Array<DefaultListItemObj> = files.map((file) => {
     const { fileName, fileSize: formattedFileSize, fileSizeA11y: fileSizeA11y } = getFileDisplay(file, t, false)
@@ -34,15 +34,15 @@ const FileList: FC<FileListProps> = ({ files, onDelete }) => {
       decorator: ButtonDecoratorType.Delete,
       onPress: () => {
         deleteFileAlert({
-          title: t('file.removeConfirm'),
+          title: t('file.removeFile'),
           destructiveButtonIndex: 1,
           cancelButtonIndex: 0,
           buttons: [
             {
-              text: t('cancel'),
+              text: t('keep'),
             },
             {
-              text: t('delete'),
+              text: t('remove'),
               onPress: () => {
                 onDelete(file)
               },

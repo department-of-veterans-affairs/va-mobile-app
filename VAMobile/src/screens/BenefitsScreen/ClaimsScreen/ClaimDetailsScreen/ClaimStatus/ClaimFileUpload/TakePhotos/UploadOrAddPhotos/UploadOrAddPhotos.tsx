@@ -19,7 +19,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
-import { useBeforeNavBackListener, useDestructiveAlert, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveActionSheet, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOrAddPhotos'>
@@ -35,7 +35,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
   const scrollViewRef = useRef<ScrollView>(null)
   const snackbarMessages: SnackbarMessages = {
@@ -55,11 +55,11 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       destructiveButtonIndex: 1,
       buttons: [
         {
-          text: t('cancel'),
+          text: t('fileUpload.continueUpload'),
         },
 
         {
-          text: t('fileUpload.discard.photos'),
+          text: t('fileUpload.cancelUpload'),
           onPress: () => {
             navigation.dispatch(e.data.action)
           },
@@ -173,7 +173,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
                 photoNum: index + 1,
                 totalPhotos: imagesList?.length,
               })}
-              lastPhoto={imagesList?.length === 1 ? true : undefined}
             />
           </Box>
         )
@@ -223,7 +222,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const deleteCallbackIfUri = (response: Asset[]): void => {
     if (response.length === 0) {
       setImagesList([])
-      showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
+      showSnackBar(t('photoRemoved'), dispatch, undefined, true, false, false)
       navigation.navigate('TakePhotos', { request, focusOnSnackbar: true })
     } else {
       setErrorMessage('')
@@ -235,7 +234,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         }
       })
       setTotalBytesUsed(bytesUsed)
-      showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
+      showSnackBar(t('photoRemoved'), dispatch, undefined, true, false, false)
     }
   }
 

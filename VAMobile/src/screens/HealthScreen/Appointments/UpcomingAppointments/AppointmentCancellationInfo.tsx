@@ -6,11 +6,9 @@ import { Box, ButtonTypesConstants, ClickForActionLink, ClickToCallPhoneNumber, 
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { cancelAppointment } from 'store/slices'
-import { formatDateMMDDYYYY } from 'utils/formattingUtils'
 import { getTranslation } from 'utils/formattingUtils'
-import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -24,12 +22,11 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
   const dispatch = useAppDispatch()
-  const isAndroidDevice = isAndroid()
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, isCovidVaccine, cancelId, startDateUtc, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, location, isCovidVaccine, cancelId, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
   const { name, phone } = location || ({} as AppointmentLocation)
 
   const findYourVALocationProps: LinkButtonProps = {
@@ -99,39 +96,23 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   )
 
   const onCancelAppointment = () => {
-    const appointmentDate = formatDateMMDDYYYY(startDateUtc)
     const onPress = () => {
       dispatch(cancelAppointment(cancelId, appointment?.id))
     }
 
-    const androidButtons = [
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.android.noKeep'),
-      },
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.android.yesCancel'),
-        onPress,
-      },
-    ]
-    const iosButtons = [
-      {
-        text: tc('cancel'),
-      },
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.yesCancelAppointment'),
-        onPress,
-      },
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.noCancelAppointment'),
-      },
-    ]
-
     confirmAlert({
-      title: '',
-      message: t('upcomingAppointmentDetails.cancelAppointment.message', { appointmentDate }),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: isAndroidDevice ? androidButtons : iosButtons,
+      title: tc('appointments.cancelThisAppointment'),
+      cancelButtonIndex: 1,
+      destructiveButtonIndex: 0,
+      buttons: [
+        {
+          text: tc('appointments.cancelAppointment'),
+          onPress: onPress,
+        },
+        {
+          text: tc('appointments.keepAppointment'),
+        },
+      ],
     })
   }
 
