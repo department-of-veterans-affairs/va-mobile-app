@@ -16,6 +16,7 @@ export const CommonE2eIdConstants = {
   VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
+  PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
   LETTERS_ROW_TEXT: 'VA letters and documents',
   SETTINGS_ROW_TEXT: 'Settings',
@@ -179,6 +180,10 @@ export async function openProfile() {
 
 export async function openSettings() {
   await element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT)).tap() 
+}
+
+export async function openPersonalInformation() {
+  await element(by.text(CommonE2eIdConstants.PERSONAL_INFORMATION_ROW_TEXT)).tap()
 }
 
 export async function openMilitaryInformation() {
