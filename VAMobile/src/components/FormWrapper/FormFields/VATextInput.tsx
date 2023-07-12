@@ -51,6 +51,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onChange,
     maxLength,
     onEndEditing,
+    testID,
     inputRef,
     isRequiredField,
     helperTextKey,
@@ -58,7 +59,6 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     error,
     isTextArea,
     setInputCursorToBeginning,
-    testID,
   } = props
   const { t } = useTranslation()
   const theme = useTheme()
@@ -118,6 +118,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
       }
     },
     onEndEditing,
+    testID,
     style: {
       fontSize: theme.fontSizes.MobileBody.fontSize,
       fontFamily: theme.fontFace.regular,
