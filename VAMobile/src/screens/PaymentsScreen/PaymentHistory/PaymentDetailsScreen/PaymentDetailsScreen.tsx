@@ -94,7 +94,12 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ navigation, route
           )}
         </TextArea>
         <Box mx={gutter} mt={contentMarginTop}>
-          <Pressable onPress={navigateTo('PaymentIssue')} {...testIdProps(t('payments.ifMyPaymentDoesNotLookRight'))} testID="paymentInfoIncorrectTestID" accessibilityRole="link" accessible={true}>
+          <Pressable
+            onPress={navigateTo('PaymentIssue')}
+            {...testIdProps(t('payments.ifMyPaymentDoesNotLookRight'))}
+            testID="paymentInfoIncorrectTestID"
+            accessibilityRole="link"
+            accessible={true}>
             <TextView {...textViewProps}>{t('payments.ifMyPaymentDoesNotLookRight')}</TextView>
           </Pressable>
         </Box>
