@@ -16,9 +16,9 @@ import {
   TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
 import { InlineTextWithIconsProps, MessageListItemObj, PickerItem, VAIconProps } from 'components'
-import { UseDestructiveAlertProps, imageDocumentResponseType } from './hooks'
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
 import { getFormattedMessageTime, stringToTitleCase } from 'utils/formattingUtils'
+import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
 import { logNonFatalErrorToFirebase } from './analytics'
 import theme from 'styles/themes/standardTheme'
 
@@ -32,13 +32,13 @@ export const getMessagesListItems = (
 ): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
     const { attributes } = message
-    const { recipientName, senderName, subject, sentDate, readReceipt, attachment, category } = attributes
+    const { attachment, recipientName, senderName, subject, sentDate, readReceipt, hasAttachments, category } = attributes
     const isSentFolder = folderName === FolderNameTypeConstants.sent
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
 
     const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'Unread', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps) : undefined
-    const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
+    const paperClipProps = hasAttachments || attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
 
     const textLines: Array<InlineTextWithIconsProps> = [
       {
@@ -367,13 +367,13 @@ export const getfolderName = (id: string, folders: SecureMessagingFolderList): s
 /**
  * Checks if the message has attachments before saving a draft and displays a message to the
  * user letting them know that the attachments wouldn't be saved with the draft
- * @param alert - Alert from useDestructiveAlert() hook
+ * @param alert - Alert from useDestructiveActionSheet() hook
  * @param attachmentsList - List of attachments
  * @param t - Traslation function
  * @param dispatchSaveDraft - Dispatch save draft callback
  */
 export const saveDraftWithAttachmentAlert = (
-  alert: (props: UseDestructiveAlertProps) => void,
+  alert: (props: useDestructiveActionSheetProps) => void,
   attachmentsList: Array<imageDocumentResponseType>,
   t: TFunction,
   dispatchSaveDraft: () => void,

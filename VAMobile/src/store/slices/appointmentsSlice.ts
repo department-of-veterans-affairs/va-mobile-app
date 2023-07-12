@@ -339,16 +339,14 @@ export const cancelAppointment =
       dispatch(dispatchFinishCancelAppointment({ appointmentID }))
       await logAnalyticsEvent(Events.vama_appt_cancel(!!isPendingAppointment))
       // TODO refactor translation to work in store
-      const successText = isPendingAppointment ? 'Pending request canceled' : 'Canceled upcoming appointment'
+      const successText = isPendingAppointment ? 'Request canceled' : 'Appointment canceled'
       showSnackBar(successText, dispatch, undefined, true, false, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `cancelAppointment: ${appointmenNonFatalErrorString}`)
         dispatch(dispatchFinishCancelAppointment({ error }))
         // TODO refactor translation to work in store
-        const errorText = isPendingAppointment
-          ? 'Request could not be canceled. Try again or contact your facility to cancel.'
-          : 'Appointment could not be canceled. Try again or contact your facility to cancel.'
+        const errorText = isPendingAppointment ? 'Request not canceled.' : 'Appointment not canceled.'
         showSnackBar(errorText, dispatch, retryFunction, false, true, true)
       }
     }

@@ -74,6 +74,7 @@ context('FolderMessages', () => {
               messageId: 1,
               category: CategoryTypeFields.other,
               subject: 'subject',
+              hasAttachments: true,
               attachment: true,
               sentDate: '03-12-2021',
               senderId: 0,

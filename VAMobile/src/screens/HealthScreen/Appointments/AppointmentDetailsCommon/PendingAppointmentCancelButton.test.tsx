@@ -16,7 +16,7 @@ jest.mock('utils/hooks', () => {
   const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useDestructiveAlert: () => mockAlertSpy,
+    useDestructiveActionSheet: () => mockAlertSpy,
   }
 })
 

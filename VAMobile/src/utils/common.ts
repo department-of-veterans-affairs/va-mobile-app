@@ -393,8 +393,8 @@ export function halfPanelCardStyleInterpolator({ current, inverted }: StackCardI
   }
 }
 
-export function fullPanelCardStyleInterpolator({ current, inverted }: StackCardInterpolationProps): StackCardInterpolatedStyle {
-  const screenHeight = Dimensions.get('screen').height
+export function fullPanelCardStyleInterpolator({ current, inverted, layouts }: StackCardInterpolationProps): StackCardInterpolatedStyle {
+  const screenHeight = layouts.screen.height
 
   const translateY = Animated.multiply(
     current.progress.interpolate({

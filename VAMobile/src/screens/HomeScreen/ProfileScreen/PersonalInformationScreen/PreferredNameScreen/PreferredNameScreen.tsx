@@ -10,7 +10,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api'
 import { SnackbarMessages } from 'components/SnackBar'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import { useAppDispatch, useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
@@ -22,7 +22,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
 
   const getInitialState = (): string => {
     const item = profile?.preferredName
@@ -106,6 +106,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
         onChange: onSetName,
         helperTextKey: 'personalInformation.preferredName.editHelperText',
         a11yLabel: 'personalInformation.preferredNameScreen.body.a11yLabel',
+        testID: 'preferredNameTestID',
       },
       fieldErrorMessage: t('personalInformation.preferredName.fieldEmpty'),
       validationList: [

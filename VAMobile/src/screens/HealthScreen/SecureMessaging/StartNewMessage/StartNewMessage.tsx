@@ -54,7 +54,7 @@ import {
   useAppDispatch,
   useAttachments,
   useBeforeNavBackListener,
-  useDestructiveAlert,
+  useDestructiveActionSheet,
   useError,
   useMessageWithSignature,
   useRouteNavigation,
@@ -72,7 +72,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
-  const draftAttachmentAlert = useDestructiveAlert()
+  const draftAttachmentAlert = useDestructiveActionSheet()
 
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.draft.saved'),
