@@ -735,6 +735,8 @@
   "health": "Health",
   "appointments": "Appointments",
   "appointmentsHelp": "Appointments help",
+  "appointments.claimExam": "Claim exam",
+  "appointments.claimExam.explanationText": "This appointment is for disability rating purposes only. It doesn't include treatment. If you have medical evidence to support your claim, bring copies to this appointment.",
   "appointments.sessionNotStarted.title": "You can't join this session yet",
   "appointments.joinVideoConnect": "You can join VA Video Connect up to 30 minutes prior to the start time.",
   "details": "Details",
