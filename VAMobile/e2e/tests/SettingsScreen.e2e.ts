@@ -9,6 +9,8 @@ export const SettingsE2eIdConstants = {
   MANAGE_ACCT_SCREEN_TEXT: 'To confirm or update your sign-in email, go to the website where you manage your account information.',
   NOTIFICATIONS_ROW_TEXT: 'Notifications',
   NOTIFICATIONS_SCREEN_TEXT: 'Select what type of alerts you would like to receive.',
+  NOTIFICATIONS_APPOINTMENT_TEXT: 'Appointment Reminders',
+  NOTIFICATIONS_MESSAGING_TEXT: 'Secure Message Alerts',
   SHARE_APP_ROW_TEXT: 'Share the app',
   SHARE_APP_SCREEN_TEXT:
     'Download the VA: Health and Benefits on the App Store: https://apps.apple.com/us/app/va-health-and-benefits/id1559609596 or on Google Play: https://play.google.com/store/apps/details?id=gov.va.mobileapp',
@@ -44,6 +46,8 @@ describe('Settings Screen', () => {
     await element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_ROW_TEXT)).atIndex(0).tap()
     await expect(element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_ROW_TEXT)).atIndex(0)).toExist()
     await expect(element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_SCREEN_TEXT))).toExist()
+    await expect(element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_APPOINTMENT_TEXT))).toExist()
+    await expect(element(by.text(SettingsE2eIdConstants.NOTIFICATIONS_MESSAGING_TEXT))).toExist()
     await element(by.text(SettingsE2eIdConstants.SETTINGS_SCREEN_TEXT)).tap()
   })
 
