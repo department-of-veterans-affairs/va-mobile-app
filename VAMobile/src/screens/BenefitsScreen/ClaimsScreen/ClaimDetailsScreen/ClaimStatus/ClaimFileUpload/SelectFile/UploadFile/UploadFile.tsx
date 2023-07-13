@@ -48,10 +48,10 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
       destructiveButtonIndex: 1,
       buttons: [
         {
-          text: t('cancel'),
+          text: t('fileUpload.continueUpload'),
         },
         {
-          text: t('fileUpload.discard'),
+          text: t('fileUpload.cancelUpload'),
           onPress: () => {
             navigation.dispatch(e.data.action)
           },
@@ -135,7 +135,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
   const onFileDelete = () => {
     setFilesList([])
-    showSnackBar(t('file.deleted'), dispatch, undefined, true, false, false)
+    showSnackBar(t('fileRemoved'), dispatch, undefined, true, false, false)
     navigation.navigate('SelectFile', { claimID: claim?.id || '', request, focusOnSnackbar: true })
   }
 

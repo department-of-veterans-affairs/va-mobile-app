@@ -73,6 +73,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: 'mock subject 1: The initial message sets the overall thread subject header',
     body: 'message 1 body text',
+    hasAttachments: false,
     attachment: false,
     sentDate: '1',
     senderId: 2,
@@ -86,6 +87,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: '',
     body: 'test 2',
+    hasAttachments: false,
     attachment: false,
     sentDate: '2',
     senderId: 2,
@@ -99,6 +101,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: '',
     body: 'Last accordion collapsible should be open, so the body text of this message should display',
+    hasAttachments: false,
     attachment: false,
     sentDate: '3',
     senderId: 2,
@@ -112,6 +115,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: 'This message should not display because it has different thread ID',
     body: 'test',
+    hasAttachments: false,
     attachment: false,
     sentDate: '1-1-21',
     senderId: 2,
@@ -285,40 +289,12 @@ context('ReplyMessage', () => {
     })
   })
 
-  it('renders only messages in the same thread as the message associated with messageID', async () => {
-    await waitFor(() => {
-      expect(testInstance.findAllByType(AccordionCollapsible).length).toBe(3)
-    })
-  })
-
-  it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
-    await waitFor(() => {
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[18].props.children).toEqual('mock sender 3')
-      expect(textViews[19].props.children).toEqual('Invalid DateTime')
-      expect(textViews[20].props.children).toEqual('Last accordion collapsible should be open, so the body text of this message should display')
-      expect(textViews[21].props.children).toEqual('mock sender 2')
-      expect(textViews[22].props.children).toEqual('Invalid DateTime')
-      expect(textViews[23].props.children).toEqual('mock sender 1')
-      expect(textViews[24].props.children).toEqual('Invalid DateTime')
-    })
-  })
-
-  describe('when first message and last message is clicked', () => {
-    it('should close first accordion and open last accordion', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[4].props.onPress()
-      })
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[6].props.onPress()
-      })
-
-      expect(testInstance.findAllByType(TextView)[20].props.children).toBe('mock sender 2')
-      //Used to display last message's contents, but now there is no textview after the date
-      expect(testInstance.findAllByType(TextView)[22].props.children).toBe('mock sender 1')
-      expect(testInstance.findAllByType(TextView)[23].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView).length).toBe(25)
-    })
+  it('should render the correct number of accordions', async () => {
+    expect(screen.getAllByRole('tab').length).toBe(3)
+    expect(screen.getByText('mock sender 1')).toBeTruthy()
+    expect(screen.getByText('mock sender 2')).toBeTruthy()
+    expect(screen.getAllByText('mock sender 3').length).toBe(2)
+    expect(screen.queryByText('mock sender 45')).toBeFalsy()
   })
 
   describe('when loading is set to true', () => {

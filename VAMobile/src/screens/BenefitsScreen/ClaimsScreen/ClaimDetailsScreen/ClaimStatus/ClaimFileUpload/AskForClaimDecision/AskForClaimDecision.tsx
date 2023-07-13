@@ -105,7 +105,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('cancel'),
+          text: t('cancelRequest'),
         },
         {
           text: t('askForClaimDecision.alertBtnTitle'),
