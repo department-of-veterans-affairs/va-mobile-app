@@ -6,9 +6,11 @@ import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent
 import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, getProfileInfo, prefetchClaimsAndAppeals } from 'store/slices'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
@@ -20,7 +22,9 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claimsAndAppealsByClaimType, loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>(
+    (state) => state.claimsAndAppeals,
+  )
   const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const claimsAndAppealsAccess = claimsAuthorization || appealsAuthorization
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>(
@@ -121,6 +125,13 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
     return <></>
   }
 
+  const onTabChange = (tab: string) => {
+    if (tab !== selectedTab) {
+      logAnalyticsEvent(Events.vama_claim_count(claimsAndAppealsByClaimType.CLOSED.length, claimsAndAppealsByClaimType.ACTIVE.length, tab))
+    }
+    setSelectedTab(tab)
+  }
+
   return (
     <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title}>
       <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
@@ -129,7 +140,7 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
             <SegmentedControl
               values={controlValues}
               titles={controlValues}
-              onChange={setSelectedTab}
+              onChange={onTabChange}
               selected={controlValues.indexOf(selectedTab)}
               accessibilityHints={accessibilityHints}
             />
