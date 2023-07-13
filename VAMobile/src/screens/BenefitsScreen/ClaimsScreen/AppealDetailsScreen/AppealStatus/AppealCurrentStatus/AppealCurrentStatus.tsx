@@ -285,7 +285,7 @@ const getStatusHeadingAndTitle = (
       break
     case AppealStatusTypesConstants.remand_return:
       appealStatusDisplayedData.title = translation('appealDetails.remandReturn')
-      appealStatusDisplayedData.details = [translation('appealDetails.remandReturnDescription')]
+      appealStatusDisplayedData.details = [translation('appealDetails.remandDescription')]
       break
   }
 

@@ -7,7 +7,6 @@ import { Box, ButtonTypesConstants, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { cancelAppointment } from 'store/slices'
 import { isAPendingAppointment } from 'utils/appointments'
-import { isAndroid } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
@@ -23,44 +22,28 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const confirmAlert = useDestructiveActionSheet()
-  const isAndroidDevice = isAndroid()
 
-  const { cancelId, typeOfCare, status } = attributes || ({} as AppointmentAttributes)
+  const { cancelId, status } = attributes || ({} as AppointmentAttributes)
 
   if (isAppointmentPending && cancelId && status !== AppointmentStatusConstants.CANCELLED) {
     const onPress = () => {
       dispatch(cancelAppointment(cancelId, appointmentID, true))
     }
 
-    const androidButtons = [
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.android.noKeep'),
-      },
-      {
-        text: t('upcomingAppointmentDetails.cancelAppointment.android.yesCancel'),
-        onPress,
-      },
-    ]
-    const iosButtons = [
-      {
-        text: tc('cancel'),
-      },
-      {
-        text: t('appointments.pending.cancelRequest.yes'),
-        onPress,
-      },
-      {
-        text: t('appointments.pending.cancelRequest.no'),
-      },
-    ]
-
     const onCancel = () => {
       confirmAlert({
-        title: '',
-        message: t('appointments.pending.cancelRequest.message', { typeOfCare }),
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-        buttons: isAndroidDevice ? androidButtons : iosButtons,
+        title: tc('appointments.cancelRequest'),
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0,
+        buttons: [
+          {
+            text: tc('cancelRequest'),
+            onPress: onPress,
+          },
+          {
+            text: tc('keepRequest'),
+          },
+        ],
       })
     }
 
