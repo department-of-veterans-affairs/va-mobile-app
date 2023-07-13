@@ -553,11 +553,6 @@ export const Events = {
       },
     }
   },
-  vama_rx_help: (): Event => {
-    return {
-      name: 'vama_rx_help',
-    }
-  },
   vama_rx_filter: (): Event => {
     return {
       name: 'vama_rx_filter',
@@ -569,6 +564,11 @@ export const Events = {
       params: {
         filter,
       },
+    }
+  },
+  vama_rx_help: (): Event => {
+    return {
+      name: 'vama_rx_help',
     }
   },
   vama_rx_na: (): Event => {
