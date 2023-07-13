@@ -114,12 +114,13 @@ describe('Appointments Screen', () => {
 		await element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID)).tap()
 		await element(by.id('UpcomingApptDetailsTestID')).scrollTo('bottom')
 		await element(by.id('Cancel request')).tap()
-		if (device.getPlatform() === 'android') {
+		await element(by.text('Cancel Request')).tap()
+		/*if (device.getPlatform() === 'android') {
 			await element(by.text('YES, CANCEL')).tap()
 		} else {
 			await element(by.text('Yes, Cancel Request')).tap()
-		}
-		await expect(element(by.text('Pending request canceled'))).toExist()
+		}*/
+		await expect(element(by.text('Request canceled'))).toExist()
 		await element(by.text('Dismiss')).tap()
 	})
 	
