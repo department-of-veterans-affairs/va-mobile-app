@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, loginToDemoMode, openProfile, openSettings } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openDismissLeavingAppPopup, openProfile, openSettings } from './utils'
 
 export const SettingsE2eIdConstants = {
   SETTINGS_SCREEN_TEXT: 'Settings',
@@ -61,6 +61,16 @@ describe('Settings Screen', () => {
     await setTimeout(5000)
     await device.takeScreenshot('SettingsPrivacyPolicy')
     await device.launchApp({ newInstance: false })
+  })
+
+  it('should show and dismiss leaving app popup for privacy', async () => {
+    await openDismissLeavingAppPopup(SettingsE2eIdConstants.PRIVACY_ROW_TEXT, true)
+  })
+
+  it('should show and dismiss signout popup', async () => {
+    await element(by.text(CommonE2eIdConstants.SIGN_OUT_BTN_ID)).tap()
+    await expect(element(by.text(CommonE2eIdConstants.SIGN_OUT_CONFIRM_TEXT))).toExist()
+    await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
   })
 
   it('should sign out', async () => {
