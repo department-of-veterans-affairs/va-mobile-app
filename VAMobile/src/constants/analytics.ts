@@ -545,15 +545,6 @@ export const Events = {
       name: 'vama_rx_cerner_exp ',
     }
   },
-  vama_rx_det_open_tt: (pages_touched: number, totalTime: number): Event => {
-    return {
-      name: 'vama_rx_det_open_tt',
-      params: {
-        pages_touched: pages_touched,
-        totalTime: totalTime,
-      },
-    }
-  },
   vama_rx_details: (rx_id: string): Event => {
     return {
       name: 'vama_rx_details ',
@@ -577,14 +568,6 @@ export const Events = {
       name: 'vama_rx_filter_sel',
       params: {
         filter,
-      },
-    }
-  },
-  vama_rx_first_refill_ttc: (totalTime: number): Event => {
-    return {
-      name: 'vama_rx_first_refill_ttc',
-      params: {
-        totalTime: totalTime,
       },
     }
   },
