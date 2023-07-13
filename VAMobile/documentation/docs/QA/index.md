@@ -1,7 +1,7 @@
 ---
 title: QA
 ---
-# Overview | VA Mobile App Quality Assurance Process
+# VA Mobile App Quality Assurance Process
 
  A quality assurance process is an agreement between the project developers, product managers and quality assurance on the process for testing and verifying the delivery of product functionality. (See [this whitepaper](https://www.altexsoft.com/whitepapers/quality-assurance-quality-control-and-testing-the-basics-of-software-quality-management/) for some great QA-related basic terms and definitions, including "quality assurance process")
 
@@ -72,8 +72,8 @@ All issue tickets should be written using the [issue ticket template](https://gi
 
 | **Frequency** | **Definition** | **Examples** |
 | --- | --- | --- |
-| High frequency | Affects a component, screen, or action used by 15% or more of monthly users | Authentication, category landing screens, feature landing or child screens for most-used features (Claims, Upcoming Appointments), feature landing or child screens for next-most-used features (Payments, Messaging, Letters, Disability Rating, Military Info and Onboarding) |
-| Low frequency | Affects a component, screen, or action used by 14% or fewer of monthly users | All app actions (send message, upload file, etc); and all screens not listed in high frequency examples |
+| High frequency | Affects a component, screen, or action used by 15% or more of monthly users | Authentication, home page (including What's New and Encouraged Update), category landing screens, feature landing or child screens for most-used features (Claims, Upcoming Appointments, and Decision Letters), feature landing or child screens for next-most-used features (Prescriptions, Payments, Messaging, Letters, Disability Rating, and Military Info), and downloading a letter (decision or any other kind) |
+| Low frequency | Affects a component, screen, or action used by 14% or fewer of monthly users | All other app actions (send message, upload file, etc); and all screens not listed in high frequency examples |
 
 ## Test activity reporting
 
