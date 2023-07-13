@@ -46,7 +46,11 @@ export type BenefitsStackParamList = {
   }
   ClaimLettersScreen: undefined
   ConsolidatedClaimsNote: undefined
-  WhatDoIDoIfDisagreement: undefined
+  WhatDoIDoIfDisagreement: {
+    claimID: string
+    claimType: string
+    claimStep: number
+  }
   AppealDetailsScreen: {
     appealID: string
   }
@@ -54,16 +58,19 @@ export type BenefitsStackParamList = {
     claimID: string
   }
   FileRequestDetails: {
+    claimID: string
     request: ClaimEventData
   }
   AskForClaimDecision: {
     claimID: string
   }
   TakePhotos: {
+    claimID: string
     request: ClaimEventData
     focusOnSnackbar?: boolean
   }
   SelectFile: {
+    claimID: string
     request: ClaimEventData
     focusOnSnackbar?: boolean
   }
