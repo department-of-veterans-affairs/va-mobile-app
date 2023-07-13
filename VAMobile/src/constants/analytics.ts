@@ -190,11 +190,6 @@ export const Events = {
       },
     }
   },
-  vama_claim_step_three: (): Event => {
-    return {
-      name: 'vama_claim_step_three',
-    }
-  },
   vama_claim_upload_compl: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
     return {
       name: 'vama_claim_upload_compl',
