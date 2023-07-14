@@ -33,7 +33,7 @@ Used for validating params in controllers
 Authorization policies used to verify access to routes and resources
 
 ## Serializers
-Definitions of how different models should be serialized
+Definitions of how different models should be serialized. These all conform to the JSON API standard.
 
 ## Services
 Objects used for communicating with upstream service objects. These can be a mixture of services we've written directly,
@@ -57,3 +57,25 @@ The various paths for testing are as follows
 ```
 /modules/mobile/docs
 ```
+
+## Misc
+#### Lib
+```
+/lib
+```
+Traditionally, lib contains code that is not specific to the rails app. our contains:
+ - Validation errors classes 
+ - Engines
+ - Scripts
+
+#### Config
+```
+/config
+```
+Standard rails config, such routes
+
+#### DB
+```
+/db
+```
+Data migrations, though we seldom used because we rarely have db backed models
