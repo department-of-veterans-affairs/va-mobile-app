@@ -43,7 +43,12 @@ context('GenderIdentityScreen', () => {
   })
   
   const initializeTestInstance = (preloadGenderIdentityOptions?: boolean, errorsState: ErrorsState = initialErrorsState) => {
-    const props = mockNavProps()
+    const props = mockNavProps(
+      {},
+      {
+      addListener: jest.fn(),
+      }
+    )
     const store = {
       ...InitialState,
       personalInformation: {
