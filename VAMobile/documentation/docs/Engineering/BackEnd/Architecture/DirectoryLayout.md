@@ -30,18 +30,37 @@ so that the new data is backwards compatible.
 Used for validating params in controllers
 
 ## Policies
+```
+/modules/mobile/app/policies
+```
 Authorization policies used to verify access to routes and resources
 
 ## Serializers
+```
+/modules/mobile/app/serializers
+```
 Definitions of how different models should be serialized. These all conform to the JSON API standard.
 
 ## Services
+```
+/modules/mobile/app/services
+```
 Objects used for communicating with upstream service objects. These can be a mixture of services we've written directly,
 or proxy objects we've written that communicate with other teams' objects. Usually objects here inherit from
 `Common::Client::Base` or are related to configuration for such objects.
 
 ## Workers
+```
+/modules/mobile/app/workers
+```
 Background workers. For more information, visit this [link](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Architecture/BackgroundWorkersAndCaching)
+
+## Helpers
+```
+/modules/mobile/app/helpers
+```
+Not traditional rails helpers because this is a pure api without views. These are just POROs. Some do make requests
+to upstream services and, as such, are indistinguishable from our `proxies`
 
 ## Testing
 The various paths for testing are as follows
@@ -61,7 +80,7 @@ The various paths for testing are as follows
 ## Misc
 #### Lib
 ```
-/lib
+/modules/mobile/lib
 ```
 Traditionally, lib contains code that is not specific to the rails app. our contains:
  - Validation errors classes 
@@ -70,12 +89,12 @@ Traditionally, lib contains code that is not specific to the rails app. our cont
 
 #### Config
 ```
-/config
+/modules/mobile/config
 ```
 Standard rails config, such as routes
 
 #### DB
 ```
-/db
+/modules/mobile/db
 ```
 Data migrations, though we seldom used because we rarely have db backed models
