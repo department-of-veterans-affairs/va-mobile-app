@@ -37,14 +37,21 @@ jest.mock('store/slices', () => {
 context('GenderIdentityScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
-  
+  let props: any
 
   afterEach(() => {
     jest.clearAllMocks()
   })
   
   const initializeTestInstance = (preloadGenderIdentityOptions?: boolean, errorsState: ErrorsState = initialErrorsState) => {
-    const props = mockNavProps()
+    props = mockNavProps(
+      {},
+      {
+        navigate: jest.fn(),
+        goBack: jest.fn(),
+        addListener: jest.fn(),
+      },
+      {})
     const store = {
       ...InitialState,
       personalInformation: {
