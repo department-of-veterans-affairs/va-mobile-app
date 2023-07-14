@@ -41,7 +41,7 @@ or proxy objects we've written that communicate with other teams' objects. Usual
 `Common::Client::Base` or are related to configuration for such objects.
 
 ## Workers
-Background workers
+Background workers. For more information, visit this [link](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Architecture/BackgroundWorkersAndCaching)
 
 ## Testing
 The various paths for testing are as follows
@@ -72,7 +72,7 @@ Traditionally, lib contains code that is not specific to the rails app. our cont
 ```
 /config
 ```
-Standard rails config, such routes
+Standard rails config, such as routes
 
 #### DB
 ```
