@@ -12,7 +12,16 @@ export const linking: LinkingOptions<any> = {
   config: {
     /* configuration for matching screens with paths */
     screens: {
-      Appointments: 'appointments/:id',
+      Tabs: {
+        screens: {
+          HealthTab: {
+            screens: {
+              Appointments: 'appointments/:id',
+              SecureMessaging: 'secure-message/:id',
+            },
+          },
+        },
+      },
     },
   },
 }
