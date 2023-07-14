@@ -75,6 +75,17 @@ All issue tickets should be written using the [issue ticket template](https://gi
 | High frequency | Affects a component, screen, or action used by 15% or more of monthly users | Authentication, home page (including What's New and Encouraged Update), category landing screens, feature landing or child screens for most-used features (Claims, Upcoming Appointments, and Decision Letters), feature landing or child screens for next-most-used features (Prescriptions, Payments, Messaging, Letters, Disability Rating, and Military Info), and downloading a letter (decision or any other kind) |
 | Low frequency | Affects a component, screen, or action used by 14% or fewer of monthly users | All other app actions (send message, upload file, etc); and all screens not listed in high frequency examples |
 
+### User-submitted Bug Reports
+
+The Mobile QA team monitors various bug reporting mechanisms to better serve our user base. Some of these mechanisms include: App Stores, Email, and miscellaneous message services. We manuall collect these issues and file them into our backlog or review and triage as, "user feedback."
+
+We have four paths for an issue that is submitted:
+
+1. If the issue is repeated in customer reports or shows evidence in monitoring tools, but we are unable to replicate, we will hold the issue in our backlog as a documented open issue.
+2. If we cannot replicate the issue or evidence points to strange transient network problems / isolated to a single user, we will label the issue as "[Closed - Can't Repro](https://github.com/department-of-veterans-affairs/va-mobile-app/labels/Closed%20-%20Can%27t%20Repro)" and close the issue.
+3. If we know the issue was previously fixed, we will label the issue as "[Closed - Deployed/Fixed](https://github.com/department-of-veterans-affairs/va-mobile-app/labels/Closed%20-%20Deployed%2FFixed)" and close the issue.
+4. If we are able to replicate the issue it will be evaluated for severity and assigned to the proper team for remediation.
+
 ## Test activity reporting
 
 QA activities will primarily be tracked in ZenHub as commentary on sprint stories or logged issues.
