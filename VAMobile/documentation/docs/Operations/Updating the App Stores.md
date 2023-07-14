@@ -102,7 +102,8 @@ sidebar_position: 3
     * For all images, make sure “ignore overlapping layers” and “include bounding box” are checked before exporting.
     
     ![Screenshot of Figma export options](/img/app-store/figma-export.png)
-    * For Android, images should be exported at 4x and can be up to 8 MB per screen. Feature graphic should be exported at 1x and can be up to 1 MB.
+    * For iOS, images must not include a transparency/alpha layer. Figma does not have a way to remove this from your PNG export, but the [Export Opaque PNG plugin](https://www.figma.com/community/plugin/1052463252412045420/Export-Opaque-PNG) can be installed. Alternatively, you can [follow these steps](https://stackoverflow.com/questions/26171739/remove-alpha-channel-in-an-image) using the Preview app on a Mac.
+	* For Android, images should be exported at 4x and can be up to 8 MB per screen. Feature graphic should be exported at 1x and can be up to 1 MB.
 	* Frames in Figma are currently named according to the app store requirements
 5. Product reviews images in [Google Drive](https://drive.google.com/drive/folders/1t_WOjaZkJKNR9oXEMczjtIePAFef2ym6)
 6. After images are updated in app stores, design merges branch in [Figma file](https://www.figma.com/file/UOTRHWoB1eNZE0M3P16Su2/%F0%9F%A7%B0-App-Store-Images---Resource---VAMobile%F0%9F%A7%B0?node-id=68%3A62&t=NFKdcdXC3Q52ZkTu-1)
