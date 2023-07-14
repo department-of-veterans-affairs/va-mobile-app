@@ -42,7 +42,13 @@ See [Bug Tracking](https://department-of-veterans-affairs.github.io/va-mobile-ap
 <!-- OPTIONAL. Add the link to the issue here. you can shorthand the link like this: #598 where 598 is the ticket number. Skip if found during a regression. -->
 
 ## Screen shot(s) and additional information
-<!-- Add any screen shots, video, gifs, etc that will help the engineers track down the issue. -->
+<!-- Add any screen shots, video, gifs, etc that will help the engineers track down the issue. The 'details' section below will expand/collapse, so is a good default location for long JSON responses.  -->
+
+<details>
+  <summary>Full JSON response for services related to issue (expand/collapse)</summary>
+  <!-- Copy-paste the JSON from Charles here. Easiest is to use the 'raw' tab which will include header + body. -->
+
+</details>
 
 ## Ticket Checklist
 - [ ] Steps to reproduce are defined
