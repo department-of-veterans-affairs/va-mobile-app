@@ -88,6 +88,15 @@ export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
       [maintWindow.service]: metadata,
     }
   }
+  const metadata: DowntimeWindow = {
+    featureName: 'Claims',
+    startTime: DateTime.fromISO('2022-04-25T23:35:26Z'),
+    endTime: DateTime.fromISO('2024-04-25T23:35:26Z'),
+  }
+  downtimeWindows = {
+    ...downtimeWindows,
+    claims: metadata,
+  }
   dispatch(dispatchSetDowntime(downtimeWindows))
 }
 
