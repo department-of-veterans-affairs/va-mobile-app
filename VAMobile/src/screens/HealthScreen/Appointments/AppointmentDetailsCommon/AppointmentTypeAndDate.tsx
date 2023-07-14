@@ -54,7 +54,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes })
   } else if (serviceCategoryName === 'COMPENSATION & PENSION') {
     content = (
       <>
-        <TextView variant={'MobileBodyBold'} mb={theme.dimensions.condensedMarginBetween}>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
           {t('appointments.claimExam')}
         </TextView>
         <TextView variant={'MobileBody'} paragraphSpacing={true}>
