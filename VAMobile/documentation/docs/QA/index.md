@@ -77,7 +77,7 @@ All issue tickets should be written using the [issue ticket template](https://gi
 
 ### User-submitted Bug Reports
 
-The Mobile QA team monitors various bug reporting mechanisms to better serve our user base. Some of these mechanisms include: App Stores, Email, and miscellaneous message services. We manuall collect these issues and file them into our backlog or review and triage as, "user feedback."
+The Mobile QA team monitors various bug reporting mechanisms to better serve our user base. Some of these mechanisms include: App Stores, Email, and miscellaneous message services. We manually collect these issues and file them into our backlog for review and triage as, "user feedback."
 
 We have four paths for an issue that is submitted:
 
