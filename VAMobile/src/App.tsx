@@ -22,7 +22,7 @@ import i18n from 'utils/i18n'
 import performance from '@react-native-firebase/perf'
 
 import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
-import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import { AnalyticsState, AuthState, dispatchSetInitialLink, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { BenefitsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getBenefitsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
@@ -36,6 +36,7 @@ import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
 import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
+import { linking } from 'constants/linking'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
 import { useAppDispatch } from 'utils/hooks'
@@ -131,7 +132,7 @@ const MainApp: FC = () => {
         <ThemeProvider theme={currentTheme}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
-              <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
+              <NavigationContainer ref={navigationRef} linking={linking} onReady={navOnReady} onStateChange={onNavStateChange}>
                 <NotificationManager>
                   <SafeAreaProvider>
                     <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={currentTheme.colors.background.main} />
@@ -213,6 +214,12 @@ export const AuthGuard: FC = () => {
     console.debug('AuthGuard: initializing')
     dispatch(initializeAuth())
 
+    Linking.getInitialURL().then((link) => {
+      if (link) {
+        dispatch(dispatchSetInitialLink(link))
+      }
+    })
+
     const listener = (event: { url: string }): void => {
       if (event.url?.startsWith('vamobile://login-success?')) {
         dispatch(handleTokenCallbackUrl(event.url))
@@ -283,11 +290,18 @@ export const AppTabs: FC = () => {
 
 export const AuthedApp: FC = () => {
   const headerStyles = useHeaderStyles()
+  const { initialLink } = useSelector<RootState, AuthState>((state) => state.auth)
 
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
   const paymentsScreens = getPaymentsScreens()
+
+  useEffect(() => {
+    if (initialLink) {
+      Linking.openURL(initialLink)
+    }
+  }, [])
 
   return (
     <>
