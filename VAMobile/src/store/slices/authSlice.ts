@@ -92,6 +92,7 @@ export type AuthState = {
   authorizeStateParam?: string
   authParamsLoadingState: AuthParamsLoadingStateTypes
   successfulLogin?: boolean
+  initialLink?: string
 }
 
 export const initialAuthState: AuthState = {
@@ -773,6 +774,7 @@ const authSlice = createSlice({
         firstTimeLogin: state.firstTimeLogin,
         loggedIn: loggedIn,
         displayBiometricsPreferenceScreen: true,
+        initialLink: state.initialLink,
       }
     },
     dispatchSetDisplayBiometricsPreferenceScreen: (state, action: PayloadAction<boolean>) => {
@@ -802,6 +804,7 @@ const authSlice = createSlice({
         codeChallenge: state.codeChallenge,
         authorizeStateParam: state.authorizeStateParam,
         authParamsLoadingState: state.authParamsLoadingState,
+        initialLink: state.initialLink,
       }
     },
     dispatchFinishAuthLogin: (state, action: PayloadAction<AuthFinishLoginPayload>) => {
@@ -849,6 +852,9 @@ const authSlice = createSlice({
     dispatchFinishSetBiometricPreference: (state) => {
       state.settingBiometricPreference = false
     },
+    dispatchSetInitialLink: (state, action) => {
+      state.initialLink = action.payload
+    },
   },
 })
 
@@ -868,6 +874,7 @@ export const {
   dispatchStartLogout,
   dispatchStartSetBiometricPreference,
   dispatchFinishSetBiometricPreference,
+  dispatchSetInitialLink,
 } = authSlice.actions
 
 export default authSlice.reducer
