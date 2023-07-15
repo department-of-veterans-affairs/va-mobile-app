@@ -6,7 +6,7 @@ import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from '.
 import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
 import { Params } from '../api'
-import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from './payments'
+import { PaymenDemoStore, PaymentsAccountStore, PaymentsDemoReturnTypes, getBankData, getPaymentsHistory } from './payments'
 import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from './prescriptions'
 import {
   ProfileDemoReturnTypes,
@@ -35,6 +35,7 @@ export type DemoStore = AppointmentsDemoStore &
   DecisionLettersDemoStore &
   LettersDemoStore &
   PaymenDemoStore &
+  PaymentsAccountStore &
   PrescriptionsDemoStore &
   NotificationDemoStore
 
@@ -151,6 +152,9 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     }
     case '/v0/payment-history': {
       return getPaymentsHistory(store, params, endpoint)
+    }
+    case '/v0/payment-information/benefits': {
+      return getBankData(store, params, endpoint)
     }
     case '/v0/health/rx/prescriptions': {
       return getPrescriptions(store, params, endpoint)

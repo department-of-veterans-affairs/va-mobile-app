@@ -313,5 +313,30 @@
                 }
             }
         }
+    },
+    "/v0/payment-information/benefits": {
+        "data": 
+        {
+            "attributes": {
+                "accountControl": {
+                    "canUpdateAddress": false,
+                    "corpAvailIndicator": true,
+                    "corpRecFoundIndicator": false,
+                    "hasNoBdnPaymentsIndicator": true,
+                    "identityIndicator": true,
+                    "isCompetentIndicator": true,
+                    "indexIndicator": true,
+                    "noFiduciaryAssignedIndicator": true,
+                    "notDeceasedIndicator": true,
+                    "canUpdatePayment": true
+                  },
+                "paymentAccount": {
+                    "accountType": "Checking",
+                    "financialInstitutionName": "Ad Hoc Bank",
+                    "accountNumber": "1234567890123",
+                    "financialInstitutionRoutingNumber": "987654321"
+                }
+            }
+        }
     }
 }
