@@ -159,6 +159,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       return
     }
 
+    if (addressSaved) {
+      return
+    }
+
     e.preventDefault()
     const title =
       addressType === profileAddressOptions.RESIDENTIAL_ADDRESS ? t('editAddress.validation.cancelConfirm.home.title') : t('editAddress.validation.cancelConfirm.mailing.title')
