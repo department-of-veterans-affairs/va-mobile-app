@@ -68,13 +68,13 @@ describe('Direct Deposit Screen', () => {
 
   it('should tap phone and TTY links', async () => {
     if (device.getPlatform() === 'android') {
-      scrollToThenTap(DirectDepositConstants.PHONE_LINK_TEXT)
-      await setTimeout(5000)
+      await scrollToThenTap(DirectDepositConstants.PHONE_LINK_TEXT)
+      await setTimeout(1000)
       await device.takeScreenshot('DirectDepositPhoneNumber')
       await device.launchApp({ newInstance: false })
 
-      scrollToThenTap(DirectDepositConstants.TTY_LINK_TEXT)
-      await setTimeout(5000)
+      await scrollToThenTap(DirectDepositConstants.TTY_LINK_TEXT)
+      await setTimeout(1000)
       await device.takeScreenshot('DirectDepositTTY')
       await device.launchApp({ newInstance: false })
     }
