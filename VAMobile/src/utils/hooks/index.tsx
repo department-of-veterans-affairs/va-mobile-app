@@ -16,6 +16,8 @@ import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureType, DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
+import { EventParams, logAnalyticsEvent } from 'utils/analytics'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { VATheme } from 'styles/theme'
@@ -181,17 +183,24 @@ export function useIsScreenReaderEnabled(withListener = false): boolean {
  *
  * @returns an alert showing user they are leaving the app
  */
-export function useExternalLink(): (url: string) => void {
+export function useExternalLink(): (url: string, eventParams?: EventParams) => void {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  return (url: string) => {
+  return (url: string, eventParams?: EventParams) => {
+    logAnalyticsEvent(Events.vama_link_click({ url, ...eventParams }))
+
+    const onOKPress = () => {
+      logAnalyticsEvent(Events.vama_link_confirm({ url, ...eventParams }))
+      return Linking.openURL(url)
+    }
+
     if (url.startsWith(WebProtocolTypesConstants.http)) {
       Alert.alert(t('leavingApp.title'), t('leavingApp.body'), [
         {
           text: t('cancel'),
           style: 'cancel',
         },
-        { text: t('leavingApp.ok'), onPress: (): Promise<void> => Linking.openURL(url), style: 'default' },
+        { text: t('leavingApp.ok'), onPress: (): Promise<void> => onOKPress(), style: 'default' },
       ])
     } else {
       Linking.openURL(url)

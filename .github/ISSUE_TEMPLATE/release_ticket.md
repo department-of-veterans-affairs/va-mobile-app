@@ -50,7 +50,7 @@ Indicate NA if no changes.
 {{ env.issues }}
 
 ## Regression Testing
- [QA Testrail Regression Test Run Here](https://dsvavsp.testrail.io/index.php?/runs/view/4584)
+[QA Testrail Regression Test Run Here](^^^Testrail-url^^^)
  
  ```mermaid
  %%{init: {'theme': 'base', 'themeVariables': { 'pie1': '#00ff00', 'pie2': '#212121', 'pie3': '#FFE000', 'pie4': '#ff0000', 'pie5': '#cccccc', 'pieLegendTextSize': '20px', 'pieLegendTextColor':'#777777', 'pieSectionTextSize': '24px', 'pieTitleTextColor': '#777777'}}}%%

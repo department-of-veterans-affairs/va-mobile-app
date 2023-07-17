@@ -515,7 +515,7 @@ context('claimsAndAppeals', () => {
     it('should dispatch the correct actions', async () => {
       const store = realStore()
 
-      await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, files))
+      await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, files, 'file'))
 
       const actions = store.getActions()
 
@@ -562,7 +562,7 @@ context('claimsAndAppeals', () => {
       }
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, files))
+      await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, files, 'file'))
       const { claimsAndAppeals } = store.getState()
 
       expect(claimsAndAppeals?.claim?.attributes.eventsTimeline[0].uploaded).toBe(true)
@@ -573,7 +573,7 @@ context('claimsAndAppeals', () => {
 
       const store = realStore()
 
-      await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, multiFiles))
+      await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, multiFiles, 'file'))
 
       expect(api.post as jest.Mock).toBeCalledWith('/v0/claim/id/documents/multi-image', { document_type: 'L228', files: ['imgstring', 'imgstring'], tracked_item_id: 1 })
     })

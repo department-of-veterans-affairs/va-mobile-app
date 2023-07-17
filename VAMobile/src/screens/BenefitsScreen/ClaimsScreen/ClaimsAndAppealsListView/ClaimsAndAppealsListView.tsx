@@ -103,6 +103,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     totalEntries: totalEntries,
     pageSize: perPage,
     page: currentPage,
+    tab: claimType.toLowerCase(),
   }
 
   return (

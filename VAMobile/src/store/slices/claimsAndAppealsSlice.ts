@@ -243,6 +243,12 @@ export const getClaim =
 
     try {
       const singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`, {}, signal)
+
+      if (singleClaim?.data) {
+        const attributes = singleClaim.data.attributes
+        await logAnalyticsEvent(Events.vama_claim_details_open(id, attributes.claimType, attributes.phase, attributes.phaseChangeDate || '', attributes.dateFiled))
+      }
+
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
       const [totalTime] = getAnalyticsTimers(getState())
       await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
@@ -320,12 +326,12 @@ export const submitClaimDecision =
  * Redux action to upload a file to a claim
  */
 export const uploadFileToClaim =
-  (claimID: string, messages: SnackbarMessages, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>): AppThunk =>
+  (claimID: string, messages: SnackbarMessages, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>, evidenceMethod: 'file' | 'photo'): AppThunk =>
   async (dispatch) => {
-    const retryFunction = () => dispatch(uploadFileToClaim(claimID, messages, request, files))
+    const retryFunction = () => dispatch(uploadFileToClaim(claimID, messages, request, files, evidenceMethod))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartFileUpload())
-    await logAnalyticsEvent(Events.vama_claim_upload_start())
+    await logAnalyticsEvent(Events.vama_claim_upload_start(claimID, request.trackedItemId || null, request.type, evidenceMethod))
     try {
       if (files.length > 1) {
         const fileStrings = files.map((file: DocumentPickerResponse | Asset) => {
@@ -376,14 +382,14 @@ export const uploadFileToClaim =
 
         await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, formData as unknown as api.Params, contentTypes.multipart)
       }
-      await logAnalyticsEvent(Events.vama_claim_upload_compl())
+      await logAnalyticsEvent(Events.vama_claim_upload_compl(claimID, request.trackedItemId || null, request.type, evidenceMethod))
 
       dispatch(dispatchFinishFileUpload({ error: undefined, eventDescription: request.description, files, request }))
       showSnackBar(messages.successMsg, dispatch, undefined, true)
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `uploadFileToClaim: ${claimsAndAppealsNonFatalErrorString}`)
-        await logAnalyticsEvent(Events.vama_claim_upload_fail())
+        await logAnalyticsEvent(Events.vama_claim_upload_fail(claimID, request.trackedItemId || null, request.type, evidenceMethod))
         dispatch(dispatchFinishFileUpload({ error }))
         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
@@ -395,13 +401,6 @@ export const uploadFileToClaim =
  */
 export const fileUploadSuccess = (): AppThunk => async (dispatch) => {
   dispatch(dispatchFileUploadSuccess())
-}
-
-/**
- * Redux action to track when a user is on step 3 of claims
- */
-export const sendClaimStep3Analytics = (): AppThunk => async () => {
-  await logAnalyticsEvent(Events.vama_claim_step_three())
 }
 
 /**

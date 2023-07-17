@@ -6,9 +6,10 @@ import React, { FC, useRef, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
 import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { Events } from 'constants/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import getEnv from 'utils/env'
@@ -23,7 +24,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const [error, setError] = useState('')
   const scrollViewRef = useRef<ScrollView>(null)
-  const { request } = route.params
+  const { claimID, request } = route.params
   const showActionSheet = useShowActionSheet()
 
   const onFileFolder = async (): Promise<void> => {
@@ -86,8 +87,13 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   // Because the select a file button has the same accessibility label as the file upload screen it causes query issues in android
   const buttonTestId = IS_TEST ? 'selectfilebutton2' : t('fileUpload.selectAFile')
 
+  const onCancel = () => {
+    logAnalyticsEvent(Events.vama_evidence_cancel_1(claimID, request.trackedItemId || null, request.type, 'file'))
+    navigation.goBack()
+  }
+
   return (
-    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('fileUpload.selectFiles')}>
+    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={onCancel} title={t('fileUpload.selectFiles')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
