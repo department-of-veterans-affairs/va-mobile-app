@@ -1,4 +1,5 @@
-import { by, element, expect } from 'detox'
+import { by, device, element, expect, waitFor } from 'detox'
+import { setTimeout } from 'timers/promises'
 
 import { loginToDemoMode, openDirectDeposit, openPayments } from './utils'
 
@@ -9,7 +10,16 @@ export const DirectDepositConstants = {
   PHONE_LINK_TEXT: '800-827-1000',
   TTY_LINK_TEXT: 'TTY: 711',
   EDIT_ACCOUNT_TEXT: 'Edit account',
+  CONFIRM_CHECKBOX_TEXT: 'I confirm that this information is correct. (Required)',
   CHECKING_EXAMPLE_LABEL: 'You can find your 9-digit routing number on the bottom left side of a check. You can find your account number in the bottom center of a check.',
+}
+
+const scrollToThenTap = async (text: string) => {
+  await waitFor(element(by.text(text)))
+    .toBeVisible()
+    .whileElement(by.id('DirectDepositEditAccount'))
+    .scroll(200, 'down')
+  await element(by.text(text)).tap()
 }
 
 beforeAll(async () => {
@@ -31,12 +41,12 @@ describe('Direct Deposit Screen', () => {
     await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
     await expect(element(by.text(DirectDepositConstants.EDIT_ACCOUNT_TEXT))).toExist()
 
-    await element(by.id('routingNumber')).typeText('123456789')
-    await element(by.id('accountNumber')).typeText('12345678901234567')
+    await element(by.id('routingNumber')).typeText('123456789\n')
+    await element(by.id('accountNumber')).typeText('12345678901234567\n')
     await element(by.id('accountType picker required')).tap()
     await element(by.text('Checking')).tap()
     await element(by.text('Done')).tap()
-    await element(by.text('I confirm that this information is correct. (Required)')).tap()
+    await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
     await element(by.text('Save')).tap()
 
     await expect(element(by.text(DirectDepositConstants.INFORMATION_HEADING))).toExist()
@@ -54,5 +64,19 @@ describe('Direct Deposit Screen', () => {
     await element(by.text('Where can I find these numbers?')).tap()
     await expect(element(by.label(DirectDepositConstants.CHECKING_EXAMPLE_LABEL)).atIndex(0)).toBeVisible()
     await element(by.text('Cancel')).tap()
+  })
+
+  it('should tap phone and TTY links', async () => {
+    if (device.getPlatform() === 'android') {
+      scrollToThenTap(DirectDepositConstants.PHONE_LINK_TEXT)
+      await setTimeout(5000)
+      await device.takeScreenshot('DirectDepositPhoneNumber')
+      await device.launchApp({ newInstance: false })
+
+      scrollToThenTap(DirectDepositConstants.TTY_LINK_TEXT)
+      await setTimeout(5000)
+      await device.takeScreenshot('DirectDepositTTY')
+      await device.launchApp({ newInstance: false })
+    }
   })
 })
