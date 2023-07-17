@@ -502,6 +502,7 @@
   "contactInformation.emailAddress.not.saved": "Email address could not be saved",
   "contactInformation.emailAddress.removed": "Email address removed",
   "contactInformation.emailAddress.saved": "Email address saved",
+  "contactInformation.emailAddress.deleteChanges": "Delete changes to your email address?",
   "contactInformation.home": "Home",
   "contactInformation.homePhoneNumber": "home phone number",
   "contactInformation.howWillYouUseContactInfo": "How we use your contact information",
