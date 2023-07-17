@@ -9,6 +9,7 @@ export const DirectDepositConstants = {
   PHONE_LINK_TEXT: '800-827-1000',
   TTY_LINK_TEXT: 'TTY: 711',
   EDIT_ACCOUNT_TEXT: 'Edit account',
+  CHECKING_EXAMPLE_LABEL: 'You can find your 9-digit routing number on the bottom left side of a check. You can find your account number in the bottom center of a check.',
 }
 
 beforeAll(async () => {
@@ -44,5 +45,14 @@ describe('Direct Deposit Screen', () => {
     await expect(element(by.text('Checking account'))).toExist()
     await expect(element(by.text('Direct deposit information saved'))).toExist()
     await element(by.text('Dismiss')).tap()
+  })
+
+  it('should show "Where can I find these numbers?" information', async () => {
+    await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
+    await expect(element(by.text(DirectDepositConstants.EDIT_ACCOUNT_TEXT))).toExist()
+
+    await element(by.text('Where can I find these numbers?')).tap()
+    await expect(element(by.label(DirectDepositConstants.CHECKING_EXAMPLE_LABEL)).atIndex(0)).toBeVisible()
+    await element(by.text('Cancel')).tap()
   })
 })
