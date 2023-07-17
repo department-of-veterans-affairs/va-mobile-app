@@ -115,6 +115,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
         value: routingNumber,
         isRequiredField: true,
         helperTextKey: 'editDirectDeposit.routingNumberHelperText',
+        testID: 'routingNumber',
       },
       fieldErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
       validationList: [
@@ -135,6 +136,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
         inputRef: accountNumRef,
         isRequiredField: true,
         helperTextKey: 'editDirectDeposit.accountNumberHelperText',
+        testID: 'accountNumber',
       },
       fieldErrorMessage: t('editDirectDeposit.accountNumberFieldError'),
       validationList: [
@@ -153,6 +155,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
         pickerOptions: accountOptions,
         includeBlankPlaceholder: true,
         isRequiredField: true,
+        testID: 'accountType',
       },
       fieldErrorMessage: t('editDirectDeposit.accountTypeFieldError'),
     },

@@ -16,6 +16,8 @@ export const CommonE2eIdConstants = {
   VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
+  PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
+  DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
   LETTERS_ROW_TEXT: 'VA letters and documents',
@@ -192,6 +194,14 @@ export async function openMilitaryInformation() {
 
 export async function openHealth() {
 	await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap() 
+}
+
+export async function openPayments() {
+  await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
+}
+
+export async function openDirectDeposit() {
+  await element(by.text(CommonE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT)).tap()
 }
 
 export async function openPrescriptions() {
