@@ -36,7 +36,9 @@ export const CommonE2eIdConstants = {
 /** Log the automation into demo mode
  * */
 export async function loginToDemoMode() {
-  await setTimeout(5000)
+  await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+    .toExist()
+    .withTimeout(10000)
   try {
 	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
 	await element(by.text('Dismiss')).tap()
