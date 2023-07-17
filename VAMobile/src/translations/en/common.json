@@ -917,6 +917,7 @@
   "personalInformation.dateOfBirth": "Date of birth",
   "personalInformation.genderIdentity.title": "Gender identity",
   "personalInformation.genderIdentity.changeSelection": "You can change your selection at any time. If you decide you no longer want to share your gender identity, select ",
+  "personalInformation.genderIdentity.deleteChange": "Delete change to gender identity selection?",
   "personalInformation.genderIdentity.preferNotToAnswer": "Prefer not to answer",
   "personalInformation.genderIdentity.whatToKnow": "What to know before you decide to share your gender identity",
   "personalInformation.genderIdentity.saved": "Gender identity saved",
