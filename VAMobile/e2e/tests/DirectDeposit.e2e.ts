@@ -5,6 +5,7 @@ import { loginToDemoMode, openDirectDeposit, openPayments } from './utils'
 
 export const DirectDepositConstants = {
   SCREEN_TITLE: 'Direct deposit',
+  PAYMENTS_SCREEN_TITLE: 'Payments',
   INFORMATION_HEADING: 'Direct deposit information',
   ACCOUNT_TEXT: 'Account',
   PHONE_LINK_TEXT: '800-827-1000',
@@ -12,6 +13,7 @@ export const DirectDepositConstants = {
   EDIT_ACCOUNT_TEXT: 'Edit account',
   CONFIRM_CHECKBOX_TEXT: 'I confirm that this information is correct. (Required)',
   CHECKING_EXAMPLE_LABEL: 'You can find your 9-digit routing number on the bottom left side of a check. You can find your account number in the bottom center of a check.',
+  WHERE_CAN_I_FIND_TEXT: 'Where can I find these numbers?',
 }
 
 const scrollToThenTap = async (text: string) => {
@@ -61,8 +63,10 @@ describe('Direct Deposit Screen', () => {
     await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
     await expect(element(by.text(DirectDepositConstants.EDIT_ACCOUNT_TEXT))).toExist()
 
-    await element(by.text('Where can I find these numbers?')).tap()
+    await element(by.text(DirectDepositConstants.WHERE_CAN_I_FIND_TEXT)).tap()
     await expect(element(by.label(DirectDepositConstants.CHECKING_EXAMPLE_LABEL)).atIndex(0)).toBeVisible()
+    await element(by.text(DirectDepositConstants.WHERE_CAN_I_FIND_TEXT)).tap()
+    await expect(element(by.label(DirectDepositConstants.CHECKING_EXAMPLE_LABEL)).atIndex(0)).not.toBeVisible()
     await element(by.text('Cancel')).tap()
   })
 
@@ -78,5 +82,10 @@ describe('Direct Deposit Screen', () => {
       await device.takeScreenshot('DirectDepositTTY')
       await device.launchApp({ newInstance: false })
     }
+  })
+
+  it('should navigate back to Payments screen', async () => {
+    await element(by.text(DirectDepositConstants.PAYMENTS_SCREEN_TITLE)).atIndex(0).tap()
+    await expect(element(by.text(DirectDepositConstants.PAYMENTS_SCREEN_TITLE)).atIndex(0)).toExist()
   })
 })
