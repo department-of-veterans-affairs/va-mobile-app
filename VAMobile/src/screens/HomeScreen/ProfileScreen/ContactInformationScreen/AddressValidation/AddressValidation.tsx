@@ -177,7 +177,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1}>
-        <Box mt={contentMarginTop}>
+        <Box>
           <CollapsibleAlert
             border="warning"
             headerText={t('editAddress.validation.verifyAddress.title')}

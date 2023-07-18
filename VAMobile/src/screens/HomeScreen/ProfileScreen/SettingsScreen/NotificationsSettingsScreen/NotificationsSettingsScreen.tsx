@@ -19,7 +19,7 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()
-  const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
+  const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const { deviceToken, preferences, loadingPreferences, registeringDevice, systemNotificationsOn, settingPreference } = useSelector<RootState, NotificationsState>(
     (state) => state.notifications,
   )
@@ -106,7 +106,7 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
   }
   return (
     <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.settings.title')}>
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
+      <Box mb={contentMarginBottom}>
         {!systemNotificationsOn && alert()}
         <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter} mt={standardMarginBetween}>
           {t('notifications.settings.personalize.heading')}

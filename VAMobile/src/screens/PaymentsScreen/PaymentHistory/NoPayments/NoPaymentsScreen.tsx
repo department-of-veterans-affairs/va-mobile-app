@@ -8,11 +8,10 @@ import { useTheme } from 'utils/hooks'
 const NoPaymentsScreen: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   return (
     <VAScrollView>
-      <Box mt={standardMarginBetween}>
+      <Box>
         <AlertBox border="informational">
           <TextView variant="MobileBodyBold" accessibilityLabel={t('payments.noPayments.title.a11yLabel')}>
             {t('payments.noPayments.title')}

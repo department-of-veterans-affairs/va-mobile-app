@@ -3,16 +3,13 @@ import React, { FC } from 'react'
 
 import { AlertBox, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
 
 const NoVaccineRecords: FC = () => {
   const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
-  const theme = useTheme()
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   return (
     <VAScrollView>
-      <Box mt={standardMarginBetween}>
+      <Box>
         <AlertBox title={t('health:noVaccineRecords.alert.title')} border="informational" text={t('health:noVaccineRecords.alert.text.1')}>
           <TextView paragraphSpacing={true} variant="MobileBody">
             {t('health:noVaccineRecords.alert.text.2')}

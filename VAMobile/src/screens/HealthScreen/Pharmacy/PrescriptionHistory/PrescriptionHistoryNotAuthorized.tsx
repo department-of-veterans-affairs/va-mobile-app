@@ -22,7 +22,7 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
   }, [])
 
   const alertWrapperProps: BoxProps = {
-    my: standardMarginBetween,
+    mb: standardMarginBetween,
   }
 
   const bulletOne = {

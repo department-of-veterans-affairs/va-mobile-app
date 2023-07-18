@@ -41,7 +41,7 @@ const PrescriptionsDetailsBanner: FC = () => {
 
     return (
       <>
-        <TextView variant="MobileBody" mb={standardMarginBetween} mt={standardMarginBetween}>
+        <TextView variant="MobileBody" mb={standardMarginBetween}>
           {t('prescription.details.banner.body1')}
         </TextView>
         <TextView variant="MobileBody" mb={standardMarginBetween}>

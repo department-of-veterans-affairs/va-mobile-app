@@ -27,7 +27,7 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ route }) =>
 
   return (
     <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('claimsDetails.whatDoIDoIfDisagreement.header')}
         </TextView>
