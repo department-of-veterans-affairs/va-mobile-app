@@ -106,6 +106,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
         onChange: onSetName,
         helperTextKey: 'personalInformation.preferredName.editHelperText',
         a11yLabel: 'personalInformation.preferredNameScreen.body.a11yLabel',
+        testID: 'preferredNameTestID',
       },
       fieldErrorMessage: t('personalInformation.preferredName.fieldEmpty'),
       validationList: [

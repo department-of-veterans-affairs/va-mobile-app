@@ -1,5 +1,6 @@
 import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, findByTypeWithSubstring, mockNavProps, mockStore, render, RenderAPI, waitFor } from 'testUtils'
@@ -18,6 +19,7 @@ context('AppointmentTypeAndDate', () => {
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
     statusDetail: AppointmentStatusDetailType | null = null,
     isPending: boolean = false,
+    serviceCategoryName: string | null = null,
   ): Promise<void> => {
     props = {
       appointmentType: 'VA',
@@ -28,6 +30,7 @@ context('AppointmentTypeAndDate', () => {
       statusDetail,
       isPending,
       typeOfCare: 'typeOfCare',
+      serviceCategoryName,
     }
 
     await waitFor(() => {
@@ -66,6 +69,14 @@ context('AppointmentTypeAndDate', () => {
     it('should render TypeOfCare text', async () => {
       await initializeTestInstance(AppointmentStatusConstants.SUBMITTED, null, true)
       expect(findByTypeWithSubstring(testInstance, TextView, 'Pending request for typeOfCare appointment')).toBeTruthy()
+    })
+  })
+
+  describe('when the serviceCategoryName is C&P', () => {
+    it('should display the correct text', async () => {
+      initializeTestInstance(AppointmentStatusConstants.BOOKED, null, false, 'COMPENSATION & PENSION')
+      expect(screen.getByText('Claim exam')).toBeTruthy()
+      expect(screen.getByText("This appointment is for disability rating purposes only. It doesn't include treatment. If you have medical evidence to support your claim, bring copies to this appointment.")).toBeTruthy()
     })
   })
 })

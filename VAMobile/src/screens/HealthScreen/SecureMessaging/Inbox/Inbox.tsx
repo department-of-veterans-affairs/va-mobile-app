@@ -55,6 +55,7 @@ const Inbox: FC<InboxProps> = () => {
     totalEntries: paginationMetaData?.totalEntries || 0,
     pageSize: paginationMetaData?.perPage || 0,
     page,
+    tab: 'inbox messages',
   }
 
   return (
