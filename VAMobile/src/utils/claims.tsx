@@ -8,7 +8,6 @@ import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
-import { isIOS } from './platform'
 import { logAnalyticsEvent } from './analytics'
 
 /** function that determines if a request file has been uploaded or received for a claim's event*/
@@ -218,9 +217,7 @@ export const onAddPhotos = (
   claimID: string,
   request: ClaimEventData,
 ): void => {
-  const options = isIOS()
-    ? [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('common:cancel')]
-    : [t('fileUpload.camera') + ' ', t('fileUpload.photoGallery') + ' ', t('common:cancel') + ' ']
+  const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('common:cancel')]
 
   showActionSheetWithOptions(
     {

@@ -274,7 +274,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
         textStyle: { color: currentTheme.colors.text.primary },
         destructiveButtonIndex: newDestructiveButtonIndex,
         destructiveColor: currentTheme.colors.text.error,
-        options: newButtons.map((button) => stringToTitleCase(button.text)),
+        options: newButtons.map((button) => stringToTitleCase(isIOS() ? button.text : button.text + ' ')),
         containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
       },
       (buttonIndex) => {
@@ -456,7 +456,7 @@ export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i
       if (isIOS()) {
         return stringToTitleCase(optionText)
       } else {
-        return capitalizeFirstLetter(optionText)
+        return capitalizeFirstLetter(optionText + ' ')
       }
     })
 
