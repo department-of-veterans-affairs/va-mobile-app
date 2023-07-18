@@ -14,6 +14,8 @@ export const DirectDepositConstants = {
   CONFIRM_CHECKBOX_TEXT: 'I confirm that this information is correct. (Required)',
   CHECKING_EXAMPLE_LABEL: 'You can find your 9-digit routing number on the bottom left side of a check. You can find your account number in the bottom center of a check.',
   WHERE_CAN_I_FIND_TEXT: 'Where can I find these numbers?',
+  CANCEL_CONFIRM_TEXT: 'Delete changes to your direct deposit information?',
+  CANCEL_CONFIRM_BUTTON_TEXT: 'Delete Changes',
 }
 
 const scrollToThenTap = async (text: string) => {
@@ -57,6 +59,18 @@ describe('Direct Deposit Screen', () => {
     await expect(element(by.text('Checking account'))).toExist()
     await expect(element(by.text('Direct deposit information saved'))).toExist()
     await element(by.text('Dismiss')).tap()
+  })
+
+  it('should show cancel confirmation after user enters information', async () => {
+    await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
+    await expect(element(by.text(DirectDepositConstants.EDIT_ACCOUNT_TEXT))).toExist()
+
+    await element(by.id('routingNumber')).typeText('123456789\n')
+    await element(by.text('Cancel')).tap()
+    await expect(element(by.text(DirectDepositConstants.CANCEL_CONFIRM_TEXT))).toExist()
+    await element(by.text(DirectDepositConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()
+
+    await expect(element(by.text(DirectDepositConstants.SCREEN_TITLE))).toExist()
   })
 
   it('should show "Where can I find these numbers?" information', async () => {
