@@ -11,7 +11,6 @@ import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { isIOS } from './platform'
 import { logAnalyticsEvent } from './analytics'
 
-
 /** function that determines if a request file has been uploaded or received for a claim's event*/
 export const hasUploadedOrReceived = (event: ClaimEventData): boolean => {
   const { uploaded, type } = event
