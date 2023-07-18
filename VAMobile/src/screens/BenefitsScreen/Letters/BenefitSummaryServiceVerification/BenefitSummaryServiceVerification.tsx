@@ -223,7 +223,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       backLabel={t('letters.overview.viewLetters')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
-      {...testIdProps('Letters: Benefit-Summary-Service-Verification-Letter-Page')}>
+      testID="BenefitSummaryServiceVerificationTestID">
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

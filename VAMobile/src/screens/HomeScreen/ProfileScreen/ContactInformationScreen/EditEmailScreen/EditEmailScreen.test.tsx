@@ -58,6 +58,7 @@ context('EditEmailScreen', () => {
     props = mockNavProps(
       {},
       {
+        addListener: jest.fn(),
         navigate: jest.fn(),
         goBack: onBackSpy,
         setOptions: (options: Partial<StackNavigationOptions>) => {

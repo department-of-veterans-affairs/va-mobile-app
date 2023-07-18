@@ -396,6 +396,16 @@ export const Events = {
       name: 'vama_exchange_failed',
     }
   },
+  vama_fail: (): Event => {
+    return {
+      name: 'vama_fail',
+    }
+  },
+  vama_fail_refresh: (): Event => {
+    return {
+      name: 'vama_fail_refresh',
+    }
+  },
   vama_gender_id_fail: (): Event => {
     return {
       name: 'vama_gender_id_fail',
@@ -464,6 +474,16 @@ export const Events = {
       },
     }
   },
+  vama_pagination: (pages: number, to_page: number, tab?: string): Event => {
+    return {
+      name: 'vama_pagination',
+      params: {
+        pages: pages,
+        to_page: to_page,
+        tab: tab,
+      },
+    }
+  },
   vama_pref_name_fail: (): Event => {
     return {
       name: 'vama_pref_name_fail',
@@ -520,6 +540,11 @@ export const Events = {
       },
     }
   },
+  vama_rx_cerner_exp: (): Event => {
+    return {
+      name: 'vama_rx_cerner_exp ',
+    }
+  },
   vama_rx_details: (rx_id: string): Event => {
     return {
       name: 'vama_rx_details ',
@@ -541,9 +566,29 @@ export const Events = {
       },
     }
   },
+  vama_rx_help: (): Event => {
+    return {
+      name: 'vama_rx_help',
+    }
+  },
+  vama_rx_na: (): Event => {
+    return {
+      name: 'vama_rx_na',
+    }
+  },
+  vama_rx_noauth: (): Event => {
+    return {
+      name: 'vama_rx_noauth',
+    }
+  },
   vama_rx_pendingtab: (): Event => {
     return {
       name: 'vama_rx_pendingtab',
+    }
+  },
+  vama_rx_refill_cerner: (): Event => {
+    return {
+      name: 'vama_rx_refill_cerner',
     }
   },
   vama_rx_refill_fail: (rx_ids: string[]): Event => {
@@ -607,9 +652,39 @@ export const Events = {
       },
     }
   },
+  vama_rx_status: (status: string, ttv: number): Event => {
+    return {
+      name: 'vama_rx_status',
+      params: {
+        status: status,
+        ttv: ttv,
+      },
+    }
+  },
+  vama_rx_trackdet: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_trackdet',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
+  vama_rx_trackdet_close: (rx_id: string): Event => {
+    return {
+      name: 'vama_rx_trackdet_close',
+      params: {
+        rx_id: rx_id,
+      },
+    }
+  },
   vama_rx_trackingtab: (): Event => {
     return {
       name: 'vama_rx_trackingtab',
+    }
+  },
+  vama_select_all: (): Event => {
+    return {
+      name: 'vama_select_all',
     }
   },
   vama_sm_change_category: (messageCategory: CategoryTypes, previousCategory: CategoryTypes): Event => {

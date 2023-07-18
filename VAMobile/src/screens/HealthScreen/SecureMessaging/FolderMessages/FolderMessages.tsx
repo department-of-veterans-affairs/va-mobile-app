@@ -120,6 +120,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
       totalEntries: paginationMetaData?.totalEntries || 0,
       pageSize: paginationMetaData?.perPage || 0,
       page,
+      tab: 'folder messages',
     }
 
     return (

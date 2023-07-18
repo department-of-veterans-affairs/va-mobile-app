@@ -228,6 +228,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     totalEntries: totalEntries,
     pageSize: perPage,
     page: currentPage,
+    tab: 'past appointments',
   }
 
   return (

@@ -48,6 +48,7 @@ context('EditDirectDepositScreen', () => {
       {
         goBack: jest.fn(),
         navigate: jest.fn(),
+        addListener: jest.fn(),
       },
       { params: { displayTitle: 'Edit Direct Deposit' } },
     )
