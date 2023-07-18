@@ -265,6 +265,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
     }
 
     // Don't pass cancelButtonIndex because doing so would hide the button on iPad
+    // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets
     showActionSheetWithOptions(
       {
         title: props.title,
@@ -456,6 +457,7 @@ export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i
       if (isIOS()) {
         return stringToTitleCase(optionText)
       } else {
+        // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets
         return capitalizeFirstLetter(optionText + ' ')
       }
     })
