@@ -241,8 +241,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   }
 
   if (loadingHistory) {
+    // Must pass scrollViewRef here, otherwise it becomes undefined
     return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
       </FeatureLandingTemplate>
     )
@@ -658,7 +659,13 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   }
 
   return (
-    <FeatureLandingTemplate headerButton={headerButton} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')} testID="PrescriptionHistory">
+    <FeatureLandingTemplate
+      scrollViewProps={{ scrollViewRef }}
+      headerButton={headerButton}
+      backLabel={tc('health')}
+      backLabelOnPress={navigation.goBack}
+      title={tc('prescriptions')}
+      testID="PrescriptionHistory">
       {getRequestRefillButton()}
       <TabBar {...tabProps} />
       <Box {...filterWrapperProps}>
