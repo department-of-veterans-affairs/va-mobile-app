@@ -1,4 +1,4 @@
-import { Pressable } from 'react-native'
+import { Pressable, View } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { isEmpty, map } from 'underscore'
 import { useSelector } from 'react-redux'
@@ -14,7 +14,7 @@ import { RootState } from 'store'
 import { deepCopyObject } from 'utils/common'
 import { getGroupedPayments } from 'utils/payments'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAutoScrollToElement, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>
@@ -24,6 +24,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
+  const [scrollViewRef, viewRef, scrollToView] = useAutoScrollToElement()
   const { standardMarginBetween, gutter, contentMarginTop } = theme.dimensions
   const { currentPagePayments, currentPagePagination, loading, availableYears } = useSelector<RootState, PaymentState>((state) => state.payments)
   const newCurrentPagePayments = deepCopyObject<PaymentsByDate>(currentPagePayments)
@@ -102,9 +103,11 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
     const paginationProps: PaginationProps = {
       onNext: () => {
         fetchPayments(page + 1, year)
+        scrollToView()
       },
       onPrev: () => {
         fetchPayments(page - 1, year)
+        scrollToView()
       },
       totalEntries: currentPagePagination?.totalEntries || 0,
       pageSize: currentPagePagination?.perPage || 0,
@@ -134,7 +137,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
 
   if (useError(ScreenIDTypesConstants.PAYMENTS_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -142,7 +145,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
 
   if (loading) {
     return (
-      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
         <LoadingComponent text={t('payments.loading')} />
       </FeatureLandingTemplate>
     )
@@ -150,14 +153,14 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
 
   if (noPayments) {
     return (
-      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
         <NoPaymentsScreen />
       </FeatureLandingTemplate>
     )
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+    <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
       <Box {...testIdProps('', false, 'payments-page')}>
         <Box mx={gutter} mb={standardMarginBetween} mt={contentMarginTop}>
           <Pressable onPress={navigateTo('PaymentMissing')} {...testIdProps(t('payments.ifIAmMissingPayemt'))} accessibilityRole="link" accessible={true}>
@@ -168,7 +171,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
           <VAModalPicker {...pickerProps} key={yearPickerOption?.value} />
         </Box>
       </Box>
-      {getPaymentsData()}
+      <View ref={viewRef}>{getPaymentsData()}</View>
       {renderPagination()}
     </FeatureLandingTemplate>
   )
