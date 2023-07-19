@@ -10,9 +10,10 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { Vaccine } from 'store/api/types'
 import { VaccineState, getVaccines } from 'store/slices/vaccineSlice'
+import { View } from 'react-native'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAutoScrollToElement, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
@@ -28,6 +29,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const [scrollViewRef, viewRef, scrollToView] = useAutoScrollToElement()
   const vaccineButtons: Array<DefaultListItemObj> = map(vaccines || [], (vaccine: Vaccine, index) => {
     const textLines: Array<TextLine> = [
       { text: t('vaccines.vaccineName', { name: vaccine.attributes?.groupName }), variant: 'MobileBodyBold' },
@@ -59,9 +61,11 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
     const paginationProps: PaginationProps = {
       onNext: () => {
         requestPage(page + 1)
+        scrollToView()
       },
       onPrev: () => {
         requestPage(page - 1)
+        scrollToView()
       },
       totalEntries: vaccinePagination?.totalEntries || 0,
       pageSize: vaccinePagination?.perPage || 0,
@@ -81,7 +85,12 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   if (useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+      <FeatureLandingTemplate
+        scrollViewProps={{ scrollViewRef }}
+        backLabel={tc('health')}
+        backLabelOnPress={navigation.goBack}
+        title={tc('vaVaccines')}
+        titleA11y={tc('vaVaccines.a11y')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -89,7 +98,12 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   if (loading) {
     return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+      <FeatureLandingTemplate
+        scrollViewProps={{ scrollViewRef }}
+        backLabel={tc('health')}
+        backLabelOnPress={navigation.goBack}
+        title={tc('vaVaccines')}
+        titleA11y={tc('vaVaccines.a11y')}>
         <LoadingComponent text={t('vaccines.loading')} />
       </FeatureLandingTemplate>
     )
@@ -97,16 +111,28 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   if (vaccines.length === 0) {
     return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+      <FeatureLandingTemplate
+        scrollViewProps={{ scrollViewRef }}
+        backLabel={tc('health')}
+        backLabelOnPress={navigation.goBack}
+        title={tc('vaVaccines')}
+        titleA11y={tc('vaVaccines.a11y')}>
         <NoVaccineRecords />
       </FeatureLandingTemplate>
     )
   }
 
   return (
-    <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+    <FeatureLandingTemplate
+      scrollViewProps={{ scrollViewRef }}
+      backLabel={tc('health')}
+      backLabelOnPress={navigation.goBack}
+      title={tc('vaVaccines')}
+      titleA11y={tc('vaVaccines.a11y')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <DefaultList items={vaccineButtons} />
+        <View ref={viewRef}>
+          <DefaultList items={vaccineButtons} />
+        </View>
       </Box>
       {renderPagination()}
     </FeatureLandingTemplate>
