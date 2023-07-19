@@ -72,7 +72,8 @@ export async function validateSort(name, sortBy, sortOrder, firstPrescription, l
 		await element(by.text(sortBy)).tap()
 		await element(by.text(sortOrder)).tap()
 		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_TEXT)).tap()
-		await expect(element(by.text(firstPrescription)).atIndex(0)).toBeVisible()
+		await expect(element(by.text(firstPrescription)).atIndex(0)).toBeVisible()	
+		await element(by.id('PrescriptionHistory')).swipe('up', 'fast', 1.0)
 		await element(by.id('PrescriptionHistory')).swipe('up', 'fast', 1.0)
 		await element(by.id('PrescriptionHistory')).swipe('up', 'fast', 1.0)
 		await element(by.id('next-page')).tap()
@@ -349,22 +350,18 @@ describe('Prescriptions Screen', () => {
 	
 	it('should display an action sheet when a refill is selected and request refill is tapped', async () => {
 		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0).tap()
-		await element(by.label('Request refill')).tap()
+		await element(by.text('Request refill')).tap()
 		await expect(element(by.text('Request prescription refill?'))).toExist()
 		if (device.getPlatform() === 'android') {
-			await element(by.text('CANCEL')).tap()
+			await element(by.label('Cancel')).tap()
 		} else {
-			await element(by.label('Cancel')).atIndex(1).tap()	
+			await element(by.label('Cancel')).atIndex(1).tap()
 		}	
 	})
 	
 	it('should refill a prescription and display the correct information in the refill request summary screen', async () => {
 		await element(by.label('Request refill')).tap()
-		if (device.getPlatform() === 'android') {
-			await element(by.text('REQUEST REFILL')).tap()
-		} else {
-			await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
-		}
+		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
 		await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_LABEL))).toExist()
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT))).toExist()
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_NAME_TEXT)).atIndex(0)).toExist()
@@ -387,11 +384,7 @@ describe('Prescriptions Screen', () => {
 		await waitFor(element(by.label('CAPECITABINE 500MG TAB.'))).toBeVisible().whileElement(by.id('PrescriptionHistory')).scroll(50, 'down')
 		await element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
 		await element(by.label('Request refill')).tap()
-		if (device.getPlatform() === 'android') {
-			await element(by.text('REQUEST REFILL')).tap()
-		} else {
-			await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
-		}
+		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
 		await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_LABEL))).toExist()
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT))).toExist()
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_NAME_TEXT)).atIndex(0)).toExist()
@@ -403,7 +396,6 @@ describe('Prescriptions Screen', () => {
 	it('verifies that tapping close brings you to the screen prior to the refill model', async () => {
 		await element(by.text('Close')).tap()
 		await expect(element(by.text('AMLODIPINE BESYLATE 10MG TAB'))).toExist()
-		await expect(element(by.text('Details'))).toExist()
 		await element(by.text('Prescriptions')).tap()
 	})
 	

@@ -1,7 +1,7 @@
 import { expect, device, by, element, waitFor } from 'detox'
 import { isTypedArray } from 'util/types'
 import { CommonE2eIdConstants, openVeteransCrisisLine } from './utils'
-import { VCLE2eIdConstants } from './VeteransCrisisLine.e2e'
+import { VCLConstants } from './VeteransCrisisLine.e2e'
 
 export const LoginE2eIdConstants = {
   LOGIN_PAGE_ID: 'Login-page',

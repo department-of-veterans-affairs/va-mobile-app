@@ -16,9 +16,10 @@ export const CommonE2eIdConstants = {
   VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
-  PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
+  PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
   LETTERS_ROW_TEXT: 'VA letters and documents',
+  DISABILITY_RATING_ROW_TEXT: 'Disability rating',
   SETTINGS_ROW_TEXT: 'Settings',
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
   SIGN_OUT_BTN_ID: 'Sign out',
@@ -206,6 +207,10 @@ export async function openLetters() {
   await element(by.text(CommonE2eIdConstants.LETTERS_ROW_TEXT)).tap() 
 }
 
+export async function openDisabilityRating() {
+  await element(by.text(CommonE2eIdConstants.DISABILITY_RATING_ROW_TEXT)).tap()
+}
+
 /**
  * Going back on android and iOS
 */
@@ -216,4 +221,3 @@ export async function backButton() {
 	await element(by.traits(['button'])).atIndex(0).tap();
   }
 }
-
