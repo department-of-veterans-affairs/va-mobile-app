@@ -5,6 +5,7 @@ import React, { FC, useEffect, useLayoutEffect } from 'react'
 import { Box, ClosePanelButton, ErrorComponent, FullScreenSubtask, LoadingComponent, MultiTouchCard, MultiTouchCardProps, TextView } from 'components'
 import { ClickForActionLink } from 'components'
 import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, getTrackingInfo } from 'store/slices'
@@ -13,7 +14,8 @@ import { RootState } from 'store'
 import { a11yLabelID } from 'utils/a11yLabel'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { isIOS } from 'utils/platform'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useAppDispatch, useBeforeNavBackListener, useDowntime, useError, useTheme } from 'utils/hooks'
 import { usePanelHeaderStyles } from 'utils/hooks/headerStyles'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
@@ -70,6 +72,10 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
       dispatch(getTrackingInfo(prescription.id, ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID))
     }
   }, [dispatch, prescription, prescriptionInDowntime])
+
+  useBeforeNavBackListener(navigation, () => {
+    logAnalyticsEvent(Events.vama_rx_trackdet_close(prescription.id))
+  })
 
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.
   // In this case, we need to support two different screenIDs:

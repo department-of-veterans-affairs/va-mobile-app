@@ -18,6 +18,8 @@ export const CommonE2eIdConstants = {
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
   PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
+  BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
+  LETTERS_ROW_TEXT: 'VA letters and documents',
   SETTINGS_ROW_TEXT: 'Settings',
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
   SIGN_OUT_BTN_ID: 'Sign out',
@@ -65,7 +67,7 @@ export async function loginToDemoMode() {
  * @param timeOut - time to wait for the element
  * */
 
-const checkIfElementIsPresent = async (matchString: string, findbyText = false, waitForElement = false, timeOut = 2000) => {
+export async function checkIfElementIsPresent(matchString: string, findbyText = false, waitForElement = false, timeOut = 2000) {
   try {
     if (findbyText) {
       if (waitForElement) {
@@ -200,6 +202,14 @@ export async function openAppointments() {
 export async function openPrescriptions() {
 	await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
 
+}
+
+export async function openBenefits() {
+	await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap() 
+}
+
+export async function openLetters() {
+  await element(by.text(CommonE2eIdConstants.LETTERS_ROW_TEXT)).tap() 
 }
 
 /**

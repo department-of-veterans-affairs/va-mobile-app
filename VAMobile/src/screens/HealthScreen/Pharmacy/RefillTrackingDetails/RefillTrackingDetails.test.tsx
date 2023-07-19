@@ -30,6 +30,7 @@ context('RefillTrackingDetails', () => {
       {
         setOptions: jest.fn(),
         navigate: jest.fn(),
+        addListener: jest.fn(),
       },
       { params: { prescription: paramPrescription ? paramPrescription : mockData[0] } },
     )

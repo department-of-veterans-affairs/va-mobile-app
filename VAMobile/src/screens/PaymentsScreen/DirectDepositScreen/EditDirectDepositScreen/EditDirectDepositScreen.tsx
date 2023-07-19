@@ -26,7 +26,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
 import { getTranslation } from 'utils/formattingUtils'
-import { useAppDispatch, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 const MAX_ROUTING_DIGITS = 9
@@ -43,6 +43,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
   const { t: tc } = useTranslation()
   const { displayTitle } = route.params
   const theme = useTheme()
+  const confirmAlert = useDestructiveActionSheet()
   const accountNumRef = useRef<TextInput>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
@@ -58,6 +59,38 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('directDeposit.saved'),
     errorMsg: t('directDeposit.saved.error'),
+  }
+
+  useBeforeNavBackListener(navigation, (e) => {
+    if (noPageChanges() || bankInfoUpdated) {
+      return
+    }
+    e.preventDefault()
+    confirmAlert({
+      title: t('directDeposit.deleteChanges'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('keepEditing'),
+        },
+        {
+          text: t('deleteChanges'),
+          onPress: () => {
+            navigation.dispatch(e.data.action)
+          },
+        },
+      ],
+    })
+  })
+
+  //returns true when no edits have been made.
+  const noPageChanges = (): boolean => {
+    if (routingNumber || accountNumber || accountType || confirmed === true) {
+      return false
+    } else {
+      return true
+    }
   }
 
   const accountOptions: Array<PickerItem> = AccountOptions.map((option) => {
