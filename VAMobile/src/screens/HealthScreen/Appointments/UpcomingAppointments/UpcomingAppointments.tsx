@@ -8,11 +8,12 @@ import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'co
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { TimeFrameTypeConstants } from 'constants/appointments'
+import { View } from 'react-native'
 import { deepCopyObject } from 'utils/common'
 import { getGroupedAppointments } from 'utils/appointments'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
@@ -24,6 +25,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const [focusRef, setFocus] = useAccessibilityFocus<View>()
   const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const currentPageUpcomingAppointmentsByYear = deepCopyObject<AppointmentsGroupedByYear>(currentPageAppointmentsByYear?.upcoming)
 
@@ -52,9 +54,11 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const paginationProps: PaginationProps = {
     onNext: () => {
       requestPage(currentPage + 1)
+      setFocus()
     },
     onPrev: () => {
       requestPage(currentPage - 1)
+      setFocus()
     },
     totalEntries: totalEntries,
     pageSize: perPage,
@@ -67,7 +71,9 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>
-      {getGroupedAppointments(currentPageUpcomingAppointmentsByYear || {}, theme, { t, tc }, onUpcomingAppointmentPress, false, paginationByTimeFrame.upcoming)}
+      <View ref={focusRef}>
+        {getGroupedAppointments(currentPageUpcomingAppointmentsByYear || {}, theme, { t, tc }, onUpcomingAppointmentPress, false, paginationByTimeFrame.upcoming)}
+      </View>
       <Box flex={1} mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>

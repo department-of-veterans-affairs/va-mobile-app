@@ -10,11 +10,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
+import { View } from 'react-native'
 import { deepCopyObject } from 'utils/common'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { getGroupedAppointments, getTextLinesForAppointmentListItem, getYearsToSortedMonths, isAPendingAppointment } from 'utils/appointments'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
@@ -26,6 +27,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
+  const [focusRef, setFocus] = useAccessibilityFocus<View>()
   const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const newCurrentPageAppointmentsByYear = deepCopyObject<CurrentPageAppointmentsByYear>(currentPageAppointmentsByYear)
 
@@ -221,9 +223,11 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const paginationProps: PaginationProps = {
     onNext: () => {
       requestPage(currentPage + 1)
+      setFocus()
     },
     onPrev: () => {
       requestPage(currentPage - 1)
+      setFocus()
     },
     totalEntries: totalEntries,
     pageSize: perPage,
@@ -241,7 +245,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
           labelKey={'health:pastAppointments.selectADateRange'}
         />
       </Box>
-      {getAppointmentData()}
+      <View ref={focusRef}>{getAppointmentData()}</View>
       <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
