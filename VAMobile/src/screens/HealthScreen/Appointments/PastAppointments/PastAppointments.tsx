@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
 
 import { AppointmentsList } from 'store/api/types'
@@ -205,6 +205,11 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       ? getAppointmentsPastThreeMonths()
       : getGroupedAppointments(currentPagePastAppointmentsByYear || {}, theme, { t, tc }, onPastAppointmentPress, true, paginationByTimeFrame[timeFrame])
   }
+
+  useEffect(() => {
+    // Switching tabs resets the date range dropdown. Ensure appointments state matches dropdown
+    getAppointmentsInSelectedRange(pickerOptions[0], 1)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID} />
