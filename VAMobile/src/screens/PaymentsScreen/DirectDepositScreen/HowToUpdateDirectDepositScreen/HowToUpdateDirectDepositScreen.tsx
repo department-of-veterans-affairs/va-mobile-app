@@ -20,17 +20,15 @@ const HowToUpdateDirectDepositScreen: FC<HowToUpdateDirectDepositScreenProps> = 
   return (
     <>
       <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
-        <Box>
-          <AlertBox border="warning">
-            <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
-              {t('howToUpdateDirectDeposit.alert.title')}
-            </TextView>
-            <TextView variant="MobileBody" paragraphSpacing={true}>
-              {t('howToUpdateDirectDeposit.alert.body.1')}
-            </TextView>
-            <TextView variant="MobileBody">{t('howToUpdateDirectDeposit.alert.body.2')}</TextView>
-          </AlertBox>
-        </Box>
+        <AlertBox border="warning">
+          <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+            {t('howToUpdateDirectDeposit.alert.title')}
+          </TextView>
+          <TextView variant="MobileBody" paragraphSpacing={true}>
+            {t('howToUpdateDirectDeposit.alert.body.1')}
+          </TextView>
+          <TextView variant="MobileBody">{t('howToUpdateDirectDeposit.alert.body.2')}</TextView>
+        </AlertBox>
         <Box mt={standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>
           <TextArea>
             <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
