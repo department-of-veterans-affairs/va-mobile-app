@@ -62,7 +62,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
   }
 
   useBeforeNavBackListener(navigation, (e) => {
-    if (noPageChanges()) {
+    if (noPageChanges() || bankInfoUpdated) {
       return
     }
     e.preventDefault()
