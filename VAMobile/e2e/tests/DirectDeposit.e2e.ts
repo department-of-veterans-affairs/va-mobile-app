@@ -55,7 +55,7 @@ describe('Direct Deposit Screen', () => {
 
     await expect(element(by.text(DirectDepositConstants.INFORMATION_HEADING))).toExist()
     await expect(element(by.text('Bank'))).toExist()
-    await expect(element(by.text('12345678901234567'))).toExist()
+    await expect(element(by.text('*************4567'))).toExist()
     await expect(element(by.text('Checking account'))).toExist()
     await expect(element(by.text('Direct deposit information saved'))).toExist()
     await element(by.text('Dismiss')).tap()
