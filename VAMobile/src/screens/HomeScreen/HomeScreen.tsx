@@ -44,6 +44,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { initialLink } = useSelector<RootState, AuthState>((state) => state.auth)
   const name = profile?.preferredName ? profile.preferredName : profile?.firstName || ''
 
   useEffect(() => {
@@ -109,6 +110,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           <TextView variant={'MobileBodyBold'} accessibilityRole={'header'}>
             {heading}
           </TextView>
+          <TextView>{initialLink}</TextView>
         </Box>
         <EncourageUpdateAlert />
         <Nametag />

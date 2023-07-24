@@ -223,6 +223,8 @@ export const AuthGuard: FC = () => {
     const listener = (event: { url: string }): void => {
       if (event.url?.startsWith('vamobile://login-success?')) {
         dispatch(handleTokenCallbackUrl(event.url))
+      } else {
+        dispatch(dispatchSetInitialLink(event.url))
       }
     }
     const sub = Linking.addEventListener('url', listener)
