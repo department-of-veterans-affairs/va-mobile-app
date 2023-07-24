@@ -46,3 +46,8 @@ mobile_lighthouse:
 ```
 2. `ansible/deployment/config/vets-api/prod-settings.local.yml.j2`: Same format as staging
 3. `ansible/roles/review-instance-configure/vars/settings.local.yml`: Used for populating values in review instances. 
+
+## Forward Proxy
+
+* If updating forward proxies to a URL is necessary, this can be done at `ansible/deployment/config/fwdproxy-vagov-staging.yml` and 
+  `ansible/deployment/config/fwdproxy-vagov-prod.yml`
