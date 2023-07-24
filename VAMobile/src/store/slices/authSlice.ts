@@ -93,6 +93,7 @@ export type AuthState = {
   authParamsLoadingState: AuthParamsLoadingStateTypes
   successfulLogin?: boolean
   initialLink?: string
+  initialNotification?: object
 }
 
 export const initialAuthState: AuthState = {
@@ -108,6 +109,7 @@ export const initialAuthState: AuthState = {
   displayBiometricsPreferenceScreen: false,
   showLaoGate: false,
   authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
+  initialNotification: { foo: 'bar', bar: 'foo' },
 }
 
 /**
@@ -855,6 +857,9 @@ const authSlice = createSlice({
     dispatchSetInitialLink: (state, action) => {
       state.initialLink = action.payload
     },
+    dispatchSetNotification: (state, action) => {
+      state.initialNotification = action.payload
+    },
   },
 })
 
@@ -875,6 +880,7 @@ export const {
   dispatchStartSetBiometricPreference,
   dispatchFinishSetBiometricPreference,
   dispatchSetInitialLink,
+  dispatchSetNotification,
 } = authSlice.actions
 
 export default authSlice.reducer

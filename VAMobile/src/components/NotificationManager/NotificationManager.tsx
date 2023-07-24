@@ -1,4 +1,4 @@
-import { AuthState } from 'store/slices'
+import { AuthState, dispatchSetNotification } from 'store/slices'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { RootState } from 'store'
 import { View } from 'react-native'
@@ -41,6 +41,7 @@ const NotificationManager: FC = ({ children }) => {
       console.debug('Notification Received - Foreground', notification)
       foregroundNotifications.push(notification.identifier)
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
+      dispatch(dispatchSetNotification(notification))
       completion({ alert: true, sound: true, badge: true })
     })
 
@@ -52,6 +53,7 @@ const NotificationManager: FC = ({ children }) => {
       if (foregroundNotifications.includes(notification.identifier)) {
         dispatch(dispatchSetTappedForegroundNotification())
       }
+      dispatch(dispatchSetNotification(notification))
       console.debug('Notification opened by device user', notification)
       console.debug(`Notification opened with an action identifier: ${notification.identifier}`)
       completion()
