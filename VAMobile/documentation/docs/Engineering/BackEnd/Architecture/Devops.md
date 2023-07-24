@@ -2,10 +2,6 @@
 When storing sensitive information that cannot be publicly exposed. It must be added to all the following locations:
 
 _Note: All Devops and Manifests PRs will need a Platform support ticket created for devops team to review_ 
-## Adding Local Settings
-Add a new section to `config/settings.yml` in the vets-api. See mobile entry `lighthouse_health_immunization` as reference. 
-This file populates these variables in local spec environment. Variables will get overwritten by the Devops/Manifest values in staging and production.
-The names of the variables should be identical to whats in Devops/Manifests repos but the values can be dummy values. They can then be referenced by `Settings` variable in specs.
 
 ## AWS
 All variables should first be put in AWS. If it is not done first, when Manifests repo looks for the new variables, it will fail deployment if it is not found. 
@@ -46,6 +42,11 @@ mobile_lighthouse:
 ```
 2. `ansible/deployment/config/vets-api/prod-settings.local.yml.j2`: Same format as staging
 3. `ansible/roles/review-instance-configure/vars/settings.local.yml`: Used for populating values in review instances. 
+
+## Adding Local Settings
+Add a new section to `config/settings.yml` in the vets-api. See mobile entry `lighthouse_health_immunization` as reference.
+This file populates these variables in local spec environment. Variables will get overwritten by the Devops/Manifest values in staging and production.
+The names of the variables should be identical to whats in Devops/Manifests repos but the values can be dummy values. They can then be referenced by `Settings` variable in specs.
 
 ## Forward Proxy
 
