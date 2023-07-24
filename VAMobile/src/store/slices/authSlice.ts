@@ -777,6 +777,7 @@ const authSlice = createSlice({
         loggedIn: loggedIn,
         displayBiometricsPreferenceScreen: true,
         initialLink: state.initialLink,
+        initialNotification: state.initialNotification,
       }
     },
     dispatchSetDisplayBiometricsPreferenceScreen: (state, action: PayloadAction<boolean>) => {
@@ -807,6 +808,7 @@ const authSlice = createSlice({
         authorizeStateParam: state.authorizeStateParam,
         authParamsLoadingState: state.authParamsLoadingState,
         initialLink: state.initialLink,
+        initialNotification: state.initialNotification,
       }
     },
     dispatchFinishAuthLogin: (state, action: PayloadAction<AuthFinishLoginPayload>) => {
