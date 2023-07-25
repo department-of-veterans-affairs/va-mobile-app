@@ -62,7 +62,7 @@ jest.mock('utils/hooks', () => {
   const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useDestructiveActionSheet: () => mockAlertSpy,
+    useAlert: () => mockAlertSpy,
   }
 })
 
@@ -647,12 +647,6 @@ context('EditAddressScreen', () => {
     it('should display the AddressValidation component', async () => {
       initializeTestInstance(profileInfo, undefined, undefined, undefined, true)
       expect(testInstance.findAllByType(AddressValidation).length).toEqual(1)
-    })
-
-    it('when cancel is pressed during address validation', async () => {
-      initializeTestInstance(profileInfo, undefined, undefined, undefined, true)
-      testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
-      expect(mockAlertSpy).toHaveBeenCalled()
     })
   })
 

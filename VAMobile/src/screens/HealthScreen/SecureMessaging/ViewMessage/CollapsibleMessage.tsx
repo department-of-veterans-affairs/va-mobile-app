@@ -37,6 +37,10 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const attachmentBoolean = hasAttachments || attachment
   const attachLabel = attachmentBoolean ? t('secureMessaging.attachments.hasAttachment').toLowerCase() : ''
 
+  if (isInitialMessage) {
+    return <></>
+  }
+
   const onPress = (expandedValue?: boolean): void => {
     // Fetching a message thread only includes a summary of the message, and no attachments.
     // If the message has an attachment but we only have the summary, fetch the message details
@@ -129,10 +133,6 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     headerRef: collapsibleMessageRef,
   }
 
-  //ToDo: in future ticket when updating the top card of the review messages screen to return <></> if it is the initial message as it is not supposed to be in the list
-  if (isInitialMessage) {
-  } else {
-  }
   return <AccordionCollapsible {...accordionProps} />
 }
 
