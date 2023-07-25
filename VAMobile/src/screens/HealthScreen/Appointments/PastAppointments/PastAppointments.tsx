@@ -208,7 +208,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   useEffect(() => {
     // Switching tabs resets the date range dropdown. Ensure appointments state matches dropdown
-    getAppointmentsInSelectedRange(pickerOptions[0], 1)
+    getAppointmentsInSelectedRange(datePickerOption, 1)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)) {
