@@ -126,3 +126,8 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
 .navbar__search {
   margin-left: 10px !important;
 }
+
+/* Bring back the openAPI nav search box */
+.redocusaurus .menu-content div:first-child {
+  display: block !important;
+}

@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextView, VABulletList, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
 const PrescriptionHistoryNoPrescriptions: FC = () => {
@@ -10,6 +12,10 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { standardMarginBetween } = theme.dimensions
+
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_rx_na())
+  }, [])
 
   const alertWrapperProps: BoxProps = {
     mt: standardMarginBetween,
@@ -27,13 +33,11 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
     <VAScrollView>
       <Box {...alertWrapperProps}>
         <AlertBox border={'informational'} title={t('prescriptions.notFound.title')} titleA11yLabel={t('prescriptions.notFound.title.a11y')}>
-          <TextView pt={standardMarginBetween} accessibilityLabel={t('prescriptions.notFound.yourVA.a11y')}>
+          <TextView pt={theme.paragraphSpacing.spacing20FontSize} paragraphSpacing={true} accessibilityLabel={t('prescriptions.notFound.yourVA.a11y')}>
             {t('prescriptions.notFound.yourVA')}
           </TextView>
-          <Box pt={standardMarginBetween}>
-            <VABulletList listOfText={bullets} />
-          </Box>
-          <TextView pt={standardMarginBetween}>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
+          <VABulletList listOfText={bullets} paragraphSpacing={true} />
+          <TextView paragraphSpacing={true}>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
           <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />
         </AlertBox>
       </Box>

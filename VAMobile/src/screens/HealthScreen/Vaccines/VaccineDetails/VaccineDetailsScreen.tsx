@@ -4,14 +4,13 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
+import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
 import { COVID19 } from 'constants/common'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { VaccineState, getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/slices/vaccineSlice'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'VaccineDetails'>
@@ -19,7 +18,7 @@ type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Vaccine
 /**
  * Screen providing details on an vaccine
  */
-const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
+const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation }) => {
   const { vaccineId } = route.params
   const { vaccinesById, vaccineLocationsById, detailsLoading } = useSelector<RootState, VaccineState>((state) => state.vaccine)
   const theme = useTheme()
@@ -48,7 +47,11 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
   }
 
   if (detailsLoading) {
-    return <LoadingComponent text={t('vaccines.details.loading')} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('vaVaccines')} backLabelA11y={tc('vaVaccines.a11y')} backLabelOnPress={navigation.goBack} title={tc('details')}>
+        <LoadingComponent text={t('vaccines.details.loading')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   const displayDate = vaccine.attributes?.date ? formatDateMMMMDDYYYY(vaccine.attributes.date) : placeHolder
@@ -65,7 +68,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
   const isCovidVaccine = vaccine.attributes?.groupName?.toUpperCase()?.includes(COVID19)
 
   return (
-    <VAScrollView {...testIdProps('Vaccine-details-page')}>
+    <FeatureLandingTemplate backLabel={tc('vaVaccines')} backLabelA11y={tc('vaVaccines.a11y')} backLabelOnPress={navigation.goBack} title={tc('details')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -136,7 +139,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route }) => {
           </Box>
         )}
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

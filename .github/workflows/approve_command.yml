@@ -1,4 +1,4 @@
-name: 'Approve Slash Command'
+name: '[Release] Approve Slash Command'
 
 on:
   repository_dispatch:
@@ -32,7 +32,7 @@ jobs:
     needs: run_prs
     steps:
       - name: 'Checkout repo'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: 'Set up GH CLI secret'
         run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - name: 'Log into GH CLI'

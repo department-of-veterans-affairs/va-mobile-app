@@ -67,12 +67,14 @@ export type LinkButtonProps = AccessibilityProps & {
 
   /** optional function to fire analytic events when the link is clicked */
   fireAnalytic?: () => void
+  /** Optional TestID */
+  testID?: string
 }
 
 /**
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
-const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, a11yLabel, fireAnalytic, ...props }) => {
+const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, a11yLabel, fireAnalytic, testID, ...props }) => {
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
 
@@ -123,7 +125,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
   const getIconName = (): keyof typeof VA_ICON_MAP => {
     switch (linkType) {
       case 'call':
-        return 'Phone'
+        return 'CirclePhone'
       case 'callTTY':
         return 'PhoneTTY'
       case 'text':
@@ -135,7 +137,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
       case 'directions':
         return 'Directions'
       case 'externalLink':
-        return 'ExternalLink'
+        return 'CircleExternalLink'
     }
   }
 
@@ -156,11 +158,13 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
   }
 
   return (
-    <TouchableWithoutFeedback {...pressableProps}>
+    <TouchableWithoutFeedback testID={testID} {...pressableProps}>
       <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} alignItems={'center'}>
         <VAIcon name={getIconName()} fill={'link'} width={25} height={25} />
         <Box flexShrink={1}>
-          <TextView {...textViewProps}>{displayedText}</TextView>
+          <TextView testID={testID} {...textViewProps}>
+            {displayedText}
+          </TextView>
         </Box>
       </Box>
     </TouchableWithoutFeedback>

@@ -15,20 +15,22 @@ export type ErrorComponentProps = {
   screenID: ScreenIDTypes
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
+  /**Override the feature name in the event that a feature happens to share the same api error(ex:contact information and personal information) */
+  overrideFeatureName?: string
 }
 
 /**Main error handling component. This component will show the proper screen according to the type of error.*/
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const { errorsByScreenID, tryAgain: storeTryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HEALTH, NAMESPACE.PROFILE])
+  const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HEALTH])
   const isInDowntime = useDowntime(DowntimeScreenIDToFeature[props.screenID])
 
-  const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID }) => {
+  const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID, overrideFeatureName }) => {
     const tryAgain = onTryAgain ? onTryAgain : storeTryAgain
     const errorType = errorsByScreenID[screenID] || ''
 
     if (isInDowntime) {
-      return <DowntimeError screenID={screenID} />
+      return <DowntimeError screenID={screenID} overrideFeatureName={overrideFeatureName} />
     }
     // check which specific error occurred and return the corresponding error element
     switch (errorType) {
@@ -50,9 +52,9 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING:
         return (
           <CallHelpCenter
-            titleText={t('profile:disabilityRating.errorTitle')}
-            titleA11yHint={t('profile:disabilityRating.errorTitleA11y')}
-            callPhone={t('profile:disabilityRating.errorPhoneNumber')}
+            titleText={t('common:disabilityRating.errorTitle')}
+            titleA11yHint={t('common:disabilityRating.errorTitleA11y')}
+            callPhone={t('common:disabilityRating.errorPhoneNumber')}
           />
         )
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE:

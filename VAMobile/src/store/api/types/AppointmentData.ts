@@ -148,6 +148,7 @@ export type AppointmentAttributes = {
   phoneOnly: boolean
   reason: string | null
   isCovidVaccine: boolean
+  serviceCategoryName: string | null
   // pending appointment props
   isPending: boolean
   typeOfCare?: string // unclear if this always undefined for confirmed appointments that was a pending appointment
@@ -226,25 +227,4 @@ export const AppointmentCancellationStatusConstants: {
 } = {
   SUCCESS: 'SUCCESS',
   FAIL: 'FAIL',
-}
-
-export type AppointmentMessageAttributes = {
-  messageText?: string | null
-  messageDateTime?: string | null
-  appointmentRequestId?: string | null
-  date?: string | null
-}
-
-export type AppointmentMessages = {
-  id?: string | null
-  type?: string | null
-  attributes?: AppointmentMessageAttributes
-}
-
-export type AppointmentGetMessagesData = {
-  data: Array<AppointmentMessages>
-}
-
-export type AppointmentMessagesMap = {
-  [key: string]: Array<AppointmentMessages>
 }

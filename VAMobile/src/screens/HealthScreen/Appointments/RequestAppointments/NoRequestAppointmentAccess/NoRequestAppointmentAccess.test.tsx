@@ -14,12 +14,8 @@ const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -42,7 +38,7 @@ context('NoRequestAppointmentAccess', () => {
 
     component = render(<NoRequestAppointmentAccess {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
@@ -51,11 +47,11 @@ context('NoRequestAppointmentAccess', () => {
 
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[0].props.children).toBe("We can't find your facility registration")
-    expect(texts[1].props.children).toBe('To request an appointment online, you need to be:')
-    expect(texts[2].props.children[0]).toBe('Enrolled in VA health care,')
-    expect(texts[3].props.children).toBe(' and')
-    expect(texts[4].props.children[0]).toBe('Registered with at least 1 VA medical center that accepts online scheduling')
+    expect(texts[3].props.children).toBe("We can't find your facility registration")
+    expect(texts[4].props.children).toBe('To request an appointment online, you need to be:')
+    expect(texts[5].props.children[1]).toBe('Enrolled in VA health care,')
+    expect(texts[6].props.children).toBe(' and')
+    expect(texts[7].props.children[1]).toBe('Registered with at least 1 VA medical center that accepts online scheduling')
   })
 
   it('should use route navigation when Find facility button is pressed', async () => {

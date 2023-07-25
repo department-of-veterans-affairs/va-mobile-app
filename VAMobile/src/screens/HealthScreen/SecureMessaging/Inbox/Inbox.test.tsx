@@ -15,12 +15,8 @@ import { LoadingComponent, TextView } from 'components'
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
@@ -45,7 +41,6 @@ context('Inbox', () => {
   let testInstance: ReactTestInstance
   let mockNavigateToSpy: jest.Mock
 
-
   const initializeTestInstance = (category: CategoryTypes = CategoryTypeFields.other, subjectLine: string = 'Default subject line', loading: boolean = false) => {
     mockNavigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
@@ -67,6 +62,7 @@ context('Inbox', () => {
                 category: category,
                 subject: subjectLine ? subjectLine : '',
                 body: 'test',
+                hasAttachments: false,
                 attachment: false,
                 sentDate: '1-1-21',
                 senderId: 2,
@@ -90,7 +86,7 @@ context('Inbox', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -114,7 +110,7 @@ context('Inbox', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
       await waitFor(() => {
         expect(testInstance.findByType(NoInboxMessages)).toBeTruthy()
       })
@@ -133,7 +129,7 @@ context('Inbox', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessageScreen', {'currentPage': 2, 'folderID': 0, 'messageID': 1, 'messagesLeft': 1})
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessageScreen', { currentPage: 2, folderID: 0, messageID: 1, messagesLeft: 1 })
         expect(mockNavigateToSpy).toHaveBeenCalled()
       })
     })

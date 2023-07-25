@@ -1,6 +1,7 @@
 {
   "testRunner": "jest",
-  "runnerConfig": "e2e/config.json",
+  "runnerConfig": "detoxconfig.js",
+  
   "skipLegacyWorkersInjection": true,
   "apps": {
     "ios": {
@@ -24,7 +25,7 @@
     "emulator": {
       "type": "android.emulator",
       "device": {
-        "avdName": "Pixel_4_API_30"
+        "avdName": "Pixel_4_XL_API_31"
       }
     }
   },

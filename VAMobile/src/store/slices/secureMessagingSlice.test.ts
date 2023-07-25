@@ -5,7 +5,7 @@ import { SecureMessagingTabTypesConstants, SecureMessagingFormData } from 'store
 import FileViewer from 'react-native-file-viewer'
 import { when } from 'jest-when'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { contentTypes } from 'store/api/api'
 import {
   dispatchClearLoadedMessages,
@@ -120,6 +120,7 @@ context('secureMessaging', () => {
               messageId: 1, // ID of the message you just read
               category: 'COVID',
               subject: '',
+              hasAttachments: false,
               attachment: false,
               sentDate: '1/1/2021',
               senderId: 200,
@@ -256,6 +257,7 @@ context('secureMessaging', () => {
               messageId: 1, // ID of the message you just read
               category: 'COVID',
               subject: '',
+              hasAttachments: false,
               attachment: false,
               sentDate: '1/1/2021',
               senderId: 200,

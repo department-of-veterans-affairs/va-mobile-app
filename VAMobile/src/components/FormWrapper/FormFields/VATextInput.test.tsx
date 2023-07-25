@@ -29,7 +29,7 @@ context('VATextInput', () => {
     error = '',
     isRequiredField = false,
     testID = '',
-    labelKey = 'profile:personalInformation.emailAddress',
+    labelKey = 'profile:contactInformation.emailAddress',
     isTextArea = false,
   ) => {
     onChangeSpy = jest.fn(() => {})
@@ -50,7 +50,7 @@ context('VATextInput', () => {
       />,
     )
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

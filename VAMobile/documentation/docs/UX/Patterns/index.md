@@ -1,9 +1,12 @@
 ---
 title: Patterns
 ---
+Patterns are best practice design solutions for common user actions, tasks, and experiences. Patterns used in the VA: Health and Benefits mobile app include (but are not limited to:
+- [Haptics](haptics.md)
+- [Confirmation messages](confirmation-messages.md)
 
 
-Design patterns help to ensure consistent behavior across the VA mobile app's features. They typically make use of more than one component and may include display logic. 
-
-Patterns we use in the VA mobile app include our navigation model, screen types, error handling, help content, form fields, pickers, and empty/loading states.
-
+See also:
+- [VA Design Patterns](https://design.va.gov/patterns/)
+- [USWDS Patterns](https://designsystem.digital.gov/patterns/)
+- [Human Interaface Guidelines Patterns](https://developer.apple.com/design/human-interface-guidelines/patterns)

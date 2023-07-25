@@ -4,9 +4,11 @@ import React, { FC } from 'react'
 
 import { FooterButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useDestructiveAlert } from 'utils/hooks'
+import { View, ViewStyle } from 'react-native'
+import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
-/*To use this template to rap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
+
+/* To use this template to wrap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
 Use 'options={{headerShown: false}}' in the individual screen if only an individual screen is supposed to do it.
 */
@@ -30,9 +32,11 @@ export type LargePanelProps = {
   onFooterButtonPress?: () => void
   /** function called when right button is pressed and a save action is needed */
   onRightButtonPress?: () => void
+  /** Optional TestID for scrollView */
+  testID?: string
 }
 
-const LargePanel: FC<LargePanelProps> = ({
+export const LargePanel: FC<LargePanelProps> = ({
   children,
   leftButtonText,
   leftButtonA11yLabel,
@@ -43,11 +47,12 @@ const LargePanel: FC<LargePanelProps> = ({
   footerButtonText,
   onRightButtonPress,
   onFooterButtonPress,
+  testID,
 }) => {
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const confirmAlert = useDestructiveAlert()
-
+  const confirmAlert = useDestructiveActionSheet()
+  const theme = useTheme()
   const message = t('areYouSure')
 
   const leftTitleButtonPress = () => {
@@ -87,13 +92,20 @@ const LargePanel: FC<LargePanelProps> = ({
     divider: true,
   }
 
+  const fillStyle: ViewStyle = {
+    backgroundColor: theme.colors.background.main,
+    flex: 1,
+  }
+
   return (
     <>
-      <HeaderBanner {...headerProps} />
-      <VAScrollView>
-        {children}
-        {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
-      </VAScrollView>
+      <View {...fillStyle}>
+        <HeaderBanner {...headerProps} />
+        <VAScrollView testID={testID}>
+          {children}
+          {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
+        </VAScrollView>
+      </View>
     </>
   )
 }

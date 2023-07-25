@@ -2,7 +2,7 @@
 # Lint and Unit Test jobs that runs our lint:ci and test npm scripts
 #
 
-name: Code Checks
+name: '[Code Quality] Code Checks'
 
 on:
   pull_request:
@@ -25,13 +25,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
-          cache-dependency-path: 'VAMobile/yarn.lock'
+          # cache: 'yarn'
+          # cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - run: yarn lint:ci
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-4-cores-latest
     strategy:
       matrix:
         chunk: [1, 2, 3, 4, 5] # Array of chunks we want to split the tests into
@@ -41,8 +41,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
-          cache-dependency-path: 'VAMobile/yarn.lock'
+          # cache: 'yarn'
+          # cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: yarn test

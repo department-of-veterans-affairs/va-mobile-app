@@ -26,18 +26,8 @@ NativeModules.RNInAppUpdate = {
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
-jest.mock('react-native-safe-area-context', () => {
-  let original = jest.requireActual('react-native-safe-area-context')
-  return {
-    ...original,
-    useSafeAreaInsets: jest.fn().mockReturnValue({
-      insets: {
-        right: 0,
-        left: 0,
-      },
-    }),
-  }
-})
+import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock'
+jest.mock('react-native-safe-area-context', () => mockSafeAreaContext)
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
@@ -61,12 +51,9 @@ jest.mock('../src/store/api', () => ({
 
 jest.mock('../src/utils/hooks', () => {
   let original = jest.requireActual('../src/utils/hooks')
-  let theme = jest.requireActual('../src/styles/themes/standardTheme').default
+
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return jest.fn()
     },
@@ -287,10 +274,18 @@ jest.mock('@react-native-firebase/remote-config', () => {
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
-jest.mock('utils/encourageUpdate', () => {
+jest.mock('utils/homeScreenAlerts', () => {
   return {
+    FeatureConstants: jest.fn(),
     getVersionSkipped: jest.fn(),
     getStoreVersion: jest.fn(),
-    getEncourageUpdateLocalVersion: jest.fn(),
+    getLocalVersion: jest.fn(),
+  }
+})
+
+jest.mock('react-native-webview', () => {
+  const { View } = require('react-native')
+  return {
+    WebView: View,
   }
 })

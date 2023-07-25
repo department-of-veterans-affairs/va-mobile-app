@@ -15,7 +15,7 @@ context('NoInboxMessages', () => {
   const initializeTestInstance = () => {
     component = render(<NoInboxMessages />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -28,9 +28,7 @@ context('NoInboxMessages', () => {
 
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[0].props.children).toBe("You don't have any messages in your Inbox")
-    expect(texts[1].props.children).toBe(
-      'Compose a message to ask non-urgent (non-emergency) health related questions, send updates, manage appointments, and request referrals and medication refills from your VA health care team.',
-    )
+    expect(texts[0].props.children).toBe("You don't have any messages in your inbox")
+    expect(texts[1].props.children).toBe('Waiting for a reply from your care team? It may take up to 3 business days to get a reply.')
   })
 })

@@ -23,11 +23,11 @@ context('PrepareForVideoVisit', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
-    expect(testInstance.findAllByType(TextView).length).toEqual(11)
+    expect(testInstance.findAllByType(TextView).length).toEqual(13)
   })
 })

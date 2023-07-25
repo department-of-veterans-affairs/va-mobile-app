@@ -18,13 +18,14 @@ export type AddPreferenceComponentProps = {
 /** common component to add a preference */
 const AddPreferenceComponent: FC<AddPreferenceComponentProps> = ({ buttonText, onPress, preferenceTitle }) => {
   const theme = useTheme()
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const iconProps: VAIconProps = {
     name: 'Add',
     height: 24,
     width: 24,
     fill: theme.colors.buttonBackground.buttonPrimary,
+    fill2: theme.colors.icon.transparent,
   }
 
   return (
@@ -33,7 +34,7 @@ const AddPreferenceComponent: FC<AddPreferenceComponentProps> = ({ buttonText, o
         {preferenceTitle}
       </TextView>
       <TouchableWithoutFeedback onPress={onPress}>
-        <TextLineWithIcon text={buttonText || tc('add.preference.btn.title')} variant="MobileBodyLink" iconProps={iconProps} />
+        <TextLineWithIcon text={buttonText || t('add.preference.btn.title')} variant="MobileBodyLink" iconProps={iconProps} />
       </TouchableWithoutFeedback>
     </TextArea>
   )

@@ -29,9 +29,6 @@ jest.mock('utils/hooks', () => {
   const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -44,11 +41,14 @@ context('NoFolderMessages', () => {
   const mockNavigateToSpy = jest.fn()
 
   const initializeTestInstance = () => {
-    when(mockNavigationSpy).mockReturnValue(() => {}).calledWith('SecureMessaging').mockReturnValue(mockNavigateToSpy)
+    when(mockNavigationSpy)
+      .mockReturnValue(() => {})
+      .calledWith('SecureMessaging')
+      .mockReturnValue(mockNavigateToSpy)
     mockNavigationSpy.mockReturnValueOnce(() => {}).mockReturnValueOnce(mockNavigateToSpy)
-    component = render(<NoFolderMessages folderName={'test'} />)
+    component = render(<NoFolderMessages />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -61,7 +61,7 @@ context('NoFolderMessages', () => {
 
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[1].props.children).toBe("You don't have any messages in your test folder")
+    expect(texts[1].props.children).toBe("You don't have any messages in this folder")
   })
 
   describe('on click of the go to inbox button', () => {
@@ -79,9 +79,12 @@ context('NoDrafts', () => {
   const mockNavigateToSpy = jest.fn()
 
   const initializeTestInstance = () => {
-    when(mockNavigationSpy).mockReturnValue(() => {}).calledWith('SecureMessaging').mockReturnValue(mockNavigateToSpy)
-    component = render(<NoFolderMessages folderName={'Drafts'} />)
-    testInstance = component.container
+    when(mockNavigationSpy)
+      .mockReturnValue(() => {})
+      .calledWith('SecureMessaging')
+      .mockReturnValue(mockNavigateToSpy)
+    component = render(<NoFolderMessages />)
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -94,7 +97,7 @@ context('NoDrafts', () => {
 
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[1].props.children).toBe("You don't have any drafts in your Drafts folder")
+    expect(texts[1].props.children).toBe("You don't have any messages in this folder")
   })
 
   describe('on click of the go to inbox button', () => {

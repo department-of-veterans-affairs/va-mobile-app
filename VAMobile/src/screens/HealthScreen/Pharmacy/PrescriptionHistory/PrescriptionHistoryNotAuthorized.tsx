@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useExternalLink, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -14,6 +16,10 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { standardMarginBetween } = theme.dimensions
   const launchExternalLink = useExternalLink()
+
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_rx_noauth())
+  }, [])
 
   const alertWrapperProps: BoxProps = {
     my: standardMarginBetween,
@@ -40,6 +46,7 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
     accessibilityRole: 'link',
     accessibilityLabel: t('notEnrolledSM.learnHowTo.a11yLabel'),
     accessibilityHint: t('notEnrolledSM.learnHowTo.a11yHint'),
+    paragraphSpacing: true,
   }
 
   return (
@@ -49,15 +56,10 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView>{t('prescriptions.notAuthorized.toAccess')}</TextView>
-          <TextView pt={standardMarginBetween}>{t('prescriptions.notAuthorized.toUpgrade')}</TextView>
-          <Box my={standardMarginBetween}>
-            <VABulletList listOfText={[bulletOne]} />
-            <VABulletList listOfText={[bulletTwo]} />
-          </Box>
-          <Box mt={standardMarginBetween}>
-            <TextView {...linkProps}>{t('notEnrolledSM.learnHowTo')}</TextView>
-          </Box>
+          <TextView paragraphSpacing={true}>{t('prescriptions.notAuthorized.toAccess')}</TextView>
+          <TextView paragraphSpacing={true}>{t('prescriptions.notAuthorized.toUpgrade')}</TextView>
+          <VABulletList listOfText={[bulletOne, bulletTwo]} paragraphSpacing={true} />
+          <TextView {...linkProps}>{t('notEnrolledSM.learnHowTo')}</TextView>
           <TextView mt={standardMarginBetween} accessibilityLabel={t('prescriptions.notAuthorized.pleaseCall.a11y')}>
             {t('prescriptions.notAuthorized.pleaseCall')}
           </TextView>

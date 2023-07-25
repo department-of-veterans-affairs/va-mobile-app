@@ -1,12 +1,12 @@
 import _ from 'underscore'
 import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
-import { appeal as AppealPayload } from 'screens/ClaimsScreen/appealData'
-import { claim as Claim } from 'screens/ClaimsScreen/claimData'
+import { appeal as AppealPayload } from 'screens/BenefitsScreen/ClaimsScreen/appealData'
+import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { ClaimEventData, ClaimsAndAppealsGetDataMeta } from 'store/api/types'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
+import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { DocumentPickerResponse } from '../../screens/BenefitsScreen/BenefitsStackScreens'
 import { contentTypes } from 'store/api/api'
 import { Asset } from 'react-native-image-picker'
 import {
@@ -53,12 +53,17 @@ export const ActionTypes: {
   CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS: 'claimsAndAppeals/dispatchFileUploadSuccess',
 }
 
-const snackbarMessages : SnackbarMessages = {
-    successMsg: 'success',
-    errorMsg: 'failure'
+const snackbarMessages: SnackbarMessages = {
+  successMsg: 'success',
+  errorMsg: 'failure',
 }
 
 context('claimsAndAppeals', () => {
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+  
   const claimEventData: ClaimEventData = {
     description: 'need proof of something',
     type: 'eventType',
@@ -81,10 +86,16 @@ context('claimsAndAppeals', () => {
 
   const multiFiles: Array<Asset> = [
     {
-      base64: 'imgstring', uri: 'path/to/file', fileSize: 100, fileName: 'myfile'
+      base64: 'imgstring',
+      uri: 'path/to/file',
+      fileSize: 100,
+      fileName: 'myfile',
     },
     {
-      base64: 'imgstring', uri: 'path/to/file', fileSize: 100, fileName: 'myfile'
+      base64: 'imgstring',
+      uri: 'path/to/file',
+      fileSize: 100,
+      fileName: 'myfile',
     },
   ]
 
@@ -95,6 +106,7 @@ context('claimsAndAppeals', () => {
       attributes: {
         subtype: 'supplementalClaim',
         completed: false,
+        decisionLetterSent: false,
         dateFiled: '2020-10-22',
         updatedAt: '2020-10-28',
         displayTitle: 'supplemental claim for disability compensation',
@@ -106,6 +118,7 @@ context('claimsAndAppeals', () => {
       attributes: {
         subtype: 'Disability',
         completed: false,
+        decisionLetterSent: false,
         dateFiled: '2020-11-13',
         updatedAt: '2020-11-30',
         displayTitle: 'Disability',
@@ -117,6 +130,7 @@ context('claimsAndAppeals', () => {
       attributes: {
         subtype: 'Compensation',
         completed: false,
+        decisionLetterSent: false,
         dateFiled: '2020-06-11',
         updatedAt: '2020-12-07',
         displayTitle: 'Compensation',
@@ -131,6 +145,7 @@ context('claimsAndAppeals', () => {
       attributes: {
         subtype: 'supplementalClaim',
         completed: true,
+        decisionLetterSent: true,
         dateFiled: '2020-10-22',
         updatedAt: '2020-10-28',
         displayTitle: 'supplemental claim for disability compensation',
@@ -142,6 +157,7 @@ context('claimsAndAppeals', () => {
       attributes: {
         subtype: 'Disability',
         completed: true,
+        decisionLetterSent: true,
         dateFiled: '2020-11-13',
         updatedAt: '2020-11-30',
         displayTitle: 'Disability',
@@ -153,6 +169,7 @@ context('claimsAndAppeals', () => {
       attributes: {
         subtype: 'Compensation',
         completed: true,
+        decisionLetterSent: true,
         dateFiled: '2020-06-11',
         updatedAt: '2020-12-07',
         displayTitle: 'Disability',
@@ -498,7 +515,7 @@ context('claimsAndAppeals', () => {
     it('should dispatch the correct actions', async () => {
       const store = realStore()
 
-      await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, files))
+      await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, files, 'file'))
 
       const actions = store.getActions()
 
@@ -545,7 +562,7 @@ context('claimsAndAppeals', () => {
       }
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, files))
+      await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, files, 'file'))
       const { claimsAndAppeals } = store.getState()
 
       expect(claimsAndAppeals?.claim?.attributes.eventsTimeline[0].uploaded).toBe(true)
@@ -556,7 +573,7 @@ context('claimsAndAppeals', () => {
 
       const store = realStore()
 
-      await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, multiFiles))
+      await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, multiFiles, 'file'))
 
       expect(api.post as jest.Mock).toBeCalledWith('/v0/claim/id/documents/multi-image', { document_type: 'L228', files: ['imgstring', 'imgstring'], tracked_item_id: 1 })
     })

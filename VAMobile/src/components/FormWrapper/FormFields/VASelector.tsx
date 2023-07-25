@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView, VAIcon, VAIconProps } from '../../index'
-import { NAMESPACE } from 'constants/namespaces'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
@@ -55,22 +54,14 @@ const VASelector: FC<VASelectorProps> = ({
   a11yHint,
   error,
   setError,
-  isRequiredField,
 }) => {
   const theme = useTheme()
   const { t } = useTranslation()
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const iconWidth = 22
 
   const selectorOnPress = (): void => {
     if (!disabled) {
       setError && setError('')
-
-      // if its a required checkbox and its being unchecked, display the error
-      if (isRequiredField && selected && setError && selectorType === SelectorType.Checkbox) {
-        setError()
-      }
-
       onSelectionChange(!selected)
     }
   }
@@ -96,19 +87,19 @@ const VASelector: FC<VASelectorProps> = ({
 
   const getCheckBoxIcon = (): React.ReactNode => {
     if (disabled && selectorType === SelectorType.Radio) {
-      return <VAIcon {...getIconsProps('DisabledRadio')} {...testIdProps('DisabledRadio')} />
+      return <VAIcon {...getIconsProps('RadioEmpty', 'checkboxDisabled', 'radioDisabled')} {...testIdProps('RadioEmpty')} />
     }
 
     if (!!error && selectorType === SelectorType.Checkbox) {
-      return <VAIcon {...getIconsProps('ErrorCheckBox', theme.colors.icon.error)} {...testIdProps('ErrorCheckBox')} />
+      return <VAIcon {...getIconsProps('CheckBoxError', theme.colors.icon.error, 'checkboxDisabledContrast')} {...testIdProps('CheckBoxError')} />
     }
 
-    const filledName = selectorType === SelectorType.Checkbox ? 'FilledCheckBox' : 'FilledRadio'
-    const emptyName = selectorType === SelectorType.Checkbox ? 'EmptyCheckBox' : 'EmptyRadio'
+    const filledName = selectorType === SelectorType.Checkbox ? 'CheckBoxFilled' : 'RadioFilled'
+    const emptyName = selectorType === SelectorType.Checkbox ? 'CheckBoxEmpty' : 'RadioEmpty'
 
     const name = selected ? filledName : emptyName
     const fill = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabledContrast'
-    const stroke = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabled'
+    const stroke = selected ? undefined : 'checkboxDisabled'
 
     return <VAIcon {...getIconsProps(name, stroke, fill)} {...testIdProps(name)} />
   }
@@ -116,14 +107,16 @@ const VASelector: FC<VASelectorProps> = ({
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
   const a11yRole = selectorType === SelectorType.Checkbox ? 'checkbox' : 'radio'
   const a11yState = selectorType === SelectorType.Checkbox ? { checked: selected } : { selected }
-  const labelToUse = `${a11yLabel || getTranslation(labelKey, t, labelArgs)} ${error ? tc('error', { error }) : ''}`
+  const labelToUse = `${a11yLabel || getTranslation(labelKey, t, labelArgs)} ${error ? t('error', { error }) : ''}`
 
   return (
     <TouchableWithoutFeedback onPress={selectorOnPress} accessibilityState={a11yState} accessibilityRole={a11yRole} accessibilityLabel={labelToUse} {...hintProp}>
       <Box>
         {!!error && <Box {...errorBoxProps}>{renderInputError(error)}</Box>}
         <Box flexDirection="row">
-          <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
+          <Box {...testIdProps('checkbox-with-label')} mt={5}>
+            {getCheckBoxIcon()}
+          </Box>
           <Box {...selectorBoxProps}>
             <TextView variant="VASelector" color={disabled ? 'checkboxDisabled' : 'bodyText'}>
               {getTranslation(labelKey, t, labelArgs)}

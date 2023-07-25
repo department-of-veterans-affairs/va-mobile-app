@@ -1,6 +1,6 @@
 ---
 title: Branching in Figma
-sidebar_position: 3
+sidebar_position: 5
 ---
 
 ## What is branching?
@@ -23,7 +23,8 @@ In the future, we may consider branching for:
 * Development handoff of specific components or feature work
 
 ## Who will be able to do what in the design library?
-We’ll be updating permissions for the design library as follows:
+
+We’ll be updating [permissions](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/figma-permissions) for the design library as follows:
 
 * Owner (UX lead)
     * Able to adjust file and project permissions
@@ -39,6 +40,8 @@ We’ll be updating permissions for the design library as follows:
 
 ## How do I create a branch in Figma?
 Open the file you want to branch. Next to the file name, there is a dropdown where you can select **_Create branch_**.
+
+**Note**: When working in a branch, keep track of if/when you move components from one section to another in the library. This may cause conflicts and/or duplicate components when a Reviewer merges your branch into the main file. Be sure to include this information when you submit your branch for review.
 
 
 ![Screenshot of the create a branch menu item](/img/figma/figma-create-a-branch-menu.png)

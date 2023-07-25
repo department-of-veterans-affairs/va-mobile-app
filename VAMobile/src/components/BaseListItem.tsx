@@ -2,9 +2,10 @@ import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, P
 import React, { FC, ReactElement, useState } from 'react'
 
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
+import { triggerHaptic } from 'utils/haptics'
 import { useTheme } from 'utils/hooks'
 import Box, { BackgroundVariant, BoxProps } from './Box'
-import FileRequestNumberIndicator from 'screens/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
+import FileRequestNumberIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
 import SwitchComponent, { SwitchProps } from './Switch'
 import VAIcon, { VAIconProps } from './VAIcon'
 
@@ -21,15 +22,15 @@ export enum ButtonDecoratorType {
   /** Trash can decorator */
   Delete = 'Delete',
   /** Empty radio button decorator */
-  EmptyRadio = 'EmptyRadio',
+  RadioEmpty = 'RadioEmpty',
   /** Filled radio button decorator */
-  FilledRadio = 'FilledRadio',
+  RadioFilled = 'RadioFilled',
   /** Disabled radio button decorator */
-  DisabledRadio = 'DisabledRadio',
-  /** Empty radio button decorator */
-  EmptyCheckBox = 'EmptyCheckBox',
-  /** Filled radio button decorator */
-  FilledCheckBox = 'FilledCheckBox',
+  RadioDisabled = 'RadioDisabled',
+  /** Empty check box button decorator */
+  CheckBoxEmpty = 'CheckBoxEmpty',
+  /** Filled check box button decorator */
+  CheckBoxFilled = 'CheckBoxFilled',
 }
 
 export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
@@ -94,22 +95,13 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
     case ButtonDecoratorType.SelectedItem:
       return <VAIcon name={'CheckMark'} height={13} width={16} fill={theme.colors.icon.pickerIcon} {...decoratorProps} />
     case ButtonDecoratorType.Delete:
-      return <VAIcon name={'TrashSolid'} height={16} width={14} fill={theme.colors.icon.error} {...decoratorProps} />
-    case ButtonDecoratorType.FilledRadio:
+      return <VAIcon name={'Trash'} height={16} width={14} fill={theme.colors.icon.error} {...decoratorProps} />
+    case ButtonDecoratorType.RadioFilled:
+      return <VAIcon name={'RadioFilled'} height={radioBtnHeight} width={radioBtnWidth} fill={theme.colors.icon.checkboxEnabledPrimary} {...decoratorProps} />
+    case ButtonDecoratorType.RadioEmpty:
       return (
         <VAIcon
-          name={'FilledRadio'}
-          height={radioBtnHeight}
-          width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxEnabledPrimary}
-          stroke={theme.colors.icon.checkboxEnabledPrimary}
-          {...decoratorProps}
-        />
-      )
-    case ButtonDecoratorType.EmptyRadio:
-      return (
-        <VAIcon
-          name={'EmptyRadio'}
+          name={'RadioEmpty'}
           height={radioBtnHeight}
           width={radioBtnWidth}
           fill={theme.colors.icon.checkboxDisabledContrast}
@@ -117,32 +109,23 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
           {...decoratorProps}
         />
       )
-    case ButtonDecoratorType.DisabledRadio:
+    case ButtonDecoratorType.RadioDisabled:
       return (
         <VAIcon
-          name={'DisabledRadio'}
+          name={'RadioEmpty'}
           height={radioBtnHeight}
           width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxDisabledContrast}
+          fill={theme.colors.icon.radioDisabled}
           stroke={theme.colors.icon.checkboxDisabled}
           {...decoratorProps}
         />
       )
-    case ButtonDecoratorType.FilledCheckBox:
+    case ButtonDecoratorType.CheckBoxFilled:
+      return <VAIcon name={'CheckBoxFilled'} height={radioBtnHeight} width={radioBtnWidth} fill={theme.colors.icon.checkboxEnabledPrimary} {...decoratorProps} />
+    case ButtonDecoratorType.CheckBoxEmpty:
       return (
         <VAIcon
-          name={'FilledCheckBox'}
-          height={radioBtnHeight}
-          width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxEnabledPrimary}
-          stroke={theme.colors.icon.checkboxEnabledPrimary}
-          {...decoratorProps}
-        />
-      )
-    case ButtonDecoratorType.EmptyCheckBox:
-      return (
-        <VAIcon
-          name={'EmptyCheckBox'}
+          name={'CheckBoxEmpty'}
           height={radioBtnHeight}
           width={radioBtnWidth}
           fill={theme.colors.icon.checkboxDisabledContrast}
@@ -154,7 +137,7 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
     default:
       return (
         <VAIcon
-          name={'ArrowRight'}
+          name={'ChevronRight'}
           fill={theme.colors.icon.chevronListItem}
           width={theme.dimensions.chevronListItemWidth}
           height={theme.dimensions.chevronListItemHeight}
@@ -196,7 +179,6 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   const _onPressOut = (): void => {
     setIsPressed(false)
   }
-
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
   const showDecorator = onPress && decorator !== ButtonDecoratorType.None
 
@@ -206,6 +188,9 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   const onOuterPress = (): void => {
     // nooop for switch types, need to press on the switch specifically
     if (onPress) {
+      if (isSwitchRow) {
+        triggerHaptic('impactHeavy')
+      }
       onPress()
     }
   }
@@ -213,6 +198,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   const onDecoratorPress = (): void => {
     // if we're a switch type, need to handle the press on the decorator specifically
     if (isSwitchRow && onPress) {
+      triggerHaptic('impactHeavy')
       onPress()
     }
   }
@@ -226,7 +212,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     onPressOut: _onPressOut,
     accessible: true,
     accessibilityRole,
-    disabled: decorator === ButtonDecoratorType.DisabledRadio,
+    disabled: decorator === ButtonDecoratorType.RadioDisabled,
   }
 
   const boxProps: BoxProps = {

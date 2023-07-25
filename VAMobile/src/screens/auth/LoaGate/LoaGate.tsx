@@ -1,20 +1,21 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ButtonTypesConstants, CollapsibleView, CrisisLineCta, TextView, TextViewProps, VABulletList, VAButton, VAScrollView } from 'components'
+import { Box, ButtonTypesConstants, CollapsibleView, CrisisLineCta, FullScreenSubtask, TextView, TextViewProps, VABulletList, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
+import { useNavigation } from '@react-navigation/native'
 import { useRouteNavigation } from 'utils/hooks'
+import { useStartAuth } from 'utils/hooks/auth'
 import { useTheme } from 'utils/hooks'
 
 type LoaGateProps = Record<string, unknown>
 
 const LoaGate: FC<LoaGateProps> = ({}) => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.LOGIN)
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const startAuth = useStartAuth()
   const navigateTo = useRouteNavigation()
-
-  const onConfirm = navigateTo('WebviewLogin')
+  const navigation = useNavigation()
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const bulletOne = {
@@ -32,18 +33,20 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Sign-in: L-o-a-gate-page')}>
+    <FullScreenSubtask leftButtonText={t('back')} onLeftButtonPress={navigation.goBack}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView {...bodyTextProps}>{t('loaGate.p1')}</TextView>
-        <TextView {...bodyTextProps} my={theme.dimensions.standardMarginBetween}>
+        <TextView paragraphSpacing={true} {...bodyTextProps}>
+          {t('loaGate.p1')}
+        </TextView>
+        <TextView paragraphSpacing={true} {...bodyTextProps}>
           {t('loaGate.p2')}
         </TextView>
         <CollapsibleView text={t('loaGate.expandMsg')} showInTextArea={false} a11yHint={t('loaGate.expandMsg.a11yHint')}>
-          <TextView {...bodyTextProps}>{t('loaGate.readMore.p1')}</TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <TextView {...titleTextProps}>{t('loaGate.readMore.p2')}</TextView>
-          </Box>
+          <TextView paragraphSpacing={true} {...bodyTextProps}>
+            {t('loaGate.readMore.p1')}
+          </TextView>
+          <TextView {...titleTextProps}>{t('loaGate.readMore.p2')}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <TextView {...bodyTextProps}>
               {t('loaGate.readMore.itemOne')}
@@ -57,16 +60,12 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
             <TextView {...bodyTextProps}>{t('loaGate.readMore.itemTwo.OfferProof')}</TextView>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VABulletList listOfText={[bulletOne]} />
-          </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VABulletList listOfText={[{ text: t('loaGate.readMore.bulletTwo') }]} />
+            <VABulletList listOfText={[bulletOne, { text: t('loaGate.readMore.bulletTwo') }]} />
           </Box>
         </CollapsibleView>
-
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
-            onPress={onConfirm}
+            onPress={startAuth}
             label={t('continueToSignin')}
             buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('continueToSignin.a11yHint')}
@@ -74,7 +73,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
           />
         </Box>
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 

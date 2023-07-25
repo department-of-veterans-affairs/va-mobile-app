@@ -20,6 +20,7 @@ import demoReducer from 'store/slices/demoSlice'
 import directDepositReducer from 'store/slices/directDepositSlice'
 import disabilityRatingReducer from 'store/slices/disabilityRatingSlice'
 import errorReducer from 'store/slices/errorSlice'
+import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import lettersReducer from 'store/slices/lettersSlice'
 import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
@@ -34,6 +35,7 @@ import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import { InitialState } from 'store/slices'
 import theme from 'styles/themes/standardTheme'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 export const findByTypeWithName = (testInstance: ReactTestInstance, type: ElementType, name: string): ReactTestInstance | null => {
   try {
@@ -140,6 +142,7 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       claimsAndAppeals: claimsAndAppealsReducer,
       directDeposit: directDepositReducer,
       disabilityRating: disabilityRatingReducer,
+      decisionLetters: decisionLettersReducer,
       letters: lettersReducer,
       militaryService: militaryServiceReducer,
       notifications: notificationReducer,
@@ -240,7 +243,9 @@ function render(ui, { preloadedState, navigationProvided = false, ...renderOptio
       return (
         <Provider store={store}>
           <I18nextProvider i18n={i18nReal}>
-            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+            <ThemeProvider theme={theme}>
+              <SafeAreaProvider>{children}</SafeAreaProvider>
+            </ThemeProvider>
           </I18nextProvider>
         </Provider>
       )
@@ -249,7 +254,9 @@ function render(ui, { preloadedState, navigationProvided = false, ...renderOptio
       <Provider store={store}>
         <I18nextProvider i18n={i18nReal}>
           <NavigationContainer>
-            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+            <ThemeProvider theme={theme}>
+              <SafeAreaProvider>{children}</SafeAreaProvider>
+            </ThemeProvider>
           </NavigationContainer>
         </I18nextProvider>
       </Provider>

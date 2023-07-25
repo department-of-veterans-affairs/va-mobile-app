@@ -2,8 +2,8 @@ import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 
-import { Box, BoxProps, ValidationFunctionItems } from '../../index'
-import { getInputBorderColor, getInputBorderWidth, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
+import { Box, BoxProps } from '../../index'
+import { getInputBorderColor, getInputBorderWidth, getInputWrapperProps, removeInputErrorMessage, renderInputError, renderInputLabelSection } from './formFieldUtils'
 import { isIOS } from 'utils/platform'
 import { useTheme } from 'utils/hooks'
 
@@ -34,8 +34,6 @@ export type VATextInputProps = {
   setError?: (error?: string) => void
   /** if this exists updates input styles to error state */
   error?: string
-  /** optional list of validation functions to check against */
-  validationList?: Array<ValidationFunctionItems>
   /** optional boolean that when true displays a text area rather than a single line text input */
   isTextArea?: boolean
   /** optional boolean to set the cursor to the beginning of a string value */
@@ -53,12 +51,12 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onChange,
     maxLength,
     onEndEditing,
+    testID,
     inputRef,
     isRequiredField,
     helperTextKey,
     setError,
     error,
-    validationList,
     isTextArea,
     setInputCursorToBeginning,
   } = props
@@ -71,8 +69,8 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const ref = useRef<TextInput>(null)
 
   useEffect(() => {
-    updateInputErrorMessage(isFocused, isRequiredField, error, setError, value, focusUpdated, setFocusUpdated, validationList)
-  }, [isFocused, labelKey, value, error, setError, isRequiredField, t, focusUpdated, validationList])
+    removeInputErrorMessage(isFocused, error, setError, focusUpdated, setFocusUpdated)
+  }, [isFocused, error, setError, focusUpdated])
 
   let textContentType: 'emailAddress' | 'telephoneNumber' | 'none' = 'none'
   let keyboardType: KeyboardTypeOptions = 'default'
@@ -118,12 +116,9 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
       } else {
         onChange(newVal)
       }
-      // if there was an error, remove when the user starts typing
-      if (newVal.length > 0 && setError && error !== '') {
-        setError('')
-      }
     },
     onEndEditing,
+    testID,
     style: {
       fontSize: theme.fontSizes.MobileBody.fontSize,
       fontFamily: theme.fontFace.regular,

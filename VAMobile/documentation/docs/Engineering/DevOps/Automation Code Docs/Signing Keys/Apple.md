@@ -11,7 +11,7 @@ Apple Certificates expire every year and need to be renewed. This process is lin
 
 
 ## Fastlane Match and Apple Signing
-Apple Signing in our build system is managed with [Fastlane match]. Match manages and stores the certificates so that a single Distribution certificate can be shared with the team through GitHub authorization to the [private, encrypted repository](https://github.com/department-of-veterans-affairs/va-mobile-app-private).
+Apple Signing in our build system is managed with [Fastlane match](https://docs.fastlane.tools/actions/match/). Match manages and stores the certificates so that a single Distribution certificate can be shared with the team through GitHub authorization to the [private, encrypted repository](https://github.com/department-of-veterans-affairs/va-mobile-app-private).
 
 Match can be called from a local machine to download the certificates and provisioning profiles for distribution or development. It is also used to sign certificates in the CI during Fastlane scripts. 
 ## Renewing Certificates
@@ -27,12 +27,12 @@ You will need to delete the expiring profile and certificates from the Developer
 #### [Certificate](https://developer.apple.com/account/resources/certificates/list)
 | NAME                                   | TYPE         | PLATFORM | CREATED BY     | EXPIRATION |
 |----------------------------------------|--------------|----------|----------------|------------|
-| US Department of Veterans Affairs (VA) | Distribution | All      | Patrick Saxton | 07/13/2023 |
+| US Department of Veterans Affairs (VA) | Distribution | All      | Narin Ratana | 06/26/2024 |
 
 #### [Provisioning Profiles](https://developer.apple.com/account/resources/profiles/list)
 | NAME                              | PLATFORM | TYPE      | EXPIRATION |
 |-----------------------------------|----------|-----------|------------|
-| match AppStore gov.va.vamobileapp | iOS      | App Store | 07/13/2023 |
+| match AppStore gov.va.vamobileapp | iOS      | App Store | 06/26/2024 |
 
 Once the certificates have been deleted from both locations you can [run match in your terminal](https://docs.fastlane.tools/actions/match/#run) to renew the certs
 navigate to `~/VAMobile/ios/fastlane` and then run `fastlane match appstore`. You should be able to follow the prompt to create a new Distribution Certificate and Provisioning Profile that will be uploaded to the private repository and can then be used for signing apps.

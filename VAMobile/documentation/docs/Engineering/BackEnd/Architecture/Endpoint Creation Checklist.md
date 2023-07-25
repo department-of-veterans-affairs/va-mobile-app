@@ -12,6 +12,25 @@
 ### Documentation
 * Created $ref schema for new endpoint (`modules/mobile/docs/schemas`)
 * Updated openapi.yaml for new endpoint (`modules/mobile/docs/openapi.yaml`)
+  * Included standard error responses in docs _(more responses may be applicable for some endpoints)_:
+  ```
+  '401':
+      $ref: '#/components/responses/401'
+  '403':
+      $ref: '#/components/responses/403'
+  '404':
+      $ref: '#/components/responses/404'
+  '408':
+      $ref: '#/components/responses/408'
+  '500':
+      $ref: '#/components/responses/500'
+  '502':
+      $ref: '#/components/responses/502'
+  '503':
+      $ref: '#/components/responses/503'
+  '504':
+      $ref: '#/components/responses/504'
+  ```
 * Regenerated HTML file by running `generate_static_docs.sh` command (`modules/mobile/docs/generate_static_docs.sh`)
 ### Monitoring
 * Added new endpoint to `SERVICE_GRAPH` (`modules/mobile/app/controllers/mobile/v0/maintenance_windows_controller.rb`) _(only applicable for new upstream services used)_

@@ -27,18 +27,17 @@ platform :ios do
               key_filepath: ENV['APPSTORE_CONNECT_FILEPATH'],
               in_house: false
             )
-    ENV['ITMSTRANSPORTER_FORCE_ITMS_PACKAGE_UPLOAD'] = 'true'
   end
 
   desc "Push a new internal QA build to TestFlight"
   lane :qa do |options|
     puts('Begin QA lane' )
-    ensure_xcode_version(version: "13", strict: false)
+    ensure_xcode_version(version: "14", strict: false)
     notes = options[:notes]
     update_version(options[:version])
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-QA")
     sign
-    build
+    build("QA")
     notes = "New QA version for " + Time.new.strftime("%m.%d.%Y") if notes.to_s.empty?
     upload_tf(notes, "Development Team")
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
@@ -46,15 +45,50 @@ platform :ios do
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS", ENV['SLACK_THREAD_TS'])
   end
 
-  desc "Push new demo version to TestFlight"
-  lane :demo do
-    puts('Begin Demo lane')
+  desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
+  lane :on_demand do |options|
+    puts "on demand run"
+    ensure_xcode_version(version: "14", strict: false)
+    notes = options[:notes]
+    datetime = Time.new.strftime("%m-%d-%Y %I:%M %p %Z")
+    update_version(options[:version])
+    sign
+    build("QA")
+
+    tf_group = options[:tfGroup].empty? ? "Development Team" : options[:tfGroup]
+
+    if notes.to_s.empty?
+      notes = "New On Demand QA version for " + datetime
+    elsif notes.start_with?("feature-build-")
+      notes = "Feature Build: #{notes.gsub('feature-build-','').gsub('-',' ')} - " + datetime
+    end
+
+    puts notes
+    upload_tf(notes, tf_group)
+    message = "New On Demand build successfully uploaded to TestFlight Group " + tf_group
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand", message, "iOS", ENV['SLACK_THREAD_TS'])
+  end
+
+  desc "Deploy a RC new version to TestFlight"
+  lane :rc do |options|
+    puts('Begin RC lane' )
+    ensure_xcode_version(version: "14", strict: false)
+    update_version(options[:version])
+    update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-RC")
+    sign
+    build("RC")
+    rcVersion = "#{Gem::Version.new(lane_context[SharedValues::VERSION_NUMBER]).bump}.0"
+    notes = "Release Candidate build for version #{rcVersion} - #{Time.new.strftime("%m.%d.%Y")}"
+    upload_tf(notes, "Development Team")
+    tag_build(lane_context[SharedValues::BUILD_NUMBER])
+    message = "New RC for #{rcVersion} successfully uploaded to TestFlight Group - Development Team"
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Release Candidate", message, "iOS", ENV['SLACK_THREAD_TS'])
   end
 
   desc "Build new Production build and upload to App Store for review"
   lane :review do |options|
     puts("Begin Review Lane")
-    ensure_xcode_version(version: "13", strict: false)
+    ensure_xcode_version(version: "14", strict: false)
     update_version(options[:version])
     sign
     build
@@ -79,44 +113,9 @@ platform :ios do
     end
   end
 
-  desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
-  lane :on_demand do |options|
-    puts "on demand run"
-    ensure_xcode_version(version: "13", strict: false)
-    notes = options[:notes]
-    datetime = Time.new.strftime("%m-%d-%Y %I:%M %p %Z")
-    update_version(options[:version])
-    sign
-    build
-
-    tf_group = options[:tfGroup].empty? ? "Development Team" : options[:tfGroup]
-
-    if notes.to_s.empty?
-      notes = "New On Demand QA version for " + datetime
-    elsif notes.start_with?("feature-build-")
-      notes = "Feature Build: #{notes.gsub('feature-build-','').gsub('-',' ')} - " + datetime
-    end
-
-    puts notes
-    upload_tf(notes, tf_group)
-    message = "New On Demand build successfully uploaded to TestFlight Group " + tf_group
-    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "On Demand", message, "iOS", ENV['SLACK_THREAD_TS'])
-  end
-
-  desc "Deploy a RC new version to TestFlight"
-  lane :rc do |options|
-    puts('Begin RC lane' )
-    ensure_xcode_version(version: "13", strict: false)
-    update_version(options[:version])
-    update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-RC")
-    sign
-    build("RC")
-    rcVersion = "#{Gem::Version.new(lane_context[SharedValues::VERSION_NUMBER]).bump}.0"
-    notes = "Release Candidate build for version #{rcVersion} - #{Time.new.strftime("%m.%d.%Y")}"
-    upload_tf(notes, "Development Team")
-    tag_build(lane_context[SharedValues::BUILD_NUMBER])
-    message = "New RC for #{rcVersion} successfully uploaded to TestFlight Group - Development Team"
-    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Release Candidate", message, "iOS", ENV['SLACK_THREAD_TS'])
+  desc "Push new demo version to TestFlight"
+  lane :demo do
+    puts('Begin Demo lane')
   end
 
   after_all do |lane, options|
@@ -166,7 +165,7 @@ platform :ios do
       tag = "ios-build-" + build.to_s
       puts "Tagging commit with " + tag
       add_git_tag(tag: tag)
-      push_git_tags
+      push_git_tags(tag: tag)
     rescue => e
         puts e.to_s
       slack_github_error(e, "Error tagging iOS build", "iOS", ENV['SLACK_THREAD_TS'])

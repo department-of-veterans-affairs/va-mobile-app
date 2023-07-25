@@ -2,9 +2,10 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useLayoutEffect } from 'react'
 
-import { Box, ClosePanelButton, ErrorComponent, LoadingComponent, MultiTouchCard, MultiTouchCardProps, TextView, VAScrollView } from 'components'
+import { Box, ClosePanelButton, ErrorComponent, FullScreenSubtask, LoadingComponent, MultiTouchCard, MultiTouchCardProps, TextView } from 'components'
 import { ClickForActionLink } from 'components'
 import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, getTrackingInfo } from 'store/slices'
@@ -13,7 +14,9 @@ import { RootState } from 'store'
 import { a11yLabelID } from 'utils/a11yLabel'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { isIOS } from 'utils/platform'
-import { useAppDispatch, useDowntime, useError, usePanelHeaderStyles, useTheme } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useAppDispatch, useBeforeNavBackListener, useDowntime, useError, useTheme } from 'utils/hooks'
+import { usePanelHeaderStyles } from 'utils/hooks/headerStyles'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
@@ -70,20 +73,36 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
     }
   }, [dispatch, prescription, prescriptionInDowntime])
 
+  useBeforeNavBackListener(navigation, () => {
+    logAnalyticsEvent(Events.vama_rx_trackdet_close(prescription.id))
+  })
+
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.
   // In this case, we need to support two different screenIDs:
   // 1. Generic 'rx_refill' downtime message that can be seen in multiple Pharmacy screens
   // 2. Error message specific to this page
   if (prescriptionInDowntime) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+    return (
+      <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if (hasError) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID} />
+    return (
+      <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID} />
+      </FullScreenSubtask>
+    )
   }
 
   if (loadingTrackingInfo) {
-    return <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
+    return (
+      <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
+        <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
+      </FullScreenSubtask>
+    )
   }
 
   const renderOtherPrescription = (otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>) => {
@@ -184,15 +203,20 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   }
 
   return (
-    <VAScrollView>
+    <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
       <Box mx={gutter} mt={contentMarginTop} mb={contentMarginBottom}>
         {renderHeader()}
         <Box mt={standardMarginBetween}>
-          <TextView variant="HelperText">{t('prescriptions.refillTracking.upTo15Days')}</TextView>
+          <TextView variant="HelperText" paragraphSpacing={true}>
+            {t('prescriptions.refillTracking.upTo15Days')}
+          </TextView>
         </Box>
+        <TextView variant="HelperText" accessibilityLabel={tc('prescriptions.refillTracking.deliveryChanges.a11yLabel')}>
+          {tc('prescriptions.refillTracking.deliveryChanges')}
+        </TextView>
         {renderTrackingCards()}
       </Box>
-    </VAScrollView>
+    </FullScreenSubtask>
   )
 }
 

@@ -7,15 +7,15 @@ The VA mobile app's visual design system is a “cousin” to the [VA design sys
 
 ## Elements​
 ### Color 
-The VA mobile app has two color themes: Light and Dark. For both themes, we [use  colors](https://www.figma.com/file/bGO6g5cCvWycrNjoK66PXc/VA-Mobile-Design-Tokens?node-id=151%3A76) from the [VA style guide](https://design.va.gov/foundation/color-palette), and only deviate if necessary for accessibility purposes.
+The VA mobile app has two color themes: Light and Dark. [The VA mobile app themes](https://www.figma.com/file/bGO6g5cCvWycrNjoK66PXc/VA-Mobile-Design-Tokens?node-id=151%3A76) use colors from the [VA style guide](https://design.va.gov/foundation/color-palette), and only deviate if necessary for accessibility purposes.
 
-<iframe width="550" height="500" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2Fbranch%2FrRcjru5nNPz1A4p3xvD6ND%2FVAMobile-DesignLibrary1.0-%25F0%259F%2593%2590%3Fnode-id%3D720%253A1431%26t%3DkaAKRCUzSZOxoRi6-1" allowfullscreen></iframe>
+<iframe width="550" height="500" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2F%25F0%259F%2593%2590-DesignLibrary2.0---VAMobile%3Ftype%3Ddesign%26node-id%3D3859%253A7446%26t%3DLWuS4oyNuplsuZBa-1" allowfullscreen></iframe>
 
 **Themes**
 - [Light theme in Figma](https://www.figma.com/file/yXL0MkEKyAPGXPZqRH0VFZ/VA-Mobile-light-theme?node-id=183%3A441)
 - [Dark theme in Figma](https://www.figma.com/file/gOhb2kZvoQiXiGigqWZhnx/VA-Mobile-dark-theme?node-id=183%3A441)
 
-See also [FrontEnd: Fonts and Colors](/docs/Engineering/FrontEnd/Fonts%20and%20Colors/FontsAndColors)
+See also [FrontEnd: Fonts and Colors](/docs/Engineering/FrontEnd/FontsAndColors)
 
 
 ### Typography
@@ -74,24 +74,24 @@ Typography in the VA mobile app generally follows [typography used by VA.gov](ht
 </tr>
 </table> -->
 
-<iframe width="550" height="500" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FbGO6g5cCvWycrNjoK66PXc%2FVA-Mobile-Design-Tokens%3Fnode-id%3D151%253A959" allowfullscreen></iframe>
+<iframe width="550" height="500" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2F%25F0%259F%2593%2590-DesignLibrary2.0---VAMobile%3Ftype%3Ddesign%26node-id%3D3859%253A7737%26t%3DLWuS4oyNuplsuZBa-1" allowfullscreen></iframe>
 
-* [Typography in Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%9A-VA-Mobile-Design-Library?node-id=720%3A1708)
-* See also [FrontEnd: Fonts and Colors](/docs/Engineering/FrontEnd/Fonts%20and%20Colors/FontsAndColors)
+* [Typography in Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=3859%3A7737&t=8Vn51lk7QdLMQXS3-1)
+* See also [FrontEnd: Fonts and Colors](/docs/Engineering/FrontEnd/FontsAndColors)
 
 ### Icons
 Icons are used sparingly throughout the VA mobile app as a way to enhance user understanding and wayfinding.
 
-<iframe width="550" height="500" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2Fbranch%2FrRcjru5nNPz1A4p3xvD6ND%2FVAMobile-DesignLibrary1.0-%25F0%259F%2593%2590%3Fnode-id%3D543%253A1079%26t%3DkaAKRCUzSZOxoRi6-1" allowfullscreen></iframe>
+<iframe width="550" height="500" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2F%25F0%259F%2593%2590-DesignLibrary2.0---VAMobile%3Ftype%3Ddesign%26node-id%3D4156%253A7676%26t%3DLWuS4oyNuplsuZBa-1" allowfullscreen></iframe>
 
-* [Icons in Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%9A-VA-Mobile-Design-Library?node-id=720%3A1986)
+* [Icons in Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=4156%3A7676&t=LWuS4oyNuplsuZBa-1)
 * See also [FrontEnd: Icons](/docs/Engineering/FrontEnd/Icons/)
 
  
 ### Grid
-<iframe width="550" height="500" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2Fbranch%2FrRcjru5nNPz1A4p3xvD6ND%2FVAMobile-DesignLibrary1.0-%25F0%259F%2593%2590%3Fnode-id%3D578%253A783%26t%3DkaAKRCUzSZOxoRi6-1" allowfullscreen></iframe>
+<iframe width="550" height="500" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2F%25F0%259F%2593%2590-DesignLibrary2.0---VAMobile%3Ftype%3Ddesign%26node-id%3D3859%253A7810%26t%3DjWFCs3N7Lf6mFiPw-1" allowfullscreen></iframe>
 
-* [Grid in Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%9A-VA-Mobile-Design-Library?node-id=720%3A2053)
+* [Grid in Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=3859%3A7737&t=EuJmlpcIxjibtKua-1)
 
 
 ## Resources

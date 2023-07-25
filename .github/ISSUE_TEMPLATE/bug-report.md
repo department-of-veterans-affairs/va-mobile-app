@@ -27,10 +27,14 @@ assignees:
 
 ## Bug Severity - BE SURE TO ADD THE SEVERITY LABEL
 <!-- How bad is it? --> 
-See [Issue Tracking](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/testing/VA%20Mobile%20App%20Test%20Plan.md#issue-tracking) for details on Severity Levels
-<!-- Pick one -->
-- 4 - Low
-- 3 - Medium
+See [Bug Tracking](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA#issue-severity) for details on severity levels
+<!-- Pick high or low for each category, using definitions in the link above if needed. -->
+- Impact: High Low 
+- Frequency: High Low 
+
+<!-- Pick a single severity label (and delete the others) -->
+<!-- sev-1 is HIGH for both impact and frequency, sev-2 is HIGH in one measure and LOW in the other, sev-3 is LOW for both -->
+- 3 - Low
 - 2 - High
 - 1 - Critical
 
@@ -38,10 +42,17 @@ See [Issue Tracking](https://github.com/department-of-veterans-affairs/va.gov-te
 <!-- OPTIONAL. Add the link to the issue here. you can shorthand the link like this: #598 where 598 is the ticket number. Skip if found during a regression. -->
 
 ## Screen shot(s) and additional information
-<!-- Add any screen shots, video, gifs, etc that will help the engineers track down the issue. -->
+<!-- Add any screen shots, video, gifs, etc that will help the engineers track down the issue. The 'details' section below will expand/collapse, so is a good default location for long JSON responses.  -->
+
+<details>
+  <summary>Full JSON response for services related to issue (expand/collapse)</summary>
+  <!-- Copy-paste the JSON from Charles here. Easiest is to use the 'raw' tab which will include header + body. -->
+
+</details>
 
 ## Ticket Checklist
 - [ ] Steps to reproduce are defined
 - [ ] Desired behavior is added
-- [ ] Labels added (front-end, back-end, feature, bug)
-- [ ] Estimate of 1 added
+- [ ] Labels added (front-end, back-end, relevant feature, accessibility, etc)
+- [ ] Estimate of 1 added (for front-end tickets)
+- [ ] Added either to the relevant feature epic (if found during new feature implementation), or the [bug epic](https://app.zenhub.com/workspaces/va-mobile-product-view-610035bc5395bb000e62e529/issues/gh/department-of-veterans-affairs/va-mobile-app/5367)

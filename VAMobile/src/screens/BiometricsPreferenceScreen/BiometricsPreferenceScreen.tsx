@@ -16,7 +16,7 @@ export type SyncScreenProps = Record<string, unknown>
 const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { t } = useTranslation(NAMESPACE.SETTINGS)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const { supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
   const biometricsText = getSupportedBiometricText(supportedBiometric || '', t)
@@ -38,7 +38,7 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
         <TextView variant="BitterBoldHeading" accessibilityRole="header" {...testIdProps(t('biometricsPreference.doYouWantToAllow.a11yLabel', { biometricsA11yLabel }))}>
           {t('biometricsPreference.doYouWantToAllow', { biometricsText })}
         </TextView>
-        <TextView variant="MobileBody" my={theme.dimensions.textAndButtonLargeMargin}>
+        <TextView paragraphSpacing={true} variant="MobileBody" mt={theme.dimensions.textAndButtonLargeMargin}>
           {bodyText}
           {t('biometricsPreference.youCanAlwaysChangeThis')}
         </TextView>

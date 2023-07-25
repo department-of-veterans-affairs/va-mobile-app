@@ -35,12 +35,13 @@ context('AppointmentCancellationInfo', () => {
           name: appointmentLocationName,
           phone: phoneData,
         },
+        cancelId: '12',
       },
     }
 
     component = render(<AppointmentCancellationInfo appointment={mockAppointment} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

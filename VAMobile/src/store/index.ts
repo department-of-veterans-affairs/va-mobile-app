@@ -5,12 +5,12 @@ import appointmentsReducer from 'store/slices/appointmentsSlice'
 import authReducer from 'store/slices/authSlice'
 import authorizedServicesReducer from 'store/slices/authorizedServicesSlice'
 import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
+import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import demoReducer from 'store/slices/demoSlice'
 import directDepositReducer from 'store/slices/directDepositSlice'
 import disabilityRatingReducer from 'store/slices/disabilityRatingSlice'
 import errorReducer from 'store/slices/errorSlice'
 import lettersReducer from 'store/slices/lettersSlice'
-import logger from 'redux-logger'
 import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
 import patientReducer from 'store/slices/patientSlice'
@@ -37,6 +37,7 @@ const store = configureStore({
     claimsAndAppeals: claimsAndAppealsReducer,
     directDeposit: directDepositReducer,
     disabilityRating: disabilityRatingReducer,
+    decisionLetters: decisionLettersReducer,
     letters: lettersReducer,
     militaryService: militaryServiceReducer,
     notifications: notificationReducer,
@@ -49,7 +50,7 @@ const store = configureStore({
     prescriptions: prescriptionsReducer,
     settings: settingsReducer,
   },
-  middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }).concat(logger),
+  middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
   devTools: process.env.NODE_ENV !== 'production',
 })
 

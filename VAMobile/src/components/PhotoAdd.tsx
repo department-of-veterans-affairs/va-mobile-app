@@ -18,7 +18,7 @@ type PhotoAddProps = {
 
 const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress }) => {
   const { colors: themeColor } = useTheme()
-  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const pressableProps: PressableProps = {
     onPress,
@@ -47,7 +47,7 @@ const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress }) => {
   return (
     <Pressable {...pressableProps}>
       <Box {...boxProps}>
-        <VAIcon name={'Add'} width={32} height={32} fill={themeColor.icon.photoAdd} />
+        <VAIcon name={'Add'} width={32} height={32} fill={themeColor.icon.photoAdd} fill2={themeColor.icon.transparent} />
       </Box>
       <Box width={width} flexDirection="row">
         <TextView {...textProps}>{t('fileUpload.addPhoto')}</TextView>

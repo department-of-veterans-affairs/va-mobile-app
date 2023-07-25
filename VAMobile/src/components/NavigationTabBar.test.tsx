@@ -10,6 +10,7 @@ import Mock = jest.Mock
 
 import { context, render, waitFor } from 'testUtils'
 import NavigationTabBar from './NavigationTabBar'
+import VAIconWithText from './VAIconWithText/VAIconWithText'
 
 context('NavigationTabBar', () => {
   let component: any
@@ -20,9 +21,9 @@ context('NavigationTabBar', () => {
 
   let routes = [
     { name: 'Home', key: 'Home-1' },
-    { name: 'Claims', key: 'Claims-1' },
+    { name: 'Benefits', key: 'Benefits-1' },
     { name: 'Health', key: 'Health-1' },
-    { name: 'Profile', key: 'Profile-1' },
+    { name: 'Payments', key: 'Payments-1' },
   ]
 
   const initializeTestInstance = (index = 0, routesList = routes) => {
@@ -37,7 +38,7 @@ context('NavigationTabBar', () => {
       />,
     )
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -77,34 +78,34 @@ context('NavigationTabBar', () => {
     })
   })
 
-  describe('when the focused tab name is Home', () => {
-    it('should return the Home Selected component', async () => {
-      const homeSelected = testInstance.findByProps({ id: 'homeSelected' })
-      expect(homeSelected).toBeTruthy()
+  describe('when the focused tab is Home', () => {
+    it('should activate the Home icon', async () => {
+      const homeIcon = testInstance.findAllByType(VAIconWithText)[0]
+      expect(homeIcon.props.fill).toBe('active')
     })
   })
 
-  describe('when the focused tab name is Claims', () => {
-    it('should return the Claims Selected component', async () => {
+  describe('when the focused tab is Benefits', () => {
+    it('should activate the Benefits icon', async () => {
       initializeTestInstance(1)
-      const claimsSelected = testInstance.findByProps({ id: 'claimsSelected' })
-      expect(claimsSelected).toBeTruthy()
+      const benefitsIcon = testInstance.findAllByType(VAIconWithText)[1]
+      expect(benefitsIcon.props.fill).toBe('active')
     })
   })
 
-  describe('when the focused tab name is Health', () => {
-    it('should return the Health Selected component', async () => {
+  describe('when the focused tab is Health', () => {
+    it('should activate the Health icon', async () => {
       initializeTestInstance(2)
-      const appointmentsSelected = testInstance.findByProps({ id: 'healthSelected' })
-      expect(appointmentsSelected).toBeTruthy()
+      const healthIcon = testInstance.findAllByType(VAIconWithText)[2]
+      expect(healthIcon.props.fill).toBe('active')
     })
   })
 
-  describe('when the focused tab name is Profile', () => {
-    it('should return the Profile Selected component', async () => {
+  describe('when the focused tab is Payments', () => {
+    it('should activate the Payments icon', async () => {
       initializeTestInstance(3)
-      const profileSelected = testInstance.findByProps({ id: 'profileSelected' })
-      expect(profileSelected).toBeTruthy()
+      const paymentsIcon = testInstance.findAllByType(VAIconWithText)[3]
+      expect(paymentsIcon.props.fill).toBe('active')
     })
   })
 })

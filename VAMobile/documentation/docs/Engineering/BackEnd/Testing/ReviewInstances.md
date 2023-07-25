@@ -60,3 +60,16 @@ http://dc02d94d6648a008950cc9c84056a860-api.review.vetsgov-internal/v0/sign_in/a
 ```
 curl --proxy socks5h://127.0.0.1:2001 -X POST http://dbded860eb589f4ccfef2b1470e8472d-api.review.vetsgov-internal/v0/sign_in/token -H 'Content-Type: application/json' -d '{"grant_type": "authorization_code", "code_verifier": "5787d673fb784c90f0e309883241803d", "code": "69a8cdea-6251-413f-8773-0ff7c5c82877"}'
 ```
+2. Open network tab on browser Inspector then complete sign in
+3. After sign in, you should notice a failed request that looks similar to:
+```
+https://staging-api.va.gov/idHlwZSI6ImlkbWUiLCJjbGllbnRfaWQiOiJ3ZWIiLCJjb2RlX2NoYWxsZW5nZSI6IjFCVXB4eTM3U29JUG1Ldzk2d2JkNk1EY3ZheU9ZbTNwdFQtemJlNkxfek0iLCJjbGllbnRfc3RhdGUiOm51bGwsImNvZGUiOiJmYjNmMTVjOWU0ZDcxNWNkNjEyNjBhMmM1NzYxNzY3YyJ9.EINudwac8qI5JCFPpsYsN7Q7AkyJaQb7jzO78ZJU_GWyPsy4VShRUuYRuxegeBClnjrqkXkfqE78vU5Jjp7aViWLDmDcs2WAJaMwsFRwNEwfQi0g-XUXxWqjVup_rWfDTYWMlxNCipj3xhLN2ACMkFjxoXXlWoob_didzURc1vBEuozkseAAcsA0UOPMexnIjAfFvk11dhR6bC5_Ql14aS22WTE7D-rrngtPCTo_J4Fe-vOgpn-PPV_t5AyiLhzpqDkRlaWTbihwJ_6JpZ8FctkT42Vz4zGk6XTS33BjGv8yJvJYwgEwC2FeVpg-Em49zfkc47Bgl7DEjlDNs624lQ&code=8cb3d1e45111430eafd6e2f155f067e0
+```
+4. Replace `https://staging-api.va.gov` with your review instance and go to that url in your browser (still having your network tab open)
+5. Find a response in the network tab that has redirect to the `vamobile:` with a code that can be used to exchange tokens. Code should look something like `7ca6321-ca3e-4b51-8a4f-4b8ecf2f1597`
+6. To get a token with that code, send the following Curl but with your review instance and code:
+```
+curl -X POST http://dbded860eb589f4ccfef2b1470e8472d-api.review.vetsgov-internal/v0/sign_in/token -H 'Content-Type: application/json' -d '{"grant_type": "authorization_code", "code_verifier": "5787d673fb784c90f0e309883241803d", "code": "69a8cdea-6251-413f-8773-0ff7c5c82877"}'
+```
+
+

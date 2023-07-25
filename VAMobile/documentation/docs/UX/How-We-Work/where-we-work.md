@@ -1,6 +1,6 @@
 ---
 title: Where we work
-sidebar_position: 2
+sidebar_position: 1
 ---
 
 # Where we work
@@ -16,7 +16,6 @@ Main whiteboarding software where we brainstorm, do group work, and research syn
 ### Figjam
 
 Optional software that comes with Figma. We’ve used this to do group work, map out user flows, and brainstorm. Might eventually replace Mural but for now when in doubt use Mural.
-
 
 ## Wireframing
 

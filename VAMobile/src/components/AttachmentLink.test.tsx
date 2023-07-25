@@ -1,10 +1,9 @@
 import 'react-native'
-import { ActivityIndicator, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import Mock = jest.Mock
-import LottieView from 'lottie-react-native'
 
 import { context, render, RenderAPI, waitFor } from 'testUtils'
 import { TextView } from './index'
@@ -18,8 +17,8 @@ context('AttachmentLink', () => {
 
   const initializeTestInstance = () => {
     onPressSpy = jest.fn(() => {})
-    component = render(<AttachmentLink name={'Test.png'} formattedSize={'(234 KB)'} onPress={onPressSpy} load={true} />)
-    testInstance = component.container
+    component = render(<AttachmentLink name={'Test.png'} formattedSize={'(234 KB)'} onPress={onPressSpy} />)
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -41,10 +40,5 @@ context('AttachmentLink', () => {
     const texts = testInstance.findAllByType(TextView)
     expect(texts.length).toBe(1)
     expect(texts[0].props.children).toBe('Test.png (234 KB)')
-  })
-
-  it('should render va spinner if load is true', async () => {
-    const loader = testInstance.findAllByType(LottieView)
-    expect(loader.length).toBe(1)
   })
 })

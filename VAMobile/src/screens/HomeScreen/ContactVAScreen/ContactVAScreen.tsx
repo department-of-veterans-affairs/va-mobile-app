@@ -1,14 +1,13 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
-import { Box, ClickToCallPhoneNumber, TextArea, TextView, VAScrollView } from 'components'
+import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { CrisisLineCta } from 'components'
 import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import HeaderTitle from 'components/HeaderTitle'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 
@@ -20,34 +19,28 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HOME)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-
-  useEffect(() => {
-    navigation.setOptions({
-      // using react-navigation internal HeaderTitle component to easily maintain font and styling while being able to add an accessibilityLabel
-      headerTitle: (header) => <HeaderTitle {...testIdProps(t('contactVA.title.a11yLabel'))} headerTitle={header.children} />,
-    })
-  })
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
 
   return (
-    <VAScrollView {...testIdProps('Contact-V-A-page')}>
+    <FeatureLandingTemplate backLabel={tc('home')} backLabelOnPress={navigation.goBack} title={tc('contactVA')} titleA11y={a11yLabelVA(tc('contactVA'))}>
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityLabel={t('contactVA.va411.callMy.a11yLabel')} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityLabel={a11yLabelVA(t('contactVA.va411.callMy.a11yLabel'))} accessibilityRole="header">
             {t('contactVA.va411.callMy')}
           </TextView>
-          <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('contactVA.va411.body.a11yLabel')}>
+          <TextView variant="MobileBody" mt={standardMarginBetween} paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('contactVA.va411.body.a11yLabel'))}>
             {t('contactVA.va411.body')}
           </TextView>
           <ClickToCallPhoneNumber phone={t('contactVA.va411.numberDisplayed')} />
         </TextArea>
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

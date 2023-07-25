@@ -21,9 +21,6 @@ jest.mock('/utils/hooks', () => {
   const theme = jest.requireActual('/styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return () => mockNavigationSpy
     },
@@ -77,6 +74,7 @@ context('FolderMessages', () => {
               messageId: 1,
               category: CategoryTypeFields.other,
               subject: 'subject',
+              hasAttachments: true,
               attachment: true,
               sentDate: '03-12-2021',
               senderId: 0,
@@ -126,7 +124,7 @@ context('FolderMessages', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -202,7 +200,7 @@ context('FolderMessages', () => {
     it('should not show unread icons', async () => {
       await waitFor(() => {
         initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
-        expect(findByTypeWithName(testInstance, VAIcon, 'UnreadIcon')).toBeFalsy()
+        expect(findByTypeWithName(testInstance, VAIcon, 'Unread')).toBeFalsy()
       })
     })
 

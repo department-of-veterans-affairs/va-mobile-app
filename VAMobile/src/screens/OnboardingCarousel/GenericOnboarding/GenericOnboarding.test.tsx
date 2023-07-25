@@ -12,9 +12,9 @@ context('GenericOnboarding', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (displayLogo: boolean = false) => {
-    component = render(<GenericOnboarding header={'header'} text={'text'} testID={'testID'} displayLogo={displayLogo} />)
+    component = render(<GenericOnboarding header={'header'} text={'text'} displayLogo={displayLogo} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

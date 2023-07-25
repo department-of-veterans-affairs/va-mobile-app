@@ -13,8 +13,8 @@ import {
   ProviderName,
 } from '../AppointmentDetailsCommon'
 import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
-import { AppointmentsState, getAppointmentMessages, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
-import { Box, TextArea, TextView, VAScrollView } from 'components'
+import { AppointmentsState, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
+import { Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -25,30 +25,24 @@ import { useSelector } from 'react-redux'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 
-const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
+const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
-  const { pastAppointmentsById, appointmentMessagesById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { pastAppointmentsById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
   const appointment = pastAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, status } = attributes || ({} as AppointmentAttributes)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
-  const messages = appointmentMessagesById[appointmentID]
 
   useEffect(() => {
     dispatch(trackAppointmentDetail(pendingAppointment))
   }, [dispatch, appointmentID, pendingAppointment])
-
-  useEffect(() => {
-    if (appointment && isAPendingAppointment && !appointmentMessagesById[appointmentID]) {
-      dispatch(getAppointmentMessages(appointmentID))
-    }
-  }, [dispatch, appointment, appointmentID, appointmentMessagesById])
 
   const appointmentTypeAndDateIsLastItem =
     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME || appointmentIsCanceled
@@ -70,7 +64,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   }
 
   return (
-    <VAScrollView {...testIdProps('Past-appointment-details-page')}>
+    <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <AppointmentAlert attributes={attributes} />
         <TextArea>
@@ -84,13 +78,13 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
 
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
-          <AppointmentReason attributes={attributes} messages={messages} />
+          <AppointmentReason attributes={attributes} />
           <ContactInformation attributes={attributes} />
         </TextArea>
 
         {renderScheduleAnotherAppointment()}
       </Box>
-    </VAScrollView>
+    </FeatureLandingTemplate>
   )
 }
 

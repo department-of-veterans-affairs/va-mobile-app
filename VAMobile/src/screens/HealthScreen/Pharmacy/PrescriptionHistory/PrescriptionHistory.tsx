@@ -1,4 +1,4 @@
-import { Pressable, PressableProps, ScrollView, StyleProp, ViewStyle } from 'react-native'
+import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
@@ -16,6 +16,7 @@ import {
   CollapsibleAlert,
   CollapsibleAlertProps,
   ErrorComponent,
+  FeatureLandingTemplate,
   LinkButtonProps,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
@@ -31,7 +32,7 @@ import {
   VAButton,
   VAButtonProps,
   VAIcon,
-  VAScrollView,
+  VAIconProps,
 } from 'components'
 import {
   DowntimeFeatureTypeConstants,
@@ -64,6 +65,9 @@ import getEnv from 'utils/env'
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
 const pageSize = DEFAULT_PAGE_SIZE
+
+// Delay custom screen reader announcements so they don't cut off native announcements
+const announcementDelay = 1000
 
 const sortByOptions = [
   { display: 'prescriptions.sort.facility', value: PrescriptionSortOptionConstants.FACILITY_NAME },
@@ -176,34 +180,21 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const [currentTab, setCurrentTab] = useState<string>(PrescriptionHistoryTabConstants.ALL)
 
   useEffect(() => {
-    if (startingTab) {
-      onTabChange(startingTab)
+    if (hasTransferred) {
+      logAnalyticsEvent(Events.vama_rx_refill_cerner())
     }
-  }, [startingTab])
-
-  // scrollViewRef is leveraged by renderPagination to reset scroll position to the top on page change
-  const scrollViewRef = useRef<ScrollView | null>(null)
-
-  const pressableProps: PressableProps = {
-    onPress: navigateTo('PrescriptionHelp'),
-    accessibilityRole: 'button',
-    accessibilityLabel: t('prescription.help.button.a11yLabel'),
-  }
+  }, [hasTransferred])
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: (): ReactNode => (
-        <Pressable {...pressableProps}>
-          <Box px={23} height={theme.dimensions.headerHeight} flexDirection={'row'} alignItems={'center'}>
-            <VAIcon mr={5} preventScaling={true} name="QuestionMark" width={16} height={16} fill={'prescriptionHelper'} />
-            <TextView variant="ActionBar" allowFontScaling={false}>
-              {t('prescription.help.button.text')}
-            </TextView>
-          </Box>
-        </Pressable>
-      ),
-    })
-  })
+    if (startingTab) {
+      onTabChange(startingTab)
+      navigation.setParams({ startingTab: undefined })
+    }
+  }, [startingTab, navigation])
+
+  // scrollViewRef is leveraged by renderPagination to reset scroll position to the top on page change.
+  // Must pass scrollViewRef to all uses of FeatureLandingTemplate, otherwise it will become undefined
+  const scrollViewRef = useRef<ScrollView | null>(null)
 
   useEffect(() => {
     const filters = getFilterArgsForFilter(filterToUse)
@@ -227,37 +218,60 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.
   // In this case, we need to support multiple screen IDs
   if (prescriptionInDowntime) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (hasError) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (!prescriptionsAuthorized) {
-    return <PrescriptionHistoryNotAuthorized />
+    return (
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <PrescriptionHistoryNotAuthorized />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (loadingHistory) {
-    return <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+    return (
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (!tabCounts[PrescriptionHistoryTabConstants.ALL]) {
-    return <PrescriptionHistoryNoPrescriptions />
+    return (
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+        <PrescriptionHistoryNoPrescriptions />
+      </FeatureLandingTemplate>
+    )
   }
 
   const tabs: TabsValuesType = [
     {
       value: PrescriptionHistoryTabConstants.ALL,
       title: t('prescriptions.tabs.all', { count: tabCounts[PrescriptionHistoryTabConstants.ALL] }),
+      testID: 'prescriptionAllCountTestID',
     },
     {
       value: PrescriptionHistoryTabConstants.PENDING,
       title: t('prescriptions.tabs.pending', { count: tabCounts[PrescriptionHistoryTabConstants.PENDING] }),
+      testID: 'prescriptionPendingCountTestID',
     },
     {
       value: PrescriptionHistoryTabConstants.TRACKING,
       title: t('prescriptions.tabs.tracking', { count: tabCounts[PrescriptionHistoryTabConstants.TRACKING] }),
+      testID: 'prescriptionTrackingCountTestID',
     },
   ]
 
@@ -280,12 +294,17 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     selected: currentTab,
   }
 
+  const prescriptionDetailsClicked = (prescriptionID: string) => {
+    logAnalyticsEvent(Events.vama_rx_details(prescriptionID))
+    return navigation.navigate('PrescriptionDetails', { prescriptionId: prescriptionID })
+  }
+
   const prescriptionItems = () => {
     const total = currentPrescriptions?.length
 
     const listItems: Array<ReactNode> = (currentPrescriptions || []).map((prescription, idx) => {
       const detailsPressableProps: PressableProps = {
-        onPress: navigateTo('PrescriptionDetails', { prescriptionId: prescription.id }),
+        onPress: () => prescriptionDetailsClicked(prescription.id),
         accessible: true,
         accessibilityRole: 'button',
         accessibilityLabel: t('prescription.history.getDetails'),
@@ -299,7 +318,12 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
               <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
-              <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={theme.dimensions.chevronListItemWidth} height={theme.dimensions.chevronListItemHeight} />
+              <VAIcon
+                name={'ChevronRight'}
+                fill={theme.colors.icon.chevronListItem}
+                width={theme.dimensions.chevronListItemWidth}
+                height={theme.dimensions.chevronListItemHeight}
+              />
             </Box>
           </Pressable>
         </>
@@ -330,9 +354,14 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           </Box>
         )
 
-        const bottomOnPress = navigateTo('RefillTrackingModal', { prescription: prescription })
-
-        cardProps = { ...cardProps, bottomContent, bottomOnPress }
+        cardProps = {
+          ...cardProps,
+          bottomContent,
+          bottomOnPress() {
+            logAnalyticsEvent(Events.vama_rx_trackdet(prescription.id))
+            navigation.navigate('RefillTrackingModal', { prescription: prescription })
+          },
+        }
       }
 
       return (
@@ -343,10 +372,6 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     })
 
     return listItems
-  }
-
-  const mainViewStyle: StyleProp<ViewStyle> = {
-    flexGrow: 1,
   }
 
   const renderPagination = (): ReactNode => {
@@ -362,6 +387,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       totalEntries: prescriptions?.length || 0,
       pageSize: pageSize,
       page,
+      tab: currentTab,
     }
 
     return <Pagination {...paginationProps} />
@@ -382,7 +408,13 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
   })
 
+  const announceAfterDelay = (announcement: string) => {
+    setTimeout(() => AccessibilityInfo.announceForAccessibility(announcement), announcementDelay)
+  }
+
   const sortOrderRadioOptions = getSortOrderOptionsForSortBy(selectedSortBy, t)
+
+  const sortButtonText = `${t('prescriptions.sort.by')}: ${getDisplayForValue(sortByOptions, sortByToUse)}`
 
   const sortProps: RadioGroupModalProps = {
     groups: [
@@ -403,11 +435,15 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         title: t('prescriptions.sort.order'),
       },
     ],
-    buttonText: `${t('prescriptions.sort.by')}: ${getDisplayForValue(sortByOptions, sortByToUse)}`,
+    buttonText: sortButtonText,
+    buttonA11yLabel: sortButtonText, // so Android reads button text
     buttonA11yHint: t('prescription.filter.sort.a11y'),
+    buttonTestID: 'openSortTestID',
     headerText: t('prescription.filter.sort'),
     topRightButtonText: tc('reset'),
     topRightButtonA11yHint: t('prescription.filter.sort.reset.a11y'),
+    topRightButtonTestID: 'resetSortTestID',
+    testID: 'sortListTestID',
     onConfirm: () => {
       setSortOnToUse(selectedSortOn)
       setSortByToUse(selectedSortBy)
@@ -416,6 +452,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     onUpperRightAction: () => {
       setSelectedSortBy(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
       setSelectedSortOn(ASCENDING)
+      const value = getDisplayForValue(sortByOptions, PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
+      const direction = t('prescriptions.sort.atoz.a11y')
+      announceAfterDelay(tc('prescriptions.resetAnnouncementWithDirection', { value, direction }))
     },
     onCancel: () => {
       setSelectedSortBy(sortByToUse)
@@ -448,10 +487,14 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       },
     ],
     buttonText: filterButtonText,
+    buttonA11yLabel: filterButtonText, // so Android reads button text
     buttonA11yHint: t('prescription.filter.by.a11y'),
+    buttonTestID: 'openFilterTestID',
     headerText: t('prescription.filter.status'),
     topRightButtonText: tc('reset'),
     topRightButtonA11yHint: t('prescription.filter.by.reset.a11y'),
+    topRightButtonTestID: 'resetFilterTestID',
+    testID: 'filterListTestID',
     onConfirm: () => {
       setPage(1)
       setFilterToUse(selectedFilter)
@@ -459,6 +502,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     },
     onUpperRightAction: () => {
       setSelectedFilter('')
+      announceAfterDelay(tc('prescriptions.resetAnnouncement', { value: getDisplayForValue(filterOptionsForTab, '') }))
     },
     onCancel: () => {
       setSelectedFilter(filterToUse)
@@ -476,6 +520,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     pt: 16,
     pb: 6,
     px: 20,
+    testID: 'filterSortWrapperBoxTestID',
   }
 
   const filterWrapperProps: BoxProps = {
@@ -525,16 +570,19 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       headerText: t('prescription.history.transferred.title'),
       body: (
         <>
-          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')}>
+          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')} paragraphSpacing={true}>
             {t('prescription.history.transferred.instructions')}
           </TextView>
-          <TextView my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
+          <TextView paragraphSpacing={true} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
             {t('prescription.history.transferred.youCan')}
           </TextView>
           <ClickForActionLink {...linkProps} />
         </>
       ),
       a11yLabel: t('prescription.history.transferred.title'),
+      onExpand() {
+        logAnalyticsEvent(Events.vama_rx_cerner_exp())
+      },
     }
 
     return (
@@ -596,24 +644,42 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
   }
 
+  const helpIconProps: VAIconProps = {
+    name: 'QuestionMark',
+    fill2: theme.colors.icon.transparent,
+  }
+
+  const headerButton = {
+    label: tc('help'),
+    icon: helpIconProps,
+    onPress: () => {
+      logAnalyticsEvent(Events.vama_rx_help())
+      navigation.navigate('PrescriptionHelp')
+    },
+  }
+
   return (
-    <Box display={'flex'} flexDirection={'column'} flex={1} backgroundColor={'main'}>
-      <VAScrollView scrollViewRef={scrollViewRef} contentContainerStyle={mainViewStyle}>
-        {getRequestRefillButton()}
-        <TabBar {...tabProps} />
-        <Box {...filterWrapperProps}>
-          <Box {...filterContainerProps}>
-            <Box mr={8} mb={10}>
-              <RadioGroupModal {...filterProps} />
-            </Box>
-            <Box mb={10}>
-              <RadioGroupModal {...sortProps} />
-            </Box>
+    <FeatureLandingTemplate
+      scrollViewProps={{ scrollViewRef }}
+      headerButton={headerButton}
+      backLabel={tc('health')}
+      backLabelOnPress={navigation.goBack}
+      title={tc('prescriptions')}
+      testID="PrescriptionHistory">
+      {getRequestRefillButton()}
+      <TabBar {...tabProps} />
+      <Box {...filterWrapperProps}>
+        <Box {...filterContainerProps}>
+          <Box mr={8} mb={10}>
+            <RadioGroupModal {...filterProps} />
+          </Box>
+          <Box mb={10}>
+            <RadioGroupModal {...sortProps} />
           </Box>
         </Box>
-        {getContent()}
-      </VAScrollView>
-    </Box>
+      </Box>
+      {getContent()}
+    </FeatureLandingTemplate>
   )
 }
 

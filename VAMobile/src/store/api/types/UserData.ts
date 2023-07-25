@@ -17,12 +17,14 @@ export const SigninServiceTypesConstants: {
 
 export type UserDataProfile = {
   firstName: string
+  preferredName: string
   middleName: string
   lastName: string
   fullName: string
   contactEmail: EmailData
   signinEmail: string
   birthDate: string
+  genderIdentity: string
   addresses: string
   residentialAddress?: AddressData
   mailingAddress?: AddressData
@@ -121,6 +123,20 @@ export type EditResponseData = {
         type: string
         metadata: Array<EditMetaDataPayload>
       }
+    }
+  }
+}
+
+export type GenderIdentityOptions = {
+  [key: string]: string
+}
+
+export type GenderIdentityOptionsData = {
+  data: {
+    id: string
+    type: string
+    attributes: {
+      options: GenderIdentityOptions
     }
   }
 }

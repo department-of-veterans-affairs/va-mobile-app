@@ -57,11 +57,11 @@ then
 
   echo "Fetching latest tag"
   # checks for latest tag on main that matches vX.Y.Z
-  latest=$(git describe --match "v[0-9]*.[0-9]*.[0-9]*" --abbrev=0) &&
+  latest=$(git tag | sort -r --version-sort | head -n1) &&
 
   echo "Incrementing latest tag $latest by minor version"
   next=$(increment_version "$latest" 1) &&
-
+  
   echo "Next version: $next"
   echo
   echo "Checking out and pulling latest from develop branch"
@@ -79,7 +79,7 @@ then
   git tag -a "$TAG" -m "Release Candidate for $next. tagged on $(date +%m/%d/%y) at $(date +%H:%M)"
   git push origin "$TAG"
 
-  echo "Successfully tagged for Release Candidate builds"
+  echo "Successfully tagged for Release Candidate builds: $TAG"
   echo "Exit"
 else
   echo "Not scheduled for new release branch this week. Exiting."

@@ -7,7 +7,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HealthScreen } from './HealthScreen'
 import { Pressable, TouchableWithoutFeedback } from 'react-native'
-import { initialAuthState, initialErrorsState, initialSecureMessagingState, loadAllPrescriptions } from 'store/slices'
+import { initialAuthorizedServicesState, initialAuthState, initialErrorsState, initialSecureMessagingState, loadAllPrescriptions } from 'store/slices'
 import { TextView, MessagesCountTag } from 'components'
 import { when } from 'jest-when'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -19,16 +19,12 @@ jest.mock('utils/remoteConfig')
 
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
 
   return {
     ...original,
     useRouteNavigation: () => {
       return mockNavigateToSpy
     },
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
   }
 })
 
@@ -57,8 +53,12 @@ context('HealthScreen', () => {
   let mockNavigateToPharmacySpy: jest.Mock
   let mockFeatureEnabled = featureEnabled as jest.Mock
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   //mockList:  SecureMessagingMessageList --> for inboxMessages
-  const initializeTestInstance = (unreadCount = 13, hasLoadedInbox = true, prescriptionsEnabled = false, prescriptionsNeedLoad = false) => {
+  const initializeTestInstance = (unreadCount = 13, hasLoadedInbox = true, prescriptionsEnabled = false, prescriptionsNeedLoad = false, smAuthorized = true) => {
     mockNavigateToCrisisLineSpy = jest.fn()
     mockNavigateToAppointmentSpy = jest.fn()
     mockNavigateToSecureMessagingSpy = jest.fn()
@@ -85,6 +85,7 @@ context('HealthScreen', () => {
       preloadedState: {
         auth: { ...initialAuthState },
         prescriptions: { prescriptionsNeedLoad },
+        authorizedServices: { ...initialAuthorizedServicesState, secureMessaging: smAuthorized },
         secureMessaging: {
           ...initialSecureMessagingState,
           hasLoadedInbox,
@@ -105,7 +106,7 @@ context('HealthScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
   beforeEach(() => {
     initializeTestInstance()
@@ -150,7 +151,7 @@ context('HealthScreen', () => {
     it('should call useRouteNavigation', async () => {
       initializeTestInstance(0, true, true)
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
+        testInstance.findAllByType(Pressable)[2].props.onPress()
         expect(mockNavigateToPharmacySpy).toHaveBeenCalled()
       })
     })
@@ -158,7 +159,7 @@ context('HealthScreen', () => {
     it('should reload rx data if data is present', async () => {
       initializeTestInstance(0, true, true, false)
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
+        testInstance.findAllByType(Pressable)[2].props.onPress()
         expect(loadAllPrescriptions).toHaveBeenCalled()
       })
     })
@@ -166,7 +167,7 @@ context('HealthScreen', () => {
     it('should not reload rx data if data is not present', async () => {
       initializeTestInstance(0, true, true, true)
       await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
+        testInstance.findAllByType(Pressable)[2].props.onPress()
         expect(loadAllPrescriptions).not.toHaveBeenCalled()
       })
     })
@@ -215,8 +216,9 @@ context('HealthScreen', () => {
 
   it('should render messagesCountTag with the correct count number', async () => {
     await waitFor(() => {
+      initializeTestInstance(13)
       expect(testInstance.findByType(MessagesCountTag)).toBeTruthy()
-      expect(testInstance.findAllByType(TextView)[7].props.children).toBe(13)
+      expect(testInstance.findAllByType(TextView)[8].props.children).toBe(13)
     })
   })
 
@@ -224,8 +226,7 @@ context('HealthScreen', () => {
     it('should not render a messagesCountTag', async () => {
       await waitFor(() => {
         initializeTestInstance(0)
-        expect(testInstance.findAllByType(TextView)[6].props.children).toBe('Messages')
-        expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Send and receive secure messages')
+        expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Messages')
       })
     })
   })

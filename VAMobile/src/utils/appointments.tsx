@@ -93,10 +93,10 @@ export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOn
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
       return { ...iconProp, name: 'VideoCamera' }
     case AppointmentTypeConstants.VA:
-      return phoneOnly ? { ...iconProp, name: 'PhoneSolid' } : { ...iconProp, name: 'BuildingSolid' }
+      return phoneOnly ? { ...iconProp, name: 'Phone' } : { ...iconProp, name: 'Building' }
     case AppointmentTypeConstants.COMMUNITY_CARE:
     default:
-      return phoneOnly ? { ...iconProp, name: 'PhoneSolid' } : undefined
+      return phoneOnly ? { ...iconProp, name: 'Phone' } : undefined
   }
 }
 
@@ -200,7 +200,7 @@ const getListItemsForAppointments = (
  */
 export const getTextLinesForAppointmentListItem = (appointment: AppointmentData, t: TFunction, theme: VATheme): Array<TextLineWithIconProps> => {
   const { attributes } = appointment
-  const { startDateUtc, timeZone, appointmentType, location, phoneOnly, isCovidVaccine, typeOfCare, healthcareProvider } = attributes
+  const { startDateUtc, timeZone, appointmentType, location, phoneOnly, isCovidVaccine, typeOfCare, healthcareProvider, serviceCategoryName } = attributes
   const textLines: Array<TextLineWithIconProps> = []
   const { condensedMarginBetween } = theme.dimensions
   const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
@@ -215,7 +215,11 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
 
   // pending appointments
   if (isPendingAppointment) {
-    textLines.push({ text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 })
+    if (serviceCategoryName === 'COMPENSATION & PENSION') {
+      textLines.push({ text: t('common:appointments.claimExam'), variant: 'MobileBodyBold', mb: 5 })
+    } else {
+      textLines.push({ text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 })
+    }
     switch (appointmentType) {
       case AppointmentTypeConstants.COMMUNITY_CARE:
         if (healthcareProvider) {
@@ -238,10 +242,16 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
       variant: 'HelperText',
     })
   } else {
-    // if isCovidVaccine is true then make it the bold header, else if typeOfCare exist make it the bold header otherwise make the date/time bold header
+    // if isCovidVaccine is true then make it the bold header, else if serviceCategoryName is C&P make it bold header, else if typeOfCare exist make it the bold header otherwise make the date/time bold header
     if (isCovidVaccine) {
       textLines.push(
         { text: t('upcomingAppointments.covidVaccine'), variant: 'MobileBodyBold', mb: 5 },
+        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
+        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
+      )
+    } else if (serviceCategoryName === 'COMPENSATION & PENSION') {
+      textLines.push(
+        { text: t('common:appointments.claimExam'), variant: 'MobileBodyBold', mb: 5 },
         { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
         { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
       )

@@ -54,7 +54,7 @@ context('VAModalPicker', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
 
     await waitFor(() => {
       const showButton = testInstance.findByProps({ accessibilityRole: 'spinbutton' })
@@ -74,7 +74,7 @@ context('VAModalPicker', () => {
       { label: 'JavaScript3', value: 'js3' },
     ]
 
-    await initializeTestInstance('js', 'profile:editPhoneNumber.number')
+    await initializeTestInstance('js', 'common:editPhoneNumber.number')
   })
 
   it('initializes correctly', async () => {

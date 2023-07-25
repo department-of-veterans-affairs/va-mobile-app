@@ -1,18 +1,18 @@
 import { DateTime } from 'luxon'
-import { ScrollView, ViewStyle } from 'react-native'
+import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FooterButton, SegmentedControl, VAScrollView } from 'components'
+import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, FooterButton, SegmentedControl } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { VAScrollViewProps } from 'components/VAScrollView'
 import { featureEnabled } from 'utils/remoteConfig'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
@@ -24,16 +24,17 @@ type AppointmentsScreenProps = StackScreenProps<HealthStackParamList, 'Appointme
 
 export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
   const todaysDate = DateTime.local()
-  const twelveMonthsFromToday = todaysDate.plus({ months: 12 })
+  const futureDate = todaysDate.plus({ days: 390 })
 
   return {
     startDate: todaysDate.startOf('day').toISO(),
-    endDate: twelveMonthsFromToday.endOf('day').toISO(),
+    endDate: futureDate.endOf('day').toISO(),
   }
 }
 
-const Appointments: FC<AppointmentsScreenProps> = ({}) => {
+const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
@@ -76,11 +77,19 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   }, [dispatch, apptsNotInDowntime])
 
   if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('appointments')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (!appointments) {
-    return <NoMatchInRecords />
+    return (
+      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('appointments')}>
+        <NoMatchInRecords />
+      </FeatureLandingTemplate>
+    )
   }
 
   const serviceErrorAlert = (): ReactElement => {
@@ -104,39 +113,38 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     return <></>
   }
 
-  const scrollStyles: ViewStyle = {
-    flexGrow: 1,
-  }
-
   const onRequestAppointmentPress = () => {
     scheduleAppointments ? navigateToRequestAppointments() : navigateToNoRequestAppointmentAccess()
   }
+  const requestAppointmentsFooter = featureEnabled('appointmentRequests') ? (
+    <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />
+  ) : undefined
+
+  const scrollViewProps: VAScrollViewProps = {
+    scrollViewRef: scrollViewRef,
+  }
 
   return (
-    <>
-      <VAScrollView scrollViewRef={scrollViewRef} {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}>
-        <Box flex={1} justifyContent="flex-start">
-          <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-            <SegmentedControl
-              values={controlValues}
-              titles={controlValues}
-              onChange={setSelectedTab}
-              selected={controlValues.indexOf(selectedTab)}
-              accessibilityHints={a11yHints}
-            />
-          </Box>
-          {serviceErrorAlert()}
-          <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
-            <CernerAlert />
-          </Box>
-          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-            {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
-            {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
-          </Box>
+    <FeatureLandingTemplate
+      backLabel={tc('health')}
+      backLabelOnPress={navigation.goBack}
+      title={tc('appointments')}
+      scrollViewProps={scrollViewProps}
+      footerContent={requestAppointmentsFooter}>
+      <Box flex={1} justifyContent="flex-start">
+        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+          <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
         </Box>
-      </VAScrollView>
-      {featureEnabled('appointmentRequests') && <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />}
-    </>
+        {serviceErrorAlert()}
+        <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
+          <CernerAlert />
+        </Box>
+        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+          {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
+          {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
+        </Box>
+      </Box>
+    </FeatureLandingTemplate>
   )
 }
 

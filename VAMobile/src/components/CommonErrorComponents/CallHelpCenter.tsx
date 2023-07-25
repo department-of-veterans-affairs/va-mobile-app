@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, VAButton, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useEffect } from 'react'
 import { useTheme } from 'utils/hooks'
 
 export type CallHelpCenterProps = {
@@ -34,8 +37,18 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA
     mt: theme.dimensions.contentMarginTop,
     mb: theme.dimensions.contentMarginBottom,
   }
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_fail())
+  }, [])
 
   const standardMarginBetween = theme.dimensions.standardMarginBetween
+
+  const tryAgain = () => {
+    logAnalyticsEvent(Events.vama_fail_refresh())
+    if (onTryAgain) {
+      onTryAgain()
+    }
+  }
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
@@ -46,7 +59,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA
           text={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
           border="error">
           <Box>
-            <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
+            <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
               {errorText ? errorText : t('errors.callHelpCenter.informationLine')}
             </TextView>
             <ClickToCallPhoneNumber
@@ -56,7 +69,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA
             {onTryAgain && (
               <Box mt={standardMarginBetween} accessibilityRole="button">
                 <VAButton
-                  onPress={onTryAgain}
+                  onPress={tryAgain}
                   label={t('refresh')}
                   buttonType={ButtonTypesConstants.buttonPrimary}
                   testID={t('refresh')}

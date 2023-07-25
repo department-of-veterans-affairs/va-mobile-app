@@ -25,6 +25,10 @@ context('PastAppointmentDetails', () => {
   let testInstance: ReactTestInstance
   let props: any
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+  
   const runAfterTransition = (testToRun: () => void) => {
     InteractionManager.runAfterInteractions(() => {
       testToRun()
@@ -76,7 +80,7 @@ context('PastAppointmentDetails', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
@@ -87,7 +91,7 @@ context('PastAppointmentDetails', () => {
   })
 
   describe('when the appointment type is VA_VIDEO_CONNECT_GFE or VA_VIDEO_CONNECT_HOME', () => {
-    it('should render only 4 TextViews to display appointment type, date information, and the schedule text', async () => {
+    it('should render only 7 TextViews to display appointment type, date information, and the schedule text', async () => {
       await waitFor(() => {
         initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
       })
@@ -95,16 +99,16 @@ context('PastAppointmentDetails', () => {
       let allTextViews: ReactTestInstance[]
 
       allTextViews = testInstance.findAllByType(TextView)
-      expect(allTextViews.length).toEqual(4)
-      expect(allTextViews[0].props.children).toEqual('VA Video Connect\r\nusing a VA device')
+      expect(allTextViews.length).toEqual(6)
+      expect(allTextViews[3].props.children).toEqual('VA Video Connect\r\nusing a VA device')
 
       await waitFor(() => {
         initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
       })
 
       allTextViews = testInstance.findAllByType(TextView)
-      expect(allTextViews.length).toEqual(4)
-      expect(allTextViews[0].props.children).toEqual('VA Video Connect\r\nHome')
+      expect(allTextViews.length).toEqual(6)
+      expect(allTextViews[3].props.children).toEqual('VA Video Connect\r\nHome')
     })
   })
 
@@ -115,7 +119,7 @@ context('PastAppointmentDetails', () => {
           initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE)
         })
 
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Larry R. TestDoctor')
+        expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Larry R. TestDoctor')
       })
     })
   })
@@ -159,10 +163,10 @@ context('PastAppointmentDetails', () => {
     })
 
     it('should display the title name as covid', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('COVID-19 vaccine')
+      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('COVID-19 vaccine')
     })
     it('should display the name of the facility location', async () => {
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('COVID-19 vaccine')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('COVID-19 vaccine')
     })
   })
 })

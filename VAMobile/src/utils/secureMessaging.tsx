@@ -6,7 +6,7 @@ import DocumentPicker from 'react-native-document-picker'
 import _ from 'underscore'
 
 import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'store/api/types'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import {
   FolderNameTypeConstants,
   MAX_IMAGE_DIMENSION,
@@ -18,8 +18,11 @@ import {
 import { InlineTextWithIconsProps, MessageListItemObj, PickerItem, VAIconProps } from 'components'
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
 import { getFormattedMessageTime, stringToTitleCase } from 'utils/formattingUtils'
+import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
 import { logNonFatalErrorToFirebase } from './analytics'
 import theme from 'styles/themes/standardTheme'
+
+const MAX_SUBJECT_LENGTH = 50
 
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
@@ -29,13 +32,13 @@ export const getMessagesListItems = (
 ): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
     const { attributes } = message
-    const { recipientName, senderName, subject, sentDate, readReceipt, attachment, category } = attributes
+    const { attachment, recipientName, senderName, subject, sentDate, readReceipt, hasAttachments, category } = attributes
     const isSentFolder = folderName === FolderNameTypeConstants.sent
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
 
-    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'UnreadIcon', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps) : undefined
-    const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
+    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'Unread', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps) : undefined
+    const paperClipProps = hasAttachments || attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
 
     const textLines: Array<InlineTextWithIconsProps> = [
       {
@@ -61,7 +64,7 @@ export const getMessagesListItems = (
         },
         leftIconProps: paperClipProps,
         rightIconProps: {
-          name: 'ArrowRight',
+          name: 'ChevronRight',
           width: theme.dimensions.chevronListItemWidth,
           height: theme.dimensions.chevronListItemHeight,
           fill: theme.colors.icon.chevronListItem,
@@ -90,25 +93,25 @@ export const getMessagesListItems = (
 export const translateSubjectCategory = (category: CategoryTypes, t: TFunction): string => {
   switch (category) {
     case CategoryTypeFields.covid:
-      return t('secureMessaging.composeMessage.covid')
+      return t('secureMessaging.startNewMessage.covid')
     case CategoryTypeFields.test:
-      return t('secureMessaging.composeMessage.test')
+      return t('secureMessaging.startNewMessage.test')
     case CategoryTypeFields.medication:
-      return t('secureMessaging.composeMessage.medication')
+      return t('secureMessaging.startNewMessage.medication')
     case CategoryTypeFields.appointment:
       return t('appointments.appointment')
     case CategoryTypeFields.other:
     case CategoryTypeFields.general:
-      return t('secureMessaging.composeMessage.general')
+      return t('secureMessaging.startNewMessage.general')
     case CategoryTypeFields.education:
-      return t('secureMessaging.composeMessage.education')
+      return t('secureMessaging.startNewMessage.education')
   }
   return category
 }
 
-/** Given the raw subject category and subject line attributes, we need to translate the category and then display
+/** Given the raw category and subject attributes, we need to translate the category and then display
  * the two as separated by a colon and a space.
- * If there's no subjectLine, should only display subject category with no colon
+ * If there's no subject, should only display category with no colon
  *
  * @param category - message attribute of categoryTypes indicating what category the message belongs to
  * @param subject - string from message attribute
@@ -120,15 +123,15 @@ export const formatSubject = (category: CategoryTypes, subject: string, t: TFunc
   return `${subjectCategory}${subjectLine}`.trim()
 }
 
-export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<PickerItem> => {
+export const getStartNewMessageCategoryPickerOptions = (t: TFunction): Array<PickerItem> => {
   return [
     {
       value: CategoryTypeFields.other,
-      label: t('secureMessaging.composeMessage.general'),
+      label: t('secureMessaging.startNewMessage.general'),
     },
     {
       value: CategoryTypeFields.covid,
-      label: t('secureMessaging.composeMessage.covid'),
+      label: t('secureMessaging.startNewMessage.covid'),
     },
     {
       value: CategoryTypeFields.appointment,
@@ -136,17 +139,28 @@ export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<Picke
     },
     {
       value: CategoryTypeFields.medication,
-      label: t('secureMessaging.composeMessage.medication'),
+      label: t('secureMessaging.startNewMessage.medication'),
     },
     {
       value: CategoryTypeFields.test,
-      label: t('secureMessaging.composeMessage.test'),
+      label: t('secureMessaging.startNewMessage.test'),
     },
     {
       value: CategoryTypeFields.education,
-      label: t('secureMessaging.composeMessage.education'),
+      label: t('secureMessaging.startNewMessage.education'),
     },
   ]
+}
+
+/**
+ * Function to determine invalid subject length
+ * @returns Callback function that returns true if subject length invalid (over 50 characters)
+ */
+export const SubjectLengthValidationFn = (subject: string) => {
+  const InvalidSubjectLength = (): boolean => {
+    return subject.length > MAX_SUBJECT_LENGTH
+  }
+  return InvalidSubjectLength
 }
 
 /**
@@ -345,7 +359,40 @@ export const onAddFileAttachments = (
 export const getfolderName = (id: string, folders: SecureMessagingFolderList): string => {
   const folderName = _.filter(folders, (folder) => {
     return folder.id === id
-  })[0].attributes.name
+  })[0]?.attributes.name
 
   return folderName === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : folderName
+}
+
+/**
+ * Checks if the message has attachments before saving a draft and displays a message to the
+ * user letting them know that the attachments wouldn't be saved with the draft
+ * @param alert - Alert from useDestructiveActionSheet() hook
+ * @param attachmentsList - List of attachments
+ * @param t - Traslation function
+ * @param dispatchSaveDraft - Dispatch save draft callback
+ */
+export const saveDraftWithAttachmentAlert = (
+  alert: (props: useDestructiveActionSheetProps) => void,
+  attachmentsList: Array<imageDocumentResponseType>,
+  t: TFunction,
+  dispatchSaveDraft: () => void,
+) => {
+  if (attachmentsList.length) {
+    alert({
+      title: t('secureMessaging.draft.cantSaveAttachments'),
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('secureMessaging.keepEditing'),
+        },
+        {
+          text: t('secureMessaging.saveDraft'),
+          onPress: dispatchSaveDraft,
+        },
+      ],
+    })
+  } else {
+    dispatchSaveDraft()
+  }
 }

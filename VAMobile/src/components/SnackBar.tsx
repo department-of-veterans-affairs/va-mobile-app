@@ -1,12 +1,15 @@
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { StyleProp, TouchableOpacity, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
 import { Box, TextViewProps } from 'components'
 import { BoxProps } from './Box'
+import { NAMESPACE } from 'constants/namespaces'
+import { triggerHaptic } from 'utils/haptics'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useTranslation } from 'react-i18next'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 import colors from '../styles/themes/VAColors'
@@ -26,6 +29,8 @@ const SnackBar: FC<ToastProps> = (toast) => {
   const { onActionPressed, isError, actionBtnText, isUndo } = data || {}
   const { colors: themeColor } = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const fontScale = useWindowDimensions().fontScale
 
   useFocusEffect(setFocus)
 
@@ -96,6 +101,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     flexGrow: 1,
+    flexWrap: fontScale >= 3 ? 'wrap' : undefined,
   }
 
   const onActionPress = () => {
@@ -105,9 +111,14 @@ const SnackBar: FC<ToastProps> = (toast) => {
     toast.onHide()
   }
 
+  const onDismissPress = () => {
+    toast.onHide()
+  }
+
   const snackBarIconProps: VAIconProps = {
-    name: isError ? 'ExclamationTriangleSolid' : 'CircleCheckMark',
+    name: isError ? 'ExclamationTriangle' : 'CircleCheckMark',
     fill: themeColor.icon.snackBarIcon,
+    fill2: themeColor.icon.transparent,
     height: 18,
     width: 18,
   }
@@ -116,6 +127,14 @@ const SnackBar: FC<ToastProps> = (toast) => {
     mr: 8,
     alignSelf: 'flex-start',
     mt: 2,
+  }
+
+  const vibrate = (): void => {
+    if (!isUndo) {
+      triggerHaptic('notificationError')
+    } else {
+      triggerHaptic('notificationSuccess')
+    }
   }
 
   return (
@@ -133,15 +152,16 @@ const SnackBar: FC<ToastProps> = (toast) => {
           {!isUndo && (
             <TouchableOpacity onPress={onActionPress} style={confirmBtnStlye} accessible={true} accessibilityRole={'button'}>
               <TextView variant={'SnackBarBtnText'} display={'flex'}>
-                {actionBtnText || isError ? 'Retry' : 'Undo'}
+                {actionBtnText || isError ? t('snackbar.tryAgain') : t('snackbar.undo')}
               </TextView>
             </TouchableOpacity>
           )}
-          <TouchableOpacity onPress={() => toast.onHide()} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
-            <TextView variant={'SnackBarBtnText'}>{'Dismiss'}</TextView>
+          <TouchableOpacity onPress={onDismissPress} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
+            <TextView variant={'SnackBarBtnText'}>{t('snackbar.dismiss')}</TextView>
           </TouchableOpacity>
         </Box>
       </Box>
+      {vibrate()}
     </SafeAreaView>
   )
 }

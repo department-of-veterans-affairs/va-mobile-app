@@ -1,22 +1,34 @@
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
-import { CrisisLineCta, LargeNavButton } from 'components'
+import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DateTime } from 'luxon'
-import { EncourageUpdateAlert } from 'components/EncourageUpdate'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
-import { createStackNavigator } from '@react-navigation/stack'
-import { featureEnabled } from 'utils/remoteConfig'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import { useAppDispatch, useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
+import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
+import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
+import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/HapticsDemoScreen'
+import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
+import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
+import Nametag from 'components/Nametag'
+import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
+import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
+import ProfileScreen from './ProfileScreen/ProfileScreen'
+import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
+import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
+import SettingsScreen from './ProfileScreen/SettingsScreen'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -32,7 +44,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const name = profile?.fullName || ''
+  const name = profile?.preferredName ? profile.preferredName : profile?.firstName || ''
 
   useEffect(() => {
     // Fetch the profile information
@@ -47,27 +59,22 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     })
   }, [navigation])
 
-  const onClaimsAndAppeals = navigateTo('ClaimsTab')
   const onContactVA = navigateTo('ContactVA')
-  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: t('webview.valocation.loading') })
+  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('home_screen'))
     navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
-  const onLetters = navigateTo('LettersOverview')
-  const onHealthCare = navigateTo('HealthTab')
-  const onPayments = navigateTo('Payments')
 
   const buttonDataList: Array<SimpleListItemObj> = [
+    { text: t('contactVA.title'), a11yHintText: a11yLabelVA(t('contactVA.a11yHint')), onPress: onContactVA, testId: a11yLabelVA(t('contactVA.title')) },
     {
       text: t('findLocation.title'),
-      a11yHintText: t('findLocation.a11yHint'),
+      a11yHintText: a11yLabelVA(t('findLocation.a11yHint')),
       onPress: onFacilityLocator,
-      testId: t('findLocation.titleA11yLabel'),
+      testId: a11yLabelVA(t('findLocation.title')),
     },
-    { text: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA, testId: t('contactVA.title.a11yLabel') },
-    { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ, testId: t('coronavirusFaqs.title') },
+    { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ, testId: a11yLabelVA(t('coronavirusFaqs.title')) },
   ]
 
   let greeting
@@ -85,59 +92,36 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
   const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
 
+  const profileIconProps: VAIconProps = {
+    name: 'ProfileSelected',
+  }
+
+  const headerButton = {
+    label: tc('profile.title'),
+    icon: profileIconProps,
+    onPress: navigateTo('Profile'),
+  }
+
   return (
-    <VAScrollView>
+    <CategoryLanding headerButton={headerButton}>
       <Box flex={1} justifyContent="flex-start">
-        <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
           <TextView variant={'MobileBodyBold'} accessibilityRole={'header'}>
             {heading}
           </TextView>
         </Box>
         <EncourageUpdateAlert />
-        <Box mx={theme.dimensions.gutter}>
-          <LargeNavButton
-            title={t('claimsAndAppeals.title')}
-            subText={t('claimsAndAppeals.subText')}
-            onPress={onClaimsAndAppeals}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-          <LargeNavButton
-            title={t('healthCare.title')}
-            subText={featureEnabled('prescriptions') ? t('healthCare.subText.rxRefill.enabled') : t('healthCare.subText')}
-            onPress={onHealthCare}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-          <LargeNavButton
-            title={t('letters.title')}
-            subText={t('letters.subText')}
-            onPress={onLetters}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-          <LargeNavButton
-            title={t('payments.title')}
-            subText={t('payments.subText')}
-            onPress={onPayments}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
+        <Nametag />
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+          <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
+            {tc('aboutVA')}
+          </TextView>
         </Box>
-        <Box my={theme.dimensions.contentMarginBottom}>
+        <Box mb={theme.dimensions.contentMarginBottom}>
           <SimpleList items={buttonDataList} />
         </Box>
       </Box>
-    </VAScrollView>
+    </CategoryLanding>
   )
 }
 
@@ -150,11 +134,38 @@ const HomeScreenStack = createStackNavigator()
  */
 const HomeStackScreen: FC<HomeStackScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.HOME)
-  const headerStyles = useHeaderStyles()
+  const screenOptions = {
+    headerShown: false,
+    // Use horizontal slide transition on Android instead of default crossfade
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+  }
 
   return (
-    <HomeScreenStack.Navigator screenOptions={headerStyles}>
+    <HomeScreenStack.Navigator
+      screenOptions={screenOptions}
+      screenListeners={{
+        transitionStart: (e) => {
+          if (e.data.closing) {
+            CloseSnackbarOnNavigation(e.target)
+          }
+        },
+        blur: (e) => {
+          CloseSnackbarOnNavigation(e.target)
+        },
+      }}>
       <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
+      <HomeScreenStack.Screen name="ContactVA" component={ContactVAScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="ContactInformation" component={ContactInformationScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="ManageYourAccount" component={ManageYourAccount} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="NotificationsSettings" component={NotificationsSettingsScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="RemoteConfig" component={RemoteConfigScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="Sandbox" component={SandboxScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />
     </HomeScreenStack.Navigator>
   )
 }

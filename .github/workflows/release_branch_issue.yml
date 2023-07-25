@@ -1,4 +1,4 @@
-name: "Create Release Branch Ticket"
+name: '[Release] New Release Issue'
 
 on:
   create:
@@ -16,7 +16,7 @@ jobs:
       - run: echo "PROD_DUE_DATE=$(date -d "+5 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - run: echo "RELEASE_DATE=$(date -d "+13 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - run: gh auth login --with-token < token.txt
       - run: |
@@ -62,13 +62,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: [release_ticket, create_testrail_milestone, start_testrail_run]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - run: gh auth login --with-token < token.txt
       - run: echo ${{needs.start_testrail_run.outputs.testrailUrl}}
       - run: |
+          TICKET_NUM=${{ needs.release_ticket.outputs.ticketNumber }}
           RUN_URL=${{ needs.start_testrail_run.outputs.testrailUrl }}
-          OLD_BODY=$(echo $(gh issue view 3359 --json body | jq -r '.body'))
-          NEW_BODY=$(echo "$BODY" | sed -e "s/\^\^\^Testrail-url\^\^\^/$RUN_URL/g")
-          gh issue edit ${{ needs.release_ticket.outputs.ticketNumber }} -b $NEW_BODY
-
+          OLD_BODY=$(echo $(gh issue view $TICKET_NUM --json body | jq -r '.body'))
+          NEW_BODY=$(echo "$OLD_BODY" | sed -e "s#\^\^\^Testrail-url\^\^\^#$RUN_URL#g")
+          gh issue edit $TICKET_NUM -b $NEW_BODY

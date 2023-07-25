@@ -4,9 +4,14 @@ import { isErrorObject } from './common'
 import analytics from '@react-native-firebase/analytics'
 import crashlytics from '@react-native-firebase/crashlytics'
 
+import { ErrorObject } from 'store/api'
+import { Events } from 'constants/analytics'
+
+export type EventParams = { [key: string]: unknown }
+
 export type Event = {
   name: string
-  params?: undefined | { [key: string]: unknown }
+  params?: EventParams
 }
 
 export type UserAnalytic = {
@@ -16,7 +21,7 @@ export type UserAnalytic = {
 
 export const logAnalyticsEvent = async (event: Event): Promise<void> => {
   const { name, params } = event
-  console.debug(`logging analytics event ${name}`)
+  console.debug(`logging analytics event ${name}`, params)
   await analytics().logEvent(name, params)
 }
 
@@ -41,6 +46,7 @@ export const getAnalyticsTimers = (state: RootState): [number, number, number] =
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
   let errorObject: Error = Error()
+  let apiErrorObject: ErrorObject | undefined
 
   // if the error is a string
   if (typeof error === 'string') {
@@ -49,9 +55,10 @@ export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
   } else if (typeof error === 'object' && isErrorObject(error)) {
     // checks if json is in the object for api error
     if ('json' in error && error.json) {
+      apiErrorObject = error
       const { text, json, networkError, status } = error
       // if the json's errors array has data if not than it creates an error object with the service call status
-      if (json.errors.length > 0) {
+      if (json.errors?.length > 0) {
         const { detail, title } = json.errors[0]
         errorObject.message = detail
         errorObject.name = title
@@ -66,6 +73,7 @@ export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
       errorObject = error
     }
 
+    logAnalyticsEvent(Events.vama_error(errorObject.name, errorObject.message, errorObject.stack, apiErrorObject?.status, apiErrorObject?.endpoint))
     crashlytics().recordError(errorObject, errorName)
   }
 }

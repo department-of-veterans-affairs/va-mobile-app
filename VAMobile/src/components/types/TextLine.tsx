@@ -21,6 +21,11 @@ export type TextLine = {
   textTag?: {
     labelType: LabelTagTypes
   }
+  /*optional a11y label*/
+  a11yLabel?: string
+
+  /** set margin top of this component*/
+  mt?: number | string // same as in Box.tsx
 
   /** set margin bottom of this component*/
   mb?: number | string // same as in Box.tsx

@@ -2,7 +2,6 @@ import { AccessibilityProps, Pressable, PressableProps } from 'react-native'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
-import LoadingComponent from './LoadingComponent'
 import React, { FC } from 'react'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -20,14 +19,12 @@ export type AttachmentLinkProps = {
   a11yHint?: string
   /** optional a11y value */
   a11yValue?: string
-  /** Enables loading display */
-  load?: boolean
 }
 
 /**
  * A common component for an attachment link display. Can be used to show file attachments in a message thread.
  */
-const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, formattedSizeA11y, onPress, a11yHint, a11yValue, load }) => {
+const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, formattedSizeA11y, onPress, a11yHint, a11yValue }) => {
   const theme = useTheme()
 
   const pressableProps: PressableProps = {
@@ -51,10 +48,9 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, formatte
         <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
           <VAIcon name="PaperClip" width={16} height={16} fill={'link'} />
         </Box>
-        <TextView mr={theme.dimensions.textIconMargin} variant={'MobileBodyLink'} accessible={true}>
+        <TextView mr={theme.dimensions.textIconMargin} variant={'MobileBodyLink'}>
           {text}
         </TextView>
-        {load && <LoadingComponent justTheSpinnerIcon={true} spinnerHeight={24} spinnerWidth={24} />}
       </Box>
     </Pressable>
   )

@@ -21,6 +21,7 @@ import com.wix.reactnativenotifications.core.notification.IPushNotification;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import gov.va.mobileapp.native_modules.CustomTabsIntentManager;
 import gov.va.mobileapp.native_modules.DeviceDataPackage;
 import gov.va.mobileapp.native_modules.RNCalendarPackage;
 import gov.va.mobileapp.native_modules.RNCheckVoiceOverPackage;
@@ -28,6 +29,7 @@ import gov.va.mobileapp.native_modules.RNNotificationPrefsPackage;
 import gov.va.mobileapp.native_modules.RNReviewPackage;
 import gov.va.mobileapp.native_modules.RNSecureRandomPackage;
 import gov.va.mobileapp.native_modules.RNInAppUpdatePackage;
+import gov.va.mobileapp.native_modules.RNNativeUIUtilitiesPackage;
 import gov.va.mobileapp.notifications.VAPushNotifications;
 import com.facebook.react.bridge.JSIModulePackage;
 import com.airbnb.android.react.lottie.LottiePackage;
@@ -54,7 +56,9 @@ public class MainApplication extends Application implements ReactApplication, IN
             packages.add(new RNSecureRandomPackage());
             packages.add(new RNReviewPackage());
             packages.add(new RNInAppUpdatePackage());
+            packages.add(new RNNativeUIUtilitiesPackage());
             packages.add(new LottiePackage());
+            packages.add(new CustomTabsIntentManager());
 
             return packages;
         }

@@ -12,6 +12,7 @@ jest.mock('@react-native-firebase/remote-config', () => () => ({
   })),
   getAll: jest.fn(() => false),
   activate: jest.fn(() => Promise.resolve()),
+  setConfigSettings: jest.fn(() => Promise.resolve()),
   setDefaults: mockSetDefaultsSpy,
 }))
 
@@ -21,8 +22,10 @@ const mockOverrides = {
   SIS: true,
   testFeature: false,
   inAppUpdates: false,
-  preferredNameGender: false,
+  preferredNameGenderWaygate: false,
   haptics: false,
+  whatsNewUI: false,
+  decisionLettersWaygate: false,
 }
 
 describe('activate', () => {

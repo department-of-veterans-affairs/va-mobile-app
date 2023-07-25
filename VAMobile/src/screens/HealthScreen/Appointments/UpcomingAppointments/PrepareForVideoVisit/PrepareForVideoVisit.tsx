@@ -2,18 +2,17 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, TextArea, TextView, VAScrollView } from 'components'
+import { Box, LargePanel, TextView } from 'components'
 import { HealthStackParamList } from '../../../HealthStackScreens'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { generateTestID } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 type PrepareForVideoVisitProps = StackScreenProps<HealthStackParamList, 'PrepareForVideoVisit'>
 
 const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   useEffect(() => {
@@ -27,47 +26,43 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
   })
 
   return (
-    <VAScrollView {...testIdProps(generateTestID(t('prepareForVideoVisit.title'), ''))}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('prepareForVideoVisit.beforeYourAppointment')}
-          </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('prepareForVideoVisit.downloadBasedOnDevice')}
-          </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('prepareForVideoVisit.cameraAndMicrophone')}
-          </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('prepareForVideoVisit.joinBy')}
-          </TextView>
+    <LargePanel title={tc('appointmentsHelp')} rightButtonText={tc('close')}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter} mt={theme.dimensions.cardPadding}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {t('prepareForVideoVisit.beforeYourAppointment')}
+        </TextView>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+          {t('prepareForVideoVisit.downloadBasedOnDevice')}
+        </TextView>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {t('prepareForVideoVisit.cameraAndMicrophone')}
+        </TextView>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {t('prepareForVideoVisit.joinBy')}
+        </TextView>
 
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
-            {t('prepareForVideoVisit.toHaveBestExperience')}
-          </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('prepareForVideoVisit.connectFromQuietPlace')}
-          </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('prepareForVideoVisit.checkConnection')}
-          </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('prepareForVideoVisit.connectWithWifi')}
-          </TextView>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {t('prepareForVideoVisit.toHaveBestExperience')}
+        </TextView>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+          {t('prepareForVideoVisit.connectFromQuietPlace')}
+        </TextView>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {t('prepareForVideoVisit.checkConnection')}
+        </TextView>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {t('prepareForVideoVisit.connectWithWifi')}
+        </TextView>
 
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
-            {t('prepareForVideoVisit.medicationReview')}
-          </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('prepareForVideoVisit.reviewEverything')}
-          </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('prepareForVideoVisit.beReadyToTalk')}
-          </TextView>
-        </TextArea>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {t('prepareForVideoVisit.medicationReview')}
+        </TextView>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+          {t('prepareForVideoVisit.reviewEverything')}
+        </TextView>
+        <TextView variant="MobileBody">{t('prepareForVideoVisit.beReadyToTalk')}</TextView>
       </Box>
-    </VAScrollView>
+    </LargePanel>
   )
 }
 

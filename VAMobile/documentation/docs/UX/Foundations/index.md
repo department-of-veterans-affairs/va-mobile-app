@@ -3,7 +3,7 @@ title: Foundations
 
 ---
 ## Our approach 
-As [outlined in our project mission](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/product/Mobile-Roadmap.md#outcomes-roadmap), the VA: Health and Benefits app should be a trusted source for Veterans to quickly and easily check the status of their VA services and complete simple, transactional tasks across their health and benefits. 
+As [outlined in our project mission](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/About/team-charter#team-mission-statement), the VA: Health and Benefits app should be a trusted source for Veterans to quickly and easily check the status of their VA services and complete simple, transactional tasks across their health and benefits.
 
 ### Values
 In order to accomplish this we approach our design work by the following values:
@@ -16,7 +16,7 @@ In order to accomplish this we approach our design work by the following values:
 ### Process
 Our values are embodied in our design process:
 
-* **Discovery & [research](/docs/UX/Research)**
+* **Discovery & [research](Research)**
   * In order to understand a new feature or problem we interview users, go through research done by other VA teams, and/or look at other companies or applications for inspiration. 
 * **Iteration cycles**
   * In most cases, we go through several iterations of a design before it is handed off to engineering. Most designs begin with sketches or low-fidelity mockups in Balsamiq.

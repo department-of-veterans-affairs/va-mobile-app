@@ -37,23 +37,6 @@ platform :android do
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android", ENV['SLACK_THREAD_TS'])
   end
 
-  # review lane uploads to beta track for promotion to the store on release date
-  desc "Build new Production version for Google Play and stash in Pre-Prod Stash track"
-  lane :review do |options|
-    puts 'Run the review lane'
-    update_version_and_build(options[:version ])
-    bundle("Release")
-    upload("Pre-Prod Stash", false)
-    tag_build
-    message = "New Production build successfully uploaded to Pre-Prod Stash Track on Google Play"
-    slack_sent_for_review(ENV['BUILD_NUM'], ENV['VERSION_NAME'], message, "Android", ENV['SLACK_THREAD_TS'])
-  end
-
-  desc "Promote the release in Pre-Prod stash to Production"
-  lane :release do
-    promote_pre_prod
-  end
-
   desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
   lane :on_demand do |options|
     puts "on demand run"
@@ -76,7 +59,7 @@ platform :android do
     distribute_to_firebase(notes, "qa")
     tag_build
     message = "New On Demand build successfully uploaded to Google Play"
-    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "On-Demand", message, "Android", ENV['SLACK_THREAD_TS'])
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "On Demand", message, "Android", ENV['SLACK_THREAD_TS'])
   end
 
   desc "Deploy a RC new version to Firebase Distribution"
@@ -89,6 +72,23 @@ platform :android do
     distribute_to_firebase(notes, "qa")
     message = "New RC for #{rcVersion} successfully uploaded to Firebase Distribution"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Release Candidate", message, "Android", ENV['SLACK_THREAD_TS'])
+  end
+
+  # review lane uploads to beta track for promotion to the store on release date
+  desc "Build new Production version for Google Play and stash in Pre-Prod Stash track"
+  lane :review do |options|
+    puts 'Run the review lane'
+    update_version_and_build(options[:version ])
+    bundle("Release")
+    upload("Pre-Prod Stash", false)
+    tag_build
+    message = "New Production build successfully uploaded to Pre-Prod Stash Track on Google Play"
+    slack_sent_for_review(ENV['BUILD_NUM'], ENV['VERSION_NAME'], message, "Android", ENV['SLACK_THREAD_TS'])
+  end
+
+  desc "Promote the release in Pre-Prod stash to Production"
+  lane :release do
+    promote_pre_prod
   end
 
   lane :demo do
@@ -176,7 +176,7 @@ platform :android do
       tag = "android-build-" + ENV['BUILD_NUM'].to_s
       puts "Tagging commit with " + tag
       add_git_tag(tag: tag)
-      push_git_tags
+      push_git_tags(tag: tag)
     rescue => e
       slack_github_error(e, "Error tagging Android build", "Android", ENV['SLACK_THREAD_TS'])
     end

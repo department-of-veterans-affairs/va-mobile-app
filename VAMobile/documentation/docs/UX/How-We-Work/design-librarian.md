@@ -1,13 +1,13 @@
 ---
 title: Design Librarian
-sidebar_position: 1
+sidebar_position: 4
 ---
 
 # Design librarian
 
 ## Overview
 
-* **What is a design librarian?** Design librarians are a rotating designer who maintains and improves how we work in Figma and serves as a resource within the mobile team, VA, and Ad Hoc
+* **What is a design librarian?** Design librarians are a rotating designer who maintains and improves how we work in Figma and serves as a resource within the mobile team, VA, and Ad Hoc.
 * **How long does a design librarian serve?** Design librarians serve for a full quarter. During the first month, they shadow the previous librarian. During the second month, they work independently. And during the third month, they onboard the next librarian.
 * **How much time is expected per week?** Design librarians are expected to spend less than X hours per week, but this can fluctuate depending on their current workload.
 
@@ -63,3 +63,6 @@ sidebar_position: 1
         * Add new design librarians by searching their name, selecting “can edit,” and sending an invite
         ![Figma screenshot of permissions](/img/figma/figma-permissions.png)
         * **Note**: The file “Navigation 2.0 Screen templates for designers” is currently available for anyone to edit. Once finalized, the permissions should be updated to restrict editing.
+
+        *For more information on permissions and sharing in Figma, check out [this page](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/figma-permissions) on the doc site.*
+

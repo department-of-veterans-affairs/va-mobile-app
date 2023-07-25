@@ -51,6 +51,20 @@ jest.mock('../../utils/env', () =>
   })),
 )
 
+jest.mock('@react-native-firebase/analytics', () => {
+  return () => ({
+    logEvent: jest.fn(),
+    setUserProperty: jest.fn(),
+    setAnalyticsCollectionEnabled: jest.fn(),
+  })
+})
+
+jest.mock('@react-native-firebase/perf', () => {
+  return () => ({
+    setPerformanceCollectionEnabled: jest.fn(),
+  })
+})
+
 const defaultEnvParams = {
   AUTH_SIS_ENDPOINT: 'https://test.gov/sign-in',
   AUTH_SIS_REVOKE_URL: 'https://test.gov/v0/sign_in/revoke',
@@ -58,8 +72,7 @@ const defaultEnvParams = {
   AUTH_SIS_TOKEN_REFRESH_URL: 'https://test.gov/v0/sign_in/refresh',
 }
 
-const sampleIdToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMDAwMDEyMzQ1IiwiYXVkIjoidmFtb2JpbGUiLCJpYXQiOjE2MDMxMjY3MzEsImV4cCI6MjUyNDYwODAwMCwiaXNzIjoiSUFNIFNTT2Ugc2VydmljZSIsIm5vbmNlIjoiRmltYlhLa3M5b3ZOcnI3STl0TEkifQ.DJCdQ45WP3ZUHTb2nqNzlHBxEAUl7dpPhoLm1TKtogs'
+const sampleIdToken = 'TEST_TOKEN';
 
 let mockFeatureEnabled = featureEnabled as jest.Mock
 const getItemMock = AsyncStorage.getItem as jest.Mock
@@ -71,6 +84,9 @@ context('authAction SIS', () => {
   let encryptedComponent: string
   let nonce: string
   let testRefreshToken: string
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
   beforeEach(() => {
     testAccessToken = generateRandomString()
     encryptedComponent = generateRandomString()
@@ -579,6 +595,7 @@ context('authAction SIS', () => {
       expect(storeState.loggedIn).toBeTruthy()
       // expect(storeState.canStoreWithBiometric).toBeTruthy()
       // expect(storeState.shouldStoreWithBiometric).toBeTruthy()
+      when(mockFeatureEnabled).calledWith('SIS').mockReturnValue(true)
       await store.dispatch(setBiometricsPreference(true))
       storeState = store.getState().auth
       // expect(storeState.canStoreWithBiometric).toBeTruthy()
