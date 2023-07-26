@@ -33,7 +33,6 @@ const sixMonthsEarlier = todaysDate.minus({ months: 6 }).endOf('month').endOf('d
 const elevenMonthsEarlier = todaysDate.minus({ months: 11 }).startOf('month').startOf('day')
 const nineMonthsEarlier = todaysDate.minus({ months: 9 }).endOf('month').endOf('day')
 const currentYear = todaysDate.get('year')
-const firstDayCurrentYear = todaysDate.set({ month: 1, day: 1, hour: 0, minute: 0, millisecond: 0 })
 const lastYearDateTime = todaysDate.minus({ years: 1 })
 const lastYear = lastYearDateTime.get('year')
   
