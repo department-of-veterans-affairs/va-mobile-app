@@ -44,7 +44,7 @@ import {
   useAppDispatch,
   useAttachments,
   useBeforeNavBackListener,
-  useDestructiveAlert,
+  useDestructiveActionSheet,
   useMessageWithSignature,
   useRouteNavigation,
   useTheme,
@@ -61,7 +61,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
-  const draftAttachmentAlert = useDestructiveAlert()
+  const draftAttachmentAlert = useDestructiveActionSheet()
 
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
@@ -69,6 +69,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const validateMessage = useValidateMessageWithSignature()
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+  const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const scrollViewRef = useRef<ScrollView>(null)
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
   const { messageID, attachmentFileToAdd } = route.params
@@ -251,7 +252,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const renderForm = (): ReactNode => (
     <Box>
-      <MessageAlert scrollViewRef={scrollViewRef} hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} focusOnError={onSendClicked} />
+      <MessageAlert
+        scrollViewRef={scrollViewRef}
+        hasValidationError={formContainsError}
+        saveDraftAttempted={onSaveDraftClicked}
+        focusOnError={onSendClicked}
+        errorList={errorList}
+      />
       <TextArea>
         <TextView variant="MobileBody" accessible={true}>
           {t('secureMessaging.formMessage.to')}
@@ -274,6 +281,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
             setFormContainsError={setFormContainsError}
             resetErrors={resetErrors}
             setResetErrors={setResetErrors}
+            setErrorList={setErrorList}
           />
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>

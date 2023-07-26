@@ -55,7 +55,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { SubjectLengthValidationFn, formatSubject, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
-import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveAlert, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
@@ -95,8 +95,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     deleteDraftComplete,
     deletingDraft,
   } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-  const destructiveAlert = useDestructiveAlert()
-  const draftAttachmentAlert = useDestructiveAlert()
+  const destructiveAlert = useDestructiveActionSheet()
+  const draftAttachmentAlert = useDestructiveActionSheet()
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
   const { attachmentFileToAdd } = route.params
@@ -119,6 +119,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+  const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const scrollViewRef = useRef<ScrollView>(null)
 
   const [isDiscarded, editCancelConfirmation] = useComposeCancelConfirmation()
@@ -206,22 +207,22 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const onDeletePressed = (): void => {
     destructiveAlert({
-      title: t('secureMessaging.deleteDraft.deleteThisDraft'),
+      title: tc('deleteDraft'),
       message: t('secureMessaging.deleteDraft.deleteInfo'),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('secureMessaging.keepEditing'),
+          text: tc('keepEditing'),
         },
         {
-          text: t('secureMessaging.deleteDraft.delete'),
+          text: tc('delete'),
           onPress: () => {
             dispatch(deleteDraft(messageID, snackbarMessages))
           },
         },
         {
-          text: t('secureMessaging.saveDraft'),
+          text: tc('save'),
           onPress: () => {
             setOnSaveDraftClicked(true)
             setOnSendClicked(true)
@@ -470,7 +471,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        <MessageAlert hasValidationError={formContainsError} saveDraftAttempted={onSaveDraftClicked} scrollViewRef={scrollViewRef} focusOnError={onSendClicked} />
+        <MessageAlert
+          hasValidationError={formContainsError}
+          saveDraftAttempted={onSaveDraftClicked}
+          scrollViewRef={scrollViewRef}
+          focusOnError={onSendClicked}
+          errorList={errorList}
+        />
         <TextArea>
           {message && isReplyDraft && (
             <>
@@ -495,6 +502,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
               setFormContainsError={setFormContainsError}
               resetErrors={resetErrors}
               setResetErrors={setResetErrors}
+              setErrorList={setErrorList}
             />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>

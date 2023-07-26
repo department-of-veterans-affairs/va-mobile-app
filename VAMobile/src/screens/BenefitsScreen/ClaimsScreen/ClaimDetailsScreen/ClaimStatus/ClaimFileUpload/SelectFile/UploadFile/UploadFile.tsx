@@ -10,11 +10,13 @@ import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
-import { useBeforeNavBackListener, useDestructiveAlert, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import FileList from 'components/FileList'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
@@ -27,7 +29,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const dispatch = useDispatch()
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('fileUpload.submitted'),
@@ -46,10 +48,10 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
       destructiveButtonIndex: 1,
       buttons: [
         {
-          text: t('cancel'),
+          text: t('fileUpload.continueUpload'),
         },
         {
-          text: t('fileUpload.discard'),
+          text: t('fileUpload.cancelUpload'),
           onPress: () => {
             navigation.dispatch(e.data.action)
           },
@@ -95,10 +97,13 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   }
 
   const onUploadConfirmed = () => {
-    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, filesList))
+    logAnalyticsEvent(Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'file'))
+    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, filesList, 'file'))
   }
 
   const onUpload = (): void => {
+    const totalSize = filesList.reduce((sum, file) => sum + file.size, 0)
+    logAnalyticsEvent(Events.vama_evidence_cont_2(claim?.id || '', request.trackedItemId || null, request.type, 'file', totalSize, filesList.length))
     confirmAlert({
       title: t('fileUpload.submit.confirm.title'),
       message: t('fileUpload.submit.confirm.message'),
@@ -115,10 +120,23 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
     })
   }
 
+  const onDocumentTypeChange = (selectedType: string) => {
+    const typeLabel = DocumentTypes526.filter((type) => type.value === selectedType)[0]?.label || selectedType
+    logAnalyticsEvent(Events.vama_evidence_type(claim?.id || '', request.trackedItemId || null, request.type, 'file', typeLabel))
+    setDocumentType(selectedType)
+  }
+
+  const onCheckboxChange = (isChecked: boolean) => {
+    if (isChecked) {
+      logAnalyticsEvent(Events.vama_evidence_conf(claim?.id || '', request.trackedItemId || null, request.type, 'file'))
+    }
+    setConfirmed(isChecked)
+  }
+
   const onFileDelete = () => {
     setFilesList([])
-    showSnackBar(t('file.deleted'), dispatch, undefined, true, false, false)
-    navigation.navigate('SelectFile', { request, focusOnSnackbar: true })
+    showSnackBar(t('fileRemoved'), dispatch, undefined, true, false, false)
+    navigation.navigate('SelectFile', { claimID: claim?.id || '', request, focusOnSnackbar: true })
   }
 
   const pickerField: Array<FormFieldType<unknown>> = [
@@ -126,7 +144,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
       fieldType: FieldType.Picker,
       fieldProps: {
         selectedValue: documentType,
-        onSelectionChange: setDocumentType,
+        onSelectionChange: onDocumentTypeChange,
         pickerOptions: DocumentTypes526,
         labelKey: 'fileUpload.documentType',
         isRequiredField: true,
@@ -139,7 +157,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
       fieldProps: {
         labelKey: 'fileUpload.evidenceOnly',
         selected: confirmed,
-        onSelectionChange: setConfirmed,
+        onSelectionChange: onCheckboxChange,
         isRequiredField: true,
       },
       fieldErrorMessage: t('fileUpload.evidenceOnly.error'),
@@ -151,6 +169,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
       leftButtonText={t('cancel')}
       title={t('fileUpload.uploadFiles')}
       onLeftButtonPress={() => {
+        logAnalyticsEvent(Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'file'))
         navigation.dispatch(StackActions.pop(2))
       }}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>

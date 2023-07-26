@@ -20,10 +20,13 @@ import {
 } from 'components'
 import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { useAppDispatch, useDestructiveAlert, useError, useTheme } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { useAppDispatch, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
 
@@ -36,11 +39,12 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
-  const requestEvalAlert = useDestructiveAlert()
+  const requestEvalAlert = useDestructiveActionSheet()
 
   const navigateToClaimsDetailsPage = submittedDecision && !error
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
   const claimType = isClosedClaim ? ClaimTypeConstants.CLOSED : ClaimTypeConstants.ACTIVE
+  const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
   useEffect(() => {
     if (navigateToClaimsDetailsPage) {
@@ -56,9 +60,23 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
     )
   }
 
+  const onCancelPress = () => {
+    if (claim) {
+      logAnalyticsEvent(Events.vama_claim_eval_cancel(claim.id, claim.attributes.claimType, claim.attributes.phase, numberOfRequests))
+    }
+    navigation.goBack()
+  }
+
+  const onSelectionChange = (value: boolean) => {
+    if (claim && value) {
+      logAnalyticsEvent(Events.vama_claim_eval_check(claim.id, claim.attributes.claimType, numberOfRequests))
+    }
+    setHaveSubmittedEvidence(value)
+  }
+
   if (loadingSubmitClaimDecision) {
     return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('askForClaimDecision.pageTitle')}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={onCancelPress} title={t('askForClaimDecision.pageTitle')}>
         <LoadingComponent text={t('askForClaimDecision.loading')} />
       </FullScreenSubtask>
     )
@@ -72,16 +90,22 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   ]
 
   const onSubmit = (): void => {
+    if (claim) {
+      logAnalyticsEvent(Events.vama_claim_eval_submit(claim.id, claim.attributes.claimType, numberOfRequests))
+    }
     dispatch(submitClaimDecision(claimID, ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID))
   }
 
   const onRequestEvaluation = (): void => {
+    if (claim) {
+      logAnalyticsEvent(Events.vama_claim_eval_conf(claim.id, claim.attributes.claimType, numberOfRequests))
+    }
     requestEvalAlert({
       title: t('askForClaimDecision.alertTitle'),
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('cancel'),
+          text: t('cancelRequest'),
         },
         {
           text: t('askForClaimDecision.alertBtnTitle'),
@@ -96,7 +120,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
       fieldType: FieldType.Selector,
       fieldProps: {
         selected: haveSubmittedEvidence,
-        onSelectionChange: setHaveSubmittedEvidence,
+        onSelectionChange,
         labelKey: 'common:askForClaimDecision.haveSubmittedAllEvidence',
         a11yLabel: t('askForClaimDecision.haveSubmittedAllEvidenceA11yLabel'),
         a11yHint: t('askForClaimDecision.haveSubmittedAllEvidenceA11yHint'),
@@ -107,7 +131,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   ]
 
   return (
-    <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('askForClaimDecision.pageTitle')}>
+    <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={onCancelPress} title={t('askForClaimDecision.pageTitle')}>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>

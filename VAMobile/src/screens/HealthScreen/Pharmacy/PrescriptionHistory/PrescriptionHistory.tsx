@@ -180,6 +180,12 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const [currentTab, setCurrentTab] = useState<string>(PrescriptionHistoryTabConstants.ALL)
 
   useEffect(() => {
+    if (hasTransferred) {
+      logAnalyticsEvent(Events.vama_rx_refill_cerner())
+    }
+  }, [hasTransferred])
+
+  useEffect(() => {
     if (startingTab) {
       onTabChange(startingTab)
       navigation.setParams({ startingTab: undefined })
@@ -188,27 +194,6 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   // scrollViewRef is leveraged by renderPagination to reset scroll position to the top on page change
   const scrollViewRef = useRef<ScrollView | null>(null)
-
-  const pressableProps: PressableProps = {
-    onPress: navigateTo('PrescriptionHelp'),
-    accessibilityRole: 'button',
-    accessibilityLabel: t('prescription.help.button.a11yLabel'),
-  }
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: (): ReactNode => (
-        <Pressable {...pressableProps}>
-          <Box px={23} height={theme.dimensions.headerHeight} flexDirection={'row'} alignItems={'center'}>
-            <VAIcon mr={5} preventScaling={true} name="QuestionMark" width={16} height={16} fill={'prescriptionHelper'} fill2={theme.colors.icon.transparent} />
-            <TextView variant="ActionBar" allowFontScaling={false}>
-              {t('prescription.help.button.text')}
-            </TextView>
-          </Box>
-        </Pressable>
-      ),
-    })
-  })
 
   useEffect(() => {
     const filters = getFilterArgsForFilter(filterToUse)
@@ -275,14 +260,17 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     {
       value: PrescriptionHistoryTabConstants.ALL,
       title: t('prescriptions.tabs.all', { count: tabCounts[PrescriptionHistoryTabConstants.ALL] }),
+      testID: 'prescriptionAllCountTestID',
     },
     {
       value: PrescriptionHistoryTabConstants.PENDING,
       title: t('prescriptions.tabs.pending', { count: tabCounts[PrescriptionHistoryTabConstants.PENDING] }),
+      testID: 'prescriptionPendingCountTestID',
     },
     {
       value: PrescriptionHistoryTabConstants.TRACKING,
       title: t('prescriptions.tabs.tracking', { count: tabCounts[PrescriptionHistoryTabConstants.TRACKING] }),
+      testID: 'prescriptionTrackingCountTestID',
     },
   ]
 
@@ -365,9 +353,14 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           </Box>
         )
 
-        const bottomOnPress = navigateTo('RefillTrackingModal', { prescription: prescription })
-
-        cardProps = { ...cardProps, bottomContent, bottomOnPress }
+        cardProps = {
+          ...cardProps,
+          bottomContent,
+          bottomOnPress() {
+            logAnalyticsEvent(Events.vama_rx_trackdet(prescription.id))
+            navigation.navigate('RefillTrackingModal', { prescription: prescription })
+          },
+        }
       }
 
       return (
@@ -393,6 +386,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       totalEntries: prescriptions?.length || 0,
       pageSize: pageSize,
       page,
+      tab: currentTab,
     }
 
     return <Pagination {...paginationProps} />
@@ -443,9 +437,12 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     buttonText: sortButtonText,
     buttonA11yLabel: sortButtonText, // so Android reads button text
     buttonA11yHint: t('prescription.filter.sort.a11y'),
+    buttonTestID: 'openSortTestID',
     headerText: t('prescription.filter.sort'),
     topRightButtonText: tc('reset'),
     topRightButtonA11yHint: t('prescription.filter.sort.reset.a11y'),
+    topRightButtonTestID: 'resetSortTestID',
+    testID: 'sortListTestID',
     onConfirm: () => {
       setSortOnToUse(selectedSortOn)
       setSortByToUse(selectedSortBy)
@@ -491,9 +488,12 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     buttonText: filterButtonText,
     buttonA11yLabel: filterButtonText, // so Android reads button text
     buttonA11yHint: t('prescription.filter.by.a11y'),
+    buttonTestID: 'openFilterTestID',
     headerText: t('prescription.filter.status'),
     topRightButtonText: tc('reset'),
     topRightButtonA11yHint: t('prescription.filter.by.reset.a11y'),
+    topRightButtonTestID: 'resetFilterTestID',
+    testID: 'filterListTestID',
     onConfirm: () => {
       setPage(1)
       setFilterToUse(selectedFilter)
@@ -519,6 +519,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     pt: 16,
     pb: 6,
     px: 20,
+    testID: 'filterSortWrapperBoxTestID',
   }
 
   const filterWrapperProps: BoxProps = {
@@ -578,6 +579,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
         </>
       ),
       a11yLabel: t('prescription.history.transferred.title'),
+      onExpand() {
+        logAnalyticsEvent(Events.vama_rx_cerner_exp())
+      },
     }
 
     return (
@@ -647,11 +651,14 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const headerButton = {
     label: tc('help'),
     icon: helpIconProps,
-    onPress: navigateTo('PrescriptionHelp'),
+    onPress: () => {
+      logAnalyticsEvent(Events.vama_rx_help())
+      navigation.navigate('PrescriptionHelp')
+    },
   }
 
   return (
-    <FeatureLandingTemplate headerButton={headerButton} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+    <FeatureLandingTemplate headerButton={headerButton} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')} testID="PrescriptionHistory">
       {getRequestRefillButton()}
       <TabBar {...tabProps} />
       <Box {...filterWrapperProps}>

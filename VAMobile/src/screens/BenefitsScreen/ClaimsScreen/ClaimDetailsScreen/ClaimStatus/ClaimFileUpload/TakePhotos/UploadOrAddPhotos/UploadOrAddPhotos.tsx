@@ -12,14 +12,16 @@ import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScre
 import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
 import { DocumentTypes526 } from 'constants/documentTypes'
+import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
-import { useBeforeNavBackListener, useDestructiveAlert, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveActionSheet, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOrAddPhotos'>
@@ -35,7 +37,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
-  const confirmAlert = useDestructiveAlert()
+  const confirmAlert = useDestructiveActionSheet()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
   const scrollViewRef = useRef<ScrollView>(null)
   const snackbarMessages: SnackbarMessages = {
@@ -55,11 +57,11 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       destructiveButtonIndex: 1,
       buttons: [
         {
-          text: t('cancel'),
+          text: t('fileUpload.continueUpload'),
         },
 
         {
-          text: t('fileUpload.discard.photos'),
+          text: t('fileUpload.cancelUpload'),
           onPress: () => {
             navigation.dispatch(e.data.action)
           },
@@ -105,10 +107,14 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   const onUploadConfirmed = () => {
-    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, imagesList || []))
+    logAnalyticsEvent(Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
+    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, imagesList || [], 'photo'))
   }
 
   const onUpload = (): void => {
+    const totalSize = imagesList?.reduce((sum, image) => sum + (image.fileSize || 0), 0)
+    logAnalyticsEvent(Events.vama_evidence_cont_2(claim?.id || '', request.trackedItemId || null, request.type, 'photo', totalSize || 0, imagesList?.length || 0))
+
     confirmAlert({
       title: t('fileUpload.submit.confirm.title'),
       message: t('fileUpload.submit.confirm.message'),
@@ -125,12 +131,25 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     })
   }
 
+  const onDocumentTypeChange = (selectedType: string) => {
+    const typeLabel = DocumentTypes526.filter((type) => type.value === selectedType)[0]?.label || selectedType
+    logAnalyticsEvent(Events.vama_evidence_type(claim?.id || '', request.trackedItemId || null, request.type, 'photo', typeLabel))
+    setDocumentType(selectedType)
+  }
+
+  const onCheckboxChange = (isChecked: boolean) => {
+    if (isChecked) {
+      logAnalyticsEvent(Events.vama_evidence_conf(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
+    }
+    setConfirmed(isChecked)
+  }
+
   const pickerField: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.Picker,
       fieldProps: {
         selectedValue: documentType,
-        onSelectionChange: setDocumentType,
+        onSelectionChange: onDocumentTypeChange,
         pickerOptions: DocumentTypes526,
         labelKey: 'common:fileUpload.documentType',
         isRequiredField: true,
@@ -143,7 +162,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       fieldProps: {
         labelKey: 'common:fileUpload.evidenceOnlyPhoto',
         selected: confirmed,
-        onSelectionChange: setConfirmed,
+        onSelectionChange: onCheckboxChange,
         isRequiredField: true,
       },
       fieldErrorMessage: t('fileUpload.evidenceOnly.error'),
@@ -173,7 +192,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
                 photoNum: index + 1,
                 totalPhotos: imagesList?.length,
               })}
-              lastPhoto={imagesList?.length === 1 ? true : undefined}
             />
           </Box>
         )
@@ -189,7 +207,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
               width={calculatedWidth}
               height={calculatedWidth}
               onPress={(): void => {
-                onAddPhotos(t, showActionSheetWithOptions, setErrorMessage, callbackIfUri, totalBytesUsed || 0)
+                onAddPhotos(t, showActionSheetWithOptions, setErrorMessage, callbackIfUri, totalBytesUsed || 0, claim?.id || '', request)
               }}
             />
           </Box>
@@ -223,8 +241,8 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const deleteCallbackIfUri = (response: Asset[]): void => {
     if (response.length === 0) {
       setImagesList([])
-      showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
-      navigation.navigate('TakePhotos', { request, focusOnSnackbar: true })
+      showSnackBar(t('photoRemoved'), dispatch, undefined, true, false, false)
+      navigation.navigate('TakePhotos', { claimID: claim?.id || '', request, focusOnSnackbar: true })
     } else {
       setErrorMessage('')
       setImagesList(response)
@@ -235,7 +253,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         }
       })
       setTotalBytesUsed(bytesUsed)
-      showSnackBar(t('fileUpload.photoDeleted'), dispatch, undefined, true, false, false)
+      showSnackBar(t('photoRemoved'), dispatch, undefined, true, false, false)
     }
   }
 
@@ -245,6 +263,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       leftButtonText={t('cancel')}
       title={t('fileUpload.uploadPhotos')}
       onLeftButtonPress={() => {
+        logAnalyticsEvent(Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
         navigation.dispatch(StackActions.pop(2))
       }}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>

@@ -38,7 +38,7 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
   }, [navigation, headerStyle, tc])
 
   return (
-    <LargePanel title={tc('prescriptionsHelp')} rightButtonText={tc('close')}>
+    <LargePanel testID="PrescriptionsHelpTestID" title={tc('prescriptionsHelp')} rightButtonText={tc('close')}>
       <Box mx={gutter} mt={contentMarginTop} mb={contentMarginBottom}>
         <TextView variant="MobileBodyBold">{t('prescription.help.header')}</TextView>
         <TextView mt={condensedMarginBetween} variant="MobileBody" paragraphSpacing={true}>
