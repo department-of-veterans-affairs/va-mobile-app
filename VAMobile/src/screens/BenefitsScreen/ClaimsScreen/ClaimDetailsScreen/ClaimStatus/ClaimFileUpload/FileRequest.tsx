@@ -6,11 +6,14 @@ import React, { FC } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ButtonTypesConstants, ChildTemplate, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
+import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
@@ -29,13 +32,20 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
   const getRequests = (): Array<SimpleListItemObj> => {
     let requestNumber = 1
 
+    const onDetailsPress = (request: ClaimEventData) => {
+      logAnalyticsEvent(Events.vama_request_details(claimID, request.trackedItemId || null, request.type))
+      navigateTo('FileRequestDetails', { claimID, request })()
+    }
+
     return map(requests, (request) => {
       const { displayName } = request
       const hasUploaded = hasUploadedOrReceived(request)
       const item: SimpleListItemObj = {
         text: displayName || '',
         testId: displayName,
-        onPress: navigateTo('FileRequestDetails', { request }),
+        onPress: () => {
+          onDetailsPress(request)
+        },
         claimsRequestNumber: requestNumber,
         fileUploaded: hasUploaded,
         a11yHintText: t('fileRequest.buttonA11yHint'),
@@ -55,6 +65,13 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
         <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID} />
       </ChildTemplate>
     )
+  }
+
+  const viewEvaluationDetailsPress = () => {
+    if (claim) {
+      logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, numberOfRequests))
+    }
+    navigateTo('AskForClaimDecision', { claimID })()
   }
 
   return (
@@ -78,7 +95,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
               {t('fileRequest.askForYourClaimEvaluationBody')}
             </TextView>
             <VAButton
-              onPress={navigateTo('AskForClaimDecision', { claimID })}
+              onPress={viewEvaluationDetailsPress}
               label={t('fileRequest.viewEvaluationDetails')}
               testID={t('fileRequest.viewEvaluationDetails')}
               buttonType={ButtonTypesConstants.buttonPrimary}

@@ -5,9 +5,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { context, mockNavProps, render } from 'testUtils'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
-import { AccordionCollapsible} from 'components'
 import ViewMessageScreen from './ViewMessageScreen'
-import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 import { DateTime } from 'luxon'
 
 // Contains message Ids grouped together by thread
@@ -128,18 +126,16 @@ context('ViewMessageScreen', () => {
     })
 
     it('renders CollapsibleMessage card for the initialMessage', () => {
-      //ToDo with 6056
+      expect(screen.getByText('mock sender 3')).toBeTruthy()
     })
 
     it('renders correct amount of CollapsibleMessages', () => {
-      expect(screen.getAllByRole('tab').length).toBe(3)
+      expect(screen.getAllByRole('tab').length).toBe(2)
       expect(screen.getByText('mock sender 1')).toBeTruthy()
       expect(screen.getByText('mock sender 2')).toBeTruthy()
-      expect(screen.getByText('mock sender 3')).toBeTruthy()
       expect(screen.queryByText('mock sender 45')).toBeFalsy()
-
-      //ToDO with 6056 make it not render the initialMessage for collapsible messages
     })
+    
     it('should have the reply button since the latest message is within 45 days', () => {
       expect(screen.getByText('Reply')).toBeTruthy()
     })

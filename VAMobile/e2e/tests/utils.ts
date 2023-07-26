@@ -17,15 +17,19 @@ export const CommonE2eIdConstants = {
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
   PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
+  BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
+  LETTERS_ROW_TEXT: 'VA letters and documents',
   SETTINGS_ROW_TEXT: 'Settings',
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
   SIGN_OUT_BTN_ID: 'Sign out',
-  SIGN_OUT_CONFIRM_TEXT: 'Are you sure you want to sign out?',
+  SIGN_OUT_CONFIRM_TEXT: 'Sign out?',
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'You’re leaving the app',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
+  PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
+  VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
 }
 
 
@@ -64,7 +68,7 @@ export async function loginToDemoMode() {
  * @param timeOut - time to wait for the element
  * */
 
-const checkIfElementIsPresent = async (matchString: string, findbyText = false, waitForElement = false, timeOut = 2000) => {
+export async function checkIfElementIsPresent(matchString: string, findbyText = false, waitForElement = false, timeOut = 2000) {
   try {
     if (findbyText) {
       if (waitForElement) {
@@ -194,6 +198,21 @@ export async function openHealth() {
 
 export async function openPrescriptions() {
 	await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
+}
+
+export async function openPayments() {
+  await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
+}
+
+export async function openVAPaymentHistory() {
+  await element(by.text(CommonE2eIdConstants.VA_PAYMENT_HISTORY_BUTTON_TEXT)).tap()
+
+export async function openBenefits() {
+	await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap() 
+}
+
+export async function openLetters() {
+  await element(by.text(CommonE2eIdConstants.LETTERS_ROW_TEXT)).tap() 
 }
 
 /**

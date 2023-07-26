@@ -13,13 +13,14 @@ const { LINK_URL_DECISION_REVIEWS } = getEnv()
 
 type WhatDoIDoIfDisagreementProps = StackScreenProps<BenefitsStackParamList, 'WhatDoIDoIfDisagreement'>
 
-const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = () => {
+const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
+  const { claimID, claimType, claimStep } = route.params
 
   const onDecisionReview = async (): Promise<void> => {
-    launchExternalLink(LINK_URL_DECISION_REVIEWS)
+    launchExternalLink(LINK_URL_DECISION_REVIEWS, { claim_id: claimID, claim_type: claimType, claim_step: claimStep })
   }
 
   const text = t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview')

@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { Box, ClickToCallPhoneNumber, CollapsibleAlert, TextView, VABulletList, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
 const PrescriptionsDetailsBanner: FC = () => {
@@ -12,6 +14,10 @@ const PrescriptionsDetailsBanner: FC = () => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
   const { contentMarginTop, standardMarginBetween } = theme.dimensions
+
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_rx_refill_cerner())
+  }, [])
 
   const getContent = () => {
     const bullets = [
@@ -52,10 +58,21 @@ const PrescriptionsDetailsBanner: FC = () => {
       </>
     )
   }
+
+  const onExpand = () => {
+    logAnalyticsEvent(Events.vama_rx_cerner_exp())
+  }
+
   return (
     <VAScrollView>
       <Box mt={contentMarginTop}>
-        <CollapsibleAlert border="warning" headerText={t('prescription.details.banner.title')} body={getContent()} a11yLabel={t('prescription.details.banner.title')} />
+        <CollapsibleAlert
+          border="warning"
+          headerText={t('prescription.details.banner.title')}
+          body={getContent()}
+          a11yLabel={t('prescription.details.banner.title')}
+          onExpand={onExpand}
+        />
       </Box>
     </VAScrollView>
   )
