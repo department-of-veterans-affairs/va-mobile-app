@@ -207,6 +207,7 @@ export async function openPayments() {
 
 export async function openVAPaymentHistory() {
   await element(by.text(CommonE2eIdConstants.VA_PAYMENT_HISTORY_BUTTON_TEXT)).tap()
+}
 
 export async function openBenefits() {
 	await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap() 

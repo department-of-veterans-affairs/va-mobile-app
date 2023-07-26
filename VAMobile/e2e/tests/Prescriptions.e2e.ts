@@ -1,7 +1,5 @@
 import { expect, device, by, element, waitFor } from 'detox'
-import { isTypedArray } from 'util/types'
-import { loginToDemoMode, openDismissLeavingAppPopup, CommonE2eIdConstants, backButton, changeMockData, openHealth, openPrescriptions, checkImages } from './utils'
-import { log } from 'console'
+import { loginToDemoMode, changeMockData, openHealth, openPrescriptions, checkImages } from './utils'
 import { setTimeout } from "timers/promises"
 
 export const PrescriptionsE2eIdConstants = {
@@ -28,7 +26,7 @@ export const PrescriptionsE2eIdConstants = {
 	PRESCRIPTION_PENDING_DESCRIPTION_LABEL: 'This list shows refill requests that you have submitted. It also shows refills that the V-A pharmacy is processing.',
 	PRESCRIPTION_TRACKING_GET_TRACKING_TEXT: 'Get prescription tracking',
 	PRESCRIPTION_REFILL_NAME_TEXT: 'AMLODIPINE BESYLATE 10MG TAB',
-	PRESCRIPTION_REFILL_DIALOG_YES_TEXT: 'Request Refill',
+	PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request Refill ',
 	PRESCRIPTION_REFILL_REQUEST_SUMMARY_LABEL: 'We got your refill requests',
 	PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT: 'Refill request summary',
 	PRESCRIPTION_REFILL_REQUEST_SUMMARY_NAME_TEXT: 'AMLODIPINE BESYLATE 10MG TAB',
@@ -353,7 +351,7 @@ describe('Prescriptions Screen', () => {
 		await element(by.text('Request refill')).tap()
 		await expect(element(by.text('Request prescription refill?'))).toExist()
 		if (device.getPlatform() === 'android') {
-			await element(by.label('Cancel')).tap()
+			await element(by.text('Cancel ')).tap()
 		} else {
 			await element(by.label('Cancel')).atIndex(1).tap()
 		}	

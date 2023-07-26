@@ -1,5 +1,5 @@
-import { expect, device, by, element, waitFor } from 'detox'
-import { CommonE2eIdConstants, loginToDemoMode, openBenefits, openDisabilityRating } from './utils'
+import { expect, device, by, element} from 'detox'
+import {loginToDemoMode, openBenefits, openDisabilityRating } from './utils'
 import { setTimeout } from 'timers/promises'
 
 export const DisabilityRatingsIdConstants = {
