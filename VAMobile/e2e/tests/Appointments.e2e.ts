@@ -1,11 +1,7 @@
 import { expect, device, by, element, waitFor } from 'detox'
-import { isTypedArray } from 'util/types'
-import { loginToDemoMode, openHealth, CommonE2eIdConstants, backButton, openAppointments, changeMockData } from './utils'
-import { log } from 'console'
+import { loginToDemoMode, openHealth, CommonE2eIdConstants, openAppointments } from './utils'
 import { setTimeout } from "timers/promises"
 import { DateTime } from 'luxon'
-
-var monthsinYear = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
 export const Appointmentse2eConstants = {
 	APPOINTMENT_DESCRIPTION: 'Here are your appointments. This list includes appointments you\'ve requested but not yet confirmed.',
