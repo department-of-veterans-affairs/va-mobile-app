@@ -87,7 +87,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
+    <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')} testID="DirectDepositEditAccount">
       <Box mx={gutter} mt={contentMarginTop}>
         <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
           {t('directDeposit.viewAndEditText')}
