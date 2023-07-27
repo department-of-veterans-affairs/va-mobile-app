@@ -216,8 +216,7 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
       return updateAddress(store, params as unknown as AddressData)
     }
     case '/v0/payment-information/benefits': {
-      store['/v0/payment-information/benefits'].data.attributes.paymentAccount = params as unknown as PaymentAccountData
-      return directDepositTransform(params as unknown as PaymentAccountData)
+      return directDepositTransform(store, params as unknown as PaymentAccountData)
     }
     default: {
       return undefined
