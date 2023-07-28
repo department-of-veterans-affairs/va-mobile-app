@@ -16,6 +16,8 @@ export const CommonE2eIdConstants = {
   VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
+  PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
+  DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
   PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
   LETTERS_ROW_TEXT: 'VA letters and documents',
@@ -37,7 +39,9 @@ export const CommonE2eIdConstants = {
 /** Log the automation into demo mode
  * */
 export async function loginToDemoMode() {
-  await setTimeout(5000)
+  await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+    .toExist()
+    .withTimeout(10000)
   try {
 	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
 	await element(by.text('Dismiss')).tap()
@@ -195,6 +199,14 @@ export async function openMilitaryInformation() {
 
 export async function openHealth() {
 	await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap() 
+}
+
+export async function openPayments() {
+  await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
+}
+
+export async function openDirectDeposit() {
+  await element(by.text(CommonE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT)).tap()
 }
 
 export async function openPrescriptions() {
