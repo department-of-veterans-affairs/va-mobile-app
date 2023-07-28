@@ -95,28 +95,26 @@ export const DowntimeFeatureNameConstants = {
   [DowntimeFeatureTypeConstants.rx]: 'VA Prescriptions',
 }
 
-// which screen to show which downtime message on
+// map of downtime names to which screens are impacted by the downtime
 export const DowntimeFeatureToScreenID = {
-  // TODO: Find a proper page conversion for facility locator to display downtime
-  [DowntimeFeatureTypeConstants.claims]: ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.appointments]: ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.secureMessaging]: ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.letters]: ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.directDepositBenefits]: ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.disabilityRating]: ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.militaryServiceHistory]: ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
-  // it was determined that claims and appeals would be interconnected and downtime for either would block both
-  [DowntimeFeatureTypeConstants.appeals]: ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.userProfileUpdate]: ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.payments]: ScreenIDTypesConstants.PAYMENTS_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.rx]: ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID,
+  [DowntimeFeatureTypeConstants.claims]: [ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID, ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID],
+  [DowntimeFeatureTypeConstants.appointments]: [ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID],
+  [DowntimeFeatureTypeConstants.secureMessaging]: [ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID],
+  [DowntimeFeatureTypeConstants.letters]: [ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID],
+  [DowntimeFeatureTypeConstants.directDepositBenefits]: [ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID],
+  [DowntimeFeatureTypeConstants.disabilityRating]: [ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID],
+  [DowntimeFeatureTypeConstants.militaryServiceHistory]: [ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID],
+  [DowntimeFeatureTypeConstants.appeals]: [ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID],
+  [DowntimeFeatureTypeConstants.userProfileUpdate]: [ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID],
+  [DowntimeFeatureTypeConstants.payments]: [ScreenIDTypesConstants.PAYMENTS_SCREEN_ID],
+  [DowntimeFeatureTypeConstants.rx]: [ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID],
 }
 
-export const DowntimeScreenIDToFeature: DowntimeScreenIDToFeatureType = invert(DowntimeFeatureToScreenID)
+// export const DowntimeScreenIDToFeature: DowntimeScreenIDToFeatureType = invert(DowntimeFeatureToScreenID)
 
-export type DowntimeScreenIDToFeatureType = {
-  [key in ScreenIDTypes]: DowntimeFeatureType
-}
+// export type DowntimeScreenIDToFeatureType = {
+//   [key in ScreenIDTypes]: DowntimeFeatureType
+// }
 
 export type MaintenanceWindowsGetData = {
   data: MaintenanceWindowsEntry[]

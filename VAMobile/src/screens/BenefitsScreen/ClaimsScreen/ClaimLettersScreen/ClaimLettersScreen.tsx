@@ -47,7 +47,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     dispatch(getDecisionLetters(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID))
   }
 
-  if (useError(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID)) {
     return (
       <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} onTryAgain={fetchInfoAgain} />
