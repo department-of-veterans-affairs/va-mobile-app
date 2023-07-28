@@ -14,7 +14,7 @@ import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescri
 import { AppDispatch, RootState } from 'store'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { DowntimeFeatureType, DowntimeFeatureToScreenID, ScreenIDTypes } from 'store/api/types'
+import { DowntimeFeatureType, DowntimeFeatureTypes, DowntimeFeatureToScreenID, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
@@ -40,7 +40,7 @@ export const useError = (currentScreenID: ScreenIDTypes): boolean => {
   return useDowntime(downtimeServices) || !!errorsByScreenID[currentScreenID]
 }
 
-export const useDowntime = (feature: DowntimeFeatureType): boolean => {
+export const useDowntime = (features: DowntimeFeatureTypes): boolean => {
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const mw = downtimeWindowsByFeature[feature]
   if (!!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {

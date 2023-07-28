@@ -116,6 +116,10 @@ export const DowntimeFeatureToScreenID = {
 //   [key in ScreenIDTypes]: DowntimeFeatureType
 // }
 
+export const DowntimeFeatureTypes = {
+  Array<DowntimeFeatureType>
+}
+
 export type MaintenanceWindowsGetData = {
   data: MaintenanceWindowsEntry[]
 }
