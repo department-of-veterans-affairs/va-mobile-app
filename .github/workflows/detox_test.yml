@@ -1,4 +1,4 @@
-# Runs Detox tests
+# Runs e2e Detox tests
 
 name: 'Detox Tests'
 
