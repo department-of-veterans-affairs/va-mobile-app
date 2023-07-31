@@ -1,1 +1,11 @@
+# Runs Detox tests
 
+name: 'Detox Tests'
+
+on: workflow_dispatch
+
+jobs:
+  ios_build:
+    name: ios Build
+    uses: ./.github/workflows/build_ios.yml
+    secrets: inherit
