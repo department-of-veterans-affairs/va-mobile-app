@@ -40,12 +40,14 @@ export const useError = (currentScreenID: ScreenIDTypes): boolean => {
   return useDowntime(downtimeServices) || !!errorsByScreenID[currentScreenID]
 }
 
-export const useDowntime = (features: DowntimeFeatureTypes): boolean => {
+export const useDowntime = (features: Array<DowntimeFeatureType>): boolean => {
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const mw = downtimeWindowsByFeature[feature]
-  if (!!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
-    return true
-  }
+  features.forEach((feature) => {
+    const mw = downtimeWindowsByFeature[feature]
+    if (!!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
+      return true
+    }
+  })
   return false
 }
 

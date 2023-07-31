@@ -110,16 +110,6 @@ export const DowntimeFeatureToScreenID = {
   [DowntimeFeatureTypeConstants.rx]: [ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID],
 }
 
-// export const DowntimeScreenIDToFeature: DowntimeScreenIDToFeatureType = invert(DowntimeFeatureToScreenID)
-
-// export type DowntimeScreenIDToFeatureType = {
-//   [key in ScreenIDTypes]: DowntimeFeatureType
-// }
-
-export const DowntimeFeatureTypes = {
-  Array<DowntimeFeatureType>
-}
-
 export type MaintenanceWindowsGetData = {
   data: MaintenanceWindowsEntry[]
 }
