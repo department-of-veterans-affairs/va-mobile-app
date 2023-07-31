@@ -12,3 +12,16 @@ jobs:
     name: ios Build
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
+  detox_test:
+    runs-on: macos-latest-xl
+    steps:
+      - name: 'Install detox-cli'
+        run: yarn global add detox-cli
+      - name: 'Install applesimutils'
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
+      - name: 'Build detox'
+        run: yarn e2e:ios-build
+      - name: 'Run detox test'
+        run: yarn e2e:ios-test
