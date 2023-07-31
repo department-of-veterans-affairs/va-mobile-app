@@ -18,7 +18,7 @@ export const linking: LinkingOptions<any> = {
             initialRouteName: 'HealthTab',
             screens: {
               Appointments: 'appointments/:id',
-              SecureMessaging: 'secure-messages/:id',
+              SecureMessaging: 'messages/:id',
             },
           },
         },
