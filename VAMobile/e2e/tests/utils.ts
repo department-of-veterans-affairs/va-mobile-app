@@ -31,7 +31,6 @@ export const CommonE2eIdConstants = {
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
-  PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
   VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
 }
 
@@ -211,10 +210,6 @@ export async function openDirectDeposit() {
 
 export async function openPrescriptions() {
 	await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
-}
-
-export async function openPayments() {
-  await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
 }
 
 export async function openVAPaymentHistory() {
