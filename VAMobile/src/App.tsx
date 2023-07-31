@@ -22,7 +22,7 @@ import i18n from 'utils/i18n'
 import performance from '@react-native-firebase/perf'
 
 import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
-import { AnalyticsState, AuthState, dispatchSetInitialLink, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { BenefitsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getBenefitsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
@@ -214,17 +214,15 @@ export const AuthGuard: FC = () => {
     console.debug('AuthGuard: initializing')
     dispatch(initializeAuth())
 
-    Linking.getInitialURL().then((link) => {
-      if (link) {
-        dispatch(dispatchSetInitialLink(link))
-      }
-    })
+    // Linking.getInitialURL().then((link) => {
+    //   if (link) {
+    //     dispatch(dispatchSetInitialLink(link))
+    //   }
+    // })
 
     const listener = (event: { url: string }): void => {
       if (event.url?.startsWith('vamobile://login-success?')) {
         dispatch(handleTokenCallbackUrl(event.url))
-      } else {
-        dispatch(dispatchSetInitialLink(event.url))
       }
     }
     const sub = Linking.addEventListener('url', listener)
@@ -303,7 +301,7 @@ export const AuthedApp: FC = () => {
     if (initialLink) {
       Linking.openURL(initialLink)
     }
-  }, [])
+  }, [initialLink])
 
   return (
     <>

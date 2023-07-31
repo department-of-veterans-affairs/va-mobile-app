@@ -1,4 +1,4 @@
-import { AuthState, dispatchSetNotification } from 'store/slices'
+import { AuthState, dispatchSetInitialLink, dispatchSetNotification } from 'store/slices'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { RootState } from 'store'
 import { View } from 'react-native'
@@ -52,6 +52,9 @@ const NotificationManager: FC = ({ children }) => {
        */
       if (foregroundNotifications.includes(notification.identifier)) {
         dispatch(dispatchSetTappedForegroundNotification())
+      }
+      if (notification.payload.url) {
+        dispatch(dispatchSetInitialLink(notification.payload.url))
       }
       dispatch(dispatchSetNotification(notification))
       console.debug('Notification opened by device user', notification)
