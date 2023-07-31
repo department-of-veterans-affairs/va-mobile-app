@@ -2,7 +2,10 @@
 
 name: 'Detox Tests'
 
-on: workflow_dispatch
+on:
+  push:
+      branches:
+        - '5278-detox-automation'
 
 jobs:
   ios_build:
