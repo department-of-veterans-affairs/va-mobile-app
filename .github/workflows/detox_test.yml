@@ -14,6 +14,7 @@ jobs:
     secrets: inherit
   detox_test:
     runs-on: macos-latest-xl
+    working-directory: VAMobile
     needs: ios_build
     steps:
       - name: 'Install detox-cli'
