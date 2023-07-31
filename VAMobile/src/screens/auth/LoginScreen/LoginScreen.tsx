@@ -60,6 +60,7 @@ const LoginScreen: FC = () => {
     minHeight: theme.dimensions.touchableMinHeight,
     mt: theme.dimensions.standardMarginBetween,
     py: theme.dimensions.buttonPadding,
+    testID: 'findVALocationTestID',
   }
 
   const handleUpdateDemoMode = () => {
@@ -89,7 +90,7 @@ const LoginScreen: FC = () => {
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
       <Box flex={1}>
         <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween} testID="va-icon">
-          <VAIcon name={'Logo'} />
+          <VAIcon testID="VAIcon" name={'Logo'} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={80}>
           <VAButton onPress={onLoginInit} label={t('common:signin')} a11yHint={t('common:signin.a11yHint')} buttonType={ButtonTypesConstants.buttonWhite} hideBorder={true} />
