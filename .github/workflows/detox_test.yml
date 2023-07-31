@@ -14,6 +14,7 @@ jobs:
     secrets: inherit
   detox_test:
     runs-on: macos-latest-xl
+    needs: ios_build
     steps:
       - name: 'Install detox-cli'
         run: yarn global add detox-cli
