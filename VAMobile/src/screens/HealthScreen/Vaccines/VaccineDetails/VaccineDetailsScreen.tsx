@@ -80,19 +80,19 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
           <TextView variant="MobileBodyBold" selectable={true}>
             {t('vaccines.details.typeAndDosage')}
           </TextView>
-          <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
+          <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween} testID={'Type And Dosage ' + vaccine.attributes?.shortDescription || placeHolder}>
             {vaccine.attributes?.shortDescription || placeHolder}
           </TextView>
           {isCovidVaccine && (
             <>
               <TextView variant="MobileBodyBold">{t('vaccines.details.manufacturer')}</TextView>
-              <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
+              <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween} testID={'Manufacturer ' + vaccine.attributes?.manufacturer || placeHolder}>
                 {vaccine.attributes?.manufacturer || placeHolder}
               </TextView>
             </>
           )}
           <TextView variant="MobileBodyBold">{t('vaccines.details.series')}</TextView>
-          <TextView variant="MobileBody" selectable={true}>
+          <TextView variant="MobileBody" selectable={true} testID={'Series status' + displaySeries}>
             {displaySeries}
           </TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
@@ -128,7 +128,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
               </TextView>
             </Box>
             <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
-            <TextView variant="MobileBody" selectable={true}>
+            <TextView variant="MobileBody" selectable={true} testID={'Notes ' + vaccine.attributes?.note || 'None noted'}>
               {vaccine.attributes?.note || placeHolder}
             </TextView>
           </Box>
