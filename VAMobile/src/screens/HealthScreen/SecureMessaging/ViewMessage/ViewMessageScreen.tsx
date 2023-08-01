@@ -14,7 +14,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
+import { SecureMessagingState, getMessage, getThread, listFolders, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
 import { getfolderName } from 'utils/secureMessaging'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
@@ -36,7 +36,7 @@ export const renderMessages = (message: SecureMessagingMessageAttributes, messag
 
 const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) => {
   const messageID = Number(route.params.messageID)
-  const currentFolderIdParam = Number(route.params.folderID)
+  const currentFolderIdParam = Number(route.params.folderID) || SecureMessagingSystemFolderIdConstants.INBOX
   const currentPage = Number(route.params.currentPage)
   const messagesLeft = Number(route.params.messagesLeft)
   const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderIdParam.toString())
@@ -74,6 +74,12 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
     }
   }, [isUndo, currentFolderIdParam, moveMessageFailed])
+
+  useEffect(() => {
+    if (!folders.length) {
+      dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
+    }
+  }, [dispatch, folders])
 
   const getFolders = (): PickerItem[] => {
     let indexOfDeleted: number | undefined
