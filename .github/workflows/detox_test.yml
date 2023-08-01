@@ -8,7 +8,7 @@ on:
         - '5278-detox-automation'
 defaults:
   run:
-    working-directory: VAMobile
+    working-directory: ../VAMobile
 
 jobs:
   ios_build:
