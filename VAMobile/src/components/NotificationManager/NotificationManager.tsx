@@ -2,7 +2,7 @@ import { AuthState, dispatchSetNotification } from 'store/slices'
 import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { RootState } from 'store'
-import { dispatchSetTappedForegroundNotification, getInitialUrl, registerDevice } from 'store/slices/notificationSlice'
+import { dispatchSetInitialUrl, dispatchSetTappedForegroundNotification, registerDevice } from 'store/slices/notificationSlice'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
@@ -17,9 +17,6 @@ const NotificationManager: FC = ({ children }) => {
   const dispatch = useAppDispatch()
   const [eventsRegistered, setEventsRegistered] = useState(false)
 
-  useEffect(() => {
-    dispatch(getInitialUrl())
-  }, [dispatch])
 
   useEffect(() => {
     const register = () => {
@@ -59,7 +56,11 @@ const NotificationManager: FC = ({ children }) => {
         dispatch(dispatchSetTappedForegroundNotification())
       }
       if (notification.payload.url) {
-        Linking.openURL(notification.payload.url)
+        if(loggedIn) {
+          Linking.openURL(notification.payload.url)
+        } else {
+          dispatch(dispatchSetInitialUrl(notification.payload.url))
+        }
       }
       dispatch(dispatchSetNotification(notification))
       console.debug('Notification opened by device user', notification)
@@ -78,6 +79,9 @@ const NotificationManager: FC = ({ children }) => {
     Notifications.getInitialNotification()
       .then((notification) => {
         console.debug('Initial notification was:', notification || 'N/A')
+        if(notification) {
+          dispatch(dispatchSetInitialUrl(notification.payload.url))
+        }
       })
       .catch((err) => console.error('getInitialNotification() failed', err))
   }
