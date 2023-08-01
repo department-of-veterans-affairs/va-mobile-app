@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { AppThunk } from 'store'
 import { GetPushPrefsResponse, PUSH_APP_NAME, PushOsName, PushPreference, ScreenIDTypes, ScreenIDTypesConstants } from '../api'
-import { Notifications } from 'react-native-notifications'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getDeviceName } from 'utils/deviceData'
@@ -138,16 +137,6 @@ export const loadPushPreferences =
       }
     }
   }
-
-/**
- * Set the initial URL if the app was launched by a notification
- */
-export const getInitialUrl = (): AppThunk => async (dispatch) => {
-  const notification = await Notifications.getInitialNotification()
-  if (notification) {
-    dispatch(dispatchSetInitialUrl(notification.payload.url))
-  }
-}
 
 /**
  * Redux slice that will create the actions and reducers
