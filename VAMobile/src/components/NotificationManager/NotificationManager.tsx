@@ -19,7 +19,7 @@ const NotificationManager: FC = ({ children }) => {
 
   useEffect(() => {
     dispatch(getInitialUrl())
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     const register = () => {
