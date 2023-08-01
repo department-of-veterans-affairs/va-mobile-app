@@ -1,8 +1,8 @@
-import { AuthState, dispatchSetInitialLink, dispatchSetNotification } from 'store/slices'
+import { AuthState, dispatchSetNotification } from 'store/slices'
+import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { RootState } from 'store'
-import { View } from 'react-native'
-import { dispatchSetTappedForegroundNotification, registerDevice } from 'store/slices/notificationSlice'
+import { dispatchSetTappedForegroundNotification, getInitialUrl, registerDevice } from 'store/slices/notificationSlice'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
@@ -16,6 +16,11 @@ const NotificationManager: FC = ({ children }) => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
   const dispatch = useAppDispatch()
   const [eventsRegistered, setEventsRegistered] = useState(false)
+
+  useEffect(() => {
+    getInitialUrl()
+  }, [])
+
   useEffect(() => {
     const register = () => {
       Notifications.events().registerRemoteNotificationsRegistered((event) => {
@@ -54,7 +59,7 @@ const NotificationManager: FC = ({ children }) => {
         dispatch(dispatchSetTappedForegroundNotification())
       }
       if (notification.payload.url) {
-        dispatch(dispatchSetInitialLink(notification.payload.url))
+        Linking.openURL(notification.payload.url)
       }
       dispatch(dispatchSetNotification(notification))
       console.debug('Notification opened by device user', notification)
