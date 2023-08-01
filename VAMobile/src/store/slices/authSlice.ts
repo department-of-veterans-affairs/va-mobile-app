@@ -92,7 +92,6 @@ export type AuthState = {
   authorizeStateParam?: string
   authParamsLoadingState: AuthParamsLoadingStateTypes
   successfulLogin?: boolean
-  initialLink?: string
   initialNotification?: object
 }
 
@@ -776,7 +775,6 @@ const authSlice = createSlice({
         firstTimeLogin: state.firstTimeLogin,
         loggedIn: loggedIn,
         displayBiometricsPreferenceScreen: true,
-        initialLink: state.initialLink,
         initialNotification: state.initialNotification,
       }
     },
@@ -807,7 +805,6 @@ const authSlice = createSlice({
         codeChallenge: state.codeChallenge,
         authorizeStateParam: state.authorizeStateParam,
         authParamsLoadingState: state.authParamsLoadingState,
-        initialLink: state.initialLink,
         initialNotification: state.initialNotification,
       }
     },
@@ -856,9 +853,6 @@ const authSlice = createSlice({
     dispatchFinishSetBiometricPreference: (state) => {
       state.settingBiometricPreference = false
     },
-    dispatchSetInitialLink: (state, action) => {
-      state.initialLink = action.payload
-    },
     dispatchSetNotification: (state, action) => {
       state.initialNotification = action.payload
     },
@@ -881,7 +875,6 @@ export const {
   dispatchStartLogout,
   dispatchStartSetBiometricPreference,
   dispatchFinishSetBiometricPreference,
-  dispatchSetInitialLink,
   dispatchSetNotification,
 } = authSlice.actions
 
