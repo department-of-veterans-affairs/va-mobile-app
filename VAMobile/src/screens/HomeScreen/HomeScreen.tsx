@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { AuthState } from 'store/slices'
+import { AuthState, NotificationsState } from 'store/slices'
 import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DateTime } from 'luxon'
@@ -45,7 +45,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const { initialLink, initialNotification } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { initialNotification } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { initialUrl } = useSelector<RootState, NotificationsState>((state) => state.notifications)
   const name = profile?.preferredName ? profile.preferredName : profile?.firstName || ''
 
   useEffect(() => {
@@ -111,7 +112,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           <TextView variant={'MobileBodyBold'} accessibilityRole={'header'}>
             {heading}
           </TextView>
-          <TextView>{`Link: ${initialLink}`}</TextView>
+          <TextView>{`Link: ${initialUrl}`}</TextView>
           <TextView>{`Notification: ${JSON.stringify(initialNotification)}`}</TextView>
         </Box>
         <EncourageUpdateAlert />

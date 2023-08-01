@@ -22,7 +22,7 @@ import i18n from 'utils/i18n'
 import performance from '@react-native-firebase/perf'
 
 import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
-import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import { AnalyticsState, AuthState, NotificationsState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { BenefitsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getBenefitsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
@@ -290,7 +290,7 @@ export const AppTabs: FC = () => {
 
 export const AuthedApp: FC = () => {
   const headerStyles = useHeaderStyles()
-  const { initialLink } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { initialUrl } = useSelector<RootState, NotificationsState>((state) => state.notifications)
 
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
@@ -298,10 +298,10 @@ export const AuthedApp: FC = () => {
   const paymentsScreens = getPaymentsScreens()
 
   useEffect(() => {
-    if (initialLink) {
-      Linking.openURL(initialLink)
+    if (initialUrl) {
+      Linking.openURL(initialUrl)
     }
-  }, [initialLink])
+  }, [initialUrl])
 
   return (
     <>
