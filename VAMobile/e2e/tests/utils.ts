@@ -16,25 +16,31 @@ export const CommonE2eIdConstants = {
   VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
+  PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
+  DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
   LETTERS_ROW_TEXT: 'VA letters and documents',
   SETTINGS_ROW_TEXT: 'Settings',
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
   SIGN_OUT_BTN_ID: 'Sign out',
-  SIGN_OUT_CONFIRM_TEXT: 'Are you sure you want to sign out?',
+  SIGN_OUT_CONFIRM_TEXT: 'Sign out?',
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'You’re leaving the app',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
+  PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
+  VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
 }
 
 
 /** Log the automation into demo mode
  * */
 export async function loginToDemoMode() {
-  await setTimeout(5000)
+  await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+    .toExist()
+    .withTimeout(10000)
   try {
 	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
 	await element(by.text('Dismiss')).tap()
@@ -194,9 +200,24 @@ export async function openHealth() {
 	await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap() 
 }
 
+export async function openPayments() {
+  await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
+}
+
+export async function openDirectDeposit() {
+  await element(by.text(CommonE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT)).tap()
+}
+
 export async function openPrescriptions() {
 	await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
 }
+
+export async function openPayments() {
+  await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
+}
+
+export async function openVAPaymentHistory() {
+  await element(by.text(CommonE2eIdConstants.VA_PAYMENT_HISTORY_BUTTON_TEXT)).tap()
 
 export async function openBenefits() {
 	await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap() 
