@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, VAScrollView } from 'components'
-import { DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
+import { DowntimeScreenIDToFeature, useTheme } from 'utils/hooks'
 import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { ScreenIDTypes } from 'store/api/types'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
   /**The screen id for the screen that has the errors*/
@@ -31,9 +31,13 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID, overrideFeatureName }
     mb: theme.dimensions.contentMarginBottom,
   }
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const feature = DowntimeScreenIDToFeature[screenID]
-  const featureName = overrideFeatureName ? overrideFeatureName : downtimeWindowsByFeature[feature]?.featureName
-  const endTime = downtimeWindowsByFeature[feature]?.endTime.toFormat('fff')
+  const feature = DowntimeScreenIDToFeature(screenID)
+  const downtimeWindow = feature ? downtimeWindowsByFeature[feature] : null
+  let featureName = overrideFeatureName
+  if (!featureName) {
+    featureName = downtimeWindow?.featureName
+  }
+  const endTime = downtimeWindow?.endTime.toFormat('fff')
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>

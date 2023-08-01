@@ -14,7 +14,7 @@ import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescri
 import { AppDispatch, RootState } from 'store'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { DowntimeFeatureType, DowntimeFeatureTypes, DowntimeFeatureToScreenID, ScreenIDTypes } from 'store/api/types'
+import { DowntimeFeatureToScreenID, DowntimeFeatureType, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
@@ -33,22 +33,35 @@ import { useTheme as styledComponentsUseTheme } from 'styled-components'
  */
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
   const { errorsByScreenID } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const matches = Object.entries(DowntimeFeatureToScreenID).filter(
-    ([_, value]) => value.includes(currentScreenID)
-  )
-  const downtimeServices = Object.keys(matches)
-  return useDowntime(downtimeServices) || !!errorsByScreenID[currentScreenID]
+  const downtime = useDowntime(currentScreenID)
+  if (downtime) {
+    return true
+  }
+
+  return !!errorsByScreenID[currentScreenID]
 }
 
-export const useDowntime = (features: Array<DowntimeFeatureType>): boolean => {
+// this is not the right place for this but neither is types. where should it go?
+export const DowntimeScreenIDToFeature = (currentScreenID: ScreenIDTypes): DowntimeFeatureType | undefined => {
+  const match = Object.entries(DowntimeFeatureToScreenID).find(([_, value]) => value.includes(currentScreenID))
+  return match ? (match[0] as DowntimeFeatureType) : undefined
+  // return matches.reduce((services: Array<DowntimeFeatureType>, match) => {
+  //   services.push(match[0] as DowntimeFeatureType)
+  //   return services
+  // }, [])
+}
+
+export const useDowntime = (currentScreenID: ScreenIDTypes): boolean => {
+  const matches = Object.entries(DowntimeFeatureToScreenID).filter(([_, value]) => value.includes(currentScreenID))
+  const downtimeServices = matches.reduce((services: Array<DowntimeFeatureType>, match) => {
+    services.push(match[0] as DowntimeFeatureType)
+    return services
+  }, [])
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  features.forEach((feature) => {
+  return downtimeServices.some((feature) => {
     const mw = downtimeWindowsByFeature[feature]
-    if (!!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
-      return true
-    }
+    return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime
   })
-  return false
 }
 
 /**

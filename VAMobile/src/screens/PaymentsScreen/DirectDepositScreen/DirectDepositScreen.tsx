@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView } from 'components'
 import { DirectDepositState, getBankData } from 'store/slices/directDepositSlice'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, ScreenIDTypes } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from '../PaymentsStackScreens'
 import { RootState } from 'store'
@@ -26,7 +26,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
+  const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits as ScreenIDTypes)
 
   const { gutter, contentMarginTop, contentMarginBottom } = theme.dimensions
 
