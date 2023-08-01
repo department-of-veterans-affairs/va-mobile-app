@@ -17,7 +17,6 @@ const NotificationManager: FC = ({ children }) => {
   const dispatch = useAppDispatch()
   const [eventsRegistered, setEventsRegistered] = useState(false)
 
-
   useEffect(() => {
     const register = () => {
       Notifications.events().registerRemoteNotificationsRegistered((event) => {
@@ -56,7 +55,7 @@ const NotificationManager: FC = ({ children }) => {
         dispatch(dispatchSetTappedForegroundNotification())
       }
       if (notification.payload.url) {
-        if(loggedIn) {
+        if (loggedIn) {
           Linking.openURL(notification.payload.url)
         } else {
           dispatch(dispatchSetInitialUrl(notification.payload.url))
@@ -79,7 +78,7 @@ const NotificationManager: FC = ({ children }) => {
     Notifications.getInitialNotification()
       .then((notification) => {
         console.debug('Initial notification was:', notification || 'N/A')
-        if(notification) {
+        if (notification) {
           dispatch(dispatchSetInitialUrl(notification.payload.url))
         }
       })
