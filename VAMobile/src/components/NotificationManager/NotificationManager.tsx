@@ -18,7 +18,7 @@ const NotificationManager: FC = ({ children }) => {
   const [eventsRegistered, setEventsRegistered] = useState(false)
 
   useEffect(() => {
-    getInitialUrl()
+    dispatch(getInitialUrl())
   }, [])
 
   useEffect(() => {
