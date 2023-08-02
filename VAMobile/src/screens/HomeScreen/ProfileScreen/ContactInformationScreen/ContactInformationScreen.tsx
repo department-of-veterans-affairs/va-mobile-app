@@ -89,7 +89,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   useFocusEffect(
     React.useCallback(() => {
       if (needsDataLoad && profileNotInDowntime) {
-        dispatch(getProfileInfo(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
+        dispatch(getProfileInfo(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID))
       }
     }, [dispatch, needsDataLoad, profileNotInDowntime]),
   )
@@ -142,10 +142,10 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
   ]
 
-  if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)) {
     return (
       <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} overrideFeatureName={stringToTitleCase(t('contactInformation.title'))} />
+        <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} overrideFeatureName={stringToTitleCase(t('contactInformation.title'))} />
       </FeatureLandingTemplate>
     )
   }
