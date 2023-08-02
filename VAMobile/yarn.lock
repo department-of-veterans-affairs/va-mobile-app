@@ -12826,10 +12826,10 @@ react-native-localize@^2.0.2:
   resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-2.1.7.tgz#f1dda0c6fd58ab06b5b119cb4a507ab8800b9823"
   integrity sha512-phimOUtDLiqY2ba7Rjk9KpuaVSo7iGMNnwr7rjBVqlhmtTF3ShQ1FPFPxOyUrzDU9jLtj1xMi7MXWYuiVg660Q==
 
-react-native-notifications@^4.2.4:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/react-native-notifications/-/react-native-notifications-4.3.1.tgz#ad9a8e6881bc17cf03ef16d4dfdaee9ec8bb721d"
-  integrity sha512-A668d+Q0/VQRjmrh+LvDpc/REA8GXgwCijXDCIlDHGMK8enmrtdxY5OANQf1VM3hecf+fD0wYFw2uqL/ZR8jgg==
+react-native-notifications@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-notifications/-/react-native-notifications-5.0.0.tgz#a6f8cead3372aa81aead50e9fc8bfac77d5b786d"
+  integrity sha512-QXtBBmbDtwq9X8WAPLn+OctIeEtnJOQ+RCT6iweaypvFTydt2baLPtawTAbCSXKuWpVDqDAdmZnlQjCcavNzoA==
 
 react-native-responsive-screen@^1.4.2:
   version "1.4.2"
