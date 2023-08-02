@@ -50,16 +50,16 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { profile, loading, loadingGenderIdentityOptions, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, loading, error, loadingGenderIdentityOptions, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const navigateTo = useRouteNavigation()
 
   useFocusEffect(
     React.useCallback(() => {
-      if (profile?.genderIdentity && !Object.keys(genderIdentityOptions).length) {
+      if (profile?.genderIdentity && !Object.keys(genderIdentityOptions).length && !error) {
         dispatch(getGenderIdentityOptions(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
       }
-    }, [dispatch, genderIdentityOptions, profile?.genderIdentity]),
+    }, [dispatch, error, genderIdentityOptions, profile?.genderIdentity]),
   )
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
@@ -112,7 +112,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   //ToDo add feature flag display logic for preferredName and genderIdentity cards once it is merged into the nav update
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')} testID="PersonalInformationTestID">
       <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter}>
         {t('contactInformation.editNote')}
       </TextView>

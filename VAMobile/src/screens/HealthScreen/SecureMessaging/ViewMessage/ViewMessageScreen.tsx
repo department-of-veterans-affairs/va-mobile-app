@@ -16,12 +16,11 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
-import { formatSubject, getfolderName } from 'utils/secureMessaging'
+import { getfolderName } from 'utils/secureMessaging'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
-import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
-import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
+import MessageCard from './MessageCard'
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
 
@@ -29,10 +28,10 @@ type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessag
  * Accepts a message, map of all messages, and array of messageIds in the current thread.  Gets each messageId from the message map, sorts by
  * sentDate ascending, and returns an array of <CollapsibleMessages/>
  */
-export const renderMessages = (message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>): ReactNode => {
+export const renderMessages = (message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>, hideMessage = false): ReactNode => {
   const threadMessages = thread.map((messageID) => messagesById[messageID]).sort((message1, message2) => (message1.sentDate > message2.sentDate ? -1 : 1))
 
-  return threadMessages.map((m) => m && m.messageId && <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={m.messageId === message.messageId} />)
+  return threadMessages.map((m) => m && m.messageId && <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={hideMessage && m.messageId === message.messageId} />)
 }
 
 const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) => {
@@ -60,8 +59,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
-  const subject = message ? message.subject : ''
-  const category = message ? message.category : 'OTHER'
+
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   // have to use uselayout due to the screen showing in white or showing the previouse data
@@ -89,19 +87,19 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         fill: 'defaultMenuItem',
         height: theme.fontSizes.MobileBody.fontSize,
         width: theme.fontSizes.MobileBody.fontSize,
-        name: 'FolderSolid',
+        name: 'Folder',
       } as VAIconProps
 
       if (label === FolderNameTypeConstants.deleted) {
         label = TRASH_FOLDER_NAME
         icon.fill = 'error'
-        icon.name = 'TrashSolid'
+        icon.name = 'Trash'
         indexOfDeleted = index
       }
 
       if (label === FolderNameTypeConstants.inbox) {
         icon.fill = 'defaultMenuItem'
-        icon.name = 'InboxSolid'
+        icon.name = 'Inbox'
       }
 
       return {
@@ -202,7 +200,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   }
 
   const moveIconProps: VAIconProps = {
-    name: 'FolderSolid',
+    name: 'Folder',
   }
 
   const headerButton =
@@ -229,24 +227,26 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
           showModalByDefault={true}
         />
       )}
-      {!replyExpired ? (
-        <ReplyMessageButton messageID={messageID} />
-      ) : (
-        <Box>
-          <StartNewMessageButton />
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')} />
-          </Box>
+      {replyExpired && (
+        <Box my={theme.dimensions.standardMarginBetween}>
+          <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')}>
+            <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
+              {t('secureMessaging.reply.olderThan45Days')}
+            </TextView>
+          </AlertBox>
         </Box>
       )}
-      <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-        <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-          <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
-            {formatSubject(category, subject, t)}
-          </TextView>
+      <MessageCard message={message} />
+      {thread.length > 1 && (
+        <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+          <Box accessible={true} accessibilityRole={'header'}>
+            <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+              {t('secureMessaging.reply.messageConversation')}
+            </TextView>
+          </Box>
+          {renderMessages(message, messagesById, thread, true)}
         </Box>
-        {renderMessages(message, messagesById, thread)}
-      </Box>
+      )}
     </ChildTemplate>
   )
 }

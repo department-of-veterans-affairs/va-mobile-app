@@ -6,7 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { SnackbarMessages } from 'components/SnackBar'
 import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
-import { useDestructiveAlert, useRouteNavigation } from 'utils/hooks'
+import { useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
 import { useState } from 'react'
 
 type ComposeCancelConfirmationProps = {
@@ -27,7 +27,7 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const confirmationAlert = useDestructiveAlert()
+  const confirmationAlert = useDestructiveActionSheet()
   const goToDrafts = useGoToDrafts()
   const [isDiscarded, setIsDiscarded] = useState(false)
 
@@ -72,20 +72,25 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
       }
 
       confirmationAlert({
-        title: t('secureMessaging.startNewMessage.cancel.saveDraftQuestion'),
-        message: t('secureMessaging.startNewMessage.cancel.saveDraftDescription'),
+        title:
+          origin === 'Compose'
+            ? tc('composeCancelConfirmation.compose.title')
+            : origin === 'Draft'
+            ? tc('composeCancelConfirmation.draft.title')
+            : tc('composeCancelConfirmation.reply.title'),
+        message: origin === 'Draft' ? tc('composeCancelConfirmation.draft.body') : tc('composeCancelConfirmation.body'),
         cancelButtonIndex: 0,
         destructiveButtonIndex: 1,
         buttons: [
           {
-            text: tc('cancel'),
+            text: tc('keepEditing'),
           },
           {
-            text: t('secureMessaging.startNewMessage.cancel.discard'),
+            text: origin === 'Draft' ? tc('deleteChanges') : tc('delete'),
             onPress: onDiscard,
           },
           {
-            text: t('secureMessaging.startNewMessage.cancel.saveDraft'),
+            text: origin === 'Draft' ? tc('saveChanges') : tc('save'),
             onPress: onSaveDraft,
           },
         ],

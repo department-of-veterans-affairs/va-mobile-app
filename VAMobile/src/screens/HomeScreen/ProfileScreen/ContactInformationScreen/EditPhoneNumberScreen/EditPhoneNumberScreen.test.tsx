@@ -13,17 +13,6 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { AlertBox, ErrorComponent, TextView, VAButton } from 'components'
 
-jest.mock('../../../../../utils/hooks', () => {
-  let original = jest.requireActual('../../../../../utils/hooks')
-  let theme = jest.requireActual('../../../../../styles/themes/standardTheme').default
-  return {
-    ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-  }
-})
-
 context('EditPhoneNumberScreen', () => {
   let store: any
   let component: RenderAPI
@@ -37,6 +26,7 @@ context('EditPhoneNumberScreen', () => {
       {
         navigate: jest.fn(),
         goBack: jest.fn(),
+        addListener: jest.fn(),
       },
       {
         params: {
@@ -54,7 +44,7 @@ context('EditPhoneNumberScreen', () => {
 
     component = render(<EditPhoneNumberScreen {...props} />, { preloadedState: store })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -137,7 +127,7 @@ context('EditPhoneNumberScreen', () => {
         component = render(<EditPhoneNumberScreen {...props} />, { preloadedState: store })
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
 
       expect(props.navigation.goBack).toBeCalled()
     })

@@ -6,14 +6,28 @@ on:
     # 06:00 UTC, 2:00AM ET, 11:00PM (Tues) PT every Wednesday
     - cron: '00 6 * * 3'
 
-defaults:
-  run:
-    working-directory: VAMobile
-
 jobs:
+  get-workflow-environment:
+    runs-on: ubuntu-latest
+    outputs:
+      environment_name: ${{ steps.check-environment.outputs.env_name }}
+    steps:
+      - name: Check environment
+        id: check-environment
+        run: |
+          if [[ ${{ github.event_name }} == 'workflow_dispatch' ]]; then
+            echo ::set-output name=env_name::'manual-release'
+          else
+            echo ::set-output name=env_name::''
+          fi
   cut_release_branch:
     name: Cut Release Branch
+    needs: [get-workflow-environment]
+    environment: ${{ needs.get-workflow-environment.outputs.environment_name }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: VAMobile
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,6 +38,7 @@ jobs:
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-
       - name: Cut release branch
+        env:
+          GITHUB_TOKEN:  ${{ secrets.GH_ACTIONS_PAT }}
         run: ./release_branch.sh

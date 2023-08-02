@@ -28,7 +28,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
 
-  const { gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
+  const { gutter, contentMarginTop, contentMarginBottom } = theme.dimensions
 
   useFocusEffect(
     useCallback(() => {
@@ -87,22 +87,18 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
-      <Box>
-        <Box mx={gutter} mt={contentMarginTop}>
-          <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
-            {t('directDeposit.viewAndEditText')}
-          </TextView>
-        </Box>
+    <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')} testID="DirectDepositEditAccount">
+      <Box mx={gutter} mt={contentMarginTop}>
+        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
+          {t('directDeposit.viewAndEditText')}
+        </TextView>
       </Box>
       <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />
-      <Box>
-        <Box mx={gutter} mt={condensedMarginBetween}>
-          <TextView>
-            <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
-            <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
-          </TextView>
-        </Box>
+      <Box mx={gutter} my={theme.paragraphSpacing.spacing20FontSize}>
+        <TextView>
+          <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
+          <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
+        </TextView>
       </Box>
       <Box mx={gutter} mb={contentMarginBottom}>
         <ClickToCallPhoneNumber phone={t('8008271000.displayText')} />

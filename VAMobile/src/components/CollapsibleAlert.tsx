@@ -51,7 +51,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
     accessibilityRole: 'tab',
   }
 
-  const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ArrowUp' : 'ArrowDown'
+  const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ChevronUp' : 'ChevronDown'
 
   const accordionHeader = () => {
     const data = (
@@ -59,7 +59,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
         <Box flex={1}>
           <TextView variant="MobileBodyBold">{headerText}</TextView>
         </Box>
-        <Box mt={theme.dimensions.condensedMarginBetween} ml={10}>
+        <Box justifyContent={'center'} ml={10}>
           <VAIcon name={iconName} fill={theme.colors.icon.chevronCollapsible} width={16} height={10} />
         </Box>
       </Box>

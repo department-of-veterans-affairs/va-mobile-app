@@ -262,7 +262,8 @@ export const getThread =
     dispatch(dispatchStartGetThread())
 
     try {
-      const response = await api.get<SecureMessagingThreadGetData>(`/v0/messaging/health/messages/${messageID}/thread`)
+      const excludeProvidedMessage = true
+      const response = await api.get<SecureMessagingThreadGetData>(`/v1/messaging/health/messages/${messageID}/thread?excludeProvidedMessage=${excludeProvidedMessage}`)
       dispatch(dispatchFinishGetThread({ threadData: response, messageID }))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
     } catch (error) {
@@ -427,7 +428,7 @@ export const saveDraft =
         response = await api.post<SecureMessagingSaveDraftData>(url, messageData as unknown as api.Params)
       }
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_sm_save_draft(totalTime, actionTime))
+      await logAnalyticsEvent(Events.vama_sm_save_draft(totalTime, actionTime, messageData.category))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
@@ -505,7 +506,7 @@ export const sendMessage =
       )
 
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_sm_send_message(totalTime, actionTime))
+      await logAnalyticsEvent(Events.vama_sm_send_message(totalTime, actionTime, messageData.category))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())

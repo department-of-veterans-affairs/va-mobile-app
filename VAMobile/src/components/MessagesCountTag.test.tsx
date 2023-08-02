@@ -15,7 +15,7 @@ context('MessagesCountTag', () => {
   beforeEach(() => {
     component = render(<MessagesCountTag unread={2} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   })
 
   it('initializes correctly', async () => {

@@ -54,10 +54,12 @@ const CernerAlert: FC = () => {
     }
 
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBody">{t('cernerAlert.ourRecordsShow')}</TextView>
+      <Box mt={theme.paragraphSpacing.spacing20FontSize}>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {t('cernerAlert.ourRecordsShow')}
+        </TextView>
         {body}
-        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween} accessibilityLabel={t('cernerAlert.footer.a11yLabel')}>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('cernerAlert.footer.a11yLabel')}>
           {t('cernerAlert.footer')}
         </TextView>
         <ClickForActionLink {...linkToCallProps} />

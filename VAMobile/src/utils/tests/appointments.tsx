@@ -47,6 +47,7 @@ export const defaultAppointmentAttributes: AppointmentAttributes = {
   comment: 'Please arrive 20 minutes before the start of your appointment',
   timeZone: 'America/Los_Angeles',
   healthcareService: 'Blind Rehabilitation Center',
+  serviceCategoryName: null,
   healthcareProvider: null,
   location: defaultAppointmentLocation,
   practitioner: defaultAppointmentPractitioner,
@@ -54,6 +55,7 @@ export const defaultAppointmentAttributes: AppointmentAttributes = {
   reason: null,
   isCovidVaccine: false,
   isPending: false,
+  cancelId: '12',
 }
 
 export const defaultAppoinment: AppointmentData = {

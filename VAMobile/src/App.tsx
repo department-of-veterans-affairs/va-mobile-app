@@ -38,8 +38,9 @@ import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
-import { useAppDispatch, useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks'
+import { useAppDispatch } from 'utils/hooks'
 import { useColorScheme } from 'styles/themes/colorScheme'
+import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -49,7 +50,6 @@ import OnboardingCarousel from './screens/OnboardingCarousel'
 import SnackBar from 'components/SnackBar'
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
-import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
 import getEnv from 'utils/env'
 import store, { RootState } from 'store'
@@ -70,13 +70,6 @@ if (isIOS()) {
   KeyboardManager.setKeyboardDistanceFromTextField(45)
   KeyboardManager.setEnableAutoToolbar(false)
 }
-
-/**
- * (https://github.com/react-native-webview/react-native-webview/issues/575)
- * Potential fix for an Android specific crash issue related to react-navigation animations when
- * transitioning to a webview
- */
-const SHOW_LOGIN_VIEW_ANIMATION = isIOS()
 
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
@@ -178,7 +171,7 @@ export const AuthGuard: FC = () => {
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
-    return (): void => sub.remove()
+    return (): void => sub?.remove()
   }, [dispatch, fontScale])
 
   useEffect(() => {
@@ -199,7 +192,7 @@ export const AuthGuard: FC = () => {
     // Listener for the current app state, updates isVoiceOverTalkBackRunning when app state is active and voice over/talk back
     // was turned on or off
     const sub = AppState.addEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
-    return (): void => sub.remove()
+    return (): void => sub?.remove()
   }, [dispatch, isVoiceOverTalkBackRunning])
 
   useEffect(() => {
@@ -227,7 +220,7 @@ export const AuthGuard: FC = () => {
     }
     const sub = Linking.addEventListener('url', listener)
     return (): void => {
-      sub.remove()
+      sub?.remove()
     }
   }, [dispatch])
 
@@ -265,7 +258,6 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="Login" component={LoginScreen} options={{ ...topPaddingAsHeaderStyles, title: t('login') }} />
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
-        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ headerShown: false, animationEnabled: SHOW_LOGIN_VIEW_ANIMATION }} />
         <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
       </Stack.Navigator>
     )

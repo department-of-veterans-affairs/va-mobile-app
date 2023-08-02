@@ -4,13 +4,7 @@ import React from 'react'
 import { context, findByTestID, render, RenderAPI } from 'testUtils'
 import { ReactTestInstance } from 'react-test-renderer'
 
-import {
-  ErrorsState,
-  initialAuthorizedServicesState,
-  initialAuthState,
-  initialErrorsState,
-
-} from 'store/slices'
+import { ErrorsState, initialAuthorizedServicesState, initialAuthState, initialErrorsState } from 'store/slices'
 import { LargeNavButton } from 'components'
 import { SigninServiceTypes, SigninServiceTypesConstants } from 'store/api/types'
 import { waitFor } from '@testing-library/react-native'
@@ -23,9 +17,6 @@ jest.mock('utils/hooks', () => {
   const theme = jest.requireActual('../../styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -33,42 +24,41 @@ jest.mock('utils/hooks', () => {
 })
 
 context('PaymentsScreen', () => {
-    let component: RenderAPI
-    let testInstance: ReactTestInstance
-    let navigateToDirectDepositSpy: jest.Mock
-    let navigateToHowToUpdateDirectDepositSpy: jest.Mock
-  
-    const initializeTestInstance = (
-      directDepositBenefits: boolean = false,
-      directDepositBenefitsUpdate: boolean = false,
-      errorState: ErrorsState = initialErrorsState,
-      signinService: SigninServiceTypes = SigninServiceTypesConstants.IDME,
-    ): void => {
-      navigateToDirectDepositSpy = jest.fn()
-      navigateToHowToUpdateDirectDepositSpy = jest.fn()
-  
-      when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('DirectDeposit')
-        .mockReturnValue(navigateToDirectDepositSpy)
-        .calledWith('HowToUpdateDirectDeposit')
-        .mockReturnValue(navigateToHowToUpdateDirectDepositSpy)
-  
-      component = render(<PaymentsScreen />, {
-        preloadedState: {
-          auth: { ...initialAuthState },
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            directDepositBenefits,
-            directDepositBenefitsUpdate,
-          },
-          errors: errorState,
+  let component: RenderAPI
+  let testInstance: ReactTestInstance
+  let navigateToDirectDepositSpy: jest.Mock
+  let navigateToHowToUpdateDirectDepositSpy: jest.Mock
+
+  const initializeTestInstance = (
+    directDepositBenefits: boolean = false,
+    directDepositBenefitsUpdate: boolean = false,
+    errorState: ErrorsState = initialErrorsState,
+    signinService: SigninServiceTypes = SigninServiceTypesConstants.IDME,
+  ): void => {
+    navigateToDirectDepositSpy = jest.fn()
+    navigateToHowToUpdateDirectDepositSpy = jest.fn()
+
+    when(mockNavigationSpy)
+      .mockReturnValue(() => {})
+      .calledWith('DirectDeposit')
+      .mockReturnValue(navigateToDirectDepositSpy)
+      .calledWith('HowToUpdateDirectDeposit')
+      .mockReturnValue(navigateToHowToUpdateDirectDepositSpy)
+
+    component = render(<PaymentsScreen />, {
+      preloadedState: {
+        auth: { ...initialAuthState },
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          directDepositBenefits,
+          directDepositBenefitsUpdate,
         },
-      })
-  
-      testInstance = component.container
-    }
-  
+        errors: errorState,
+      },
+    })
+
+    testInstance = component.UNSAFE_root
+  }
 
   describe('direct deposit', () => {
     describe('when directDepositBenefits is true', () => {

@@ -56,7 +56,7 @@ export const generateTestIDForInlineTextIconList = (listOfText: Array<InlineText
   const listOfTextID: Array<string> = []
 
   listOfText.forEach((listOfTextItem: InlineTextWithIconsProps) => {
-    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'UnreadIcon') {
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'Unread') {
       listOfTextID.push(t('secureMessaging.unread.a11y'))
     }
     if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'PaperClip') {
@@ -79,7 +79,7 @@ export const generateTestIDForTextIconList = (listOfText: Array<TextLineWithIcon
   const listOfTextID: Array<string> = []
 
   listOfText.forEach((listOfTextItem: TextLineWithIconProps) => {
-    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'UnreadIcon') {
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'Unread') {
       listOfTextID.push(t('secureMessaging.unread.a11y'))
     }
     if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'PaperClip') {
@@ -393,8 +393,8 @@ export function halfPanelCardStyleInterpolator({ current, inverted }: StackCardI
   }
 }
 
-export function fullPanelCardStyleInterpolator({ current, inverted }: StackCardInterpolationProps): StackCardInterpolatedStyle {
-  const screenHeight = Dimensions.get('screen').height
+export function fullPanelCardStyleInterpolator({ current, inverted, layouts }: StackCardInterpolationProps): StackCardInterpolatedStyle {
+  const screenHeight = layouts.screen.height
 
   const translateY = Animated.multiply(
     current.progress.interpolate({

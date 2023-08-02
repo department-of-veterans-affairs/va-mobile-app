@@ -48,6 +48,7 @@ context('EditDirectDepositScreen', () => {
       {
         goBack: jest.fn(),
         navigate: jest.fn(),
+        addListener: jest.fn(),
       },
       { params: { displayTitle: 'Edit Direct Deposit' } },
     )
@@ -63,7 +64,7 @@ context('EditDirectDepositScreen', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
     routingNumberTextInput = testInstance.findAllByType(TextInput)[0]
     accountNumberTextInput = testInstance.findAllByType(TextInput)[1]
 
@@ -177,7 +178,7 @@ context('EditDirectDepositScreen', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
       await waitFor(() => {
         expect(props.navigation.goBack).toBeCalled()
       })
@@ -197,7 +198,7 @@ context('EditDirectDepositScreen', () => {
         },
       })
 
-      testInstance = component.container
+      testInstance = component.UNSAFE_root
 
       expect(testInstance.findByType(AlertBox)).toBeTruthy()
     })

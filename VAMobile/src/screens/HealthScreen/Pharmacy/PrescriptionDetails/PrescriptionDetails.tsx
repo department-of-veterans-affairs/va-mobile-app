@@ -5,14 +5,14 @@ import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, ChildTemplate, ClickToCallPhoneNumber, LoadingComponent, TextArea, TextView, VAButton, VAButtonProps } from 'components'
 import { DowntimeFeatureTypeConstants, RefillStatusConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
 import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { RootState } from 'store'
-import { UserAnalytics } from 'constants/analytics'
-import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useAppDispatch, useDestructiveAlert, useDowntime, useExternalLink, useTheme } from 'utils/hooks'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { useAppDispatch, useDestructiveActionSheet, useDowntime, useExternalLink, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import DetailsTextSections from './DetailsTextSections'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
@@ -27,7 +27,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const { loadingHistory, prescriptionsById, prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
-  const submitRefillAlert = useDestructiveAlert()
+  const submitRefillAlert = useDestructiveActionSheet()
   const dispatch = useAppDispatch()
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const { t } = useTranslation(NAMESPACE.HEALTH)
@@ -82,7 +82,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: redirectLink,
       iconProps: {
-        name: 'WebviewOpen',
+        name: 'ExternalLink',
         height: 15,
         width: 15,
         fill: 'navBar',
@@ -101,18 +101,24 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       label: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
       buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: () => {
+        const prescriptionIds = [prescription].map((prescriptions) => prescriptions.id)
+        logAnalyticsEvent(Events.vama_rx_request_start(prescriptionIds))
         submitRefillAlert({
           title: t('prescriptions.refill.confirmationTitle', { count: 1 }),
           cancelButtonIndex: 0,
           buttons: [
             {
               text: tc('cancel'),
+              onPress: () => {
+                logAnalyticsEvent(Events.vama_rx_request_cancel(prescriptionIds))
+              },
             },
             {
               text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
               onPress: () => {
                 // Call refill request so its starts the loading screen and then go to the modal
                 if (!prescriptionInDowntime) {
+                  logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
                   dispatch(requestRefills([prescription]))
                 }
                 navigation.navigate('RefillScreenModal')
@@ -133,7 +139,6 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
     if (refillStatus !== RefillStatusConstants.TRANSFERRED) {
       return <></>
     }
-
     return <PrescriptionsDetailsBanner />
   }
 

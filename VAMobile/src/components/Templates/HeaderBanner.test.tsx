@@ -42,7 +42,7 @@ context('HeaderBanner', () => {
 
     component = render(<HeaderBanner leftButton={leftButton} title={title} rightButton={rightButton} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

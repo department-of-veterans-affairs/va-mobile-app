@@ -6,6 +6,7 @@ import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea, TextView
 import { CrisisLineCta } from 'components'
 import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
@@ -26,14 +27,14 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
 
   return (
-    <FeatureLandingTemplate backLabel={tc('home')} backLabelOnPress={navigation.goBack} title={tc('contactVA')} titleA11y={tc('contactVA.a11y')}>
+    <FeatureLandingTemplate backLabel={tc('home')} backLabelOnPress={navigation.goBack} title={tc('contactVA')} titleA11y={a11yLabelVA(tc('contactVA'))}>
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityLabel={t('contactVA.va411.callMy.a11yLabel')} accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityLabel={a11yLabelVA(t('contactVA.va411.callMy.a11yLabel'))} accessibilityRole="header">
             {t('contactVA.va411.callMy')}
           </TextView>
-          <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('contactVA.va411.body.a11yLabel')}>
+          <TextView variant="MobileBody" mt={standardMarginBetween} paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('contactVA.va411.body.a11yLabel'))}>
             {t('contactVA.va411.body')}
           </TextView>
           <ClickToCallPhoneNumber phone={t('contactVA.va411.numberDisplayed')} />

@@ -159,9 +159,8 @@ export const requestRefills =
   async (dispatch) => {
     dispatch(dispatchStartRequestRefills())
     let results: RefillRequestSummaryItems = []
-
+    const prescriptionIds = prescriptions.map((prescription) => prescription.id)
     try {
-      const prescriptionIds = prescriptions.map((prescription) => prescription.id)
       const response = await put<PrescriptionRefillData>('/v0/health/rx/prescriptions/refill', {
         ids: prescriptionIds,
       })
@@ -170,7 +169,7 @@ export const requestRefills =
         submitted: !failedPrescriptionIds.includes(prescription.id),
         data: prescription,
       }))
-      await logAnalyticsEvent(Events.vama_rx_refill_success())
+      await logAnalyticsEvent(Events.vama_rx_refill_success(prescriptionIds))
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `requestRefills : ${prescriptionNonFatalErrorString}`)
@@ -180,7 +179,7 @@ export const requestRefills =
         submitted: false,
         data: prescription,
       }))
-      await logAnalyticsEvent(Events.vama_rx_refill_fail())
+      await logAnalyticsEvent(Events.vama_rx_refill_fail(prescriptionIds))
     }
 
     setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())

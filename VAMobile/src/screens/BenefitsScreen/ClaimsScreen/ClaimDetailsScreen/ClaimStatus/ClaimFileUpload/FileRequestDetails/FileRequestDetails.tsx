@@ -5,9 +5,11 @@ import React, { FC } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, BoxProps, ButtonTypesConstants, ChildTemplate, TextArea, TextView, VAButton } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { hasUploadedOrReceived } from 'utils/claims'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
@@ -16,7 +18,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { request } = route.params
+  const { claimID, request } = route.params
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
   const { displayName, description, uploadDate, documents } = request
 
@@ -33,7 +35,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
   const getUploadedFileNames = (): JSX.Element[] | JSX.Element => {
     const uploadedFileNames = map(documents || [], (item, index) => {
       return (
-        <TextView variant="MobileBody" key={index}>
+        <TextView paragraphSpacing={true} variant="MobileBody" key={index}>
           {item.filename}
         </TextView>
       )
@@ -51,6 +53,16 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
     return documents && documents.length > 0 ? documents[0].fileType : noneNoted
   }
 
+  const onFilePress = () => {
+    logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'file'))
+    navigateTo('SelectFile', { claimID, request })()
+  }
+
+  const onPhotoPress = () => {
+    logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'photo'))
+    navigateTo('TakePhotos', { claimID, request })()
+  }
+
   return (
     <ChildTemplate backLabel={t('request.backLabel')} backLabelOnPress={navigation.goBack} title={displayName || ''}>
       <Box mt={contentMarginTop} mb={contentMarginBottom} flex={1}>
@@ -60,13 +72,13 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
               <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {t('fileRequestDetails.submittedTitle')}
               </TextView>
-              <TextView mb={standardMarginBetween} variant="MobileBody">
+              <TextView paragraphSpacing={true} variant="MobileBody">
                 {getUploadedDate()}
               </TextView>
               <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {t('fileRequestDetails.fileTitle')}
               </TextView>
-              <Box mb={standardMarginBetween}>{getUploadedFileNames()}</Box>
+              {getUploadedFileNames()}
               <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {t('fileRequestDetails.typeTitle')}
               </TextView>
@@ -85,7 +97,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
         <Box {...boxProps}>
           <Box mt={standardMarginBetween} mx={gutter} mb={contentMarginBottom}>
             <VAButton
-              onPress={navigateTo('SelectFile', { request })}
+              onPress={onFilePress}
               label={t('fileUpload.selectAFile')}
               testID={t('fileUpload.selectAFile')}
               buttonType={ButtonTypesConstants.buttonSecondary}
@@ -93,7 +105,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
             />
             <Box mt={theme.dimensions.condensedMarginBetween}>
               <VAButton
-                onPress={navigateTo('TakePhotos', { request })}
+                onPress={onPhotoPress}
                 label={t('fileUpload.takePhotos')}
                 testID={t('fileUpload.takePhotos')}
                 buttonType={ButtonTypesConstants.buttonSecondary}

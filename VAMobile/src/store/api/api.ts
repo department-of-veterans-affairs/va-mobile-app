@@ -161,13 +161,30 @@ const call = async function <T>(
       return
     }
     if (response.status > 399) {
-      // clone response to access the response stream twice
-      const clonedResponse = await response.clone()
-      const json = await clonedResponse.json()
-      const text = await response.text()
+      let json
+      let text
+      if (response.headers.get('Content-Type')?.startsWith('application/json')) {
+        json = await response.json()
+        const vamfBody = json?.errors?.[0].source?.vamfBody
 
-      throw { status: response.status, text, json }
+        if (vamfBody) {
+          // Handle vamfBody separately since JSON.stringify chokes on it
+          json.errors[0].source.vamfBody = ''
+          text = JSON.stringify(json)
+          const escaped = vamfBody.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+          text = text.replace('"vamfBody":""', `"vamfBody":"${escaped}"`)
+        } else {
+          text = JSON.stringify(json)
+        }
+      } else {
+        text = await response.text()
+        json = {}
+      }
+
+      throw { status: response.status, endpoint, text, json }
     }
+
+    // No errors found, return the response
     return await response.json()
   } else {
     // we are in demo and need to transform the request from the demo store

@@ -18,9 +18,6 @@ jest.mock('utils/hooks', () => {
   const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -98,7 +95,7 @@ context('PaymentHistoryScreen', () => {
         errors: errorState,
       },
     })
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {

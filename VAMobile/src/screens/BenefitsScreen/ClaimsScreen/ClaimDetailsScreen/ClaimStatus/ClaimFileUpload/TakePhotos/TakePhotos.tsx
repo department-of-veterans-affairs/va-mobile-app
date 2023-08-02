@@ -6,8 +6,10 @@ import React, { FC, ReactNode, useRef, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAButton } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
@@ -24,7 +26,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
-  const { request } = route.params
+  const { claimID, request } = route.params
   const { displayName } = request
   const [error, setError] = useState('')
   const scrollViewRef = useRef<ScrollView>(null)
@@ -48,7 +50,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.accessibilityAlert.body.a11y')}>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('fileUpload.accessibilityAlert.body.a11y')}>
           {t('fileUpload.accessibilityAlert.body')}
         </TextView>
         <ClickForActionLink {...linkToCallProps} />
@@ -56,8 +58,13 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
     )
   }
 
+  const onCancel = () => {
+    logAnalyticsEvent(Events.vama_evidence_cancel_1(claimID, request.trackedItemId || null, request.type, 'photo'))
+    navigation.goBack()
+  }
+
   return (
-    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('fileUpload.selectPhotos')}>
+    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={onCancel} title={t('fileUpload.selectPhotos')}>
       {!!error && (
         <Box mt={theme.dimensions.contentMarginTop}>
           <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />
@@ -75,30 +82,26 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('fileUpload.uploadFileUsingCamera', { displayName })}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" paragraphSpacing={true} mt={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.takePhotoEachPage')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} {...testIdProps(t('fileUpload.ifMoreThan10.a11y'))}>
+        <TextView variant="MobileBody" paragraphSpacing={true} {...testIdProps(t('fileUpload.ifMoreThan10.a11y'))}>
           {t('fileUpload.ifMoreThan10.1')}
           <TextView variant="MobileBodyBold">
             {t('fileUpload.ifMoreThan10.2')}
             <TextView variant="MobileBody">{t('fileUpload.ifMoreThan10.3')}</TextView>
           </TextView>
         </TextView>
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
-          {t('fileUpload.maxFileSize')}
-        </TextView>
-        <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')}>
+        <TextView variant="MobileBodyBold">{t('fileUpload.maxFileSize')}</TextView>
+        <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')} paragraphSpacing={true}>
           {t('fileUpload.50MB')}
         </TextView>
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
-          {t('fileUpload.acceptedFileTypes')}
-        </TextView>
+        <TextView variant="MobileBodyBold">{t('fileUpload.acceptedFileTypes')}</TextView>
         <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
       </TextArea>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <VAButton
-          onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, 0)}
+          onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, 0, claimID, request)}
           label={t('fileUpload.takeOrSelectPhotos')}
           testID={t('fileUpload.takePhotos')}
           buttonType={ButtonTypesConstants.buttonPrimary}

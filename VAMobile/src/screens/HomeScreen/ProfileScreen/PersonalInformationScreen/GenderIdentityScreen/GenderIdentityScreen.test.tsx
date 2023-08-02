@@ -37,20 +37,32 @@ jest.mock('store/slices', () => {
 context('GenderIdentityScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
+  let props: any
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+  
   const initializeTestInstance = (preloadGenderIdentityOptions?: boolean, errorsState: ErrorsState = initialErrorsState) => {
-    const props = mockNavProps()
+    props = mockNavProps(
+      {},
+      {
+        navigate: jest.fn(),
+        goBack: jest.fn(),
+        addListener: jest.fn(),
+      },
+      {})
     const store = {
       ...InitialState,
-      personalInformation: { 
-        ...InitialState.personalInformation, 
-        genderIdentityOptions: preloadGenderIdentityOptions ? genderIdentityOptions : {}
+      personalInformation: {
+        ...InitialState.personalInformation,
+        genderIdentityOptions: preloadGenderIdentityOptions ? genderIdentityOptions : {},
       },
-      errors: errorsState
+      errors: errorsState,
     }
 
-    component = render(<GenderIdentityScreen {...props} />, {preloadedState: store})
-    testInstance = component.container
+    component = render(<GenderIdentityScreen {...props} />, { preloadedState: store })
+    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
@@ -63,7 +75,7 @@ context('GenderIdentityScreen', () => {
     expect(getGenderIdentityOptions).toBeCalled()
   })
 
-  it('does not fetch gender identity options from the API if they were previously fetched', async() => {
+  it('does not fetch gender identity options from the API if they were previously fetched', async () => {
     initializeTestInstance(true)
     expect(getGenderIdentityOptions).not.toHaveBeenCalled()
   })
@@ -91,7 +103,7 @@ context('GenderIdentityScreen', () => {
       ...initialErrorsState,
       errorsByScreenID,
     }
-    
+
     initializeTestInstance(false, errorsState)
     expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
   })

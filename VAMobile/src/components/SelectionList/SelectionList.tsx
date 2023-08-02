@@ -3,7 +3,9 @@ import { mapObject, values } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from '../Box'
 import SelectionListItem, { SelectionListItemObj } from './SelectionListItem'
@@ -63,7 +65,7 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
 
   const onSelectAll = () => {
     let newSelectionVals
-
+    logAnalyticsEvent(Events.vama_select_all())
     if (numSelected < items.length) {
       newSelectionVals = mapObject(selectionVals, () => {
         return true
@@ -80,13 +82,13 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
   const getSelectAllIcon = () => {
     let name: keyof typeof VA_ICON_MAP
     let fill = 'checkboxEnabledPrimary'
-    let stroke = 'checkboxEnabledPrimary'
+    let stroke
     if (numSelected === items.length) {
-      name = 'FilledCheckBox'
+      name = 'CheckBoxFilled'
     } else if (numSelected > 0) {
-      name = 'IntermediateCheckBox'
+      name = 'CheckBoxIntermediate'
     } else {
-      name = 'EmptyCheckBox'
+      name = 'CheckBoxEmpty'
       fill = 'checkboxDisabledContrast'
       stroke = 'checkboxDisabled'
     }

@@ -38,11 +38,24 @@ export type ChildTemplateProps = {
   footerContent?: ReactNode
   /** Optional ScrollView props to pass through to VAScrollView if desired */
   scrollViewProps?: VAScrollViewProps
+  /** Optional TestID for scrollView */
+  testID?: string
 }
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
 
-export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y, backLabelOnPress, title, titleA11y, headerButton, children, footerContent, scrollViewProps }) => {
+export const ChildTemplate: FC<ChildTemplateProps> = ({
+  backLabel,
+  backLabelA11y,
+  backLabelOnPress,
+  title,
+  titleA11y,
+  headerButton,
+  children,
+  footerContent,
+  scrollViewProps,
+  testID,
+}) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
@@ -53,7 +66,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
   const [transitionHeaderHeight, setTransitionHeaderHeight] = useState(0)
 
   const fillStyle: ViewStyle = {
-    paddingTop: insets.top,
+    paddingTop: insets?.top,
     backgroundColor: theme.colors.background.main,
     flex: 1,
   }
@@ -104,6 +117,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({ backLabel, backLabelA11y
 
       <>
         <VAScrollView
+          testID={testID}
           scrollEventThrottle={1}
           onScroll={(event) => {
             transitionHeader(event.nativeEvent.contentOffset.y)

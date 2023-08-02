@@ -3,6 +3,7 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
+import { fireEvent, screen } from '@testing-library/react-native'
 
 import DocumentPicker from 'react-native-document-picker'
 import { ImagePickerResponse } from 'react-native-image-picker'
@@ -27,12 +28,8 @@ jest.mock('@expo/react-native-action-sheet', () => {
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -59,11 +56,15 @@ context('Attachments', () => {
 
     component = render(<Attachments {...props} />)
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance()
+  })
+
+  afterEach(() => {
+    mockShowActionSheetWithOptions.mockClear()
   })
 
   it('initializes correctly', async () => {
@@ -75,7 +76,7 @@ context('Attachments', () => {
   describe('on click of select a file', () => {
     it('should call showActionSheetWithOptions and display the action sheet', async () => {
       await waitFor(() => {
-        testInstance.findByType(VAButton).props.onPress()
+        fireEvent.press(screen.getByText('Select a file'))
 
         expect(mockShowActionSheetWithOptions).toHaveBeenCalled()
 
@@ -90,30 +91,19 @@ context('Attachments', () => {
       const promise = Promise.resolve({ uri: 'uri', name: 'custom-file-name.docx', type: 'docx', size: 100000 } as DocumentPickerResponse)
       jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(promise)
 
-      const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons.length).toEqual(1)
-      expect(buttons[0].props.label).toEqual('Select a file')
-
-      await waitFor(() => {
-        buttons[0].props.onPress()
-      })
+      fireEvent.press(screen.getByText('Select a file'))
 
       const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
-
-      await waitFor(() => {
-        actionSheetCallback(2)
-      })
+      actionSheetCallback(2)
 
       await waitFor(() => {
         promise
       })
-
-      const allButtons = testInstance.findAllByType(VAButton)
-      expect(allButtons[0].props.label).toEqual('Attach')
-
-      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('custom-file-name.docx (0.1 MB)')
+      
+      expect(screen.getByLabelText('Attach')).toBeTruthy()
+      expect(screen.getByLabelText('custom-file-name.docx (0.1 megabytes)')).toBeTruthy()
     })
-
+    
     describe('on click of the attach button', () => {
       it('should call useRouteNavigation', async () => {
         const promise = Promise.resolve({ uri: 'uri', name: 'custom-file-name.docx', type: 'docx' } as DocumentPickerResponse)
@@ -189,9 +179,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
-            'The file type you are trying to upload is not allowed. Please confirm that your file is one of the following formats: doc, docx, gif, jpg, pdf, png, rtf, txt, xls, xlsx.',
-          )
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Attach a DOC, DOCX, GIF, PDF, JPG, PNG, RTF, TXT, XLS, or XLSX')
         })
       })
 
@@ -217,9 +205,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
-            'The file you are trying to upload exceeds the 6 MB limit. Please reduce the file size and try again.',
-          )
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(`Attach a file that's smaller than 6 MB`)
         })
       })
 
@@ -247,9 +233,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
-            'The sum of the file(s) you are trying to upload exceeds the 10 MB limit. Please reduce the file(s) size and try again.',
-          )
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('The total size of your attachments must be smaller than 10 MB')
         })
       })
 
@@ -277,7 +261,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('File already uploaded. Please select a different file.')
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('You already attached this file')
         })
       })
     })

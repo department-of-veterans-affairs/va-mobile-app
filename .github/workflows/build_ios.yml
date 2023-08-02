@@ -80,7 +80,7 @@ jobs:
           ssh-private-key: ${{ secrets.VA_MOBILE_ROBOT_GITHUB_SSH_KEY }}
       - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
         run: |
-          echo Notes: ${{ inputs.notes }}
+          echo "Notes: ${{ inputs.notes }}"
           echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
           echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
       - name: Setup Xcode
@@ -91,8 +91,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          cache: 'yarn'
-          cache-dependency-path: 'VAMobile/yarn.lock'
+          # cache: 'yarn'
+          # cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install npm dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: Set app environment variables

@@ -1,6 +1,6 @@
 import HooksInfo from '../../../../src/components/HooksInfo'
 
-export const exampleString = `const deletePhoneAlert = useDestructiveAlert()\n
+export const exampleString = `const deletePhoneAlert = useDestructiveActionSheet()\n
 const onDeletePressed = (): void => {
     deletePhoneAlert({
       title: t('editPhoneNumber.remove.title', { numberType: buttonTitle }),
@@ -19,4 +19,4 @@ const onDeletePressed = (): void => {
     })
   }`
 
-<HooksInfo componentName="useDestructiveAlert" example={exampleString}/>
+<HooksInfo componentName="useDestructiveActionSheet" example={exampleString}/>

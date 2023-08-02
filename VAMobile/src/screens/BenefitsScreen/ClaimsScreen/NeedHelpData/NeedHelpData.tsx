@@ -2,8 +2,10 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -11,9 +13,12 @@ const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
 
 type NeedHelpDataProps = {
   isAppeal?: boolean
+  claimId?: string
+  claimType?: string
+  claimPhase?: number
 }
 
-const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
+const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal, claimId, claimType, claimPhase }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -47,6 +52,11 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
     a11yLabel: t('8008271000.displayText.a11yLabel'),
     numberOrUrlLink: t('8008271000'),
     linkType: LinkTypeOptionsConstants.call,
+    fireAnalytic: () => {
+      if (claimId && claimType && claimPhase) {
+        logAnalyticsEvent(Events.vama_claim_call(claimId, claimType, claimPhase))
+      }
+    },
   }
 
   return (
@@ -57,9 +67,11 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
         </TextView>
       </Box>
       <Box {...testIdProps(t('claimDetails.callVA.a11yLabel'))} accessible={true}>
-        <TextView variant="MobileBody">{t('claimDetails.callVA')}</TextView>
+        <TextView variant="MobileBody" paragraphSpacing={true}>
+          {t('claimDetails.callVA')}
+        </TextView>
       </Box>
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box>
         <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('claimDetails.VANumberA11yHint'))} />
       </Box>
       <AppealData />

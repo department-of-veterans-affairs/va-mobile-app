@@ -27,7 +27,7 @@ assignees:
 
 ## Bug Severity - BE SURE TO ADD THE SEVERITY LABEL
 <!-- How bad is it? --> 
-See [Bug Tracking](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/testing/VA%20Mobile%20App%20Test%20Plan.md#issue-severity) for details on severity levels
+See [Bug Tracking](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA#issue-severity) for details on severity levels
 <!-- Pick high or low for each category, using definitions in the link above if needed. -->
 - Impact: High Low 
 - Frequency: High Low 
@@ -42,7 +42,13 @@ See [Bug Tracking](https://github.com/department-of-veterans-affairs/va.gov-team
 <!-- OPTIONAL. Add the link to the issue here. you can shorthand the link like this: #598 where 598 is the ticket number. Skip if found during a regression. -->
 
 ## Screen shot(s) and additional information
-<!-- Add any screen shots, video, gifs, etc that will help the engineers track down the issue. -->
+<!-- Add any screen shots, video, gifs, etc that will help the engineers track down the issue. The 'details' section below will expand/collapse, so is a good default location for long JSON responses.  -->
+
+<details>
+  <summary>Full JSON response for services related to issue (expand/collapse)</summary>
+  <!-- Copy-paste the JSON from Charles here. Easiest is to use the 'raw' tab which will include header + body. -->
+
+</details>
 
 ## Ticket Checklist
 - [ ] Steps to reproduce are defined

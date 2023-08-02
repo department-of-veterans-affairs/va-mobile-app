@@ -1,11 +1,12 @@
 import 'react-native'
 import React from 'react'
+import { fireEvent, screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTypeWithSubstring, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import ReplyMessage from './ReplyMessage'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState, saveDraft } from 'store/slices'
@@ -18,12 +19,8 @@ import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
-  let theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
@@ -43,6 +40,24 @@ jest.mock('store/slices', () => {
   }
 })
 
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native')
+  RN.InteractionManager.runAfterInteractions = (callback: () => void) => {
+    callback()
+  }
+
+  return RN
+})
+
+let mockUseComposeCancelConfirmationSpy = jest.fn()
+jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
+  let original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
+  }
+})
+
 let mockIsIOS = jest.fn()
 jest.mock('utils/platform', () => ({
   isIOS: jest.fn(() => mockIsIOS),
@@ -58,6 +73,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: 'mock subject 1: The initial message sets the overall thread subject header',
     body: 'message 1 body text',
+    hasAttachments: false,
     attachment: false,
     sentDate: '1',
     senderId: 2,
@@ -71,6 +87,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: '',
     body: 'test 2',
+    hasAttachments: false,
     attachment: false,
     sentDate: '2',
     senderId: 2,
@@ -84,6 +101,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: '',
     body: 'Last accordion collapsible should be open, so the body text of this message should display',
+    hasAttachments: false,
     attachment: false,
     sentDate: '3',
     senderId: 2,
@@ -97,6 +115,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
     category: CategoryTypeFields.other,
     subject: 'This message should not display because it has different thread ID',
     body: 'test',
+    hasAttachments: false,
     attachment: false,
     sentDate: '1-1-21',
     senderId: 2,
@@ -117,6 +136,7 @@ context('ReplyMessage', () => {
   let navigateToVeteranCrisisLineSpy: jest.Mock
   let navigateToAttachmentsSpy: jest.Mock
   let navigateToAttachmentsFAQSpy: jest.Mock
+  let navigateToReplyHelpSpy: jest.Mock
 
   const initializeTestInstance = (
     mockMessagesById: SecureMessagingMessageMap,
@@ -128,18 +148,25 @@ context('ReplyMessage', () => {
     navigateToVeteranCrisisLineSpy = jest.fn()
     navigateToAttachmentsSpy = jest.fn()
     navigateToAttachmentsFAQSpy = jest.fn()
+    navigateToReplyHelpSpy = jest.fn()
 
     when(mockNavigationSpy)
-        .mockReturnValue(() => {})
-        .calledWith('VeteransCrisisLine').mockReturnValue(navigateToVeteranCrisisLineSpy)
-        .calledWith('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList: [], messageID: 3 }).mockReturnValue(navigateToAttachmentsSpy)
-        .calledWith('AttachmentsFAQ', { originHeader: 'Reply' } ).mockReturnValue(navigateToAttachmentsFAQSpy)
+      .mockReturnValue(() => {})
+      .calledWith('VeteransCrisisLine')
+      .mockReturnValue(navigateToVeteranCrisisLineSpy)
+      .calledWith('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList: [], messageID: 3 })
+      .mockReturnValue(navigateToAttachmentsSpy)
+      .calledWith('AttachmentsFAQ', { originHeader: 'Reply' })
+      .mockReturnValue(navigateToAttachmentsFAQSpy)
+      .calledWith('ReplyHelp')
+      .mockReturnValue(navigateToReplyHelpSpy)
 
     isIOSMock.mockReturnValue(false)
 
     props = mockNavProps(
       undefined,
       {
+        addListener: mockUseComposeCancelConfirmationSpy,
         goBack,
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
@@ -165,7 +192,7 @@ context('ReplyMessage', () => {
       },
     })
 
-    testInstance = component.container
+    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -188,21 +215,18 @@ context('ReplyMessage', () => {
   })
 
   describe('on click of the collapsible view', () => {
-    it('should display the when will i get a reply children text', async () => {
-      waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
 
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual(
-          'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
-        )
+    it('should show the Reply Help panel', async () => {
+      await waitFor(() => {
+        testInstance.findByProps({ accessibilityLabel: 'Only use messages for non-urgent needs' }).props.onPress()
       })
+      expect(navigateToReplyHelpSpy).toHaveBeenCalled()
     })
   })
 
   it('should add the text (*Required) for the message body text field', async () => {
     await waitFor(() => {
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[19].props.children).toEqual(['Message', ' ','(Required)'])
+      expect(screen.getByText('Message (Required)')).toBeTruthy()
     })
   })
 
@@ -217,15 +241,15 @@ context('ReplyMessage', () => {
     describe('when a required field is not filled', () => {
       it('should display a field error for that field', async () => {
         await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
         })
       })
 
       it('should display an AlertBox', async () => {
         await waitFor(() => {
           expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-          expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'In order to save this draft, all of the required fields must be filled.')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
+          expect(findByTypeWithSubstring(testInstance, TextView, 'To save this message, provide this information:')).toBeTruthy()
         })
       })
     })
@@ -252,57 +276,30 @@ context('ReplyMessage', () => {
 
       it('should display a field error for that field', async () => {
         await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
         })
       })
       it('should display an AlertBox', async () => {
         await waitFor(() => {
           expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-          expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
+          expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
+          expect(findByTypeWithSubstring(testInstance, TextView, 'To send this message, provide this information:')).toBeTruthy()
         })
       })
     })
   })
 
-  it('renders only messages in the same thread as the message associated with messageID', async () => {
-    await waitFor(() => {
-      expect(testInstance.findAllByType(AccordionCollapsible).length).toBe(3)
-    })
-  })
-
-  it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
-    await waitFor(() => {
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[19].props.children).toEqual('mock sender 3')
-      expect(textViews[20].props.children).toEqual('Invalid DateTime')
-      expect(textViews[21].props.children).toEqual('Last accordion collapsible should be open, so the body text of this message should display')
-      expect(textViews[22].props.children).toEqual('mock sender 2')
-      expect(textViews[23].props.children).toEqual('Invalid DateTime')
-      expect(textViews[24].props.children).toEqual('mock sender 1')
-      expect(textViews[25].props.children).toEqual('Invalid DateTime')
-    })
-  })
-
-  describe('when first message and last message is clicked', () => {
-    it('should close first accordion and open last accordion', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[4].props.onPress()
-      })
-      await waitFor(() => {
-      testInstance.findAllByType(Pressable)[6].props.onPress()
-      })
-
-      expect(testInstance.findAllByType(TextView)[21].props.children).toBe('mock sender 2')
-      // Used to display last message's contents, but now there is no textview after the date
-      expect(testInstance.findAllByType(TextView)[23].props.children).toBe('mock sender 1')
-      expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView).length).toBe(26)
-    })
+  it('should render the correct number of accordions', async () => {
+    expect(screen.getAllByRole('tab').length).toBe(3)
+    expect(screen.getByText('mock sender 1')).toBeTruthy()
+    expect(screen.getByText('mock sender 2')).toBeTruthy()
+    expect(screen.getAllByText('mock sender 3').length).toBe(2)
+    expect(screen.queryByText('mock sender 45')).toBeFalsy()
   })
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance({}, [], true)
+      initializeTestInstance(mockMessagesById, [], true)
       await waitFor(() => {
         expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
       })

@@ -38,10 +38,24 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
     // alternative check if need to update: isClosedClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
     const isActiveClaim = claimType === ClaimTypeConstants.ACTIVE
 
+    const whyWeCombineOnPress = () => {
+      logAnalyticsEvent(Events.vama_claim_why_combine(claim.id, claim.attributes.claimType, claim.attributes.phase))
+      navigateTo('ConsolidatedClaimsNote')()
+    }
+
+    const whatShouldOnPress = () => {
+      logAnalyticsEvent(Events.vama_claim_disag(claim.id, claim.attributes.claimType, claim.attributes.phase))
+      navigateTo('WhatDoIDoIfDisagreement', {
+        claimID: claim.id,
+        claimType: claim.attributes.claimType,
+        claimStep: claim.attributes.phase,
+      })()
+    }
+
     if (isActiveClaim) {
       const detailsFAQListItems: Array<SimpleListItemObj> = [
-        { text: t('claimDetails.whyWeCombine'), onPress: navigateTo('ConsolidatedClaimsNote'), testId: t('claimDetails.whyWeCombine.a11yLabel') },
-        { text: t('claimDetails.whatShouldIDoIfDisagree'), onPress: navigateTo('WhatDoIDoIfDisagreement'), testId: t('claimDetails.whatShouldIDoIfDisagree.a11yLabel') },
+        { text: t('claimDetails.whyWeCombine'), onPress: whyWeCombineOnPress, testId: t('claimDetails.whyWeCombine.a11yLabel') },
+        { text: t('claimDetails.whatShouldIDoIfDisagree'), onPress: whatShouldOnPress, testId: t('claimDetails.whatShouldIDoIfDisagree.a11yLabel') },
       ]
 
       // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false
@@ -94,13 +108,11 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
               <TextView variant="MobileBodyBold">{claimDecidedOn}</TextView>
             </Box>
             <Box {...testIdProps(letterAvailable)} accessible={true}>
-              <TextView variant="MobileBody">{letterAvailable}</TextView>
+              <TextView variant="MobileBody" paragraphSpacing={showButton ? true : false}>
+                {letterAvailable}
+              </TextView>
             </Box>
-            {showButton && (
-              <Box mt={theme.dimensions.condensedMarginBetween}>
-                <VAButton onPress={onPress} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} />
-              </Box>
-            )}
+            {showButton && <VAButton onPress={onPress} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} />}
           </TextArea>
         </Box>
       )
@@ -113,7 +125,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
     <Box {...testIdProps('Your-claim: Status-tab-claim-details-page')}>
       <ActiveClaimStatusDetails />
       <ClosedClaimStatusDetails />
-      <NeedHelpData />
+      <NeedHelpData claimId={claim.id} claimType={claim.attributes.claimType} claimPhase={claim.attributes.phase} />
     </Box>
   )
 }
