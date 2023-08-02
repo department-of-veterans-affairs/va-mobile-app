@@ -15,7 +15,6 @@ export const linking: LinkingOptions<any> = {
       Tabs: {
         screens: {
           HealthTab: {
-            initialRouteName: 'HealthTab',
             screens: {
               Appointments: 'appointments/:id',
               ViewMessageScreen: 'messages/:messageID',
@@ -24,6 +23,31 @@ export const linking: LinkingOptions<any> = {
         },
       },
     },
+  },
+  getStateFromPath(path) {
+    const pathParts = path.split('/')
+    if (pathParts[0] === 'messages' && pathParts.length === 2) {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'HealthTab',
+                  state: {
+                    routes: [{ name: 'Health' }, { name: 'SecureMessaging' }, { name: 'ViewMessageScreen', params: { messageID: pathParts[1] } }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
+    }
+    // return getStateFromPath(path, config)
+    // Return a state object here
+    // You can also reuse the default logic by importing `getStateFromPath` from `@react-navigation/native`
   },
 }
 
