@@ -6,7 +6,7 @@ import React, { FC, useEffect } from 'react'
 import { AuthorizedServicesState } from 'store/slices'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { LettersState, getLetters } from 'store/slices/lettersSlice'
@@ -26,7 +26,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
+  const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters as ScreenIDTypes)
 
   const letterPressFn = (letterType: LetterTypes, letterName: string): OnPressHandler | undefined => {
     switch (letterType) {

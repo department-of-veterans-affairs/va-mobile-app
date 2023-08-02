@@ -4,7 +4,7 @@ import React, { FC, useEffect, useLayoutEffect } from 'react'
 
 import { Box, ClosePanelButton, ErrorComponent, FullScreenSubtask, LoadingComponent, MultiTouchCard, MultiTouchCardProps, TextView } from 'components'
 import { ClickForActionLink } from 'components'
-import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, getTrackingInfo } from 'store/slices'
@@ -47,7 +47,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, contentMarginBottom, contentMarginTop, gutter, standardMarginBetween } = theme.dimensions
-  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx as ScreenIDTypes)
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID)
   const noneNoted = tc('noneNoted')
 

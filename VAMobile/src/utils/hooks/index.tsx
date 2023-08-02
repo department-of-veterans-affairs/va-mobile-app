@@ -45,23 +45,16 @@ export const useError = (currentScreenID: ScreenIDTypes): boolean => {
 export const DowntimeScreenIDToFeature = (currentScreenID: ScreenIDTypes): DowntimeFeatureType | undefined => {
   const match = Object.entries(DowntimeFeatureToScreenID).find(([_, value]) => value.includes(currentScreenID))
   return match ? (match[0] as DowntimeFeatureType) : undefined
-  // return matches.reduce((services: Array<DowntimeFeatureType>, match) => {
-  //   services.push(match[0] as DowntimeFeatureType)
-  //   return services
-  // }, [])
 }
 
 export const useDowntime = (currentScreenID: ScreenIDTypes): boolean => {
-  const matches = Object.entries(DowntimeFeatureToScreenID).filter(([_, value]) => value.includes(currentScreenID))
-  const downtimeServices = matches.reduce((services: Array<DowntimeFeatureType>, match) => {
-    services.push(match[0] as DowntimeFeatureType)
-    return services
-  }, [])
+  const feature = DowntimeScreenIDToFeature(currentScreenID)
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  return downtimeServices.some((feature) => {
-    const mw = downtimeWindowsByFeature[feature]
-    return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime
-  })
+  if (!feature) {
+    return false
+  }
+  const mw = downtimeWindowsByFeature[feature]
+  return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime
 }
 
 /**

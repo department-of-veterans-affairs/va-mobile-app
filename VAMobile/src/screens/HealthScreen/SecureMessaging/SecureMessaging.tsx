@@ -4,7 +4,7 @@ import React, { FC, ReactElement, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
 import { Box, ErrorComponent, FeatureLandingTemplate, SegmentedControl } from 'components'
-import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, ScreenIDTypes, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -41,7 +41,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
   const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
-  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging as ScreenIDTypes)
 
   useEffect(() => {
     if (secureMessaging && smNotInDowntime) {

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
-import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { HiddenA11yElement } from 'styles/common'
@@ -37,7 +37,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const [selectedValues, setSelectedValues] = useState<Record<string, boolean>>({})
   const [selectedPrescriptionsCount, setSelectedPrescriptionsCount] = useState(0)
 
-  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx as ScreenIDTypes)
 
   const { loadingHistory, refillablePrescriptions, showLoadingScreenRequestRefills, submittingRequestRefills } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const refillable = refillablePrescriptions || []

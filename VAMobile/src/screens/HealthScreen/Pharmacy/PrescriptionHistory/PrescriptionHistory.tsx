@@ -1,5 +1,6 @@
 import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
 import { ReactNode, useEffect, useRef, useState } from 'react'
+import { ScreenIDTypes } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'
@@ -162,7 +163,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)
-  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx as ScreenIDTypes)
   const startingTab = route?.params?.startingTab
   const hasTransferred = !!transferredPrescriptions?.length
 

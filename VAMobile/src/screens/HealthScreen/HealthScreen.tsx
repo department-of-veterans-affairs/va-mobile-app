@@ -5,7 +5,7 @@ import React, { FC, useEffect } from 'react'
 import { AuthorizedServicesState, PrescriptionState, loadAllPrescriptions } from 'store/slices'
 import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -62,7 +62,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
     navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.covidUpdates.loading') })
   }
 
-  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging as ScreenIDTypes)
 
   useEffect(() => {
     if (smNotInDowntime) {

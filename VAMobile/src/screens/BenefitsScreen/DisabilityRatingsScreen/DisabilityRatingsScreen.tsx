@@ -21,7 +21,7 @@ import {
   TextViewProps,
 } from 'components'
 import { DisabilityRatingState, getDisabilityRating } from 'store/slices/disabilityRatingSlice'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
 import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -44,7 +44,7 @@ const DisabilityRatingsScreen: FC = () => {
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
   const totalCombinedRating = ratingData?.combinedDisabilityRating
-  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
+  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating as ScreenIDTypes)
 
   useEffect(() => {
     // Get the disability rating data if not loaded already
