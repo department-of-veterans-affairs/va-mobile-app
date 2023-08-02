@@ -24,6 +24,7 @@ export const CommonE2eIdConstants = {
   DISABILITY_RATING_ROW_TEXT: 'Disability rating',
   SETTINGS_ROW_TEXT: 'Settings',
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
+  VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
   SIGN_OUT_BTN_ID: 'Sign out',
   SIGN_OUT_CONFIRM_TEXT: 'Sign out?',
   BACK_BTN_LABEL: 'Back',
@@ -31,7 +32,6 @@ export const CommonE2eIdConstants = {
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
-  PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
   VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
 }
 
@@ -213,10 +213,6 @@ export async function openPrescriptions() {
 	await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
 }
 
-export async function openPayments() {
-  await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
-}
-
 export async function openVAPaymentHistory() {
   await element(by.text(CommonE2eIdConstants.VA_PAYMENT_HISTORY_BUTTON_TEXT)).tap()
 }
@@ -231,6 +227,10 @@ export async function openLetters() {
 
 export async function openDisabilityRating() {
   await element(by.text(CommonE2eIdConstants.DISABILITY_RATING_ROW_TEXT)).tap()
+}
+
+export async function openVaccineRecords() {
+  await element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT)).tap()
 }
 
 /**
