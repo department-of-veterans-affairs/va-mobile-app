@@ -11,6 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
+import { VeteranStatusCard } from 'components/VeteranStatusCard.tsx'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
@@ -22,7 +23,6 @@ import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
 import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/HapticsDemoScreen'
 import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
 import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
-import Nametag from 'components/Nametag'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
 import ProfileScreen from './ProfileScreen/ProfileScreen'
@@ -111,7 +111,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           </TextView>
         </Box>
         <EncourageUpdateAlert />
-        <Nametag />
+        <VeteranStatusCard />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
             {tc('aboutVA')}
