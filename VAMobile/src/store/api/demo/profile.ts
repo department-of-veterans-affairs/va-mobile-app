@@ -190,14 +190,19 @@ export const deleteAddress = (store: DemoStore, params: Params): EditResponseDat
  * @param paymentData- PaymentAccountData object to update DD info
  * @returns DirectDepositData- transformed object from paymentData for use in PUT updates in direct deposit actions
  */
-export const directDepositTransform = (paymentData: PaymentAccountData): DirectDepositData => {
-  return {
-    data: {
-      type: paymentData.accountType,
-      id: 'mock_id',
-      attributes: {
-        paymentAccount: paymentData,
-      },
-    },
+export const directDepositTransform = (store: DemoStore, paymentData: PaymentAccountData): DirectDepositData => {
+  // Simulate masked bank account number returned by BE
+  paymentData.accountNumber = paymentData.accountNumber
+    .split('')
+    .map((letter, i) => (i < paymentData.accountNumber.length - 4 ? '*' : letter))
+    .join('')
+
+  const data = {
+    type: paymentData.accountType,
+    id: 'mock_id',
+    attributes: { paymentAccount: paymentData },
   }
+  store['/v0/payment-information/benefits'].data = data
+
+  return { data }
 }
