@@ -6,10 +6,6 @@ on:
   push:
       branches:
         - '5278-detox-automation'
-defaults:
-  run:
-    working-directory: ../VAMobile
-
 jobs:
   ios_build:
     name: ios Build
@@ -18,6 +14,9 @@ jobs:
   detox_test:
     runs-on: macos-latest-xl
     needs: ios_build
+    defaults:
+      run:
+        working-directory: VAMobile
     steps:
       - name: 'Install detox-cli'
         run: yarn global add detox-cli
