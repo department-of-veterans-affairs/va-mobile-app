@@ -16,7 +16,7 @@ jobs:
     needs: ios_build
     defaults:
       run:
-        working-directory: VAMobile
+        working-directory: ${GITHUB_WORKSPACE}
     steps:
       - name: 'Install detox-cli'
         run: yarn global add detox-cli
