@@ -34,7 +34,7 @@ context('AppointmentTypeAndDate', () => {
     }
 
     await waitFor(() => {
-      component = render(<AppointmentTypeAndDate attributes={props} />, {
+      component = render(<AppointmentTypeAndDate attributes={props} isPastAppointment={false} />, {
         preloadedState: {
           ...InitialState,
         },
