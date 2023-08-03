@@ -16,7 +16,6 @@ export const linking: LinkingOptions<any> = {
         screens: {
           HealthTab: {
             screens: {
-              Appointments: 'appointments/:id',
               ViewMessageScreen: 'messages/:messageID',
             },
           },
@@ -24,6 +23,7 @@ export const linking: LinkingOptions<any> = {
       },
     },
   },
+  // Sets the navigation state for deeply nested screens to ensure navigating backwards works correctly
   getStateFromPath(path) {
     const pathParts = path.split('/')
     if (pathParts[0] === 'messages' && pathParts.length === 2) {

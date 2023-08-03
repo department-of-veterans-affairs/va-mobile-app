@@ -52,6 +52,9 @@ const NotificationManager: FC = ({ children }) => {
       if (foregroundNotifications.includes(notification.identifier)) {
         dispatch(dispatchSetTappedForegroundNotification())
       }
+
+      // Open the deep link from the notification when present. If the user is not logged
+      // in, store the link so it can be opened after authentication.
       if (notification.payload.url) {
         if (loggedIn) {
           Linking.openURL(notification.payload.url)

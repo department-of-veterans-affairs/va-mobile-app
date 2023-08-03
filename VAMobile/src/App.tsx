@@ -291,6 +291,8 @@ export const AuthedApp: FC = () => {
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
   const paymentsScreens = getPaymentsScreens()
 
+  // When applicable, this will open the deep link from the notification that launched the app once sign in
+  // is complete. Mapping the link to the appropriate screen is handled by the React Navigation linking config.
   useEffect(() => {
     if (initialUrl) {
       Linking.openURL(initialUrl)
