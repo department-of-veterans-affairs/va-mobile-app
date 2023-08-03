@@ -26,7 +26,7 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
   const { serviceHistory, loading, needsDataLoad } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
-  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory as ScreenIDTypes)
+  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
 
   useEffect(() => {
     if (needsDataLoad && militaryInfoAuthorization && mhNotInDowntime) {

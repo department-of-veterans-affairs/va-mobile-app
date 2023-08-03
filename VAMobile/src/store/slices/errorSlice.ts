@@ -6,7 +6,6 @@ import { AppThunk } from 'store'
 import { CommonErrorTypes } from 'constants/errors'
 import {
   DowntimeFeatureNameConstants,
-  DowntimeFeatureToScreenID,
   DowntimeFeatureType,
   DowntimeFeatureTypeConstants,
   MaintenanceWindowsGetData,
@@ -74,7 +73,7 @@ export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
   }
 
   // filtering out any maintenance windows we haven't mapped to a screen in the app
-  const maintWindows = response.data.filter((w) => !!DowntimeFeatureToScreenID[w.attributes.service])
+  const maintWindows = response.data.filter((w) => Object.values(DowntimeFeatureTypeConstants).includes(w.attributes.service))
   let downtimeWindows = {} as DowntimeWindowsByFeatureType
   for (const m of maintWindows) {
     const maintWindow = m.attributes
@@ -88,15 +87,15 @@ export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
       [maintWindow.service]: metadata,
     }
   }
-  const metadata: DowntimeWindow = {
-    featureName: 'Claims',
-    startTime: DateTime.fromISO('2022-04-25T23:35:26Z'),
-    endTime: DateTime.fromISO('2024-04-25T23:35:26Z'),
-  }
-  downtimeWindows = {
-    ...downtimeWindows,
-    claims: metadata,
-  }
+  // const metadata: DowntimeWindow = {
+  //   featureName: 'Claims',
+  //   startTime: DateTime.fromISO('2022-04-25T23:35:26Z'),
+  //   endTime: DateTime.fromISO('2024-04-25T23:35:26Z'),
+  // }
+  // downtimeWindows = {
+  //   ...downtimeWindows,
+  //   claims: metadata,
+  // }
   dispatch(dispatchSetDowntime(downtimeWindows))
 }
 

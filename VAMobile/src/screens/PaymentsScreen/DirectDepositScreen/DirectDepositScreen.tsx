@@ -26,7 +26,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits as ScreenIDTypes)
+  const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
 
   const { gutter, contentMarginTop, contentMarginBottom } = theme.dimensions
 

@@ -163,7 +163,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)
-  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx as ScreenIDTypes)
+  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const startingTab = route?.params?.startingTab
   const hasTransferred = !!transferredPrescriptions?.length
 

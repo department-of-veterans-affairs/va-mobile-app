@@ -20,8 +20,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
 
-  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate as ScreenIDTypes)
-  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory as ScreenIDTypes)
+  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
+  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
 
   const dispatch = useAppDispatch()
   const theme = useTheme()

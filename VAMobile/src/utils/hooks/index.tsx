@@ -14,7 +14,7 @@ import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescri
 import { AppDispatch, RootState } from 'store'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { DowntimeFeatureToScreenID, DowntimeFeatureType, ScreenIDTypes } from 'store/api/types'
+import { DowntimeFeatureType,ScreenIDToDowntimeFeature, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
@@ -33,27 +33,16 @@ import { useTheme as styledComponentsUseTheme } from 'styled-components'
  */
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
   const { errorsByScreenID } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const downtime = useDowntime(currentScreenID)
-  if (downtime) {
-    return true
-  }
+  const feature = ScreenIDToDowntimeFeature[currentScreenID]
+  const downtime = useDowntime(feature)
+  if (downtime) { return true }
 
   return !!errorsByScreenID[currentScreenID]
 }
 
-// this is not the right place for this but neither is types. where should it go?
-export const DowntimeScreenIDToFeature = (currentScreenID: ScreenIDTypes): DowntimeFeatureType | undefined => {
-  const match = Object.entries(DowntimeFeatureToScreenID).find(([_, value]) => value.includes(currentScreenID))
-  return match ? (match[0] as DowntimeFeatureType) : undefined
-}
-
-export const useDowntime = (currentScreenID: ScreenIDTypes): boolean => {
-  const feature = DowntimeScreenIDToFeature(currentScreenID)
+export const useDowntime = (downtownWindowName: DowntimeFeatureType): boolean => {
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  if (!feature) {
-    return false
-  }
-  const mw = downtimeWindowsByFeature[feature]
+  const mw = downtimeWindowsByFeature[downtownWindowName]
   return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime
 }
 

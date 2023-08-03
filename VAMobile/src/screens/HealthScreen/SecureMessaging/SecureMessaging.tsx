@@ -41,7 +41,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
   const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
-  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging as ScreenIDTypes)
+  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
     if (secureMessaging && smNotInDowntime) {

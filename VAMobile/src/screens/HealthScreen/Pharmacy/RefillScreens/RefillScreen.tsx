@@ -37,7 +37,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const [selectedValues, setSelectedValues] = useState<Record<string, boolean>>({})
   const [selectedPrescriptionsCount, setSelectedPrescriptionsCount] = useState(0)
 
-  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx as ScreenIDTypes)
+  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
   const { loadingHistory, refillablePrescriptions, showLoadingScreenRequestRefills, submittingRequestRefills } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const refillable = refillablePrescriptions || []

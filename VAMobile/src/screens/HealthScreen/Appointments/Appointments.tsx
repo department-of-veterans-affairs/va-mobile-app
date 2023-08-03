@@ -46,7 +46,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   )
   const { appointments, scheduleAppointments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const hasCernerFacilities = useHasCernerFacilities()
-  const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments as ScreenIDTypes)
+  const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
   const navigateToRequestAppointments = navigateTo('RequestAppointmentScreen')
   const navigateToNoRequestAppointmentAccess = navigateTo('NoRequestAppointmentAccess')
 

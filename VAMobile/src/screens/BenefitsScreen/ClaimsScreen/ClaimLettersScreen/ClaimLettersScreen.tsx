@@ -6,7 +6,7 @@ import React, { useEffect } from 'react'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, DefaultList, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView } from 'components'
 import { DecisionLettersState, downloadDecisionLetter, getDecisionLetters } from 'store/slices/decisionLettersSlice'
-import { DowntimeFeatureTypeConstants, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -26,7 +26,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { loading, decisionLetters, downloading } = useSelector<RootState, DecisionLettersState>((state) => state.decisionLetters)
-  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims as ScreenIDTypes)
+  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
 
   // This screen is reachable from two different screens, so adjust back button label

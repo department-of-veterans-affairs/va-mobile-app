@@ -47,7 +47,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, contentMarginBottom, contentMarginTop, gutter, standardMarginBetween } = theme.dimensions
-  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx as ScreenIDTypes)
+  const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID)
   const noneNoted = tc('noneNoted')
 
