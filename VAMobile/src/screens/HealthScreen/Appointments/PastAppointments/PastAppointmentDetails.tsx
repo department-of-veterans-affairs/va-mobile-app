@@ -69,7 +69,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
         <AppointmentAlert attributes={attributes} />
         <TextArea>
           <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
-            <AppointmentTypeAndDate attributes={attributes} />
+            <AppointmentTypeAndDate attributes={attributes} isPastAppointment={true} />
           </Box>
 
           <ProviderName attributes={attributes} />
