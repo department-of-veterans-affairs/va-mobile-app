@@ -108,7 +108,7 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
     <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.settings.title')}>
       <Box mb={contentMarginBottom}>
         {!systemNotificationsOn && alert()}
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter} mt={standardMarginBetween}>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter}>
           {t('notifications.settings.personalize.heading')}
         </TextView>
         <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={gutter} mt={condensedMarginBetween}>

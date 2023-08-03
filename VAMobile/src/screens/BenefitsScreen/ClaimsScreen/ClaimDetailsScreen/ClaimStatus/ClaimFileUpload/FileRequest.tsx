@@ -77,7 +77,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
   return (
     <ChildTemplate backLabel={t('claim.backLabel')} backLabelOnPress={navigation.goBack} title={t('fileRequest.title')}>
       <Box mb={contentMarginBottom}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" mt={standardMarginBetween} mb={condensedMarginBetween} mx={gutter}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mb={condensedMarginBetween} mx={gutter}>
           {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
         </TextView>
         <Box>

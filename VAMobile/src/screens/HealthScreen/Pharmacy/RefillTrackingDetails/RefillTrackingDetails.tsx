@@ -194,7 +194,9 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
 
     return (
       <>
-        <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
+        <TextView variant="BitterBoldHeading" mt={theme.dimensions.condensedMarginBetween}>
+          {prescriptionName}
+        </TextView>
         <TextView variant={'HelperText'} accessibilityLabel={rxNumberA11yLabel}>
           {rxNumber}
         </TextView>
