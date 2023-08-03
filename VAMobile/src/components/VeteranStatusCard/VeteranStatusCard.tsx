@@ -7,13 +7,14 @@ import { BranchesOfServiceConstants } from 'store/api/types'
 import { MilitaryServiceState, PersonalInformationState } from 'store/slices'
 import { RootState } from 'store'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export const VeteranStatusCard: FC = () => {
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
 
   const name = (): string => {
     return profile?.fullName || ''
@@ -76,7 +77,7 @@ export const VeteranStatusCard: FC = () => {
   }
 
   return (
-    <Pressable style={pressableStyles}>
+    <Pressable style={pressableStyles} onPress={navigateTo('VeteranStatus')}>
       <Box flex={1} backgroundColor="profileBanner" accessible={true} mb={theme.dimensions.standardMarginBetween} mx={16}>
         <Box py={accessToMilitaryInfo ? theme.dimensions.cardPadding : 0} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
           <Box flexDirection={'row'} justifyContent={'space-between'}>

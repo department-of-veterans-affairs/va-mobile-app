@@ -19,7 +19,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
-const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
+export const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
   if (profile && profile.birthDate) {
     const formattedBirthDate = formatDateMMMMDDYYYY(profile.birthDate)
     return t('dynamicField', { field: formattedBirthDate })
