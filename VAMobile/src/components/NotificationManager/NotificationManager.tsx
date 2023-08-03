@@ -1,4 +1,4 @@
-import { AuthState, dispatchSetNotification } from 'store/slices'
+import { AuthState } from 'store/slices'
 import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { RootState } from 'store'
@@ -16,7 +16,6 @@ const NotificationManager: FC = ({ children }) => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
   const dispatch = useAppDispatch()
   const [eventsRegistered, setEventsRegistered] = useState(false)
-
   useEffect(() => {
     const register = () => {
       Notifications.events().registerRemoteNotificationsRegistered((event) => {
@@ -42,7 +41,6 @@ const NotificationManager: FC = ({ children }) => {
       console.debug('Notification Received - Foreground', notification)
       foregroundNotifications.push(notification.identifier)
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
-      dispatch(dispatchSetNotification(notification))
       completion({ alert: true, sound: true, badge: true })
     })
 
@@ -61,7 +59,6 @@ const NotificationManager: FC = ({ children }) => {
           dispatch(dispatchSetInitialUrl(notification.payload.url))
         }
       }
-      dispatch(dispatchSetNotification(notification))
       console.debug('Notification opened by device user', notification)
       console.debug(`Notification opened with an action identifier: ${notification.identifier}`)
       completion()

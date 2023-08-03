@@ -45,9 +45,6 @@ export const linking: LinkingOptions<any> = {
         ],
       }
     }
-    // return getStateFromPath(path, config)
-    // Return a state object here
-    // You can also reuse the default logic by importing `getStateFromPath` from `@react-navigation/native`
   },
 }
 

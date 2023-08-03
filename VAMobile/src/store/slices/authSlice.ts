@@ -92,7 +92,6 @@ export type AuthState = {
   authorizeStateParam?: string
   authParamsLoadingState: AuthParamsLoadingStateTypes
   successfulLogin?: boolean
-  initialNotification?: object
 }
 
 export const initialAuthState: AuthState = {
@@ -108,7 +107,6 @@ export const initialAuthState: AuthState = {
   displayBiometricsPreferenceScreen: false,
   showLaoGate: false,
   authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
-  initialNotification: { foo: 'bar', bar: 'foo' },
 }
 
 /**
@@ -775,7 +773,6 @@ const authSlice = createSlice({
         firstTimeLogin: state.firstTimeLogin,
         loggedIn: loggedIn,
         displayBiometricsPreferenceScreen: true,
-        initialNotification: state.initialNotification,
       }
     },
     dispatchSetDisplayBiometricsPreferenceScreen: (state, action: PayloadAction<boolean>) => {
@@ -805,7 +802,6 @@ const authSlice = createSlice({
         codeChallenge: state.codeChallenge,
         authorizeStateParam: state.authorizeStateParam,
         authParamsLoadingState: state.authParamsLoadingState,
-        initialNotification: state.initialNotification,
       }
     },
     dispatchFinishAuthLogin: (state, action: PayloadAction<AuthFinishLoginPayload>) => {
@@ -853,9 +849,6 @@ const authSlice = createSlice({
     dispatchFinishSetBiometricPreference: (state) => {
       state.settingBiometricPreference = false
     },
-    dispatchSetNotification: (state, action) => {
-      state.initialNotification = action.payload
-    },
   },
 })
 
@@ -875,7 +868,6 @@ export const {
   dispatchStartLogout,
   dispatchStartSetBiometricPreference,
   dispatchFinishSetBiometricPreference,
-  dispatchSetNotification,
 } = authSlice.actions
 
 export default authSlice.reducer
