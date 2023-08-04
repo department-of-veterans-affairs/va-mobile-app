@@ -7,20 +7,14 @@ on:
       branches:
         - '5278-detox-automation'
 jobs:
-  ios_build:
-    name: ios Build
-    uses: ./.github/workflows/build_ios.yml
-    secrets: inherit
   detox_test:
-    uses: actions/checkout@v3
     env:
       ACTIONS_STEP_DEBUG: true
     runs-on: macos-latest-xl
     needs: ios_build
-    defaults:
-      run:
-        working-directory: VAMobile
     steps:
+      - name: 'build'
+        uses: ./.github/workflows/build_ios.yml
       - name: 'Install detox-cli'
         run: yarn global add detox-cli
       - name: 'Install applesimutils'
