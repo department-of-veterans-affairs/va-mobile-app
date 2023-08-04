@@ -4,7 +4,7 @@ import React, { FC, ReactElement, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
 import { Box, ErrorComponent, FeatureLandingTemplate, SegmentedControl } from 'components'
-import { DowntimeFeatureTypeConstants, ScreenIDTypes, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'

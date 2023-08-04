@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
-import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { HiddenA11yElement } from 'styles/common'

@@ -4,7 +4,7 @@ import React, { FC, useEffect, useLayoutEffect } from 'react'
 
 import { Box, ClosePanelButton, ErrorComponent, FullScreenSubtask, LoadingComponent, MultiTouchCard, MultiTouchCardProps, TextView } from 'components'
 import { ClickForActionLink } from 'components'
-import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
+import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, getTrackingInfo } from 'store/slices'

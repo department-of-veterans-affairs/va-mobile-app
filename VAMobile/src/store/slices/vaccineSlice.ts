@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as api from '../api'
-import { APIError, ScreenIDTypes, VaccineList, VaccineListData, VaccineLocation, VaccineLocationData, VaccineLocationsMap, VaccinePaginationMeta, VaccinesMap } from '../api'
+import { APIError, VaccineList, VaccineListData, VaccineLocation, VaccineLocationData, VaccineLocationsMap, VaccinePaginationMeta, VaccinesMap } from '../api'
 import { AppThunk } from 'store'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Events } from 'constants/analytics'
@@ -58,7 +58,7 @@ const getLoadedVaccines = (vaccinesList: VaccineListType, page: string) => {
  * @param screenID - screen that is waiting for vaccines to load
  */
 export const getVaccines =
-  (screenID?: ScreenIDTypes, page = 1): AppThunk =>
+  (screenID?: page = 1): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getVaccines(screenID))))

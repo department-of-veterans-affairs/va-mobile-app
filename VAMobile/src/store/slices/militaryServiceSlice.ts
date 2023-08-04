@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as api from 'store/api'
 import { AppThunk } from 'store'
-import { ScreenIDTypes, ServiceData } from '../api'
+import { ServiceData } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getDateFromString } from 'utils/formattingUtils'

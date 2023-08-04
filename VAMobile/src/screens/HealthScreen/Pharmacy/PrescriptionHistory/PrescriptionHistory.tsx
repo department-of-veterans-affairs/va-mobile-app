@@ -1,6 +1,5 @@
 import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
 import { ReactNode, useEffect, useRef, useState } from 'react'
-import { ScreenIDTypes } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'

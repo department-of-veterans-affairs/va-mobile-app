@@ -4,7 +4,7 @@ import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
-import { DowntimeFeatureTypeConstants, ScreenIDTypes, ServiceData } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { NAMESPACE } from 'constants/namespaces'

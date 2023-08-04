@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, ChildTemplate, ClickToCallPhoneNumber, LoadingComponent, TextArea, TextView, VAButton, VAButtonProps } from 'components'
-import { DowntimeFeatureTypeConstants, RefillStatusConstants, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, RefillStatusConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'

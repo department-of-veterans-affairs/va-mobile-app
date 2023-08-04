@@ -1,4 +1,4 @@
-import { APIError, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
+import { APIError, ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
 import { flatten, includes, map, some } from 'lodash'
 

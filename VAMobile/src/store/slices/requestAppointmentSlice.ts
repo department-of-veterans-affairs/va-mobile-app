@@ -1,6 +1,6 @@
 import * as api from 'store/api'
 import { AppThunk } from 'store'
-import { AppointmentFlowFormDataType, FacilitiesFilterType, ScreenIDTypes, UserCCEligibilityAttributes, UserFacilityInfo, UserVAEligibilityService } from 'store/api'
+import { AppointmentFlowFormDataType, FacilitiesFilterType, UserCCEligibilityAttributes, UserFacilityInfo, UserVAEligibilityService } from 'store/api'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { filter } from 'underscore'

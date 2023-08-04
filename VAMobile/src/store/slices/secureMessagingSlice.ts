@@ -202,7 +202,7 @@ export const getInbox =
  * Redux action to fetch the folders
  */
 export const listFolders =
-  (screenID?: ScreenIDTypes, forceRefresh = false): AppThunk =>
+  (screenID?: forceRefresh = false): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolders(screenID))))

@@ -195,7 +195,7 @@ export const prefetchClaimsAndAppeals =
  * Redux action to get all claims and appeals
  */
 export const getClaimsAndAppeals =
-  (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1): AppThunk =>
+  (claimType: ClaimType, screenID?: page = 1): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaimsAndAppeals(claimType, screenID, page))))
