@@ -81,11 +81,10 @@ jobs:
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 15
-      - name: Update directory
-        run:
-          working-directory: VAMobile/ios
       - name: Install detox-cli
         run: yarn global add detox-cli
+        with:
+          working-directory: VAMobile/ios
       - name: Install applesimutils
         run: |
           brew tap wix/brew
