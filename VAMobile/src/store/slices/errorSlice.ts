@@ -5,11 +5,7 @@ import { reduce } from 'underscore'
 import { AppThunk } from 'store'
 import { CommonErrorTypes } from 'constants/errors'
 import {
-  DowntimeFeatureNameConstants,
-  DowntimeFeatureType,
-  DowntimeFeatureTypeConstants,
-  MaintenanceWindowsGetData,
-  ScreenIDTypes,
+  DowntimeFeatureType, DowntimeFeatureTypeConstants, MaintenanceWindowsGetData, ScreenIDTypes
 } from 'store/api/types'
 import { ScreenIDTypesConstants } from '../api/types/Screens'
 import { get } from 'store/api'
@@ -23,7 +19,7 @@ export type DowntimeWindowsByFeatureType = {
 }
 
 export type DowntimeWindow = {
-  featureName: string
+  // featureName: string
   startTime: DateTime
   endTime: DateTime
 }
@@ -78,7 +74,7 @@ export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
   for (const m of maintWindows) {
     const maintWindow = m.attributes
     const metadata: DowntimeWindow = {
-      featureName: DowntimeFeatureNameConstants[maintWindow.service],
+      // featureName: DowntimeFeatureNameConstants[maintWindow.service],
       startTime: DateTime.fromISO(maintWindow.startTime),
       endTime: DateTime.fromISO(maintWindow.endTime),
     }

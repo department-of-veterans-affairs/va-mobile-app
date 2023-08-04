@@ -3,22 +3,20 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, VAScrollView } from 'components'
-import { ScreenIDToDowntimeFeature, useTheme } from 'utils/hooks'
 import { ErrorsState } from 'store/slices'
+import { useTheme } from 'utils/hooks'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { ScreenIDTypes } from 'store/api/types'
+import { ScreenIDToDowntimeFeature, ScreenIDTypes, ScreenNameFeatureConstants } from 'store/api/types'
 import { useSelector } from 'react-redux'
 
 export type DowntimeErrorProps = {
   /**The screen id for the screen that has the errors*/
   screenID: ScreenIDTypes
-  /**Override the feature name in the event that a feature happens to share the same api error(ex:contact information and personal information) */
-  overrideFeatureName?: string
 }
 
 /**Common component to show an alert when the service is down*/
-const DowntimeError: FC<DowntimeErrorProps> = ({ screenID, overrideFeatureName }) => {
+const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -33,10 +31,8 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID, overrideFeatureName }
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const feature = ScreenIDToDowntimeFeature[screenID]
   const downtimeWindow = feature ? downtimeWindowsByFeature[feature] : null
-  const featureName = !!overrideFeatureName ? overrideFeatureName : downtimeWindow?.featureName
-  // if (!featureName) {
-  //   featureName = downtimeWindow?.featureName
-  // }
+
+  const featureName = ScreenNameFeatureConstants[screenID]
   const endTime = downtimeWindow?.endTime.toFormat('fff')
 
   return (

@@ -145,7 +145,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   if (useError(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)) {
     return (
       <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} overrideFeatureName={stringToTitleCase(t('contactInformation.title'))} />
+        <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
   }

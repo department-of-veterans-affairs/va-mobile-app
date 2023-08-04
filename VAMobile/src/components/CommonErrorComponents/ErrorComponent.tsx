@@ -15,8 +15,6 @@ export type ErrorComponentProps = {
   screenID: ScreenIDTypes
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
-  /**Override the feature name in the event that a feature happens to share the same api error(ex:contact information and personal information) */
-  overrideFeatureName?: string
 }
 
 /**Main error handling component. This component will show the proper screen according to the type of error.*/
@@ -26,12 +24,12 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const feature = ScreenIDToDowntimeFeature[props.screenID]
   const isInDowntime = useDowntime(feature)
 
-  const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID, overrideFeatureName }) => {
+  const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID }) => {
     const tryAgain = onTryAgain ? onTryAgain : storeTryAgain
     const errorType = errorsByScreenID[screenID] || ''
 
     if (isInDowntime) {
-      return <DowntimeError screenID={screenID} overrideFeatureName={overrideFeatureName} />
+      return <DowntimeError screenID={screenID} />
     }
     // check which specific error occurred and return the corresponding error element
     switch (errorType) {
