@@ -11,7 +11,6 @@ jobs:
     env:
       ACTIONS_STEP_DEBUG: true
     runs-on: macos-latest-xl
-    needs: ios_build
     steps:
       - name: 'build'
         uses: ./.github/workflows/build_ios.yml
