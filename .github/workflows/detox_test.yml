@@ -83,13 +83,15 @@ jobs:
         timeout-minutes: 15
       - name: Install detox-cli
         run: yarn global add detox-cli
-        with:
-          working-directory: VAMobile/ios
+        working-directory: VAMobile
       - name: Install applesimutils
         run: |
           brew tap wix/brew
           brew install applesimutils
+        working-directory: VAMobile
       - name: Build detox
         run: yarn e2e:ios-build
+        working-directory: VAMobile
       - name: Run detox test
         run: yarn e2e:ios-test
+        working-directory: VAMobile
