@@ -3,12 +3,13 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIcon, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DateTime } from 'luxon'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
+import { Pressable, ViewStyle } from 'react-native'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { VeteranStatusCard } from 'components/VeteranStatusCard/VeteranStatusCard'
@@ -102,6 +103,13 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     onPress: navigateTo('Profile'),
   }
 
+  const pressableStyles: ViewStyle = {
+    width: '100%',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+  }
+
   return (
     <CategoryLanding headerButton={headerButton}>
       <Box flex={1} justifyContent="flex-start">
@@ -111,7 +119,29 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           </TextView>
         </Box>
         <EncourageUpdateAlert />
-        <VeteranStatusCard />
+        <Pressable style={pressableStyles} onPress={navigateTo('VeteranStatus')}>
+          <Box
+            borderRadius={5}
+            py={theme.dimensions.standardMarginBetween}
+            flex={1}
+            backgroundColor="profileBanner"
+            mb={theme.dimensions.standardMarginBetween}
+            mx={16}
+            flexDirection={'row'}
+            justifyContent={'space-between'}
+            alignItems={'center'}>
+            <TextView variant="MobileBody" color="primaryContrast" ml={20}>
+              {tc('veteranStatus.title')}
+            </TextView>
+            <VAIcon
+              name={'ChevronRight'}
+              fill={theme.colors.icon.contrast}
+              width={theme.dimensions.chevronListItemWidth}
+              height={theme.dimensions.chevronListItemHeight}
+              mr={theme.dimensions.listItemDecoratorMarginLeft}
+            />
+          </Box>
+        </Pressable>
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
             {tc('aboutVA')}

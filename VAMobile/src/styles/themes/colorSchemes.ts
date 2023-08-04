@@ -43,6 +43,7 @@ export const lightTheme = {
     tagInactive: colors.grayLightest,
     tagYellow: colors.goldLightest,
     tagGreen: colors.greenLightest,
+    veteranStatus: colors.primaryDarker,
   },
   border: {
     primary: colors.grayLight,
@@ -68,6 +69,7 @@ export const lightTheme = {
     tagInactive: colors.grayLight,
     tagYellow: colors.gold,
     tagGreen: colors.green,
+    veteranStatus: colors.coolBlueLighter,
   },
   icon: {
     footerButton: colors.primary,
@@ -240,6 +242,7 @@ export const darkTheme = {
     tagInactive: colors.grayLightest,
     tagYellow: colors.goldLightest,
     tagGreen: colors.greenLightest,
+    veteranStatus: colors.primaryDarker,
   },
   border: {
     primary: colors.darkmodeBorder,
@@ -265,6 +268,7 @@ export const darkTheme = {
     tagInactive: colors.grayLight,
     tagYellow: colors.gold,
     tagGreen: colors.green,
+    veteranStatus: colors.coolBlueLighter,
   },
   icon: {
     footerButton: colors.darkmodeLightBlue,

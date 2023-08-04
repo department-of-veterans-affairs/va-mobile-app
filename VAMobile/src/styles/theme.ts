@@ -175,6 +175,7 @@ export type VABackgroundColors = {
   tagInactive: string
   tagYellow: string
   tagGreen: string
+  veteranStatus: string
 }
 
 export type VABorderColors = {
@@ -201,6 +202,7 @@ export type VABorderColors = {
   tagInactive: string
   tagYellow: string
   tagGreen: string
+  veteranStatus: string
 }
 
 export type VAFontSizes = {
