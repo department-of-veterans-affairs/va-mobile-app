@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextView, VABulletList, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
 const PrescriptionHistoryNoPrescriptions: FC = () => {
@@ -10,6 +12,10 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const { standardMarginBetween } = theme.dimensions
+
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_rx_na())
+  }, [])
 
   const alertWrapperProps: BoxProps = {
     mt: standardMarginBetween,

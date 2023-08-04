@@ -8,6 +8,7 @@ export type APIError = {
   status?: number
   text?: string
   networkError?: boolean
+  endpoint?: string
   json?: {
     errors: Array<{
       title: string

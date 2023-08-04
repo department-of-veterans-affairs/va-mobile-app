@@ -18,6 +18,7 @@ context('StatusDefinition', () => {
       {
         setOptions: jest.fn(),
         navigate: jest.fn(),
+        addListener: jest.fn(),
       },
       { params: routeMock || { display: '', value: 'active' } },
     )

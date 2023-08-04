@@ -78,7 +78,8 @@ context('CollapsibleMessage', () => {
   })
 
   it('does not render CollapsibleMessage when it is the initialMessage', () => {
-    //ToDo when the ticket for the card is completed #6056
+    initializeTestInstance(initialErrorsState, true)
+    expect(screen.queryByText('John Smith')).toBeFalsy()
   })
 
   it('should render AttachmentLink content correctly when collapsibleMessage is expanded and should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', async () => {

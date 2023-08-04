@@ -11,7 +11,7 @@ import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } f
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
-import { useAlert, useAppDispatch, useError, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useError, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
@@ -26,6 +26,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const { profile, emailSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id
   const deleteEmailAlert = useAlert()
+  const confirmAlert = useDestructiveActionSheet()
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const [email, setEmail] = useState(profile?.contactEmail?.emailAddress || '')
   const [formContainsError, setFormContainsError] = useState(false)
@@ -49,6 +50,40 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const saveSnackbarMessages: SnackbarMessages = {
     successMsg: t('contactInformation.emailAddress.saved'),
     errorMsg: t('contactInformation.emailAddress.not.saved'),
+  }
+
+  useBeforeNavBackListener(navigation, (e) => {
+    if (noPageChanges()) {
+      return
+    }
+    e.preventDefault()
+    confirmAlert({
+      title: t('contactInformation.emailAddress.deleteChanges'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('keepEditing'),
+        },
+        {
+          text: t('deleteChanges'),
+          onPress: () => {
+            navigation.dispatch(e.data.action)
+          },
+        },
+      ],
+    })
+  })
+
+  const noPageChanges = (): boolean => {
+    if (profile?.contactEmail?.emailAddress) {
+      if (profile?.contactEmail?.emailAddress !== email) {
+        return false
+      }
+    } else if (email) {
+      return false
+    }
+    return true
   }
 
   const saveEmail = (): void => {

@@ -6,7 +6,9 @@ import React, { ReactElement } from 'react'
 
 import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
+import { logAnalyticsEvent } from './analytics'
 
 /** function that determines if a request file has been uploaded or received for a claim's event*/
 export const hasUploadedOrReceived = (event: ClaimEventData): boolean => {
@@ -212,6 +214,8 @@ export const onAddPhotos = (
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse) => void,
   totalBytesUsed: number,
+  claimID: string,
+  request: ClaimEventData,
 ): void => {
   const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('common:cancel')]
 
@@ -223,11 +227,13 @@ export const onAddPhotos = (
     (buttonIndex) => {
       switch (buttonIndex) {
         case 0:
+          logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'camera'))
           launchCamera({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
             postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
           })
           break
         case 1:
+          logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'gallery'))
           launchImageLibrary({ selectionLimit: MAX_NUM_PHOTOS, mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
             postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
           })
@@ -280,7 +286,7 @@ export const getIndicatorValue = (number: number, useCheckMark: boolean): ReactE
     )
   } else {
     return (
-      <TextView variant="ClaimPhase" textAlign={'center'}>
+      <TextView variant="ClaimPhase" textAlign={'center'} mt={-2.5}>
         {number}
       </TextView>
     )
