@@ -20,8 +20,9 @@ export const Appointmentse2eConstants = {
 	PATIENT_CANCELLATION: 'You canceled this appointment.',
 	VA_PAST_APPOINTMENT: 'To schedule another appointment, please visit VA.gov or call your VA medical center.',
 	PAST_APPOINTMENT_1_ID: 'Pending Primary Care Community care Request type: In-person',
-	PAST_APPOINTMENT_2_ID: 'Canceled Primary Care Cheyenne VA Medical Center Request type: In-person',
+	PAST_APPOINTMENT_2_ID: 'Canceled Optometry (routine eye exam) Vilasini Reddy Request type: In-person',
 	DATE_RANGE_INITIAL_TEXT: 'Past 3 months',
+	APPOINTMENT_CANCEL_REQUEST_TEXT: device.getPlatform() === 'ios' ? 'Cancel Request' : 'Cancel Request ',
 }
 
 const todaysDate = DateTime.local()
@@ -109,12 +110,7 @@ describe('Appointments Screen', () => {
 		await element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID)).tap()
 		await element(by.id('UpcomingApptDetailsTestID')).scrollTo('bottom')
 		await element(by.id('Cancel request')).tap()
-		await element(by.text('Cancel Request')).tap()
-		/*if (device.getPlatform() === 'android') {
-			await element(by.text('YES, CANCEL')).tap()
-		} else {
-			await element(by.text('Yes, Cancel Request')).tap()
-		}*/
+		await element(by.text(Appointmentse2eConstants.APPOINTMENT_CANCEL_REQUEST_TEXT)).tap()
 		await expect(element(by.text('Request canceled'))).toExist()
 		await element(by.text('Dismiss')).tap()
 	})
