@@ -85,6 +85,12 @@ const config = {
             label: 'Documentation',
           },
           {
+            type: 'doc',
+            docId: 'Design System/index',
+            position: 'left',
+            label: 'Design System',
+          },
+          {
             href: 'https://github.com/department-of-veterans-affairs/va-mobile-app',
             label: 'GitHub',
             position: 'right',
