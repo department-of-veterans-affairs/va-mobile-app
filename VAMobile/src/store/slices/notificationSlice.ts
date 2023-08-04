@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { AppThunk } from 'store'
-import { GetPushPrefsResponse, PUSH_APP_NAME, PushOsName, PushPreference, ScreenIDTypesConstants } from '../api'
+import { GetPushPrefsResponse, PUSH_APP_NAME, PushOsName, PushPreference, ScreenIDTypes, ScreenIDTypesConstants } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getDeviceName } from 'utils/deviceData'

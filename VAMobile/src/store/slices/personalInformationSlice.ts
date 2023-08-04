@@ -358,7 +358,7 @@ export const finishEditEmail = (): AppThunk => async (dispatch) => {
  * Redux action to make the API call to update a users address
  */
 export const updateAddress =
-  (addressData: AddressData, messages: SnackbarMessages, screenID?: revalidate?: boolean): AppThunk =>
+  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes, revalidate?: boolean): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     const retryFunction = () => dispatch(updateAddress(addressData, messages, screenID))
