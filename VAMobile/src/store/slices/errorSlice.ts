@@ -19,7 +19,6 @@ export type DowntimeWindowsByFeatureType = {
 }
 
 export type DowntimeWindow = {
-  // featureName: string
   startTime: DateTime
   endTime: DateTime
 }
@@ -74,7 +73,6 @@ export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
   for (const m of maintWindows) {
     const maintWindow = m.attributes
     const metadata: DowntimeWindow = {
-      // featureName: DowntimeFeatureNameConstants[maintWindow.service],
       startTime: DateTime.fromISO(maintWindow.startTime),
       endTime: DateTime.fromISO(maintWindow.endTime),
     }
@@ -84,7 +82,7 @@ export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
     }
   }
   // const metadata: DowntimeWindow = {
-  //   featureName: 'Claims',
+    // featureName: 'Claims',
   //   startTime: DateTime.fromISO('2022-04-25T23:35:26Z'),
   //   endTime: DateTime.fromISO('2024-04-25T23:35:26Z'),
   // }
