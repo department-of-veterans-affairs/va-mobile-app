@@ -1,7 +1,6 @@
 import { device, element, by, expect, waitFor } from 'detox'
 import getEnv from '../../src/utils/env'
 import { expect as jestExpect } from '@jest/globals'
-import { setTimeout } from "timers/promises"
 
 const { toMatchImageSnapshot } = require('jest-image-snapshot')
 const fs = require('fs')
@@ -24,6 +23,7 @@ export const CommonE2eIdConstants = {
   SETTINGS_ROW_TEXT: 'Settings',
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
   VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
+  MESSAGES_ROW_TEXT: 'Messages',
   SIGN_OUT_BTN_ID: 'Sign out',
   SIGN_OUT_CONFIRM_TEXT: 'Sign out?',
   BACK_BTN_LABEL: 'Back',
@@ -228,6 +228,10 @@ export async function openVaccineRecords() {
   await element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT)).tap()
 }
 
+export async function openMessages() {
+  await element(by.text(CommonE2eIdConstants.MESSAGES_ROW_TEXT)).tap() 
+}
+
 /**
  * Going back on android and iOS
 */
@@ -238,4 +242,3 @@ export async function backButton() {
 	await element(by.traits(['button'])).atIndex(0).tap();
   }
 }
-

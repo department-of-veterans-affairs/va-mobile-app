@@ -23,6 +23,8 @@ export type FullScreenSubtaskProps = {
   onLeftButtonPress?: () => void
   /** a11y label for left button text */
   leftButtonA11yLabel?: string
+  /** Optional TestID for left button */
+  leftButtonTestID?: string
   /** text of the title bar title(no text it doesn't appear) */
   title?: string
   /** a11y label for title text */
@@ -35,6 +37,8 @@ export type FullScreenSubtaskProps = {
   rightButtonDisabled?: boolean
   /** a11y label for right button text */
   rightButtonA11yLabel?: string
+  /** Optional TestID for right button */
+  rightButtonTestID?: string
   /** icon for title bar right button(must have right button text to display) */
   rightVAIconProps?: VAIconProps
   /** ref for the VAScrollView component that contains the content */
@@ -45,6 +49,8 @@ export type FullScreenSubtaskProps = {
   primaryContentButtonText?: string
   /** function called when primary content button is pressed(no function it doesn't appear) */
   onPrimaryContentButtonPress?: () => void
+  /** Optional TestID for primary button */
+  primaryButtonTestID?: string
   /** text of the footer button(no text it doesn't appear) */
   secondaryContentButtonText?: string
   /** function called when secondary content button is pressed(no function it doesn't appear) */
@@ -53,6 +59,8 @@ export type FullScreenSubtaskProps = {
   navigationMultiStepCancelScreen?: number
   /** whether to show the crisis line CTA (defaults to false) */
   showCrisisLineCta?: boolean
+  /** Optional TestID*/
+  testID?: string
 }
 
 export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
@@ -60,20 +68,24 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   leftButtonText,
   onLeftButtonPress,
   leftButtonA11yLabel,
+  leftButtonTestID,
   title,
   titleA11yLabel,
   rightButtonText,
   onRightButtonPress,
   rightButtonA11yLabel,
+  rightButtonTestID,
   rightVAIconProps,
   scrollViewRef,
   menuViewActions,
   primaryContentButtonText,
   onPrimaryContentButtonPress,
+  primaryButtonTestID,
   secondaryContentButtonText,
   onSecondaryContentButtonPress,
   navigationMultiStepCancelScreen,
   showCrisisLineCta = false,
+  testID,
 }) => {
   const theme = useTheme()
   const navigation = useNavigation()
@@ -145,8 +157,10 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   }
 
   const headerProps: HeaderBannerProps = {
-    leftButton: leftButtonText ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, onPress: onLeftTitleButtonPress } : undefined,
-    rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: onRightTitleButtonPress, icon: rightVAIconProps } : undefined,
+    leftButton: leftButtonText ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, testID: leftButtonTestID, onPress: onLeftTitleButtonPress } : undefined,
+    rightButton: rightButtonText
+      ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, testID: rightButtonTestID, onPress: onRightTitleButtonPress, icon: rightVAIconProps }
+      : undefined,
     menuViewActions,
   }
   const fillStyle: ViewStyle = {
@@ -159,7 +173,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
-      <VAScrollView scrollViewRef={scrollViewRef}>
+      <VAScrollView testID={testID} scrollViewRef={scrollViewRef}>
         {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
         {title && (
           <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
@@ -176,7 +190,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
             </Box>
           )}
           <Box ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter} mr={theme.dimensions.gutter} flex={1}>
-            <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} testID={primaryButtonTestID} />
           </Box>
         </Box>
       )}

@@ -262,6 +262,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
         pickerOptions: getToPickerOptions(),
         includeBlankPlaceholder: true,
         isRequiredField: true,
+        testID: 'startNewMessageToTestID',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
     },
@@ -274,6 +275,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
         pickerOptions: getStartNewMessageCategoryPickerOptions(t),
         includeBlankPlaceholder: true,
         isRequiredField: true,
+        testID: 'startNewMessageCategoryTestID',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.category.fieldError'),
     },
@@ -286,6 +288,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
         onChange: setSubject,
         helperTextKey: 'health:secureMessaging.startNewMessage.subject.helperText',
         isRequiredField: category === CategoryTypeFields.other,
+        testID: 'startNewMessageSubjectTestID',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.subject.fieldEmpty'),
       validationList: [
@@ -305,6 +308,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
                 label: t('secureMessaging.formMessage.addFiles'),
                 a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
                 onPress: onAddFiles,
+                testID: 'startNewMessageAddFilesTestID',
               }
             : undefined,
         attachmentsList,
@@ -320,6 +324,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
         isRequiredField: true,
         isTextArea: true,
         setInputCursorToBeginning: true,
+        testID: 'startNewMessageMessageFieldTestID',
       },
       fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },
@@ -388,7 +393,8 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
               onPress={navigateTo('ReplyHelp')}
               accessibilityRole={'button'}
               accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
-              importantForAccessibility={'yes'}>
+              importantForAccessibility={'yes'}
+              testID="startNewMessageOnlyUseMessagesTestID">
               <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
                 <CollapsibleView text={tc('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
               </Box>
@@ -427,7 +433,10 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       leftButtonText={tc('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineCta={true}>
+      showCrisisLineCta={true}
+      testID="startNewMessageTestID"
+      rightButtonTestID="startNewMessageSaveTestID"
+      leftButtonTestID="startNewMessageCancelTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
     </FullScreenSubtask>
   )

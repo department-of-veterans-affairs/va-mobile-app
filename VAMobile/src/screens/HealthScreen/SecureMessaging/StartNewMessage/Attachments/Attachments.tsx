@@ -149,7 +149,8 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       leftButtonText={tc('cancel')}
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={displaySelectFile ? t('secureMessaging.attachments.selectAFile') : t('secureMessaging.startNewMessage.attach')}
-      onPrimaryContentButtonPress={displaySelectFile ? onSelectAFile : onAttach}>
+      onPrimaryContentButtonPress={displaySelectFile ? onSelectAFile : onAttach}
+      primaryButtonTestID="selectAFileTestID">
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>

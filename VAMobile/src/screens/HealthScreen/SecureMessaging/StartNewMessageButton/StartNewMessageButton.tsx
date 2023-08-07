@@ -17,6 +17,7 @@ const StartNewMessageButton: FC = () => {
     onPress: onPress,
     a11yHint: t('secureMessaging.startNewMessage.a11yHint'),
     iconProps: { name: 'Compose', fill: 'navBar' },
+    testID: 'startNewMessageButtonTestID',
   }
 
   return (

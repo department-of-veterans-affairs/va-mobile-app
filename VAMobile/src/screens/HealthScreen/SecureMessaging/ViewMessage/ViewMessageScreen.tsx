@@ -126,6 +126,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.back}
           showCarat={true}
+          backButtonTestID="viewMessageBackTestID"
         />
       ),
       headerRight: () =>
@@ -213,7 +214,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         }
 
   return (
-    <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')} headerButton={headerButton}>
+    <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')} headerButton={headerButton} testID="viewMessageTestID">
       {headerButton && showModalPicker && (
         <VAModalPicker
           selectedValue={newCurrentFolderID}

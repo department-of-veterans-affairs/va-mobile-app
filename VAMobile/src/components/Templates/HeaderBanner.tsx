@@ -12,6 +12,7 @@ export type HeaderLeftButtonProps = {
   a11yLabel?: string
   onPress: () => void
   descriptiveBack?: boolean
+  testID?: string
 }
 
 /** Static header title */
@@ -42,6 +43,7 @@ export type HeaderRightButtonProps = {
   a11yLabel?: string
   onPress: () => void
   icon?: VAIconProps
+  testID?: string
 }
 
 export type HeaderBannerProps = {
@@ -172,6 +174,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
       variant: 'MobileBody',
       accessibilityLabel: leftButton.a11yLabel,
       allowFontScaling: false,
+      testID: leftButton.testID,
     }
   }
 
@@ -198,6 +201,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
       variant: 'MobileBody',
       accessibilityLabel: rightButton.a11yLabel,
       allowFontScaling: false,
+      testID: rightButton.testID,
     }
   }
 
