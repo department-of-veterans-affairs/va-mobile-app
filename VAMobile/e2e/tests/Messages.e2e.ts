@@ -17,7 +17,7 @@ export const MessagesE2eIdConstants = {
   ATTACHMENT_FILE_FOLDER_TEXT: device.getPlatform() === 'ios' ? 'File Folder' : 'File folder ',
   MESSAGE_INPUT_ID: 'messageInputTestID',
   SEND_BUTTON_ID: 'sendButtonTestID',
-  SELECT_A_FILE_ID: 'selectAFileTestID',
+  SELECT_A_FILE_ID: 'Select a file',
   REPLY_PAGE_TEST_ID: 'replyPageTestID',
   START_NEW_MESSAGE_TO_ID: 'startNewMessageToTestID',
   START_NEW_MESSAGE_CATEGORY_ID: 'startNewMessageCategoryTestID',
@@ -116,7 +116,7 @@ describe('Messages Screen', () => {
     await expect(element(by.text('The maximum size for each file is 6 MB.'))).toExist()
     await expect(element(by.text('The maximum total size for all files attached to 1 message is 10 MB.'))).toExist()
     await expect(element(by.text('We can\'t save attachments in a draft.'))).toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.SELECT_A_FILE_ID))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.SELECT_A_FILE_ID))).toExist()
   })
 
   it('should tap cancel and verify that the reply page is displayed', async () => {
@@ -130,7 +130,7 @@ describe('Messages Screen', () => {
 
   it('should tap add files, tap select a file, and verify the correct action sheet options are displayed', async () => {
     await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_ID)).tap()
-    await element(by.id(MessagesE2eIdConstants.SELECT_A_FILE_ID)).tap()
+    await element(by.text(MessagesE2eIdConstants.SELECT_A_FILE_ID)).tap()
     await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_CAMERA_TEXT))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_PHOTO_GALLERY_TEXT))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_FILE_FOLDER_TEXT))).toExist()
