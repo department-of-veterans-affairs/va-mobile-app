@@ -10,7 +10,6 @@ import { ScreenIDToDowntimeFeature, ScreenIDTypes, ScreenNameFeatureConstants } 
 import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'
 
-
 export type DowntimeErrorProps = {
   /**The screen id for the screen that has the errors*/
   screenID: ScreenIDTypes

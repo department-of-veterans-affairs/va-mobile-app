@@ -4,9 +4,7 @@ import { reduce } from 'underscore'
 
 import { AppThunk } from 'store'
 import { CommonErrorTypes } from 'constants/errors'
-import {
-  DowntimeFeatureType, DowntimeFeatureTypeConstants, MaintenanceWindowsGetData, ScreenIDTypes
-} from 'store/api/types'
+import { DowntimeFeatureType, DowntimeFeatureTypeConstants, MaintenanceWindowsGetData, ScreenIDTypes } from 'store/api/types'
 import { ScreenIDTypesConstants } from '../api/types/Screens'
 import { get } from 'store/api'
 
@@ -82,7 +80,7 @@ export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
     }
   }
   // const metadata: DowntimeWindow = {
-    // featureName: 'Claims',
+  // featureName: 'Claims',
   //   startTime: DateTime.fromISO('2022-04-25T23:35:26Z'),
   //   endTime: DateTime.fromISO('2024-04-25T23:35:26Z'),
   // }

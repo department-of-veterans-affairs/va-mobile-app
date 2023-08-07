@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView } from 'components'
 import { DirectDepositState, getBankData } from 'store/slices/directDepositSlice'
-import { DowntimeFeatureTypeConstants, ScreenIDTypes } from 'store/api/types'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from '../PaymentsStackScreens'
 import { RootState } from 'store'
