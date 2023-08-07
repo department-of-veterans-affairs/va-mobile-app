@@ -244,6 +244,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
           labelKey={'health:pastAppointments.selectADateRange'}
+          testID="getDateRangeTestID"
         />
       </Box>
       {getAppointmentData()}

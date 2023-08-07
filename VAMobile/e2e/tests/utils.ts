@@ -1,4 +1,4 @@
-import { device, element, by, expect, waitFor } from 'detox'
+import { device, element, by, expect, waitFor, web } from 'detox'
 import getEnv from '../../src/utils/env'
 import { expect as jestExpect } from '@jest/globals'
 import { setTimeout } from "timers/promises"
@@ -16,6 +16,7 @@ export const CommonE2eIdConstants = {
   VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
+  APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
   PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
   DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
@@ -200,6 +201,10 @@ export async function openHealth() {
 	await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap() 
 }
 
+export async function openAppointments() {
+	await element(by.text(CommonE2eIdConstants.APPOINTMENTS_TAB_BUTTON_TEXT)).tap() 
+}
+
 export async function openPayments() {
   await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
 }
@@ -210,6 +215,7 @@ export async function openDirectDeposit() {
 
 export async function openPrescriptions() {
 	await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
+
 }
 
 export async function openVAPaymentHistory() {
@@ -238,4 +244,3 @@ export async function backButton() {
 	await element(by.traits(['button'])).atIndex(0).tap();
   }
 }
-
