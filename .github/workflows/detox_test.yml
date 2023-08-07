@@ -20,13 +20,6 @@ env:
   DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
   # Slack API token used by fastlane
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-  environment: staging
-  lane: qa
-  notes: ''
-  ref:
-  version: qa
-  tf_group: ''
-  slack_thread_ts: ''
 
 jobs:
   build_ios:
@@ -46,15 +39,12 @@ jobs:
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: ${{ inputs.ref }}
       - name: Setup ssh-agent with VA Mobile Automation ssh key for fastlane match
         uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.VA_MOBILE_ROBOT_GITHUB_SSH_KEY }}
       - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
         run: |
-          echo "Notes: ${{ inputs.notes }}"
           echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
           echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
       - name: Setup Xcode
@@ -70,10 +60,7 @@ jobs:
       - name: Install npm dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: Set app environment variables
-        run: yarn env:${{ inputs.environment }}
-      - name: Set SLACK_THREAD_TS environment variable
-        if: inputs.slack_thread_ts
-        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
+        run: yarn env:staging
       - name: Bundle app
         run: yarn bundle:ios
       - name: Install pods
@@ -83,7 +70,7 @@ jobs:
       - name: Update fastlane
         run: bundle update fastlane
       - name: Run fastlane
-        run: bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
+        run: bundle exec fastlane qa version:"qa" notes:"" tfGroup:"" --verbose
       - name: Setup tmate session
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
