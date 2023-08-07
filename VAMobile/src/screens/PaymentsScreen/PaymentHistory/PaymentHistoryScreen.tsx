@@ -75,6 +75,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
     selectedValue: yearPickerOption?.value || '',
     onSelectionChange: setValuesOnPickerSelect,
     pickerOptions,
+    testID: 'selectAYearTestID',
   }
 
   const getPaymentsData = (): ReactNode => {
@@ -157,10 +158,15 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+    <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')} testID="paymentHistoryTestID">
       <Box {...testIdProps('', false, 'payments-page')}>
         <Box mx={gutter} mb={standardMarginBetween} mt={contentMarginTop}>
-          <Pressable onPress={navigateTo('PaymentMissing')} {...testIdProps(t('payments.ifIAmMissingPayemt'))} accessibilityRole="link" accessible={true}>
+          <Pressable
+            onPress={navigateTo('PaymentMissing')}
+            accessibilityRole="link"
+            accessible={true}
+            {...testIdProps(t('payments.ifIAmMissingPayemt'))}
+            testID="missingPaymentsTestID">
             <TextView {...textViewProps}>{t('payments.ifIAmMissingPayemt')}</TextView>
           </Pressable>
         </Box>

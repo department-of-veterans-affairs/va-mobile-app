@@ -265,6 +265,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
     }
 
     // Don't pass cancelButtonIndex because doing so would hide the button on iPad
+    // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
     showActionSheetWithOptions(
       {
         title: props.title,
@@ -274,7 +275,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
         textStyle: { color: currentTheme.colors.text.primary },
         destructiveButtonIndex: newDestructiveButtonIndex,
         destructiveColor: currentTheme.colors.text.error,
-        options: newButtons.map((button) => stringToTitleCase(button.text)),
+        options: newButtons.map((button) => stringToTitleCase(isIOS() ? button.text : button.text + ' ')),
         containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
       },
       (buttonIndex) => {
@@ -456,7 +457,8 @@ export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i
       if (isIOS()) {
         return stringToTitleCase(optionText)
       } else {
-        return capitalizeFirstLetter(optionText)
+        // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
+        return capitalizeFirstLetter(optionText + ' ')
       }
     })
 
