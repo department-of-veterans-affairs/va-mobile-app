@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { render, context, mockNavProps, waitFor } from 'testUtils'
+import { render, context, mockNavProps } from 'testUtils'
 
 import WebviewLogin from './WebviewLogin'
 import { initialAuthState } from 'store/slices'
