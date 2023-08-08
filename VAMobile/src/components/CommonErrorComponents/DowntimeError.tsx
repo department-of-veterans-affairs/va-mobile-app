@@ -30,10 +30,9 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   }
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const feature = ScreenIDToDowntimeFeature[screenID]
-  const downtimeWindow = feature ? downtimeWindowsByFeature[feature] : null
+  const downtimeWindow = feature ? downtimeWindowsByFeature[feature] : undefined
 
   const featureName = ScreenNameFeatureConstants[screenID]
-  // const featureName = t(`downtime.${screenID}.featureName`)
   const endTime = downtimeWindow?.endTime.toFormat('fff')
 
   return (

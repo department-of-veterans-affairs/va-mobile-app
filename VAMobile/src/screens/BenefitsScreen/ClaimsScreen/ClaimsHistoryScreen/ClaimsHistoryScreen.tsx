@@ -31,8 +31,8 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
   const claimType = selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
   const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
+  // claims and appeals downtime are coupled on the back end. no need to check appeals downtime.
   const claimsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.claims)
-  const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
   const title = featureEnabled('decisionLettersWaygate') ? t('claimsHistory.title') : t('claims.title')
@@ -48,11 +48,10 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   // load claims and appeals and filter upon mount
   // fetch the first page of Active and Closed
   useEffect(() => {
-    // only block api call if claims and appeals are both down
-    if (claimsAndAppealsAccess && (claimsNotInDowntime || appealsNotInDowntime)) {
+    if (claimsAndAppealsAccess && claimsNotInDowntime) {
       dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
     }
-  }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime, appealsNotInDowntime])
+  }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime])
 
   const fetchInfoAgain = (): void => {
     if (claimsAndAppealsAccess) {
