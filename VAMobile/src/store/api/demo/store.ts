@@ -66,16 +66,36 @@ const setDemoStore = (data: DemoStore) => {
   store = data
 }
 
-const createISODate = (match: string, sign: string, offset: string, units: string, option: string) => {
-  const zoneMethod = option === 'utc' ? 'utc' : 'now'
-  const format = option === 'short' ? 'toLocaleString' : 'toISO'
-  const signMethod = sign === '+' ? 'plus' : 'minus'
+/**
+ * Replace double curly brace date expression in mock file with ISO date.
+ * For example, \{\{now + 5 days\}\} is replaced with 2023-08-08T10:58:58.003-06:00
+ * (Ignore the backslashes, they're just for JSDoc.)
+ * Units can be days, weeks, months, or years, and you can add or subtract.
+ * You can add an optional format at the end. Options:
+ *   short: month-day-year (05-30-2023)
+ *   shortReversed: year-month-day (2023-07-11)
+ *   year: year only (2023)
+ *   utc: timestamp in UTC time (2023-08-10T22:04:16.695Z)
+ *   (default): timestamp in local timezone (2023-11-08T16:04:16.693-07:00)
+ */
+const generateDate = (match: string, signSymbol: string, offset: string, units: string, format: string) => {
+  const sign = signSymbol === '+' ? 'plus' : 'minus'
+  const localNow = DateTime.now()[sign]({ [units]: offset })
   let result = ''
   try {
-    result = DateTime[zoneMethod]()
-      .setLocale('zh') // y-m-d in short format
-      [signMethod]({ [units]: offset })
-      [format]()
+    if (format === 'short') {
+      result = localNow.toFormat('MM-dd-yyyy')
+    } else if (format === 'shortReversed') {
+      result = localNow.toFormat('yyyy-MM-dd')
+    } else if (format === 'year') {
+      result = localNow.toFormat('yyyy')
+    } else if (format === 'utc') {
+      result = DateTime.utc()
+        [sign]({ [units]: offset })
+        .toISO()
+    } else {
+      result = localNow.toString()
+    }
   } catch (error) {
     console.log(`Error in mock file date expression ${match}: ${error}`)
   }
@@ -83,16 +103,8 @@ const createISODate = (match: string, sign: string, offset: string, units: strin
   return result
 }
 
-/**
- * Replace double curly brace date expressions in mock files with ISO dates.
- * For example, \{\{now + 5 days\}\} is replaced with 2023-08-08T10:58:58.003-06:00
- * (Ignore the backslashes, they're just for JSDoc.)
- * Units can be days, weeks, months, or years, and you can add or subtract.
- * Times are in the local TZ by default. For UTC add "utc" at the end, like "now + 5 days utc"
- * Put "short" at the end for shorter output. "now + 5 days short" outputs "2023/8/8"
- */
 const transformDates = (fileObject: Record<string, unknown>) => {
-  return JSON.parse(JSON.stringify(fileObject).replace(/{{now (\+|-) (\d+) (\w+) ?(\w+)?}}/g, createISODate))
+  return JSON.parse(JSON.stringify(fileObject).replace(/{{now (\+|-) (\d+) (\w+) ?(\w+)?}}/g, generateDate))
 }
 
 /**
