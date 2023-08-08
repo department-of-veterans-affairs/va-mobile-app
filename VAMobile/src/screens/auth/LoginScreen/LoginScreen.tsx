@@ -51,11 +51,11 @@ const LoginScreen: FC = () => {
 
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
-    navigation.navigate('Webview', {
+    navigation.navigate('Webview' as never, {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
       displayTitle: t('common:webview.vagov'),
       loadingMessage: t('common:webview.valocation.loading'),
-    })
+    } as never)
   }
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
