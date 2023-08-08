@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon'
+
 import { AddressData, PaymentAccountData, SecureMessagingSystemFolderIdConstants } from '../types'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
@@ -64,6 +66,32 @@ const setDemoStore = (data: DemoStore) => {
   store = data
 }
 
+const createISODate = (match: string, sign: string, offset: string, units: string, utc: string) => {
+  const zoneMethod = utc ? 'utc' : 'now'
+  const signMethod = sign === '+' ? 'plus' : 'minus'
+  let result = ''
+  try {
+    result = DateTime[zoneMethod]()
+      [signMethod]({ [units]: offset })
+      .toISO()
+  } catch (error) {
+    console.log(`Error in mock file date expression ${match}: ${error}`)
+  }
+
+  return result
+}
+
+/**
+ * Replace double curly brace date expressions in mock files with ISO dates.
+ * For example, \{\{now + 5 days\}\} is replaced with 2023-08-08T10:58:58.003-06:00
+ * (Ignore the backslashes, they're just for JSDoc.)
+ * Units can be days, weeks, months, or years, and you can add or subtract.
+ * Times are in the local TZ by default. For UTC add "utc" at the end, like "now + 5 days utc"
+ */
+const transformDates = (fileObject: Record<string, unknown>) => {
+  return JSON.parse(JSON.stringify(fileObject).replace(/{{now (\+|-) (\d+) (\w+) ?(utc)?}}/g, createISODate))
+}
+
 /**
  * function to import the demo data store from the JSON file and initialize the demo store.
  */
@@ -81,7 +109,8 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/prescriptions.json'),
     import('./mocks/notifications.json'),
   ])
-  setDemoStore(data.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
+  const transformedData = data.map((file) => transformDates(file))
+  setDemoStore(transformedData.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
 }
 
 /**
