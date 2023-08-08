@@ -6,7 +6,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { AuthState, AuthorizedServicesState, completeSync, logInDemoMode } from 'store/slices'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
-import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, checkForDowntimeErrors, getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/slices'
+import { MilitaryServiceState, PersonalInformationState, checkForDowntimeErrors, getProfileInfo, getServiceHistory } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
@@ -28,7 +28,6 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const { preloadComplete: personalInformationLoaded } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
   const { preloadComplete: militaryHistoryLoaded } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
-  const { preloadComplete: disabilityRatingLoaded } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
   const { hasLoaded: authorizedServicesLoaded, militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>(
     (state) => state.authorizedServices,
   )
@@ -51,11 +50,9 @@ const SyncScreen: FC<SyncScreenProps> = () => {
         dispatch(getProfileInfo())
       } else if (authorizedServicesLoaded && militaryInfoAuthorization && !militaryHistoryLoaded) {
         dispatch(getServiceHistory())
-      } else if (!disabilityRatingLoaded) {
-        dispatch(getDisabilityRating())
       }
     }
-  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded, disabilityRatingLoaded, militaryHistoryLoaded])
+  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded, militaryHistoryLoaded])
 
   useEffect(() => {
     if (syncing) {
@@ -69,10 +66,10 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     }
 
     const finishSyncingMilitaryHistory = authorizedServicesLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded)
-    if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded) {
+    if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn && !loggingOut) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t, disabilityRatingLoaded, syncing])
+  }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t, syncing])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
