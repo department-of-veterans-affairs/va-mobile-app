@@ -7,7 +7,7 @@ const { toMatchImageSnapshot } = require('jest-image-snapshot')
 const fs = require('fs')
 jestExpect.extend({ toMatchImageSnapshot })
 
-const { DEMO_PASSWORD, LOGIN_PASSWORD, LOGIN_USERNAME } = getEnv() 
+const { DEMO_PASSWORD } = getEnv() 
 
 export const CommonE2eIdConstants = {
   VA_LOGO_ICON_ID: 'va-icon',
