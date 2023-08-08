@@ -1,4 +1,4 @@
-import { expect, device, by, element, waitFor } from 'detox'
+import { expect, device, by, element } from 'detox'
 import { loginToDemoMode, openContactInfo, openProfile } from './utils'
 
 export const ContactInfoE2eIdConstants = {
