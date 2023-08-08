@@ -78,7 +78,7 @@ export const DowntimeFeatureTypeConstants: {
   rx: 'rx_refill',
 }
 
-export const ScreenNameFeatureConstants = {
+export const ScreenIDToFeatureName = {
   [ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID]: 'Claims',
   [ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID]: 'Claims',
   [ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID]: 'Appointments',
