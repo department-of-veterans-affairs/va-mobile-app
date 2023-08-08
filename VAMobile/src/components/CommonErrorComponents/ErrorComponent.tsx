@@ -7,7 +7,7 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { ScreenIDToDowntimeFeature, ScreenIDTypes } from 'store/api/types'
+import { DowntimeFeatureType, ScreenIDToDowntimeFeature, ScreenIDTypes } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
 
 export type ErrorComponentProps = {
@@ -21,8 +21,8 @@ export type ErrorComponentProps = {
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const { errorsByScreenID, tryAgain: storeTryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HEALTH])
-  const feature = ScreenIDToDowntimeFeature[props.screenID]
-  const isInDowntime = useDowntime(feature)
+  const features = ScreenIDToDowntimeFeature[props.screenID]
+  const isInDowntime = features?.some(feature => { useDowntime(feature as DowntimeFeatureType) })
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID }) => {
     const tryAgain = onTryAgain ? onTryAgain : storeTryAgain

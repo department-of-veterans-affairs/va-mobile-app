@@ -110,17 +110,17 @@ export const DowntimeFeatureNameConstants = {
 }
 
 export const ScreenIDToDowntimeFeature = {
-  [ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID]: DowntimeFeatureTypeConstants.claims,
-  [ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID]: DowntimeFeatureTypeConstants.claims,
-  [ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID]: DowntimeFeatureTypeConstants.appointments,
-  [ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID]: DowntimeFeatureTypeConstants.secureMessaging,
-  [ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID]: DowntimeFeatureTypeConstants.letters,
-  [ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID]: DowntimeFeatureTypeConstants.directDepositBenefits,
-  [ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID]: DowntimeFeatureTypeConstants.disabilityRating,
-  [ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID]: DowntimeFeatureTypeConstants.militaryServiceHistory,
-  [ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID]: DowntimeFeatureTypeConstants.userProfileUpdate,
-  [ScreenIDTypesConstants.PAYMENTS_SCREEN_ID]: DowntimeFeatureTypeConstants.payments,
-  [ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID]: DowntimeFeatureTypeConstants.rx,
+  [ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID]: [DowntimeFeatureTypeConstants.claims, DowntimeFeatureNameConstants.appeals],
+  [ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID]: [DowntimeFeatureTypeConstants.claims],
+  [ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID]: [DowntimeFeatureTypeConstants.appointments],
+  [ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID]: [DowntimeFeatureTypeConstants.secureMessaging],
+  [ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID]: [DowntimeFeatureTypeConstants.letters],
+  [ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID]: [DowntimeFeatureTypeConstants.directDepositBenefits],
+  [ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID]: [DowntimeFeatureTypeConstants.disabilityRating],
+  [ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID]: [DowntimeFeatureTypeConstants.militaryServiceHistory],
+  [ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID]: [DowntimeFeatureTypeConstants.userProfileUpdate],
+  [ScreenIDTypesConstants.PAYMENTS_SCREEN_ID]: [DowntimeFeatureTypeConstants.payments],
+  [ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID]: [DowntimeFeatureTypeConstants.rx],
 }
 
 export type MaintenanceWindowsGetData = {

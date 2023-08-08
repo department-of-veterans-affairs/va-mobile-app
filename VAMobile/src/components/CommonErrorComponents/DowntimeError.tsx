@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, VAScrollView } from 'components'
-import { ErrorsState } from 'store/slices'
+import { DowntimeWindow, ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { ScreenIDToDowntimeFeature, ScreenIDTypes, ScreenIDToFeatureName } from 'store/api/types'
+import { DowntimeFeatureType, ScreenIDToDowntimeFeature, ScreenIDTypes, ScreenIDToFeatureName } from 'store/api/types'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
+import { useDowntime, useTheme } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
   /**The screen id for the screen that has the errors*/
@@ -29,11 +29,23 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
     mb: theme.dimensions.contentMarginBottom,
   }
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const feature = ScreenIDToDowntimeFeature[screenID]
-  const downtimeWindow = feature ? downtimeWindowsByFeature[feature] : undefined
+  const features = ScreenIDToDowntimeFeature[screenID]
+  let latestDowntimeWindow: DowntimeWindow | null = null
+  features.forEach(feature => {
+    if (useDowntime(feature as DowntimeFeatureType)) {
+      const downtimeWindow = downtimeWindowsByFeature[feature as DowntimeFeatureType]
+      if (downtimeWindow) {
+        if (latestDowntimeWindow === null) {
+          latestDowntimeWindow = downtimeWindow
+        } else if (latestDowntimeWindow.endTime < downtimeWindow.endTime) {
+          latestDowntimeWindow = downtimeWindow
+        }
+      }
+    }
+  })
 
   const featureName = ScreenIDToFeatureName[screenID]
-  const endTime = downtimeWindow?.endTime.toFormat('fff')
+  const endTime = !!latestDowntimeWindow ? (latestDowntimeWindow as DowntimeWindow).endTime.toFormat('fff') : ''
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
