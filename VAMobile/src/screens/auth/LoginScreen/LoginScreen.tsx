@@ -6,11 +6,14 @@ import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView,
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useStartAuth } from 'utils/hooks/auth'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
@@ -23,6 +26,7 @@ const LoginScreen: FC = () => {
   const { authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
 
   const dispatch = useAppDispatch()
+  const navigation = useNavigation()
   const navigateTo = useRouteNavigation()
   const startAuth = useStartAuth()
   const theme = useTheme()
@@ -45,11 +49,15 @@ const LoginScreen: FC = () => {
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
-  const onFacilityLocator = navigateTo('Webview', {
-    url: WEBVIEW_URL_FACILITY_LOCATOR,
-    displayTitle: t('common:webview.vagov'),
-    loadingMessage: t('common:webview.valocation.loading'),
-  })
+  const onFacilityLocator = () => {
+    logAnalyticsEvent(Events.vama_find_location())
+    navigation.navigate('Webview', {
+      url: WEBVIEW_URL_FACILITY_LOCATOR,
+      displayTitle: t('common:webview.vagov'),
+      loadingMessage: t('common:webview.valocation.loading'),
+    })
+  }
+
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const findLocationProps: BoxProps = {
