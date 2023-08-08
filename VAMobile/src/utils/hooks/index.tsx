@@ -34,11 +34,11 @@ import { useTheme as styledComponentsUseTheme } from 'styled-components'
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
   const { errorsByScreenID } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const features = ScreenIDToDowntimeFeature[currentScreenID]
-  features?.forEach(feature => {
+  features?.forEach((feature) => {
     if (useDowntime(feature as DowntimeFeatureType)) {
       return true
     }
-  });
+  })
 
   return !!errorsByScreenID[currentScreenID]
 }
