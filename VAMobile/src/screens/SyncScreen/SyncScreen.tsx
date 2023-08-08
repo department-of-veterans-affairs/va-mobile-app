@@ -1,4 +1,4 @@
-import { ViewStyle } from 'react-native'
+import { Dimensions, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
@@ -74,9 +74,19 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     }
   }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t, disabilityRatingLoaded, syncing])
 
+  const isPortrait = () => {
+    const dim = Dimensions.get('screen')
+    return dim.height >= dim.width
+  }
+
   return (
-    <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
-      <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+    <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
+      <Box
+        justifyContent="center"
+        mx={isPortrait() ? theme.dimensions.gutter : theme.dimensions.headerHeight}
+        mt={theme.dimensions.contentMarginTop}
+        mb={theme.dimensions.contentMarginBottom}
+        alignItems={'center'}>
         <VAIcon name={'Logo'} />
 
         <Box alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={50}>

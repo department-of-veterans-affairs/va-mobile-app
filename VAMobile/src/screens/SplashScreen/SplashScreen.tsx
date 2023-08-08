@@ -1,5 +1,5 @@
 import { Box, VAIcon, VAScrollView } from 'components'
-import { ViewStyle } from 'react-native'
+import { Dimensions, ViewStyle } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import React, { FC } from 'react'
@@ -13,9 +13,19 @@ const SplashScreen: FC<SplashScreenProps> = () => {
     backgroundColor: theme.colors.background.splashScreen,
   }
 
+  const isPortrait = () => {
+    const dim = Dimensions.get('screen')
+    return dim.height >= dim.width
+  }
+
   return (
-    <VAScrollView {...testIdProps('Splash-page')} contentContainerStyle={splashStyles}>
-      <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+    <VAScrollView {...testIdProps('Splash-page')} contentContainerStyle={splashStyles} removeInsets={true}>
+      <Box
+        justifyContent="center"
+        mx={isPortrait() ? theme.dimensions.gutter : theme.dimensions.headerHeight}
+        mt={theme.dimensions.contentMarginTop}
+        mb={theme.dimensions.contentMarginBottom}
+        alignItems={'center'}>
         <VAIcon name={'Logo'} />
       </Box>
     </VAScrollView>

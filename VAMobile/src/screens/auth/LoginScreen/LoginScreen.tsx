@@ -1,4 +1,4 @@
-import { Pressable, StyleProp, ViewStyle } from 'react-native'
+import { Dimensions, Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
@@ -75,6 +75,11 @@ const LoginScreen: FC = () => {
     }
   }
 
+  const isPortrait = () => {
+    const dim = Dimensions.get('screen')
+    return dim.height >= dim.width
+  }
+
   const onLoginInit = demoMode
     ? () => {
         dispatch(loginStart(true))
@@ -84,11 +89,11 @@ const LoginScreen: FC = () => {
     : startAuth
 
   return (
-    <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
+    <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
-      <Box flex={1}>
+      <Box flex={1} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait() ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween} testID="va-icon">
           <VAIcon testID="VAIcon" name={'Logo'} />
         </Box>
