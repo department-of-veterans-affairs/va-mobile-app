@@ -66,14 +66,16 @@ const setDemoStore = (data: DemoStore) => {
   store = data
 }
 
-const createISODate = (match: string, sign: string, offset: string, units: string, utc: string) => {
-  const zoneMethod = utc ? 'utc' : 'now'
+const createISODate = (match: string, sign: string, offset: string, units: string, option: string) => {
+  const zoneMethod = option === 'utc' ? 'utc' : 'now'
+  const format = option === 'short' ? 'toLocaleString' : 'toISO'
   const signMethod = sign === '+' ? 'plus' : 'minus'
   let result = ''
   try {
     result = DateTime[zoneMethod]()
+      .setLocale('zh') // y-m-d in short format
       [signMethod]({ [units]: offset })
-      .toISO()
+      [format]()
   } catch (error) {
     console.log(`Error in mock file date expression ${match}: ${error}`)
   }
@@ -87,9 +89,10 @@ const createISODate = (match: string, sign: string, offset: string, units: strin
  * (Ignore the backslashes, they're just for JSDoc.)
  * Units can be days, weeks, months, or years, and you can add or subtract.
  * Times are in the local TZ by default. For UTC add "utc" at the end, like "now + 5 days utc"
+ * Put "short" at the end for shorter output. "now + 5 days short" outputs "2023/8/8"
  */
 const transformDates = (fileObject: Record<string, unknown>) => {
-  return JSON.parse(JSON.stringify(fileObject).replace(/{{now (\+|-) (\d+) (\w+) ?(utc)?}}/g, createISODate))
+  return JSON.parse(JSON.stringify(fileObject).replace(/{{now (\+|-) (\d+) (\w+) ?(\w+)?}}/g, createISODate))
 }
 
 /**
