@@ -53,9 +53,10 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { messagesById, threads, loading, loadingFile, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
+  const { messagesById, threads, loading, loadingFile, loadingInbox, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<
+    RootState,
+    SecureMessagingState
+  >((state) => state.secureMessaging)
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
@@ -64,9 +65,13 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   // have to use uselayout due to the screen showing in white or showing the previouse data
   useLayoutEffect(() => {
-    dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
-    dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
-  }, [messageID, dispatch])
+    // Only get message and thread when inbox isn't being fetched
+    // to avoid a race condition with writing to `messagesById`
+    if (!loadingInbox) {
+      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
+      dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
+    }
+  }, [loadingInbox, messageID, dispatch])
 
   useEffect(() => {
     if (isUndo || moveMessageFailed) {
@@ -166,7 +171,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     )
   }
 
-  if (loading || loadingFile || movingMessage) {
+  if (loading || loadingFile || loadingInbox || movingMessage) {
     return (
       <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
         <LoadingComponent
