@@ -192,6 +192,7 @@ const DisabilityRatingsScreen: FC = () => {
     numberOrUrlLink: LINK_URL_ABOUT_DISABILITY_RATINGS,
     accessibilityHint: t('disabilityRating.learnAboutLinkTitle.a11yHint'),
     a11yLabel: t('disabilityRating.learnAboutLinkTitle.a11yLabel'),
+    testID: 'aboutDisabilityRatingsTestID',
   }
 
   const titleProps: TextViewProps = {
@@ -203,7 +204,7 @@ const DisabilityRatingsScreen: FC = () => {
   }
 
   return (
-    <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
+    <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')} testID="disabilityRatingTestID">
       <Box>{getCombinedTotalSection()}</Box>
       <Box mb={condensedMarginBetween}>
         <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
