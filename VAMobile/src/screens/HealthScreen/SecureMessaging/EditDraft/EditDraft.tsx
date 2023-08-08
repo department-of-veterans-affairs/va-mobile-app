@@ -55,7 +55,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { SubjectLengthValidationFn, formatSubject, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
-import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 
@@ -65,7 +65,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const goToDrafts = useGoToDrafts()
   const snackbarMessages: SnackbarMessages = {
@@ -353,7 +352,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     })
   }
 
-  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
+  const onAddFiles = () => {
+    logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
+    navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
+  }
 
   let formFieldsList: Array<FormFieldType<unknown>> = []
 
@@ -469,6 +471,11 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       )
     }
 
+    const navigateToReplyHelp = () => {
+      logAnalyticsEvent(Events.vama_sm_nonurgent())
+      navigation.navigate('ReplyHelp')
+    }
+
     return (
       <Box>
         <MessageAlert
@@ -507,7 +514,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Pressable
-              onPress={navigateTo('ReplyHelp')}
+              onPress={navigateToReplyHelp}
               accessibilityRole={'button'}
               accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
               importantForAccessibility={'yes'}>

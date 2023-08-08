@@ -7,6 +7,7 @@ import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingCompon
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DemoState } from 'store/slices/demoSlice'
+import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -17,6 +18,7 @@ import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMess
 import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
 import { getfolderName } from 'utils/secureMessaging'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
@@ -209,7 +211,10 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       : {
           label: tc('pickerLaunchBtn'),
           icon: moveIconProps,
-          onPress: () => setShowModalPicker(true),
+          onPress: () => {
+            logAnalyticsEvent(Events.vama_sm_move())
+            setShowModalPicker(true)
+          },
         }
 
   return (

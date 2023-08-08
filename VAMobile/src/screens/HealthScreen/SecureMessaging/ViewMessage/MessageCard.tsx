@@ -7,6 +7,7 @@ import React, { FC, ReactNode } from 'react'
 
 import { AttachmentLink, Box, CollapsibleView, LoadingComponent, TextView } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { RootState } from 'store'
@@ -14,7 +15,9 @@ import { SecureMessagingState, downloadFileAttachment } from 'store/slices'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { formatSubject } from 'utils/secureMessaging'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useNavigation } from '@react-navigation/native'
 import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
 import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 
@@ -30,7 +33,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
   const { t: tFunction } = useTranslation()
   const { hasAttachments, attachment, attachments, senderName, sentDate, body, messageId, subject, category } = message
   const dateTime = getFormattedDateAndTimeZone(sentDate)
-  const navigateTo = useRouteNavigation()
+  const navigation = useNavigation()
   const dispatch = useAppDispatch()
   const { loadingAttachments } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
@@ -101,14 +104,15 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
     }
   }
 
+  const navigateToReplyHelp = () => {
+    logAnalyticsEvent(Events.vama_sm_nonurgent())
+    navigation.navigate('ReplyHelp')
+  }
+
   const getMessageHelp = (): ReactNode => {
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
-        <Pressable
-          onPress={navigateTo('ReplyHelp')}
-          accessibilityRole={'button'}
-          accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
-          importantForAccessibility={'yes'}>
+        <Pressable onPress={navigateToReplyHelp} accessibilityRole={'button'} accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')} importantForAccessibility={'yes'}>
           <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
             <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
           </Box>

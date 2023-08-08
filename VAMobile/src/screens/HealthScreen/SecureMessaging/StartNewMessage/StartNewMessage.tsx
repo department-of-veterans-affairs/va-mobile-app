@@ -57,7 +57,6 @@ import {
   useDestructiveActionSheet,
   useError,
   useMessageWithSignature,
-  useRouteNavigation,
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
@@ -70,7 +69,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const draftAttachmentAlert = useDestructiveActionSheet()
 
@@ -250,8 +248,10 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     })
   }
 
-  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
-
+  const onAddFiles = () => {
+    logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
+    navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
+  }
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.Picker,
@@ -363,6 +363,11 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       )
     }
 
+    const navigateToReplyHelp = () => {
+      logAnalyticsEvent(Events.vama_sm_nonurgent())
+      navigation.navigate('ReplyHelp')
+    }
+
     return (
       <Box>
         <MessageAlert
@@ -385,7 +390,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
           />
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Pressable
-              onPress={navigateTo('ReplyHelp')}
+              onPress={navigateToReplyHelp}
               accessibilityRole={'button'}
               accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
               importantForAccessibility={'yes'}>

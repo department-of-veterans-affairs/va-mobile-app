@@ -2,14 +2,20 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, VAButton, VAButtonProps } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useNavigation } from '@react-navigation/native'
+import { useTheme } from 'utils/hooks'
 
 const StartNewMessageButton: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
-  const navigateTo = useRouteNavigation()
+  const navigation = useNavigation()
   const theme = useTheme()
-  const onPress = navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  const onPress = () => {
+    logAnalyticsEvent(Events.vama_sm_start())
+    navigation.navigate('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  }
 
   const startNewMessageButtonProps: VAButtonProps = {
     label: t('secureMessaging.startNewMessage'),
