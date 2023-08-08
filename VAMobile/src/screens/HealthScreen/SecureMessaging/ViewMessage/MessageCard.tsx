@@ -106,7 +106,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
 
   const navigateToReplyHelp = () => {
     logAnalyticsEvent(Events.vama_sm_nonurgent())
-    navigation.navigate('ReplyHelp')
+    navigation.navigate('ReplyHelp' as never)
   }
 
   const getMessageHelp = (): ReactNode => {

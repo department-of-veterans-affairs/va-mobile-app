@@ -14,7 +14,7 @@ const StartNewMessageButton: FC = () => {
   const theme = useTheme()
   const onPress = () => {
     logAnalyticsEvent(Events.vama_sm_start())
-    navigation.navigate('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+    navigation.navigate('StartNewMessage' as never, { attachmentFileToAdd: {}, attachmentFileToRemove: {} } as never)
   }
 
   const startNewMessageButtonProps: VAButtonProps = {
