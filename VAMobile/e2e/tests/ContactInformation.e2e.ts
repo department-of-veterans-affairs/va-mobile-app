@@ -1,5 +1,5 @@
 import { expect, device, by, element, waitFor } from 'detox'
-import { loginToDemoMode, openContactInfo, openProfile, loginToApp } from './utils'
+import { loginToDemoMode, openContactInfo, openProfile } from './utils'
 
 export const ContactInfoE2eIdConstants = {
   MAILING_ADDRESS_ID: 'Mailing address 3101 N Fort Valley Rd Flagstaff, AZ, 86001',
@@ -81,12 +81,6 @@ describe('Contact Info Screen', () => {
   })
 
   it('should open the home address', async () => {
-    if (device.getPlatform() === 'android') {
-      await device.launchApp({newInstance: true})
-      await loginToApp()
-      await openProfile()
-      await openContactInfo()
-    }
     await element(by.text('Home address')).tap()
   })
 
@@ -105,6 +99,7 @@ describe('Contact Info Screen', () => {
     await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
     await element(by.text('United States')).tap()
     await element(by.text('Done')).tap()
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).clearText()
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).replaceText('3101 N Fort Valley Rd')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
     await element(by.id('EditAddressTestID')).scrollTo('bottom')
@@ -118,18 +113,6 @@ describe('Contact Info Screen', () => {
     await element(by.id('Use this address')).tap()
     await expect(element(by.text('Home address saved'))).toExist()
     await element(by.text('Dismiss')).tap()
-  })
-
-  it('should update the address and remove the number in street address line 2', async () => {
-    if(device.getPlatform() === 'android') {
-      await element(by.text('Home address')).tap()
-      await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).clearText()
-      await element(by.text('Save')).tap()
-      await element(by.id('suggestedAddressTestID')).tap()
-      await element(by.id('Use this address')).tap()
-      await expect(element(by.text('Home address saved'))).toExist()
-      await element(by.text('Dismiss')).tap()
-    }
   })
 
   it ('should open the home phone number', async () => {
@@ -173,6 +156,10 @@ describe('Contact Info Screen', () => {
   })
 
   it ('should open the mobile phone number', async () => {
+    await device.launchApp({newInstance: true})
+    await loginToDemoMode()
+    await openProfile()
+    await openContactInfo()
     await element(by.id('ContactInfoTestID')).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.MOBILE_PHONE_ID)).tap()
   })
@@ -200,7 +187,7 @@ describe('Contact Info Screen', () => {
   })
 
   it('should update the email address with a +', async () => {
-    await element(by.id('EmailAddressTestID')).replaceText('attended1+@gmail.com')
+    await element(by.id('emailAddressEditTestID')).replaceText('attended1+@gmail.com')
     await element(by.text('Save')).tap()
     await expect(element(by.text('Email address saved'))).toExist()
     await element(by.text('Dismiss')).tap()
@@ -209,7 +196,7 @@ describe('Contact Info Screen', () => {
   it('should update the email address and remove the +', async () => {
     await element(by.id('ContactInfoTestID')).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
-    await element(by.id('EmailAddressTestID')).replaceText('attended1@gmail.com')
+    await element(by.id('emailAddressEditTestID')).replaceText('attended1@gmail.com')
     await element(by.text('Save')).tap()
     await expect(element(by.text('Email address saved'))).toExist()
     await element(by.text('Dismiss')).tap()

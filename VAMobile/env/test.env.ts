@@ -36,5 +36,3 @@ export const CARRIER_TRACKING_URL_USPS = 'https://tools.usps.com/go/TrackConfirm
 export const CARRIER_TRACKING_URL_UPS = 'https://wwwapps.ups.com/WebTracking/track?track=yes&trackNums='
 export const CARRIER_TRACKING_URL_FEDEX = 'https://www.fedex.com/apps/fedextrack/?tracknumbers='
 export const CARRIER_TRACKING_URL_DHL = 'https://www.dhl.com/en/express/tracking.html?AWB='
-export const LOGIN_PASSWORD='' 
-export const LOGIN_USERNAME='' 

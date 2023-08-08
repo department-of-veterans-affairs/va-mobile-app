@@ -98,32 +98,6 @@ export async function checkIfElementIsPresent(matchString: string, findbyText = 
   }
 }
 
-/** Log the automation into a staging
- * */
-export async function loginToApp() {
-	try {
-	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
-	await element(by.text('Dismiss')).tap()
-  } catch (e) {}
-  await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
-
-  await expect(web.element(by.web.xpath('//*[@id="sign-in-wrapper"]/button[2]'))).toExist()
-  await web.element(by.web.xpath('//*[@id="sign-in-wrapper"]/button[2]')).tap()
-  await expect(web.element(by.web.name('user[email]'))).toExist()
-  await web.element(by.web.name('user[email]')).replaceText(LOGIN_USERNAME)
-  await web.element(by.web.name('user[password]')).replaceText(LOGIN_PASSWORD)
-  await web.element(by.web.className('btn')).tap()
-  await expect(web.element(by.web.name('button'))).toExist()
-  await web.element(by.web.name('button')).tap()
-  await expect(web.element(by.web.name('button'))).toExist()
-  await web.element(by.web.name('button')).tap()
-  try {
-	  await waitFor(element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT))).toExist().withTimeout(60000)
-	  await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
-  } catch (error) {
-  }	
-}
-
 /*This function will open, check for, and dismiss the leaving app popup from a specified launching point
  * 
  * @param matchString - string of the text or id to match

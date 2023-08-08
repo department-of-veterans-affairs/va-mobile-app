@@ -146,7 +146,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
         onChange: setEmail,
         value: email,
         isRequiredField: true,
-        testID: 'EmailAddressTestID',
+        testID: 'emailAddressEditTestID',
       },
       fieldErrorMessage: t('editEmail.fieldError'),
       validationList: [
