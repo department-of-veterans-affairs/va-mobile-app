@@ -6,12 +6,14 @@ import React, { FC, useEffect } from 'react'
 import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DateTime } from 'luxon'
+import { Events } from 'constants/analytics'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -30,8 +32,6 @@ import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/R
 import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
 import SettingsScreen from './ProfileScreen/SettingsScreen'
 import getEnv from 'utils/env'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { Events } from 'constants/analytics'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
