@@ -18,6 +18,15 @@ const config = {
   plugins: [
     './docusaurus-plugin-react-native-web',
     [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'design',
+        path: 'design',
+        routeBasePath: 'design',
+        sidebarPath: require.resolve('./sidebars.js'),
+      },
+    ],
+    [
       'docusaurus-plugin-react-docgen-typescript',
       {
         // pass in a single string or an array of strings
@@ -46,6 +55,8 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       {
         docs: {
+          path: 'docs',
+          routeBasePath: 'docs',
           sidebarPath: require.resolve('./sidebars.js'),
           remarkPlugins: [require('mdx-mermaid')],
           // Please change this to your repo.
@@ -60,8 +71,8 @@ const config = {
       {
         specs: [
           {
-            routePath: '/api/',
-            specUrl: 'https://raw.githubusercontent.com/department-of-veterans-affairs/vets-api/master/modules/mobile/docs/openapi.yaml',
+            route: '/api/',
+            spec: 'https://raw.githubusercontent.com/department-of-veterans-affairs/vets-api/master/modules/mobile/docs/openapi.yaml',
           },
         ],
       },
@@ -79,10 +90,16 @@ const config = {
         },
         items: [
           {
-            type: 'doc',
-            docId: 'intro',
-            position: 'left',
+            to: '/docs/Intro', // ./docs/Intro.md
             label: 'Documentation',
+            position: 'left',
+            activeBaseRegex: `/docs/`,
+          },
+          {
+            to: '/design/Intro', // ./docs-api/Intro.md
+            label: 'Design',
+            position: 'left',
+            activeBaseRegex: `/design/`,
           },
           {
             href: 'https://github.com/department-of-veterans-affairs/va-mobile-app',
