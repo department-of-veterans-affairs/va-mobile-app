@@ -234,6 +234,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         isRequiredField: true,
         isTextArea: true,
         setInputCursorToBeginning: true,
+        testID: 'reply field',
       },
       fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },

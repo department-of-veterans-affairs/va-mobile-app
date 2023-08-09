@@ -5,7 +5,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import 'jest-styled-components'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, mockNavProps, render, waitFor } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import EditDraft from './EditDraft'
 import { initializeErrorsByScreenID, InitialState, updateSecureMessagingTab } from 'store/slices'
 import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap } from 'store/api/types'
@@ -269,21 +269,17 @@ context('EditDraft', () => {
 
   describe('when pressing the back button', () => {
     it('should ask for confirmation if any field filled in', async () => {
-      await waitFor(() => {
-        fireEvent.changeText(screen.getByTestId('messageText'), 'Random String')
-        navHeaderSpy.back.props.onPress()
-        expect(goBack).not.toHaveBeenCalled()
-        expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
-      })
+      fireEvent.changeText(screen.getByTestId('messageText'), 'Random String')
+      navHeaderSpy.back.props.onPress()
+      expect(goBack).not.toHaveBeenCalled()
+      expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        fireEvent.press(screen.getByLabelText('Add Files'))
-        expect(mockNavigationSpy).toHaveBeenCalled()
-      })
+      fireEvent.press(screen.getByLabelText('Add Files'))
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 })
