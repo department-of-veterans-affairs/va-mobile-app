@@ -207,7 +207,11 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   }
 
   if (letterDownloadError) {
-    return <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('letters.download.tryAgain.a11y')} />
+    return (
+      <FeatureLandingTemplate backLabel={t('letters.overview.viewLetters')} backLabelOnPress={navigation.goBack} title={t('letters.details.title')}>
+        <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('letters.download.tryAgain.a11y')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (downloading || !letterBeneficiaryData) {
