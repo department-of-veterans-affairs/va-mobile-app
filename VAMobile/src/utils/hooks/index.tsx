@@ -34,7 +34,7 @@ import { useTheme as styledComponentsUseTheme } from 'styled-components'
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
   const { errorsByScreenID, downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const features = ScreenIDToDowntimeFeatures[currentScreenID]
-  const downtime = features?.some((feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindowsByFeature))
+  const downtime = oneOfFeaturesInDowntime(features, downtimeWindowsByFeature)
   if (downtime) {
     return true
   }
@@ -51,6 +51,10 @@ export const useDowntime = (feature: DowntimeFeatureType): boolean => {
 export const featureInDowntime = (feature: DowntimeFeatureType, downtimeWindows: DowntimeWindowsByFeatureType): boolean => {
   const mw = downtimeWindows[feature]
   return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime
+}
+
+export const oneOfFeaturesInDowntime = (features: DowntimeFeatureType[], downtimeWindows: DowntimeWindowsByFeatureType): boolean => {
+  return !!features?.some((feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
 }
 
 /**

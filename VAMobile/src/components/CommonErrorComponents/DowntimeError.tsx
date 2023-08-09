@@ -34,12 +34,8 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   features.forEach((feature) => {
     if (featureInDowntime(feature as DowntimeFeatureType, downtimeWindowsByFeature)) {
       const downtimeWindow = downtimeWindowsByFeature[feature as DowntimeFeatureType]
-      if (downtimeWindow) {
-        if (latestDowntimeWindow === null) {
-          latestDowntimeWindow = downtimeWindow
-        } else if (latestDowntimeWindow.endTime < downtimeWindow.endTime) {
-          latestDowntimeWindow = downtimeWindow
-        }
+      if (downtimeWindow && (latestDowntimeWindow === null || latestDowntimeWindow.endTime < downtimeWindow.endTime)) {
+        latestDowntimeWindow = downtimeWindow
       }
     }
   })
