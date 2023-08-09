@@ -80,9 +80,10 @@ const setDemoStore = (data: DemoStore) => {
  */
 const generateDate = (match: string, signSymbol: string, offset: string, units: string, format: string) => {
   const sign = signSymbol === '+' ? 'plus' : 'minus'
-  const localNow = DateTime.now()[sign]({ [units]: offset })
   let result = ''
+
   try {
+    const localNow = DateTime.now()[sign]({ [units]: offset })
     if (format === 'short') {
       result = localNow.toFormat('MM-dd-yyyy')
     } else if (format === 'shortReversed') {
