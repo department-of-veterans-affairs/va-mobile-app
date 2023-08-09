@@ -1,6 +1,6 @@
-# Testing the auth bug on older versions of Chrome on Android
+# Testing the auth redirect bug on older versions of Chrome on Android
 Versions of Chrome on Android that are v99 and below cannot redirect a user back
-to the app after authenticated using JavaScript or a meta refresh.  The steps 
+to the app after authenticating using JavaScript or a meta refresh.  The steps 
 below outline how to reproduce this bug so that we can find a solution for users
  who have outdated devices.
 
