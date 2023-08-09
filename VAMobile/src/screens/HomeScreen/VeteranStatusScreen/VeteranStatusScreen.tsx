@@ -43,7 +43,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
           </TextView>
         </Box>
         <Box>
-          <TextView variant="HelperText" mb={theme.dimensions.standardMarginBetween}>
+          <TextView variant="HelperText" color="primaryContrast" mb={theme.dimensions.standardMarginBetween}>
             {t('militaryInformation.history', { begin: service.formattedBeginDate, end: service.formattedEndDate })}
           </TextView>
         </Box>
@@ -88,13 +88,13 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
     <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')}>
       <Box backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant} flex={1}>
         <Box alignItems="center">
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box flex={1} mt={theme.dimensions.standardMarginBetween}>
             <VAIcon name={'Logo'} />
           </Box>
           <Box my={theme.dimensions.standardMarginBetween}>
             <PhotoUpload width={100} height={100} />
           </Box>
-          <Box flex={1} my={theme.dimensions.standardMarginBetween}>
+          <Box mb={theme.dimensions.formMarginBetween}>
             <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
               {name()}
             </TextView>
@@ -110,15 +110,23 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
         </Box>
         <Box mx={theme.dimensions.gutter}>
           <Box {...boxProps}>
-            <TextView variant="MobileBodyBold">{t('personalInformation.dateOfBirth')}</TextView>
-            <TextView variant="MobileBody">{getBirthDate(profile, t)}</TextView>
+            <TextView variant="MobileBodyBold" color="primaryContrast">
+              {t('personalInformation.dateOfBirth')}
+            </TextView>
+            <TextView variant="MobileBody" color="primaryContrast">
+              {getBirthDate(profile, t)}
+            </TextView>
           </Box>
           <Box {...boxProps}>
-            <TextView variant="MobileBodyBold">{t('disabilityRating.title')}</TextView>
-            <TextView variant="MobileBody">{combinedPercentText}</TextView>
+            <TextView variant="MobileBodyBold" color="primaryContrast">
+              {t('disabilityRating.title')}
+            </TextView>
+            <TextView variant="MobileBody" color="primaryContrast">
+              {combinedPercentText}
+            </TextView>
           </Box>
           <Box {...boxProps} borderBottomWidth={theme.dimensions.borderWidth}>
-            <TextView variant="MobileBodyBold" mb={theme.dimensions.standardMarginBetween}>
+            <TextView variant="MobileBodyBold" color="primaryContrast" mb={theme.dimensions.standardMarginBetween}>
               {t('veteranStatus.periodOfService')}
             </TextView>
             {getPeriodOfService}

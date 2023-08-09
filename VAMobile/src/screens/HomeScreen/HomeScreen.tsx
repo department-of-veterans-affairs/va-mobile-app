@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIcon, VAIconProps } from 'components'
+import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, Nametag, SimpleList, SimpleListItemObj, TextView, VAIcon, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DateTime } from 'luxon'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -119,7 +119,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           </TextView>
         </Box> */}
         <EncourageUpdateAlert />
-        <Pressable style={pressableStyles} onPress={navigateTo('VeteranStatus')}>
+        {/* <Pressable style={pressableStyles} onPress={navigateTo('VeteranStatus')}>
           <Box
             borderRadius={5}
             py={theme.dimensions.standardMarginBetween}
@@ -142,6 +142,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             />
           </Box>
         </Pressable>
+        <VeteranStatusCard /> */}
+        <Nametag />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
             {tc('aboutVA')}

@@ -79,23 +79,6 @@ export const VeteranStatusCard: FC = () => {
   return (
     <Pressable style={pressableStyles} onPress={navigateTo('VeteranStatus')}>
       <Box flex={1} backgroundColor="profileBanner" accessible={true} mb={theme.dimensions.standardMarginBetween} mx={16}>
-        <Box py={accessToMilitaryInfo ? theme.dimensions.cardPadding : 0} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <Box flexDirection={'row'} justifyContent={'space-between'}>
-            <TextView mb={theme.dimensions.textIconMargin} variant="VAHeader" color="primaryContrast" ml={15}>
-              {vaTitle}
-            </TextView>
-            <TextView variant="MobileBody" color="primaryContrast" ml={5}>
-              Veteran Status
-            </TextView>
-          </Box>
-          <VAIcon
-            name={'ChevronRight'}
-            fill={theme.colors.icon.contrast}
-            width={theme.dimensions.chevronListItemWidth}
-            height={theme.dimensions.chevronListItemHeight}
-            mr={theme.dimensions.listItemDecoratorMarginLeft}
-          />
-        </Box>
         <Box ml={20} flex={1} mb={theme.dimensions.standardMarginBetween}>
           <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
             {name()}
@@ -108,6 +91,23 @@ export const VeteranStatusCard: FC = () => {
               </TextView>
             </Box>
           )}
+        </Box>
+        <Box py={accessToMilitaryInfo ? theme.dimensions.cardPadding : 0} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+          <Box flexDirection={'row'} justifyContent={'space-between'}>
+            {/* <TextView mb={theme.dimensions.textIconMargin} variant="VAHeader" color="primaryContrast" ml={15}>
+              {vaTitle}
+            </TextView> */}
+            <TextView variant="MobileBody" color="primaryContrast" ml={5}>
+              Veteran Status
+            </TextView>
+          </Box>
+          <VAIcon
+            name={'ChevronRight'}
+            fill={theme.colors.icon.contrast}
+            width={theme.dimensions.chevronListItemWidth}
+            height={theme.dimensions.chevronListItemHeight}
+            mr={theme.dimensions.listItemDecoratorMarginLeft}
+          />
         </Box>
       </Box>
     </Pressable>

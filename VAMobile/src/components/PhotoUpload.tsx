@@ -9,8 +9,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
 import { themeFn } from 'utils/theme'
 import { useDestructiveActionSheet, useShowActionSheet } from 'utils/hooks'
-import { useTheme } from 'utils/hooks'
-import Box, { BorderColorVariant, BoxProps } from './Box'
+import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import theme from 'styles/themes/standardTheme'
 
@@ -50,7 +49,6 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
   const photoUploadBorderWidth = 2
   const showActionSheetWithOptions = useShowActionSheet()
   const [uri, setUri] = useState('')
-  const theme = useTheme()
   const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('cancel')]
   const uploadBorderColor = theme.colors.border.photoUpload
 
@@ -129,20 +127,19 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
     borderRadius: photoUploadBorderRadius,
     width: width,
     height: height,
+    alignItems: 'center',
   }
 
   return (
     <Pressable {...pressableProps}>
-      <Box {...boxProps}>
-        {uri ? (
-          <Box>{photo()}</Box>
-        ) : (
-          <Box alignItems="center">
-            <VAIcon name="UploadPhoto" />
-            <TextView variant="HelperText">Upload Photo</TextView>
-          </Box>
-        )}
-      </Box>
+      {uri ? (
+        <Box {...boxProps}>{photo()}</Box>
+      ) : (
+        <Box {...boxProps} mb={20}>
+          <VAIcon name="UploadPhoto" />
+          <TextView variant="HelperText">Upload Photo</TextView>
+        </Box>
+      )}
     </Pressable>
   )
 }
