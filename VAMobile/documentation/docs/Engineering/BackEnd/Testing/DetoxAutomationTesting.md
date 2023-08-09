@@ -2,8 +2,8 @@
 
 ## Prerequisites
 Follow instructions for FE [Development Setup Instructions](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevSetupProcess) 
-> **Note**<br>
-For Android and iPhone Setup, _Physical Device_ setup is not required. Only complete Emulator and Simulator setup
+> [!NOTE]
+> For Android and iPhone Setup, _Physical Device_ setup is not required. Only complete Emulator and Simulator setup
 
 ## Detox Local Setup
 1. Complete the [Detox Prerequisites](https://wix.github.io/Detox/docs/introduction/getting-started#detox-prerequisites) using the `yarn` package manager
