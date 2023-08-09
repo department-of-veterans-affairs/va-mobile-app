@@ -147,7 +147,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
         maxLength: MAX_ROUTING_DIGITS,
         value: routingNumber,
         isRequiredField: true,
-        helperTextKey: 'editDirectDeposit.routingNumberHelperText',
         testID: 'routingNumber',
       },
       fieldErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
