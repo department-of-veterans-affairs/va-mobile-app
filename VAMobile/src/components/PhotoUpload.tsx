@@ -9,8 +9,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
 import { themeFn } from 'utils/theme'
 import { useDestructiveActionSheet, useShowActionSheet } from 'utils/hooks'
-import Box, { BoxProps } from './Box'
-import TextView, { TextViewProps } from './TextView'
+import { useTheme } from 'utils/hooks'
+import Box, { BorderColorVariant, BoxProps } from './Box'
+import TextView from './TextView'
+import theme from 'styles/themes/standardTheme'
 
 type PhotoUploadProps = {
   /** width of the photo */
@@ -25,26 +27,37 @@ type StyledImageProps = {
   width: number
   /** prop to set image height */
   height: number
-  /** Hardcoded radius of 5 due to design plan */
+  /** Hardcoded radius of 50 due to circular design plan */
   borderRadius: number
+  /** Hardcoded radius of 2 due to design plan */
+  borderWidth: number
+  /** Hardcoded border color of white */
+  borderColor: string
 }
 
 const StyledImage = styled(Image)<StyledImageProps>`
   width: ${themeFn<StyledImageProps>((_theme, props) => props.width)}px;
   height: ${themeFn<StyledImageProps>((_theme, props) => props.height)}px;
   border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius)}px;
+  border-width: ${themeFn<StyledImageProps>((_theme, props) => props.borderWidth)}px;
+  border-color: ${themeFn<StyledImageProps>((_theme, props) => props.borderColor)};
 `
 
 const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveActionSheet()
-  const photoPreviewBorderRadius = 5
+  const photoUploadBorderRadius = 50
+  const photoUploadBorderWidth = 2
   const showActionSheetWithOptions = useShowActionSheet()
   const [uri, setUri] = useState('')
+  const theme = useTheme()
   const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('cancel')]
+  const uploadBorderColor = theme.colors.border.photoUpload
 
   const photo = (): ReactNode => {
-    return <StyledImage source={{ uri }} width={width} height={height} borderRadius={photoPreviewBorderRadius} />
+    return (
+      <StyledImage source={{ uri }} width={width} height={height} borderRadius={photoUploadBorderRadius} borderWidth={photoUploadBorderWidth} borderColor={uploadBorderColor} />
+    )
   }
 
   const uploadCallback = (response: ImagePickerResponse): void => {
@@ -113,22 +126,9 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
   }
 
   const boxProps: BoxProps = {
-    borderRadius: photoPreviewBorderRadius,
+    borderRadius: photoUploadBorderRadius,
     width: width,
     height: height,
-  }
-
-  const blueOpacity: BoxProps = {
-    borderRadius: photoPreviewBorderRadius,
-    width: width,
-    height: height,
-    opacity: 0.4,
-    backgroundColor: 'profileBanner',
-    position: 'absolute',
-  }
-
-  const textProps: TextViewProps = {
-    variant: 'HelperText',
   }
 
   return (

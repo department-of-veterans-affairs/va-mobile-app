@@ -196,6 +196,7 @@ export type VABorderColors = {
   menuDivider: string
   tabSelectorInactive: string
   tabSelectorActive: string
+  photoUpload: string
   prescriptionDivider: string
   modalButton: string
   tagBlue: string
