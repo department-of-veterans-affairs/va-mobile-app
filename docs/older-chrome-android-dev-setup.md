@@ -1,4 +1,4 @@
-# Testing the auth redirect bug on older versions of Chrome on Android
+# Testing auth redirect bug on older versions of Chrome on Android
 Versions of Chrome on Android that are v99 and below cannot redirect a user back
 to the app after authenticating using JavaScript or a meta refresh.  The steps 
 below outline how to reproduce this bug so that we can find a solution for users
@@ -7,8 +7,8 @@ below outline how to reproduce this bug so that we can find a solution for users
 ## Setting up the emulator
 1. Download and install [Android Studio](https://developer.android.com/studio)
 1. After installing and following the initial prompts, create a new project and 
-choose any of the templates when prompted (it doesn't matter as we wont' be 
-using it)
+choose any of the templates when prompted. It doesn't matter which one you choose
+as we won't be doing anything with this project.
 1. In your menubar, go to Tools > Device Manager
 1. Click the "Create Device" button
 1. Select Pixel 6a and click "Next"
@@ -35,7 +35,7 @@ sharing
 the version of the app that has Custom Tabs and is giving users issues
 
 ## Chrome Devtools
-You can access developer tools and view the console as your normally would in
+You can access developer tools and view the console as you normally would in
 the desktop version of Chrome so you can see the console and error messages
 1. Once you've started the sign in process and the browser has launched, open
 Chrome on your desktop and go to `chrome://inspect#devices`. You should see your
