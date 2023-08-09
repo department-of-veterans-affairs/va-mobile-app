@@ -3,17 +3,13 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, mockNavProps, render, waitFor } from 'testUtils'
 import EditDraft from './EditDraft'
-import { TouchableWithoutFeedback } from 'react-native'
-import { AlertBox, ErrorComponent, LoadingComponent, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState, updateSecureMessagingTab } from 'store/slices'
 import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -151,9 +147,6 @@ context('EditDraft', () => {
   let goBack: jest.Mock
   let navHeaderSpy: any
   let navigateSpy: jest.Mock
-  let navigateToVeteransCrisisLineSpy: jest.Mock
-  let navigateToAddToFilesSpy: jest.Mock
-  let navigateToAttachAFileSpy: jest.Mock
 
   const initializeTestInstance = ({
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
@@ -166,19 +159,8 @@ context('EditDraft', () => {
   }) => {
     goBack = jest.fn()
     navigateSpy = jest.fn()
-    navigateToVeteransCrisisLineSpy = jest.fn()
-    navigateToAddToFilesSpy = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('VeteransCrisisLine')
-      .mockReturnValue(navigateToVeteransCrisisLineSpy)
-      .calledWith('Attachments', { origin: 'Draft', attachmentsList: [], messageID: 2 })
-      .mockReturnValue(navigateToAddToFilesSpy)
-      .calledWith('AttachmentsFAQ', { originHeader: 'Edit Draft' })
-      .mockReturnValue(navigateToAttachAFileSpy)
 
     props = mockNavProps(
       undefined,
@@ -300,7 +282,6 @@ context('EditDraft', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         fireEvent.press(screen.getByLabelText('Add Files'))
-        // testInstance.findByProps({ label: 'Add Files' }).props.onPress()
         expect(mockNavigationSpy).toHaveBeenCalled()
       })
     })
