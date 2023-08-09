@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, VAScrollView } from 'components'
-import { DowntimeFeatureType, ScreenIDToDowntimeFeature, ScreenIDToFeatureName, ScreenIDTypes } from 'store/api/types'
+import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDToFeatureName, ScreenIDTypes } from 'store/api/types'
 import { DowntimeWindow, ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -29,7 +29,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
     mb: theme.dimensions.contentMarginBottom,
   }
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const features = ScreenIDToDowntimeFeature[screenID]
+  const features = ScreenIDToDowntimeFeatures[screenID]
   let latestDowntimeWindow: DowntimeWindow | null = null
   features.forEach((feature) => {
     if (featureInDowntime(feature as DowntimeFeatureType, downtimeWindowsByFeature)) {

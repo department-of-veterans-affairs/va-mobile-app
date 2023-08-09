@@ -93,24 +93,8 @@ export const ScreenIDToFeatureName = {
   [ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID]: 'VA Prescriptions',
 }
 
-// Friendly names shown in downtime messages
-export const DowntimeFeatureNameConstants = {
-  [DowntimeFeatureTypeConstants.facilityLocator]: 'Facility Locator',
-  [DowntimeFeatureTypeConstants.claims]: 'Claims',
-  [DowntimeFeatureTypeConstants.appointments]: 'Appointments',
-  [DowntimeFeatureTypeConstants.secureMessaging]: 'Secure Messaging',
-  [DowntimeFeatureTypeConstants.letters]: 'Letters',
-  [DowntimeFeatureTypeConstants.directDepositBenefits]: 'Direct Deposit',
-  [DowntimeFeatureTypeConstants.disabilityRating]: 'Disability Rating',
-  [DowntimeFeatureTypeConstants.militaryServiceHistory]: 'Military Service History',
-  [DowntimeFeatureTypeConstants.appeals]: 'Appeals',
-  [DowntimeFeatureTypeConstants.userProfileUpdate]: 'Personal Information',
-  [DowntimeFeatureTypeConstants.payments]: 'Payments',
-  [DowntimeFeatureTypeConstants.rx]: 'VA Prescriptions',
-}
-
-export const ScreenIDToDowntimeFeature = {
-  [ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID]: [DowntimeFeatureTypeConstants.claims, DowntimeFeatureNameConstants.appeals],
+export const ScreenIDToDowntimeFeatures = {
+  [ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID]: [DowntimeFeatureTypeConstants.claims, DowntimeFeatureTypeConstants.appeals],
   [ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID]: [DowntimeFeatureTypeConstants.claims],
   [ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID]: [DowntimeFeatureTypeConstants.appointments],
   [ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID]: [DowntimeFeatureTypeConstants.secureMessaging],
