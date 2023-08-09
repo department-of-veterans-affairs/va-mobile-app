@@ -22,17 +22,18 @@ Follow instructions for FE [Development Setup Instructions](https://department-o
    - If you want to see the iOS tests on the simulator, you need to have the Simulator app open or run `yarn ios` before starting the iOS tests (but, if you don't care about watching on the simulator, it'll still run fine without it.)
 2. Run `yarn e2e:android-test` to run the Android tests
    - Android will open the emulator & show you the tests running, automatically.
-   - If android tests hangs and you receive this error: *Exceeded timeout of 300000ms while handling jest-circus "setup" event*, you will need to downgrade API of AVD System Image to 28
-     - Open *Android Studio*
+   - If android tests hangs and you receive this error: _`Exceeded timeout of 300000ms while handling jest-circus "setup" event`_, you will need to downgrade API of AVD System Image to 28
+     - Open _Android Studio_
      - Go to `Tools -> Device Manager -> (next to emulator used for tests) Edit this AVD -> (next to system image) Change` 
-     - Change API Level to 28 (Release name: *Pie*)
+     - Change API Level to 28 (Release name: _Pie_)
    - Individual test runtime is ~30 seconds (we start all tests back from the login window). Total test runtime will change as we add more tests, but expect it to take a few minutes as well.
 
 ## UI Automation Testing Process
 For information on testing process and how to write new cases visit QA's [Automated Testing Process](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/Automation#ui-automation-testing-process) section.
-> **Note**
+
+> [!NOTE] 
 > - All detox scripts are located in the e2e folder.
-> - For most tests, you should have the same initial format where you import the necessary variables, have a dictionary of any constants, and run a *beforeAll* statement that navigates to the specific place in the app before running your tests.
+> - For most tests, you should have the same initial format where you import the necessary variables, have a dictionary of any constants, and run a _beforeAll_ statement that navigates to the specific place in the app before running your tests.
 > - Utils.ts is where the global functions/constants live.  It is also is where all the navigation to a specific page functions live.
 > - Detox help can be found here: https://wix.github.io/Detox/docs/19.x/api/matchers
 > - Because our test case suite is so large, it may be best to exclusively run just the test you are working on by doing `yarn e2e:<android/ios>-test /e2e/tests/<yourName.e2e>`. 
