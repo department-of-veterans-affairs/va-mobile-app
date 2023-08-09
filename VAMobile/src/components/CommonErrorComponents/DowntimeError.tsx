@@ -7,7 +7,7 @@ import { DowntimeFeatureType, ScreenIDToDowntimeFeature, ScreenIDToFeatureName, 
 import { DowntimeWindow, ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { useDowntime, useTheme } from 'utils/hooks'
+import { featureInDowntime, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
 export type DowntimeErrorProps = {
@@ -32,7 +32,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   const features = ScreenIDToDowntimeFeature[screenID]
   let latestDowntimeWindow: DowntimeWindow | null = null
   features.forEach((feature) => {
-    if (useDowntime(feature as DowntimeFeatureType)) {
+    if (featureInDowntime(feature as DowntimeFeatureType, downtimeWindowsByFeature)) {
       const downtimeWindow = downtimeWindowsByFeature[feature as DowntimeFeatureType]
       if (downtimeWindow) {
         if (latestDowntimeWindow === null) {

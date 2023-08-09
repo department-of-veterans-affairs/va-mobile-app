@@ -15,7 +15,7 @@ import { AppDispatch, RootState } from 'store'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeature, ScreenIDTypes } from 'store/api/types'
-import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
+import { DowntimeWindowsByFeatureType, ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { VATheme } from 'styles/theme'
@@ -32,10 +32,10 @@ import { useTheme as styledComponentsUseTheme } from 'styled-components'
  * @returns boolean to show the error
  */
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
-  const { errorsByScreenID } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const { errorsByScreenID, downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const features = ScreenIDToDowntimeFeature[currentScreenID]
   features?.forEach((feature) => {
-    if (useDowntime(feature as DowntimeFeatureType)) {
+    if (featureInDowntime(feature as DowntimeFeatureType, downtimeWindowsByFeature)) {
       return true
     }
   })
@@ -45,7 +45,12 @@ export const useError = (currentScreenID: ScreenIDTypes): boolean => {
 
 export const useDowntime = (feature: DowntimeFeatureType): boolean => {
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const mw = downtimeWindowsByFeature[feature]
+  return featureInDowntime(feature, downtimeWindowsByFeature)
+}
+
+// this is not a hook. not sure this is the right place for this function
+export const featureInDowntime = (feature: DowntimeFeatureType, downtimeWindows: DowntimeWindowsByFeatureType): boolean => {
+  const mw = downtimeWindows[feature]
   return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime
 }
 
