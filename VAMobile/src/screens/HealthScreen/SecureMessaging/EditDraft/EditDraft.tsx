@@ -432,6 +432,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         labelKey: 'health:secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,
+        testID: 'messageText',
       },
       fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },
