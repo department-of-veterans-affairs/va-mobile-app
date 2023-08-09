@@ -36,5 +36,5 @@ For information on testing process and how to write new cases visit QA's [Automa
 > - For most tests, you should have the same initial format where you import the necessary variables, have a dictionary of any constants, and run a _beforeAll_ statement that navigates to the specific place in the app before running your tests.
 > - Utils.ts is where the global functions/constants live.  It is also is where all the navigation to a specific page functions live.
 > - Detox help can be found here: https://wix.github.io/Detox/docs/19.x/api/matchers
-> - Because our test case suite is so large, it may be best to exclusively run just the test you are working on by doing `yarn e2e:<android/ios>-test /e2e/tests/<yourName.e2e>`. 
+> - Because our test case suite is so large, it may be best to exclusively run just the test you are working on by doing `yarn e2e:<android/ios>-test /e2e/tests/<yourName.e2e.ts>`. 
 > - If you change anything in the app code, you will need to run `yarn e2e:<android/ios>-build` beforehand
