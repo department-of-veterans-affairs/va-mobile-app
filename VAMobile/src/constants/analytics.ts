@@ -474,6 +474,14 @@ export const Events = {
       },
     }
   },
+  vama_notification_click: (notification_url?: string): Event => {
+    return {
+      name: 'vama_notification_click',
+      params: {
+        notification_url,
+      },
+    }
+  },
   vama_pagination: (pages: number, to_page: number, tab?: string): Event => {
     return {
       name: 'vama_pagination',
