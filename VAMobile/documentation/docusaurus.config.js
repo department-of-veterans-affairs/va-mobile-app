@@ -97,15 +97,9 @@ const config = {
           },
           {
             to: '/design/Intro', // ./docs-api/Intro.md
-            label: 'Design',
+            label: 'Design System',
             position: 'left',
             activeBaseRegex: `/design/`,
-          },
-          {
-            type: 'doc',
-            docId: 'Design System/index',
-            position: 'left',
-            label: 'Design System',
           },
           {
             href: 'https://github.com/department-of-veterans-affairs/va-mobile-app',
