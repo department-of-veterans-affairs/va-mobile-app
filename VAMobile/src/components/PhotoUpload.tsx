@@ -65,7 +65,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
     if (uri === '') {
       getPhotoFromStorage()
     }
-  }, [uri, getPhotoFromStorage])
+  }, [uri])
 
   const photo = (): ReactNode => {
     return (

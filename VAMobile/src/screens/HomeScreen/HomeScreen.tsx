@@ -3,19 +3,15 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, Nametag, SimpleList, SimpleListItemObj, TextView, VAIcon, VAIconProps } from 'components'
+import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { DateTime } from 'luxon'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
-import { Pressable, ViewStyle } from 'react-native'
 import { RootState } from 'store'
-import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
-import { VeteranStatusCard } from 'components/VeteranStatusCard/VeteranStatusCard'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
@@ -101,13 +97,6 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     label: tc('profile.title'),
     icon: profileIconProps,
     onPress: navigateTo('Profile'),
-  }
-
-  const pressableStyles: ViewStyle = {
-    width: '100%',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
   }
 
   return (

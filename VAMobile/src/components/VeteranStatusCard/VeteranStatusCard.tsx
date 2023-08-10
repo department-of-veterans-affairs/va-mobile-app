@@ -41,7 +41,7 @@ export const VeteranStatusCard: FC = () => {
     }
   }
 
-  const vaTitle = ' VA '
+  //const vaTitle = ' VA '
 
   //   <Pressable
   //   style={pressableStyles}
