@@ -104,6 +104,9 @@ const generateDate = (match: string, signSymbol: string, offset: string, units: 
   return result
 }
 
+/**
+ * Replace all the date expressions in a mock file with the corresponding dates
+ */
 const transformDates = (fileObject: Record<string, unknown>) => {
   return JSON.parse(JSON.stringify(fileObject).replace(/{{now (\+|-) (\d+) (\w+) ?(\w+)?}}/g, generateDate))
 }
