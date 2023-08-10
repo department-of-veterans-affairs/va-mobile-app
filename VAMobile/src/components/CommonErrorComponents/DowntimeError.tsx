@@ -30,6 +30,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   }
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const features = ScreenIDToDowntimeFeatures[screenID]
+  // if there are multiple active downtime windows for the screen, use the latest endTime
   let latestDowntimeWindow: DowntimeWindow | null = null
   features.forEach((feature) => {
     if (featureInDowntime(feature as DowntimeFeatureType, downtimeWindowsByFeature)) {
