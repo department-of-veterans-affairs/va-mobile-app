@@ -20,7 +20,6 @@ export type GenericOnboardingProps = {
 const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
-  const isPortrait = useOrientation()
 
   useFocusEffect(setFocus)
 
