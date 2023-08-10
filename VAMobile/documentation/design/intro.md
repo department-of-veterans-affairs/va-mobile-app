@@ -1,9 +1,9 @@
 ---
-title: VA Mobile App Design System
+title: Intro to the design system
 sidebar_position: 1
 ---
 
-# Intro to the design system
+# VA Mobile App Design System
 
 **A system to help you write, design, and build digital services on the VA Mobile App.** Our content style guide, components, and patterns include guidance, standards, and tools to help teams build a consistent, intuitive, and Veteran-centered experience across the VA Mobile App.
 
