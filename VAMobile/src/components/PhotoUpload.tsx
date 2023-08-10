@@ -2,13 +2,14 @@
 import { Image, Pressable, PressableProps } from 'react-native'
 import { ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { VAIcon } from './index'
 import { themeFn } from 'utils/theme'
 import { useDestructiveActionSheet, useShowActionSheet } from 'utils/hooks'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import theme from 'styles/themes/standardTheme'
@@ -48,9 +49,23 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
   const photoUploadBorderRadius = 50
   const photoUploadBorderWidth = 2
   const showActionSheetWithOptions = useShowActionSheet()
+  const VETERAN_STATUS_PHOTO = '@store_veteran_status_photo'
   const [uri, setUri] = useState('')
   const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('cancel')]
   const uploadBorderColor = theme.colors.border.photoUpload
+
+  const getPhotoFromStorage = async (): Promise<void> => {
+    const override = await AsyncStorage.getItem(VETERAN_STATUS_PHOTO)
+    if (override !== null) {
+      setUri(override)
+    }
+  }
+
+  useEffect(() => {
+    if (uri === '') {
+      getPhotoFromStorage()
+    }
+  }, [uri, getPhotoFromStorage])
 
   const photo = (): ReactNode => {
     return (
@@ -71,6 +86,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
       }
       if (assets && assets[0] && assets[0].uri) {
         setUri(assets[0].uri)
+        AsyncStorage.setItem(VETERAN_STATUS_PHOTO, assets[0].uri)
       }
     }
   }
@@ -90,6 +106,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
             text: t('remove'),
             onPress: () => {
               setUri('')
+              AsyncStorage.setItem(VETERAN_STATUS_PHOTO, '')
             },
           },
         ],
