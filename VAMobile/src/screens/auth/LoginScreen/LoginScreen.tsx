@@ -22,7 +22,6 @@ const LoginScreen: FC = () => {
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
   const { authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
 
-  const isPortrait = useOrientation()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const startAuth = useStartAuth()
