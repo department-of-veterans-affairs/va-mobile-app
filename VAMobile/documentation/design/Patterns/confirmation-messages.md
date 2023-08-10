@@ -21,8 +21,8 @@ Confirmation messages include (but are not limited to) cancellation confirmation
 In the VA: Health and Benefits mobile app, action sheets slide up from the bottom of a phone screen and appear as a popover on tablet screens (this choice is for accessibility reasons—native action sheets on iPad do not contain an explicit cancel action). 
 
 
-![Action sheet example - two choices](../../../static/img/patterns/ActionSheet.png "Action sheet example - two choices")
-![Action sheet example - description, three choices, one destructive](../../../static/img/patterns/ActionSheet-description-destructive.png "Action sheet example - three choices, one destructive")
+![Action sheet example - two choices](../../static/img/patterns/ActionSheet.png "Action sheet example - two choices")
+![Action sheet example - description, three choices, one destructive](../../static/img/patterns/ActionSheet-description-destructive.png "Action sheet example - three choices, one destructive")
 
 
 
@@ -34,7 +34,7 @@ In the VA: Health and Benefits mobile app, action sheets slide up from the botto
 The VA: Health and Benefits mobile app uses the standard native implementation for modal alert/dialogs (appearing in the center of the screen) for phone and tablet screens. 
  
 
-![Alert example](../../../static/img/patterns/Alert.png "Alert example")
+![Alert example](../../static/img/patterns/Alert.png "Alert example")
  
 
 
@@ -95,15 +95,15 @@ Both action sheets and modal alert/dialogs contain the following elements:
 
 #### Action sheet
 
-![Action Sheet - cancellation confirmation, preferred name](../../../static/img/patterns/ActionSheet-preferredname.PNG "Action Sheet - cancellation confirmation, preferred name")
+![Action Sheet - cancellation confirmation, preferred name](../../static/img/patterns/ActionSheet-preferredname.PNG "Action Sheet - cancellation confirmation, preferred name")
 
-![Action Sheet - destructive action - save draft](../../../static/img/patterns/ActionSheet-savedraft.PNG "Action Sheet - destructive action - save draft")
+![Action Sheet - destructive action - save draft](../../static/img/patterns/ActionSheet-savedraft.PNG "Action Sheet - destructive action - save draft")
 
 
 
 #### Alert/dialog
 
-![Alert - leaving the app](../../../static/img/patterns/Alert-leaving-app.png "Alert - leaving the app")
+![Alert - leaving the app](../../static/img/patterns/Alert-leaving-app.png "Alert - leaving the app")
 
 
 
