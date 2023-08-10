@@ -1,8 +1,10 @@
 import { AuthState } from 'store/slices'
+import { Events } from 'constants/analytics'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { RootState } from 'store'
 import { View } from 'react-native'
 import { dispatchSetTappedForegroundNotification, registerDevice } from 'store/slices/notificationSlice'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
@@ -52,6 +54,9 @@ const NotificationManager: FC = ({ children }) => {
       if (foregroundNotifications.includes(notification.identifier)) {
         dispatch(dispatchSetTappedForegroundNotification())
       }
+
+      logAnalyticsEvent(Events.vama_notification_click(notification.payload.url))
+
       console.debug('Notification opened by device user', notification)
       console.debug(`Notification opened with an action identifier: ${notification.identifier}`)
       completion()
@@ -68,6 +73,7 @@ const NotificationManager: FC = ({ children }) => {
     Notifications.getInitialNotification()
       .then((notification) => {
         console.debug('Initial notification was:', notification || 'N/A')
+        logAnalyticsEvent(Events.vama_notification_click(notification?.payload.url))
       })
       .catch((err) => console.error('getInitialNotification() failed', err))
   }
