@@ -104,7 +104,7 @@ context('FormWrapper', () => {
         initializeTestInstance([shortenedFieldsList])
         testInstance.findByType(VATextInput).props.setError('')
         const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[textViews.length - 2].props.children).not.toEqual('first error message')
+        expect(textViews[textViews.length - 1].props.children).not.toEqual('first error message')
       })
     })
   })
