@@ -75,7 +75,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t, disabilityRatingLoaded, syncing])
 
   return (
-   <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
+    <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
       <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
         <VAIcon name={'Logo'} />
 
