@@ -10,7 +10,7 @@ import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, 
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 import colors from 'styles/themes/VAColors'
 
 export type SyncScreenProps = Record<string, unknown>
@@ -23,7 +23,6 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   }
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const isPortrait = useOrientation()
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -79,7 +78,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
       <Box
         justifyContent="center"
-        mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
+        mx={theme.dimensions.headerHeight}
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.contentMarginBottom}
         alignItems={'center'}>
