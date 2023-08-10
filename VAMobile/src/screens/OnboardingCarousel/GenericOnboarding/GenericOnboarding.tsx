@@ -1,9 +1,9 @@
-import { View, ViewStyle } from 'react-native'
+import { Dimensions, View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAScrollView } from 'components'
 import { testIdProps } from 'utils/accessibility'
-import { useAccessibilityFocus, useOrientation, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 
 export type GenericOnboardingProps = {
