@@ -5,10 +5,12 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 import { AccordionCollapsible, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTranslation } from 'utils/formattingUtils'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { sendClaimStep3Analytics, sendClaimStep3FileRequestAnalytics } from 'store/slices/claimsAndAppealsSlice'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { sendClaimStep3FileRequestAnalytics } from 'store/slices/claimsAndAppealsSlice'
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -104,12 +106,6 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const showClaimFileUploadBtn = needItemsFromVet(attributes) && !attributes.waiverSubmitted
 
   useEffect(() => {
-    if (phase === 3 && current === 3) {
-      dispatch(sendClaimStep3Analytics())
-    }
-  }, [dispatch, phase, current])
-
-  useEffect(() => {
     if (phase === 3 && current === 3 && showClaimFileUploadBtn) {
       dispatch(sendClaimStep3FileRequestAnalytics())
     }
@@ -158,8 +154,23 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const youHaveFileRequestsText = t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })
   const youHaveFileRequestsTextA11yHint = getTranslation(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}A11yHint`, t, { numberOfRequests })
 
+  const accordionPress = (isExpanded: boolean | undefined) => {
+    logAnalyticsEvent(Events.vama_claim_details_exp(claimID, attributes.claimType, phase, isExpanded || false, attributes.phaseChangeDate || '', attributes.dateFiled))
+  }
+
+  const fileRequestsPress = () => {
+    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, numberOfRequests))
+    navigateTo('FileRequest', { claimID })()
+  }
+
   return (
-    <AccordionCollapsible noBorder={true} header={getPhaseHeader()} expandedContent={getPhaseExpandedContent()} hideArrow={!phaseLessThanEqualToCurrent} testID={testID}>
+    <AccordionCollapsible
+      noBorder={true}
+      header={getPhaseHeader()}
+      expandedContent={getPhaseExpandedContent()}
+      hideArrow={!phaseLessThanEqualToCurrent}
+      customOnPress={accordionPress}
+      testID={testID}>
       {phase === 3 && showClaimFileUploadBtn && (
         <Box mt={standardMarginBetween}>
           <Box {...testIdProps(youHaveFileRequestsTextA11yHint)} accessible={true} accessibilityRole="header">
@@ -167,7 +178,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
           </Box>
           <Box mt={standardMarginBetween}>
             <VAButton
-              onPress={navigateTo('FileRequest', { claimID })}
+              onPress={fileRequestsPress}
               testID={t('claimPhase.fileRequests.button.label')}
               label={t('claimPhase.fileRequests.button.label')}
               buttonType={ButtonTypesConstants.buttonPrimary}

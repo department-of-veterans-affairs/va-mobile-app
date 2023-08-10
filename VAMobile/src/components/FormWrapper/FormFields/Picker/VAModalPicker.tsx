@@ -36,8 +36,6 @@ export type VAModalPickerProps = {
   labelKey?: string
   /** optional boolean that disables the picker when set to true */
   disabled?: boolean
-  /** optional testID for the overall component */
-  testID?: string
   /** optional boolean that displays required text next to label if set to true */
   isRequiredField?: boolean
   /** optional key for string to display underneath label */
@@ -56,6 +54,8 @@ export type VAModalPickerProps = {
   confirmBtnText?: string
   /** shows the modal by default */
   showModalByDefault?: boolean
+  /** Optional TestID for scrollView */
+  testID?: string
 }
 
 /**A common component to display a picker for the device with an optional label*/
@@ -66,7 +66,6 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   pickerOptions,
   labelKey,
   disabled,
-  testID,
   isRequiredField,
   helperTextKey,
   setError,
@@ -75,6 +74,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   displayButton = false,
   buttonText,
   confirmBtnText,
+  testID,
   showModalByDefault,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
@@ -157,7 +157,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     const valueBox = (
       <Box {...wrapperProps}>
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <TextView variant="MobileBody" flex={1}>
+          <TextView testID={testID} variant="MobileBody" flex={1}>
             {currentlySelectedOption?.label}
           </TextView>
           <Box mr={8} ml={16} my={16}>

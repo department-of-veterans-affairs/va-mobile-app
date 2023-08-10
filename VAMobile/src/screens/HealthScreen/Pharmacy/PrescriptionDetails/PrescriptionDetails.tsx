@@ -139,7 +139,6 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
     if (refillStatus !== RefillStatusConstants.TRANSFERRED) {
       return <></>
     }
-
     return <PrescriptionsDetailsBanner />
   }
 

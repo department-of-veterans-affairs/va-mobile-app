@@ -16,6 +16,8 @@ import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
 import { DowntimeWindowsByFeatureType, ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
+import { EventParams, logAnalyticsEvent } from 'utils/analytics'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { VATheme } from 'styles/theme'
@@ -193,17 +195,24 @@ export function useIsScreenReaderEnabled(withListener = false): boolean {
  *
  * @returns an alert showing user they are leaving the app
  */
-export function useExternalLink(): (url: string) => void {
+export function useExternalLink(): (url: string, eventParams?: EventParams) => void {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  return (url: string) => {
+  return (url: string, eventParams?: EventParams) => {
+    logAnalyticsEvent(Events.vama_link_click({ url, ...eventParams }))
+
+    const onOKPress = () => {
+      logAnalyticsEvent(Events.vama_link_confirm({ url, ...eventParams }))
+      return Linking.openURL(url)
+    }
+
     if (url.startsWith(WebProtocolTypesConstants.http)) {
       Alert.alert(t('leavingApp.title'), t('leavingApp.body'), [
         {
           text: t('cancel'),
           style: 'cancel',
         },
-        { text: t('leavingApp.ok'), onPress: (): Promise<void> => Linking.openURL(url), style: 'default' },
+        { text: t('leavingApp.ok'), onPress: (): Promise<void> => onOKPress(), style: 'default' },
       ])
     } else {
       Linking.openURL(url)
@@ -268,6 +277,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
     }
 
     // Don't pass cancelButtonIndex because doing so would hide the button on iPad
+    // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
     showActionSheetWithOptions(
       {
         title: props.title,
@@ -277,7 +287,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
         textStyle: { color: currentTheme.colors.text.primary },
         destructiveButtonIndex: newDestructiveButtonIndex,
         destructiveColor: currentTheme.colors.text.error,
-        options: newButtons.map((button) => stringToTitleCase(button.text)),
+        options: newButtons.map((button) => stringToTitleCase(isIOS() ? button.text : button.text + ' ')),
         containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
       },
       (buttonIndex) => {
@@ -459,7 +469,8 @@ export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i
       if (isIOS()) {
         return stringToTitleCase(optionText)
       } else {
-        return capitalizeFirstLetter(optionText)
+        // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
+        return capitalizeFirstLetter(optionText + ' ')
       }
     })
 

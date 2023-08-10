@@ -1,4 +1,4 @@
-import { device, element, by, expect, waitFor } from 'detox'
+import { device, element, by, expect, waitFor, web } from 'detox'
 import getEnv from '../../src/utils/env'
 import { expect as jestExpect } from '@jest/globals'
 import { setTimeout } from "timers/promises"
@@ -16,23 +16,33 @@ export const CommonE2eIdConstants = {
   VETERAN_CRISIS_LINE_BTN_ID: 'talk-to-the-veterans-crisis-line-now',
   PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
+  APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
+  PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
+  DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
+  BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
   PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
+  LETTERS_ROW_TEXT: 'VA letters and documents',
+  DISABILITY_RATING_ROW_TEXT: 'Disability rating',
   SETTINGS_ROW_TEXT: 'Settings',
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
+  VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
   SIGN_OUT_BTN_ID: 'Sign out',
-  SIGN_OUT_CONFIRM_TEXT: 'Are you sure you want to sign out?',
+  SIGN_OUT_CONFIRM_TEXT: 'Sign out?',
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'You’re leaving the app',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
+  VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
 }
 
 
 /** Log the automation into demo mode
  * */
 export async function loginToDemoMode() {
-  await setTimeout(5000)
+  await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+    .toExist()
+    .withTimeout(10000)
   try {
 	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
 	await element(by.text('Dismiss')).tap()
@@ -64,7 +74,7 @@ export async function loginToDemoMode() {
  * @param timeOut - time to wait for the element
  * */
 
-const checkIfElementIsPresent = async (matchString: string, findbyText = false, waitForElement = false, timeOut = 2000) => {
+export async function checkIfElementIsPresent(matchString: string, findbyText = false, waitForElement = false, timeOut = 2000) {
   try {
     if (findbyText) {
       if (waitForElement) {
@@ -192,8 +202,41 @@ export async function openHealth() {
 	await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap() 
 }
 
+export async function openAppointments() {
+	await element(by.text(CommonE2eIdConstants.APPOINTMENTS_TAB_BUTTON_TEXT)).tap() 
+}
+
+export async function openPayments() {
+  await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
+}
+
+export async function openDirectDeposit() {
+  await element(by.text(CommonE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT)).tap()
+}
+
 export async function openPrescriptions() {
 	await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
+
+}
+
+export async function openVAPaymentHistory() {
+  await element(by.text(CommonE2eIdConstants.VA_PAYMENT_HISTORY_BUTTON_TEXT)).tap()
+}
+
+export async function openBenefits() {
+	await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap() 
+}
+
+export async function openLetters() {
+  await element(by.text(CommonE2eIdConstants.LETTERS_ROW_TEXT)).tap() 
+}
+
+export async function openDisabilityRating() {
+  await element(by.text(CommonE2eIdConstants.DISABILITY_RATING_ROW_TEXT)).tap()
+}
+
+export async function openVaccineRecords() {
+  await element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT)).tap()
 }
 
 /**
@@ -206,4 +249,3 @@ export async function backButton() {
 	await element(by.traits(['button'])).atIndex(0).tap();
   }
 }
-

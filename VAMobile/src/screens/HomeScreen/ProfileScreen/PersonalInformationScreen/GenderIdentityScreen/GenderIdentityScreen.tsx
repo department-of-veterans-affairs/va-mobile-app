@@ -13,7 +13,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIdentity'>
 
@@ -28,6 +28,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const confirmAlert = useDestructiveActionSheet()
 
   const [error, setError] = useState('')
   const [genderIdentity, setGenderIdentity] = useState(profile?.genderIdentity)
@@ -44,6 +45,29 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
       navigation.goBack()
     }
   }, [genderIdentitySaved, navigation, dispatch])
+
+  useBeforeNavBackListener(navigation, (e) => {
+    if (profile?.genderIdentity === genderIdentity || !genderIdentity) {
+      return
+    }
+    e.preventDefault()
+    confirmAlert({
+      title: t('personalInformation.genderIdentity.deleteChange'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('keepEditing'),
+        },
+        {
+          text: t('deleteChanges'),
+          onPress: () => {
+            navigation.dispatch(e.data.action)
+          },
+        },
+      ],
+    })
+  })
 
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('personalInformation.genderIdentity.saved'),

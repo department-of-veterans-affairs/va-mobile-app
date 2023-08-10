@@ -694,7 +694,7 @@
           "attributes":
           {
             "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
+            "cancelId": "14",
             "comment": null,
             "healthcareProvider": "Vilasini Reddy",
             "healthcareService": "Test clinic 2",
@@ -761,7 +761,7 @@
           "attributes":
           {
             "appointmentType": "VA",
-            "cancelId": null,
+            "cancelId": "12",
             "comment": null,
             "healthcareProvider": null,
             "healthcareService": null,
@@ -825,7 +825,7 @@
           "attributes":
           {
             "appointmentType": "COMMUNITY_CARE",
-            "cancelId": null,
+            "cancelId": "13",
             "comment": null,
             "healthcareProvider": "",
             "healthcareService": "Test clinic 2",

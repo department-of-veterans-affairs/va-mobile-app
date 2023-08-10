@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 import _ from 'underscore'
 
 import { AppointmentsList } from 'store/api/types'
@@ -206,6 +206,11 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       : getGroupedAppointments(currentPagePastAppointmentsByYear || {}, theme, { t, tc }, onPastAppointmentPress, true, paginationByTimeFrame[timeFrame])
   }
 
+  useEffect(() => {
+    // Switching tabs resets the date range dropdown. Ensure appointments state matches dropdown
+    getAppointmentsInSelectedRange(datePickerOption, 1)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   if (useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID} />
   }
@@ -228,6 +233,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     totalEntries: totalEntries,
     pageSize: perPage,
     page: currentPage,
+    tab: 'past appointments',
   }
 
   return (
@@ -238,6 +244,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
           labelKey={'health:pastAppointments.selectADateRange'}
+          testID="getDateRangeTestID"
         />
       </Box>
       {getAppointmentData()}

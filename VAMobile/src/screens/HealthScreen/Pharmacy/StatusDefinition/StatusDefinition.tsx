@@ -2,12 +2,15 @@ import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC, useLayoutEffect } from 'react'
 
 import { Box, ClosePanelButton, LargePanel, TextView } from 'components'
+import { DateTime } from 'luxon'
+import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { getStatusDefinitionTextForRefillStatus } from 'utils/prescriptions'
 import { isIOS } from 'utils/platform'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
 import { usePanelHeaderStyles } from 'utils/hooks/headerStyles'
-import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
 type StatusDefinitionProps = StackScreenProps<HealthStackParamList, 'StatusDefinition'>
@@ -19,6 +22,7 @@ const StatusDefinition: FC<StatusDefinitionProps> = ({ navigation, route }) => {
   const theme = useTheme()
 
   const { text, a11yLabel } = getStatusDefinitionTextForRefillStatus(value, tc)
+  const timeOpened = DateTime.now().toMillis()
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -33,6 +37,11 @@ const StatusDefinition: FC<StatusDefinitionProps> = ({ navigation, route }) => {
       ),
     })
   }, [navigation, headerStyle, tc])
+
+  useBeforeNavBackListener(navigation, () => {
+    const timeClosed = DateTime.now().toMillis()
+    logAnalyticsEvent(Events.vama_rx_status(display, timeClosed - timeOpened))
+  })
 
   return (
     <LargePanel title={tc('statusDefinition')} rightButtonText={tc('close')}>
