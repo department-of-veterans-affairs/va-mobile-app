@@ -1,4 +1,4 @@
-import { Dimensions, ViewStyle } from 'react-native'
+import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
@@ -10,7 +10,7 @@ import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, 
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
 import colors from 'styles/themes/VAColors'
 
 export type SyncScreenProps = Record<string, unknown>
@@ -23,6 +23,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   }
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isPortrait = useOrientation()
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -74,16 +75,11 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     }
   }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t, disabilityRatingLoaded, syncing])
 
-  const isPortrait = () => {
-    const dim = Dimensions.get('screen')
-    return dim.height >= dim.width
-  }
-
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
       <Box
         justifyContent="center"
-        mx={isPortrait() ? theme.dimensions.gutter : theme.dimensions.headerHeight}
+        mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.contentMarginBottom}
         alignItems={'center'}>
