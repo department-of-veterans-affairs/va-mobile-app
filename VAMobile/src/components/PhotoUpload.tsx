@@ -154,7 +154,9 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
       ) : (
         <Box {...boxProps} mb={20}>
           <VAIcon name="UploadPhoto" />
-          <TextView variant="HelperText">Upload Photo</TextView>
+          <TextView color="primaryContrast" variant="HelperText">
+            Upload Photo
+          </TextView>
         </Box>
       )}
     </Pressable>
