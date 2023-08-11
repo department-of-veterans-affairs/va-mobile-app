@@ -12,4 +12,4 @@ The VA Health & Benefits mobile app's navigation model is the same on both iOS a
 * **Secondary navigation:**
   * The right side of the app’s top navigation bar is reserved for global contextual features that relate to the content on that screen (Example: Profile, Help).
 
-  For ENG components that make up the primary navigation, see [Primary Navigation](/va-mobile-app/docs/Design%20System/Components/Navigation/Primary/) in the UX Components section.
+  For ENG components that make up the primary navigation, see [Primary Navigation](/design/Components/Navigation/Primary/) in the UX Components section.

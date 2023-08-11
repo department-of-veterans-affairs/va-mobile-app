@@ -118,6 +118,11 @@ const config = {
                 label: 'Documentation',
                 to: '/docs/intro',
               },
+              {
+                label: 'Design System',
+                to: '/design/intro',
+              },
+
             ],
           },
           {
