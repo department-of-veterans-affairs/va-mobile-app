@@ -112,7 +112,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
                 {letterAvailable}
               </TextView>
             </Box>
-            {showButton && <VAButton onPress={onPress} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} />}
+            {showButton && <VAButton onPress={onPress} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} testID="getClaimLettersTestID" />}
           </TextArea>
         </Box>
       )

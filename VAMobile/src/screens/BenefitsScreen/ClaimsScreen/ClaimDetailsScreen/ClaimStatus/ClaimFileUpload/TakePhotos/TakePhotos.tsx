@@ -64,7 +64,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   }
 
   return (
-    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={onCancel} title={t('fileUpload.selectPhotos')}>
+    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={onCancel} title={t('fileUpload.selectPhotos')} testID="takePhotosTestID">
       {!!error && (
         <Box mt={theme.dimensions.contentMarginTop}>
           <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />
