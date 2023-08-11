@@ -1,5 +1,6 @@
 import { CommonE2eIdConstants } from './utils'
-import { by, element, expect, waitFor } from 'detox'
+import { by, device, element, expect, waitFor } from 'detox'
+import { setTimeout } from 'timers/promises'
 
 export const SignE2eIdConstants = {
   LOGIN_PAGE_ID: 'Login-page',
@@ -11,12 +12,6 @@ export const SignE2eIdConstants = {
   LOA_GATE_READ_MORE_P2: 'To complete the process on your smartphone, you’ll need these items:',
   CONTINUE_SIGN_IN_BTN_ID: 'Continue to sign in',
 }
-
-beforeAll(async () => {
-  await waitFor(element(by.id(SignE2eIdConstants.LOGIN_PAGE_ID)))
-    .toExist()
-    .withTimeout(2000)
-})
 
 describe('Sign In', () => {
   it('should show sign in page content', async () => {
@@ -30,13 +25,10 @@ describe('Sign In', () => {
     await expect(element(by.text(SignE2eIdConstants.LOA_P2_TEXT))).toExist()
     await expect(element(by.text(SignE2eIdConstants.LOA_GATE_EXPAND_MSG_TEXT))).toExist()
     await expect(element(by.id(SignE2eIdConstants.CONTINUE_SIGN_IN_BTN_ID))).toExist()
-    // await element(by.label(CommonE2eIdConstants.BACK_BTN_LABEL)).tap()
-    // await expect(element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID))).toExist()
   })
 
   it('should show webview with log in options', async () => {
-    await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
-    await element(by.label(CommonE2eIdConstants.BACK_BTN_LABEL)).tap()
+    await element(by.text('Back')).tap()
     await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
     await element(by.text('Done')).tap()
@@ -47,5 +39,7 @@ describe('Sign In', () => {
     await expect(element(by.text(SignE2eIdConstants.LOA_GATE_READ_MORE_P1))).not.toExist()
     await expect(element(by.text(SignE2eIdConstants.LOA_GATE_READ_MORE_P2))).not.toExist()
     await element(by.id(SignE2eIdConstants.CONTINUE_SIGN_IN_BTN_ID)).tap()
+    await setTimeout(7000)
+    await device.takeScreenshot('VALoginWebview')
   })
 })
