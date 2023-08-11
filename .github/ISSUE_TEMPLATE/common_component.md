@@ -10,7 +10,7 @@ assignees:
 # Common Component Ticket
 <!-- Goal of these tickets: Add new common components to, or make updates for existing components in, the VA mobile app design system. Only a subset of these will be applicable for updating a component, mark other ones as NA -->
 
-## Intro
+## Overview (header will not be published)
 This text provides the overall purpose and function of the component.
 
 ## Examples
