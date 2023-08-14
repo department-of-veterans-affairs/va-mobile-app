@@ -269,7 +269,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   return (
-    <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}  testID="UpcomingApptDetailsTestID">
+    <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')} testID="UpcomingApptDetailsTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>
         <AppointmentAlert attributes={attributes} />
         <TextArea>
