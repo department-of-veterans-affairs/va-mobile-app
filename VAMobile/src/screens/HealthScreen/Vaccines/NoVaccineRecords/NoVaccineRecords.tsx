@@ -14,7 +14,7 @@ const NoVaccineRecords: FC = () => {
     <VAScrollView>
       <Box mt={standardMarginBetween}>
         <AlertBox title={t('health:noVaccineRecords.alert.title')} border="informational" text={t('health:noVaccineRecords.alert.text.1')}>
-          <TextView paragraphSpacing={true} variant="MobileBody">
+          <TextView paragraphSpacing={true} mt={theme.paragraphSpacing.spacing20FontSize} variant="MobileBody">
             {t('health:noVaccineRecords.alert.text.2')}
           </TextView>
           <ClickToCallPhoneNumber phone={t('common:8006982411')} displayedText={t('common:8006982411.displayText')} />
