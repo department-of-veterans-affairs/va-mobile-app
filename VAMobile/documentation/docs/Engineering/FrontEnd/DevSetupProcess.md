@@ -84,6 +84,8 @@ sidebar_position: 5
 
 ## With VSCode or IntelliJ IDEA Project Setup
 
+- Verify you have access to the [Firebase console](https://console.firebase.google.com/u/0/project/va-mobile-app/settings/general/android:gov.va.mobileapp). If you don't, please reach out to VA Mobile engineering leadership./
+
 - With your prefer IDE Open the `/Users/(your user folder/Workspace/va-mobile-app/VAMobile` folder.
 
 - In the `android/app` directory add a file named `google-services.json`. You can download this `google-services.json` file from the [firebase console](https://console.firebase.google.com/u/0/project/va-mobile-app/settings/general/android:gov.va.mobileapp), under the "your apps" section. You can also download the corresponding `GoogleService-Info.plist` file you will need to later place in your in `VAMobile/ios`.

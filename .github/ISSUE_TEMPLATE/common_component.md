@@ -20,7 +20,7 @@ Embed Figma master component.
 If available, add a link to Storybook.
 
 ### Variations
-Embed Figma variations.
+Embed Figma variations. Show any differences between Android and iOS.
 
 ## Usage
 
@@ -44,7 +44,7 @@ Describe the key interactions for this component.
 * **Loops and modes**: Meta rules that govern the interaction.
 
 ### Choosing between variations
-Help the designer and developer understand when to choose between any variations of this component.
+Help the designer and developer understand when to choose between any variations of this component. Describe any differences between Android and iOS.
 
 ### Placement
 Where the component appears visually, and if necessary to clarify, where it may appear in the source code. Can also comment on where the component is not to be placed.
