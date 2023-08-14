@@ -7,17 +7,23 @@ import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingCompon
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DemoState } from 'store/slices/demoSlice'
+import {
+  DowntimeFeatureNameConstants,
+  DowntimeFeatureTypeConstants,
+  SecureMessagingMessageAttributes,
+  SecureMessagingMessageMap,
+  SecureMessagingSystemFolderIdConstants,
+} from 'store/api/types'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState, getMessage, getThread, listFolders, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
 import { getfolderName } from 'utils/secureMessaging'
-import { useAppDispatch, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
 import MessageCard from './MessageCard'
@@ -62,16 +68,17 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   // have to use uselayout due to the screen showing in white or showing the previouse data
   useLayoutEffect(() => {
     // Only get message and thread when inbox isn't being fetched
     // to avoid a race condition with writing to `messagesById`
-    if (!loadingInbox) {
+    if (!loadingInbox && smNotInDowntime) {
       dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
       dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
     }
-  }, [loadingInbox, messageID, dispatch])
+  }, [loadingInbox, messageID, smNotInDowntime, dispatch])
 
   useEffect(() => {
     if (isUndo || moveMessageFailed) {
@@ -162,11 +169,16 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       ? tc('messages')
       : tc('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
+  // We need to set the screen ID to the same as the secure messaging screen when in downtime in order for the ErrorComponent to display the downtime message.
+  // This is because downtime currently only supports mapping one screen to a feature. When the PR https://github.com/department-of-veterans-affairs/va-mobile-app/pull/6456
+  // is merged, this can be removed, and Errors.ts can be updated to include the view message screen in the mapping of the secure messaging feature
+  const screenID = smNotInDowntime ? ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID : ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID
+
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID) || messageIDsOfError?.includes(messageID)) {
+  if (useError(screenID) || messageIDsOfError?.includes(messageID)) {
     return (
       <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
+        <ErrorComponent screenID={screenID} overrideFeatureName={DowntimeFeatureNameConstants[DowntimeFeatureTypeConstants.secureMessaging]} />
       </ChildTemplate>
     )
   }
