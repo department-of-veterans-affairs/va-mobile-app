@@ -29,6 +29,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
   const theme = useTheme()
+  const [error, setError] = useState('')
 
   const { standardMarginBetween, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const { validationKey, confirmedSuggestedAddresses } = useSelector<RootState, PersonalInformationState>((storeState) => storeState.personalInformation)
@@ -69,6 +70,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   const onUseThisAddress = (): void => {
     let revalidate = false
     if (!selectedSuggestedAddress) {
+      setError(t('selectAddress'))
       return
     }
 
@@ -144,7 +146,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
 
     return (
       <TextArea>
-        <RadioGroup<SuggestedAddress | AddressData> options={suggestedAddressOptions} value={selectedSuggestedAddress} onChange={onSetSuggestedAddress} />
+        <RadioGroup<SuggestedAddress | AddressData> options={suggestedAddressOptions} value={selectedSuggestedAddress} onChange={onSetSuggestedAddress} error={error} />
       </TextArea>
     )
   }
