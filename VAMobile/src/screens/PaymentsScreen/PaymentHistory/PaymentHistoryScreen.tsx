@@ -24,7 +24,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
-  const { standardMarginBetween, gutter, contentMarginTop } = theme.dimensions
+  const { standardMarginBetween, gutter } = theme.dimensions
   const { currentPagePayments, currentPagePagination, loading, availableYears } = useSelector<RootState, PaymentState>((state) => state.payments)
   const newCurrentPagePayments = deepCopyObject<PaymentsByDate>(currentPagePayments)
   const noPayments = availableYears.length === 0
@@ -160,7 +160,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   return (
     <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')} testID="paymentHistoryTestID">
       <Box {...testIdProps('', false, 'payments-page')}>
-        <Box mx={gutter} mb={standardMarginBetween} mt={contentMarginTop}>
+        <Box mx={gutter} mb={standardMarginBetween}>
           <Pressable
             onPress={navigateTo('PaymentMissing')}
             accessibilityRole="link"

@@ -23,7 +23,6 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
   const navigation = useNavigation()
 
   const containerStyles = {
-    mt: 30,
     mb: contentMarginBottom,
   }
 

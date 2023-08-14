@@ -48,7 +48,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         {letterType === LetterTypeConstants.serviceVerification && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox border="informational">
