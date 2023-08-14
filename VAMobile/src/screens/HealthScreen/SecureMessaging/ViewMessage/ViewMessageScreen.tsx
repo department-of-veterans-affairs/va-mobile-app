@@ -163,7 +163,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       : tc('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID) && !messageIDsOfError) {
+  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID) || messageIDsOfError?.includes(messageID)) {
     return (
       <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
