@@ -34,7 +34,7 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
       ...headerStyle,
       headerLeft: (props) => <ClosePanelButton buttonText={t('close')} onPress={props.onPress} buttonTextColor={'showAll'} />,
     })
-  }, [navigation, headerStyle, tc])
+  }, [navigation, headerStyle, t])
 
   return (
     <LargePanel testID="PrescriptionsHelpTestID" title={t('prescriptionsHelp')} rightButtonText={t('close')}>

@@ -64,7 +64,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
         />
       ),
     })
-  }, [navigation, headerStyle, tc])
+  }, [navigation, headerStyle, t])
 
   useEffect(() => {
     if (!prescriptionInDowntime) {

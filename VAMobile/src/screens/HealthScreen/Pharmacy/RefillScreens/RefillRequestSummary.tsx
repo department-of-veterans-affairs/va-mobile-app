@@ -53,7 +53,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       setStatus(REQUEST_STATUS.MIX)
     }
     setRequestFailed(requestFailedItems)
-  }, [refillRequestSummaryItems, tc, requestFailed.length])
+  }, [refillRequestSummaryItems, t, requestFailed.length])
 
   useLayoutEffect(() => {
     navigation.setOptions({
