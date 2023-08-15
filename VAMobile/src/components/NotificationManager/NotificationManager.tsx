@@ -51,11 +51,10 @@ const NotificationManager: FC = ({ children }) => {
       /** this should be logged in firebase automatically. Anything here should be actions the app takes when it
        * opens like deep linking, etc
        */
+      logAnalyticsEvent(Events.vama_notification_click(notification.payload.url))
       if (foregroundNotifications.includes(notification.identifier)) {
         dispatch(dispatchSetTappedForegroundNotification())
       }
-
-      logAnalyticsEvent(Events.vama_notification_click(notification.payload.url))
 
       // Open deep link from the notification when present. If the user is
       // not logged in, store the link so it can be opened after authentication.
@@ -81,8 +80,8 @@ const NotificationManager: FC = ({ children }) => {
     // Callback in case there is need to do something with initial notification before it goes to system tray
     Notifications.getInitialNotification()
       .then((notification) => {
-        console.debug('Initial notification was:', notification || 'N/A')
         logAnalyticsEvent(Events.vama_notification_click(notification?.payload.url))
+        console.debug('Initial notification was:', notification || 'N/A')
 
         if (notification?.payload.url) {
           dispatch(dispatchSetInitialUrl(notification.payload.url))
