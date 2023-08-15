@@ -192,12 +192,12 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
           onSubmitPressed()
         }}>
         {showAlert && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} scrollViewRef={scrollViewRef} />
           </Box>
         )}
         <Box mx={theme.dimensions.gutter}>
-          <TextView mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true} variant={'HelperText'}>
+          <TextView paragraphSpacing={true} variant={'HelperText'}>
             {t('prescriptions.refill.instructions.requestRefills')}
             <TextView variant={'HelperTextBold'}>
               {t('prescriptions.refill.instructions.fifteenDays')}
