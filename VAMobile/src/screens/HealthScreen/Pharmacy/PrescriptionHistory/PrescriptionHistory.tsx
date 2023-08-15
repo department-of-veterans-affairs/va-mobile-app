@@ -603,7 +603,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       onPress: navigateTo('RefillScreenModal'),
     }
     return (
-      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+      <Box mx={theme.dimensions.buttonPadding}>
         <VAButton {...requestRefillButtonProps} />
       </Box>
     )

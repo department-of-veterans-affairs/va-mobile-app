@@ -94,7 +94,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
 
   return (
     <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={onCancel} title={t('fileUpload.selectFiles')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />

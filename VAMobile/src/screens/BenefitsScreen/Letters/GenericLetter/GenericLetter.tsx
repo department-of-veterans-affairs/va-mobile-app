@@ -27,7 +27,11 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
   }
 
   if (letterDownloadError) {
-    return <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('letters.download.tryAgain.a11y')} />
+    return (
+      <FeatureLandingTemplate backLabel={t('letters.overview.viewLetters')} backLabelOnPress={navigation.goBack} title={t('letters.details.title')}>
+        <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('letters.download.tryAgain.a11y')} />
+      </FeatureLandingTemplate>
+    )
   }
 
   if (downloading) {
@@ -44,7 +48,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         {letterType === LetterTypeConstants.serviceVerification && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox border="informational">

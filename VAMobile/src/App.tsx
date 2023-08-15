@@ -50,6 +50,7 @@ import OnboardingCarousel from './screens/OnboardingCarousel'
 import SnackBar from 'components/SnackBar'
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
+import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
 import getEnv from 'utils/env'
 import store, { RootState } from 'store'
@@ -70,6 +71,13 @@ if (isIOS()) {
   KeyboardManager.setKeyboardDistanceFromTextField(45)
   KeyboardManager.setEnableAutoToolbar(false)
 }
+
+/**
+ * (https://github.com/react-native-webview/react-native-webview/issues/575)
+ * Potential fix for an Android specific crash issue related to react-navigation animations when
+ * transitioning to a webview
+ */
+const SHOW_LOGIN_VIEW_ANIMATION = isIOS()
 
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
@@ -258,6 +266,7 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="Login" component={LoginScreen} options={{ ...topPaddingAsHeaderStyles, title: t('login') }} />
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
+        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ headerShown: false, animationEnabled: SHOW_LOGIN_VIEW_ANIMATION }} />
         <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
       </Stack.Navigator>
     )
