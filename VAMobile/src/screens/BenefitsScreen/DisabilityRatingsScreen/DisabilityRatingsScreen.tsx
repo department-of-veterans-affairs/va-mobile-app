@@ -40,7 +40,7 @@ const DisabilityRatingsScreen: FC = () => {
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
   const { loading, needsDataLoad, ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
-  const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
+  const { condensedMarginBetween, contentMarginBottom, gutter } = theme.dimensions
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
   const totalCombinedRating = ratingData?.combinedDisabilityRating
@@ -192,18 +192,18 @@ const DisabilityRatingsScreen: FC = () => {
     numberOrUrlLink: LINK_URL_ABOUT_DISABILITY_RATINGS,
     accessibilityHint: t('disabilityRating.learnAboutLinkTitle.a11yHint'),
     a11yLabel: t('disabilityRating.learnAboutLinkTitle.a11yLabel'),
+    testID: 'aboutDisabilityRatingsTestID',
   }
 
   const titleProps: TextViewProps = {
     variant: 'TableHeaderBold',
     mx: gutter,
     mb: condensedMarginBetween,
-    mt: standardMarginBetween,
     accessibilityRole: 'header',
   }
 
   return (
-    <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
+    <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')} testID="disabilityRatingTestID">
       <Box>{getCombinedTotalSection()}</Box>
       <Box mb={condensedMarginBetween}>
         <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />

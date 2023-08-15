@@ -185,9 +185,9 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}
       rightButtonDisabled={saveDisabled}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {profile?.contactEmail?.emailAddress && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
+          <Box my={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onDeletePressed}
               label={t('contactInformation.removeData', { pageName: emailTitle })}

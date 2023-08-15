@@ -11,14 +11,12 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { standardMarginBetween } = theme.dimensions
 
   useEffect(() => {
     logAnalyticsEvent(Events.vama_rx_na())
   }, [])
 
   const alertWrapperProps: BoxProps = {
-    mt: standardMarginBetween,
     mb: theme.dimensions.contentMarginBottom,
   }
 
