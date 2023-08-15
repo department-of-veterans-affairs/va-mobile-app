@@ -7,7 +7,6 @@ import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingCompon
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DemoState } from 'store/slices/demoSlice'
-import { Events } from 'constants/analytics'
 import {
   DowntimeFeatureNameConstants,
   DowntimeFeatureTypeConstants,
@@ -15,6 +14,7 @@ import {
   SecureMessagingMessageMap,
   SecureMessagingSystemFolderIdConstants,
 } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
