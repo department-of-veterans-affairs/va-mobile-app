@@ -276,16 +276,21 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   ]
 
   const onTabChange = (newTab: string) => {
-    setFilterToUse('')
-    setSelectedFilter('')
-    setCurrentTab(newTab)
-    setPage(1)
-
     if (newTab === PrescriptionHistoryTabConstants.PENDING) {
       logAnalyticsEvent(Events.vama_rx_pendingtab())
     } else if (newTab === PrescriptionHistoryTabConstants.TRACKING) {
       logAnalyticsEvent(Events.vama_rx_trackingtab())
     }
+    if (newTab === PrescriptionHistoryTabConstants.ALL) {
+      setCurrentTab(newTab)
+      setFilterToUse(RefillStatusConstants.ACTIVE)
+      setSelectedFilter(RefillStatusConstants.ACTIVE)
+    } else {
+      setFilterToUse('')
+      setSelectedFilter('')
+      setCurrentTab(newTab)
+    }
+    setPage(1)
   }
 
   const tabProps: TabBarProps = {
