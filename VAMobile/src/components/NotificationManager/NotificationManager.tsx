@@ -1,8 +1,8 @@
 import { AuthState } from 'store/slices'
+import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { RootState } from 'store'
-import { View } from 'react-native'
-import { dispatchSetTappedForegroundNotification, registerDevice } from 'store/slices/notificationSlice'
+import { dispatchSetInitialUrl, dispatchSetTappedForegroundNotification, registerDevice } from 'store/slices/notificationSlice'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
@@ -52,6 +52,16 @@ const NotificationManager: FC = ({ children }) => {
       if (foregroundNotifications.includes(notification.identifier)) {
         dispatch(dispatchSetTappedForegroundNotification())
       }
+
+      // Open deep link from the notification when present. If the user is
+      // not logged in, store the link so it can be opened after authentication.
+      if (notification.payload.url) {
+        if (loggedIn) {
+          Linking.openURL(notification.payload.url)
+        } else {
+          dispatch(dispatchSetInitialUrl(notification.payload.url))
+        }
+      }
       console.debug('Notification opened by device user', notification)
       console.debug(`Notification opened with an action identifier: ${notification.identifier}`)
       completion()
@@ -68,6 +78,9 @@ const NotificationManager: FC = ({ children }) => {
     Notifications.getInitialNotification()
       .then((notification) => {
         console.debug('Initial notification was:', notification || 'N/A')
+        if (notification?.payload.url) {
+          dispatch(dispatchSetInitialUrl(notification.payload.url))
+        }
       })
       .catch((err) => console.error('getInitialNotification() failed', err))
   }
