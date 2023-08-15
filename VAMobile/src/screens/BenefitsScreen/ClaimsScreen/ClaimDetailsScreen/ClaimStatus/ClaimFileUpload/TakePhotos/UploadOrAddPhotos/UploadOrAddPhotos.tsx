@@ -266,7 +266,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         logAnalyticsEvent(Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
         navigation.dispatch(StackActions.pop(2))
       }}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         {!!errorMessage && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox scrollViewRef={scrollViewRef} title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" focusOnError={onSaveClicked} />

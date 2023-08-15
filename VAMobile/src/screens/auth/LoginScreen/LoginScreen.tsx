@@ -1,10 +1,9 @@
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
-import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
-import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
+import { AuthState, loginStart } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -12,7 +11,6 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useStartAuth } from 'utils/hooks/auth'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
@@ -20,22 +18,12 @@ import getEnv from 'utils/env'
 const LoginScreen: FC = () => {
   const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HOME])
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
-  const { authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
-
   const isPortrait = useOrientation()
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
-  const startAuth = useStartAuth()
   const theme = useTheme()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 20
   let demoTaps = 0
-
-  useEffect(() => {
-    if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.INIT) {
-      dispatch(setPKCEParams())
-    }
-  }, [authParamsLoadingState, dispatch])
 
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -64,6 +52,7 @@ const LoginScreen: FC = () => {
     testID: 'findVALocationTestID',
   }
 
+  const dispatch = useAppDispatch()
   const handleUpdateDemoMode = () => {
     dispatch(updateDemoMode(true))
   }
@@ -82,7 +71,7 @@ const LoginScreen: FC = () => {
       }
     : firstTimeLogin
     ? navigateTo('LoaGate')
-    : startAuth
+    : navigateTo('WebviewLogin')
 
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>

@@ -40,7 +40,7 @@ const DisabilityRatingsScreen: FC = () => {
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
   const { loading, needsDataLoad, ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
-  const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
+  const { condensedMarginBetween, contentMarginBottom, gutter } = theme.dimensions
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
   const totalCombinedRating = ratingData?.combinedDisabilityRating
@@ -199,7 +199,6 @@ const DisabilityRatingsScreen: FC = () => {
     variant: 'TableHeaderBold',
     mx: gutter,
     mb: condensedMarginBetween,
-    mt: standardMarginBetween,
     accessibilityRole: 'header',
   }
 
