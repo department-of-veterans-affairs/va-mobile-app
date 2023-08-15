@@ -273,7 +273,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       <Box mb={theme.dimensions.contentMarginBottom}>
         <AppointmentAlert attributes={attributes} />
         <TextArea>
-          <AppointmentTypeAndDate attributes={attributes} />
+          <AppointmentTypeAndDate attributes={attributes} isPastAppointment={false} />
           <AddToCalendar />
 
           <VideoAppointment_HowToJoin />
