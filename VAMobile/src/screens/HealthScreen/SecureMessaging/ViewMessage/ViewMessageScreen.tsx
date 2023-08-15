@@ -7,13 +7,7 @@ import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingCompon
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DemoState } from 'store/slices/demoSlice'
-import {
-  DowntimeFeatureNameConstants,
-  DowntimeFeatureTypeConstants,
-  SecureMessagingMessageAttributes,
-  SecureMessagingMessageMap,
-  SecureMessagingSystemFolderIdConstants,
-} from 'store/api/types'
+import { DowntimeFeatureTypeConstants, SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -169,16 +163,13 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       ? tc('messages')
       : tc('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
-  // We need to set the screen ID to the same as the secure messaging screen when in downtime in order for the ErrorComponent to display the downtime message.
-  // This is because downtime currently only supports mapping one screen to a feature. When the PR https://github.com/department-of-veterans-affairs/va-mobile-app/pull/6456
-  // is merged, this can be removed, and Errors.ts can be updated to include the view message screen in the mapping of the secure messaging feature
-  const screenID = smNotInDowntime ? ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID : ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID
+  const screenID = ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID
 
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
   if (useError(screenID) || messageIDsOfError?.includes(messageID)) {
     return (
       <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
-        <ErrorComponent screenID={screenID} overrideFeatureName={DowntimeFeatureNameConstants[DowntimeFeatureTypeConstants.secureMessaging]} />
+        <ErrorComponent screenID={screenID} />
       </ChildTemplate>
     )
   }
