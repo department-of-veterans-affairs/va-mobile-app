@@ -76,7 +76,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   }, [navigation])
 
   return (
-    <CategoryLanding title={t('health')}>
+    <CategoryLanding title={t('health.title')}>
       <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('appointments.title')}

@@ -152,7 +152,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
           CloseSnackbarOnNavigation(e.target)
         },
       }}>
-      <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('home') }} />
+      <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
       <HomeScreenStack.Screen name="ContactVA" component={ContactVAScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ headerShown: false }} />

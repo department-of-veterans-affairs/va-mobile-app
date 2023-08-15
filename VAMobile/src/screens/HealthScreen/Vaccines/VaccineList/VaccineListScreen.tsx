@@ -80,7 +80,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   if (useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -88,7 +88,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   if (loading) {
     return (
-      <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
         <LoadingComponent text={t('vaccines.loading')} />
       </FeatureLandingTemplate>
     )
@@ -96,14 +96,14 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   if (vaccines.length === 0) {
     return (
-      <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
         <NoVaccineRecords />
       </FeatureLandingTemplate>
     )
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
+    <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <DefaultList items={vaccineButtons} />
       </Box>

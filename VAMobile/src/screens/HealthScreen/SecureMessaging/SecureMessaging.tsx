@@ -60,7 +60,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('messages')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -68,7 +68,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
 
   if (!secureMessaging) {
     return (
-      <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('messages')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
         <NotEnrolledSM />
       </FeatureLandingTemplate>
     )
@@ -76,7 +76,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
 
   if (termsAndConditionError) {
     return (
-      <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('messages')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
         <TermsAndConditions />
       </FeatureLandingTemplate>
     )
@@ -96,7 +96,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('messages')}>
+    <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
       <StartNewMessageButton />
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>

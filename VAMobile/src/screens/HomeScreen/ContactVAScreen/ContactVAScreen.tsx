@@ -26,7 +26,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
 
   return (
-    <FeatureLandingTemplate backLabel={t('home')} backLabelOnPress={navigation.goBack} title={t('contactVA')} titleA11y={a11yLabelVA(t('contactVA'))}>
+    <FeatureLandingTemplate backLabel={t('home.title')} backLabelOnPress={navigation.goBack} title={t('contactVA')} titleA11y={a11yLabelVA(t('contactVA'))}>
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>

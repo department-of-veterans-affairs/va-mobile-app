@@ -77,7 +77,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
 
   if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -85,7 +85,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
 
   if (!appointments) {
     return (
-      <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
         <NoMatchInRecords />
       </FeatureLandingTemplate>
     )
@@ -125,7 +125,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('health')}
+      backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
