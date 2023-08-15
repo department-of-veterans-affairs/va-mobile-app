@@ -27,6 +27,12 @@ jest.mock('react-native-keyboard-manager', () => ({
   setEnableAutoToolbar: jest.fn(() => {}),
 }))
 
+jest.mock('react-native/Libraries/Linking/Linking', () => ({
+  getInitialURL: jest.fn(),
+  addEventListener: jest.fn(),
+  removeEventListener: jest.fn(),
+}));
+
 context('App', () => {
   afterEach(() => {
     jest.clearAllMocks()
