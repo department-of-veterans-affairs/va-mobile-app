@@ -85,7 +85,7 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
         <NoMilitaryInformationAccess />
       ) : (
         <>
-          <Box mb={theme.dimensions.standardMarginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween} mt={-theme.dimensions.standardMarginBetween}>
             <DefaultList items={historyItems} title={t('militaryInformation.periodOfService')} />
           </Box>
           <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>

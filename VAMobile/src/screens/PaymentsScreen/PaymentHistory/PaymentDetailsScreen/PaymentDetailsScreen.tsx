@@ -58,7 +58,7 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ navigation, route
 
   return (
     <FeatureLandingTemplate backLabel={t('history.title')} backLabelOnPress={navigation.goBack} title={t('paymentDetails.title')}>
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
+      <Box mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBody" mb={standardMarginBetween}>
             {formatDateUtc(date, 'MMMM d, yyyy')}

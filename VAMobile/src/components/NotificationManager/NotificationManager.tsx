@@ -1,9 +1,9 @@
 import { AuthState } from 'store/slices'
 import { Events } from 'constants/analytics'
+import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { RootState } from 'store'
-import { View } from 'react-native'
-import { dispatchSetTappedForegroundNotification, registerDevice } from 'store/slices/notificationSlice'
+import { dispatchSetInitialUrl, dispatchSetTappedForegroundNotification, registerDevice } from 'store/slices/notificationSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -57,6 +57,15 @@ const NotificationManager: FC = ({ children }) => {
 
       logAnalyticsEvent(Events.vama_notification_click(notification.payload.url))
 
+      // Open deep link from the notification when present. If the user is
+      // not logged in, store the link so it can be opened after authentication.
+      if (notification.payload.url) {
+        if (loggedIn) {
+          Linking.openURL(notification.payload.url)
+        } else {
+          dispatch(dispatchSetInitialUrl(notification.payload.url))
+        }
+      }
       console.debug('Notification opened by device user', notification)
       console.debug(`Notification opened with an action identifier: ${notification.identifier}`)
       completion()
@@ -74,6 +83,10 @@ const NotificationManager: FC = ({ children }) => {
       .then((notification) => {
         console.debug('Initial notification was:', notification || 'N/A')
         logAnalyticsEvent(Events.vama_notification_click(notification?.payload.url))
+
+        if (notification?.payload.url) {
+          dispatch(dispatchSetInitialUrl(notification.payload.url))
+        }
       })
       .catch((err) => console.error('getInitialNotification() failed', err))
   }

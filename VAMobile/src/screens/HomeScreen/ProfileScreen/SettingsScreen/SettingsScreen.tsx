@@ -110,7 +110,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} flex={1}>
+      <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <SimpleList items={items} />
           {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
