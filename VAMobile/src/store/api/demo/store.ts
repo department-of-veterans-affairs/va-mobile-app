@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon'
+
 import { AddressData, PaymentAccountData, SecureMessagingSystemFolderIdConstants } from '../types'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
@@ -65,6 +67,51 @@ const setDemoStore = (data: DemoStore) => {
 }
 
 /**
+ * Replace double curly brace date expression in mock file with ISO date.
+ * For example, \{\{now + 5 days\}\} is replaced with 2023-08-08T10:58:58.003-06:00
+ * (Ignore the backslashes, they're just for JSDoc.)
+ * Units can be days, weeks, months, or years, and you can add or subtract.
+ * You can add an optional format at the end. Options:
+ *   short: month-day-year (05-30-2023)
+ *   shortReversed: year-month-day (2023-07-11)
+ *   year: year only (2023)
+ *   utc: timestamp in UTC time (2023-08-10T22:04:16.695Z)
+ *   (default): timestamp in local timezone (2023-11-08T16:04:16.693-07:00)
+ */
+const generateDate = (match: string, signSymbol: string, offset: string, units: string, format: string) => {
+  const sign = signSymbol === '+' ? 'plus' : 'minus'
+  let result = ''
+
+  try {
+    const localNow = DateTime.now()[sign]({ [units]: offset })
+    if (format === 'short') {
+      result = localNow.toFormat('MM-dd-yyyy')
+    } else if (format === 'shortReversed') {
+      result = localNow.toFormat('yyyy-MM-dd')
+    } else if (format === 'year') {
+      result = localNow.toFormat('yyyy')
+    } else if (format === 'utc') {
+      result = DateTime.utc()
+        [sign]({ [units]: offset })
+        .toISO()
+    } else {
+      result = localNow.toString()
+    }
+  } catch (error) {
+    console.log(`Error in mock file date expression ${match}: ${error}`)
+  }
+
+  return result
+}
+
+/**
+ * Replace all the date expressions in a mock file with the corresponding dates
+ */
+const transformDates = (fileObject: Record<string, unknown>) => {
+  return JSON.parse(JSON.stringify(fileObject).replace(/{{now (\+|-) (\d+) (\w+) ?(\w+)?}}/g, generateDate))
+}
+
+/**
  * function to import the demo data store from the JSON file and initialize the demo store.
  */
 export const initDemoStore = async (): Promise<void> => {
@@ -81,7 +128,8 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/prescriptions.json'),
     import('./mocks/notifications.json'),
   ])
-  setDemoStore(data.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
+  const transformedData = data.map((file) => transformDates(file))
+  setDemoStore(transformedData.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
 }
 
 /**
