@@ -71,6 +71,10 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     }
   }
 
+  const onFeedback = () => {
+    navigation.navigate('InAppRecruitment')
+  }
+
   const onPrivacyPolicy = async (): Promise<void> => {
     launchExternalLink(LINK_URL_PRIVACY_POLICY)
   }
@@ -81,6 +85,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     canStoreWithBiometric ? biometricRow : [],
     notificationsRow,
     { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
+    { text: t('inAppRecruitment.giveFeedback'), a11yHinText: t('inAppRecruitment.giveFeedback.a11yHint'), onPress: onFeedback },
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
