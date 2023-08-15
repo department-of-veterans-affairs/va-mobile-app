@@ -7,17 +7,17 @@ import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingCompon
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DemoState } from 'store/slices/demoSlice'
-import { DowntimeFeatureTypeConstants, SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState, getMessage, getThread, listFolders, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
 import { getfolderName } from 'utils/secureMessaging'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntimeByScreenID, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
 import MessageCard from './MessageCard'
@@ -33,6 +33,8 @@ export const renderMessages = (message: SecureMessagingMessageAttributes, messag
 
   return threadMessages.map((m) => m && m.messageId && <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={hideMessage && m.messageId === message.messageId} />)
 }
+
+const screenID = ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID
 
 const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) => {
   const messageID = Number(route.params.messageID)
@@ -62,15 +64,15 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const smNotInDowntime = !useDowntimeByScreenID(screenID)
 
   // have to use uselayout due to the screen showing in white or showing the previouse data
   useLayoutEffect(() => {
     // Only get message and thread when inbox isn't being fetched
     // to avoid a race condition with writing to `messagesById`
     if (!loadingInbox && smNotInDowntime) {
-      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
-      dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
+      dispatch(getMessage(messageID, screenID))
+      dispatch(getThread(messageID, screenID))
     }
   }, [loadingInbox, messageID, smNotInDowntime, dispatch])
 
@@ -83,7 +85,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   useEffect(() => {
     if (!folders.length) {
-      dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
+      dispatch(listFolders(screenID))
     }
   }, [dispatch, folders])
 
@@ -162,8 +164,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     Number(folderWhereMessagePreviousewas.current) === SecureMessagingSystemFolderIdConstants.INBOX
       ? tc('messages')
       : tc('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
-
-  const screenID = ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID
 
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
   if (useError(screenID) || messageIDsOfError?.includes(messageID)) {
