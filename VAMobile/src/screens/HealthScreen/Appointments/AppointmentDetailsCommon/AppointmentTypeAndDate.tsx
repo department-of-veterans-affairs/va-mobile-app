@@ -21,7 +21,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes })
 
   const isAppointmentPending = isAPendingAppointment(attributes)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
-  const appointmentTypeLabel = getTranslation(AppointmentTypeToA11yLabel[appointmentType], th)
+  const appointmentTypeLabel = getTranslation(AppointmentTypeToA11yLabel[appointmentType], t)
 
   const date = getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone)
   const time = getFormattedTimeForTimeZone(startDateUtc, timeZone)

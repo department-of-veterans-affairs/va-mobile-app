@@ -44,7 +44,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
     return (
       <Box flexDirection={'column'}>
         <TextView variant="MobileBodyBold" accessibilityRole={'header'} mt={theme.dimensions.standardMarginBetween}>
-          {formatSubject(category, subject, th)}
+          {formatSubject(category, subject, t)}
         </TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
           {senderName}

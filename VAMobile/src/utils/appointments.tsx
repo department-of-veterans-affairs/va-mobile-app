@@ -115,7 +115,7 @@ export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOn
 export const getGroupedAppointments = (
   appointmentsByYear: AppointmentsGroupedByYear,
   theme: VATheme,
-  translations: { t: TFunction; tc: TFunction },
+  translations: { t: TFunction },
   onAppointmentPress: (appointmentID: string) => void,
   isReverseSort: boolean,
   upcomingPageMetaData: AppointmentsMetaPagination,

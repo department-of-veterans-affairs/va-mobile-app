@@ -202,7 +202,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
     return isPastThreeMonths
       ? getAppointmentsPastThreeMonths()
-      : getGroupedAppointments(currentPagePastAppointmentsByYear || {}, theme, { t, tc }, onPastAppointmentPress, true, paginationByTimeFrame[timeFrame])
+      : getGroupedAppointments(currentPagePastAppointmentsByYear || {}, theme, { t }, onPastAppointmentPress, true, paginationByTimeFrame[timeFrame])
   }
 
   useEffect(() => {

@@ -21,7 +21,7 @@ const StatusDefinition: FC<StatusDefinitionProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const { text, a11yLabel } = getStatusDefinitionTextForRefillStatus(value, tc)
+  const { text, a11yLabel } = getStatusDefinitionTextForRefillStatus(value, t)
   const timeOpened = DateTime.now().toMillis()
 
   useLayoutEffect(() => {
