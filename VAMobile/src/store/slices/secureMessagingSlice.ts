@@ -299,7 +299,7 @@ export const getMessage =
     if (loadingAttachments) {
       dispatch(dispatchStartGetAttachmentList())
     } else {
-      dispatch(dispatchStartGetMessage())
+      dispatch(dispatchStartGetMessage({ messageID }))
     }
 
     try {
@@ -314,7 +314,7 @@ export const getMessage =
       // If message is unread, refresh inbox to get up to date unreadCount
       if (messagesById?.[messageID] && messagesById[messageID].readReceipt !== READ) {
         if (!demoMode) {
-          dispatch(getInbox())
+          dispatch(getInbox(screenID))
         }
       }
       await registerReviewEvent()
@@ -323,6 +323,7 @@ export const getMessage =
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `getMessage: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishGetMessage({ error, messageId: messageID }))
+        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }
   }
@@ -788,8 +789,9 @@ const secureMessagingSlice = createSlice({
     },
 
     dispatchStartGetMessage: (state, action: PayloadAction<Record<string, unknown> | undefined>) => {
-      const { setLoading } = action.payload || {}
+      const { messageID, setLoading } = action.payload || {}
       state.loading = setLoading ? true : state.loading
+      state.messageIDsOfError = state.messageIDsOfError?.filter((id) => id !== messageID)
     },
 
     dispatchFinishGetMessage: (state, action: PayloadAction<{ messageData?: SecureMessagingMessageGetData; error?: api.APIError; messageId?: number; isDemoMode?: boolean }>) => {

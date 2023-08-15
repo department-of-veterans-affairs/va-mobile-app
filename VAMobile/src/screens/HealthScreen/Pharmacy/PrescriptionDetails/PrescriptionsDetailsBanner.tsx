@@ -13,7 +13,7 @@ const PrescriptionsDetailsBanner: FC = () => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
 
-  const { contentMarginTop, standardMarginBetween } = theme.dimensions
+  const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
   useEffect(() => {
     logAnalyticsEvent(Events.vama_rx_refill_cerner())
@@ -41,7 +41,7 @@ const PrescriptionsDetailsBanner: FC = () => {
 
     return (
       <>
-        <TextView variant="MobileBody" mb={standardMarginBetween} mt={standardMarginBetween}>
+        <TextView variant="MobileBody" mb={standardMarginBetween}>
           {t('prescription.details.banner.body1')}
         </TextView>
         <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -65,7 +65,7 @@ const PrescriptionsDetailsBanner: FC = () => {
 
   return (
     <VAScrollView>
-      <Box mt={contentMarginTop}>
+      <Box mb={contentMarginBottom}>
         <CollapsibleAlert
           border="warning"
           headerText={t('prescription.details.banner.title')}

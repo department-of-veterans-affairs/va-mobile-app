@@ -26,7 +26,7 @@ const StartNewMessageButton: FC = () => {
   }
 
   return (
-    <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+    <Box mx={theme.dimensions.buttonPadding}>
       <VAButton {...startNewMessageButtonProps} />
     </Box>
   )

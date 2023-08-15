@@ -34,7 +34,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const noneNoted = tc('noneNoted')
 
-  const { contentMarginTop, contentMarginBottom } = theme.dimensions
+  const { contentMarginBottom } = theme.dimensions
 
   const prescription = prescriptionsById[prescriptionId]
   const {
@@ -90,7 +90,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       },
     }
     return (
-      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+      <Box mb={theme.dimensions.buttonPadding} mx={theme.dimensions.buttonPadding}>
         <VAButton {...buttonProps} />
       </Box>
     )
@@ -129,7 +129,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
       },
     }
     return (
-      <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+      <Box mb={theme.dimensions.buttonPadding} mx={theme.dimensions.buttonPadding}>
         <VAButton {...requestRefillButtonProps} />
       </Box>
     )
@@ -159,7 +159,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
     <ChildTemplate backLabel={tc('prescriptions')} backLabelOnPress={navigation.goBack} title={tc('prescriptionDetails')}>
       {getBanner()}
       {getRefillVAHealthButton()}
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
+      <Box mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
           <TextView color={'placeholder'} accessibilityLabel={rxNumberA11yLabel}>

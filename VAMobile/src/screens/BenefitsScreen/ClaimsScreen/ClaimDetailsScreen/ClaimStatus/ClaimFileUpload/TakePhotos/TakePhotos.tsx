@@ -66,11 +66,11 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   return (
     <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={onCancel} title={t('fileUpload.selectPhotos')}>
       {!!error && (
-        <Box mt={theme.dimensions.contentMarginTop}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />
         </Box>
       )}
-      <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
+      <Box mb={theme.dimensions.standardMarginBetween}>
         <CollapsibleAlert
           border="informational"
           headerText={t('fileUpload.accessibilityAlert.title')}
