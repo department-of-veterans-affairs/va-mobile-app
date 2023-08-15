@@ -46,7 +46,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes, i
   } else if (isAppointmentCanceled && serviceCategoryName === 'COMPENSATION & PENSION') {
     content = (
       <>
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+        <TextView variant={'MobileBody'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
           {t('appointments.claimExam')}
         </TextView>
         <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
@@ -66,7 +66,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes, i
   } else if (serviceCategoryName === 'COMPENSATION & PENSION') {
     content = (
       <>
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+        <TextView variant={isPastAppointment ? 'MobileBody' : 'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
           {t('appointments.claimExam')}
         </TextView>
         {isPastAppointment ? (
