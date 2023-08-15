@@ -49,7 +49,6 @@ export const useDowntime = (feature: DowntimeFeatureType): boolean => {
   return featureInDowntime(feature, downtimeWindowsByFeature)
 }
 
-// this is not a hook. not sure this is the right place for this function
 export const featureInDowntime = (feature: DowntimeFeatureType, downtimeWindows: DowntimeWindowsByFeatureType): boolean => {
   const mw = downtimeWindows[feature]
   return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime

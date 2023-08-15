@@ -104,6 +104,7 @@ export const ScreenIDToDowntimeFeatures = {
   [ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID]: [DowntimeFeatureTypeConstants.disabilityRating],
   [ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID]: [DowntimeFeatureTypeConstants.militaryServiceHistory],
   [ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID]: [DowntimeFeatureTypeConstants.userProfileUpdate],
+  [ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID]: [DowntimeFeatureTypeConstants.userProfileUpdate],
   [ScreenIDTypesConstants.PAYMENTS_SCREEN_ID]: [DowntimeFeatureTypeConstants.payments],
   [ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID]: [DowntimeFeatureTypeConstants.rx],
 }
