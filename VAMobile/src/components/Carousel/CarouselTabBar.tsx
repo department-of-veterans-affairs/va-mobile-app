@@ -108,7 +108,7 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
       buttonText = 'done'
       allyHint = a11yHints?.doneHint
     } else {
-      buttonText = 'common:next'
+      buttonText = 'next'
       allyHint = a11yHints?.continueHint
     }
 

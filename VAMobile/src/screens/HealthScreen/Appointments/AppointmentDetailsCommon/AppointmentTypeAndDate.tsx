@@ -49,7 +49,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes, i
           {t('appointments.claimExam')}
         </TextView>
         <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
-          {th('appointments.canceled.message', { date, time })}
+          {t('appointments.canceled.message', { date, time })}
         </TextView>
       </>
     )
