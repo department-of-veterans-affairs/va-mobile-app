@@ -24,7 +24,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme.dimensions
+  const { contentMarginBottom, standardMarginBetween } = theme.dimensions
   const dispatch = useAppDispatch()
 
   const vaccine = vaccinesById[vaccineId]
@@ -69,7 +69,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
 
   return (
     <FeatureLandingTemplate backLabel={tc('vaVaccines')} backLabelA11y={tc('vaVaccines.a11y')} backLabelOnPress={navigation.goBack} title={tc('details')}>
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
+      <Box mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBody" mb={standardMarginBetween}>
             {displayDate}
