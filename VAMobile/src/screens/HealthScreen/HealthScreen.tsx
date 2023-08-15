@@ -36,9 +36,7 @@ type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
 
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
@@ -59,7 +57,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   }
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('health_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov'), loadingMessage: th('webview.covidUpdates.loading') })
+    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
 
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
@@ -78,7 +76,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   }, [navigation])
 
   return (
-    <CategoryLanding title={tc('health')}>
+    <CategoryLanding title={t('health')}>
       <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('appointments.title')}

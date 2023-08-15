@@ -9,8 +9,7 @@ import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_MY_HEALTHEVET } = getEnv()
 const TermsAndConditions: FC = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
 
@@ -35,7 +34,7 @@ const TermsAndConditions: FC = () => {
             />
           </Box>
           <TextView>
-            <TextView variant="MobileBodyBold">{tc('note') + ' '}</TextView>
+            <TextView variant="MobileBodyBold">{t('note') + ' '}</TextView>
             <TextView variant="MobileBody">{t('secureMessaging.doNotUseSM')}</TextView>
           </TextView>
         </TextArea>

@@ -182,7 +182,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'common:editDirectDeposit.accountType',
+        labelKey: 'editDirectDeposit.accountType',
         selectedValue: accountType,
         onSelectionChange: setAccountType,
         pickerOptions: accountOptions,

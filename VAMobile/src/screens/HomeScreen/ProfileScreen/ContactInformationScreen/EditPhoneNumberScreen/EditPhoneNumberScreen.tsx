@@ -165,7 +165,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'phone',
-        labelKey: 'common:editPhoneNumber.number',
+        labelKey: 'editPhoneNumber.number',
         onChange: setPhoneNumberOnChange,
         maxLength: MAX_DIGITS_AFTER_FORMAT,
         value: phoneNumber,
@@ -184,7 +184,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'phone',
-        labelKey: 'common:editPhoneNumber.extension',
+        labelKey: 'editPhoneNumber.extension',
         onChange: setExtension,
         value: extension,
       },

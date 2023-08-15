@@ -27,8 +27,7 @@ export const getInboxUnreadCount = (state: RootState): number => {
 }
 
 const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
@@ -61,7 +60,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
+      <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('messages')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -69,7 +68,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
 
   if (!secureMessaging) {
     return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
+      <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('messages')}>
         <NotEnrolledSM />
       </FeatureLandingTemplate>
     )
@@ -77,7 +76,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
 
   if (termsAndConditionError) {
     return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
+      <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('messages')}>
         <TermsAndConditions />
       </FeatureLandingTemplate>
     )
@@ -97,7 +96,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   }
 
   return (
-    <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('messages')}>
+    <FeatureLandingTemplate backLabel={t('health')} backLabelOnPress={navigation.goBack} title={t('messages')}>
       <StartNewMessageButton />
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>

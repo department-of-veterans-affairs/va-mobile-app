@@ -10,8 +10,7 @@ import { useTheme } from 'utils/hooks'
 
 const PrescriptionsDetailsBanner: FC = () => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
@@ -23,18 +22,18 @@ const PrescriptionsDetailsBanner: FC = () => {
     const bullets = [
       {
         text: t('prescription.details.banner.bullet1'),
-        boldedText: ' ' + tc('or'),
-        a11yLabel: t('prescription.details.banner.bullet1.a11yLabel') + ' ' + tc('or'),
+        boldedText: ' ' + t('or'),
+        a11yLabel: t('prescription.details.banner.bullet1.a11yLabel') + ' ' + t('or'),
       },
       {
         text: t('prescription.details.banner.bullet2'),
-        boldedText: ' ' + tc('or'),
-        a11yLabel: t('prescription.details.banner.bullet2.a11yLabel') + ' ' + tc('or'),
+        boldedText: ' ' + t('or'),
+        a11yLabel: t('prescription.details.banner.bullet2.a11yLabel') + ' ' + t('or'),
       },
       {
         text: t('prescription.details.banner.bullet3'),
-        boldedText: ' ' + tc('or'),
-        a11yLabel: t('prescription.details.banner.bullet3') + ' ' + tc('or'),
+        boldedText: ' ' + t('or'),
+        a11yLabel: t('prescription.details.banner.bullet3') + ' ' + t('or'),
       },
       { text: t('prescription.details.banner.bullet4') },
     ]
@@ -51,9 +50,9 @@ const PrescriptionsDetailsBanner: FC = () => {
           <VABulletList listOfText={bullets} />
         </Box>
         <ClickToCallPhoneNumber
-          phone={tc('5418307563')}
-          displayedText={`${tc('automatedPhoneSystem')} ${tc('5418307563.displayText')}`}
-          a11yLabel={`${tc('automatedPhoneSystem')} ${getNumberAccessibilityLabelFromString(tc('5418307563'))}`}
+          phone={t('5418307563')}
+          displayedText={`${t('automatedPhoneSystem')} ${t('5418307563.displayText')}`}
+          a11yLabel={`${t('automatedPhoneSystem')} ${getNumberAccessibilityLabelFromString(t('5418307563'))}`}
         />
       </>
     )

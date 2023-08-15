@@ -20,11 +20,10 @@ export type PrescriptionListItemProps = {
 /** common component to show the prescription info on a list  */
 const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hideInstructions, includeRefillTag }) => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
   const { instructions, refillRemaining, prescriptionName, prescriptionNumber, facilityName, refillDate } = prescription
-  const noneNoted = tc('noneNoted')
+  const noneNoted = t('noneNoted')
 
   const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
   const [dateMMddyyyy, dateA11yLabel] = getDateTextAndLabel(t, refillDate)

@@ -16,7 +16,7 @@ type FacilityTypeSelectionScreenProps = StackScreenProps<AppointmentFlowModalSta
 
 const FacilityTypeSelectionScreen: FC<FacilityTypeSelectionScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const [noFacilityTypeSelectedError, setFacilityTypeSelectedError] = useState('')
 

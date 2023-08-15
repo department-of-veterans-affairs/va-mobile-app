@@ -83,11 +83,11 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
 
     if (currentScreenIndex === 0) {
       onPressCallback = onCarouselEnd
-      buttonText = 'common:skip'
+      buttonText = 'skip'
       allyHint = a11yHints?.skipHint
     } else {
       onPressCallback = goBack
-      buttonText = 'common:back'
+      buttonText = 'back'
       allyHint = a11yHints?.backHint
     }
 
@@ -105,7 +105,7 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
     let allyHint: string | undefined
 
     if (currentScreenIndex === screenList.length - 1) {
-      buttonText = 'common:done'
+      buttonText = 'done'
       allyHint = a11yHints?.doneHint
     } else {
       buttonText = 'common:next'
@@ -138,7 +138,7 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
         <Box flex={1} display="flex" justifyContent="center">
           {goBackOrSkipBtn()}
         </Box>
-        <Box {...testIdProps(translation('common:carouselIndicators'))} {...a11yHintProp(a11yHints?.carouselIndicatorsHint || '')} {...progressBarContainerProps}>
+        <Box {...testIdProps(translation('carouselIndicators'))} {...a11yHintProp(a11yHints?.carouselIndicatorsHint || '')} {...progressBarContainerProps}>
           {getProgressBar()}
         </Box>
         <Box flex={1} display="flex" justifyContent="center">

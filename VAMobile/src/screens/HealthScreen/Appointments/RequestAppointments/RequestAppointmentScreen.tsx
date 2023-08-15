@@ -47,7 +47,7 @@ const RequestAppointmentScreen: FC<RequestAppointmentScreenProps> = ({ navigatio
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const inset = useSafeAreaInsets()
   const [forceFocus, setForceFocus] = useState<string>()
 

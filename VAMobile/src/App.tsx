@@ -276,15 +276,15 @@ export const AuthGuard: FC = () => {
 }
 
 export const AppTabs: FC = () => {
-  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.COMMON, NAMESPACE.HEALTH])
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (
     <>
       <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="HomeTab" screenOptions={{ headerShown: false }}>
-        <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home:title') }} />
-        <TabNav.Screen name="BenefitsTab" component={BenefitsScreen} options={{ title: t('common:benefits.title') }} />
-        <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health:title') }} />
-        <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('common:payments.title') }} />
+        <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home') }} />
+        <TabNav.Screen name="BenefitsTab" component={BenefitsScreen} options={{ title: t('benefits.title') }} />
+        <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health') }} />
+        <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('payments.title') }} />
       </TabNav.Navigator>
     </>
   )
@@ -295,7 +295,7 @@ export const AuthedApp: FC = () => {
 
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
-  const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
+  const healthScreens = getHealthScreens(useTranslation(NAMESPACE.COMMON).t)
   const paymentsScreens = getPaymentsScreens()
 
   return (

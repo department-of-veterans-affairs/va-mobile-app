@@ -121,7 +121,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
       fieldProps: {
         selected: haveSubmittedEvidence,
         onSelectionChange,
-        labelKey: 'common:askForClaimDecision.haveSubmittedAllEvidence',
+        labelKey: 'askForClaimDecision.haveSubmittedAllEvidence',
         a11yLabel: t('askForClaimDecision.haveSubmittedAllEvidenceA11yLabel'),
         a11yHint: t('askForClaimDecision.haveSubmittedAllEvidenceA11yHint'),
         isRequiredField: true,

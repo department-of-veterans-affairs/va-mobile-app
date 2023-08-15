@@ -18,8 +18,7 @@ const { LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
  * Returns VeteransCrisisLineScreen component
  */
 const VeteransCrisisLineScreen: FC = () => {
-  const { t } = useTranslation(NAMESPACE.HOME)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
@@ -34,7 +33,7 @@ const VeteransCrisisLineScreen: FC = () => {
   }
 
   return (
-    <LargePanel title={tc('veteransCrisisLine.title')} rightButtonText={tc('done')}>
+    <LargePanel title={t('veteransCrisisLine.title')} rightButtonText={t('done')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
           {t('veteransCrisisLine.weAreHereForYou')}

@@ -38,8 +38,7 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
   children,
 }) => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
 
   const getButtonSection = () => {
@@ -50,7 +49,7 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
           <Box flex={1} mr={10}>
             <VAButton
               onPress={firstActionPress}
-              label={firstActionButtonTitle || tc('back')}
+              label={firstActionButtonTitle || t('back')}
               buttonType={'buttonSecondary'}
               disabled={disableFirstAction}
               a11yHint={t('requestAppointment.backBtnA11yHint')}
@@ -59,7 +58,7 @@ const AppointmentFlowLayout: FC<AppointmentFlowLayoutProps> = ({
           <Box flex={1}>
             <VAButton
               onPress={secondActionButtonPress}
-              label={secondActionButtonTitle || tc('continue')}
+              label={secondActionButtonTitle || t('continue')}
               buttonType={'buttonPrimary'}
               disabled={disableSecondAction}
               minHeight={53}

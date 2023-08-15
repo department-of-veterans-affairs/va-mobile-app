@@ -29,8 +29,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
   const { appointmentID } = route.params
 
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { pastAppointmentsById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
@@ -64,7 +63,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
   }
 
   return (
-    <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}>
+    <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <AppointmentAlert attributes={attributes} />
         <TextArea>

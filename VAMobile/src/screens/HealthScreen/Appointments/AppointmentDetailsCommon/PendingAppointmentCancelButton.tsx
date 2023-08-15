@@ -17,8 +17,7 @@ type PendingAppointmentCancelButtonProps = {
 
 const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = ({ attributes, appointmentID }) => {
   const isAppointmentPending = isAPendingAppointment(attributes)
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const confirmAlert = useDestructiveActionSheet()
@@ -32,16 +31,16 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
 
     const onCancel = () => {
       confirmAlert({
-        title: tc('appointments.cancelRequest'),
+        title: t('appointments.cancelRequest'),
         cancelButtonIndex: 1,
         destructiveButtonIndex: 0,
         buttons: [
           {
-            text: tc('cancelRequest'),
+            text: t('cancelRequest'),
             onPress: onPress,
           },
           {
-            text: tc('keepRequest'),
+            text: t('keepRequest'),
           },
         ],
       })

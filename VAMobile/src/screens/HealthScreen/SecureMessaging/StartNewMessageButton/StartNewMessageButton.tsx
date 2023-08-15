@@ -6,7 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 const StartNewMessageButton: FC = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const onPress = navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })

@@ -18,7 +18,7 @@ type InboxProps = Record<string, unknown>
 const Inbox: FC<InboxProps> = () => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { inboxMessages, loadingInbox, paginationMetaByFolderId } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const paginationMetaData = paginationMetaByFolderId?.[SecureMessagingSystemFolderIdConstants.INBOX]

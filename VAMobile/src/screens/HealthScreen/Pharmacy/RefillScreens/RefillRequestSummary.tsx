@@ -27,8 +27,7 @@ type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'Prescri
 const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const [status, setStatus] = useState<REQUEST_STATUS>()
   const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
   const { refillRequestSummaryItems, showLoadingScreenRequestRefillsRetry } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
@@ -99,7 +98,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
                   const prescriptionIds = requestFailed.map((prescription) => prescription.id)
                   logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
                 }}
-                label={tc('tryAgain')}
+                label={t('tryAgain')}
                 buttonType="buttonPrimary"
                 a11yHint={t('prescriptions.refillRequestSummary.tryAgain.a11yLabel')}
               />
@@ -139,7 +138,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         accessibilityLabel: `${prescriptionName}. ${rxNumberA11yLabel}. ${
           request.submitted ? t('prescriptions.refillRequestSummary.pendingRefills.requestSubmitted') : t('prescriptions.refillRequestSummary.pendingRefills.requestFailed')
         }`,
-        accessibilityValue: { text: tc('listPosition', { position: index + 1, total: refillRequestSummaryItems.length }) },
+        accessibilityValue: { text: t('listPosition', { position: index + 1, total: refillRequestSummaryItems.length }) },
         accessible: true,
       }
 
@@ -201,7 +200,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   if (showLoadingScreenRequestRefillsRetry) {
     return (
       <FullScreenSubtask
-        leftButtonText={tc('close')}
+        leftButtonText={t('close')}
         onLeftButtonPress={() => {
           onNavToHistory()
         }}>
@@ -213,11 +212,11 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   return (
     <>
       <FullScreenSubtask
-        leftButtonText={tc('close')}
+        leftButtonText={t('close')}
         onLeftButtonPress={() => {
           onNavToHistory()
         }}
-        title={tc('refillRequest')}>
+        title={t('refillRequest')}>
         <Box mb={theme.dimensions.contentMarginBottom}>
           {renderAlert()}
           <TextArea>

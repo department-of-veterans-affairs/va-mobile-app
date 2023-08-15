@@ -217,7 +217,7 @@ export const onAddPhotos = (
   claimID: string,
   request: ClaimEventData,
 ): void => {
-  const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('common:cancel')]
+  const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('cancel')]
 
   showActionSheetWithOptions(
     {

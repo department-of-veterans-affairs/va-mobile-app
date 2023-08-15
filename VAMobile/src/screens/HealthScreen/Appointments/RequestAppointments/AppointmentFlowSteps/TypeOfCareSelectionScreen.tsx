@@ -17,7 +17,7 @@ type TypeOfCareSelectionScreenProps = StackScreenProps<AppointmentFlowModalStack
 
 const TypeOfCareSelectionScreen: FC<TypeOfCareSelectionScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const setIsVaEligible = useSetIsVAEligible<TypeOfCareObjectType>()
   const checkEligibility = useCheckEligibilityAndRouteUser<TypeOfCareObjectType>()

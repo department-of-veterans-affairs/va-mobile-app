@@ -43,7 +43,7 @@ export const getMessagesListItems = (
     const textLines: Array<InlineTextWithIconsProps> = [
       {
         leftTextProps: {
-          text: t('common:text.raw', {
+          text: t('text.raw', {
             text: `${isDraftsFolder ? t('secureMessaging.viewMessage.draftPrefix') : ''}${isOutbound ? stringToTitleCase(recipientName) : stringToTitleCase(senderName)}`,
           }),
           variant: 'MobileBodyBold',
@@ -51,14 +51,14 @@ export const getMessagesListItems = (
         },
         leftIconProps: unreadIconProps,
         rightTextProps: {
-          text: t('common:text.raw', { text: getFormattedMessageTime(sentDate) }),
+          text: t('text.raw', { text: getFormattedMessageTime(sentDate) }),
           variant: 'MobileBody',
           textAlign: 'right',
         },
       },
       {
         leftTextProps: {
-          text: t('common:text.raw', { text: formatSubject(category, subject, t) }),
+          text: t('text.raw', { text: formatSubject(category, subject, t) }),
           variant: 'MobileBody',
           textAlign: 'left',
         },
@@ -79,7 +79,7 @@ export const getMessagesListItems = (
       onPress: () => onMessagePress(message.id, isDraftsFolder),
       a11yHintText: isDraftsFolder ? t('secureMessaging.viewMessage.draft.a11yHint') : t('secureMessaging.viewMessage.a11yHint'),
       testId: generateTestIDForInlineTextIconList(textLines, t),
-      a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
+      a11yValue: t('listPosition', { position: index + 1, total: messages.length }),
     }
   })
 }
@@ -323,7 +323,7 @@ export const onAddFileAttachments = (
   fileUris: Array<string>,
   imageBase64s: Array<string>,
 ): void => {
-  const options = [t('common:camera'), t('common:photoGallery'), t('common:fileFolder'), t('common:cancel')]
+  const options = [t('camera'), t('photoGallery'), t('fileFolder'), t('cancel')]
 
   showActionSheetWithOptions(
     {

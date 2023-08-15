@@ -144,7 +144,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   })
 
   const currentlySelectedOption = allPickerOptions.find((el) => el.value === selectedValue)
-  const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:picker')
+  const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'picker')
 
   const parentProps: AccessibilityProps = {
     ...a11yValueProp({ text: generateA11yValue(currentlySelectedOption?.label, isFocused, t) }),
@@ -218,7 +218,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const topPadding = insets.top + 60
 
   const cancelLabel = t('cancel')
-  const confirmLabel = getTranslation(confirmBtnText || 'common:done', t)
+  const confirmLabel = getTranslation(confirmBtnText || 'done', t)
 
   const cancelButtonProps: PressableProps = {
     accessible: true,
