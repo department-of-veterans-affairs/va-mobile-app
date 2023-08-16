@@ -146,7 +146,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
     let sum = 0
     let multiplier = 3
     digits.forEach((digit: string) => {
-      sum += parseInt(digit) * multiplier
+      sum += parseInt(digit, 10) * multiplier
       multiplier = multiplier === 3 ? 7 : multiplier === 3 ? 1 : 3
     })
     return sum % 10 !== 0
