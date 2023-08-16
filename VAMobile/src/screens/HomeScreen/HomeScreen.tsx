@@ -74,21 +74,6 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ, testId: a11yLabelVA(t('coronavirusFaqs.title')) },
   ]
 
-  // let greeting
-  // const currentHour = DateTime.now().toObject()?.hour
-  // if (currentHour === undefined) {
-  //   greeting = null
-  // } else if (currentHour < UserGreetingTimeConstants.EVENING) {
-  //   greeting = t('greetings.evening')
-  // } else if (currentHour < UserGreetingTimeConstants.MORNING) {
-  //   greeting = t('greetings.morning')
-  // } else if (currentHour < UserGreetingTimeConstants.AFTERNOON) {
-  //   greeting = t('greetings.afternoon')
-  // } else {
-  //   greeting = t('greetings.evening')
-  // }
-  // const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
-
   const profileIconProps: VAIconProps = {
     name: 'ProfileSelected',
   }
@@ -102,36 +87,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   return (
     <CategoryLanding headerButton={headerButton}>
       <Box flex={1} justifyContent="flex-start">
-        {/* <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
-          <TextView variant={'MobileBodyBold'} accessibilityRole={'header'}>
-            {heading}
-          </TextView>
-        </Box> */}
         <EncourageUpdateAlert />
-        {/* <Pressable style={pressableStyles} onPress={navigateTo('VeteranStatus')}>
-          <Box
-            borderRadius={5}
-            py={theme.dimensions.standardMarginBetween}
-            flex={1}
-            backgroundColor="profileBanner"
-            mb={theme.dimensions.standardMarginBetween}
-            mx={16}
-            flexDirection={'row'}
-            justifyContent={'space-between'}
-            alignItems={'center'}>
-            <TextView variant="MobileBody" color="primaryContrast" ml={20}>
-              {tc('veteranStatus.title')}
-            </TextView>
-            <VAIcon
-              name={'ChevronRight'}
-              fill={theme.colors.icon.contrast}
-              width={theme.dimensions.chevronListItemWidth}
-              height={theme.dimensions.chevronListItemHeight}
-              mr={theme.dimensions.listItemDecoratorMarginLeft}
-            />
-          </Box>
-        </Pressable>
-        <VeteranStatusCard /> */}
         <Nametag />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>

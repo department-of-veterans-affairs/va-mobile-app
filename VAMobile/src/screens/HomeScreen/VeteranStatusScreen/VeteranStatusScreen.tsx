@@ -109,16 +109,16 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
           </Box>
         </Box>
         <Box mx={theme.dimensions.gutter}>
-        {ratingIsDefined && (
-          <Box {...boxProps}>
-            <TextView variant="MobileBodyBold" color="primaryContrast">
-              {t('disabilityRating.title')}
-            </TextView>
-            <TextView variant="MobileBody" color="primaryContrast">
-              {combinedPercentText}
-            </TextView>
-          </Box>
-        )}
+          {ratingIsDefined && (
+            <Box {...boxProps}>
+              <TextView variant="MobileBodyBold" color="primaryContrast">
+                {t('disabilityRating.title')}
+              </TextView>
+              <TextView variant="MobileBody" color="primaryContrast">
+                {combinedPercentText}
+              </TextView>
+            </Box>
+          )}
           <Box {...boxProps}>
             <TextView variant="MobileBodyBold" color="primaryContrast">
               {t('veteranStatus.periodOfService')}
