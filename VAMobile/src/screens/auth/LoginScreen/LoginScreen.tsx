@@ -13,7 +13,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
@@ -24,6 +24,7 @@ const LoginScreen: FC = () => {
   const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HOME])
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
   const navigation = useNavigation<StackNavigationProp<RootNavStackParamList, keyof RootNavStackParamList>>()
+  const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
@@ -83,11 +84,11 @@ const LoginScreen: FC = () => {
     : navigateTo('WebviewLogin')
 
   return (
-    <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
+    <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
-      <Box flex={1}>
+      <Box flex={1} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween} testID="va-icon">
           <VAIcon testID="VAIcon" name={'Logo'} />
         </Box>
