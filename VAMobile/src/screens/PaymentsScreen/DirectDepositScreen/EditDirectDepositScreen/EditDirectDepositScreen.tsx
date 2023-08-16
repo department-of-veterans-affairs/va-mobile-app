@@ -137,6 +137,21 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
     return !/^\d+$/.test(input)
   }
 
+  const validRoutingNumber = (input: string): boolean => {
+    if (input.length !== 9) {
+      return true
+    }
+
+    const digits = input.split('')
+    let sum = 0
+    let multiplier = 3
+    digits.forEach((digit: string) => {
+      sum += parseInt(digit) * multiplier
+      multiplier = multiplier === 3 ? 7 : multiplier === 3 ? 1 : 3
+    })
+    return sum % 10 !== 0
+  }
+
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.TextInput,
@@ -153,6 +168,10 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
       validationList: [
         {
           validationFunction: (): boolean => containsNonNumbersValidation(routingNumber),
+          validationFunctionErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
+        },
+        {
+          validationFunction: (): boolean => validRoutingNumber(routingNumber),
           validationFunctionErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
         },
       ],
