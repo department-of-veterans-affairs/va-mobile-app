@@ -19,7 +19,7 @@ const ReplyHelp: FC = () => {
 
   return (
     <LargePanel title={t('secureMessaging.replyHelp.title')} rightButtonText={t('close')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('secureMessaging.replyHelp.onlyUseMessages')}
         </TextView>

@@ -25,7 +25,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
   const { claimID } = route.params
   const { claim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
-  const { condensedMarginBetween, contentMarginBottom, contentMarginTop, standardMarginBetween, gutter } = theme.dimensions
+  const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
 
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
@@ -76,8 +76,8 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
 
   return (
     <ChildTemplate backLabel={t('claim.backLabel')} backLabelOnPress={navigation.goBack} title={t('fileRequest.title')} testID="fileRequestPageTestID">
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" mt={standardMarginBetween} mb={condensedMarginBetween} mx={gutter}>
+      <Box mb={contentMarginBottom}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mb={condensedMarginBetween} mx={gutter}>
           {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
         </TextView>
         <Box>

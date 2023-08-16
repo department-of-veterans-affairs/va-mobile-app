@@ -150,7 +150,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={displaySelectFile ? t('secureMessaging.attachments.selectAFile') : t('secureMessaging.startNewMessage.attach')}
       onPrimaryContentButtonPress={displaySelectFile ? onSelectAFile : onAttach}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox scrollViewRef={scrollViewRef} text={error} textA11yLabel={errorA11y} border="error" />

@@ -72,9 +72,7 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, sc
       )}
       {!!text && (
         <View ref={!title ? viewRef : undefined} accessible={true} accessibilityLabel={textA11yLabel || text}>
-          <TextView paragraphSpacing={true} variant="MobileBody">
-            {text}
-          </TextView>
+          <TextView variant="MobileBody">{text}</TextView>
         </View>
       )}
       {children}
