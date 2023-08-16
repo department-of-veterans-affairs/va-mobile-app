@@ -45,6 +45,7 @@ import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
 import { isAPendingAppointment } from 'utils/appointments'
+import { isIOS } from 'utils/platform'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
@@ -66,7 +67,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const appointment = upcomingAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, location, startDateUtc, minutesDuration, comment, status, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
-  const { name, code, url } = location || ({} as AppointmentLocation)
+  const { name, code, url, lat, long, address } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
 
@@ -104,7 +105,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       title: getTranslation(isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType], t),
       startTime: getEpochSecondsOfDate(startDateUtc),
       endTime: getEpochSecondsOfDate(endTime),
-      location: name || '',
+      location: isIOS() && lat && long ? name || '' : address ? address.street + ' ' + address.city + ', ' + address.state + ' ' + address.zipCode : name || '',
+      latitude: lat || 0,
+      longitude: long || 0,
     },
     testID: 'addToCalendarTestID',
   }
