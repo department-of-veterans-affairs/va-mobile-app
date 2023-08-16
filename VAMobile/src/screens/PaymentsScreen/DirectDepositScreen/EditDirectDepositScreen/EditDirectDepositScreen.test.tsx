@@ -129,7 +129,7 @@ context('EditDirectDepositScreen', () => {
   describe('when content is valid', () => {
     it('should call updateBankInfo when save is pressed', async () => {
       await waitFor(() => {
-        routingNumberTextInput.props.onChangeText('123456789')
+        routingNumberTextInput.props.onChangeText('053100300')
         accountNumberTextInput.props.onChangeText('12345678901234567')
         accountTypeRNPickerSelect.props.onSelectionChange('Checking')
         confirmCheckBox.props.onSelectionChange(true)
@@ -138,7 +138,7 @@ context('EditDirectDepositScreen', () => {
 
         expect(updateBankInfo).toBeCalledWith(
           '12345678901234567',
-          '123456789',
+          '053100300',
           'Checking',
           { errorMsg: 'Direct deposit information could not be saved', successMsg: 'Direct deposit information saved' },
           ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID,
