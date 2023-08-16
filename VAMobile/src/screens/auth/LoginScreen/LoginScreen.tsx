@@ -17,11 +17,13 @@ import { useSelector } from 'react-redux'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { RootNavStackParamList } from 'App'
 
 const LoginScreen: FC = () => {
   const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HOME])
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
-  const navigation = useNavigation()
+  const navigation = useNavigation<StackNavigationProp<RootNavStackParamList, keyof RootNavStackParamList>>()
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
@@ -40,12 +42,12 @@ const LoginScreen: FC = () => {
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
     navigation.navigate(
-      'Webview' as never,
+      'Webview',
       {
         url: WEBVIEW_URL_FACILITY_LOCATOR,
         displayTitle: t('common:webview.vagov'),
         loadingMessage: t('common:webview.valocation.loading'),
-      } as never,
+      },
     )
   }
 
