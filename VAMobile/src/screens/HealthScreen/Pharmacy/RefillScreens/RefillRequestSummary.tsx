@@ -218,7 +218,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
           onNavToHistory()
         }}
         title={tc('refillRequest')}>
-        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+        <Box mb={theme.dimensions.contentMarginBottom}>
           {renderAlert()}
           <TextArea>
             {renderRequestSummary()}

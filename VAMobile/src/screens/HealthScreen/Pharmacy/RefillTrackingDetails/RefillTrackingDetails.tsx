@@ -48,7 +48,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const { condensedMarginBetween, contentMarginBottom, contentMarginTop, gutter, standardMarginBetween } = theme.dimensions
+  const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID)
   const noneNoted = tc('noneNoted')
@@ -194,7 +194,9 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
 
     return (
       <>
-        <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
+        <TextView variant="BitterBoldHeading" mt={theme.dimensions.condensedMarginBetween}>
+          {prescriptionName}
+        </TextView>
         <TextView variant={'HelperText'} accessibilityLabel={rxNumberA11yLabel}>
           {rxNumber}
         </TextView>
@@ -204,7 +206,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
 
   return (
     <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
-      <Box mx={gutter} mt={contentMarginTop} mb={contentMarginBottom}>
+      <Box mx={gutter} mb={contentMarginBottom}>
         {renderHeader()}
         <Box mt={standardMarginBetween}>
           <TextView variant="HelperText" paragraphSpacing={true}>

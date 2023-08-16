@@ -15,7 +15,7 @@ const PaymentMissing: FC<PaymentMissingScreenProps> = () => {
 
   return (
     <LargePanel title={t('paymentsHelp.title')} rightButtonText={t('close')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('payments.ifIAmMissingPayemt')}
         </TextView>

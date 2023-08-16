@@ -24,6 +24,7 @@ export type NotificationsState = {
   settingPreference: boolean
   systemNotificationsOn: boolean
   tappedForegroundNotification?: boolean
+  initialUrl?: string
 }
 
 export const initialNotificationsState: NotificationsState = {
@@ -34,6 +35,7 @@ export const initialNotificationsState: NotificationsState = {
   settingPreference: false,
   systemNotificationsOn: false,
   tappedForegroundNotification: false,
+  initialUrl: undefined,
 }
 
 /**
@@ -184,6 +186,9 @@ const notificationSlice = createSlice({
     dispatchResetTappedForegroundNotification: (state) => {
       state.tappedForegroundNotification = false
     },
+    dispatchSetInitialUrl: (state, action) => {
+      state.initialUrl = action.payload
+    },
   },
 })
 
@@ -196,5 +201,6 @@ export const {
   dispatchUpdateDeviceToken,
   dispatchSetTappedForegroundNotification,
   dispatchResetTappedForegroundNotification,
+  dispatchSetInitialUrl,
 } = notificationSlice.actions
 export default notificationSlice.reducer
