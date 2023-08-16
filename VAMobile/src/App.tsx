@@ -22,7 +22,7 @@ import i18n from 'utils/i18n'
 import performance from '@react-native-firebase/perf'
 
 import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
-import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import { AnalyticsState, AuthState, NotificationsState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { BenefitsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getBenefitsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
@@ -36,6 +36,7 @@ import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
 import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
+import { linking } from 'constants/linking'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
 import { useAppDispatch } from 'utils/hooks'
@@ -50,6 +51,7 @@ import OnboardingCarousel from './screens/OnboardingCarousel'
 import SnackBar from 'components/SnackBar'
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
+import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
 import getEnv from 'utils/env'
 import store, { RootState } from 'store'
@@ -70,6 +72,13 @@ if (isIOS()) {
   KeyboardManager.setKeyboardDistanceFromTextField(45)
   KeyboardManager.setEnableAutoToolbar(false)
 }
+
+/**
+ * (https://github.com/react-native-webview/react-native-webview/issues/575)
+ * Potential fix for an Android specific crash issue related to react-navigation animations when
+ * transitioning to a webview
+ */
+const SHOW_LOGIN_VIEW_ANIMATION = isIOS()
 
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
@@ -131,7 +140,7 @@ const MainApp: FC = () => {
         <ThemeProvider theme={currentTheme}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
-              <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
+              <NavigationContainer ref={navigationRef} linking={linking} onReady={navOnReady} onStateChange={onNavStateChange}>
                 <NotificationManager>
                   <SafeAreaProvider>
                     <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={currentTheme.colors.background.main} />
@@ -258,6 +267,7 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="Login" component={LoginScreen} options={{ ...topPaddingAsHeaderStyles, title: t('login') }} />
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
+        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ headerShown: false, animationEnabled: SHOW_LOGIN_VIEW_ANIMATION }} />
         <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
       </Stack.Navigator>
     )
@@ -283,11 +293,20 @@ export const AppTabs: FC = () => {
 
 export const AuthedApp: FC = () => {
   const headerStyles = useHeaderStyles()
+  const { initialUrl } = useSelector<RootState, NotificationsState>((state) => state.notifications)
 
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
   const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
   const paymentsScreens = getPaymentsScreens()
+
+  // When applicable, this will open the deep link from the notification that launched the app once sign in
+  // is complete. Mapping the link to the appropriate screen is handled by the React Navigation linking config.
+  useEffect(() => {
+    if (initialUrl) {
+      Linking.openURL(initialUrl)
+    }
+  }, [initialUrl])
 
   return (
     <>
