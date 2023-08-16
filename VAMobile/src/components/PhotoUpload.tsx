@@ -138,6 +138,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
   const pressableProps: PressableProps = {
     onPress,
     accessibilityRole: 'button',
+    accessibilityLabel: uri ? t('veteranStatus.editPhoto') : t('veteranStatus.uploadPhoto'),
   }
 
   const boxProps: BoxProps = {
@@ -150,12 +151,17 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
   return (
     <Pressable {...pressableProps}>
       {uri ? (
-        <Box {...boxProps}>{photo()}</Box>
+        <Box {...boxProps} mb={20}>
+          {photo()}
+          <TextView color="primaryContrast" variant="HelperText">
+            {t('veteranStatus.editPhoto')}
+          </TextView>
+        </Box>
       ) : (
         <Box {...boxProps} mb={20}>
           <VAIcon name="UploadPhoto" />
           <TextView color="primaryContrast" variant="HelperText">
-            Upload Photo
+            {t('veteranStatus.uploadPhoto')}
           </TextView>
         </Box>
       )}

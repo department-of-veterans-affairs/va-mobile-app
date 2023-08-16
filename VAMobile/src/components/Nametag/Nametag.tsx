@@ -45,7 +45,12 @@ export const Nametag: FC = () => {
   }
 
   return (
-    <Pressable onPress={navigateTo('VeteranStatus')}>
+    <Pressable
+      onPress={navigateTo('VeteranStatus')}
+      accessibilityRole={'button'}
+      accessibilityLabel={name() + ' ' + branch + ' ' + t('veteranStatus.title')}
+      // accessibilityLabel: uri ? t('veteranStatus.editPhoto') : t('veteranStatus.uploadPhoto'),
+    >
       <Box
         width="100%"
         backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant}
@@ -53,10 +58,10 @@ export const Nametag: FC = () => {
         display="flex"
         justifyContent="center"
         mb={theme.dimensions.standardMarginBetween}
-        accessible={true}>
+        pr={theme.dimensions.cardPadding}>
         <Box py={accessToMilitaryInfo ? theme.dimensions.cardPadding : 0} display="flex" flexDirection="row">
           {accessToMilitaryInfo && <Box pl={theme.dimensions.cardPadding}>{getBranchSeal()}</Box>}
-          <Box ml={20} flex={1}>
+          <Box ml={theme.dimensions.cardPadding} flex={1}>
             <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
               {name()}
             </TextView>
@@ -66,7 +71,7 @@ export const Nametag: FC = () => {
               </TextView>
             )}
             <Box flexDirection={'row'} alignItems={'center'} mt={theme.dimensions.standardMarginBetween}>
-              <TextView variant="MobileBody" color="primaryContrast" mr={20}>
+              <TextView variant="MobileBody" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
                 {t('veteranStatus.title')}
               </TextView>
               <VAIcon

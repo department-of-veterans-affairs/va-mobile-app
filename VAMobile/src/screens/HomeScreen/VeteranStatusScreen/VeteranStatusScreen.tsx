@@ -37,13 +37,13 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
     const branch = t('militaryInformation.branch', { branch: service.branchOfService })
     return (
       <Box>
-        <Box display="flex" flexDirection="row" alignItems="center">
+        <Box display="flex" flexDirection="row" alignItems="center" mt={theme.dimensions.condensedMarginBetween}>
           <TextView variant="MobileBody" color="primaryContrast">
             {branch}
           </TextView>
         </Box>
         <Box>
-          <TextView variant="HelperText" color="primaryContrast" mb={theme.dimensions.standardMarginBetween}>
+          <TextView variant="HelperText" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
             {t('militaryInformation.history', { begin: service.formattedBeginDate, end: service.formattedEndDate })}
           </TextView>
         </Box>
@@ -56,8 +56,8 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
   const boxProps: BoxProps = {
     minHeight: 81,
     borderRadius: 6,
-    p: theme.dimensions.cardPadding,
-    mb: theme.dimensions.condensedMarginBetween,
+    pt: theme.dimensions.cardPadding,
+    pb: theme.dimensions.cardPadding,
     backgroundColor: theme.colors.background.veteranStatus as BackgroundVariant,
     borderTopWidth: theme.dimensions.borderWidth,
     borderColor: theme.colors.border.veteranStatus as BorderColorVariant,
@@ -109,14 +109,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
           </Box>
         </Box>
         <Box mx={theme.dimensions.gutter}>
-          <Box {...boxProps}>
-            <TextView variant="MobileBodyBold" color="primaryContrast">
-              {t('personalInformation.dateOfBirth')}
-            </TextView>
-            <TextView variant="MobileBody" color="primaryContrast">
-              {getBirthDate(profile, t)}
-            </TextView>
-          </Box>
+        {ratingIsDefined && (
           <Box {...boxProps}>
             <TextView variant="MobileBodyBold" color="primaryContrast">
               {t('disabilityRating.title')}
@@ -125,11 +118,20 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
               {combinedPercentText}
             </TextView>
           </Box>
-          <Box {...boxProps} borderBottomWidth={theme.dimensions.borderWidth}>
-            <TextView variant="MobileBodyBold" color="primaryContrast" mb={theme.dimensions.standardMarginBetween}>
+        )}
+          <Box {...boxProps}>
+            <TextView variant="MobileBodyBold" color="primaryContrast">
               {t('veteranStatus.periodOfService')}
             </TextView>
             {getPeriodOfService}
+          </Box>
+          <Box {...boxProps} borderBottomWidth={theme.dimensions.borderWidth} mb={theme.dimensions.formMarginBetween}>
+            <TextView variant="MobileBodyBold" color="primaryContrast">
+              {t('personalInformation.dateOfBirth')}
+            </TextView>
+            <TextView variant="MobileBody" color="primaryContrast">
+              {getBirthDate(profile, t)}
+            </TextView>
           </Box>
         </Box>
       </Box>
