@@ -6,14 +6,13 @@ import React, { FC, useEffect } from 'react'
 import { BenefitsStackParamList } from './BenefitsStackScreens'
 import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { DisabilityRatingState, getDisabilityRating } from 'store/slices'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api'
+import { DisabilityRatingState } from 'store/slices'
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
-import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useHeaderStyles } from 'utils/hooks/headerStyles'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
@@ -28,19 +27,10 @@ import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericL
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
 
 const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
-  const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { needsDataLoad, ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
-  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
-
-  useEffect(() => {
-    // Fetch disability rating data for displaying rating percent in nav button
-    if (needsDataLoad && drNotInDowntime) {
-      dispatch(getDisabilityRating(ScreenIDTypesConstants.BENEFIT_SCREEN_ID))
-    }
-  }, [dispatch, needsDataLoad, drNotInDowntime])
+  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
 
   useEffect(() => {
     navigation.setOptions({
