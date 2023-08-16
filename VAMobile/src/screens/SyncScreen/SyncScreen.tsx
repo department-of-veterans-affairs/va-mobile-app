@@ -26,9 +26,9 @@ const SyncScreen: FC<SyncScreenProps> = () => {
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const { preloadComplete: personalInformationLoaded } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
-  const { preloadComplete: militaryHistoryLoaded } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
-  const { preloadComplete: disabilityRatingLoaded } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { preloadComplete: personalInformationLoaded, loading: personalInformationLoading } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
+  const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
   const { hasLoaded: authorizedServicesLoaded, militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>(
     (state) => state.authorizedServices,
   )
@@ -47,15 +47,26 @@ const SyncScreen: FC<SyncScreenProps> = () => {
 
   useEffect(() => {
     if (loggedIn) {
-      if (!personalInformationLoaded) {
+      if (!personalInformationLoaded && !personalInformationLoading) {
         dispatch(getProfileInfo())
-      } else if (authorizedServicesLoaded && militaryInfoAuthorization && !militaryHistoryLoaded) {
+      } else if (authorizedServicesLoaded && militaryInfoAuthorization && !militaryHistoryLoaded && !militaryHistoryLoading) {
         dispatch(getServiceHistory())
-      } else if (!disabilityRatingLoaded) {
+      } else if (!disabilityRatingLoaded && !disabilityRatingLoading) {
         dispatch(getDisabilityRating())
       }
     }
-  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded, disabilityRatingLoaded, militaryHistoryLoaded])
+  }, [
+    dispatch,
+    loggedIn,
+    personalInformationLoaded,
+    personalInformationLoading,
+    militaryInfoAuthorization,
+    authorizedServicesLoaded,
+    disabilityRatingLoaded,
+    disabilityRatingLoading,
+    militaryHistoryLoaded,
+    militaryHistoryLoading,
+  ])
 
   useEffect(() => {
     if (syncing) {
