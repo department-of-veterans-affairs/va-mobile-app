@@ -121,12 +121,18 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     )
   }
 
+  const errorContent = (
+    <Box mt={theme.dimensions.gutter}>
+      <IndividualMessageErrorComponent />
+    </Box>
+  )
+
   const loadMessageError = messageIDsOfError?.includes(message.messageId)
 
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,
-    expandedContent: loadMessageError ? <IndividualMessageErrorComponent /> : getExpandedContent(),
+    expandedContent: loadMessageError ? errorContent : getExpandedContent(),
     collapsedContent: !screenReaderEnabled ? getCollapsedContent() : undefined,
     customOnPress: onPress,
     noBorder: true,
