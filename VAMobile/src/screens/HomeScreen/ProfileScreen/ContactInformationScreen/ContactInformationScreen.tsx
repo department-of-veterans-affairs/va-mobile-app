@@ -1,17 +1,16 @@
 import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
-import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 import { RootState } from 'store'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { getA11yLabelText } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { stringToTitleCase } from 'utils/formattingUtils'
@@ -79,20 +78,11 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { profile, loading, needsDataLoad } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
-  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
   const navigateTo = useRouteNavigation()
-
-  useFocusEffect(
-    React.useCallback(() => {
-      if (needsDataLoad && profileNotInDowntime) {
-        dispatch(getProfileInfo(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
-      }
-    }, [dispatch, needsDataLoad, profileNotInDowntime]),
-  )
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
   const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
