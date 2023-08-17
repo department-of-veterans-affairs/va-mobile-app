@@ -7,7 +7,7 @@ import React, { FC, useState } from 'react'
 import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
+import { PersonalInformationState } from 'store/slices/personalInformationSlice'
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
@@ -15,7 +15,7 @@ import { getA11yLabelText } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
@@ -75,7 +75,6 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction,
 type ContactInformationScreenProps = StackScreenProps<HomeStackParamList, 'ContactInformation'>
 
 const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigation }) => {
-  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { profile, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
