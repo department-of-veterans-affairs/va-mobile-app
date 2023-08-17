@@ -8,7 +8,7 @@ import { DateTime } from 'luxon'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { cancelAppointment } from 'store/slices'
-import { isAPendingAppointment } from 'utils/appointments'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
@@ -29,26 +29,13 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
   const { cancelId, status } = attributes || ({} as AppointmentAttributes)
 
   if (isAppointmentPending && cancelId && status !== AppointmentStatusConstants.CANCELLED) {
-    let apiStatus: string | undefined
-    const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
-    if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-      apiStatus = 'Canceled'
-    } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
-      apiStatus = 'Confirmed'
-    } else if (isPendingAppointment) {
-      apiStatus = 'Pending'
-    }
-    const apptDate = Math.floor(DateTime.fromISO(attributes.startDateUtc).toMillis() / (1000 * 60 * 60 * 24))
-    const nowDate = Math.floor(DateTime.now().toMillis() / (1000 * 60 * 60 * 24))
-    const days = apptDate - nowDate
-
     const onPress = () => {
-      logAnalyticsEvent(Events.vama_apt_cancel_clicks(appointmentID || '', apiStatus || '', attributes.appointmentType.toString(), days, 'confirm'))
-      dispatch(cancelAppointment(cancelId, appointmentID, true, apiStatus, attributes.appointmentType.toString(), days))
+      logAnalyticsEvent(Events.vama_apt_cancel_clicks(appointmentID || '', getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes), 'confirm'))
+      dispatch(cancelAppointment(cancelId, appointmentID, true, getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes)))
     }
 
     const onCancel = () => {
-      logAnalyticsEvent(Events.vama_apt_cancel_clicks(appointmentID || '', apiStatus || '', attributes.appointmentType.toString(), days, 'start'))
+      logAnalyticsEvent(Events.vama_apt_cancel_clicks(appointmentID || '', getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes), 'start'))
       confirmAlert({
         title: tc('appointments.cancelRequest'),
         cancelButtonIndex: 1,

@@ -45,8 +45,8 @@ import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
-import { isAPendingAppointment } from 'utils/appointments'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -74,21 +74,16 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const pendingAppointment = isAPendingAppointment(attributes)
 
   useEffect(() => {
-    let apiStatus
-    const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
-    if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-      apiStatus = 'Canceled'
-    } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
-      apiStatus = 'Confirmed'
-    } else if (isPendingAppointment) {
-      apiStatus = 'Pending'
-    }
-    const apptDate = Math.floor(DateTime.fromISO(attributes.startDateUtc).toMillis() / (1000 * 60 * 60 * 24))
-    const nowDate = Math.floor(DateTime.now().toMillis() / (1000 * 60 * 60 * 24))
-    const days = apptDate - nowDate
-
-    dispatch(trackAppointmentDetail(pendingAppointment, appointmentID, apiStatus, attributes.appointmentType.toString(), days))
-  }, [dispatch, appointmentID, pendingAppointment, attributes.isPending, attributes.status, attributes.appointmentType, attributes.startDateUtc])
+    dispatch(
+      trackAppointmentDetail(
+        pendingAppointment,
+        appointmentID,
+        getAppointmentAnalyticsStatus(attributes),
+        attributes.appointmentType.toString(),
+        getAppointmentAnalyticsDays(attributes),
+      ),
+    )
+  }, [dispatch, appointmentID, pendingAppointment, attributes])
 
   useEffect(() => {
     navigation.setOptions({
@@ -111,19 +106,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const calendarAnalytics = (): void => {
-    let apiStatus
-    const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
-    if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-      apiStatus = 'Canceled'
-    } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
-      apiStatus = 'Confirmed'
-    } else if (isPendingAppointment) {
-      apiStatus = 'Pending'
-    }
-    const apptDate = Math.floor(DateTime.fromISO(attributes.startDateUtc).toMillis() / (1000 * 60 * 60 * 24))
-    const nowDate = Math.floor(DateTime.now().toMillis() / (1000 * 60 * 60 * 24))
-    const days = apptDate - nowDate
-    logAnalyticsEvent(Events.vama_apt_add_cal(appointmentID, apiStatus, attributes.appointmentType.toString(), days))
+    logAnalyticsEvent(
+      Events.vama_apt_add_cal(appointmentID, getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
+    )
   }
 
   const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()

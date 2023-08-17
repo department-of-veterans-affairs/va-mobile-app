@@ -49,6 +49,47 @@ export const getAppointmentTypeIconText = (appointmentType: AppointmentType, tra
 }
 
 /**
+ * Returns returns the appointment analytics status
+ *
+ * @param attributes - appointment attributes
+ *
+ * @returns string appointment analytics status
+ */
+export const getAppointmentAnalyticsStatus = (attributes: AppointmentAttributes): string => {
+  let apiStatus = ''
+
+  const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
+
+  if (attributes.status === AppointmentStatusConstants.CANCELLED) {
+    apiStatus = 'Canceled'
+  } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
+    apiStatus = 'Confirmed'
+  } else if (isPendingAppointment) {
+    apiStatus = 'Pending'
+  }
+  const apptDate = Math.floor(DateTime.fromISO(attributes.startDateUtc).toMillis() / (1000 * 60 * 60 * 24))
+  const nowDate = Math.floor(DateTime.now().toMillis() / (1000 * 60 * 60 * 24))
+  const days = apptDate - nowDate
+
+  return apiStatus
+}
+
+/**
+ * Returns returns the appointment analytics days
+ *
+ * @param attributes - appointment attributes
+ *
+ * @returns string appointment analytics days
+ */
+export const getAppointmentAnalyticsDays = (attributes: AppointmentAttributes): number => {
+  const apptDate = Math.floor(DateTime.fromISO(attributes.startDateUtc).toMillis() / (1000 * 60 * 60 * 24))
+  const nowDate = Math.floor(DateTime.now().toMillis() / (1000 * 60 * 60 * 24))
+  const days = apptDate - nowDate
+
+  return days
+}
+
+/**
  * Returns returns the request type text for pending appointments
  *
  * @param appointmentType - type AppointmentType, to describe the type of appointment

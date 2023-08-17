@@ -19,7 +19,7 @@ import { DateTime } from 'luxon'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { isAPendingAppointment } from '../../../../utils/appointments'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from '../../../../utils/appointments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -42,21 +42,16 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
   const pendingAppointment = isAPendingAppointment(attributes)
 
   useEffect(() => {
-    let apiStatus
-    const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
-    if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-      apiStatus = 'Canceled'
-    } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
-      apiStatus = 'Confirmed'
-    } else if (isPendingAppointment) {
-      apiStatus = 'Pending'
-    }
-    const apptDate = Math.floor(DateTime.fromISO(attributes.startDateUtc).toMillis() / (1000 * 60 * 60 * 24))
-    const nowDate = Math.floor(DateTime.now().toMillis() / (1000 * 60 * 60 * 24))
-    const days = apptDate - nowDate
-
-    dispatch(trackAppointmentDetail(pendingAppointment, appointmentID, apiStatus, attributes.appointmentType.toString(), days))
-  }, [dispatch, appointmentID, pendingAppointment, attributes.isPending, attributes.status, attributes.appointmentType, attributes.startDateUtc])
+    dispatch(
+      trackAppointmentDetail(
+        pendingAppointment,
+        appointmentID,
+        getAppointmentAnalyticsStatus(attributes),
+        attributes.appointmentType.toString(),
+        getAppointmentAnalyticsDays(attributes),
+      ),
+    )
+  }, [dispatch, appointmentID, pendingAppointment, attributes])
 
   const appointmentTypeAndDateIsLastItem =
     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME || appointmentIsCanceled

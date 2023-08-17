@@ -8,6 +8,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { cancelAppointment } from 'store/slices'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus } from 'utils/appointments'
 import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
@@ -99,23 +100,23 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   )
 
   const onCancelAppointment = () => {
-    let apiStatus: string | undefined
-    const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
-    if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-      apiStatus = 'Canceled'
-    } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
-      apiStatus = 'Confirmed'
-    } else if (isPendingAppointment) {
-      apiStatus = 'Pending'
-    }
-    const apptDate = Math.floor(DateTime.fromISO(attributes.startDateUtc).toMillis() / (1000 * 60 * 60 * 24))
-    const nowDate = Math.floor(DateTime.now().toMillis() / (1000 * 60 * 60 * 24))
-    const days = apptDate - nowDate
-    logAnalyticsEvent(Events.vama_apt_cancel_clicks(appointment?.id || '', apiStatus || '', appointmentType.toString(), days, 'start'))
+    logAnalyticsEvent(
+      Events.vama_apt_cancel_clicks(appointment?.id || '', getAppointmentAnalyticsStatus(attributes), appointmentType.toString(), getAppointmentAnalyticsDays(attributes), 'start'),
+    )
 
     const onPress = () => {
-      logAnalyticsEvent(Events.vama_apt_cancel_clicks(appointment?.id || '', apiStatus || '', appointmentType.toString(), days, 'confirm'))
-      dispatch(cancelAppointment(cancelId, appointment?.id, undefined, apiStatus, appointmentType.toString(), days))
+      logAnalyticsEvent(
+        Events.vama_apt_cancel_clicks(
+          appointment?.id || '',
+          getAppointmentAnalyticsStatus(attributes),
+          appointmentType.toString(),
+          getAppointmentAnalyticsDays(attributes),
+          'confirm',
+        ),
+      )
+      dispatch(
+        cancelAppointment(cancelId, appointment?.id, undefined, getAppointmentAnalyticsStatus(attributes), appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
+      )
     }
 
     confirmAlert({
