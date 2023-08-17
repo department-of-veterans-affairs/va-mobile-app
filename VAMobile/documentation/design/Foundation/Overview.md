@@ -1,6 +1,7 @@
 ---
 title: Overview
 sidebar_position: 1
+draft: true
 ---
 
 The VA mobile app's visual design system is a “cousin” to the [VA design system](https://design.va.gov/design/).  because it is related, but because of contextual and accessibility reasons, not identical (for example: VA.gov does not have a dark mode color palette). Despite these differences, Veterans should feel like the app is part of the VA design family.

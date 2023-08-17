@@ -1,0 +1,14 @@
+import CodeBlock from '@theme/CodeBlock'
+import VAButtonString from '!!raw-loader!@componentsDocs/VAButton'
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `<VAButton 
+onPress={() => { console.log('button pressed') }} 
+label={'my button'} 
+textColor="primaryContrast" 
+backgroundColor="button" 
+disabledText="my instructions to enable this button" 
+iconProps={{ name: 'PaperClip', width: 16, height: 18 }} />`
+
+
+<ComponentTopInfo componentName="VAButton" example={exampleString} codeString={VAButtonString} />

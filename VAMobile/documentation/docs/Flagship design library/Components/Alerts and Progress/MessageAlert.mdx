@@ -1,0 +1,13 @@
+import CodeBlock from '@theme/CodeBlock'
+import MessageAlertString from '!!raw-loader!@componentsDocs/MessageAlert'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `<MessageAlert
+hasValidationError={formContainsError}
+saveDraftAttempted={onSaveDraftClicked}
+savingDraft={savingDraft}
+/>`
+
+
+<ComponentTopInfo componentName="MessageAlert" example={exampleString} codeString={MessageAlertString} />
