@@ -1,11 +1,14 @@
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useRef } from 'react'
 
+import { AuthorizedServicesState } from 'store/slices'
 import { Box, ButtonTypesConstants, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
 import { ClaimData } from 'store/api/types'
 import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -32,6 +35,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const { decisionLetters: decisionLettersAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
   const sentEvent = useRef(false)
 
   const ActiveClaimStatusDetails = (): ReactElement => {
@@ -92,7 +96,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
       let letterAvailable = t('claimDetails.decisionLetterMailed')
       let showButton = false
 
-      if (featureEnabled('decisionLettersWaygate') && claim.attributes.decisionLetterSent) {
+      if (featureEnabled('decisionLettersWaygate') && decisionLettersAuthorized && claim.attributes.decisionLetterSent) {
         letterAvailable = t('claimDetails.youCanDownload')
         showButton = true
         if (!sentEvent.current) {
