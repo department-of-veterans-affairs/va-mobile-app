@@ -12,6 +12,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
 
 type InboxProps = Record<string, unknown>
 
@@ -60,7 +61,7 @@ const Inbox: FC<InboxProps> = () => {
 
   return (
     <Box {...testIdProps('', false, 'Inbox-page')}>
-      <MessageList items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress, 'Inbox')} title={t('secureMessaging.inbox')} />
+      <MessageList items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress, FolderNameTypeConstants.inbox)} title={t('secureMessaging.inbox')} />
       <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
