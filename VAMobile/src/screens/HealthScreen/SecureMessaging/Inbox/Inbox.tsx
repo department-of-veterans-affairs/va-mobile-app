@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -12,7 +13,6 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
-import { FolderNameTypeConstants } from 'constants/secureMessaging'
 
 type InboxProps = Record<string, unknown>
 
