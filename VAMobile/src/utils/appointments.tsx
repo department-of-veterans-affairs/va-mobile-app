@@ -67,9 +67,6 @@ export const getAppointmentAnalyticsStatus = (attributes: AppointmentAttributes)
   } else if (isPendingAppointment) {
     apiStatus = 'Pending'
   }
-  const apptDate = Math.floor(DateTime.fromISO(attributes.startDateUtc).toMillis() / (1000 * 60 * 60 * 24))
-  const nowDate = Math.floor(DateTime.now().toMillis() / (1000 * 60 * 60 * 24))
-  const days = apptDate - nowDate
 
   return apiStatus
 }

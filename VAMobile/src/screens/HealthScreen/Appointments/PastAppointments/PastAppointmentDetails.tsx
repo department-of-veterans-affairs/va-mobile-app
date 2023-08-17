@@ -15,7 +15,6 @@ import {
 import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
 import { AppointmentsState, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
 import { Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
-import { DateTime } from 'luxon'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'

@@ -39,7 +39,6 @@ import {
   VAButtonProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { DateTime } from 'luxon'
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
