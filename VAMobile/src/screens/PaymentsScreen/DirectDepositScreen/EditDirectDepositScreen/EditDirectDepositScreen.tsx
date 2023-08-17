@@ -137,7 +137,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
     return !/^\d+$/.test(input)
   }
 
-  const validRoutingNumber = (input: string): boolean => {
+  const invalidRoutingNumber = (input: string): boolean => {
     if (input.length !== 9) {
       return true
     }
@@ -171,7 +171,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
           validationFunctionErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
         },
         {
-          validationFunction: (): boolean => validRoutingNumber(routingNumber),
+          validationFunction: (): boolean => invalidRoutingNumber(routingNumber),
           validationFunctionErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
         },
       ],
