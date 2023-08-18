@@ -42,7 +42,7 @@ const StyledImage = styled(Image)<StyledImageProps>`
   border-width: ${themeFn<StyledImageProps>((_theme, props) => props.borderWidth)}px;
   border-color: ${themeFn<StyledImageProps>((_theme, props) => props.borderColor)};
 `
-
+//TODO: Add this back to the VeteranStatusScreen when decided upon
 const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveActionSheet()

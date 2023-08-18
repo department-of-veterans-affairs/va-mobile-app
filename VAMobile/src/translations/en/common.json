@@ -863,7 +863,7 @@
   "howWillYou.useInfo.2.a11yLabel": "If you’re enrolled in V-A health care, we’ll send your prescriptions to your mailing address. Your health care team may also use this information to contact you.",
   "militaryInformation.title": "Military information",
   "militaryInformation.branch": "{{branch}}",
-  "militaryInformation.history": "{{begin}} - {{end}}",
+  "militaryInformation.history": "{{begin}} – {{end}}",
   "militaryInformation.historyA11yLabel": "{{begin}} to {{end}}",
   "militaryInformation.periodOfService": "Period of service",
   "militaryInformation.incorrectServiceInfo": "What if my military service information doesn't look right?",

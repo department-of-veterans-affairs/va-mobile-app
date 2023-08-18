@@ -91,10 +91,11 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
           <Box flex={1} mt={theme.dimensions.standardMarginBetween}>
             <VAIcon name={'Logo'} />
           </Box>
-          <Box my={theme.dimensions.standardMarginBetween}>
+          {/* <Box my={theme.dimensions.standardMarginBetween}>
+          //TODO: Put back PhotoUpload later after concerns have been met
             <PhotoUpload width={100} height={100} />
-          </Box>
-          <Box mb={theme.dimensions.formMarginBetween}>
+          </Box> */}
+          <Box my={theme.dimensions.formMarginBetween}>
             <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
               {name()}
             </TextView>
