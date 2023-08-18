@@ -45,12 +45,7 @@ export const Nametag: FC = () => {
   }
 
   return (
-    <Pressable
-      onPress={navigateTo('VeteranStatus')}
-      accessibilityRole={'button'}
-      accessibilityLabel={name() + ' ' + branch + ' ' + t('veteranStatus.title')}
-      // accessibilityLabel: uri ? t('veteranStatus.editPhoto') : t('veteranStatus.uploadPhoto'),
-    >
+    <Pressable onPress={navigateTo('VeteranStatus')} accessibilityRole={'button'} accessibilityLabel={name() + ' ' + branch + ' ' + t('veteranStatus.title')}>
       <Box
         width="100%"
         backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant}

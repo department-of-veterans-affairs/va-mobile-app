@@ -1,4 +1,3 @@
-// import { Asset } from 'react-native-image-picker/src/types'
 import { Image, Pressable, PressableProps } from 'react-native'
 import { ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { useTranslation } from 'react-i18next'
