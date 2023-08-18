@@ -41,6 +41,7 @@ import {
   getMessageRecipients,
   getMessageSignature,
   resetHasLoadedRecipients,
+  resetSaveDraftComplete,
   resetSendMessageComplete,
   resetSendMessageFailed,
   saveDraft,
@@ -107,6 +108,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
   useEffect(() => {
+    dispatch(resetSaveDraftComplete())
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
 
     if (PREPOPULATE_SIGNATURE && !signature) {
