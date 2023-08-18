@@ -1,6 +1,7 @@
 import { expect, device, by, element} from 'detox'
 import {loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
 import { setTimeout } from 'timers/promises'
+import { DateTime } from 'luxon'
 
 export const AppealsIdConstants = {
   APPEAL_1_ID: 'Disability compensation appeal updated on November 22, 2011 Submitted June 12, 2008',
@@ -10,12 +11,19 @@ export const AppealsIdConstants = {
   APPEALS_DETAILS_ID: 'appealsDetailsTestID',
   APPEAL_DETAILS_TEXT: 'Appeal details',
   APPEAL_TYPE_TEXT: 'Appeal for compensation',
-  APPEAL_DATE_TEXT: 'Up to date as of December 03, 2021 at 12:39 PM CST',
   APPEAL_SUBMITTED_TEXT: 'Submitted June 12, 2008',
   APPEAL_NEED_HELP_NUMBER_TEXT: '800-827-1000',
   APPEAL_VISIT_VA_TEXT: 'Visit VA.gov',
 }
 
+export async function getDateWithTimeZone(dateString: string) {
+  var date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', {zone: 'America/Chicago'})
+  var dateUTC = date.toLocal()
+  var dateTime = dateUTC.toLocaleString(Object.assign(DateTime.DATETIME_FULL, {day: '2-digit'}))
+  return dateTime
+}
+
+var dateWithTimeZone
 beforeAll(async () => {
   await loginToDemoMode()
   await openBenefits()
@@ -28,7 +36,8 @@ describe('Appeals', () => {
     await element(by.id(AppealsIdConstants.APPEAL_1_ID)).tap()
     await expect(element(by.text(AppealsIdConstants.APPEAL_TYPE_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_DETAILS_TEXT))).toExist()
-    await expect(element(by.text(AppealsIdConstants.APPEAL_DATE_TEXT))).toExist()
+    dateWithTimeZone = await getDateWithTimeZone('December 03, 2021 12:39 PM')
+    await expect(element(by.text('Up to date as of ' + dateWithTimeZone))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_SUBMITTED_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.STATUS_TAB_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.ISSUES_TAB_TEXT))).toExist()
@@ -45,7 +54,8 @@ describe('Appeals', () => {
     await element(by.text(AppealsIdConstants.ISSUES_TAB_TEXT)).tap()
     await expect(element(by.text(AppealsIdConstants.APPEAL_TYPE_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_DETAILS_TEXT))).toExist()
-    await expect(element(by.text(AppealsIdConstants.APPEAL_DATE_TEXT))).toExist()
+    dateWithTimeZone = await getDateWithTimeZone('December 03, 2021 12:39 PM')
+    await expect(element(by.text('Up to date as of ' + dateWithTimeZone))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_SUBMITTED_TEXT))).toExist()
     await expect(element(by.text('Currently on appeal'))).toExist()
     await expect(element(by.text('Service connection, ureteral stricture'))).toExist()
