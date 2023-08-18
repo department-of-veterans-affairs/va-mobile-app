@@ -31,6 +31,7 @@ import {
   SecureMessagingState,
   dispatchSetActionStart,
   getMessageSignature,
+  resetSaveDraftComplete,
   resetSendMessageComplete,
   resetSendMessageFailed,
   saveDraft,
@@ -120,6 +121,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
+    dispatch(resetSaveDraftComplete())
     dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
     if (PREPOPULATE_SIGNATURE && !signature) {
       dispatch(getMessageSignature())
