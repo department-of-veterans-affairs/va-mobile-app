@@ -5,7 +5,7 @@ import { formatDateUtc } from 'utils/formattingUtils'
 
 /**
  * Returns the display text and accessibilityLabel value for rxNumber used in Prescriptions. Defaults to 'None noted' if not given.
- * @param healthT - translation set with `useTranslation(NAMESPACE.COMMON)`
+ * @param t - translation set with `useTranslation(NAMESPACE.COMMON)`
  * @param prescriptionNumber - number of prescriptions
  *
  * ex. returns [`Rx #: 1231` | `None Noted`, `Rx number 1 2 3 1` | `None Noted`]
