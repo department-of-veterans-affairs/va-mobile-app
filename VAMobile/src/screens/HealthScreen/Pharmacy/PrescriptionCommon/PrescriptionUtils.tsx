@@ -19,7 +19,7 @@ export const getRxNumberTextAndLabel = (t: TFunction, prescriptionNumber?: strin
 
 /**
  * Returns the display text and accessibilityLabel value for date used in Prescriptions. Defaults to 'None noted' if not given.
- * @param healthT - translation set with `useTranslation(NAMESPACE.COMMON)`
+ * @param t - translation set with `useTranslation(NAMESPACE.COMMON)`
  * @param date - date passed in
  *
  * ex. returns ['01/02/2023' | `None Noted`, `January 2nd, 20223` | `None Noted`]
