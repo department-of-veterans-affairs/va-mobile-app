@@ -65,8 +65,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     logAnalyticsEvent(Events.vama_find_location())
     navigation.navigate('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
-      displayTitle: tc('webview.vagov'),
-      loadingMessage: tc('webview.valocation.loading'),
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('webview.valocation.loading'),
     })
   }
   const onCoronaVirusFAQ = () => {
