@@ -78,7 +78,7 @@ context('MilitaryInformationScreen', () => {
 
       const texts = testInstance.findAllByType(TextView)
       expect(texts[4].props.children).toBe('United States Marine Corps')
-      expect(texts[5].props.children).toBe('June 04, 1993 - July 10, 1995')
+      expect(texts[5].props.children).toBe('June 04, 1993 – July 10, 1995')
 
       const link = testInstance.findByProps({ accessibilityRole: 'link' })
       expect(link.props.children).toBe("What if my military service information doesn't look right?")
