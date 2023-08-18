@@ -1,6 +1,17 @@
 import { expect, by, element, device, waitFor} from 'detox'
 import { loginToDemoMode, openMessages, openHealth, checkImages } from './utils'
 import { setTimeout } from "timers/promises"
+import { DateTime } from 'luxon'
+
+export async function getDateWithTimeZone(dateString: string) {
+  var date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', {zone: 'America/Chicago'})
+  var dateUTC = date.toLocal()
+  var dateTime = dateUTC.toLocaleString(Object.assign(DateTime.DATETIME_FULL))
+  if (device.getPlatform() === 'android') {
+    dateTime = dateTime.replace(' at ', ', ')
+  }
+  return dateTime
+}
 
 export const MessagesE2eIdConstants = {
   MESSAGE_1_ID: 'Unread: Martha Kaplan, Md 10/26/2021 Medication: Naproxen side effects',
@@ -37,6 +48,8 @@ export const MessagesE2eIdConstants = {
   EDIT_DRAFT_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   EDIT_DRAFT_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save Changes' : 'Save Changes ',
 }
+
+var dateWithTimeZone
 
 beforeAll(async () => {
   await loginToDemoMode()
@@ -79,11 +92,8 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
     await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
     await expect(element(by.text('RATANA, NARIN '))).toExist()
-    if (device.getPlatform() === 'android'){
-      await expect(element(by.text('October 26, 2021, 5:22 PM CDT'))).toExist()
-    } else {
-      await expect(element(by.text('October 26, 2021 at 5:22 PM CDT'))).toExist()
-    }
+    dateWithTimeZone = await getDateWithTimeZone('October 26, 2021 5:22 PM')
+    await expect(element(by.id(dateWithTimeZone))).toExist()
     await expect(element(by.text('Upset stomach is a common side effect of this medication.  Mild stomach pain is normal, but if you are having severe stomach pains, please let us know or seek in-person care.'))).toExist()
     await expect(element(by.text('Only use messages for non-urgent needs'))).toExist()
   })
@@ -297,52 +307,40 @@ describe('Messages Screen', () => {
   })
 
   it('should navigate to the sent folder and select the first message', async () => {
-    await element(by.text('Messages')).tap()
+    await device.launchApp({ newInstance: true })
+    await loginToDemoMode()
+    await openHealth()
+    await openMessages()
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).tap()
     await element(by.text('Sent')).tap()
   })
 
   it('should tap on the first message and verify a message thread is displayed', async () => {
     await element(by.id('Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Appointment: Preparing for your visit')).tap()
-    if(device.getPlatform() === 'android') {
-      await expect(element(by.id('FREEMAN, MELVIN  V November 12, 2021, 6:07 PM CST '))).toExist()
-      await expect(element(by.id('RATANA, NARIN  October 21, 2021, 10:58 AM CDT '))).toExist()
-      await expect(element(by.id('FREEMAN, MELVIN  V October 15, 2021, 5:55 PM CDT has attachment'))).toExist()
-      await expect(element(by.id('RATANA, NARIN  October 1, 2021, 5:23 PM CDT '))).toExist()
-    } else {
-      await expect(element(by.id('FREEMAN, MELVIN  V November 12, 2021 at 6:07 PM CST '))).toExist()
-      await expect(element(by.id('RATANA, NARIN  October 21, 2021 at 10:58 AM CDT '))).toExist()
-      await expect(element(by.id('FREEMAN, MELVIN  V October 15, 2021 at 5:55 PM CDT has attachment'))).toExist()
-      await expect(element(by.id('RATANA, NARIN  October 1, 2021 at 5:23 PM CDT '))).toExist()
-    }
+    dateWithTimeZone = await getDateWithTimeZone('November 12, 2021 6:07 PM')
+    await expect(element(by.id('FREEMAN, MELVIN  V ' + dateWithTimeZone + ' '))).toExist()
+    dateWithTimeZone = await getDateWithTimeZone('October 21, 2021 10:58 AM')
+    await expect(element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' '))).toExist()
+    dateWithTimeZone = await getDateWithTimeZone('October 15, 2021 5:55 PM')
+    await expect(element(by.id('FREEMAN, MELVIN  V ' + dateWithTimeZone + ' has attachment'))).toExist()
+    dateWithTimeZone = await getDateWithTimeZone('October 1, 2021 5:23 PM')
+    await expect(element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' '))).toExist()
   })
 
   it('should expand and collapse a message with more than two lines', async () => {
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-    if(device.getPlatform() === 'android') {
-      var messageCollapsed = await element(by.id('RATANA, NARIN  October 1, 2021, 5:23 PM CDT ')).takeScreenshot('MessageCollapsed')
-		  checkImages(messageCollapsed)
-      await element(by.text('October 1, 2021, 5:23 PM CDT')).tap()
-      await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-      var messageExpanded = await element(by.id('RATANA, NARIN  October 1, 2021, 5:23 PM CDT ')).takeScreenshot('MessageExpanded')
-      checkImages(messageExpanded)
-    } else {
-      var messageCollapsed = await element(by.id('RATANA, NARIN  October 1, 2021 at 5:23 PM CDT ')).takeScreenshot('MessageCollapsed')
-		  checkImages(messageCollapsed)
-      await element(by.text('October 1, 2021 at 5:23 PM CDT')).tap()
-      await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-      var messageExpanded = await element(by.id('RATANA, NARIN  October 1, 2021 at 5:23 PM CDT ')).takeScreenshot('MessageExpanded')
-      checkImages(messageExpanded)
-    }
+    dateWithTimeZone = await getDateWithTimeZone('October 1, 2021 5:23 PM')
+    var messageCollapsed = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageCollapsed')
+    checkImages(messageCollapsed)
+    await element(by.text(dateWithTimeZone)).tap()
+    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+    var messageExpanded = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageExpanded')
+    checkImages(messageExpanded)
     await element(by.text('Sent')).tap()
     await element(by.text('Messages')).tap()
   })
 
   it('should navigate to the drafts folder and click the newest message', async () => {
-    await device.launchApp({ newInstance: true })
-    await loginToDemoMode()
-    await openHealth()
-    await openMessages()
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
     await element(by.text('Drafts (3)')).tap()
     await element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry')).tap()
