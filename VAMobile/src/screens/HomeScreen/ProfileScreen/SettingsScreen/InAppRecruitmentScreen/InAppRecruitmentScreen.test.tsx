@@ -31,7 +31,7 @@ context('CollapsibleMessage', () => {
     expect(screen.getByLabelText('Give feedback')).toBeTruthy()
     expect(screen.getByText('Make this app better for all Veterans')).toBeTruthy()
     expect(screen.getByText('You can help us improve this app by being part of online feedback sessions.')).toBeTruthy()
-    expect(screen.getByText('Register once by completing a 5 minute questionnaire.')).toBeTruthy()
+    expect(screen.getByText('Register once by completing a 5-minute questionnaire.')).toBeTruthy()
     expect(screen.getByText('Wait to be matched with a session.')).toBeTruthy()
     expect(screen.getByText('Get paid for each session you complete (excludes VA employees).')).toBeTruthy()
     expect(screen.getByText('Go to questionnaire')).toBeTruthy()
