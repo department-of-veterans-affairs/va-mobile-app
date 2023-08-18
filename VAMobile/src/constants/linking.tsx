@@ -12,8 +12,39 @@ export const linking: LinkingOptions<any> = {
   config: {
     /* configuration for matching screens with paths */
     screens: {
-      Appointments: 'appointments/:id',
+      Tabs: {
+        screens: {
+          HealthTab: {
+            screens: {
+              ViewMessageScreen: 'messages/:messageID',
+            },
+          },
+        },
+      },
     },
+  },
+  // Sets the navigation state for deeply nested screens to ensure navigating backwards works correctly
+  getStateFromPath(path) {
+    const pathParts = path.split('/')
+    if (pathParts[0] === 'messages' && pathParts.length === 2) {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'HealthTab',
+                  state: {
+                    routes: [{ name: 'Health' }, { name: 'SecureMessaging' }, { name: 'ViewMessageScreen', params: { messageID: pathParts[1] } }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
+    }
   },
 }
 

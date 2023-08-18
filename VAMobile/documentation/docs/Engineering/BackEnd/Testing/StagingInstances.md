@@ -21,7 +21,7 @@ At the top, you'll see the last time the pods were synced to HEAD. On the right,
 
 ![](../../../../static/img/backend/eks-terminal.png)
 
-You'll see "TERMINAL" as a tab. From here, you have access to the console. You can run any commands you would in a local terminal here. For instance, run `bundle exec rails c` if you'd like to run a rails console. 
+You'll see "TERMINAL" as a tab. From here, you have access to the console. You can run any commands you would in a local terminal here. For instance, run `bundle exec rails c` if you'd like to run a rails console.
 
 ### User Sign In
 You can then fetch an [api token](ApiTokens.md#fetching-api-tokens) and use that token to create either an IAM user session (deprecated):
@@ -34,3 +34,4 @@ or an SIS user session:
 irb(main):001:0> token = SignIn::AccessTokenJwtDecoder.new(access_token_jwt: 'crazylongsistoken').perform(with_validation: true)
 irb(main):001:0> user = User.find(token.user_uuid)
 ```
+If the user comes back as nil, this means it's not in redis due to inactivity. If that happens, make any API request for the user and try again. The API request will load the user into redis as part of the authentication process.

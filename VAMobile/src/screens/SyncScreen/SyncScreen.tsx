@@ -10,7 +10,7 @@ import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, 
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
 import colors from 'styles/themes/VAColors'
 
 export type SyncScreenProps = Record<string, unknown>
@@ -23,6 +23,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   }
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isPortrait = useOrientation()
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -86,8 +87,13 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t, disabilityRatingLoaded, syncing])
 
   return (
-    <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
-      <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+    <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
+      <Box
+        justifyContent="center"
+        mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
+        mt={theme.dimensions.contentMarginTop}
+        mb={theme.dimensions.contentMarginBottom}
+        alignItems={'center'}>
         <VAIcon name={'Logo'} />
 
         <Box alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={50}>
