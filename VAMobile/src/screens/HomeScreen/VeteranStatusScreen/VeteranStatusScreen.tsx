@@ -13,7 +13,7 @@ import { RootState } from 'store'
 import { getBirthDate } from '../ProfileScreen/PersonalInformationScreen/PersonalInformationScreen'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useTheme } from 'utils/hooks'
-import PhotoUpload from 'components/PhotoUpload'
+// import PhotoUpload from 'components/PhotoUpload'
 
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
 
