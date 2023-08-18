@@ -105,7 +105,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         <DefaultList items={vaccineButtons} />
       </Box>
       {renderPagination()}

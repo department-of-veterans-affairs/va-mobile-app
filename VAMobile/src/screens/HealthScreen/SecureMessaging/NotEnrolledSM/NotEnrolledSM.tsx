@@ -14,7 +14,7 @@ const NotEnrolledSM: FC = () => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
   const theme = useTheme()
-  const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme.dimensions
+  const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
   const bulletOne = {
     text: t('notEnrolledSM.youAreEnrolled'),
@@ -45,7 +45,7 @@ const NotEnrolledSM: FC = () => {
 
   return (
     <VAScrollView>
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
+      <Box mb={contentMarginBottom}>
         <Box {...testIdProps(t('notEnrolledSM.title'))} accessibilityRole="header" accessible={true} mx={theme.dimensions.gutter} mb={standardMarginBetween}>
           <TextView variant="BitterBoldHeading">{t('notEnrolledSM.title')}</TextView>
         </Box>

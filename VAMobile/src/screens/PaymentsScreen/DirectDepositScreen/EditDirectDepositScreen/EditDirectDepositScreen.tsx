@@ -47,7 +47,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
   const accountNumRef = useRef<TextInput>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
-  const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
+  const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
 
   const [routingNumber, setRoutingNumber] = useState('')
   const [accountNumber, setAccountNumber] = useState('')
@@ -147,7 +147,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
         maxLength: MAX_ROUTING_DIGITS,
         value: routingNumber,
         isRequiredField: true,
-        helperTextKey: 'editDirectDeposit.routingNumberHelperText',
         testID: 'routingNumber',
       },
       fieldErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
@@ -214,7 +213,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
         rightButtonText={t('save')}
         onRightButtonPress={() => setOnSaveClicked(true)}
         title={displayTitle}>
-        <Box mt={contentMarginTop} mb={contentMarginBottom}>
+        <Box mb={contentMarginBottom}>
           {formContainsError && (
             <Box mb={standardMarginBetween}>
               <AlertBox scrollViewRef={scrollViewRef} title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" focusOnError={onSaveClicked} />

@@ -220,9 +220,9 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       onLeftButtonPress={goBack}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         {getFormattedPhoneNumber(phoneData) !== '' && (
-          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+          <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <VAButton
               onPress={onDeletePressed}
               label={t('contactInformation.removeData', { pageName: buttonTitle })}
