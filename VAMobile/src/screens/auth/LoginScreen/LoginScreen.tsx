@@ -44,8 +44,8 @@ const LoginScreen: FC = () => {
     logAnalyticsEvent(Events.vama_find_location())
     navigation.navigate('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
-      displayTitle: t('common:webview.vagov'),
-      loadingMessage: t('common:webview.valocation.loading'),
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('webview.valocation.loading'),
     })
   }
 
