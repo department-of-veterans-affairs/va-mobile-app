@@ -25,6 +25,8 @@ export type radioOption<T> = {
   additionalLabelText?: Array<string>
   /** Removes the radio btn icon from radio list and makes it not selectable*/
   notSelectableRadioBtn?: boolean
+  /** Optional TestID */
+  testID?: string
 }
 
 /**
@@ -61,7 +63,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isR
   }, [hasSingleOption, value, options, onChange])
 
   const getOption = (option: radioOption<T>): ReactElement => {
-    const { labelKey, labelArgs, a11yLabel } = option
+    const { labelKey, labelArgs, a11yLabel, testID } = option
 
     // Render option as simple text
     if (hasSingleOption) {
@@ -86,6 +88,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isR
         labelArgs={labelArgs}
         disabled={disabled}
         a11yLabel={a11yLabel}
+        testID={testID}
       />
     )
   }
