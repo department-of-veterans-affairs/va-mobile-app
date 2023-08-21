@@ -72,6 +72,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: Install macOS dependencies
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
       - name: Install npm dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: Install Detox
