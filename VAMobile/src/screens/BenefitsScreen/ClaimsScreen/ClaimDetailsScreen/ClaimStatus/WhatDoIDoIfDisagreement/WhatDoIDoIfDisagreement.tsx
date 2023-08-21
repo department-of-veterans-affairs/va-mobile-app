@@ -34,7 +34,12 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ route }) =>
         <TextView variant="MobileBody" paragraphSpacing={true}>
           {t('claimsDetails.whatDoIDoIfDisagreement.content')}
         </TextView>
-        <TextView variant="MobileBodyLink" accessibilityRole="link" {...a11yHintProp(`${text} ${t('mobileBodyLink.a11yHint')}`)} onPress={onDecisionReview}>
+        <TextView
+          variant="MobileBodyLink"
+          accessibilityRole="link"
+          {...a11yHintProp(`${text} ${t('mobileBodyLink.a11yHint')}`)}
+          onPress={onDecisionReview}
+          testID="ClaimsDecisionReviewOptionsTestID">
           {text}
         </TextView>
       </Box>

@@ -406,6 +406,11 @@ export const Events = {
       name: 'vama_fail_refresh',
     }
   },
+  vama_find_location: (): Event => {
+    return {
+      name: 'vama_find_location',
+    }
+  },
   vama_gender_id_fail: (): Event => {
     return {
       name: 'vama_gender_id_fail',
@@ -471,6 +476,14 @@ export const Events = {
       name: 'vama_login_success',
       params: {
         sis: isSIS.toString(),
+      },
+    }
+  },
+  vama_notification_click: (notification_url?: string): Event => {
+    return {
+      name: 'vama_notification_click',
+      params: {
+        notification_url,
       },
     }
   },
