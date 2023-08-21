@@ -106,7 +106,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   }
 
   return (
-    <Box {...boxProps} testID={testID} importantForAccessibility={'no'}>
+    <Box {...boxProps} {...testIdProps('accordion-wrapper', true)} testID={testID} importantForAccessibility={'no'}>
       <TextArea noBorder={noBorder}>
         {renderHeader()}
         {!expanded && collapsedContent}
