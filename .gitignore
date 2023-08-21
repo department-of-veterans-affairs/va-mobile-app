@@ -20,6 +20,8 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
+.yarn
+.tool-versions
 
 # Gradle
 /build/
