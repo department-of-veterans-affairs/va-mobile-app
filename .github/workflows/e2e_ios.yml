@@ -85,4 +85,4 @@ jobs:
       - name: Install gems
         run: bundle install
       - name: Run e2e tests
-        run: yarn e2e:ios-test
+        run: detox test --configuration ios.sim.release --cleanup --headless --record-logs all
