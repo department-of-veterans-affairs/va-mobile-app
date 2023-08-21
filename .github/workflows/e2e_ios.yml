@@ -24,7 +24,7 @@ on:
 
 defaults:
   run:
-    working-directory: VAMobile/ios
+    working-directory: VAMobile
 
 env:
   # IAM staging app client secret
