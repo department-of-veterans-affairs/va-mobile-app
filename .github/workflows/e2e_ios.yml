@@ -24,7 +24,7 @@ on:
 
 defaults:
   run:
-    working-directory: VAMobile
+    working-directory: VAMobile/ios
 
 env:
   # IAM staging app client secret
@@ -77,7 +77,7 @@ jobs:
           brew tap wix/brew
           brew install applesimutils
       - name: Install npm dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+        run: cd .. && yarn install --frozen-lockfile --non-interactive
       - name: Install Detox
         run: yarn global add detox-cli
       - name: Set app environment variables
