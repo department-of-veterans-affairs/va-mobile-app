@@ -53,6 +53,8 @@ export type FullScreenSubtaskProps = {
   navigationMultiStepCancelScreen?: number
   /** whether to show the crisis line CTA (defaults to false) */
   showCrisisLineCta?: boolean
+  /** Optional testID */
+  testID?: string
 }
 
 export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
@@ -74,6 +76,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   onSecondaryContentButtonPress,
   navigationMultiStepCancelScreen,
   showCrisisLineCta = false,
+  testID,
 }) => {
   const theme = useTheme()
   const navigation = useNavigation()
@@ -159,7 +162,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
-      <VAScrollView scrollViewRef={scrollViewRef}>
+      <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
         {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
         {title && (
           <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
