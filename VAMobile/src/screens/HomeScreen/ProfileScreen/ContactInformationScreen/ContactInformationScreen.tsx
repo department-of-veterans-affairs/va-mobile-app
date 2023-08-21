@@ -8,7 +8,7 @@ import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState } from 'store/slices/personalInformationSlice'
-import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
+import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, ScreenIDTypesConstants, UserDataProfile } from 'store/api/types'
 import { RootState } from 'store'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { stringToTitleCase } from 'utils/formattingUtils'
