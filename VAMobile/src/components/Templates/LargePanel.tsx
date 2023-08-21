@@ -36,6 +36,8 @@ export type LargePanelProps = {
   onRightButtonPress?: () => void
   /** Optional TestID for scrollView */
   testID?: string
+  /** Optional TestID for right Button */
+  rightButtonTestID?: string
 }
 
 export const LargePanel: FC<LargePanelProps> = ({
@@ -51,6 +53,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   onRightButtonPress,
   onFooterButtonPress,
   testID,
+  rightButtonTestID,
 }) => {
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -91,7 +94,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   const headerProps: HeaderBannerProps = {
     leftButton: leftButtonText ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, onPress: leftTitleButtonPress } : undefined,
     title: title ? { type: 'Static', title, a11yLabel: titleA11yLabel } : undefined,
-    rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, testID: rightButtonTestID, onPress: rightTitleButtonPress } : undefined,
+    rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: rightTitleButtonPress, testID: rightButtonTestID } : undefined,
     divider: true,
   }
 

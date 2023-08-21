@@ -84,7 +84,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   }
 
   if (claimsAndAppeals.length === 0) {
-    return <NoClaimsAndAppeals />
+    return <NoClaimsAndAppeals claimType={claimType} />
   }
 
   const yourClaimsAndAppealsHeader = t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })
