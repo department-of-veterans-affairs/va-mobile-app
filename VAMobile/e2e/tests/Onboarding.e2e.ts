@@ -1,5 +1,4 @@
-import { by, device, element, expect, waitFor } from 'detox'
-import { setTimeout } from 'timers/promises'
+import { by, device, element, expect} from 'detox'
 import { showOnboarding, checkImages } from './utils'
 
 
