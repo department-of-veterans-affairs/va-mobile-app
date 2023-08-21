@@ -36,8 +36,6 @@ export type LargePanelProps = {
   onRightButtonPress?: () => void
   /** Optional TestID for scrollView */
   testID?: string
-  /** Optional TestID for right Button */
-  rightButtonTestID?: string
 }
 
 export const LargePanel: FC<LargePanelProps> = ({
@@ -53,7 +51,6 @@ export const LargePanel: FC<LargePanelProps> = ({
   onRightButtonPress,
   onFooterButtonPress,
   testID,
-  rightButtonTestID,
 }) => {
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
