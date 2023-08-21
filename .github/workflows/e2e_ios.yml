@@ -78,15 +78,17 @@ jobs:
           brew install applesimutils
       - name: Install npm dependencies
         run: cd .. && yarn install --frozen-lockfile --non-interactive
+      - name: PWD
+        run: pwd
       - name: Install Detox
-        run: yarn global add detox-cli
+        run: cd .. && yarn global add detox-cli
       - name: Set app environment variables
-        run: yarn env:staging
+        run: cd .. && yarn env:staging
       - name: Bundle app
-        run: yarn e2e:ios-build
+        run: cd .. && yarn e2e:ios-build
       - name: Install pods
         run: pod install
       - name: Install gems
         run: bundle install
       - name: Run e2e tests
-        run: detox test --cleanup --headless --record-logs all
+        run: cd .. && detox test --cleanup --headless --record-logs all
