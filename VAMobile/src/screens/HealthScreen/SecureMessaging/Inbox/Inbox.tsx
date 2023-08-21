@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -60,7 +61,7 @@ const Inbox: FC<InboxProps> = () => {
 
   return (
     <Box {...testIdProps('', false, 'Inbox-page')}>
-      <MessageList items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress)} title={t('secureMessaging.inbox')} />
+      <MessageList items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress, FolderNameTypeConstants.inbox)} title={t('secureMessaging.inbox')} />
       <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
