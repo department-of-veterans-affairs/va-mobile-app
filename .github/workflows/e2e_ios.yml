@@ -91,4 +91,4 @@ jobs:
       - name: Install gems
         run: bundle install
       - name: Run e2e tests
-        run: cd .. && detox test --cleanup --headless --record-logs all
+        run: cd .. && detox test --configuration ios --cleanup --headless --record-logs all
