@@ -42,6 +42,7 @@ export type HeaderRightButtonProps = {
   a11yLabel?: string
   onPress: () => void
   icon?: VAIconProps
+  testID?: string
 }
 
 export type HeaderBannerProps = {
@@ -267,7 +268,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
                 <TouchableWithoutFeedback ref={focus === 'Right' ? focusRef : () => {}} onPress={rightButton.onPress} accessibilityRole="button">
                   <Box {...commonBoxProps}>
                     {rightButton.icon ? (
-                      <VAIconWithText label={rightButton.text} labelA11y={rightButton.a11yLabel} {...rightButton.icon} />
+                      <VAIconWithText testID={rightButton.testID} label={rightButton.text} labelA11y={rightButton.a11yLabel} {...rightButton.icon} />
                     ) : (
                       <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
                     )}
