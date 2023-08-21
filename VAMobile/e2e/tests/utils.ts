@@ -37,6 +37,8 @@ export const CommonE2eIdConstants = {
   OK_UNIVERSAL_TEXT: 'OK',
   CONTACT_INFORMATION_TEXT: 'Contact information',
   VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
+  CLAIMS_BUTTON_TEXT: 'Claims',
+  CLAIMS_HISTORY_BUTTON_TEXT: 'Claims history'
 }
 
 
@@ -243,6 +245,14 @@ export async function openVaccineRecords() {
 
 export async function openMessages() {
   await element(by.text(CommonE2eIdConstants.MESSAGES_ROW_TEXT)).tap() 
+}
+
+export async function openClaims() {
+	await element(by.text(CommonE2eIdConstants.CLAIMS_BUTTON_TEXT)).tap() 
+}
+
+export async function openClaimsHistory() {
+	await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap() 
 }
 
 /**

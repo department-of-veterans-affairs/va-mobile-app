@@ -59,7 +59,7 @@ export type FullScreenSubtaskProps = {
   navigationMultiStepCancelScreen?: number
   /** whether to show the crisis line CTA (defaults to false) */
   showCrisisLineCta?: boolean
-  /** Optional TestID*/
+  /** Optional testID */
   testID?: string
 }
 
