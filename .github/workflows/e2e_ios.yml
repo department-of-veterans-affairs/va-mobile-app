@@ -79,7 +79,7 @@ jobs:
       - name: Install npm dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: Install Detox
-        run: npm install detox-cli --global
+        run: yarn global add detox-cli
       - name: Set app environment variables
         run: yarn env:staging
       - name: Bundle app
@@ -89,4 +89,4 @@ jobs:
       - name: Install gems
         run: bundle install
       - name: Run e2e tests
-        run: detox test --configuration ios.sim.release --cleanup --headless --record-logs all
+        run: detox test --cleanup --headless --record-logs all
