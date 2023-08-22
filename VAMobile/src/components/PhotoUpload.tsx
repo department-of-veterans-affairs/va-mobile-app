@@ -18,7 +18,6 @@ type PhotoUploadProps = {
   width: number
   /** height of the photo */
   height: number
-  /** imagePickerResponse with asset to style for component and fileSize */
 }
 
 type StyledImageProps = {
@@ -48,15 +47,15 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
   const photoUploadBorderRadius = 50
   const photoUploadBorderWidth = 2
   const showActionSheetWithOptions = useShowActionSheet()
-  const VETERAN_STATUS_PHOTO = '@store_veteran_status_photo'
+  const VETERAN_STATUS_PHOTO_KEY = '@store_veteran_status_photo'
   const [uri, setUri] = useState('')
   const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('cancel')]
   const uploadBorderColor = theme.colors.border.photoUpload
 
   const getPhotoFromStorage = async (): Promise<void> => {
-    const override = await AsyncStorage.getItem(VETERAN_STATUS_PHOTO)
-    if (override !== null) {
-      setUri(override)
+    const storedUri = await AsyncStorage.getItem(VETERAN_STATUS_PHOTO_KEY)
+    if (storedUri) {
+      setUri(storedUri)
     }
   }
 
@@ -66,27 +65,23 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
     }
   }, [uri])
 
-  const photo = (): ReactNode => {
-    return (
-      <StyledImage source={{ uri }} width={width} height={height} borderRadius={photoUploadBorderRadius} borderWidth={photoUploadBorderWidth} borderColor={uploadBorderColor} />
-    )
-  }
+  const photo = (
+    <StyledImage source={{ uri }} width={width} height={height} borderRadius={photoUploadBorderRadius} borderWidth={photoUploadBorderWidth} borderColor={uploadBorderColor} />
+  )
 
   const uploadCallback = (response: ImagePickerResponse): void => {
     const { assets, errorMessage, didCancel } = response
+    const picture = assets?.[0]?.uri
     if (didCancel) {
       return
     } else if (errorMessage) {
       //TODO Snackbar in this case? Discuss error cases
       return
+    } else if (picture) {
+      setUri(picture)
+      AsyncStorage.setItem(VETERAN_STATUS_PHOTO_KEY, picture)
     } else {
-      if (assets?.length === 0) {
-        return
-      }
-      if (assets && assets[0] && assets[0].uri) {
-        setUri(assets[0].uri)
-        AsyncStorage.setItem(VETERAN_STATUS_PHOTO, assets[0].uri)
-      }
+      return
     }
   }
 
@@ -105,7 +100,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
             text: t('remove'),
             onPress: () => {
               setUri('')
-              AsyncStorage.setItem(VETERAN_STATUS_PHOTO, '')
+              AsyncStorage.setItem(VETERAN_STATUS_PHOTO_KEY, '')
             },
           },
         ],
@@ -151,7 +146,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
     <Pressable {...pressableProps}>
       {uri ? (
         <Box {...boxProps} mb={20}>
-          {photo()}
+          {photo}
           <TextView color="primaryContrast" variant="HelperText">
             {t('veteranStatus.editPhoto')}
           </TextView>

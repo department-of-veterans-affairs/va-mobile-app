@@ -19,15 +19,11 @@ type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranSta
 
 const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const { serviceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const { serviceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((state) => state.militaryService)
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-
-  const name = (): string => {
-    return profile?.fullName || ''
-  }
 
   const ratingPercent = ratingData?.combinedDisabilityRating
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
@@ -97,7 +93,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
           </Box> */}
           <Box my={theme.dimensions.formMarginBetween}>
             <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
-              {name()}
+              {profile?.fullName || ''}
             </TextView>
             {accessToMilitaryInfo && (
               <Box display="flex" flexDirection="row">
