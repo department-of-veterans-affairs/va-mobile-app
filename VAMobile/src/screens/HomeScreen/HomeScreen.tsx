@@ -9,7 +9,7 @@ import { DateTime } from 'luxon'
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
+import { PersonalInformationState, getDemographics, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -45,13 +45,14 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const name = profile?.preferredName ? profile.preferredName : profile?.firstName || ''
+  const { demographics, loadingDemographics, profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const name = loadingDemographics ? '' : demographics?.preferredName || profile?.firstName || ''
 
   useEffect(() => {
     // Fetch the profile information
     if (name === '') {
       dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
+      dispatch(getDemographics(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
   }, [dispatch, name])
 
