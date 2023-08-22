@@ -141,6 +141,20 @@ export type GenderIdentityOptionsData = {
   }
 }
 
+export type DemographicsData = {
+  data: {
+    attributes: {
+      genderIdentity: string
+      preferredName: string
+    }
+  }
+}
+
+export type UserDemographics = {
+  genderIdentity: string
+  preferredName: string
+}
+
 export const UserGreetingTimeConstants: {
   MORNING: number
   AFTERNOON: number
