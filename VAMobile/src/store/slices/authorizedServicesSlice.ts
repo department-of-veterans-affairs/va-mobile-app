@@ -14,6 +14,7 @@ export type AuthorizedServicesState = {
   appeals: boolean
   appointments: boolean
   claims: boolean
+  decisionLetters: boolean
   directDepositBenefits: boolean
   directDepositBenefitsUpdate: boolean
   lettersAndDocuments: boolean
@@ -29,6 +30,7 @@ export const initialAuthorizedServicesState: AuthorizedServicesState = {
   appeals: false,
   appointments: false,
   claims: false,
+  decisionLetters: false,
   directDepositBenefits: false, // User can view, but not edit their Direct Deposit
   directDepositBenefitsUpdate: false, // User can view and update their Direct Deposit
   lettersAndDocuments: false,
@@ -50,6 +52,7 @@ const authorizedServicesSlice = createSlice({
       const appeals = contains(services, VAServicesConstants.Appeals)
       const appointments = contains(services, VAServicesConstants.Appointments)
       const claims = contains(services, VAServicesConstants.Claims)
+      const decisionLetters = contains(services, VAServicesConstants.DecisionLetters)
       const directDepositBenefits = contains(services, VAServicesConstants.DirectDepositBenefits)
       const directDepositBenefitsUpdate = contains(services, VAServicesConstants.DirectDepositBenefitsUpdate)
       const lettersAndDocuments = contains(services, VAServicesConstants.LettersAndDocuments)
@@ -63,6 +66,7 @@ const authorizedServicesSlice = createSlice({
         appeals: appeals.toString(),
         appointments: appointments.toString(),
         claims: claims.toString(),
+        decisionLetters: decisionLetters.toString(),
         directDepositBenefits: directDepositBenefits.toString(),
         lettersAndDocuments: lettersAndDocuments.toString(),
         militaryServiceHistory: militaryServiceHistory.toString(),
@@ -76,6 +80,7 @@ const authorizedServicesSlice = createSlice({
       state.appeals = appeals
       state.appointments = appointments
       state.claims = claims
+      state.decisionLetters = decisionLetters
       state.directDepositBenefits = directDepositBenefits
       state.directDepositBenefitsUpdate = directDepositBenefitsUpdate
       state.lettersAndDocuments = lettersAndDocuments
