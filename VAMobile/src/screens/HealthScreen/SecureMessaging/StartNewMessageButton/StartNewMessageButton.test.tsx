@@ -2,48 +2,32 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, render, RenderAPI } from 'testUtils'
+import { context, render } from 'testUtils'
 import StartNewMessageButton from './StartNewMessageButton'
-import { VAButton } from 'components'
-import { waitFor } from '@testing-library/react-native'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+jest.mock('@react-navigation/native', () => {
+  let actual = jest.requireActual('@react-navigation/native')
   return {
-    ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    ...actual,
+    useNavigation: () => ({
+      navigate: mockNavigationSpy,
+    }),
   }
 })
 
 context('StartNewMessageFooter', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let mockNavigateToSpy: jest.Mock
 
   beforeEach(() => {
-    mockNavigateToSpy = jest.fn()
-    mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
-    component = render(<StartNewMessageButton />)
-
-    testInstance = component.UNSAFE_root
-  })
-
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    render(<StartNewMessageButton />)
   })
 
   describe('on click of the footer button', () => {
     it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findByType(VAButton).props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalledWith('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
-        expect(mockNavigateToSpy).toHaveBeenCalled()
-      })
+      fireEvent.press(screen.getByText('Start new message'))
+      expect(mockNavigationSpy).toHaveBeenCalledWith('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
     })
   })
 })

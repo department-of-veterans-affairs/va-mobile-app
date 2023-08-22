@@ -9,11 +9,13 @@ import { AlertBox, BackButton, Box, FullScreenSubtask, TextView, VABulletList } 
 import { Asset, ImagePickerResponse } from 'react-native-image-picker'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { Events } from 'constants/analytics'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { Image } from 'react-native'
 import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y, getMaxWidthAndHeightOfImage } from 'utils/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { themeFn } from 'utils/theme'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
@@ -48,7 +50,14 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     })
   })
 
+  useEffect(() => {
+    if (error !== '') {
+      logAnalyticsEvent(Events.vama_sm_attach_outcome('false'))
+    }
+  }, [error])
+
   const callbackOnSuccessfulFileSelection = (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean): void => {
+    logAnalyticsEvent(Events.vama_sm_attach_outcome('true'))
     // display image preview
     if (isImage) {
       setImage(response as ImagePickerResponse)
@@ -103,7 +112,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       const assets = [img]
       return callbackOnSuccessfulFileSelection({ assets }, true)
     }
-
+    logAnalyticsEvent(Events.vama_sm_attach('Select a file'))
     onAddFileAttachments(t, showActionSheetWithOptions, setError, setErrorA11y, callbackOnSuccessfulFileSelection, getTotalBytesUsedByFiles(), getFileUris(), getImageBase64s())
   }
 
@@ -150,7 +159,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={displaySelectFile ? t('secureMessaging.attachments.selectAFile') : t('secureMessaging.startNewMessage.attach')}
       onPrimaryContentButtonPress={displaySelectFile ? onSelectAFile : onAttach}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox scrollViewRef={scrollViewRef} text={error} textA11yLabel={errorA11y} border="error" />

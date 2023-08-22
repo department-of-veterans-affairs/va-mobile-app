@@ -27,14 +27,19 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ route }) =>
 
   return (
     <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('claimsDetails.whatDoIDoIfDisagreement.header')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true}>
           {t('claimsDetails.whatDoIDoIfDisagreement.content')}
         </TextView>
-        <TextView variant="MobileBodyLink" accessibilityRole="link" {...a11yHintProp(`${text} ${t('mobileBodyLink.a11yHint')}`)} onPress={onDecisionReview}>
+        <TextView
+          variant="MobileBodyLink"
+          accessibilityRole="link"
+          {...a11yHintProp(`${text} ${t('mobileBodyLink.a11yHint')}`)}
+          onPress={onDecisionReview}
+          testID="ClaimsDecisionReviewOptionsTestID">
           {text}
         </TextView>
       </Box>

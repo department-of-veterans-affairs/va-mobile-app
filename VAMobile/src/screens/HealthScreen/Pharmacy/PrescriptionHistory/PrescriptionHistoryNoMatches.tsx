@@ -102,7 +102,7 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ c
 
   return (
     <VAScrollView contentContainerStyle={noMatchScrollStyles}>
-      <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+      <Box justifyContent="center" mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
         <Box mt={theme.dimensions.condensedMarginBetween}>{getContent()}</Box>
       </Box>
     </VAScrollView>

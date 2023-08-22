@@ -1,0 +1,78 @@
+import CodeBlock from '@theme/CodeBlock'
+import ClickForActionLinkString from '!!raw-loader!@componentsDocs/ClickForActionLink'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+
+A Click For Action Link is a type of link that appears with an icon. It is used for opening a native calling app, texting app, or opening a url in a browser when tapped. It can appear alone, or in a group with other Click For Action Links ([Click to Call Phone Number](/docs/Flagship%20design%20library/Components/Buttons%20and%20Links/ClickToCallPhoneNumber) is a type of Click for Action Link).
+
+- [Click for Action Link in Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=3876%3A7615&t=YDkTeygO0rv9kGMN-1)
+
+<iframe width="800" height="450" alt="Click for action link example" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2FVAMobile-DesignLibrary1.0-%25F0%259F%2593%2590%3Fnode-id%3D565%253A897%26t%3DZDrejgQLeRRckbXL-1" allowfullscreen></iframe>
+
+
+### Usage
+Use a Click For Action Link when you want to:
+- Open an external web page in the user's default browser
+- Open the user's native default calendar
+- Open the user's native default maps
+- Trigger a phone call
+- Trigger the download of a file
+
+
+Do not use a Click For Action Link to:
+- Open a web view that stays within the app (use a link without an icon)
+- Access instructional or helper text (use a link without an icon).
+
+
+### Examples in practice
+{Component sticker sheet goes here}
+- [Profile - Help](https://www.figma.com/proto/O6sdr5N7xV6GOZhTPcgY5x/%F0%9F%9A%A2-Profile-2.0---Shipped---VA-Mobile?type=design&page-id=601%3A6458&node-id=829-8633&viewport=138%2C282%2C0.25&scaling=min-zoom)
+- [Claim details](https://www.figma.com/proto/p0vlRz38TKIOwWDfI2bGc7/%F0%9F%9A%A2-Benefits-2.0---Shipped---VA-Mobile?type=design&page-id=702%3A3110&node-id=1033-14745&viewport=589%2C474%2C0.25&scaling=min-zoom&starting-point-node-id=1013%3A9529)
+- [Appointment details](https://www.figma.com/proto/JQAoUBxvSWCzKvu2ifRRE7/%F0%9F%9A%A2-Health-2.0---Shipped---VA-Mobile?type=design&page-id=601%3A6458&node-id=1067-32446&viewport=-277%2C-99%2C0.5&scaling=min-zoom)
+
+
+### Best practices
+Needs description: When to use a link vs a Click For Action Link
+
+
+### Content guidelines
+- Links should tell people what action to take, where to go next, or what information to expect when they select the link.
+- Use natural and descriptive language.
+- Hyperlink the most relevant word or phrase that describes the purpose and target (destination) of the link.
+- Avoid “Click here” as the CTA text.
+- Avoid generic CTA links like “Learn more,” “See more,” and “Read more” by themselves.
+- Don’t punctuate standalone CTA links. Exception: When the link text is a question.
+- If the embedded link text comes at the end of a sentence, don’t hyperlink the ending punctuation.
+- When a link opens a PDF, YouTube video, XLS or other file format, use the appropriate link variation.
+
+
+### Accessibility
+- Links must be underlined.
+- Keyboard navigation: The user must be able to navigate to links using the Tab key and activate links using the Enter key.
+- Purpose and target: Without a purpose and target, everyone– but especially screen reader users– will struggle to understand where they may be routed off to.
+
+
+### Related components
+- [Design.va.gov: Links](https://design.va.gov/components/link/)
+- [AttachmentLink](/docs/Flagship%20design%20library/Components/Buttons%20and%20Links/AttachmentLink)
+- [Buttons]
+
+
+## Engineering resources
+
+
+export const exampleString = `<ClickForActionLink 
+displayedText={'text displayed'}
+a11yLabel={'for the voiceover'}
+numberOrUrlLink={'https://www.google.com'} 
+linkType={LinkTypeOptionsConstants.url} />\n
+<ClickForActionLink 
+displayedText={'text displayed'}
+a11yLabel={'for the voiceover'}
+numberOrUrlLink={'https://www.google.com'} 
+linkType={LinkTypeOptionsConstants.url} 
+linkUrlIconType={LinkUrlIconType.Arrow} />`
+
+
+<ComponentTopInfo componentName="ClickForActionLink" example={exampleString} codeString={ClickForActionLinkString} />
