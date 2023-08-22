@@ -91,4 +91,4 @@ jobs:
       - name: Install gems
         run: bundle install
       - name: Run e2e tests
-        run: cd .. && yarn e2e:ios-tes
+        run: cd .. && yarn e2e:ios-test
