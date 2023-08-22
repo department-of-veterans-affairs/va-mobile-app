@@ -5,7 +5,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { Pressable } from 'react-native'
 
 import PersonalInformationScreen from './index'
-import { AddressData, BranchesOfServiceConstants, ServiceData, UserDataProfile } from 'store/api/types'
+import { AddressData, BranchesOfServiceConstants, ServiceData, UserDataProfile, UserDemographics } from 'store/api/types'
 import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import {
@@ -52,6 +52,7 @@ context('PersonalInformationScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
   let profile: UserDataProfile
+  let demographics: UserDemographics
   let props: any
   let navigateToResidentialAddressSpy: jest.Mock
   let navigateToMailingAddressSpy: jest.Mock
@@ -79,12 +80,12 @@ context('PersonalInformationScreen', () => {
     )
 
     profile = {
-      preferredName: 'Benny',
+      preferredName: '',
       firstName: 'Ben',
       middleName: 'J',
       lastName: 'Morgan',
       fullName: 'Ben J Morgan',
-      genderIdentity: 'M',
+      genderIdentity: '',
       contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
       signinEmail: 'ben@gmail.com',
       birthDate: '1990-05-08',
@@ -144,11 +145,17 @@ context('PersonalInformationScreen', () => {
       signinService: 'IDME',
     }
 
+    demographics = {
+      genderIdentity: 'M',
+      preferredName: 'Benny'
+    }
+
     store = {
       auth: { ...initialAuthState },
       personalInformation: {
         ...personalInformationState,
         profile,
+        demographics,
         loading,
       },
       errors: errorsState,
