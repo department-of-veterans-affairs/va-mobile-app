@@ -141,7 +141,7 @@ context('Nametag', () => {
 
       testInstance = component.UNSAFE_root
 
-      expect(testInstance.findAllByType(TextView)).toHaveLength(2)
+      expect(testInstance.findAllByType(TextView)).toHaveLength(1)
     })
   })
 
@@ -159,7 +159,7 @@ context('Nametag', () => {
 
       testInstance = component.UNSAFE_root
 
-      expect(testInstance.findAllByType(TextView)).toHaveLength(2)
+      expect(testInstance.findAllByType(TextView)).toHaveLength(1)
     })
   })
 })
