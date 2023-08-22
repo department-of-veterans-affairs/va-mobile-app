@@ -1,15 +1,19 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect } from 'react'
+import _ from 'underscore'
 
 import { AuthorizedServicesState } from 'store/slices'
 import { Box, ErrorComponent, FeatureLandingTemplate, SegmentedControl } from 'components'
 import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { Events } from 'constants/analytics'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlertSM from './CernerAlertSM/CernerAlertSM'
@@ -33,7 +37,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   const inboxUnreadCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { secureMessagingTab, termsAndConditionError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const { folders, secureMessagingTab, termsAndConditionError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const { secureMessaging } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
@@ -91,6 +95,13 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const onTabUpdate = (selection: string): void => {
     const tab = selection as SecureMessagingTabTypes
     if (secureMessagingTab !== tab) {
+      if (tab === SecureMessagingTabTypesConstants.FOLDERS) {
+        _.forEach(folders, (folder) => {
+          if (folder.attributes.name === FolderNameTypeConstants.drafts) {
+            logAnalyticsEvent(Events.vama_sm_folders(folder.attributes.count))
+          }
+        })
+      }
       snackBar?.hideAll()
       dispatch(updateSecureMessagingTab(tab))
     }
