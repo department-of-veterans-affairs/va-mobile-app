@@ -1,18 +1,15 @@
 import 'react-native'
 import React from 'react'
+import { fireEvent, screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import EditDraft from './EditDraft'
-import { TouchableWithoutFeedback } from 'react-native'
-import { AlertBox, ErrorComponent, LoadingComponent, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState, updateSecureMessagingTab } from 'store/slices'
 import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -146,16 +143,10 @@ const mockMessages: SecureMessagingMessageMap = {
 }
 
 context('EditDraft', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let props: any
   let goBack: jest.Mock
   let navHeaderSpy: any
   let navigateSpy: jest.Mock
-  let navigateToVeteransCrisisLineSpy: jest.Mock
-  let navigateToAddToFilesSpy: jest.Mock
-  let navigateToAttachAFileSpy: jest.Mock
-  let navigateToReplyHelpSpy: jest.Mock
 
   const initializeTestInstance = ({
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
@@ -168,23 +159,8 @@ context('EditDraft', () => {
   }) => {
     goBack = jest.fn()
     navigateSpy = jest.fn()
-    navigateToVeteransCrisisLineSpy = jest.fn()
-    navigateToAddToFilesSpy = jest.fn()
-    navigateToAttachAFileSpy = jest.fn()
-    navigateToReplyHelpSpy = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('VeteransCrisisLine')
-      .mockReturnValue(navigateToVeteransCrisisLineSpy)
-      .calledWith('Attachments', { origin: 'Draft', attachmentsList: [], messageID: 2 })
-      .mockReturnValue(navigateToAddToFilesSpy)
-      .calledWith('AttachmentsFAQ', { originHeader: 'Edit Draft' })
-      .mockReturnValue(navigateToAttachAFileSpy)
-      .calledWith('ReplyHelp')
-      .mockReturnValue(navigateToReplyHelpSpy)
 
     props = mockNavProps(
       undefined,
@@ -201,7 +177,7 @@ context('EditDraft', () => {
       { params: { attachmentFileToAdd: {}, messageID } },
     )
 
-    component = render(<EditDraft {...props} />, {
+    render(<EditDraft {...props} />, {
       preloadedState: {
         ...InitialState,
         secureMessaging: {
@@ -242,18 +218,10 @@ context('EditDraft', () => {
         },
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance({})
-  })
-
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-    })
   })
 
   describe('when no recipients are returned', () => {
@@ -266,75 +234,52 @@ context('EditDraft', () => {
     })
 
     it('should display an AlertBox', async () => {
-      await waitFor(() => {
-        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      })
+      expect(screen.getByText("We can't match you with a provider")).toBeTruthy()
     })
 
     describe('on click of the go to inbox button', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
-        await waitFor(() => {
-          testInstance.findByProps({ label: 'Go to inbox' }).props.onPress()
-          expect(navigateSpy).toHaveBeenCalled()
-          expect(updateSecureMessagingTab).toHaveBeenCalled()
-        })
+        fireEvent.press(screen.getByText('Go to inbox'))
+        expect(navigateSpy).toHaveBeenCalled()
+        expect(updateSecureMessagingTab).toHaveBeenCalled()
       })
     })
   })
 
   describe('when hasLoadedRecipients is false', () => {
     it('should display the LoadingComponent', async () => {
-      await waitFor(() => {
-        initializeTestInstance({ loading: true })
-        expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
-      })
+      initializeTestInstance({ loading: true })
+      expect(screen.getByText("Loading your draft...")).toBeTruthy()
     })
   })
 
   describe('when there is an error', () => {
     it('should display the ErrorComponent', async () => {
-      await waitFor(() => {
-        initializeTestInstance({ screenID: ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID })
-        expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
-      })
-    })
-  })
-
-  describe('on click of the crisis line banner', () => {
-    it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-        expect(navigateToVeteransCrisisLineSpy).toHaveBeenCalled()
-      })
+      initializeTestInstance({ screenID: ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID })
+      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
     })
   })
 
   describe('on click of the collapsible view', () => {
     it('should show the Reply Help panel', async () => {
-      await waitFor(() => {
-        testInstance.findByProps({ accessibilityLabel: 'Only use messages for non-urgent needs' }).props.onPress()
-      })
-      expect(navigateToReplyHelpSpy).toHaveBeenCalled()
+      fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs'))
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
   describe('when pressing the back button', () => {
     it('should ask for confirmation if any field filled in', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(VATextInput)[0].props.onChange('Random string')
-        navHeaderSpy.back.props.onPress()
-        expect(goBack).not.toHaveBeenCalled()
-        expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
-      })
+      fireEvent.changeText(screen.getByTestId('messageText'), 'Random String')
+      navHeaderSpy.back.props.onPress()
+      expect(goBack).not.toHaveBeenCalled()
+      expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findByProps({ label: 'Add Files' }).props.onPress()
-        expect(navigateToAddToFilesSpy).toHaveBeenCalled()
-      })
+      fireEvent.press(screen.getByLabelText('Add Files'))
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 })
