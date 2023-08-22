@@ -5,7 +5,7 @@ import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
 import { MilitaryServiceState, PersonalInformationState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
-import { Pressable } from 'react-native'
+import { Pressable, PressableProps } from 'react-native'
 import { RootState } from 'store'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -44,8 +44,14 @@ export const Nametag: FC = () => {
     }
   }
 
+  const pressableProps: PressableProps = {
+    onPress: accessToMilitaryInfo ? navigateTo('VeteranStatus') : undefined,
+    accessibilityRole: accessToMilitaryInfo ? 'button' : undefined,
+    accessibilityLabel: accessToMilitaryInfo ? `${name()} ${branch} ${t('veteranStatus.title')}` : undefined,
+  }
+
   return (
-    <Pressable onPress={navigateTo('VeteranStatus')} accessibilityRole={'button'} accessibilityLabel={name() + ' ' + branch + ' ' + t('veteranStatus.title')}>
+    <Pressable {...pressableProps}>
       <Box
         width="100%"
         backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant}
@@ -54,10 +60,10 @@ export const Nametag: FC = () => {
         justifyContent="center"
         mb={theme.dimensions.standardMarginBetween}
         pr={theme.dimensions.cardPadding}>
-        <Box py={accessToMilitaryInfo ? theme.dimensions.cardPadding : 0} display="flex" flexDirection="row">
+        <Box py={theme.dimensions.cardPadding} display="flex" flexDirection="row">
           {accessToMilitaryInfo && <Box pl={theme.dimensions.cardPadding}>{getBranchSeal()}</Box>}
           <Box ml={theme.dimensions.cardPadding} flex={1}>
-            <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
+            <TextView textTransform="capitalize" mb={accessToMilitaryInfo ? theme.dimensions.textIconMargin : 0} variant="BitterBoldHeading" color="primaryContrast">
               {name()}
             </TextView>
             {accessToMilitaryInfo && (
@@ -65,18 +71,20 @@ export const Nametag: FC = () => {
                 {branch}
               </TextView>
             )}
-            <Box flexDirection={'row'} alignItems={'center'} mt={theme.dimensions.standardMarginBetween}>
-              <TextView variant="MobileBody" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
-                {t('veteranStatus.title')}
-              </TextView>
-              <VAIcon
-                name={'ChevronRight'}
-                fill={theme.colors.icon.contrast}
-                width={theme.dimensions.chevronListItemWidth}
-                height={theme.dimensions.chevronListItemHeight}
-                mr={theme.dimensions.listItemDecoratorMarginLeft}
-              />
-            </Box>
+            {accessToMilitaryInfo && (
+              <Box flexDirection={'row'} alignItems={'center'} mt={theme.dimensions.standardMarginBetween}>
+                <TextView variant="MobileBody" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
+                  {t('veteranStatus.proofOf')}
+                </TextView>
+                <VAIcon
+                  name={'ChevronRight'}
+                  fill={theme.colors.icon.contrast}
+                  width={theme.dimensions.chevronListItemWidth}
+                  height={theme.dimensions.chevronListItemHeight}
+                  mr={theme.dimensions.listItemDecoratorMarginLeft}
+                />
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>
