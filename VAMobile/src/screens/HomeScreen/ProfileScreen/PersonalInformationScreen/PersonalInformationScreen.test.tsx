@@ -2,10 +2,9 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
-import { Pressable } from 'react-native'
 
 import PersonalInformationScreen from './index'
-import { AddressData, BranchesOfServiceConstants, ServiceData, UserDataProfile, UserDemographics } from 'store/api/types'
+import { BranchesOfServiceConstants, ServiceData, UserDataProfile, UserDemographics } from 'store/api/types'
 import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import {
