@@ -7,6 +7,7 @@ import _ from 'underscore'
 
 import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { Events } from 'constants/analytics'
 import {
   FolderNameTypeConstants,
   MAX_IMAGE_DIMENSION,
@@ -19,7 +20,7 @@ import { InlineTextWithIconsProps, MessageListItemObj, PickerItem, VAIconProps }
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
 import { getFormattedMessageTime, stringToTitleCase } from 'utils/formattingUtils'
 import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
-import { logNonFatalErrorToFirebase } from './analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
 import theme from 'styles/themes/standardTheme'
 
 const MAX_SUBJECT_LENGTH = 50
@@ -72,11 +73,29 @@ export const getMessagesListItems = (
       },
     ]
 
+    const folder = (): string => {
+      switch (folderName) {
+        case FolderNameTypeConstants.sent:
+          return 'sent'
+        case FolderNameTypeConstants.inbox:
+          return 'inbox'
+        case FolderNameTypeConstants.deleted:
+          return 'deleted'
+        case FolderNameTypeConstants.drafts:
+          return 'drafts'
+        default:
+          return 'custom'
+      }
+    }
+
     return {
       inlineTextWithIcons: textLines,
       isSentFolder: isSentFolder,
       readReceipt: readReceipt,
-      onPress: () => onMessagePress(message.id, isDraftsFolder),
+      onPress: () => {
+        logAnalyticsEvent(Events.vama_sm_open(message.id, folder(), readReceipt !== READ && !isOutbound ? 'unread' : 'read'))
+        onMessagePress(message.id, isDraftsFolder)
+      },
       a11yHintText: isDraftsFolder ? t('secureMessaging.viewMessage.draft.a11yHint') : t('secureMessaging.viewMessage.a11yHint'),
       testId: generateTestIDForInlineTextIconList(textLines, t),
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
