@@ -6840,7 +6840,7 @@ detox@*:
     yargs-parser "^20.2.2"
     yargs-unparser "^2.0.0"
 
-detox@^19.12.0:
+detox@^19.13.0:
   version "19.13.0"
   resolved "https://registry.yarnpkg.com/detox/-/detox-19.13.0.tgz#6eae8b4e5ef5ca913d465ddc5bd7855fe8834c5c"
   integrity sha512-tKg0m5wlb4r1MISFtqPFXwdLncXWQhWaoAV6nuC3MmBGcJnTSrSa7wNZG26HhfEeR8c6eRUqMFHKefiZnWoO1Q==
