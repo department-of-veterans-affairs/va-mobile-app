@@ -310,7 +310,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
                 label: t('secureMessaging.formMessage.addFiles'),
                 a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
                 onPress: onAddFiles,
-                testID: 'startNewMessageAddFilesTestID',
               }
             : undefined,
         attachmentsList,

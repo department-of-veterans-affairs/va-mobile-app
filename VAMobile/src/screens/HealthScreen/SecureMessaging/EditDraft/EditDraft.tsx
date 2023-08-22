@@ -421,7 +421,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
                 label: t('secureMessaging.formMessage.addFiles'),
                 a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
                 onPress: onAddFiles,
-                testID: 'editDraftAddFilesTestID',
               }
             : undefined,
         attachmentsList,

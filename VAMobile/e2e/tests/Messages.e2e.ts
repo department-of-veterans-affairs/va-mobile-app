@@ -22,19 +22,19 @@ export const MessagesE2eIdConstants = {
   MESSAGES_ID: 'messagesTestID',
   REVIEW_MESSAGE_REPLY_ID: 'replyTestID',
   ONLY_USE_MESSAGES_TEXT: 'Only use messages for non-urgent needs',
-  ATTACHMENTS_BUTTON_ID: 'attachmentsAddFilesID',
+  ATTACHMENTS_BUTTON_TEXT: 'Add Files',
   ATTACHMENT_CAMERA_TEXT: device.getPlatform() === 'ios' ? 'Camera' : 'Camera ',
   ATTACHMENT_PHOTO_GALLERY_TEXT: device.getPlatform() === 'ios' ? 'Photo Gallery' : 'Photo gallery ',
   ATTACHMENT_FILE_FOLDER_TEXT: device.getPlatform() === 'ios' ? 'File Folder' : 'File folder ',
-  MESSAGE_INPUT_ID: 'messageInputTestID',
+  MESSAGE_INPUT_ID: 'reply field',
   SEND_BUTTON_ID: 'sendButtonTestID',
   SELECT_A_FILE_ID: 'Select a file',
   REPLY_PAGE_TEST_ID: 'replyPageTestID',
-  START_NEW_MESSAGE_TO_ID: 'startNewMessageToTestID',
-  START_NEW_MESSAGE_CATEGORY_ID: 'startNewMessageCategoryTestID',
+  START_NEW_MESSAGE_TO_ID: 'to field',
+  START_NEW_MESSAGE_CATEGORY_ID: 'picker',
   START_NEW_MESSAGE_SUBJECT_ID: 'startNewMessageSubjectTestID',
-  START_NEW_MESSAGE_MESSAGE_FIELD_ID: 'startNewMessageMessageFieldTestID',
-  START_NEW_MESSAGE_ADD_FILES_ID: 'startNewMessageAddFilesTestID',
+  START_NEW_MESSAGE_MESSAGE_FIELD_ID: 'message field',
+  START_NEW_MESSAGE_ADD_FILES_TEXT: 'Add Files',
   START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID: 'startNewMessageOnlyUseMessagesTestID',
   START_NEW_MESSAGE_ID: 'startNewMessageTestID',
   START_NEW_MESSAGE_SAVE_ID: 'startNewMessageSaveTestID',
@@ -43,7 +43,7 @@ export const MessagesE2eIdConstants = {
   MESSAGE_CANCEL_KEEP_EDITING_TEXT: device.getPlatform() === 'ios' ? 'Keep Editing' : 'Keep Editing ',
   MESSAGE_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save' : 'Save ',
   VIEW_MESSAGE_ID: 'viewMessageTestID',
-  EDIT_DRAFT_MESSAGE_FIELD_ID: 'editDraftMessageTestID',
+  EDIT_DRAFT_MESSAGE_FIELD_ID: 'messageText',
   EDIT_DRAFT_CANCEL_ID: 'editDraftCancelTestID',
   EDIT_DRAFT_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   EDIT_DRAFT_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save Changes' : 'Save Changes ',
@@ -107,7 +107,7 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID)).tap()
     await expect(element(by.id('To RATANA, NARIN '))).toExist()
     await expect(element(by.id('Subject Medication: Naproxen side effects'))).toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_ID))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_INPUT_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.SEND_BUTTON_ID))).toExist()
   })
@@ -119,7 +119,7 @@ describe('Messages Screen', () => {
   })
 
   it('should tap add files and verify the correct info is displayed', async () => {
-    await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_ID)).tap()
+    await element(by.text(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_TEXT)).tap()
     await expect(element(by.text('What to know about attaching files'))).toExist()
     await expect(element(by.text('You can attach up to 4 files to each message.'))).toExist()
     await expect(element(by.text('You can attach only these file types: DOC, DOCX, GIF, PDF, JPG, PNG, RTF, TXT, XLS, or XLSX.'))).toExist()
@@ -133,13 +133,13 @@ describe('Messages Screen', () => {
     await element(by.text('Cancel')).atIndex(0).tap()
     await expect(element(by.id('To RATANA, NARIN '))).toExist()
     await expect(element(by.id('Subject Medication: Naproxen side effects'))).toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_ID))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_INPUT_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.SEND_BUTTON_ID))).toExist()
   })
 
   it('should tap add files, tap select a file, and verify the correct action sheet options are displayed', async () => {
-    await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_ID)).tap()
+    await element(by.text(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_TEXT)).tap()
     await element(by.text(MessagesE2eIdConstants.SELECT_A_FILE_ID)).tap()
     await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_CAMERA_TEXT))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_PHOTO_GALLERY_TEXT))).toExist()
@@ -197,7 +197,7 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_MESSAGE_FIELD_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ADD_FILES_ID))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.START_NEW_MESSAGE_ADD_FILES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
   })
 

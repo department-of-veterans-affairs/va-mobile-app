@@ -221,7 +221,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
                 label: t('secureMessaging.formMessage.addFiles'),
                 a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
                 onPress: onAddFiles,
-                testID: 'attachmentsAddFilesID',
               }
             : undefined,
         attachmentsList,
