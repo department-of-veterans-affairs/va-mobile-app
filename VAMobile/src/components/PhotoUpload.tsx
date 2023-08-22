@@ -1,7 +1,7 @@
 import { Image, Pressable, PressableProps } from 'react-native'
 import { ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
