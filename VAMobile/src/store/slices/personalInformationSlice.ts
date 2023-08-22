@@ -5,6 +5,7 @@ import * as api from 'store/api'
 import {
   AddressData,
   AddressValidationScenarioTypes,
+  DemographicsData,
   GenderIdentityOptions,
   GenderIdentityOptionsData,
   PhoneData,
@@ -14,6 +15,7 @@ import {
   SuggestedAddress,
   UserData,
   UserDataProfile,
+  UserDemographics,
   addressPouTypes,
   get,
 } from '../api'
@@ -63,6 +65,9 @@ export type PersonalInformationState = {
   genderIdentitySaved: boolean
   genderIdentityOptions: GenderIdentityOptions
   loadingGenderIdentityOptions: boolean
+  loadingDemographics: boolean
+  demographics?: UserDemographics
+  demographicsPreloadComplete: boolean
 }
 
 export const initialPersonalInformationState: PersonalInformationState = {
@@ -73,12 +78,14 @@ export const initialPersonalInformationState: PersonalInformationState = {
   addressSaved: false,
   showValidation: false,
   preloadComplete: false,
+  demographicsPreloadComplete: false,
   phoneNumberSaved: false,
   validateAddressAbortController: undefined,
   preferredNameSaved: false,
   genderIdentitySaved: false,
   genderIdentityOptions: {} as GenderIdentityOptions,
   loadingGenderIdentityOptions: false,
+  loadingDemographics: false,
 }
 
 const personalInformationNonFatalErrorString = 'Personal Information Service Error'
@@ -121,6 +128,29 @@ export const getProfileInfo =
         logNonFatalErrorToFirebase(error, `getProfileInfo: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishGetProfileInfo({ error }))
         dispatch(dispatchUpdateAuthorizedServices({ error }))
+        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+      }
+    }
+  }
+
+/**
+ * Redux action to get demographics information
+ */
+export const getDemographics =
+  (screenID?: ScreenIDTypes): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchClearErrors(screenID))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getDemographics(screenID))))
+
+    try {
+      dispatch(dispatchStartGetDemographics())
+      const response = await get<DemographicsData>('/v0/user/demographics')
+      const demographics = response?.data.attributes
+      dispatch(dispatchFinishGetDemographics({ demographics }))
+    } catch (error) {
+      if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, `getDemographics: ${personalInformationNonFatalErrorString}`)
+        dispatch(dispatchFinishGetDemographics({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }
@@ -626,6 +656,11 @@ const peronalInformationSlice = createSlice({
         profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
         profile.formattedMobilePhone = getFormattedPhoneNumber(profile.mobilePhoneNumber)
         profile.formattedWorkPhone = getFormattedPhoneNumber(profile.workPhoneNumber)
+
+        // Reset these since this information is now being pulled from the demographics endpoint.
+        // This can be removed when we switch over to the `v2/user` endpoint.
+        profile.preferredName = ''
+        profile.genderIdentity = ''
       }
 
       state.profile = profile
@@ -634,7 +669,16 @@ const peronalInformationSlice = createSlice({
       state.needsDataLoad = !!error
       state.preloadComplete = true
     },
-
+    dispatchStartGetDemographics: (state) => {
+      state.loadingDemographics = true
+    },
+    dispatchFinishGetDemographics: (state, action: PayloadAction<{ demographics?: UserDemographics; error?: Error }>) => {
+      const { demographics, error } = action.payload
+      state.error = error
+      state.demographics = demographics
+      state.loadingDemographics = false
+      state.demographicsPreloadComplete = true
+    },
     dispatchFinishEditPhoneNumber: (state) => {
       state.loading = true
       state.phoneNumberSaved = false
@@ -722,8 +766,8 @@ const peronalInformationSlice = createSlice({
       const { preferredName, error } = action.payload
       state.error = error
       state.loading = false
-      if (state.profile && preferredName) {
-        state.profile.preferredName = preferredName
+      if (state.demographics && preferredName) {
+        state.demographics.preferredName = preferredName
       }
       state.preferredNameSaved = !error
     },
@@ -734,8 +778,8 @@ const peronalInformationSlice = createSlice({
       const { genderIdentity, error } = action.payload
       state.error = error
       state.loading = false
-      if (state.profile && genderIdentity) {
-        state.profile.genderIdentity = genderIdentity
+      if (state.demographics && genderIdentity) {
+        state.demographics.genderIdentity = genderIdentity
       }
       state.genderIdentitySaved = !error
     },
@@ -757,6 +801,8 @@ const peronalInformationSlice = createSlice({
 export const {
   dispatchStartGetProfileInfo,
   dispatchFinishGetProfileInfo,
+  dispatchStartGetDemographics,
+  dispatchFinishGetDemographics,
   dispatchFinishEditPhoneNumber,
   dispatchFinishSavePhoneNumber,
   dispatchProfileLogout,

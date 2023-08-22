@@ -2,7 +2,7 @@ import _ from 'underscore'
 
 import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
-import { AddressData, AddressValidationScenarioTypesConstants } from 'store/api/types'
+import { AddressData, AddressValidationScenarioTypesConstants, DemographicsData } from 'store/api/types'
 import { RootState } from 'store'
 import {
   deleteAddress,
@@ -17,6 +17,7 @@ import {
   updatePreferredName,
   validateAddress,
   updateGenderIdentity,
+  getDemographics,
 } from './personalInformationSlice'
 import { SnackbarMessages } from 'components/SnackBar'
 
@@ -41,6 +42,8 @@ export const ActionTypes: {
   PERSONAL_INFORMATION_FINISH_UPDATE_GENDER_IDENTITY: string
   PERSONAL_INFORMATION_START_GET_GENDER_IDENTITY_OPTIONS: string
   PERSONAL_INFORMATION_FINISH_GET_GENDER_IDENTITY_OPTIONS: string
+  PERSONAL_INFORMATION_START_GET_DEMOGRAPHICS: string
+  PERSONAL_INFORMATION_FINISH_GET_DEMOGRAPHICS: string
 } = {
   PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER: 'personalInformation/dispatchStartSavePhoneNumber',
   PERSONAL_INFORMATION_FINISH_SAVE_PHONE_NUMBER: 'personalInformation/dispatchFinishSavePhoneNumber',
@@ -62,6 +65,8 @@ export const ActionTypes: {
   PERSONAL_INFORMATION_FINISH_UPDATE_GENDER_IDENTITY: 'personalInformation/dispatchFinishUpdateGenderIdentity',
   PERSONAL_INFORMATION_START_GET_GENDER_IDENTITY_OPTIONS: 'personalInformation/dispatchStartGetGenderIdentityOptions',
   PERSONAL_INFORMATION_FINISH_GET_GENDER_IDENTITY_OPTIONS: 'personalInformation/dispatchFinishGetGenderIdentityOptions',
+  PERSONAL_INFORMATION_START_GET_DEMOGRAPHICS: 'personalInformation/dispatchStartGetDemographics',
+  PERSONAL_INFORMATION_FINISH_GET_DEMOGRAPHICS: 'personalInformation/dispatchFinishGetDemographics',
 }
 
 const snackbarMessages: SnackbarMessages = {
@@ -74,6 +79,7 @@ context('personalInformation', () => {
     personalInformation: {
       preferredNameSaved:false,
       loading: false,
+      loadingDemographics: false,
       loadingGenderIdentityOptions: false,
       savingAddress: false,
       profile: {
@@ -82,7 +88,7 @@ context('personalInformation', () => {
         middleName: 'J',
         lastName: 'Morgan',
         fullName: 'Ben J Morgan',
-        genderIdentity: 'M',
+        genderIdentity: '',
         contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
         signinEmail: 'ben@gmail.com',
         birthDate: '1990-05-08',
@@ -141,11 +147,16 @@ context('personalInformation', () => {
         formattedWorkPhone: '(858)-690-1287',
         signinService: 'IDME',
       },
+      demographics: {
+        genderIdentity: 'M',
+        preferredName: '',
+      },
       needsDataLoad: false,
       emailSaved: false,
       addressSaved: false,
       showValidation: false,
       preloadComplete: false,
+      demographicsPreloadComplete: false,
       phoneNumberSaved: false,
       genderIdentityOptions: {},
       genderIdentitySaved: false,
@@ -346,7 +357,6 @@ context('personalInformation', () => {
               firstName: 'Test',
               middleName: 'NOT_FOUND',
               lastName: 'ing',
-              genderIdentity: null,
               contactEmail: { emailAddress: 'user123@id.me', id: '0' },
               signinEmail: 'user123@id.me',
               birthDate: '04/01/1970',
@@ -1002,6 +1012,43 @@ context('personalInformation', () => {
 
         const { personalInformation } = store.getState()
         expect(personalInformation.error).toBeTruthy()
+    })
+  })
+
+  describe('getDemographics', () => {
+    it('should get the users demographics', async () => {
+      const mockDemographicsPayload: DemographicsData = {
+        data: {
+          attributes: {
+            genderIdentity: 'M',
+            preferredName: 'Gary'
+          },
+        },
+      }
+
+      when(api.get as jest.Mock)
+        .calledWith('/v0/user/demographics')
+        .mockResolvedValue(mockDemographicsPayload)
+
+      const store = realStore()
+      await store.dispatch(getDemographics())
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_GET_DEMOGRAPHICS })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.personalInformation.loadingDemographics).toBeTruthy()
+
+      const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_GET_DEMOGRAPHICS })
+      expect(endAction?.state.personalInformation.loading).toBeFalsy()
+      expect(endAction?.state.personalInformation.error).toBeFalsy()
+
+      const { personalInformation } = store.getState()
+      expect(personalInformation.demographics).toEqual({
+        ...mockDemographicsPayload.data.attributes,
+        genderIdentity: 'M',
+        preferredName: 'Gary'
+      })
+      expect(personalInformation.error).toBeFalsy()
     })
   })
 })
