@@ -6,7 +6,7 @@ import { TouchableWithoutFeedback } from 'react-native'
 
 import { context, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
-import { UserDataProfile } from 'store/api/types'
+import { UserDataProfile, UserDemographics } from 'store/api/types'
 import { VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
@@ -82,6 +82,7 @@ context('EditAddressScreen', () => {
   let props: any
   let testInstance: ReactTestInstance
   let profileInfo: UserDataProfile
+  let demographics: UserDemographics
   let goBackSpy: any
 
   const getSaveButton = () => testInstance.findAllByType(TouchableWithoutFeedback)[1]
@@ -94,6 +95,11 @@ context('EditAddressScreen', () => {
     showValidation = false,
   ) => {
     goBackSpy = jest.fn()
+
+    demographics = {
+      genderIdentity: 'M',
+      preferredName: 'Benny'
+    }
 
     props = mockNavProps(
       {},
@@ -114,6 +120,7 @@ context('EditAddressScreen', () => {
         ...InitialState,
         personalInformation: {
           profile,
+          demographics,
           loading: false,
           addressSaved,
           showValidation,
@@ -131,12 +138,12 @@ context('EditAddressScreen', () => {
 
   beforeEach(() => {
     profileInfo = {
-      preferredName: 'Benny',
+      preferredName: '',
       firstName: 'Ben',
       middleName: 'J',
       lastName: 'Morgan',
       fullName: 'Ben J Morgan',
-      genderIdentity: 'M',
+      genderIdentity: '',
       contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
       signinEmail: 'ben@gmail.com',
       birthDate: '1990-05-08',

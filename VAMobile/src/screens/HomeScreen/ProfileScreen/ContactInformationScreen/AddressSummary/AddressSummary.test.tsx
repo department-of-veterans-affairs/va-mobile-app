@@ -6,7 +6,7 @@ import { context, mockStore, render, RenderAPI } from 'testUtils'
 
 import AddressSummary, { addressDataField, profileAddressOptions } from './AddressSummary'
 import Mock = jest.Mock
-import { AddressData, UserDataProfile } from 'store/api/types'
+import { AddressData, UserDataProfile, UserDemographics } from 'store/api/types'
 import { TextView } from 'components'
 import { InitialState } from 'store/slices'
 import { Pressable } from 'react-native'
@@ -29,15 +29,16 @@ context('AddressSummary', () => {
   let onPressSpy2: Mock
   let testInstance: ReactTestInstance
   let profile: UserDataProfile
+  let demographics: UserDemographics
 
   beforeEach(() => {
     profile = {
-      preferredName: 'Benny',
+      preferredName: '',
       firstName: 'Ben',
       middleName: 'J',
       lastName: 'Morgan',
       fullName: 'Ben J Morgan',
-      genderIdentity: 'M',
+      genderIdentity: '',
       contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
       signinEmail: 'ben@gmail.com',
       birthDate: '1990-05-08',
@@ -97,6 +98,11 @@ context('AddressSummary', () => {
       signinService: 'IDME',
     }
 
+    demographics = {
+      preferredName: 'Benny',
+      genderIdentity: 'M',
+    }
+
     onPressSpy = jest.fn()
     onPressSpy2 = jest.fn()
 
@@ -108,7 +114,7 @@ context('AddressSummary', () => {
     component = render(<AddressSummary addressData={addressData} />, {
       preloadedState: {
         ...InitialState,
-        personalInformation: { ...InitialState.personalInformation, profile },
+        personalInformation: { ...InitialState.personalInformation, profile, demographics },
       },
     })
 

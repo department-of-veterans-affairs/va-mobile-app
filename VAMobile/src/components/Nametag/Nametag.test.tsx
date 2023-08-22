@@ -20,12 +20,12 @@ context('Nametag', () => {
         personalInformation: {
           ...InitialState.personalInformation,
           profile: {
-            preferredName: 'Benny',
+            preferredName: '',
             firstName: 'Ben',
             middleName: 'J',
             lastName: 'Morgan',
             fullName: 'Jerry Mills',
-            genderIdentity: 'M',
+            genderIdentity: '',
             contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
             signinEmail: 'ben@gmail.com',
             birthDate: '1990-05-08',
@@ -56,6 +56,10 @@ context('Nametag', () => {
             formattedWorkPhone: '(858)-690-1287',
             signinService: 'IDME',
           },
+          demographics: {
+            preferredName: 'Benny',
+            genderIdentity: 'M',
+          }
         },
         militaryService: {
           ...InitialState.militaryService,
