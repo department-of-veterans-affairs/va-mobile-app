@@ -21,7 +21,7 @@ type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIde
  * Screen for editing gender identity
  */
 const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => {
-  const { profile, genderIdentityOptions, genderIdentitySaved, loading, loadingGenderIdentityOptions } = useSelector<RootState, PersonalInformationState>(
+  const { demographics, genderIdentityOptions, genderIdentitySaved, loading, loadingGenderIdentityOptions } = useSelector<RootState, PersonalInformationState>(
     (state) => state.personalInformation,
   )
   const dispatch = useAppDispatch()
@@ -31,7 +31,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
   const confirmAlert = useDestructiveActionSheet()
 
   const [error, setError] = useState('')
-  const [genderIdentity, setGenderIdentity] = useState(profile?.genderIdentity)
+  const [genderIdentity, setGenderIdentity] = useState(demographics?.genderIdentity)
 
   useEffect(() => {
     if (!Object.keys(genderIdentityOptions).length) {
@@ -47,7 +47,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
   }, [genderIdentitySaved, navigation, dispatch])
 
   useBeforeNavBackListener(navigation, (e) => {
-    if (profile?.genderIdentity === genderIdentity || !genderIdentity) {
+    if (demographics?.genderIdentity === genderIdentity || !genderIdentity) {
       return
     }
     e.preventDefault()
