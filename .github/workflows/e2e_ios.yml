@@ -80,8 +80,8 @@ jobs:
         run: cd .. && yarn install --frozen-lockfile --non-interactive
       - name: PWD
         run: pwd
-      - name: Install Detox
-        run: cd .. && yarn global add detox-cli
+      # - name: Install Detox
+      #   run: cd .. && yarn global add detox-cli
       - name: Set app environment variables
         run: cd .. && yarn env:staging
       - name: Bundle app
