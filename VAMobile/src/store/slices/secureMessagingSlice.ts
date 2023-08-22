@@ -507,7 +507,7 @@ export const sendMessage =
       )
 
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_sm_send_message(totalTime, actionTime, messageData.category))
+      await logAnalyticsEvent(Events.vama_sm_send_message(totalTime, actionTime, messageData.category, replyToID))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
@@ -587,6 +587,23 @@ export const moveMessage =
       } else {
         await callMoveMessageApi(messageID, newFolderID)
       }
+
+      const folder = (): string => {
+        switch (newFolderID) {
+          case SecureMessagingSystemFolderIdConstants.SENT:
+            return 'sent'
+          case SecureMessagingSystemFolderIdConstants.INBOX:
+            return 'inbox'
+          case SecureMessagingSystemFolderIdConstants.DELETED:
+            return 'deleted'
+          case SecureMessagingSystemFolderIdConstants.DRAFTS:
+            return 'drafts'
+          default:
+            return 'custom'
+        }
+      }
+
+      await logAnalyticsEvent(Events.vama_sm_move_outcome(folder()))
       refreshFoldersAfterMove(dispatch, messages, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders)
     } catch (error) {
       if (isErrorObject(error)) {

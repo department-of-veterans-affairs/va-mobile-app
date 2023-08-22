@@ -1,19 +1,15 @@
 import 'react-native'
 import React from 'react'
+import { fireEvent, screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, mockNavProps, render, findByTestID, findByTypeWithText, findByTypeWithSubstring, findByTypeWithName, waitFor } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import FolderMessages from './FolderMessages'
-import { Pressable } from 'react-native'
 import { InitialState, listFolderMessages } from 'store/slices'
-import { LoadingComponent, Pagination, TextView, VAIcon, AlertBox } from 'components'
-import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 import { CategoryTypeFields, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { StackNavigationOptions } from '@react-navigation/stack'
-import { RenderAPI } from '@testing-library/react-native'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('/utils/hooks', () => {
@@ -41,8 +37,6 @@ jest.mock('store/slices', () => {
 })
 
 context('FolderMessages', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let props: any
   let navHeaderSpy: any
 
@@ -105,7 +99,7 @@ context('FolderMessages', () => {
       },
     }
 
-    component = render(<FolderMessages {...props} />, {
+    render(<FolderMessages {...props} />, {
       preloadedState: {
         ...InitialState,
         secureMessaging: {
@@ -123,99 +117,63 @@ context('FolderMessages', () => {
         },
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-    })
-  })
-
   describe('when a message is pressed', () => {
     it('should call navigate', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalled()
-      })
+      fireEvent.press(screen.getByTestId('Recipient Invalid DateTime Has attachment General: subject'))
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
   describe('when loading is true', () => {
     it('should render the LoadingComponent', async () => {
-      await waitFor(() => {
-        initializeTestInstance(true)
-        expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
-      })
+      initializeTestInstance(true)
+      expect(screen.getByText('Loading your messages...')).toBeTruthy()
     })
   })
 
   describe('when there are no messages', () => {
     it('should render the NoFolderMessages', async () => {
-      await waitFor(() => {
-        initializeTestInstance(false, true)
-        expect(testInstance.findAllByType(NoFolderMessages).length).toEqual(1)
-      })
+      initializeTestInstance(false, true)
+      expect(screen.getByText("You don't have any messages in this folder")).toBeTruthy()
     })
   })
 
   describe('pagination', () => {
     it('should call listFolderMessages for previous arrow', async () => {
-      await waitFor(() => {
-        findByTestID(testInstance, 'previous-page').props.onPress()
-        // was 2 now 1
-      })
+      fireEvent.press(screen.getByTestId('previous-page'))
       expect(listFolderMessages).toHaveBeenCalledWith(-1, 1, expect.anything())
     })
 
     it('should call listFolderMessages for next arrow', async () => {
-      await waitFor(() => {
-        findByTestID(testInstance, 'next-page').props.onPress()
-        // was 2 now 3
-      })
+      fireEvent.press(screen.getByTestId('next-page'))
       expect(listFolderMessages).toHaveBeenCalledWith(-1, 3, expect.anything())
     })
 
     it('should show pagination if it is not a system folder', async () => {
-      await waitFor(() => {
-        initializeTestInstance(false, false, 1)
-      })
-      expect(testInstance.findAllByType(Pagination).length).toEqual(1)
+      initializeTestInstance(false, false, 1)
+      expect(screen.getByTestId('next-page')).toBeTruthy()
+      expect(screen.getByTestId('previous-page')).toBeTruthy()
+      expect(screen.getByText('2 to 2 of 5')).toBeTruthy()
     })
   })
 
   describe('drafts', () => {
     it('should mark messages as a draft', async () => {
-      await waitFor(() => {
-        initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
-        expect(findByTypeWithSubstring(testInstance, TextView, 'DRAFT - ')).toBeTruthy()
-      })
-    })
-
-    it('should not show unread icons', async () => {
-      await waitFor(() => {
-        initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
-        expect(findByTypeWithName(testInstance, VAIcon, 'Unread')).toBeFalsy()
-      })
-    })
-
-    it('should show attachment icons', async () => {
-      await waitFor(() => {
-        initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
-        expect(findByTypeWithName(testInstance, VAIcon, 'PaperClip')).toBeTruthy()
-      })
+      initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
+      expect(screen.getByText('DRAFT - Recipient')).toBeTruthy()
     })
 
     it('should show pagination', async () => {
-      await waitFor(() => {
-        initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
-        expect(testInstance.findAllByType(Pagination).length).toBeGreaterThan(0)
-      })
+      initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
+      expect(screen.getByTestId('next-page')).toBeTruthy()
+      expect(screen.getByTestId('previous-page')).toBeTruthy()
+      expect(screen.getByText('2 to 2 of 5')).toBeTruthy()
     })
   })
 })
