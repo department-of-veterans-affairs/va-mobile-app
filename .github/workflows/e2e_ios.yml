@@ -91,14 +91,14 @@ jobs:
       - name: Set app environment variables
         run: cd .. && yarn env:staging
 
-      # - name: Cache Detox build
-      #   id: cache-detox-build
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ios/build
-      #     key: ${{ runner.os }}-detox-build
-      #     restore-keys: |
-      #       ${{ runner.os }}-detox-build
+      - name: Cache Detox build
+        id: cache-detox-build
+        uses: actions/cache@v3
+        with:
+          path: ./build
+          key: ${{ runner.os }}-detox-build
+          restore-keys: |
+            ${{ runner.os }}-detox-build
 
       - name: Bundle app
         run: cd .. && yarn e2e:ios-build
