@@ -52,7 +52,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     // Fetch the profile information
     if (name === '') {
       dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
-      dispatch(getDemographics(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
+      dispatch(getDemographics(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
     }
   }, [dispatch, name])
 
