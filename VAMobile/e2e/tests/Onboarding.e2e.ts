@@ -1,5 +1,5 @@
 import { by, device, element, expect} from 'detox'
-import { showOnboarding, checkImages } from './utils'
+import { loginToDemoMode, checkImages } from './utils'
 
 
 export const OnboardingE2eIdConstants = {
@@ -7,7 +7,7 @@ export const OnboardingE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await showOnboarding()
+  await loginToDemoMode(false)
 })
 
 describe('Onboarding Screen', () => {
@@ -74,7 +74,7 @@ describe('Onboarding Screen', () => {
     await device.uninstallApp()
     await device.installApp()
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    await showOnboarding()
+    await loginToDemoMode(false)
     await element(by.text('Skip')).tap()
     await expect(element(by.text('Contact VA'))).toExist()
     await expect(element(by.text('Find a VA location'))).toExist()

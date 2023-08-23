@@ -44,7 +44,7 @@ export const CommonE2eIdConstants = {
 
 /** Log the automation into demo mode
  * */
-export async function loginToDemoMode() {
+export async function loginToDemoMode(skipOnboarding = true) {
   await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
     .toExist()
     .withTimeout(10000)
@@ -61,10 +61,12 @@ export async function loginToDemoMode() {
 
   await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
-  const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
+  if(skipOnboarding == true) {
+    const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
 
-  if (ifCarouselSkipBtnExist) {
-    await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
+    if (ifCarouselSkipBtnExist) {
+      await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
+    }
   }
 }
 
@@ -240,26 +242,6 @@ export async function openDisabilityRating() {
 
 export async function openVaccineRecords() {
   await element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT)).tap()
-}
-
-export async function showOnboarding() {
-  await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
-    .toExist()
-    .withTimeout(10000)
-  try {
-  await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
-  await element(by.text('Dismiss')).tap()
-  } catch (e) {} 
-  const { DEMO_PASSWORD } = getEnv() 
-  await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(21)
-  if (DEMO_PASSWORD != undefined) {
-    await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
-  }
-  
-  // due to keyboard being open one tap to close keyboard second to tap demo btn
-  await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
-
-  await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 }
 
 export async function openClaims() {
