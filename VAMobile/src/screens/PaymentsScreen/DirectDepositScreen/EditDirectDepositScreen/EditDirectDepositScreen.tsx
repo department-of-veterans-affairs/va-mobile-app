@@ -193,7 +193,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
       validationList: [
         {
           validationFunction: (): boolean => containsNonNumbersValidation(accountNumber),
-          validationFunctionErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
+          validationFunctionErrorMessage: t('editDirectDeposit.accountNumberFieldError'),
         },
       ],
     },
