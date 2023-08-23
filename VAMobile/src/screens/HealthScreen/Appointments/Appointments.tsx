@@ -130,9 +130,10 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
       backLabelOnPress={navigation.goBack}
       title={tc('appointments')}
       scrollViewProps={scrollViewProps}
-      footerContent={requestAppointmentsFooter}>
+      footerContent={requestAppointmentsFooter}
+      testID="appointmentsTestID">
       <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}

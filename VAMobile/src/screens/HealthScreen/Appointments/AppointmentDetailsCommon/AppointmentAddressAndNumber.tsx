@@ -5,6 +5,7 @@ import { AppointmentAttributes, AppointmentLocation, AppointmentType, Appointmen
 import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
+import { getAllFieldsThatExist } from 'utils/common'
 import { getDirectionsUrl } from 'utils/location'
 import { isAPendingAppointment } from 'utils/appointments'
 import getEnv from 'utils/env'
@@ -54,6 +55,10 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     )
   }
 
+  const cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
+
+  const testIdFields = !appointmentIsAtlas ? [location.name, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
+  const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
   const hasNoProvider = !healthcareProvider && !location.name
   const isPendingAppointment = isAPendingAppointment(attributes)
 
@@ -124,7 +129,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
 
     return (
       <>
-        <Box accessible={true}>
+        <Box testID={testId} accessible={true}>
           {getLocationName()}
           {missingAddressMessage ? (
             <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={missingAddressA11yLabel || undefined} selectable={true} accessible={false}>
@@ -141,6 +146,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
               a11yLabel={`${t('common:directions')}`}
               linkType={'directions'}
               numberOrUrlLink={getDirectionsUrl(location)}
+              testID="directionsTestID"
               {...a11yHintProp(t('common:directions.a11yHint'))}
             />
           )}
