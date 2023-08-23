@@ -1,1 +1,1 @@
-We changed the prescriptions list to show your active prescriptions first. We also added general improvements and fixed a few bugs.
+We added general improvements and fixed a few bugs.
