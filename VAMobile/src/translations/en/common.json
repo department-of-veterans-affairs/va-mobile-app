@@ -953,6 +953,7 @@
   "noClaims.youDontHaveAnyAppeals": "You don't have any appeals",
   "noClaims.youDontHaveAnyClaims": "You don't have any submitted claims",
   "noClaims.youDontHaveAnyClaimsOrAppeals": "You don't have any submitted claims or appeals",
+  "noClaims.youDontHaveAnyClosedClaimsOrAppeals": "You don't have any closed claims or appeals",
   "noItemSelected": "No item currently selected. Select an item from the dropdown.",
   "noLetters.benefitsAndServicesNumber": "8008271000",
   "noLetters.benefitsAndServicesNumberDisplayed": "800-827-1000",

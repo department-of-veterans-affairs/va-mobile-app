@@ -171,6 +171,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
         value: phoneNumber,
         onEndEditing: onEndEditingPhoneNumber,
         isRequiredField: true,
+        testID: 'phoneNumberTestID',
       },
       fieldErrorMessage: t('editPhoneNumber.numberFieldError'),
       validationList: [
@@ -187,6 +188,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
         labelKey: 'editPhoneNumber.extension',
         onChange: setExtension,
         value: extension,
+        testID: 'phoneNumberExtensionTestID',
       },
     },
   ]
