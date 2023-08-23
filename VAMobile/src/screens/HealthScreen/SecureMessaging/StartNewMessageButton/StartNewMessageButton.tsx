@@ -12,7 +12,7 @@ import { useTheme } from 'utils/hooks'
 
 const StartNewMessageButton: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
+  const navigation = useNavigation<StackNavigationProp<HealthStackParamList, keyof HealthStackParamList>>()
   const theme = useTheme()
   const onPress = () => {
     logAnalyticsEvent(Events.vama_sm_start())
