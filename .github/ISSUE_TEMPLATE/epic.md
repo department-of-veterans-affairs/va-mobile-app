@@ -8,124 +8,234 @@ assignees:
 <!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
 
 
-## Epic Objective
-<!-- Goal of these tickets: Define whole features we're adding to the app as an epic. -->  
+# Project Status Overview
 
-## User Story
-<!-- As a user of the VA mobile app, I want to use [...] feature in the app so that I can [...] -->  
+### Project Objective:
 
-## Definition of Done
-<!-- In order for this epcis to be considered complete, the following needs to be true-->  
+- High level description of the project and what we are trying to solve
 
-## External Dependencies / Blockers
-<!--Are we dependent on other team's ? Is there anything that keeps us from finishing this feature? Lack of staging accounts? Are there ACs we can't define? Why? -->
+ 
+### Current Dependencies / Blockers
+<details>
+<summary>Blockers</summary>
 
-## Epic Scope 
-<!-- What work is in scope to be completed -->  
+|Blocker | Team / Owner | Est to Resolution |
+|-------|---------|-------| 
+|  |   |
+|  |   |
+|  |   |
 
-## Whats Not in Scope
-<!-- What work is out of scope and will not be completed in this feature-->  
 
-## Timing 
-<!-- Any hard deadlines that need to be met or accounted for ?--> 
+</details>
 
-## Related OCTO Goals 
-__________________________________________
 
-## Discovery Task (feature discovery)
+### Project Timeline
+<details>
+<summary>Milestones</summary>
 
-## Discovery task (i.e. conversation with another team, review of past research, collaboration with engineering, etc)
-<!-- (i.e. conversation with another team, review of past research, collaboration with engineering, etc) --> 
+|Step | Timing | 
+|-------| ---------| 
+|Sprint 0 - Discovery |    |
+|Step 1 - Strategy |   |
+|Step 2 - Design  |   |
+|Step 3 - Building / Implementing |   |
+| 100% Release |  |
+|Step 4 - Post Verification|   |
+</details>
 
-## Key Takeaways
-<!--What is the work? What did you find in discovery? What information do you now have that should drive Acceptability Criteria  -->
 
-______________________________
-## Project Checklist 
-<!--An example list of possible work broken out by department - please add / modify to best suit the project-->
 
-### Product Checklist
+### Monthly Update 
+<details>
+<summary>Updates</summary>
 
-- [ ] Link to Product Brief / Step 0 
-- [ ] Link to Product Canvas / Step 1 (if available)
-- [ ] Link to Github page
-- [ ] Link to Implementation Strategy
-  - [ ] Implementation Plan
-  - [ ] UAT Plan Yes / No
-  - [ ] Release Plan
-  - [ ] Metrics identified (what metrics are we capturing, how do they tie into stakeholder OKRs, etc)
-- [ ] Pre-Production Readiness
-  - [ ] Associate Readiness
-    - [ ] Update product guide
-    - [ ] Coordinate with contact center support teams
-  - [ ] What’s New Content Y/ N
-    - [ ] App Store/In App messaging (if applicable)
-    - [ ] Coordinate with Release coordinator
+|Month| Project Health | Progress & Key Accomplishments| Issues/Risks/Blockers|
+|-------| ---------|--------|---------|
+|July '23| 
+|Aug '23| .....
+|Sep '23|
+|Oct '23|
+</details>
+
+# Detailed Project Scope 
+
+### Problem Statement
+
+### Assumptions 
+
+### Risks 
+
+### Definition of Done 
+<details>
+<summary>Following needs to be true</summary>
+
+|Item | Completed | 
+|-------| ---------|
+| | | 
+| | | 
+
+</details>
+
+### Project Scope
+<details>
+<summary>Items in and out of scope</summary>
+
+|In Scope | Out of Scope| 
+|-------| ---------|
+| | | 
+| | | 
+
+</details>
+
+### Important Project Links 
+<details>
+<summary>Links</summary>
+
+- [Github](url)
+- [Product Brief](url)
+- [Product Canvas](url)
+- Design 
+   - [Discovery](url)
+   - [Mockups](url)
+   - [Final Design](url)
+   - [Figma File](url)
+- Research
+   - [Document 1](url) 
+   - [Document 2 ](url) 
+-Analytics
+   - [Document 1](url) 
+</details>
+
+### Team Members
+
+<details>
+<summary>Contact List</summary>
+
+- **OCTO Product Leads:** Rachel Han and Ryan Thurlwell
+- **PM:** Rachel Han
+- **Ad Hoc PM:** Meko Hong
+- **Engineering:** Jayson Perkins and Jon Bindbeutel
+- **Design:** Lauren Russell
+- **External Team 1 & Role:**
+- **External Team 1 & Role:**
+
+</details>
+
+### OKR and Analytic Metrics 
+<details>
+<summary>Metrics</summary>
+
+|What we are measuring | Why | Event Name 
+|-------| ---------| ----- |
+| | | |
+| | | |
+
+</details>
+
+# Checklist
+
+<details>
+  <summary>Toggle Product Checklist</summary>
+
+**Project Kickoff & Requirements Gathering**
+   - [ ] Project Kickoff session
+   - [ ] Initiative Scope finalized
+   - [ ] Link Product Brief - [Sprint 0 ](https://docs.google.com/document/d/1WHDJ1iCt9J-acLx8_DSL4tkRKoVYqJGaRUqXuFf7ceg/edit# )
+   - [ ] Link to Implementation Strategy
+       - Implementation Plan
+       - UAT Plan
+       - Release Plan
+       - Metrics Identified (what metrics are we capturing, how do they tie into stakeholder OKRs, etc)
+
+**Pre-Production Readiness**
+- [ ] Associate Readiness
+  - [ ] Update product guide
+  - [ ] Coordinate with contact center support teams
+- [ ] What’s New Content
+- [ ] App Store/In App messaging (if applicable)
+- [ ] Coordinate with Release coordinator
 - [ ] App store Content changes required? Y/N
-  - [ ] App store images needed? Y/N
-  - [ ] QA Signed off 
-  - [ ] UAT complete
-  - [ ] Obtain Go/No Go decision from PO 
-- [ ] Feature Go Live
-  - [ ] Add functionality in demo mode 
-  - [ ] Ensure Waygate/Feature toggle release ticket submitted w/engineering & QA
-  - [ ] Coordinate with content & release coordinator if what’s new is required
+- [ ] App store images needed? Y/N
+- [ ] QA Signed off 
+- [ ] UAT complete
+- [ ] Obtain Go/No Go decision
 
+**Feature Go Live**
+- [ ] Ensure Waygate/Feature toggle release ticket submitted w/engineering & QA 
+  - **Template: Turn on Waygate/Turn off feature flag**
+- [ ] Coordinate with content & release coordinator if what’s new in app is required
+</details>
 
-### Design/UX Checklist
+<details>
+  <summary>Toggle Team Collaboration Checklist</summary>
 
+- [ ] Design Intent & Feasibility discussions
+- [X] Research needed? No
+- [ ] UAT Needed? Yes/No
+- [ ] Ticket creation 
+- [ ] Demo feature (mid check, end of development)
+</details>
+
+<details>
+  <summary>Toggle Design/UX Checklist</summary>
+
+- [ ] Review problem/opportunity statement
 - [ ] Add questions and assumptions to product brief
-  - [ ] Add research links to product brief
-  - [ ] Note any related icebox tickets
+- [ ] Add research links to product brief
 - [ ] Document high-level research/design plans
-- [ ] Create lo/hi fi wireframes & user flows & error handling 
-  - [ ] Add links to Epic & applicable GitHub folders
-  - [ ] Socialize designs internally
-  - [ ] Socialize designs with POs 
-  - [ ] Sign off received by POs 
-  - [ ] Complete Design QA
-- [ ] Component review (if applicable)
-- [ ] Accessibility review
-- [ ] Update internal documentation 
-  - [ ] Add Hi Res files to Figma in Shipped Files
-  - [ ] Docusaurous update  
+- [ ] Create lo/hi fi wireframes & user flows if applicable
+- [ ] Add links to Epic & applicable GitHub folders
+- [ ] Socialize designs
+- [ ] Sign off received
+- [ ] Complete Design QA
+- [ ] Does it require component review?
+- [ ] Accessibility review needed?
 
-### Research Checklist 
-- [ ] Is there a research need for this feature
-- [ ] Research plan
-- [ ] Recruitment needs with Perigean
-- [ ] Qual sessions 
-- [ ] Synthesize data
-- [ ] Share findings report 
+</details>
 
-### Content Checklist
+<details>
+  <summary>Toggle Content Checklist</summary>
 
-- [ ] Discovery work - review / audit / sitewide discussions 
-- [ ] Document content recommendations
+- [ ] Review product brief and surface any questions, assumptions & risks
+- [ ] Participate in project discovery and kickoff activities/ceremonies
+- [ ] Complete comparative analysis/content research activities for net-new content
+- [ ] Review current content and determine where app may need to differ and potential improvements to share with web
+- [ ] Review past VA research and decisions documentation
+- [ ] Support Research & UX Design in research sessions and synthesis
+- [ ] Make content recommendations for lo-/hi-fi wireframes in collaboration with UX Design
+- [ ] Collaborate with Sitewide Content team for alignment, improvements, and sign-off
+- [ ] Participate in FE hand off
 - [ ] Complete content QA
+- [ ] Write copy for What's New In App
+- [ ] Write copy for app stores' What's New sections.
+- [ ] Write copy for updated screenshots in app stores 
 
-### Engineering Checklist
-- [ ] Are UI designs/ specs available/ready?
-  - [ ] If yes, they should be attached to  attach specs. (We are assuming the design specs have been approved)
+</details>
+
+<details>
+  <summary>Toggle Engineering Checklist</summary>
+
+- [ ] Are UI designs/ specs available/ready? If yes, they should be attached to  attach specs. (We are assuming the design specs have been approved)
+- [ ] Are there any deadlines that need to be met?
 - [ ] What is the roll out plan? (Do we need a feature toggle? is this going to be available to every user immediately or do we want to roll out to a few users first)
-- [ ] Update / create engineering documentation 
-- [ ] Does this project require api integration?
-  - [ ] if yes, what api endpoints are we integrating with and what is the expected response body?
+- [ ] Does this project require api integration? if yes, what api endpoint are we integrating with and what is the expected response body?
+- [ ] Do we want to capture analytics for this projects (i.e. update GA, add logs to grafana/datadog etc)?If yes, what metrics would we like to capture?
 
-### Analytics Checklist 
-- [ ] Do we want to capture analytics for this projects (i.e. update GA, add logs to grafana/datadog etc)?
-  - [ ] If yes, what metrics would we like to capture?
-- [ ] Creation of an engineering ticket with what events and their naming convention
-- [ ] Dashboard creation / modification to include future changes 
+</details>
 
-### QA Checlist
+<details>
+  <summary>Toggle QA Checklist</summary>
+
 - [ ] Create test plan
-- [ ] Test accounts needs
-  - [ ] List of what staging test accounts will be used 
+  -  **Template: QA Test Plan**
+- [ ] Identify test data needs
+- [ ] Gotten & incorporated test plan review
 - [ ] QA Complete
 - [ ] Waygate tasks complete
-
-
+- [ ] Added new feature cases to the RC in TestRail
+- [ ] Added feature cases to appropriate section of active cases in TestRail
+- [ ] Spun up a (future) UI automation ticket for new feature
+</details>
 
 
 
