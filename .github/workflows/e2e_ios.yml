@@ -57,6 +57,7 @@ jobs:
           ssh-private-key: ${{ secrets.VA_MOBILE_ROBOT_GITHUB_SSH_KEY }}
 
       - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
+        working-directory: VAMobile/ios
         run: |
           echo "Notes: e2e test run"
           echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
