@@ -113,6 +113,12 @@ jobs:
       - name: Bundle app
         run: yarn e2e:ios-build
 
+      - name: PWD
+        run: cd ios && pwd && ls -l
+
+      - name: PWD
+        run: cd ios/build && pwd && ls -l
+
       - name: Run e2e tests
         run: yarn e2e:ios-test
       
