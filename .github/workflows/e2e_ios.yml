@@ -80,6 +80,12 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
 
+      - name: Install pods
+        run: pod install
+  
+      - name: Install Ruby gems
+        run: bundle install
+
       - name: Install npm dependencies
         working-directory: VAMobile
         run: yarn install --frozen-lockfile --non-interactive
@@ -88,16 +94,30 @@ jobs:
         working-directory: VAMobile
         run: yarn env:staging
 
+      - name: Detox rebuild framework cache
+        working-directory: VAMobile
+        run: yarn detox rebuild-framework-cache
+
+      - name: Cache Detox build
+        id: cache-detox-build
+        uses: actions/cache@v3
+        with:
+          path: build
+          key: ${{ runner.os }}-detox-build
+          restore-keys: |
+            ${{ runner.os }}-detox-build
+
       - name: Bundle app
         working-directory: VAMobile
         run: yarn e2e:ios-build
 
-      - name: Install pods
-        run: pod install
-
-      - name: Install gems
-        run: bundle install
-
       - name: Run e2e tests
         working-directory: VAMobile
         run: yarn e2e:ios-test
+      
+      - name: Upload artifacts
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: detox-artifacts
+          path: ../artifacts
