@@ -118,7 +118,6 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
       }
     },
     onEndEditing,
-    testID,
     style: {
       fontSize: theme.fontSizes.MobileBody.fontSize,
       fontFamily: theme.fontFace.regular,
@@ -130,6 +129,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onBlur,
     selection,
     multiline: isTextArea ? true : false,
+    testID,
   }
 
   const textAreaWrapperProps: BoxProps = {
@@ -146,7 +146,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     const textInputBox = (
       <Box {...wrapperProps}>
         <Box width="100%">
-          <TextInput {...inputProps} ref={inputRef || ref} />
+          <TextInput testID={testID} {...inputProps} ref={inputRef || ref} />
         </Box>
       </Box>
     )

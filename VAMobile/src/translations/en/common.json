@@ -628,6 +628,7 @@
   "noClaims.youDontHaveAnyAppeals": "You don't have any appeals",
   "noClaims.youDontHaveAnyClaims": "You don't have any submitted claims",
   "noClaims.youDontHaveAnyClaimsOrAppeals": "You don't have any submitted claims or appeals",
+  "noClaims.youDontHaveAnyClosedClaimsOrAppeals": "You don't have any closed claims or appeals",
   "claims.title": "Claims",
   "claimsHistory.title": "Claims history",
   "claimLetters.title": "Claim letters",

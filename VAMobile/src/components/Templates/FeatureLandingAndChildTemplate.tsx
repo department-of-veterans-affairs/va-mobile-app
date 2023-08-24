@@ -19,6 +19,7 @@ type headerButton = {
   labelA11y?: string
   icon: VAIconProps
   onPress: () => void
+  testID?: string
 }
 
 export type ChildTemplateProps = {
@@ -28,6 +29,8 @@ export type ChildTemplateProps = {
   backLabelA11y?: string
   /** On press navigation for descriptive back button */
   backLabelOnPress: () => void
+  /** Optional TestID for back */
+  backLabelTestID?: string
   /** Title for page that transitions to header */
   title: string
   /** Optional a11y label for title  */
@@ -47,6 +50,7 @@ export type FeatureLandingProps = ChildTemplateProps // Passthrough to same prop
 export const ChildTemplate: FC<ChildTemplateProps> = ({
   backLabel,
   backLabelA11y,
+  backLabelTestID,
   backLabelOnPress,
   title,
   titleA11y,
@@ -72,7 +76,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   }
 
   const headerProps: HeaderBannerProps = {
-    leftButton: { text: backLabel, a11yLabel: backLabelA11y, onPress: backLabelOnPress, descriptiveBack: true },
+    leftButton: { text: backLabel, a11yLabel: backLabelA11y, testID: backLabelTestID, onPress: backLabelOnPress, descriptiveBack: true },
     title: { type: 'Transition', title, a11yLabel: titleA11y, scrollOffset, transitionHeaderHeight },
     rightButton: headerButton ? { text: headerButton.label, a11yLabel: headerButton.labelA11y, onPress: headerButton.onPress, icon: headerButton.icon } : undefined,
   }

@@ -22,6 +22,7 @@ import {
   VAButton,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -31,6 +32,7 @@ import {
   SecureMessagingState,
   dispatchSetActionStart,
   getMessageSignature,
+  resetSaveDraftComplete,
   resetSendMessageComplete,
   resetSendMessageFailed,
   saveDraft,
@@ -39,6 +41,7 @@ import {
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
 import { formatSubject, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import {
   useAppDispatch,
@@ -46,7 +49,6 @@ import {
   useBeforeNavBackListener,
   useDestructiveActionSheet,
   useMessageWithSignature,
-  useRouteNavigation,
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
@@ -59,7 +61,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const draftAttachmentAlert = useDestructiveActionSheet()
 
@@ -121,6 +122,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
+    dispatch(resetSaveDraftComplete())
     dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
     if (PREPOPULATE_SIGNATURE && !signature) {
       dispatch(getMessageSignature())
@@ -203,7 +205,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
+  const onAddFiles = () => {
+    logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
+    navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
+  }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -231,6 +236,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         isRequiredField: true,
         isTextArea: true,
         setInputCursorToBeginning: true,
+        testID: 'reply field',
       },
       fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },
@@ -250,6 +256,11 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
   }
 
+  const navigateToReplyHelp = () => {
+    logAnalyticsEvent(Events.vama_sm_nonurgent())
+    navigation.navigate('ReplyHelp')
+  }
+
   const renderForm = (): ReactNode => (
     <Box>
       <MessageAlert
@@ -260,13 +271,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         errorList={errorList}
       />
       <TextArea>
-        <TextView variant="MobileBody" accessible={true}>
+        <TextView variant="MobileBody" accessible={true} testID={'To ' + receiverName}>
           {t('secureMessaging.formMessage.to')}
         </TextView>
         <TextView variant="MobileBodyBold" accessible={true}>
           {receiverName}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessible={true}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessible={true} testID={'Subject ' + subjectHeader}>
           {t('secureMessaging.startNewMessage.subject')}
         </TextView>
         <TextView variant="MobileBodyBold" accessible={true}>
@@ -286,7 +297,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <Pressable
-            onPress={navigateTo('ReplyHelp')}
+            onPress={navigateToReplyHelp}
             accessibilityRole={'button'}
             accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
             importantForAccessibility={'yes'}>
@@ -304,6 +315,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
             }}
             a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
             buttonType={ButtonTypesConstants.buttonPrimary}
+            testID="sendButtonTestID"
           />
         </Box>
       </TextArea>
@@ -341,7 +353,8 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
       }}
-      showCrisisLineCta={true}>
+      showCrisisLineCta={true}
+      testID="replyPageTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
         <Box>{renderMessageThread()}</Box>

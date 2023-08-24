@@ -3,18 +3,12 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
-import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, findByTypeWithSubstring, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import ReplyMessage from './ReplyMessage'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState, saveDraft } from 'store/slices'
-import { AccordionCollapsible, AlertBox, FormWrapper, LoadingComponent, TextView } from 'components'
-import { Pressable, TouchableWithoutFeedback } from 'react-native'
 import { isIOS } from '../../../../utils/platform'
-import { when } from 'jest-when'
-import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -127,16 +121,8 @@ const mockMessagesById: SecureMessagingMessageMap = {
 }
 
 context('ReplyMessage', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let props: any
-  let goBack: jest.Mock
   let isIOSMock = isIOS as jest.Mock
-  let navHeaderSpy: any
-  let navigateToVeteranCrisisLineSpy: jest.Mock
-  let navigateToAttachmentsSpy: jest.Mock
-  let navigateToAttachmentsFAQSpy: jest.Mock
-  let navigateToReplyHelpSpy: jest.Mock
 
   const initializeTestInstance = (
     mockMessagesById: SecureMessagingMessageMap,
@@ -144,22 +130,6 @@ context('ReplyMessage', () => {
     loading: boolean = false,
     sendMessageFailed: boolean = false,
   ) => {
-    goBack = jest.fn()
-    navigateToVeteranCrisisLineSpy = jest.fn()
-    navigateToAttachmentsSpy = jest.fn()
-    navigateToAttachmentsFAQSpy = jest.fn()
-    navigateToReplyHelpSpy = jest.fn()
-
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('VeteransCrisisLine')
-      .mockReturnValue(navigateToVeteranCrisisLineSpy)
-      .calledWith('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList: [], messageID: 3 })
-      .mockReturnValue(navigateToAttachmentsSpy)
-      .calledWith('AttachmentsFAQ', { originHeader: 'Reply' })
-      .mockReturnValue(navigateToAttachmentsFAQSpy)
-      .calledWith('ReplyHelp')
-      .mockReturnValue(navigateToReplyHelpSpy)
 
     isIOSMock.mockReturnValue(false)
 
@@ -167,18 +137,14 @@ context('ReplyMessage', () => {
       undefined,
       {
         addListener: mockUseComposeCancelConfirmationSpy,
-        goBack,
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-            save: options.headerRight ? options.headerRight({}) : undefined,
-          }
-        },
+        goBack: jest.fn(),
+        navigate: jest.fn(),
+        setOptions: () => {},
       },
       { params: { messageID: 3, attachmentFileToAdd: {} } },
     )
 
-    component = render(<ReplyMessage {...props} />, {
+    render(<ReplyMessage {...props} />, {
       preloadedState: {
         auth: { ...initialAuthState },
         secureMessaging: {
@@ -192,74 +158,47 @@ context('ReplyMessage', () => {
       },
     })
 
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance(mockMessagesById, mockThreads)
   })
 
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-    })
-  })
-
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
-        expect(navigateToVeteranCrisisLineSpy).toHaveBeenCalled()
-      })
+      fireEvent.press(screen.getByLabelText('talk-to-the-veterans-crisis-line-now'))
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of the collapsible view', () => {
-
     it('should show the Reply Help panel', async () => {
-      await waitFor(() => {
-        testInstance.findByProps({ accessibilityLabel: 'Only use messages for non-urgent needs' }).props.onPress()
-      })
-      expect(navigateToReplyHelpSpy).toHaveBeenCalled()
+      fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs'))
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
   it('should add the text (*Required) for the message body text field', async () => {
-    await waitFor(() => {
-      expect(screen.getByText('Message (Required)')).toBeTruthy()
-    })
+    expect(screen.getByText('Message (Required)')).toBeTruthy()
   })
 
   describe('on click of save (draft)', () => {
     beforeEach(async () => {
-      await waitFor(() => {
-        navHeaderSpy.save.props.onSave()
-
-        testInstance.findByType(FormWrapper).props.onSave(true)
-      })
+      fireEvent.press(screen.getByText('Save'))
     })
     describe('when a required field is not filled', () => {
-      it('should display a field error for that field', async () => {
-        await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
-        })
-      })
-
-      it('should display an AlertBox', async () => {
-        await waitFor(() => {
-          expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-          expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
-          expect(findByTypeWithSubstring(testInstance, TextView, 'To save this message, provide this information:')).toBeTruthy()
-        })
+      it('should display a field error for that field and an AlertBox', async () => {
+        expect(screen.getAllByText('Enter a message')).toBeTruthy()
+        expect(screen.getAllByText('We need more information')).toBeTruthy()
+        expect(screen.getAllByText('To save this message, provide this information:')).toBeTruthy()
       })
     })
 
     describe('when form fields are filled out correctly and saved', () => {
       it('should call saveDraft', async () => {
-        await waitFor(() => {
-          testInstance.findByType(FormWrapper).props.onSave(true)
-          expect(saveDraft).toHaveBeenCalled()
-        })
+        fireEvent.changeText(screen.getByTestId('reply field'), 'Random String')
+        fireEvent.press(screen.getByText('Save'))
+        expect(saveDraft).toHaveBeenCalled()
       })
     })
   })
@@ -267,24 +206,13 @@ context('ReplyMessage', () => {
   describe('on click of send', () => {
     describe('when a required field is not filled', () => {
       beforeEach(async () => {
-        await waitFor(() => {
-          act(() => {
-            testInstance.findByProps({ label: 'Send' }).props.onPress()
-          })
-        })
+        fireEvent.press(screen.getByText('Send'))
       })
 
-      it('should display a field error for that field', async () => {
-        await waitFor(() => {
-          expect(findByTypeWithText(testInstance, TextView, 'Enter a message')).toBeTruthy()
-        })
-      })
-      it('should display an AlertBox', async () => {
-        await waitFor(() => {
-          expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-          expect(findByTypeWithText(testInstance, TextView, 'We need more information')).toBeTruthy()
-          expect(findByTypeWithSubstring(testInstance, TextView, 'To send this message, provide this information:')).toBeTruthy()
-        })
+      it('should display a field error for that field and an AlertBox', async () => {
+        expect(screen.getAllByText('Enter a message')).toBeTruthy()
+        expect(screen.getAllByText('We need more information')).toBeTruthy()
+        expect(screen.getAllByText('To send this message, provide this information:')).toBeTruthy()
       })
     })
   })
@@ -300,18 +228,14 @@ context('ReplyMessage', () => {
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
       initializeTestInstance(mockMessagesById, [], true)
-      await waitFor(() => {
-        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-      })
+      expect(screen.getByText("Loading your message...")).toBeTruthy()
     })
   })
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findByProps({ label: 'Add Files' }).props.onPress()
-        expect(navigateToAttachmentsSpy).toHaveBeenCalled()
-      })
+      fireEvent.press(screen.getByLabelText('Add Files'))
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 })

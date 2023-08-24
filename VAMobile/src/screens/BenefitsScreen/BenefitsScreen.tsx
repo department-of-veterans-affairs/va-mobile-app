@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
+import { AuthorizedServicesState, DisabilityRatingState } from 'store/slices'
 import { BenefitsStackParamList } from './BenefitsStackScreens'
 import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { DisabilityRatingState } from 'store/slices'
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -31,6 +31,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
+  const { decisionLetters: decisionLettersAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
   useEffect(() => {
     navigation.setOptions({
@@ -42,7 +43,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
   const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
 
-  const claimsDestination = featureEnabled('decisionLettersWaygate') ? 'Claims' : 'ClaimsHistory'
+  const claimsDestination = featureEnabled('decisionLettersWaygate') && decisionLettersAuthorized ? 'Claims' : 'ClaimsHistory'
 
   return (
     <CategoryLanding title={t('benefits.title')}>
