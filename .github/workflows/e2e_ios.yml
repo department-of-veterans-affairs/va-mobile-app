@@ -70,7 +70,7 @@ jobs:
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version: '16s'
+          node-version: '16'
 
       - name: Install macOS dependencies
         run: |
@@ -81,15 +81,15 @@ jobs:
           HOMEBREW_NO_INSTALL_CLEANUP: 1
 
       - name: Install npm dependencies
-        working-directory: /VAMobile
+        working-directory: VAMobile
         run: yarn install --frozen-lockfile --non-interactive
 
       - name: Set app environment variables
-        working-directory: /VAMobile
+        working-directory: VAMobile
         run: yarn env:staging
 
       - name: Bundle app
-        working-directory: /VAMobile
+        working-directory: VAMobile
         run: yarn e2e:ios-build
 
       - name: Install pods
@@ -99,5 +99,5 @@ jobs:
         run: bundle install
 
       - name: Run e2e tests
-        working-directory: /VAMobile
+        working-directory: VAMobile
         run: yarn e2e:ios-test
