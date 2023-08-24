@@ -102,7 +102,7 @@ jobs:
         id: cache-detox-build
         uses: actions/cache@v3
         with:
-          path: build
+          path: ios/build
           key: ${{ runner.os }}-detox-build
           restore-keys: |
             ${{ runner.os }}-detox-build
@@ -117,7 +117,7 @@ jobs:
         run: cd ios && pwd && ls -l
 
       - name: PWD
-        run: cd ios/build && pwd && ls -l
+        run: cd ios/output/Build/Products/ && pwd && ls -l
 
       - name: Run e2e tests
         run: yarn e2e:ios-test
