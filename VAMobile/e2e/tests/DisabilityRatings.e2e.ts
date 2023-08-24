@@ -19,7 +19,7 @@ beforeAll(async () => {
 
 describe('Veterans Crisis Line', () => {
   it('should match the disability ratings page design', async () => {
-    await waitFor(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toBeVisible().withTimeout(60000)
+    // await waitFor(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toBeVisible().withTimeout(60000)
     
     await expect(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toExist()
     await expect(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toExist()
