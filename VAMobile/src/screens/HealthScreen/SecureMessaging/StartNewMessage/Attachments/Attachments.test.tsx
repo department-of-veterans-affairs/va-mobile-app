@@ -33,6 +33,7 @@ jest.mock('utils/hooks', () => {
     useRouteNavigation: () => {
       return mockNavigationSpy
     },
+    useBeforeNavBackListener: jest.fn(),
   }
 })
 
