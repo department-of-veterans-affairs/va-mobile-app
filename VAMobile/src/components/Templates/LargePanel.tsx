@@ -26,6 +26,8 @@ export type LargePanelProps = {
   rightButtonText?: string
   /** a11y label for right button text */
   rightButtonA11yLabel?: string
+  /** Optional TestID */
+  rightButtonTestID?: string
   /** text of the footer button(no text it doesn't appear) */
   footerButtonText?: string
   /** function called when footer button is pressed(no function it doesn't appear) */
@@ -34,8 +36,6 @@ export type LargePanelProps = {
   onRightButtonPress?: () => void
   /** Optional TestID for scrollView */
   testID?: string
-  /** Optional TestID for right Button */
-  rightButtonTestID?: string
 }
 
 export const LargePanel: FC<LargePanelProps> = ({
@@ -46,11 +46,11 @@ export const LargePanel: FC<LargePanelProps> = ({
   titleA11yLabel,
   rightButtonText,
   rightButtonA11yLabel,
+  rightButtonTestID,
   footerButtonText,
   onRightButtonPress,
   onFooterButtonPress,
   testID,
-  rightButtonTestID,
 }) => {
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
