@@ -290,6 +290,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
         onChange: setSubject,
         helperTextKey: 'health:secureMessaging.startNewMessage.subject.helperText',
         isRequiredField: category === CategoryTypeFields.other,
+        testID: 'startNewMessageSubjectTestID',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.subject.fieldEmpty'),
       validationList: [
@@ -398,7 +399,8 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
               onPress={navigateToReplyHelp}
               accessibilityRole={'button'}
               accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
-              importantForAccessibility={'yes'}>
+              importantForAccessibility={'yes'}
+              testID="startNewMessageOnlyUseMessagesTestID">
               <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
                 <CollapsibleView text={tc('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
               </Box>
@@ -437,7 +439,10 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       leftButtonText={tc('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineCta={true}>
+      showCrisisLineCta={true}
+      testID="startNewMessageTestID"
+      rightButtonTestID="startNewMessageSaveTestID"
+      leftButtonTestID="startNewMessageCancelTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
     </FullScreenSubtask>
   )
