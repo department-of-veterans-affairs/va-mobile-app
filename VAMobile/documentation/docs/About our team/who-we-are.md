@@ -17,6 +17,10 @@ sidebar_position: 3
 
 - Seth Eheart - Program Manager
 
+### Project Management
+
+- Jennifer Brown, M.B.A - Project Manager
+
 ### Product
 
 - Matt Hall - Product Leadership
