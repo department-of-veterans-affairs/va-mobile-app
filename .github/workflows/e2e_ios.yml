@@ -40,7 +40,7 @@ jobs:
     runs-on: macos-latest-xl
     env:
       # Path to write secret key to. Also used by fastlane
-      APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
+      APPSTORE_CONNECT_FILEPATH: './ios/AppStoreConnectKey.p8'
       # Xcode project file name
       IOS_PROJ_FILE: 'VAMobile.xcodeproj'
       # Xcode scheme to build
@@ -72,6 +72,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: 'yarn.lock'
 
       - name: Install macOS dependencies
         run: |
@@ -102,7 +104,7 @@ jobs:
         id: cache-detox-build
         uses: actions/cache@v3
         with:
-          path: ios/build
+          path: ios/output
           key: ${{ runner.os }}-detox-build
           restore-keys: |
             ${{ runner.os }}-detox-build
