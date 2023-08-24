@@ -24,7 +24,7 @@ on:
 
 defaults:
   run:
-    working-directory: VAMobile/ios
+    working-directory: VAMobile
 
 env:
   # IAM staging app client secret
@@ -81,21 +81,20 @@ jobs:
           HOMEBREW_NO_INSTALL_CLEANUP: 1
 
       - name: Install npm dependencies
-        working-directory: VAMobile
         run: yarn install --frozen-lockfile --non-interactive
 
       - name: Set app environment variables
-        working-directory: VAMobile
         run: yarn env:staging
 
       - name: Install pods
+        working-directory: VAMobile/ios
         run: pod install
   
       - name: Install Ruby gems
+        working-directory: VAMobile/ios
         run: bundle install
 
       - name: Detox rebuild framework cache
-        working-directory: VAMobile
         run: yarn detox rebuild-framework-cache
 
       - name: Cache Detox build
@@ -108,11 +107,9 @@ jobs:
             ${{ runner.os }}-detox-build
 
       - name: Bundle app
-        working-directory: VAMobile
         run: yarn e2e:ios-build
 
       - name: Run e2e tests
-        working-directory: VAMobile
         run: yarn e2e:ios-test
       
       - name: Upload artifacts
@@ -120,4 +117,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: detox-artifacts
-          path: ../artifacts
+          path: artifacts
