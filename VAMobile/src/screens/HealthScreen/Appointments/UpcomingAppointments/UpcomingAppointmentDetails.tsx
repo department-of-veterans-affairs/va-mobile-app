@@ -114,7 +114,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       return name || ''
     }
   }
-  
+
   const calendarAnalytics = (): void => {
     logAnalyticsEvent(
       Events.vama_apt_add_cal(appointmentID, getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
