@@ -73,7 +73,7 @@ jobs:
         with:
           node-version: '16'
           cache: 'yarn'
-          cache-dependency-path: 'yarn.lock'
+          cache-dependency-path: './VAMobile/yarn.lock'
 
       - name: Install macOS dependencies
         run: |
