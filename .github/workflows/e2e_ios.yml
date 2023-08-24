@@ -106,6 +106,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-detox-build
 
+      - name: PWD
+        run: pwd && ls -l
+
       - name: Bundle app
         run: yarn e2e:ios-build
 
