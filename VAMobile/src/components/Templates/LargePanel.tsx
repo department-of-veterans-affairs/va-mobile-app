@@ -26,6 +26,8 @@ export type LargePanelProps = {
   rightButtonText?: string
   /** a11y label for right button text */
   rightButtonA11yLabel?: string
+  /** Optional TestID */
+  rightButtonTestID?: string
   /** text of the footer button(no text it doesn't appear) */
   footerButtonText?: string
   /** function called when footer button is pressed(no function it doesn't appear) */
@@ -44,6 +46,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   titleA11yLabel,
   rightButtonText,
   rightButtonA11yLabel,
+  rightButtonTestID,
   footerButtonText,
   onRightButtonPress,
   onFooterButtonPress,
@@ -88,7 +91,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   const headerProps: HeaderBannerProps = {
     leftButton: leftButtonText ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, onPress: leftTitleButtonPress } : undefined,
     title: title ? { type: 'Static', title, a11yLabel: titleA11yLabel } : undefined,
-    rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: rightTitleButtonPress } : undefined,
+    rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: rightTitleButtonPress, testID: rightButtonTestID } : undefined,
     divider: true,
   }
 

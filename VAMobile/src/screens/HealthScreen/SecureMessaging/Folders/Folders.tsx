@@ -4,12 +4,14 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { Box, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, HIDDEN_FOLDERS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { SecureMessagingFolderList } from 'store/api/types'
+import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState } from 'store/slices'
 import { VATheme } from 'styles/theme'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -103,6 +105,21 @@ const Folders: FC<FoldersProps> = () => {
   const { folders, loadingFolders } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
   const onFolderPress = (folderID: number, folderName: string): void => {
+    const folder = (): string => {
+      switch (folderID) {
+        case SecureMessagingSystemFolderIdConstants.SENT:
+          return 'sent'
+        case SecureMessagingSystemFolderIdConstants.INBOX:
+          return 'inbox'
+        case SecureMessagingSystemFolderIdConstants.DELETED:
+          return 'deleted'
+        case SecureMessagingSystemFolderIdConstants.DRAFTS:
+          return 'drafts'
+        default:
+          return 'custom'
+      }
+    }
+    logAnalyticsEvent(Events.vama_sm_folder_open(folder()))
     navigateTo('FolderMessages', { folderID, folderName })()
   }
 

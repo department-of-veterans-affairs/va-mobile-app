@@ -12,7 +12,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 import { RootState } from 'store'
-import { getA11yLabelText } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
@@ -55,9 +54,9 @@ const getPhoneNumberData = (
   cellText = cellText.concat(getTextForPhoneData(profile, 'formattedMobilePhone', 'mobilePhoneNumber', t))
 
   return [
-    { textLines: homeText, a11yHintText: t('contactInformation.editOrAddHomeNumber'), onPress: onHomePhone, testId: getA11yLabelText(homeText) },
-    { textLines: workText, a11yHintText: t('contactInformation.editOrAddWorkNumber'), onPress: onWorkPhone, testId: getA11yLabelText(workText) },
-    { textLines: cellText, a11yHintText: t('contactInformation.editOrAddCellNumber'), onPress: onCellPhone, testId: getA11yLabelText(cellText) },
+    { textLines: homeText, a11yHintText: t('contactInformation.editOrAddHomeNumber'), onPress: onHomePhone, testId: 'homePhoneTestID' },
+    { textLines: workText, a11yHintText: t('contactInformation.editOrAddWorkNumber'), onPress: onWorkPhone, testId: 'workPhoneTestID' },
+    { textLines: cellText, a11yHintText: t('contactInformation.editOrAddCellNumber'), onPress: onCellPhone, testId: 'mobilePhoneTestID' },
   ]
 }
 
@@ -70,7 +69,7 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction,
     textLines.push({ text: t('contactInformation.addYour', { field: t('contactInformation.emailAddress').toLowerCase() }) })
   }
 
-  return [{ textLines: textLines, a11yHintText: t('contactInformation.editOrAddEmailAddress'), onPress: onEmailAddress, testId: getA11yLabelText(textLines) }]
+  return [{ textLines: textLines, a11yHintText: t('contactInformation.editOrAddEmailAddress'), onPress: onEmailAddress, testId: 'emailAddressTestID' }]
 }
 
 type ContactInformationScreenProps = StackScreenProps<HomeStackParamList, 'ContactInformation'>
@@ -159,12 +158,14 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')}>
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')} testID="ContactInfoTestID">
       <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter}>
         {t('contactInformation.editNote')}
       </TextView>
       <Pressable onPress={navigateTo('HowWillYou')} accessibilityRole="link" accessible={true}>
-        <TextView {...linkProps}>{t('contactInformation.howWillYouUseContactInfo')}</TextView>
+        <TextView testID="howWeUseContactInfoLinkTestID" {...linkProps}>
+          {t('contactInformation.howWillYouUseContactInfo')}
+        </TextView>
       </Pressable>
       <AddressSummary addressData={addressData} title={t('contactInformation.addresses')} />
       <DefaultList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone)} title={t('contactInformation.phoneNumbers')} />

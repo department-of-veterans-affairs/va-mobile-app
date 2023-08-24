@@ -25,8 +25,12 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   const { claimsAndAppealsByClaimType, loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>(
     (state) => state.claimsAndAppeals,
   )
-  const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
-  const claimsAndAppealsAccess = claimsAuthorization || appealsAuthorization
+  const {
+    claims: claimsAuthorized,
+    appeals: appealsAuthorized,
+    decisionLetters: decisionLettersAuthorized,
+  } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const claimsAndAppealsAccess = claimsAuthorized || appealsAuthorized
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>(
     (state) => state.personalInformation,
   )
@@ -39,8 +43,8 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
   const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
-  const title = featureEnabled('decisionLettersWaygate') ? t('claimsHistory.title') : t('claims.title')
-  const backLabel = featureEnabled('decisionLettersWaygate') ? t('claims.title') : t('benefits.title')
+  const title = featureEnabled('decisionLettersWaygate') && decisionLettersAuthorized ? t('claimsHistory.title') : t('claims.title')
+  const backLabel = featureEnabled('decisionLettersWaygate') && decisionLettersAuthorized ? t('claims.title') : t('benefits.title')
 
   useEffect(() => {
     // Fetch the profile information

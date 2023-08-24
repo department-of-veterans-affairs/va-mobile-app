@@ -5,11 +5,16 @@ import React, { FC, useState } from 'react'
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
 import { AuthState, loginStart } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
+import { StackNavigationProp } from '@react-navigation/stack'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
@@ -18,6 +23,7 @@ import getEnv from 'utils/env'
 const LoginScreen: FC = () => {
   const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HOME])
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
+  const navigation = useNavigation<StackNavigationProp<RootNavStackParamList, keyof RootNavStackParamList>>()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
@@ -34,11 +40,15 @@ const LoginScreen: FC = () => {
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
-  const onFacilityLocator = navigateTo('Webview', {
-    url: WEBVIEW_URL_FACILITY_LOCATOR,
-    displayTitle: t('common:webview.vagov'),
-    loadingMessage: t('common:webview.valocation.loading'),
-  })
+  const onFacilityLocator = () => {
+    logAnalyticsEvent(Events.vama_find_location())
+    navigation.navigate('Webview', {
+      url: WEBVIEW_URL_FACILITY_LOCATOR,
+      displayTitle: t('common:webview.vagov'),
+      loadingMessage: t('common:webview.valocation.loading'),
+    })
+  }
+
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const findLocationProps: BoxProps = {

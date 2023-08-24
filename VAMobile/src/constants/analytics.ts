@@ -406,6 +406,11 @@ export const Events = {
       name: 'vama_fail_refresh',
     }
   },
+  vama_find_location: (): Event => {
+    return {
+      name: 'vama_find_location',
+    }
+  },
   vama_gender_id_fail: (): Event => {
     return {
       name: 'vama_gender_id_fail',
@@ -471,6 +476,14 @@ export const Events = {
       name: 'vama_login_success',
       params: {
         sis: isSIS.toString(),
+      },
+    }
+  },
+  vama_notification_click: (notification_url?: string): Event => {
+    return {
+      name: 'vama_notification_click',
+      params: {
+        notification_url,
       },
     }
   },
@@ -687,12 +700,72 @@ export const Events = {
       name: 'vama_select_all',
     }
   },
+  vama_sm_attach: (type: string): Event => {
+    return {
+      name: 'vama_sm_attach',
+      params: {
+        type: type,
+      },
+    }
+  },
+  vama_sm_attach_outcome: (attached: string): Event => {
+    return {
+      name: 'vama_sm_attach_outcome',
+      params: {
+        attached: attached,
+      },
+    }
+  },
   vama_sm_change_category: (messageCategory: CategoryTypes, previousCategory: CategoryTypes): Event => {
     return {
       name: 'vama_sm_change_category',
       params: {
         messageCategory,
         previousCategory,
+      },
+    }
+  },
+  vama_sm_folder_open: (folder: string): Event => {
+    return {
+      name: 'vama_sm_folder_open',
+      params: {
+        folder: folder,
+      },
+    }
+  },
+  vama_sm_folders: (draft_count: number): Event => {
+    return {
+      name: 'vama_sm_folders',
+      params: {
+        draft_count: draft_count,
+      },
+    }
+  },
+  vama_sm_move: (): Event => {
+    return {
+      name: 'vama_sm_move',
+    }
+  },
+  vama_sm_move_outcome: (outcome: string): Event => {
+    return {
+      name: 'vama_sm_move_outcome',
+      params: {
+        outcome: outcome,
+      },
+    }
+  },
+  vama_sm_nonurgent: (): Event => {
+    return {
+      name: 'vama_sm_nonurgent',
+    }
+  },
+  vama_sm_open: (sm_id: number, location: string, status: string): Event => {
+    return {
+      name: 'vama_sm_open',
+      params: {
+        sm_id: sm_id,
+        location: location,
+        status: status,
       },
     }
   },
@@ -706,14 +779,20 @@ export const Events = {
       },
     }
   },
-  vama_sm_send_message: (totalTime: number, actionTime: number, messageCategory: CategoryTypes): Event => {
+  vama_sm_send_message: (totalTime: number, actionTime: number, messageCategory: CategoryTypes, replyToID: number | undefined): Event => {
     return {
       name: 'vama_sm_send_message',
       params: {
         totalTime,
         actionTime,
         messageCategory,
+        replyToID,
       },
+    }
+  },
+  vama_sm_start: (): Event => {
+    return {
+      name: 'vama_sm_start',
     }
   },
   vama_ttv_appt_details: (totalTime: number): Event => {
