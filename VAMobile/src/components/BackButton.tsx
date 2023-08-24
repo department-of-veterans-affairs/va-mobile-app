@@ -27,6 +27,8 @@ export type BackButtonProps = {
   a11yHint?: string
   /** boolean to specify if we want accesibility to focus on the back button */
   focusOnButton?: boolean
+  /** option testID */
+  backButtonTestID?: string
 
   webview?: boolean
 }
@@ -34,7 +36,7 @@ export type BackButtonProps = {
 /**
  * Button used by the stack navigation to go back to the previous screen
  */
-export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, showCarat, a11yHint, focusOnButton = true, webview }) => {
+export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, showCarat, a11yHint, backButtonTestID, focusOnButton = true, webview }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -51,7 +53,14 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, sho
   const a11yHintPropParam = a11yHint ? a11yHint : t(`${label}.a11yHint`)
 
   return (
-    <TouchableWithoutFeedback ref={focusRef} onPress={onPress} {...testIdProps(label)} {...a11yHintProp(a11yHintPropParam)} accessibilityRole="button" accessible={true}>
+    <TouchableWithoutFeedback
+      ref={focusRef}
+      onPress={onPress}
+      {...testIdProps(label)}
+      {...a11yHintProp(a11yHintPropParam)}
+      accessibilityRole="button"
+      accessible={true}
+      testID={backButtonTestID}>
       <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} alignItems={'center'}>
         {chevron}
         <TextView variant="ActionBar" color={webview ? 'footerButton' : undefined} ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>

@@ -21,6 +21,7 @@ const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID }) => {
     onPress: onPress,
     a11yHint: t('secureMessaging.reply.a11yHint'),
     iconProps: { name: 'Reply', fill: 'navBar' },
+    testID: 'replyTestID',
   }
 
   return (
