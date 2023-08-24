@@ -40,7 +40,7 @@ jobs:
     runs-on: macos-latest-xl
     env:
       # Path to write secret key to. Also used by fastlane
-      APPSTORE_CONNECT_FILEPATH: './ios/AppStoreConnectKey.p8'
+      APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
       # Xcode project file name
       IOS_PROJ_FILE: 'VAMobile.xcodeproj'
       # Xcode scheme to build
