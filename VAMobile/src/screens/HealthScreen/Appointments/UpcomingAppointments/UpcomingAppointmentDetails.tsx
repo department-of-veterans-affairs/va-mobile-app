@@ -105,7 +105,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       title: getTranslation(isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType], t),
       startTime: getEpochSecondsOfDate(startDateUtc),
       endTime: getEpochSecondsOfDate(endTime),
-      location: isIOS() && lat && long ? name || '' : address ? `${address.street} ${address.city}, ${address.state} ${address.zipCode}` : name || '',
+      location:
+        isIOS() && lat && long
+          ? name || ''
+          : address?.street && address?.city && address?.state && address?.zipCode
+          ? `${address.street} ${address.city}, ${address.state} ${address.zipCode}`
+          : name || '',
       latitude: lat || 0,
       longitude: long || 0,
     },
