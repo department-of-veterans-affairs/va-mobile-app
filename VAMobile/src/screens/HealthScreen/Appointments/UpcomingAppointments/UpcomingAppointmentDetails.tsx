@@ -39,12 +39,14 @@ import {
   VAButtonProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
-import { isAPendingAppointment } from 'utils/appointments'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
@@ -71,8 +73,16 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const pendingAppointment = isAPendingAppointment(attributes)
 
   useEffect(() => {
-    dispatch(trackAppointmentDetail(pendingAppointment))
-  }, [dispatch, appointmentID, pendingAppointment])
+    dispatch(
+      trackAppointmentDetail(
+        pendingAppointment,
+        appointmentID,
+        getAppointmentAnalyticsStatus(attributes),
+        attributes.appointmentType.toString(),
+        getAppointmentAnalyticsDays(attributes),
+      ),
+    )
+  }, [dispatch, appointmentID, pendingAppointment, attributes])
 
   useEffect(() => {
     navigation.setOptions({
@@ -94,6 +104,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     navigation.goBack()
   }
 
+  const calendarAnalytics = (): void => {
+    logAnalyticsEvent(
+      Events.vama_apt_add_cal(appointmentID, getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
+    )
+  }
+
   const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()
   const endTime = minutesDuration ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString() : startTimeDate.toISOString()
   const addToCalendarProps: LinkButtonProps = {
@@ -107,6 +123,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       location: name || '',
     },
     testID: 'addToCalendarTestID',
+    fireAnalytic: calendarAnalytics,
   }
 
   // TODO abstract some of these render functions into their own components - too many in one file
