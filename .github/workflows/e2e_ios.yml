@@ -80,12 +80,6 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
 
-      - name: Install pods
-        run: pod install
-  
-      - name: Install Ruby gems
-        run: bundle install
-
       - name: Install npm dependencies
         working-directory: VAMobile
         run: yarn install --frozen-lockfile --non-interactive
@@ -93,6 +87,12 @@ jobs:
       - name: Set app environment variables
         working-directory: VAMobile
         run: yarn env:staging
+
+      - name: Install pods
+        run: pod install
+  
+      - name: Install Ruby gems
+        run: bundle install
 
       - name: Detox rebuild framework cache
         working-directory: VAMobile
