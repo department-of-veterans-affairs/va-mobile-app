@@ -101,7 +101,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   const formattedSubmittedDate = formatDateMMMMDDYYYY(getSubmittedDate())
 
   return (
-    <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')}>
+    <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')} testID="appealsDetailsTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
           <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
