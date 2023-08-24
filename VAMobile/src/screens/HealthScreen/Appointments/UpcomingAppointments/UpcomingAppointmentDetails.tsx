@@ -95,6 +95,16 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     navigation.goBack()
   }
 
+  const getLocation = (): string => {
+    if (isIOS() && lat && long) {
+      return name || ''
+    } else if (address?.street && address?.city && address?.state && address?.zipCode) {
+      return `${address.street} ${address.city}, ${address.state} ${address.zipCode}`
+    } else {
+      return name || ''
+    }
+  }
+
   const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()
   const endTime = minutesDuration ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString() : startTimeDate.toISOString()
   const addToCalendarProps: LinkButtonProps = {
@@ -105,12 +115,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       title: getTranslation(isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType], t),
       startTime: getEpochSecondsOfDate(startDateUtc),
       endTime: getEpochSecondsOfDate(endTime),
-      location:
-        isIOS() && lat && long
-          ? name || ''
-          : address?.street && address?.city && address?.state && address?.zipCode
-          ? `${address.street} ${address.city}, ${address.state} ${address.zipCode}`
-          : name || '',
+      location: getLocation(),
       latitude: lat || 0,
       longitude: long || 0,
     },
