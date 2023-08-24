@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, Ref, useState } from 'react'
 
 import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
@@ -51,6 +53,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   const [expanded, setExpanded] = useState(expandedInitialValue || false)
 
   const onPress = (): void => {
+    logAnalyticsEvent(Events.vama_accordion_click(testID || '', !expanded))
     if (customOnPress) {
       customOnPress(!expanded)
     }
