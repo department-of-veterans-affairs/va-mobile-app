@@ -46,6 +46,7 @@ import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
+import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -68,7 +69,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const appointment = upcomingAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, location, startDateUtc, minutesDuration, comment, status, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
-  const { name, code, url } = location || ({} as AppointmentLocation)
+  const { name, code, url, lat, long, address } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
 
@@ -104,6 +105,16 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     navigation.goBack()
   }
 
+  const getLocation = (): string => {
+    if (isIOS() && lat && long) {
+      return name || ''
+    } else if (address?.street && address?.city && address?.state && address?.zipCode) {
+      return `${address.street} ${address.city}, ${address.state} ${address.zipCode}`
+    } else {
+      return name || ''
+    }
+  }
+
   const calendarAnalytics = (): void => {
     logAnalyticsEvent(
       Events.vama_apt_add_cal(appointmentID, getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
@@ -120,7 +131,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       title: getTranslation(isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType], t),
       startTime: getEpochSecondsOfDate(startDateUtc),
       endTime: getEpochSecondsOfDate(endTime),
-      location: name || '',
+      location: getLocation(),
+      latitude: lat || 0,
+      longitude: long || 0,
     },
     testID: 'addToCalendarTestID',
     fireAnalytic: calendarAnalytics,
