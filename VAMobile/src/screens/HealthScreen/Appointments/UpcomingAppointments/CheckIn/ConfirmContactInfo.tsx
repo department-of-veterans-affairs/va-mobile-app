@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 
 type ConfirmContactInfoProps = StackScreenProps<HealthStackParamList, 'ConfirmContactInfo'>
 
-const ConfirmContactInfo: FC<ConfirmContactInfoProps> = ({ navigation, route }) => {
+const ConfirmContactInfo: FC<ConfirmContactInfoProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   return <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} title={t('checkIn.confirmContactInfo')} />
