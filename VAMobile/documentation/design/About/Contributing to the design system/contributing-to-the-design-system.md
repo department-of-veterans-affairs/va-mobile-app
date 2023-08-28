@@ -28,7 +28,7 @@ Review the criteria for a “good” candidate above.
 
 #### Step 2
 
-Fill out the issue template (ADD LINK). In the issue, you will need to provide justification for the component or pattern, and link to any artifacts you want to include.
+Fill out the GitHub issue template for contributing to the design system. In the issue, you will need to provide justification for the component or pattern, and link to any artifacts you want to include.
 
 * Note that you do not need to have anything coded at this point, and in fact, we suggest not having anything coded since ideally ideas would be surfaced before teams put effort into building new components.
 * Additionally, the artifacts you include do not need to be high fidelity. They only need to be able to illustrate your concept. We do, however, encourage some thoughts on how your component or pattern will work.
