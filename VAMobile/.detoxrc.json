@@ -44,5 +44,21 @@
     "init": {
       "exposeGlobals": false
     }
+  },
+  "artifacts": {
+    "rootDir": "./artifacts",
+    "plugins": {
+      "log": {
+        "enabled": true
+      },
+      "screenshot": {
+        "shouldTakeAutomaticSnapshots": true,
+        "keepOnlyFailedTestsArtifacts": true,
+        "takeWhen": {
+          "testStart": false,
+          "testDone": true
+        }
+      }
+    }
   }
 }

@@ -34,7 +34,7 @@
     "env:production": "./env/env.sh -e production -d false -t false",
     "postinstall": "patch-package",
     "e2e:ios-build": "yarn run bundle:ios && detox build -c ios",
-    "e2e:ios-test": "detox test ./e2e/tests/DisabilityRatings.e2e.ts -c ios --cleanup --record-logs all",
+    "e2e:ios-test": "detox test ./e2e/tests/DisabilityRatings.e2e.ts -c ios --cleanup --record-logs all --artifacts-location /tmp/detox_artifacts",
     "e2e:android-build": " yarn run bundle:android && detox build -c android",
     "e2e:android-test": "detox test -c android --cleanup",
     "docs": "yarn && cd documentation && yarn && yarn start"
