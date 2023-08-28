@@ -42,7 +42,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLo
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         {displayLogo && (
           <Box my={theme.dimensions.standardMarginBetween} alignItems={'center'}>
-            <VAIcon name="Logo" />
+            <VAIcon name="Logo" testID="VAIconOnboardingLogo" />
           </Box>
         )}
         <Box alignItems={centerHeader ? 'center' : 'flex-start'}>
