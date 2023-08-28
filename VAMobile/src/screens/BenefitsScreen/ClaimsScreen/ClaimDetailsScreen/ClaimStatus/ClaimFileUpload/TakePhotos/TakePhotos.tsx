@@ -12,7 +12,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import CollapsibleAlert from 'components/CollapsibleAlert'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import getEnv from 'utils/env'
@@ -30,6 +30,13 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   const { displayName } = request
   const [error, setError] = useState('')
   const scrollViewRef = useRef<ScrollView>(null)
+  const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
+
+  useBeforeNavBackListener(navigation, (e) => {
+    if (isActionSheetVisible) {
+      e.preventDefault()
+    }
+  })
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
@@ -101,7 +108,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
       </TextArea>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <VAButton
-          onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, 0, claimID, request)}
+          onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, 0, claimID, request, setIsActionSheetVisible)}
           label={t('fileUpload.takeOrSelectPhotos')}
           testID={t('fileUpload.takePhotos')}
           buttonType={ButtonTypesConstants.buttonPrimary}
