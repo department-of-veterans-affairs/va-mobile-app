@@ -305,7 +305,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <Atlas_AppointmentData />
           <SpecialInstructions />
           {featureEnabled('patientCheckIn') && (
-            <Box my={theme.dimensions.gutter} accessibilityRole="button" mr={theme.dimensions.buttonPadding}>
+            <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
               <VAButton onPress={navigateTo('ConfirmContactInfo')} label={tc('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
             </Box>
           )}
