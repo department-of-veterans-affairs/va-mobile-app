@@ -1,0 +1,190 @@
+diff --git a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/App.tsx b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/App.tsx
+index 98b50dd..4774dbc 100644
+--- a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/App.tsx
++++ b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/App.tsx
+@@ -1,40 +1,40 @@
+-import { useCallback } from 'react'
+-import { View } from 'react-native'
+-import { I18nextProvider } from 'react-i18next'
+-import { useFonts } from 'expo-font'
+-import * as SplashScreen from 'expo-splash-screen'
+-
+-import i18n from './utils/translation/i18n'
+-
+-SplashScreen.preventAutoHideAsync()
+-
+-const App = () => {
+-  // Loads in custom fonts async
+-  const [fontsLoaded, fontError] = useFonts({
+-    'SourceSansPro-Bold': require('./assets/fonts/SourceSansPro/SourceSansPro-Bold.ttf'),
+-    'SourceSansPro-Regular': require('./assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf'),
+-  })
+-
+-  // Holds rendering until custom fonts load
+-  const onLayoutRootView = useCallback(async () => {
+-    if (fontsLoaded || fontError) {
+-      await SplashScreen.hideAsync()
+-    }
+-  }, [fontsLoaded, fontError])
+-
+-  if (!fontsLoaded && !fontError) {
+-    return null
+-  }
+-
+-  const StorybookUI = require('../.storybook/native').default
+-
+-  return (
+-    <I18nextProvider i18n={i18n}>
+-      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+-        <StorybookUI />
+-      </View>
+-    </I18nextProvider>
+-  )
+-}
+-
+-export default App
++// import { useCallback } from 'react'
++// import { View } from 'react-native'
++// import { I18nextProvider } from 'react-i18next'
++// import { useFonts } from 'expo-font'
++// import * as SplashScreen from 'expo-splash-screen'
++
++// import i18n from './utils/translation/i18n'
++
++// SplashScreen.preventAutoHideAsync()
++
++// const App = () => {
++//   // Loads in custom fonts async
++//   const [fontsLoaded, fontError] = useFonts({
++//     'SourceSansPro-Bold': require('./assets/fonts/SourceSansPro/SourceSansPro-Bold.ttf'),
++//     'SourceSansPro-Regular': require('./assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf'),
++//   })
++
++//   // Holds rendering until custom fonts load
++//   const onLayoutRootView = useCallback(async () => {
++//     if (fontsLoaded || fontError) {
++//       await SplashScreen.hideAsync()
++//     }
++//   }, [fontsLoaded, fontError])
++
++//   if (!fontsLoaded && !fontError) {
++//     return null
++//   }
++
++//   const StorybookUI = require('../.storybook/native').default
++
++//   return (
++//     <I18nextProvider i18n={i18n}>
++//       <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
++//         <StorybookUI />
++//       </View>
++//     </I18nextProvider>
++//   )
++// }
++
++// export default App
+diff --git a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/SegmentedControl/SegmentedControl.tsx b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/SegmentedControl/SegmentedControl.tsx
+index 5b47f83..47db323 100644
+--- a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/SegmentedControl/SegmentedControl.tsx
++++ b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/SegmentedControl/SegmentedControl.tsx
+@@ -1,4 +1,4 @@
+-import { I18nextProvider, useTranslation } from 'react-i18next'
++// import { I18nextProvider, useTranslation } from 'react-i18next'
+ import { FC, useEffect } from 'react'
+ import styled from 'styled-components'
+ import {
+@@ -10,7 +10,7 @@ import {
+   useColorScheme,
+ } from 'react-native'
+ 
+-import i18n from '../../utils/translation/i18n'
++// import i18n from '../../utils/translation/i18n'
+ 
+ /**
+  * Props for {@link SegmentedControl}
+@@ -49,7 +49,7 @@ export const SegmentedControl: FC<SegmentedControlProps> = ({
+   selected,
+   labelsA11yHints: accessibilityHints,
+ }) => {
+-  const { t } = useTranslation()
++  // const { t } = useTranslation()
+   const colorScheme = useColorScheme()
+ 
+   useEffect(() => {
+@@ -90,7 +90,7 @@ export const SegmentedControl: FC<SegmentedControlProps> = ({
+   }
+ 
+   return (
+-    <I18nextProvider i18n={i18n}>
++    // <I18nextProvider i18n={i18n}>
+       <View style={viewStyle} accessibilityRole="tablist">
+         {labels.map((label, index) => {
+           const isSelected = selected === index
+@@ -120,10 +120,7 @@ export const SegmentedControl: FC<SegmentedControlProps> = ({
+                 accessibilityHints ? accessibilityHints[index] : ''
+               }
+               accessibilityValue={{
+-                text: t('listPosition', {
+-                  position: index + 1,
+-                  total: labels.length,
+-                }),
++                text: 'pending translation',
+               }}
+               accessibilityRole={'tab'}
+               accessibilityState={{ selected: isSelected }}>
+@@ -134,6 +131,6 @@ export const SegmentedControl: FC<SegmentedControlProps> = ({
+           )
+         })}
+       </View>
+-    </I18nextProvider>
++    // </I18nextProvider>
+   )
+ }
+diff --git a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/index.tsx b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/index.tsx
+index f812add..da2b2a1 100644
+--- a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/index.tsx
++++ b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/index.tsx
+@@ -1,16 +1,16 @@
+ // Import components here so they can be exported through npm
+-import { registerRootComponent } from 'expo'
++// import { registerRootComponent } from 'expo'
+ 
+-import App from './App'
++// import App from './App'
+ 
+-const storybookEnabled = process.env.EXPO_PUBLIC_STORYBOOK_ENABLED === 'true'
++// const storybookEnabled = process.env.EXPO_PUBLIC_STORYBOOK_ENABLED === 'true'
+ 
+-if (storybookEnabled) {
+-  // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
+-  // It also ensures that whether you load the app in Expo Go or in a native build,
+-  // the environment is set up appropriately
+-  registerRootComponent(App)
+-}
++// if (storybookEnabled) {
++//   // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
++//   // It also ensures that whether you load the app in Expo Go or in a native build,
++//   // the environment is set up appropriately
++//   registerRootComponent(App)
++// }
+ 
+ 
+ export { MyButton } from './components/Button/Button'
+diff --git a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/utils/translation/i18n.ts b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/utils/translation/i18n.ts
+index a620aad..9207dfc 100644
+--- a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/utils/translation/i18n.ts
++++ b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/utils/translation/i18n.ts
+@@ -1,11 +1,11 @@
+-import * as RNLocalize from 'expo-localization'
++import { getLocales } from 'expo-localization'
+ import { initReactI18next } from 'react-i18next'
+ import i18n from 'i18next'
+ 
+ import * as enTranslation from './en.json'
+ 
+ const fallbackLanguage = { languageTag: 'en', isRTL: false }
+-const defaultLanguage = RNLocalize.getLocales()[0] || fallbackLanguage
++const defaultLanguage = getLocales()[0] || fallbackLanguage
+ 
+ export const resources = {
+   en: { translation: enTranslation },

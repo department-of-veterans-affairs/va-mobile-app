@@ -1,4 +1,4 @@
-const { getDefaultConfig } = require("metro-config");
+const { getDefaultConfig } = require('metro-config')
 
 /**
  * Metro configuration for React Native
@@ -7,10 +7,12 @@ const { getDefaultConfig } = require("metro-config");
  * @format
  */
 
+const path = require('path')
+
 module.exports = (async () => {
   const {
-    resolver: { sourceExts, assetExts }
-  } = await getDefaultConfig();
+    resolver: { sourceExts, assetExts },
+  } = await getDefaultConfig()
   return {
     transformer: {
       getTransformOptions: async () => ({
@@ -19,11 +21,15 @@ module.exports = (async () => {
           inlineRequires: true,
         },
       }),
-      babelTransformerPath: require.resolve("react-native-svg-transformer")
+      babelTransformerPath: require.resolve('react-native-svg-transformer'),
     },
     resolver: {
-      assetExts: assetExts.filter(ext => ext !== "svg"),
-      sourceExts: [...sourceExts, "svg"]
-    }
-  };
-})();
+      assetExts: assetExts.filter((ext) => ext !== 'svg'),
+      sourceExts: [...sourceExts, 'svg'],
+    },
+    watchFolders: [
+      // path.resolve(__dirname, '../../Mobile Platform/va-mobile-temporary/packages/components'),
+      // path.resolve(__dirname, '../../Mobile Platform/va-mobile-temporary/packages/components/node_modules'),
+      path.resolve(__dirname, './node_modules')],
+  }
+})()

@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import { SegmentedControl as LibrarySC } from '@department-of-veterans-affairs/mobile-component-library'
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
@@ -134,7 +135,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
       testID="appointmentsTestID">
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
+          <LibrarySC labels={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} labelsA11yHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}
         <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
