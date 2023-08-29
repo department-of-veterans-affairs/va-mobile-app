@@ -17,7 +17,7 @@ A segmented control is used to switch between related views of information withi
 <iframe width="800" height="450" alt="alt text goes here" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7332-11331&mode=design&t=lRnzcV3CBx2yby7N-4" title="Image of component examples in Figma showing the Segmented Control component in Claims and Appointments in light and dark mode"allowfullscreen></iframe>
 
 ## Usage
-A segmented control consists of a horizontal set of two or more segments, each of which functions as a button. One option is always selected. The component does not scroll horizontally.
+A segmented control consists of a horizontal set of 2-4 segments, each of which functions as a button. One option is always selected. The component does not scroll horizontally.
 
 ### When to use Segmented control
 - To represent the same kind of content, such as a list-view with different filters applied. 
@@ -41,11 +41,12 @@ A segmented control consists of a horizontal set of two or more segments, each o
 *_Storybook link will be added later_*
 
 ## Content considerations
-- **Keep labels to 1 word**: If you need 2 (or more) words, you're likely trying to include extraneous words or group together items that are not similar enough. You may need to consider using a different component.
+- **Keep labels to 1 word**: If you need 2 (or more) words, you're likely trying to include extraneous words or group together items that are not similar enough. You may need to consider using a different component. The label text must be short enough that it doesn't wrap in the component.
 - **Consider if labels are used elsewhere on the screen**: You can help differentiate different sections beneath the segmented control by not reusing the same labels.
 
 ## Accessibility considerations
-- Reference [Segmented Control / Tab - Native app accessibility checklist - MagentaA11y](https://www.magentaa11y.com/checklist-native/segmented-control/) 
+- Reference [Segmented Control / Tab - Native app accessibility checklist - MagentaA11y](https://www.magentaa11y.com/checklist-native/segmented-control/)
+- **Font scaling**: This component will ignore a user's settings for font scaling so the text always remains the same size. This is consistent with Apple's segmented control component.
 - **Name**: Purpose is clear and matches visible label
 - **Role**: Identifies as a button in iOS and "double tap to activate" in Android
 - **Group**: Visible label (if any) is grouped or associated with the button in a single swipe
