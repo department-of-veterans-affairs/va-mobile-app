@@ -48,6 +48,12 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
+      - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
+        working-directory: VAMobile/ios
+        run: |
+          echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
+          echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
+
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
