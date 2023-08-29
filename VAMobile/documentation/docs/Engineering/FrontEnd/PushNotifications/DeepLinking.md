@@ -76,3 +76,31 @@ In the linking configuration, the [getStateFromPath](https://github.com/departme
 The state should match the behavior you'd see if you were manually navigating from the home screen to the desired screen. The navigation state should be returned by the function if the `path` parameter matches the pattern specified in the `config` object. This will ensure that navigating back from the screen opened by a push notification produces expected behavior.
 
 More information on navigation state can be found in the [React Navigation documentation](https://reactnavigation.org/docs/navigation-state).
+
+## Testing deep links
+
+Once you've configured deep linking for your push notification, you'll be able to test it by triggering push notifications remotely from the responsible service. The VANotify API can also be used to send push notifications to a device, but this requires an API key that will need to be provided by the VANotify team.
+
+_Note: Remote push notifications will only work on a physical device with a non-development build installed, so you'll need to run an [on demand build](../../DevOps/Overview.md#on-demand-builds) for your branch._
+
+### Local testing
+
+If you're not able to test your deep link via remote push notifications, or would like a quicker way of testing, you can test your deep link locally with either [uri-scheme](https://github.com/expo/expo-cli/tree/main/packages/uri-scheme) or [Detox](../../../QA/Automation.md#detox-our-ui-automation-tool).
+
+#### uri-scheme
+
+This is a CLI tool used for testing native URI schemes on both iOS and Android. This approach will work with a virtual device. To test your deep link, you can run the following command in your terminal:
+
+```
+npx uri-scheme open "{THE_FULL_URL}" --{DEVICE_PLATFORM}
+```
+
+This will launch the app with the provided URL, similar to how a push notification with deep linking configured would. Using the example from earlier, running this for the iOS simulator would look something like:
+
+```
+npx uri-scheme open "vamobile://messages/1234" --ios
+```
+
+#### Detox
+
+You can also use our automated UI testing tool Detox to simulate push notifications on a virtual device. Detox supports [mocking push notifications](https://wix.github.io/Detox/docs/guide/mocking-user-notifications/), which provides a more complete view of how the app will behave when a deep link is opened from a push notification. Since Detox is already used in our repository, all you'll need to do is create a new test for your push notification, and run it locally. You can view an example of a Detox test for a push notification [here](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/VAMobile/e2e/tests/PushNotifications.e2e.ts).
