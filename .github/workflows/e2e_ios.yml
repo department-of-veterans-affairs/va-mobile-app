@@ -34,6 +34,29 @@ jobs:
       # Xcode scheme to build
       IOS_SCHEME: 'VAMobileRelease'
 
+    strategy:
+      matrix:
+        testsuite: [
+          "Appeals",
+          "Appointments",
+          "Claims",
+          "ContactInformation",
+          "DirectDeposit",
+          "DisabilityRatings",
+          "HomeScreen",
+          "Letters",
+          "LoginScreen",
+          "Messages",
+          "MilitaryInformation",
+          "Onboarding",
+          "Payments",
+          "PersonalInformationScreen",
+          "Prescriptions",
+          "ProfileScreen",
+          "PushNotifications",
+          "SettingsScreen"
+        ]
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -83,7 +106,7 @@ jobs:
         run: yarn e2e:ios-build
 
       - name: Run e2e tests for iOS
-        run: yarn e2e:ios-test
+        run: yarn e2e:ios-test e2e/tests/${{matrix.testsuite}}.e2e.ts
       
       - name: Upload artifacts on failure
         if: failure()
