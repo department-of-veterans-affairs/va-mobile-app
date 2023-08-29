@@ -38,8 +38,8 @@ jobs:
       matrix:
         testsuite: [
           # "Appeals",
-          "Appointments",
-          # "Claims",
+          # "Appointments",
+          "Claims",
           # "ContactInformation",
           # "DirectDeposit",
           # "DisabilityRatings",
