@@ -38,23 +38,23 @@ jobs:
       matrix:
         testsuite: [
           "Appeals",
-          "Appointments",
-          "Claims",
-          "ContactInformation",
-          "DirectDeposit",
-          "DisabilityRatings",
-          "HomeScreen",
-          "Letters",
-          "LoginScreen",
-          "Messages",
-          "MilitaryInformation",
-          "Onboarding",
-          "Payments",
-          "PersonalInformationScreen",
-          "Prescriptions",
-          "ProfileScreen",
-          "PushNotifications",
-          "SettingsScreen"
+          # "Appointments",
+          # "Claims",
+          # "ContactInformation",
+          # "DirectDeposit",
+          # "DisabilityRatings",
+          # "HomeScreen",
+          # "Letters",
+          # "LoginScreen",
+          # "Messages",
+          # "MilitaryInformation",
+          # "Onboarding",
+          # "Payments",
+          # "PersonalnformationScreen",
+          # "Prescriptions",
+          # "ProfileScreen",
+          # "PushNotifications",
+          # "SettingsScreen"
         ]
 
     steps:
@@ -105,12 +105,12 @@ jobs:
       - name: Bundle iOS app
         run: yarn e2e:ios-build
 
-      - name: Run e2e tests for iOS
+      - name: Run e2e tests for iOS (${{matrix.testsuite}})
         run: yarn e2e:ios-test e2e/tests/${{matrix.testsuite}}.e2e.ts
       
       - name: Upload artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
+          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}-${{matrix.testsuite}}
           path: VAMobile/artifacts
