@@ -32,7 +32,7 @@ env:
   # IAM production app client secret
   APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
   # Password to enter demo mode from login screen
-  DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
+  DEMO_PASSWORD: ''
 
 jobs:
   e2e:
@@ -58,8 +58,6 @@ jobs:
       - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
         working-directory: VAMobile/ios
         run: |
-          echo "Notes: e2e test run ${{ env.DEMO_PASSWORD }}"
-          echo "secrets: ${{ secrets.DEMO_PASSWORD }}"
           echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
           echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
 
