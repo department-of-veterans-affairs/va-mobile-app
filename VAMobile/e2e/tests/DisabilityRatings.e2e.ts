@@ -27,28 +27,27 @@ describe('Veterans Crisis Line', () => {
     await expect(element(by.id(DisabilityRatingsIdConstants.ABOUT_DISABILITY_RATINGS_LINK_ID))).toExist()
     await expect(element(by.text('Learn about VA disability ratings'))).toExist()
     await expect(element(by.text('Need Help?'))).toExist()
-    await device.takeScreenshot('EndDisabilityRatingsPageDesign')
   })
 
-  // it('should tap About VA disability ratings and verify the correct information is displayed', async () => {
-  //   await element(by.id(DisabilityRatingsIdConstants.DISABILITY_RATING_PAGE_ID)).scrollTo('bottom')
-  //   await element(by.id(DisabilityRatingsIdConstants.ABOUT_DISABILITY_RATINGS_LINK_ID)).tap()
-  //   await element(by.text('Ok')).tap()
-  //   await setTimeout(5000)
-  //   await device.takeScreenshot('AboutDisabilityRatings')
-  //   await device.launchApp({ newInstance: false })
-  // })
+  it('should tap About VA disability ratings and verify the correct information is displayed', async () => {
+    await element(by.id(DisabilityRatingsIdConstants.DISABILITY_RATING_PAGE_ID)).scrollTo('bottom')
+    await element(by.id(DisabilityRatingsIdConstants.ABOUT_DISABILITY_RATINGS_LINK_ID)).tap()
+    await element(by.text('Ok')).tap()
+    await setTimeout(5000)
+    await device.takeScreenshot('AboutDisabilityRatings')
+    await device.launchApp({ newInstance: false })
+  })
 
-  // it('should tap the links in the get help section and verify the correct information', async() => {
-  //   if (device.getPlatform() === 'android') {
-	// 		await element(by.text('800-827-1000')).tap()
-	// 		await device.takeScreenshot('DisabilityRatingAndroidCallingScreen')
-	// 		await device.launchApp({newInstance: false})
-	// 	} 
-  //   if (device.getPlatform() === 'android') {
-	// 		await element(by.text('TTY: 711')).tap()
-	// 		await device.takeScreenshot('DisabilityRatingTTYAndroidCallingScreen')
-	// 		await device.launchApp({newInstance: false})
-	// 	} 
-  // })
+  it('should tap the links in the get help section and verify the correct information', async() => {
+    if (device.getPlatform() === 'android') {
+			await element(by.text('800-827-1000')).tap()
+			await device.takeScreenshot('DisabilityRatingAndroidCallingScreen')
+			await device.launchApp({newInstance: false})
+		} 
+    if (device.getPlatform() === 'android') {
+			await element(by.text('TTY: 711')).tap()
+			await device.takeScreenshot('DisabilityRatingTTYAndroidCallingScreen')
+			await device.launchApp({newInstance: false})
+		} 
+  })
 })
