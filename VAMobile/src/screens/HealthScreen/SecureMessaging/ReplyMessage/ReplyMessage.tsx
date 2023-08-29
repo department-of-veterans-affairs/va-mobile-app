@@ -269,6 +269,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         saveDraftAttempted={onSaveDraftClicked}
         focusOnError={onSendClicked}
         errorList={errorList}
+        navigation={navigation}
       />
       <TextArea>
         <TextView variant="MobileBody" accessible={true} testID={'To ' + receiverName}>
