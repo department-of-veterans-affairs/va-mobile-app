@@ -39,6 +39,8 @@
   "cancel.continueEditing.a11yHint": "Cancel and continue editing",
   "cancel.picker.a11yHint": "cancels selection and closes the menu",
   "carouselIndicators": "Carousel indicators",
+  "checkIn.now": "Check in now",
+  "checkIn.confirmContactInfo": "Is this your current contact information?",
   "close": "Close",
   "composeCancelConfirmation.compose.title": "Delete message you started or save as draft?",
   "composeCancelConfirmation.draft.title": "Delete changes to draft?",
