@@ -44,6 +44,7 @@ import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { featureEnabled } from 'utils/remoteConfig'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
 import { isIOS } from 'utils/platform'
@@ -316,7 +317,11 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <Atlas_AppointmentData />
           <SpecialInstructions />
-
+          {featureEnabled('patientCheckIn') && (
+            <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
+              <VAButton onPress={navigateTo('ConfirmContactInfo')} label={tc('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
+            </Box>
+          )}
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
           <AppointmentReason attributes={attributes} />
