@@ -12,7 +12,7 @@ Deep links in the app are handled by the React Navigation library. The React Nav
 
 A prerequisite for adding deep linking support for a feature's push notification is to have push notifications setup for that feature. An architectural overview of how push notifications work in the app and information on how to add them for a feature can be found [here](../../BackEnd/Features/PushNotifications.md).
 
-In order for deep linking to work for your push notification, the `url` field must be present in the push template. The URL should be prefixed with `vamobile://` and followed by the path of the deep link you want to add, e.g. `vamobile://messages/%MSG_ID%`. In this example, the path of the deep link is prefixed with `vamobile://`, starts with `messages`, and is followed by the `MSG_ID` parameter, which is a field that will be populated from the API call that triggers the push notification. This will result in push notifications returning a payload that looks some like:
+In order for deep linking to work for your push notification, the `url` field must be present in the push template. The URL should be prefixed with `vamobile://` and followed by the path of the deep link you want to add, e.g. `vamobile://messages/%MSG_ID%`. In this example, the path of the deep link is prefixed with `vamobile://`, starts with `messages`, and is followed by the `MSG_ID` parameter, which is a field that will be populated from the API call that triggers the push notification. This will result in push notifications returning a payload that looks something like:
 
 ``` json
 {
