@@ -1,4 +1,4 @@
-import { expect, device, by, element, waitFor} from 'detox'
+import { expect, device, by, element } from 'detox'
 import {loginToDemoMode, openBenefits, openDisabilityRating } from './utils'
 import { setTimeout } from 'timers/promises'
 
@@ -13,16 +13,17 @@ export const DisabilityRatingsIdConstants = {
 
 beforeAll(async () => {
   await loginToDemoMode()
-  console.log('logged into demo mode');
   await openBenefits()
-  console.log('opened benefits');
   await openDisabilityRating()
-  console.log('opened openDisabilityRating');
 })
 
 describe('Veterans Crisis Line', () => {
   it('should match the disability ratings page design', async () => {
     
+    await waitFor(element(by.id(DisabilityRatingsIdConstants.ABOUT_DISABILITY_RATINGS_LINK_ID)))
+      .toBeVisible()
+      .withTimeout(120000)
+
     await expect(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toExist()
     await expect(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toExist()
     await expect(element(by.text(DisabilityRatingsIdConstants.INDIVIDUAL_RATING_TEXT))).toExist()
@@ -30,6 +31,7 @@ describe('Veterans Crisis Line', () => {
     await expect(element(by.id(DisabilityRatingsIdConstants.ABOUT_DISABILITY_RATINGS_LINK_ID))).toExist()
     await expect(element(by.text('Learn about VA disability ratings'))).toExist()
     await expect(element(by.text('Need Help?'))).toExist()
+    await device.takeScreenshot('AboutDisabilityRatingsPageDesign')
   })
 
   it('should tap About VA disability ratings and verify the correct information is displayed', async () => {

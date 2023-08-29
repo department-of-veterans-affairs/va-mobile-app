@@ -105,21 +105,12 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ios/output
-          key: ${{ runner.os }}-detox-build
+          key: detox-build-${{ runner.os }}
           restore-keys: |
-            ${{ runner.os }}-detox-build
-
-      - name: PWD
-        run: pwd && ls -l
+            detox-build-${{ runner.os }}
 
       - name: Bundle app
         run: yarn e2e:ios-build
-
-      - name: PWD
-        run: cd ios && pwd && ls -l
-
-      - name: PWD
-        run: cd ios/output/Build/Products/ && pwd && ls -l
 
       - name: Run e2e tests
         run: yarn e2e:ios-test
@@ -128,5 +119,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: detox-artifacts-${{ github.run_id }}
+          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
           path: VAMobile/artifacts
