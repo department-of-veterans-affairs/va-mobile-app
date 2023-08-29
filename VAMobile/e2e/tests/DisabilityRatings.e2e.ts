@@ -1,4 +1,4 @@
-import { expect, device, by, element } from 'detox'
+import { expect, device, by, element} from 'detox'
 import {loginToDemoMode, openBenefits, openDisabilityRating } from './utils'
 import { setTimeout } from 'timers/promises'
 
@@ -19,7 +19,6 @@ beforeAll(async () => {
 
 describe('Veterans Crisis Line', () => {
   it('should match the disability ratings page design', async () => {
-    await device.takeScreenshot('StartDisabilityRatingsPageDesign')
     await expect(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toExist()
     await expect(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toExist()
     await expect(element(by.text(DisabilityRatingsIdConstants.INDIVIDUAL_RATING_TEXT))).toExist()

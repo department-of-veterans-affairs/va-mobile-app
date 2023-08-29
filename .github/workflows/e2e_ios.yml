@@ -33,7 +33,7 @@ env:
   APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
 
 jobs:
-  e2e:
+  e2e-ios:
     runs-on: macos-latest-xl
     env:
       # Path to write secret key to. Also used by fastlane
@@ -47,17 +47,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-
-      - name: Setup ssh-agent with VA Mobile Automation ssh key for fastlane match
-        uses: webfactory/ssh-agent@v0.7.0
-        with:
-          ssh-private-key: ${{ secrets.VA_MOBILE_ROBOT_GITHUB_SSH_KEY }}
-
-      - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
-        working-directory: VAMobile/ios
-        run: |
-          echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
-          echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
 
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
