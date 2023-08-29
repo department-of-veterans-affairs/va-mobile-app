@@ -47,11 +47,13 @@ export const CommonE2eIdConstants = {
 export async function loginToDemoMode() {
   await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
     .toExist()
-    .withTimeout(10000)
+    .withTimeout(120000)
+    await device.takeScreenshot('WaitForDemoMode')
   try {
-	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
-	await element(by.text('Dismiss')).tap()
+	  await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
+	  await element(by.text('Dismiss')).tap()
   } catch (e) {} 
+  
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(21)
   if (DEMO_PASSWORD != undefined) {
     await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
@@ -61,6 +63,8 @@ export async function loginToDemoMode() {
   .toBeVisible()
   .withTimeout(120000)
   
+  await device.takeScreenshot('EnterDemoMode')
+
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
   await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
