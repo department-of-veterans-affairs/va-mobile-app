@@ -40,6 +40,8 @@ export type VASelectorProps = {
   setError?: (value?: string) => void
   /** optional boolean that marks the component as required */
   isRequiredField?: boolean
+  /** Optional TestID */
+  testID?: string
 }
 
 /**A common component to display a checkbox with text*/
@@ -53,6 +55,7 @@ const VASelector: FC<VASelectorProps> = ({
   a11yLabel,
   a11yHint,
   error,
+  testID,
   setError,
 }) => {
   const theme = useTheme()
@@ -110,7 +113,7 @@ const VASelector: FC<VASelectorProps> = ({
   const labelToUse = `${a11yLabel || getTranslation(labelKey, t, labelArgs)} ${error ? t('error', { error }) : ''}`
 
   return (
-    <TouchableWithoutFeedback onPress={selectorOnPress} accessibilityState={a11yState} accessibilityRole={a11yRole} accessibilityLabel={labelToUse} {...hintProp}>
+    <TouchableWithoutFeedback testID={testID} onPress={selectorOnPress} accessibilityState={a11yState} accessibilityRole={a11yRole} accessibilityLabel={labelToUse} {...hintProp}>
       <Box>
         {!!error && <Box {...errorBoxProps}>{renderInputError(error)}</Box>}
         <Box flexDirection="row">

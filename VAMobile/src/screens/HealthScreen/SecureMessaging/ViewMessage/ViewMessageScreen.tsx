@@ -7,6 +7,7 @@ import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingCompon
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DemoState } from 'store/slices/demoSlice'
+import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -18,6 +19,7 @@ import { SecureMessagingState, getMessage, getThread, listFolders, moveMessage }
 import { SnackbarMessages } from 'components/SnackBar'
 import { getfolderName } from 'utils/secureMessaging'
 import { useAppDispatch, useDowntimeByScreenID, useError, useTheme } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
 import MessageCard from './MessageCard'
@@ -140,6 +142,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.back}
           showCarat={true}
+          backButtonTestID="viewMessageBackTestID"
         />
       ),
       headerRight: () =>
@@ -223,11 +226,14 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       : {
           label: tc('pickerLaunchBtn'),
           icon: moveIconProps,
-          onPress: () => setShowModalPicker(true),
+          onPress: () => {
+            logAnalyticsEvent(Events.vama_sm_move())
+            setShowModalPicker(true)
+          },
         }
 
   return (
-    <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')} headerButton={headerButton}>
+    <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')} headerButton={headerButton} testID="viewMessageTestID">
       {headerButton && showModalPicker && (
         <VAModalPicker
           selectedValue={newCurrentFolderID}

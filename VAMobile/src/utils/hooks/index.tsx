@@ -466,6 +466,7 @@ export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()
  */
 export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void {
   const { showActionSheetWithOptions } = useActionSheet()
+  const currentTheme = getTheme()
 
   return (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => {
     // Use title case for iOS, sentence case for Android
@@ -479,6 +480,11 @@ export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i
     })
 
     const casedOptions: ActionSheetOptions = {
+      titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
+      messageTextStyle: { textAlign: 'center', color: currentTheme.colors.text.primary },
+      textStyle: { color: currentTheme.colors.text.primary },
+      destructiveColor: currentTheme.colors.text.error,
+      containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
       ...options,
       options: casedOptionText,
     }

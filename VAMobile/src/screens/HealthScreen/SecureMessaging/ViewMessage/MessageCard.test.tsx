@@ -12,13 +12,13 @@ import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { DateTime } from 'luxon'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+jest.mock('@react-navigation/native', () => {
+  let actual = jest.requireActual('@react-navigation/native')
   return {
-    ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    ...actual,
+    useNavigation: () => ({
+      navigate: mockNavigationSpy,
+    }),
   }
 })
 

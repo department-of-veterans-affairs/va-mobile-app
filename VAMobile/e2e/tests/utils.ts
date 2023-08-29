@@ -1,11 +1,12 @@
 import { device, element, by, expect, waitFor, web } from 'detox'
 import getEnv from '../../src/utils/env'
 import { expect as jestExpect } from '@jest/globals'
-import { setTimeout } from "timers/promises"
 
 const { toMatchImageSnapshot } = require('jest-image-snapshot')
 const fs = require('fs')
 jestExpect.extend({ toMatchImageSnapshot })
+
+const { DEMO_PASSWORD } = getEnv() 
 
 export const CommonE2eIdConstants = {
   VA_LOGO_ICON_ID: 'va-icon',
@@ -26,6 +27,7 @@ export const CommonE2eIdConstants = {
   SETTINGS_ROW_TEXT: 'Settings',
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
   VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
+  MESSAGES_ROW_TEXT: 'Messages',
   SIGN_OUT_BTN_ID: 'Sign out',
   SIGN_OUT_CONFIRM_TEXT: 'Sign out?',
   BACK_BTN_LABEL: 'Back',
@@ -33,13 +35,16 @@ export const CommonE2eIdConstants = {
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
+  CONTACT_INFORMATION_TEXT: 'Contact information',
   VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
+  CLAIMS_BUTTON_TEXT: 'Claims',
+  CLAIMS_HISTORY_BUTTON_TEXT: 'Claims history',
 }
 
 
 /** Log the automation into demo mode
  * */
-export async function loginToDemoMode() {
+export async function loginToDemoMode(skipOnboarding = true) {
   await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
     .toExist()
     .withTimeout(10000)
@@ -47,21 +52,21 @@ export async function loginToDemoMode() {
 	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
 	await element(by.text('Dismiss')).tap()
   } catch (e) {} 
-  const { DEMO_PASSWORD } = getEnv() 
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(21)
   if (DEMO_PASSWORD != undefined) {
     await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
   }
   
-  // due to keyboard being open one tap to close keyboard second to tap demo btn
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
   await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
-  const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
+  if(skipOnboarding == true) {
+    const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
 
-  if (ifCarouselSkipBtnExist) {
-    await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
+    if (ifCarouselSkipBtnExist) {
+      await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
+    }
   }
 }
 
@@ -99,7 +104,7 @@ export async function checkIfElementIsPresent(matchString: string, findbyText = 
   }
 }
 
-/** This function will open, check for, and dismiss the leaving app popup from a specified launching point
+/*This function will open, check for, and dismiss the leaving app popup from a specified launching point
  * 
  * @param matchString - string of the text or id to match
  * @param findbyText - boolean to search by testID or Text
@@ -123,6 +128,7 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
  * @param jsonProperty - array of strings and dictionaries: should match the path to get to the json ob you want changed that matches the path to get to the object you want changed
  * @param newJsonValue - string or boolean: new value for the json object
  */
+
 export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue: string | boolean) {
 			
 	fs.readFile('./src/store/api/demo/mocks/' + mockFileName, 'utf8', (error, data) => {
@@ -132,7 +138,6 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 		 }
 
 		const jsonParsed = JSON.parse(data)
-		//const jsonFirstObject = source[jsonProperty[0]]
 		var mockDataVariable
 		var mockDataKeyValue
 		for(var x=0; x<jsonProperty.length; x++) {
@@ -149,10 +154,8 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 				} else {
 					mockDataVariable = mockDataVariable[jsonProperty[x]]
 				}
-			}
-				
+			}				
 		}
-		//log(JSON.stringify(jsonParsed, null, 2))
 	
 		fs.writeFile('./src/store/api/demo/mocks/' + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
 			if (err) { return console.log(err) }
@@ -170,7 +173,6 @@ export async function checkImages(screenshotPath) {
 		failureThreshold: 0.01,
 		failureThresholdType: 'percent'})
 }
-
 
 /**
  * Single-source collection for 'open this screen' functions
@@ -216,7 +218,10 @@ export async function openDirectDeposit() {
 
 export async function openPrescriptions() {
 	await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
+}
 
+export async function openContactInfo() {
+  await element(by.text(CommonE2eIdConstants.CONTACT_INFORMATION_TEXT)).tap()
 }
 
 export async function openVAPaymentHistory() {
@@ -237,6 +242,18 @@ export async function openDisabilityRating() {
 
 export async function openVaccineRecords() {
   await element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT)).tap()
+}
+
+export async function openMessages() {
+  await element(by.text(CommonE2eIdConstants.MESSAGES_ROW_TEXT)).tap() 
+}
+
+export async function openClaims() {
+  await element(by.text(CommonE2eIdConstants.CLAIMS_BUTTON_TEXT)).tap()
+}
+
+export async function openClaimsHistory() {
+	await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap() 
 }
 
 /**

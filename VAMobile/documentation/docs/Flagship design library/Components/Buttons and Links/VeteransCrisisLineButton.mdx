@@ -1,0 +1,46 @@
+---
+title: Veterans Crisis Line button
+---
+
+import CodeBlock from '@theme/CodeBlock'
+import AlertBoxString from '!!raw-loader!@componentsDocs/CrisisLineCta'
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+
+Veterans Crisis Line (VCL) button provides users quick access to crisis care.
+
+## Examples
+
+### Default
+<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7820-13268&mode=design&t=XkYEw6lPmNkmrNt0-4" allowfullscreen></iframe>
+
+## Usage
+
+### When to use Veterans Crisis Line button
+- VCL button currently displays on the following screens:
+     - Login
+     - Home
+     - Contact VA
+     - Category screens, including Benefits, Health, and Payments
+- We don't include it on all screens to prevent banner fatigue / semantic satiation.
+- It should be considered on screens where there is a likelihood the Veteran is there because they're in crisis.
+- If the VCL button is the only number on the page, it's possible it will be used as a general call center line.
+
+### Behavior
+- When the component is tapped, it opens a full panel with more information.
+
+### Placement
+- Component should appear near the top of the screen, directly below the top navigation bar.
+
+## Content considerations
+- Copy should always be `Talk to the Veterans Crisis Line now`. Do not change.
+- No punctuation
+
+## Accessibility considerations
+- The component should indicate that it is a button.
+
+## Code usage
+import CrisisLineCtaString from '!!raw-loader!@componentsDocs/CrisisLineCta'
+export const exampleString = `<CrisisLineCta onPress={onCrisisLine} />`
+
+<ComponentTopInfo componentName="CrisisLineCta" example={exampleString} codeString={CrisisLineCtaString} />

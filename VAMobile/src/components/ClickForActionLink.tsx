@@ -39,6 +39,8 @@ export type CalendarMetaData = {
   startTime: number
   endTime: number
   location: string
+  latitude: number
+  longitude: number
 }
 
 export type ActionLinkMetaData = CalendarMetaData
@@ -79,7 +81,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
   const launchExternalLink = useExternalLink()
 
   const onCalendarPress = async (): Promise<void> => {
-    const { title, endTime, startTime, location } = metaData as ActionLinkMetaData
+    const { title, endTime, startTime, location, latitude, longitude } = metaData as ActionLinkMetaData
 
     let hasPermission = await checkCalendarPermission()
     if (!hasPermission) {
@@ -87,7 +89,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
     }
 
     if (hasPermission) {
-      await addToCalendar(title, startTime, endTime, location)
+      await addToCalendar(title, startTime, endTime, location, latitude, longitude)
     }
   }
 

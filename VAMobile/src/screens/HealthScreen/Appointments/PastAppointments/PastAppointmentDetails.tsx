@@ -18,7 +18,7 @@ import { Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { isAPendingAppointment } from '../../../../utils/appointments'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from '../../../../utils/appointments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -41,8 +41,16 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
   const pendingAppointment = isAPendingAppointment(attributes)
 
   useEffect(() => {
-    dispatch(trackAppointmentDetail(pendingAppointment))
-  }, [dispatch, appointmentID, pendingAppointment])
+    dispatch(
+      trackAppointmentDetail(
+        pendingAppointment,
+        appointmentID,
+        getAppointmentAnalyticsStatus(attributes),
+        attributes.appointmentType.toString(),
+        getAppointmentAnalyticsDays(attributes),
+      ),
+    )
+  }, [dispatch, appointmentID, pendingAppointment, attributes])
 
   const appointmentTypeAndDateIsLastItem =
     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME || appointmentIsCanceled
