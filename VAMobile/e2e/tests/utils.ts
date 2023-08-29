@@ -74,6 +74,8 @@ export async function loginToDemoMode() {
   if (ifCarouselSkipBtnExist) {
     await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
   }
+
+  await device.takeScreenshot('DemoModeOver')
 }
 
 /** this function is to see if a element is present that could sometime not be like the carousel for example

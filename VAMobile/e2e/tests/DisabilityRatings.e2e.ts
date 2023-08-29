@@ -19,6 +19,7 @@ beforeAll(async () => {
 
 describe('Veterans Crisis Line', () => {
   it('should match the disability ratings page design', async () => {
+    await device.takeScreenshot('StartDisabilityRatingsPageDesign')
     await expect(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toExist()
     await expect(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toExist()
     await expect(element(by.text(DisabilityRatingsIdConstants.INDIVIDUAL_RATING_TEXT))).toExist()
@@ -26,7 +27,7 @@ describe('Veterans Crisis Line', () => {
     await expect(element(by.id(DisabilityRatingsIdConstants.ABOUT_DISABILITY_RATINGS_LINK_ID))).toExist()
     await expect(element(by.text('Learn about VA disability ratings'))).toExist()
     await expect(element(by.text('Need Help?'))).toExist()
-    await device.takeScreenshot('AboutDisabilityRatingsPageDesign')
+    await device.takeScreenshot('EndDisabilityRatingsPageDesign')
   })
 
   // it('should tap About VA disability ratings and verify the correct information is displayed', async () => {
