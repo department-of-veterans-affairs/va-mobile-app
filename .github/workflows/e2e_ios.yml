@@ -31,8 +31,6 @@ env:
   APP_CLIENT_SECRET: ${{ secrets.APP_CLIENT_SECRET }}
   # IAM production app client secret
   APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
-  # Password to enter demo mode from login screen
-  DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD_DETOX }}.trim()
 
 jobs:
   e2e:
