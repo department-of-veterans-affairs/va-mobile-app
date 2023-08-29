@@ -39,8 +39,8 @@ jobs:
         testsuite: [
           # "Appeals",
           # "Appointments",
-          "Claims",
-          # "ContactInformation",
+          # "Claims",
+          "ContactInformation",
           # "DirectDeposit",
           # "DisabilityRatings",
           # "HomeScreen",
