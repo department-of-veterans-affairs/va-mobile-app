@@ -3,22 +3,20 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, VAScrollView } from 'components'
-import { DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
-import { ErrorsState } from 'store/slices'
+import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDToFeatureName, ScreenIDTypes } from 'store/api/types'
+import { DowntimeWindow, ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { featureInDowntime, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useTheme } from 'utils/hooks'
 
 export type DowntimeErrorProps = {
   /**The screen id for the screen that has the errors*/
   screenID: ScreenIDTypes
-  /**Override the feature name in the event that a feature happens to share the same api error(ex:contact information and personal information) */
-  overrideFeatureName?: string
 }
 
 /**Common component to show an alert when the service is down*/
-const DowntimeError: FC<DowntimeErrorProps> = ({ screenID, overrideFeatureName }) => {
+const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -31,9 +29,20 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID, overrideFeatureName }
     mb: theme.dimensions.contentMarginBottom,
   }
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const feature = DowntimeScreenIDToFeature[screenID]
-  const featureName = overrideFeatureName ? overrideFeatureName : downtimeWindowsByFeature[feature]?.featureName
-  const endTime = downtimeWindowsByFeature[feature]?.endTime.toFormat('fff')
+  const features = ScreenIDToDowntimeFeatures[screenID]
+  // if there are multiple active downtime windows for the screen, use the latest endTime
+  let latestDowntimeWindow: DowntimeWindow | null = null
+  features.forEach((feature) => {
+    if (featureInDowntime(feature as DowntimeFeatureType, downtimeWindowsByFeature)) {
+      const downtimeWindow = downtimeWindowsByFeature[feature as DowntimeFeatureType]
+      if (downtimeWindow && (latestDowntimeWindow === null || latestDowntimeWindow.endTime < downtimeWindow.endTime)) {
+        latestDowntimeWindow = downtimeWindow
+      }
+    }
+  })
+
+  const featureName = ScreenIDToFeatureName[screenID]
+  const endTime = latestDowntimeWindow ? (latestDowntimeWindow as DowntimeWindow).endTime.toFormat('fff') : ''
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
