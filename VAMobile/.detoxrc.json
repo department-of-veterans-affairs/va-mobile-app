@@ -53,7 +53,7 @@
       },
       "screenshot": {
         "shouldTakeAutomaticSnapshots": true,
-        "keepOnlyFailedTestsArtifacts": true,
+        "keepOnlyFailedTestsArtifacts": false,
         "takeWhen": {
           "testStart": false,
           "testDone": true
