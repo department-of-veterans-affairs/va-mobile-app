@@ -56,6 +56,10 @@ export async function loginToDemoMode() {
   if (DEMO_PASSWORD != undefined) {
     await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
   }
+
+  await waitFor(element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)))
+  .toBeVisible()
+  .withTimeout(120000)
   
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
