@@ -128,5 +128,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: detox-artifacts
+          name: detox-artifacts-${{ github.run_id }}
           path: VAMobile/artifacts
