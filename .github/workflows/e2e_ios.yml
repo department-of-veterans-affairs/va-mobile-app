@@ -6,15 +6,6 @@ name: '[e2e] iOS Detox Test Run'
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: Environment
-        required: true
-        default: staging
-        type: choice
-        options:
-          - staging
-          - production
   pull_request:
   push:
     branches:
@@ -78,7 +69,7 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive
 
       - name: Set app environment variables
-        run: yarn env:${{ inputs.environment }}
+        run: yarn env:staging
 
       - name: Install pods
         working-directory: VAMobile/ios
