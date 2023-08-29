@@ -5,6 +5,7 @@ import { Box, ButtonTypesConstants, CollapsibleView, CrisisLineCta, FullScreenSu
 import { NAMESPACE } from 'constants/namespaces'
 import { useNavigation } from '@react-navigation/native'
 import { useRouteNavigation } from 'utils/hooks'
+import { useStartAuth } from 'utils/hooks/auth'
 import { useTheme } from 'utils/hooks'
 
 type LoaGateProps = Record<string, unknown>
@@ -12,9 +13,9 @@ type LoaGateProps = Record<string, unknown>
 const LoaGate: FC<LoaGateProps> = ({}) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const startAuth = useStartAuth()
   const navigateTo = useRouteNavigation()
   const navigation = useNavigation()
-  const onConfirm = navigateTo('WebviewLogin')
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const bulletOne = {
@@ -64,7 +65,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
         </CollapsibleView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
-            onPress={onConfirm}
+            onPress={startAuth}
             label={t('continueToSignin')}
             buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('continueToSignin.a11yHint')}
