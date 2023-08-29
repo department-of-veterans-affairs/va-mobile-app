@@ -78,7 +78,7 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive
 
       - name: Set app environment variables
-        run: yarn env:staging
+        run: yarn env:${{ inputs.environment }}
 
       - name: Install pods
         working-directory: VAMobile/ios
@@ -88,13 +88,13 @@ jobs:
         working-directory: VAMobile/ios
         run: bundle install
 
-      - name: Bundle app
+      - name: Bundle iOS app
         run: yarn e2e:ios-build
 
-      - name: Run e2e tests
+      - name: Run e2e tests for iOS
         run: yarn e2e:ios-test
       
-      - name: Upload artifacts
+      - name: Upload artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v3
         with:
