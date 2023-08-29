@@ -4,9 +4,11 @@ import React, { FC } from 'react'
 import { AppointmentAttributes } from 'store/api'
 import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { Box, ButtonTypesConstants, VAButton } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { cancelAppointment } from 'store/slices'
-import { isAPendingAppointment } from 'utils/appointments'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
@@ -27,10 +29,30 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
 
   if (isAppointmentPending && cancelId && status !== AppointmentStatusConstants.CANCELLED) {
     const onPress = () => {
-      dispatch(cancelAppointment(cancelId, appointmentID, true))
+      logAnalyticsEvent(
+        Events.vama_apt_cancel_clicks(
+          appointmentID || '',
+          getAppointmentAnalyticsStatus(attributes),
+          attributes.appointmentType.toString(),
+          getAppointmentAnalyticsDays(attributes),
+          'confirm',
+        ),
+      )
+      dispatch(
+        cancelAppointment(cancelId, appointmentID, true, getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
+      )
     }
 
     const onCancel = () => {
+      logAnalyticsEvent(
+        Events.vama_apt_cancel_clicks(
+          appointmentID || '',
+          getAppointmentAnalyticsStatus(attributes),
+          attributes.appointmentType.toString(),
+          getAppointmentAnalyticsDays(attributes),
+          'start',
+        ),
+      )
       confirmAlert({
         title: tc('appointments.cancelRequest'),
         cancelButtonIndex: 1,

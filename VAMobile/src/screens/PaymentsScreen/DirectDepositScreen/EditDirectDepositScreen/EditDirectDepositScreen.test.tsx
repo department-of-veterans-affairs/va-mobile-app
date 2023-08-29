@@ -96,10 +96,10 @@ context('EditDirectDepositScreen', () => {
   describe('when user enters a routing number', () => {
     it('should update the value of routingNumber', async () => {
       await waitFor(() => {
-        routingNumberTextInput.props.onChangeText('123456789')
+        routingNumberTextInput.props.onChangeText('053100300')
 
         const routingNumberVATextInput = testInstance.findAllByType(VATextInput)[0]
-        expect(routingNumberVATextInput.props.value).toEqual('123456789')
+        expect(routingNumberVATextInput.props.value).toEqual('053100300')
       })
     })
   })
@@ -129,7 +129,7 @@ context('EditDirectDepositScreen', () => {
   describe('when content is valid', () => {
     it('should call updateBankInfo when save is pressed', async () => {
       await waitFor(() => {
-        routingNumberTextInput.props.onChangeText('123456789')
+        routingNumberTextInput.props.onChangeText('053100300')
         accountNumberTextInput.props.onChangeText('12345678901234567')
         accountTypeRNPickerSelect.props.onSelectionChange('Checking')
         confirmCheckBox.props.onSelectionChange(true)
@@ -138,7 +138,7 @@ context('EditDirectDepositScreen', () => {
 
         expect(updateBankInfo).toBeCalledWith(
           '12345678901234567',
-          '123456789',
+          '053100300',
           'Checking',
           { errorMsg: 'Direct deposit information could not be saved', successMsg: 'Direct deposit information saved' },
           ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID,
@@ -158,10 +158,10 @@ context('EditDirectDepositScreen', () => {
         getSaveButton().props.onPress()
 
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-        expect(findByTypeWithText(testInstance, TextView, "Enter the bank's 9-digit routing number.")).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'Enter your account number.')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'Select the type that best describes the account.')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'Confirm this information is correct.')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, "Enter a 9-digit routing number")).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'Enter an account number')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'Select an account type')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'Select checkbox to confirm information')).toBeTruthy()
       })
     })
   })

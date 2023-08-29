@@ -6,19 +6,48 @@ import { Event, EventParams, UserAnalytic } from 'utils/analytics'
  */
 /*eslint id-length: ["error", { "max": 24 }]*/
 export const Events = {
-  vama_appt_cancel: (isPendingAppointment: boolean): Event => {
+  vama_accordion_click: (section: string, isOpened: boolean): Event => {
+    return {
+      name: 'vama_accordion_click',
+      params: {
+        section: section,
+        isOpened: isOpened,
+      },
+    }
+  },
+  vama_appt_cancel: (
+    isPendingAppointment: boolean,
+    apt_id: string | undefined,
+    apt_status: string | undefined,
+    apt_type: string | undefined,
+    days_to_apt: number | undefined,
+  ): Event => {
     return {
       name: 'vama_appt_cancel',
       params: {
         isPending: isPendingAppointment,
+        apt_id: apt_id,
+        apt_status: apt_status,
+        apt_type: apt_type,
+        days_to_apt: days_to_apt,
       },
     }
   },
-  vama_appt_view_details: (isPendingAppointment: boolean): Event => {
+  vama_appt_view_details: (
+    isPendingAppointment: boolean,
+    apt_id: string | undefined,
+    apt_status: string | undefined,
+    apt_type: string | undefined,
+    days_to_apt: number | undefined,
+  ): Event => {
     return {
       name: 'vama_appt_view_details',
       params: {
         isPending: isPendingAppointment,
+        apt_id: apt_id,
+        apt_status: apt_status,
+        apt_type: apt_type,
+        days_to_apt: days_to_apt,
       },
     }
   },
@@ -26,6 +55,29 @@ export const Events = {
   vama_appts_page_warning: (): Event => {
     return {
       name: 'vama_appts_page_warning',
+    }
+  },
+  vama_apt_add_cal: (apt_id: string, apt_status: string | undefined, apt_type: string, days_to_apt: number): Event => {
+    return {
+      name: 'vama_apt_add_cal',
+      params: {
+        apt_id: apt_id,
+        apt_status: apt_status,
+        apt_type: apt_type,
+        days_to_apt: days_to_apt,
+      },
+    }
+  },
+  vama_apt_cancel_clicks: (apt_id: string, apt_status: string, apt_type: string, days_to_apt: number, step: string): Event => {
+    return {
+      name: 'vama_apt_cancel_clicks',
+      params: {
+        apt_id: apt_id,
+        apt_status: apt_status,
+        apt_type: apt_type,
+        days_to_apt: days_to_apt,
+        step: step,
+      },
     }
   },
   vama_auth_completed: (): Event => {
@@ -479,6 +531,23 @@ export const Events = {
       },
     }
   },
+  vama_modalpick_open: (modal: string): Event => {
+    return {
+      name: 'vama_modalpick_open',
+      params: {
+        modal: modal,
+      },
+    }
+  },
+  vama_modalpick_sel: (modal: string, selection: string): Event => {
+    return {
+      name: 'vama_modalpick_sel',
+      params: {
+        modal: modal,
+        selection: selection,
+      },
+    }
+  },
   vama_notification_click: (notification_url?: string): Event => {
     return {
       name: 'vama_notification_click',
@@ -693,6 +762,14 @@ export const Events = {
   vama_rx_trackingtab: (): Event => {
     return {
       name: 'vama_rx_trackingtab',
+    }
+  },
+  vama_segcontrol_click: (label: string): Event => {
+    return {
+      name: 'vama_segcontrol_click',
+      params: {
+        label: label,
+      },
     }
   },
   vama_select_all: (): Event => {
