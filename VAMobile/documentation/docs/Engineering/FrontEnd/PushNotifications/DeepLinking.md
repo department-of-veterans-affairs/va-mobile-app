@@ -51,7 +51,7 @@ From the example above, the URI endpoint `messages/:messageID` is being mapped t
 
  Once you've added your deep link to the linking configuration, depending on how nested the screen is in the app, one issue you may run into is navigating backwards. Navigating back from screens opened via a deep link will typically go back to the home screen. This is because React Navigation isn't able to automatically generate the correct navigation state when a deep link is opened. The navigation state will need to be manually generated to ensure navigating back after opening a deep link takes the user to the correct screen.
 
-In the linking configuration, the [getStateFromPath](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/8daf0536ebbf801de0ed63e0b2af9385d54b1bc1/VAMobile/src/constants/linking.tsx#L27-L49) function can be used for manually setting the navigation state based on the path of opened the deep link. Logic added here shouldn't conflict with logic for other deep links. The generated navigation state for `ViewMessageScreen` from the previous examples looks like this:
+In the linking configuration, the [getStateFromPath](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/8daf0536ebbf801de0ed63e0b2af9385d54b1bc1/VAMobile/src/constants/linking.tsx#L27-L49) function can be used for manually setting the navigation state based on the path of the opened deep link. Logic added here shouldn't conflict with logic for other deep links. The generated navigation state for `ViewMessageScreen` from the previous examples looks like this:
 
 ```tsx
 {
