@@ -37,8 +37,8 @@ jobs:
     strategy:
       matrix:
         testsuite: [
-          "Appeals",
-          # "Appointments",
+          # "Appeals",
+          "Appointments",
           # "Claims",
           # "ContactInformation",
           # "DirectDeposit",
