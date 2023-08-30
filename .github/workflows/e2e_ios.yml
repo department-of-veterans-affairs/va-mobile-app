@@ -50,8 +50,8 @@ jobs:
           # "MilitaryInformation (fail)",
           # "Onboarding (fail)",
           # "Payments",
-          "PersonalnformationScreen",
-          # "Prescriptions",
+          # "PersonalnformationScreen (fail)",
+          "Prescriptions",
           # "ProfileScreen",
           # "PushNotifications",
           # "SettingsScreen"
