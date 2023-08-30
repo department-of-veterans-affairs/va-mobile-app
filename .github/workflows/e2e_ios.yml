@@ -43,7 +43,7 @@ jobs:
           # "ContactInformation (fail)",
           # "DirectDeposit (fail)",
           # "DisabilityRatings",
-          "HomeScreen (fail)",
+          "HomeScreen",
           # "Letters",
           # "LoginScreen (fail)",
           # "Messages (fail)",
