@@ -1,11 +1,11 @@
 import { DateTime } from 'luxon'
-import { SegmentedControl as LibrarySC } from '@department-of-veterans-affairs/mobile-component-library'
 import { ScrollView } from 'react-native'
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, FooterButton, SegmentedControl } from 'components'
+import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, FooterButton } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -135,7 +135,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
       testID="appointmentsTestID">
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <LibrarySC labels={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} labelsA11yHints={a11yHints} />
+          <SegmentedControl labels={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} labelsA11yHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}
         <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
