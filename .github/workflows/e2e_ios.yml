@@ -106,7 +106,7 @@ jobs:
         run: yarn e2e:ios-build
 
       - name: Run e2e tests for iOS (${{matrix.testsuite}})
-        run: yarn e2e:ios-test e2e/tests/${{matrix.testsuite}}.e2e.ts
+        run: yarn e2e:ios-test e2e/tests/${{matrix.testsuite}}.e2e.ts --take-screenshots failing
       
       - name: Upload artifacts on failure
         if: failure()
