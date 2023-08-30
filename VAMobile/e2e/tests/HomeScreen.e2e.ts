@@ -4,7 +4,7 @@ import { CommonE2eIdConstants, loginToDemoMode, backButton } from './utils'
 export const HomeE2eIdConstants = {
 	GREETING_ID: 'greeting-text',
 	PAYMENTS_BTN_ID: 'Payments',
-	LOCATION_FINDER_ROW_ID: 'Find a V-A location',
+	LOCATION_FINDER_ROW_ID: 'Find a  V-A  location',
 	CONTACT_VA_ROW_ID: 'Contact V-A',
 	COVID_ROW_ID: 'Get the latest COVID-19 updates',
 	HOME_PAGE_USER_NAME: 'Kimberly Washington',
