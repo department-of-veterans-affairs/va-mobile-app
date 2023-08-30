@@ -169,11 +169,11 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const [page, setPage] = useState(1)
   const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
 
-  const [selectedFilter, setSelectedFilter] = useState<RefillStatus | ''>(RefillStatusConstants.ACTIVE)
+  const [selectedFilter, setSelectedFilter] = useState<RefillStatus | ''>('')
   const [selectedSortBy, setSelectedSortBy] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
   const [selectedSortOn, setSelectedSortOn] = useState(ASCENDING)
 
-  const [filterToUse, setFilterToUse] = useState<RefillStatus | ''>(RefillStatusConstants.ACTIVE)
+  const [filterToUse, setFilterToUse] = useState<RefillStatus | ''>('')
   const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
 
@@ -276,21 +276,16 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   ]
 
   const onTabChange = (newTab: string) => {
+    setFilterToUse('')
+    setSelectedFilter('')
+    setCurrentTab(newTab)
+    setPage(1)
+
     if (newTab === PrescriptionHistoryTabConstants.PENDING) {
       logAnalyticsEvent(Events.vama_rx_pendingtab())
     } else if (newTab === PrescriptionHistoryTabConstants.TRACKING) {
       logAnalyticsEvent(Events.vama_rx_trackingtab())
     }
-    if (newTab === PrescriptionHistoryTabConstants.ALL) {
-      setCurrentTab(newTab)
-      setFilterToUse(RefillStatusConstants.ACTIVE)
-      setSelectedFilter(RefillStatusConstants.ACTIVE)
-    } else {
-      setFilterToUse('')
-      setSelectedFilter('')
-      setCurrentTab(newTab)
-    }
-    setPage(1)
   }
 
   const tabProps: TabBarProps = {
@@ -506,7 +501,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter))
     },
     onUpperRightAction: () => {
-      setSelectedFilter(currentTab === PrescriptionHistoryTabConstants.ALL ? RefillStatusConstants.ACTIVE : '')
+      setSelectedFilter('')
       announceAfterDelay(tc('prescriptions.resetAnnouncement', { value: getDisplayForValue(filterOptionsForTab, '') }))
     },
     onCancel: () => {

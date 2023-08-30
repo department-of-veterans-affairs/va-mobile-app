@@ -1,7 +1,6 @@
 import { device, element, by, expect, waitFor, web } from 'detox'
 import getEnv from '../../src/utils/env'
 import { expect as jestExpect } from '@jest/globals'
-import { setTimeout } from "timers/promises"
 
 const { toMatchImageSnapshot } = require('jest-image-snapshot')
 const fs = require('fs')
@@ -28,6 +27,7 @@ export const CommonE2eIdConstants = {
   SETTINGS_ROW_TEXT: 'Settings',
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
   VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
+  MESSAGES_ROW_TEXT: 'Messages',
   SIGN_OUT_BTN_ID: 'Sign out',
   SIGN_OUT_CONFIRM_TEXT: 'Sign out?',
   BACK_BTN_LABEL: 'Back',
@@ -38,13 +38,13 @@ export const CommonE2eIdConstants = {
   CONTACT_INFORMATION_TEXT: 'Contact information',
   VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
   CLAIMS_BUTTON_TEXT: 'Claims',
-  CLAIMS_HISTORY_BUTTON_TEXT: 'Claims history'
+  CLAIMS_HISTORY_BUTTON_TEXT: 'Claims history',
 }
 
 
 /** Log the automation into demo mode
  * */
-export async function loginToDemoMode() {
+export async function loginToDemoMode(skipOnboarding = true) {
   await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
     .toExist()
     .withTimeout(10000)
@@ -61,10 +61,12 @@ export async function loginToDemoMode() {
 
   await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
-  const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
+  if(skipOnboarding == true) {
+    const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
 
-  if (ifCarouselSkipBtnExist) {
-    await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
+    if (ifCarouselSkipBtnExist) {
+      await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
+    }
   }
 }
 
@@ -216,7 +218,6 @@ export async function openDirectDeposit() {
 
 export async function openPrescriptions() {
 	await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
-
 }
 
 export async function openContactInfo() {
@@ -243,8 +244,12 @@ export async function openVaccineRecords() {
   await element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT)).tap()
 }
 
+export async function openMessages() {
+  await element(by.text(CommonE2eIdConstants.MESSAGES_ROW_TEXT)).tap() 
+}
+
 export async function openClaims() {
-	await element(by.text(CommonE2eIdConstants.CLAIMS_BUTTON_TEXT)).tap() 
+  await element(by.text(CommonE2eIdConstants.CLAIMS_BUTTON_TEXT)).tap()
 }
 
 export async function openClaimsHistory() {

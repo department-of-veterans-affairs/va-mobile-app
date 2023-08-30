@@ -10,6 +10,7 @@ import { GeneralHelpScreen, SubTypeHelpScreen, TypeOfCareNotListedHelpScreen } f
 import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import Attachments from './SecureMessaging/StartNewMessage/Attachments/Attachments'
+import ConfirmContactInfo from './Appointments/UpcomingAppointments/CheckIn/ConfirmContactInfo'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
 import NoRequestAppointmentAccess from './Appointments/RequestAppointments/NoRequestAppointmentAccess/NoRequestAppointmentAccess'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
@@ -30,6 +31,7 @@ export type HealthStackParamList = WebviewStackParams & {
   UpcomingAppointmentDetails: {
     appointmentID: string
   }
+  ConfirmContactInfo: undefined
   PrepareForVideoVisit: undefined
   PastAppointmentDetails: {
     appointmentID: string
@@ -172,6 +174,7 @@ export const getHealthScreens = (t: TFunction) => {
         options={{ ...TransitionPresets.SlideFromRightIOS }}
       />
     </HealthStack.Group>,
+    <HealthStack.Screen key={'ConfirmContactInfo'} name="ConfirmContactInfo" component={ConfirmContactInfo} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'RefillRequestSummary'} name="RefillRequestSummary" component={RefillRequestSummary} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'RefillScreenModal'} name="RefillScreenModal" component={RefillScreenModal} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'RefillTrackingModal'} name="RefillTrackingModal" component={RefillTrackingModal} options={FULLSCREEN_SUBTASK_OPTIONS} />,

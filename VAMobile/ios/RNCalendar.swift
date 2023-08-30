@@ -94,8 +94,10 @@ class RNCalendar: NSObject, EKEventEditViewDelegate, RCTBridgeModule {
   ///   - beginTime: Start time in UTC seconds since 1970
   ///   - endTime: End time in UTC seconds since 1970
   ///   - location: Address or name of place where the event is taking place
+  ///   - latitude: latitude of place where the event is taking place
+  ///   - longitude: longitude of place where the event is taking place
   /// - Returns: Void
-  @objc func addToCalendar(_ title: String, beginTime: NSNumber, endTime: NSNumber, location: String)-> Void {
+ @objc func addToCalendar(_ title: String, beginTime: NSNumber, endTime: NSNumber, location: String, latitude: NSNumber, longitude: NSNumber)-> Void {
    
     // get the current application window and present the event viewcontroller
     if let window: UIWindow = UIApplication.shared.keyWindow, let vc = window.rootViewController {
@@ -103,10 +105,20 @@ class RNCalendar: NSObject, EKEventEditViewDelegate, RCTBridgeModule {
          let store = EKEventStore()
         // create a new event object to save
         let event = EKEvent(eventStore: store)
+        let geoLocation = CLLocation(latitude: CLLocationDegrees(truncating: latitude), longitude: CLLocationDegrees(truncating: longitude))
+        let eventLocation = EKStructuredLocation()
+        eventLocation.title = location
+        eventLocation.radius = 0
+        eventLocation.geoLocation = geoLocation
+       
         event.title = title
         event.startDate = Date(timeIntervalSince1970: TimeInterval(beginTime.doubleValue))
         event.endDate = Date(timeIntervalSince1970: TimeInterval(endTime.doubleValue))
-        event.location = location
+        if (latitude == 0 && longitude == 0) {
+          event.location = location
+        } else{
+         event.structuredLocation = eventLocation
+        }
         event.calendar = store.defaultCalendarForNewEvents
         // get an instance of the ViewController that deals with events
         let eventVC = EKEventEditViewController()
