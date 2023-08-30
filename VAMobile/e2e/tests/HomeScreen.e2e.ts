@@ -4,9 +4,9 @@ import { CommonE2eIdConstants, loginToDemoMode, backButton } from './utils'
 export const HomeE2eIdConstants = {
 	GREETING_ID: 'greeting-text',
 	PAYMENTS_BTN_ID: 'Payments',
-	LOCATION_FINDER_ROW_ID: 'Find a VA Location',
-	CONTACT_VA_ROW_ID: 'Contact VA',
-	COVID_ROW_ID: 'VA COVID-19 updates',
+	LOCATION_FINDER_ROW_ID: 'Find a V-A Location',
+	CONTACT_VA_ROW_ID: 'Contact V-A',
+	COVID_ROW_ID: 'V﻿A COVID-19 updates',
 	HOME_PAGE_USER_NAME: 'Kimberly Washington',
 	HOME_PAGE_MILITARY_BRANCH: 'United States Coast Guard',
 	CONTACT_VA_TITLE: 'Call My V-A 4 1 1',
@@ -22,15 +22,11 @@ describe('Home Screen', () => {
 	it('should show primary home page content', async () => {
 		await device.takeScreenshot('StartHomeScreen')
 		await expect(element(by.text(HomeE2eIdConstants.HOME_PAGE_USER_NAME))).toExist()
-		await device.takeScreenshot('1HomeScreen')
 		await expect(element(by.text(HomeE2eIdConstants.HOME_PAGE_MILITARY_BRANCH))).toExist()
-		await device.takeScreenshot('2HomeScreen')
 		await expect(element(by.text(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
-		await device.takeScreenshot('3HomeScreen')
 		await expect(element(by.text(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
-		await device.takeScreenshot('4HomeScreen')
 		await expect(element(by.text(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
-		await device.takeScreenshot('EndHomeScreen')
+		await device.takeScreenshot('StartHomeScreen')
 	})
 
 })
