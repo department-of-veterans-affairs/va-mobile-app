@@ -5,7 +5,15 @@ import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { SnackbarMessages } from 'components/SnackBar'
-import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/slices'
+import {
+  resetHasLoadedRecipients,
+  resetReplyTriageError,
+  resetSaveDraftComplete,
+  resetSaveDraftFailed,
+  resetSendMessageFailed,
+  saveDraft,
+  updateSecureMessagingTab,
+} from 'store/slices'
 import { useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
 import { useState } from 'react'
 
@@ -63,6 +71,7 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
         setIsDiscarded(true)
         resetAlerts()
         if (isReply && replyToID) {
+          dispatch(resetReplyTriageError())
           navigateTo('ViewMessageScreen', { messageID: replyToID })()
         } else if (isEditDraft) {
           goToDrafts(false)

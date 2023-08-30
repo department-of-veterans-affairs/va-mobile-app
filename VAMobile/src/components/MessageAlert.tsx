@@ -5,7 +5,7 @@ import React, { FC, RefObject } from 'react'
 import { AlertBox, Box, ButtonTypesConstants, TextView, VABulletList, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { SecureMessagingState, resetSendMessageFailed } from 'store/slices'
+import { SecureMessagingState, resetReplyTriageError, resetSendMessageFailed } from 'store/slices'
 import { SecureMessagingTabTypesConstants } from 'store/api/types/SecureMessagingData'
 import { updateSecureMessagingTab } from 'store/slices'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -22,12 +22,10 @@ export type MessageAlertProps = {
   scrollViewRef?: RefObject<ScrollView>
   /** optional list of alertbox failed reasons, supplied by FormWrapper component */
   errorList?: { [key: number]: string }
-  /** optional navigation stack */
-  navigation?: navigation
 }
 
 /**Common component to show a message alert when saving or sending a secure message */
-const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, scrollViewRef, focusOnError, errorList, navigation}) => {
+const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, scrollViewRef, focusOnError, errorList }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.HEALTH)
   const { replyTriageError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
@@ -37,7 +35,8 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
-    navigateTo('SecureMessaging')
+    dispatch(resetReplyTriageError())
+    navigateTo('SecureMessaging')()
   }
 
   const bulletedListOfText = []

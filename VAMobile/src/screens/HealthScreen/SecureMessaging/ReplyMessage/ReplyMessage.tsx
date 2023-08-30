@@ -16,12 +16,10 @@ import {
   FullScreenSubtask,
   LoadingComponent,
   MessageAlert,
-  SaveButton,
   TextArea,
   TextView,
   VAButton,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -131,29 +129,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       setIsTransitionComplete(true)
     })
   }, [dispatch, signature])
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => (
-        <BackButton
-          onPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
-          canGoBack={props.canGoBack}
-          label={BackButtonLabelConstants.cancel}
-          showCarat={false}
-        />
-      ),
-      headerRight: () => (
-        <SaveButton
-          onSave={() => {
-            setOnSaveDraftClicked(true)
-            setOnSendClicked(true)
-          }}
-          disabled={false}
-          a11yHint={t('secureMessaging.saveDraft.a11yHint')}
-        />
-      ),
-    })
-  })
 
   useEffect(() => {
     // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
@@ -269,7 +244,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         saveDraftAttempted={onSaveDraftClicked}
         focusOnError={onSendClicked}
         errorList={errorList}
-        navigation={navigation}
       />
       <TextArea>
         <TextView variant="MobileBody" accessible={true} testID={'To ' + receiverName}>
