@@ -26,7 +26,7 @@ describe('Home Screen', () => {
 		await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
 		await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
 		await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
-		await device.takeScreenshot('StartHomeScreen')
+		await device.takeScreenshot('EndHomeScreen')
 	})
 
 })
