@@ -51,9 +51,9 @@ jobs:
           # "Onboarding (fail)",
           # "Payments",
           # "PersonalnformationScreen (fail)",
-          # "Prescriptions",
-          "ProfileScreen",
-          # "PushNotifications",
+          # "Prescriptions (fail)",
+          # "ProfileScreen",
+          "PushNotifications",
           # "SettingsScreen"
         ]
 
