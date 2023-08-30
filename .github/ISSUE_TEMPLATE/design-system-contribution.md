@@ -1,3 +1,4 @@
+---
 name: Contributing to the design system
 about: Template for new common component for VA mobile app
 title: Component:[Insert name of component here]
