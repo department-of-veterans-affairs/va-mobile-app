@@ -40,7 +40,7 @@ jobs:
           # "Appeals",
           # "Appointments",
           # "Claims",
-          # "ContactInformation (fail)",
+          "ContactInformation",
           # "DirectDeposit (fail)",
           # "DisabilityRatings",
           # "HomeScreen (fail)",
@@ -54,7 +54,7 @@ jobs:
           # "Prescriptions (fail)",
           # "ProfileScreen",
           # "PushNotifications",
-          "SettingsScreen"
+          # "SettingsScreen"
         ]
 
     steps:

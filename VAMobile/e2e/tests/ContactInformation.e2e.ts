@@ -47,7 +47,7 @@ describe('Contact Info Screen', () => {
 
   it('should open and update the mailing address', async () => {
     await element(by.id(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID)).tap()
-    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).typeText('2')
   })
 
   it('should tap on the save button and verify your address screen is displayed', async () => {
@@ -100,14 +100,14 @@ describe('Contact Info Screen', () => {
     await element(by.text('United States')).tap()
     await element(by.text('Done')).tap()
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).clearText()
-    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).replaceText('3101 N Fort Valley Rd')
-    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('3101 N Fort Valley Rd')
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).typeText('2')
     await element(by.id('EditAddressTestID')).scrollTo('bottom')
-    await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
+    await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).typeText('Flagstaff')
     await element(by.id('stateTestID')).tap()
     await element(by.text('Arizona')).tap()
     await element(by.text('Done')).tap()
-    await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).replaceText('86001')
+    await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).typeText('86001')
     await element(by.text('Save')).tap()
     await element(by.id('suggestedAddressTestID')).tap()
     await element(by.id('Use this address')).tap()
@@ -120,8 +120,8 @@ describe('Contact Info Screen', () => {
   })
 
   it('should update the home phone with an extension', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).replaceText('276-608-6180')
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).replaceText('1234')
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
     await element(by.text('Save')).tap()
     await expect(element(by.text('Home phone saved'))).toExist()
     await element(by.text('Dismiss')).tap()
@@ -140,8 +140,8 @@ describe('Contact Info Screen', () => {
   })
 
   it('should update the work phone with an extension', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).replaceText('276-608-6180')
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).replaceText('1234')
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
     await element(by.text('Save')).tap()
     await expect(element(by.text('Work phone saved'))).toExist()
     await element(by.text('Dismiss')).tap()
@@ -165,8 +165,8 @@ describe('Contact Info Screen', () => {
   })
 
   it('should update the mobile phone with an extension', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).replaceText('276-608-6180')
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).replaceText('1234')
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
     await element(by.text('Save')).tap()
     await expect(element(by.text('Mobile phone saved'))).toExist()
     await element(by.text('Dismiss')).tap()
@@ -187,7 +187,7 @@ describe('Contact Info Screen', () => {
   })
 
   it('should update the email address with a +', async () => {
-    await element(by.id('emailAddressEditTestID')).replaceText('attended1+@gmail.com')
+    await element(by.id('emailAddressEditTestID')).typeText('attended1+@gmail.com')
     await element(by.text('Save')).tap()
     await expect(element(by.text('Email address saved'))).toExist()
     await element(by.text('Dismiss')).tap()
@@ -196,7 +196,7 @@ describe('Contact Info Screen', () => {
   it('should update the email address and remove the +', async () => {
     await element(by.id('ContactInfoTestID')).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
-    await element(by.id('emailAddressEditTestID')).replaceText('attended1@gmail.com')
+    await element(by.id('emailAddressEditTestID')).typeText('attended1@gmail.com')
     await element(by.text('Save')).tap()
     await expect(element(by.text('Email address saved'))).toExist()
     await element(by.text('Dismiss')).tap()
