@@ -421,7 +421,6 @@ export const saveDraft =
     dispatch(dispatchStartSaveDraft())
     try {
       let response
-      throw new Error('new error')
       if (messageID) {
         const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft/${messageID}` : `/v0/messaging/health/message_drafts/${messageID}`
         response = await api.put<SecureMessagingSaveDraftData>(url, messageData as unknown as api.Params)
@@ -446,8 +445,7 @@ export const saveDraft =
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `saveDraft: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishSaveDraft({ error }))
-        // isReply && hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, error) ? '' : showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
-        isReply && true ? '' : showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }
