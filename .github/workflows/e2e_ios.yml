@@ -53,8 +53,8 @@ jobs:
           # "PersonalnformationScreen (fail)",
           # "Prescriptions (fail)",
           # "ProfileScreen",
-          "PushNotifications",
-          # "SettingsScreen"
+          # "PushNotifications",
+          "SettingsScreen"
         ]
 
     steps:
