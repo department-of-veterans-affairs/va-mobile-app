@@ -6,7 +6,6 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import {
-  BackButton,
   Box,
   ButtonTypesConstants,
   CollapsibleView,
