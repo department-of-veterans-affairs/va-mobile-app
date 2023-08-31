@@ -26,6 +26,8 @@ const mockOverrides = {
   haptics: false,
   whatsNewUI: false,
   decisionLettersWaygate: false,
+  patientCheckIn: false,
+  patientCheckInWaygate: true,
 }
 
 describe('activate', () => {

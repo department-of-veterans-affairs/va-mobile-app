@@ -54,6 +54,7 @@ const screensToCloseSnackbarOnNavigation = [
   'UploadFile',
   'UploadOrAddPhotos',
   'ViewMessageScreen',
+  'LettersOverview',
 ]
 
 export const CloseSnackbarOnNavigation = (screenName: string | undefined) => {
