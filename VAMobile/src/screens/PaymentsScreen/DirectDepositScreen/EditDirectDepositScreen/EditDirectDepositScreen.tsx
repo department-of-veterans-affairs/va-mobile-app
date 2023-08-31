@@ -218,6 +218,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
         onSelectionChange: setConfirmed,
         a11yHint: t('editDirectDeposit.confirmHint'),
         isRequiredField: true,
+        testID: 'checkBox',
       },
       fieldErrorMessage: t('editDirectDeposit.checkBoxFieldError'),
     },
