@@ -27,7 +27,7 @@ const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation })
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('inAppRecruitment.makeAppBetter.header')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+        <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('inAppRecruitment.makeAppBetter.body')}
         </TextView>
         <VABulletList
