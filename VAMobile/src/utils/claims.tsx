@@ -206,7 +206,7 @@ export const postCameraLaunchCallback = (
  * @param setError - sets error message
  * @param callbackIfUri - callback when an image is selected from the camera roll or taken with the camera successfully
  * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
- *
+ * @param setIsActionSheetVisible - Function for updating the state of the action sheet visibility. Useful for preventing back navigation when action sheet is opened
  **/
 export const onAddPhotos = (
   t: TFunction,
@@ -216,15 +216,18 @@ export const onAddPhotos = (
   totalBytesUsed: number,
   claimID: string,
   request: ClaimEventData,
+  setIsActionSheetVisible?: (isVisible: boolean) => void,
 ): void => {
   const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('cancel')]
 
+  setIsActionSheetVisible && setIsActionSheetVisible(true)
   showActionSheetWithOptions(
     {
       options,
       cancelButtonIndex: 2,
     },
     (buttonIndex) => {
+      setIsActionSheetVisible && setIsActionSheetVisible(false)
       switch (buttonIndex) {
         case 0:
           logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'camera'))

@@ -1,6 +1,6 @@
 {
   "name": "react-native-notifications",
-  "version": "4.3.1",
+  "version": "5.0.0",
   "summary": "Advanced Push Notifications (Silent, interactive notifications) for iOS & Android",
   "authors": "Wix.com",
   "homepage": "https://github.com/wix/react-native-notifications",
@@ -11,7 +11,7 @@
   "module_name": "RNNotifications",
   "source": {
     "git": "https://github.com/wix/react-native-notifications",
-    "tag": "4.3.1"
+    "tag": "5.0.0"
   },
   "requires_arc": true,
   "preserve_paths": [

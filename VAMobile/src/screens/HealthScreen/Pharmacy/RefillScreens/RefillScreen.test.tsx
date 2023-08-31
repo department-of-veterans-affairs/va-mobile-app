@@ -87,7 +87,6 @@ context('RefillScreen', () => {
           {
             downtimeWindowsByFeature: {
               rx_refill: {
-                featureName: 'VA Prescriptions',
                 startTime: DateTime.now().plus({ days: -1 }),
                 endTime: DateTime.now().plus({ days: 1 }),
               },

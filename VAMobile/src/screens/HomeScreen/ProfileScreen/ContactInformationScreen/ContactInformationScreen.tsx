@@ -1,21 +1,18 @@
 import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
-import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
-import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
+import { PersonalInformationState } from 'store/slices/personalInformationSlice'
+import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, ScreenIDTypesConstants, UserDataProfile } from 'store/api/types'
 import { RootState } from 'store'
 import { registerReviewEvent } from 'utils/inAppReviews'
-import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
@@ -75,23 +72,13 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction,
 type ContactInformationScreenProps = StackScreenProps<HomeStackParamList, 'ContactInformation'>
 
 const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigation }) => {
-  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { profile, loading, needsDataLoad } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
 
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
-  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
   const navigateTo = useRouteNavigation()
-
-  useFocusEffect(
-    React.useCallback(() => {
-      if (needsDataLoad && profileNotInDowntime) {
-        dispatch(getProfileInfo(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
-      }
-    }, [dispatch, needsDataLoad, profileNotInDowntime]),
-  )
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
   const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
@@ -141,10 +128,10 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
   ]
 
-  if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)) {
     return (
       <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} overrideFeatureName={stringToTitleCase(t('contactInformation.title'))} />
+        <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
   }

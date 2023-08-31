@@ -43,10 +43,10 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     // Fetch the profile information
-    if (personalInformationNeedsUpdate && profileNotInDowntime) {
+    if (personalInformationNeedsUpdate && profileNotInDowntime && !personalInformationLoading) {
       dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
-  }, [dispatch, personalInformationNeedsUpdate, profileNotInDowntime])
+  }, [dispatch, personalInformationNeedsUpdate, profileNotInDowntime, personalInformationLoading])
 
   useEffect(() => {
     // Get the service history to populate the profile banner

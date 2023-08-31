@@ -369,6 +369,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           pickerOptions: getToPickerOptions(),
           includeBlankPlaceholder: true,
           isRequiredField: true,
+          testID: 'editDraftToTestID',
         },
         fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
       },
@@ -381,6 +382,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           pickerOptions: getStartNewMessageCategoryPickerOptions(t),
           includeBlankPlaceholder: true,
           isRequiredField: true,
+          testID: 'editDraftCategoryTestID',
         },
         fieldErrorMessage: t('secureMessaging.startNewMessage.category.fieldError'),
       },
@@ -393,6 +395,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           onChange: setSubject,
           helperTextKey: 'secureMessaging.startNewMessage.subject.helperText',
           isRequiredField: category === CategoryTypeFields.other,
+          testID: 'editDraftSubjectTestID',
         },
         fieldErrorMessage: t('secureMessaging.startNewMessage.subject.fieldEmpty'),
         validationList: [
@@ -573,7 +576,9 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       leftButtonText={t('cancel')}
       onLeftButtonPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
       menuViewActions={MenViewActions}
-      showCrisisLineCta={true}>
+      showCrisisLineCta={true}
+      leftButtonTestID="editDraftCancelTestID"
+      testID="editDraftTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box>{renderForm()}</Box>
         <Box>{isReplyDraft && renderMessageThread()}</Box>

@@ -18,7 +18,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { themeFn } from 'utils/theme'
-import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -36,12 +36,19 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
+  const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const [error, setError] = useState('')
   const [errorA11y, setErrorA11y] = useState('')
   const [image, setImage] = useState({} as ImagePickerResponse)
   const [file, setFile] = useState({} as DocumentPickerResponse)
   const scrollViewRef = useRef<ScrollView>(null)
   const { origin, attachmentsList, messageID } = route.params
+
+  useBeforeNavBackListener(navigation, (e) => {
+    if (isActionSheetVisible) {
+      e.preventDefault()
+    }
+  })
 
   useEffect(() => {
     navigation.setOptions({
@@ -112,7 +119,17 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       return callbackOnSuccessfulFileSelection({ assets }, true)
     }
     logAnalyticsEvent(Events.vama_sm_attach('Select a file'))
-    onAddFileAttachments(t, showActionSheetWithOptions, setError, setErrorA11y, callbackOnSuccessfulFileSelection, getTotalBytesUsedByFiles(), getFileUris(), getImageBase64s())
+    onAddFileAttachments(
+      t,
+      showActionSheetWithOptions,
+      setError,
+      setErrorA11y,
+      callbackOnSuccessfulFileSelection,
+      getTotalBytesUsedByFiles(),
+      getFileUris(),
+      getImageBase64s(),
+      setIsActionSheetVisible,
+    )
   }
 
   const onAttach = (): void => {

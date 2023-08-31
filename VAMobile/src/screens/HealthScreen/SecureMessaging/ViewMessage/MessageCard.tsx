@@ -55,7 +55,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
           {senderName}
         </TextView>
         <Box flexDirection={'row'}>
-          <TextView variant="MobileBody" paragraphSpacing={true}>
+          <TextView variant="MobileBody" paragraphSpacing={true} testID={dateTime}>
             {dateTime}
           </TextView>
         </Box>
