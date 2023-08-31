@@ -318,7 +318,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <SpecialInstructions />
           {featureEnabled('patientCheckIn') && (
             <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
-              <VAButton onPress={navigateTo('ConfirmContactInfo')} label={tc('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
+              <VAButton onPress={navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
             </Box>
           )}
           <PreferredDateAndTime attributes={attributes} />
