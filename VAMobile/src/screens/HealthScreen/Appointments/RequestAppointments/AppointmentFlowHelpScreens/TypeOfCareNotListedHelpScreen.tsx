@@ -64,19 +64,6 @@ const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({
     )
   }
 
-  console.log('HELLO')
-  console.log('HELLO')
-  console.log('HELLO')
-  console.log('HELLO')
-  console.log(t('requestAppointment.typeOfCareNotListedFindfVaLinkLabel'))
-  console.log(t('requestAppointment.typeOfCareNotListedFindfVaLinkLabel'))
-  console.log(t('requestAppointment.typeOfCareNotListedFindfVaLinkLabel'))
-  console.log(t('requestAppointment.typeOfCareNotListedFindfVaLinkLabel'))
-  console.log('HELLO')
-  console.log('HELLO')
-  console.log('HELLO')
-  console.log('HELLO')
-
   return (
     <Box flex={1} backgroundColor={'main'}>
       <Box mx={gutter}>

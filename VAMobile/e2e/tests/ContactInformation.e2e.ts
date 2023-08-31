@@ -116,7 +116,6 @@ describe('Contact Info Screen', () => {
   })
 
   it ('should open the home phone number', async () => {
-    
     await element(by.id(ContactInfoE2eIdConstants.HOME_PHONE_ID)).tap()
   })
 

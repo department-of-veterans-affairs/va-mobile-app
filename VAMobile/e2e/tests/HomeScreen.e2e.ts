@@ -20,13 +20,11 @@ beforeAll(async () => {
 
 describe('Home Screen', () => {
 	it('should show primary home page content', async () => {
-		await device.takeScreenshot('StartHomeScreen')
 		await expect(element(by.text(HomeE2eIdConstants.HOME_PAGE_USER_NAME))).toExist()
 		await expect(element(by.text(HomeE2eIdConstants.HOME_PAGE_MILITARY_BRANCH))).toExist()
 		await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
 		await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
 		await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
-		await device.takeScreenshot('EndHomeScreen')
 	})
 
 })
