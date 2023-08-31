@@ -6,7 +6,7 @@ export const HomeE2eIdConstants = {
 	PAYMENTS_BTN_ID: 'Payments',
 	LOCATION_FINDER_ROW_ID: 'Find a  V-A  location',
 	CONTACT_VA_ROW_ID: 'Contact  V-A ',
-	COVID_ROW_ID: 'VA  COVID-19  updates',
+	COVID_ROW_ID: 'VA COVID-19 updates',
 	HOME_PAGE_USER_NAME: 'Kimberly Washington',
 	HOME_PAGE_MILITARY_BRANCH: 'United States Coast Guard',
 	CONTACT_VA_TITLE: 'Call My V-A 4 1 1',
