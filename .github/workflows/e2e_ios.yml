@@ -40,7 +40,7 @@ jobs:
           # "Appeals",
           # "Appointments",
           # "Claims",
-          "ContactInformation (fail)",
+          "ContactInformation",
           # "DirectDeposit (fail)",
           # "DisabilityRatings",
           # "HomeScreen",
