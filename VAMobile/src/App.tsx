@@ -4,6 +4,7 @@ import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { Provider, useSelector } from 'react-redux'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
@@ -95,6 +96,7 @@ type RootTabNavParamList = {
 const MainApp: FC = () => {
   const navigationRef = useNavigationContainerRef()
   const routeNameRef = useRef('')
+  const queryClient = new QueryClient()
 
   const scheme = useColorScheme()
   setColorScheme(scheme)
@@ -128,22 +130,24 @@ const MainApp: FC = () => {
 
   return (
     <>
-      <ActionSheetProvider>
-        <ThemeProvider theme={currentTheme}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <NavigationContainer ref={navigationRef} linking={linking} onReady={navOnReady} onStateChange={onNavStateChange}>
-                <NotificationManager>
-                  <SafeAreaProvider>
-                    <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={currentTheme.colors.background.main} />
-                    <AuthGuard />
-                  </SafeAreaProvider>
-                </NotificationManager>
-              </NavigationContainer>
-            </I18nextProvider>
-          </Provider>
-        </ThemeProvider>
-      </ActionSheetProvider>
+      <QueryClientProvider client={queryClient}>
+        <ActionSheetProvider>
+          <ThemeProvider theme={currentTheme}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <NavigationContainer ref={navigationRef} linking={linking} onReady={navOnReady} onStateChange={onNavStateChange}>
+                  <NotificationManager>
+                    <SafeAreaProvider>
+                      <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={currentTheme.colors.background.main} />
+                      <AuthGuard />
+                    </SafeAreaProvider>
+                  </NotificationManager>
+                </NavigationContainer>
+              </I18nextProvider>
+            </Provider>
+          </ThemeProvider>
+        </ActionSheetProvider>
+      </QueryClientProvider>
     </>
   )
 }
