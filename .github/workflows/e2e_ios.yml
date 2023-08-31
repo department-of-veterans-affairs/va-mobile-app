@@ -39,8 +39,7 @@ jobs:
         testsuite: [
           # "Messages",
           # "ContactInformation",
-          "DirectDeposit",
-          # "PersonalnformationScreen",
+          "PersonalnformationScreen",
           # "Prescriptions",
         ]
 
