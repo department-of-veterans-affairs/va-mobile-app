@@ -39,7 +39,7 @@ jobs:
         testsuite: [
           # "Messages",
           # "ContactInformation",
-          "PersonalnformationScreen",
+          "PersonalInformationScreen",
           # "Prescriptions",
         ]
 
