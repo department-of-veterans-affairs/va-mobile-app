@@ -6,12 +6,6 @@ name: '[e2e] iOS Detox Test Run'
 
 on:
   workflow_dispatch:
-  pull_request:
-  push:
-    branches:
-      - main
-      - develop
-      - 'release/v**'
 
 defaults:
   run:
@@ -33,15 +27,6 @@ jobs:
       IOS_PROJ_FILE: 'VAMobile.xcodeproj'
       # Xcode scheme to build
       IOS_SCHEME: 'VAMobileRelease'
-
-    strategy:
-      matrix:
-        testsuite: [
-          # "Messages",
-          # "ContactInformation",
-          "PersonalInformationScreen",
-          # "Prescriptions",
-        ]
 
     steps:
       - uses: actions/checkout@v3
@@ -91,12 +76,12 @@ jobs:
       - name: Bundle iOS app
         run: yarn e2e:ios-build
 
-      - name: Run e2e tests for iOS (${{ matrix.testsuite }})
-        run: yarn e2e:ios-test e2e/tests/${{ matrix.testsuite }}.e2e.ts --headless --take-screenshots failing --updateSnapshot
+      - name: Run e2e tests for iOS
+        run: yarn e2e:ios-test --take-screenshots failing --updateSnapshot
       
       - name: Upload artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}-${{matrix.testsuite}}
+          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
           path: VAMobile/artifacts
