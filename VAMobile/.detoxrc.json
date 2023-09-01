@@ -33,7 +33,7 @@
     "ios": {
       "device": "simulator",
       "app": "ios",
-      "headless": "false"
+      "headless": "true"
     },
     "android": {
       "device": "emulator",
