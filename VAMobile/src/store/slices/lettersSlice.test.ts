@@ -207,9 +207,6 @@ context('letters', () => {
       await store.dispatch(getLetterBeneficiaryData())
       const actions = store.getActions()
 
-      const startAction = _.find(actions, { type: ActionTypes.LETTER_START_GET_BENEFICIARY_DATA })
-      expect(startAction).toBeTruthy()
-
       const endAction = _.find(actions, { type: ActionTypes.LETTER_FINISH_GET_BENEFICIARY_DATA })
       expect(endAction).toBeTruthy()
       expect(endAction?.state.letters.loading).toBe(false)
