@@ -110,10 +110,10 @@ context('EditDirectDepositScreen', () => {
     it('should display an AlertBox and field errors', async () => {
       fireEvent.press(screen.getByText('Save'))
       expect(screen.getByText('Check your direct deposit information')).toBeTruthy()
-      expect(screen.getByText("Enter the bank's 9-digit routing number.")).toBeTruthy()
-      expect(screen.getByText('Enter your account number.')).toBeTruthy()
-      expect(screen.getByText('Select the type that best describes the account.')).toBeTruthy()
-      expect(screen.getByText('Confirm this information is correct.')).toBeTruthy()
+      expect(screen.getByText("Enter a 9-digit routing number")).toBeTruthy()
+      expect(screen.getByText('Enter an account number')).toBeTruthy()
+      expect(screen.getByText('Select an account type')).toBeTruthy()
+      expect(screen.getByText('Select checkbox to confirm information')).toBeTruthy()
     })
   })
 
