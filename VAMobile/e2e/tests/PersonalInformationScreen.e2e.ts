@@ -93,7 +93,7 @@ describe('Personal Information Screen', () => {
   it('should update preferred name', async () => {
     await element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT)).tap()
     await expect(element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT)).atIndex(0)).toExist()
-    await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).typeText('Kimberlee')
+    await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).typeText('Kimberlee\n')
     await element(by.text('Save')).tap()
 
     await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT)).atIndex(0)).toExist()
