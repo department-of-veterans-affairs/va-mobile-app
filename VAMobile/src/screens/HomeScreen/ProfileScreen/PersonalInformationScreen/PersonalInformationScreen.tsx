@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { TFunction } from 'i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { Box, BoxProps, ErrorComponent, FeatureLandingTemplate, LargeNavButton, LoadingComponent, TextView, TextViewProps } from 'components'
 import { GenderIdentityOptions, ScreenIDTypesConstants } from 'store/api/types'
@@ -12,11 +12,13 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getGenderIdentityOptions } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { UserDataProfile } from 'store/api/types'
+import { UserDemographics } from 'api/types/DemographicsData'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY, stringToTitleCase } from 'utils/formattingUtils'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDemographics } from 'api/demographics'
 import { useSelector } from 'react-redux'
 
 const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
@@ -28,17 +30,17 @@ const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): strin
   }
 }
 
-const getPreferredName = (profile: UserDataProfile | undefined, t: TFunction): string => {
-  if (profile?.preferredName) {
-    return stringToTitleCase(profile.preferredName)
+const getPreferredName = (demographics: UserDemographics | undefined, t: TFunction): string => {
+  if (demographics?.preferredName) {
+    return stringToTitleCase(demographics.preferredName)
   } else {
     return t('personalInformation.genericBody', { informationType: t('personalInformation.preferredName.title').toLowerCase() })
   }
 }
 
-const getGenderIdentity = (profile: UserDataProfile | undefined, t: TFunction, genderIdentityOptions: GenderIdentityOptions): string => {
-  if (profile?.genderIdentity) {
-    return genderIdentityOptions[profile.genderIdentity]
+const getGenderIdentity = (demographics: UserDemographics | undefined, t: TFunction, genderIdentityOptions: GenderIdentityOptions): string => {
+  if (demographics?.genderIdentity) {
+    return genderIdentityOptions[demographics.genderIdentity]
   } else {
     return t('personalInformation.genericBody', { informationType: t('personalInformation.genderIdentity.title').toLowerCase() })
   }
@@ -53,13 +55,14 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const { profile, loading, error, loadingGenderIdentityOptions, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const navigateTo = useRouteNavigation()
+  const { data: demographics, isLoading: loadingDemographics } = useDemographics()
 
   useFocusEffect(
     React.useCallback(() => {
-      if (profile?.genderIdentity && !Object.keys(genderIdentityOptions).length && !error) {
+      if (demographics?.genderIdentity && !Object.keys(genderIdentityOptions).length && !error) {
         dispatch(getGenderIdentityOptions(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
       }
-    }, [dispatch, error, genderIdentityOptions, profile?.genderIdentity]),
+    }, [dispatch, error, genderIdentityOptions, demographics?.genderIdentity]),
   )
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
@@ -99,7 +102,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     )
   }
 
-  if (loading || loadingGenderIdentityOptions) {
+  if (loading || loadingGenderIdentityOptions || loadingDemographics) {
     return (
       <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
         <LoadingComponent text={t('personalInformation.loading')} />
@@ -139,7 +142,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
               borderColor={'secondary'}
               borderColorActive={'primaryDarkest'}
               borderStyle={'solid'}
-              subText={getPreferredName(profile, t)}
+              subText={getPreferredName(demographics, t)}
               onPress={navigateTo('PreferredName')}
             />
             <LargeNavButton
@@ -148,7 +151,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
               borderColor={'secondary'}
               borderColorActive={'primaryDarkest'}
               borderStyle={'solid'}
-              subText={getGenderIdentity(profile, t, genderIdentityOptions)}
+              subText={getGenderIdentity(demographics, t, genderIdentityOptions)}
               onPress={navigateTo('GenderIdentity')}
             />
           </>
