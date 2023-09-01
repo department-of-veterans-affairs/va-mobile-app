@@ -14,6 +14,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDemographics } from 'api/demographics'
 
 type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIdentity'>
 
@@ -21,9 +22,10 @@ type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIde
  * Screen for editing gender identity
  */
 const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => {
-  const { profile, genderIdentityOptions, genderIdentitySaved, loading, loadingGenderIdentityOptions } = useSelector<RootState, PersonalInformationState>(
+  const { genderIdentityOptions, genderIdentitySaved, loading, loadingGenderIdentityOptions } = useSelector<RootState, PersonalInformationState>(
     (state) => state.personalInformation,
   )
+  const { data: demographics } = useDemographics()
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -31,7 +33,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
   const confirmAlert = useDestructiveActionSheet()
 
   const [error, setError] = useState('')
-  const [genderIdentity, setGenderIdentity] = useState(profile?.genderIdentity)
+  const [genderIdentity, setGenderIdentity] = useState(demographics?.genderIdentity)
 
   useEffect(() => {
     if (!Object.keys(genderIdentityOptions).length) {
@@ -47,7 +49,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
   }, [genderIdentitySaved, navigation, dispatch])
 
   useBeforeNavBackListener(navigation, (e) => {
-    if (profile?.genderIdentity === genderIdentity || !genderIdentity) {
+    if (demographics?.genderIdentity === genderIdentity || !genderIdentity) {
       return
     }
     e.preventDefault()

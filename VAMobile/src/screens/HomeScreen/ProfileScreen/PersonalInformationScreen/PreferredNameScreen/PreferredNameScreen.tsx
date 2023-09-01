@@ -11,6 +11,7 @@ import { ScreenIDTypesConstants } from 'store/api'
 import { SnackbarMessages } from 'components/SnackBar'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useDemographics } from 'api/demographics'
 import { useSelector } from 'react-redux'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
@@ -18,14 +19,15 @@ type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredN
 const MAX_NAME_LENGTH = 25
 
 const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
-  const { profile, preferredNameSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { preferredNameSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { data: demographics } = useDemographics()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const confirmAlert = useDestructiveActionSheet()
 
   const getInitialState = (): string => {
-    const item = profile?.preferredName
+    const item = demographics?.preferredName
     return item ? stringToTitleCase(item) : ''
   }
 
