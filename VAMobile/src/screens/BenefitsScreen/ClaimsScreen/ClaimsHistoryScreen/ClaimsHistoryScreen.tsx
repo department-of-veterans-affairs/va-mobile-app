@@ -1,8 +1,9 @@
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SegmentedControl } from 'components'
+import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
 import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, getProfileInfo, prefetchClaimsAndAppeals } from 'store/slices'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -141,13 +142,7 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
       <Box flex={1} justifyContent="flex-start" mb={theme.dimensions.contentMarginBottom}>
         {!claimsAndAppealsServiceErrors && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl
-              values={controlValues}
-              titles={controlValues}
-              onChange={onTabChange}
-              selected={controlValues.indexOf(selectedTab)}
-              accessibilityHints={accessibilityHints}
-            />
+            <SegmentedControl labels={controlValues} onChange={onTabChange} selected={controlValues.indexOf(selectedTab)} labelsA11yHints={accessibilityHints} />
           </Box>
         )}
         {serviceErrorAlert()}

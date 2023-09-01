@@ -1,3 +1,4 @@
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useFocusEffect } from '@react-navigation/native'
@@ -6,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
-import { BackButton, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SegmentedControl, TextView } from 'components'
+import { BackButton, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
@@ -120,7 +121,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
           </TextView>
           <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl values={controlValues} titles={controlValues} onChange={onTabChange} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
+            <SegmentedControl labels={controlValues} onChange={onTabChange} selected={controlValues.indexOf(selectedTab)} labelsA11yHints={a11yHints} />
           </Box>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>

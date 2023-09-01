@@ -1,10 +1,11 @@
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect } from 'react'
+import React, { FC, ReactElement, useEffect, useState } from 'react'
 import _ from 'underscore'
 
 import { AuthorizedServicesState } from 'store/slices'
-import { Box, ErrorComponent, FeatureLandingTemplate, SegmentedControl } from 'components'
+import { Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
@@ -35,7 +36,6 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const { t: tc } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   const inboxUnreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { folders, secureMessagingTab, termsAndConditionError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const { secureMessaging } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
@@ -45,6 +45,8 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
   const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
+  const initialSelectedTab = secureMessagingTab || inboxLabel
+  const [selectedTab, setSelectedTab] = useState(initialSelectedTab)
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
@@ -93,6 +95,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   }
 
   const onTabUpdate = (selection: string): void => {
+    console.log(selection)
     const tab = selection as SecureMessagingTabTypes
     if (secureMessagingTab !== tab) {
       if (tab === SecureMessagingTabTypesConstants.FOLDERS) {
@@ -104,6 +107,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
       }
       snackBar?.hideAll()
       dispatch(updateSecureMessagingTab(tab))
+      setSelectedTab(tab)
     }
   }
 
@@ -112,18 +116,12 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
       <StartNewMessageButton />
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-          <SegmentedControl
-            values={controlValues}
-            titles={controlLabels}
-            onChange={onTabUpdate}
-            selected={controlValues.indexOf(secureMessagingTab || SecureMessagingTabTypesConstants.INBOX)}
-            accessibilityHints={a11yHints}
-          />
+          <SegmentedControl labels={controlLabels} onChange={onTabUpdate} selected={controlLabels.indexOf(selectedTab)} labelsA11yHints={a11yHints} />
         </Box>
         <CernerAlertSM />
         {serviceErrorAlert()}
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {secureMessagingTab === SecureMessagingTabTypesConstants.INBOX && <Inbox />}
+          {secureMessagingTab?.slice(0, 5) === SecureMessagingTabTypesConstants.INBOX && <Inbox />}
           {secureMessagingTab === SecureMessagingTabTypesConstants.FOLDERS && <Folders />}
         </Box>
       </Box>

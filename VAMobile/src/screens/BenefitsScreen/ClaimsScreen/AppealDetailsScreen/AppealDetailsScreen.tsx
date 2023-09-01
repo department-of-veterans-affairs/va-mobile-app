@@ -1,3 +1,4 @@
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { filter, pluck } from 'underscore'
 import { useTranslation } from 'react-i18next'
@@ -5,7 +6,7 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SegmentedControl, TextView } from 'components'
+import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -110,13 +111,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
           <TextView variant="MobileBody">{t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}</TextView>
           <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl
-              values={controlValues}
-              titles={controlValues}
-              onChange={setSelectedTab}
-              selected={controlValues.indexOf(selectedTab)}
-              accessibilityHints={segmentedControlA11yHints}
-            />
+            <SegmentedControl labels={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} labelsA11yHints={segmentedControlA11yHints} />
           </Box>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>

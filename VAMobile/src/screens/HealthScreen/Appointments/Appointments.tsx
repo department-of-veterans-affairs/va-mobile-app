@@ -39,9 +39,9 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
-  const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
+  const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
-  const [selectedTab, setSelectedTab] = useState(controlValues[0])
+  const [selectedTab, setSelectedTab] = useState(controlLabels[0])
   const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError, currentPageAppointmentsByYear } = useSelector<RootState, AppointmentsState>(
     (state) => state.appointments,
   )
@@ -135,7 +135,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
       testID="appointmentsTestID">
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <SegmentedControl labels={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} labelsA11yHints={a11yHints} />
+          <SegmentedControl labels={controlLabels} onChange={setSelectedTab} selected={controlLabels.indexOf(selectedTab)} labelsA11yHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}
         <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>

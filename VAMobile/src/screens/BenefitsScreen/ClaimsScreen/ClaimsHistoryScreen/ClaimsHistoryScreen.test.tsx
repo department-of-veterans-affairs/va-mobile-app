@@ -3,6 +3,7 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import { context, mockNavProps, render, RenderAPI, waitFor, when } from 'testUtils'
 import { ReactTestInstance } from 'react-test-renderer'
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 
 import {
   ClaimsAndAppealsState,
@@ -14,7 +15,7 @@ import {
   InitialState,
 } from 'store/slices'
 import ClaimsHistoryScreen from './ClaimsHistoryScreen'
-import { AlertBox, ErrorComponent, LoadingComponent, SegmentedControl, TextView } from 'components'
+import { AlertBox, ErrorComponent, LoadingComponent, TextView } from 'components'
 import ClaimsAndAppealsListView from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import * as api from 'store/api'
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -208,7 +209,7 @@ context('ClaimsHistoryScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Claims status is unavailable')
+      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Claims status is unavailable')
     })
   })
 
@@ -222,7 +223,7 @@ context('ClaimsHistoryScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Appeal status is unavailable')
+      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Appeal status is unavailable')
     })
   })
 
