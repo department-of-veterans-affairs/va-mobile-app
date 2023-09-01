@@ -167,6 +167,7 @@
     "@react-navigation/native/**/nanoid": "^3.1.31",
     "@types/detox/minimatch": "^3.0.5",
     "@types/detox/minimist": "^1.2.6",
+    "@types/react": "^18.0.0",
     "@wdio/**/got": "^11.8.5",
     "@wdio/**/minimatch": "^3.0.5 ",
     "@wdio/cli/ejs": "^3.1.7",

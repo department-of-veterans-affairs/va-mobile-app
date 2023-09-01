@@ -12,6 +12,7 @@ module.exports = {
       {
         tsconfig: 'tsconfig.test.json',
         babelConfig: 'babel.config.js',
+        jsx: 'react-native',
       },
     ],
   },
