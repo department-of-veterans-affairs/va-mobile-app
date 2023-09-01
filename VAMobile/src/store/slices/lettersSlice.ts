@@ -79,10 +79,10 @@ export const getLetterBeneficiaryData =
   async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetterBeneficiaryData(screenID))))
-    dispatch(dispatchStartGetLetterBeneficiaryData())
 
     try {
       const letterBeneficiaryData = await api.get<api.LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
+      dispatch(dispatchStartGetLetterBeneficiaryData())
       dispatch(dispatchFinishGetLetterBeneficiaryData({ letterBeneficiaryData: letterBeneficiaryData?.data.attributes }))
     } catch (error) {
       if (isErrorObject(error)) {
