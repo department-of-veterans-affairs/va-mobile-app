@@ -69,7 +69,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
 
   const nameUpdateScreen = (): ReactElement => {
     return (
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('howDoIUpdate.name.title')}
         </TextView>
@@ -87,7 +87,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
 
   const dateOfBirthUpdateScreen = (): ReactElement => {
     return (
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('howDoIUpdate.dateOfBirth.title')}
         </TextView>

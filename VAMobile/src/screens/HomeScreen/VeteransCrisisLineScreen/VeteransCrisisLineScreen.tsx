@@ -35,7 +35,7 @@ const VeteransCrisisLineScreen: FC = () => {
 
   return (
     <LargePanel title={tc('veteransCrisisLine.title')} rightButtonText={tc('done')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
