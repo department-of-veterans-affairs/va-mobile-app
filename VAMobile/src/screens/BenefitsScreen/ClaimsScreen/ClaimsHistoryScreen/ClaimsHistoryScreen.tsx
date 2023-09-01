@@ -35,9 +35,9 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>(
     (state) => state.personalInformation,
   )
-  const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
+  const controlLabels = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
-  const [selectedTab, setSelectedTab] = useState(controlValues[0])
+  const [selectedTab, setSelectedTab] = useState(controlLabels[0])
   const claimType = selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
   const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
   const claimsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.claims)
@@ -142,7 +142,7 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
       <Box flex={1} justifyContent="flex-start" mb={theme.dimensions.contentMarginBottom}>
         {!claimsAndAppealsServiceErrors && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl labels={controlValues} onChange={onTabChange} selected={controlValues.indexOf(selectedTab)} labelsA11yHints={accessibilityHints} />
+            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={controlLabels.indexOf(selectedTab)} labelsA11yHints={accessibilityHints} />
           </Box>
         )}
         {serviceErrorAlert()}

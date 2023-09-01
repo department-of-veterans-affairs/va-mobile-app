@@ -34,8 +34,8 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const controlValues = [t('claimDetails.status'), t('claimDetails.details')]
-  const [selectedTab, setSelectedTab] = useState(controlValues[0])
+  const controlLabels = [t('claimDetails.status'), t('claimDetails.details')]
+  const [selectedTab, setSelectedTab] = useState(controlLabels[0])
 
   const { claimID, claimType, focusOnSnackbar } = route.params
   const { decisionLetters: decisionLettersAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
@@ -121,7 +121,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
           </TextView>
           <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl labels={controlValues} onChange={onTabChange} selected={controlValues.indexOf(selectedTab)} labelsA11yHints={a11yHints} />
+            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={controlLabels.indexOf(selectedTab)} labelsA11yHints={a11yHints} />
           </Box>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>

@@ -24,8 +24,8 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const controlValues = [t('claimDetails.status'), t('appealDetails.issuesTab')]
-  const [selectedTab, setSelectedTab] = useState(controlValues[0])
+  const controlLabels = [t('claimDetails.status'), t('appealDetails.issuesTab')]
+  const [selectedTab, setSelectedTab] = useState(controlLabels[0])
   const segmentedControlA11yHints = [
     t('appealDetails.viewYourAppeal', { tabName: t('claimDetails.status') }),
     t('appealDetails.viewYourAppeal', { tabName: t('appealDetails.issuesTab') }),
@@ -111,7 +111,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
           <TextView variant="MobileBody">{t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}</TextView>
           <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl labels={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} labelsA11yHints={segmentedControlA11yHints} />
+            <SegmentedControl labels={controlLabels} onChange={setSelectedTab} selected={controlLabels.indexOf(selectedTab)} labelsA11yHints={segmentedControlA11yHints} />
           </Box>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
