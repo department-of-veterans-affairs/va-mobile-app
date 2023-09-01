@@ -218,7 +218,7 @@ export const onAddPhotos = (
   request: ClaimEventData,
   setIsActionSheetVisible?: (isVisible: boolean) => void,
 ): void => {
-  const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('common:cancel')]
+  const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('cancel')]
 
   setIsActionSheetVisible && setIsActionSheetVisible(true)
   showActionSheetWithOptions(

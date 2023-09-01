@@ -15,13 +15,12 @@ type GeneralHelpScreenProps = StackScreenProps<HealthStackParamList, 'GeneralHel
 
 /** Component for the global general help screen inside the request appointment flow  */
 const GeneralHelpScreen: FC<GeneralHelpScreenProps> = ({ navigation, route }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { title, description } = route.params
   const { gutter, contentMarginTop } = theme.dimensions
-  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
+  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('webview.vagov'), loadingMessage: t('webview.valocation.loading') })
   const headerStyle = useRequestAppointmentModalHeaderStyles()
 
   useLayoutEffect(() => {

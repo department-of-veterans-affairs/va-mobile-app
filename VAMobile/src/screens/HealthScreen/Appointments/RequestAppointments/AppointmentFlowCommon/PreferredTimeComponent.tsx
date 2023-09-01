@@ -20,8 +20,7 @@ type PreferredTimeComponentProps = {
 
 // Common component for the time of contact selection on appointment request
 const PreferredTimeComponent: FC<PreferredTimeComponentProps> = ({ selectedTimes, onChange, errorMessage, selectionTitle }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const selectedList = new Set(selectedTimes || [])
@@ -52,9 +51,9 @@ const PreferredTimeComponent: FC<PreferredTimeComponentProps> = ({ selectedTimes
         decorator: selected ? ButtonDecoratorType.CheckBoxFilled : ButtonDecoratorType.CheckBoxEmpty,
         onPress: onValueChanged,
         minHeight: 64,
-        a11yValue: selected ? tc('selected') : undefined,
+        a11yValue: selected ? t('selected') : undefined,
         a11yRole: 'checkbox',
-        testId: `${item.label} ${tc('option', { count: index + 1, totalOptions: timesList.length })}`,
+        testId: `${item.label} ${t('option', { count: index + 1, totalOptions: timesList.length })}`,
       }
 
       return checkBox

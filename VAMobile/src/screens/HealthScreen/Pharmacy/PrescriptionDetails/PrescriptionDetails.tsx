@@ -30,9 +30,8 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const submitRefillAlert = useDestructiveActionSheet()
   const dispatch = useAppDispatch()
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const noneNoted = tc('noneNoted')
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const noneNoted = t('noneNoted')
 
   const { contentMarginBottom } = theme.dimensions
 
@@ -77,8 +76,8 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   }
   const getGoToMyVAHealthButton = () => {
     const buttonProps: VAButtonProps = {
-      label: tc('goToMyVAHealth'),
-      testID: tc('goToMyVAHealth.a11yLabel'),
+      label: t('goToMyVAHealth'),
+      testID: t('goToMyVAHealth.a11yLabel'),
       buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: redirectLink,
       iconProps: {
@@ -108,7 +107,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
           cancelButtonIndex: 0,
           buttons: [
             {
-              text: tc('cancel'),
+              text: t('cancel'),
               onPress: () => {
                 logAnalyticsEvent(Events.vama_rx_request_cancel(prescriptionIds))
               },
@@ -149,14 +148,14 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
 
   if (loadingHistory) {
     return (
-      <ChildTemplate backLabel={tc('prescriptions')} backLabelOnPress={navigation.goBack} title={tc('prescriptionDetails')}>
+      <ChildTemplate backLabel={t('prescriptions')} backLabelOnPress={navigation.goBack} title={t('prescriptionDetails')}>
         <LoadingComponent text={t('prescription.details.loading')} />
       </ChildTemplate>
     )
   }
 
   return (
-    <ChildTemplate backLabel={tc('prescriptions')} backLabelOnPress={navigation.goBack} title={tc('prescriptionDetails')}>
+    <ChildTemplate backLabel={t('prescriptions')} backLabelOnPress={navigation.goBack} title={t('prescriptionDetails')}>
       {getBanner()}
       {getRefillVAHealthButton()}
       <Box mb={contentMarginBottom}>

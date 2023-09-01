@@ -20,7 +20,7 @@ type BodyTextType = Array<TextSectionType>
 
 /** Component for the sub type care help screen */
 const SubTypeHelpScreen: FC<SubTypeHelpScreenProps> = ({ navigation, route }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { careTypeId } = route.params
   const { gutter, contentMarginTop } = theme.dimensions

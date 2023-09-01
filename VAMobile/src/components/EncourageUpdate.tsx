@@ -16,7 +16,7 @@ import { useTheme } from 'utils/hooks'
 
 export const EncourageUpdateAlert = () => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const [localVersionName, setVersionName] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()

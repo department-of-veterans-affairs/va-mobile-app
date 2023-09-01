@@ -18,10 +18,10 @@ type StatusDefinitionProps = StackScreenProps<HealthStackParamList, 'StatusDefin
 const StatusDefinition: FC<StatusDefinitionProps> = ({ navigation, route }) => {
   const { display, value } = route.params
   const headerStyle = usePanelHeaderStyles()
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const { text, a11yLabel } = getStatusDefinitionTextForRefillStatus(value, tc)
+  const { text, a11yLabel } = getStatusDefinitionTextForRefillStatus(value, t)
   const timeOpened = DateTime.now().toMillis()
 
   useLayoutEffect(() => {
@@ -29,14 +29,14 @@ const StatusDefinition: FC<StatusDefinitionProps> = ({ navigation, route }) => {
       ...headerStyle,
       headerLeft: (props) => (
         <ClosePanelButton
-          buttonText={tc('close')}
+          buttonText={t('close')}
           onPress={props.onPress}
           buttonTextColor={'showAll'}
           focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on modal
         />
       ),
     })
-  }, [navigation, headerStyle, tc])
+  }, [navigation, headerStyle, t])
 
   useBeforeNavBackListener(navigation, () => {
     const timeClosed = DateTime.now().toMillis()
@@ -44,7 +44,7 @@ const StatusDefinition: FC<StatusDefinitionProps> = ({ navigation, route }) => {
   })
 
   return (
-    <LargePanel title={tc('statusDefinition')} rightButtonText={tc('close')}>
+    <LargePanel title={t('statusDefinition')} rightButtonText={t('close')}>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
         <TextView variant="MobileBodyBold">{display}</TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween} accessibilityLabel={a11yLabel}>

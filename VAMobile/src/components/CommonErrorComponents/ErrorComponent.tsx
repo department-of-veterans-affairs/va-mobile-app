@@ -20,7 +20,7 @@ export type ErrorComponentProps = {
 /**Main error handling component. This component will show the proper screen according to the type of error.*/
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const { errorsByScreenID, downtimeWindowsByFeature, tryAgain: storeTryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HEALTH])
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const features = ScreenIDToDowntimeFeatures[props.screenID]
   const isInDowntime = oneOfFeaturesInDowntime(features, downtimeWindowsByFeature)
 
@@ -43,21 +43,17 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
         return (
           <CallHelpCenter
             onTryAgain={tryAgain}
-            errorText={t('health:secureMessaging.sendError.ifTheAppStill')}
-            errorA11y={t('health:secureMessaging.sendError.ifTheAppStill.a11y')}
-            callPhone={t('common:8773270022.displayText')}
+            errorText={t('secureMessaging.sendError.ifTheAppStill')}
+            errorA11y={t('secureMessaging.sendError.ifTheAppStill.a11y')}
+            callPhone={t('8773270022.displayText')}
           />
         )
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING:
         return (
-          <CallHelpCenter
-            titleText={t('common:disabilityRating.errorTitle')}
-            titleA11yHint={t('common:disabilityRating.errorTitleA11y')}
-            callPhone={t('common:disabilityRating.errorPhoneNumber')}
-          />
+          <CallHelpCenter titleText={t('disabilityRating.errorTitle')} titleA11yHint={t('disabilityRating.errorTitleA11y')} callPhone={t('disabilityRating.errorPhoneNumber')} />
         )
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE:
-        return <CallHelpCenter onTryAgain={tryAgain} titleText={t('common:errors.callHelpCenter.vaAppNotWorking')} callPhone={t('common:8006982411.displayText')} />
+        return <CallHelpCenter onTryAgain={tryAgain} titleText={t('errors.callHelpCenter.vaAppNotWorking')} callPhone={t('8006982411.displayText')} />
       default:
         return <CallHelpCenter onTryAgain={tryAgain} />
     }

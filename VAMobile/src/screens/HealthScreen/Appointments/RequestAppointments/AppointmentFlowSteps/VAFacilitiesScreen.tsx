@@ -16,7 +16,7 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 type VAFacilitiesScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'VAFacilitiesScreen'>
 
 const VAFacilitiesScreen: FC<VAFacilitiesScreenProps> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const [sortOption, setSortOption] = useState<FacilitiesFilterType>(FACILITY_FILTER.home)

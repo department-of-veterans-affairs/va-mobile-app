@@ -12,7 +12,7 @@ type AppointmentReasonProps = {
 }
 
 const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { reason } = attributes || ({} as AppointmentAttributes)
   const isPendingAppointment = isAPendingAppointment(attributes)

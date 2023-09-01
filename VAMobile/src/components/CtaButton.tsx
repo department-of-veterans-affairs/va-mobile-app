@@ -23,7 +23,7 @@ export type CtaButtonProps = {
  * @returns CtaButton component
  */
 const CtaButton: FC<CtaButtonProps> = ({ onPress, iconColor, backgroundColor, children, px, py, alignItems, justifyContent, accessibilityLabel, accessibilityHint }) => {
-  const { t } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   const touchableProps: TouchableWithoutFeedbackProps = {
