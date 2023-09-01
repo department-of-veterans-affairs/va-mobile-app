@@ -177,3 +177,4 @@ buck-out/
 
 # Detox
 /VAMobile/artifacts
+/VAMobile/e2e/tests/__image_snapshots__
