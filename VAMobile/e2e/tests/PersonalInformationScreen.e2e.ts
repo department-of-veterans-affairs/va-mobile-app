@@ -90,6 +90,14 @@ describe('Personal Information Screen', () => {
     await element(by.text('Close')).tap()
   })
 
+  it('should show "What to know" large panel in gender identity section', async () => {
+    await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
+    await scrollToThenTap(PersonalInfoConstants.GENDER_IDENTITY_WHAT_TO_KNOW_TEXT)
+    await expect(element(by.text('Profile help'))).toExist()
+    await element(by.text('Close')).tap()
+    await element(by.text('Cancel')).tap()
+  })
+
   it('should update preferred name', async () => {
     await element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT)).tap()
     await expect(element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT)).atIndex(0)).toExist()
@@ -123,11 +131,4 @@ describe('Personal Information Screen', () => {
     await element(by.text('Cancel')).tap()
   })
 
-  it('should show "What to know" large panel in gender identity section', async () => {
-    await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
-    await scrollToThenTap(PersonalInfoConstants.GENDER_IDENTITY_WHAT_TO_KNOW_TEXT)
-    await expect(element(by.text('Profile help'))).toExist()
-    await element(by.text('Close')).tap()
-    await element(by.text('Cancel')).tap()
-  })
 })
