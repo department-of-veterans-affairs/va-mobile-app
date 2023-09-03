@@ -4,7 +4,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTestID, fireEvent, render, RenderAPI, screen, waitFor } from 'testUtils'
 import NotEnrolledSM from './NotEnrolledSM'
 
 const mockExternalLinkSpy = jest.fn()
@@ -35,9 +35,7 @@ context('NotEnrolledSM', () => {
 
   describe('when Learn how to upgrade link is clicked', () => {
     it('should launch external link', async () => {
-      await waitFor(() => {
-        findByTestID(testInstance, 'Learn how to upgrade to a My HealtheVet Premium account.').props.onPress()
-      })
+      fireEvent.press(screen.getByText('Learn how to upgrade to a My HealtheVet Premium account.'))
       expect(mockExternalLinkSpy).toBeCalledWith('https://www.myhealth.va.gov/web/myhealthevet/upgrading-your-my-healthevet-account-through-in-person-or-online-authentication')
     })
   })
