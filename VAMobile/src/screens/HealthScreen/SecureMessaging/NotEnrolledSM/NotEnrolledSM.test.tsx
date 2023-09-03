@@ -1,7 +1,5 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
 
 import { context, fireEvent, render, screen } from 'testUtils'
 import NotEnrolledSM from './NotEnrolledSM'
