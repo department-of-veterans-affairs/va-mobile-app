@@ -11,6 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RequestAppointmentState } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
 import { States } from 'constants/states'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type VAFacilitiesScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'VAFacilitiesScreen'>
@@ -74,7 +75,7 @@ const VAFacilitiesScreen: FC<VAFacilitiesScreenProps> = ({ navigation }) => {
       }}
       secondActionButtonPress={onContinue}
       linkText={t('requestAppointment.facilityNotListed')}>
-      <AppointmentFlowTitleSection title={t('requestAppointment.whichFacility')} titleA11yLabel={t('requestAppointment.whichFacilityLabel')} />
+      <AppointmentFlowTitleSection title={t('requestAppointment.whichFacility')} titleA11yLabel={a11yLabelVA(t('requestAppointment.whichFacility'))} />
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
         <TextView variant="HelperTextBold" mb={theme.dimensions.condensedMarginBetween}>
           {t('requestAppointment.sortFacilities')}

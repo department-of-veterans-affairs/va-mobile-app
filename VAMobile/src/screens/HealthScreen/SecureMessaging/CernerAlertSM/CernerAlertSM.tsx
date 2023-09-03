@@ -7,6 +7,7 @@ import { Facility } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { PatientState } from 'store/slices'
 import { RootState } from 'store'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -28,13 +29,13 @@ const CernerAlertSM: FC = () => {
   const accordionContent = (): ReactNode => {
     let intro = t('cernerAlertSM.sendingAMessage', { facility: cernerFacilities[0].facilityName })
     let thisFacility = t('cernerAlertSM.thisFacilityUses')
-    let thisFacilityA11y = t('cernerAlertSM.thisFacilityUses.a11y')
+    let thisFacilityA11y = a11yLabelVA(t('cernerAlertSM.thisFacilityUses'))
     let bullets: VABulletListText[] = []
 
     if (hasMultipleFacilities) {
       intro = t('cernerAlertSM.sendingAMessageMultiple')
       thisFacility = t('cernerAlertSM.theseFacilitiesUse')
-      thisFacilityA11y = t('cernerAlertSM.theseFacilitiesUse.a11y')
+      thisFacilityA11y = a11yLabelVA(t('cernerAlertSM.theseFacilitiesUse'))
       bullets = cernerFacilities.map((facility: Facility) => ({ text: facility.facilityName }))
     }
 
@@ -45,7 +46,7 @@ const CernerAlertSM: FC = () => {
       displayedText: t('goToMyVAHealth'),
       linkType: LinkTypeOptionsConstants.externalLink,
       numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
-      a11yLabel: t('goToMyVAHealth.a11yLabel'),
+      a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
     }
 
     return (

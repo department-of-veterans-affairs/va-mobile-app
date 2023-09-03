@@ -8,6 +8,7 @@ import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'co
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { TimeFrameTypeConstants } from 'constants/appointments'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { deepCopyObject } from 'utils/common'
 import { getGroupedAppointments } from 'utils/appointments'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
@@ -35,7 +36,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   }
 
   if (_.isEmpty(currentPageUpcomingAppointmentsByYear)) {
-    return <NoAppointments subText={t('noAppointments.youCanSchedule')} subTextA11yLabel={t('noAppointments.youCanScheduleA11yLabel')} />
+    return <NoAppointments subText={t('noAppointments.youCanSchedule')} subTextA11yLabel={a11yLabelVA(t('noAppointments.youCanSchedule'))} />
   }
 
   const requestPage = (requestedPage: number) => {

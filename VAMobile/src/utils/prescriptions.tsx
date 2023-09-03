@@ -2,6 +2,7 @@ import { ASCENDING } from '../constants/common'
 import { LabelTagTypeConstants } from 'components/LabelTag'
 import { PrescriptionSortOptionConstants, PrescriptionSortOptions, RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { TFunction } from 'i18next'
+import { a11yLabelVA } from './a11yLabel'
 
 export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
   switch (status) {
@@ -130,61 +131,61 @@ export const getStatusDefinitionTextForRefillStatus = (status: RefillStatus, t: 
     case RefillStatusConstants.ACTIVE:
       return {
         text: t('statusDefinition.active'),
-        a11yLabel: t('statusDefinition.active.a11yLabel'),
+        a11yLabel: a11yLabelVA(t('statusDefinition.active')),
       }
     case RefillStatusConstants.REFILL_IN_PROCESS:
       return {
         text: t('statusDefinition.active.inProgress'),
-        a11yLabel: t('statusDefinition.active.inProgress.a11yLabel'),
+        a11yLabel: a11yLabelVA(t('statusDefinition.active.inProgress')),
       }
     case RefillStatusConstants.HOLD:
     case RefillStatusConstants.PROVIDER_HOLD:
       return {
         text: t('statusDefinition.active.hold'),
-        a11yLabel: t('statusDefinition.active.hold.a11yLabel'),
+        a11yLabel: a11yLabelVA(t('statusDefinition.active.hold')),
       }
     case RefillStatusConstants.ACTIVE_PARKED:
       return {
         text: t('statusDefinition.active.parked'),
-        a11yLabel: t('statusDefinition.active.parked.a11yLabel'),
+        a11yLabel: a11yLabelVA(t('statusDefinition.active.parked')),
       }
     case RefillStatusConstants.SUBMITTED:
       return {
         text: t('statusDefinition.active.submitted'),
-        a11yLabel: t('statusDefinition.active.submitted.a11yLabel'),
+        a11yLabel: a11yLabelVA(t('statusDefinition.active.submitted')),
       }
     case RefillStatusConstants.SUSPENDED:
       return {
         text: t('statusDefinition.active.suspended'),
-        a11yLabel: t('statusDefinition.active.suspended.a11yLabel'),
+        a11yLabel: a11yLabelVA(t('statusDefinition.active.suspended')),
       }
     case RefillStatusConstants.TRANSFERRED:
       return {
         text: t('statusDefinition.transferred'),
-        a11yLabel: t('statusDefinition.transferred.a11yLabel'),
+        a11yLabel: a11yLabelVA(t('statusDefinition.transferred')),
       }
     case RefillStatusConstants.DISCONTINUED:
     case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
     case RefillStatusConstants.DISCONTINUED_EDIT:
       return {
         text: t('statusDefinition.discontinued'),
-        a11yLabel: t('statusDefinition.discontinued.a11yLabel'),
+        a11yLabel: a11yLabelVA(t('statusDefinition.discontinued')),
       }
     case RefillStatusConstants.EXPIRED:
       return {
         text: t('statusDefinition.expired'),
-        a11yLabel: t('statusDefinition.expired.a11yLabel'),
+        a11yLabel: a11yLabelVA(t('statusDefinition.expired')),
       }
     case RefillStatusConstants.DELETED:
     case RefillStatusConstants.UNKNOWN:
       return {
         text: t('statusDefinition.unknown'),
-        a11yLabel: t('statusDefinition.unknown.a11yLabel'),
+        a11yLabel: a11yLabelVA(t('statusDefinition.unknown')),
       }
     case RefillStatusConstants.NON_VERIFIED: {
       return {
         text: t('statusDefinition.nonVerified'),
-        a11yLabel: t('statusDefinition.nonVerified.a11yLabel'),
+        a11yLabel: a11yLabelVA(t('statusDefinition.nonVerified')),
       }
     }
     default:

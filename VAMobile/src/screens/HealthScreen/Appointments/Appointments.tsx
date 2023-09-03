@@ -12,6 +12,7 @@ import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { VAScrollViewProps } from 'components/VAScrollView'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled } from 'utils/remoteConfig'
 import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -102,8 +103,8 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
             title={t('appointments.appointmentsStatusSomeUnavailable')}
             text={t('appointments.troubleLoadingSomeAppointments')}
             border="error"
-            titleA11yLabel={t('appointments.appointmentsStatusSomeUnavailable.a11yLabel')}
-            textA11yLabel={t('appointments.troubleLoadingSomeAppointments.a11yLabel')}
+            titleA11yLabel={a11yLabelVA(t('appointments.appointmentsStatusSomeUnavailable'))}
+            textA11yLabel={a11yLabelVA(t('appointments.troubleLoadingSomeAppointments'))}
           />
         </Box>
       )

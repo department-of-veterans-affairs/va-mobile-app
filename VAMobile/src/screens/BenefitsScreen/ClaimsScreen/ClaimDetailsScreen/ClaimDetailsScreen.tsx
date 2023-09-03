@@ -95,7 +95,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   if (loadingClaim) {
     return (
       <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
-        <LoadingComponent text={t('cliamInformation.loading')} />
+        <LoadingComponent text={t('claimInformation.loading')} />
       </FeatureLandingTemplate>
     )
   }

@@ -50,6 +50,7 @@ import {
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
 import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
   useAppDispatch,
@@ -361,7 +362,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
         <AlertBox
           title={t('secureMessaging.startNewMessage.noMatchWithProvider')}
           text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
-          textA11yLabel={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
+          textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           border="error">
           <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
         </AlertBox>

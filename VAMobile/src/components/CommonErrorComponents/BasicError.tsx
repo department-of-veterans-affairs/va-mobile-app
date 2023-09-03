@@ -26,7 +26,7 @@ export type BasicErrorProps = {
 const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yLabel, label }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const buttonText: string = label || t('tryAgain')
+  const buttonText: string = label || t('snackbar.tryAgain')
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,

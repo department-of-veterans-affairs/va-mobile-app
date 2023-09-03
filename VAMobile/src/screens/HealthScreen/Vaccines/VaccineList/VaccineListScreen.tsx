@@ -10,6 +10,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { Vaccine } from 'store/api/types'
 import { VaccineState, getVaccines } from 'store/slices/vaccineSlice'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -80,7 +81,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   if (useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={a11yLabelVA(t('vaVaccines'))}>
         <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -88,7 +89,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   if (loading) {
     return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={a11yLabelVA(t('vaVaccines'))}>
         <LoadingComponent text={t('vaccines.loading')} />
       </FeatureLandingTemplate>
     )
@@ -96,14 +97,14 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   if (vaccines.length === 0) {
     return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={a11yLabelVA(t('vaVaccines'))}>
         <NoVaccineRecords />
       </FeatureLandingTemplate>
     )
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
+    <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={a11yLabelVA(t('vaVaccines'))}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <DefaultList items={vaccineButtons} />
       </Box>
