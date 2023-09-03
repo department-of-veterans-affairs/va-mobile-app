@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 import { act, ReactTestInstance } from 'react-test-renderer'
 
-import { context, findByTypeWithSubstring, findByTypeWithText, render, RenderAPI } from 'testUtils'
+import { context, findByTypeWithSubstring, findByTypeWithText, render, RenderAPI, screen } from 'testUtils'
 import CernerAlert from './CernerAlert'
 import { initialPatientState, InitialState, PatientState } from 'store/slices'
 import { TextView } from 'components'
@@ -68,9 +68,6 @@ context('CernerAlert', () => {
     })
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
 
   it('should only show cerner facilities', () => {
     expect(findByTypeWithSubstring(testInstance, TextView, 'FacilityOne')).toBeTruthy()
@@ -86,7 +83,7 @@ context('CernerAlert', () => {
 
   describe('when some facilities are cerner', () => {
     it('should show proper header text', () => {
-      expect(findByTypeWithText(testInstance, TextView, 'Some of your V\uFEFFA health care team may be using the My V\uFEFFA Health portal')).toBeTruthy()
+      expect(screen.getByText('Some of your VA health care team may be using the My VA Health portal')).toBeTruthy()
     })
   })
 
@@ -119,7 +116,7 @@ context('CernerAlert', () => {
           },
         ],
       })
-      expect(findByTypeWithText(testInstance, TextView, 'Your V\uFEFFA health care team may be using the My V\uFEFFA Health portal')).toBeTruthy()
+      expect(screen.getByText('Your VA health care team may be using the My VA Health portal')).toBeTruthy()
     })
   })
 })
