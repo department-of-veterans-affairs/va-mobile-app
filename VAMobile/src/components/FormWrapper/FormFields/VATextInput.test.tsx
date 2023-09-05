@@ -70,7 +70,7 @@ context('VATextInput', () => {
 
   describe('when isTextArea is true', () => {
     it('should add the text area props to the text input', async () => {
-      initializeTestInstance('email', 'common:field', 'common:back.a11yHint', '', false, '', 'common:field', true)
+      initializeTestInstance('email', 'field', 'back.a11yHint', '', false, '', 'field', true)
       expect(testInstance.findByType(TextInput).props.multiline).toEqual(true)
     })
   })
@@ -91,7 +91,7 @@ context('VATextInput', () => {
 
   describe('when there is helper text', () => {
     it('should display it', async () => {
-      initializeTestInstance('email', '', 'common:back.a11yHint')
+      initializeTestInstance('email', '', 'back.a11yHint')
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Navigates to the previous page')
     })
   })

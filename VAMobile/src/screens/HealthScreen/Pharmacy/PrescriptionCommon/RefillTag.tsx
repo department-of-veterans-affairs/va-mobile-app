@@ -13,7 +13,7 @@ export type RefillTagProps = {
 }
 
 const RefillTag: FC<RefillTagProps> = ({ status }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
   const statusText = getTextForRefillStatus(status, t) || ''

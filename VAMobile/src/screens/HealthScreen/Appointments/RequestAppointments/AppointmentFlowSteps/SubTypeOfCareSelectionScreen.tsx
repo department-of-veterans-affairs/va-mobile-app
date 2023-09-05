@@ -18,7 +18,7 @@ type SubTypeOfCareSelectionScreenProps = StackScreenProps<AppointmentFlowModalSt
 /** Component that will allow user to select a sub care  */
 const SubTypeOfCareSelectionScreen: FC<SubTypeOfCareSelectionScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const [noTypeSelectedError, setNoTypeSelectedError] = useState('')
   const { loadingCCEligibility, appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)

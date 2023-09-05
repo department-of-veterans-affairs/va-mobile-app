@@ -58,8 +58,7 @@ import { useSelector } from 'react-redux'
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
 const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const draftAttachmentAlert = useDestructiveActionSheet()
@@ -191,7 +190,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       ? t('secureMessaging.deletingChanges.loading')
       : t('secureMessaging.viewMessage.loading')
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
         <LoadingComponent text={text} />
       </FullScreenSubtask>
     )
@@ -199,7 +198,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   if (sendingMessage) {
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
         <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
       </FullScreenSubtask>
     )
@@ -232,7 +231,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         inputType: 'none',
         value: messageReply,
         onChange: setMessageReply,
-        labelKey: 'health:secureMessaging.formMessage.message',
+        labelKey: 'secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,
         setInputCursorToBeginning: true,
@@ -299,10 +298,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           <Pressable
             onPress={navigateToReplyHelp}
             accessibilityRole={'button'}
-            accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
+            accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
             importantForAccessibility={'yes'}>
             <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-              <CollapsibleView text={tc('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
+              <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
             </Box>
           </Pressable>
         </Box>
@@ -345,10 +344,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={tc('reply')}
-      leftButtonText={tc('cancel')}
+      title={t('reply')}
+      leftButtonText={t('cancel')}
       onLeftButtonPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
-      rightButtonText={tc('save')}
+      rightButtonText={t('save')}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)

@@ -53,8 +53,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const folderWhereMessageIs = useRef(currentFolderIdParam.toString())
   const folderWhereMessagePreviousewas = useRef(folderWhereMessageIs.current)
 
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { messagesById, threads, loading, loadingFile, loadingInbox, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<
@@ -152,9 +151,9 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
             selectedValue={newCurrentFolderID}
             onSelectionChange={onMove}
             pickerOptions={getFolders()}
-            labelKey={'common:pickerMoveMessageToFolder'}
-            buttonText={'common:pickerLaunchBtn'}
-            confirmBtnText={'common:pickerLaunchBtn'}
+            labelKey={'pickerMoveMessageToFolder'}
+            buttonText={'pickerLaunchBtn'}
+            confirmBtnText={'pickerLaunchBtn'}
             key={newCurrentFolderID}
           />
         ) : (
@@ -165,13 +164,13 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   const backLabel =
     Number(folderWhereMessagePreviousewas.current) === SecureMessagingSystemFolderIdConstants.INBOX
-      ? tc('messages')
-      : tc('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
+      ? t('messages')
+      : t('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
   if (useError(screenID) || messageIDsOfError?.includes(messageID)) {
     return (
-      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
         <ErrorComponent screenID={screenID} />
       </ChildTemplate>
     )
@@ -179,7 +178,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   if (loading || loadingFile || loadingInbox || movingMessage) {
     return (
-      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
         <LoadingComponent
           text={loadingFile ? t('secureMessaging.viewMessage.loadingAttachment') : movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
         />
@@ -224,7 +223,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT
       ? undefined
       : {
-          label: tc('pickerLaunchBtn'),
+          label: t('pickerLaunchBtn'),
           icon: moveIconProps,
           onPress: () => {
             logAnalyticsEvent(Events.vama_sm_move())
@@ -233,16 +232,16 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         }
 
   return (
-    <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')} headerButton={headerButton} testID="viewMessageTestID">
+    <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')} headerButton={headerButton} testID="viewMessageTestID">
       {headerButton && showModalPicker && (
         <VAModalPicker
           selectedValue={newCurrentFolderID}
           onSelectionChange={onMove}
           onClose={() => setShowModalPicker(false)}
           pickerOptions={getFolders()}
-          labelKey={'common:pickerMoveMessageToFolder'}
-          buttonText={'common:pickerLaunchBtn'}
-          confirmBtnText={'common:pickerLaunchBtn'}
+          labelKey={'pickerMoveMessageToFolder'}
+          buttonText={'pickerLaunchBtn'}
+          confirmBtnText={'pickerLaunchBtn'}
           key={newCurrentFolderID}
           showModalByDefault={true}
         />

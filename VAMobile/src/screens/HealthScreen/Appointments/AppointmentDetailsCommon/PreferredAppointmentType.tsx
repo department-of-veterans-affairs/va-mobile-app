@@ -14,7 +14,7 @@ type PreferredAppointmentTypeProps = {
 
 const PreferredAppointmentType: FC<PreferredAppointmentTypeProps> = ({ attributes }) => {
   const isAppointmentPending = isAPendingAppointment(attributes)
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   const { appointmentType, phoneOnly } = attributes || ({} as AppointmentAttributes)

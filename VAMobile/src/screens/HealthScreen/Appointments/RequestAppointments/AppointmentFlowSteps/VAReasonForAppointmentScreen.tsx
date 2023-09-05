@@ -17,8 +17,7 @@ type VAReasonForAppointmentScreenProps = StackScreenProps<AppointmentFlowModalSt
 
 const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { gutter, contentMarginBottom } = theme.dimensions
@@ -81,7 +80,7 @@ const VAReasonForAppointmentScreen: FC<VAReasonForAppointmentScreenProps> = ({ n
       <AppointmentFlowWhiteCtaButton
         mx={10}
         onPress={() => {}}
-        text={`${th('component.crisisLine.talkToThe')} ${th('component.crisisLine.veteranCrisisLine')} ${th('component.crisisLine.now')}`}
+        text={`${t('component.crisisLine.talkToThe')} ${t('component.crisisLine.veteranCrisisLine')} ${t('component.crisisLine.now')}`}
       />
 
       <AppointmentFlowTitleSection title={t('requestAppointment.whatReasonForCare')} errorMessage={noReasonSelectedError} />
