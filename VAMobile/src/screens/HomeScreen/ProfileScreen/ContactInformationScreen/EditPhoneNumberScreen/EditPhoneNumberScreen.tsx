@@ -165,12 +165,13 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'phone',
-        labelKey: 'common:editPhoneNumber.number',
+        labelKey: 'editPhoneNumber.number',
         onChange: setPhoneNumberOnChange,
         maxLength: MAX_DIGITS_AFTER_FORMAT,
         value: phoneNumber,
         onEndEditing: onEndEditingPhoneNumber,
         isRequiredField: true,
+        testID: 'phoneNumberTestID',
       },
       fieldErrorMessage: t('editPhoneNumber.numberFieldError'),
       validationList: [
@@ -184,9 +185,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'phone',
-        labelKey: 'common:editPhoneNumber.extension',
+        labelKey: 'editPhoneNumber.extension',
         onChange: setExtension,
         value: extension,
+        testID: 'phoneNumberExtensionTestID',
       },
     },
   ]
@@ -218,9 +220,9 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       onLeftButtonPress={goBack}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         {getFormattedPhoneNumber(phoneData) !== '' && (
-          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+          <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <VAButton
               onPress={onDeletePressed}
               label={t('contactInformation.removeData', { pageName: buttonTitle })}

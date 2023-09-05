@@ -28,7 +28,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const ddNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.directDepositBenefits)
 
-  const { gutter, contentMarginTop, contentMarginBottom } = theme.dimensions
+  const { gutter, contentMarginBottom } = theme.dimensions
 
   useFocusEffect(
     useCallback(() => {
@@ -88,7 +88,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')} testID="DirectDepositEditAccount">
-      <Box mx={gutter} mt={contentMarginTop} accessible={true}>
+      <Box mx={gutter}>
         <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
           {t('directDeposit.viewAndEditText')}
         </TextView>

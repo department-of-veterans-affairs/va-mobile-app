@@ -35,7 +35,7 @@ export type MessageListProps = {
  * Display a list of buttons with text and optional actions
  */
 const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
     const { inlineTextWithIcons, testId, ...listItemObj } = item

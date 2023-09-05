@@ -16,7 +16,7 @@ import { useTheme } from 'utils/hooks'
 
 export const EncourageUpdateAlert = () => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const [localVersionName, setVersionName] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
@@ -85,7 +85,7 @@ export const EncourageUpdateAlert = () => {
     logAnalyticsEvent(Events.vama_eu_shown())
     return (
       <Box mb={theme.dimensions.buttonPadding}>
-        <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="informational">
+        <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="warning">
           <Box>
             <Box my={theme.dimensions.gutter} accessibilityRole="button" mr={theme.dimensions.buttonPadding}>
               <VAButton onPress={onUpdatePressed} label={t('encourageUpdate.update')} buttonType={ButtonTypesConstants.buttonPrimary} />

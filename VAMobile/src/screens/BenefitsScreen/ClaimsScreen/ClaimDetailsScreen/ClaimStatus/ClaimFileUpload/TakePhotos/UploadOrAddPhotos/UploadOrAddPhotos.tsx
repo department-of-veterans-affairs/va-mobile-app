@@ -151,7 +151,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         selectedValue: documentType,
         onSelectionChange: onDocumentTypeChange,
         pickerOptions: DocumentTypes526,
-        labelKey: 'common:fileUpload.documentType',
+        labelKey: 'fileUpload.documentType',
         isRequiredField: true,
         disabled: false,
       },
@@ -160,7 +160,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     {
       fieldType: FieldType.Selector,
       fieldProps: {
-        labelKey: 'common:fileUpload.evidenceOnlyPhoto',
+        labelKey: 'fileUpload.evidenceOnlyPhoto',
         selected: confirmed,
         onSelectionChange: onCheckboxChange,
         isRequiredField: true,
@@ -266,7 +266,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         logAnalyticsEvent(Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
         navigation.dispatch(StackActions.pop(2))
       }}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         {!!errorMessage && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox scrollViewRef={scrollViewRef} title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" focusOnError={onSaveClicked} />

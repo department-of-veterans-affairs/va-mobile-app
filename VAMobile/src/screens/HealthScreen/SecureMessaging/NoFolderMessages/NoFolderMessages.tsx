@@ -11,7 +11,7 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 
 const NoFolderMessages: FC = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()

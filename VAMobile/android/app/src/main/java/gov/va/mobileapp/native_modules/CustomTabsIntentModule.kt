@@ -81,10 +81,6 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
                                 setShowTitle(true)
                             }
                             .build()
-                            .also {
-                                it.intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
-                                it.intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
-                            }
 
             context.currentActivity?.apply { customTabsIntent.launchUrl(this, authURI) }
             promise.resolve(true)

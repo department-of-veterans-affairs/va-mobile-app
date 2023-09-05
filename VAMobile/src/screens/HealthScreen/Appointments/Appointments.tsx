@@ -33,8 +33,7 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
 }
 
 const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
@@ -78,7 +77,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
 
   if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('appointments')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -86,7 +85,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
 
   if (!appointments) {
     return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('appointments')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
         <NoMatchInRecords />
       </FeatureLandingTemplate>
     )
@@ -126,14 +125,14 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate
-      backLabel={tc('health')}
+      backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
-      title={tc('appointments')}
+      title={t('appointments')}
       scrollViewProps={scrollViewProps}
       footerContent={requestAppointmentsFooter}
       testID="appointmentsTestID">
       <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}

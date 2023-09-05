@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 
@@ -12,21 +12,21 @@ import { useTheme } from 'utils/hooks'
 
 type AppointmentTypeAndDateProps = {
   attributes: AppointmentAttributes
+  isPastAppointment: boolean
 }
 
-const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes }) => {
-  const { t: th } = useTranslation(NAMESPACE.HEALTH)
-  const { t: t } = useTranslation(NAMESPACE.COMMON)
+const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes, isPastAppointment = false }) => {
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { appointmentType, startDateUtc, timeZone, isCovidVaccine, typeOfCare, status, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
 
   const isAppointmentPending = isAPendingAppointment(attributes)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
-  const appointmentTypeLabel = getTranslation(AppointmentTypeToA11yLabel[appointmentType], th)
+  const appointmentTypeLabel = getTranslation(AppointmentTypeToA11yLabel[appointmentType], t)
 
   const date = getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone)
   const time = getFormattedTimeForTimeZone(startDateUtc, timeZone)
-  const covid19Text = th('upcomingAppointments.covidVaccine')
+  const covid19Text = t('upcomingAppointments.covidVaccine')
 
   let content
   if (isAppointmentPending) {
@@ -38,28 +38,43 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes })
       const title = appointmentCanceled ? 'appointments.pending.cancelled.pendingRequestTypeOfCare' : 'appointments.pending.submitted.pendingRequestTypeOfCare'
       content = (
         <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} selectable={true}>
-          {th(title, { typeOfCare })}
+          {t(title, { typeOfCare })}
         </TextView>
       )
     }
+  } else if (isAppointmentCanceled && serviceCategoryName === 'COMPENSATION & PENSION') {
+    content = (
+      <>
+        <TextView variant={'MobileBody'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+          {t('appointments.claimExam')}
+        </TextView>
+        <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+          {t('appointments.canceled.message', { date, time })}
+        </TextView>
+      </>
+    )
   } else if (isAppointmentCanceled) {
     // cancelled
     content = (
       <>
         <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
-          {th('appointments.canceled.message', { date, time })}
+          {t('appointments.canceled.message', { date, time })}
         </TextView>
       </>
     )
   } else if (serviceCategoryName === 'COMPENSATION & PENSION') {
     content = (
       <>
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+        <TextView variant={isPastAppointment ? 'MobileBody' : 'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
           {t('appointments.claimExam')}
         </TextView>
-        <TextView variant={'MobileBody'} paragraphSpacing={true}>
-          {t('appointments.claimExam.explanationText')}
-        </TextView>
+        {isPastAppointment ? (
+          <></>
+        ) : (
+          <TextView variant={'MobileBody'} paragraphSpacing={true}>
+            {t('appointments.claimExam.explanationText')}
+          </TextView>
+        )}
         <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} selectable={true}>
           {`${date}\n${time}`}
         </TextView>
@@ -73,11 +88,22 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes })
       </TextView>
     )
   }
+
+  const appointmentTitle = (): ReactElement => {
+    if (serviceCategoryName === 'COMPENSATION & PENSION') {
+      return <></>
+    } else {
+      return (
+        <TextView variant={'MobileBody'} mb={theme.dimensions.standardMarginBetween} {...testIdProps(isCovidVaccine ? covid19Text : appointmentTypeLabel)}>
+          {getTranslation(isCovidVaccine ? covid19Text : AppointmentTypeToID[appointmentType], t)}
+        </TextView>
+      )
+    }
+  }
+
   return (
     <Box>
-      <TextView variant={'MobileBody'} mb={theme.dimensions.standardMarginBetween} {...testIdProps(isCovidVaccine ? covid19Text : appointmentTypeLabel)}>
-        {getTranslation(isCovidVaccine ? covid19Text : AppointmentTypeToID[appointmentType], th)}
-      </TextView>
+      {appointmentTitle()}
       {content}
     </Box>
   )

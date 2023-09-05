@@ -13,8 +13,7 @@ type ContactInformationProps = {
 
 const ContactInformation: FC<ContactInformationProps> = ({ attributes }) => {
   const isAppointmentPending = isAPendingAppointment(attributes)
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   const { patientEmail, patientPhoneNumber, bestTimeToCall, appointmentType } = attributes || ({} as AppointmentAttributes)
@@ -29,19 +28,19 @@ const ContactInformation: FC<ContactInformationProps> = ({ attributes }) => {
         )}
         {!!patientEmail && (
           <TextView variant="MobileBodyBold">
-            {`${tc('email')}: `}
+            {`${t('email')}: `}
             <TextView variant="MobileBody">{patientEmail}</TextView>
           </TextView>
         )}
         {!!patientPhoneNumber && (
           <TextView variant="MobileBodyBold">
-            {`${tc('phoneNumber')}: `}
+            {`${t('phoneNumber')}: `}
             <TextView variant="MobileBody">{patientPhoneNumber}</TextView>
           </TextView>
         )}
         {!!bestTimeToCall?.length && appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && (
           <TextView variant="MobileBodyBold">
-            {`${tc('call')}: `}
+            {`${t('call')}: `}
             <TextView variant="MobileBody">{bestTimeToCall?.join()}</TextView>
           </TextView>
         )}

@@ -3,10 +3,13 @@ import React, { FC } from 'react'
 
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToA11yLabel } from 'store/api/types'
 import { Box, ButtonTypesConstants, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextArea, TextView, VAButton } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { cancelAppointment } from 'store/slices'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus } from 'utils/appointments'
 import { getTranslation } from 'utils/formattingUtils'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -19,8 +22,7 @@ type AppointmentCancellationInfoProps = {
 }
 
 const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ appointment }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const confirmAlert = useDestructiveActionSheet()
   const dispatch = useAppDispatch()
@@ -96,21 +98,36 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   )
 
   const onCancelAppointment = () => {
+    logAnalyticsEvent(
+      Events.vama_apt_cancel_clicks(appointment?.id || '', getAppointmentAnalyticsStatus(attributes), appointmentType.toString(), getAppointmentAnalyticsDays(attributes), 'start'),
+    )
+
     const onPress = () => {
-      dispatch(cancelAppointment(cancelId, appointment?.id))
+      logAnalyticsEvent(
+        Events.vama_apt_cancel_clicks(
+          appointment?.id || '',
+          getAppointmentAnalyticsStatus(attributes),
+          appointmentType.toString(),
+          getAppointmentAnalyticsDays(attributes),
+          'confirm',
+        ),
+      )
+      dispatch(
+        cancelAppointment(cancelId, appointment?.id, undefined, getAppointmentAnalyticsStatus(attributes), appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
+      )
     }
 
     confirmAlert({
-      title: tc('appointments.cancelThisAppointment'),
+      title: t('appointments.cancelThisAppointment'),
       cancelButtonIndex: 1,
       destructiveButtonIndex: 0,
       buttons: [
         {
-          text: tc('appointments.cancelAppointment'),
+          text: t('appointments.cancelAppointment'),
           onPress: onPress,
         },
         {
-          text: tc('appointments.keepAppointment'),
+          text: t('appointments.keepAppointment'),
         },
       ],
     })

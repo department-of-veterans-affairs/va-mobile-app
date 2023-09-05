@@ -41,6 +41,7 @@ import {
   getMessageRecipients,
   getMessageSignature,
   resetHasLoadedRecipients,
+  resetSaveDraftComplete,
   resetSendMessageComplete,
   resetSendMessageFailed,
   saveDraft,
@@ -57,7 +58,6 @@ import {
   useDestructiveActionSheet,
   useError,
   useMessageWithSignature,
-  useRouteNavigation,
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
@@ -67,10 +67,8 @@ import { useSelector } from 'react-redux'
 type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
 
 const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const draftAttachmentAlert = useDestructiveActionSheet()
 
@@ -107,6 +105,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
   useEffect(() => {
+    dispatch(resetSaveDraftComplete())
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
 
     if (PREPOPULATE_SIGNATURE && !signature) {
@@ -197,7 +196,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
-      <FullScreenSubtask title={t('secureMessaging.startNewMessage')} leftButtonText={tc('cancel')}>
+      <FullScreenSubtask title={t('secureMessaging.startNewMessage')} leftButtonText={t('cancel')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -213,7 +212,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       ? t('secureMessaging.deleteDraft.loading')
       : t('secureMessaging.formMessage.startNewMessage.loading')
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
         <LoadingComponent text={text} />
       </FullScreenSubtask>
     )
@@ -221,7 +220,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
   if (sendingMessage) {
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
         <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
       </FullScreenSubtask>
     )
@@ -250,30 +249,34 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     })
   }
 
-  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
-
+  const onAddFiles = () => {
+    logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
+    navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
+  }
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'health:secureMessaging.formMessage.to',
+        labelKey: 'secureMessaging.formMessage.to',
         selectedValue: to,
         onSelectionChange: setTo,
         pickerOptions: getToPickerOptions(),
         includeBlankPlaceholder: true,
         isRequiredField: true,
+        testID: 'to field',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
     },
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'health:secureMessaging.startNewMessage.category',
+        labelKey: 'secureMessaging.startNewMessage.category',
         selectedValue: category,
         onSelectionChange: onCategoryChange,
         pickerOptions: getStartNewMessageCategoryPickerOptions(t),
         includeBlankPlaceholder: true,
         isRequiredField: true,
+        testID: 'picker',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.category.fieldError'),
     },
@@ -281,11 +284,12 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'none',
-        labelKey: 'health:secureMessaging.startNewMessage.subject',
+        labelKey: 'secureMessaging.startNewMessage.subject',
         value: subject,
         onChange: setSubject,
-        helperTextKey: 'health:secureMessaging.startNewMessage.subject.helperText',
+        helperTextKey: 'secureMessaging.startNewMessage.subject.helperText',
         isRequiredField: category === CategoryTypeFields.other,
+        testID: 'startNewMessageSubjectTestID',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.subject.fieldEmpty'),
       validationList: [
@@ -316,10 +320,11 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
         inputType: 'none',
         value: message,
         onChange: setMessage,
-        labelKey: 'health:secureMessaging.formMessage.message',
+        labelKey: 'secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,
         setInputCursorToBeginning: true,
+        testID: 'message field',
       },
       fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },
@@ -363,6 +368,11 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       )
     }
 
+    const navigateToReplyHelp = () => {
+      logAnalyticsEvent(Events.vama_sm_nonurgent())
+      navigation.navigate('ReplyHelp')
+    }
+
     return (
       <Box>
         <MessageAlert
@@ -385,12 +395,13 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
           />
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Pressable
-              onPress={navigateTo('ReplyHelp')}
+              onPress={navigateToReplyHelp}
               accessibilityRole={'button'}
-              accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
-              importantForAccessibility={'yes'}>
+              accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
+              importantForAccessibility={'yes'}
+              testID="startNewMessageOnlyUseMessagesTestID">
               <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-                <CollapsibleView text={tc('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
+                <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
               </Box>
             </Pressable>
           </Box>
@@ -413,7 +424,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const rightButtonProps = noProviderError
     ? undefined
     : {
-        rightButtonText: tc('save'),
+        rightButtonText: t('save'),
         onRightButtonPress: () => {
           setOnSaveDraftClicked(true)
           setOnSendClicked(true)
@@ -424,10 +435,13 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
       title={t('secureMessaging.startNewMessage')}
-      leftButtonText={tc('cancel')}
+      leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineCta={true}>
+      showCrisisLineCta={true}
+      testID="startNewMessageTestID"
+      rightButtonTestID="startNewMessageSaveTestID"
+      leftButtonTestID="startNewMessageCancelTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
     </FullScreenSubtask>
   )

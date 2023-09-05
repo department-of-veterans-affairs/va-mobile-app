@@ -18,8 +18,8 @@ const ReplyHelp: FC = () => {
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   return (
-    <LargePanel title={t('secureMessaging.replyHelp.title')} rightButtonText={t('close')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+    <LargePanel testID="messageHelpTestID" title={t('secureMessaging.replyHelp.title')} rightButtonText={t('close')} rightButtonTestID="messagesHelpCloseTestID">
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('secureMessaging.replyHelp.onlyUseMessages')}
         </TextView>

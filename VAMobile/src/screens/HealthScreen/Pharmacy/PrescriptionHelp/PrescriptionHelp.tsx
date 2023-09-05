@@ -13,10 +13,9 @@ type PrescriptionHelpProps = StackScreenProps<HealthStackParamList, 'Prescriptio
 const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
   const theme = useTheme()
   const headerStyle = usePanelHeaderStyles()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const { gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
+  const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const medicationNoIncludedList: Array<VABulletListText> = [
     {
       text: t('prescription.help.item1'),
@@ -33,13 +32,13 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       ...headerStyle,
-      headerLeft: (props) => <ClosePanelButton buttonText={tc('close')} onPress={props.onPress} buttonTextColor={'showAll'} />,
+      headerLeft: (props) => <ClosePanelButton buttonText={t('close')} onPress={props.onPress} buttonTextColor={'showAll'} />,
     })
-  }, [navigation, headerStyle, tc])
+  }, [navigation, headerStyle, t])
 
   return (
-    <LargePanel testID="PrescriptionsHelpTestID" title={tc('prescriptionsHelp')} rightButtonText={tc('close')}>
-      <Box mx={gutter} mt={contentMarginTop} mb={contentMarginBottom}>
+    <LargePanel testID="PrescriptionsHelpTestID" title={t('prescriptionsHelp')} rightButtonText={t('close')}>
+      <Box mx={gutter} mb={contentMarginBottom}>
         <TextView variant="MobileBodyBold">{t('prescription.help.header')}</TextView>
         <TextView mt={condensedMarginBetween} variant="MobileBody" paragraphSpacing={true}>
           {t('prescription.help.listHeader')}

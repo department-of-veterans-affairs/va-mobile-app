@@ -13,3 +13,4 @@ As the team builds out dashboards to monitor specific features of the app, they 
 * [Appointments feature dashboard (MVP)](https://lookerstudio.google.com/u/0/reporting/06c3f64f-fcbd-4c13-adb6-3a9c34503f63/page/p_wtepo1ul5c)
 * [Claims feature dashboard (MVP)](https://lookerstudio.google.com/u/0/reporting/dea3ede1-2d2e-4401-abd7-a44beada8a35/page/p_wtepo1ul5c)
 * [Prescriptions feature dashboard (MVP)](https://lookerstudio.google.com/u/0/reporting/8e2627dc-fd2c-4be0-83dc-b60f69df7527/page/p_wtepo1ul5c)
+* [Secure Messaging dashboard (MVP)](https://lookerstudio.google.com/u/0/reporting/ee7b19ce-7c3a-4a0c-a5fe-1a5dcbdffc58/page/p_wtepo1ul5c)

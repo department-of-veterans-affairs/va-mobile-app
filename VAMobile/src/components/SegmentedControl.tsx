@@ -2,9 +2,11 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 import styled from 'styled-components'
 
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from '../constants/namespaces'
 import { TouchableOpacity } from 'react-native'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { themeFn } from '../utils/theme'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
@@ -67,7 +69,10 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
 
         return (
           <ButtonContainer
-            onPress={(): void => onChange(values[index])}
+            onPress={(): void => {
+              logAnalyticsEvent(Events.vama_segcontrol_click(values[index]))
+              onChange(values[index])
+            }}
             isSelected={isSelected}
             key={index}
             widthPct={`${100 / values.length}%`}

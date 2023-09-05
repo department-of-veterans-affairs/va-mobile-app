@@ -11,8 +11,7 @@ import { useTheme } from 'utils/hooks'
 type PrepareForVideoVisitProps = StackScreenProps<HealthStackParamList, 'PrepareForVideoVisit'>
 
 const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   useEffect(() => {
@@ -26,8 +25,8 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
   })
 
   return (
-    <LargePanel title={tc('appointmentsHelp')} rightButtonText={tc('close')}>
-      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter} mt={theme.dimensions.cardPadding}>
+    <LargePanel title={t('appointmentsHelp')} rightButtonText={t('close')}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('prepareForVideoVisit.beforeYourAppointment')}
         </TextView>

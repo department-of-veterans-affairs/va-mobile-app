@@ -14,22 +14,20 @@ const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 type NoRequestAppointmentAccessProps = StackScreenProps<HealthStackParamList, 'NoRequestAppointmentAccess'>
 
 const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
-  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
+  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('webview.vagov'), loadingMessage: t('webview.valocation.loading') })
   const navigation = useNavigation()
 
   const containerStyles = {
-    mt: 30,
     mb: contentMarginBottom,
   }
 
   const bulletOne = {
     text: t('noRequestAppointmentAccess.bulletOneText'),
-    boldedText: ' ' + tc('and'),
+    boldedText: ' ' + t('and'),
     a11yLabel: t('noRequestAppointmentAccess.bulletOneLabel'),
   }
 
@@ -39,7 +37,7 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
   }
 
   return (
-    <ChildTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={t('requestAppointments.launchModalBtnTitle')}>
+    <ChildTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('requestAppointments.launchModalBtnTitle')}>
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox title={t('noRequestAppointmentAccess.title')} border="warning" text={t('noRequestAppointmentAccess.text')}>
           <Box mt={standardMarginBetween}>
