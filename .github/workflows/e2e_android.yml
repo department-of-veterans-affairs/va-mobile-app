@@ -77,7 +77,7 @@ jobs:
         run: yarn e2e:android-build
 
       - name: Run e2e tests for Android
-        run: yarn e2e:android-test --take-screenshots failing --updateSnapshot
+        run: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
       
       - name: Upload artifacts on failure
         if: failure()
