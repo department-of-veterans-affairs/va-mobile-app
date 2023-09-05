@@ -16,7 +16,7 @@ type NoAppointmentsProps = {
 }
 
 export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLabel, showVAGovLink = true }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   return (

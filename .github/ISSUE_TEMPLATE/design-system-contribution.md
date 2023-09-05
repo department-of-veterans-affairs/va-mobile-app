@@ -1,3 +1,11 @@
+---
+name: Contributing to the design system
+about: Template for new common component for VA mobile app
+title: Component:[Insert name of component here]
+labels: component-documentation, ux
+assignees:
+---
+
 # Contributing to the design system
 Adding a new component or updating an existing component
 

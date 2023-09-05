@@ -22,8 +22,7 @@ type AppointmentCancellationInfoProps = {
 }
 
 const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ appointment }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const confirmAlert = useDestructiveActionSheet()
   const dispatch = useAppDispatch()
@@ -119,16 +118,16 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
     }
 
     confirmAlert({
-      title: tc('appointments.cancelThisAppointment'),
+      title: t('appointments.cancelThisAppointment'),
       cancelButtonIndex: 1,
       destructiveButtonIndex: 0,
       buttons: [
         {
-          text: tc('appointments.cancelAppointment'),
+          text: t('appointments.cancelAppointment'),
           onPress: onPress,
         },
         {
-          text: tc('appointments.keepAppointment'),
+          text: t('appointments.keepAppointment'),
         },
       ],
     })

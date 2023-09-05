@@ -12,8 +12,7 @@ const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
 
 const PrescriptionHistoryNotAuthorized: FC = () => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { standardMarginBetween } = theme.dimensions
   const launchExternalLink = useExternalLink()
 
@@ -27,8 +26,8 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
 
   const bulletOne = {
     text: t('prescriptions.notAuthorized.enrolled'),
-    boldedText: ' ' + tc('and'),
-    a11yLabel: t('prescriptions.notAuthorized.enrolled.a11y') + ' ' + tc('and'),
+    boldedText: ' ' + t('and'),
+    a11yLabel: t('prescriptions.notAuthorized.enrolled.a11y') + ' ' + t('and'),
   }
 
   const bulletTwo = {
@@ -63,7 +62,7 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
           <TextView mt={standardMarginBetween} accessibilityLabel={t('prescriptions.notAuthorized.pleaseCall.a11y')}>
             {t('prescriptions.notAuthorized.pleaseCall')}
           </TextView>
-          <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />
+          <ClickToCallPhoneNumber displayedText={t('8773270022.displayText')} phone={t('8773270022')} />
         </TextArea>
       </Box>
     </VAScrollView>

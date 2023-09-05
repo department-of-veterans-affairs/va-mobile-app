@@ -7,7 +7,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
 const NoRefills: FC = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   const scrollStyles: ViewStyle = {

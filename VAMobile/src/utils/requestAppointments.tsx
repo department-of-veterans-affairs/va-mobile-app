@@ -27,7 +27,7 @@ import { useAppDispatch, useRouteNavigation, useTheme } from './hooks'
 /** Header style for the modals in the request appointment flow */
 export const useRequestAppointmentModalHeaderStyles = (): StackNavigationOptions => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const headerStyles: StackNavigationOptions = {
     headerStyle: {
@@ -85,7 +85,7 @@ export function useSetIsVAEligible<T extends SetIsVAEligibleType>() {
 export const useCheckEligibilityAndRouteUser = <T extends SetIsVAEligibleType>() => {
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { ccEligibilityChecked, ccEligible } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const isVaEligible = useRef(true)
   const selectedName = useRef<TypeOfCareNameTypes>()
@@ -179,7 +179,7 @@ export const setReasonCode = (data: string | undefined): AppointmentFlowFormData
 
 // method to create the list of languages used on the appointment request flow.
 export const usePreferredLanguageList = (): Array<string> => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const listOfLanguagePref = [
     '',
     t('requestAppointments.langPrefEnglish'),
