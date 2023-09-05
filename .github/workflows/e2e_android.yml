@@ -1,0 +1,85 @@
+#
+# Detox e2e tests in CI
+#
+
+name: '[e2e] iOS Detox Test Run'
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: VAMobile
+
+env:
+  # IAM staging app client secret
+  APP_CLIENT_SECRET: ${{ secrets.APP_CLIENT_SECRET }}
+  # IAM production app client secret
+  APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
+  # Android Key Store Key Alias
+  ANDROID_KS_KEY_ALIAS: ${{ secrets.ANDROID_KS_KEY_ALIAS }}
+  # Android Key Store Key Alias Password
+  ANDROID_KS_KEY_PW: ${{ secrets.ANDROID_KS_KEY_PW }}
+  # Android Key Store Key Password
+  ANDROID_KS_PW: ${{ secrets.ANDROID_KS_PW }}
+  # App ID for Android project in Firebase
+  FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+  # Filepath for firebase distribution key. Also used by fastlane
+  FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
+
+jobs:
+  e2e-android:
+    runs-on: ubuntu-4-cores-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Set git config
+        run: |
+            git config --global user.name 'VA Automation Bot'
+            git config --global user.email 'va-mobileapp@adhocteam.us'
+
+      - name: Decode base64 encoded keys
+        working-directory: VAMobile/android
+        run: |
+          mkdir keys
+          cd keys
+          echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
+          echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
+          echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
+          cd ../app
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
+
+      - name: Setup ruby and restore bundler cache
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0.2'
+          bundler-cache: true
+          working-directory: VAMobile/android
+
+      - name: Setup node and restore yarn cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: './VAMobile/yarn.lock'
+
+      - name: Install npm dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Set app environment variables
+        run: yarn env:staging
+
+      - name: Bundle Android app
+        run: yarn e2e:android-build
+
+      - name: Run e2e tests for Android
+        run: yarn e2e:android-test --take-screenshots failing --updateSnapshot
+      
+      - name: Upload artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
+          path: VAMobile/artifacts
