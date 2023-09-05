@@ -6,7 +6,7 @@ name: '[e2e] Android Detox Test Run'
 
 on:
   workflow_dispatch:
-  pull_request:
+  # pull_request:
   push:
 
 defaults:
