@@ -36,7 +36,7 @@ export const useDemographics = () => {
 }
 
 /**
- * Updates gender identity
+ * Updates a user's gender identity
  */
 export const updateGenderIdentity = async (genderIdentity: string) => {
   try {
