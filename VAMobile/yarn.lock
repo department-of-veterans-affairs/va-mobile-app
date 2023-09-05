@@ -2561,10 +2561,10 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@department-of-veterans-affairs/mobile-component-library@0.0.15":
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.0.15.tgz#e164dddadf94746caac6d806289c2ad1d7f971c4"
-  integrity sha512-/gqKz1ynlj169wbbirGrRx3T5IkGCxbz/CvgdACzSpjDJ/HPpD+yZZ5VNRN21bZCIFbGjBwJmZUqMbrM+CNdZQ==
+"@department-of-veterans-affairs/mobile-component-library@0.0.17":
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.0.17.tgz#eab2f83cc5f2983d737b81c9583dc43157f6e029"
+  integrity sha512-1Z2Hnex0D9CVlP23oQzrSn7ysNDY2spbqI7avLDfbUKHGzV1QevOWWA3QdrYjIfZmsGtt7030NALJa7PshGvSA==
   dependencies:
     "@os-team/i18next-react-native-language-detector" "^1.0.28"
     expo "^49.0.0"
