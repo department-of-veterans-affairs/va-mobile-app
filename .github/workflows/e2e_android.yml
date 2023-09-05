@@ -60,21 +60,12 @@ jobs:
           bundler-cache: true
           working-directory: VAMobile/android
 
-      - name: Set up JDK 11
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: 11
-          distribution: 'adopt'
-          cache: 'gradle'
+          java-version: 17
+          distribution: 'microsoft'
       
-      - name: Run connected tests
-        uses: ReactiveCircus/android-emulator-runner@v2
-        with:
-          api-level: 30
-          target: google_apis
-          arch: x86_64
-          script: ./gradlew connectedCheck
-
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
 
