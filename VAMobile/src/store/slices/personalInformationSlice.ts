@@ -60,7 +60,6 @@ export type PersonalInformationState = {
   preloadComplete: boolean
   validateAddressAbortController?: AbortController
   preferredNameSaved: boolean
-  genderIdentitySaved: boolean
   genderIdentityOptions: GenderIdentityOptions
   loadingGenderIdentityOptions: boolean
 }
@@ -76,7 +75,6 @@ export const initialPersonalInformationState: PersonalInformationState = {
   phoneNumberSaved: false,
   validateAddressAbortController: undefined,
   preferredNameSaved: false,
-  genderIdentitySaved: false,
   genderIdentityOptions: {} as GenderIdentityOptions,
   loadingGenderIdentityOptions: false,
 }
@@ -533,42 +531,6 @@ export const finishUpdatePreferredName = (): AppThunk => async (dispatch) => {
 }
 
 /**
- * Makes an API call to update a user's gender identity
- */
-export const updateGenderIdentity =
-  (genderIdentity: string, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
-    const retryFunction = () => dispatch(updateGenderIdentity(genderIdentity, messages, screenID))
-
-    try {
-      dispatch(dispatchClearErrors(screenID))
-      dispatch(dispatchSetTryAgainFunction(retryFunction))
-      dispatch(dispatchStartUpdateGenderIdentity())
-
-      await api.put<api.EditResponseData>('/v0/user/gender_identity', { code: genderIdentity })
-
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
-      const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_prof_update_gender(totalTime, actionTime))
-      await logAnalyticsEvent(Events.vama_gender_id_success)
-      await dispatch(resetAnalyticsActionStart())
-      await dispatch(setAnalyticsTotalTimeStart())
-      await registerReviewEvent()
-
-      dispatch(dispatchFinishUpdateGenderIdentity({ genderIdentity }))
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `updateGenderIdentity: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishUpdateGenderIdentity({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
-      }
-      await logAnalyticsEvent(Events.vama_gender_id_fail)
-    }
-  }
-
-/**
  * Makes an API call to get valid gender identity options
  */
 export const getGenderIdentityOptions =
@@ -727,21 +689,6 @@ const peronalInformationSlice = createSlice({
       }
       state.preferredNameSaved = !error
     },
-    dispatchStartUpdateGenderIdentity: (state) => {
-      state.loading = true
-    },
-    dispatchFinishUpdateGenderIdentity: (state, action: PayloadAction<{ genderIdentity?: string; error?: Error | undefined }>) => {
-      const { genderIdentity, error } = action.payload
-      state.error = error
-      state.loading = false
-      if (state.profile && genderIdentity) {
-        state.profile.genderIdentity = genderIdentity
-      }
-      state.genderIdentitySaved = !error
-    },
-    dispatchFinishEditGenderIdentity: (state) => {
-      state.genderIdentitySaved = false
-    },
     dispatchStartGetGenderIdentityOptions: (state) => {
       state.loadingGenderIdentityOptions = true
     },
@@ -772,9 +719,6 @@ export const {
   dispatchStartUpdatePreferredName,
   dispatchFinishUpdatePreferredName,
   dispatchFinishSaveUpdatePreferredName,
-  dispatchStartUpdateGenderIdentity,
-  dispatchFinishUpdateGenderIdentity,
-  dispatchFinishEditGenderIdentity,
   dispatchStartGetGenderIdentityOptions,
   dispatchFinishGetGenderIdentityOptions,
 } = peronalInformationSlice.actions
