@@ -2,7 +2,7 @@
 # Detox e2e tests in CI
 #
 
-name: '[e2e] iOS Detox Test Run'
+name: '[e2e] Android Detox Test Run'
 
 on:
   workflow_dispatch:
