@@ -61,30 +61,35 @@
           "lettersAndDocuments",
           "militaryServiceHistory",
           "userProfileUpdate",
-          "secureMessaging",
-          "prescriptions"
+          "prescriptions",
+          "secureMessaging"
         ],
         "health": {
           "facilities": [
             {
               "facilityId": "983",
-              "isCerner": false
+              "isCerner": false,
+              "facilityName": ""
             },
             {
               "facilityId": "556",
-              "isCerner": false
+              "isCerner": false,
+              "facilityName": ""
             },
             {
               "facilityId": "668",
-              "isCerner": true
+              "isCerner": false,
+              "facilityName": "Mann-Grandstaff Department of Veterans Affairs Medical Center"
             },
             {
               "facilityId": "984",
-              "isCerner": false
+              "isCerner": false,
+              "facilityName": ""
             },
             {
               "facilityId": "987",
-              "isCerner": false
+              "isCerner": false,
+              "facilityName": ""
             }
           ],
           "isCernerPatient": false
