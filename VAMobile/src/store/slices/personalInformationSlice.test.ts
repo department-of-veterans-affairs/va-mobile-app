@@ -31,8 +31,6 @@ export const ActionTypes: {
   PERSONAL_INFORMATION_START_VALIDATE_ADDRESS: string
   PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: string
   PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: string
-  PERSONAL_INFORMATION_START_GET_GENDER_IDENTITY_OPTIONS: string
-  PERSONAL_INFORMATION_FINISH_GET_GENDER_IDENTITY_OPTIONS: string
 } = {
   PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER: 'personalInformation/dispatchStartSavePhoneNumber',
   PERSONAL_INFORMATION_FINISH_SAVE_PHONE_NUMBER: 'personalInformation/dispatchFinishSavePhoneNumber',
@@ -58,7 +56,6 @@ context('personalInformation', () => {
   const mockStorePersonalInformation: Partial<RootState> = {
     personalInformation: {
       loading: false,
-      loadingGenderIdentityOptions: false,
       savingAddress: false,
       profile: {
         firstName: 'Ben',
@@ -131,8 +128,6 @@ context('personalInformation', () => {
       showValidation: false,
       preloadComplete: false,
       phoneNumberSaved: false,
-      genderIdentityOptions: {},
-      genderIdentitySaved: false,
     },
   }
 
