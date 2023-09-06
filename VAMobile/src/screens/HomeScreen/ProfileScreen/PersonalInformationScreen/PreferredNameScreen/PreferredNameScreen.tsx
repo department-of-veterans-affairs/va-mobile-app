@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDemographics } from 'api/demographics/getDemographics'
 import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
-import { useUpdatePreferredName } from 'api/demographics'
+import { useUpdatePreferredName } from 'api/demographics/updatePreferredName'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 
