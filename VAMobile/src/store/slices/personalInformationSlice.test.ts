@@ -10,7 +10,6 @@ import {
   deleteUsersNumber,
   editUsersNumber,
   finishEditAddress,
-  getGenderIdentityOptions,
   getProfileInfo,
   updateAddress,
   updateEmail,
@@ -48,8 +47,6 @@ export const ActionTypes: {
   PERSONAL_INFORMATION_START_VALIDATE_ADDRESS: 'personalInformation/dispatchStartValidateAddress',
   PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: 'personalInformation/dispatchFinishValidateAddress',
   PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: 'personalInformation/dispatchFinishEditAddress',
-  PERSONAL_INFORMATION_START_GET_GENDER_IDENTITY_OPTIONS: 'personalInformation/dispatchStartGetGenderIdentityOptions',
-  PERSONAL_INFORMATION_FINISH_GET_GENDER_IDENTITY_OPTIONS: 'personalInformation/dispatchFinishGetGenderIdentityOptions',
 }
 
 const snackbarMessages: SnackbarMessages = {
@@ -835,75 +832,6 @@ context('personalInformation', () => {
 
       const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS })
       expect(endAction?.state.personalInformation.addressSaved).toBeFalsy()
-    })
-  })
-
-  describe('getGenderIdentityOptions', () => {
-    it('should get gender identity options', async() => {
-      const mockGenderIdentityPayload = {
-        data: {
-          attributes: {
-            options: {
-              m: 'Man',
-              b: 'Non-Binary',
-              tm: 'Transgender man',
-              tf: 'Transgender woman',
-              f: 'Woman',
-              n: 'Prefer not to answer',
-              o: 'A gender not listed',
-            }
-          }
-        }
-      }
-
-      when(api.get as jest.Mock)
-        .calledWith('/v0/user/gender_identity/edit')
-        .mockResolvedValue(mockGenderIdentityPayload)
-
-        const store = realStore()
-        await store.dispatch(getGenderIdentityOptions())
-        const actions = store.getActions()
-
-        const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_GET_GENDER_IDENTITY_OPTIONS })
-        expect(startAction).toBeTruthy()
-        expect(startAction?.state.personalInformation.loadingGenderIdentityOptions).toBeTruthy()
-
-        const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_GET_GENDER_IDENTITY_OPTIONS })
-        expect(endAction?.state.personalInformation.loadingGenderIdentityOptions).toBeFalsy()
-        expect(endAction?.state.personalInformation.error).toBeFalsy()
-
-        const { personalInformation } = store.getState()
-        expect(personalInformation.genderIdentityOptions).toEqual({
-          M: 'Man',
-          B: 'Non-Binary',
-          TM: 'Transgender man',
-          TF: 'Transgender woman',
-          F: 'Woman',
-          N: 'Prefer not to answer',
-          O: 'A gender not listed',
-        })
-    })
-
-    it('should get an error if the API call fails', async() => {
-      const error = new Error('Failed to fetch gender identity options.')
-
-      when(api.get as jest.Mock)
-        .calledWith('/v0/user/gender_identity/edit')
-        .mockRejectedValue(error)
-
-        const store = realStore()
-        await store.dispatch(getGenderIdentityOptions())
-        const actions = store.getActions()
-
-        const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_START_GET_GENDER_IDENTITY_OPTIONS })
-        expect(startAction).toBeTruthy()
-        expect(startAction?.state.personalInformation.loadingGenderIdentityOptions).toBeTruthy()
-
-        const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_GET_GENDER_IDENTITY_OPTIONS })
-        expect(endAction?.state.personalInformation.loadingGenderIdentityOptions).toBeFalsy()
-
-        const { personalInformation } = store.getState()
-        expect(personalInformation.error).toBeTruthy()
     })
   })
 })

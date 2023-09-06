@@ -1,6 +1,5 @@
 import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
@@ -8,12 +7,11 @@ import { Box, ErrorComponent, FullScreenSubtask, LoadingComponent, RadioGroup, R
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, getGenderIdentityOptions } from 'store/slices'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveActionSheet, useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useDemographics, useUpdateGenderIdentity } from 'api/demographics'
+import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 
 type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIdentity'>
 
@@ -21,10 +19,9 @@ type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIde
  * Screen for editing gender identity
  */
 const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => {
-  const { genderIdentityOptions, loadingGenderIdentityOptions } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { data: demographics } = useDemographics()
+  const { data: genderIdentityOptions, isLoading: loadingGenderIdentityOptions } = useGenderIdentityOptions()
   const genderIdentityMutation = useUpdateGenderIdentity()
-  const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -33,12 +30,6 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
 
   const [error, setError] = useState('')
   const [genderIdentity, setGenderIdentity] = useState(demographics?.genderIdentity)
-
-  useEffect(() => {
-    if (!Object.keys(genderIdentityOptions).length) {
-      dispatch(getGenderIdentityOptions(ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID))
-    }
-  }, [dispatch, genderIdentityOptions])
 
   useEffect(() => {
     if (genderIdentityMutation.isSuccess) {

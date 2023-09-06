@@ -1,24 +1,24 @@
 import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
-import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, ErrorComponent, FeatureLandingTemplate, LargeNavButton, LoadingComponent, TextView, TextViewProps } from 'components'
-import { GenderIdentityOptions, ScreenIDTypesConstants } from 'store/api/types'
+import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, getGenderIdentityOptions } from 'store/slices/personalInformationSlice'
+import { PersonalInformationState } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { UserDataProfile } from 'store/api/types'
-import { UserDemographics } from 'api/types/DemographicsData'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY, stringToTitleCase } from 'utils/formattingUtils'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useDemographics } from 'api/demographics'
+import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { useSelector } from 'react-redux'
 
 const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
@@ -49,21 +49,13 @@ const getGenderIdentity = (demographics: UserDemographics | undefined, t: TFunct
 type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'PersonalInformation'>
 
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
-  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { profile, loading, error, loadingGenderIdentityOptions, genderIdentityOptions } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const navigateTo = useRouteNavigation()
-  const { data: demographics, isLoading: loadingDemographics } = useDemographics()
-
-  useFocusEffect(
-    React.useCallback(() => {
-      if (demographics?.genderIdentity && !Object.keys(genderIdentityOptions).length && !error) {
-        dispatch(getGenderIdentityOptions(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
-      }
-    }, [dispatch, error, genderIdentityOptions, demographics?.genderIdentity]),
-  )
+  const { data: demographics, isLoading: loadingDemographics, isError: getDemographicsError } = useDemographics()
+  const { data: genderIdentityOptions, isLoading: loadingGenderIdentityOptions, isError: getGenderIdentityOptionsError } = useGenderIdentityOptions()
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
   const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
@@ -94,7 +86,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     borderStyle: 'solid',
   }
 
-  if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID) || getDemographicsError || getGenderIdentityOptionsError) {
     return (
       <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} />
