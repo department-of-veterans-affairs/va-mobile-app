@@ -77,3 +77,49 @@ export const useUpdateGenderIdentity = () => {
     },
   })
 }
+
+/**
+ * Updates a user's preferred name
+ */
+export const updatePreferredName = async (preferredName: string) => {
+  try {
+    const preferredNameUpdateData = {
+      text: preferredName,
+    }
+    await put<EditResponseData>('/v0/user/preferred_name', preferredNameUpdateData)
+  } catch (error) {
+    throw error
+  }
+}
+
+/**
+ * Returns a mutation for updating preferred name
+ */
+export const useUpdatePreferredName = () => {
+  const dispatch = useAppDispatch()
+  const queryClient = useQueryClient()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.preferredName.saved'),
+    errorMsg: t('personalInformation.preferredName.notSaved'),
+  }
+
+  return useMutation({
+    mutationFn: updatePreferredName,
+    onSuccess: async () => {
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_preferred_name())
+      await logAnalyticsEvent(Events.vama_pref_name_success)
+      queryClient.invalidateQueries({ queryKey: ['user', 'demographics'] })
+      showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false)
+    },
+    onError: async (data: string, error) => {
+      if (isErrorObject(error)) {
+        const retryFunction = () => updatePreferredName(data)
+        logNonFatalErrorToFirebase(error, 'updatePreferredName: Service error')
+        showSnackBar(snackbarMessages.errorMsg, dispatch, retryFunction, false, true, true)
+      }
+      await logAnalyticsEvent(Events.vama_pref_name_fail)
+    },
+  })
+}

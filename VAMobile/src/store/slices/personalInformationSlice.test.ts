@@ -14,7 +14,6 @@ import {
   getProfileInfo,
   updateAddress,
   updateEmail,
-  updatePreferredName,
   validateAddress,
 } from './personalInformationSlice'
 import { SnackbarMessages } from 'components/SnackBar'
@@ -33,11 +32,6 @@ export const ActionTypes: {
   PERSONAL_INFORMATION_START_VALIDATE_ADDRESS: string
   PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: string
   PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: string
-  PERSONAL_INFORMATION_UPDATE_PREFERRED_NAME: string
-  PERSONAL_INFORMATION_FINISH_UPDATE_PREFERRED_NAME: string
-  PERSONAL_INFORMATION_FINISH_SAVE_UPDATE_PREFERRED_NAME: string
-  PERSONAL_INFORMATION_START_UPDATE_GENDER_IDENTITY: string
-  PERSONAL_INFORMATION_FINISH_UPDATE_GENDER_IDENTITY: string
   PERSONAL_INFORMATION_START_GET_GENDER_IDENTITY_OPTIONS: string
   PERSONAL_INFORMATION_FINISH_GET_GENDER_IDENTITY_OPTIONS: string
 } = {
@@ -54,11 +48,6 @@ export const ActionTypes: {
   PERSONAL_INFORMATION_START_VALIDATE_ADDRESS: 'personalInformation/dispatchStartValidateAddress',
   PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: 'personalInformation/dispatchFinishValidateAddress',
   PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: 'personalInformation/dispatchFinishEditAddress',
-  PERSONAL_INFORMATION_UPDATE_PREFERRED_NAME: 'personalInformation/dispatchStartUpdatePreferredName',
-  PERSONAL_INFORMATION_FINISH_UPDATE_PREFERRED_NAME: 'personalInformation/dispatchFinishUpdatePreferredName',
-  PERSONAL_INFORMATION_FINISH_SAVE_UPDATE_PREFERRED_NAME: 'personalInformation/dispatchFinishSaveUpdatePreferredName',
-  PERSONAL_INFORMATION_START_UPDATE_GENDER_IDENTITY: 'personalInformation/dispatchStartUpdateGenderIdentity',
-  PERSONAL_INFORMATION_FINISH_UPDATE_GENDER_IDENTITY: 'personalInformation/dispatchFinishUpdateGenderIdentity',
   PERSONAL_INFORMATION_START_GET_GENDER_IDENTITY_OPTIONS: 'personalInformation/dispatchStartGetGenderIdentityOptions',
   PERSONAL_INFORMATION_FINISH_GET_GENDER_IDENTITY_OPTIONS: 'personalInformation/dispatchFinishGetGenderIdentityOptions',
 }
@@ -71,7 +60,6 @@ const snackbarMessages: SnackbarMessages = {
 context('personalInformation', () => {
   const mockStorePersonalInformation: Partial<RootState> = {
     personalInformation: {
-      preferredNameSaved:false,
       loading: false,
       loadingGenderIdentityOptions: false,
       savingAddress: false,
@@ -178,35 +166,6 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
       expect(api.del as jest.Mock).toBeCalledWith('/v0/user/phones', phoneData)
-
-      const { personalInformation } = store.getState()
-      expect(personalInformation.error).toBeFalsy()
-    })
-  })
-
-  describe('updatePreferredName', () => {
-    it('should update users preferred Name', async () => {
-      const preferredNameUpdateData = {
-        text: 'Gary',
-      }
-
-      when(api.put as jest.Mock)
-        .calledWith('/v0/user/preferred_name', preferredNameUpdateData)
-        .mockResolvedValue({})
-
-      const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updatePreferredName('Gary', snackbarMessages))
-      const actions = store.getActions()
-
-      const startAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_UPDATE_PREFERRED_NAME })
-      expect(startAction).toBeTruthy()
-      expect(startAction?.state.personalInformation.loading).toBeTruthy()
-
-      const endAction = _.find(actions, { type: ActionTypes.PERSONAL_INFORMATION_FINISH_SAVE_UPDATE_PREFERRED_NAME })
-      expect(endAction?.state.personalInformation.loading).toBeFalsy()
-      expect(endAction?.state.personalInformation.error).toBeFalsy()
-
-      expect(api.put as jest.Mock).toBeCalledWith('/v0/user/preferred_name', { text: 'Gary' })
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
