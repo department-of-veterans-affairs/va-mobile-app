@@ -4,7 +4,7 @@ import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { Provider, useSelector } from 'react-redux'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
@@ -54,6 +54,7 @@ import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewScreen from './screens/WebviewScreen'
 import getEnv from 'utils/env'
+import queryClient from 'api/queryClient'
 import store, { RootState } from 'store'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 
@@ -96,7 +97,6 @@ type RootTabNavParamList = {
 const MainApp: FC = () => {
   const navigationRef = useNavigationContainerRef()
   const routeNameRef = useRef('')
-  const queryClient = new QueryClient()
 
   const scheme = useColorScheme()
   setColorScheme(scheme)
