@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { EditResponseData, put } from '../store/api'
+import { EditResponseData, put } from '../../store/api'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { SnackbarMessages } from 'components/SnackBar'
@@ -10,47 +10,44 @@ import { useAppDispatch } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
 /**
- * Updates a user's preferred name
+ * Updates a user's gender identity
  */
-export const updatePreferredName = async (preferredName: string) => {
+export const updateGenderIdentity = async (genderIdentity: string) => {
   try {
-    const preferredNameUpdateData = {
-      text: preferredName,
-    }
-    await put<EditResponseData>('/v0/user/preferred_name', preferredNameUpdateData)
+    await put<EditResponseData>('/v0/user/gender_identity', { code: genderIdentity })
   } catch (error) {
     throw error
   }
 }
 
 /**
- * Returns a mutation for updating preferred name
+ * Returns a mutation for updating gender identity
  */
-export const useUpdatePreferredName = () => {
+export const useUpdateGenderIdentity = () => {
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const snackbarMessages: SnackbarMessages = {
-    successMsg: t('personalInformation.preferredName.saved'),
-    errorMsg: t('personalInformation.preferredName.notSaved'),
+    successMsg: t('personalInformation.genderIdentity.saved'),
+    errorMsg: t('personalInformation.genderIdentity.not.saved'),
   }
 
   return useMutation({
-    mutationFn: updatePreferredName,
+    mutationFn: updateGenderIdentity,
     onSuccess: async () => {
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_preferred_name())
-      await logAnalyticsEvent(Events.vama_pref_name_success)
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+      await logAnalyticsEvent(Events.vama_gender_id_success)
       queryClient.invalidateQueries({ queryKey: ['user', 'demographics'] })
-      showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false)
+      showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
     },
     onError: async (data: string, error) => {
       if (isErrorObject(error)) {
-        const retryFunction = () => updatePreferredName(data)
-        logNonFatalErrorToFirebase(error, 'updatePreferredName: Service error')
+        const retryFunction = () => updateGenderIdentity(data)
+        logNonFatalErrorToFirebase(error, 'updateGenderIdentity: Service error')
         showSnackBar(snackbarMessages.errorMsg, dispatch, retryFunction, false, true, true)
       }
-      await logAnalyticsEvent(Events.vama_pref_name_fail)
+      await logAnalyticsEvent(Events.vama_gender_id_fail)
     },
   })
 }
