@@ -54,7 +54,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const { profile, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const navigateTo = useRouteNavigation()
-  const { data: demographics, isLoading: loadingDemographics, isError: getDemographicsError } = useDemographics()
+  const { data: demographics, isFetching: loadingDemographics, isError: getDemographicsError } = useDemographics()
   const { data: genderIdentityOptions, isLoading: loadingGenderIdentityOptions, isError: getGenderIdentityOptionsError } = useGenderIdentityOptions()
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
