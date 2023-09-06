@@ -44,7 +44,7 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
 
   return (
     <Box>
-      <CollapsibleView text={t('appealDetails.viewPastEvents')} contentInTextArea={false} a11yHint={t('appealDetails.viewPastEventsA11yHint')}>
+      <CollapsibleView text={t('appealDetails.viewPastEvents')} contentInTextArea={false} a11yHint={t('appealDetails.viewPastEventsA11yHint')} testID="reviewPastEventsTestID">
         <AppealTimeline events={events} />
       </CollapsibleView>
       <Box mt={theme.dimensions.condensedMarginBetween}>

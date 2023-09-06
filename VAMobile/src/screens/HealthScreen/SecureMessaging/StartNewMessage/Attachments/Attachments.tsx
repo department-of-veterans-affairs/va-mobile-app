@@ -9,14 +9,16 @@ import { AlertBox, BackButton, Box, FullScreenSubtask, TextView, VABulletList } 
 import { Asset, ImagePickerResponse } from 'react-native-image-picker'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { Events } from 'constants/analytics'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { Image } from 'react-native'
 import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y, getMaxWidthAndHeightOfImage } from 'utils/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { themeFn } from 'utils/theme'
-import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -35,6 +37,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheetWithOptions = useShowActionSheet()
+  const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const [error, setError] = useState('')
   const [errorA11y, setErrorA11y] = useState('')
   const [image, setImage] = useState({} as ImagePickerResponse)
@@ -42,13 +45,26 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const scrollViewRef = useRef<ScrollView>(null)
   const { origin, attachmentsList, messageID } = route.params
 
+  useBeforeNavBackListener(navigation, (e) => {
+    if (isActionSheetVisible) {
+      e.preventDefault()
+    }
+  })
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
     })
   })
 
+  useEffect(() => {
+    if (error !== '') {
+      logAnalyticsEvent(Events.vama_sm_attach_outcome('false'))
+    }
+  }, [error])
+
   const callbackOnSuccessfulFileSelection = (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean): void => {
+    logAnalyticsEvent(Events.vama_sm_attach_outcome('true'))
     // display image preview
     if (isImage) {
       setImage(response as ImagePickerResponse)
@@ -103,8 +119,18 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       const assets = [img]
       return callbackOnSuccessfulFileSelection({ assets }, true)
     }
-
-    onAddFileAttachments(t, showActionSheetWithOptions, setError, setErrorA11y, callbackOnSuccessfulFileSelection, getTotalBytesUsedByFiles(), getFileUris(), getImageBase64s())
+    logAnalyticsEvent(Events.vama_sm_attach('Select a file'))
+    onAddFileAttachments(
+      t,
+      showActionSheetWithOptions,
+      setError,
+      setErrorA11y,
+      callbackOnSuccessfulFileSelection,
+      getTotalBytesUsedByFiles(),
+      getFileUris(),
+      getImageBase64s(),
+      setIsActionSheetVisible,
+    )
   }
 
   const onAttach = (): void => {

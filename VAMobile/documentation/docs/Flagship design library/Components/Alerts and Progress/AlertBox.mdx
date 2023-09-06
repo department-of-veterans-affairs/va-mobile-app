@@ -1,0 +1,79 @@
+---
+title: Alert box
+---
+
+import CodeBlock from '@theme/CodeBlock'
+import AlertBoxString from '!!raw-loader!@componentsDocs/AlertBox'
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+import Screenshot from '@site/static/img/components/AlertBox.png'
+
+
+
+This text provides the overall purpose and function of the component.
+
+## Examples
+
+### Default
+Embed Figma master component. If available, add a link to Storybook.
+<iframe width="800" height="450" alt="Image of component examples in Figma showing the Snackbar component" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2FVAMobile-DesignLibrary1.0-%25F0%259F%2593%2590%3Fnode-id%3D638%253A1966%26t%3Diqk24DBhrvJTq9ln-1" allowfullscreen></iframe>
+
+### Variations
+Embed Figma variations. Show any differences between Android and iOS.
+<iframe width="800" height="450" alt="Image of component examples in Figma showing the Alert box component" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FQVLPB3eOunmKrgQOuOt0SU%2FVAMobile-DesignLibrary1.0-%25F0%259F%2593%2590%3Fnode-id%3D638%253A1966%26t%3Diqk24DBhrvJTq9ln-1" allowfullscreen></iframe>
+
+
+## Usage
+
+### When to use Component name
+* **In this context**: Explain the scenario or user context where this component is, or could be, used.
+* **In this task**: Explain the user task or tasks where this component is, or could be, used.
+
+### When to consider something else
+* **Not in this context**: Explain which scenarios or user context where this component is not, or should not, be used.
+* **Not for these tasks**: Explain the user tasks where this component is not, or should not, be used.
+* **Use this instead**: Explain when another component should be used instead.
+
+### How this component works
+Details the design decisions inherent to the component.
+
+### Behavior
+Describe the key interactions for this component.
+* **Trigger**: What does the user do to start the interaction with this component.
+* **Rules**: What rules govern how the component behaves. How does it work?
+* **Feedback**: What the user sees, hears, and feels that help them understand the rules.
+* **Loops and modes**: Meta rules that govern the interaction.
+
+### Choosing between variations
+Help the designer and developer understand when to choose between any variations of this component. Describe any differences between Android and iOS.
+
+### Placement
+Where the component appears visually, and if necessary to clarify, where it may appear in the source code. Can also comment on where the component is not to be placed.
+
+### Design principles
+* List of design or UX principles that this component is an example or or adheres to.
+
+### Instances of this component in production
+Images with captions that describe different instances of this component being used in production.
+
+## Content considerations
+* Bulleted list of content related instructions to the designer.
+* May be an include is shared with the Content style guide section.
+
+## Accessibility considerations
+* Bulleted list of a11y related instructions to the designer and developer.
+
+## Related
+* Links to related components.
+
+## Code usage
+If available, add a link to Storybook.
+If Storybook is not available, add properties / examples / source code / accessibility information from the current doc site.
+
+export const exampleString = `<AlertBox 
+  title="Alert header text here" 
+  text="Alert body text here"
+  textA11yLabel="Alert text a11y label here"
+  border="warning"
+/>`
+
+<ComponentTopInfo componentName="AlertBox" example={exampleString} codeString={AlertBoxString} />

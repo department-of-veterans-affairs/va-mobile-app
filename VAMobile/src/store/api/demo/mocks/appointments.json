@@ -96,13 +96,13 @@
               "id": null,
               "name": "Outpatient Clinic",
               "address": {
-                "street": "2341 North Ave",
-                "city": "Commerce",
+                "street": "11201 Benton Street",
+                "city": "Loma Linda",
                 "state": "CA",
-                "zipCode": "90022"
+                "zipCode": "92357"
               },
-              "lat": null,
-              "long": null,
+              "lat": 34.050250,
+              "long": -117.250720,
               "phone": {
                 "areaCode": "323",
                 "number": "723-9322",
@@ -620,13 +620,13 @@
               "id": null,
               "name": "Community Clinic Association",
               "address": {
-                "street": "1412 East Cesar Ave",
-                "city": "East Lost Angeles",
+                "street": "11201 Benton Street",
+                "city": "Loma Linda",
                 "state": "CA",
-                "zipCode": "93344"
+                "zipCode": "92357"
               },
-              "lat": null,
-              "long": null,
+              "lat": 34.050250,
+              "long": -117.250720,
               "phone": {
                 "areaCode": "323",
                 "number": "458-9423",

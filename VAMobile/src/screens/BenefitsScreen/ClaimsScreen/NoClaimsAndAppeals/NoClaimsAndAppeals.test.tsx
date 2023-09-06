@@ -8,6 +8,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 import NoClaimsAndAppeals from './NoClaimsAndAppeals'
 import { InitialState } from 'store/slices'
 import { TextView } from 'components'
+import { ClaimTypeConstants } from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 context('NoClaimsAndAppeals', () => {
   let component: RenderAPI
@@ -15,7 +16,7 @@ context('NoClaimsAndAppeals', () => {
 
   const initializeTestInstance = async (claimsServiceError = false, appealsServiceError = false) => {
     await waitFor(() => {
-      component = render(<NoClaimsAndAppeals />, {
+      component = render(<NoClaimsAndAppeals claimType={ClaimTypeConstants.ACTIVE} />, {
         preloadedState: {
           ...InitialState,
           claimsAndAppeals: {

@@ -21,9 +21,11 @@ export type CollapsibleAlertProps = {
   onExpand?: () => void
   /** handles anything needed when collapsing the alert*/
   onCollapse?: () => void
+  /** Optional TestID */
+  testID?: string
 }
 
-const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel, onExpand, onCollapse }) => {
+const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body, a11yLabel, onExpand, onCollapse, testID }) => {
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
@@ -85,7 +87,7 @@ const CollapsibleAlert: FC<CollapsibleAlertProps> = ({ border, headerText, body,
   }
 
   return (
-    <Box {...boxProps}>
+    <Box testID={testID} {...boxProps}>
       <TextArea>
         {accordionHeader()}
         {expanded && body}

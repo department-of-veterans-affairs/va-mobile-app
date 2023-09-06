@@ -1,8 +1,7 @@
 // parent level error object that contains the status, text, and json properties from a fetch response stream
 // used to keep full error information in respective stores
 // json property is used to parse through to find error metadata
-import { ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { invert } from 'underscore'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 export type APIError = {
   status?: number
@@ -80,43 +79,36 @@ export const DowntimeFeatureTypeConstants: {
   rx: 'rx_refill',
 }
 
-// Friendly names shown in downtime messages
-export const DowntimeFeatureNameConstants = {
-  [DowntimeFeatureTypeConstants.facilityLocator]: 'Facility Locator',
-  [DowntimeFeatureTypeConstants.claims]: 'Claims',
-  [DowntimeFeatureTypeConstants.appointments]: 'Appointments',
-  [DowntimeFeatureTypeConstants.secureMessaging]: 'Secure Messaging',
-  [DowntimeFeatureTypeConstants.letters]: 'Letters',
-  [DowntimeFeatureTypeConstants.directDepositBenefits]: 'Direct Deposit',
-  [DowntimeFeatureTypeConstants.disabilityRating]: 'Disability Rating',
-  [DowntimeFeatureTypeConstants.militaryServiceHistory]: 'Military Service History',
-  [DowntimeFeatureTypeConstants.appeals]: 'Appeals',
-  [DowntimeFeatureTypeConstants.userProfileUpdate]: 'Personal Information',
-  [DowntimeFeatureTypeConstants.payments]: 'Payments',
-  [DowntimeFeatureTypeConstants.rx]: 'VA Prescriptions',
+export const ScreenIDToFeatureName = {
+  [ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID]: 'Claims',
+  [ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID]: 'Claims',
+  [ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID]: 'Appointments',
+  [ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID]: 'Secure Messaging',
+  [ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID]: 'Secure Messaging',
+  [ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID]: 'Letters',
+  [ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID]: 'Direct Deposit',
+  [ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID]: 'Disability Rating',
+  [ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID]: 'Military Service History',
+  [ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID]: 'Personal Information',
+  [ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID]: 'Personal Information',
+  [ScreenIDTypesConstants.PAYMENTS_SCREEN_ID]: 'Payments',
+  [ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID]: 'VA Prescriptions',
 }
 
-// which screen to show which downtime message on
-export const DowntimeFeatureToScreenID = {
-  // TODO: Find a proper page conversion for facility locator to display downtime
-  [DowntimeFeatureTypeConstants.claims]: ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.appointments]: ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.secureMessaging]: ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.letters]: ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.directDepositBenefits]: ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.disabilityRating]: ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.militaryServiceHistory]: ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
-  // it was determined that claims and appeals would be interconnected and downtime for either would block both
-  [DowntimeFeatureTypeConstants.appeals]: ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.userProfileUpdate]: ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.payments]: ScreenIDTypesConstants.PAYMENTS_SCREEN_ID,
-  [DowntimeFeatureTypeConstants.rx]: ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID,
-}
-
-export const DowntimeScreenIDToFeature: DowntimeScreenIDToFeatureType = invert(DowntimeFeatureToScreenID)
-
-export type DowntimeScreenIDToFeatureType = {
-  [key in ScreenIDTypes]: DowntimeFeatureType
+export const ScreenIDToDowntimeFeatures = {
+  [ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID]: [DowntimeFeatureTypeConstants.claims, DowntimeFeatureTypeConstants.appeals],
+  [ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID]: [DowntimeFeatureTypeConstants.claims],
+  [ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID]: [DowntimeFeatureTypeConstants.appointments],
+  [ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID]: [DowntimeFeatureTypeConstants.secureMessaging],
+  [ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID]: [DowntimeFeatureTypeConstants.secureMessaging],
+  [ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID]: [DowntimeFeatureTypeConstants.letters],
+  [ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID]: [DowntimeFeatureTypeConstants.directDepositBenefits],
+  [ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID]: [DowntimeFeatureTypeConstants.disabilityRating],
+  [ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID]: [DowntimeFeatureTypeConstants.militaryServiceHistory],
+  [ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID]: [DowntimeFeatureTypeConstants.userProfileUpdate],
+  [ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID]: [DowntimeFeatureTypeConstants.userProfileUpdate],
+  [ScreenIDTypesConstants.PAYMENTS_SCREEN_ID]: [DowntimeFeatureTypeConstants.payments],
+  [ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID]: [DowntimeFeatureTypeConstants.rx],
 }
 
 export type MaintenanceWindowsGetData = {
