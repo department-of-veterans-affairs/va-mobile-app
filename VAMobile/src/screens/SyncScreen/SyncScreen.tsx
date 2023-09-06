@@ -11,7 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
-import { useDemographics } from 'api/demographics'
+import { useDemographics } from 'api/demographics/getDemographics'
 import colors from 'styles/themes/VAColors'
 
 export type SyncScreenProps = Record<string, unknown>

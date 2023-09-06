@@ -6,8 +6,9 @@ import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingC
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import { useDemographics, useUpdatePreferredName } from 'api/demographics'
+import { useDemographics } from 'api/demographics/getDemographics'
 import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useUpdatePreferredName } from 'api/demographics'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 

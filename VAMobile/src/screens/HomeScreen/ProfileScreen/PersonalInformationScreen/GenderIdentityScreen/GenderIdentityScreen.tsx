@@ -10,8 +10,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useBeforeNavBackListener, useDestructiveActionSheet, useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useDemographics, useUpdateGenderIdentity } from 'api/demographics'
+import { useDemographics } from 'api/demographics/getDemographics'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
+import { useUpdateGenderIdentity } from 'api/demographics'
 
 type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIdentity'>
 

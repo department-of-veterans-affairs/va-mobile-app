@@ -1,7 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { DemographicsPayload, UserDemographics } from './types/DemographicsData'
-import { EditResponseData, get, put } from '../store/api'
+import { EditResponseData, put } from '../store/api'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { SnackbarMessages } from 'components/SnackBar'
@@ -9,31 +8,6 @@ import { isErrorObject, showSnackBar } from 'utils/common'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { useAppDispatch } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
-
-/**
- * Fetch user demographics
- */
-export const getDemographics = async (): Promise<UserDemographics | undefined> => {
-  try {
-    const response = await get<DemographicsPayload>('/v0/user/demographics')
-    return response?.data.attributes
-  } catch (error) {
-    if (isErrorObject(error)) {
-      logNonFatalErrorToFirebase(error, 'getDemographics: Service error')
-    }
-    throw error
-  }
-}
-
-/**
- * Returns a query for user demographics
- */
-export const useDemographics = () => {
-  return useQuery({
-    queryKey: ['user', 'demographics'],
-    queryFn: () => getDemographics(),
-  })
-}
 
 /**
  * Updates a user's gender identity
