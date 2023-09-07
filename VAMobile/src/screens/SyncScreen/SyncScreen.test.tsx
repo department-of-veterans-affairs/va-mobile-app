@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { context, render, RenderAPI } from 'testUtils'
+import { context, render, RenderAPI, waitFor } from 'testUtils'
 import { ReactTestInstance } from 'react-test-renderer'
 
 import { initialAuthorizedServicesState, initialAuthState, initialDisabilityRatingState, initialMilitaryServiceState, initialPersonalInformationState } from 'store/slices'
@@ -119,8 +119,24 @@ context('SyncScreen', () => {
 
   describe('sync completion', () => {
     it('should complete the sync when all loading is finished', async () => {
+      jest.mock('../../api/demographics/getDemographics', () => {
+        let original = jest.requireActual('../../api/demographics/getDemographics')
+        return {
+          ...original,
+          useDemographics: () => ({
+            status: "success",
+            data: {
+              genderIdentity: '',
+              preferredName: '',
+            }
+          }),
+        }
+      })
+
       initializeTestInstance(false, false, false, true, false)
-      expect(completeSync).toHaveBeenCalled()
+      await waitFor(async () => {
+        expect(completeSync).toHaveBeenCalled()
+      })
     })
   })
 })

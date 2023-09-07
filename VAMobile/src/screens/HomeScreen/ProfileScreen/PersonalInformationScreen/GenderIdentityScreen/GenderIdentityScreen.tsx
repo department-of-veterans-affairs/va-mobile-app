@@ -20,8 +20,8 @@ type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIde
  * Screen for editing gender identity
  */
 const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => {
-  const { data: demographics } = useDemographics()
-  const { data: genderIdentityOptions, isLoading: loadingGenderIdentityOptions } = useGenderIdentityOptions()
+  const { data: demographics, isError: getDemographicsError } = useDemographics()
+  const { data: genderIdentityOptions, isLoading: loadingGenderIdentityOptions, isError: getGenderIdentityOptionsError } = useGenderIdentityOptions()
   const genderIdentityMutation = useUpdateGenderIdentity()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -95,7 +95,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
     value: genderIdentity,
   }
 
-  if (genderIdentityMutation.isError || genderIdentityInDowntime) {
+  if (genderIdentityInDowntime || getDemographicsError || getGenderIdentityOptionsError) {
     return (
       <FullScreenSubtask title={t('personalInformation.genderIdentity.title')} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
         <ErrorComponent screenID={ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID} />
