@@ -35,7 +35,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const controlLabels = [t('claimDetails.status'), t('claimDetails.details')]
-  const [selectedTab, setSelectedTab] = useState(controlLabels[0])
+  const [selectedTab, setSelectedTab] = useState(0)
 
   const { claimID, claimType, focusOnSnackbar } = route.params
   const { decisionLetters: decisionLettersAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
@@ -101,9 +101,9 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
     )
   }
 
-  const onTabChange = (tab: string) => {
+  const onTabChange = (tab: number) => {
     if (tab !== selectedTab && claim) {
-      const analyticsEvent = tab === 'Status' ? Events.vama_claim_status_tab : Events.vama_claim_details_tab
+      const analyticsEvent = tab === controlLabels.indexOf(t('claimDetails.status')) ? Events.vama_claim_status_tab : Events.vama_claim_details_tab
       logAnalyticsEvent(analyticsEvent(claim.id, claim.attributes.claimType, claim.attributes.phase, claim.attributes.dateFiled))
     }
     setSelectedTab(tab)
@@ -121,12 +121,12 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
           </TextView>
           <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={controlLabels.indexOf(selectedTab)} labelsA11yHints={a11yHints} />
+            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={a11yHints} />
           </Box>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          {claim && selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
-          {claim && selectedTab === t('claimDetails.details') && <ClaimDetails claim={claim} />}
+          {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
+          {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
         </Box>
       </Box>
     </FeatureLandingTemplate>

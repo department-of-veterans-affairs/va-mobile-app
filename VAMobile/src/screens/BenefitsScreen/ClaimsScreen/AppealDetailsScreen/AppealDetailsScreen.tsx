@@ -25,7 +25,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const controlLabels = [t('claimDetails.status'), t('appealDetails.issuesTab')]
-  const [selectedTab, setSelectedTab] = useState(controlLabels[0])
+  const [selectedTab, setSelectedTab] = useState(0)
   const segmentedControlA11yHints = [
     t('appealDetails.viewYourAppeal', { tabName: t('claimDetails.status') }),
     t('appealDetails.viewYourAppeal', { tabName: t('appealDetails.issuesTab') }),
@@ -111,11 +111,11 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
           <TextView variant="MobileBody">{t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}</TextView>
           <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl labels={controlLabels} onChange={setSelectedTab} selected={controlLabels.indexOf(selectedTab)} labelsA11yHints={segmentedControlA11yHints} />
+            <SegmentedControl labels={controlLabels} onChange={setSelectedTab} selected={selectedTab} a11yHints={segmentedControlA11yHints} />
           </Box>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          {appeal && selectedTab === t('claimDetails.status') && (
+          {appeal && selectedTab === 0 && (
             <AppealStatus
               events={events}
               status={status}
@@ -127,7 +127,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
               programArea={programArea}
             />
           )}
-          {appeal && selectedTab === t('appealDetails.issuesTab') && <AppealIssues issues={getFilteredIssues()} />}
+          {appeal && selectedTab === 1 && <AppealIssues issues={getFilteredIssues()} />}
         </Box>
       </Box>
     </FeatureLandingTemplate>

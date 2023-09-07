@@ -40,7 +40,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
-  const [selectedTab, setSelectedTab] = useState(controlLabels[0])
+  const [selectedTab, setSelectedTab] = useState(0)
   const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError, currentPageAppointmentsByYear } = useSelector<RootState, AppointmentsState>(
     (state) => state.appointments,
   )
@@ -93,8 +93,8 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   }
 
   const serviceErrorAlert = (): ReactElement => {
-    const pastAppointmentError = selectedTab === t('appointmentsTab.past') && (pastVaServiceError || pastCcServiceError)
-    const upcomingAppointmentError = selectedTab === t('appointmentsTab.upcoming') && (upcomingVaServiceError || upcomingCcServiceError)
+    const pastAppointmentError = selectedTab === 1 && (pastVaServiceError || pastCcServiceError)
+    const upcomingAppointmentError = selectedTab === 0 && (upcomingVaServiceError || upcomingCcServiceError)
     if (pastAppointmentError || upcomingAppointmentError) {
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
@@ -134,15 +134,15 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
       testID="appointmentsTestID">
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <SegmentedControl labels={controlLabels} onChange={setSelectedTab} selected={controlLabels.indexOf(selectedTab)} labelsA11yHints={a11yHints} />
+          <SegmentedControl labels={controlLabels} onChange={setSelectedTab} selected={selectedTab} a11yHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}
         <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
           <CernerAlert />
         </Box>
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
-          {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
+          {selectedTab === 1 && <PastAppointments />}
+          {selectedTab === 0 && <UpcomingAppointments />}
         </Box>
       </Box>
     </FeatureLandingTemplate>

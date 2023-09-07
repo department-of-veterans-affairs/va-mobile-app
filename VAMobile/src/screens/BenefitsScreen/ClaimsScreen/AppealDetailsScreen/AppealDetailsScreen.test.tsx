@@ -103,7 +103,7 @@ context('AppealDetailsScreen', () => {
       })
 
       await waitFor(() => {
-        testInstance.findByType(SegmentedControl).props.onChange('Status')
+        testInstance.findByType(SegmentedControl).props.onChange(0)
         expect(component.UNSAFE_root.findAllByType(AppealStatus).length).toEqual(1)
       })
     })
@@ -117,7 +117,7 @@ context('AppealDetailsScreen', () => {
       })
 
       await waitFor(async () => {
-        component.UNSAFE_root.findByType(SegmentedControl).props.onChange('Issues')
+        component.UNSAFE_root.findByType(SegmentedControl).props.onChange(1)
       })
       expect(component.UNSAFE_root.findAllByType(AppealIssues).length).toEqual(1)
     })

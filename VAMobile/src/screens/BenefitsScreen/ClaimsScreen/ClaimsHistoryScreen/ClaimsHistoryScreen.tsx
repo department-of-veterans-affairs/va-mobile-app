@@ -37,8 +37,8 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   )
   const controlLabels = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
-  const [selectedTab, setSelectedTab] = useState(controlLabels[0])
-  const claimType = selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
+  const [selectedTab, setSelectedTab] = useState(0)
+  const claimType = selectedTab === controlLabels.indexOf(t('claimsTab.active')) ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
   const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
   const claimsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
@@ -130,9 +130,9 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
     return <></>
   }
 
-  const onTabChange = (tab: string) => {
+  const onTabChange = (tab: number) => {
     if (tab !== selectedTab) {
-      logAnalyticsEvent(Events.vama_claim_count(claimsAndAppealsByClaimType.CLOSED.length, claimsAndAppealsByClaimType.ACTIVE.length, tab))
+      logAnalyticsEvent(Events.vama_claim_count(claimsAndAppealsByClaimType.CLOSED.length, claimsAndAppealsByClaimType.ACTIVE.length, controlLabels[tab]))
     }
     setSelectedTab(tab)
   }
@@ -142,7 +142,7 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
       <Box flex={1} justifyContent="flex-start" mb={theme.dimensions.contentMarginBottom}>
         {!claimsAndAppealsServiceErrors && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={controlLabels.indexOf(selectedTab)} labelsA11yHints={accessibilityHints} />
+            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={accessibilityHints} />
           </Box>
         )}
         {serviceErrorAlert()}
