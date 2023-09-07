@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { EditResponseData, put } from '../../store/api'
+import { EditResponseData, put } from 'store/api'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { SnackbarMessages } from 'components/SnackBar'

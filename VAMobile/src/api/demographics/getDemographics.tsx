@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { DemographicsPayload, UserDemographics } from '../types/DemographicsData'
-import { get } from '../../store/api'
+import { DemographicsPayload, UserDemographics } from 'api/types/DemographicsData'
+import { get } from 'store/api'
 
 /**
  * Fetch user demographics

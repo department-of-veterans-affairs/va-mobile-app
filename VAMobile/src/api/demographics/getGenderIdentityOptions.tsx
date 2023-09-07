@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { GenderIdentityOptions, GenderIdentityOptionsPayload } from '../types/DemographicsData'
+import { GenderIdentityOptions, GenderIdentityOptionsPayload } from 'api/types/DemographicsData'
 import { UserAnalytics } from 'constants/analytics'
-import { get } from '../../store/api'
+import { get } from 'store/api'
 
 /**
  * Fetch gender identity options
