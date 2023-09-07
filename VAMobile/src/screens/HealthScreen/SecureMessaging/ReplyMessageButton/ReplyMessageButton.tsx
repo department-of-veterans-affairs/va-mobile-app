@@ -10,7 +10,7 @@ export type ReplyMessageButtonProps = {
 }
 
 const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const onPress = navigateTo('ReplyMessage', { messageID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
@@ -21,6 +21,7 @@ const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID }) => {
     onPress: onPress,
     a11yHint: t('secureMessaging.reply.a11yHint'),
     iconProps: { name: 'Reply', fill: 'navBar' },
+    testID: 'replyTestID',
   }
 
   return (

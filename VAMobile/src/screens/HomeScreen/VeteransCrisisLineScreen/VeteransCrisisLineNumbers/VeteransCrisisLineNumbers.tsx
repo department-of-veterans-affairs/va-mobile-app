@@ -17,7 +17,7 @@ const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP } = getEnv()
  * Returns VeteransCrisisLineNumbers component
  */
 const VeteransCrisisLineNumbers: FC = () => {
-  const { t } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 

@@ -1,8 +1,10 @@
 import { AuthState } from 'store/slices'
+import { Events } from 'constants/analytics'
+import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { RootState } from 'store'
-import { View } from 'react-native'
-import { dispatchSetTappedForegroundNotification, registerDevice } from 'store/slices/notificationSlice'
+import { dispatchSetInitialUrl, dispatchSetTappedForegroundNotification, registerDevice } from 'store/slices/notificationSlice'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
@@ -49,8 +51,19 @@ const NotificationManager: FC = ({ children }) => {
       /** this should be logged in firebase automatically. Anything here should be actions the app takes when it
        * opens like deep linking, etc
        */
+      logAnalyticsEvent(Events.vama_notification_click(notification.payload.url))
       if (foregroundNotifications.includes(notification.identifier)) {
         dispatch(dispatchSetTappedForegroundNotification())
+      }
+
+      // Open deep link from the notification when present. If the user is
+      // not logged in, store the link so it can be opened after authentication.
+      if (notification.payload.url) {
+        if (loggedIn) {
+          Linking.openURL(notification.payload.url)
+        } else {
+          dispatch(dispatchSetInitialUrl(notification.payload.url))
+        }
       }
       console.debug('Notification opened by device user', notification)
       console.debug(`Notification opened with an action identifier: ${notification.identifier}`)
@@ -67,7 +80,12 @@ const NotificationManager: FC = ({ children }) => {
     // Callback in case there is need to do something with initial notification before it goes to system tray
     Notifications.getInitialNotification()
       .then((notification) => {
+        logAnalyticsEvent(Events.vama_notification_click(notification?.payload.url))
         console.debug('Initial notification was:', notification || 'N/A')
+
+        if (notification?.payload.url) {
+          dispatch(dispatchSetInitialUrl(notification.payload.url))
+        }
       })
       .catch((err) => console.error('getInitialNotification() failed', err))
   }

@@ -39,12 +39,16 @@ import {
   VAButtonProps,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { featureEnabled } from 'utils/remoteConfig'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
-import { isAPendingAppointment } from 'utils/appointments'
+import { isIOS } from 'utils/platform'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
@@ -55,8 +59,7 @@ type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'U
 const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
 
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -66,13 +69,21 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const appointment = upcomingAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, location, startDateUtc, minutesDuration, comment, status, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
-  const { name, code, url } = location || ({} as AppointmentLocation)
+  const { name, code, url, lat, long, address } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
 
   useEffect(() => {
-    dispatch(trackAppointmentDetail(pendingAppointment))
-  }, [dispatch, appointmentID, pendingAppointment])
+    dispatch(
+      trackAppointmentDetail(
+        pendingAppointment,
+        appointmentID,
+        getAppointmentAnalyticsStatus(attributes),
+        attributes.appointmentType.toString(),
+        getAppointmentAnalyticsDays(attributes),
+      ),
+    )
+  }, [dispatch, appointmentID, pendingAppointment, attributes])
 
   useEffect(() => {
     navigation.setOptions({
@@ -94,6 +105,22 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     navigation.goBack()
   }
 
+  const getLocation = (): string => {
+    if (isIOS() && lat && long) {
+      return name || ''
+    } else if (address?.street && address?.city && address?.state && address?.zipCode) {
+      return `${address.street} ${address.city}, ${address.state} ${address.zipCode}`
+    } else {
+      return name || ''
+    }
+  }
+
+  const calendarAnalytics = (): void => {
+    logAnalyticsEvent(
+      Events.vama_apt_add_cal(appointmentID, getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
+    )
+  }
+
   const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()
   const endTime = minutesDuration ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString() : startTimeDate.toISOString()
   const addToCalendarProps: LinkButtonProps = {
@@ -104,9 +131,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       title: getTranslation(isCovidVaccine ? 'upcomingAppointments.covidVaccine' : AppointmentTypeToID[appointmentType], t),
       startTime: getEpochSecondsOfDate(startDateUtc),
       endTime: getEpochSecondsOfDate(endTime),
-      location: name || '',
+      location: getLocation(),
+      latitude: lat || 0,
+      longitude: long || 0,
     },
     testID: 'addToCalendarTestID',
+    fireAnalytic: calendarAnalytics,
   }
 
   // TODO abstract some of these render functions into their own components - too many in one file
@@ -262,18 +292,18 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   if (loadingAppointmentCancellation) {
     return (
-      <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}>
+      <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
         <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
       </FeatureLandingTemplate>
     )
   }
 
   return (
-    <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')} testID="UpcomingApptDetailsTestID">
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+    <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')} testID="UpcomingApptDetailsTestID">
+      <Box mb={theme.dimensions.contentMarginBottom}>
         <AppointmentAlert attributes={attributes} />
         <TextArea>
-          <AppointmentTypeAndDate attributes={attributes} />
+          <AppointmentTypeAndDate attributes={attributes} isPastAppointment={false} />
           <AddToCalendar />
 
           <VideoAppointment_HowToJoin />
@@ -286,7 +316,11 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <Atlas_AppointmentData />
           <SpecialInstructions />
-
+          {featureEnabled('patientCheckIn') && (
+            <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
+              <VAButton onPress={navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
+            </Box>
+          )}
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
           <AppointmentReason attributes={attributes} />

@@ -10,7 +10,7 @@ import { Events } from 'constants/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
-import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import getEnv from 'utils/env'
 
@@ -23,9 +23,16 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const [error, setError] = useState('')
+  const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
   const { claimID, request } = route.params
   const showActionSheet = useShowActionSheet()
+
+  useBeforeNavBackListener(navigation, (e) => {
+    if (isActionSheetVisible) {
+      e.preventDefault()
+    }
+  })
 
   const onFileFolder = async (): Promise<void> => {
     const {
@@ -69,12 +76,14 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
 
     const options = [t('fileUpload.fileFolder'), t('cancel')]
 
+    setIsActionSheetVisible(true)
     showActionSheet(
       {
         options,
         cancelButtonIndex: 1,
       },
       (buttonIndex) => {
+        setIsActionSheetVisible(false)
         switch (buttonIndex) {
           case 0:
             onFileFolder()
@@ -94,7 +103,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
 
   return (
     <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={onCancel} title={t('fileUpload.selectFiles')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />

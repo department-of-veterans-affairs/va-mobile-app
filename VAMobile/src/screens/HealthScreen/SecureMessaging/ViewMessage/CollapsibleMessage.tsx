@@ -25,8 +25,7 @@ export type ThreadMessageProps = {
 
 const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage, collapsibleMessageRef }) => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tCom } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
   const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
@@ -79,7 +78,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
                     formattedSize={bytesToFinalSizeDisplay(a.size, tFunction)}
                     formattedSizeA11y={bytesToFinalSizeDisplayA11y(a.size, tFunction)}
                     a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
-                    a11yValue={tCom('listPosition', { position: index + 1, total: attachments.length })}
+                    a11yValue={t('listPosition', { position: index + 1, total: attachments.length })}
                     onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
                   />
                 </Box>
@@ -121,12 +120,18 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     )
   }
 
+  const errorContent = (
+    <Box mt={theme.dimensions.gutter}>
+      <IndividualMessageErrorComponent />
+    </Box>
+  )
+
   const loadMessageError = messageIDsOfError?.includes(message.messageId)
 
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,
-    expandedContent: loadMessageError ? <IndividualMessageErrorComponent /> : getExpandedContent(),
+    expandedContent: loadMessageError ? errorContent : getExpandedContent(),
     collapsedContent: !screenReaderEnabled ? getCollapsedContent() : undefined,
     customOnPress: onPress,
     noBorder: true,

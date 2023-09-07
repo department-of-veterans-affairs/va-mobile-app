@@ -6,12 +6,14 @@ import React, { FC, useEffect } from 'react'
 import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DateTime } from 'luxon'
+import { Events } from 'constants/analytics'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -38,8 +40,7 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
 
-  const { t } = useTranslation(NAMESPACE.HOME)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
@@ -60,10 +61,17 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }, [navigation])
 
   const onContactVA = navigateTo('ContactVA')
-  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: tc('webview.vagov'), loadingMessage: tc('webview.valocation.loading') })
+  const onFacilityLocator = () => {
+    logAnalyticsEvent(Events.vama_find_location())
+    navigation.navigate('Webview', {
+      url: WEBVIEW_URL_FACILITY_LOCATOR,
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('webview.valocation.loading'),
+    })
+  }
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('home_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: tc('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
+    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
 
   const buttonDataList: Array<SimpleListItemObj> = [
@@ -97,7 +105,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   const headerButton = {
-    label: tc('profile.title'),
+    label: t('profile.title'),
     icon: profileIconProps,
     onPress: navigateTo('Profile'),
   }
@@ -114,7 +122,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
         <Nametag />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
-            {tc('aboutVA')}
+            {t('aboutVA')}
           </TextView>
         </Box>
         <Box mb={theme.dimensions.contentMarginBottom}>
@@ -133,7 +141,7 @@ const HomeScreenStack = createStackNavigator()
  * Stack screen for the Home tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const HomeStackScreen: FC<HomeStackScreenProps> = () => {
-  const { t } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const screenOptions = {
     headerShown: false,
     // Use horizontal slide transition on Android instead of default crossfade
@@ -153,7 +161,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
           CloseSnackbarOnNavigation(e.target)
         },
       }}>
-      <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
+      <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
       <HomeScreenStack.Screen name="ContactVA" component={ContactVAScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ headerShown: false }} />

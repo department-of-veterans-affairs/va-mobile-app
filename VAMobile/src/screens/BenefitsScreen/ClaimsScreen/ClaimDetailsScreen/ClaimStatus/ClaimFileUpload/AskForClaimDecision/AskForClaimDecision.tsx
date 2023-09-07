@@ -38,7 +38,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const { submittedDecision, error, claim, loadingSubmitClaimDecision } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
-  const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
+  const { standardMarginBetween, contentMarginBottom, gutter } = theme.dimensions
   const requestEvalAlert = useDestructiveActionSheet()
 
   const navigateToClaimsDetailsPage = submittedDecision && !error
@@ -121,7 +121,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
       fieldProps: {
         selected: haveSubmittedEvidence,
         onSelectionChange,
-        labelKey: 'common:askForClaimDecision.haveSubmittedAllEvidence',
+        labelKey: 'askForClaimDecision.haveSubmittedAllEvidence',
         a11yLabel: t('askForClaimDecision.haveSubmittedAllEvidenceA11yLabel'),
         a11yHint: t('askForClaimDecision.haveSubmittedAllEvidenceA11yHint'),
         isRequiredField: true,
@@ -131,8 +131,8 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   ]
 
   return (
-    <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={onCancelPress} title={t('askForClaimDecision.pageTitle')}>
-      <Box mt={contentMarginTop} mb={contentMarginBottom}>
+    <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={onCancelPress} title={t('askForClaimDecision.pageTitle')} testID="askForClaimDecisionPageTestID">
+      <Box mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header" mb={standardMarginBetween}>
             {t('askForClaimDecision.title')}

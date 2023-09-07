@@ -1,5 +1,6 @@
 import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
@@ -7,7 +8,6 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, render, RenderAPI, waitFor } from 'testUtils'
 import FormWrapper, { FieldType, FormFieldType } from './FormWrapper'
 import { VAModalPicker } from 'components'
-import TextView from '../TextView'
 import VATextInput from './FormFields/VATextInput'
 import VASelector, { VASelectorProps } from './FormFields/VASelector'
 import Mock = jest.Mock
@@ -28,7 +28,6 @@ context('FormWrapper', () => {
         onChange: () => {},
         value: '12345',
         isRequiredField: true,
-        helperTextKey: 'editDirectDeposit.routingNumberHelperText',
       },
       fieldErrorMessage: 'first error message',
     },
@@ -92,8 +91,7 @@ context('FormWrapper', () => {
         let shortenedFieldsList = formFieldsList[1]
         initializeTestInstance([shortenedFieldsList])
         testInstance.findByType(VAModalPicker).props.setError('')
-        const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[textViews.length - 2].props.children).not.toEqual('second error message')
+        expect(screen.queryByText('second error message')).toBeFalsy()
       })
     })
   })
@@ -104,8 +102,7 @@ context('FormWrapper', () => {
         let shortenedFieldsList = formFieldsList[0]
         initializeTestInstance([shortenedFieldsList])
         testInstance.findByType(VATextInput).props.setError('')
-        const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[textViews.length - 2].props.children).not.toEqual('first error message')
+        expect(screen.queryByText('first error message')).toBeFalsy()
       })
     })
   })
@@ -116,8 +113,7 @@ context('FormWrapper', () => {
         let shortenedFieldsList = formFieldsList[2]
         initializeTestInstance([shortenedFieldsList])
         testInstance.findByType(VASelector).props.setError('')
-        const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[textViews.length - 1].props.children).not.toEqual('third error message')
+        expect(screen.queryByText('third error message')).toBeFalsy()
       })
     })
   })
@@ -128,8 +124,7 @@ context('FormWrapper', () => {
         let shortenedFieldsList = formFieldsList[1]
         initializeTestInstance([shortenedFieldsList])
         testInstance.findByType(VAModalPicker).props.setError()
-        const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[textViews.length - 2].props.children).toEqual('second error message')
+        expect(screen.getByText('second error message')).toBeTruthy()
       })
     })
   })
@@ -140,8 +135,7 @@ context('FormWrapper', () => {
         let shortenedFieldsList = formFieldsList[0]
         initializeTestInstance([shortenedFieldsList])
         testInstance.findByType(VATextInput).props.setError()
-        const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[textViews.length - 1].props.children).toEqual('first error message')
+        expect(screen.getByText('first error message')).toBeTruthy()
       })
     })
   })
@@ -152,8 +146,7 @@ context('FormWrapper', () => {
         let shortenedFieldsList = formFieldsList[2]
         initializeTestInstance([shortenedFieldsList])
         testInstance.findByType(VASelector).props.setError()
-        const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[textViews.length - 2].props.children).toEqual('third error message')
+        expect(screen.getByText('third error message')).toBeTruthy()
       })
     })
   })
@@ -164,12 +157,10 @@ context('FormWrapper', () => {
         let shortenedFieldsList = formFieldsList[2]
         initializeTestInstance([shortenedFieldsList])
         testInstance.findByType(VASelector).props.setError()
-        let textViews = testInstance.findAllByType(TextView)
-        expect(textViews[textViews.length - 2].props.children).toEqual('third error message')
+        expect(screen.getByText('third error message')).toBeTruthy()
 
         initializeTestInstance([shortenedFieldsList], true)
-        textViews = testInstance.findAllByType(TextView)
-        expect(textViews[textViews.length - 1].props.children).toEqual('I confirm that this information is correct. (Required)')
+        expect(screen.getByText('I confirm that this information is correct. (Required)')).toBeTruthy()
       })
     })
   })
@@ -210,9 +201,7 @@ context('FormWrapper', () => {
       //     ]
       //     initializeTestInstance(updatedList, false, true)
       //     expect(onSaveSpy).not.toHaveBeenCalled()
-      //     const textViews = testInstance.findAllByType(TextView)
-
-      //     expect(textViews[7].props.children).toEqual('ERROR')
+      //     expect(screen.getByText('ERROR')).toBeTruthy()
       //   })
       // })
     })
@@ -228,7 +217,6 @@ context('FormWrapper', () => {
     //           onChange: () => {},
     //           value: '',
     //           isRequiredField: true,
-    //           helperTextKey: 'profile:editDirectDeposit.routingNumberHelperText',
     //         },
     //         fieldErrorMessage: 'first error message',
     //       },
@@ -258,8 +246,7 @@ context('FormWrapper', () => {
 
     //     initializeTestInstance(updatedList, false, true)
     //     expect(onSaveSpy).not.toHaveBeenCalled()
-    //     const textViews = testInstance.findAllByType(TextView)
-    //     expect(textViews[textViews.length - 2].props.children).toEqual('third error message')
+    //     expect(screen.getByText('third error message')).toBeTruthy()
     //   })
     // })
   })

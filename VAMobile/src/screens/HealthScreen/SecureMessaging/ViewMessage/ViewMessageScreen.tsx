@@ -7,6 +7,7 @@ import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingCompon
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DemoState } from 'store/slices/demoSlice'
+import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -14,10 +15,11 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import { SecureMessagingState, getMessage, getThread, moveMessage } from 'store/slices/secureMessagingSlice'
+import { SecureMessagingState, getMessage, getThread, listFolders, moveMessage } from 'store/slices/secureMessagingSlice'
 import { SnackbarMessages } from 'components/SnackBar'
 import { getfolderName } from 'utils/secureMessaging'
-import { useAppDispatch, useError, useTheme } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useAppDispatch, useDowntimeByScreenID, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
 import MessageCard from './MessageCard'
@@ -34,9 +36,11 @@ export const renderMessages = (message: SecureMessagingMessageAttributes, messag
   return threadMessages.map((m) => m && m.messageId && <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={hideMessage && m.messageId === message.messageId} />)
 }
 
+const screenID = ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID
+
 const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) => {
   const messageID = Number(route.params.messageID)
-  const currentFolderIdParam = Number(route.params.folderID)
+  const currentFolderIdParam = Number(route.params.folderID) || SecureMessagingSystemFolderIdConstants.INBOX
   const currentPage = Number(route.params.currentPage)
   const messagesLeft = Number(route.params.messagesLeft)
   const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderIdParam.toString())
@@ -49,24 +53,29 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const folderWhereMessageIs = useRef(currentFolderIdParam.toString())
   const folderWhereMessagePreviousewas = useRef(folderWhereMessageIs.current)
 
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { messagesById, threads, loading, loadingFile, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
+  const { messagesById, threads, loading, loadingFile, loadingInbox, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<
+    RootState,
+    SecureMessagingState
+  >((state) => state.secureMessaging)
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+  const smNotInDowntime = !useDowntimeByScreenID(screenID)
 
   // have to use uselayout due to the screen showing in white or showing the previouse data
   useLayoutEffect(() => {
-    dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
-    dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
-  }, [messageID, dispatch])
+    // Only get message and thread when inbox isn't being fetched
+    // to avoid a race condition with writing to `messagesById`
+    if (!loadingInbox && smNotInDowntime) {
+      dispatch(getMessage(messageID, screenID))
+      dispatch(getThread(messageID, screenID))
+    }
+  }, [loadingInbox, messageID, smNotInDowntime, dispatch])
 
   useEffect(() => {
     if (isUndo || moveMessageFailed) {
@@ -74,6 +83,12 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       folderWhereMessageIs.current = folderWhereMessagePreviousewas.current
     }
   }, [isUndo, currentFolderIdParam, moveMessageFailed])
+
+  useEffect(() => {
+    if (!folders.length) {
+      dispatch(listFolders(screenID))
+    }
+  }, [dispatch, folders])
 
   const getFolders = (): PickerItem[] => {
     let indexOfDeleted: number | undefined
@@ -126,6 +141,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.back}
           showCarat={true}
+          backButtonTestID="viewMessageBackTestID"
         />
       ),
       headerRight: () =>
@@ -135,9 +151,9 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
             selectedValue={newCurrentFolderID}
             onSelectionChange={onMove}
             pickerOptions={getFolders()}
-            labelKey={'common:pickerMoveMessageToFolder'}
-            buttonText={'common:pickerLaunchBtn'}
-            confirmBtnText={'common:pickerLaunchBtn'}
+            labelKey={'pickerMoveMessageToFolder'}
+            buttonText={'pickerLaunchBtn'}
+            confirmBtnText={'pickerLaunchBtn'}
             key={newCurrentFolderID}
           />
         ) : (
@@ -148,21 +164,21 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   const backLabel =
     Number(folderWhereMessagePreviousewas.current) === SecureMessagingSystemFolderIdConstants.INBOX
-      ? tc('messages')
-      : tc('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
+      ? t('messages')
+      : t('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID) && !messageIDsOfError) {
+  if (useError(screenID) || messageIDsOfError?.includes(messageID)) {
     return (
-      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
+        <ErrorComponent screenID={screenID} />
       </ChildTemplate>
     )
   }
 
-  if (loading || loadingFile || movingMessage) {
+  if (loading || loadingFile || loadingInbox || movingMessage) {
     return (
-      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
         <LoadingComponent
           text={loadingFile ? t('secureMessaging.viewMessage.loadingAttachment') : movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
         />
@@ -207,22 +223,25 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT
       ? undefined
       : {
-          label: tc('pickerLaunchBtn'),
+          label: t('pickerLaunchBtn'),
           icon: moveIconProps,
-          onPress: () => setShowModalPicker(true),
+          onPress: () => {
+            logAnalyticsEvent(Events.vama_sm_move())
+            setShowModalPicker(true)
+          },
         }
 
   return (
-    <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')} headerButton={headerButton}>
+    <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')} headerButton={headerButton} testID="viewMessageTestID">
       {headerButton && showModalPicker && (
         <VAModalPicker
           selectedValue={newCurrentFolderID}
           onSelectionChange={onMove}
           onClose={() => setShowModalPicker(false)}
           pickerOptions={getFolders()}
-          labelKey={'common:pickerMoveMessageToFolder'}
-          buttonText={'common:pickerLaunchBtn'}
-          confirmBtnText={'common:pickerLaunchBtn'}
+          labelKey={'pickerMoveMessageToFolder'}
+          buttonText={'pickerLaunchBtn'}
+          confirmBtnText={'pickerLaunchBtn'}
           key={newCurrentFolderID}
           showModalByDefault={true}
         />

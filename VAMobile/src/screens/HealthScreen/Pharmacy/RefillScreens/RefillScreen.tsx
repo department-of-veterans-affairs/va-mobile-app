@@ -30,8 +30,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const submitRefillAlert = useDestructiveActionSheet()
   const confirmAlert = useDestructiveActionSheet()
 
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const [showAlert, setAlert] = useState(false)
   const [selectedValues, setSelectedValues] = useState<Record<string, boolean>>({})
@@ -68,15 +67,15 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     }
     e.preventDefault()
     confirmAlert({
-      title: tc('prescriptions.refillRequest.cancelMessage'),
+      title: t('prescriptions.refillRequest.cancelMessage'),
       cancelButtonIndex: 0,
       destructiveButtonIndex: 1,
       buttons: [
         {
-          text: tc('prescriptions.refillRequest.continueRequest'),
+          text: t('prescriptions.refillRequest.continueRequest'),
         },
         {
-          text: tc('cancelRequest'),
+          text: t('cancelRequest'),
           onPress: () => {
             dispatch(dispatchSetPrescriptionsNeedLoad())
             dispatch(dispatchClearLoadingRequestRefills())
@@ -104,7 +103,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: tc('cancel'),
+          text: t('cancel'),
           onPress: () => {
             logAnalyticsEvent(Events.vama_rx_request_cancel(prescriptionIds))
           },
@@ -142,7 +141,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   if (prescriptionInDowntime) {
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} title={t('refillRequest')} onLeftButtonPress={navigation.goBack}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -150,7 +149,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   if (refillable.length === 0) {
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} title={tc('refillRequest')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} title={t('refillRequest')} onLeftButtonPress={navigation.goBack}>
         <NoRefills />
       </FullScreenSubtask>
     )
@@ -158,7 +157,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   if (loadingHistory) {
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
       </FullScreenSubtask>
     )
@@ -166,7 +165,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   if (showLoadingScreenRequestRefills) {
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
         <LoadingComponent text={t('prescriptions.refill.send', { count: selectedPrescriptionsCount })} />
       </FullScreenSubtask>
     )
@@ -175,9 +174,9 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   return (
     <>
       <FullScreenSubtask
-        leftButtonText={tc('cancel')}
+        leftButtonText={t('cancel')}
         onLeftButtonPress={navigation.goBack}
-        title={tc('refillRequest')}
+        title={t('refillRequest')}
         primaryContentButtonText={
           selectedPrescriptionsCount === refillablePrescriptions?.length
             ? t('prescriptions.refill.RequestRefillButtonTitle.all')
@@ -192,12 +191,12 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
           onSubmitPressed()
         }}>
         {showAlert && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox border="error" title={t('prescriptions.refill.pleaseSelect')} scrollViewRef={scrollViewRef} />
           </Box>
         )}
         <Box mx={theme.dimensions.gutter}>
-          <TextView mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true} variant={'HelperText'}>
+          <TextView paragraphSpacing={true} variant={'HelperText'}>
             {t('prescriptions.refill.instructions.requestRefills')}
             <TextView variant={'HelperTextBold'}>
               {t('prescriptions.refill.instructions.fifteenDays')}

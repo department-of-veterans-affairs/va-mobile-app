@@ -74,7 +74,7 @@ context('VAModalPicker', () => {
       { label: 'JavaScript3', value: 'js3' },
     ]
 
-    await initializeTestInstance('js', 'common:editPhoneNumber.number')
+    await initializeTestInstance('js', 'editPhoneNumber.number')
   })
 
   it('initializes correctly', async () => {
@@ -115,7 +115,7 @@ context('VAModalPicker', () => {
 
   describe('when there is helper text', () => {
     it('should display it', async () => {
-      await initializeTestInstance('js', 'label', 'common:back.a11yHint')
+      await initializeTestInstance('js', 'label', 'back.a11yHint')
       expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('Navigates to the previous page')
     })
   })

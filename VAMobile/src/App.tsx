@@ -22,7 +22,7 @@ import i18n from 'utils/i18n'
 import performance from '@react-native-firebase/perf'
 
 import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
-import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import { AnalyticsState, AuthState, NotificationsState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { BenefitsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getBenefitsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
@@ -36,6 +36,7 @@ import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
 import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { injectStore } from 'store/api/api'
 import { isIOS } from 'utils/platform'
+import { linking } from 'constants/linking'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
 import { useAppDispatch } from 'utils/hooks'
@@ -131,7 +132,7 @@ const MainApp: FC = () => {
         <ThemeProvider theme={currentTheme}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
-              <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
+              <NavigationContainer ref={navigationRef} linking={linking} onReady={navOnReady} onStateChange={onNavStateChange}>
                 <NotificationManager>
                   <SafeAreaProvider>
                     <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={currentTheme.colors.background.main} />
@@ -267,15 +268,15 @@ export const AuthGuard: FC = () => {
 }
 
 export const AppTabs: FC = () => {
-  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.COMMON, NAMESPACE.HEALTH])
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (
     <>
       <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="HomeTab" screenOptions={{ headerShown: false }}>
-        <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home:title') }} />
-        <TabNav.Screen name="BenefitsTab" component={BenefitsScreen} options={{ title: t('common:benefits.title') }} />
-        <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health:title') }} />
-        <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('common:payments.title') }} />
+        <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home.title') }} />
+        <TabNav.Screen name="BenefitsTab" component={BenefitsScreen} options={{ title: t('benefits.title') }} />
+        <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health.title') }} />
+        <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('payments.title') }} />
       </TabNav.Navigator>
     </>
   )
@@ -283,11 +284,20 @@ export const AppTabs: FC = () => {
 
 export const AuthedApp: FC = () => {
   const headerStyles = useHeaderStyles()
+  const { initialUrl } = useSelector<RootState, NotificationsState>((state) => state.notifications)
 
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
-  const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
+  const healthScreens = getHealthScreens(useTranslation(NAMESPACE.COMMON).t)
   const paymentsScreens = getPaymentsScreens()
+
+  // When applicable, this will open the deep link from the notification that launched the app once sign in
+  // is complete. Mapping the link to the appropriate screen is handled by the React Navigation linking config.
+  useEffect(() => {
+    if (initialUrl) {
+      Linking.openURL(initialUrl)
+    }
+  }, [initialUrl])
 
   return (
     <>

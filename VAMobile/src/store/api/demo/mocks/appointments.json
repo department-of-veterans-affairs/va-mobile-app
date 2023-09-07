@@ -11,8 +11,8 @@
             "phoneOnly": false,
             "statusDetail": null,
             "isCovidVaccine": true,
-            "startDateLocal": "2021-09-06T19:53:14.000+00:00",
-            "startDateUtc": "2021-09-06T19:53:14.000+00:00",
+            "startDateLocal": "{{now - 32 days}}",
+            "startDateUtc": "{{now - 32 days utc}}",
             "minutesDuration": 60,
             "comment": "Please arrive 20 minutes before the start of your appointment",
             "timeZone": "America/Los_Angeles",
@@ -73,8 +73,8 @@
             },
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "2021-06-02T20:00:00.000-04:00",
-            "startDateUtc": "2021-06-03T00:00:00.000Z",
+            "startDateLocal": "{{now - 93 days}}",
+            "startDateUtc": "{{now - 93 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/New_York",
@@ -96,13 +96,13 @@
               "id": null,
               "name": "Outpatient Clinic",
               "address": {
-                "street": "2341 North Ave",
-                "city": "Commerce",
+                "street": "11201 Benton Street",
+                "city": "Loma Linda",
                 "state": "CA",
-                "zipCode": "90022"
+                "zipCode": "92357"
               },
-              "lat": null,
-              "long": null,
+              "lat": 34.050250,
+              "long": -117.250720,
               "phone": {
                 "areaCode": "323",
                 "number": "723-9322",
@@ -113,8 +113,8 @@
             },
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "2021-05-13T02:48:00.000-04:00",
-            "startDateUtc": "2021-05-13T06:48:00.000Z",
+            "startDateLocal": "{{now - 112 days}}",
+            "startDateUtc": "{{now - 112 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/New_York",
@@ -150,8 +150,8 @@
               "code": null
             },
             "minutesDuration": 90,
-            "startDateLocal": "2021-04-21T08:30:00.000-04:00",
-            "startDateUtc": "2021-04-21T12:30:00.000+00:00",
+            "startDateLocal": "{{now - 140 days}}",
+            "startDateUtc": "{{now - 140 days utc}}",
             "status": "HIDDEN",
             "timeZone": "America/New_York",
             "vetextId": "2855;20210421.080030"
@@ -184,8 +184,8 @@
               "code": null
             },
             "minutesDuration": null,
-            "startDateLocal": "2021-04-08T08:00:00.000-04:00",
-            "startDateUtc": "2021-04-08T12:00:00.000+00:00",
+            "startDateLocal": "{{now - 157 days}}",
+            "startDateUtc": "{{now - 157 days utc}}",
             "status": "CANCELLED",
             "timeZone": "America/New_York",
             "vetextId": "1184;20210408.080000"
@@ -218,8 +218,8 @@
               "code": "VJJLWB"
             },
             "minutesDuration": 30,
-            "startDateLocal": "2021-03-29T17:30:00.000-04:00",
-            "startDateUtc": "2021-03-29T21:30:00.000+00:00",
+            "startDateLocal": "{{now - 165 days}}",
+            "startDateUtc": "{{now - 165 days utc}}",
             "status": "BOOKED",
             "timeZone": "America/New_York",
             "vetextId": ";20210329.170030"
@@ -252,8 +252,8 @@
               "code": "VJJLWB"
             },
             "minutesDuration": 30,
-            "startDateLocal": "2021-02-07T17:30:00.000-04:00",
-            "startDateUtc": "2021-02-07T21:30:00.000+00:00",
+            "startDateLocal": "{{now - 177 days}}",
+            "startDateUtc": "{{now - 177 days utc}}",
             "status": "BOOKED",
             "timeZone": "America/New_York",
             "vetextId": ";20210207.170030"
@@ -286,8 +286,8 @@
               "code": "VJJLWB"
             },
             "minutesDuration": 30,
-            "startDateLocal": "2021-02-06T17:30:00.000-04:00",
-            "startDateUtc": "2021-02-06T21:30:00.000+00:00",
+            "startDateLocal": "{{now - 179 days}}",
+            "startDateUtc": "{{now - 179 days utc}}",
             "status": "BOOKED",
             "timeZone": "America/New_York",
             "vetextId": ";20210206.170030"
@@ -327,8 +327,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "2021-10-01T06:00:00.000-06:00",
-            "startDateUtc": "2021-10-01T12:00:00.000Z",
+            "startDateLocal": "{{now - 33 days}}",
+            "startDateUtc": "{{now - 33 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY PATIENT",
             "timeZone": "America/Denver",
@@ -338,11 +338,11 @@
             "isPending": true,
             "proposedTimes":[
               {
-                "date": "10/01/2021",
+                "date": "{{now - 33 days short}}",
                 "time": "PM"
               },
               {
-                "date": "10/02/2021",
+                "date": "{{now - 32 days short}}",
                 "time": "PM"
               }
             ],
@@ -393,8 +393,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "2021-11-02T01:00:00.000-07:00",
-            "startDateUtc": "2021-11-02T08:00:00.000Z",
+            "startDateLocal": "{{now - 15 days}}",
+            "startDateUtc": "{{now - 15 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -404,15 +404,15 @@
             "isPending": true,
             "proposedTimes":[
               {
-                "date": "10/01/2021",
+                "date": "{{now - 44 days short}}",
                 "time": "PM"
               },
               {
-                "date": "11/02/2021",
+                "date": "{{now - 15 days short}}",
                 "time": "AM"
               },
               {
-                "date": "11/03/2021",
+                "date": "{{now - 14 days short}}",
                 "time": "AM"
               }
             ],
@@ -457,8 +457,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "2021-11-02T01:00:00.000-07:00",
-            "startDateUtc": "2021-11-02T08:00:00.000Z",
+            "startDateLocal": "{{now - 88 days}}",
+            "startDateUtc": "{{now - 88 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -468,15 +468,15 @@
             "isPending": true,
             "proposedTimes":[
               {
-                "date": "10/01/2021",
+                "date": "{{now - 89 days short}}",
                 "time": "PM"
               },
               {
-                "date": "11/02/2021",
+                "date": "{{now - 88 days short}}",
                 "time": "AM"
               },
               {
-                "date": "11/03/2021",
+                "date": "{{now - 87 days short}}",
                 "time": "AM"
               }
             ],
@@ -521,8 +521,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "2021-10-01T06:00:00.000-06:00",
-            "startDateUtc": "2021-10-01T12:00:00.000Z",
+            "startDateLocal": "{{now - 101 days}}",
+            "startDateUtc": "{{now - 101 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -532,11 +532,11 @@
             "isPending": true,
             "proposedTimes":[
               {
-                "date": "10/01/2021",
+                "date": "{{now - 101 days short}}",
                 "time": "PM"
               },
               {
-                "date": "10/02/2021",
+                "date": "{{now - 100 days short}}",
                 "time": "PM"
               }
             ],
@@ -597,11 +597,11 @@
             },
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "2022-06-02T20:00:00.000-04:00",
-            "startDateUtc": "2022-06-03T00:00:00.000Z",
+            "startDateLocal": "{{now + 45 minutes}}",
+            "startDateUtc": "{{now + 45 minutes utc}}",
             "status": "BOOKED",
             "statusDetail": null,
-            "timeZone": "America/New_York",
+            "timeZone": "America/Los_Angeles",
             "vetextId": null,
             "reason": null,
             "isCovidVaccine": false
@@ -620,13 +620,13 @@
               "id": null,
               "name": "Community Clinic Association",
               "address": {
-                "street": "1412 East Cesar Ave",
-                "city": "East Lost Angeles",
+                "street": "11201 Benton Street",
+                "city": "Loma Linda",
                 "state": "CA",
-                "zipCode": "93344"
+                "zipCode": "92357"
               },
-              "lat": null,
-              "long": null,
+              "lat": 34.050250,
+              "long": -117.250720,
               "phone": {
                 "areaCode": "323",
                 "number": "458-9423",
@@ -637,8 +637,8 @@
             },
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "2022-06-16T16:26:00.000-04:00",
-            "startDateUtc": "2022-06-16T20:26:00.000Z",
+            "startDateLocal": "{{now + 2 days}}",
+            "startDateUtc": "{{now + 2 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/New_York",
@@ -656,8 +656,8 @@
             "phoneOnly": false,
             "statusDetail": null,
             "isCovidVaccine": true,
-            "startDateLocal": "2022-09-06T19:53:14.000+00:00",
-            "startDateUtc": "2022-09-06T19:53:14.000+00:00",
+            "startDateLocal": "{{now + 25 days}}",
+            "startDateUtc": "{{now + 25 days utc}}",
             "minutesDuration": 60,
             "comment": "Please arrive 20 minutes before the start of your appointment",
             "timeZone": "America/Los_Angeles",
@@ -722,8 +722,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "2022-10-01T06:00:00.000-06:00",
-            "startDateUtc": "2022-10-01T12:00:00.000Z",
+            "startDateLocal": "{{now + 63 days}}",
+            "startDateUtc": "{{now + 63 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -734,11 +734,11 @@
 
             "proposedTimes":[
               {
-                "date": "10/01/2022",
+                "date": "{{now + 63 days short}}",
                 "time": "PM"
               },
               {
-                "date": "10/02/2022",
+                "date": "{{now + 64 days short}}",
                 "time": "PM"
               }
             ],
@@ -789,8 +789,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "2022-11-02T01:00:00.000-07:00",
-            "startDateUtc": "2022-11-02T08:00:00.000Z",
+            "startDateLocal": "{{now + 87 days}}",
+            "startDateUtc": "{{now + 87 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -800,15 +800,15 @@
             "isPending": true,
             "proposedTimes":[
               {
-                "date": "10/01/2022",
+                "date": "{{now + 86 days short}}",
                 "time": "PM"
               },
               {
-                "date": "11/02/2022",
+                "date": "{{now + 87 days short}}",
                 "time": "AM"
               },
               {
-                "date": "11/03/2022",
+                "date": "{{now + 88 days short}}",
                 "time": "AM"
               }
             ],
@@ -853,8 +853,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "2022-10-01T06:00:00.000-06:00",
-            "startDateUtc": "2022-10-01T12:00:00.000Z",
+            "startDateLocal": "{{now + 16 days}}",
+            "startDateUtc": "{{now + 16 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -864,11 +864,11 @@
             "isPending": true,
             "proposedTimes":[
               {
-                "date": "10/01/2022",
+                "date": "{{now + 16 days short}}",
                 "time": "PM"
               },
               {
-                "date": "10/02/2022",
+                "date": "{{now + 17 days short}}",
                 "time": "PM"
               }
             ],
@@ -913,8 +913,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "2022-10-01T06:00:00.000-06:00",
-            "startDateUtc": "2022-10-01T12:00:00.000Z",
+            "startDateLocal": "{{now + 32 days}}",
+            "startDateUtc": "{{now + 32 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",
@@ -924,11 +924,11 @@
             "isPending": true,
             "proposedTimes":[
               {
-                "date": "10/01/2022",
+                "date": "{{now + 32 days short}}",
                 "time": "PM"
               },
               {
-                "date": "10/02/2022",
+                "date": "{{now + 33 days short}}",
                 "time": "PM"
               }
             ],
@@ -973,8 +973,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "2022-10-01T06:00:00.000-06:00",
-            "startDateUtc": "2022-10-01T12:00:00.000Z",
+            "startDateLocal": "{{now + 52 days}}",
+            "startDateUtc": "{{now + 52 days utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY CLINIC",
             "timeZone": "America/Denver",

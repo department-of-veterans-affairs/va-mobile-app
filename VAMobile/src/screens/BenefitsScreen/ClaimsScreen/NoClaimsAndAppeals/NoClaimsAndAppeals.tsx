@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, TextView } from 'components'
+import { ClaimType, ClaimTypeConstants } from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -9,7 +10,11 @@ import { testIdProps } from 'utils/accessibility'
 import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'
 
-const NoClaimsAndAppeals: FC = () => {
+type NoClaimsAndAppealsProps = {
+  claimType: ClaimType
+}
+
+const NoClaimsAndAppeals: FC<NoClaimsAndAppealsProps> = ({ claimType }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
@@ -23,6 +28,9 @@ const NoClaimsAndAppeals: FC = () => {
   } else if (appealsServiceError) {
     header = t('noClaims.youDontHaveAnyClaims')
     text = t('noClaims.appOnlyShowsCompletedClaims')
+  } else if (claimType === ClaimTypeConstants.CLOSED) {
+    header = t('noClaims.youDontHaveAnyClosedClaimsOrAppeals')
+    text = ''
   }
 
   return (

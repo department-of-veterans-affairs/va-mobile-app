@@ -6,11 +6,16 @@ import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView,
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
+import { StackNavigationProp } from '@react-navigation/stack'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useStartAuth } from 'utils/hooks/auth'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
@@ -18,11 +23,13 @@ import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
-  const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HOME])
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
   const { authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
 
   const dispatch = useAppDispatch()
+  const navigation = useNavigation<StackNavigationProp<RootNavStackParamList, keyof RootNavStackParamList>>()
+  const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
   const startAuth = useStartAuth()
   const theme = useTheme()
@@ -45,11 +52,15 @@ const LoginScreen: FC = () => {
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
-  const onFacilityLocator = navigateTo('Webview', {
-    url: WEBVIEW_URL_FACILITY_LOCATOR,
-    displayTitle: t('common:webview.vagov'),
-    loadingMessage: t('common:webview.valocation.loading'),
-  })
+  const onFacilityLocator = () => {
+    logAnalyticsEvent(Events.vama_find_location())
+    navigation.navigate('Webview', {
+      url: WEBVIEW_URL_FACILITY_LOCATOR,
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('webview.valocation.loading'),
+    })
+  }
+
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const findLocationProps: BoxProps = {
@@ -84,24 +95,24 @@ const LoginScreen: FC = () => {
     : startAuth
 
   return (
-    <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
+    <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
-      <Box flex={1}>
+      <Box flex={1} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween} testID="va-icon">
           <VAIcon testID="VAIcon" name={'Logo'} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={80}>
-          <VAButton onPress={onLoginInit} label={t('common:signin')} a11yHint={t('common:signin.a11yHint')} buttonType={ButtonTypesConstants.buttonWhite} hideBorder={true} />
+          <VAButton onPress={onLoginInit} label={t('signin')} a11yHint={t('signin.a11yHint')} buttonType={ButtonTypesConstants.buttonWhite} hideBorder={true} />
           <Pressable
             onPress={onFacilityLocator}
-            {...testIdProps(a11yLabelVA(t('home:findLocation.title')))}
-            accessibilityHint={a11yLabelVA(t('home:findLocation.a11yHint'))}
+            {...testIdProps(a11yLabelVA(t('findLocation.title')))}
+            accessibilityHint={a11yLabelVA(t('findLocation.a11yHint'))}
             accessibilityRole="button">
             <Box {...findLocationProps}>
               <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
-                {t('home:findLocation.title')}
+                {t('findLocation.title')}
               </TextView>
               <VAIcon name="ChevronRight" fill="#FFF" width={10} height={15} />
             </Box>

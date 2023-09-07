@@ -1,9 +1,9 @@
-import { Dimensions, View, ViewStyle } from 'react-native'
+import { View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAScrollView } from 'components'
 import { testIdProps } from 'utils/accessibility'
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useOrientation, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 
 export type GenericOnboardingProps = {
@@ -20,6 +20,7 @@ export type GenericOnboardingProps = {
 const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
+  const isPortrait = useOrientation()
 
   useFocusEffect(setFocus)
 
@@ -36,17 +37,12 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLo
     justifyContent: 'center',
   }
 
-  const isPortrait = () => {
-    const dim = Dimensions.get('screen')
-    return dim.height >= dim.width
-  }
-
   return (
     <VAScrollView contentContainerStyle={containerStyle} alwaysBounceVertical={false} removeInsets={true}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait() ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         {displayLogo && (
           <Box my={theme.dimensions.standardMarginBetween} alignItems={'center'}>
-            <VAIcon name="Logo" />
+            <VAIcon name="Logo" testID="VAIconOnboardingLogo" />
           </Box>
         )}
         <Box alignItems={centerHeader ? 'center' : 'flex-start'}>
