@@ -1,12 +1,10 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { context, render, RenderAPI } from 'testUtils'
-import { ReactTestInstance } from 'react-test-renderer'
 
+import { screen } from '@testing-library/react-native'
+import { context, render } from 'testUtils'
 import { initialAuthorizedServicesState, initialAuthState, initialDisabilityRatingState, initialMilitaryServiceState, initialPersonalInformationState } from 'store/slices'
 import { SyncScreen } from './index'
-import TextView from '../../components/TextView'
 import { completeSync, getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/slices'
 
 jest.mock('store/slices', () => {
@@ -42,8 +40,6 @@ jest.mock('store/slices', () => {
 
 context('SyncScreen', () => {
   let store: any
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
 
   const initializeTestInstance = (militaryLoading = true, profileLoading = true, disabilityRatingLoading = true, loggedIn = false, loggingOut = false, syncing = true): void => {
     store = {
@@ -57,10 +53,7 @@ context('SyncScreen', () => {
         hasLoaded: true,
       },
     }
-
-    component = render(<SyncScreen />, { preloadedState: store })
-
-    testInstance = component.UNSAFE_root
+    render(<SyncScreen />, { preloadedState: store })
   }
 
   beforeEach(() => {
@@ -71,26 +64,22 @@ context('SyncScreen', () => {
     jest.clearAllMocks()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
   describe('loading text', () => {
     it('should show the signing in text', async () => {
       initializeTestInstance()
-      expect(testInstance.findByType(TextView).props.children).toEqual('Signing you in...')
+      expect(screen.getByText('Signing you in...')).toBeTruthy()
     })
   })
 
   describe('sign out', () => {
     it('should show sign out text', async () => {
       initializeTestInstance(false, false, false, true, true)
-      expect(testInstance.findByType(TextView).props.children).toEqual('Signing you out...')
+      expect(screen.getByText('Signing you out...')).toBeTruthy()
     })
 
     it('should show sign out text even if data is not loaded', async () => {
       initializeTestInstance(true, true, true, true, true)
-      expect(testInstance.findByType(TextView).props.children).toEqual('Signing you out...')
+      expect(screen.getByText('Signing you out...')).toBeTruthy()
     })
   })
 
