@@ -22,7 +22,7 @@ export const renderInputLabelSection = (
     <Box>
       <Box display="flex" flexDirection="row" flexWrap="wrap" mb={isHelperText ? 0 : 8}>
         <TextView variant={variant}>
-          {t(labelKey)} {isRequiredField ? t('common:required') : ''}
+          {t(labelKey)} {isRequiredField ? t('required') : ''}
         </TextView>
       </Box>
       {isHelperText && (
@@ -132,7 +132,7 @@ export const generateInputTestID = (
   }
 
   if (isRequiredField) {
-    resultingTestID += ` ${t('common:required.a11yLabel')}`
+    resultingTestID += ` ${t('required.a11yLabel')}`
   }
 
   if (helperTextKey) {
@@ -140,7 +140,7 @@ export const generateInputTestID = (
   }
 
   if (error) {
-    resultingTestID += ` ${t('common:error', { error })}`
+    resultingTestID += ` ${t('error', { error })}`
   }
 
   return resultingTestID
@@ -152,15 +152,15 @@ export const generateInputTestID = (
 export const generateA11yValue = (value: string | undefined, isFocused: boolean, t: TFunction): string => {
   if (isFocused) {
     if (value) {
-      return t('common:editing', { text: value })
+      return t('editing', { text: value })
     } else {
-      return t('common:editingNoValue')
+      return t('editingNoValue')
     }
   }
 
   if (value) {
-    return t('common:filled', { value })
+    return t('filled', { value })
   }
 
-  return t('common:empty')
+  return t('empty')
 }

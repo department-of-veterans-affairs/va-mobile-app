@@ -13,7 +13,7 @@ type ProviderNameProps = {
 }
 
 const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const isAppointmentPending = isAPendingAppointment(attributes)
 

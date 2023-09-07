@@ -71,7 +71,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   }
 
   const pickerProps: VAModalPickerProps = {
-    labelKey: 'common:payments.pickerLabel',
+    labelKey: 'payments.pickerLabel',
     selectedValue: yearPickerOption?.value || '',
     onSelectionChange: setValuesOnPickerSelect,
     pickerOptions,

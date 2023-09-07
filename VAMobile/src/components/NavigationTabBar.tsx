@@ -74,8 +74,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
           const isFocused = state.index === index
           const routeName = route.name.replace('Tab', '')
           const lowerCaseRoute = routeName.toLowerCase()
-          // TODO: remove this conditional once all tab names have been moved to common.json
-          const translatedName = ['payments', 'benefits'].includes(lowerCaseRoute) ? translation(`common:${lowerCaseRoute}.title`) : translation(`${routeName.toLowerCase()}:title`)
+          const translatedName = translation(`${lowerCaseRoute}.title`)
 
           type TouchableProps = {
             key: string

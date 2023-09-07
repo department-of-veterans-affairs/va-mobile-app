@@ -153,7 +153,7 @@ export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOn
 export const getGroupedAppointments = (
   appointmentsByYear: AppointmentsGroupedByYear,
   theme: VATheme,
-  translations: { t: TFunction; tc: TFunction },
+  translations: { t: TFunction },
   onAppointmentPress: (appointmentID: string) => void,
   isReverseSort: boolean,
   upcomingPageMetaData: AppointmentsMetaPagination,
@@ -201,20 +201,20 @@ export const getGroupedAppointments = (
  */
 const getListItemsForAppointments = (
   listOfAppointments: AppointmentsList,
-  translations: { t: TFunction; tc: TFunction },
+  translations: { t: TFunction },
   onAppointmentPress: (appointmentID: string) => void,
   upcomingPageMetaData: AppointmentsMetaPagination,
   groupIdx: number,
   theme: VATheme,
 ): Array<DefaultListItemObj> => {
   const listItems: Array<DefaultListItemObj> = []
-  const { t, tc } = translations
+  const { t } = translations
   const { currentPage, perPage, totalEntries } = upcomingPageMetaData
 
   _.forEach(listOfAppointments, (appointment, index) => {
     const textLines = getTextLinesForAppointmentListItem(appointment, t, theme)
     const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
-    const a11yValue = tc('common:listPosition', { position, total: totalEntries })
+    const a11yValue = t('listPosition', { position, total: totalEntries })
     const isPendingAppointment = isAPendingAppointment(appointment?.attributes)
 
     listItems.push({
@@ -254,14 +254,14 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
   // pending appointments
   if (isPendingAppointment) {
     if (serviceCategoryName === 'COMPENSATION & PENSION') {
-      textLines.push({ text: t('common:appointments.claimExam'), variant: 'MobileBodyBold', mb: 5 })
+      textLines.push({ text: t('appointments.claimExam'), variant: 'MobileBodyBold', mb: 5 })
     } else {
-      textLines.push({ text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 })
+      textLines.push({ text: t('text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 })
     }
     switch (appointmentType) {
       case AppointmentTypeConstants.COMMUNITY_CARE:
         if (healthcareProvider) {
-          textLines.push({ text: t('common:text.raw', { text: healthcareProvider }), variant: 'HelperText' })
+          textLines.push({ text: t('text.raw', { text: healthcareProvider }), variant: 'HelperText' })
         } else {
           textLines.push({ text: t('upcomingAppointments.communityCare'), variant: 'HelperText' })
         }
@@ -269,7 +269,7 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
       case AppointmentTypeConstants.VA:
       default:
         textLines.push({
-          text: t('common:text.raw', { text: location.name }),
+          text: t('text.raw', { text: location.name }),
           variant: 'HelperText',
           mb: condensedMarginBetween,
         })
@@ -284,25 +284,25 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
     if (isCovidVaccine) {
       textLines.push(
         { text: t('upcomingAppointments.covidVaccine'), variant: 'MobileBodyBold', mb: 5 },
-        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
+        { text: t('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
+        { text: t('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
       )
     } else if (serviceCategoryName === 'COMPENSATION & PENSION') {
       textLines.push(
-        { text: t('common:appointments.claimExam'), variant: 'MobileBodyBold', mb: 5 },
-        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
+        { text: t('appointments.claimExam'), variant: 'MobileBodyBold', mb: 5 },
+        { text: t('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
+        { text: t('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
       )
     } else if (typeOfCare) {
       textLines.push(
-        { text: t('common:text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 },
-        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
+        { text: t('text.raw', { text: typeOfCare }), variant: 'MobileBodyBold', mb: 5 },
+        { text: t('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText' },
+        { text: t('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'HelperText', mb: condensedMarginBetween },
       )
     } else {
       textLines.push(
-        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', mb: 5 },
+        { text: t('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
+        { text: t('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', mb: 5 },
       )
     }
 
@@ -310,14 +310,14 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
     const isCCAppointmentAndPhoneOnly = appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && phoneOnly
     const showAppointmentTypeIcon = isVideoOrVAAppointment || isCCAppointmentAndPhoneOnly
     textLines.push({
-      text: t('common:text.raw', { text: healthcareProvider || location.name }),
+      text: t('text.raw', { text: healthcareProvider || location.name }),
       variant: 'HelperText',
       mb: showAppointmentTypeIcon ? condensedMarginBetween : 0,
     })
 
     if (showAppointmentTypeIcon) {
       textLines.push({
-        text: t('common:text.raw', { text: getAppointmentTypeIconText(appointmentType, t, phoneOnly) }),
+        text: t('text.raw', { text: getAppointmentTypeIconText(appointmentType, t, phoneOnly) }),
         iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
         variant: 'HelperText',
       })

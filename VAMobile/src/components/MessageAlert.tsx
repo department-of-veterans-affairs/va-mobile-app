@@ -27,7 +27,7 @@ export type MessageAlertProps = {
 /**Common component to show a message alert when saving or sending a secure message */
 const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, scrollViewRef, focusOnError, errorList }) => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { replyTriageError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()

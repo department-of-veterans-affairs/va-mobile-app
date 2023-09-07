@@ -31,8 +31,7 @@ type ComposeCancelConfirmationProps = {
 }
 
 export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCancelConfirmation: (props: ComposeCancelConfirmationProps) => void] {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const confirmationAlert = useDestructiveActionSheet()
@@ -83,23 +82,23 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
       confirmationAlert({
         title:
           origin === 'Compose'
-            ? tc('composeCancelConfirmation.compose.title')
+            ? t('composeCancelConfirmation.compose.title')
             : origin === 'Draft'
-            ? tc('composeCancelConfirmation.draft.title')
-            : tc('composeCancelConfirmation.reply.title'),
-        message: origin === 'Draft' ? tc('composeCancelConfirmation.draft.body') : tc('composeCancelConfirmation.body'),
+            ? t('composeCancelConfirmation.draft.title')
+            : t('composeCancelConfirmation.reply.title'),
+        message: origin === 'Draft' ? t('composeCancelConfirmation.draft.body') : t('composeCancelConfirmation.body'),
         cancelButtonIndex: 0,
         destructiveButtonIndex: 1,
         buttons: [
           {
-            text: tc('keepEditing'),
+            text: t('keepEditing'),
           },
           {
-            text: origin === 'Draft' ? tc('deleteChanges') : tc('delete'),
+            text: origin === 'Draft' ? t('deleteChanges') : t('delete'),
             onPress: onDiscard,
           },
           {
-            text: origin === 'Draft' ? tc('saveChanges') : tc('save'),
+            text: origin === 'Draft' ? t('saveChanges') : t('save'),
             onPress: onSaveDraft,
           },
         ],

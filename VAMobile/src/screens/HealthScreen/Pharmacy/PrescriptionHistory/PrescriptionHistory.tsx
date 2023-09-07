@@ -158,8 +158,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const { prescriptions: prescriptionsAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
@@ -219,7 +218,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   // In this case, we need to support multiple screen IDs
   if (prescriptionInDowntime) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescriptions')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -227,7 +226,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   if (hasError) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescriptions')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -235,7 +234,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   if (!prescriptionsAuthorized) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescriptions')}>
         <PrescriptionHistoryNotAuthorized />
       </FeatureLandingTemplate>
     )
@@ -243,7 +242,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   if (loadingHistory) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescriptions')}>
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
       </FeatureLandingTemplate>
     )
@@ -251,7 +250,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   if (!tabCounts[PrescriptionHistoryTabConstants.ALL]) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('prescriptions')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescriptions')}>
         <PrescriptionHistoryNoPrescriptions />
       </FeatureLandingTemplate>
     )
@@ -440,7 +439,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     buttonA11yHint: t('prescription.filter.sort.a11y'),
     buttonTestID: 'openSortTestID',
     headerText: t('prescription.filter.sort'),
-    topRightButtonText: tc('reset'),
+    topRightButtonText: t('reset'),
     topRightButtonA11yHint: t('prescription.filter.sort.reset.a11y'),
     topRightButtonTestID: 'resetSortTestID',
     testID: 'sortListTestID',
@@ -454,7 +453,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       setSelectedSortOn(ASCENDING)
       const value = getDisplayForValue(sortByOptions, PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
       const direction = t('prescriptions.sort.atoz.a11y')
-      announceAfterDelay(tc('prescriptions.resetAnnouncementWithDirection', { value, direction }))
+      announceAfterDelay(t('prescriptions.resetAnnouncementWithDirection', { value, direction }))
     },
     onCancel: () => {
       setSelectedSortBy(sortByToUse)
@@ -491,7 +490,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     buttonA11yHint: t('prescription.filter.by.a11y'),
     buttonTestID: 'openFilterTestID',
     headerText: t('prescription.filter.status'),
-    topRightButtonText: tc('reset'),
+    topRightButtonText: t('reset'),
     topRightButtonA11yHint: t('prescription.filter.by.reset.a11y'),
     topRightButtonTestID: 'resetFilterTestID',
     testID: 'filterListTestID',
@@ -502,7 +501,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     },
     onUpperRightAction: () => {
       setSelectedFilter('')
-      announceAfterDelay(tc('prescriptions.resetAnnouncement', { value: getDisplayForValue(filterOptionsForTab, '') }))
+      announceAfterDelay(t('prescriptions.resetAnnouncement', { value: getDisplayForValue(filterOptionsForTab, '') }))
     },
     onCancel: () => {
       setSelectedFilter(filterToUse)
@@ -558,11 +557,11 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     }
 
     const linkProps: LinkButtonProps = {
-      displayedText: tc('goToMyVAHealth'),
+      displayedText: t('goToMyVAHealth'),
       linkType: LinkTypeOptionsConstants.externalLink,
       linkUrlIconType: LinkUrlIconType.Arrow,
       numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
-      a11yLabel: tc('goToMyVAHealth'),
+      a11yLabel: t('goToMyVAHealth'),
     }
 
     const props: CollapsibleAlertProps = {
@@ -650,7 +649,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   }
 
   const headerButton = {
-    label: tc('help'),
+    label: t('help'),
     icon: helpIconProps,
     onPress: () => {
       logAnalyticsEvent(Events.vama_rx_help())
@@ -662,9 +661,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     <FeatureLandingTemplate
       scrollViewProps={{ scrollViewRef }}
       headerButton={headerButton}
-      backLabel={tc('health')}
+      backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
-      title={tc('prescriptions')}
+      title={t('prescriptions')}
       testID="PrescriptionHistory">
       {getRequestRefillButton()}
       <TabBar {...tabProps} />
