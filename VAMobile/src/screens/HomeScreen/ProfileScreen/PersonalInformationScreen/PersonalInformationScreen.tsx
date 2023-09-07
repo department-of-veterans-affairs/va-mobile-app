@@ -54,8 +54,13 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const { profile, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const navigateTo = useRouteNavigation()
-  const { data: demographics, isFetching: loadingDemographics, isError: getDemographicsError } = useDemographics()
-  const { data: genderIdentityOptions, isLoading: loadingGenderIdentityOptions, isError: getGenderIdentityOptionsError } = useGenderIdentityOptions()
+  const { data: demographics, isFetching: loadingDemographics, isError: getDemographicsError, refetch: refetchDemographics } = useDemographics()
+  const {
+    data: genderIdentityOptions,
+    isLoading: loadingGenderIdentityOptions,
+    isError: getGenderIdentityOptionsError,
+    refetch: refetchGenderIdentityOptions,
+  } = useGenderIdentityOptions()
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
   const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
@@ -86,10 +91,20 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     borderStyle: 'solid',
   }
 
-  if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID) || getDemographicsError || getGenderIdentityOptionsError) {
+  const screenError = useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
+  const onTryAgain = () => {
+    if (getDemographicsError) {
+      refetchDemographics()
+    }
+    if (getGenderIdentityOptionsError) {
+      refetchGenderIdentityOptions()
+    }
+  }
+
+  if (screenError || getDemographicsError || getGenderIdentityOptionsError) {
     return (
       <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} />
+        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={screenError ? undefined : onTryAgain} />
       </FeatureLandingTemplate>
     )
   }
