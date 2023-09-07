@@ -506,6 +506,11 @@ const peronalInformationSlice = createSlice({
         profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
         profile.formattedMobilePhone = getFormattedPhoneNumber(profile.mobilePhoneNumber)
         profile.formattedWorkPhone = getFormattedPhoneNumber(profile.workPhoneNumber)
+
+        // Reset these since this information is now being pulled from the demographics endpoint.
+        // This can be removed when we switch over to the `v2/user` endpoint.
+        profile.preferredName = ''
+        profile.genderIdentity = ''
       }
 
       state.profile = profile
