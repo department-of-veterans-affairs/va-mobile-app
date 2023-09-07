@@ -4,6 +4,7 @@ import { EditResponseData, put } from 'store/api'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { SnackbarMessages } from 'components/SnackBar'
+import { demographicsKeys } from './queryKeys'
 import { isErrorObject, showSnackBar } from 'utils/common'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { useAppDispatch } from 'utils/hooks'
@@ -41,7 +42,7 @@ export const useUpdatePreferredName = () => {
     onSuccess: async () => {
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_preferred_name())
       await logAnalyticsEvent(Events.vama_pref_name_success)
-      queryClient.invalidateQueries({ queryKey: ['user', 'demographics'] })
+      queryClient.invalidateQueries({ queryKey: demographicsKeys.demographics })
       showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false)
     },
     onError: async (data: string, error) => {

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { DemographicsPayload, UserDemographics } from 'api/types/DemographicsData'
+import { demographicsKeys } from './queryKeys'
 import { get } from 'store/api'
 
 /**
@@ -20,7 +21,7 @@ export const getDemographics = async (): Promise<UserDemographics | undefined> =
  */
 export const useDemographics = () => {
   return useQuery({
-    queryKey: ['user', 'demographics'],
+    queryKey: demographicsKeys.demographics,
     queryFn: () => getDemographics(),
     meta: {
       errorName: 'getDemographics: Service error',

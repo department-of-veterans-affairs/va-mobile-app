@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { GenderIdentityOptions, GenderIdentityOptionsPayload } from 'api/types/DemographicsData'
 import { UserAnalytics } from 'constants/analytics'
+import { demographicsKeys } from './queryKeys'
 import { get } from 'store/api'
 
 /**
@@ -29,7 +30,7 @@ export const getGenderIdentityOptions = async (): Promise<GenderIdentityOptions>
  */
 export const useGenderIdentityOptions = () => {
   return useQuery({
-    queryKey: ['user', 'gender_identity', 'options'],
+    queryKey: demographicsKeys.genderIdentityOptions,
     queryFn: () => getGenderIdentityOptions(),
     initialData: {},
     meta: {
