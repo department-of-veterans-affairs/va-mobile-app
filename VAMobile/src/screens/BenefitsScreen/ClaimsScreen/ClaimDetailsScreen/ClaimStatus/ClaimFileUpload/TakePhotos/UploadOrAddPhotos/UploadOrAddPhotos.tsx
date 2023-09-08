@@ -151,7 +151,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         selectedValue: documentType,
         onSelectionChange: onDocumentTypeChange,
         pickerOptions: DocumentTypes526,
-        labelKey: 'common:fileUpload.documentType',
+        labelKey: 'fileUpload.documentType',
         isRequiredField: true,
         disabled: false,
       },
@@ -160,7 +160,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     {
       fieldType: FieldType.Selector,
       fieldProps: {
-        labelKey: 'common:fileUpload.evidenceOnlyPhoto',
+        labelKey: 'fileUpload.evidenceOnlyPhoto',
         selected: confirmed,
         onSelectionChange: onCheckboxChange,
         isRequiredField: true,

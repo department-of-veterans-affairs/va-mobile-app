@@ -7,7 +7,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 const NoInboxMessages: FC = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   return (

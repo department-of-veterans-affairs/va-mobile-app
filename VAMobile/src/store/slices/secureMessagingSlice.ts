@@ -519,7 +519,8 @@ export const sendMessage =
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `sendMessage: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishSendMessage(error))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+        const isReplyWithTriageError = replyToID && hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, error)
+        !isReplyWithTriageError && showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
       }
     }
   }

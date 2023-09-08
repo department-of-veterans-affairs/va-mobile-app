@@ -25,8 +25,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { vaccines, loading, vaccinePagination } = useSelector<RootState, VaccineState>((state) => state.vaccine)
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const vaccineButtons: Array<DefaultListItemObj> = map(vaccines || [], (vaccine: Vaccine, index) => {
     const textLines: Array<TextLine> = [
@@ -38,7 +37,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
       textLines,
       onPress: navigateTo('VaccineDetails', { vaccineId: vaccine.id }),
       a11yHintText: t('vaccines.list.a11y'),
-      a11yValue: tc('listPosition', { position: index + 1, total: vaccines.length }),
+      a11yValue: t('listPosition', { position: index + 1, total: vaccines.length }),
       testId: getA11yLabelText(textLines),
     }
 
@@ -81,7 +80,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   if (useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -89,7 +88,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   if (loading) {
     return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
         <LoadingComponent text={t('vaccines.loading')} />
       </FeatureLandingTemplate>
     )
@@ -97,14 +96,14 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
   if (vaccines.length === 0) {
     return (
-      <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
         <NoVaccineRecords />
       </FeatureLandingTemplate>
     )
   }
 
   return (
-    <FeatureLandingTemplate backLabel={tc('health')} backLabelOnPress={navigation.goBack} title={tc('vaVaccines')} titleA11y={tc('vaVaccines.a11y')}>
+    <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={t('vaVaccines.a11y')}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <DefaultList items={vaccineButtons} />
       </Box>

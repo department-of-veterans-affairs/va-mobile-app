@@ -14,8 +14,7 @@ import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 type CCReasonForAppointmentScreen = StackScreenProps<AppointmentFlowModalStackParamList, 'CCReasonForAppointmentScreen'>
 
 const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { gutter } = theme.dimensions
@@ -42,7 +41,7 @@ const CCReasonForAppointmentScreen: FC<CCReasonForAppointmentScreen> = ({ naviga
       <AppointmentFlowWhiteCtaButton
         mx={10}
         onPress={() => {}}
-        text={`${th('component.crisisLine.talkToThe')} ${th('component.crisisLine.veteranCrisisLine')} ${th('component.crisisLine.now')}`}
+        text={`${t('component.crisisLine.talkToThe')} ${t('component.crisisLine.veteranCrisisLine')} ${t('component.crisisLine.now')}`}
       />
       <AppointmentFlowTitleSection title={t('requestAppointment.whatReasonForCare')} />
       <AppointmentFlowTextInputWithAlert

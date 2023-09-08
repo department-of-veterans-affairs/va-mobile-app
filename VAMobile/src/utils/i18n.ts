@@ -1,6 +1,4 @@
 import * as commonEN from 'translations/en/common.json'
-import * as healthEN from 'translations/en/health.json'
-import * as homeEN from 'translations/en/home.json'
 
 import { NAMESPACE } from 'constants/namespaces'
 
@@ -14,8 +12,6 @@ const defaultLanguage = RNLocalize.findBestAvailableLanguage(['en']) || fallback
 export const resources = {
   en: {
     common: commonEN,
-    health: healthEN,
-    home: homeEN,
   },
 } as const
 
