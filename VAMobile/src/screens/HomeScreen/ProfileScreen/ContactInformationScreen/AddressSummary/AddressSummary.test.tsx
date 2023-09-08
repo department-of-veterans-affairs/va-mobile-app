@@ -1,34 +1,26 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockStore, render, RenderAPI } from 'testUtils'
 
+import { fireEvent, screen } from '@testing-library/react-native'
+import { context, render } from 'testUtils'
 import AddressSummary, { addressDataField, profileAddressOptions } from './AddressSummary'
 import Mock = jest.Mock
 import { AddressData, UserDataProfile } from 'store/api/types'
-import { TextView } from 'components'
 import { InitialState } from 'store/slices'
-import { Pressable } from 'react-native'
-
-const initializeWithUpdatedData = (component: RenderAPI, profile: UserDataProfile, addressData: Array<addressDataField>): ReactTestInstance => {
-  component = render(<AddressSummary addressData={addressData} />, {
-    preloadedState: {
-      ...InitialState,
-      personalInformation: { ...InitialState.personalInformation, profile },
-    },
-  })
-
-  return component.UNSAFE_root
-}
 
 context('AddressSummary', () => {
-  let component: RenderAPI
   let addressData: any
   let onPressSpy: Mock
   let onPressSpy2: Mock
-  let testInstance: ReactTestInstance
   let profile: UserDataProfile
+  const initializeTestInstance = (profile: UserDataProfile, addressData: Array<addressDataField>) => {
+    render(<AddressSummary addressData={addressData} />, {
+      preloadedState: {
+        ...InitialState,
+        personalInformation: { ...InitialState.personalInformation, profile },
+      },
+    })
+  }
 
   beforeEach(() => {
     profile = {
@@ -104,58 +96,44 @@ context('AddressSummary', () => {
       { addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onPressSpy },
       { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onPressSpy2 },
     ]
-
-    component = render(<AddressSummary addressData={addressData} />, {
-      preloadedState: {
-        ...InitialState,
-        personalInformation: { ...InitialState.personalInformation, profile },
-      },
-    })
-
-    testInstance = component.UNSAFE_root
+    initializeTestInstance(profile, addressData)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  describe('when there is a mailing address', () => {
+  describe('when there are addresses', () => {
     it('should display the full address', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('1707 Tiburon Blvd, Address line 2, Address line 3')
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Tiburon, CA, 94920')
+      expect(screen.getByText('Mailing address')).toBeTruthy()
+      expect(screen.getByText('1707 Tiburon Blvd, Address line 2, Address line 3')).toBeTruthy()
+      expect(screen.getByText('Tiburon, CA, 94920')).toBeTruthy()
+      expect(screen.getByText('Home address')).toBeTruthy()
+      expect(screen.getByText('10 Laurel Way')).toBeTruthy()
+      expect(screen.getByText('Novato, CA, 94920')).toBeTruthy()
     })
   })
 
-  describe('when there is no mailing address', () => {
-    it('should display Add your mailing address', async () => {
+  describe('when the address summary is clicked', () => {
+    it('should call onPress', async () => {
+      fireEvent.press(screen.getByTestId("Mailing address 1707 Tiburon Blvd, Address line 2, Address line 3 Tiburon, CA, 94920"))
+      expect(onPressSpy).toBeCalled()
+
+      fireEvent.press(screen.getByTestId("Home address 10 Laurel Way Novato, CA, 94920"))
+      expect(onPressSpy2).toBeCalled()
+    })
+  })
+
+  describe('when there is no address', () => {
+    it('should display Add your address for mailing or home based off which one is missing', async () => {
       profile.mailingAddress = {} as AddressData
-      testInstance = initializeWithUpdatedData(component, profile, addressData)
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Add your mailing address')
+      initializeTestInstance(profile, addressData)
+      expect(screen.getByText('Add your mailing address')).toBeTruthy()
+
+      profile.residentialAddress = {} as AddressData
+      initializeTestInstance(profile, addressData)
+      expect(screen.getByText('Add your home address')).toBeTruthy()
 
       profile = {} as UserDataProfile
-      testInstance = initializeWithUpdatedData(component, profile, addressData)
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Add your mailing address')
-    })
-  })
-
-  describe('when there is a residential address', () => {
-    it('should display the full address', async () => {
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('10 Laurel Way')
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Novato, CA, 94920')
-    })
-  })
-
-  describe('when there is no residential address', () => {
-    it('should display Add your home address', async () => {
-      profile.residentialAddress = {} as AddressData
-      testInstance = initializeWithUpdatedData(component, profile, addressData)
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Add your home address')
-    })
-  })
-
-  describe('when the addressType is DOMESTIC', () => {
-    it('should display the last line as CITY, STATE, ZIP', async () => {
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Tiburon, CA, 94920')
+      initializeTestInstance(profile, addressData)
+      expect(screen.getByText('Add your mailing address')).toBeTruthy()
+      expect(screen.getByText('Add your home address')).toBeTruthy()
     })
   })
 
@@ -177,9 +155,8 @@ context('AddressSummary', () => {
           zipCode: '94920',
           zipCodeSuffix: '1234',
         }
-        testInstance = initializeWithUpdatedData(component, profile, addressData)
-
-        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Tiburon, Armed Forces Americas (AA) 94920')
+        initializeTestInstance(profile, addressData)
+        expect(screen.getByText('Tiburon, Armed Forces Americas (AA) 94920')).toBeTruthy()
       })
     })
 
@@ -200,15 +177,14 @@ context('AddressSummary', () => {
           zipCode: '94920',
           zipCodeSuffix: '1234',
         }
-        testInstance = initializeWithUpdatedData(component, profile, addressData)
-
-        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Armed Forces Americas (AA) 94920')
+        initializeTestInstance(profile, addressData)
+        expect(screen.getByText('Armed Forces Americas (AA) 94920')).toBeTruthy()
       })
     })
   })
 
   describe('when the addressType is INTERNATIONAL', () => {
-    it('should display the second to last line as CITY, STATE, INTERNATIONAL_POSTAL_CODE', async () => {
+    it('should display the second to last line as CITY, STATE, INTERNATIONAL_POSTAL_CODE and country code on last line if it exists', async () => {
       profile.mailingAddress = {
         id: 1,
         addressLine1: '127 Harvest Moon Dr',
@@ -217,37 +193,16 @@ context('AddressSummary', () => {
         addressPou: 'RESIDENCE/CHOICE',
         addressType: 'INTERNATIONAL',
         city: 'Bolton',
-        countryCodeIso3: '1',
+        countryCodeIso3: 'ESP',
         internationalPostalCode: 'L7E 2W1',
         province: 'Ontario',
         stateCode: 'CA',
         zipCode: '94920',
         zipCodeSuffix: '1234',
       }
-      testInstance = initializeWithUpdatedData(component, profile, addressData)
-
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Bolton, Ontario, L7E 2W1')
-    })
-
-    it('should display the country code on the last line if it exists', async () => {
-      profile.mailingAddress = {
-        id: 1,
-        addressLine1: '1707 Tiburon Blvd',
-        addressLine2: 'Address line 2',
-        addressLine3: 'Address line 3',
-        addressPou: 'RESIDENCE/CHOICE',
-        addressType: 'INTERNATIONAL',
-        city: 'Tiburon',
-        countryCodeIso3: 'ESP',
-        internationalPostalCode: '1',
-        province: 'province',
-        stateCode: 'CA',
-        zipCode: '94920',
-        zipCodeSuffix: '1234',
-      }
-      testInstance = initializeWithUpdatedData(component, profile, addressData)
-
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Spain')
+      initializeTestInstance(profile, addressData)
+      expect(screen.getByText('Bolton, Ontario, L7E 2W1')).toBeTruthy()
+      expect(screen.getByText('Spain')).toBeTruthy()
     })
 
     describe('when there is no country code', () => {
@@ -265,9 +220,8 @@ context('AddressSummary', () => {
           zipCode: '',
           zipCodeSuffix: '',
         }
-        testInstance = initializeWithUpdatedData(component, profile, addressData)
-
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Add your mailing address')
+        initializeTestInstance(profile, addressData)
+        expect(screen.getByText('Add your mailing address')).toBeTruthy()
       })
     })
 
@@ -286,20 +240,9 @@ context('AddressSummary', () => {
           zipCode: '',
           zipCodeSuffix: '',
         }
-        testInstance = initializeWithUpdatedData(component, profile, addressData)
-
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Spain')
+        initializeTestInstance(profile, addressData)
+        expect(screen.getByText('Spain')).toBeTruthy()
       })
-    })
-  })
-
-  describe('when the address summary is clicked', () => {
-    it('should call onPress', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(onPressSpy).toBeCalled()
-
-      testInstance.findAllByType(Pressable)[1].props.onPress()
-      expect(onPressSpy2).toBeCalled()
     })
   })
 })
