@@ -2,12 +2,13 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
-import { Pressable } from 'react-native'
+import { screen } from '@testing-library/react-native'
+import { when } from 'jest-when'
 
 import PersonalInformationScreen from './index'
-import { AddressData, BranchesOfServiceConstants, ServiceData, UserDataProfile } from 'store/api/types'
+import { BranchesOfServiceConstants, ServiceData, UserDataProfile } from 'store/api/types'
 import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
-import { ErrorComponent, LoadingComponent, TextView } from 'components'
+import { ErrorComponent, LoadingComponent } from 'components'
 import {
   ErrorsState,
   initialAuthorizedServicesState,
@@ -19,7 +20,6 @@ import {
 } from 'store/slices'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -27,6 +27,20 @@ jest.mock('../../../../utils/hooks', () => {
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
+jest.mock('../../../../api/demographics/getDemographics', () => {
+  let original = jest.requireActual('../../../../api/demographics/getDemographics')
+  return {
+    ...original,
+    useDemographics: () => ({
+      status: "success",
+      data: {
+        genderIdentity: '',
+        preferredName: '',
+      }
+    }),
   }
 })
 
@@ -79,12 +93,12 @@ context('PersonalInformationScreen', () => {
     )
 
     profile = {
-      preferredName: 'Benny',
+      preferredName: '',
       firstName: 'Ben',
       middleName: 'J',
       lastName: 'Morgan',
       fullName: 'Ben J Morgan',
-      genderIdentity: 'M',
+      genderIdentity: '',
       contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
       signinEmail: 'ben@gmail.com',
       birthDate: '1990-05-08',
@@ -184,7 +198,7 @@ context('PersonalInformationScreen', () => {
 
   describe('when there is a birth date', () => {
     it('should display the birth date in the format Month day, year', async () => {
-      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('May 08, 1990')
+      expect(screen.queryByText('May 08, 1990')).toBeTruthy()
     })
   })
 
@@ -207,7 +221,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.UNSAFE_root
 
-      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('This information is not available right now')
+      expect(screen.queryByText('This information is not available right now')).toBeTruthy()
     })
   })
 

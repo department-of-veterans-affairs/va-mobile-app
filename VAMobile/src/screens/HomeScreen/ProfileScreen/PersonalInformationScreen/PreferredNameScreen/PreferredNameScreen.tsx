@@ -5,27 +5,24 @@ import React, { FC, useEffect, useState } from 'react'
 import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, finishUpdatePreferredName, updatePreferredName } from 'store/slices'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api'
-import { SnackbarMessages } from 'components/SnackBar'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useDemographics } from 'api/demographics/getDemographics'
+import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useUpdatePreferredName } from 'api/demographics/updatePreferredName'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 
 const MAX_NAME_LENGTH = 25
 
 const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
-  const { profile, preferredNameSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { data: demographics } = useDemographics()
+  const preferredNameMutation = useUpdatePreferredName()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const confirmAlert = useDestructiveActionSheet()
 
   const getInitialState = (): string => {
-    const item = profile?.preferredName
+    const item = demographics?.preferredName
     return item ? stringToTitleCase(item) : ''
   }
 
@@ -34,16 +31,10 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   const [resetErrors, setResetErrors] = useState(false)
 
   useEffect(() => {
-    if (preferredNameSaved) {
-      dispatch(finishUpdatePreferredName())
+    if (preferredNameMutation.isSuccess) {
       navigation.goBack()
     }
-  }, [preferredNameSaved, navigation, dispatch])
-
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: t('personalInformation.preferredName.saved'),
-    errorMsg: t('personalInformation.preferredName.notSaved'),
-  }
+  }, [preferredNameMutation.isSuccess, navigation])
 
   const onConfirmCancel = (): void => {
     if (preferredName !== getInitialState()) {
@@ -73,7 +64,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
 
   const onSave = (): void => {
     if (preferredName !== '') {
-      dispatch(updatePreferredName(preferredName, snackbarMessages, ScreenIDTypesConstants.PREFERRED_NAME_SCREEN))
+      preferredNameMutation.mutate(preferredName)
     }
   }
 
@@ -126,7 +117,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
     },
   ]
 
-  if (loading || preferredNameSaved) {
+  if (preferredNameMutation.isLoading) {
     return (
       <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
         <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />

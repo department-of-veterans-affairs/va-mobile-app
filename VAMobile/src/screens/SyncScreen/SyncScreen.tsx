@@ -11,6 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
+import { useDemographics } from 'api/demographics/getDemographics'
 import colors from 'styles/themes/VAColors'
 
 export type SyncScreenProps = Record<string, unknown>
@@ -33,6 +34,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { hasLoaded: authorizedServicesLoaded, militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>(
     (state) => state.authorizedServices,
   )
+  const { isFetched: demographicsLoaded } = useDemographics()
 
   const [displayMessage, setDisplayMessage] = useState('')
 
@@ -81,10 +83,22 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     }
 
     const finishSyncingMilitaryHistory = authorizedServicesLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded)
-    if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded) {
+    if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded && demographicsLoaded) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t, disabilityRatingLoaded, syncing])
+  }, [
+    dispatch,
+    loggedIn,
+    loggingOut,
+    authorizedServicesLoaded,
+    personalInformationLoaded,
+    militaryHistoryLoaded,
+    militaryInfoAuthorization,
+    t,
+    disabilityRatingLoaded,
+    syncing,
+    demographicsLoaded,
+  ])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
