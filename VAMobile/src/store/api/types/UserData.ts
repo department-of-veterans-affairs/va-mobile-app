@@ -130,20 +130,6 @@ export type EditResponseData = {
   }
 }
 
-export type GenderIdentityOptions = {
-  [key: string]: string
-}
-
-export type GenderIdentityOptionsData = {
-  data: {
-    id: string
-    type: string
-    attributes: {
-      options: GenderIdentityOptions
-    }
-  }
-}
-
 export const UserGreetingTimeConstants: {
   MORNING: number
   AFTERNOON: number
