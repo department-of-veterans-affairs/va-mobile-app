@@ -65,7 +65,7 @@ describe(':android: Cerner Notice', () => {
 
   it('should tap on the cerner notification and verify the correct information is displayed for one facility', async () => {
     await element(by.text(CernerIdConstants.CERNER_NOTE_MESSAGES_HEADER_TEXT)).tap()
-    await expect(element(by.text('Sending a message to a provider at Mann-Grandstaff Department of Veterans Affairs Medical Center?'))).toExist()
+    await expect(element(by.text('Sending a message to a care team at Mann-Grandstaff Department of Veterans Affairs Medical Center?'))).toExist()
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_MESSAGES_TEXT))).toExist()
     await expect(element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID))).toExist()
   })
@@ -80,7 +80,7 @@ describe(':android: Cerner Notice', () => {
 
   it('should tap on the cerner notification and verify the correct information is displayed for multiple facilities', async () => {
     await element(by.text(CernerIdConstants.CERNER_NOTE_MESSAGES_HEADER_TEXT)).tap()
-    await expect(element(by.text('Sending a message to a provider at one of these health facilities?'))).toExist()
+    await expect(element(by.text('Sending a message to a care team at one of these health facilities?'))).toExist()
     await expect(element(by.text('San Francisco VA Medical Center'))).toExist()
     await expect(element(by.text('Mann-Grandstaff Department of Veterans Affairs Medical Center'))).toExist()
     await expect(element(by.text('These facilities currently use our My VA Health portal. You\'ll need to go there to send your message.'))).toExist()
