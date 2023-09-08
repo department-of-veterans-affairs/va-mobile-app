@@ -9,7 +9,7 @@
           "middleName": "",
           "lastName": "WASHINGTON",
           "fullName": "KIMBERLY WASHINGTON",
-          "genderIdentity": "F",
+          "genderIdentity": "",
           "contactEmail": {
             "id": 183571,
             "emailAddress": "attended1@gmail.com"
@@ -108,6 +108,16 @@
         "userProfileUpdate",
         "secureMessaging"
       ]
+    }
+  },
+  "/v0/user/demographics": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "demographics",
+      "attributes": {
+        "genderIdentity": "F",
+        "preferredName": ""
+        }
     }
   },
   "/v0/military-service-history": {
