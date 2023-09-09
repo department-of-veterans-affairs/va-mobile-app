@@ -20,7 +20,6 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { dispatchUpdateAuthorizedServices } from './authorizedServicesSlice'
-import { dispatchUpdateCerner } from './patientSlice'
 import {
   getAddressDataFromSuggestedAddress,
   getAddressValidationScenarioFromAddressValidationData,
@@ -104,7 +103,6 @@ export const getProfileInfo =
       const authorizedServices = user?.data.attributes.authorizedServices
       dispatch(dispatchFinishGetProfileInfo({ profile }))
       dispatch(dispatchUpdateAuthorizedServices({ authorizedServices }))
-      dispatch(dispatchUpdateCerner({ cerner: user?.data.attributes.health }))
       await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
       if (isErrorObject(error)) {

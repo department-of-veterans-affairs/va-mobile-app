@@ -3,10 +3,10 @@ import { AppThunk } from 'store'
 import { AppointmentFlowFormDataType, FacilitiesFilterType, ScreenIDTypes, UserCCEligibilityAttributes, UserFacilityInfo, UserVAEligibilityService } from 'store/api'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { filter } from 'underscore'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 
 export type RequestAppointmentState = {
   loadingVAEligibility: boolean
@@ -39,26 +39,31 @@ export const initialRequestAppointmentState: RequestAppointmentState = {
  * */
 export const getUserVAEligibility =
   (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
+  async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getUserVAEligibility(screenID))))
+    const { data: facilitiesInfo } = useFacilitiesInfo()
 
-    try {
-      const facilities = filter(getState().patient.facilities || [], (item) => {
-        return item.isCerner === false
-      }).map((item) => item.facilityId)
+    if (facilitiesInfo) {
+      try {
+        const facilities = facilitiesInfo
+          .filter((f) => {
+            return !f.cerner
+          })
+          .map((item) => item.id)
 
-      dispatch(dispatchStartGeVAEligibility())
-      const eligibilityData = await api.get<api.UserVAEligibilityData>('/v0/appointments/va/eligibility', {
-        'facilityIds[]': facilities,
-      })
+        dispatch(dispatchStartGeVAEligibility())
+        const eligibilityData = await api.get<api.UserVAEligibilityData>('/v0/appointments/va/eligibility', {
+          'facilityIds[]': facilities,
+        })
 
-      dispatch(dispatchFinishGetVAEligibility({ eligibilityData: eligibilityData?.data.attributes.services, ccSupported: eligibilityData?.data.attributes.ccSupported }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, 'getUserEligibility: Request Appointment Service Error')
-        dispatch(dispatchFinishGetVAEligibility({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+        dispatch(dispatchFinishGetVAEligibility({ eligibilityData: eligibilityData?.data.attributes.services, ccSupported: eligibilityData?.data.attributes.ccSupported }))
+      } catch (error) {
+        if (isErrorObject(error)) {
+          logNonFatalErrorToFirebase(error, 'getUserEligibility: Request Appointment Service Error')
+          dispatch(dispatchFinishGetVAEligibility({ error }))
+          dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
+        }
       }
     }
   }
