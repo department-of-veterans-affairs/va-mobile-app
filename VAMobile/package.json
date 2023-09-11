@@ -40,6 +40,7 @@
     "docs": "yarn && cd documentation && yarn && yarn start"
   },
   "dependencies": {
+    "@department-of-veterans-affairs/mobile-component-library": "0.0.18",
     "@expo/react-native-action-sheet": "^3.13.0",
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-native-community/clipboard": "^1.5.1",
@@ -63,13 +64,13 @@
     "patch-package": "^7.0.0",
     "postinstall-postinstall": "^2.1.0",
     "querystringify": "^2.2.0",
-    "react": "18.1.0",
+    "react": "18.2.0",
     "react-i18next": "^11.15.3",
     "react-native": "0.71.7",
     "react-native-document-picker": "^8.0.0",
     "react-native-dotenv": "^3.2.0",
     "react-native-file-viewer": "^2.1.4",
-    "react-native-gesture-handler": "^2.9.0",
+    "react-native-gesture-handler": "~2.12.0",
     "react-native-haptic-feedback": "^1.14.0",
     "react-native-image-picker": "^5.4.2",
     "react-native-keyboard-manager": "^6.5.4-3",

@@ -1,3 +1,4 @@
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useFocusEffect } from '@react-navigation/native'
@@ -6,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 
 import { AuthorizedServicesState } from 'store/slices'
-import { BackButton, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SegmentedControl, TextView } from 'components'
+import { BackButton, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
@@ -33,8 +34,8 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const controlValues = [t('claimDetails.status'), t('claimDetails.details')]
-  const [selectedTab, setSelectedTab] = useState(controlValues[0])
+  const controlLabels = [t('claimDetails.status'), t('claimDetails.details')]
+  const [selectedTab, setSelectedTab] = useState(0)
 
   const { claimID, claimType, focusOnSnackbar } = route.params
   const { decisionLetters: decisionLettersAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
@@ -100,9 +101,9 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
     )
   }
 
-  const onTabChange = (tab: string) => {
+  const onTabChange = (tab: number) => {
     if (tab !== selectedTab && claim) {
-      const analyticsEvent = tab === 'Status' ? Events.vama_claim_status_tab : Events.vama_claim_details_tab
+      const analyticsEvent = tab === controlLabels.indexOf(t('claimDetails.status')) ? Events.vama_claim_status_tab : Events.vama_claim_details_tab
       logAnalyticsEvent(analyticsEvent(claim.id, claim.attributes.claimType, claim.attributes.phase, claim.attributes.dateFiled))
     }
     setSelectedTab(tab)
@@ -120,12 +121,12 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
           </TextView>
           <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl values={controlValues} titles={controlValues} onChange={onTabChange} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
+            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={a11yHints} />
           </Box>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          {claim && selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
-          {claim && selectedTab === t('claimDetails.details') && <ClaimDetails claim={claim} />}
+          {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
+          {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
         </Box>
       </Box>
     </FeatureLandingTemplate>
