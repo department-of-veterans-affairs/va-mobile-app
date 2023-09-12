@@ -27,7 +27,7 @@ describe('Sign In', () => {
     await expect(element(by.id(SignE2eIdConstants.CONTINUE_SIGN_IN_BTN_ID))).toExist()
   })
 
-  it('should show webview with log in options', async () => {
+  it(':ios: should show webview with log in options', async () => {
     await element(by.text('Back')).tap()
     await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
