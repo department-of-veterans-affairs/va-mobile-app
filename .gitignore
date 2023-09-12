@@ -174,3 +174,7 @@ buck-out/
 **/fastlane/report.xml
 /VAMobile/ios/fastlane/README.md
 /VAMobile/android/fastlane/README.md
+
+# Detox
+/VAMobile/artifacts
+/VAMobile/e2e/tests/__image_snapshots__

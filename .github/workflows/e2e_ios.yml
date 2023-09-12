@@ -1,0 +1,87 @@
+#
+# Detox e2e tests in CI
+#
+
+name: '[e2e] iOS Detox Test Run'
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: VAMobile
+
+env:
+  # IAM staging app client secret
+  APP_CLIENT_SECRET: ${{ secrets.APP_CLIENT_SECRET }}
+  # IAM production app client secret
+  APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
+
+jobs:
+  e2e-ios:
+    runs-on: macos-latest-xl
+    env:
+      # Path to write secret key to. Also used by fastlane
+      APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
+      # Xcode project file name
+      IOS_PROJ_FILE: 'VAMobile.xcodeproj'
+      # Xcode scheme to build
+      IOS_SCHEME: 'VAMobileRelease'
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
+        working-directory: VAMobile/ios
+        run: |
+          echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
+          echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Setup node and restore yarn cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: './VAMobile/yarn.lock'
+
+      - name: Install macOS dependencies
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
+
+      - name: Install npm dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Set app environment variables
+        run: yarn env:staging
+
+      - name: Install pods
+        working-directory: VAMobile/ios
+        run: pod install
+  
+      - name: Install Ruby gems
+        working-directory: VAMobile/ios
+        run: bundle install
+
+      - name: Bundle iOS app
+        run: yarn e2e:ios-build
+
+      - name: Run e2e tests for iOS
+        run: yarn e2e:ios-test --take-screenshots failing --updateSnapshot
+      
+      - name: Upload artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
+          path: VAMobile/artifacts

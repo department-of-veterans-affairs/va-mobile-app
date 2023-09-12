@@ -17,6 +17,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDemographics } from 'api/demographics/getDemographics'
 import { useSelector } from 'react-redux'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
@@ -45,7 +46,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const name = profile?.preferredName ? profile.preferredName : profile?.firstName || ''
+  const { data: demographics, isLoading: loadingDemographics } = useDemographics()
+  const name = loadingDemographics ? '' : demographics?.preferredName || profile?.firstName || ''
 
   useEffect(() => {
     // Fetch the profile information
