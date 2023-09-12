@@ -1308,6 +1308,7 @@
   "secureMessaging.reply.a11yHint": "navigate to the reply message page",
   "secureMessaging.reply.error.ifYouThink": "Please contact your My HealtheVet Coordinator at this VA Medical Center to see if this triage group is currently participating in Secure Messaging and if you are enrolled in the triage group.",
   "secureMessaging.reply.error.ifYouThinkA11y": "Please contact your My Healthy Vet Coordinator at this V-A Medical Center to see if this triage group is currently participating in Secure Messaging and if you are enrolled in the triage group.",
+  "secureMessaging.reply.error.youCantSend": "You can no longer send messages to this triage group.",
   "secureMessaging.reply.messageConversation": "Messages in this conversation",
   "secureMessaging.reply.olderThan45Days": "The last message in this conversation is more than 45 days old. To continue this conversation, start a new message.",
   "secureMessaging.reply.youCanNoLonger": "This conversation is too old for new replies",
