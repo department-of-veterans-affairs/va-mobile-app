@@ -6,7 +6,6 @@ import { ReactTestInstance } from 'react-test-renderer'
 
 import {
   ErrorsState,
-  initialAuthorizedServicesState,
   initialAuthState,
   initialDisabilityRatingState,
   initialErrorsState,
@@ -74,12 +73,6 @@ context('ProfileScreen', () => {
     component = render(<ProfileScreen {...props} />, {
       preloadedState: {
         auth: { ...initialAuthState },
-        authorizedServices: {
-          ...initialAuthorizedServicesState,
-          directDepositBenefits,
-          directDepositBenefitsUpdate,
-          userProfileUpdate,
-        },
         militaryService: { ...initialMilitaryServiceState, loading: militaryInformationLoading },
         disabilityRating: {
           ...initialDisabilityRatingState,

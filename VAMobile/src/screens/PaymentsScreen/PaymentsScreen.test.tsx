@@ -1,10 +1,10 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { context, findByTestID, render, RenderAPI } from 'testUtils'
+import { context, render, RenderAPI } from 'testUtils'
 import { ReactTestInstance } from 'react-test-renderer'
 
-import { ErrorsState, initialAuthorizedServicesState, initialAuthState, initialErrorsState } from 'store/slices'
+import { ErrorsState, initialAuthState, initialErrorsState } from 'store/slices'
 import { LargeNavButton } from 'components'
 import { SigninServiceTypes, SigninServiceTypesConstants } from 'store/api/types'
 import { waitFor } from '@testing-library/react-native'
@@ -48,11 +48,6 @@ context('PaymentsScreen', () => {
     component = render(<PaymentsScreen />, {
       preloadedState: {
         auth: { ...initialAuthState },
-        authorizedServices: {
-          ...initialAuthorizedServicesState,
-          directDepositBenefits,
-          directDepositBenefitsUpdate,
-        },
         errors: errorState,
       },
     })
