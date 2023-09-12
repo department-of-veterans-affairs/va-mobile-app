@@ -4,7 +4,7 @@ import React from 'react'
 import { context, render, RenderAPI, waitFor } from 'testUtils'
 import { ReactTestInstance } from 'react-test-renderer'
 
-import { initialAuthorizedServicesState, initialAuthState, initialDisabilityRatingState, initialMilitaryServiceState, initialPersonalInformationState } from 'store/slices'
+import { initialAuthState, initialDisabilityRatingState, initialMilitaryServiceState, initialPersonalInformationState } from 'store/slices'
 import { SyncScreen } from './index'
 import TextView from '../../components/TextView'
 import { completeSync, getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/slices'
@@ -51,11 +51,6 @@ context('SyncScreen', () => {
       disabilityRating: { ...initialDisabilityRatingState, preloadComplete: !disabilityRatingLoading },
       militaryService: { ...initialMilitaryServiceState, preloadComplete: !militaryLoading },
       personalInformation: { ...initialPersonalInformationState, preloadComplete: !profileLoading },
-      authorizedServices: {
-        ...initialAuthorizedServicesState,
-        militaryServiceHistory: true,
-        hasLoaded: true,
-      },
     }
 
     component = render(<SyncScreen />, { preloadedState: store })

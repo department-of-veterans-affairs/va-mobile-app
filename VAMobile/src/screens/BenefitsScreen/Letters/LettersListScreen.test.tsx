@@ -4,7 +4,7 @@ import React from 'react'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, mockNavProps, waitFor, render, RenderAPI } from 'testUtils'
-import { ErrorsState, initialAuthorizedServicesState, initialErrorsState, initializeErrorsByScreenID, initialLettersState, InitialState } from 'store/slices'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, initialLettersState, InitialState } from 'store/slices'
 import { APIError, LettersList } from 'store/api/types'
 import { LettersListScreen } from './index'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
@@ -130,10 +130,6 @@ context('LettersListScreen', () => {
 
     const storeVals = {
       ...InitialState,
-      authorizedServices: {
-        ...initialAuthorizedServicesState,
-        lettersAndDocuments: lettersAndDocuments,
-      },
       letters: { ...initialLettersState, loading },
     }
 

@@ -48,10 +48,6 @@ context('AppointmentsScreen', () => {
         ...InitialState,
         appointments,
         errors: errorsState,
-        authorizedServices: {
-          ...InitialState.authorizedServices,
-          appointments: appointmentsAuthorized,
-        },
       },
     })
 

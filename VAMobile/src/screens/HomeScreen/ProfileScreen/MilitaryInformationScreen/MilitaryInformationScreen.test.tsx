@@ -8,7 +8,6 @@ import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import MilitaryInformationScreen from './index'
 import {
   ErrorsState,
-  initialAuthorizedServicesState,
   initialAuthState,
   initialErrorsState,
   initializeErrorsByScreenID,
@@ -52,10 +51,6 @@ context('MilitaryInformationScreen', () => {
           mostRecentBranch: BranchesOfServiceConstants.MarineCorps,
           needDataLoad: needsDataLoad,
         } as MilitaryServiceState,
-        authorizedServices: {
-          ...initialAuthorizedServicesState,
-          militaryServiceHistory: true,
-        },
         errors: errorsState,
       },
     })
@@ -138,10 +133,6 @@ context('MilitaryInformationScreen', () => {
             serviceHistory: [],
             mostRecentBranch: BranchesOfServiceConstants.MarineCorps,
           },
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: true,
-          },
         },
       })
 
@@ -163,10 +154,6 @@ context('MilitaryInformationScreen', () => {
             serviceHistory: [{} as ServiceData],
             mostRecentBranch: BranchesOfServiceConstants.MarineCorps,
           },
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: false,
-          },
         },
       })
 
@@ -186,10 +173,6 @@ context('MilitaryInformationScreen', () => {
             ...initialMilitaryServiceState,
             serviceHistory: [{} as ServiceData],
             mostRecentBranch: BranchesOfServiceConstants.MarineCorps,
-          },
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: true,
           },
         },
       })

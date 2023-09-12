@@ -288,10 +288,6 @@ context('PrescriptionHistory', () => {
             '2': 3,
           },
         },
-        authorizedServices: {
-          ...InitialState.authorizedServices,
-          prescriptions: true,
-        },
       },
     })
     testInstance = component.UNSAFE_root

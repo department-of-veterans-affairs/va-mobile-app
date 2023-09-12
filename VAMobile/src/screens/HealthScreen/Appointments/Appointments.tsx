@@ -7,7 +7,7 @@ import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, FooterButton } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
-import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
+import { AppointmentsState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -15,6 +15,7 @@ import { RootState } from 'store'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { featureEnabled } from 'utils/remoteConfig'
 import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
@@ -44,7 +45,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError, currentPageAppointmentsByYear } = useSelector<RootState, AppointmentsState>(
     (state) => state.appointments,
   )
-  const { appointments, scheduleAppointments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const hasCernerFacilities = useHasCernerFacilities()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
   const navigateToRequestAppointments = navigateTo('RequestAppointmentScreen')
@@ -76,7 +77,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, apptsNotInDowntime])
 
-  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || getUserAuthorizedServicesError) {
     return (
       <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
@@ -84,7 +85,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     )
   }
 
-  if (!appointments) {
+  if (!userAuthorizedServices?.appointments) {
     return (
       <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
         <NoMatchInRecords />
@@ -114,7 +115,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   }
 
   const onRequestAppointmentPress = () => {
-    scheduleAppointments ? navigateToRequestAppointments() : navigateToNoRequestAppointmentAccess()
+    userAuthorizedServices?.scheduleAppointments ? navigateToRequestAppointments() : navigateToNoRequestAppointmentAccess()
   }
   const requestAppointmentsFooter = featureEnabled('appointmentRequests') ? (
     <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />

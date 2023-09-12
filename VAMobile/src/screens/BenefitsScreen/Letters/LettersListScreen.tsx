@@ -3,7 +3,6 @@ import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { AuthorizedServicesState } from 'store/slices'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -14,6 +13,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { OnPressHandler, useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 import NoLettersScreen from './NoLettersScreen'
 
@@ -21,7 +21,7 @@ type LettersListScreenProps = StackScreenProps<BenefitsStackParamList, 'LettersL
 
 const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-  const { lettersAndDocuments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const { letters, loading } = useSelector<RootState, LettersState>((state) => state.letters)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -102,12 +102,12 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   })
 
   useEffect(() => {
-    if (lettersAndDocuments && lettersNotInDowntime) {
+    if (userAuthorizedServices?.lettersAndDocuments && lettersNotInDowntime) {
       dispatch(getLetters(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
     }
-  }, [dispatch, lettersAndDocuments, lettersNotInDowntime])
+  }, [dispatch, userAuthorizedServices, lettersNotInDowntime])
 
-  if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID) || getUserAuthorizedServicesError) {
     return (
       <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.viewLetters')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
@@ -115,7 +115,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
     )
   }
 
-  if (loading) {
+  if (loading || loadingUserAuthorizedServices) {
     return (
       <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.viewLetters')}>
         <LoadingComponent text={t('letters.list.loading')} />
@@ -123,7 +123,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
     )
   }
 
-  if (!lettersAndDocuments || !letters || letters.length === 0) {
+  if (!userAuthorizedServices?.lettersAndDocuments || !letters || letters.length === 0) {
     return (
       <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.viewLetters')}>
         <NoLettersScreen />

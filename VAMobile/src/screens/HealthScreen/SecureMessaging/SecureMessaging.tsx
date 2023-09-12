@@ -1,9 +1,8 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 import _ from 'underscore'
 
-import { AuthorizedServicesState } from 'store/slices'
 import { Box, ErrorComponent, FeatureLandingTemplate, SegmentedControl } from 'components'
 import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
@@ -15,6 +14,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 import CernerAlertSM from './CernerAlertSM/CernerAlertSM'
 import Folders from './Folders/Folders'
@@ -37,7 +37,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   const inboxUnreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { folders, secureMessagingTab, termsAndConditionError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-  const { secureMessaging } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { data: userAuthorizedServices } = useAuthorizedServices()
 
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
 
@@ -47,7 +47,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
-    if (secureMessaging && smNotInDowntime) {
+    if (userAuthorizedServices?.secureMessaging && smNotInDowntime) {
       dispatch(resetSaveDraftComplete())
       dispatch(resetSaveDraftFailed())
       // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag
@@ -60,7 +60,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
       // fetch folders list
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
     }
-  }, [dispatch, secureMessaging, navigation, secureMessagingTab, smNotInDowntime])
+  }, [dispatch, userAuthorizedServices, navigation, secureMessagingTab, smNotInDowntime])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
     return (
@@ -70,7 +70,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
     )
   }
 
-  if (!secureMessaging) {
+  if (!userAuthorizedServices?.secureMessaging) {
     return (
       <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
         <NotEnrolledSM />
@@ -84,11 +84,6 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
         <TermsAndConditions />
       </FeatureLandingTemplate>
     )
-  }
-
-  const serviceErrorAlert = (): ReactElement => {
-    // TODO error alert from state
-    return <></>
   }
 
   const onTabUpdate = (selection: string): void => {
@@ -120,7 +115,6 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
           />
         </Box>
         <CernerAlertSM />
-        {serviceErrorAlert()}
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
           {secureMessagingTab === SecureMessagingTabTypesConstants.INBOX && <Inbox />}
           {secureMessagingTab === SecureMessagingTabTypesConstants.FOLDERS && <Folders />}

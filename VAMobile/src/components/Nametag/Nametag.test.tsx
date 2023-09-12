@@ -5,7 +5,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 
 import { context, render, RenderAPI } from 'testUtils'
 import Nametag from './Nametag'
-import { initialAuthorizedServicesState, InitialState } from 'store/slices'
+import { InitialState } from 'store/slices'
 import { TextView, VAIcon } from 'components'
 import { ServiceData } from 'store/api/types'
 
@@ -61,10 +61,6 @@ context('Nametag', () => {
           ...InitialState.militaryService,
           mostRecentBranch: mostRecentBranch || 'United States Air Force',
           serviceHistory: [{} as ServiceData],
-        },
-        authorizedServices: {
-          ...initialAuthorizedServicesState,
-          militaryServiceHistory: true,
         },
         disabilityRating: {
           ...InitialState.disabilityRating,
@@ -132,10 +128,6 @@ context('Nametag', () => {
             ...InitialState.militaryService,
             serviceHistory: [],
           },
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: true,
-          },
         },
       })
 
@@ -150,10 +142,6 @@ context('Nametag', () => {
       component = render(<Nametag />, {
         preloadedState: {
           ...InitialState,
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: false,
-          },
         },
       })
 

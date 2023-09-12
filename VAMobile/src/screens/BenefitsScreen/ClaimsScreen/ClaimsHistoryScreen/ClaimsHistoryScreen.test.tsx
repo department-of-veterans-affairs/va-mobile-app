@@ -8,7 +8,6 @@ import { SegmentedControl } from '@department-of-veterans-affairs/mobile-compone
 import {
   ClaimsAndAppealsState,
   ErrorsState,
-  initialAuthorizedServicesState,
   initialClaimsAndAppealsState,
   initialErrorsState,
   initializeErrorsByScreenID,
@@ -163,11 +162,6 @@ context('ClaimsHistoryScreen', () => {
       },
       claimsAndAppeals,
       errors: errorsState,
-      authorizedServices: {
-        ...initialAuthorizedServicesState,
-        claims: true,
-        appeals: true,
-      },
     }
 
     const props = mockNavProps()
@@ -256,11 +250,6 @@ context('ClaimsHistoryScreen', () => {
         preloadedState: {
           ...InitialState,
           errors: errorState,
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            claims: false,
-            appeals: false,
-          },
           personalInformation: {
             ...InitialState.personalInformation,
             needsDataLoad: false,
@@ -285,11 +274,6 @@ context('ClaimsHistoryScreen', () => {
         preloadedState: {
           ...InitialState,
           errors: errorState,
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            claims: false,
-            appeals: false,
-          },
           personalInformation: {
             ...InitialState.personalInformation,
             needsDataLoad: false,
@@ -311,11 +295,6 @@ context('ClaimsHistoryScreen', () => {
       component = render(<ClaimsHistoryScreen {...props} />, {
         preloadedState: {
           ...InitialState,
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            claims: false,
-            appeals: true,
-          },
         },
       })
 
@@ -334,11 +313,6 @@ context('ClaimsHistoryScreen', () => {
       component = render(<ClaimsHistoryScreen {...props} />, {
         preloadedState: {
           ...InitialState,
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            claims: true,
-            appeals: false,
-          },
         },
       })
 
@@ -358,11 +332,6 @@ context('ClaimsHistoryScreen', () => {
         component = render(<ClaimsHistoryScreen {...props} />, {
           preloadedState: {
             ...InitialState,
-            authorizedServices: {
-              ...initialAuthorizedServicesState,
-              claims: false,
-              appeals: false,
-            },
           },
         })
       })

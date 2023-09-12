@@ -8,7 +8,7 @@ import { screen, fireEvent } from '@testing-library/react-native'
 import * as api from 'store/api'
 import { context, mockNavProps, render, RenderAPI, waitFor, when } from 'testUtils'
 import SecureMessaging from './SecureMessaging'
-import { updateSecureMessagingTab, initialAuthorizedServicesState, InitialState } from 'store/slices'
+import { updateSecureMessagingTab, InitialState } from 'store/slices'
 import { TouchableOpacity } from 'react-native'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { ErrorComponent } from 'components/CommonErrorComponents'
@@ -38,10 +38,6 @@ context('SecureMessaging', () => {
     component = render(<SecureMessaging {...props} />, {
       preloadedState: {
         ...InitialState,
-        authorizedServices: {
-          ...initialAuthorizedServicesState,
-          secureMessaging: authorizedSM,
-        },
       },
     })
 

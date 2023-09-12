@@ -15,7 +15,6 @@ import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
 import appointmentsReducer from 'store/slices/appointmentsSlice'
 import authReducer from 'store/slices/authSlice'
-import authorizedServicesReducer from 'store/slices/authorizedServicesSlice'
 import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
 import demoReducer from 'store/slices/demoSlice'
 import directDepositReducer from 'store/slices/directDepositSlice'
@@ -136,7 +135,6 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       accessibility: accessabilityReducer,
       demo: demoReducer,
       personalInformation: personalInformationReducer,
-      authorizedServices: authorizedServicesReducer,
       errors: errorReducer,
       analytics: analyticsReducer,
       appointments: appointmentsReducer,

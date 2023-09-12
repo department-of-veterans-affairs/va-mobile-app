@@ -36,7 +36,6 @@ export const ActionTypes: {
   PERSONAL_INFORMATION_FINISH_SAVE_PHONE_NUMBER: 'personalInformation/dispatchFinishSavePhoneNumber',
   PERSONAL_INFORMATION_START_GET_INFO: 'personalInformation/dispatchStartGetProfileInfo',
   PERSONAL_INFORMATION_FINISH_GET_INFO: 'personalInformation/dispatchFinishGetProfileInfo',
-  AUTHORIZED_SERVICES_UPDATE: 'authorizedServices/dispatchUpdateAuthorizedServices',
   CERNER_UPDATE: 'patient/dispatchUpdateCerner',
   PERSONAL_INFORMATION_START_SAVE_EMAIL: 'personalInformation/dispatchStartSaveEmail',
   PERSONAL_INFORMATION_FINISH_SAVE_EMAIL: 'personalInformation/dispatchFinishSaveEmail',
@@ -333,76 +332,6 @@ context('personalInformation', () => {
       expect(personalInformation.error).toBeFalsy()
     })
 
-    it('should get authorizedServices information', async () => {
-      const mockAuthorizedServicesPayload = {
-        data: {
-          attributes: {
-            profile: {},
-            authorizedServices: ['directDepositBenefits'],
-          },
-        },
-      }
-
-      when(api.get as jest.Mock)
-        .calledWith('/v1/user')
-        .mockResolvedValue(mockAuthorizedServicesPayload)
-
-      const store = realStore()
-      await store.dispatch(getProfileInfo())
-      const actions = store.getActions()
-
-      const updateAction = _.find(actions, { type: ActionTypes.AUTHORIZED_SERVICES_UPDATE })
-      expect(updateAction).toBeTruthy()
-
-      const { authorizedServices } = store.getState()
-      expect(authorizedServices.directDepositBenefits).toBeTruthy()
-      expect(authorizedServices.error).toBeFalsy()
-    })
-
-    it('should get health information', async () => {
-      const mockFacilities = [
-        {
-          facilityId: '1',
-          isCerner: true,
-          facilityName: 'Test Veterans Outpatient Clinic',
-        },
-        {
-          facilityId: '2',
-          isCerner: false,
-          facilityName: '',
-        },
-      ]
-      const mockHealthPayload = {
-        data: {
-          attributes: {
-            profile: {},
-            authorizedServices: [],
-            health: {
-              facilities: mockFacilities,
-              isCernerPatient: true,
-            },
-          },
-        },
-      }
-
-      when(api.get as jest.Mock)
-        .calledWith('/v1/user')
-        .mockResolvedValue(mockHealthPayload)
-
-      const store = realStore()
-      await store.dispatch(getProfileInfo())
-      const actions = store.getActions()
-
-      const updateAction = _.find(actions, { type: ActionTypes.CERNER_UPDATE })
-      expect(updateAction).toBeTruthy()
-
-      const { error, cernerFacilities, isCernerPatient, facilities } = store.getState().patient
-      expect(isCernerPatient).toBeTruthy()
-      expect(cernerFacilities).toEqual([mockFacilities[0]])
-      expect(facilities).toEqual(mockFacilities)
-      expect(error).toBeFalsy()
-    })
-
     it('should get errors if userProfileData is not received', async () => {
       const error = new Error('error from backend')
 
@@ -424,13 +353,6 @@ context('personalInformation', () => {
       const { personalInformation } = store.getState()
       expect(personalInformation.profile).toBeFalsy()
       expect(personalInformation.error).toBeTruthy()
-
-      const updateAuthorizedServicesAction = _.find(actions, { type: ActionTypes.AUTHORIZED_SERVICES_UPDATE })
-      expect(updateAuthorizedServicesAction).toBeTruthy()
-
-      const { authorizedServices } = store.getState()
-      expect(authorizedServices.directDepositBenefits).toBeFalsy()
-      expect(authorizedServices.error).toBeTruthy()
     })
   })
 
