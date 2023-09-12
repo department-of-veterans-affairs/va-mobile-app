@@ -150,6 +150,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
     backgroundColor: bannerDivider ? 'largePanelHeader' : 'main',
     borderBottomWidth: bannerDivider ? theme.dimensions.borderWidth : 0,
     borderBottomColor: 'menuDivider',
+    mb: bannerDivider ? theme.dimensions.standardMarginBetween : 0,
   }
 
   const commonBoxProps: BoxProps = {
