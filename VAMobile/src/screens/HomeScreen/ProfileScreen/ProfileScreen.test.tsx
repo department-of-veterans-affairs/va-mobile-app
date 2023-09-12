@@ -31,6 +31,7 @@ jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({
+      status: "success",
       data: {
         appeals: true,
         appointments: true,
@@ -50,6 +51,7 @@ jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
         userProfileUpdate: false
       }
     }).mockReturnValueOnce({
+      status: "success",
       data: {
         appeals: true,
         appointments: true,

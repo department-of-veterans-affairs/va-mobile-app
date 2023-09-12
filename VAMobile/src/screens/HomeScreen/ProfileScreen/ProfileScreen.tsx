@@ -62,7 +62,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, militaryHistoryNeedsUpdate, userAuthorizedServices, mhNotInDowntime])
 
-  //Todo, Change ContactInformation navigate To to the contact information screen when it is created in the next ticket
   const getProfileButtons = (): ReactElement => {
     if (userAuthorizedServices?.userProfileUpdate) {
       return (
