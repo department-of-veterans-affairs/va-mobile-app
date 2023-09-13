@@ -17,6 +17,54 @@ import * as api from 'store/api'
 
 let mockNavigationSpy = jest.fn()
 
+jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
+  let original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
+  return {
+    ...original,
+    useAuthorizedServices: jest.fn().mockReturnValue({
+      status: "success",
+      data: {
+        appeals: true,
+        appointments: true,
+        claims: true,
+        decisionLetters: true,
+        directDepositBenefits: true,
+        directDepositBenefitsUpdate: true,
+        disabilityRating: true,
+        genderIdentity: true,
+        lettersAndDocuments: true,
+        militaryServiceHistory: true,
+        paymentHistory: true,
+        preferredName: true,
+        prescriptions: true,
+        scheduleAppointments: true,
+        secureMessaging: true,
+        userProfileUpdate: true
+      }
+    }).mockReturnValueOnce({
+      status: "success",
+      data: {
+        appeals: true,
+        appointments: true,
+        claims: true,
+        decisionLetters: true,
+        directDepositBenefits: true,
+        directDepositBenefitsUpdate: true,
+        disabilityRating: true,
+        genderIdentity: true,
+        lettersAndDocuments: false,
+        militaryServiceHistory: true,
+        paymentHistory: true,
+        preferredName: true,
+        prescriptions: true,
+        scheduleAppointments: true,
+        secureMessaging: true,
+        userProfileUpdate: true
+      }
+    })
+  }
+})
+
 jest.mock('store/slices/', () => {
   let actual = jest.requireActual('store/slices')
   let letters = jest.requireActual('store/slices').initialLettersState
@@ -148,6 +196,15 @@ context('LettersListScreen', () => {
     testInstance = component.UNSAFE_root
   }
 
+  describe('when lettersAndDocuments is set to false', () => {
+    it('should show noLettersScreen', async () => {
+      await waitFor(() => {
+        initializeTestInstance(lettersData, false, false, false)
+        expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+      })
+    })
+  })
+
   it('initializes correctly', async () => {
     await waitFor(() => {
       initializeTestInstance(lettersData)
@@ -277,15 +334,6 @@ context('LettersListScreen', () => {
       })
 
       expect(mockNavigateToServiceVerificationLetterSpy).toHaveBeenCalled()
-    })
-  })
-
-  describe('when lettersAndDocuments is set to false', () => {
-    it('should show noLettersScreen', async () => {
-      await waitFor(() => {
-        initializeTestInstance(lettersData, false, false, false)
-        expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
-      })
     })
   })
 
