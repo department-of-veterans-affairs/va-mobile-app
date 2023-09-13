@@ -934,6 +934,7 @@
   "militaryInformation.incorrectServiceInfo.bodyA11yLabel.2": "If the military service information in your profile doesn’t look right, please call the Defense Manpower Data Center (D-M-D-C). They’ll work with you to update your information in D-E-E-R-S.",
   "militaryInformation.incorrectServiceInfo.bodyA11yLabel.3": "To reach the D-M-D-C, call Monday through Friday (except federal holidays), 8:00 a.m. to 8:00 p.m. Eastern Time.",
   "militaryInformation.incorrectServiceInfo.header": "What if my military service information doesn't look right page",
+  "militaryInformation.loading": "Loading your military information...",
   "militaryInformation.noMilitaryInfoAccess.body": "We're sorry. We can't access your military service records. If you think you should be able to review your service information here, please file a request to change or correct your DD214 or other military records.",
   "militaryInformation.noMilitaryInfoAccess.body.a11yLabel": "We're sorry. We can't access your military service records. If you think you should be able to review your service information here, please file a request to change or correct your D-D 2 1 4 or other military records.",
   "militaryInformation.noMilitaryInfoAccess.title": "We can't access your military information",

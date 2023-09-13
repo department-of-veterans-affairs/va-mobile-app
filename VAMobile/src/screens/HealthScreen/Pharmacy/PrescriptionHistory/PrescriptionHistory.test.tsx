@@ -1,14 +1,11 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { render, context, RenderAPI, waitFor, findByTypeWithText, mockNavProps } from 'testUtils'
 
+import { render, context, mockNavProps } from 'testUtils'
+import { screen } from '@testing-library/react-native'
 import PrescriptionHistory from './PrescriptionHistory'
-import { ReactTestInstance } from 'react-test-renderer'
-
 import { PrescriptionHistoryTabs, PrescriptionsGetData } from 'store/api'
-import { initialAuthState, initialPrescriptionState, InitialState } from 'store/slices'
-import { VAButton, TextView } from 'components'
+import { initialAuthState, initialPrescriptionState } from 'store/slices'
 import { PrescriptionHistoryTabConstants } from 'store/api/types'
 
 
@@ -260,9 +257,6 @@ const prescriptionData: PrescriptionsGetData = {
 }
 
 context('PrescriptionHistory', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
   const initializeTestInstance = (includeTransferred = false, startingTab?: PrescriptionHistoryTabs) => {
     const props = mockNavProps(
       undefined,
@@ -275,7 +269,7 @@ context('PrescriptionHistory', () => {
 
     const data = prescriptionData.data
 
-    component = render(<PrescriptionHistory {...props} />, {
+    render(<PrescriptionHistory {...props} />, {
       preloadedState: {
         auth: { ...initialAuthState },
         prescriptions: {
@@ -320,67 +314,33 @@ context('PrescriptionHistory', () => {
         },
       },
     })
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-    })
-  })
-
-  describe('when showing the list', () => {
-    it('should show the names and instructions of prescriptions', async () => {
-      await waitFor(() => {
-        initializeTestInstance()
-      })
-
-      expect(findByTypeWithText(testInstance, TextView, 'ACETAMINOPHEN 160MG/5ML ALC-F LIQUID')).toBeTruthy()
-      expect(
-        findByTypeWithText(testInstance, TextView, 'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY'),
-      ).toBeTruthy()
-
-      expect(findByTypeWithText(testInstance, TextView, 'ACETAMINOPHEN 325MG TAB')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy()
+  describe('Initializes correctly', () => {
+    it('should show the names and instructions of prescriptions and StartRefillRequest button', async () => {
+      expect(screen.getByText('ACETAMINOPHEN 160MG/5ML ALC-F LIQUID')).toBeTruthy()
+      expect(screen.getByText('TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY')).toBeTruthy()
+      expect(screen.getByText('ACETAMINOPHEN 325MG TAB')).toBeTruthy()
+      expect(screen.getByText('TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy()
+      expect(screen.getByText('Start refill request')).toBeTruthy()
+      expect(screen.queryByText("We can't refill some of your prescriptions in the app")).toBeFalsy()
     })
   })
 
   describe('when there is a transferred prescription', () => {
     it('should show the alert for transferred prescriptions', async () => {
-      await waitFor(() => {
-        initializeTestInstance(true)
-      })
-
-      expect(findByTypeWithText(testInstance, TextView, "We can't refill some of your prescriptions in the app")).toBeTruthy()
+      initializeTestInstance(true)
+      expect(screen.getByText("We can't refill some of your prescriptions in the app")).toBeTruthy()
     })
   })
-
-  describe('StartRefillRequestButton', () => {
-    describe('when currentTab is PrescriptionHistoryTabConstants.ALL', () => {
-      it('should show StartRefillRequest button', async () => {
-        await waitFor(() => {
-          initializeTestInstance()
-        })
-        const vaButtons = testInstance.findAllByType(VAButton)
-        // [0] and [1] are Apply buttons from the sort and filter
-        expect(vaButtons.length).toEqual(1)
-        expect(vaButtons[0].props.label).toEqual('Start refill request')
-      })
-    })
-
-    describe('when currentTab is not PrescriptionHistoryTabConstants.ALL', () => {
-      it('should not show StartRefillRequest button', async () => {
-        await waitFor(() => {
-          initializeTestInstance(false, PrescriptionHistoryTabConstants.TRACKING)
-        })
-
-        const vaButtons = testInstance.findAllByType(VAButton)
-        expect(vaButtons.length).toEqual(0)
-      })
+  describe('when currentTab is not PrescriptionHistoryTabConstants.ALL', () => {
+    it('should not show StartRefillRequest button', async () => {
+      initializeTestInstance(false, PrescriptionHistoryTabConstants.TRACKING)
+      expect(screen.queryByText('Start refill request')).toBeFalsy()
     })
   })
 })

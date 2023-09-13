@@ -78,7 +78,7 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')}>
       {loading || loadingUserAuthorizedServices ? (
-        <LoadingComponent />
+        <LoadingComponent text={t('militaryInformation.loading')} />
       ) : !userAuthorizedServices?.militaryServiceHistory || serviceHistory.length < 1 ? (
         <NoMilitaryInformationAccess />
       ) : (

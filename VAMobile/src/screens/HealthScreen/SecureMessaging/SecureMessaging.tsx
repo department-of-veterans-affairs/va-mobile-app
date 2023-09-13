@@ -37,7 +37,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   const inboxUnreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { folders, secureMessagingTab, termsAndConditionError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
 
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
 
@@ -62,7 +62,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
     }
   }, [dispatch, userAuthorizedServices, navigation, secureMessagingTab, smNotInDowntime])
 
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID) || getUserAuthorizedServicesError) {
     return (
       <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />

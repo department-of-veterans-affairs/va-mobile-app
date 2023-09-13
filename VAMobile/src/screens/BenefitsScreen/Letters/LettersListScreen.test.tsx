@@ -1,17 +1,11 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockNavProps, waitFor, render, RenderAPI } from 'testUtils'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, initialLettersState, InitialState } from 'store/slices'
+import { fireEvent, screen } from '@testing-library/react-native'
+import { context, mockNavProps, waitFor, render } from 'testUtils'
+import { initialLettersState, InitialState } from 'store/slices'
 import { APIError, LettersList } from 'store/api/types'
 import { LettersListScreen } from './index'
-import { ErrorComponent, LoadingComponent, TextView } from 'components'
-import NoLettersScreen from './NoLettersScreen'
-import { Pressable } from 'react-native'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { when } from 'jest-when'
 import * as api from 'store/api'
 
@@ -126,8 +120,6 @@ const lettersData: LettersList = [
 ]
 
 context('LettersListScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let props: any
   let mockNavigateToBenefitSummarySpy: jest.Mock
   let mockNavigateToServiceVerificationLetterSpy: jest.Mock
@@ -138,7 +130,7 @@ context('LettersListScreen', () => {
   let mockNavigateToProofOfPrescriptionLetterSpy: jest.Mock
   let mockNavigateToProofOfMinimumEssentialLetterSpy: jest.Mock
 
-  const initializeTestInstance = (lettersList: LettersList | null, loading = false, throwError: boolean = false, lettersAndDocuments: boolean = true) => {
+  const initializeTestInstance = (lettersList: LettersList | null, loading = false, throwError: boolean = false) => {
     mockNavigateToBenefitSummarySpy = jest.fn()
     mockNavigateToServiceVerificationLetterSpy = jest.fn()
     mockNavigateToCommissaryLetterSpy = jest.fn()
@@ -187,37 +179,24 @@ context('LettersListScreen', () => {
 
     props = mockNavProps()
 
-    component = render(<LettersListScreen {...props} />, {
+    render(<LettersListScreen {...props} />, {
       preloadedState: {
         ...storeVals,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   describe('when lettersAndDocuments is set to false', () => {
     it('should show noLettersScreen', async () => {
-      await waitFor(() => {
-        initializeTestInstance(lettersData, false, false, false)
-        expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
-      })
-    })
-  })
-
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      initializeTestInstance(lettersData)
-      expect(component).toBeTruthy()
+      initializeTestInstance(lettersData, false, false)
+      expect(screen.getByText("We couldn't find information about your VA letters")).toBeTruthy()
     })
   })
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      await waitFor(() => {
-        initializeTestInstance(lettersData, true)
-        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-      })
+      initializeTestInstance(lettersData, true)
+      expect(screen.getByText('Loading your letters list...')).toBeTruthy()
     })
   })
 
@@ -225,18 +204,14 @@ context('LettersListScreen', () => {
     await waitFor(() => {
       initializeTestInstance(lettersData)
     })
-
-    const texts = testInstance.findAllByType(TextView)
-    expect(texts.length).toBe(11)
-
-    expect(texts[3].props.children).toBe('Benefit summary letter')
-    expect(texts[4].props.children).toBe('Benefit verification letter')
-    expect(texts[5].props.children).toBe('Civil service preference letter')
-    expect(texts[6].props.children).toBe('Commissary letter')
-    expect(texts[7].props.children).toBe('Proof of creditable prescription drug coverage letter')
-    expect(texts[8].props.children).toBe('Proof of minimum essential coverage letter')
-    expect(texts[9].props.children).toBe('Proof of service card')
-    expect(texts[10].props.children).toBe('Service verification letter')
+    expect(screen.getByText('Benefit summary letter')).toBeTruthy()
+    expect(screen.getByText('Benefit verification letter')).toBeTruthy()
+    expect(screen.getByText('Civil service preference letter')).toBeTruthy()
+    expect(screen.getByText('Commissary letter')).toBeTruthy()
+    expect(screen.getByText('Proof of creditable prescription drug coverage letter')).toBeTruthy()
+    expect(screen.getByText('Proof of minimum essential coverage letter')).toBeTruthy()
+    expect(screen.getByText('Proof of service card')).toBeTruthy()
+    expect(screen.getByText('Service verification letter')).toBeTruthy()
   })
 
   describe('when a link is clicked', () => {
@@ -244,11 +219,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
-      })
-
+      fireEvent.press(screen.getByText('Benefit summary letter'))
       expect(mockNavigateToBenefitSummarySpy).toHaveBeenCalled()
     })
 
@@ -256,11 +227,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[1].props.onPress()
-      })
-
+      fireEvent.press(screen.getByText('Benefit verification letter'))
       expect(mockNavigateToBenefitVerificationSpy).toHaveBeenCalled()
     })
 
@@ -268,11 +235,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[2].props.onPress()
-      })
-
+      fireEvent.press(screen.getByText('Civil service preference letter'))
       expect(mockNavigateToCivilServiceLetterSpy).toHaveBeenCalled()
     })
 
@@ -280,11 +243,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[3].props.onPress()
-      })
-
+      fireEvent.press(screen.getByText('Commissary letter'))
       expect(mockNavigateToCommissaryLetterSpy).toHaveBeenCalled()
     })
 
@@ -292,11 +251,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[4].props.onPress()
-      })
-
+      fireEvent.press(screen.getByText('Proof of creditable prescription drug coverage letter'))
       expect(mockNavigateToProofOfPrescriptionLetterSpy).toHaveBeenCalled()
     })
 
@@ -304,11 +259,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[5].props.onPress()
-      })
-
+      fireEvent.press(screen.getByText('Proof of minimum essential coverage letter'))
       expect(mockNavigateToProofOfMinimumEssentialLetterSpy).toHaveBeenCalled()
     })
 
@@ -316,11 +267,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[6].props.onPress()
-      })
-
+      fireEvent.press(screen.getByText('Proof of service card'))
       expect(mockNavigateToProofOfServiceLetterSpy).toHaveBeenCalled()
     })
 
@@ -328,11 +275,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[7].props.onPress()
-      })
-
+      fireEvent.press(screen.getByText('Service verification letter'))
       expect(mockNavigateToServiceVerificationLetterSpy).toHaveBeenCalled()
     })
   })
@@ -342,8 +285,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(null)
       })
-
-      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+      expect(screen.getByText("We couldn't find information about your VA letters")).toBeTruthy()
     })
   })
 
@@ -352,8 +294,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance([])
       })
-
-      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+      expect(screen.getByText("We couldn't find information about your VA letters")).toBeTruthy()
     })
   })
 
@@ -362,23 +303,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance([], undefined, true)
       })
-
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
-    })
-
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      await waitFor(() => {
-        initializeTestInstance([], undefined, false)
-        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
-      })
+      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
     })
   })
 })

@@ -1,18 +1,12 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
-import { screen, fireEvent } from '@testing-library/react-native'
 
+import { screen, fireEvent } from '@testing-library/react-native'
 import * as api from 'store/api'
-import { context, mockNavProps, render, RenderAPI, waitFor, when } from 'testUtils'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import SecureMessaging from './SecureMessaging'
-import { updateSecureMessagingTab, InitialState } from 'store/slices'
-import { TouchableOpacity } from 'react-native'
+import { updateSecureMessagingTab } from 'store/slices'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import { ErrorComponent } from 'components/CommonErrorComponents'
-import NotEnrolledSM from './NotEnrolledSM/NotEnrolledSM'
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
@@ -27,40 +21,66 @@ jest.mock('store/slices', () => {
   }
 })
 
-context('SecureMessaging', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let props: any
-
-  const initializeTestInstance = (authorizedSM = true) => {
-    props = mockNavProps()
-
-    component = render(<SecureMessaging {...props} />, {
-      preloadedState: {
-        ...InitialState,
-      },
+jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
+  let original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
+  return {
+    ...original,
+    useAuthorizedServices: jest.fn().mockReturnValue({
+      status: "success",
+      data: {
+        appeals: true,
+        appointments: true,
+        claims: true,
+        decisionLetters: true,
+        directDepositBenefits: true,
+        directDepositBenefitsUpdate: true,
+        disabilityRating: true,
+        genderIdentity: true,
+        lettersAndDocuments: true,
+        militaryServiceHistory: true,
+        paymentHistory: true,
+        preferredName: true,
+        prescriptions: true,
+        scheduleAppointments: true,
+        secureMessaging: true,
+        userProfileUpdate: true
+      }
+    }).mockReturnValueOnce({
+      status: "success",
+      data: {
+        appeals: true,
+        appointments: true,
+        claims: true,
+        decisionLetters: true,
+        directDepositBenefits: true,
+        directDepositBenefitsUpdate: true,
+        disabilityRating: true,
+        genderIdentity: true,
+        lettersAndDocuments: true,
+        militaryServiceHistory: true,
+        paymentHistory: true,
+        preferredName: true,
+        prescriptions: true,
+        scheduleAppointments: true,
+        secureMessaging: false,
+        userProfileUpdate: true
+      }
     })
+  }
+})
 
-    testInstance = component.UNSAFE_root
+context('SecureMessaging', () => {
+  const initializeTestInstance = () => {
+    render(<SecureMessaging {...mockNavProps()} />)
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-    })
-  })
-
   describe('when user is not authorized for secure messaging', () => {
     it('should display NotEnrolledSM component', async () => {
-      await waitFor(() => {
-        initializeTestInstance(false)
-      })
-
-      expect(testInstance.findAllByType(NotEnrolledSM).length).toEqual(1)
+      expect(screen.getByText("You're not currently enrolled to use Secure Messaging")).toBeTruthy()
     })
   })
 
@@ -75,8 +95,7 @@ context('SecureMessaging', () => {
       await waitFor(() => {
         initializeTestInstance()
       })
-
-      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
     })
   })
 
@@ -91,19 +110,15 @@ context('SecureMessaging', () => {
       await waitFor(() => {
         initializeTestInstance()
       })
-
-      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
-      expect(testInstance.findByProps({ phone: '877-327-0022' })).toBeTruthy()
+      expect(screen.getByText("We're sorry. Something went wrong on our end. Please refresh this screen or try again later.")).toBeTruthy()
+      expect(screen.getByText('877-327-0022')).toBeTruthy()
     })
   })
 
   describe('on click of a segmented control tab', () => {
     it('should call updateSecureMessagingTab', async () => {
-      await waitFor(() => {
-        initializeTestInstance()
-        fireEvent.press(screen.getByText('Folders'))
-      })
-
+      initializeTestInstance()
+      fireEvent.press(screen.getByText('Folders'))
       expect(updateSecureMessagingTab).toHaveBeenCalled()
     })
   })
