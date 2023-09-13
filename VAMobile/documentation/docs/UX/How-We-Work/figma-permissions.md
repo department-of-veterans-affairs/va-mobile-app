@@ -150,7 +150,7 @@ All of our Figma files are set so “**anyone with the link can view**.” If yo
 ### Setting permissions for projects and files
 * For **projects**, set the Owner as the UX Lead. Then, set the share settings so “Members of VA Mobile App can edit.”
 * For **shipped files**, set the Owner as the UX Lead. Then, set the share settings so “Anyone with the link can view.” Members of the VA Mobile App will still be able to edit.
-* For **working files**, set the Owner as the UX Librarian. Then, set the share settings so “Anyone with the link can view.” Members of the VA Mobile App will still be able to edit.
+* For **working files**, set the Owner as the Design Librarian. Then, set the share settings so “Anyone with the link can view.” Members of the VA Mobile App will still be able to edit.
 
 
 #### Project and file permissions by role
@@ -250,8 +250,7 @@ All of our Figma files are set so “**anyone with the link can view**.” If yo
 
 
 ### Setting permissions for libraries
-* For **01 Design Libraries project**, set the Owner as the UX Lead and add the UX Librarian as an editor. Then, set the share settings so “Members of VA Mobile App can view.”
-    * To change the Design Librarian, follow the onboarding/offboarding steps in the [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian/#onboarding--offboarding) documentation.
+* For **01 Design Libraries project**, set the Owner as the UX Lead and add the Design Librarian as an editor. Then, set the share settings so “Members of VA Mobile App can view.”
 * For **library files**, set the Owner as the UX Lead. Then, set the share settings so “Anyone at Ad Hoc with the link can view.”
 
 
