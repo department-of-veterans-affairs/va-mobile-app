@@ -14,7 +14,7 @@ import { useRouteNavigation } from 'utils/hooks'
 type CCClosestCityScreen = StackScreenProps<AppointmentFlowModalStackParamList, 'CCClosestCityScreen'>
 
 const CCClosestCityScreen: FC<CCClosestCityScreen> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { userFacilities, ccSupportedFacilities } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
   const navigateTo = useRouteNavigation()
   const [selectedCity, onChangeSelectedCity] = useState<string>()

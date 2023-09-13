@@ -10,20 +10,19 @@ import getEnv from 'utils/env'
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
 
 const NotEnrolledSM: FC = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
   const theme = useTheme()
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
   const bulletOne = {
     text: t('notEnrolledSM.youAreEnrolled'),
-    boldedText: ' ' + tc('and'),
+    boldedText: ' ' + t('and'),
     a11yLabel: t('notEnrolledSM.youAreEnrolled.a11yLabel'),
   }
   const bulletTwo = {
     text: t('notEnrolledSM.youAreRegistered'),
-    boldedText: ' ' + tc('and'),
+    boldedText: ' ' + t('and'),
     a11yLabel: t('notEnrolledSM.youAreRegistered.a11yLabel'),
   }
   const bulletThree = { text: t('notEnrolledSM.bothYouAndYour'), a11yLabel: t('notEnrolledSM.bothYouAndYour.a11yLabel') }
@@ -66,7 +65,7 @@ const NotEnrolledSM: FC = () => {
             </TextView>
             <Box>
               <TextView>
-                <TextView variant="MobileBodyBold">{tc('note') + ' '}</TextView>
+                <TextView variant="MobileBodyBold">{t('note') + ' '}</TextView>
                 <TextView variant="MobileBody">{t('secureMessaging.doNotUseSM')}</TextView>
               </TextView>
             </Box>

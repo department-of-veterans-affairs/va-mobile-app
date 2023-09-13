@@ -16,7 +16,7 @@ import { usePreferredLanguageList } from 'utils/requestAppointments'
 type CCPreferredLanguageScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'CCPreferredLanguageScreen'>
 
 const CCPreferredLanguageScreen: FC<CCPreferredLanguageScreenProps> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
@@ -42,7 +42,7 @@ const CCPreferredLanguageScreen: FC<CCPreferredLanguageScreenProps> = ({ navigat
   }
 
   const pickerProps: VAModalPickerProps = {
-    labelKey: 'health:requestAppointments.langPrefModalTitle',
+    labelKey: 'requestAppointments.langPrefModalTitle',
     selectedValue: preferredLanguage || '',
     onSelectionChange: setValuesOnPickerSelect,
     pickerOptions: getPickerOptions(),

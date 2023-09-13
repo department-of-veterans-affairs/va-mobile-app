@@ -23,6 +23,8 @@ export type FeatureToggleType =
   | 'haptics'
   | 'whatsNewUI'
   | 'decisionLettersWaygate'
+  | 'patientCheckIn'
+  | 'patientCheckInWaygate'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
@@ -34,6 +36,8 @@ type FeatureToggleValues = {
   haptics: boolean
   whatsNewUI: boolean
   decisionLettersWaygate: boolean
+  patientCheckIn: boolean
+  patientCheckInWaygate: boolean
 }
 
 export let devConfig: FeatureToggleValues = {
@@ -46,6 +50,8 @@ export let devConfig: FeatureToggleValues = {
   haptics: true,
   whatsNewUI: true,
   decisionLettersWaygate: true,
+  patientCheckIn: false,
+  patientCheckInWaygate: true,
 }
 
 export const productionDefaults: FeatureToggleValues = {
@@ -58,6 +64,8 @@ export const productionDefaults: FeatureToggleValues = {
   haptics: true,
   whatsNewUI: true,
   decisionLettersWaygate: true,
+  patientCheckIn: false,
+  patientCheckInWaygate: true,
 }
 
 /**

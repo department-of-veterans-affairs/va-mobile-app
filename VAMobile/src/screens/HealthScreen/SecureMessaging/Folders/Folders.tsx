@@ -37,13 +37,13 @@ const getListItemsForFolders = (
     const draftDisplay = folder.attributes.name === FolderNameTypeConstants.drafts && count > 0
     const nameOfFolder = name === FolderNameTypeConstants.deleted ? TRASH_FOLDER_NAME : name
     listItems.push({
-      text: `${t('common:text.raw', { text: nameOfFolder })}${draftDisplay ? ` (${count})` : ''}`,
+      text: `${t('text.raw', { text: nameOfFolder })}${draftDisplay ? ` (${count})` : ''}`,
       onPress: () => onFolderPress(folderId, nameOfFolder),
       a11yHintText: draftDisplay
         ? t('secureMessaging.folders.count.a11yHint', { count, folderName: nameOfFolder })
         : t('secureMessaging.foldersViewMessages.a11yHint', { folderName: nameOfFolder }),
-      a11yValue: t('common:listPosition', { position: index + 1, total: visibleFolders.length }),
-      testId: t('common:text.raw', { text: nameOfFolder }),
+      a11yValue: t('listPosition', { position: index + 1, total: visibleFolders.length }),
+      testId: t('text.raw', { text: nameOfFolder }),
     })
   })
 
@@ -99,7 +99,7 @@ export const getUserFolders = (
 type FoldersProps = Record<string, unknown>
 
 const Folders: FC<FoldersProps> = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { folders, loadingFolders } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)

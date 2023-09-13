@@ -43,10 +43,10 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     // Fetch the profile information
-    if (personalInformationNeedsUpdate && profileNotInDowntime) {
+    if (personalInformationNeedsUpdate && profileNotInDowntime && !personalInformationLoading) {
       dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
-  }, [dispatch, personalInformationNeedsUpdate, profileNotInDowntime])
+  }, [dispatch, personalInformationNeedsUpdate, profileNotInDowntime, personalInformationLoading])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
@@ -86,7 +86,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   // pass in optional onTryAgain because this screen needs to dispatch two actions for its loading sequence
   if (useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID)) {
     return (
-      <ChildTemplate title={t('profile.title')} backLabel={t('home')} backLabelOnPress={navigation.goBack}>
+      <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack}>
         <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
         <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
           <LargeNavButton
@@ -104,7 +104,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   if (militaryInformationLoading || personalInformationLoading) {
     return (
-      <ChildTemplate title={t('profile.title')} backLabel={t('home')} backLabelOnPress={navigation.goBack}>
+      <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack}>
         <NameTag />
         <LoadingComponent text={t('profile.loading')} />
       </ChildTemplate>
@@ -112,7 +112,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <ChildTemplate title={t('profile.title')} backLabel={t('home')} backLabelOnPress={navigation.goBack}>
+    <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack}>
       <NameTag />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         {getProfileButtons()}

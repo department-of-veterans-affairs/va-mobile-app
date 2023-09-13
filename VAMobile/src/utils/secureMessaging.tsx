@@ -44,7 +44,7 @@ export const getMessagesListItems = (
     const textLines: Array<InlineTextWithIconsProps> = [
       {
         leftTextProps: {
-          text: t('common:text.raw', {
+          text: t('text.raw', {
             text: `${isDraftsFolder ? t('secureMessaging.viewMessage.draftPrefix') : ''}${isOutbound ? stringToTitleCase(recipientName) : stringToTitleCase(senderName)}`,
           }),
           variant: 'MobileBodyBold',
@@ -52,14 +52,14 @@ export const getMessagesListItems = (
         },
         leftIconProps: unreadIconProps,
         rightTextProps: {
-          text: t('common:text.raw', { text: getFormattedMessageTime(sentDate) }),
+          text: t('text.raw', { text: getFormattedMessageTime(sentDate) }),
           variant: 'MobileBody',
           textAlign: 'right',
         },
       },
       {
         leftTextProps: {
-          text: t('common:text.raw', { text: formatSubject(category, subject, t) }),
+          text: t('text.raw', { text: formatSubject(category, subject, t) }),
           variant: 'MobileBody',
           textAlign: 'left',
         },
@@ -98,7 +98,7 @@ export const getMessagesListItems = (
       },
       a11yHintText: isDraftsFolder ? t('secureMessaging.viewMessage.draft.a11yHint') : t('secureMessaging.viewMessage.a11yHint'),
       testId: generateTestIDForInlineTextIconList(textLines, t),
-      a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
+      a11yValue: t('listPosition', { position: index + 1, total: messages.length }),
     }
   })
 }
@@ -331,6 +331,7 @@ export const postCameraOrImageLaunchOnFileAttachments = (
  * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
  * @param fileUris - list of already attached files uri values
  * @param imageBase64s - list of already attached images base64 values
+ * @param setIsActionSheetVisible - Function for updating the state of the action sheet visibility. Useful for preventing back navigation when action sheet is opened
  */
 export const onAddFileAttachments = (
   t: TFunction,
@@ -341,15 +342,18 @@ export const onAddFileAttachments = (
   totalBytesUsed: number,
   fileUris: Array<string>,
   imageBase64s: Array<string>,
+  setIsActionSheetVisible: (isVisible: boolean) => void,
 ): void => {
-  const options = [t('common:camera'), t('common:photoGallery'), t('common:fileFolder'), t('common:cancel')]
+  const options = [t('camera'), t('photoGallery'), t('fileFolder'), t('cancel')]
 
+  setIsActionSheetVisible(true)
   showActionSheetWithOptions(
     {
       options,
       cancelButtonIndex: 3,
     },
     (buttonIndex) => {
+      setIsActionSheetVisible(false)
       switch (buttonIndex) {
         case 0:
           launchCamera(

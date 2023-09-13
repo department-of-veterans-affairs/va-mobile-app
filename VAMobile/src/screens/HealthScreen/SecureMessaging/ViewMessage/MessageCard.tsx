@@ -30,7 +30,6 @@ export type MessageCardProps = {
 
 const MessageCard: FC<MessageCardProps> = ({ message }) => {
   const theme = useTheme()
-  const { t: th } = useTranslation(NAMESPACE.HEALTH)
   const { t: t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
   const { hasAttachments, attachment, attachments, senderName, sentDate, body, messageId, subject, category } = message
@@ -50,7 +49,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
     return (
       <Box flexDirection={'column'}>
         <TextView variant="MobileBodyBold" accessibilityRole={'header'} mt={theme.dimensions.standardMarginBetween}>
-          {formatSubject(category, subject, th)}
+          {formatSubject(category, subject, t)}
         </TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
           {senderName}
@@ -93,7 +92,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
                 name={a.filename}
                 formattedSize={bytesToFinalSizeDisplay(a.size, tFunction)}
                 formattedSizeA11y={bytesToFinalSizeDisplayA11y(a.size, tFunction)}
-                a11yHint={th('secureMessaging.viewAttachment.a11yHint')}
+                a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
                 a11yValue={t('listPosition', { position: index + 1, total: attachments.length })}
                 onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
               />

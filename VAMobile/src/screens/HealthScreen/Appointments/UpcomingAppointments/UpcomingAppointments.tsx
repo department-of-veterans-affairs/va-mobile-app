@@ -19,8 +19,7 @@ import NoAppointments from '../NoAppointments/NoAppointments'
 type UpcomingAppointmentsProps = Record<string, unknown>
 
 const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -67,7 +66,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>
-      {getGroupedAppointments(currentPageUpcomingAppointmentsByYear || {}, theme, { t, tc }, onUpcomingAppointmentPress, false, paginationByTimeFrame.upcoming)}
+      {getGroupedAppointments(currentPageUpcomingAppointmentsByYear || {}, theme, { t }, onUpcomingAppointmentPress, false, paginationByTimeFrame.upcoming)}
       <Box flex={1} mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>

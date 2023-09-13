@@ -137,6 +137,21 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
     return !/^\d+$/.test(input)
   }
 
+  const invalidRoutingNumber = (input: string): boolean => {
+    if (input.length !== 9) {
+      return true
+    }
+
+    const digits = input.split('')
+    let sum = 0
+    let multiplier = 3
+    digits.forEach((digit: string) => {
+      sum += parseInt(digit, 10) * multiplier
+      multiplier = multiplier === 3 ? 7 : multiplier === 7 ? 1 : 3
+    })
+    return sum % 10 !== 0
+  }
+
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.TextInput,
@@ -153,6 +168,10 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
       validationList: [
         {
           validationFunction: (): boolean => containsNonNumbersValidation(routingNumber),
+          validationFunctionErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
+        },
+        {
+          validationFunction: (): boolean => invalidRoutingNumber(routingNumber),
           validationFunctionErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
         },
       ],
@@ -174,14 +193,14 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
       validationList: [
         {
           validationFunction: (): boolean => containsNonNumbersValidation(accountNumber),
-          validationFunctionErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
+          validationFunctionErrorMessage: t('editDirectDeposit.accountNumberFieldError'),
         },
       ],
     },
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'common:editDirectDeposit.accountType',
+        labelKey: 'editDirectDeposit.accountType',
         selectedValue: accountType,
         onSelectionChange: setAccountType,
         pickerOptions: accountOptions,
@@ -199,6 +218,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route
         onSelectionChange: setConfirmed,
         a11yHint: t('editDirectDeposit.confirmHint'),
         isRequiredField: true,
+        testID: 'checkBox',
       },
       fieldErrorMessage: t('editDirectDeposit.checkBoxFieldError'),
     },

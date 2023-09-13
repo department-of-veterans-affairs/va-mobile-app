@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react'
 
 import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { VAIconProps } from 'components/VAIcon'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, removeInputErrorMessage, renderInputError, renderInputLabelSection } from '../formFieldUtils'
 import { getTranslation } from 'utils/formattingUtils'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 import PickerList, { PickerListItemObj } from './PickerList'
 
@@ -91,18 +93,20 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   }, [isFocused, selectedValue, error, setError, focusUpdated])
 
   const showModal = useCallback((): void => {
+    logAnalyticsEvent(Events.vama_modalpick_open(labelKey ? getTranslation(labelKey, t) : testID ? testID : ''))
     if (!disabled) {
       setIsFocused(true)
       setModalVisible(true)
       snackBar?.hideAll()
     }
-  }, [disabled])
+  }, [disabled, labelKey, testID, t])
 
   useEffect(() => {
     showModalByDefault && showModal()
   }, [showModalByDefault, showModal])
 
   const onConfirm = (): void => {
+    logAnalyticsEvent(Events.vama_modalpick_sel(labelKey ? getTranslation(labelKey, t) : testID ? testID : '', currentSelectedValue))
     onSelectionChange(currentSelectedValue)
     setModalVisible(false)
     setIsFocused(false)
@@ -144,7 +148,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   })
 
   const currentlySelectedOption = allPickerOptions.find((el) => el.value === selectedValue)
-  const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:picker')
+  const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'picker')
 
   const parentProps: AccessibilityProps = {
     ...a11yValueProp({ text: generateA11yValue(currentlySelectedOption?.label, isFocused, t) }),
@@ -218,7 +222,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const topPadding = insets.top + 60
 
   const cancelLabel = t('cancel')
-  const confirmLabel = getTranslation(confirmBtnText || 'common:done', t)
+  const confirmLabel = getTranslation(confirmBtnText || 'done', t)
 
   const cancelButtonProps: PressableProps = {
     accessible: true,

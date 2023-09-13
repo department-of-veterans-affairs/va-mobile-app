@@ -44,10 +44,10 @@ export const CommonE2eIdConstants = {
 
 /** Log the automation into demo mode
  * */
-export async function loginToDemoMode() {
+export async function loginToDemoMode(skipOnboarding = true) {
   await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
     .toExist()
-    .withTimeout(10000)
+    .withTimeout(60000)
   try {
 	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
 	await element(by.text('Dismiss')).tap()
@@ -61,10 +61,12 @@ export async function loginToDemoMode() {
 
   await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
-  const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
+  if(skipOnboarding == true) {
+    const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
 
-  if (ifCarouselSkipBtnExist) {
-    await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
+    if (ifCarouselSkipBtnExist) {
+      await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
+    }
   }
 }
 
@@ -216,7 +218,6 @@ export async function openDirectDeposit() {
 
 export async function openPrescriptions() {
 	await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
-
 }
 
 export async function openContactInfo() {

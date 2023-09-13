@@ -174,14 +174,14 @@ export const bytesToFinalSizeDisplay = (bytes: number, t: TFunction, includePare
 
   if (bytes < 10) {
     // Less than 0.01 KB, display with Bytes size unit
-    fileSize = `${bytes} ${t('common:Bytes')}`
+    fileSize = `${bytes} ${t('Bytes')}`
   } else if (bytes < 10000) {
     // Less than 0.01 MB, display with KB size unit
     const kb = bytesToKilobytes(bytes)
-    fileSize = `${kb} ${t('common:KB')}`
+    fileSize = `${kb} ${t('KB')}`
   } else {
     const mb = bytesToMegabytes(bytes)
-    fileSize = `${mb} ${t('common:MB')}`
+    fileSize = `${mb} ${t('MB')}`
   }
 
   return includeParens ? `(${fileSize})` : fileSize
@@ -201,14 +201,14 @@ export const bytesToFinalSizeDisplayA11y = (bytes: number, t: TFunction, include
 
   if (bytes < 10) {
     // Less than 0.01 KB, display with Bytes size unit
-    fileSize = `${bytes} ${t('common:Bytes')}`
+    fileSize = `${bytes} ${t('Bytes')}`
   } else if (bytes < 10000) {
     // Less than 0.01 MB, display with KB size unit
     const kb = bytesToKilobytes(bytes)
-    fileSize = `${kb} ${t('common:KB.a11y')}`
+    fileSize = `${kb} ${t('KB.a11y')}`
   } else {
     const mb = bytesToMegabytes(bytes)
-    fileSize = `${mb} ${t('common:MB.a11y')}`
+    fileSize = `${mb} ${t('MB.a11y')}`
   }
 
   return includeParens ? `(${fileSize})` : fileSize

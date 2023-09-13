@@ -14,8 +14,8 @@ import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescri
 import { AppDispatch, RootState } from 'store'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { DowntimeFeatureType, DowntimeScreenIDToFeature, ScreenIDTypes } from 'store/api/types'
-import { ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
+import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
+import { DowntimeWindowsByFeatureType, ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -35,16 +35,32 @@ import { useTheme as styledComponentsUseTheme } from 'styled-components'
  */
 export const useError = (currentScreenID: ScreenIDTypes): boolean => {
   const { errorsByScreenID } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  return useDowntime(DowntimeScreenIDToFeature[currentScreenID]) || !!errorsByScreenID[currentScreenID]
+  const downtime = useDowntimeByScreenID(currentScreenID)
+  if (downtime) {
+    return true
+  }
+
+  return !!errorsByScreenID[currentScreenID]
 }
 
 export const useDowntime = (feature: DowntimeFeatureType): boolean => {
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const mw = downtimeWindowsByFeature[feature]
-  if (!!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime) {
-    return true
-  }
-  return false
+  return featureInDowntime(feature, downtimeWindowsByFeature)
+}
+
+export const useDowntimeByScreenID = (currentScreenID: ScreenIDTypes): boolean => {
+  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const features = ScreenIDToDowntimeFeatures[currentScreenID]
+  return oneOfFeaturesInDowntime(features, downtimeWindowsByFeature)
+}
+
+export const featureInDowntime = (feature: DowntimeFeatureType, downtimeWindows: DowntimeWindowsByFeatureType): boolean => {
+  const mw = downtimeWindows[feature]
+  return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime
+}
+
+export const oneOfFeaturesInDowntime = (features: DowntimeFeatureType[], downtimeWindows: DowntimeWindowsByFeatureType): boolean => {
+  return !!features?.some((feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
 }
 
 /**
@@ -410,7 +426,7 @@ export function useAttachments(): [
 ] {
   const [attachmentsList, setAttachmentsList] = useState<Array<imageDocumentResponseType>>([])
   const destructiveAlert = useDestructiveActionSheet()
-  const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const addAttachment = (attachmentFileToAdd: imageDocumentResponseType) => {
     setAttachmentsList([...attachmentsList, attachmentFileToAdd])
@@ -422,15 +438,15 @@ export function useAttachments(): [
 
   const removeAttachment = (attachmentFileToRemove: imageDocumentResponseType) => {
     destructiveAlert({
-      title: t('health:secureMessaging.attachments.removeAttachment'),
+      title: t('secureMessaging.attachments.removeAttachment'),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('health:secureMessaging.attachments.keep'),
+          text: t('secureMessaging.attachments.keep'),
         },
         {
-          text: t('common:remove'),
+          text: t('remove'),
           onPress: () => {
             onRemove(attachmentFileToRemove)
           },
@@ -450,6 +466,7 @@ export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()
  */
 export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void {
   const { showActionSheetWithOptions } = useActionSheet()
+  const currentTheme = getTheme()
 
   return (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => {
     // Use title case for iOS, sentence case for Android
@@ -463,6 +480,11 @@ export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i
     })
 
     const casedOptions: ActionSheetOptions = {
+      titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
+      messageTextStyle: { textAlign: 'center', color: currentTheme.colors.text.primary },
+      textStyle: { color: currentTheme.colors.text.primary },
+      destructiveColor: currentTheme.colors.text.error,
+      containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
       ...options,
       options: casedOptionText,
     }

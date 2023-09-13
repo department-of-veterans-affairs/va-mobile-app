@@ -129,17 +129,3 @@ export type EditResponseData = {
     }
   }
 }
-
-export type GenderIdentityOptions = {
-  [key: string]: string
-}
-
-export type GenderIdentityOptionsData = {
-  data: {
-    id: string
-    type: string
-    attributes: {
-      options: GenderIdentityOptions
-    }
-  }
-}

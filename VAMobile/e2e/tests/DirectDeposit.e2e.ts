@@ -44,13 +44,14 @@ describe('Direct Deposit Screen', () => {
   it('should fill out Account form', async () => {
     await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
     await expect(element(by.text(DirectDepositConstants.EDIT_ACCOUNT_TEXT))).toExist()
+    await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
 
-    await element(by.id('routingNumber')).typeText('123456789\n')
-    await element(by.id('accountNumber')).typeText('12345678901234567\n')
+    // Ordering here is intentional because the iOS keyboard sometimes blocks fields at the bottom of the form
     await element(by.id('accountType picker required')).tap()
     await element(by.text('Checking')).tap()
     await element(by.text('Done')).tap()
-    await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
+    await element(by.id('routingNumber')).typeText('053100300\n')
+    await element(by.id('accountNumber')).typeText('12345678901234567\n')
     await element(by.text('Save')).tap()
 
     await expect(element(by.text(DirectDepositConstants.INFORMATION_HEADING))).toExist()
@@ -65,7 +66,7 @@ describe('Direct Deposit Screen', () => {
     await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
     await expect(element(by.text(DirectDepositConstants.EDIT_ACCOUNT_TEXT))).toExist()
 
-    await element(by.id('routingNumber')).typeText('123456789\n')
+    await element(by.id('routingNumber')).typeText('053100300\n')
     await element(by.text('Cancel')).tap()
     await expect(element(by.text(DirectDepositConstants.CANCEL_CONFIRM_TEXT))).toExist()
     await element(by.text(DirectDepositConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()

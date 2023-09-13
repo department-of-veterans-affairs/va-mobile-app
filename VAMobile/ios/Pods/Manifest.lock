@@ -414,7 +414,7 @@ PODS:
     - React-Core
   - react-native-image-picker (5.4.2):
     - React-Core
-  - react-native-notifications (4.3.1):
+  - react-native-notifications (5.0.0):
     - React-Core
   - react-native-safe-area-context (3.4.1):
     - React-Core
@@ -535,7 +535,7 @@ PODS:
     - RNFBApp
   - RNFileViewer (2.1.5):
     - React-Core
-  - RNGestureHandler (2.9.0):
+  - RNGestureHandler (2.12.1):
     - React-Core
   - RNKeychain (8.0.0):
     - React-Core
@@ -847,7 +847,7 @@ SPEC CHECKSUMS:
   react-native-cookies: f54fcded06bb0cda05c11d86788020b43528a26c
   react-native-document-picker: 429972f7ece4463aa5bcdd789622b3a674a3c5d1
   react-native-image-picker: 77f552291e993f3fdcdf48cc3c280ef7f11789c8
-  react-native-notifications: 33ec77006f7987bb22de8f1665889abc633b9196
+  react-native-notifications: d309f7080aad71206882dbb98d9ed788969f3b6d
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-webview: 203b6a1c7507737f777c91d7e10c30e7e67c1a17
   React-perflogger: 2d505bbe298e3b7bacdd9e542b15535be07220f6
@@ -874,7 +874,7 @@ SPEC CHECKSUMS:
   RNFBPerf: 15708e8e7b9c64add98e0244baa8f055fe6422a6
   RNFBRemoteConfig: 440bb1657e45674f7ca6561581bedb6fb80ebfed
   RNFileViewer: ce7ca3ac370e18554d35d6355cffd7c30437c592
-  RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
+  RNGestureHandler: c0d04458598fcb26052494ae23dda8f8f5162b13
   RNKeychain: 4f63aada75ebafd26f4bc2c670199461eab85d94
   RNLocalize: f567ea0e35116a641cdffe6683b0d212d568f32a
   RNReactNativeHapticFeedback: 1e3efeca9628ff9876ee7cdd9edec1b336913f8c
