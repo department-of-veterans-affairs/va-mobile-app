@@ -9,6 +9,35 @@ import { InitialState } from 'store/slices'
 import { TextView, VAIcon } from 'components'
 import { ServiceData } from 'store/api/types'
 
+
+jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
+  let original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
+  return {
+    ...original,
+    useAuthorizedServices: jest.fn().mockReturnValue({
+      status: "success",
+      data: {
+        appeals: true,
+        appointments: true,
+        claims: true,
+        decisionLetters: true,
+        directDepositBenefits: true,
+        directDepositBenefitsUpdate: true,
+        disabilityRating: true,
+        genderIdentity: true,
+        lettersAndDocuments: true,
+        militaryServiceHistory: true,
+        paymentHistory: true,
+        preferredName: true,
+        prescriptions: true,
+        scheduleAppointments: true,
+        secureMessaging: true,
+        userProfileUpdate: true
+      }
+    })
+  }
+})
+
 context('Nametag', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
