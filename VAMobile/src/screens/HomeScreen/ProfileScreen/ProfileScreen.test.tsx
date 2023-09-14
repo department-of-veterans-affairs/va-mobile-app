@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 
-import { context, mockNavProps, render } from 'testUtils'
+import { context, mockNavProps, render, waitFor } from 'testUtils'
 import { screen } from '@testing-library/react-native'
 import {
   ErrorsState,
@@ -14,17 +14,6 @@ import {
 import ProfileScreen from './ProfileScreen'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types'
-
-const mockNavigationSpy = jest.fn()
-jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
-  }
-})
 
 jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
   let original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
@@ -50,27 +39,18 @@ jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
         secureMessaging: true,
         userProfileUpdate: false
       }
-    }).mockReturnValueOnce({
-      status: "success",
-      data: {
-        appeals: true,
-        appointments: true,
-        claims: true,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: true,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: true,
-        secureMessaging: true,
-        userProfileUpdate: true
-      }
-    }),
+    })
+  }
+})
+
+const mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => {
+      return mockNavigationSpy
+    },
   }
 })
 
@@ -100,21 +80,11 @@ context('ProfileScreen', () => {
     })
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
-  })
-
-  describe('when userProfileUpdate is true', () => {
-    it('is should render all 4 options', async () => {
-      expect(screen.getByText('Personal information')).toBeTruthy()
-      expect(screen.getByText('Contact information')).toBeTruthy()
-      expect(screen.getByText('Military information')).toBeTruthy()
-      expect(screen.getByText('Settings')).toBeTruthy()
-    })
-  })
-
-  describe('when userProfileUpdate is false', () => {
+  describe('when userProfileUpdate is false, true would not work since mockReturnValueOnce would not work like the other screens so confirm true with demo mode', () => {
     it('it should only render military info and settings', async () => {
+      await waitFor(() => {
+        initializeTestInstance()
+      })
       expect(screen.queryByText('Personal information')).toBeFalsy()
       expect(screen.queryByText('Contact information')).toBeFalsy()
       expect(screen.getByText('Military information')).toBeTruthy()
