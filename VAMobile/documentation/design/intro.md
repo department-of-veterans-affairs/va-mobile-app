@@ -6,4 +6,21 @@ sidebar_position: 1
 # VA Mobile App Design System
 
 ### Components
-[Segmented control](/va-mobile-app/design/Components/Navigation/Secondary/SegmentedControl) (in progress)
+[Segmented control](/va-mobile-app/design/Components/Navigation/Secondary/SegmentedControl)
+
+-----
+
+### Design system team
+
+**Product Owner**: Ryan Thurlwell
+
+#### Product
+* Kelly Lein
+* Ameet Sarkar
+
+#### Engineering
+* Narin Ratana
+* Tim Roettger
+
+#### Design
+* Jessica Woodin
