@@ -33,6 +33,7 @@ const lettersNonFatalErrorString = 'Letters Service Error'
 
 export type LettersState = {
   loading: boolean
+  loadingLetterBeneficiaryData: boolean
   error?: Error
   letters: LettersList
   letterBeneficiaryData?: LetterBeneficiaryData
@@ -43,6 +44,7 @@ export type LettersState = {
 
 export const initialLettersState: LettersState = {
   loading: false,
+  loadingLetterBeneficiaryData: false,
   letters: [] as LettersList,
   mostRecentServices: [],
   downloading: false,
@@ -79,10 +81,10 @@ export const getLetterBeneficiaryData =
   async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetterBeneficiaryData(screenID))))
+    dispatch(dispatchStartGetLetterBeneficiaryData())
 
     try {
       const letterBeneficiaryData = await api.get<api.LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
-      dispatch(dispatchStartGetLetterBeneficiaryData())
       dispatch(dispatchFinishGetLetterBeneficiaryData({ letterBeneficiaryData: letterBeneficiaryData?.data.attributes }))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -165,7 +167,7 @@ const lettersSlice = createSlice({
     },
 
     dispatchStartGetLetterBeneficiaryData: (state) => {
-      state.loading = true
+      state.loadingLetterBeneficiaryData = true
     },
 
     dispatchFinishGetLetterBeneficiaryData: (state, action: PayloadAction<{ letterBeneficiaryData?: LetterBeneficiaryData; error?: Error }>) => {
@@ -187,7 +189,7 @@ const lettersSlice = createSlice({
       state.letterBeneficiaryData = letterBeneficiaryData
       state.mostRecentServices = mostRecentServices
       state.error = error
-      state.loading = false
+      state.loadingLetterBeneficiaryData = false
     },
 
     dispatchStartDownloadLetter: (state) => {
