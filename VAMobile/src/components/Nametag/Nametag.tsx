@@ -1,8 +1,10 @@
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
+import { map } from 'underscore'
+
 import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
-import { BranchesOfServiceConstants } from 'store/api/types'
+import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
 import { MilitaryServiceState, PersonalInformationState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { Pressable, PressableProps } from 'react-native'
@@ -13,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 
 export const Nametag: FC = () => {
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const { mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const { serviceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((state) => state.militaryService)
   const accessToMilitaryInfo = useHasMilitaryInformationAccess()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -22,7 +24,15 @@ export const Nametag: FC = () => {
   const name = (): string => {
     return profile?.fullName || ''
   }
+
   const branch = mostRecentBranch || ''
+
+  let showVeteranStatus = false
+  map(serviceHistory, (service: ServiceData) => {
+    if (service.honorableServiceIndicator === 'Y') {
+      showVeteranStatus = true
+    }
+  })
 
   const getBranchSeal = (): React.ReactNode => {
     const dimensions = {
@@ -45,7 +55,7 @@ export const Nametag: FC = () => {
   }
 
   const pressableProps: PressableProps = {
-    onPress: accessToMilitaryInfo ? navigateTo('VeteranStatus') : undefined,
+    onPress: accessToMilitaryInfo && showVeteranStatus ? navigateTo('VeteranStatus') : undefined,
     accessibilityRole: accessToMilitaryInfo ? 'button' : undefined,
     accessibilityLabel: accessToMilitaryInfo ? `${name()} ${branch} ${t('veteranStatus.title')}` : undefined,
   }
@@ -71,7 +81,7 @@ export const Nametag: FC = () => {
                 {branch}
               </TextView>
             )}
-            {accessToMilitaryInfo && (
+            {accessToMilitaryInfo && showVeteranStatus && (
               <Box flexDirection={'row'} alignItems={'center'} mt={theme.dimensions.standardMarginBetween}>
                 <TextView variant="MobileBody" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
                   {t('veteranStatus.proofOf')}

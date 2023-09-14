@@ -81,7 +81,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
   }
 
   return (
-    <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')}>
+    <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')} dividerMarginBypass={true}>
       <Box backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant} flex={1}>
         <Box alignItems="center">
           <Box flex={1} mt={theme.dimensions.standardMarginBetween}>
