@@ -1,6 +1,3 @@
-import { AddressData } from './AddressData'
-import { PhoneData } from './PhoneData'
-
 export type SigninServiceTypes = 'IDME' | 'DSL' | 'MHV' | 'LOGINGOV'
 
 export const SigninServiceTypesConstants: {
@@ -26,13 +23,13 @@ export type UserDataProfile = {
   birthDate: string
   genderIdentity: string
   addresses: string
-  residentialAddress?: AddressData
-  mailingAddress?: AddressData
-  homePhoneNumber: PhoneData
+  residentialAddress?: Record<string, unknown>
+  mailingAddress?: Record<string, unknown>
+  homePhoneNumber: Record<string, unknown>
   formattedHomePhone?: string
-  mobilePhoneNumber: PhoneData
+  mobilePhoneNumber: Record<string, unknown>
   formattedMobilePhone?: string
-  workPhoneNumber: PhoneData
+  workPhoneNumber: Record<string, unknown>
   formattedWorkPhone?: string
   signinService: SigninServiceTypes
 }
