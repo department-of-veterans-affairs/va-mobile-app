@@ -1,39 +1,17 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { omit } from 'underscore'
 
 import * as api from 'store/api'
-import {
-  AddressData,
-  AddressValidationScenarioTypes,
-  PhoneData,
-  PhoneType,
-  ProfileFormattedFieldType,
-  ScreenIDTypes,
-  SuggestedAddress,
-  UserData,
-  UserDataProfile,
-  addressPouTypes,
-  get,
-} from '../api'
+import { AddressData, AddressValidationScenarioTypes, SuggestedAddress } from 'api/types/AddressData'
 import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
+import { ScreenIDTypes, UserData, UserDataProfile, get } from '../api'
 import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { dispatchUpdateAuthorizedServices } from './authorizedServicesSlice'
 import { dispatchUpdateCerner } from './patientSlice'
-import {
-  getAddressDataFromSuggestedAddress,
-  getAddressValidationScenarioFromAddressValidationData,
-  getConfirmedSuggestions,
-  getPhoneDataForPhoneType,
-  getSuggestedAddresses,
-  getValidationKey,
-  showValidationScreen,
-} from 'utils/personalInformation'
-import { getAllFieldsThatExist, getFormattedPhoneNumber, isErrorObject, sanitizeString, showSnackBar } from 'utils/common'
+import { getAllFieldsThatExist, isErrorObject, sanitizeString, showSnackBar } from 'utils/common'
 import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 import getEnv from 'utils/env'
@@ -73,21 +51,6 @@ export const initialPersonalInformationState: PersonalInformationState = {
 
 const personalInformationNonFatalErrorString = 'Personal Information Service Error'
 
-const PhoneTypeToFormattedNumber: {
-  [key in PhoneType]: ProfileFormattedFieldType
-} = {
-  HOME: 'formattedHomePhone',
-  MOBILE: 'formattedMobilePhone',
-  WORK: 'formattedWorkPhone',
-}
-
-const AddressPouToProfileAddressFieldType: {
-  [key in addressPouTypes]: profileAddressType
-} = {
-  ['RESIDENCE/CHOICE']: 'residentialAddress',
-  CORRESPONDENCE: 'mailingAddress',
-}
-
 /**
  * Redux action to get user profile
  */
@@ -126,126 +89,126 @@ export const getProfileInfo =
  * @param messages - messages to show in success and error snackbars
  * @param screenID - ID used to compare within the component to see if an error component needs to be rendered
  */
-export const editUsersNumber =
-  (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
-    dispatch(dispatchClearErrors(screenID))
+// export const editUsersNumber =
+//   (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
+//   async (dispatch, getState) => {
+//     dispatch(dispatchClearErrors(screenID))
 
-    const retryFunction = () => dispatch(editUsersNumber(phoneType, phoneNumber, extension, numberId, messages, screenID))
-    dispatch(dispatchSetTryAgainFunction(retryFunction))
+//     const retryFunction = () => dispatch(editUsersNumber(phoneType, phoneNumber, extension, numberId, messages, screenID))
+//     dispatch(dispatchSetTryAgainFunction(retryFunction))
 
-    try {
-      dispatch(dispatchStartSavePhoneNumber())
+//     try {
+//       dispatch(dispatchStartSavePhoneNumber())
 
-      const profile = getState().personalInformation.profile
-      // if formatted number doesnt exist call post endpoint instead
-      const createEntry = !(profile || {})[PhoneTypeToFormattedNumber[phoneType] as keyof UserDataProfile]
+//       const profile = getState().personalInformation.profile
+//       // if formatted number doesnt exist call post endpoint instead
+//       const createEntry = !(profile || {})[PhoneTypeToFormattedNumber[phoneType] as keyof UserDataProfile]
 
-      let updatedPhoneData: PhoneData = {
-        areaCode: phoneNumber.substring(0, 3),
-        countryCode: '1',
-        phoneNumber: phoneNumber.substring(3),
-        phoneType: phoneType,
-      }
+//       let updatedPhoneData: PhoneData = {
+//         areaCode: phoneNumber.substring(0, 3),
+//         countryCode: '1',
+//         phoneNumber: phoneNumber.substring(3),
+//         phoneType: phoneType,
+//       }
 
-      // Add extension only if it exist
-      if (extension) {
-        updatedPhoneData = {
-          ...updatedPhoneData,
-          extension,
-        }
-      }
+//       // Add extension only if it exist
+//       if (extension) {
+//         updatedPhoneData = {
+//           ...updatedPhoneData,
+//           extension,
+//         }
+//       }
 
-      if (createEntry) {
-        await api.post<api.EditResponseData>('/v0/user/phones', updatedPhoneData as unknown as api.Params)
-      } else {
-        const updatedPutPhoneData = {
-          ...updatedPhoneData,
-          id: numberId,
-        }
-        await api.put<api.EditResponseData>('/v0/user/phones', updatedPutPhoneData as unknown as api.Params)
-      }
+//       if (createEntry) {
+//         await api.post<api.EditResponseData>('/v0/user/phones', updatedPhoneData as unknown as api.Params)
+//       } else {
+//         const updatedPutPhoneData = {
+//           ...updatedPhoneData,
+//           id: numberId,
+//         }
+//         await api.put<api.EditResponseData>('/v0/user/phones', updatedPutPhoneData as unknown as api.Params)
+//       }
 
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
-      const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_prof_update_phone(totalTime, actionTime))
-      await dispatch(resetAnalyticsActionStart())
-      await dispatch(setAnalyticsTotalTimeStart())
-      await registerReviewEvent()
-      dispatch(dispatchFinishSavePhoneNumber())
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
-    } catch (err) {
-      if (isErrorObject(err)) {
-        logNonFatalErrorToFirebase(err, `editUsersNumber: ${personalInformationNonFatalErrorString}`)
-        console.error(err)
-        dispatch(dispatchFinishSavePhoneNumber(err))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
-      }
-    }
-  }
+//       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+//       const [totalTime, actionTime] = getAnalyticsTimers(getState())
+//       await logAnalyticsEvent(Events.vama_prof_update_phone(totalTime, actionTime))
+//       await dispatch(resetAnalyticsActionStart())
+//       await dispatch(setAnalyticsTotalTimeStart())
+//       await registerReviewEvent()
+//       dispatch(dispatchFinishSavePhoneNumber())
+//       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
+//     } catch (err) {
+//       if (isErrorObject(err)) {
+//         logNonFatalErrorToFirebase(err, `editUsersNumber: ${personalInformationNonFatalErrorString}`)
+//         console.error(err)
+//         dispatch(dispatchFinishSavePhoneNumber(err))
+//         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+//         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
+//       }
+//     }
+//   }
 
 /**
  * Redux action for deleting number
  */
-export const deleteUsersNumber =
-  (phoneType: PhoneType, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
-    dispatch(dispatchClearErrors(screenID))
+// export const deleteUsersNumber =
+//   (phoneType: PhoneType, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
+//   async (dispatch, getState) => {
+//     dispatch(dispatchClearErrors(screenID))
 
-    const retryFunction = () => dispatch(deleteUsersNumber(phoneType, messages, screenID))
-    dispatch(dispatchSetTryAgainFunction(retryFunction))
+//     const retryFunction = () => dispatch(deleteUsersNumber(phoneType, messages, screenID))
+//     dispatch(dispatchSetTryAgainFunction(retryFunction))
 
-    try {
-      dispatch(dispatchStartSavePhoneNumber())
+//     try {
+//       dispatch(dispatchStartSavePhoneNumber())
 
-      const profile = getState().personalInformation.profile
+//       const profile = getState().personalInformation.profile
 
-      if (!profile) {
-        console.error('Attempting to delete phone number from a user with no profile.')
-        return
-      }
+//       if (!profile) {
+//         console.error('Attempting to delete phone number from a user with no profile.')
+//         return
+//       }
 
-      const existingPhoneData = getPhoneDataForPhoneType(phoneType, profile)
+//       const existingPhoneData = getPhoneDataForPhoneType(phoneType, profile)
 
-      if (!existingPhoneData) {
-        console.error(`Attempting to delete phone number from a user with no existing phone data for type ${phoneType}.`)
-        return
-      }
+//       if (!existingPhoneData) {
+//         console.error(`Attempting to delete phone number from a user with no existing phone data for type ${phoneType}.`)
+//         return
+//       }
 
-      let deletePhoneData: PhoneData = {
-        id: existingPhoneData.id,
-        areaCode: existingPhoneData.areaCode,
-        countryCode: '1',
-        phoneNumber: existingPhoneData.phoneNumber,
-        phoneType: phoneType,
-      }
+//       let deletePhoneData: PhoneData = {
+//         id: existingPhoneData.id,
+//         areaCode: existingPhoneData.areaCode,
+//         countryCode: '1',
+//         phoneNumber: existingPhoneData.phoneNumber,
+//         phoneType: phoneType,
+//       }
 
-      // Add extension only if it exist
-      if (existingPhoneData.extension) {
-        deletePhoneData = {
-          ...deletePhoneData,
-          extension: existingPhoneData.extension,
-        }
-      }
+//       // Add extension only if it exist
+//       if (existingPhoneData.extension) {
+//         deletePhoneData = {
+//           ...deletePhoneData,
+//           extension: existingPhoneData.extension,
+//         }
+//       }
 
-      await api.del<api.EditResponseData>('/v0/user/phones', deletePhoneData as unknown as api.Params)
-      const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_prof_update_phone(totalTime, actionTime))
-      await dispatch(resetAnalyticsActionStart())
-      await dispatch(setAnalyticsTotalTimeStart())
-      dispatch(dispatchFinishSavePhoneNumber())
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
-    } catch (err) {
-      if (isErrorObject(err)) {
-        logNonFatalErrorToFirebase(err, `deleteUsersNumber: ${personalInformationNonFatalErrorString}`)
-        console.error(err)
-        dispatch(dispatchFinishSavePhoneNumber(err))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
-      }
-    }
-  }
+//       await api.del<api.EditResponseData>('/v0/user/phones', deletePhoneData as unknown as api.Params)
+//       const [totalTime, actionTime] = getAnalyticsTimers(getState())
+//       await logAnalyticsEvent(Events.vama_prof_update_phone(totalTime, actionTime))
+//       await dispatch(resetAnalyticsActionStart())
+//       await dispatch(setAnalyticsTotalTimeStart())
+//       dispatch(dispatchFinishSavePhoneNumber())
+//       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
+//     } catch (err) {
+//       if (isErrorObject(err)) {
+//         logNonFatalErrorToFirebase(err, `deleteUsersNumber: ${personalInformationNonFatalErrorString}`)
+//         console.error(err)
+//         dispatch(dispatchFinishSavePhoneNumber(err))
+//         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+//         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
+//       }
+//     }
+//   }
 
 /**
  * Redux action for leaving the phone number edit mode
@@ -347,128 +310,128 @@ export const finishEditEmail = (): AppThunk => async (dispatch) => {
 /**
  * Redux action to make the API call to update a users address
  */
-export const updateAddress =
-  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes, revalidate?: boolean): AppThunk =>
-  async (dispatch, getState) => {
-    dispatch(dispatchClearErrors(screenID))
-    const retryFunction = () => dispatch(updateAddress(addressData, messages, screenID))
-    dispatch(dispatchSetTryAgainFunction(retryFunction))
+// export const updateAddress =
+//   (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes, revalidate?: boolean): AppThunk =>
+//   async (dispatch, getState) => {
+//     // dispatch(dispatchClearErrors(screenID))
+//     // const retryFunction = () => dispatch(updateAddress(addressData, messages, screenID))
+//     // dispatch(dispatchSetTryAgainFunction(retryFunction))
 
-    try {
-      dispatch(dispatchStartSaveAddress())
+//     try {
+//       // dispatch(dispatchStartSaveAddress())
 
-      const addressPou = addressData.addressPou
-      const addressFieldType = AddressPouToProfileAddressFieldType[addressPou]
-      const profile = getState().personalInformation.profile
+//       const addressPou = addressData.addressPou
+//       const addressFieldType = AddressPouToProfileAddressFieldType[addressPou]
+//       const profile = getState().personalInformation.profile
 
-      // if address doesnt exist call post endpoint instead
-      const createEntry = !(profile || {})[addressFieldType as keyof UserDataProfile]
+//       // if address doesnt exist call post endpoint instead
+//       const createEntry = !(profile || {})[addressFieldType as keyof UserDataProfile]
 
-      // to revalidate address when suggested address is selected
-      if (revalidate) {
-        const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as api.Params)
-        const validationKey = getValidationKey(getSuggestedAddresses(validationResponse))
-        addressData.validationKey = validationKey
-      }
+//       // to revalidate address when suggested address is selected
+//       if (revalidate) {
+//         const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as api.Params)
+//         const validationKey = getValidationKey(getSuggestedAddresses(validationResponse))
+//         addressData.validationKey = validationKey
+//       }
 
-      if (createEntry) {
-        const postAddressDataPayload = omit(addressData, 'id')
-        await api.post<api.EditResponseData>('/v0/user/addresses', postAddressDataPayload as unknown as api.Params)
-      } else {
-        await api.put<api.EditResponseData>('/v0/user/addresses', addressData as unknown as api.Params)
-      }
+//       if (createEntry) {
+//         const postAddressDataPayload = omit(addressData, 'id')
+//         await api.post<api.EditResponseData>('/v0/user/addresses', postAddressDataPayload as unknown as api.Params)
+//       } else {
+//         await api.put<api.EditResponseData>('/v0/user/addresses', addressData as unknown as api.Params)
+//       }
 
-      dispatch(getProfileInfo(screenID))
+//       dispatch(getProfileInfo(screenID))
 
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
-      const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_prof_update_address(totalTime, actionTime))
-      await dispatch(resetAnalyticsActionStart())
-      await dispatch(setAnalyticsTotalTimeStart())
-      await registerReviewEvent()
-      dispatch(dispatchFinishSaveAddress())
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
-    } catch (err) {
-      if (isErrorObject(err)) {
-        logNonFatalErrorToFirebase(err, `updateAddress: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishSaveAddress(err))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
-      }
-    }
-  }
+//       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+//       // const [totalTime, actionTime] = getAnalyticsTimers(getState())
+//       // await logAnalyticsEvent(Events.vama_prof_update_address(totalTime, actionTime))
+//       // await dispatch(resetAnalyticsActionStart())
+//       // await dispatch(setAnalyticsTotalTimeStart())
+//       // await registerReviewEvent()
+//       // dispatch(dispatchFinishSaveAddress())
+//       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
+//     } catch (err) {
+//       if (isErrorObject(err)) {
+//         logNonFatalErrorToFirebase(err, `updateAddress: ${personalInformationNonFatalErrorString}`)
+//         dispatch(dispatchFinishSaveAddress(err))
+//         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+//         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+//       }
+//     }
+//   }
 
 /**
  * Remove a users address
  */
-export const deleteAddress =
-  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
-    const retryFunction = () => dispatch(deleteAddress(addressData, messages, screenID))
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(retryFunction))
+// export const deleteAddress =
+//   (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
+//   async (dispatch, getState) => {
+//     const retryFunction = () => dispatch(deleteAddress(addressData, messages, screenID))
+//     dispatch(dispatchClearErrors(screenID))
+//     dispatch(dispatchSetTryAgainFunction(retryFunction))
 
-    try {
-      dispatch(dispatchStartSaveAddress())
+//     try {
+//       dispatch(dispatchStartSaveAddress())
 
-      await api.del<api.EditResponseData>('/v0/user/addresses', addressData as unknown as api.Params)
-      const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_prof_update_address(totalTime, actionTime))
-      await dispatch(resetAnalyticsActionStart())
-      await dispatch(setAnalyticsTotalTimeStart())
-      dispatch(dispatchFinishSaveAddress())
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
-    } catch (err) {
-      if (isErrorObject(err)) {
-        logNonFatalErrorToFirebase(err, `deleteAddress: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishSaveAddress(err))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
-      }
-    }
-  }
+//       await api.del<api.EditResponseData>('/v0/user/addresses', addressData as unknown as api.Params)
+//       // const [totalTime, actionTime] = getAnalyticsTimers(getState())
+//       // await logAnalyticsEvent(Events.vama_prof_update_address(totalTime, actionTime))
+//       // await dispatch(resetAnalyticsActionStart())
+//       // await dispatch(setAnalyticsTotalTimeStart())
+//       // dispatch(dispatchFinishSaveAddress())
+//       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
+//     } catch (err) {
+//       if (isErrorObject(err)) {
+//         logNonFatalErrorToFirebase(err, `deleteAddress: ${personalInformationNonFatalErrorString}`)
+//         dispatch(dispatchFinishSaveAddress(err))
+//         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+//         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+//       }
+//     }
+//   }
 
 /**
  * Redux action to make the API call to validate a users address
  */
-export const validateAddress =
-  (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
-    dispatch(dispatchClearErrors(screenID))
-    const retryFunction = () => dispatch(validateAddress(addressData, messages, screenID))
-    dispatch(dispatchSetTryAgainFunction(retryFunction))
+// export const validateAddress =
+//   (addressData: AddressData, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
+//   async (dispatch) => {
+//     dispatch(dispatchClearErrors(screenID))
+//     const retryFunction = () => dispatch(validateAddress(addressData, messages, screenID))
+//     dispatch(dispatchSetTryAgainFunction(retryFunction))
 
-    // create a new signal for this api call, so it can be aborted if a user leaves(goes back) to the previous screen
-    const newAbortController = new AbortController()
-    const signal = newAbortController.signal
+//     // create a new signal for this api call, so it can be aborted if a user leaves(goes back) to the previous screen
+//     const newAbortController = new AbortController()
+//     const signal = newAbortController.signal
 
-    try {
-      dispatch(dispatchStartValidateAddress({ abortController: newAbortController }))
-      const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as api.Params, undefined, signal)
-      const suggestedAddresses = getSuggestedAddresses(validationResponse)
-      const confirmedSuggestedAddresses = getConfirmedSuggestions(suggestedAddresses)
-      const validationKey = getValidationKey(suggestedAddresses)
+//     try {
+//       dispatch(dispatchStartValidateAddress({ abortController: newAbortController }))
+//       const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as api.Params, undefined, signal)
+//       const suggestedAddresses = getSuggestedAddresses(validationResponse)
+//       const confirmedSuggestedAddresses = getConfirmedSuggestions(suggestedAddresses)
+//       const validationKey = getValidationKey(suggestedAddresses)
 
-      if (suggestedAddresses && confirmedSuggestedAddresses && showValidationScreen(addressData, suggestedAddresses)) {
-        const addressValidationScenario = getAddressValidationScenarioFromAddressValidationData(suggestedAddresses)
-        dispatch(dispatchFinishValidateAddress({ suggestedAddresses, confirmedSuggestedAddresses, addressData, addressValidationScenario, validationKey }))
-      } else {
-        dispatch(dispatchFinishValidateAddress(undefined))
-        // if no validation screen is needed, this means we can use the first and only suggested address to update with
-        if (suggestedAddresses) {
-          const address = getAddressDataFromSuggestedAddress(suggestedAddresses[0], addressData.id)
-          addressData.addressMetaData = validationResponse?.data[0]?.meta?.address
-          await dispatch(updateAddress(address, messages, screenID))
-        }
-      }
-    } catch (err) {
-      if (isErrorObject(err)) {
-        logNonFatalErrorToFirebase(err, `validateAddress: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishValidateAddress(undefined))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-      }
-    }
-  }
+//       if (suggestedAddresses && confirmedSuggestedAddresses && showValidationScreen(addressData, suggestedAddresses)) {
+//         const addressValidationScenario = getAddressValidationScenarioFromAddressValidationData(suggestedAddresses)
+//         dispatch(dispatchFinishValidateAddress({ suggestedAddresses, confirmedSuggestedAddresses, addressData, addressValidationScenario, validationKey }))
+//       } else {
+//         dispatch(dispatchFinishValidateAddress(undefined))
+//         // if no validation screen is needed, this means we can use the first and only suggested address to update with
+//         if (suggestedAddresses) {
+//           const address = getAddressDataFromSuggestedAddress(suggestedAddresses[0], addressData.id)
+//           addressData.addressMetaData = validationResponse?.data[0]?.meta?.address
+//           await dispatch(updateAddress(address, messages, screenID))
+//         }
+//       }
+//     } catch (err) {
+//       if (isErrorObject(err)) {
+//         logNonFatalErrorToFirebase(err, `validateAddress: ${personalInformationNonFatalErrorString}`)
+//         dispatch(dispatchFinishValidateAddress(undefined))
+//         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+//       }
+//     }
+//   }
 
 /**
  * Redux action for finishing validating address
@@ -503,9 +466,9 @@ const peronalInformationSlice = createSlice({
         profile.lastName = sanitizeString(profile.lastName)
         profile.fullName = getAllFieldsThatExist([profile.firstName, profile.middleName, profile.lastName]).join(' ').trim()
 
-        profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
-        profile.formattedMobilePhone = getFormattedPhoneNumber(profile.mobilePhoneNumber)
-        profile.formattedWorkPhone = getFormattedPhoneNumber(profile.workPhoneNumber)
+        // profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
+        // profile.formattedMobilePhone = getFormattedPhoneNumber(profile.mobilePhoneNumber)
+        // profile.formattedWorkPhone = getFormattedPhoneNumber(profile.workPhoneNumber)
 
         // Reset these since this information is now being pulled from the demographics endpoint.
         // This can be removed when we switch over to the `v2/user` endpoint.
