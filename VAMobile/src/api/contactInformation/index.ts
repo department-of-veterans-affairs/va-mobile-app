@@ -1,0 +1,6 @@
+export * from './createPhoneNumber'
+export * from './deletePhoneNumber'
+export * from './getContactInformation'
+export * from './updateAddress'
+export * from './updatePhoneNumber'
+export * from './validateAddress'
