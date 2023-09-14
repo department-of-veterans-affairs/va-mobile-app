@@ -8,12 +8,12 @@ import { AppointmentFlowModalStackParamList } from '../RequestAppointmentScreen'
 import { EMAIL_REGEX_EXP, MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
 import { MethodOfContactType, PhoneEmailType, TimesForPhoneCallType } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState } from 'store/slices'
 import { RequestAppointmentState, updateFormData } from 'store/slices/requestAppointmentSlice'
 import { RootState } from 'store'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useContactInformation } from 'api/contactInformation'
 
 type ConfirmContactScreenProps = StackScreenProps<AppointmentFlowModalStackParamList, 'ConfirmContactScreen'>
 
@@ -23,10 +23,10 @@ const ConfirmContactScreen: FC<ConfirmContactScreenProps> = ({ navigation }) => 
   const dispatch = useAppDispatch()
   const { gutter, standardMarginBetween } = theme.dimensions
   const { appointmentFlowFormData } = useSelector<RootState, RequestAppointmentState>((state) => state.requestAppointment)
-  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { data: contactInformation } = useContactInformation()
   const { contact, preferredTimesForPhoneCall } = appointmentFlowFormData
   const { telecom } = contact || {}
-  const { mobilePhoneNumber, contactEmail } = profile || {}
+  const { mobilePhoneNumber, contactEmail } = contactInformation || {}
 
   const email = telecom?.find((item) => item.type === 'email')?.value ?? contactEmail?.emailAddress
   const phone = telecom?.find((item) => item.type === 'phone')?.value ?? (mobilePhoneNumber ? getFormattedPhoneNumber(mobilePhoneNumber) : '')
