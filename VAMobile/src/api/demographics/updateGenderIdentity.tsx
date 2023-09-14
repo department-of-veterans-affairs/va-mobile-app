@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { EditResponseData, put } from 'store/api'
 import { Events, UserAnalytics } from 'constants/analytics'
+import { GenderIdentityUpdatePayload } from 'api/types/DemographicsData'
 import { NAMESPACE } from 'constants/namespaces'
 import { SnackbarMessages } from 'components/SnackBar'
 import { demographicsKeys } from './queryKeys'
@@ -13,9 +14,9 @@ import { useTranslation } from 'react-i18next'
 /**
  * Updates a user's gender identity
  */
-export const updateGenderIdentity = async (genderIdentity: string) => {
+export const updateGenderIdentity = async (data: GenderIdentityUpdatePayload) => {
   try {
-    await put<EditResponseData>('/v0/user/gender_identity', { code: genderIdentity })
+    return put<EditResponseData>('/v0/user/gender_identity', data)
   } catch (error) {
     throw error
   }
@@ -42,9 +43,9 @@ export const useUpdateGenderIdentity = () => {
       queryClient.invalidateQueries({ queryKey: demographicsKeys.demographics })
       showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
     },
-    onError: async (data: string, error) => {
+    onError: async (error, variables) => {
       if (isErrorObject(error)) {
-        const retryFunction = () => updateGenderIdentity(data)
+        const retryFunction = () => updateGenderIdentity(variables)
         logNonFatalErrorToFirebase(error, 'updateGenderIdentity: Service error')
         showSnackBar(snackbarMessages.errorMsg, dispatch, retryFunction, false, true, true)
       }

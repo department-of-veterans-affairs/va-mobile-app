@@ -25,3 +25,7 @@ export type GenderIdentityOptionsPayload = {
     }
   }
 }
+
+export type GenderIdentityUpdatePayload = {
+  code: string
+}
