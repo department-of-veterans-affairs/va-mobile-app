@@ -41,7 +41,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     if (phoneNumberCreated || phoneNumberDeleted || phoneNumberUpdated) {
       navigation.goBack()
     }
-  }, [phoneNumberCreated, phoneNumberDeleted, phoneNumberUpdated, navigation, dispatch])
+  }, [phoneNumberCreated, phoneNumberDeleted, phoneNumberUpdated, navigation])
 
   const saveSnackbarMessages: SnackbarMessages = {
     successMsg: t('contactInformation.phoneNumber.saved', { type: displayTitle }),
@@ -91,7 +91,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
     const id = phoneData && phoneData.id ? phoneData.id : 0
 
-    let updatedPhoneData: PhoneData = {
+    let phoneDataPayload: PhoneData = {
       areaCode: onlyDigitsNum.substring(0, 3),
       countryCode: '1',
       phoneNumber: onlyDigitsNum.substring(3),
@@ -99,8 +99,8 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     }
 
     if (extension) {
-      updatedPhoneData = {
-        ...updatedPhoneData,
+      phoneDataPayload = {
+        ...phoneDataPayload,
         extension,
       }
     }
@@ -108,13 +108,13 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     const phoneNumberExists = (contactInformation || {})[PhoneTypeToFormattedNumber[phoneType as PhoneType] as keyof UserContactInformation]
 
     if (phoneNumberExists) {
-      updatedPhoneData = {
-        ...updatedPhoneData,
+      phoneDataPayload = {
+        ...phoneDataPayload,
         id,
       }
 
       const update = () =>
-        updatePhoneNumber(updatedPhoneData, {
+        updatePhoneNumber(phoneDataPayload, {
           onSuccess: () => showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
           onError: () => showSnackBar(saveSnackbarMessages.errorMsg, dispatch, update, false, true, true),
         })
@@ -122,7 +122,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       update()
     } else {
       const create = () =>
-        createPhoneNumber(updatedPhoneData, {
+        createPhoneNumber(phoneDataPayload, {
           onSuccess: () => showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
           onError: () => showSnackBar(saveSnackbarMessages.errorMsg, dispatch, create, false, true, true),
         })
