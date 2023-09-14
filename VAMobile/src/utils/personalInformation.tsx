@@ -8,9 +8,9 @@ import {
   PhoneType,
   PhoneTypeConstants,
   SuggestedAddress,
-  UserDataProfile,
   addressTypeFields,
-} from 'store/api/types'
+} from 'api/types'
+import { UserDataProfile } from 'store/api/types'
 import { filter, sortBy } from 'underscore'
 
 export const getAddressValidationScenarioFromAddressValidationData = (suggestedAddresses: Array<SuggestedAddress>): AddressValidationScenarioTypes | undefined => {
@@ -51,6 +51,7 @@ export const getSuggestedAddresses = (addressValidationData?: AddressValidationD
  address or their address is not know to the validation API
  */
 export const showValidationScreen = (addressData: AddressData, suggestedAddresses?: Array<SuggestedAddress>): boolean => {
+  console.log('PARAMS', suggestedAddresses)
   if (!suggestedAddresses) {
     return false
   }
@@ -101,10 +102,10 @@ export const getAddressDataFromSuggestedAddress = (suggestedAddress: SuggestedAd
 export const getPhoneDataForPhoneType = (phoneType: PhoneType, profile: UserDataProfile): PhoneData | undefined => {
   switch (phoneType) {
     case PhoneTypeConstants.HOME:
-      return profile.homePhoneNumber
+      return profile.homePhoneNumber as PhoneData
     case PhoneTypeConstants.MOBILE:
-      return profile.mobilePhoneNumber
+      return profile.mobilePhoneNumber as PhoneData
     case PhoneTypeConstants.WORK:
-      return profile.workPhoneNumber
+      return profile.workPhoneNumber as PhoneData
   }
 }

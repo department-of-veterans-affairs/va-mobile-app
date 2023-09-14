@@ -1,20 +1,6 @@
-import {
-  AddressData,
-  AddressValidationData,
-  DeliveryPointValidationTypesConstants,
-  DirectDepositData,
-  EditResponseData,
-  LettersData,
-  MilitaryServiceHistoryData,
-  PaymentAccountData,
-  PhoneData,
-  PhoneType,
-  PhoneTypeConstants,
-  ProfileFormattedFieldType,
-  UserData,
-  addressPouTypes,
-} from '../types'
+import { AddressData, AddressValidationData, DeliveryPointValidationTypesConstants, FormattedPhoneType, PhoneData, PhoneType, PhoneTypeConstants, addressPouTypes } from 'api/types'
 import { DemoStore } from './store'
+import { DirectDepositData, EditResponseData, LettersData, MilitaryServiceHistoryData, PaymentAccountData, UserData } from '../types'
 import { MOCK_EDIT_RESPONSE } from './utils'
 import { Params } from '../api'
 
@@ -74,7 +60,7 @@ type PhoneKeyUnion = 'homePhoneNumber' | 'mobilePhoneNumber' | 'workPhoneNumber'
  * @param phoneType- PhoneType constant to get the correct profile keys for
  * @returns [PhoneKeyUnion, ProfileFormattedFieldType]- tuple of the phone keys for the profile object.
  */
-const getPhoneTypes = (phoneType: PhoneType): [PhoneKeyUnion, ProfileFormattedFieldType] => {
+const getPhoneTypes = (phoneType: PhoneType): [PhoneKeyUnion, FormattedPhoneType] => {
   switch (phoneType) {
     case PhoneTypeConstants.HOME: {
       return ['homePhoneNumber', 'formattedHomePhone']
