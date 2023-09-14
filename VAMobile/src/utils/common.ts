@@ -8,6 +8,7 @@ import { contains, isEmpty, map } from 'underscore'
 import { AppDispatch } from 'store'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ErrorObject } from 'store/api'
+import { Events } from 'constants/analytics'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { PhoneData } from 'store/api/types/PhoneData'
 import { StackCardInterpolatedStyle, StackCardInterpolationProps } from '@react-navigation/stack'
@@ -15,6 +16,7 @@ import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
 import { TextLineWithIconProps } from 'components'
 import { formatPhoneNumber } from './formattingUtils'
+import { logAnalyticsEvent } from './analytics'
 import { updatBottomOffset } from 'store/slices/snackBarSlice'
 import theme from 'styles/themes/standardTheme'
 
@@ -309,6 +311,9 @@ export const deepCopyObject = <T>(item: Record<string, unknown>): T => {
  * @returns snackbar
  */
 export function showSnackBar(message: string, dispatch: AppDispatch, actionPressed?: () => void, isUndo?: boolean, isError?: boolean, withNavBar = false): void {
+  if (!snackBar) {
+    logAnalyticsEvent(Events.vama_snackbar_null('showSnackBar'))
+  }
   snackBar?.hideAll()
   dispatch(updatBottomOffset(withNavBar ? theme.dimensions.snackBarBottomOffsetWithNav : theme.dimensions.snackBarBottomOffset))
   snackBar?.show(message, {
