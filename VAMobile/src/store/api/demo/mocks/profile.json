@@ -122,7 +122,7 @@
       "attributes": {
         "serviceHistory": [
           {
-            "branchOfService": "United States Coast Guard",
+            "branchOfService": "United States Army",
             "beginDate": "1970-07-13",
             "endDate": "1998-08-31",
             "formattedBeginDate": "July 13, 1970",
@@ -131,7 +131,7 @@
             "honorableServiceIndicator": "N"
           },
           {
-            "branchOfService": "United States Army",
+            "branchOfService": "United States Coast Guard",
             "beginDate": "1998-09-01",
             "endDate": "2000-01-01",
             "formattedBeginDate": "September 01, 1998",

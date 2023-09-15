@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { BackgroundVariant, BorderColorVariant, Box, BoxProps, LargePanel, TextView, VAIcon } from 'components'
+import { BackgroundVariant, BorderColorVariant, Box, BoxProps, ClickToCallPhoneNumber, LargePanel, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
 import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState } from 'store/slices'
 import { HomeStackParamList } from '../HomeStackScreens'
@@ -129,6 +129,27 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
             <TextView variant="MobileBody" color="primaryContrast">
               {getBirthDate(profile, t)}
             </TextView>
+          </Box>
+          <Box mb={theme.dimensions.formMarginBetween}>
+            <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.formMarginBetween}>
+              {t('veteranStatus.uniformedServices')}
+            </TextView>
+            <TextView variant="MobileBodyBold" color="primaryContrast">
+              {t('veteranStatus.fixAnError')}
+            </TextView>
+            <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
+              {t('veteranStatus.fixAnError.2')}
+            </TextView>
+            <ClickToCallPhoneNumber phone={t('howDoIUpdate.profileNumber')} a11yLabel={t('howDoIUpdate.profileNumber.a11yLabel')} colorBypass={'webviewTitle'} />
+            <TextView variant="MobileBody" color="primaryContrast" my={theme.dimensions.condensedMarginBetween}>
+              {t('veteranStatus.fixAnError.3')}
+            </TextView>
+            <ClickToCallPhoneNumber
+              phone={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed')}
+              a11yLabel={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed.a11yLabel')}
+              colorBypass={'webviewTitle'}
+              ttyBypass={true}
+            />
           </Box>
         </Box>
       </Box>
