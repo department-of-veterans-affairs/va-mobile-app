@@ -132,6 +132,7 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
 
   const onTabChange = (tab: number) => {
     if (tab !== selectedTab) {
+      logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
       logAnalyticsEvent(Events.vama_claim_count(claimsAndAppealsByClaimType.CLOSED.length, claimsAndAppealsByClaimType.ACTIVE.length, controlLabels[tab]))
     }
     setSelectedTab(tab)
