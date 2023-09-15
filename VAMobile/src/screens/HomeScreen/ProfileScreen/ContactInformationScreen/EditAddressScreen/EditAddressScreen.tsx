@@ -24,9 +24,7 @@ import { GenerateAddressMessages } from 'translations/en/functions'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState } from 'store/slices'
 import { RootNavStackParamList } from 'App'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
@@ -37,7 +35,6 @@ import { showSnackBar } from 'utils/common'
 import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useError, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { useContactInformation } from 'api/contactInformation'
 import { useDeleteAddress } from 'api/contactInformation/deleteAddress'
-import { useSelector } from 'react-redux'
 import { useUpdateAddress } from 'api/contactInformation/updateAddress'
 import { useValidateAddress } from 'api/contactInformation/validateAddress'
 import AddressValidation from '../AddressValidation'
@@ -164,7 +161,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     // }
 
     if (!formChanged() && !showAddressValidation) {
-      // dispatch(finishValidateAddress())
       return
     }
 
@@ -188,7 +184,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           text: t('deleteChanges'),
           onPress: () => {
             navigation.dispatch(e.data.action)
-            // dispatch(finishValidateAddress())
           },
         },
       ],
