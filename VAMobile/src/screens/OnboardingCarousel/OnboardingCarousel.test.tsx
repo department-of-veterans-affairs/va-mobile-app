@@ -2,13 +2,14 @@ import 'react-native'
 import React from 'react'
 
 // Note: test renderer must be required after react-native.
-import { context, mockStore, render, RenderAPI } from 'testUtils'
-import { act, ReactTestInstance } from 'react-test-renderer'
+import { context, render, RenderAPI } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
 
 import OnboardingCarousel from './OnboardingCarousel'
-import { EmailData, PhoneData } from 'store/api/types'
+import { EmailData } from 'store/api/types'
 import { completeFirstTimeLogin, InitialState } from 'store/slices'
 import { Carousel } from 'components'
+import { PhoneData } from 'api/types'
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
