@@ -1,19 +1,15 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import * as api from 'store/api'
 import { AddressData, AddressValidationScenarioTypes, SuggestedAddress } from 'api/types/AddressData'
 import { AppThunk } from 'store'
-import { Events, UserAnalytics } from 'constants/analytics'
 import { ScreenIDTypes, UserData, UserDataProfile, get } from '../api'
-import { SnackbarMessages } from 'components/SnackBar'
+import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { dispatchUpdateAuthorizedServices } from './authorizedServicesSlice'
 import { dispatchUpdateCerner } from './patientSlice'
-import { getAllFieldsThatExist, isErrorObject, sanitizeString, showSnackBar } from 'utils/common'
-import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { getAllFieldsThatExist, isErrorObject, sanitizeString } from 'utils/common'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { registerReviewEvent } from 'utils/inAppReviews'
-import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
+import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 
 const { ENVIRONMENT } = getEnv()
@@ -79,16 +75,16 @@ export const getProfileInfo =
     }
   }
 
-/**
- * Redux action to update the users phone number
- *
- * @param phoneType - string specifying the type of number being updated (can be HOME, WORK, MOBILE)
- * @param phoneNumber - string of numbers signifying area code and phone number
- * @param extension - string of numbers signifying extension number
- * @param numberId - number indicating the id of the phone number
- * @param messages - messages to show in success and error snackbars
- * @param screenID - ID used to compare within the component to see if an error component needs to be rendered
- */
+// /**
+//  * Redux action to update the users phone number
+//  *
+//  * @param phoneType - string specifying the type of number being updated (can be HOME, WORK, MOBILE)
+//  * @param phoneNumber - string of numbers signifying area code and phone number
+//  * @param extension - string of numbers signifying extension number
+//  * @param numberId - number indicating the id of the phone number
+//  * @param messages - messages to show in success and error snackbars
+//  * @param screenID - ID used to compare within the component to see if an error component needs to be rendered
+//  */
 // export const editUsersNumber =
 //   (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
 //   async (dispatch, getState) => {
@@ -213,99 +209,99 @@ export const getProfileInfo =
 /**
  * Redux action for leaving the phone number edit mode
  */
-export const finishEditPhoneNumber = (): AppThunk => async (dispatch) => {
-  dispatch(dispatchFinishEditPhoneNumber())
-}
+// export const finishEditPhoneNumber = (): AppThunk => async (dispatch) => {
+//   dispatch(dispatchFinishEditPhoneNumber())
+// }
 
 /**
  * Redux action to make the API call to update a users email
  */
-export const updateEmail =
-  (messages: SnackbarMessages, email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
-    const retryFunction = () => dispatch(updateEmail(messages, email, emailId, screenID))
-    try {
-      dispatch(dispatchClearErrors(screenID))
-      dispatch(dispatchSetTryAgainFunction(retryFunction))
-      dispatch(dispatchStartSaveEmail())
+// export const updateEmail =
+//   (messages: SnackbarMessages, email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
+//   async (dispatch, getState) => {
+//     const retryFunction = () => dispatch(updateEmail(messages, email, emailId, screenID))
+//     try {
+//       dispatch(dispatchClearErrors(screenID))
+//       dispatch(dispatchSetTryAgainFunction(retryFunction))
+//       dispatch(dispatchStartSaveEmail())
 
-      // if it doesnt exist call post endpoint instead
-      const createEntry = !getState().personalInformation.profile?.contactEmail?.emailAddress
+//       // if it doesnt exist call post endpoint instead
+//       const createEntry = !getState().personalInformation.profile?.
 
-      if (createEntry) {
-        await api.post<api.EditResponseData>('/v0/user/emails', { emailAddress: email } as unknown as api.Params)
-      } else {
-        const emailUpdateData = {
-          id: emailId,
-          emailAddress: email,
-        }
-        await api.put<api.EditResponseData>('/v0/user/emails', emailUpdateData as unknown as api.Params)
-      }
+//       if (createEntry) {
+//         await api.post<api.EditResponseData>('/v0/user/emails', { emailAddress: email } as unknown as api.Params)
+//       } else {
+//         const emailUpdateData = {
+//           id: emailId,
+//           emailAddress: email,
+//         }
+//         await api.put<api.EditResponseData>('/v0/user/emails', emailUpdateData as unknown as api.Params)
+//       }
 
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
-      const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_prof_update_email(totalTime, actionTime))
-      await dispatch(resetAnalyticsActionStart())
-      await dispatch(setAnalyticsTotalTimeStart())
-      await registerReviewEvent()
-      dispatch(dispatchFinishSaveEmail())
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
-    } catch (err) {
-      if (isErrorObject(err)) {
-        logNonFatalErrorToFirebase(err, `updateEmail: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishSaveEmail(err))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        // The email is not validating for a reason our front end validation does not know about, so it will always fail
-        if (err.status === 400) {
-          showSnackBar(messages.errorMsg, dispatch, undefined, true, true)
-        } else {
-          showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
-        }
-      }
-    }
-  }
+//       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+//       // const [totalTime, actionTime] = getAnalyticsTimers(getState())
+//       // await logAnalyticsEvent(Events.vama_prof_update_email(totalTime, actionTime))
+//       // await dispatch(resetAnalyticsActionStart())
+//       // await dispatch(setAnalyticsTotalTimeStart())
+//       // await registerReviewEvent()
+//       // dispatch(dispatchFinishSaveEmail())
+//       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
+//     } catch (err) {
+//       if (isErrorObject(err)) {
+//         logNonFatalErrorToFirebase(err, `updateEmail: ${personalInformationNonFatalErrorString}`)
+//         dispatch(dispatchFinishSaveEmail(err))
+//         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+//         // The email is not validating for a reason our front end validation does not know about, so it will always fail
+//         if (err.status === 400) {
+//           showSnackBar(messages.errorMsg, dispatch, undefined, true, true)
+//         } else {
+//           showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+//         }
+//       }
+//     }
+//   }
 
 /**
  * Redux action to make the API call to delete a users email
  */
-export const deleteEmail =
-  (messages: SnackbarMessages, email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
-    const retryFunction = () => dispatch(deleteEmail(messages, email, emailId, screenID))
+// export const deleteEmail =
+//   (messages: SnackbarMessages, email?: string, emailId?: string, screenID?: ScreenIDTypes): AppThunk =>
+//   async (dispatch, getState) => {
+//     const retryFunction = () => dispatch(deleteEmail(messages, email, emailId, screenID))
 
-    try {
-      dispatch(dispatchClearErrors(screenID))
-      dispatch(dispatchSetTryAgainFunction(retryFunction))
-      dispatch(dispatchStartSaveEmail())
+//     try {
+//       dispatch(dispatchClearErrors(screenID))
+//       dispatch(dispatchSetTryAgainFunction(retryFunction))
+//       dispatch(dispatchStartSaveEmail())
 
-      const emailDeleteData = {
-        id: emailId,
-        emailAddress: email,
-      }
+//       const emailDeleteData = {
+//         id: emailId,
+//         emailAddress: email,
+//       }
 
-      await api.del<api.EditResponseData>('/v0/user/emails', emailDeleteData as unknown as api.Params)
-      const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_prof_update_email(totalTime, actionTime))
-      await dispatch(resetAnalyticsActionStart())
-      await dispatch(setAnalyticsTotalTimeStart())
-      dispatch(dispatchFinishSaveEmail())
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
-    } catch (err) {
-      if (isErrorObject(err)) {
-        logNonFatalErrorToFirebase(err, `deleteEmail: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishSaveEmail(err))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
-      }
-    }
-  }
+//       await api.del<api.EditResponseData>('/v0/user/emails', emailDeleteData as unknown as api.Params)
+//       const [totalTime, actionTime] = getAnalyticsTimers(getState())
+//       await logAnalyticsEvent(Events.vama_prof_update_email(totalTime, actionTime))
+//       await dispatch(resetAnalyticsActionStart())
+//       await dispatch(setAnalyticsTotalTimeStart())
+//       dispatch(dispatchFinishSaveEmail())
+//       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
+//     } catch (err) {
+//       if (isErrorObject(err)) {
+//         logNonFatalErrorToFirebase(err, `deleteEmail: ${personalInformationNonFatalErrorString}`)
+//         dispatch(dispatchFinishSaveEmail(err))
+//         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(err), screenID }))
+//         showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true)
+//       }
+//     }
+//   }
 
 /**
  * Redux action for exiting the email edit mode
  */
-export const finishEditEmail = (): AppThunk => async (dispatch) => {
-  dispatch(dispatchFinishEditEmail())
-}
+// export const finishEditEmail = (): AppThunk => async (dispatch) => {
+//   dispatch(dispatchFinishEditEmail())
+// }
 
 /**
  * Redux action to make the API call to update a users address
@@ -434,18 +430,18 @@ export const finishEditEmail = (): AppThunk => async (dispatch) => {
 //   }
 
 /**
- * Redux action for finishing validating address
- */
-export const finishValidateAddress = (): AppThunk => async (dispatch) => {
-  dispatch(dispatchFinishValidateAddress(undefined))
-}
+//  * Redux action for finishing validating address
+//  */
+// export const finishValidateAddress = (): AppThunk => async (dispatch) => {
+//   dispatch(dispatchFinishValidateAddress(undefined))
+// }
 
 /**
  * Redux action for exiting the address edit mode
- */
-export const finishEditAddress = (): AppThunk => async (dispatch) => {
-  dispatch(dispatchFinishEditAddress())
-}
+//  */
+// export const finishEditAddress = (): AppThunk => async (dispatch) => {
+//   dispatch(dispatchFinishEditAddress())
+// }
 
 /**
  * Redux slice that will create the actions and reducers
@@ -466,10 +462,6 @@ const peronalInformationSlice = createSlice({
         profile.lastName = sanitizeString(profile.lastName)
         profile.fullName = getAllFieldsThatExist([profile.firstName, profile.middleName, profile.lastName]).join(' ').trim()
 
-        // profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
-        // profile.formattedMobilePhone = getFormattedPhoneNumber(profile.mobilePhoneNumber)
-        // profile.formattedWorkPhone = getFormattedPhoneNumber(profile.workPhoneNumber)
-
         // Reset these since this information is now being pulled from the demographics endpoint.
         // This can be removed when we switch over to the `v2/user` endpoint.
         profile.preferredName = ''
@@ -483,99 +475,99 @@ const peronalInformationSlice = createSlice({
       state.preloadComplete = true
     },
 
-    dispatchFinishEditPhoneNumber: (state) => {
-      state.loading = true
-      state.phoneNumberSaved = false
-    },
-    dispatchStartSavePhoneNumber: (state) => {
-      state.loading = true
-    },
-    dispatchFinishSavePhoneNumber: (state, action: PayloadAction<Error | undefined>) => {
-      const error = action.payload
-      state.error = error
-      state.loading = false
-      state.needsDataLoad = !error
-      state.phoneNumberSaved = !error
-    },
+    // dispatchFinishEditPhoneNumber: (state) => {
+    //   state.loading = true
+    //   state.phoneNumberSaved = false
+    // },
+    // dispatchStartSavePhoneNumber: (state) => {
+    //   state.loading = true
+    // },
+    // dispatchFinishSavePhoneNumber: (state, action: PayloadAction<Error | undefined>) => {
+    //   const error = action.payload
+    //   state.error = error
+    //   state.loading = false
+    //   state.needsDataLoad = !error
+    //   state.phoneNumberSaved = !error
+    // },
 
     dispatchProfileLogout: () => {
       return {
         ...initialPersonalInformationState,
       }
     },
-    dispatchStartSaveEmail: (state) => {
-      state.loading = true
-    },
-    dispatchFinishSaveEmail: (state, action: PayloadAction<Error | undefined>) => {
-      const emailSaved = !action.payload
-      state.error = action.payload
-      state.loading = false
-      state.needsDataLoad = emailSaved
-      state.emailSaved = emailSaved
-    },
-    dispatchFinishEditEmail: (state) => {
-      state.loading = true
-      state.emailSaved = false
-    },
+    // dispatchStartSaveEmail: (state) => {
+    //   state.loading = true
+    // },
+    // dispatchFinishSaveEmail: (state, action: PayloadAction<Error | undefined>) => {
+    //   const emailSaved = !action.payload
+    //   state.error = action.payload
+    //   state.loading = false
+    //   state.needsDataLoad = emailSaved
+    //   state.emailSaved = emailSaved
+    // },
+    // dispatchFinishEditEmail: (state) => {
+    //   state.loading = true
+    //   state.emailSaved = false
+    // },
 
-    dispatchStartSaveAddress: (state) => {
-      state.savingAddress = true
-    },
-    dispatchFinishSaveAddress: (state, action: PayloadAction<Error | undefined>) => {
-      const error = action.payload
-      state.error = error
-      state.savingAddress = false
-      state.needsDataLoad = !error
-      state.addressSaved = !error
-      state.showValidation = false
-    },
-    dispatchFinishEditAddress: (state) => {
-      state.addressSaved = false
-    },
-    dispatchStartValidateAddress: (state, action: PayloadAction<{ abortController: AbortController }>) => {
-      state.savingAddress = true
-      state.validateAddressAbortController = action.payload.abortController
-    },
-    dispatchFinishValidateAddress: (
-      state,
-      action: PayloadAction<
-        | {
-            suggestedAddresses?: Array<SuggestedAddress>
-            confirmedSuggestedAddresses?: Array<SuggestedAddress>
-            addressData?: AddressData
-            addressValidationScenario?: AddressValidationScenarioTypes
-            validationKey?: number
-          }
-        | undefined
-      >,
-    ) => {
-      const { addressData, suggestedAddresses, confirmedSuggestedAddresses, addressValidationScenario, validationKey } = action.payload || {}
-      state.savingAddress = false
-      state.addressData = addressData
-      state.suggestedAddresses = suggestedAddresses
-      state.confirmedSuggestedAddresses = confirmedSuggestedAddresses
-      state.addressValidationScenario = addressValidationScenario
-      state.validationKey = validationKey
-      state.showValidation = !!addressData
-      state.validateAddressAbortController = undefined
-    },
+    // dispatchStartSaveAddress: (state) => {
+    //   state.savingAddress = true
+    // },
+    // dispatchFinishSaveAddress: (state, action: PayloadAction<Error | undefined>) => {
+    //   const error = action.payload
+    //   state.error = error
+    //   state.savingAddress = false
+    //   state.needsDataLoad = !error
+    //   state.addressSaved = !error
+    //   state.showValidation = false
+    // },
+    // dispatchFinishEditAddress: (state) => {
+    //   state.addressSaved = false
+    // },
+    // dispatchStartValidateAddress: (state, action: PayloadAction<{ abortController: AbortController }>) => {
+    //   state.savingAddress = true
+    //   state.validateAddressAbortController = action.payload.abortController
+    // },
+    // dispatchFinishValidateAddress: (
+    //   state,
+    //   action: PayloadAction<
+    //     | {
+    //         suggestedAddresses?: Array<SuggestedAddress>
+    //         confirmedSuggestedAddresses?: Array<SuggestedAddress>
+    //         addressData?: AddressData
+    //         addressValidationScenario?: AddressValidationScenarioTypes
+    //         validationKey?: number
+    //       }
+    //     | undefined
+    //   >,
+    // ) => {
+    //   const { addressData, suggestedAddresses, confirmedSuggestedAddresses, addressValidationScenario, validationKey } = action.payload || {}
+    //   state.savingAddress = false
+    //   state.addressData = addressData
+    //   state.suggestedAddresses = suggestedAddresses
+    //   state.confirmedSuggestedAddresses = confirmedSuggestedAddresses
+    //   state.addressValidationScenario = addressValidationScenario
+    //   state.validationKey = validationKey
+    //   state.showValidation = !!addressData
+    //   state.validateAddressAbortController = undefined
+    // },
   },
 })
 
 export const {
   dispatchStartGetProfileInfo,
   dispatchFinishGetProfileInfo,
-  dispatchFinishEditPhoneNumber,
-  dispatchFinishSavePhoneNumber,
+  // dispatchFinishEditPhoneNumber,
+  // dispatchFinishSavePhoneNumber,
   dispatchProfileLogout,
-  dispatchStartSavePhoneNumber,
-  dispatchFinishEditEmail,
-  dispatchFinishSaveEmail,
-  dispatchStartSaveEmail,
-  dispatchFinishEditAddress,
-  dispatchFinishSaveAddress,
-  dispatchStartSaveAddress,
-  dispatchFinishValidateAddress,
-  dispatchStartValidateAddress,
+  // dispatchStartSavePhoneNumber,
+  // dispatchFinishEditEmail,
+  // dispatchFinishSaveEmail,
+  // dispatchStartSaveEmail,
+  // dispatchFinishEditAddress,
+  // dispatchFinishSaveAddress,
+  // dispatchStartSaveAddress,
+  // dispatchFinishValidateAddress,
+  // dispatchStartValidateAddress,
 } = peronalInformationSlice.actions
 export default peronalInformationSlice.reducer
