@@ -132,6 +132,37 @@ assignees:
 
 </details>
 
+
+### Questions 
+<details>
+<summary>Open Questions</summary>
+
+</details>
+
+<details>
+<summary>Closed Questions</summary>
+
+| Question |  Answer |
+|--------|----------|
+| | |
+| | |
+
+</details>
+
+### Change / Decision Log 
+
+<details>
+<summary>Change & Decision Log Details </summary>
+
+| Change | Rationale | Decision Maker |  Date Change |
+|-------|------- | -------- | -------- | 
+| | | | |
+| | | | |
+
+
+</details>
+
+
 # Checklist
 
 <details>
