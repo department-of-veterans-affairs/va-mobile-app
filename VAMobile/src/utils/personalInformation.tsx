@@ -51,7 +51,6 @@ export const getSuggestedAddresses = (addressValidationData?: AddressValidationD
  address or their address is not know to the validation API
  */
 export const showValidationScreen = (addressData: AddressData, suggestedAddresses?: Array<SuggestedAddress>): boolean => {
-  console.log('PARAMS', suggestedAddresses)
   if (!suggestedAddresses) {
     return false
   }

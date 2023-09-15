@@ -6,7 +6,7 @@ import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useMutation } from '@tanstack/react-query'
 
 /**
- * Validate's an address and returns the validation key of the suggested address with the highest confidence score
+ * Validates an address and returns the validation key of the suggested address with the highest confidence score
  */
 export const validateAddress = async (addressData: AddressData): Promise<ValidateAddressData> => {
   try {

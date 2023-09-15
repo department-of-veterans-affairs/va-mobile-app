@@ -7,7 +7,7 @@ import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/anal
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 /**
- * Update's a user's phone number
+ * Updates a user's phone number
  */
 export const updatePhoneNumber = async (phoneData: PhoneData) => {
   try {
