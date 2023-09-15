@@ -2,7 +2,7 @@ import { AddressData } from './AddressData'
 import { PhoneData } from './PhoneData'
 
 export type EmailData = {
-  id: string
+  id?: string
   emailAddress: string
 }
 
@@ -14,7 +14,7 @@ export type ContactInformationPayload = {
       homePhoneNumber: PhoneData
       mobilePhoneNumber?: PhoneData
       workPhoneNumber?: PhoneData
-      contactEmail: EmailData
+      contactEmail?: EmailData
     }
   }
 }
@@ -28,5 +28,5 @@ export type UserContactInformation = {
   formattedMobilePhone?: string
   workPhoneNumber?: PhoneData
   formattedWorkPhone?: string
-  contactEmail: EmailData
+  contactEmail?: EmailData
 }
