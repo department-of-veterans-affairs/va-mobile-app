@@ -95,10 +95,10 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   }
 
   const onTabChange = (tab: number) => {
-    setSelectedTab(tab)
     if (selectedTab !== tab) {
       logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
     }
+    setSelectedTab(tab)
   }
 
   const serviceErrorAlert = (): ReactElement => {
