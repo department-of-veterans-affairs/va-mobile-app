@@ -9,11 +9,13 @@ import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, FooterButton } f
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { featureEnabled } from 'utils/remoteConfig'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
@@ -92,6 +94,13 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     )
   }
 
+  const onTabChange = (tab: number) => {
+    if (selectedTab !== tab) {
+      logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
+    }
+    setSelectedTab(tab)
+  }
+
   const serviceErrorAlert = (): ReactElement => {
     const pastAppointmentError = selectedTab === 1 && (pastVaServiceError || pastCcServiceError)
     const upcomingAppointmentError = selectedTab === 0 && (upcomingVaServiceError || upcomingCcServiceError)
@@ -134,7 +143,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
       testID="appointmentsTestID">
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <SegmentedControl labels={controlLabels} onChange={setSelectedTab} selected={selectedTab} a11yHints={a11yHints} />
+          <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}
         <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
