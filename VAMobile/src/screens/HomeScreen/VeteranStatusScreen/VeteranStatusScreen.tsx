@@ -140,14 +140,14 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
             <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
               {t('veteranStatus.fixAnError.2')}
             </TextView>
-            <ClickToCallPhoneNumber phone={t('howDoIUpdate.profileNumber')} a11yLabel={t('howDoIUpdate.profileNumber.a11yLabel')} colorBypass={'webviewTitle'} />
+            <ClickToCallPhoneNumber phone={t('howDoIUpdate.profileNumber')} a11yLabel={t('howDoIUpdate.profileNumber.a11yLabel')} colorBypass={'veteranStatus'} />
             <TextView variant="MobileBody" color="primaryContrast" my={theme.dimensions.condensedMarginBetween}>
               {t('veteranStatus.fixAnError.3')}
             </TextView>
             <ClickToCallPhoneNumber
               phone={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed')}
               a11yLabel={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed.a11yLabel')}
-              colorBypass={'webviewTitle'}
+              colorBypass={'veteranStatus'}
               ttyBypass={true}
             />
           </Box>

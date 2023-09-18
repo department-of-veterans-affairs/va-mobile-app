@@ -147,6 +147,7 @@ export const lightTheme = {
     labelTag: colors.base,
     textWithIconButton: colors.primary,
     textWithIconButtonInactive: colors.primary,
+    veteranStatus: colors.white,
     webviewTitle: colors.base,
   },
   buttonBackground: {
@@ -345,6 +346,7 @@ export const darkTheme = {
     labelTag: colors.base,
     textWithIconButton: colors.darkmodeLightBlue,
     textWithIconButtonInactive: colors.grayLight,
+    veteranStatus: colors.white,
     webviewTitle: colors.white,
   },
   buttonBackground: {
