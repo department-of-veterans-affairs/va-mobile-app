@@ -9,6 +9,7 @@ const fetchRemote = !__DEV__ && !IS_TEST
 const RC_FETCH_TIMEOUT = 10000 // 10 sec
 const RC_CACHE_TIME = 30 * 60 * 1000 // 30 min
 const REMOTE_CONFIG_OVERRIDES_KEY = '@store_remote_config_overrides'
+const WAYGATE_OVERRIDES_KEY = '@store_waygate_overrides'
 
 export let overrideRemote = false
 
@@ -40,11 +41,11 @@ type FeatureToggleValues = {
   patientCheckInWaygate: boolean
 }
 
-export let devConfig: FeatureToggleValues = {
-  appointmentRequests: true,
+export const productionDefaults: FeatureToggleValues = {
+  appointmentRequests: false,
   prescriptions: true,
   SIS: true,
-  testFeature: true,
+  testFeature: false,
   inAppUpdates: true,
   preferredNameGenderWaygate: true,
   haptics: true,
@@ -54,18 +55,81 @@ export let devConfig: FeatureToggleValues = {
   patientCheckInWaygate: true,
 }
 
-export const productionDefaults: FeatureToggleValues = {
-  appointmentRequests: false,
-  prescriptions: true,
-  SIS: true,
-  testFeature: false,
-  inAppUpdates: false,
-  preferredNameGenderWaygate: true,
-  haptics: true,
-  whatsNewUI: true,
-  decisionLettersWaygate: true,
-  patientCheckIn: false,
-  patientCheckInWaygate: true,
+export let devConfig: FeatureToggleValues = productionDefaults
+
+type Waygate = {
+  // true means waygate is 'open' so no waygate display, false will display waygate.
+  enabled: boolean
+  // Title for Alertbox
+  errorMsgTitle?: string
+  // Body for Alertbox
+  errorMsgBody?: string
+  // Whether to display the app update button
+  appUpdateButton?: boolean
+  // Whether to announce but not hinder access
+  allowFunction?: boolean
+  // Whether to deny access all together to screen
+  denyAccess?: boolean
+}
+
+type WaygateToggleValues = {
+  WG_HomeScreen: object
+  WG_ProfileScreen: object
+  WG_PersonalInformationScreen: object
+  WG_HowDoIUpdateScreen: object
+  WG_PreferredNameScreen: object
+  WG_GenderIdentityScreen: object
+  WG_WhatToKnowScreen: object
+  WG_ContactInformationScreen: object
+  WG_HowWillYouScreen: object
+  WG_EditAddressScreen: object
+  WG_EditPhoneNumberScreen: object
+  WG_EditEmailScreen: object
+  WG_MilitaryInformationScreen: object
+  // TODO: Should we add 'missing information' type blockers? NoMilitaryInfoScreen?
+  WG_IncorrectServiceInfoScreen: object
+  WG_SettingsScreen: object
+  WG_ShareAppButton: object
+  WG_PrivacyPolicyButton: object
+  WG_ManageYourAccountScreen: object
+  WG_NotificationsSettingsScreen: object
+  WG_ContactVAScreen: object
+  WG_FindVAButton: object
+  WG_Covid19Button: object
+}
+
+let waygateDefault: Waygate = {
+  enabled: true,
+  errorMsgTitle: undefined,
+  errorMsgBody: undefined,
+  appUpdateButton: false,
+  allowFunction: false,
+  denyAccess: false
+}
+
+export let waygateConfig: WaygateToggleValues = {
+  WG_HomeScreen: waygateDefault,
+  WG_ProfileScreen: waygateDefault,
+  WG_PersonalInformationScreen: waygateDefault,
+  WG_HowDoIUpdateScreen: waygateDefault,
+  WG_PreferredNameScreen: waygateDefault,
+  WG_GenderIdentityScreen: waygateDefault,
+  WG_WhatToKnowScreen: waygateDefault,
+  WG_ContactInformationScreen: waygateDefault,
+  WG_HowWillYouScreen: waygateDefault,
+  WG_EditAddressScreen: waygateDefault,
+  WG_EditPhoneNumberScreen: waygateDefault,
+  WG_EditEmailScreen: waygateDefault,
+  WG_MilitaryInformationScreen: waygateDefault,
+  WG_IncorrectServiceInfoScreen: waygateDefault,
+  WG_SettingsScreen: waygateDefault,
+  WG_ShareAppButton: waygateDefault,
+  WG_PrivacyPolicyButton: waygateDefault,
+  WG_ManageYourAccountScreen: waygateDefault,
+  WG_NotificationsSettingsScreen: waygateDefault,
+  WG_ContactVAScreen: waygateDefault,
+  WG_FindVAButton: waygateDefault,
+  WG_Covid19Button: waygateDefault,
 }
 
 /**
@@ -76,13 +140,9 @@ export const activateRemoteConfig = async (): Promise<void> => {
   try {
     // Sets timeout for remote config fetch
     await remoteConfig().setConfigSettings({ fetchTimeMillis: RC_FETCH_TIMEOUT })
-    console.debug(`Remote Config: Set fetch timeout to ${RC_FETCH_TIMEOUT / 1000} seconds`)
-
-    console.debug('Remote Config: Setting defaults')
     // Sets defaults for remote config for use prior to fetching and activating
-    const defaults = fetchRemote ? productionDefaults : devConfig
-    await remoteConfig().setDefaults(defaults)
-    console.debug('Remote Config: Defaults set', defaults)
+    await remoteConfig().setDefaults(productionDefaults)
+    console.debug('Remote Config: Defaults set', productionDefaults)
 
     /**
      * If in staging or production, fetch and activate remote settings.  Otherwise,
@@ -91,7 +151,6 @@ export const activateRemoteConfig = async (): Promise<void> => {
     if (fetchRemote) {
       console.debug('Remote Config: Fetching and activating')
       await remoteConfig().fetch(RC_CACHE_TIME)
-      console.debug('Remote Config: Fetched latest remote config')
       await remoteConfig().activate()
       console.debug('Remote Config: Activated config')
     }
@@ -112,15 +171,21 @@ export const loadOverrides = async (): Promise<void> => {
   try {
     const overrides = await AsyncStorage.getItem(REMOTE_CONFIG_OVERRIDES_KEY)
     if (overrides) {
-      console.debug('Remote Config: Found overrides in AsyncStorage. Applying')
-      overrideRemote = true
       devConfig = JSON.parse(overrides) as FeatureToggleValues
-    } else {
-      console.debug('Remote Config: No overrides found in AsyncStorage')
     }
   } catch (err) {
     logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
-    console.debug('loadOverrides: Failed to load overrides from AsyncStorage')
+  }
+}
+
+export const loadWaygateOverrides = async (): Promise<void> => {
+  try {
+    const overrides = await AsyncStorage.getItem(WAYGATE_OVERRIDES_KEY)
+    if (overrides) {
+      waygateConfig = JSON.parse(overrides)
+    }
+  } catch (err) {
+    logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
   }
 }
 
