@@ -1,7 +1,6 @@
 ---
 title: For designers
 sidebar_position: 4
-draft: true
 ---
 
 ## Documentation and resources
@@ -17,7 +16,7 @@ The VA Mobile Design System is an extension of the VA.gov Design System. Additio
 * [Content](https://design.va.gov/content-style-guide). Our house style guide for VA.gov. Follow the guidelines to help you create a consistent, helpful experience for Veterans.
 * [Foundation](https://design.va.gov/foundation). This section explains VA.gov’s base styles and visual language.
 * [Patterns](https://design.va.gov/patterns). Patterns define how components, content strategy, information architecture, accessibility, and visual design work in tandem to solve Veterans’ needs. Here you will find patterns to ask users for specific pieces of information and how to help a user to complete a task or interaction.
-* [Templates](https://design.va.gov/templates). Templates, or page layouts, compose components within a single page. A layout can contain multiple variations of a component depending on the context.
+* [Templates](https://design.va.gov/templates). Templates, or page layouts, are composed of components within a single page. A layout can contain multiple variations of a component depending on the context.
 
 #### Design resources
 
@@ -35,7 +34,7 @@ The Design System team provides a Figma library for use by teams.
 
 Use the design library to access all components. In Figma, the design library lives in the cloud. Thus you do not need to download the library. The Design System Team updates the design library in order to keep it in sync with the va-mobile-library code which contains our React Nativeweb components.
 
-To access and enable the Design Library, follow these steps:
+To access and enable the [Design Library](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design), follow these steps:
 
 1. In the Figma menu bar, navigate to Figma > Libraries to open the Libraries modal
 2. In the modal, find the DesignLibrary2.0 - VAMobile file

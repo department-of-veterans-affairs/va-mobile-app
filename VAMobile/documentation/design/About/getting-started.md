@@ -3,7 +3,6 @@ title: Getting started
 sidebar_position: 1
 ---
 
-
 # Getting started
 
 This site provides design guidelines and code to help you quickly create trustworthy, accessible, and consistent digital services in the VA Mobile App. Its primary audience includes content writers, designers, and front-end developers who work on the VA Mobile App.
