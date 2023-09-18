@@ -7,10 +7,10 @@ import React, { FC } from 'react'
 import { BackgroundVariant, BorderColorVariant, Box, BoxProps, ClickToCallPhoneNumber, LargePanel, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
 import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState } from 'store/slices'
-import { HomeStackParamList } from '../HomeStackScreens'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { getBirthDate } from '../ProfileScreen/PersonalInformationScreen/PersonalInformationScreen'
+import { getBirthDate } from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/PersonalInformationScreen'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useTheme } from 'utils/hooks'
 // import PhotoUpload from 'components/PhotoUpload'
@@ -140,14 +140,14 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
             <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
               {t('veteranStatus.fixAnError.2')}
             </TextView>
-            <ClickToCallPhoneNumber phone={t('howDoIUpdate.profileNumber')} a11yLabel={t('howDoIUpdate.profileNumber.a11yLabel')} colorBypass={'veteranStatus'} />
+            <ClickToCallPhoneNumber phone={t('howDoIUpdate.profileNumber')} a11yLabel={t('howDoIUpdate.profileNumber.a11yLabel')} colorOverride={'veteranStatus'} />
             <TextView variant="MobileBody" color="primaryContrast" my={theme.dimensions.condensedMarginBetween}>
               {t('veteranStatus.fixAnError.3')}
             </TextView>
             <ClickToCallPhoneNumber
               phone={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed')}
               a11yLabel={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed.a11yLabel')}
-              colorBypass={'veteranStatus'}
+              colorOverride={'veteranStatus'}
               ttyBypass={true}
             />
           </Box>

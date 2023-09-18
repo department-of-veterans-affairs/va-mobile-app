@@ -1,10 +1,8 @@
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { map } from 'underscore'
-
 import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
-import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
+import { BranchesOfServiceConstants } from 'store/api/types'
 import { MilitaryServiceState, PersonalInformationState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { Pressable, PressableProps } from 'react-native'
@@ -28,7 +26,7 @@ export const Nametag: FC = () => {
   const branch = mostRecentBranch || ''
 
   let showVeteranStatus = false
-  map(serviceHistory, (service: ServiceData) => {
+  serviceHistory.forEach((service) => {
     if (service.honorableServiceIndicator === 'Y') {
       showVeteranStatus = true
     }

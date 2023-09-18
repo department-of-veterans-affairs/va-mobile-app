@@ -19,11 +19,11 @@ type ClickToCallPhoneNumberProps = {
   /** tty bypass */
   ttyBypass?: boolean
   /** color bypass */
-  colorBypass?: string
+  colorOverride?: string
 }
 
 /**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
-const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center, a11yLabel, ttyBypass, colorBypass }) => {
+const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center, a11yLabel, ttyBypass, colorOverride }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   if (!phone) {
@@ -37,7 +37,7 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
     linkType: LinkTypeOptionsConstants.call,
     numberOrUrlLink: getNumbersFromString(phoneNumber),
     a11yLabel: a11yLabel || getNumberAccessibilityLabelFromString(phoneNumber),
-    colorBypass: colorBypass,
+    colorOverride: colorOverride,
   }
 
   const ttyProps: LinkButtonProps = {
@@ -45,7 +45,7 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
     linkType: LinkTypeOptionsConstants.callTTY,
     numberOrUrlLink: t('contactVA.tty.number'),
     a11yLabel: t('contactVA.tty.number.a11yLabel'),
-    colorBypass: colorBypass,
+    colorOverride: colorOverride,
   }
 
   return (
