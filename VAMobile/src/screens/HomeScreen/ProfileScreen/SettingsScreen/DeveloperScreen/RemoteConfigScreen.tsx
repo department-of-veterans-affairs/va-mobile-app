@@ -1,6 +1,6 @@
 import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
 import { logout } from 'store/slices/authSlice'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useState } from 'react'
 import remoteConfig from '@react-native-firebase/remote-config'
 
@@ -16,6 +16,7 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
+  const navigateTo = useRouteNavigation()
   const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const currentConfig = getFeatureToggles()
   const [toggles, setToggles] = useState({ ...currentConfig })
@@ -48,6 +49,11 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
   return (
     <FeatureLandingTemplate backLabel={t('debug.title')} backLabelOnPress={navigation.goBack} title={t('remoteConfig.title')}>
       <Box mb={contentMarginBottom}>
+        <Box>
+          <TextArea>
+            <VAButton onPress={navigateTo('WaygateManagement')} label={'Waygate Management'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </TextArea>
+        </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="MobileBodyBold">Last fetch status</TextView>

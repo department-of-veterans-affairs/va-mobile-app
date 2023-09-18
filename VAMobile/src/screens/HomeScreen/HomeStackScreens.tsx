@@ -36,6 +36,7 @@ export type HomeStackParamList = WebviewStackParams & {
   Sandbox: undefined
   Settings: undefined
   HapticsDemoScreen: undefined
+  WaygateManagement: undefined
   WhatToKnow: undefined
 }
 
