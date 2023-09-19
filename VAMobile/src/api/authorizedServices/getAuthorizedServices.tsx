@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { AuthorizedServicesPayload, UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
-import { authroizedServicesKeys } from './queryKeys'
+import { authorizedServicesKeys } from './queryKeys'
 import { get } from 'store/api'
 
 /**
@@ -21,7 +21,7 @@ export const getAuthorizedServices = async (): Promise<UserAuthorizedServicesDat
  */
 export const useAuthorizedServices = () => {
   return useQuery({
-    queryKey: authroizedServicesKeys.authroizedServices,
+    queryKey: authorizedServicesKeys.authorizedServices,
     queryFn: () => getAuthorizedServices(),
     meta: {
       errorName: 'getAuthorizedServices: Service error',

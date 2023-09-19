@@ -1,3 +1,3 @@
-export const authroizedServicesKeys = {
-  authroizedServices: ['authroizedServices'] as const,
+export const authorizedServicesKeys = {
+  authorizedServices: ['authorizedServices'] as const,
 }
