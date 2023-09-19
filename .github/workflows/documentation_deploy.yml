@@ -3,6 +3,9 @@ name: '[Documentation] Deploy Site'
 # Adapted from https://docusaurus.io/docs/deployment
 
 on:
+  push:
+    branches: ["develop"]
+    paths: 'VAMobile/documentation/**'
   workflow_dispatch:
   schedule:
     - cron: "0 3 * * *" # Runs at 03:00 AM (UTC) every day (Check https://crontab.guru/)
