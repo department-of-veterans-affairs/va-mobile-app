@@ -46,11 +46,7 @@ export const getUserVAEligibility =
 
     if (facilitiesInfo) {
       try {
-        const facilities = facilitiesInfo
-          .filter((f) => {
-            return !f.cerner
-          })
-          .map((item) => item.id)
+        const facilities = facilitiesInfo.filter((f) => !f.cerner).map((item) => item.id)
 
         dispatch(dispatchStartGeVAEligibility())
         const eligibilityData = await api.get<api.UserVAEligibilityData>('/v0/appointments/va/eligibility', {

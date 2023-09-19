@@ -8,13 +8,9 @@ import { get } from 'store/api'
  * Fetch user facilities info
  */
 
-export const getFacilitiesInfo = async (): Promise<Array<Facility> | undefined> => {
-  try {
-    const response = await get<FacilitiesPayload>('/v0/facilities-info')
-    return response?.data.attributes.facilities
-  } catch (error) {
-    throw error
-  }
+const getFacilitiesInfo = async (): Promise<Array<Facility> | undefined> => {
+  const response = await get<FacilitiesPayload>('/v0/facilities-info')
+  return response?.data.attributes.facilities
 }
 
 /**

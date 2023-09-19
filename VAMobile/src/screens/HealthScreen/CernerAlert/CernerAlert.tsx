@@ -19,9 +19,7 @@ const CernerAlert: FC = () => {
     return null
   }
 
-  const cernerFacilities = facilitiesInfo.filter((f) => {
-    return f.cerner
-  })
+  const cernerFacilities = facilitiesInfo.filter((f) => f.cerner)
 
   // if no cerner facilities then do not show the alert
   if (!cernerFacilities.length) {
