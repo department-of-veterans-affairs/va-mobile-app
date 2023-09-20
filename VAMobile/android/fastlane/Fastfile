@@ -19,7 +19,6 @@ platform :android do
 
   before_all do |lane, options|
     ENV['SUPPLY_UPLOAD_MAX_RETRIES'] = '5'
-    update_fastlane
     import('../../fastfiles/slack_commands/fastfile')
     version = options[:version]
     puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
@@ -121,7 +120,7 @@ platform :android do
   error do |lane, exception, options|
     puts("ERROR REPORT")
     puts exception
-    # slack_build_error(exception, options[:version], "Android Build Failed", "Android", ENV['SLACK_THREAD_TS'])
+    slack_build_error(exception, options[:version], "Android Build Failed", "Android", ENV['SLACK_THREAD_TS'])
   end
 
 # method to update the version and build in the repo
