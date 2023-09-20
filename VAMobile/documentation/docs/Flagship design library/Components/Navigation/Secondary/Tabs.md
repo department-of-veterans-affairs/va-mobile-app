@@ -28,9 +28,8 @@ It appears below the top navigation bar, near the top of the screen.
 - In Prescriptions to filter prescriptions by status. This is not an appropriate use of this component since it groups content that is similar. In this case, a Segmented Control component should be used instead.
 
 ## Content considerations
-- Clearly label tabs to help differentiate the different sections beneath them.
-- Have short and scannable labels, generally kept to a single word.
-- Use sentence case for tab labels.
+- Use 1 word only for each tab.
+- Use sentence case.
 
 ## Accessibility considerations
 * The screen reader should call out the state (selected vs unselected) of the tab and its place in the list
