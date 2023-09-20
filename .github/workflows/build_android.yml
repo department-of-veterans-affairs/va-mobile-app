@@ -91,7 +91,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0.2'
-          bundler-cache: true
+          bundler-cache: false
           working-directory: VAMobile/android
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
@@ -105,10 +105,10 @@ jobs:
         run: yarn env:${{ inputs.environment }}
       - name: Bundle app
         run: yarn bundle:android
-      - name: Update fastlane
-        run: |
-          bundle update fastlane
-          bundle exec fastlane update_plugins
+      # - name: Update fastlane
+      #   run: |
+      #     bundle update fastlane
+      #     bundle exec fastlane update_plugins
       - name: Set SLACK_THREAD_TS environment variable
         if: inputs.slack_thread_ts
         run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
