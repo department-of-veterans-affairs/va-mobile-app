@@ -11,8 +11,6 @@ const RC_CACHE_TIME = 30 * 60 * 1000 // 30 min
 const REMOTE_CONFIG_OVERRIDES_KEY = '@store_remote_config_overrides'
 const WAYGATE_OVERRIDES_KEY = '@store_waygate_overrides'
 
-export let overrideRemote = false
-
 /* Valid feature toggles.  Should match firebase */
 export type FeatureToggleType =
   | 'appointmentRequests'
@@ -72,39 +70,63 @@ type Waygate = {
   denyAccess?: boolean
 }
 
+export type WaygateToggleType =
+  | 'WG_HomeScreen'
+  | 'WG_ProfileScreen'
+  | 'WG_PersonalInformationScreen'
+  | 'WG_HowDoIUpdateScreen'
+  | 'WG_PreferredNameScreen'
+  | 'WG_GenderIdentityScreen'
+  | 'WG_WhatToKnowScreen'
+  | 'WG_ContactInformationScreen'
+  | 'WG_HowWillYouScreen'
+  | 'WG_EditAddressScreen'
+  | 'WG_EditPhoneNumberScreen'
+  | 'WG_EditEmailScreen'
+  | 'WG_MilitaryInformationScreen'
+  | 'WG_IncorrectServiceInfoScreen'
+  | 'WG_SettingsScreen'
+  | 'WG_ShareAppButton'
+  | 'WG_PrivacyPolicyButton'
+  | 'WG_ManageYourAccountScreen'
+  | 'WG_NotificationsSettingsScreen'
+  | 'WG_ContactVAScreen'
+  | 'WG_FindVAButton'
+  | 'WG_Covid19Button'
+
 type WaygateToggleValues = {
-  WG_HomeScreen: object
-  WG_ProfileScreen: object
-  WG_PersonalInformationScreen: object
-  WG_HowDoIUpdateScreen: object
-  WG_PreferredNameScreen: object
-  WG_GenderIdentityScreen: object
-  WG_WhatToKnowScreen: object
-  WG_ContactInformationScreen: object
-  WG_HowWillYouScreen: object
-  WG_EditAddressScreen: object
-  WG_EditPhoneNumberScreen: object
-  WG_EditEmailScreen: object
-  WG_MilitaryInformationScreen: object
+  WG_HomeScreen: Waygate
+  WG_ProfileScreen: Waygate
+  WG_PersonalInformationScreen: Waygate
+  WG_HowDoIUpdateScreen: Waygate
+  WG_PreferredNameScreen: Waygate
+  WG_GenderIdentityScreen: Waygate
+  WG_WhatToKnowScreen: Waygate
+  WG_ContactInformationScreen: Waygate
+  WG_HowWillYouScreen: Waygate
+  WG_EditAddressScreen: Waygate
+  WG_EditPhoneNumberScreen: Waygate
+  WG_EditEmailScreen: Waygate
+  WG_MilitaryInformationScreen: Waygate
   // TODO: Should we add 'missing information' type blockers? NoMilitaryInfoScreen?
-  WG_IncorrectServiceInfoScreen: object
-  WG_SettingsScreen: object
-  WG_ShareAppButton: object
-  WG_PrivacyPolicyButton: object
-  WG_ManageYourAccountScreen: object
-  WG_NotificationsSettingsScreen: object
-  WG_ContactVAScreen: object
-  WG_FindVAButton: object
-  WG_Covid19Button: object
+  WG_IncorrectServiceInfoScreen: Waygate
+  WG_SettingsScreen: Waygate
+  WG_ShareAppButton: Waygate
+  WG_PrivacyPolicyButton: Waygate
+  WG_ManageYourAccountScreen: Waygate
+  WG_NotificationsSettingsScreen: Waygate
+  WG_ContactVAScreen: Waygate
+  WG_FindVAButton: Waygate
+  WG_Covid19Button: Waygate
 }
 
-let waygateDefault: Waygate = {
+const waygateDefault: Waygate = {
   enabled: true,
   errorMsgTitle: undefined,
   errorMsgBody: undefined,
   appUpdateButton: false,
   allowFunction: false,
-  denyAccess: false
+  denyAccess: false,
 }
 
 export let waygateConfig: WaygateToggleValues = {
@@ -156,6 +178,7 @@ export const activateRemoteConfig = async (): Promise<void> => {
     }
 
     await loadOverrides()
+    await loadWaygateOverrides()
   } catch (err) {
     logNonFatalErrorToFirebase(err, 'activateRemoteConfig: Firebase Remote Config Error')
     console.debug('activateRemoteConfig: Failed to activate remote config')
@@ -185,7 +208,7 @@ export const loadWaygateOverrides = async (): Promise<void> => {
       waygateConfig = JSON.parse(overrides)
     }
   } catch (err) {
-    logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
+    logNonFatalErrorToFirebase(err, 'loadWaygateOverrides: AsyncStorage error')
   }
 }
 
@@ -195,7 +218,7 @@ export const loadWaygateOverrides = async (): Promise<void> => {
  * we'll return the value of the key in devConfig, otherwise we return the remoteConfig value
  */
 export const featureEnabled = (feature: FeatureToggleType): boolean => {
-  return overrideRemote ? devConfig[feature] : remoteConfig().getValue(feature)?.asBoolean()
+  return !fetchRemote ? devConfig[feature] : remoteConfig().getValue(feature)?.asBoolean()
 }
 
 /**
@@ -204,7 +227,6 @@ export const featureEnabled = (feature: FeatureToggleType): boolean => {
  * @param config - An object of FeatureToggleValues type that contains the config we want to override our remote config with
  */
 export const setDebugConfig = async (config: FeatureToggleValues): Promise<void> => {
-  overrideRemote = true
   devConfig = config
 
   // Store overrides in AsyncStorage so they persist with app quits
@@ -216,13 +238,29 @@ export const setDebugConfig = async (config: FeatureToggleValues): Promise<void>
  * devConfig. Otherwise we'll return the values from remoteConfig()
  */
 export const getFeatureToggles = (): FeatureToggleValues => {
-  if (overrideRemote) {
+  if (!fetchRemote) {
     return devConfig
   }
 
   const toggles = {} as FeatureToggleValues
   Object.keys(remoteConfig().getAll()).forEach((key) => {
-    toggles[key as FeatureToggleType] = remoteConfig().getValue(key).asBoolean()
+    if (!key.startsWith('WG')) {
+      toggles[key as FeatureToggleType] = remoteConfig().getValue(key).asBoolean()
+    }
+  })
+  return toggles
+}
+
+export const getWaygateToggles = (): WaygateToggleValues => {
+  if (!fetchRemote) {
+    return waygateConfig
+  }
+
+  const toggles = {} as WaygateToggleValues
+  Object.keys(remoteConfig().getAll()).forEach((key) => {
+    if (key.startsWith('WG')) {
+      toggles[key as WaygateToggleType] = remoteConfig().getValue(key) as unknown as Waygate
+    }
   })
   return toggles
 }

@@ -4,7 +4,7 @@ import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useState } from 'react'
 import remoteConfig from '@react-native-firebase/remote-config'
 
-import { FeatureToggleType, featureEnabled, getFeatureToggles, overrideRemote, setDebugConfig } from 'utils/remoteConfig'
+import { FeatureToggleType, featureEnabled, getFeatureToggles, setDebugConfig } from 'utils/remoteConfig'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps } from '@react-navigation/stack'
@@ -20,7 +20,6 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
   const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const currentConfig = getFeatureToggles()
   const [toggles, setToggles] = useState({ ...currentConfig })
-  const [override, setOverride] = useState(overrideRemote)
 
   const toggleList = (): ReactNode => {
     const toggleItems = Object.keys(toggles).map((key): SimpleListItemObj => {
@@ -85,13 +84,10 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
         <Box mb={theme.dimensions.condensedMarginBetween}>
           {Object.keys(getFeatureToggles()).map((key: string) => {
             const value = featureEnabled(key as FeatureToggleType).toString()
-            const isOverridden = override && featureEnabled(key as FeatureToggleType) !== remoteConfig().getValue(key).asBoolean()
             return (
               <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
                 <TextArea>
-                  <TextView variant="MobileBodyBold">
-                    {key} {isOverridden && '(overridden)'}
-                  </TextView>
+                  <TextView variant="MobileBodyBold">{key}</TextView>
                   <TextView>{value}</TextView>
                 </TextArea>
               </Box>
@@ -106,7 +102,6 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
           <TextArea>
             <VAButton
               onPress={() => {
-                setOverride(true)
                 dispatch(logout())
                 setDebugConfig(toggles)
               }}
