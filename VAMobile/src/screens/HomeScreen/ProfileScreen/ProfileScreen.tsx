@@ -60,7 +60,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     if (militaryHistoryNeedsUpdate && userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
-  }, [dispatch, militaryHistoryNeedsUpdate, userAuthorizedServices, mhNotInDowntime])
+  }, [dispatch, militaryHistoryNeedsUpdate, userAuthorizedServices?.militaryServiceHistory, mhNotInDowntime])
 
   const getProfileButtons = (): ReactElement => {
     if (userAuthorizedServices?.userProfileUpdate) {

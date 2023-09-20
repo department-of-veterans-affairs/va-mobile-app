@@ -105,7 +105,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
     if (userAuthorizedServices?.lettersAndDocuments && lettersNotInDowntime) {
       dispatch(getLetters(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
     }
-  }, [dispatch, userAuthorizedServices, lettersNotInDowntime])
+  }, [dispatch, userAuthorizedServices?.lettersAndDocuments, lettersNotInDowntime])
 
   if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID) || getUserAuthorizedServicesError) {
     return (

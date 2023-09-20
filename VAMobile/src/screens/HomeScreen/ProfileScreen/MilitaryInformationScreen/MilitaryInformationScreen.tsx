@@ -30,7 +30,7 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
     if (needsDataLoad && userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
-  }, [dispatch, needsDataLoad, userAuthorizedServices, mhNotInDowntime])
+  }, [dispatch, needsDataLoad, userAuthorizedServices?.militaryServiceHistory, mhNotInDowntime])
 
   const historyItems: Array<DefaultListItemObj> = map(serviceHistory, (service: ServiceData) => {
     const branch = t('militaryInformation.branch', { branch: service.branchOfService })

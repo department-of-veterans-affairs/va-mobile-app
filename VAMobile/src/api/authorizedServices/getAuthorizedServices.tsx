@@ -8,12 +8,8 @@ import { get } from 'store/api'
  * Fetch user demographics
  */
 export const getAuthorizedServices = async (): Promise<UserAuthorizedServicesData | undefined> => {
-  try {
-    const response = await get<AuthorizedServicesPayload>('/v0/user/authorized-services')
-    return response?.data.attributes.authorizedServices
-  } catch (error) {
-    throw error
-  }
+  const response = await get<AuthorizedServicesPayload>('/v0/user/authorized-services')
+  return response?.data.attributes.authorizedServices
 }
 
 /**

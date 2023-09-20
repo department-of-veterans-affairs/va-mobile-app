@@ -60,7 +60,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
       // fetch folders list
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
     }
-  }, [dispatch, userAuthorizedServices, navigation, secureMessagingTab, smNotInDowntime])
+  }, [dispatch, userAuthorizedServices?.secureMessaging, navigation, secureMessagingTab, smNotInDowntime])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID) || getUserAuthorizedServicesError) {
     return (
