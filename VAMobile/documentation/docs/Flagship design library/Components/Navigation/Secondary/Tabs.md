@@ -10,7 +10,7 @@ Tabs organize related groups of content within the same hierarchy into parallel 
 <iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=8443-14100&mode=design&t=KnuQLCCqRJnHgKVJ-4" title="Image of master component in Figma showing light and dark mode" allowfullscreen></iframe>
 
 ### Variations
-<iframe width="800" height="450" alt="Image of component examples in Figma showing the Segmented Control component in Claims and Appointments in light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=8443-14122&mode=design&t=KnuQLCCqRJnHgKVJ-4" allowfullscreen></iframe>
+<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=8443-14122&mode=design&t=KnuQLCCqRJnHgKVJ-4" allowfullscreen></iframe>
 
 ## Usage
 
