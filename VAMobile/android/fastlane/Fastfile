@@ -18,6 +18,7 @@ default_platform(:android)
 platform :android do
 
   before_all do |lane, options|
+    ENV['SUPPLY_UPLOAD_MAX_RETRIES'] = '5'
     import('../../fastfiles/slack_commands/fastfile')
     version = options[:version]
     puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
