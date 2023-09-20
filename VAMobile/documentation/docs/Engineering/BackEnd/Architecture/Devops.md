@@ -32,16 +32,7 @@ mobile_lighthouse_letters:
 ```
 3. Repeat these steps for the production files in `apps/vets-api/prod`. Dev env is not used by mobile and does not need to be added there.
 ## Devops Repo
-Once the the Manifests additions have been merged, add the variables to [devops repo](https://github.com/department-of-veterans-affairs/devops) in the following locations:
-1. `ansible/deployment/config/vets-api/staging-settings.local.yml.j2`: Referencing AWS path.
-```
-mobile_lighthouse:
-  client_id: "{{ lookup('aws_ssm_custom', '/dsva-vagov/vets-api/staging/mobile_lighthouse/client_id') }}"
-  rsa_key: "{{ lookup('aws_ssm_custom', '/dsva-vagov/vets-api/staging/mobile_lighthouse/rsa_key') }}"
-
-```
-2. `ansible/deployment/config/vets-api/prod-settings.local.yml.j2`: Same format as staging
-3. `ansible/roles/review-instance-configure/vars/settings.local.yml`: Used for populating values in review instances. 
+If you'd like to use these values in review instances, after updating Manifests repo, add the variables to [devops repo](https://github.com/department-of-veterans-affairs/devops) in `ansible/roles/review-instance-configure/vars/settings.local.yml` 
 
 ## Adding Local Settings
 Add a new section to `config/settings.yml` in the vets-api. See mobile entry `lighthouse_health_immunization` as reference.

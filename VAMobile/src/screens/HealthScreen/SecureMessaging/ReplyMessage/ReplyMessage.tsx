@@ -6,7 +6,6 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import {
-  BackButton,
   Box,
   ButtonTypesConstants,
   CollapsibleView,
@@ -16,12 +15,10 @@ import {
   FullScreenSubtask,
   LoadingComponent,
   MessageAlert,
-  SaveButton,
   TextArea,
   TextView,
   VAButton,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -58,8 +55,7 @@ import { useSelector } from 'react-redux'
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
 const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const draftAttachmentAlert = useDestructiveActionSheet()
@@ -133,29 +129,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   }, [dispatch, signature])
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => (
-        <BackButton
-          onPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
-          canGoBack={props.canGoBack}
-          label={BackButtonLabelConstants.cancel}
-          showCarat={false}
-        />
-      ),
-      headerRight: () => (
-        <SaveButton
-          onSave={() => {
-            setOnSaveDraftClicked(true)
-            setOnSendClicked(true)
-          }}
-          disabled={false}
-          a11yHint={t('secureMessaging.saveDraft.a11yHint')}
-        />
-      ),
-    })
-  })
-
-  useEffect(() => {
     // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
     if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
       addAttachment(attachmentFileToAdd)
@@ -191,7 +164,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       ? t('secureMessaging.deletingChanges.loading')
       : t('secureMessaging.viewMessage.loading')
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
         <LoadingComponent text={text} />
       </FullScreenSubtask>
     )
@@ -199,7 +172,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   if (sendingMessage) {
     return (
-      <FullScreenSubtask leftButtonText={tc('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
         <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
       </FullScreenSubtask>
     )
@@ -232,7 +205,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         inputType: 'none',
         value: messageReply,
         onChange: setMessageReply,
-        labelKey: 'health:secureMessaging.formMessage.message',
+        labelKey: 'secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,
         setInputCursorToBeginning: true,
@@ -299,10 +272,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           <Pressable
             onPress={navigateToReplyHelp}
             accessibilityRole={'button'}
-            accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
+            accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
             importantForAccessibility={'yes'}>
             <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-              <CollapsibleView text={tc('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
+              <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
             </Box>
           </Pressable>
         </Box>
@@ -345,10 +318,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={tc('reply')}
-      leftButtonText={tc('cancel')}
+      title={t('reply')}
+      leftButtonText={t('cancel')}
       onLeftButtonPress={validateMessage(messageReply) ? goToCancel : navigation.goBack}
-      rightButtonText={tc('save')}
+      rightButtonText={t('save')}
       onRightButtonPress={() => {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)

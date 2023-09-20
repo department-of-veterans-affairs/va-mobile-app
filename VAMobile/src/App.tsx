@@ -4,6 +4,7 @@ import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { Provider, useSelector } from 'react-redux'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
@@ -53,6 +54,7 @@ import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewScreen from './screens/WebviewScreen'
 import getEnv from 'utils/env'
+import queryClient from 'api/queryClient'
 import store, { RootState } from 'store'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 
@@ -128,22 +130,24 @@ const MainApp: FC = () => {
 
   return (
     <>
-      <ActionSheetProvider>
-        <ThemeProvider theme={currentTheme}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <NavigationContainer ref={navigationRef} linking={linking} onReady={navOnReady} onStateChange={onNavStateChange}>
-                <NotificationManager>
-                  <SafeAreaProvider>
-                    <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={currentTheme.colors.background.main} />
-                    <AuthGuard />
-                  </SafeAreaProvider>
-                </NotificationManager>
-              </NavigationContainer>
-            </I18nextProvider>
-          </Provider>
-        </ThemeProvider>
-      </ActionSheetProvider>
+      <QueryClientProvider client={queryClient}>
+        <ActionSheetProvider>
+          <ThemeProvider theme={currentTheme}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <NavigationContainer ref={navigationRef} linking={linking} onReady={navOnReady} onStateChange={onNavStateChange}>
+                  <NotificationManager>
+                    <SafeAreaProvider>
+                      <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={currentTheme.colors.background.main} />
+                      <AuthGuard />
+                    </SafeAreaProvider>
+                  </NotificationManager>
+                </NavigationContainer>
+              </I18nextProvider>
+            </Provider>
+          </ThemeProvider>
+        </ActionSheetProvider>
+      </QueryClientProvider>
     </>
   )
 }
@@ -268,15 +272,15 @@ export const AuthGuard: FC = () => {
 }
 
 export const AppTabs: FC = () => {
-  const { t } = useTranslation([NAMESPACE.HOME, NAMESPACE.COMMON, NAMESPACE.HEALTH])
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (
     <>
       <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="HomeTab" screenOptions={{ headerShown: false }}>
-        <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home:title') }} />
-        <TabNav.Screen name="BenefitsTab" component={BenefitsScreen} options={{ title: t('common:benefits.title') }} />
-        <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health:title') }} />
-        <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('common:payments.title') }} />
+        <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home.title') }} />
+        <TabNav.Screen name="BenefitsTab" component={BenefitsScreen} options={{ title: t('benefits.title') }} />
+        <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health.title') }} />
+        <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('payments.title') }} />
       </TabNav.Navigator>
     </>
   )
@@ -288,7 +292,7 @@ export const AuthedApp: FC = () => {
 
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
-  const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH).t)
+  const healthScreens = getHealthScreens(useTranslation(NAMESPACE.COMMON).t)
   const paymentsScreens = getPaymentsScreens()
 
   // When applicable, this will open the deep link from the notification that launched the app once sign in

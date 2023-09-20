@@ -62,8 +62,7 @@ import MenuView, { MenuViewActionsType } from 'components/Menu'
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
 const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const goToDrafts = useGoToDrafts()
@@ -206,22 +205,22 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const onDeletePressed = (): void => {
     destructiveAlert({
-      title: tc('deleteDraft'),
+      title: t('deleteDraft'),
       message: t('secureMessaging.deleteDraft.deleteInfo'),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: tc('keepEditing'),
+          text: t('keepEditing'),
         },
         {
-          text: tc('delete'),
+          text: t('delete'),
           onPress: () => {
             dispatch(deleteDraft(messageID, snackbarMessages))
           },
         },
         {
-          text: tc('save'),
+          text: t('save'),
           onPress: () => {
             setOnSaveDraftClicked(true)
             setOnSendClicked(true)
@@ -233,7 +232,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const MenViewActions: MenuViewActionsType = [
     {
-      actionText: tc('save'),
+      actionText: t('save'),
       addDivider: true,
       iconName: 'Folder',
       accessibilityLabel: t('secureMessaging.saveDraft'),
@@ -243,7 +242,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       },
     },
     {
-      actionText: tc('delete'),
+      actionText: t('delete'),
       addDivider: false,
       iconName: 'Trash',
       accessibilityLabel: t('secureMessaging.deleteDraft.menuBtnA11y'),
@@ -289,7 +288,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
-      <FullScreenSubtask title={tc('editDraft')} leftButtonText={tc('cancel')} menuViewActions={MenViewActions}>
+      <FullScreenSubtask title={t('editDraft')} leftButtonText={t('cancel')} menuViewActions={MenViewActions}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -305,7 +304,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       : t('secureMessaging.draft.loading')
     return (
       <FullScreenSubtask
-        leftButtonText={tc('cancel')}
+        leftButtonText={t('cancel')}
         onLeftButtonPress={() => {
           goToDrafts(false)
         }}>
@@ -317,7 +316,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   if (sendingMessage) {
     return (
       <FullScreenSubtask
-        leftButtonText={tc('cancel')}
+        leftButtonText={t('cancel')}
         onLeftButtonPress={() => {
           goToDrafts(false)
         }}>
@@ -364,7 +363,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       {
         fieldType: FieldType.Picker,
         fieldProps: {
-          labelKey: 'health:secureMessaging.formMessage.to',
+          labelKey: 'secureMessaging.formMessage.to',
           selectedValue: to,
           onSelectionChange: setTo,
           pickerOptions: getToPickerOptions(),
@@ -377,7 +376,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       {
         fieldType: FieldType.Picker,
         fieldProps: {
-          labelKey: 'health:secureMessaging.startNewMessage.category',
+          labelKey: 'secureMessaging.startNewMessage.category',
           selectedValue: category,
           onSelectionChange: onCategoryChange as () => string,
           pickerOptions: getStartNewMessageCategoryPickerOptions(t),
@@ -391,10 +390,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         fieldType: FieldType.TextInput,
         fieldProps: {
           inputType: 'none',
-          labelKey: 'health:secureMessaging.startNewMessage.subject',
+          labelKey: 'secureMessaging.startNewMessage.subject',
           value: subject,
           onChange: setSubject,
-          helperTextKey: 'health:secureMessaging.startNewMessage.subject.helperText',
+          helperTextKey: 'secureMessaging.startNewMessage.subject.helperText',
           isRequiredField: category === CategoryTypeFields.other,
           testID: 'editDraftSubjectTestID',
         },
@@ -432,7 +431,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         inputType: 'none',
         value: body,
         onChange: setBody,
-        labelKey: 'health:secureMessaging.formMessage.message',
+        labelKey: 'secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,
         testID: 'messageText',
@@ -520,10 +519,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
             <Pressable
               onPress={navigateToReplyHelp}
               accessibilityRole={'button'}
-              accessibilityLabel={tc('secureMessaging.replyHelp.onlyUseMessages')}
+              accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
               importantForAccessibility={'yes'}>
               <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-                <CollapsibleView text={tc('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
+                <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
               </Box>
             </Pressable>
           </Box>
@@ -573,8 +572,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={tc('editDraft')}
-      leftButtonText={tc('cancel')}
+      title={t('editDraft')}
+      leftButtonText={t('cancel')}
       onLeftButtonPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
       menuViewActions={MenViewActions}
       showCrisisLineCta={true}

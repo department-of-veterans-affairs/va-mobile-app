@@ -9,8 +9,7 @@ import { useTheme } from 'utils/hooks'
 
 const PrescriptionHistoryNoPrescriptions: FC = () => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   useEffect(() => {
     logAnalyticsEvent(Events.vama_rx_na())
@@ -36,7 +35,7 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
           </TextView>
           <VABulletList listOfText={bullets} paragraphSpacing={true} />
           <TextView paragraphSpacing={true}>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
-          <ClickToCallPhoneNumber displayedText={tc('8773270022.displayText')} phone={tc('8773270022')} />
+          <ClickToCallPhoneNumber displayedText={t('8773270022.displayText')} phone={t('8773270022')} />
         </AlertBox>
       </Box>
     </VAScrollView>

@@ -67,7 +67,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const insets = useSafeAreaInsets()
 
   const showModal = (): void => {
@@ -130,7 +130,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   const cancelButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
-    accessibilityHint: tc('cancel.picker.a11yHint'),
+    accessibilityHint: t('cancel.picker.a11yHint'),
   }
 
   const resetButtonProps: PressableProps = {
@@ -172,7 +172,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
           <Box backgroundColor="list" pb={insets.bottom} flex={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancelPressed} {...cancelButtonProps}>
-                <TextView {...commonButtonProps}>{tc('cancel')}</TextView>
+                <TextView {...commonButtonProps}>{t('cancel')}</TextView>
               </Pressable>
               <Box flex={4}>
                 <TextView variant="MobileBodyBold" accessibilityRole={'header'} textAlign={'center'} allowFontScaling={false}>
@@ -188,7 +188,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
             <VAScrollView testID={testID} bounces={false}>
               {getGroups()}
             </VAScrollView>
-            <FooterButton text={tc('apply')} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onApply} />
+            <FooterButton text={t('apply')} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onApply} />
           </Box>
         </Box>
       </Modal>

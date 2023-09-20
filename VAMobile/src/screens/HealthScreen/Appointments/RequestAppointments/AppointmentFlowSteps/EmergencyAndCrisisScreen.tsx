@@ -13,8 +13,7 @@ type EmergencyAndCrisisScreenProps = StackScreenProps<AppointmentFlowModalStackP
 const EmergencyAndCrisisScreen: FC<EmergencyAndCrisisScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: th } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
 
   const navigateToCrisisLine = navigateTo('VeteransCrisisLine')
@@ -50,7 +49,7 @@ const EmergencyAndCrisisScreen: FC<EmergencyAndCrisisScreenProps> = ({ navigatio
         <AppointmentFlowWhiteCtaButton
           mx={10}
           onPress={onCrisisLinePressed}
-          text={`${th('component.crisisLine.talkToThe')} ${th('component.crisisLine.veteranCrisisLine')} ${th('component.crisisLine.now')}`}
+          text={`${t('component.crisisLine.talkToThe')} ${t('component.crisisLine.veteranCrisisLine')} ${t('component.crisisLine.now')}`}
         />
       </Box>
     </AppointmentFlowLayout>

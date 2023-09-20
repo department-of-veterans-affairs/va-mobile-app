@@ -21,8 +21,7 @@ import NoAppointments from '../NoAppointments/NoAppointments'
 type PastAppointmentsProps = Record<string, unknown>
 
 const PastAppointments: FC<PastAppointmentsProps> = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -134,7 +133,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       const isPendingAppointment = isAPendingAppointment(appointment?.attributes)
 
       const position = (currentPage - 1) * perPage + index + 1
-      const a11yValue = tc('listPosition', { position, total: totalEntries })
+      const a11yValue = t('listPosition', { position, total: totalEntries })
 
       listItems.push({
         textLines,
@@ -203,7 +202,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
     return isPastThreeMonths
       ? getAppointmentsPastThreeMonths()
-      : getGroupedAppointments(currentPagePastAppointmentsByYear || {}, theme, { t, tc }, onPastAppointmentPress, true, paginationByTimeFrame[timeFrame])
+      : getGroupedAppointments(currentPagePastAppointmentsByYear || {}, theme, { t }, onPastAppointmentPress, true, paginationByTimeFrame[timeFrame])
   }
 
   useEffect(() => {
@@ -243,7 +242,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
           selectedValue={datePickerOption.value}
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
-          labelKey={'health:pastAppointments.selectADateRange'}
+          labelKey={'pastAppointments.selectADateRange'}
           testID="getDateRangeTestID"
         />
       </Box>
