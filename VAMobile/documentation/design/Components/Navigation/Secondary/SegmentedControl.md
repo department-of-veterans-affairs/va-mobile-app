@@ -13,7 +13,7 @@ A segmented control is used to switch between related views of information withi
 <iframe width="800" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?viewMode=story&id=segmented-control" allowfullscreen></iframe>
 
 ### Variations
-<iframe width="800" height="450" alt="Image of component examples in Figma showing the Segmented Control component in Claims and Appointments in light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7332-11331&mode=design&t=lRnzcV3CBx2yby7N-4" allowfullscreen></iframe>
+<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7332-11331&mode=design&t=lRnzcV3CBx2yby7N-4" allowfullscreen></iframe>
 
 ## Usage
 A segmented control consists of a horizontal set of 2-4 segments, each of which functions as a button. One option is always selected. The component does not scroll horizontally.
