@@ -105,10 +105,8 @@ jobs:
         run: yarn env:${{ inputs.environment }}
       - name: Bundle app
         run: yarn bundle:android
-      # - name: Update fastlane
-      #   run: |
-      #     bundle update fastlane
-      #     bundle exec fastlane update_plugins
+      - name: Update fastlane
+        run: bundle exec fastlane update_plugins
       - name: Set SLACK_THREAD_TS environment variable
         if: inputs.slack_thread_ts
         run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
