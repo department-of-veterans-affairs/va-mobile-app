@@ -8,7 +8,6 @@ import {
   AlertBox,
   Box,
   ButtonTypesConstants,
-  ErrorComponent,
   FieldType,
   FormFieldType,
   FormWrapper,
@@ -25,14 +24,13 @@ import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
-import { ScreenIDTypesConstants } from 'store/api/types'
 import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
 import { getAddressDataFromSuggestedAddress, showValidationScreen } from 'utils/personalInformation'
 import { omit } from 'underscore'
 import { profileAddressOptions } from '../AddressSummary'
 import { showSnackBar } from 'utils/common'
-import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useError, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { useContactInformation } from 'api/contactInformation'
 import { useDeleteAddress } from 'api/contactInformation/deleteAddress'
 import { useUpdateAddress } from 'api/contactInformation/updateAddress'
@@ -310,14 +308,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     city !== initialCity ||
     state !== initialState ||
     zipCode !== initialZipCode
-
-  if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
-    return (
-      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={onCancel}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
-  }
 
   if (deletingAddress || updatingAddress || validatingAddress) {
     const loadingText = deletingAddress ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')
