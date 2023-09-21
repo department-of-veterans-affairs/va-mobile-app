@@ -3,15 +3,14 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
 import { EMAIL_REGEX_EXP } from 'constants/common'
 import { EmailData } from 'api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
 import { isErrorObject, showSnackBar } from 'utils/common'
-import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useDowntimeByScreenID, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { useContactInformation, useDeleteEmail, useUpdateEmail } from 'api/contactInformation'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
@@ -30,7 +29,6 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const deleteEmailAlert = useAlert()
   const confirmAlert = useDestructiveActionSheet()
   const screenReaderEnabled = useIsScreenReaderEnabled()
-  const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID)
 
   const [email, setEmail] = useState(contactInformation?.contactEmail?.emailAddress || '')
   const [formContainsError, setFormContainsError] = useState(false)
@@ -133,14 +131,6 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       onError: () => showSnackBar(removeSnackbarMessages.errorMsg, dispatch, () => deleteEmail(emailData, mutateOptions), false, true),
     }
     deleteEmail(emailData, mutateOptions)
-  }
-
-  if (contactInformationInDowntime) {
-    return (
-      <FullScreenSubtask title={t('contactInformation.emailAddress')} leftButtonText={t('cancel')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
   }
 
   if (savingEmail || emailSaved) {

@@ -3,16 +3,15 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PhoneData, PhoneType, PhoneTypeToFormattedNumber, UserContactInformation } from 'api/types'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber, showSnackBar } from 'utils/common'
-import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useError, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { useCreatePhoneNumber, useDeletePhoneNumber, useUpdatePhoneNumber } from 'api/contactInformation'
 
@@ -137,11 +136,13 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }
 
   const onDelete = (): void => {
-    const mutateOptions = {
-      onSuccess: () => showSnackBar(removeSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
-      onError: () => showSnackBar(removeSnackbarMessages.errorMsg, dispatch, () => deletePhoneNumber(phoneData, mutateOptions), false, true, true),
+    if (phoneData) {
+      const mutateOptions = {
+        onSuccess: () => showSnackBar(removeSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
+        onError: () => showSnackBar(removeSnackbarMessages.errorMsg, dispatch, () => deletePhoneNumber(phoneData, mutateOptions), false, true, true),
+      }
+      deletePhoneNumber(phoneData, mutateOptions)
     }
-    deletePhoneNumber(phoneData, mutateOptions)
   }
 
   const setPhoneNumberOnChange = (text: string): void => {
@@ -173,14 +174,6 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     // - this means the corresponding validation function error message should be displayed
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
     return (onlyDigitsNum.length !== MAX_DIGITS && onlyDigitsNum.length > 0) || !onlyDigitsNum
-  }
-
-  if (useError(ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID)) {
-    return (
-      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
   }
 
   if (creatingPhoneNumber || deletingPhoneNumber || updatingPhoneNumber) {
