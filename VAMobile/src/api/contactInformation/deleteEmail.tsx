@@ -9,12 +9,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 /**
  * Deletes a user's email
  */
-export const deleteEmail = async (emailData: EmailData) => {
-  try {
-    return del<EditResponseData>('/v0/user/emails', emailData as unknown as APIParams)
-  } catch (error) {
-    throw error
-  }
+const deleteEmail = async (emailData: EmailData) => {
+  return del<EditResponseData>('/v0/user/emails', emailData as unknown as APIParams)
 }
 
 /**

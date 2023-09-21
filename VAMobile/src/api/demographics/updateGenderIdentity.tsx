@@ -14,12 +14,8 @@ import { useTranslation } from 'react-i18next'
 /**
  * Updates a user's gender identity
  */
-export const updateGenderIdentity = async (data: GenderIdentityUpdatePayload) => {
-  try {
-    return put<EditResponseData>('/v0/user/gender_identity', data)
-  } catch (error) {
-    throw error
-  }
+const updateGenderIdentity = async (data: GenderIdentityUpdatePayload) => {
+  return put<EditResponseData>('/v0/user/gender_identity', data)
 }
 
 /**

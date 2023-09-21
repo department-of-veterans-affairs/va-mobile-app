@@ -8,12 +8,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 /**
  * Deletes a user's address
  */
-export const deleteAddress = async (addressData: AddressData) => {
-  try {
-    return del<EditResponseData>('/v0/user/addresses', addressData as unknown as APIParams)
-  } catch (error) {
-    throw error
-  }
+const deleteAddress = async (addressData: AddressData) => {
+  return del<EditResponseData>('/v0/user/addresses', addressData as unknown as APIParams)
 }
 
 /**

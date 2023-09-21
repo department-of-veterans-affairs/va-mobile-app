@@ -9,12 +9,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 /**
  * Updates a user's phone number
  */
-export const updatePhoneNumber = async (phoneData: PhoneData) => {
-  try {
-    return put<EditResponseData>('/v0/user/phones', phoneData as unknown as APIParams)
-  } catch (error) {
-    throw error
-  }
+const updatePhoneNumber = async (phoneData: PhoneData) => {
+  return put<EditResponseData>('/v0/user/phones', phoneData as unknown as APIParams)
 }
 
 /**

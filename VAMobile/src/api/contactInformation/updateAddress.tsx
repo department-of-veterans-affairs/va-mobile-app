@@ -9,18 +9,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 /**
  * Creates or updates a user's address depending on whether an `id` field is present
  */
-export const updateAddress = async (addressData: AddressData) => {
-  try {
-    const endpoint = '/v0/user/addresses'
+const updateAddress = async (addressData: AddressData) => {
+  const endpoint = '/v0/user/addresses'
 
-    if (!addressData.id) {
-      return post<EditResponseData>(endpoint, addressData as unknown as APIParams)
-    }
-
-    return put<EditResponseData>(endpoint, addressData as unknown as APIParams)
-  } catch (error) {
-    throw error
+  if (!addressData.id) {
+    return post<EditResponseData>(endpoint, addressData as unknown as APIParams)
   }
+
+  return put<EditResponseData>(endpoint, addressData as unknown as APIParams)
 }
 
 /**

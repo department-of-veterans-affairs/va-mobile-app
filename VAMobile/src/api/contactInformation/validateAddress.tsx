@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query'
 /**
  * Validates an address and returns the validation key of the suggested address with the highest confidence score
  */
-export const validateAddress = async (addressData: AddressData): Promise<ValidateAddressData> => {
+const validateAddress = async (addressData: AddressData): Promise<ValidateAddressData> => {
   try {
     const response = await post<AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as APIParams)
     const suggestedAddresses = getSuggestedAddresses(response)

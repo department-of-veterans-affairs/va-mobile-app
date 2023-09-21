@@ -9,18 +9,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 /**
  * Creates or updates a user's email depending on whether an `id` field is present
  */
-export const updateEmail = async (emailData: EmailData) => {
-  try {
-    const endpoint = '/v0/user/emails'
+const updateEmail = async (emailData: EmailData) => {
+  const endpoint = '/v0/user/emails'
 
-    if (!emailData.id) {
-      return post<EditResponseData>(endpoint, emailData as unknown as APIParams)
-    }
-
-    return put<EditResponseData>(endpoint, emailData as unknown as APIParams)
-  } catch (error) {
-    throw error
+  if (!emailData.id) {
+    return post<EditResponseData>(endpoint, emailData as unknown as APIParams)
   }
+
+  return put<EditResponseData>(endpoint, emailData as unknown as APIParams)
 }
 
 /**

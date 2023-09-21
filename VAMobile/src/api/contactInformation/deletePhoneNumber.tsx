@@ -9,12 +9,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 /**
  * Deletes a user's phone number
  */
-export const deletePhoneNumber = async (phoneData: PhoneData) => {
-  try {
-    return del<EditResponseData>('/v0/user/phones', phoneData as unknown as APIParams)
-  } catch (error) {
-    throw error
-  }
+const deletePhoneNumber = async (phoneData: PhoneData) => {
+  return del<EditResponseData>('/v0/user/phones', phoneData as unknown as APIParams)
 }
 
 /**

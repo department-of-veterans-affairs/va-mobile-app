@@ -9,12 +9,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 /**
  * Creates a phone number for a user
  */
-export const createPhoneNumber = async (phoneData: PhoneData) => {
-  try {
-    return post<EditResponseData>('/v0/user/phones', phoneData as unknown as APIParams)
-  } catch (error) {
-    throw error
-  }
+const createPhoneNumber = async (phoneData: PhoneData) => {
+  return post<EditResponseData>('/v0/user/phones', phoneData as unknown as APIParams)
 }
 
 /**
