@@ -12,7 +12,7 @@ import {
 } from 'components'
 import { logout } from 'store/slices/authSlice'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, ReactFragment, ReactNode, useState } from 'react'
 import remoteConfig from '@react-native-firebase/remote-config'
 
 import { FeatureToggleType, featureEnabled, getWaygateToggles, setDebugConfig } from 'utils/remoteConfig'
@@ -34,22 +34,23 @@ const WaygateManagementScreen: FC<WaygateManagementScreenProps> = ({ navigation 
   const [toggles, setToggles] = useState({ ...currentWaygateConfig })
 
   const toggleList = (): ReactNode => {
-    const toggleItems = forEach(toggles, (WG, index) => {
+    const toggleItems: Array<ReactNode> = []
+    forEach(toggles, (WG, index) => {
       const { enabled, errorMsgTitle, errorMsgBody, appUpdateButton, allowFunction, denyAccess } = WG
-      return (
+      toggleItems.push(
         <AccordionCollapsible
-          header={index + ' ' + enabled}
+          header={<TextView variant="MobileBodyBold">{index + ' ' + enabled}</TextView>}
           expandedInitialValue={!enabled}
           expandedContent={
             <Box>
-              <TextView>{errorMsgTitle}</TextView>
-              <TextView>{errorMsgBody}</TextView>
-              <TextView>{appUpdateButton}</TextView>
-              <TextView>{allowFunction}</TextView>
-              <TextView>{denyAccess}</TextView>
+              <TextView>{'errorMsgTitle ' + errorMsgTitle}</TextView>
+              <TextView>{'errorMsgBody ' + errorMsgBody}</TextView>
+              <TextView>{'appUpdateButton ' + appUpdateButton}</TextView>
+              <TextView>{'allowFunction ' + allowFunction}</TextView>
+              <TextView>{'denyAccess ' + denyAccess}</TextView>
             </Box>
           }
-        />
+        />,
       )
     })
     return <Box mt={condensedMarginBetween}>{toggleItems}</Box>

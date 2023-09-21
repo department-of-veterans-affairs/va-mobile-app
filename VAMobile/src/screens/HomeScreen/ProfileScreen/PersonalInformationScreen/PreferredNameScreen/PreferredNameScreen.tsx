@@ -1,10 +1,11 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
+import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { Waygate, waygateEnabled } from 'utils/remoteConfig'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDemographics } from 'api/demographics/getDemographics'
 import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
@@ -125,13 +126,25 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
     )
   }
 
-  return (
-    <FullScreenSubtask
-      leftButtonText={t('cancel')}
-      onLeftButtonPress={onConfirmCancel}
-      title={t('personalInformation.preferredName.title')}
-      primaryContentButtonText={t('save')}
-      onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
+  const waygateCheck = (wg: Waygate): ReactNode => {
+    if (wg.enabled) {
+      return screenContent()
+    } else if (wg.enabled === false && wg.allowFunction === true) {
+      return (
+        <Box>
+          <Box mb={theme.dimensions.condensedMarginBetween}>
+            <AlertBox border="warning" title={wg.errorMsgTitle} text={wg.errorMsgBody} />
+          </Box>
+          {screenContent()}
+        </Box>
+      )
+    } else {
+      return <AlertBox border="error" title={wg.errorMsgTitle} text={wg.errorMsgBody} />
+    }
+  }
+
+  const screenContent = (): ReactNode => {
+    return (
       <Box mx={theme.dimensions.gutter}>
         <FormWrapper
           fieldsList={formFieldsList}
@@ -142,6 +155,19 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
           setOnSaveClicked={setOnSaveClicked}
         />
       </Box>
+    )
+  }
+
+  const wg = waygateEnabled('WG_PreferredNameScreen')
+
+  return (
+    <FullScreenSubtask
+      leftButtonText={t('cancel')}
+      onLeftButtonPress={onConfirmCancel}
+      title={t('personalInformation.preferredName.title')}
+      primaryContentButtonText={wg.enabled || wg.allowFunction ? t('save') : undefined}
+      onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
+      {waygateCheck(wg)}
     </FullScreenSubtask>
   )
 }

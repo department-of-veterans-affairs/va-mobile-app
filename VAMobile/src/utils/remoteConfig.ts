@@ -55,7 +55,7 @@ export const productionDefaults: FeatureToggleValues = {
 
 export let devConfig: FeatureToggleValues = productionDefaults
 
-type Waygate = {
+export type Waygate = {
   // true means waygate is 'open' so no waygate display, false will display waygate.
   enabled: boolean
   // Title for Alertbox
@@ -129,13 +129,40 @@ const waygateDefault: Waygate = {
   denyAccess: false,
 }
 
+const waygateUseCase3: Waygate = {
+  enabled: false,
+  errorMsgTitle: "Something's wrong",
+  errorMsgBody: 'Some users might be missing their date of birth. We are looking into this problem.',
+  appUpdateButton: false,
+  allowFunction: true,
+  denyAccess: false,
+}
+
+const waygateUseCase2: Waygate = {
+  enabled: false,
+  errorMsgTitle: "Something's wrong",
+  errorMsgBody: "We've found a critical bug on this page that we need to address. Check the app store for a hotfix soon.",
+  appUpdateButton: false,
+  allowFunction: false,
+  denyAccess: false,
+}
+
+const waygateUseCase1: Waygate = {
+  enabled: false,
+  errorMsgTitle: "Something's wrong",
+  errorMsgBody: "We've found a critical bug on this page that we need to address. Check the app store for a hotfix soon.",
+  appUpdateButton: true,
+  allowFunction: false,
+  denyAccess: true,
+}
+
 export let waygateConfig: WaygateToggleValues = {
   WG_HomeScreen: waygateDefault,
   WG_ProfileScreen: waygateDefault,
-  WG_PersonalInformationScreen: waygateDefault,
+  WG_PersonalInformationScreen: waygateUseCase3,
   WG_HowDoIUpdateScreen: waygateDefault,
-  WG_PreferredNameScreen: waygateDefault,
-  WG_GenderIdentityScreen: waygateDefault,
+  WG_PreferredNameScreen: waygateUseCase2,
+  WG_GenderIdentityScreen: waygateUseCase1,
   WG_WhatToKnowScreen: waygateDefault,
   WG_ContactInformationScreen: waygateDefault,
   WG_HowWillYouScreen: waygateDefault,
@@ -219,6 +246,10 @@ export const loadWaygateOverrides = async (): Promise<void> => {
  */
 export const featureEnabled = (feature: FeatureToggleType): boolean => {
   return !fetchRemote ? devConfig[feature] : remoteConfig().getValue(feature)?.asBoolean()
+}
+
+export const waygateEnabled = (feature: WaygateToggleType): Waygate => {
+  return !fetchRemote ? waygateConfig[feature] : (remoteConfig().getValue(feature) as unknown as Waygate)
 }
 
 /**
