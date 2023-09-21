@@ -83,10 +83,8 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
   return (
     <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')} dividerMarginBypass={true}>
       <Box backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant} flex={1}>
-        <Box alignItems="center">
-          <Box flex={1} mt={theme.dimensions.standardMarginBetween}>
-            <VAIcon name={'Logo'} />
-          </Box>
+        <Box mx={theme.dimensions.gutter} alignItems="center" mt={theme.dimensions.standardMarginBetween}>
+          <VAIcon name={'Logo'} />
           {/* <Box my={theme.dimensions.standardMarginBetween}>
           //TODO: Put back PhotoUpload later after concerns have been met
             <PhotoUpload width={100} height={100} />
