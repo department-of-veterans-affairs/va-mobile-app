@@ -13,11 +13,11 @@ export const updateAddress = async (addressData: AddressData) => {
   try {
     const endpoint = '/v0/user/addresses'
 
-    if (addressData.id) {
-      return put<EditResponseData>(endpoint, addressData as unknown as APIParams)
-    } else {
+    if (!addressData.id) {
       return post<EditResponseData>(endpoint, addressData as unknown as APIParams)
     }
+
+    return put<EditResponseData>(endpoint, addressData as unknown as APIParams)
   } catch (error) {
     throw error
   }
