@@ -36,7 +36,7 @@ export const ActionTypes: {
 }
 
 jest.mock('utils/remoteConfig')
-
+jest.mock('../../api/loggedIn/postLoggedIn')
 jest.mock('../../utils/platform', () => ({
   isAndroid: jest.fn(() => false),
   isIOS: jest.fn(),
