@@ -1,11 +1,11 @@
 import React from 'react'
-import { context, fireEvent, mockNavProps, QueriesData, render, screen, waitFor, when } from 'testUtils'
+import { fireEvent, mockNavProps, QueriesData, render, screen, waitFor, when } from 'testUtils'
 import EditEmailScreen from './EditEmailScreen'
 import Mock = jest.Mock
 import { put } from 'store/api'
 import { contactInformationKeys } from 'api/contactInformation/queryKeys'
 
-context('EditEmailScreen', () => {
+describe('EditEmailScreen', () => {
   let onBackSpy: Mock
   let props: any
 
