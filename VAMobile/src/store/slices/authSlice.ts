@@ -41,7 +41,7 @@ import { isAndroid } from 'utils/platform'
 import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { pkceAuthorizeParams } from 'utils/oauth'
-import { postLoggedIn } from 'api/loggedIn/postLoggedIn'
+import { usePostLoggedIn } from 'api/loggedIn/postLoggedIn'
 import { updateDemoMode } from './demoSlice'
 import getEnv from 'utils/env'
 
@@ -702,6 +702,7 @@ export const handleTokenCallbackUrl =
       await logAnalyticsEvent(Events.vama_login_success(SISEnabled))
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin({ authCredentials }))
+      usePostLoggedIn()
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: ${authNonFatalErrorString}`)
@@ -807,10 +808,6 @@ const authSlice = createSlice({
     },
     dispatchFinishAuthLogin: (state, action: PayloadAction<AuthFinishLoginPayload>) => {
       const successfulLogin = !action.payload.error
-
-      if (successfulLogin) {
-        postLoggedIn()
-      }
       return {
         ...state,
         ...action.payload,
