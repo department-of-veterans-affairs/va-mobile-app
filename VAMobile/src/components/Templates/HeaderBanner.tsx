@@ -57,9 +57,11 @@ export type HeaderBannerProps = {
   divider?: boolean
   /** shows the menu icon with the specified action types (won't be shown if rightButton is set) */
   menuViewActions?: MenuViewActionsType
+  /** bypass divider marginbottom */
+  dividerMarginBypass?: boolean
 }
 
-const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, divider: bannerDivider, menuViewActions }) => {
+const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, divider: bannerDivider, menuViewActions, dividerMarginBypass }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
@@ -150,7 +152,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({ leftButton, title, rightButton, d
     backgroundColor: bannerDivider ? 'largePanelHeader' : 'main',
     borderBottomWidth: bannerDivider ? theme.dimensions.borderWidth : 0,
     borderBottomColor: 'menuDivider',
-    mb: bannerDivider ? theme.dimensions.standardMarginBetween : 0,
+    mb: !dividerMarginBypass && bannerDivider ? theme.dimensions.standardMarginBetween : 0,
   }
 
   const commonBoxProps: BoxProps = {

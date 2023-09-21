@@ -21,7 +21,7 @@ import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { useSelector } from 'react-redux'
 
-const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
+export const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
   if (profile && profile.birthDate) {
     const formattedBirthDate = formatDateMMMMDDYYYY(profile.birthDate)
     return t('dynamicField', { field: formattedBirthDate })
