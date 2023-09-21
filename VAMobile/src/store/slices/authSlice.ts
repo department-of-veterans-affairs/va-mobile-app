@@ -41,8 +41,8 @@ import { isAndroid } from 'utils/platform'
 import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { pkceAuthorizeParams } from 'utils/oauth'
-import { usePostLoggedIn } from 'api/loggedIn/postLoggedIn'
 import { updateDemoMode } from './demoSlice'
+import { usePostLoggedIn } from 'api/loggedIn/postLoggedIn'
 import getEnv from 'utils/env'
 
 const {

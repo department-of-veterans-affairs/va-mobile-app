@@ -1,7 +1,7 @@
+import { isErrorObject } from 'utils/common'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { post } from 'store/api'
 import { useMutation } from '@tanstack/react-query'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { isErrorObject } from 'utils/common'
 
 /**
  * Post user logged in
