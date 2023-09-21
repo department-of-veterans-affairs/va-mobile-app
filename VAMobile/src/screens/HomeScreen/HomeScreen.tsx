@@ -116,7 +116,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     <CategoryLanding headerButton={headerButton}>
       <Box flex={1} justifyContent="flex-start">
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
-          <TextView variant={'MobileBodyBold'} accessibilityRole={'header'}>
+          <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} testID="greeting-text">
             {heading}
           </TextView>
         </Box>
