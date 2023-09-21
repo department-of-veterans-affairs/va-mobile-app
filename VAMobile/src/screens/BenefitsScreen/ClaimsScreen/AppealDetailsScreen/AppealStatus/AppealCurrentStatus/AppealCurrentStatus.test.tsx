@@ -5,11 +5,11 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, render } from 'testUtils'
 
 import AppealCurrentStatus from './AppealCurrentStatus'
-import { AppealAOJTypes, AppealStatusData, AppealTypes, EmailData } from 'store/api/types'
+import { AppealAOJTypes, AppealStatusData, AppealTypes } from 'store/api/types'
 import { TextView } from 'components'
 import { InitialState } from 'store/slices'
 import { RenderAPI } from '@testing-library/react-native'
-import { PhoneData } from 'api/types'
+import { EmailData, PhoneData } from 'api/types'
 
 const mockExternalLinkSpy = jest.fn()
 

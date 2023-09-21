@@ -1,9 +1,10 @@
+import { useMutation } from '@tanstack/react-query'
+
 import { Params as APIParams, post } from 'store/api'
 import { AddressData, AddressValidationData, ValidateAddressData } from 'api/types'
 import { getConfirmedSuggestions, getSuggestedAddresses, getValidationKey } from 'utils/personalInformation'
 import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { useMutation } from '@tanstack/react-query'
 
 /**
  * Validates an address and returns the validation key of the suggested address with the highest confidence score

@@ -1,10 +1,11 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
 import { Params as APIParams, EditResponseData, del } from 'store/api'
 import { EmailData } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
 import { contactInformationKeys } from './queryKeys'
 import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 /**
  * Deletes a user's email

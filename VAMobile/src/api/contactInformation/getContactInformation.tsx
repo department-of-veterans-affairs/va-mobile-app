@@ -8,7 +8,7 @@ import { getFormattedPhoneNumber } from 'utils/common'
 /**
  * Fetch user contact information
  */
-export const getContactInformation = async (): Promise<UserContactInformation | undefined> => {
+const getContactInformation = async (): Promise<UserContactInformation | undefined> => {
   try {
     const response = await get<ContactInformationPayload>('/v0/user/contact-info')
     const contactInformation = response?.data.attributes

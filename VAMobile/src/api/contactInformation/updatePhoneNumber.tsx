@@ -1,10 +1,11 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
 import { Params as APIParams, EditResponseData, put } from 'store/api'
 import { PhoneData } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
 import { contactInformationKeys } from './queryKeys'
 import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 /**
  * Updates a user's phone number
