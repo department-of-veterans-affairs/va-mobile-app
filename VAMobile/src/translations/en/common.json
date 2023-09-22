@@ -1396,7 +1396,6 @@
   "upcomingAppointmentDetails.addToCalendarA11yHint": "Add this appointment to your device's calendar",
   "upcomingAppointmentDetails.appointmentCode": "Appointment code: {{code}}",
   "upcomingAppointmentDetails.cancelAppointment": "Cancel appointment",
-  "upcomingAppointmentDetails.cancelAppointment.a11yHint": "Cancel this appointment",
   "upcomingAppointmentDetails.cancelCommunityCareAppointment.body": "Call your community care provider. You can't cancel community care appointments online.",
   "upcomingAppointmentDetails.cancelCompensationAndPension.body": "Call the {{facility}} compensation and pension office.",
   "upcomingAppointmentDetails.cancelCovidVaccineAppointment.body": "COVID-19 appointments can't be canceled online. Please call the VA facility to cancel your appointment.",

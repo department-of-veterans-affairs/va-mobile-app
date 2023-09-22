@@ -147,7 +147,6 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         <VAButton
           onPress={onCancelAppointment}
           label={t('upcomingAppointmentDetails.cancelAppointment')}
-          a11yHint={t('upcomingAppointmentDetails.cancelAppointment.a11yHint')}
           buttonType={ButtonTypesConstants.buttonDestructive}
           {...testIdProps(t('upcomingAppointmentDetails.cancelAppointment'))}
         />
