@@ -6,10 +6,8 @@ import { context, render, RenderAPI } from 'testUtils'
 import { ReactTestInstance } from 'react-test-renderer'
 
 import OnboardingCarousel from './OnboardingCarousel'
-import { EmailData } from 'store/api/types'
 import { completeFirstTimeLogin, InitialState } from 'store/slices'
 import { Carousel } from 'components'
-import { PhoneData } from 'api/types'
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
@@ -38,13 +36,8 @@ context('OnboardingCarousel', () => {
             middleName: '',
             lastName: '',
             genderIdentity: null,
-            contactEmail: {} as EmailData,
             signinEmail: '',
             birthDate: '',
-            addresses: '',
-            homePhoneNumber: {} as PhoneData,
-            mobilePhoneNumber: {} as PhoneData,
-            workPhoneNumber: {} as PhoneData,
             fullName: '',
             firstName: 'Billy',
             signinService: 'IDME',
