@@ -1460,7 +1460,7 @@
   "vaccines.details.series.display": "{{doseNumber}} of {{seriesDoses}}",
   "vaccines.details.typeAndDosage": "Type and dosage",
   "vaccines.details.weBaseThis": "We base this information on your current VA health records. If you have any questions, contact your health care team.",
-  "vaccines.list.a11y": "Review your V-A vaccine record",
+  "vaccines.list.a11yHint": "Review your V-A vaccine record",
   "vaccines.loading": "Loading your vaccine record...",
   "vaccines.vaccineName": "{{name}} vaccine",
   "versionAndBuild": "Version: {{versionName}} ({{buildNumber}})",
