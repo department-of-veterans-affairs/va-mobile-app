@@ -10,10 +10,10 @@ import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState }
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 import { getBirthDate } from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/PersonalInformationScreen'
 import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useTheme } from 'utils/hooks'
-import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 // import PhotoUpload from 'components/PhotoUpload'
 
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
@@ -143,12 +143,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
             <TextView variant="MobileBody" color="primaryContrast" my={theme.dimensions.condensedMarginBetween}>
               {t('veteranStatus.fixAnError.3')}
             </TextView>
-            <ClickToCallPhoneNumber
-              phone={t('8005389552')}
-              displayedText={displayedTextPhoneNumber(t('8005389552'))}
-              colorOverride={'veteranStatus'}
-              ttyBypass={true}
-            />
+            <ClickToCallPhoneNumber phone={t('8005389552')} displayedText={displayedTextPhoneNumber(t('8005389552'))} colorOverride={'veteranStatus'} ttyBypass={true} />
           </Box>
         </Box>
       </Box>

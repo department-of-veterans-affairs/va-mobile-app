@@ -37,7 +37,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
     const vaccineButton: DefaultListItemObj = {
       textLines,
       onPress: navigateTo('VaccineDetails', { vaccineId: vaccine.id }),
-      a11yHintText: t('vaccines.list.a11y'),
+      a11yHintText: t('vaccines.list.a11yHint'),
       a11yValue: t('listPosition', { position: index + 1, total: vaccines.length }),
       testId: getA11yLabelText(textLines),
     }
