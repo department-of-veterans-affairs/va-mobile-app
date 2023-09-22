@@ -215,7 +215,6 @@
   "appointments.loadingAppointments": "Loading your appointments...",
   "appointments.noProviderSelected": "No provider selected",
   "appointments.pending": "Pending",
-  "appointments.pending.cancelRequest": "Cancel request",
   "appointments.pending.cancelRequest.a11yHint": "Cancel this appointment request",
   "appointments.pending.cancelled.pendingRequestTypeOfCare": "Canceled request for {{typeOfCare}} appointment",
   "appointments.pending.cancelled.theTimeAndDate": "{{who}} canceled this appointment.",
