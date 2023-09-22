@@ -128,6 +128,7 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/prescriptions.json'),
     import('./mocks/notifications.json'),
     import('../../../api/demoMocks/getAuthorizedServices.json'),
+    import('../../../api/demoMocks/getFacilitiesInfo.json'),
   ])
   const transformedData = data.map((file) => transformDates(file))
   setDemoStore(transformedData.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)

@@ -36,6 +36,8 @@ export type LargePanelProps = {
   onRightButtonPress?: () => void
   /** Optional TestID for scrollView */
   testID?: string
+  /** bypass divider marginbottom */
+  dividerMarginBypass?: boolean
 }
 
 export const LargePanel: FC<LargePanelProps> = ({
@@ -51,6 +53,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   onRightButtonPress,
   onFooterButtonPress,
   testID,
+  dividerMarginBypass,
 }) => {
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -93,6 +96,7 @@ export const LargePanel: FC<LargePanelProps> = ({
     title: title ? { type: 'Static', title, a11yLabel: titleA11yLabel } : undefined,
     rightButton: rightButtonText ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, onPress: rightTitleButtonPress, testID: rightButtonTestID } : undefined,
     divider: true,
+    dividerMarginBypass: dividerMarginBypass,
   }
 
   const fillStyle: ViewStyle = {

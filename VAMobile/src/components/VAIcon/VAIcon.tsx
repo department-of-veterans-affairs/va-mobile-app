@@ -81,6 +81,7 @@ import Sort from './svgs/Sort.svg'
 import Trash from './svgs/Trash.svg'
 import Truck from './svgs/Truck.svg'
 import Unread from './svgs/Unread.svg'
+import UploadPhoto from './svgs/UploadPhoto.svg'
 import VideoCamera from './svgs/VideoCamera.svg'
 
 export const VA_ICON_MAP = {
@@ -141,6 +142,7 @@ export const VA_ICON_MAP = {
   Trash,
   Truck,
   Unread,
+  UploadPhoto,
   VideoCamera,
 }
 

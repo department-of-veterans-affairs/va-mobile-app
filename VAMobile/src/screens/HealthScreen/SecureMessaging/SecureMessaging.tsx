@@ -96,6 +96,9 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
           }
         })
       }
+      if (!snackBar) {
+        logAnalyticsEvent(Events.vama_snackbar_null('SecureMessaging tab change'))
+      }
       snackBar?.hideAll()
       dispatch(updateSecureMessagingTab(tab))
     }

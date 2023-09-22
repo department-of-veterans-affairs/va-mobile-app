@@ -12,7 +12,6 @@ import errorReducer from 'store/slices/errorSlice'
 import lettersReducer from 'store/slices/lettersSlice'
 import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
-import patientReducer from 'store/slices/patientSlice'
 import paymentsReducer from 'store/slices/paymentsSlice'
 import personalInformationReducer from 'store/slices/personalInformationSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
@@ -39,7 +38,6 @@ const store = configureStore({
     letters: lettersReducer,
     militaryService: militaryServiceReducer,
     notifications: notificationReducer,
-    patient: patientReducer,
     secureMessaging: secureMessagingReducer,
     snackBar: snackbarReducer,
     vaccine: vaccineReducer,

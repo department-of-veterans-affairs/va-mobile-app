@@ -70,6 +70,8 @@ context('MilitaryInformationScreen', () => {
       endDate: '1995-07-10',
       formattedBeginDate: 'June 04, 1993',
       formattedEndDate: 'July 10, 1995',
+      characterOfDischarge: 'Honorable',
+      honorableServiceIndicator: 'Y',
     },
   ]
   const props = mockNavProps(
@@ -94,7 +96,7 @@ context('MilitaryInformationScreen', () => {
       },
     })
   }
-
+  
   describe('when military service history authorization is false', () => {
     it('should render NoMilitaryInformationAccess', async () => {
       await waitFor(() => {

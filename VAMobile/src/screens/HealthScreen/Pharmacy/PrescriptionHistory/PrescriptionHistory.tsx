@@ -103,20 +103,12 @@ const filterOptions = {
       value: RefillStatusConstants.SUBMITTED,
     },
     {
-      display: 'prescription.history.tag.active.suspended',
-      value: RefillStatusConstants.SUSPENDED,
-    },
-    {
       display: 'prescription.history.tag.discontinued',
       value: RefillStatusConstants.DISCONTINUED,
     },
     {
       display: 'prescription.history.tag.expired',
       value: RefillStatusConstants.EXPIRED,
-    },
-    {
-      display: 'prescription.history.tag.nonVerified',
-      value: RefillStatusConstants.NON_VERIFIED,
     },
     {
       display: 'prescription.history.tag.transferred',

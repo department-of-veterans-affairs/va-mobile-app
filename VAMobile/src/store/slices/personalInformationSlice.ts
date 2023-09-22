@@ -19,7 +19,6 @@ import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { dispatchUpdateCerner } from './patientSlice'
 import {
   getAddressDataFromSuggestedAddress,
   getAddressValidationScenarioFromAddressValidationData,
@@ -101,7 +100,6 @@ export const getProfileInfo =
       const user = await get<UserData>('/v1/user')
       const profile = user?.data.attributes.profile
       dispatch(dispatchFinishGetProfileInfo({ profile }))
-      dispatch(dispatchUpdateCerner({ cerner: user?.data.attributes.health }))
       await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
       if (isErrorObject(error)) {
