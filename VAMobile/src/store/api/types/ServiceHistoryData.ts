@@ -28,6 +28,8 @@ export type ServiceData = {
   endDate: string
   formattedBeginDate: string
   formattedEndDate: string
+  characterOfDischarge: string
+  honorableServiceIndicator: string
 }
 
 export type ServiceHistoryData = Array<ServiceData>

@@ -69,6 +69,7 @@ export type VATextColors = {
   labelTag: string
   textWithIconButton: string
   textWithIconButtonInactive: string
+  veteranStatus: string
   webviewTitle: string
 }
 
@@ -175,6 +176,7 @@ export type VABackgroundColors = {
   tagInactive: string
   tagYellow: string
   tagGreen: string
+  veteranStatus: string
 }
 
 export type VABorderColors = {
@@ -195,12 +197,14 @@ export type VABorderColors = {
   menuDivider: string
   tabSelectorInactive: string
   tabSelectorActive: string
+  photoUpload: string
   prescriptionDivider: string
   modalButton: string
   tagBlue: string
   tagInactive: string
   tagYellow: string
   tagGreen: string
+  veteranStatus: string
 }
 
 export type VAFontSizes = {

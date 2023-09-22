@@ -17,14 +17,10 @@ export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
     case RefillStatusConstants.HOLD:
     case RefillStatusConstants.PROVIDER_HOLD:
       return t('prescription.history.tag.active.hold')
-    case RefillStatusConstants.SUSPENDED:
-      return t('prescription.history.tag.active.suspended')
     case RefillStatusConstants.ACTIVE_PARKED:
       return t('prescription.history.tag.active.parked')
     case RefillStatusConstants.REFILL_IN_PROCESS:
       return t('prescription.history.tag.active.inProgress')
-    case RefillStatusConstants.NON_VERIFIED:
-      return t('prescription.history.tag.nonVerified')
     case RefillStatusConstants.TRANSFERRED:
       return t('prescription.history.tag.transferred')
     case RefillStatusConstants.SUBMITTED:
@@ -109,9 +105,7 @@ export const getTagTypeForStatus = (status: string) => {
       return LabelTagTypeConstants.tagInactive
     case RefillStatusConstants.HOLD:
     case RefillStatusConstants.PROVIDER_HOLD:
-    case RefillStatusConstants.SUSPENDED:
     case RefillStatusConstants.ACTIVE_PARKED:
-    case RefillStatusConstants.NON_VERIFIED:
     case RefillStatusConstants.SUBMITTED:
       return LabelTagTypeConstants.tagYellow
     case RefillStatusConstants.REFILL_IN_PROCESS:
@@ -154,11 +148,6 @@ export const getStatusDefinitionTextForRefillStatus = (status: RefillStatus, t: 
         text: t('statusDefinition.active.submitted'),
         a11yLabel: a11yLabelVA(t('statusDefinition.active.submitted')),
       }
-    case RefillStatusConstants.SUSPENDED:
-      return {
-        text: t('statusDefinition.active.suspended'),
-        a11yLabel: a11yLabelVA(t('statusDefinition.active.suspended')),
-      }
     case RefillStatusConstants.TRANSFERRED:
       return {
         text: t('statusDefinition.transferred'),
@@ -182,12 +171,6 @@ export const getStatusDefinitionTextForRefillStatus = (status: RefillStatus, t: 
         text: t('statusDefinition.unknown'),
         a11yLabel: a11yLabelVA(t('statusDefinition.unknown')),
       }
-    case RefillStatusConstants.NON_VERIFIED: {
-      return {
-        text: t('statusDefinition.nonVerified'),
-        a11yLabel: a11yLabelVA(t('statusDefinition.nonVerified')),
-      }
-    }
     default:
       return {
         text: '',

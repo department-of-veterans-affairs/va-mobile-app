@@ -1,8 +1,9 @@
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SegmentedControl } from 'components'
+import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
 import { AuthorizedServicesState, ClaimsAndAppealsState, PersonalInformationState, getProfileInfo, prefetchClaimsAndAppeals } from 'store/slices'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -34,10 +35,10 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>(
     (state) => state.personalInformation,
   )
-  const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
+  const controlLabels = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
-  const [selectedTab, setSelectedTab] = useState(controlValues[0])
-  const claimType = selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
+  const [selectedTab, setSelectedTab] = useState(0)
+  const claimType = selectedTab === controlLabels.indexOf(t('claimsTab.active')) ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
   const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
   const claimsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
@@ -126,9 +127,9 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
     return <></>
   }
 
-  const onTabChange = (tab: string) => {
+  const onTabChange = (tab: number) => {
     if (tab !== selectedTab) {
-      logAnalyticsEvent(Events.vama_claim_count(claimsAndAppealsByClaimType.CLOSED.length, claimsAndAppealsByClaimType.ACTIVE.length, tab))
+      logAnalyticsEvent(Events.vama_claim_count(claimsAndAppealsByClaimType.CLOSED.length, claimsAndAppealsByClaimType.ACTIVE.length, controlLabels[tab]))
     }
     setSelectedTab(tab)
   }
@@ -138,13 +139,7 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
       <Box flex={1} justifyContent="flex-start" mb={theme.dimensions.contentMarginBottom}>
         {!claimsAndAppealsServiceErrors && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl
-              values={controlValues}
-              titles={controlValues}
-              onChange={onTabChange}
-              selected={controlValues.indexOf(selectedTab)}
-              accessibilityHints={accessibilityHints}
-            />
+            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={accessibilityHints} />
           </Box>
         )}
         {serviceErrorAlert()}
