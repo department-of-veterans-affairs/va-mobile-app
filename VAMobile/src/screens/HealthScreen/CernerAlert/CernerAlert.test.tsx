@@ -1,17 +1,13 @@
 import 'react-native'
 import React from 'react'
-import { act, ReactTestInstance } from 'react-test-renderer'
+import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, findByTypeWithSubstring, findByTypeWithText, render, RenderAPI, screen } from 'testUtils'
+import { context, render } from 'testUtils'
 import CernerAlert from './CernerAlert'
-import { initialPatientState, InitialState, PatientState } from 'store/slices'
-import { TextView } from 'components'
-import { Pressable, TouchableWithoutFeedback } from 'react-native'
 
 const mockExternalLinkSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
 
   return {
     ...original,
@@ -19,104 +15,72 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-context('CernerAlert', () => {
-  let component: any
-  let testInstance: ReactTestInstance
-  const mockPatientState: PatientState = {
-    isCernerPatient: true,
-    cernerFacilities: [
-      {
-        isCerner: true,
-        facilityId: '1',
-        facilityName: 'FacilityOne',
-      },
-    ],
-    facilities: [
-      {
-        isCerner: true,
-        facilityId: '1',
-        facilityName: 'FacilityOne',
-      },
-      {
-        isCerner: false,
-        facilityId: '2',
-        facilityName: 'FacilityTwo',
-      },
-    ],
-  }
-
-  const initializeTestInstance = (patient?: PatientState): void => {
-    const mockPatient = patient || {}
-
-    component = render(<CernerAlert />, {
-      preloadedState: {
-        ...InitialState,
-        patient: {
-          ...initialPatientState,
-          ...mockPatient,
+jest.mock('../../../api/facilities/getFacilitiesInfo', () => {
+  let original = jest.requireActual('../../../api/facilities/getFacilitiesInfo')
+  return {
+    ...original,
+    useFacilitiesInfo: jest.fn().mockReturnValueOnce({
+      status: "success",
+      data: [
+        {
+          id: "358",
+          name: "FacilityOne",
+          city: "Cheyenne",
+          state: "WY",
+          cerner: true,
+          miles: "3.17"
         },
-      },
-    })
+        {
+          id: "359",
+          name: "FacilityTwo",
+          city: "Cheyenne",
+          state: "WY",
+          cerner: true,
+          miles: "3.17"
+        }
+      ]
+    }).mockReturnValueOnce({
+      status: "success",
+      data: [
+        {
+          id: "358",
+          name: "FacilityOne",
+          city: "Cheyenne",
+          state: "WY",
+          cerner: true,
+          miles: "3.17"
+        },
+        {
+          id: "359",
+          name: "FacilityTwo",
+          city: "Cheyenne",
+          state: "WY",
+          cerner: false,
+          miles: "3.17"
+        }
+      ]
+    }),
+  }
+})
 
-    testInstance = component.UNSAFE_root
+context('CernerAlert', () => {
+  const initializeTestInstance = (): void => {
+    render(<CernerAlert />)
   }
 
   beforeEach(() => {
-    initializeTestInstance(mockPatientState)
-    act(() => {
-      testInstance.findByType(Pressable).props.onPress()
-    })
+    initializeTestInstance()
   })
 
-
-  it('should only show cerner facilities', () => {
-    expect(findByTypeWithSubstring(testInstance, TextView, 'FacilityOne')).toBeTruthy()
-    expect(findByTypeWithSubstring(testInstance, TextView, 'FacilityTwo')).toBeFalsy()
+  it('When only cerner facilities', () => {
+    fireEvent.press(screen.getByLabelText('Your V-A health care team may be using the My V-A Health portal'))
+    expect(screen.getByLabelText('FacilityOne (Now using My V﻿A Health)')).toBeTruthy()
+    expect(screen.getByLabelText('FacilityTwo (Now using My V﻿A Health)')).toBeTruthy()
   })
 
-  it('should call mockExternalLinkSpy when link is selected', async () => {
-    act(() => {
-      testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-    })
+  it('when some facilities are cerner and pressing the link', async () => {
+    fireEvent.press(screen.getByLabelText('Some of your V-A health care team may be using the My V-A Health portal'))
+    fireEvent.press(screen.getByLabelText('Go to My V-A Health'))
     expect(mockExternalLinkSpy).toBeCalledWith('https://patientportal.myhealth.va.gov/')
-  })
-
-  describe('when some facilities are cerner', () => {
-    it('should show proper header text', () => {
-      expect(screen.getByText('Some of your VA health care team may be using the My VA Health portal')).toBeTruthy()
-    })
-  })
-
-  describe('when all facilities are cerner', () => {
-    it('should show proper header text', () => {
-      initializeTestInstance({
-        isCernerPatient: true,
-        cernerFacilities: [
-          {
-            isCerner: true,
-            facilityId: '1',
-            facilityName: 'FacilityOne',
-          },
-          {
-            isCerner: true,
-            facilityId: '2',
-            facilityName: 'FacilityTwo',
-          },
-        ],
-        facilities: [
-          {
-            isCerner: true,
-            facilityId: '1',
-            facilityName: 'FacilityOne',
-          },
-          {
-            isCerner: true,
-            facilityId: '2',
-            facilityName: 'FacilityTwo',
-          },
-        ],
-      })
-      expect(screen.getByText('Your VA health care team may be using the My VA Health portal')).toBeTruthy()
-    })
   })
 })
