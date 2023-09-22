@@ -34,7 +34,7 @@ export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLa
       </Box>
       {showVAGovLink && (
         <ClickForActionLink
-          {...a11yHintProp(t('noAppointments.visitVAA11yHint'))}
+          {...a11yHintProp(t('mobileBodyLink.a11yHint'))}
           displayedText={t('noAppointments.visitVA')}
           numberOrUrlLink={LINK_URL_SCHEDULE_APPOINTMENTS}
           linkType={LinkTypeOptionsConstants.externalLink}
