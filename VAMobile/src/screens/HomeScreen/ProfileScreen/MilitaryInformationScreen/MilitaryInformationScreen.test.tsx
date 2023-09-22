@@ -137,7 +137,7 @@ context('MilitaryInformationScreen', () => {
     })
     expect(screen.getByText('Period of service')).toBeTruthy()
     expect(screen.getByText('United States Marine Corps')).toBeTruthy()
-    expect(screen.getByText('June 04, 1993 - July 10, 1995')).toBeTruthy()
+    expect(screen.getByText('June 04, 1993 – July 10, 1995')).toBeTruthy()
     expect(screen.getByText("What if my military service information doesn't look right?")).toBeTruthy()
     expect(screen.getByRole('link')).toBeTruthy()
   })
