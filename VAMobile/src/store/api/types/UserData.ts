@@ -18,19 +18,9 @@ export type UserDataProfile = {
   middleName: string
   lastName: string
   fullName: string
-  contactEmail: EmailData
   signinEmail: string
   birthDate: string
   genderIdentity: string
-  addresses: string
-  residentialAddress?: Record<string, unknown>
-  mailingAddress?: Record<string, unknown>
-  homePhoneNumber: Record<string, unknown>
-  formattedHomePhone?: string
-  mobilePhoneNumber: Record<string, unknown>
-  formattedMobilePhone?: string
-  workPhoneNumber: Record<string, unknown>
-  formattedWorkPhone?: string
   signinService: SigninServiceTypes
 }
 
@@ -43,11 +33,6 @@ export type Facility = {
 export type CernerData = {
   isCernerPatient: boolean
   facilities: Array<Facility>
-}
-
-export type EmailData = {
-  id: string
-  emailAddress: string
 }
 
 export type VAServices =

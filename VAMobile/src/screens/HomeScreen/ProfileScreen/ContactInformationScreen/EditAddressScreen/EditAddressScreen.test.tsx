@@ -6,7 +6,6 @@ import { TouchableWithoutFeedback } from 'react-native'
 
 import { context, findByTypeWithText, mockNavProps, QueriesData, render, RenderAPI, waitFor } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
-import { UserDataProfile } from 'store/api/types'
 import { VASelector, VAModalPicker, VATextInput, TextView, AlertBox, VAButton } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
@@ -83,7 +82,6 @@ context('EditAddressScreen', () => {
   let component: RenderAPI
   let props: any
   let testInstance: ReactTestInstance
-  let profileInfo: UserDataProfile
   let goBackSpy: any
 
   const getSaveButton = () => testInstance.findAllByType(TouchableWithoutFeedback)[1]
