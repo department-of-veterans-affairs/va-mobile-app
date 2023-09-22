@@ -14,7 +14,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { featureEnabled } from 'utils/remoteConfig'
-import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
@@ -45,7 +45,6 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     (state) => state.appointments,
   )
   const { appointments, scheduleAppointments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
-  const hasCernerFacilities = useHasCernerFacilities()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
   const navigateToRequestAppointments = navigateTo('RequestAppointmentScreen')
   const navigateToNoRequestAppointmentAccess = navigateTo('NoRequestAppointmentAccess')
@@ -137,9 +136,13 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
           <SegmentedControl labels={controlLabels} onChange={setSelectedTab} selected={selectedTab} a11yHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}
-        <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
-          <CernerAlert />
-        </Box>
+        {CernerAlert ? (
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <CernerAlert />
+          </Box>
+        ) : (
+          <></>
+        )}
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
           {selectedTab === 1 && <PastAppointments />}
           {selectedTab === 0 && <UpcomingAppointments />}
