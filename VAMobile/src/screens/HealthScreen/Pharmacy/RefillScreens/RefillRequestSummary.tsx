@@ -99,7 +99,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
                   const prescriptionIds = requestFailed.map((prescription) => prescription.id)
                   logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
                 }}
-                label={t('snackbar.tryAgain')}
+                label={t('tryAgain')}
                 buttonType="buttonPrimary"
                 a11yHint={t('prescriptions.refillRequestSummary.tryAgain.a11yLabel')}
               />
