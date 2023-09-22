@@ -3,19 +3,17 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { DateTime } from 'luxon'
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
-import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useDemographics } from 'api/demographics/getDemographics'
 import { useSelector } from 'react-redux'
@@ -25,7 +23,6 @@ import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
 import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/HapticsDemoScreen'
 import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
 import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
-import Nametag from 'components/Nametag'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
 import ProfileScreen from './ProfileScreen/ProfileScreen'
@@ -87,21 +84,6 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ, testId: a11yLabelVA(t('coronavirusFaqs.title')) },
   ]
 
-  let greeting
-  const currentHour = DateTime.now().toObject()?.hour
-  if (currentHour === undefined) {
-    greeting = null
-  } else if (currentHour < UserGreetingTimeConstants.EVENING) {
-    greeting = t('greetings.evening')
-  } else if (currentHour < UserGreetingTimeConstants.MORNING) {
-    greeting = t('greetings.morning')
-  } else if (currentHour < UserGreetingTimeConstants.AFTERNOON) {
-    greeting = t('greetings.afternoon')
-  } else {
-    greeting = t('greetings.evening')
-  }
-  const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
-
   const profileIconProps: VAIconProps = {
     name: 'ProfileSelected',
   }
@@ -115,11 +97,6 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   return (
     <CategoryLanding headerButton={headerButton}>
       <Box flex={1} justifyContent="flex-start">
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
-          <TextView variant={'MobileBodyBold'} accessibilityRole={'header'}>
-            {heading}
-          </TextView>
-        </Box>
         <EncourageUpdateAlert />
         <Nametag />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>

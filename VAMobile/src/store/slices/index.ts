@@ -14,7 +14,6 @@ import { initialErrorsState } from 'store/slices/errorSlice'
 import { initialLettersState } from 'store/slices/lettersSlice'
 import { initialMilitaryServiceState } from 'store/slices/militaryServiceSlice'
 import { initialNotificationsState } from 'store/slices/notificationSlice'
-import { initialPatientState } from 'store/slices/patientSlice'
 import { initialPaymentsState } from 'store/slices/paymentsSlice'
 import { initialPersonalInformationState } from 'store/slices/personalInformationSlice'
 import { initialPrescriptionState } from './prescriptionSlice'
@@ -36,7 +35,6 @@ export * from './errorSlice'
 export * from './lettersSlice'
 export * from './militaryServiceSlice'
 export * from './notificationSlice'
-export * from './patientSlice'
 export * from './personalInformationSlice'
 export * from './secureMessagingSlice'
 export * from './snackBarSlice'
@@ -64,7 +62,6 @@ export const InitialState: RootState = {
   analytics: initialAnalyticsState,
   disabilityRating: initialDisabilityRatingState,
   vaccine: initialVaccineState,
-  patient: initialPatientState,
   snackBar: initialSnackBarState,
   payments: initialPaymentsState,
   requestAppointment: initialRequestAppointmentState,

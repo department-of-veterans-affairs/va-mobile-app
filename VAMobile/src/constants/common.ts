@@ -1,5 +1,8 @@
 import { includes } from 'underscore'
 
+import { Events } from './analytics'
+import { logAnalyticsEvent } from 'utils/analytics'
+
 export const DEFAULT_PAGE_SIZE = 10
 
 export const EnvironmentTypesConstants: {
@@ -61,6 +64,9 @@ export const CloseSnackbarOnNavigation = (screenName: string | undefined) => {
   if (screenName) {
     const screen = screenName.split('-')[0]
     if (includes(screensToCloseSnackbarOnNavigation, screen)) {
+      if (!snackBar) {
+        logAnalyticsEvent(Events.vama_snackbar_null(`CloseSnackbarOnNavigation - ${screen}`))
+      }
       snackBar?.hideAll()
     }
   }
