@@ -81,7 +81,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       onPress: onFacilityLocator,
       testId: a11yLabelVA(t('findLocation.title')),
     },
-    { text: t('covid19Updates.title'), a11yHintText: t('covid19Updates.a11yHint'), onPress: onCoronaVirusFAQ },
+    { text: t('covid19Updates.title'), a11yHintText: t('covid19Updates.a11yHint'), onPress: onCoronaVirusFAQ, testId: t('covid19Updates.title') },
   ]
 
   const profileIconProps: VAIconProps = {
