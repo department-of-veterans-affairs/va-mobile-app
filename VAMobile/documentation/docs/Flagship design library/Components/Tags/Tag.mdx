@@ -1,0 +1,62 @@
+---
+title: Tag
+---
+
+import CodeBlock from '@theme/CodeBlock'
+import AlertBoxString from '!!raw-loader!@componentsDocs/LabelTag'
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+Tags provide quick contextual keywords to inform status of a row or item. 
+
+## Examples
+
+### Default
+<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=8429-12889&mode=design&t=KnuQLCCqRJnHgKVJ-4" title="Image of master component in Figma showing light and dark mode" allowfullscreen></iframe>
+
+### Variations
+<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=8429-12895&mode=design&t=KnuQLCCqRJnHgKVJ-4" allowfullscreen></iframe>
+
+## Usage
+### When to use Tags
+- When there is a list of information with different statuses for different items
+
+### How this component works
+- Only one tag should be used per instance. 
+- The trailing icon is optional, as the status definition will not apply in all use cases. When the icon is used, the tag becomes a tappable button and opens a full panel.
+
+### Choosing between variations
+- Static vs Interactive
+     - **Static**: To indicate a status that does not need further explanation or definition
+     - **Interactive**: When you need to provide additional context for a status, use the interactive version with the icon.
+- Status
+     - **Informative (blue)**: To indicate neutral, default content. Consider the Informative status for new content with expected changes in status and trailing actions to take, like an Active prescription.
+     - **Success (green)**: To indicate completed, finalized content. Consider the Success status for content with no further outstanding tasks, like a Confirmed appointment, or an In-Progress prescription refill.
+     - **Indeterminate/Unresolved (yellow)**: To indicate pending actions or content that is still in-progress. Consider the Indeterminate status for content either the system or user can resolve, like a Pending appointment, or an On-Hold prescription refill.
+     - **Inactive (gray)**: To indicate content that has no further actions. Consider the Inactive status for "dead ends", such as a Read message, a Canceled appointment, or an Expired prescription.
+
+### Instances of this component in production
+- In Prescription cards
+- In Appointment cards
+
+## Content considerations
+- Use common VA language, words, or terms for copy.
+- Keep copy to as few words as possible (1-2 words). There are exceptions where 3 or 4 words must be used in cases of VA-specific phrases or words.
+- The trailing info icon is optional. Not all tags will need one for further definition of the copy.
+- Use sentence case (i.e., Sentence case, not Title Case). Exceptions include words/phrases that use Title Case in other VA tools/sites.
+- The trailing icon should clearly describe the type of content that it will display. For example, use the info icon when additional information will display on tap.
+
+## Accessibility considerations
+- If user has magnification settings, the trailing info-icon should scale along with the font.
+- The icon is decorative, so it does not need to be read by a screen reader. If the icon is included, the tag should be read as a button.
+
+## Related
+- [Unread messages tag](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Components/Tags/MessagesCountTag)
+- [Tag - VA Design System](https://design.va.gov/components/tag)
+- [Tag - USWDS](https://designsystem.digital.gov/components/tag/)
+- [Chips - Material Design](https://m3.material.io/components/chips/overview)
+
+## Code usage
+import LabelTagString from '!!raw-loader!@componentsDocs/LabelTag'
+export const exampleString = `<LabelTag text={'value'} />`
+
+<ComponentTopInfo componentName="LabelTag" example={exampleString} codeString={LabelTagString} />

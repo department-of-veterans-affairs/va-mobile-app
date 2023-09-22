@@ -9,7 +9,7 @@
           "middleName": "",
           "lastName": "WASHINGTON",
           "fullName": "KIMBERLY WASHINGTON",
-          "genderIdentity": "F",
+          "genderIdentity": "",
           "contactEmail": {
             "id": 183571,
             "emailAddress": "attended1@gmail.com"
@@ -105,6 +105,16 @@
       ]
     }
   },
+  "/v0/user/demographics": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "demographics",
+      "attributes": {
+        "genderIdentity": "F",
+        "preferredName": ""
+        }
+    }
+  },
   "/v0/military-service-history": {
     "data": {
       "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
@@ -112,11 +122,22 @@
       "attributes": {
         "serviceHistory": [
           {
-            "branchOfService": "United States Coast Guard",
+            "branchOfService": "United States Army",
             "beginDate": "1970-07-13",
             "endDate": "1998-08-31",
             "formattedBeginDate": "July 13, 1970",
-            "formattedEndDate": "August 31, 1998"
+            "formattedEndDate": "August 31, 1998",
+            "characterOfDischarge": "Dishonorable",
+            "honorableServiceIndicator": "N"
+          },
+          {
+            "branchOfService": "United States Coast Guard",
+            "beginDate": "1998-09-01",
+            "endDate": "2000-01-01",
+            "formattedBeginDate": "September 01, 1998",
+            "formattedEndDate": "January 01, 2000",
+            "characterOfDischarge": "Honorable",
+            "honorableServiceIndicator": "Y"
           }
         ]
       }

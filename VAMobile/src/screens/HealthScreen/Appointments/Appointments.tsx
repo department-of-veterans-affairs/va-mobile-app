@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon'
 import { ScrollView } from 'react-native'
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, FooterButton, SegmentedControl } from 'components'
+import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, FooterButton } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -13,7 +14,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { featureEnabled } from 'utils/remoteConfig'
-import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
@@ -37,14 +38,13 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
-  const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
+  const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
-  const [selectedTab, setSelectedTab] = useState(controlValues[0])
+  const [selectedTab, setSelectedTab] = useState(0)
   const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError, currentPageAppointmentsByYear } = useSelector<RootState, AppointmentsState>(
     (state) => state.appointments,
   )
   const { appointments, scheduleAppointments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
-  const hasCernerFacilities = useHasCernerFacilities()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
   const navigateToRequestAppointments = navigateTo('RequestAppointmentScreen')
   const navigateToNoRequestAppointmentAccess = navigateTo('NoRequestAppointmentAccess')
@@ -92,8 +92,8 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   }
 
   const serviceErrorAlert = (): ReactElement => {
-    const pastAppointmentError = selectedTab === t('appointmentsTab.past') && (pastVaServiceError || pastCcServiceError)
-    const upcomingAppointmentError = selectedTab === t('appointmentsTab.upcoming') && (upcomingVaServiceError || upcomingCcServiceError)
+    const pastAppointmentError = selectedTab === 1 && (pastVaServiceError || pastCcServiceError)
+    const upcomingAppointmentError = selectedTab === 0 && (upcomingVaServiceError || upcomingCcServiceError)
     if (pastAppointmentError || upcomingAppointmentError) {
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
@@ -133,15 +133,19 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
       testID="appointmentsTestID">
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
+          <SegmentedControl labels={controlLabels} onChange={setSelectedTab} selected={selectedTab} a11yHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}
-        <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
-          <CernerAlert />
-        </Box>
+        {CernerAlert ? (
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <CernerAlert />
+          </Box>
+        ) : (
+          <></>
+        )}
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
-          {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
+          {selectedTab === 1 && <PastAppointments />}
+          {selectedTab === 0 && <UpcomingAppointments />}
         </Box>
       </Box>
     </FeatureLandingTemplate>

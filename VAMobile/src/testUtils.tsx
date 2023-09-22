@@ -9,6 +9,7 @@ import path from 'path'
 import { AnyAction, configureStore, Store } from '@reduxjs/toolkit'
 import { NavigationContainer } from '@react-navigation/native'
 import { ReactTestInstance } from 'react-test-renderer'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
@@ -24,7 +25,6 @@ import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import lettersReducer from 'store/slices/lettersSlice'
 import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
-import patientReducer from 'store/slices/patientSlice'
 import personalInformationReducer from 'store/slices/personalInformationSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
@@ -146,7 +146,6 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       letters: lettersReducer,
       militaryService: militaryServiceReducer,
       notifications: notificationReducer,
-      patient: patientReducer,
       secureMessaging: secureMessagingReducer,
       snackBar: snackbarReducer,
       vaccine: vaccineReducer,
@@ -239,27 +238,44 @@ function render(ui, { preloadedState, navigationProvided = false, ...renderOptio
   //@ts-ignore
   function Wrapper({ children }) {
     let store = mockStore(preloadedState)
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+      },
+      logger: {
+        log: console.log,
+        warn: console.warn,
+        // Silence the error console
+        error: () => {},
+      }
+    });
     if (navigationProvided) {
       return (
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nReal}>
-            <ThemeProvider theme={theme}>
-              <SafeAreaProvider>{children}</SafeAreaProvider>
-            </ThemeProvider>
-          </I18nextProvider>
-        </Provider>
+        <QueryClientProvider client={queryClient}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nReal}>
+              <ThemeProvider theme={theme}>
+                <SafeAreaProvider>{children}</SafeAreaProvider>
+              </ThemeProvider>
+            </I18nextProvider>
+          </Provider>
+        </QueryClientProvider>
       )
     }
     return (
-      <Provider store={store}>
-        <I18nextProvider i18n={i18nReal}>
-          <NavigationContainer>
-            <ThemeProvider theme={theme}>
-              <SafeAreaProvider>{children}</SafeAreaProvider>
-            </ThemeProvider>
-          </NavigationContainer>
-        </I18nextProvider>
-      </Provider>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nReal}>
+            <NavigationContainer>
+              <ThemeProvider theme={theme}>
+                <SafeAreaProvider>{children}</SafeAreaProvider>
+              </ThemeProvider>
+            </NavigationContainer>
+          </I18nextProvider>
+        </Provider>
+      </QueryClientProvider>
     )
   }
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })

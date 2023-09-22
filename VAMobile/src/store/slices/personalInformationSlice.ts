@@ -5,8 +5,6 @@ import * as api from 'store/api'
 import {
   AddressData,
   AddressValidationScenarioTypes,
-  GenderIdentityOptions,
-  GenderIdentityOptionsData,
   PhoneData,
   PhoneType,
   ProfileFormattedFieldType,
@@ -22,7 +20,6 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { dispatchUpdateAuthorizedServices } from './authorizedServicesSlice'
-import { dispatchUpdateCerner } from './patientSlice'
 import {
   getAddressDataFromSuggestedAddress,
   getAddressValidationScenarioFromAddressValidationData,
@@ -59,10 +56,6 @@ export type PersonalInformationState = {
   showValidation: boolean
   preloadComplete: boolean
   validateAddressAbortController?: AbortController
-  preferredNameSaved: boolean
-  genderIdentitySaved: boolean
-  genderIdentityOptions: GenderIdentityOptions
-  loadingGenderIdentityOptions: boolean
 }
 
 export const initialPersonalInformationState: PersonalInformationState = {
@@ -75,10 +68,6 @@ export const initialPersonalInformationState: PersonalInformationState = {
   preloadComplete: false,
   phoneNumberSaved: false,
   validateAddressAbortController: undefined,
-  preferredNameSaved: false,
-  genderIdentitySaved: false,
-  genderIdentityOptions: {} as GenderIdentityOptions,
-  loadingGenderIdentityOptions: false,
 }
 
 const personalInformationNonFatalErrorString = 'Personal Information Service Error'
@@ -114,7 +103,6 @@ export const getProfileInfo =
       const authorizedServices = user?.data.attributes.authorizedServices
       dispatch(dispatchFinishGetProfileInfo({ profile }))
       dispatch(dispatchUpdateAuthorizedServices({ authorizedServices }))
-      dispatch(dispatchUpdateCerner({ cerner: user?.data.attributes.health }))
       await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -494,116 +482,6 @@ export const finishEditAddress = (): AppThunk => async (dispatch) => {
   dispatch(dispatchFinishEditAddress())
 }
 
-export const updatePreferredName =
-  (preferredName: string, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
-    const retryFunction = () => dispatch(updatePreferredName(preferredName, messages, screenID))
-
-    try {
-      dispatch(dispatchClearErrors(screenID))
-      dispatch(dispatchSetTryAgainFunction(retryFunction))
-      dispatch(dispatchStartUpdatePreferredName())
-
-      const preferredNameUpdateData = {
-        text: preferredName,
-      }
-      await api.put<api.EditResponseData>('/v0/user/preferred_name', preferredNameUpdateData as unknown as api.Params)
-
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_preferred_name())
-      await logAnalyticsEvent(Events.vama_pref_name_success)
-
-      dispatch(dispatchFinishSaveUpdatePreferredName({ preferredName }))
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false)
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `updatePreferredName: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishSaveUpdatePreferredName({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
-      }
-      await logAnalyticsEvent(Events.vama_pref_name_fail)
-    }
-  }
-
-/**
- * Redux action for finishing validating address
- */
-export const finishUpdatePreferredName = (): AppThunk => async (dispatch) => {
-  dispatch(dispatchFinishUpdatePreferredName())
-}
-
-/**
- * Makes an API call to update a user's gender identity
- */
-export const updateGenderIdentity =
-  (genderIdentity: string, messages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
-    const retryFunction = () => dispatch(updateGenderIdentity(genderIdentity, messages, screenID))
-
-    try {
-      dispatch(dispatchClearErrors(screenID))
-      dispatch(dispatchSetTryAgainFunction(retryFunction))
-      dispatch(dispatchStartUpdateGenderIdentity())
-
-      await api.put<api.EditResponseData>('/v0/user/gender_identity', { code: genderIdentity })
-
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
-      const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_prof_update_gender(totalTime, actionTime))
-      await logAnalyticsEvent(Events.vama_gender_id_success)
-      await dispatch(resetAnalyticsActionStart())
-      await dispatch(setAnalyticsTotalTimeStart())
-      await registerReviewEvent()
-
-      dispatch(dispatchFinishUpdateGenderIdentity({ genderIdentity }))
-      showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `updateGenderIdentity: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishUpdateGenderIdentity({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
-        showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true, true)
-      }
-      await logAnalyticsEvent(Events.vama_gender_id_fail)
-    }
-  }
-
-/**
- * Makes an API call to get valid gender identity options
- */
-export const getGenderIdentityOptions =
-  (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
-    const retryFunction = () => dispatch(getGenderIdentityOptions(screenID))
-
-    try {
-      dispatch(dispatchClearErrors(screenID))
-      dispatch(dispatchSetTryAgainFunction(retryFunction))
-      dispatch(dispatchStartGetGenderIdentityOptions())
-
-      const response = await api.get<GenderIdentityOptionsData>('/v0/user/gender_identity/edit')
-      const responseOptions = response?.data.attributes.options || {}
-
-      // TODO: Look into adding an option to the API function for disabling the X-Key-Inflection property.
-      // Right now it's set to 'camel' which returns the keys in lowercase. We need to capitalize the keys
-      // so that they're consistent with what the PUT request for updating the genderIdentity field expects.
-      const genderIdentityOptions = Object.keys(responseOptions).reduce((options: GenderIdentityOptions, key: string) => {
-        options[key.toUpperCase()] = responseOptions[key]
-        return options
-      }, {})
-
-      dispatch(dispatchFinishGetGenderIdentityOptions({ genderIdentityOptions }))
-
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `getGenderIdentityOptions: ${personalInformationNonFatalErrorString}`)
-        dispatch(dispatchFinishGetGenderIdentityOptions({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
-      }
-    }
-  }
-
 /**
  * Redux slice that will create the actions and reducers
  */
@@ -626,6 +504,11 @@ const peronalInformationSlice = createSlice({
         profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
         profile.formattedMobilePhone = getFormattedPhoneNumber(profile.mobilePhoneNumber)
         profile.formattedWorkPhone = getFormattedPhoneNumber(profile.workPhoneNumber)
+
+        // Reset these since this information is now being pulled from the demographics endpoint.
+        // This can be removed when we switch over to the `v2/user` endpoint.
+        profile.preferredName = ''
+        profile.genderIdentity = ''
       }
 
       state.profile = profile
@@ -711,46 +594,6 @@ const peronalInformationSlice = createSlice({
       state.showValidation = !!addressData
       state.validateAddressAbortController = undefined
     },
-    dispatchStartUpdatePreferredName: (state) => {
-      state.loading = true
-    },
-    dispatchFinishUpdatePreferredName: (state) => {
-      state.loading = false
-      state.preferredNameSaved = false
-    },
-    dispatchFinishSaveUpdatePreferredName: (state, action: PayloadAction<{ preferredName?: string; error?: Error | undefined }>) => {
-      const { preferredName, error } = action.payload
-      state.error = error
-      state.loading = false
-      if (state.profile && preferredName) {
-        state.profile.preferredName = preferredName
-      }
-      state.preferredNameSaved = !error
-    },
-    dispatchStartUpdateGenderIdentity: (state) => {
-      state.loading = true
-    },
-    dispatchFinishUpdateGenderIdentity: (state, action: PayloadAction<{ genderIdentity?: string; error?: Error | undefined }>) => {
-      const { genderIdentity, error } = action.payload
-      state.error = error
-      state.loading = false
-      if (state.profile && genderIdentity) {
-        state.profile.genderIdentity = genderIdentity
-      }
-      state.genderIdentitySaved = !error
-    },
-    dispatchFinishEditGenderIdentity: (state) => {
-      state.genderIdentitySaved = false
-    },
-    dispatchStartGetGenderIdentityOptions: (state) => {
-      state.loadingGenderIdentityOptions = true
-    },
-    dispatchFinishGetGenderIdentityOptions: (state, action: PayloadAction<{ genderIdentityOptions?: GenderIdentityOptions; error?: Error }>) => {
-      const { genderIdentityOptions, error } = action.payload
-      state.loadingGenderIdentityOptions = false
-      state.genderIdentityOptions = genderIdentityOptions || {}
-      state.error = error
-    },
   },
 })
 
@@ -769,13 +612,5 @@ export const {
   dispatchStartSaveAddress,
   dispatchFinishValidateAddress,
   dispatchStartValidateAddress,
-  dispatchStartUpdatePreferredName,
-  dispatchFinishUpdatePreferredName,
-  dispatchFinishSaveUpdatePreferredName,
-  dispatchStartUpdateGenderIdentity,
-  dispatchFinishUpdateGenderIdentity,
-  dispatchFinishEditGenderIdentity,
-  dispatchStartGetGenderIdentityOptions,
-  dispatchFinishGetGenderIdentityOptions,
 } = peronalInformationSlice.actions
 export default peronalInformationSlice.reducer
