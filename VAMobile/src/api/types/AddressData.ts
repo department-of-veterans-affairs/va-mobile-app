@@ -1,3 +1,5 @@
+export type addressTypes = 'DOMESTIC' | 'INTERNATIONAL' | 'OVERSEAS MILITARY'
+
 export const addressTypeFields: {
   domestic: addressTypes
   international: addressTypes
@@ -7,8 +9,6 @@ export const addressTypeFields: {
   international: 'INTERNATIONAL',
   overseasMilitary: 'OVERSEAS MILITARY',
 }
-
-export type addressTypes = 'DOMESTIC' | 'INTERNATIONAL' | 'OVERSEAS MILITARY'
 
 export type ProfileAddressType = 'mailingAddress' | 'residentialAddress'
 

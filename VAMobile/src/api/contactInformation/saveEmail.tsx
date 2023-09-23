@@ -8,7 +8,7 @@ import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 
 /**
- * Creates or updates a user's email depending on whether an `id` field is present
+ * Creates or updates a user's email depending on whether the `id` field is present
  */
 const saveEmail = async (emailData: SaveEmailData) => {
   const endpoint = '/v0/user/emails'
