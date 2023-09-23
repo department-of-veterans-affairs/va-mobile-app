@@ -72,7 +72,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
 
   const onSave = (): void => {
     if (genderIdentity) {
-      genderIdentityMutation.mutate({ code: genderIdentity })
+      genderIdentityMutation.mutate(genderIdentity)
     } else {
       setError(t('selectOption'))
     }
