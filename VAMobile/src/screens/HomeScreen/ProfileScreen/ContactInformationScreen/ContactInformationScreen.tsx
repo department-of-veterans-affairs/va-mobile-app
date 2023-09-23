@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
-import { FormattedPhoneType, PhoneData, PhoneTypeConstants } from 'api/types'
+import { FormattedPhoneType, PhoneData, PhoneKey, PhoneTypeConstants } from 'api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
@@ -16,25 +16,18 @@ import { useContactInformation } from 'api/contactInformation/getContactInformat
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
-type phoneType = 'homePhoneNumber' | 'workPhoneNumber' | 'mobilePhoneNumber'
-
-const getTextForPhoneData = (
-  contactInformation: UserContactInformation | undefined,
-  formattedPhoneType: FormattedPhoneType,
-  phoneType: phoneType,
-  t: TFunction,
-): Array<TextLine> => {
+const getTextForPhoneData = (contactInformation: UserContactInformation | undefined, formattedPhoneType: FormattedPhoneType, phoneKey: PhoneKey, t: TFunction): Array<TextLine> => {
   const textIDs: Array<TextLine> = []
 
   if (contactInformation && contactInformation[formattedPhoneType]) {
-    const extension = contactInformation[phoneType]?.extension
+    const extension = contactInformation[phoneKey]?.extension
     if (extension) {
       textIDs.push({ text: t('contactInformation.phoneWithExtension', { number: contactInformation[formattedPhoneType] as string, extension }) })
     } else {
       textIDs.push({ text: t('dynamicField', { field: contactInformation[formattedPhoneType] as string }) })
     }
   } else {
-    textIDs.push({ text: t('contactInformation.addYour', { field: t(`contactInformation.${phoneType}`) }) })
+    textIDs.push({ text: t('contactInformation.addYour', { field: t(`contactInformation.${phoneKey}`) }) })
   }
 
   return textIDs
@@ -51,9 +44,9 @@ const getPhoneNumberData = (
   let workText: Array<TextLine> = [{ text: t('contactInformation.work'), variant: 'MobileBodyBold' }]
   let cellText: Array<TextLine> = [{ text: t('contactInformation.mobile'), variant: 'MobileBodyBold' }]
 
-  homeText = homeText.concat(getTextForPhoneData(contactInformation, 'formattedHomePhone', 'homePhoneNumber', t))
-  workText = workText.concat(getTextForPhoneData(contactInformation, 'formattedWorkPhone', 'workPhoneNumber', t))
-  cellText = cellText.concat(getTextForPhoneData(contactInformation, 'formattedMobilePhone', 'mobilePhoneNumber', t))
+  homeText = homeText.concat(getTextForPhoneData(contactInformation, 'formattedHomePhone', 'homePhone', t))
+  workText = workText.concat(getTextForPhoneData(contactInformation, 'formattedWorkPhone', 'workPhone', t))
+  cellText = cellText.concat(getTextForPhoneData(contactInformation, 'formattedMobilePhone', 'mobilePhone', t))
 
   return [
     { textLines: homeText, a11yHintText: t('contactInformation.editOrAddHomeNumber'), onPress: onHomePhone, testId: 'homePhoneTestID' },
@@ -106,19 +99,19 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   const onHomePhone = navigateTo('EditPhoneNumber', {
     displayTitle: t('editPhoneNumber.homePhoneTitle'),
     phoneType: PhoneTypeConstants.HOME,
-    phoneData: contactInformation?.homePhoneNumber || ({} as PhoneData),
+    phoneData: contactInformation?.homePhone || ({} as PhoneData),
   })
 
   const onWorkPhone = navigateTo('EditPhoneNumber', {
     displayTitle: t('editPhoneNumber.workPhoneTitle'),
     phoneType: PhoneTypeConstants.WORK,
-    phoneData: contactInformation?.workPhoneNumber || ({} as PhoneData),
+    phoneData: contactInformation?.workPhone || ({} as PhoneData),
   })
 
   const onCellPhone = navigateTo('EditPhoneNumber', {
     displayTitle: t('editPhoneNumber.mobilePhoneTitle'),
     phoneType: PhoneTypeConstants.MOBILE,
-    phoneData: contactInformation?.mobilePhoneNumber || ({} as PhoneData),
+    phoneData: contactInformation?.mobilePhone || ({} as PhoneData),
   })
 
   const onEmailAddress = navigateTo('EditEmail')

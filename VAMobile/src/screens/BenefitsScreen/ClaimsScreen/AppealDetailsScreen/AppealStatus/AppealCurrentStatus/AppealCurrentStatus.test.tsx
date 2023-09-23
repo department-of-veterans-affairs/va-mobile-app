@@ -9,7 +9,6 @@ import { AppealAOJTypes, AppealStatusData, AppealTypes } from 'store/api/types'
 import { TextView } from 'components'
 import { InitialState } from 'store/slices'
 import { RenderAPI } from '@testing-library/react-native'
-import { EmailData, PhoneData } from 'api/types'
 
 const mockExternalLinkSpy = jest.fn()
 
@@ -51,14 +50,8 @@ context('AppealStatus', () => {
             firstName: '',
             middleName: '',
             lastName: '',
-            genderIdentity: null,
-            contactEmail: {} as EmailData,
             signinEmail: '',
             birthDate: '',
-            addresses: '',
-            homePhoneNumber: {} as PhoneData,
-            mobilePhoneNumber: {} as PhoneData,
-            workPhoneNumber: {} as PhoneData,
             fullName: 'Larry Brown',
             signinService: 'IDME',
           },

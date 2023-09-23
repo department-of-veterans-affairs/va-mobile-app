@@ -9,24 +9,18 @@ export type EmailData = {
 export type ContactInformationPayload = {
   data: {
     attributes: {
-      residentialAddress?: AddressData
-      mailingAddress?: AddressData
-      homePhoneNumber: PhoneData
-      mobilePhoneNumber?: PhoneData
-      workPhoneNumber?: PhoneData
-      contactEmail?: EmailData
+      residentialAddress: AddressData | null
+      mailingAddress: AddressData | null
+      homePhone: PhoneData | null
+      mobilePhone: PhoneData | null
+      workPhone: PhoneData | null
+      contactEmail?: EmailData | null
     }
   }
 }
 
-export type UserContactInformation = {
-  residentialAddress?: AddressData
-  mailingAddress?: AddressData
-  homePhoneNumber: PhoneData
-  formattedHomePhone?: string
-  mobilePhoneNumber?: PhoneData
-  formattedMobilePhone?: string
-  workPhoneNumber?: PhoneData
-  formattedWorkPhone?: string
-  contactEmail?: EmailData
+export type UserContactInformation = ContactInformationPayload['data']['attributes'] & {
+  formattedHomePhone: string | null
+  formattedMobilePhone: string | null
+  formattedWorkPhone: string | null
 }

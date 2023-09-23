@@ -26,10 +26,10 @@ const ConfirmContactScreen: FC<ConfirmContactScreenProps> = ({ navigation }) => 
   const { data: contactInformation } = useContactInformation()
   const { contact, preferredTimesForPhoneCall } = appointmentFlowFormData
   const { telecom } = contact || {}
-  const { mobilePhoneNumber, contactEmail } = contactInformation || {}
+  const { mobilePhone, contactEmail } = contactInformation || {}
 
   const email = telecom?.find((item) => item.type === 'email')?.value ?? contactEmail?.emailAddress
-  const phone = telecom?.find((item) => item.type === 'phone')?.value ?? (mobilePhoneNumber ? getFormattedPhoneNumber(mobilePhoneNumber) : '')
+  const phone = telecom?.find((item) => item.type === 'phone')?.value ?? (mobilePhone ? getFormattedPhoneNumber(mobilePhone) : '')
 
   const [emailError, setEmailError] = useState('')
   const [phoneError, setPhoneError] = useState('')

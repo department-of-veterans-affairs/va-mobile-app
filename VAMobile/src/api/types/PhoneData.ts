@@ -1,5 +1,7 @@
 export type PhoneType = 'HOME' | 'MOBILE' | 'WORK'
 
+export type PhoneKey = 'homePhone' | 'mobilePhone' | 'workPhone'
+
 export type FormattedPhoneType = 'formattedHomePhone' | 'formattedWorkPhone' | 'formattedMobilePhone'
 
 export type PhoneData = {

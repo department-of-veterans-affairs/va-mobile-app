@@ -5,6 +5,7 @@ import {
   DeliveryPointValidationTypesConstants,
   FormattedPhoneType,
   PhoneData,
+  PhoneKey,
   PhoneType,
   PhoneTypeConstants,
   addressPouTypes,
@@ -49,35 +50,25 @@ export const updateUserPhone = (store: DemoStore, params: Params): EditResponseD
 export const deleteUserPhone = (store: DemoStore, params: Params): EditResponseData | undefined => {
   const { phoneType } = params
   const [type] = getPhoneTypes(phoneType as PhoneType)
-  store['/v0/user/contact-info'].data.attributes[type] = {
-    areaCode: '',
-    countryCode: '',
-    phoneNumber: '',
-    phoneType: phoneType as PhoneType,
-  }
+  store['/v0/user/contact-info'].data.attributes[type] = null
   return MOCK_EDIT_RESPONSE
 }
-
-/**
- * type to hold phone keys in UserContactInformation type to keep phone updates typesafe
- */
-type PhoneKeyUnion = 'homePhoneNumber' | 'mobilePhoneNumber' | 'workPhoneNumber'
 
 /**
  * function returns the tuple of the PhoneKeyUnion and ProfileFormattedFieldType to use as keys when updating the store
  * @param phoneType- PhoneType constant to get the correct profile keys for
  * @returns [PhoneKeyUnion, ProfileFormattedFieldType]- tuple of the phone keys for the profile object.
  */
-const getPhoneTypes = (phoneType: PhoneType): [PhoneKeyUnion, FormattedPhoneType] => {
+const getPhoneTypes = (phoneType: PhoneType): [PhoneKey, FormattedPhoneType] => {
   switch (phoneType) {
     case PhoneTypeConstants.HOME: {
-      return ['homePhoneNumber', 'formattedHomePhone']
+      return ['homePhone', 'formattedHomePhone']
     }
     case PhoneTypeConstants.MOBILE: {
-      return ['mobilePhoneNumber', 'formattedMobilePhone']
+      return ['mobilePhone', 'formattedMobilePhone']
     }
     case PhoneTypeConstants.WORK: {
-      return ['workPhoneNumber', 'formattedWorkPhone']
+      return ['workPhone', 'formattedWorkPhone']
     }
   }
   throw Error('Unexpected Phone type')
@@ -175,7 +166,7 @@ export const updateAddress = (store: DemoStore, address: AddressData): EditRespo
  */
 export const deleteAddress = (store: DemoStore, params: Params): EditResponseData => {
   const type = getAddressType((params as unknown as AddressData).addressPou)
-  store['/v0/user/contact-info'].data.attributes[type] = undefined
+  store['/v0/user/contact-info'].data.attributes[type] = null
   return MOCK_EDIT_RESPONSE
 }
 

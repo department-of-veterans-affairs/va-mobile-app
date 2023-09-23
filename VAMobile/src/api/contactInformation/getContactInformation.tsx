@@ -9,21 +9,16 @@ import { getFormattedPhoneNumber } from 'utils/common'
  * Fetch user contact information
  */
 const getContactInformation = async (): Promise<UserContactInformation | undefined> => {
-  try {
-    const response = await get<ContactInformationPayload>('/v0/user/contact-info')
-    const contactInformation = response?.data.attributes
+  const response = await get<ContactInformationPayload>('/v0/user/contact-info')
+  const contactInformation = response?.data.attributes
 
-    if (contactInformation) {
-      return {
-        ...contactInformation,
-        formattedHomePhone: contactInformation.homePhoneNumber && getFormattedPhoneNumber(contactInformation.homePhoneNumber),
-        formattedMobilePhone: contactInformation.mobilePhoneNumber && getFormattedPhoneNumber(contactInformation.mobilePhoneNumber),
-        formattedWorkPhone: contactInformation.workPhoneNumber && getFormattedPhoneNumber(contactInformation.workPhoneNumber),
-      }
+  if (contactInformation) {
+    return {
+      ...contactInformation,
+      formattedHomePhone: contactInformation.homePhone && getFormattedPhoneNumber(contactInformation.homePhone),
+      formattedMobilePhone: contactInformation.mobilePhone && getFormattedPhoneNumber(contactInformation.mobilePhone),
+      formattedWorkPhone: contactInformation.workPhone && getFormattedPhoneNumber(contactInformation.workPhone),
     }
-    return contactInformation
-  } catch (error) {
-    throw error
   }
 }
 
