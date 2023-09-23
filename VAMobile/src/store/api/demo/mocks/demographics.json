@@ -1,0 +1,29 @@
+{
+  "/v0/user/demographics": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "demographics",
+      "attributes": {
+        "genderIdentity": "F",
+        "preferredName": ""
+        }
+    }
+  },
+  "/v0/user/gender_identity/edit": {
+    "data": {
+      "id": "23fe358d-6e82-4541-804c-ce7562ba28f4",
+      "type": "GenderIdentityOptions",
+      "attributes": {
+        "options": {
+          "m": "Man",
+          "b": "Non-Binary",
+          "tm": "Transgender Man",
+          "tf": "Transgender Woman",
+          "f": "Woman",
+          "n": "Prefer not to answer",
+          "o": "A gender not listed here"
+        }
+      }
+    }
+  }
+}
