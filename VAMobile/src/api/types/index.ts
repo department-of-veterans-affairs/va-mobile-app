@@ -1,3 +1,5 @@
 export * from './AddressData'
 export * from './ContactInformation'
+export * from './DemographicsData'
+export * from './EmailData'
 export * from './PhoneData'

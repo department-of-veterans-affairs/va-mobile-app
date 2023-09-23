@@ -5,13 +5,13 @@ import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
 import { EMAIL_REGEX_EXP } from 'constants/common'
-import { EmailData } from 'api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { SaveEmailData } from 'api/types'
 import { SnackbarMessages } from 'components/SnackBar'
 import { isErrorObject, showSnackBar } from 'utils/common'
 import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
-import { useContactInformation, useDeleteEmail, useUpdateEmail } from 'api/contactInformation'
+import { useContactInformation, useDeleteEmail, useSaveEmail } from 'api/contactInformation'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 
@@ -23,7 +23,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { data: contactInformation } = useContactInformation()
-  const { mutate: updateEmail, isLoading: savingEmail, isSuccess: emailSaved } = useUpdateEmail()
+  const { mutate: saveEmail, isLoading: savingEmail, isSuccess: emailSaved } = useSaveEmail()
   const { mutate: deleteEmail, isLoading: deletingEmail, isSuccess: emailDeleted } = useDeleteEmail()
   const emailId = contactInformation?.contactEmail?.id
   const deleteEmailAlert = useAlert()
@@ -85,13 +85,8 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     return true
   }
 
-  const saveEmail = (): void => {
-    let emailData: EmailData = { emailAddress: email }
-    const newEmail = contactInformation?.contactEmail?.emailAddress
-
-    if (newEmail) {
-      emailData = { ...emailData, id: emailId }
-    }
+  const onSave = (): void => {
+    const emailData: SaveEmailData = { emailAddress: email, id: emailId }
 
     const mutateOptions = {
       onSuccess: () => showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
@@ -100,12 +95,12 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
           if (error.status === 400) {
             showSnackBar(saveSnackbarMessages.errorMsg, dispatch, undefined, true, true)
           } else {
-            showSnackBar(saveSnackbarMessages.errorMsg, dispatch, () => updateEmail(emailData, mutateOptions), false, true)
+            showSnackBar(saveSnackbarMessages.errorMsg, dispatch, () => saveEmail(emailData, mutateOptions), false, true)
           }
         }
       },
     }
-    updateEmail(emailData, mutateOptions)
+    saveEmail(emailData, mutateOptions)
   }
 
   const removeSnackbarMessages: SnackbarMessages = {
@@ -133,7 +128,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     deleteEmail(emailData, mutateOptions)
   }
 
-  if (savingEmail || emailSaved) {
+  if (savingEmail || deletingEmail) {
     const loadingText = deletingEmail ? t('contactInformation.delete.emailAddress') : t('contactInformation.savingEmailAddress')
 
     return (
@@ -214,7 +209,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
             <AlertBox scrollViewRef={scrollViewRef} title={t('editEmail.alertError')} border="error" focusOnError={onSaveClicked} />
           </Box>
         )}
-        <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+        <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
       </Box>
     </FullScreenSubtask>
   )

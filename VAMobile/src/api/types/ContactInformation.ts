@@ -1,10 +1,6 @@
 import { AddressData } from './AddressData'
+import { EmailData } from './EmailData'
 import { PhoneData } from './PhoneData'
-
-export type EmailData = {
-  id?: string
-  emailAddress: string
-}
 
 export type ContactInformationPayload = {
   data: {
@@ -14,7 +10,7 @@ export type ContactInformationPayload = {
       homePhone: PhoneData | null
       mobilePhone: PhoneData | null
       workPhone: PhoneData | null
-      contactEmail?: EmailData | null
+      contactEmail: EmailData | null
     }
   }
 }

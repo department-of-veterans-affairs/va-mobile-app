@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Params as APIParams, EditResponseData, post, put } from 'store/api'
-import { EmailData } from 'api/types'
+import { SaveEmailData } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
 import { contactInformationKeys } from './queryKeys'
 import { isErrorObject } from 'utils/common'
@@ -10,7 +10,7 @@ import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/anal
 /**
  * Creates or updates a user's email depending on whether an `id` field is present
  */
-const updateEmail = async (emailData: EmailData) => {
+const saveEmail = async (emailData: SaveEmailData) => {
   const endpoint = '/v0/user/emails'
 
   if (!emailData.id) {
@@ -23,18 +23,18 @@ const updateEmail = async (emailData: EmailData) => {
 /**
  * Returns a mutation for updating an email
  */
-export const useUpdateEmail = () => {
+export const useSaveEmail = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: updateEmail,
+    mutationFn: saveEmail,
     onSuccess: async () => {
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       queryClient.invalidateQueries({ queryKey: contactInformationKeys.contactInformation })
     },
     onError: async (error) => {
       if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, 'updateEmail: Service error')
+        logNonFatalErrorToFirebase(error, 'saveEmail: Service error')
       }
     },
   })
