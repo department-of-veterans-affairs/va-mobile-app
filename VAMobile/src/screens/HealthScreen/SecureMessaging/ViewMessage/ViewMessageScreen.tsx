@@ -8,7 +8,7 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DateTime } from 'luxon'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -91,12 +91,11 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   }, [dispatch, folders])
 
   const getFolders = (): PickerItem[] => {
-    let indexOfDeleted: number | undefined
     const filteredFolder = _.filter(folders, (folder) => {
       const folderName = folder.attributes.name
-      return folderName !== FolderNameTypeConstants.drafts && folderName !== FolderNameTypeConstants.sent
-    }).map((folder, index) => {
-      let label = folder.attributes.name
+      return folderName !== FolderNameTypeConstants.drafts && folderName !== FolderNameTypeConstants.sent && folderName !== FolderNameTypeConstants.deleted
+    }).map((folder) => {
+      const label = folder.attributes.name
 
       const icon = {
         fill: 'defaultMenuItem',
@@ -104,13 +103,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         width: theme.fontSizes.MobileBody.fontSize,
         name: 'Folder',
       } as VAIconProps
-
-      if (label === FolderNameTypeConstants.deleted) {
-        label = TRASH_FOLDER_NAME
-        icon.fill = 'error'
-        icon.name = 'Trash'
-        indexOfDeleted = index
-      }
 
       if (label === FolderNameTypeConstants.inbox) {
         icon.fill = 'defaultMenuItem'
@@ -123,11 +115,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         icon,
       }
     })
-
-    if (indexOfDeleted !== undefined) {
-      filteredFolder.unshift(filteredFolder.splice(indexOfDeleted, 1)[0])
-    }
-
     return filteredFolder
   }
 
