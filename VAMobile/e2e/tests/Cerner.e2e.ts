@@ -7,7 +7,7 @@ export const CernerIdConstants = {
   HEALTH_CATEGORY_ID: 'healthCategoryTestID',
   CERNER_NOTE_HEADING_TEXT: 'Some of your V\uFEFFA health care team may be using the My V\uFEFFA Health portal',
   CERNER_NOTE_RECORDS_SHOW_TEXT: 'Our records show you’re registered at:',
-  CERNER_NOTE_FACILITY_TEXT: 'Mann-Grandstaff Department of Veterans Affairs Medical Center (Now using My V\uFEFFA Health)',
+  CERNER_NOTE_FACILITY_TEXT: 'Cary VA Medical Center (Now using My V\uFEFFA Health)',
   CERNER_NOTE_MESSAGES_TEXT: 'This facility currently uses our My VA Health portal. You\'ll need to go there to send your message.',
   CERNER_NOTE_MESSAGES_HEADER_TEXT: 'Make sure you\'re in the right health portal',
 }
@@ -16,9 +16,9 @@ beforeAll(async () => {
   if(device.getPlatform() === 'android') {
     await changeMockData('profile.json', ['/v1/user', 'data', 'attributes', 'health', 'isCernerPatient'], true)
     await device.launchApp({newInstance: true})
-    await changeMockData('profile.json', ['/v1/user', 'data', 'attributes', 'health', {'facilities': 1}, 'isCerner'], true)
+    await changeMockData('getFacilitiesInfo.json', ['/v0/facilities-info', 'data', 'attributes', {'facilities': 0}, 'cerner'], true, true)
     await device.launchApp({newInstance: true})
-    await changeMockData('profile.json', ['/v1/user', 'data', 'attributes', 'health', {'facilities': 2}, 'isCerner'], true)
+    await changeMockData('getFacilitiesInfo.json', ['/v0/facilities-info', 'data', 'attributes', {'facilities': 1}, 'cerner'], false, true)
     await device.launchApp({newInstance: true})
     await loginToDemoMode()
     await openHealth()
@@ -65,13 +65,14 @@ describe(':android: Cerner Notice', () => {
 
   it('should tap on the cerner notification and verify the correct information is displayed for one facility', async () => {
     await element(by.text(CernerIdConstants.CERNER_NOTE_MESSAGES_HEADER_TEXT)).tap()
-    await expect(element(by.text('Sending a message to a care team at Mann-Grandstaff Department of Veterans Affairs Medical Center?'))).toExist()
+    await expect(element(by.text('Sending a message to a care team at Cary VA Medical Center?'))).toExist()
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_MESSAGES_TEXT))).toExist()
     await expect(element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID))).toExist()
   })
 
   it('should add another facility to the mock data file', async () => {
-    await changeMockData('profile.json', ['/v1/user', 'data', 'attributes', 'health', {'facilities': 1}, 'facilityName'], 'San Francisco VA Medical Center')
+    //await changeMockData('profile.json', ['/v1/user', 'data', 'attributes', 'health', {'facilities': 1}, 'facilityName'], 'San Francisco VA Medical Center')
+    await changeMockData('getFacilitiesInfo.json', ['/v0/facilities-info', 'data', 'attributes', {'facilities': 1}, 'cerner'], true, true)
     await device.launchApp({newInstance: true})
 		await loginToDemoMode()
 		await openHealth()
@@ -81,8 +82,8 @@ describe(':android: Cerner Notice', () => {
   it('should tap on the cerner notification and verify the correct information is displayed for multiple facilities', async () => {
     await element(by.text(CernerIdConstants.CERNER_NOTE_MESSAGES_HEADER_TEXT)).tap()
     await expect(element(by.text('Sending a message to a care team at one of these health facilities?'))).toExist()
-    await expect(element(by.text('San Francisco VA Medical Center'))).toExist()
-    await expect(element(by.text('Mann-Grandstaff Department of Veterans Affairs Medical Center'))).toExist()
+    await expect(element(by.text('Cheyenne VA Medical Center'))).toExist()
+    await expect(element(by.text('Cary VA Medical Center'))).toExist()
     await expect(element(by.text('These facilities currently use our My VA Health portal. You\'ll need to go there to send your message.'))).toExist()
     await expect(element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID))).toExist()
   })
@@ -102,12 +103,11 @@ describe(':android: Cerner Notice', () => {
   it('should reset mock data', async () => {
 		await changeMockData('profile.json', ['/v1/user', 'data', 'attributes', 'health', 'isCernerPatient'], false)
 		await device.launchApp({newInstance: true})
-    await changeMockData('profile.json', ['/v1/user', 'data', 'attributes', 'health', {'facilities': 1}, 'facilityName'], '')
-    await device.launchApp({newInstance: true})
     await changeMockData('profile.json', ['/v1/user', 'data', 'attributes', 'authorizedServices'], ["appeals", "appointments", "claims", "decisionLetters", "directDepositBenefits", "directDepositBenefitsUpdate", "lettersAndDocuments", "militaryServiceHistory", "userProfileUpdate", "prescriptions", "secureMessaging"])
     await device.launchApp({newInstance: true})
-    await changeMockData('profile.json', ['/v1/user', 'data', 'attributes', 'health', {'facilities': 1}, 'isCerner'], false)
+    //await changeMockData('getFacilitiesInfo.json', ['/v0/facilities-info', 'data', 'attributes', {'facilities': 0}, 'cerner'], false, true)
+    //await device.launchApp({newInstance: true})
+    await changeMockData('getFacilitiesInfo.json', ['/v0/facilities-info', 'data', 'attributes', {'facilities': 1}, 'cerner'], false, true)
     await device.launchApp({newInstance: true})
-    await changeMockData('profile.json', ['/v1/user', 'data', 'attributes', 'health', {'facilities': 2}, 'isCerner'], false)
   })
 })
