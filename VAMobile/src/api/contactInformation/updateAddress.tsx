@@ -10,7 +10,7 @@ import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/anal
 /**
  * Creates or updates a user's address depending on whether an `id` field is present
  */
-const updateAddress = async (addressData: AddressData) => {
+const updateAddress = (addressData: AddressData) => {
   const endpoint = '/v0/user/addresses'
 
   if (!addressData.id) {

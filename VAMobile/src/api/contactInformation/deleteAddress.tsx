@@ -9,7 +9,7 @@ import { logNonFatalErrorToFirebase } from 'utils/analytics'
 /**
  * Deletes a user's address
  */
-const deleteAddress = async (addressData: AddressData) => {
+const deleteAddress = (addressData: AddressData) => {
   return del<EditResponseData>('/v0/user/addresses', addressData as unknown as APIParams)
 }
 

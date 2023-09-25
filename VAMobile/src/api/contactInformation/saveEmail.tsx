@@ -10,7 +10,7 @@ import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/anal
 /**
  * Creates or updates a user's email depending on whether the `id` field is present
  */
-const saveEmail = async (emailData: SaveEmailData) => {
+const saveEmail = (emailData: SaveEmailData) => {
   const endpoint = '/v0/user/emails'
 
   if (!emailData.id) {

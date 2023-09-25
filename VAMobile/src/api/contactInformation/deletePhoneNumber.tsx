@@ -10,7 +10,7 @@ import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/anal
 /**
  * Deletes a user's phone number
  */
-const deletePhoneNumber = async (phoneData: PhoneData) => {
+const deletePhoneNumber = (phoneData: PhoneData) => {
   return del<EditResponseData>('/v0/user/phones', phoneData as unknown as APIParams)
 }
 

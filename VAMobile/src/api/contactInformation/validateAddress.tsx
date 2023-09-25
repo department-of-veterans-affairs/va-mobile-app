@@ -10,15 +10,11 @@ import { logNonFatalErrorToFirebase } from 'utils/analytics'
  * Validates an address and returns the validation key of the suggested address with the highest confidence score
  */
 const validateAddress = async (addressData: AddressData): Promise<ValidateAddressData> => {
-  try {
-    const response = await post<AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as APIParams)
-    const suggestedAddresses = getSuggestedAddresses(response)
-    const confirmedSuggestedAddresses = getConfirmedSuggestions(suggestedAddresses)
-    const validationKey = getValidationKey(suggestedAddresses)
-    return { confirmedSuggestedAddresses, suggestedAddresses, validationKey }
-  } catch (error) {
-    throw error
-  }
+  const response = await post<AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as APIParams)
+  const suggestedAddresses = getSuggestedAddresses(response)
+  const confirmedSuggestedAddresses = getConfirmedSuggestions(suggestedAddresses)
+  const validationKey = getValidationKey(suggestedAddresses)
+  return { confirmedSuggestedAddresses, suggestedAddresses, validationKey }
 }
 
 /**

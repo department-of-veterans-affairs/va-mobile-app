@@ -10,7 +10,7 @@ import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/anal
 /**
  * Updates a user's phone number
  */
-const updatePhoneNumber = async (phoneData: PhoneData) => {
+const updatePhoneNumber = (phoneData: PhoneData) => {
   return put<EditResponseData>('/v0/user/phones', phoneData as unknown as APIParams)
 }
 

@@ -10,7 +10,7 @@ import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/anal
 /**
  * Deletes a user's email
  */
-const deleteEmail = async (emailData: EmailData) => {
+const deleteEmail = (emailData: EmailData) => {
   return del<EditResponseData>('/v0/user/emails', emailData as unknown as APIParams)
 }
 

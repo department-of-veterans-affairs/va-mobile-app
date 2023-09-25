@@ -10,7 +10,7 @@ import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/anal
 /**
  * Creates a phone number for a user
  */
-const createPhoneNumber = async (phoneData: PhoneData) => {
+const createPhoneNumber = (phoneData: PhoneData) => {
   return post<EditResponseData>('/v0/user/phones', phoneData as unknown as APIParams)
 }
 
