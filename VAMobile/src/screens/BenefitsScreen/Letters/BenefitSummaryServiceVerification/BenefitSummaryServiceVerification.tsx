@@ -41,7 +41,9 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)
+  const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError, loadingLetterBeneficiaryData } = useSelector<RootState, LettersState>(
+    (state) => state.letters,
+  )
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(true)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(true)
@@ -214,7 +216,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     )
   }
 
-  if (downloading || !letterBeneficiaryData) {
+  if (loadingLetterBeneficiaryData || downloading || !letterBeneficiaryData) {
     return (
       <FeatureLandingTemplate backLabel={t('letters.overview.viewLetters')} backLabelOnPress={navigation.goBack} title={t('letters.details.title')}>
         <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />

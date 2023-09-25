@@ -27,6 +27,8 @@ context('militaryService', () => {
                 endDate: '2002-12-31',
                 formattedBeginDate: 'September 17, 1997',
                 formattedEndDate: 'December 31, 2002',
+                characterOfDischarge: 'Honorable',
+                honorableServiceIndicator: 'Y'
               },
             ],
           },

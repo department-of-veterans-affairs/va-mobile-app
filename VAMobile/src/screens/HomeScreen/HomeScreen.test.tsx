@@ -64,27 +64,4 @@ context('HomeScreen', () => {
       })
     })
   })
-
-  describe('when showing the greeting', () => {
-    it('should have the correct one for the morning', async () => {
-      const expectNow = DateTime.local(2021, 8, 10, 10)
-      Settings.now = () => expectNow.toMillis()
-      initializeTestInstance()
-      expect(screen.getByText('Good morning')).toBeTruthy()
-    })
-
-    it('should have the correct one for the afternoon', async () => {
-      const expectNow = DateTime.local(2021, 8, 10, 14)
-      Settings.now = () => expectNow.toMillis()
-      initializeTestInstance()
-      expect(screen.getByText('Good afternoon')).toBeTruthy()
-    })
-
-    it('should have the correct one for the evening', async () => {
-      const expectNow = DateTime.local(2021, 8, 10, 20)
-      Settings.now = () => expectNow.toMillis()
-      initializeTestInstance()
-      expect(screen.getByText('Good evening')).toBeTruthy()
-    })
-  })
 })

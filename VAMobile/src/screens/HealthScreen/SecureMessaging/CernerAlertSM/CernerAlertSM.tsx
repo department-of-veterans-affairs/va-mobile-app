@@ -1,12 +1,10 @@
-import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
 
 import { Box, ClickForActionLink, CollapsibleAlert, LinkButtonProps, LinkTypeOptionsConstants, TextView, VABulletList, VABulletListText } from 'components'
-import { Facility } from 'store/api'
+import { Facility } from 'api/types/FacilityData'
 import { NAMESPACE } from 'constants/namespaces'
-import { PatientState } from 'store/slices'
-import { RootState } from 'store'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -15,7 +13,13 @@ const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 const CernerAlertSM: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { cernerFacilities } = useSelector<RootState, PatientState>((state) => state.patient)
+  const { data: facilitiesInfo } = useFacilitiesInfo()
+
+  if (!facilitiesInfo) {
+    return <></>
+  }
+
+  const cernerFacilities = facilitiesInfo.filter((f) => f.cerner)
 
   // if no cerner facilities then do not show the alert
   if (!cernerFacilities.length) {
@@ -26,7 +30,7 @@ const CernerAlertSM: FC = () => {
   const headerText = t('cernerAlertSM.header')
 
   const accordionContent = (): ReactNode => {
-    let intro = t('cernerAlertSM.sendingAMessage', { facility: cernerFacilities[0].facilityName })
+    let intro = t('cernerAlertSM.sendingAMessage', { facility: cernerFacilities[0].name })
     let thisFacility = t('cernerAlertSM.thisFacilityUses')
     let thisFacilityA11y = t('cernerAlertSM.thisFacilityUses.a11y')
     let bullets: VABulletListText[] = []
@@ -35,7 +39,7 @@ const CernerAlertSM: FC = () => {
       intro = t('cernerAlertSM.sendingAMessageMultiple')
       thisFacility = t('cernerAlertSM.theseFacilitiesUse')
       thisFacilityA11y = t('cernerAlertSM.theseFacilitiesUse.a11y')
-      bullets = cernerFacilities.map((facility: Facility) => ({ text: facility.facilityName }))
+      bullets = cernerFacilities.map((facility: Facility) => ({ text: facility.name }))
     }
 
     const outro = `${thisFacility} ${t('cernerAlertSM.youllNeedToGoThere')}`

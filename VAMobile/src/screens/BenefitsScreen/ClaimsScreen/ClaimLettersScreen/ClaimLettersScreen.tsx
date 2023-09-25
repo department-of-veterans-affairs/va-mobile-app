@@ -78,6 +78,9 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     const textLines: Array<TextLine> = [{ text: date, variant }, { text: typeDescription }]
     const onPress = () => {
       logAnalyticsEvent(Events.vama_ddl_letter_view())
+      if (!snackBar) {
+        logAnalyticsEvent(Events.vama_snackbar_null('ClaimLetters view letter'))
+      }
       snackBar?.hideAll()
       dispatch(downloadDecisionLetter(letter.id, snackbarMessages))
     }

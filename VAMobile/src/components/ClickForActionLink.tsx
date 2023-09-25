@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 
 import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
 import { useExternalLink, useTheme } from 'utils/hooks'
-import TextView, { TextViewProps } from './TextView'
+import TextView, { ColorVariant, TextViewProps } from './TextView'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'
 
 /** Icon type for links, defaults to Chat */
@@ -69,6 +69,8 @@ export type LinkButtonProps = AccessibilityProps & {
 
   /** optional function to fire analytic events when the link is clicked */
   fireAnalytic?: () => void
+  /** color bypass */
+  colorOverride?: string
   /** Optional TestID */
   testID?: string
 }
@@ -76,7 +78,18 @@ export type LinkButtonProps = AccessibilityProps & {
 /**
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
-const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, a11yLabel, fireAnalytic, testID, ...props }) => {
+const ClickForActionLink: FC<LinkButtonProps> = ({
+  displayedText,
+  linkType,
+  numberOrUrlLink,
+  linkUrlIconType,
+  metaData,
+  a11yLabel,
+  fireAnalytic,
+  colorOverride,
+  testID,
+  ...props
+}) => {
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
 
@@ -144,11 +157,11 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
   }
 
   const textViewProps: TextViewProps = {
-    color: 'link',
+    color: colorOverride ? (colorOverride as ColorVariant) : 'link',
     variant: 'MobileBody',
     ml: 4,
     textDecoration: 'underline',
-    textDecorationColor: 'link',
+    textDecorationColor: colorOverride ? (colorOverride as ColorVariant) : 'link',
   }
 
   const pressableProps: TouchableWithoutFeedbackProps = {
@@ -162,7 +175,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
   return (
     <TouchableWithoutFeedback testID={testID} {...pressableProps}>
       <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} alignItems={'center'}>
-        <VAIcon name={getIconName()} fill={'link'} width={25} height={25} />
+        <VAIcon name={getIconName()} fill={colorOverride ? (colorOverride as ColorVariant) : 'link'} fill2={colorOverride ? 'transparent' : ''} width={25} height={25} />
         <Box flexShrink={1}>
           <TextView {...textViewProps}>{displayedText}</TextView>
         </Box>

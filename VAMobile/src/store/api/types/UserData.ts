@@ -129,13 +129,3 @@ export type EditResponseData = {
     }
   }
 }
-
-export const UserGreetingTimeConstants: {
-  MORNING: number
-  AFTERNOON: number
-  EVENING: number
-} = {
-  MORNING: 12,
-  AFTERNOON: 18,
-  EVENING: 4,
-}
