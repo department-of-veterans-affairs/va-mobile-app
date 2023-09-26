@@ -819,7 +819,7 @@ const authSlice = createSlice({
     },
     dispatchFinishAuthLogin: (state, action: PayloadAction<AuthFinishLoginPayload>) => {
       const successfulLogin = !action.payload.error
-      
+
       return {
         ...state,
         ...action.payload,
