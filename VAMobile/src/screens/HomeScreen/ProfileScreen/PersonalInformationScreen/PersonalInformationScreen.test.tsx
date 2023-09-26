@@ -11,7 +11,6 @@ import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { ErrorComponent, LoadingComponent } from 'components'
 import {
   ErrorsState,
-  initialAuthorizedServicesState,
   initialAuthState,
   initialErrorsState,
   initializeErrorsByScreenID,
@@ -45,10 +44,6 @@ jest.mock('../../../../api/demographics/getDemographics', () => {
 })
 
 const authorizedMilitaryState = {
-  authorizedServices: {
-    ...initialAuthorizedServicesState,
-    militaryServiceHistory: true,
-  },
   militaryService: {
     ...initialMilitaryServiceState,
     mostRecentBranch: BranchesOfServiceConstants.AirForce,
@@ -112,10 +107,6 @@ context('PersonalInformationScreen', () => {
         loading,
       },
       errors: errorsState,
-      authorizedServices: {
-        ...initialAuthorizedServicesState,
-        militaryServiceHistory: true,
-      },
       militaryService: {
         ...initialMilitaryServiceState,
         serviceHistory: [{} as ServiceData],

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AuthState, AuthorizedServicesState, completeSync, logInDemoMode } from 'store/slices'
+import { AuthState, completeSync, logInDemoMode } from 'store/slices'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState, checkForDowntimeErrors, getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/slices'
@@ -11,6 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useDemographics } from 'api/demographics/getDemographics'
 import colors from 'styles/themes/VAColors'
 
@@ -31,9 +32,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { preloadComplete: personalInformationLoaded, loading: personalInformationLoading } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
   const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
-  const { hasLoaded: authorizedServicesLoaded, militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>(
-    (state) => state.authorizedServices,
-  )
+  const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices()
   const { isFetched: demographicsLoaded } = useDemographics()
 
   const [displayMessage, setDisplayMessage] = useState('')
@@ -52,7 +51,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     if (loggedIn) {
       if (!personalInformationLoaded && !personalInformationLoading) {
         dispatch(getProfileInfo())
-      } else if (authorizedServicesLoaded && militaryInfoAuthorization && !militaryHistoryLoaded && !militaryHistoryLoading) {
+      } else if (!loadingUserAuthorizedServices && userAuthorizedServices?.militaryServiceHistory && !militaryHistoryLoaded && !militaryHistoryLoading) {
         dispatch(getServiceHistory())
       } else if (!disabilityRatingLoaded && !disabilityRatingLoading) {
         dispatch(getDisabilityRating())
@@ -63,8 +62,8 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     loggedIn,
     personalInformationLoaded,
     personalInformationLoading,
-    militaryInfoAuthorization,
-    authorizedServicesLoaded,
+    loadingUserAuthorizedServices,
+    userAuthorizedServices?.militaryServiceHistory,
     disabilityRatingLoaded,
     disabilityRatingLoading,
     militaryHistoryLoaded,
@@ -82,7 +81,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
       setDisplayMessage('')
     }
 
-    const finishSyncingMilitaryHistory = authorizedServicesLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded)
+    const finishSyncingMilitaryHistory = !loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded)
     if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded && demographicsLoaded) {
       dispatch(completeSync())
     }
@@ -90,10 +89,10 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     dispatch,
     loggedIn,
     loggingOut,
-    authorizedServicesLoaded,
+    loadingUserAuthorizedServices,
     personalInformationLoaded,
     militaryHistoryLoaded,
-    militaryInfoAuthorization,
+    userAuthorizedServices?.militaryServiceHistory,
     t,
     disabilityRatingLoaded,
     syncing,

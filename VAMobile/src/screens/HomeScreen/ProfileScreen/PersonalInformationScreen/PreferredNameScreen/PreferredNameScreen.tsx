@@ -5,9 +5,11 @@ import React, { FC, useEffect, useState } from 'react'
 import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { SnackbarMessages } from 'components/SnackBar'
+import { showSnackBar } from 'utils/common'
 import { stringToTitleCase } from 'utils/formattingUtils'
+import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import { useDemographics } from 'api/demographics/getDemographics'
-import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import { useUpdatePreferredName } from 'api/demographics/updatePreferredName'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
@@ -18,6 +20,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   const { data: demographics } = useDemographics()
   const preferredNameMutation = useUpdatePreferredName()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const dispatch = useAppDispatch()
   const theme = useTheme()
   const confirmAlert = useDestructiveActionSheet()
 
@@ -29,6 +32,11 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
   const [preferredName, setName] = useState(getInitialState())
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.preferredName.saved'),
+    errorMsg: t('personalInformation.preferredName.notSaved'),
+  }
 
   useEffect(() => {
     if (preferredNameMutation.isSuccess) {
@@ -62,9 +70,17 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
     }
   }
 
+  const updatePreferredName = () => {
+    const mutateOptions = {
+      onSuccess: () => showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false),
+      onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, updatePreferredName, false, true, true),
+    }
+    preferredNameMutation.mutate(preferredName, mutateOptions)
+  }
+
   const onSave = (): void => {
     if (preferredName !== '') {
-      preferredNameMutation.mutate(preferredName)
+      updatePreferredName()
     }
   }
 

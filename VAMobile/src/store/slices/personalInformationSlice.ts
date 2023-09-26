@@ -4,7 +4,6 @@ import { AppThunk } from 'store'
 import { ScreenIDTypes, UserData, UserDataProfile, get } from '../api'
 import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { dispatchUpdateAuthorizedServices } from './authorizedServicesSlice'
 import { getAllFieldsThatExist, isErrorObject, sanitizeString } from 'utils/common'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
@@ -41,15 +40,12 @@ export const getProfileInfo =
       dispatch(dispatchStartGetProfileInfo())
       const user = await get<UserData>('/v1/user')
       const profile = user?.data.attributes.profile
-      const authorizedServices = user?.data.attributes.authorizedServices
       dispatch(dispatchFinishGetProfileInfo({ profile }))
-      dispatch(dispatchUpdateAuthorizedServices({ authorizedServices }))
       await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `getProfileInfo: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishGetProfileInfo({ error }))
-        dispatch(dispatchUpdateAuthorizedServices({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }

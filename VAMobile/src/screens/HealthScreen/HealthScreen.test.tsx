@@ -1,19 +1,43 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { screen, fireEvent } from '@testing-library/react-native'
+import { context, mockNavProps, render } from 'testUtils'
 import { HealthScreen } from './HealthScreen'
-import { Pressable, TouchableWithoutFeedback } from 'react-native'
-import { initialAuthorizedServicesState, initialAuthState, initialErrorsState, initialSecureMessagingState, loadAllPrescriptions } from 'store/slices'
-import { TextView, MessagesCountTag } from 'components'
+import { initialAuthState, initialErrorsState, initialSecureMessagingState, loadAllPrescriptions } from 'store/slices'
 import { when } from 'jest-when'
 import { featureEnabled } from 'utils/remoteConfig'
 
 const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
+
+jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
+  let original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
+  return {
+    ...original,
+    useAuthorizedServices: jest.fn().mockReturnValue({
+      status: "success",
+      data: {
+        appeals: true,
+        appointments: true,
+        claims: true,
+        decisionLetters: true,
+        directDepositBenefits: true,
+        directDepositBenefitsUpdate: true,
+        disabilityRating: true,
+        genderIdentity: true,
+        lettersAndDocuments: true,
+        militaryServiceHistory: true,
+        paymentHistory: true,
+        preferredName: true,
+        prescriptions: true,
+        scheduleAppointments: true,
+        secureMessaging: true,
+        userProfileUpdate: true
+      }
+    })
+  }
+})
 
 jest.mock('utils/remoteConfig')
 
@@ -42,11 +66,7 @@ jest.mock('store/slices', () => {
 })
 
 context('HealthScreen', () => {
-  let component: RenderAPI
   let props: any
-  let testInstance: ReactTestInstance
-
-  let mockNavigateToCrisisLineSpy: jest.Mock
   let mockNavigateToAppointmentSpy: jest.Mock
   let mockNavigateToSecureMessagingSpy: jest.Mock
   let mockNavigateToVAVaccinesSpy: jest.Mock
@@ -58,16 +78,13 @@ context('HealthScreen', () => {
   })
 
   //mockList:  SecureMessagingMessageList --> for inboxMessages
-  const initializeTestInstance = (unreadCount = 13, hasLoadedInbox = true, prescriptionsEnabled = false, prescriptionsNeedLoad = false, smAuthorized = true) => {
-    mockNavigateToCrisisLineSpy = jest.fn()
+  const initializeTestInstance = (unreadCount = 13, hasLoadedInbox = true, prescriptionsEnabled = false, prescriptionsNeedLoad = false) => {
     mockNavigateToAppointmentSpy = jest.fn()
     mockNavigateToSecureMessagingSpy = jest.fn()
     mockNavigateToVAVaccinesSpy = jest.fn()
     mockNavigateToPharmacySpy = jest.fn()
     when(mockNavigateToSpy)
       .mockReturnValue(() => {})
-      .calledWith('VeteransCrisisLine')
-      .mockReturnValue(mockNavigateToCrisisLineSpy)
       .calledWith('Appointments')
       .mockReturnValue(mockNavigateToAppointmentSpy)
       .calledWith('SecureMessaging')
@@ -81,11 +98,10 @@ context('HealthScreen', () => {
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
-    component = render(<HealthScreen {...props} />, {
+    render(<HealthScreen {...props} />, {
       preloadedState: {
         auth: { ...initialAuthState },
         prescriptions: { prescriptionsNeedLoad },
-        authorizedServices: { ...initialAuthorizedServicesState, secureMessaging: smAuthorized },
         secureMessaging: {
           ...initialSecureMessagingState,
           hasLoadedInbox,
@@ -105,129 +121,89 @@ context('HealthScreen', () => {
         errors: initialErrorsState,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-    })
-  })
-
   describe('prescriptions', () => {
     describe('feature disabled', () => {
       it('does not display prescriptions button if feature toggle disabled', async () => {
-        await waitFor(() => {
-          expect(() => component.getByText('Prescriptions')).toThrow()
-        })
+        expect(screen.getByText('Appointments')).toBeTruthy()
+        expect(screen.getByText('Messages')).toBeTruthy()
+        expect(screen.queryByText('Prescriptions')).toBeFalsy()
+        expect(screen.getByText('V\ufeffA vaccine records')).toBeTruthy()
+        expect(screen.getByText('COVID-19 updates')).toBeTruthy()
       })
     })
 
     describe('feature enabled', () => {
       it('does not display prescriptions button if feature toggle enabled', async () => {
         initializeTestInstance(0, true, true)
-        await waitFor(() => {
-          expect(() => component.getByText('Prescriptions')).not.toThrow()
-          expect(component.getByText('Prescriptions')).toBeDefined()
-        })
+        expect(screen.getByText('Appointments')).toBeTruthy()
+        expect(screen.getByText('Messages')).toBeTruthy()
+        expect(screen.getByText('Prescriptions')).toBeTruthy()
+        expect(screen.getByTestId('V\ufeffA vaccine records')).toBeTruthy()
+        expect(screen.getByText('COVID-19 updates')).toBeTruthy()
       })
     })
   })
 
-  describe('on click of the crisis line button', () => {
-    it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
-        expect(mockNavigateToCrisisLineSpy).toHaveBeenCalled()
-      })
-    })
-  })
-
-  describe('on click of the pharmacy button', () => {
+  describe('on click of the prescriptions button', () => {
     it('should call useRouteNavigation', async () => {
       initializeTestInstance(0, true, true)
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[2].props.onPress()
-        expect(mockNavigateToPharmacySpy).toHaveBeenCalled()
-      })
+      fireEvent.press(screen.getByText('Prescriptions'))
+      expect(mockNavigateToPharmacySpy).toHaveBeenCalled()
     })
 
     it('should reload rx data if data is present', async () => {
       initializeTestInstance(0, true, true, false)
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[2].props.onPress()
-        expect(loadAllPrescriptions).toHaveBeenCalled()
-      })
+      fireEvent.press(screen.getByText('Prescriptions'))
+      expect(loadAllPrescriptions).toHaveBeenCalled()
     })
 
     it('should not reload rx data if data is not present', async () => {
       initializeTestInstance(0, true, true, true)
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[2].props.onPress()
-        expect(loadAllPrescriptions).not.toHaveBeenCalled()
-      })
+      fireEvent.press(screen.getByText('Prescriptions'))
+      expect(loadAllPrescriptions).not.toHaveBeenCalled()
     })
   })
 
   describe('on click of the appointments button', () => {
     it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(mockNavigateToAppointmentSpy).toHaveBeenCalled()
-      })
+      fireEvent.press(screen.getByText('Appointments'))
+      expect(mockNavigateToAppointmentSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of the secure messaging button', () => {
     it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[1].props.onPress()
-        expect(mockNavigateToSecureMessagingSpy).toHaveBeenCalled()
-      })
+      fireEvent.press(screen.getByText('Messages'))
+      expect(mockNavigateToSecureMessagingSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of the vaccines button', () => {
     it('should call useRouteNavigation', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[2].props.onPress()
-        expect(mockNavigateToVAVaccinesSpy).toHaveBeenCalled()
-      })
+      fireEvent.press(screen.getByText('V\ufeffA vaccine records'))
+      expect(mockNavigateToVAVaccinesSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of the covid-19 updates button', () => {
     it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[3].props.onPress()
-        const expectNavArgs = {
-          url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
-          displayTitle: 'va.gov',
-          loadingMessage: 'Loading VA COVID-19 updates...',
-        }
-        expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
-      })
+      fireEvent.press(screen.getByText('COVID-19 updates'))
+      const expectNavArgs = {
+        url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
+        displayTitle: 'va.gov',
+        loadingMessage: 'Loading VA COVID-19 updates...',
+      }
+      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
     })
   })
 
   it('should render messagesCountTag with the correct count number', async () => {
-    await waitFor(() => {
-      initializeTestInstance(13)
-      expect(testInstance.findByType(MessagesCountTag)).toBeTruthy()
-      expect(testInstance.findAllByType(TextView)[8].props.children).toBe(13)
-    })
-  })
-
-  describe('when there are zero unread inbox messages', () => {
-    it('should not render a messagesCountTag', async () => {
-      await waitFor(() => {
-        initializeTestInstance(0)
-        expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Messages')
-      })
-    })
+    initializeTestInstance(13)
+    expect(screen.getByText('13')).toBeTruthy()
   })
 })

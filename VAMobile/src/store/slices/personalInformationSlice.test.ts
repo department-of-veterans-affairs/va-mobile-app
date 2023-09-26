@@ -7,12 +7,10 @@ import { getProfileInfo } from './personalInformationSlice'
 export const ActionTypes: {
   PERSONAL_INFORMATION_START_GET_INFO: string
   PERSONAL_INFORMATION_FINISH_GET_INFO: string
-  AUTHORIZED_SERVICES_UPDATE: string
   CERNER_UPDATE: string
 } = {
   PERSONAL_INFORMATION_START_GET_INFO: 'personalInformation/dispatchStartGetProfileInfo',
   PERSONAL_INFORMATION_FINISH_GET_INFO: 'personalInformation/dispatchFinishGetProfileInfo',
-  AUTHORIZED_SERVICES_UPDATE: 'authorizedServices/dispatchUpdateAuthorizedServices',
   CERNER_UPDATE: 'patient/dispatchUpdateCerner',
 }
 
@@ -90,32 +88,6 @@ context('personalInformation', () => {
       expect(personalInformation.error).toBeFalsy()
     })
 
-    it('should get authorizedServices information', async () => {
-      const mockAuthorizedServicesPayload = {
-        data: {
-          attributes: {
-            profile: {},
-            authorizedServices: ['directDepositBenefits'],
-          },
-        },
-      }
-
-      when(api.get as jest.Mock)
-        .calledWith('/v1/user')
-        .mockResolvedValue(mockAuthorizedServicesPayload)
-
-      const store = realStore()
-      await store.dispatch(getProfileInfo())
-      const actions = store.getActions()
-
-      const updateAction = _.find(actions, { type: ActionTypes.AUTHORIZED_SERVICES_UPDATE })
-      expect(updateAction).toBeTruthy()
-
-      const { authorizedServices } = store.getState()
-      expect(authorizedServices.directDepositBenefits).toBeTruthy()
-      expect(authorizedServices.error).toBeFalsy()
-    })
-
     it('should get errors if userProfileData is not received', async () => {
       const error = new Error('error from backend')
 
@@ -137,13 +109,6 @@ context('personalInformation', () => {
       const { personalInformation } = store.getState()
       expect(personalInformation.profile).toBeFalsy()
       expect(personalInformation.error).toBeTruthy()
-
-      const updateAuthorizedServicesAction = _.find(actions, { type: ActionTypes.AUTHORIZED_SERVICES_UPDATE })
-      expect(updateAuthorizedServicesAction).toBeTruthy()
-
-      const { authorizedServices } = store.getState()
-      expect(authorizedServices.directDepositBenefits).toBeFalsy()
-      expect(authorizedServices.error).toBeTruthy()
     })
   })
 })

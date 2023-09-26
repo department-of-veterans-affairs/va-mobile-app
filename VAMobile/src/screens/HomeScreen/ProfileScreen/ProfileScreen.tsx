@@ -2,7 +2,6 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect } from 'react'
 
-import { AuthorizedServicesState } from 'store/slices'
 import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -11,12 +10,18 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
 const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
-  const { userProfileUpdate, militaryServiceHistory: militaryInfoAuthorization } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const {
+    data: userAuthorizedServices,
+    isLoading: loadingUserAuthorizedServices,
+    isError: getUserAuthorizedServicesError,
+    refetch: refetchUserAuthorizedServices,
+  } = useAuthorizedServices()
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
 
@@ -35,8 +40,10 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const getInfoTryAgain = (): void => {
     // Fetch the profile information
     dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
+
+    refetchUserAuthorizedServices()
     // Get the service history to populate the profile banner
-    if (militaryInfoAuthorization) {
+    if (userAuthorizedServices?.militaryServiceHistory) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
   }
@@ -50,14 +57,13 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     // Get the service history to populate the profile banner
-    if (militaryHistoryNeedsUpdate && militaryInfoAuthorization && mhNotInDowntime) {
+    if (militaryHistoryNeedsUpdate && userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
-  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization, mhNotInDowntime])
+  }, [dispatch, militaryHistoryNeedsUpdate, userAuthorizedServices?.militaryServiceHistory, mhNotInDowntime])
 
-  //Todo, Change ContactInformation navigate To to the contact information screen when it is created in the next ticket
   const getProfileButtons = (): ReactElement => {
-    if (userProfileUpdate) {
+    if (userAuthorizedServices?.userProfileUpdate) {
       return (
         <Box>
           <LargeNavButton
@@ -84,7 +90,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   }
 
   // pass in optional onTryAgain because this screen needs to dispatch two actions for its loading sequence
-  if (useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError) {
     return (
       <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack}>
         <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
@@ -102,7 +108,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     )
   }
 
-  if (militaryInformationLoading || personalInformationLoading) {
+  if (militaryInformationLoading || personalInformationLoading || loadingUserAuthorizedServices) {
     return (
       <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack}>
         <NameTag />

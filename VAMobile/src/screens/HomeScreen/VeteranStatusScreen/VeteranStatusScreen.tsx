@@ -12,7 +12,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 import { getBirthDate } from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/PersonalInformationScreen'
-import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useTheme } from 'utils/hooks'
 // import PhotoUpload from 'components/PhotoUpload'
 
@@ -22,7 +22,8 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { serviceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((state) => state.militaryService)
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
-  const accessToMilitaryInfo = useHasMilitaryInformationAccess()
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 

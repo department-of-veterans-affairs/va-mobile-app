@@ -4,7 +4,9 @@ import { AddressData } from 'api/types'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
 import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from './decisionLetters'
+import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updateGenderIdentity, updatePreferredName } from './demographics'
 import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
+import { GenderIdentityUpdatePayload, PreferredNameUpdatePayload } from 'api/types/DemographicsData'
 import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
 import { Params } from '../api'
@@ -39,7 +41,8 @@ export type DemoStore = AppointmentsDemoStore &
   LettersDemoStore &
   PaymenDemoStore &
   PrescriptionsDemoStore &
-  NotificationDemoStore
+  NotificationDemoStore &
+  DemographicsDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
@@ -56,6 +59,7 @@ type DemoApiReturns =
   | PaymentsDemoReturnTypes
   | PrescriptionsDemoReturnTypes
   | NotificationDemoApiReturnTypes
+  | DemographicsDemoApiReturnTypes
 
 let store: DemoStore | undefined
 
@@ -129,7 +133,9 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/prescriptions.json'),
     import('./mocks/notifications.json'),
     import('./mocks/contactInformation.json'),
+    import('../../../api/demoMocks/getAuthorizedServices.json'),
     import('../../../api/demoMocks/getFacilitiesInfo.json'),
+    import('./mocks/demographics.json'),
   ])
   const transformedData = data.map((file) => transformDates(file))
   setDemoStore(transformedData.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
@@ -268,6 +274,15 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
     }
     case '/v0/payment-information/benefits': {
       return directDepositTransform(store, params as unknown as PaymentAccountData)
+    }
+    /**
+     * Demographics
+     */
+    case '/v0/user/gender_identity': {
+      return updateGenderIdentity(store, params as GenderIdentityUpdatePayload)
+    }
+    case '/v0/user/preferred_name': {
+      return updatePreferredName(store, params as PreferredNameUpdatePayload)
     }
     default: {
       return undefined
