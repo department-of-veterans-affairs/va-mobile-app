@@ -150,11 +150,14 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [showAddressValidation, setShowAddressValidation] = useState(false)
 
+  const abortController = new AbortController()
+  const abortSignal = abortController.signal
+
   useBeforeNavBackListener(navigation, (e) => {
-    // if saving still when canceling then abort
-    // if (savingAddress) {
-    //   validateAddressAbortController?.abort()
-    // }
+    // If address is being validated when exiting screen, abort API call
+    if (validatingAddress) {
+      abortController.abort()
+    }
 
     if (!formChanged() && !showAddressValidation) {
       return
@@ -255,20 +258,23 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const onSave = (): void => {
     const addressValues = getAddressValues()
-    const addressDataPayload = getAddressDataPayload(addressValues, contactInformation)
+    const addressData = getAddressDataPayload(addressValues, contactInformation)
 
     const save = () => {
-      validateAddress(addressDataPayload, {
-        onSuccess: (data) => {
-          if (data?.confirmedSuggestedAddresses) {
-            setShowAddressValidation(true)
-          } else {
-            setAddressValidated(true)
-            showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
-          }
+      validateAddress(
+        { addressData, abortSignal },
+        {
+          onSuccess: (data) => {
+            if (data?.confirmedSuggestedAddresses) {
+              setShowAddressValidation(true)
+            } else {
+              setAddressValidated(true)
+              showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
+            }
+          },
+          onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, () => save, false, true),
         },
-        onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, () => save, false, true),
-      })
+      )
     }
 
     save()

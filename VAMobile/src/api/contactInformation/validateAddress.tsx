@@ -9,11 +9,16 @@ import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { saveAddress } from './saveAddress'
 import queryClient from 'api/queryClient'
 
+type ValidateAddressParameters = {
+  addressData: AddressData
+  abortSignal?: AbortSignal
+}
+
 /**
  * Determines whether an address needs to be validated. If so, returns validation data; otherwise, saves the address
  */
-export const validateAddress = async (addressData: AddressData): Promise<ValidateAddressData | undefined> => {
-  const response = await post<AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as APIParams)
+export const validateAddress = async ({ addressData, abortSignal }: ValidateAddressParameters): Promise<ValidateAddressData | undefined> => {
+  const response = await post<AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as APIParams, undefined, abortSignal)
 
   const suggestedAddresses = getSuggestedAddresses(response)
   const confirmedSuggestedAddresses = getConfirmedSuggestions(suggestedAddresses)

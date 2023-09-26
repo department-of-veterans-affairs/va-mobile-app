@@ -15,7 +15,7 @@ export const saveAddress = async ({ addressData, revalidate }: SaveAddressParame
   const addressEndpoint = '/v0/user/addresses'
 
   if (revalidate) {
-    const validationData = await validateAddress(addressData)
+    const validationData = await validateAddress({ addressData })
     addressData.validationKey = validationData?.validationKey
   }
 
