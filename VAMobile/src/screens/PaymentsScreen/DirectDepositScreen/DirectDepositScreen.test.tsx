@@ -8,7 +8,6 @@ import { context, waitFor, render, RenderAPI, mockNavProps } from 'testUtils'
 import {
   DirectDepositState,
   ErrorsState,
-  initialAuthorizedServicesState,
   initialAuthState,
   initialErrorsState,
   initializeErrorsByScreenID,
@@ -31,10 +30,6 @@ jest.mock('utils/hooks', () => {
 })
 
 const authorizedMilitaryState = {
-  authorizedServices: {
-    ...initialAuthorizedServicesState,
-    militaryServiceHistory: true,
-  },
   militaryService: {
     ...initialMilitaryServiceState,
     serviceHistory: [{} as ServiceData],

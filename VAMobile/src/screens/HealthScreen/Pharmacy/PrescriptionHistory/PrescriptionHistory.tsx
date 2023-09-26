@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
-import { AuthorizedServicesState } from 'store/slices'
 import {
   Box,
   BoxProps,
@@ -56,6 +55,7 @@ import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/pres
 import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFocusEffect } from '@react-navigation/native'
 import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
@@ -148,7 +148,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     prescriptionsNeedLoad,
     transferredPrescriptions,
   } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const { prescriptions: prescriptionsAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -201,10 +201,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
   useFocusEffect(
     React.useCallback(() => {
-      if (prescriptionsNeedLoad && prescriptionsAuthorized && !prescriptionInDowntime) {
+      if (prescriptionsNeedLoad && userAuthorizedServices?.prescriptions && !prescriptionInDowntime) {
         dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
       }
-    }, [dispatch, prescriptionsNeedLoad, prescriptionsAuthorized, prescriptionInDowntime]),
+    }, [dispatch, prescriptionsNeedLoad, userAuthorizedServices?.prescriptions, prescriptionInDowntime]),
   )
 
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.
@@ -217,7 +217,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     )
   }
 
-  if (hasError) {
+  if (hasError || getUserAuthorizedServicesError) {
     return (
       <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
@@ -225,7 +225,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     )
   }
 
-  if (!prescriptionsAuthorized) {
+  if (!userAuthorizedServices?.prescriptions) {
     return (
       <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <PrescriptionHistoryNotAuthorized />
@@ -233,7 +233,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     )
   }
 
-  if (loadingHistory) {
+  if (loadingHistory || loadingUserAuthorizedServices) {
     return (
       <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
