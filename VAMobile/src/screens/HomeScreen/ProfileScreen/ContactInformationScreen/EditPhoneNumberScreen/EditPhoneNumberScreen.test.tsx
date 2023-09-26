@@ -1,11 +1,11 @@
 import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
+import { mockNavProps, render } from 'testUtils'
 import EditPhoneNumberScreen from './EditPhoneNumberScreen'
 import { PhoneData, PhoneType } from 'api/types'
 
-context('EditPhoneNumberScreen', () => {
+describe('EditPhoneNumberScreen', () => {
   let props: any
   const phoneType: PhoneType = 'HOME'
   const phoneData: PhoneData = {

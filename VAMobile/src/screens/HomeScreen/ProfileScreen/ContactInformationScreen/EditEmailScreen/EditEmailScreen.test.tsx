@@ -1,12 +1,13 @@
 import React from 'react'
-import { fireEvent, mockNavProps, QueriesData, render, screen, waitFor, when } from 'testUtils'
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+
+import { mockNavProps, QueriesData, render, when } from 'testUtils'
 import EditEmailScreen from './EditEmailScreen'
-import Mock = jest.Mock
 import { put } from 'store/api'
 import { contactInformationKeys } from 'api/contactInformation/queryKeys'
 
 describe('EditEmailScreen', () => {
-  let onBackSpy: Mock
+  let onBackSpy: jest.Mock
   let props: any
 
   const renderWithOptions = (queriesData?: QueriesData) => {
