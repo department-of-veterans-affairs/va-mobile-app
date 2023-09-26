@@ -9,6 +9,7 @@ import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/Cl
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -58,8 +59,8 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
 
     if (isActiveClaim) {
       const detailsFAQListItems: Array<SimpleListItemObj> = [
-        { text: t('claimDetails.whyWeCombine'), onPress: whyWeCombineOnPress, testId: t('claimDetails.whyWeCombine.a11yLabel') },
-        { text: t('claimDetails.whatShouldIDoIfDisagree'), onPress: whatShouldOnPress, testId: t('claimDetails.whatShouldIDoIfDisagree.a11yLabel') },
+        { text: t('claimDetails.whyWeCombine'), onPress: whyWeCombineOnPress, testId: a11yLabelVA(t('claimDetails.whyWeCombine')) },
+        { text: t('claimDetails.whatShouldIDoIfDisagree'), onPress: whatShouldOnPress, testId: a11yLabelVA(t('claimDetails.whatShouldIDoIfDisagree')) },
       ]
 
       // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false

@@ -4,6 +4,8 @@ import React, { FC, useEffect } from 'react'
 import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useExternalLink, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -27,12 +29,12 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
   const bulletOne = {
     text: t('prescriptions.notAuthorized.enrolled'),
     boldedText: ' ' + t('and'),
-    a11yLabel: t('prescriptions.notAuthorized.enrolled.a11y') + ' ' + t('and'),
+    a11yLabel: a11yLabelVA(t('prescriptions.notAuthorized.enrolled')) + ' ' + t('and'),
   }
 
   const bulletTwo = {
     text: t('prescriptions.notAuthorized.registered'),
-    a11yLabel: t('prescriptions.notAuthorized.registered.a11y'),
+    a11yLabel: a11yLabelVA(t('prescriptions.notAuthorized.registered')),
   }
 
   const redirectLink = (): void => {
@@ -43,7 +45,7 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
     variant: 'MobileBodyLink',
     onPress: redirectLink,
     accessibilityRole: 'link',
-    accessibilityLabel: t('notEnrolledSM.learnHowTo.a11yLabel'),
+    accessibilityLabel: t('notEnrolledSM.learnHowTo'),
     accessibilityHint: t('notEnrolledSM.learnHowTo.a11yHint'),
     paragraphSpacing: true,
   }
@@ -51,7 +53,7 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
   return (
     <VAScrollView>
       <Box {...alertWrapperProps}>
-        <AlertBox border={'warning'} title={t('prescriptions.notAuthorized.warning')} titleA11yLabel={t('prescriptions.notAuthorized.warning.a11y')} />
+        <AlertBox border={'warning'} title={t('prescriptions.notAuthorized.warning')} titleA11yLabel={a11yLabelVA(t('prescriptions.notAuthorized.warning'))} />
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
@@ -62,7 +64,7 @@ const PrescriptionHistoryNotAuthorized: FC = () => {
           <TextView mt={standardMarginBetween} accessibilityLabel={t('prescriptions.notAuthorized.pleaseCall.a11y')}>
             {t('prescriptions.notAuthorized.pleaseCall')}
           </TextView>
-          <ClickToCallPhoneNumber displayedText={t('8773270022.displayText')} phone={t('8773270022')} />
+          <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
         </TextArea>
       </Box>
     </VAScrollView>

@@ -7,6 +7,7 @@ import { capitalizeWord } from 'utils/formattingUtils'
 
 import { PersonalInformationState, completeFirstTimeLogin } from 'store/slices'
 import { RootState } from 'store'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useAppDispatch } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
@@ -45,7 +46,7 @@ const OnboardingBenefits: FC = () => {
       text: t('onboarding.benefits.commonLetters.bullet'),
       variant: 'MobileBody',
       color: 'primaryContrast',
-      a11yLabel: t('onboarding.benefits.commonLetters.bullet.a11yLabel'),
+      a11yLabel: a11yLabelVA(t('onboarding.benefits.commonLetters.bullet')),
     },
   ]
   return <GenericOnboarding header={t('onboarding.benefits.header')} text={t('onboarding.benefits.details')} listOfText={benefitsTextLines} />
@@ -82,9 +83,8 @@ const OnboardingAppOverview: FC = () => {
   return (
     <GenericOnboarding
       header={t('onboarding.welcomeMessage', { firstName })}
-      headerA11yLabel={t('onboarding.welcomeMessageA11yLabel', { firstName })}
       text={t('onboarding.allInformationYouNeed')}
-      textA11yLabel={t('onboarding.allInformationYouNeed.a11yLabel')}
+      textA11yLabel={a11yLabelVA(t('onboarding.allInformationYouNeed'))}
       displayLogo={true}
       centerHeader={true}
     />

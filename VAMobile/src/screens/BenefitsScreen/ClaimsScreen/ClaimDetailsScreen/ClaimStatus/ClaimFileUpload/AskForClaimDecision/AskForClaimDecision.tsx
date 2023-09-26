@@ -24,6 +24,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { useAppDispatch, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
@@ -83,7 +84,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   }
 
   const bulletedListOfText = [
-    { text: t('askForClaimDecision.whetherYouGetVABenefits'), a11yLabel: t('askForClaimDecision.whetherYouGetVABenefitsA11yLabel') },
+    { text: t('askForClaimDecision.whetherYouGetVABenefits'), a11yLabel: a11yLabelVA(t('askForClaimDecision.whetherYouGetVABenefits')) },
     { text: t('askForClaimDecision.paymentAmount') },
     { text: t('askForClaimDecision.whetherYouGetOurHelp') },
     { text: t('askForClaimDecision.dateBenefits') },
@@ -122,7 +123,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
         selected: haveSubmittedEvidence,
         onSelectionChange,
         labelKey: 'askForClaimDecision.haveSubmittedAllEvidence',
-        a11yLabel: t('askForClaimDecision.haveSubmittedAllEvidenceA11yLabel'),
+        a11yLabel: a11yLabelVA(t('askForClaimDecision.haveSubmittedAllEvidence')),
         a11yHint: t('askForClaimDecision.haveSubmittedAllEvidenceA11yHint'),
         isRequiredField: true,
       },

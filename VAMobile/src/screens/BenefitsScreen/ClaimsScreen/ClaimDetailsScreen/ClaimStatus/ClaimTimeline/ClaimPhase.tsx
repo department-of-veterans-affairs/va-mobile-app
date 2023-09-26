@@ -7,7 +7,7 @@ import { AccordionCollapsible, Box, ButtonTypesConstants, TextView, VAButton } f
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { getTranslation } from 'utils/formattingUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { sendClaimStep3FileRequestAnalytics } from 'store/slices/claimsAndAppealsSlice'
@@ -147,19 +147,18 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
     testID = `${testID} ${updatedLastDate}`
   }
 
-  const numberOfRequests = numberOfItemsNeedingAttentionFromVet(eventsTimeline)
+  const count = numberOfItemsNeedingAttentionFromVet(eventsTimeline)
 
   const detailsText = getDetails(phase, t)
-  const detailsA11yLabel = phase === 1 ? t('claimPhase.details.phaseOneA11yLabel') : detailsText
-  const youHaveFileRequestsText = t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })
-  const youHaveFileRequestsTextA11yHint = getTranslation(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}A11yHint`, t, { numberOfRequests })
+  const detailsA11yLabel = phase === 1 ? a11yLabelVA(t('claimPhase.details.phaseOne')) : detailsText
+  const youHaveFileRequestsText = t('claimPhase.youHaveFileRequest', { count })
 
   const accordionPress = (isExpanded: boolean | undefined) => {
     logAnalyticsEvent(Events.vama_claim_details_exp(claimID, attributes.claimType, phase, isExpanded || false, attributes.phaseChangeDate || '', attributes.dateFiled))
   }
 
   const fileRequestsPress = () => {
-    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, numberOfRequests))
+    logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
     navigateTo('FileRequest', { claimID })()
   }
 
@@ -173,9 +172,9 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
       testID={testID}>
       {phase === 3 && showClaimFileUploadBtn && (
         <Box mt={standardMarginBetween}>
-          <Box {...testIdProps(youHaveFileRequestsTextA11yHint)} accessible={true} accessibilityRole="header">
-            <TextView variant={'MobileBodyBold'}>{youHaveFileRequestsText}</TextView>
-          </Box>
+          <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(youHaveFileRequestsText)} accessibilityRole="header" accessible={true}>
+            {youHaveFileRequestsText}
+          </TextView>
           <Box mt={standardMarginBetween}>
             <VAButton
               onPress={fileRequestsPress}

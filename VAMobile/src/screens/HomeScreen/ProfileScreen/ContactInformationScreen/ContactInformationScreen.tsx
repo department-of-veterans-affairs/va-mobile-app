@@ -11,9 +11,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { UserContactInformation } from 'api/types/ContactInformation'
 import { registerReviewEvent } from 'utils/inAppReviews'
-import { testIdProps } from 'utils/accessibility'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 const getTextForPhoneData = (contactInformation: UserContactInformation | undefined, formattedPhoneType: FormattedPhoneType, phoneKey: PhoneKey, t: TFunction): Array<TextLine> => {
@@ -145,7 +145,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')} testID="ContactInfoTestID">
-      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter}>
+      <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
         {t('contactInformation.editNote')}
       </TextView>
       <Pressable onPress={navigateTo('HowWillYou')} accessibilityRole="link" accessible={true}>
