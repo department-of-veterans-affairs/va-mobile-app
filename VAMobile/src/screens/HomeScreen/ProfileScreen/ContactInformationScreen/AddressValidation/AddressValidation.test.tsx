@@ -18,8 +18,8 @@ const mockAddress: AddressData = {
 }
 
 const snackbarMessages: SnackbarMessages = {
-  successMsg: 'address saved',
-  errorMsg: 'address could not be saved',
+  successMsg: 'Address saved',
+  errorMsg: 'Address could not be saved',
 }
 
 const validationData: ValidateAddressData = {
@@ -53,7 +53,7 @@ const validationData: ValidateAddressData = {
 
 const mockedNavigate = jest.fn()
 const mockedNavigationGoBack = jest.fn()
-const updateAddressSpy = jest.fn()
+const saveAddressSpy = jest.fn()
 const setShowAddressValidationSpy = jest.fn()
 
 jest.mock('@react-navigation/native', () => {
@@ -70,7 +70,7 @@ jest.mock('@react-navigation/native', () => {
 
 describe('AddressValidation', () => {
   const renderWithProps = () => {
-    render(<AddressValidation addressEntered={mockAddress} addressId={12345} snackbarMessages={snackbarMessages} validationData={validationData} updateAddress={updateAddressSpy} setShowAddressValidation={setShowAddressValidationSpy} />)
+    render(<AddressValidation addressEntered={mockAddress} addressId={12345} snackbarMessages={snackbarMessages} validationData={validationData} saveAddress={saveAddressSpy} setShowAddressValidation={setShowAddressValidationSpy} />)
   }
 
   beforeEach(() => {
@@ -91,7 +91,7 @@ describe('AddressValidation', () => {
     it('calls updateAddress', async () => {
       fireEvent.press(screen.getByTestId('youEnteredTestID'))
       fireEvent.press((screen.getByRole('button', { name: 'Use this address' })))
-      expect(updateAddressSpy).toBeCalled()
+      expect(saveAddressSpy).toBeCalled()
     })
   })
 })

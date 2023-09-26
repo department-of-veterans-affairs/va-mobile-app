@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
-import { AddressData, AddressPouToProfileAddressFieldType, UserContactInformation, addressTypeFields, addressTypes } from 'api/types'
+import { AddressData, addressTypeFields, addressTypes } from 'api/types'
 import {
   AlertBox,
   Box,
@@ -26,15 +26,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
 import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
-import { getAddressDataFromSuggestedAddress, showValidationScreen } from 'utils/personalInformation'
-import { omit } from 'underscore'
+import { getAddressDataPayload } from 'utils/personalInformation'
 import { profileAddressOptions } from '../AddressSummary'
 import { showSnackBar } from 'utils/common'
 import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { useContactInformation } from 'api/contactInformation'
-import { useDeleteAddress } from 'api/contactInformation/deleteAddress'
-import { useUpdateAddress } from 'api/contactInformation/updateAddress'
-import { useValidateAddress } from 'api/contactInformation/validateAddress'
+import { useDeleteAddress, useSaveAddress, useValidateAddress } from 'api/contactInformation'
 import AddressValidation from '../AddressValidation'
 
 const MAX_ADDRESS_LENGTH = 35
@@ -86,8 +83,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const { displayTitle, addressType } = route.params
   const { data: contactInformation } = useContactInformation()
   const { mutate: deleteAddress, isLoading: deletingAddress, isSuccess: addressDeleted } = useDeleteAddress()
-  const { mutate: updateAddress, isLoading: updatingAddress, isSuccess: addressUpdated } = useUpdateAddress()
-  const { mutate: validateAddress, isLoading: validatingAddress, isSuccess: addressValidated, data: validateAddressData } = useValidateAddress()
+  const { mutate: saveAddress, isLoading: savingAddress, isSuccess: addressSaved } = useSaveAddress()
+  const { mutate: validateAddress, isLoading: validatingAddress, data: validationData } = useValidateAddress()
+  const [addressValidated, setAddressValidated] = useState(false)
   const deleteAddressAlert = useAlert()
   const destructiveActionSheet = useDestructiveActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
@@ -162,7 +160,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       return
     }
 
-    if (addressDeleted || addressUpdated || addressValidated) {
+    if (addressDeleted || addressSaved || addressValidated) {
       return
     }
 
@@ -256,33 +254,24 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const onSave = (): void => {
-    const addressData = getAddressValues()
-    validateAddress(addressData, {
-      onSuccess: (data) => {
-        const { suggestedAddresses, confirmedSuggestedAddresses } = data
-        const shouldShowValidation = showValidationScreen(addressData, suggestedAddresses)
-        const addressVerificationNeeded = confirmedSuggestedAddresses && shouldShowValidation
-        if (addressVerificationNeeded) {
-          setShowAddressValidation(shouldShowValidation)
-        } else {
-          // If address verification isn't needed, we can use the first and only suggested address to update with
-          if (suggestedAddresses) {
-            const suggestedAddress = getAddressDataFromSuggestedAddress(suggestedAddresses[0], addressData.id)
-            const addressPou = suggestedAddress.addressPou
-            const addressFieldType = AddressPouToProfileAddressFieldType[addressPou]
-            const isNewAddress = !(contactInformation || {})[addressFieldType as keyof UserContactInformation]
-            const addressDataPayload = isNewAddress ? omit(suggestedAddress, 'id') : suggestedAddress
+    const addressValues = getAddressValues()
+    const addressDataPayload = getAddressDataPayload(addressValues, contactInformation)
 
-            // addressData.addressMetaData = validationResponse?.data[0]?.meta?.address
-            const mutateOptions = {
-              onSuccess: () => showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true),
-              onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, () => updateAddress(addressDataPayload, mutateOptions), false, true),
-            }
-            updateAddress(addressDataPayload, mutateOptions)
+    const save = () => {
+      validateAddress(addressDataPayload, {
+        onSuccess: (data) => {
+          if (data?.confirmedSuggestedAddresses) {
+            setShowAddressValidation(true)
+          } else {
+            setAddressValidated(true)
+            showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
           }
-        }
-      },
-    })
+        },
+        onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, () => save, false, true),
+      })
+    }
+
+    save()
   }
 
   useEffect(() => {
@@ -293,10 +282,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }, [checkboxSelected, country])
 
   useEffect(() => {
-    if (addressDeleted || addressUpdated) {
+    if (addressDeleted || addressSaved || addressValidated) {
       navigation.goBack()
     }
-  }, [addressDeleted, addressUpdated, navigation])
+  }, [addressDeleted, addressSaved, addressValidated, navigation])
 
   const formChanged = (): boolean =>
     checkboxSelected !== initialCheckbox ||
@@ -309,7 +298,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     state !== initialState ||
     zipCode !== initialZipCode
 
-  if (deletingAddress || updatingAddress || validatingAddress) {
+  if (deletingAddress || savingAddress || validatingAddress) {
     const loadingText = deletingAddress ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')
 
     return (
@@ -319,13 +308,14 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     )
   }
 
-  if (showAddressValidation && validateAddressData) {
+  if (showAddressValidation && validationData) {
+    const addressValues = getAddressValues()
     const addressValidationProps = {
-      addressEntered: getAddressValues(),
+      addressEntered: getAddressDataPayload(addressValues, contactInformation),
       addressId: contactInformation?.[addressType]?.id || 0,
       snackbarMessages: snackbarMessages,
-      validationData: validateAddressData,
-      updateAddress,
+      validationData,
+      saveAddress,
       setShowAddressValidation,
     }
     return (

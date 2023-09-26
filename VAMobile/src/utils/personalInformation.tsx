@@ -1,13 +1,15 @@
 import {
   AddressData,
+  AddressPouToProfileAddressFieldType,
   AddressValidationData,
   AddressValidationScenarioTypes,
   AddressValidationScenarioTypesConstants,
   DeliveryPointValidationTypesConstants,
   SuggestedAddress,
+  UserContactInformation,
   addressTypeFields,
 } from 'api/types'
-import { filter, sortBy } from 'underscore'
+import { filter, omit, sortBy } from 'underscore'
 
 export const getAddressValidationScenarioFromAddressValidationData = (suggestedAddresses: Array<SuggestedAddress>): AddressValidationScenarioTypes | undefined => {
   if (!suggestedAddresses) {
@@ -92,4 +94,14 @@ export const getAddressDataFromSuggestedAddress = (suggestedAddress: SuggestedAd
     id: addressId,
     addressMetaData: suggestedAddress?.meta?.address,
   }
+}
+
+/**
+ * Returns address data with the `id` field present or omitted based on whether the user already has the address field saved
+ */
+export const getAddressDataPayload = (addressData: AddressData, contactInformation?: UserContactInformation): AddressData => {
+  const addressPou = addressData.addressPou
+  const addressFieldType = AddressPouToProfileAddressFieldType[addressPou]
+  const newAddress = !(contactInformation || {})[addressFieldType as keyof UserContactInformation]
+  return newAddress ? omit(addressData, 'id') : addressData
 }

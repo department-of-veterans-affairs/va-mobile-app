@@ -39,8 +39,12 @@ export type AddressValidationData = {
 
 export type ValidateAddressData = {
   confirmedSuggestedAddresses?: Array<SuggestedAddress>
-  suggestedAddresses?: Array<SuggestedAddress>
   validationKey?: number
+}
+
+export type SaveAddressParameters = {
+  addressData: AddressData
+  revalidate?: boolean
 }
 
 export type SuggestedAddressAttributeType = {
