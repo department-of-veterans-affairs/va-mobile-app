@@ -4,15 +4,16 @@ import React from 'react'
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 
-import { context, findByTypeWithText, mockNavProps, QueriesData, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, QueriesData, render, RenderAPI, waitFor, when } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
 import { VASelector, VAModalPicker, VATextInput, TextView, AlertBox, VAButton } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
 import { SnackbarMessages } from 'components/SnackBar'
-import { AddressData, UserContactInformation } from 'api/types'
+import { AddressData, DeliveryPointValidationTypesConstants, UserContactInformation } from 'api/types'
 import { contactInformationKeys } from 'api/contactInformation/queryKeys'
 import { post } from 'store/api'
+import AddressValidation from '../AddressValidation'
 
 const snackbarMessages: SnackbarMessages = {
   successMsg: 'Mailing address saved',
@@ -220,7 +221,7 @@ context('EditAddressScreen', () => {
           addressLine2: 'Address line 2',
           addressLine3: 'Address line 3',
           addressPou: 'RESIDENCE/CHOICE',
-          addressType: 'OVERSEAS MILITARY',
+          addressType: 'DOMESTIC',
           city: 'Tiburon',
           countryCodeIso3: 'USA',
           internationalPostalCode: '1',
@@ -235,10 +236,10 @@ context('EditAddressScreen', () => {
           countryRNPickerSelect.props.onSelectionChange('new country')
         })
 
-        // const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
-        // expect(stateVATextInput.props.value).toEqual('')
-        // const zipCodeVATextInput = testInstance.findAllByType(VATextInput)[5]
-        // expect(zipCodeVATextInput.props.value).toEqual('')
+        const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
+        expect(stateVATextInput.props.value).toEqual('')
+        const zipCodeVATextInput = testInstance.findAllByType(VATextInput)[5]
+        expect(zipCodeVATextInput.props.value).toEqual('')
       })
     })
 
@@ -535,24 +536,90 @@ context('EditAddressScreen', () => {
     })
   })
 
-  // describe('when addressSaved is true', () => {
-  //   it('should call navigation goBack', async () => {
-  //     initializeTestInstance(true, { mailingAddress, residentialAddress })
-  //     getSaveButton().props.onPress()
+  describe('when address is saved', () => {
+    it('calls navigation goBack', async () => {
+      const mailingAddress: AddressData = {
+        id: 0,
+        addressLine1: 'Unit 2050 Box 4190',
+        addressLine2: '',
+        addressLine3: '',
+        addressPou: 'CORRESPONDENCE',
+        addressType: 'OVERSEAS MILITARY',
+        city: 'APO',
+        countryCodeIso3: 'USA',
+        internationalPostalCode: '',
+        province: '',
+        stateCode: 'AP',
+        zipCode: '96278',
+      }
 
-  //     expect(goBackSpy).toBeCalled()
-  //   })
-  // })
+      initializeTestInstance(undefined, { mailingAddress })
+      getSaveButton().props.onPress()
+      await waitFor(() => expect(goBackSpy).toBeCalled())
+    })
+  })
 
-  // describe('when showValidation is true', () => {
-  //   it('should display the AddressValidation component', async () => {
-  //     initializeTestInstance(undefined, { mailingAddress, residentialAddress })
-  //     getSaveButton().props.onPress()
+  describe('when there are suggested addresses', () => {
+    it('displays the AddressValidation component', async () => {
+      const mailingAddress: AddressData = {
+        id: 0,
+        addressLine1: 'Unit 2050 Box 4190',
+        addressLine2: '',
+        addressLine3: '',
+        addressPou: 'CORRESPONDENCE',
+        addressType: 'OVERSEAS MILITARY',
+        city: 'APO',
+        countryCodeIso3: 'USA',
+        countryName: "United States",
+        internationalPostalCode: '',
+        stateCode: 'AP',
+        zipCode: '96278',
+      }
 
-  //     await waitFor(() => expect(post).toBeCalledWith('/v0/user/addresses/validate', residentialAddress))
-  //     // await waitFor(() => expect(testInstance.findAllByType(AddressValidation).length).toEqual(1))
-  //   })
-  // })
+      const abortController = new AbortController()
+      const abortSignal = abortController.signal
+
+      when(post as jest.Mock)
+        .calledWith('/v0/user/addresses/validate', mailingAddress, undefined, abortSignal)
+        .mockResolvedValue(
+          {
+            data: [
+              {
+                id: 1,
+                type: 'mock_type',
+                attributes: {
+                  addressLine1: '1707 Tiburon Blvd',
+                  addressLine2: 'Address line 2',
+                  addressLine3: 'Address line 3',
+                  addressPou: 'RESIDENCE/CHOICE',
+                  addressType: 'DOMESTIC',
+                  city: 'Tiburon',
+                  countryCodeIso3: '1',
+                  internationalPostalCode: '1',
+                  province: 'province',
+                  stateCode: 'CA',
+                  zipCode: '94920',
+                  zipCodeSuffix: '1234',
+                },
+                meta: {
+                  address: {
+                    confidenceScore: 68,
+                    addressType: 'DOMESTIC',
+                    deliveryPointValidation: DeliveryPointValidationTypesConstants.MISSING_UNIT_NUMBER,
+                    residentialDeliveryIndicator: 'RESIDENTIAL',
+                  },
+                  validationKey: 315989,
+                },
+              },
+            ],
+          })
+
+      initializeTestInstance(undefined, { mailingAddress })
+      getSaveButton().props.onPress()
+      await waitFor(() => expect(post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', mailingAddress, undefined, abortSignal))
+      await waitFor(() => expect(testInstance.findAllByType(AddressValidation).length).toEqual(1))
+    })
+  })
 
   describe('when content is invalid for domestic address', () => {
     it('should display an AlertBox and a field error for each required field', async () => {
@@ -646,6 +713,9 @@ context('EditAddressScreen', () => {
           getSaveButton().props.onPress()
         })
 
+        const abortController = new AbortController()
+        const abortSignal = abortController.signal
+
         await waitFor(() => expect(post).toBeCalledWith('/v0/user/addresses/validate',
           {
             id: 0,
@@ -661,6 +731,8 @@ context('EditAddressScreen', () => {
             zipCode: '',
             province: 'Ontario',
           },
+          undefined,
+          abortSignal
         ))
       })
     })
@@ -689,6 +761,9 @@ context('EditAddressScreen', () => {
           getSaveButton().props.onPress()
         })
 
+        const abortController = new AbortController()
+        const abortSignal = abortController.signal
+
         await waitFor(() => (expect(post).toBeCalledWith('/v0/user/addresses/validate',
           {
             id: 0,
@@ -704,6 +779,8 @@ context('EditAddressScreen', () => {
             zipCode: '94920',
             internationalPostalCode: '',
           },
+          undefined,
+          abortSignal
         )))
       })
     })
@@ -730,19 +807,26 @@ context('EditAddressScreen', () => {
           getSaveButton().props.onPress()
         })
 
-        await waitFor(() => expect(post).toBeCalledWith('/v0/user/addresses/validate', {
-          addressLine1: 'Unit 2050 Box 4190', 
-          addressLine2: '', 
-          addressLine3: '',
-          addressPou: "CORRESPONDENCE", 
-          addressType: "OVERSEAS MILITARY", 
-          city: 'APO', 
-          countryCodeIso3: "USA", 
-          countryName: "United States", 
-          id: 0, 
-          internationalPostalCode: "", 
-          stateCode: "AP", "zipCode": "96278"
-        }))
+        const abortController = new AbortController()
+        const abortSignal = abortController.signal
+
+        await waitFor(() => expect(post).toBeCalledWith('/v0/user/addresses/validate', 
+          {
+            addressLine1: 'Unit 2050 Box 4190', 
+            addressLine2: '', 
+            addressLine3: '',
+            addressPou: "CORRESPONDENCE", 
+            addressType: "OVERSEAS MILITARY", 
+            city: 'APO', 
+            countryCodeIso3: "USA", 
+            countryName: "United States", 
+            id: 0, 
+            internationalPostalCode: "", 
+            stateCode: "AP", "zipCode": "96278"
+          }, 
+          undefined,
+          abortSignal
+        ))
       })
     })
   })
