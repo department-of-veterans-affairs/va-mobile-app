@@ -21,10 +21,10 @@ export const useDeleteAddress = () => {
 
   return useMutation({
     mutationFn: deleteAddress,
-    onSuccess: async () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: contactInformationKeys.contactInformation })
     },
-    onError: async (error) => {
+    onError: (error) => {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, 'deleteAddress: Service error')
       }

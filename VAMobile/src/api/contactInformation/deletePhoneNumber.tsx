@@ -26,7 +26,7 @@ export const useDeletePhoneNumber = () => {
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       queryClient.invalidateQueries({ queryKey: contactInformationKeys.contactInformation })
     },
-    onError: async (error) => {
+    onError: (error) => {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, 'deletePhoneNumber: Service error')
       }
