@@ -277,7 +277,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
         title: props.title,
         titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
         message: props.message,
-        messageTextStyle: { textAlign: 'center', color: currentTheme.colors.text.primary },
+        messageTextStyle: { fontWeight: 'normal', textAlign: 'left', color: currentTheme.colors.text.primary },
         textStyle: { color: currentTheme.colors.text.primary },
         destructiveButtonIndex: newDestructiveButtonIndex,
         destructiveColor: currentTheme.colors.text.error,
