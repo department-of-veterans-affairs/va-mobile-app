@@ -5,6 +5,7 @@ import { AppointmentAttributes, AppointmentLocation, AppointmentType, Appointmen
 import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { getAllFieldsThatExist } from 'utils/common'
 import { getDirectionsUrl } from 'utils/location'
 import { isAPendingAppointment } from 'utils/appointments'
@@ -115,7 +116,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
       missingAddressMessage = t('upcomingAppointmentDetails.phoneButNoNameOrAddress')
     } else if (!hasPhone && !hasPartialAddress) {
       missingAddressMessage = t('upcomingAppointmentDetails.noPhoneOrAddress')
-      missingAddressA11yLabel = t('upcomingAppointmentDetails.noPhoneOrAddress.a11yLabel')
+      missingAddressA11yLabel = a11yLabelVA(t('upcomingAppointmentDetails.noPhoneOrAddress'))
       showFacilityLocatorLink = true
     }
 
@@ -123,7 +124,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
       displayedText: t('upcomingAppointmentDetails.findYourVAFacility'),
       linkType: LinkTypeOptionsConstants.externalLink,
       numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
-      a11yLabel: t('upcomingAppointmentDetails.findYourVAFacility.a11yLabel'),
+      a11yLabel: a11yLabelVA(t('upcomingAppointmentDetails.findYourVAFacility')),
       accessibilityHint: t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
     }
 

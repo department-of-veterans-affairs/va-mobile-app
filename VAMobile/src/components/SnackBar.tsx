@@ -152,7 +152,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
           {!isUndo && (
             <TouchableOpacity onPress={onActionPress} style={confirmBtnStlye} accessible={true} accessibilityRole={'button'}>
               <TextView variant={'SnackBarBtnText'} display={'flex'}>
-                {actionBtnText || isError ? t('snackbar.tryAgain') : t('snackbar.undo')}
+                {actionBtnText || isError ? t('tryAgain') : t('snackbar.undo')}
               </TextView>
             </TouchableOpacity>
           )}

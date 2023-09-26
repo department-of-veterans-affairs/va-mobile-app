@@ -37,6 +37,6 @@ context('ContactVAScreen', () => {
     expect(children.length).toBe(3)
     expect(children[0].props.children).toBe('Call MyVA411')
     expect(children[1].props.children).toBe('MyVA411 is our main VA information line. We can help connect you to any of our VA contact centers.')
-    expect(children[2].props.phone).toEqual('800-698-2411')
+    expect(children[2].props.phone).toEqual('8006982411')
   })
 })

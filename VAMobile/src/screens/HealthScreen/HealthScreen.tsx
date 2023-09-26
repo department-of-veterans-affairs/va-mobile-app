@@ -78,7 +78,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
     <CategoryLanding title={t('health.title')}>
       <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
-          title={t('appointments.title')}
+          title={t('appointments')}
           a11yHint={t('appointments.a11yHint')}
           onPress={onAppointments}
           borderWidth={theme.dimensions.buttonBorderWidth}

@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionAttributeData } from 'store/api/types'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from './PrescriptionUtils'
 import { useTheme } from 'utils/hooks'
 import RefillTag from './RefillTag'
@@ -65,7 +66,7 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
       <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${t('prescriptions.sort.fillDate')} ${dateA11yLabel}.`}>
         {`${t('prescriptions.sort.fillDate')}: ${dateMMddyyyy}`}
       </TextView>
-      <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${t('prescription.vaFacility.a11yLabel')} ${facilityName || noneNoted}.`}>
+      <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${a11yLabelVA(t('prescription.vaFacility'))} ${facilityName || noneNoted}.`}>
         {`${t('prescription.vaFacility')} ${facilityName || noneNoted}`}
       </TextView>
     </Box>

@@ -74,8 +74,8 @@ context('CernerAlert', () => {
 
   it('When only cerner facilities', () => {
     fireEvent.press(screen.getByLabelText('Your V-A health care team may be using the My V-A Health portal'))
-    expect(screen.getByLabelText('FacilityOne (Now using My V﻿A Health)')).toBeTruthy()
-    expect(screen.getByLabelText('FacilityTwo (Now using My V﻿A Health)')).toBeTruthy()
+    expect(screen.getByLabelText('FacilityOne (Now using My V-A Health)')).toBeTruthy()
+    expect(screen.getByLabelText('FacilityTwo (Now using My V-A Health)')).toBeTruthy()
   })
 
   it('when some facilities are cerner and pressing the link', async () => {
