@@ -872,6 +872,14 @@ export const Events = {
       name: 'vama_sm_start',
     }
   },
+  vama_snackbar_null: (location: string): Event => {
+    return {
+      name: 'vama_snackbar_null',
+      params: {
+        location,
+      },
+    }
+  },
   vama_ttv_appt_details: (totalTime: number): Event => {
     return {
       name: 'vama_ttv_appt_details',

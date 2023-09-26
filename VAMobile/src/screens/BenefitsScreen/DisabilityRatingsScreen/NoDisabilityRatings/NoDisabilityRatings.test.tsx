@@ -29,7 +29,7 @@ context('NoDisabilityRatings', () => {
 
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[0].props.children).toBe('You do not have a V\ufeffA combined disability rating on record.')
+    expect(texts[0].props.children).toBe('You do not have a VA combined disability rating on record.')
     expect(texts[1].props.children).toBe(
       "This tool doesn't include ratings for any disability claims that are still in process. You can check the status of pending claims with the claims status tool.",
     )

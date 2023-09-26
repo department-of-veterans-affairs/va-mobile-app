@@ -13,7 +13,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { useAppDispatch, useDowntime, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useHeaderStyles } from 'utils/hooks/headerStyles'
 import { useSelector } from 'react-redux'
 import Appointments from './Appointments'
@@ -40,7 +40,6 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
 
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const hasCernerFacilities = useHasCernerFacilities()
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { secureMessaging } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
 
@@ -77,9 +76,9 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
 
   return (
     <CategoryLanding title={t('health.title')}>
-      <Box mb={!hasCernerFacilities ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
-          title={t('appointments.title')}
+          title={t('appointments')}
           a11yHint={t('appointments.a11yHint')}
           onPress={onAppointments}
           borderWidth={theme.dimensions.buttonBorderWidth}
@@ -128,9 +127,13 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
           borderStyle={'solid'}
         />
       </Box>
-      <Box mb={hasCernerFacilities ? theme.dimensions.contentMarginBottom : 0}>
-        <CernerAlert />
-      </Box>
+      {CernerAlert ? (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <CernerAlert />
+        </Box>
+      ) : (
+        <></>
+      )}
     </CategoryLanding>
   )
 }

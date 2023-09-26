@@ -16,7 +16,7 @@ const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID }) => {
   const onPress = navigateTo('ReplyMessage', { messageID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   const replyButtonProps: VAButtonProps = {
-    label: t('secureMessaging.reply'),
+    label: t('reply'),
     buttonType: ButtonTypesConstants.buttonPrimary,
     onPress: onPress,
     a11yHint: t('secureMessaging.reply.a11yHint'),

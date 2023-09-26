@@ -12,6 +12,7 @@ import { RootState } from 'store'
 import { useRequestAppointmentModalHeaderStyles } from 'utils/requestAppointments'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
+import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -69,16 +70,20 @@ const TypeOfCareNotListedHelpScreen: FC<TypeOfCareNotListedHelpScreenProps> = ({
         <TextView variant="MobileBodyBold" mt={contentMarginTop} accessibilityRole="header">
           {t('requestAppointment.typeOfCareNotListedCallToSchedule')}
         </TextView>
-        <TextView variant="MobileBody" mt={condensedMarginBetween} paragraphSpacing={true} accessibilityLabel={t('requestAppointment.typeOfCareNotListedYoureNotLabel')}>
+        <TextView
+          variant="MobileBody"
+          mt={condensedMarginBetween}
+          paragraphSpacing={true}
+          accessibilityLabel={a11yLabelVA(t('requestAppointment.typeOfCareNotListedYoureNotDesc'))}>
           {t('requestAppointment.typeOfCareNotListedYoureNotDesc')}
         </TextView>
         {getNonEligibleCare()}
-        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('requestAppointment.typeOfCareNotListedForTheseTypeOfCareLabel')}>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('requestAppointment.typeOfCareNotListedForTheseTypeOfCareDesc'))}>
           {t('requestAppointment.typeOfCareNotListedForTheseTypeOfCareDesc')}
         </TextView>
         <TextView
           variant="MobileBodyLink"
-          accessibilityLabel={t('requestAppointment.typeOfCareNotListedFindfVaLinkLabel')}
+          accessibilityLabel={a11yLabelVA(t('requestAppointment.typeOfCareNotListedFindfVaLinkTitle'))}
           onPress={() => {
             navigation.goBack()
             onFacilityLocator()

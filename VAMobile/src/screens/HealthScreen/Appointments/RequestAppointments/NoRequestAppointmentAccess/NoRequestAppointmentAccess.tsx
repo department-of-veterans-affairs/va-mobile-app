@@ -5,6 +5,7 @@ import React, { FC } from 'react'
 import { AlertBox, Box, ButtonTypesConstants, ChildTemplate, VABulletList, VAButton } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useNavigation } from '@react-navigation/native'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -28,12 +29,12 @@ const NoRequestAppointmentAccess: FC<NoRequestAppointmentAccessProps> = () => {
   const bulletOne = {
     text: t('noRequestAppointmentAccess.bulletOneText'),
     boldedText: ' ' + t('and'),
-    a11yLabel: t('noRequestAppointmentAccess.bulletOneLabel'),
+    a11yLabel: a11yLabelVA(t('noRequestAppointmentAccess.bulletOneText')) + ' ' + t('and'),
   }
 
   const bulletTwo = {
     text: t('noRequestAppointmentAccess.bulletTwoText'),
-    a11yLabel: t('noRequestAppointmentAccess.bulletTwoLabel'),
+    a11yLabel: a11yLabelVA(t('noRequestAppointmentAccess.bulletTwoText')),
   }
 
   return (

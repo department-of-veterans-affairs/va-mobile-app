@@ -1,10 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ButtonTypesConstants, CollapsibleView, CrisisLineCta, FullScreenSubtask, TextView, TextViewProps, VABulletList, VAButton } from 'components'
+import { Box, ButtonTypesConstants, CollapsibleView, FullScreenSubtask, TextView, TextViewProps, VABulletList, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useNavigation } from '@react-navigation/native'
-import { useRouteNavigation } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
 import { useTheme } from 'utils/hooks'
 
@@ -14,9 +13,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const startAuth = useStartAuth()
-  const navigateTo = useRouteNavigation()
   const navigation = useNavigation()
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const bulletOne = {
     text: t('loaGate.readMore.bulletOne'),
@@ -33,8 +30,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
   }
 
   return (
-    <FullScreenSubtask leftButtonText={t('back')} onLeftButtonPress={navigation.goBack}>
-      <CrisisLineCta onPress={onCrisisLine} />
+    <FullScreenSubtask leftButtonText={t('close')} title={t('signin')} onLeftButtonPress={navigation.goBack} showCrisisLineCta={true}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView paragraphSpacing={true} {...bodyTextProps}>
           {t('loaGate.p1')}
@@ -50,7 +46,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <TextView {...bodyTextProps}>
               {t('loaGate.readMore.itemOne')}
-              <TextView {...titleTextProps}>{t('loaGate.readMore.itemOne.and')}</TextView>
+              <TextView {...titleTextProps}>{t('and')}</TextView>
             </TextView>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>

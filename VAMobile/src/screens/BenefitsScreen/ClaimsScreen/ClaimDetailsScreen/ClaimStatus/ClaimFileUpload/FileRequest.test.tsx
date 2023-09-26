@@ -1,21 +1,17 @@
 import React from 'react'
-import { context, findByTestID, findByTypeWithText, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
-import { ReactTestInstance } from 'react-test-renderer'
+import { context, fireEvent, mockNavProps, render, screen } from 'testUtils'
 
 import FileRequest from './FileRequest'
-import { ErrorComponent, TextView } from 'components'
 import { ClaimEventData } from 'store/api/types'
 import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { when } from 'jest-when'
-import FileRequestNumberIndicator from './FileRequestNumberIndicator'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useRouteNavigation: () => {
@@ -25,8 +21,6 @@ jest.mock('utils/hooks', () => {
 })
 
 context('FileRequest', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let props: any
   let mockNavigateToFileRequestdetailsSpy: jest.Mock
 
@@ -49,7 +43,7 @@ context('FileRequest', () => {
       .calledWith('FileRequestDetails', { request: requests[0] })
       .mockReturnValue(mockNavigateToFileRequestdetailsSpy)
 
-    component = render(<FileRequest {...props} />, {
+    render(<FileRequest {...props} />, {
       preloadedState: {
         ...InitialState,
         claimsAndAppeals: {
@@ -66,18 +60,10 @@ context('FileRequest', () => {
         errors: errorsState,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance(requests)
-  })
-
-  it('should initialize', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-    })
   })
 
   describe('when number of requests is greater than 1', () => {
@@ -99,25 +85,19 @@ context('FileRequest', () => {
         },
       ]
 
-      await waitFor(() => {
-        initializeTestInstance(updatedRequests)
-        expect(findByTypeWithText(testInstance, TextView, 'You have 2 file requests from V\ufeffA')).toBeTruthy()
-      })
+      initializeTestInstance(updatedRequests)
+      expect(screen.getByText('You have 2 file requests from VA')).toBeTruthy()
     })
   })
 
   describe('when number of requests is equal to 1', () => {
     it('should display the text "You have 1 file request from VA"', async () => {
-      await waitFor(() => {
-        expect(findByTypeWithText(testInstance, TextView, 'You have 1 file request from V\ufeffA')).toBeTruthy()
-      })
+      expect(screen.getByText('You have 1 file request from VA')).toBeTruthy()
     })
 
     it('should have we sent you a letter text section', async () => {
       expect(
-        findByTypeWithText(
-          testInstance,
-          TextView,
+        screen.getByText(
           "We sent you a letter in the mail asking for more evidence to support your claim. We'll wait 30 days for your evidence before we begin evaluating your claim.",
         ),
       ).toBeTruthy()
@@ -134,30 +114,13 @@ context('FileRequest', () => {
         errorsByScreenID,
       }
 
-      await waitFor(() => {
-        initializeTestInstance(requests, undefined, errorState)
-        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
-      })
-    })
-
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      await waitFor(() => {
-        initializeTestInstance(requests, undefined, errorState)
-        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
-      })
+      initializeTestInstance(requests, undefined, errorState)
+      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
     })
 
     describe('on click of a file request', () => {
       it('should navigate to file request details page', async () => {
-        findByTestID(testInstance, 'Request 1').props.onPress()
+        fireEvent.press(screen.getByTestId('Request 1'))
         expect(mockNavigateToFileRequestdetailsSpy).toHaveBeenCalled()
       })
     })
@@ -166,11 +129,9 @@ context('FileRequest', () => {
   describe('when waiverSubmitted is false', () => {
     describe('when the currentPhase is 3', () => {
       it('should display evaluation section', async () => {
-        await waitFor(() => {
-          initializeTestInstance(requests, 3)
-          expect(findByTypeWithText(testInstance, TextView, 'Ask for your claim evaluation')).toBeTruthy()
-          expect(findByTypeWithText(testInstance, TextView, 'Please review the evaluation details if you are ready for us to begin evaluating your claim')).toBeTruthy()
-        })
+        initializeTestInstance(requests, 3)
+        expect(screen.getByText('Ask for your claim evaluation')).toBeTruthy()
+        expect(screen.getByText('Please review the evaluation details if you are ready for us to begin evaluating your claim')).toBeTruthy()
       })
     })
   })
@@ -197,15 +158,8 @@ context('FileRequest', () => {
           },
         ]
 
-        await waitFor(() => {
-          initializeTestInstance(updatedRequests)
-        })
-
-        const fileRequestNumberIndicator = testInstance.findAllByType(FileRequestNumberIndicator)
-        // Request 2
-        // make sure we only have 1 file request since Request 1 is still needed
-        expect(findByTypeWithText(testInstance, TextView, 'You have 1 file request from V\ufeffA')).toBeTruthy()
-        expect(fileRequestNumberIndicator[1].props.fileUploaded).toBeTruthy()
+        initializeTestInstance(updatedRequests)
+        expect(screen.getByText('You have 1 file request from VA')).toBeTruthy()
       })
     })
   })

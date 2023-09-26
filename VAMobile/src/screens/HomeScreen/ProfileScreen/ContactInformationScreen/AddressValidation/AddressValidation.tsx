@@ -111,7 +111,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
         <TextView variant="MobileBody" mt={standardMarginBetween} paragraphSpacing={true} accessibilityLabel={t('editAddress.validation.verifyAddress.body.1.a11yLabel')}>
           {t('editAddress.validation.verifyAddress.body.1')}
         </TextView>
-        <TextView variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('editAddress.validation.verifyAddress.body.2.a11yLabel')}>
+        <TextView variant="MobileBody" mb={standardMarginBetween}>
           {t('editAddress.validation.verifyAddress.body.2')}
         </TextView>
       </Box>
