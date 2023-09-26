@@ -12,6 +12,7 @@ import { LettersState, getLetters } from 'store/slices/lettersSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { OnPressHandler, useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { RootState } from 'store'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
@@ -59,7 +60,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
           description: t('letters.benefitVerification.description'),
           letterType,
           screenID: ScreenIDTypesConstants.BENEFIT_VERIFICATION_LETTER_SCREEN_ID,
-          descriptionA11yLabel: t('letters.benefitVerificationA11yLabel.description'),
+          descriptionA11yLabel: a11yLabelVA(t('letters.benefitVerification.description')),
         })
       case LetterTypeConstants.proofOfService:
         return navigateTo('GenericLetter', {

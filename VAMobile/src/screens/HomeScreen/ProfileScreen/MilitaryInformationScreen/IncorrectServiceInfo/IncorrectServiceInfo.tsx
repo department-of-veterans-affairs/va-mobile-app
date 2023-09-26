@@ -7,6 +7,8 @@ import { HiddenTitle } from 'styles/common'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
+import { a11yLabelID } from 'utils/a11yLabel'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 type IncorrectServiceInfoScreenProps = StackScreenProps<HomeStackParamList, 'IncorrectServiceInfo'>
@@ -51,9 +53,9 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
         </TextView>
         <ClickForActionLink
           testID="incorrectServiceDMDCNumberTestID"
-          displayedText={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed')}
-          a11yLabel={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed.a11yLabel')}
-          numberOrUrlLink={t('militaryInformation.incorrectServiceInfo.DMDCNumber')}
+          displayedText={displayedTextPhoneNumber(t('8005389552'))}
+          a11yLabel={a11yLabelID(t('8005389552'))}
+          numberOrUrlLink={t('8005389552')}
           linkType={LinkTypeOptionsConstants.call}
           {...a11yHintProp(t('militaryInformation.incorrectServiceInfo.DMDCNumber.a11yHint'))}
         />

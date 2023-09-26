@@ -50,6 +50,7 @@ import { PrescriptionListItem } from '../PrescriptionCommon'
 import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -210,7 +211,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   // In this case, we need to support multiple screen IDs
   if (prescriptionInDowntime) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescriptions')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -218,7 +219,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   if (hasError || getUserAuthorizedServicesError) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescriptions')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -226,7 +227,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   if (!userAuthorizedServices?.prescriptions) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescriptions')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <PrescriptionHistoryNotAuthorized />
       </FeatureLandingTemplate>
     )
@@ -234,7 +235,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   if (loadingHistory || loadingUserAuthorizedServices) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescriptions')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
       </FeatureLandingTemplate>
     )
@@ -242,7 +243,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   if (!tabCounts[PrescriptionHistoryTabConstants.ALL]) {
     return (
-      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescriptions')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <PrescriptionHistoryNoPrescriptions />
       </FeatureLandingTemplate>
     )
@@ -535,9 +536,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const getInstructionA11y = () => {
     switch (currentTab) {
       case PrescriptionHistoryTabConstants.ALL:
-        return t('prescriptions.header.helper.all.a11y')
+        return a11yLabelVA(t('prescriptions.header.helper.all'))
       case PrescriptionHistoryTabConstants.PENDING:
-        return t('prescriptions.header.helper.pending.a11y')
+        return a11yLabelVA(t('prescriptions.header.helper.pending'))
       case PrescriptionHistoryTabConstants.TRACKING:
         return t('prescriptions.header.helper.tracking')
     }
@@ -553,7 +554,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       linkType: LinkTypeOptionsConstants.externalLink,
       linkUrlIconType: LinkUrlIconType.Arrow,
       numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
-      a11yLabel: t('goToMyVAHealth'),
+      a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
     }
 
     const props: CollapsibleAlertProps = {
@@ -561,10 +562,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       headerText: t('prescription.history.transferred.title'),
       body: (
         <>
-          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('prescription.history.transferred.instructions.a11y')} paragraphSpacing={true}>
+          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))} paragraphSpacing={true}>
             {t('prescription.history.transferred.instructions')}
           </TextView>
-          <TextView paragraphSpacing={true} accessibilityLabel={t('prescription.history.transferred.youCan.a11y')}>
+          <TextView paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.youCan'))}>
             {t('prescription.history.transferred.youCan')}
           </TextView>
           <ClickForActionLink {...linkProps} />
@@ -655,7 +656,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       headerButton={headerButton}
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('prescriptions')}
+      title={t('prescription.title')}
       testID="PrescriptionHistory">
       {getRequestRefillButton()}
       <TabBar {...tabProps} />

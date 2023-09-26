@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -33,11 +34,11 @@ export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLa
       </Box>
       {showVAGovLink && (
         <ClickForActionLink
-          {...a11yHintProp(t('noAppointments.visitVAA11yHint'))}
+          {...a11yHintProp(t('mobileBodyLink.a11yHint'))}
           displayedText={t('noAppointments.visitVA')}
           numberOrUrlLink={LINK_URL_SCHEDULE_APPOINTMENTS}
           linkType={LinkTypeOptionsConstants.externalLink}
-          a11yLabel={t('noAppointments.visitVAA11yLabel')}
+          a11yLabel={a11yLabelVA(t('noAppointments.visitVA'))}
         />
       )}
     </Box>

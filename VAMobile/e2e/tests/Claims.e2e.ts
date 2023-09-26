@@ -68,15 +68,15 @@ describe('Claims Screen', () => {
 
   it('should tap on why does the VA sometimes combine claims and give the correct information', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
-    await element(by.id('Why does V-A sometimes combine claims?')).tap()
+    await element(by.id('Why does  V-A  sometimes combine claims?')).tap()
     await expect(element(by.text('A note about consolidated claims'))).toExist()
     await element(by.text('Close')).tap()
   })
 
   it('should tap on what should I do if disagreement and give the correct information', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
-    await element(by.id('What should I do if I disagree with V-A\'s decision on my disability claim?')).tap()
-    await expect(element(by.text('What should I do if I disagree with your decision on my V\ufeffA disability claim?'))).toExist()
+    await element(by.id(`What should I do if I disagree with  V-A 's decision on my disability claim?`)).tap()
+    await expect(element(by.label('What should I do if I disagree with your decision on my  V-A  disability claim?'))).toExist()
     await element(by.id('ClaimsDecisionReviewOptionsTestID')).tap()
     await element(by.text('Ok')).tap()
     await setTimeout(5000)
@@ -118,7 +118,7 @@ describe('Claims Screen', () => {
 
   it('should tap on review file requests and verify the number of requests matches the label in claim details', async () => {
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_BUTTON_ID)).tap()
-    await expect(element(by.text('You have 3 file requests from V\ufeffA'))).toExist()
+    await expect(element(by.label('You have 3 file requests from  V-A '))).toExist()
   })
 
   it('should tap a file request and verify that the user is sent to the file upload page', async () => {

@@ -61,7 +61,7 @@ const ReplyHelp: FC = () => {
         <ClickForActionLink
           displayedText={t('secureMessaging.replyHelp.call911')}
           a11yLabel={t('secureMessaging.replyHelp.call911.a11y')}
-          numberOrUrlLink={t('secureMessaging.replyHelp.911')}
+          numberOrUrlLink={t('911')}
           linkType={LinkTypeOptionsConstants.call}
           {...a11yHintProp(t('secureMessaging.replyHelp.call911.a11yHint'))}
         />
