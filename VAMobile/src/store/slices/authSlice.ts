@@ -41,7 +41,6 @@ import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { pkceAuthorizeParams } from 'utils/oauth'
 import { updateDemoMode } from './demoSlice'
-import { usePostLoggedIn } from 'api/loggedIn/postLoggedIn'
 import getEnv from 'utils/env'
 
 const {
@@ -665,6 +664,20 @@ export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
   await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
 }
 
+/*
+Call postLoggedIn to finish login setup on the BE, Success is empty and we don't show anything on failure
+*/
+
+const postLoggedIn = async () => {
+  try {
+    await api.post('/v0/user/logged-in')
+  } catch (error) {
+    if (isErrorObject(error)) {
+      logNonFatalErrorToFirebase(error, 'logged-in Url: /v0/user/logged-in')
+    }
+  }
+}
+
 export const handleTokenCallbackUrl =
   (url: string): AppThunk =>
   async (dispatch, getState) => {
@@ -700,7 +713,7 @@ export const handleTokenCallbackUrl =
       await logAnalyticsEvent(Events.vama_login_success(SISEnabled))
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin({ authCredentials }))
-      usePostLoggedIn()
+      postLoggedIn()
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: ${authNonFatalErrorString}`)
@@ -806,6 +819,7 @@ const authSlice = createSlice({
     },
     dispatchFinishAuthLogin: (state, action: PayloadAction<AuthFinishLoginPayload>) => {
       const successfulLogin = !action.payload.error
+      
       return {
         ...state,
         ...action.payload,

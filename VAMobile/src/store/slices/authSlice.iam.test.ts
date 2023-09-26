@@ -42,8 +42,6 @@ jest.mock('../../utils/platform', () => ({
   isIOS: jest.fn(),
 }))
 
-jest.mock('../../api/loggedIn/postLoggedIn')
-
 jest.mock('../../utils/env', () =>
   jest.fn(() => ({
     AUTH_IAM_CLIENT_SECRET: 'TEST_SECRET',
