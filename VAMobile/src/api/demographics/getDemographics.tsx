@@ -7,13 +7,9 @@ import { get } from 'store/api'
 /**
  * Fetch user demographics
  */
-export const getDemographics = async (): Promise<UserDemographics | undefined> => {
-  try {
-    const response = await get<DemographicsPayload>('/v0/user/demographics')
-    return response?.data.attributes
-  } catch (error) {
-    throw error
-  }
+const getDemographics = async (): Promise<UserDemographics | undefined> => {
+  const response = await get<DemographicsPayload>('/v0/user/demographics')
+  return response?.data.attributes
 }
 
 /**
