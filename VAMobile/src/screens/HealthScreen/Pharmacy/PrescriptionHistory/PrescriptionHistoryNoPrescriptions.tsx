@@ -21,11 +21,25 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
     mb: theme.dimensions.contentMarginBottom,
   }
 
-  const bullets: string[] = [
-    t('prescriptions.notFound.bullets.one'),
-    t('prescriptions.notFound.bullets.two'),
-    t('prescriptions.notFound.bullets.three'),
-    t('prescriptions.notFound.bullets.four'),
+  const medicationNoIncludedList: Array<VABulletListText> = [
+    {
+      text: t('prescription.help.item1'),
+      a11yLabel: a11yLabelVA(t('prescription.help.item1')),
+    },
+    {
+      text: t('prescription.help.item2'),
+      a11yLabel: a11yLabelVA(t('prescription.help.item2')),
+    },
+    {
+      text: t('prescription.help.item3'),
+    },
+    {
+      text: t('prescription.help.item4'),
+      a11yLabel: t('prescription.help.item4.a11yLabel'),
+    },
+    {
+      text: t('prescription.help.item5'),
+    },
   ]
 
   return (
@@ -35,7 +49,7 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
           <TextView pt={theme.paragraphSpacing.spacing20FontSize} paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('prescriptions.notFound.yourVA'))}>
             {t('prescriptions.notFound.yourVA')}
           </TextView>
-          <VABulletList listOfText={bullets} paragraphSpacing={true} />
+          <VABulletList listOfText={medicationNoIncludedList} paragraphSpacing={true} />
           <TextView paragraphSpacing={true}>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
           <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
         </AlertBox>
