@@ -22,7 +22,7 @@ describe('EditEmailScreen', () => {
       },
     )
 
-    render(<EditEmailScreen {...props} />, undefined, queriesData)
+    render(<EditEmailScreen {...props} />, {queriesData})
   }
 
   beforeEach(() => {

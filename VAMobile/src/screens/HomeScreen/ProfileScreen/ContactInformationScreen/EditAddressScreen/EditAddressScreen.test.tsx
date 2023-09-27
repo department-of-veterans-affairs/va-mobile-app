@@ -107,7 +107,7 @@ context('EditAddressScreen', () => {
       },
     )
 
-    let queriesData
+    let queriesData: QueriesData | undefined
 
     if (contactInformation) {
       queriesData = [{
@@ -115,10 +115,10 @@ context('EditAddressScreen', () => {
         data: {
           ...contactInformation
         }
-      }] as QueriesData
+      }]
     }
 
-    component = render(<EditAddressScreen {...props} />, undefined, queriesData)
+    component = render(<EditAddressScreen {...props} />, {queriesData})
 
     testInstance = component.UNSAFE_root
   }

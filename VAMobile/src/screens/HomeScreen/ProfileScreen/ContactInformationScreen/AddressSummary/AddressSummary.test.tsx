@@ -44,7 +44,7 @@ const mailingAddress: AddressData = {
 
 describe('AddressSummary', () => {
   const renderWithData = (contactInformation?: Partial<UserContactInformation>) => {
-    let queriesData
+    let queriesData: QueriesData | undefined
 
     if (contactInformation) {
       queriesData = [{
@@ -52,10 +52,10 @@ describe('AddressSummary', () => {
         data: {
           ...contactInformation
         }
-      }] as QueriesData
+      }]
     }
 
-    render(<AddressSummary addressData={addressTypes} />, undefined, queriesData)
+    render(<AddressSummary addressData={addressTypes} />, {queriesData})
   }
 
   beforeEach(() => {
