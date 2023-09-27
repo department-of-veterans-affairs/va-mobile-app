@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextView, VABulletList, VAScrollView } from 'components'
+import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextView, VABulletList, VABulletListText, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
