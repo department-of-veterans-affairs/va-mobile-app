@@ -101,13 +101,7 @@ context('SyncScreen', () => {
   })
 
   describe('loading sequence', () => {
-    it('should load profile first if the user is logged in', async () => {
-      initializeTestInstance(true, true, true, false)
-      expect(getServiceHistory).not.toHaveBeenCalled()
-      expect(getDisabilityRating).not.toHaveBeenCalled()
-    })
-
-    it('should load military history after profile has loaded', async () => {
+    it('should load military history first', async () => {
       initializeTestInstance(true, true, true, false)
       expect(getServiceHistory).toHaveBeenCalled()
       expect(getDisabilityRating).not.toHaveBeenCalled()
