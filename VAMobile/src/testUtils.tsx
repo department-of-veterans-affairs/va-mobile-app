@@ -237,8 +237,8 @@ export type QueriesData = Array<{
 }>
 
 type RenderParams = {
-  preloadedState?: Partial<RootState>, 
-  navigationProvided?: boolean, 
+  preloadedState?: any // TODO: Update this type to Partial<RootState> and fix broken tests
+  navigationProvided?: boolean,
   queriesData?: QueriesData
 }
 
