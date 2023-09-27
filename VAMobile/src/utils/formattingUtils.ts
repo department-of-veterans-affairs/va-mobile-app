@@ -68,7 +68,7 @@ export const getFormattedDateTimeYear = (dateTime: string): string => {
  */
 export const getFormattedMessageTime = (dateTime: string): string => {
   const date = DateTime.fromISO(dateTime)
-  if (DateTime.now().day === date.day && DateTime.now().month === date.month && date.year === DateTime.now().year) {
+  if (DateTime.now().day === date.day && DateTime.now().month === date.month && DateTime.now().year === date.year) {
     return date.toFormat('t')
   } else {
     return date.toFormat('D')
