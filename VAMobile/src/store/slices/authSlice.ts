@@ -108,6 +108,20 @@ export const initialAuthState: AuthState = {
   authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
 }
 
+/*
+Call postLoggedIn to finish login setup on the BE, Success is empty and we don't show anything on failure
+*/
+
+const postLoggedIn = async () => {
+  try {
+    await api.post('/v0/user/logged-in')
+  } catch (error) {
+    if (isErrorObject(error)) {
+      logNonFatalErrorToFirebase(error, 'logged-in Url: /v0/user/logged-in')
+    }
+  }
+}
+
 /**
  * Sets the flag used to determine if the biometrics preference screen should be displayed
  */
@@ -489,6 +503,7 @@ export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch
     const authCredentials = await processAuthResponse(response)
     await dispatch(dispatchSetAnalyticsLogin())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
+    postLoggedIn()
   } catch (err) {
     console.error(err)
     logNonFatalErrorToFirebase(err, `attemptIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
@@ -662,20 +677,6 @@ export const initializeAuth = (): AppThunk => async (dispatch, getState) => {
     return
   }
   await attemptIntializeAuthWithRefreshToken(dispatch, refreshToken)
-}
-
-/*
-Call postLoggedIn to finish login setup on the BE, Success is empty and we don't show anything on failure
-*/
-
-const postLoggedIn = async () => {
-  try {
-    await api.post('/v0/user/logged-in')
-  } catch (error) {
-    if (isErrorObject(error)) {
-      logNonFatalErrorToFirebase(error, 'logged-in Url: /v0/user/logged-in')
-    }
-  }
 }
 
 export const handleTokenCallbackUrl =
