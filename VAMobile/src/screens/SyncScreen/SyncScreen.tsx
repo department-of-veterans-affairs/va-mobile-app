@@ -33,7 +33,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices()
-  const { isFetched: demographicsLoaded } = useDemographics()
+  const { isFetched: demographicsLoaded } = useDemographics({ enabled: loggedIn })
 
   const [displayMessage, setDisplayMessage] = useState('')
 
