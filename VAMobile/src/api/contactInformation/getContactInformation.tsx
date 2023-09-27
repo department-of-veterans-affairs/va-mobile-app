@@ -29,6 +29,7 @@ export const useContactInformation = () => {
   return useQuery({
     queryKey: contactInformationKeys.contactInformation,
     queryFn: () => getContactInformation(),
+    staleTime: 5000,
     meta: {
       errorName: 'getContactInfo: Service error',
     },
