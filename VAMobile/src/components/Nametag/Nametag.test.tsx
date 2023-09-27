@@ -46,18 +46,6 @@ context('Nametag', () => {
     component = render(<Nametag />, {
       preloadedState: {
         ...InitialState,
-        personalInformation: {
-          ...InitialState.personalInformation,
-          profile: {
-            firstName: 'Ben',
-            middleName: 'J',
-            lastName: 'Morgan',
-            fullName: 'Jerry Mills',
-            signinEmail: 'ben@gmail.com',
-            birthDate: '1990-05-08',
-            signinService: 'IDME',
-          },
-        },
         militaryService: {
           ...InitialState.militaryService,
           mostRecentBranch: mostRecentBranch || 'United States Air Force',

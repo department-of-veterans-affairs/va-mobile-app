@@ -1,12 +1,9 @@
 import 'react-native'
 import React from 'react'
-import { DateTime, Settings } from 'luxon'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
-import { screen } from '@testing-library/react-native'
-
-import { context, findByTypeWithSubstring, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HomeScreen } from './HomeScreen'
 
 const mockNavigateToSpy = jest.fn()

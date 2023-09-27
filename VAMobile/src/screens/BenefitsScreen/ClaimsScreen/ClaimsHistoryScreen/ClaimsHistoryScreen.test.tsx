@@ -141,10 +141,6 @@ context('ClaimsHistoryScreen', () => {
   const initializeTestInstance = () => {
     const preloadedState = {
       ...InitialState,
-      personalInformation: {
-        ...InitialState.personalInformation,
-        needsDataLoad: false,
-      },
     }
 
     render(<ClaimsHistoryScreen {...mockNavProps()} />, { preloadedState })

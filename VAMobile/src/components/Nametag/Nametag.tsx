@@ -3,26 +3,26 @@ import React, { FC } from 'react'
 
 import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
-import { MilitaryServiceState, PersonalInformationState } from 'store/slices'
+import { MilitaryServiceState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { Pressable, PressableProps } from 'react-native'
 import { RootState } from 'store'
+import { getFullName } from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/PersonalInformationScreen'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
 export const Nametag: FC = () => {
-  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { mostRecentBranch, serviceHistory } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: personalInfo } = usePersonalInformation()
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const name = (): string => {
-    return profile?.fullName || ''
-  }
+  const fullName = getFullName(personalInfo)
 
   const branch = mostRecentBranch || ''
 
@@ -56,7 +56,7 @@ export const Nametag: FC = () => {
   const pressableProps: PressableProps = {
     onPress: accessToMilitaryInfo && showVeteranStatus ? navigateTo('VeteranStatus') : undefined,
     accessibilityRole: accessToMilitaryInfo ? 'button' : undefined,
-    accessibilityLabel: accessToMilitaryInfo ? `${name()} ${branch} ${t('veteranStatus.title')}` : undefined,
+    accessibilityLabel: accessToMilitaryInfo ? `${fullName} ${branch} ${t('veteranStatus.title')}` : undefined,
   }
 
   return (
@@ -73,7 +73,7 @@ export const Nametag: FC = () => {
           {accessToMilitaryInfo && <Box pl={theme.dimensions.cardPadding}>{getBranchSeal()}</Box>}
           <Box ml={theme.dimensions.cardPadding} flex={1}>
             <TextView textTransform="capitalize" mb={accessToMilitaryInfo ? theme.dimensions.textIconMargin : 0} variant="BitterBoldHeading" color="primaryContrast">
-              {name()}
+              {fullName}
             </TextView>
             {accessToMilitaryInfo && (
               <TextView textTransform="capitalize" variant="MobileBodyBold" color="primaryContrast">

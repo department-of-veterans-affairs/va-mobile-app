@@ -24,7 +24,6 @@ import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import lettersReducer from 'store/slices/lettersSlice'
 import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
-import personalInformationReducer from 'store/slices/personalInformationSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
 import vaccineReducer from 'store/slices/vaccineSlice'
@@ -133,7 +132,6 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       auth: authReducer,
       accessibility: accessabilityReducer,
       demo: demoReducer,
-      personalInformation: personalInformationReducer,
       errors: errorReducer,
       analytics: analyticsReducer,
       appointments: appointmentsReducer,

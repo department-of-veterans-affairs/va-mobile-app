@@ -6,23 +6,24 @@ import React, { FC } from 'react'
 
 import { BackgroundVariant, BorderColorVariant, Box, BoxProps, ClickToCallPhoneNumber, LargePanel, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
-import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState } from 'store/slices'
+import { DisabilityRatingState, MilitaryServiceState } from 'store/slices'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
-import { getBirthDate } from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/PersonalInformationScreen'
+import { getBirthDate, getFullName } from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/PersonalInformationScreen'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { useTheme } from 'utils/hooks'
 // import PhotoUpload from 'components/PhotoUpload'
 
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
 
 const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
-  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { serviceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((state) => state.militaryService)
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: personalInfo } = usePersonalInformation()
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -30,6 +31,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
   const ratingPercent = ratingData?.combinedDisabilityRating
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
   const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
+  const fullName = getFullName(personalInfo)
 
   const getPeriodOfService: React.ReactNode = map(serviceHistory, (service: ServiceData) => {
     const branch = t('militaryInformation.branch', { branch: service.branchOfService })
@@ -93,7 +95,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
           </Box> */}
           <Box my={theme.dimensions.formMarginBetween}>
             <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
-              {profile?.fullName || ''}
+              {fullName}
             </TextView>
             {accessToMilitaryInfo && (
               <Box display="flex" flexDirection="row">
@@ -127,7 +129,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
               {t('personalInformation.dateOfBirth')}
             </TextView>
             <TextView variant="MobileBody" color="primaryContrast">
-              {getBirthDate(profile, t)}
+              {getBirthDate(personalInfo?.birthDate, t)}
             </TextView>
           </Box>
           <Box mb={theme.dimensions.formMarginBetween}>

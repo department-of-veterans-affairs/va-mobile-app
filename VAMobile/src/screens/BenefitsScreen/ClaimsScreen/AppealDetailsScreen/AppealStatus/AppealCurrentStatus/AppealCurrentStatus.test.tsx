@@ -14,7 +14,6 @@ const mockExternalLinkSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
 
   return {
     ...original,
@@ -44,18 +43,6 @@ context('AppealStatus', () => {
     component = render(<AppealCurrentStatus {...props} />, {
       preloadedState: {
         ...InitialState,
-        personalInformation: {
-          ...InitialState.personalInformation,
-          profile: {
-            firstName: '',
-            middleName: '',
-            lastName: '',
-            signinEmail: '',
-            birthDate: '',
-            fullName: 'Larry Brown',
-            signinService: 'IDME',
-          },
-        },
       },
     })
 

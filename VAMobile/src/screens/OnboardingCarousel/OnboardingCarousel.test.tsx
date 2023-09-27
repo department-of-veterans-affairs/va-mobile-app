@@ -4,7 +4,6 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import { context, render, RenderAPI } from 'testUtils'
 import { ReactTestInstance } from 'react-test-renderer'
-
 import OnboardingCarousel from './OnboardingCarousel'
 import { completeFirstTimeLogin, InitialState } from 'store/slices'
 import { Carousel } from 'components'
@@ -30,19 +29,6 @@ context('OnboardingCarousel', () => {
     component = render(<OnboardingCarousel />, {
       preloadedState: {
         ...InitialState,
-        personalInformation: {
-          ...InitialState.personalInformation,
-          profile: {
-            middleName: '',
-            lastName: '',
-            genderIdentity: null,
-            signinEmail: '',
-            birthDate: '',
-            fullName: '',
-            firstName: 'Billy',
-            signinService: 'IDME',
-          },
-        },
       },
     })
 
