@@ -2,15 +2,13 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { AuthorizedServicesState } from 'store/slices'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from './PaymentsStackScreens'
-import { RootState } from 'store'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useHeaderStyles } from 'utils/hooks/headerStyles'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentDetailsScreen from './PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
@@ -19,14 +17,14 @@ import PaymentHistoryScreen from './PaymentHistory/PaymentHistoryScreen'
 type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
 
 const PaymentsScreen: FC<PaymentsScreenProps> = () => {
-  const { directDepositBenefits, directDepositBenefitsUpdate } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { data: userAuthorizedServices } = useAuthorizedServices()
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
   const onPayments = navigateTo('PaymentHistory')
-  const onDirectDeposit = directDepositBenefitsUpdate ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
+  const onDirectDeposit = userAuthorizedServices?.directDepositBenefitsUpdate ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
 
   return (
     <CategoryLanding title={t('payments.title')}>
@@ -39,7 +37,7 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
         />
-        {directDepositBenefits && (
+        {userAuthorizedServices?.directDepositBenefits && (
           <LargeNavButton
             title={t('directDeposit.information')}
             onPress={onDirectDeposit}

@@ -100,7 +100,6 @@ export type UserData = {
     attributes: {
       id: string
       type: string
-      authorizedServices: Array<VAServices>
       profile: UserDataProfile
       health: CernerData
     }

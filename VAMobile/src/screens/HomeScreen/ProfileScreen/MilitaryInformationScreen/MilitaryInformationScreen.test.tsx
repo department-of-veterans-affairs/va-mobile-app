@@ -1,30 +1,69 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, mockNavProps, render, RenderAPI } from 'testUtils'
 
-import { ErrorComponent, LoadingComponent, TextView } from 'components'
+import { context, mockNavProps, render } from 'testUtils'
+import { screen } from '@testing-library/react-native'
 import MilitaryInformationScreen from './index'
 import {
   ErrorsState,
-  initialAuthorizedServicesState,
   initialAuthState,
   initialErrorsState,
-  initializeErrorsByScreenID,
   initialMilitaryServiceState,
   MilitaryServiceState,
 } from 'store/slices'
 import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 import { waitFor } from '@testing-library/react-native'
 
+jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
+  let original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
+  return {
+    ...original,
+    useAuthorizedServices: jest.fn().mockReturnValue({
+      status: "success",
+      data: {
+        appeals: true,
+        appointments: true,
+        claims: true,
+        decisionLetters: true,
+        directDepositBenefits: true,
+        directDepositBenefitsUpdate: true,
+        disabilityRating: true,
+        genderIdentity: true,
+        lettersAndDocuments: true,
+        militaryServiceHistory: true,
+        paymentHistory: true,
+        preferredName: true,
+        prescriptions: true,
+        scheduleAppointments: true,
+        secureMessaging: true,
+        userProfileUpdate: true
+      }
+    }).mockReturnValueOnce({
+      status: "success",
+      data: {
+        appeals: true,
+        appointments: true,
+        claims: true,
+        decisionLetters: true,
+        directDepositBenefits: true,
+        directDepositBenefitsUpdate: true,
+        disabilityRating: true,
+        genderIdentity: true,
+        lettersAndDocuments: true,
+        militaryServiceHistory: false,
+        paymentHistory: true,
+        preferredName: true,
+        prescriptions: true,
+        scheduleAppointments: true,
+        secureMessaging: true,
+        userProfileUpdate: true
+      }
+    })
+  }
+})
+
 context('MilitaryInformationScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  const serviceHistory = [
+  const serviceHistoryMock = [
     {
       branchOfService: BranchesOfServiceConstants.MarineCorps,
       beginDate: '1993-06-04',
@@ -43,164 +82,63 @@ context('MilitaryInformationScreen', () => {
       addListener: jest.fn(),
     },
   )
-  const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState, needsDataLoad = true) => {
-    component = render(<MilitaryInformationScreen {...props} />, {
+  const initializeTestInstance = ( errorsState: ErrorsState = initialErrorsState, serviceHistory = serviceHistoryMock) => {
+    render(<MilitaryInformationScreen {...props} />, {
       preloadedState: {
         auth: { ...initialAuthState },
         militaryService: {
           ...initialMilitaryServiceState,
-          loading,
           serviceHistory,
           mostRecentBranch: BranchesOfServiceConstants.MarineCorps,
-          needDataLoad: needsDataLoad,
+          needDataLoad: true,
         } as MilitaryServiceState,
-        authorizedServices: {
-          ...initialAuthorizedServicesState,
-          militaryServiceHistory: true,
-        },
         errors: errorsState,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
-
-  beforeEach(async () => {
-    await waitFor(() => {
-      initializeTestInstance()
-    })
-  })
-
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-
-      const header = findByTestID(testInstance, 'Period of service')
-      expect(header.props.children).toBe('Period of service')
-
-      const texts = testInstance.findAllByType(TextView)
-      expect(texts[4].props.children).toBe('United States Marine Corps')
-      expect(texts[5].props.children).toBe('June 04, 1993 – July 10, 1995')
-
-      const link = testInstance.findByProps({ accessibilityRole: 'link' })
-      expect(link.props.children).toBe("What if my military service information doesn't look right?")
-    })
-  })
-
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance(true)
-
+  
+  describe('when military service history authorization is false', () => {
+    it('should render NoMilitaryInformationAccess', async () => {
       await waitFor(() => {
-        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+        initializeTestInstance()
       })
-    })
-  })
-
-  describe('when common error occurs', () => {
-    // TODO: Issue 4283 should ensure this unit test is fixed
-    // it('should render error component when the stores screenID matches the components screenID', async () => {
-    //   const errorsByScreenID = initializeErrorsByScreenID()
-    //   errorsByScreenID[ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-    //   const errorState: ErrorsState = {
-    //     ...initialErrorsState,
-    //     errorsByScreenID,
-    //   }
-
-    //   await waitFor(() => {
-    //     initializeTestInstance(true, errorState, false)
-    //     expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
-    //   })
-    // })
-
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      await waitFor(() => {
-        initializeTestInstance(true, errorState)
-      })
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      expect(screen.getByText("We can't access your military information")).toBeTruthy()
     })
   })
 
   describe('when service history is empty', () => {
     it('should render NoMilitaryInformationAccess', async () => {
-      component = render(<MilitaryInformationScreen {...props} />, {
-        preloadedState: {
-          auth: { ...initialAuthState },
-          militaryService: {
-            ...initialMilitaryServiceState,
-            serviceHistory: [],
-            mostRecentBranch: BranchesOfServiceConstants.MarineCorps,
-          },
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: true,
-          },
-        },
-      })
-
-      testInstance = component.UNSAFE_root
-
       await waitFor(() => {
-        expect(testInstance.findByType(NoMilitaryInformationAccess)).toBeTruthy()
+        initializeTestInstance(initialErrorsState, [])
       })
-    })
-  })
-
-  describe('when military service history authorization is false', () => {
-    it('should render NoMilitaryInformationAccess', async () => {
-      component = render(<MilitaryInformationScreen {...props} />, {
-        preloadedState: {
-          auth: { ...initialAuthState },
-          militaryService: {
-            ...initialMilitaryServiceState,
-            serviceHistory: [{} as ServiceData],
-            mostRecentBranch: BranchesOfServiceConstants.MarineCorps,
-          },
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: false,
-          },
-        },
-      })
-
-      testInstance = component.UNSAFE_root
-      await waitFor(() => {
-        expect(testInstance.findByType(NoMilitaryInformationAccess)).toBeTruthy()
-      })
+      expect(screen.getByText("We can't access your military information")).toBeTruthy()
     })
   })
 
   describe('when service history is not empty and military service history authorization is true', () => {
     it('should not render NoMilitaryInformationAccess', async () => {
-      component = render(<MilitaryInformationScreen {...props} />, {
-        preloadedState: {
-          auth: { ...initialAuthState },
-          militaryService: {
-            ...initialMilitaryServiceState,
-            serviceHistory: [{} as ServiceData],
-            mostRecentBranch: BranchesOfServiceConstants.MarineCorps,
-          },
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: true,
-          },
-        },
-      })
-
-      testInstance = component.UNSAFE_root
-
       await waitFor(() => {
-        expect(testInstance.findAllByType(NoMilitaryInformationAccess)).toHaveLength(0)
+        initializeTestInstance(initialErrorsState, [{} as ServiceData])
       })
+      expect(screen.queryByText("We can't access your military information")).toBeFalsy()
     })
+  })
+
+  describe('when loading is set to true', () => {
+    it('should show loading screen', async () => {
+      initializeTestInstance()
+      expect(screen.getByText('Loading your military information...')).toBeTruthy()
+    })
+  })
+
+  it('initializes correctly', async () => {
+    await waitFor(() => {
+      initializeTestInstance()
+    })
+    expect(screen.getByText('Period of service')).toBeTruthy()
+    expect(screen.getByText('United States Marine Corps')).toBeTruthy()
+    expect(screen.getByText('June 04, 1993 – July 10, 1995')).toBeTruthy()
+    expect(screen.getByText("What if my military service information doesn't look right?")).toBeTruthy()
+    expect(screen.getByRole('link')).toBeTruthy()
   })
 })
