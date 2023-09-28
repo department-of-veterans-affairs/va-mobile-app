@@ -132,20 +132,6 @@ context('SyncScreen', () => {
 
   describe('sync completion', () => {
     it('should complete the sync when all loading is finished', async () => {
-      jest.mock('../../api/demographics/getDemographics', () => {
-        let original = jest.requireActual('../../api/demographics/getDemographics')
-        return {
-          ...original,
-          useDemographics: () => ({
-            status: "success",
-            data: {
-              genderIdentity: '',
-              preferredName: '',
-            }
-          }),
-        }
-      })
-
       initializeTestInstance(false, false, false, true, false)
       await waitFor(async () => {
         expect(completeSync).toHaveBeenCalled()
