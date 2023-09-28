@@ -31,7 +31,7 @@ env:
 
 jobs:
   e2e-android:
-    runs-on: ubuntu-4-cores-latest
+    runs-on: macos-latest-xl
     steps:
       - uses: actions/checkout@v3
         with:
