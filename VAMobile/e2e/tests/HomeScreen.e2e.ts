@@ -1,12 +1,10 @@
 import { expect, device, by, element } from 'detox'
 import { CommonE2eIdConstants, loginToDemoMode, checkImages } from './utils'
 import { setTimeout } from "timers/promises"
-import { UserGreetingTimeConstants } from 'store/api/types'
-import { DateTime } from 'luxon'
 
 export const HomeE2eIdConstants = {
-	GREETING_ID: 'greeting-text',
 	PAYMENTS_BTN_ID: 'Payments',
+	VETERAN_STATUS_TEXT: 'Proof of Veteran status',
 	LOCATION_FINDER_ROW_ID: 'Find a  V-A  location',
 	CONTACT_VA_ROW_ID: 'Contact  V-A ',
 	COVID_ROW_ID: 'COVID-19 updates',
@@ -17,20 +15,6 @@ export const HomeE2eIdConstants = {
 	WEBVIEW_ID: 'Webview-web'
 }
 
-let greeting
-const currentHour = DateTime.now().toObject()?.hour
-if (currentHour === undefined) {
-  greeting = null
-} else if (currentHour < UserGreetingTimeConstants.EVENING) {
-  greeting = 'Good evening'
-} else if (currentHour < UserGreetingTimeConstants.MORNING) {
-  greeting = 'Good morning'
-} else if (currentHour < UserGreetingTimeConstants.AFTERNOON) {
-  greeting = 'Good afternoon'
-} else {
-  greeting = 'Good evening'
-}
-
 beforeAll(async () => {
 	await loginToDemoMode()
 })
@@ -39,10 +23,9 @@ describe('Home Screen', () => {
 	it('should show primary home page content', async () => {
 		await expect(element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID))).toExist()
 		await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT))).toExist()
-		await expect(element(by.id(HomeE2eIdConstants.GREETING_ID))).toExist()
-		await expect(element(by.text(greeting + ', Kimberly'))).toExist()
 		await expect(element(by.text(HomeE2eIdConstants.HOME_PAGE_USER_NAME))).toExist()
 		await expect(element(by.text(HomeE2eIdConstants.HOME_PAGE_MILITARY_BRANCH))).toExist()
+		await expect(element(by.text(HomeE2eIdConstants.VETERAN_STATUS_TEXT))).toExist()
 		var militaryBadge = await element(by.id('United States Coast Guard')).takeScreenshot('MilitaryServiceBadgeHome')
 		checkImages(militaryBadge)
 		await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()

@@ -98,13 +98,11 @@ describe('Personal Information Screen', () => {
 
     await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT)).atIndex(0)).toExist()
     await expect(element(by.text('Preferred name saved'))).toExist()
-    //Commented out until user endpoint is completed
-    //await expect(element(by.text('Kimberlee'))).toExist()
+    await expect(element(by.text('Kimberlee'))).toExist()
 
     await element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT)).tap()
     await expect(element(by.text('Preferred name saved'))).not.toExist()
-    //Commented out until user endpoint is completed
-    //await expect(element(by.text('Kimberlee')).atIndex(0)).toExist()
+    await expect(element(by.text('Kimberlee')).atIndex(0)).toExist()
     await element(by.text('Cancel')).tap()
   })
 
@@ -116,12 +114,12 @@ describe('Personal Information Screen', () => {
 
     await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT))).toExist()
     await expect(element(by.text('Gender identity saved'))).toExist()
-    //await expect(element(by.text(PersonalInfoConstants.PREFER_NOT_TEXT))).toExist()
+    await expect(element(by.text(PersonalInfoConstants.PREFER_NOT_TEXT))).toExist()
     await element(by.text('Dismiss')).tap()
 
     await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
     await expect(element(by.text('Gender identity saved'))).not.toExist()
-    //await expect(element(by.label(PersonalInfoConstants.PREFER_NOT_TEXT + ' ').withDescendant(by.id('RadioFilled')))).toExist()
+    await expect(element(by.label(PersonalInfoConstants.PREFER_NOT_TEXT + ' ').withDescendant(by.id('RadioFilled')))).toExist()
     await element(by.text('Cancel')).tap()
   })
 
