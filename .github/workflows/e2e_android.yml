@@ -74,8 +74,14 @@ jobs:
           java-version: 17
           distribution: 'microsoft'
       
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
+      - name: Add avdmanager and sdkmanager to system PATH
+        run: |
+            echo "$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/${{ env.ANDROID_BUILD_TOOLS_VERSION }}" >> $GITHUB_PATH
+      
+      - name: Install Sdk   
+        run: |
+           yes Y | sdkmanager --licenses
+           sdkmanager --install ${ANDROID_SDK_PACKAGES}
 
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
@@ -92,15 +98,6 @@ jobs:
 
       - name: Bundle Android app
         run: yarn e2e:android-build
-
-      - name: Add avdmanager and sdkmanager to system PATH
-        run: |
-            echo "$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/${{ env.ANDROID_BUILD_TOOLS_VERSION }}" >> $GITHUB_PATH
-      
-      - name: Install Sdk   
-        run: |
-           yes Y | sdkmanager --licenses
-           sdkmanager --install ${ANDROID_SDK_PACKAGES}
   
       - name: Build emulator
         run: |
@@ -109,7 +106,7 @@ jobs:
       - name: Launch emulator
         run: |
           bash ${GITHUB_WORKSPACE}/.github/scripts/start_emu_headless.sh
-          EMULATOR_TIMEOUT=$EMULATOR_TIMEOUT EMULATOR_NAME=$EMULATOR_NAME ./start_emu_headless.sh
+          EMULATOR_TIMEOUT=$EMULATOR_TIMEOUT EMULATOR_NAME=$EMULATOR_NAME ${GITHUB_WORKSPACE}/.github/scripts/start_emu_headless.sh
 
       - name: Run e2e tests for Android
         run: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
