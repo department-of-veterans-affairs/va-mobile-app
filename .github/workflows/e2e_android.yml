@@ -92,6 +92,7 @@ jobs:
       - name: Run e2e tests for Android
         uses: reactivecircus/android-emulator-runner@v2
         with:
+          working-directory: VAMobile
           api-level: 28
           arch: x86_64
           avd-name: ${{ steps.device.outputs.AVD_NAME }}
