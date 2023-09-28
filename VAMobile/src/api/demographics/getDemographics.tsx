@@ -15,9 +15,8 @@ const getDemographics = async (): Promise<UserDemographics | undefined> => {
 /**
  * Returns a query for user demographics
  */
-export const useDemographics = (options?: { enabled?: boolean }) => {
+export const useDemographics = () => {
   return useQuery({
-    ...options,
     queryKey: demographicsKeys.demographics,
     queryFn: () => getDemographics(),
     meta: {
