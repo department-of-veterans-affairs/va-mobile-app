@@ -43,6 +43,7 @@ export const lightTheme = {
     tagInactive: colors.grayLightest,
     tagYellow: colors.goldLightest,
     tagGreen: colors.greenLightest,
+    veteranStatus: colors.primaryDarker,
   },
   border: {
     primary: colors.grayLight,
@@ -62,12 +63,14 @@ export const lightTheme = {
     menuDivider: colors.grayDark,
     tabSelectorInactive: colors.grayLight,
     tabSelectorActive: colors.primary,
+    photoUpload: colors.white,
     prescriptionDivider: colors.grayLighter,
     modalButton: colors.primary,
     tagBlue: colors.primary,
     tagInactive: colors.grayLight,
     tagYellow: colors.gold,
     tagGreen: colors.green,
+    veteranStatus: colors.coolBlueLighter,
   },
   icon: {
     footerButton: colors.primary,
@@ -144,6 +147,7 @@ export const lightTheme = {
     labelTag: colors.base,
     textWithIconButton: colors.primary,
     textWithIconButtonInactive: colors.primary,
+    veteranStatus: colors.white,
     webviewTitle: colors.base,
   },
   buttonBackground: {
@@ -240,6 +244,7 @@ export const darkTheme = {
     tagInactive: colors.grayLightest,
     tagYellow: colors.goldLightest,
     tagGreen: colors.greenLightest,
+    veteranStatus: colors.primaryDarker,
   },
   border: {
     primary: colors.darkmodeBorder,
@@ -259,12 +264,14 @@ export const darkTheme = {
     menuDivider: colors.darkmodeBorder,
     tabSelectorInactive: colors.grayMedium,
     tabSelectorActive: colors.darkmodeLightBlue,
+    photoUpload: colors.white,
     prescriptionDivider: colors.darkmodeBorder,
     modalButton: colors.darkmodeBorder,
     tagBlue: colors.primary,
     tagInactive: colors.grayLight,
     tagYellow: colors.gold,
     tagGreen: colors.green,
+    veteranStatus: colors.coolBlueLighter,
   },
   icon: {
     footerButton: colors.darkmodeLightBlue,
@@ -339,6 +346,7 @@ export const darkTheme = {
     labelTag: colors.base,
     textWithIconButton: colors.darkmodeLightBlue,
     textWithIconButtonInactive: colors.grayLight,
+    veteranStatus: colors.white,
     webviewTitle: colors.white,
   },
   buttonBackground: {

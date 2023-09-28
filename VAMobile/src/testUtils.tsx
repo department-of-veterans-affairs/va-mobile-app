@@ -15,7 +15,6 @@ import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
 import appointmentsReducer from 'store/slices/appointmentsSlice'
 import authReducer from 'store/slices/authSlice'
-import authorizedServicesReducer from 'store/slices/authorizedServicesSlice'
 import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
 import demoReducer from 'store/slices/demoSlice'
 import directDepositReducer from 'store/slices/directDepositSlice'
@@ -25,7 +24,6 @@ import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import lettersReducer from 'store/slices/lettersSlice'
 import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
-import patientReducer from 'store/slices/patientSlice'
 import personalInformationReducer from 'store/slices/personalInformationSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
@@ -136,7 +134,6 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       accessibility: accessabilityReducer,
       demo: demoReducer,
       personalInformation: personalInformationReducer,
-      authorizedServices: authorizedServicesReducer,
       errors: errorReducer,
       analytics: analyticsReducer,
       appointments: appointmentsReducer,
@@ -147,7 +144,6 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       letters: lettersReducer,
       militaryService: militaryServiceReducer,
       notifications: notificationReducer,
-      patient: patientReducer,
       secureMessaging: secureMessagingReducer,
       snackBar: snackbarReducer,
       vaccine: vaccineReducer,

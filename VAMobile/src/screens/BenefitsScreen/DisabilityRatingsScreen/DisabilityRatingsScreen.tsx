@@ -25,7 +25,8 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { capitalizeFirstLetter } from 'utils/formattingUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { capitalizeFirstLetter, displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
@@ -129,12 +130,17 @@ const DisabilityRatingsScreen: FC = () => {
     return (
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={a11yLabelVA(t('disabilityRating.learnAbout'))}>
             {t('disabilityRating.learnAbout')}
           </TextView>
         </Box>
         <Box accessible={true}>
-          <TextView variant="MobileBody" accessibilityRole="text" selectable={false} accessibilityLabel={t('disabilityRating.learnAboutSummary.a11yLabel')} paragraphSpacing={true}>
+          <TextView
+            variant="MobileBody"
+            accessibilityRole="text"
+            selectable={false}
+            accessibilityLabel={a11yLabelVA(t('disabilityRating.learnAboutSummary'))}
+            paragraphSpacing={true}>
             {t('disabilityRating.learnAboutSummary')}
           </TextView>
         </Box>
@@ -156,7 +162,7 @@ const DisabilityRatingsScreen: FC = () => {
             {t('claimDetails.callVA')}
           </TextView>
         </Box>
-        <ClickToCallPhoneNumber phone={t('8008271000.displayText')} />
+        <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} />
       </TextArea>
     )
   }
@@ -191,7 +197,7 @@ const DisabilityRatingsScreen: FC = () => {
     linkUrlIconType: LinkUrlIconType.Arrow,
     numberOrUrlLink: LINK_URL_ABOUT_DISABILITY_RATINGS,
     accessibilityHint: t('disabilityRating.learnAboutLinkTitle.a11yHint'),
-    a11yLabel: t('disabilityRating.learnAboutLinkTitle.a11yLabel'),
+    a11yLabel: a11yLabelVA(t('disabilityRating.learnAboutLinkTitle')),
     testID: 'aboutDisabilityRatingsTestID',
   }
 

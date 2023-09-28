@@ -5,7 +5,7 @@ import { log } from 'console'
 import { setTimeout } from "timers/promises"
 
 export const MilitaryInformationE2eIdConstants = {
-  MILITARY_DATE_TEXT: 'July 13, 1970 - August 31, 1998',
+  MILITARY_DATE_TEXT: 'July 13, 1970 – August 31, 1998',
   SERVICE_INFORMATION_INCORRECT_TITLE_TEXT: 'What if my military service information doesn\'t look right?',
   SERVICE_INFORMATION_INCORRECT_BODY_LABEL_1: 'Some Veterans have reported seeing military service information in their V-A .gov profiles that doesn’t seem right. When this happens, it’s because there’s an error in the information we’re pulling into V-A .gov from the Defense Enrollment Eligibility Reporting System (D-E-E-R-S).',
   SERVICE_INFORMATION_INCORRECT_BODY_LABEL_2: 'If the military service information in your profile doesn’t look right, please call the Defense Manpower Data Center (D-M-D-C). They’ll work with you to update your information in D-E-E-R-S.',

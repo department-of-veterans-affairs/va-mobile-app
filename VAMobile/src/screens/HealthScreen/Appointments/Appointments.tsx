@@ -7,14 +7,16 @@ import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, FooterButton } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
-import { AppointmentsState, AuthorizedServicesState } from 'store/slices'
+import { AppointmentsState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { VAScrollViewProps } from 'components/VAScrollView'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled } from 'utils/remoteConfig'
-import { useAppDispatch, useDowntime, useError, useHasCernerFacilities, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
@@ -44,8 +46,8 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError, currentPageAppointmentsByYear } = useSelector<RootState, AppointmentsState>(
     (state) => state.appointments,
   )
-  const { appointments, scheduleAppointments } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
-  const hasCernerFacilities = useHasCernerFacilities()
+
+  const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
   const navigateToRequestAppointments = navigateTo('RequestAppointmentScreen')
   const navigateToNoRequestAppointmentAccess = navigateTo('NoRequestAppointmentAccess')
@@ -76,7 +78,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, apptsNotInDowntime])
 
-  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || getUserAuthorizedServicesError) {
     return (
       <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
@@ -84,7 +86,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     )
   }
 
-  if (!appointments) {
+  if (!userAuthorizedServices?.appointments) {
     return (
       <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
         <NoMatchInRecords />
@@ -103,8 +105,8 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
             title={t('appointments.appointmentsStatusSomeUnavailable')}
             text={t('appointments.troubleLoadingSomeAppointments')}
             border="error"
-            titleA11yLabel={t('appointments.appointmentsStatusSomeUnavailable.a11yLabel')}
-            textA11yLabel={t('appointments.troubleLoadingSomeAppointments.a11yLabel')}
+            titleA11yLabel={a11yLabelVA(t('appointments.appointmentsStatusSomeUnavailable'))}
+            textA11yLabel={a11yLabelVA(t('appointments.troubleLoadingSomeAppointments'))}
           />
         </Box>
       )
@@ -114,7 +116,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   }
 
   const onRequestAppointmentPress = () => {
-    scheduleAppointments ? navigateToRequestAppointments() : navigateToNoRequestAppointmentAccess()
+    userAuthorizedServices?.scheduleAppointments ? navigateToRequestAppointments() : navigateToNoRequestAppointmentAccess()
   }
   const requestAppointmentsFooter = featureEnabled('appointmentRequests') ? (
     <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />
@@ -137,9 +139,13 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
           <SegmentedControl labels={controlLabels} onChange={setSelectedTab} selected={selectedTab} a11yHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}
-        <Box mb={hasCernerFacilities ? theme.dimensions.standardMarginBetween : 0}>
-          <CernerAlert />
-        </Box>
+        {CernerAlert ? (
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <CernerAlert />
+          </Box>
+        ) : (
+          <></>
+        )}
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
           {selectedTab === 1 && <PastAppointments />}
           {selectedTab === 0 && <UpcomingAppointments />}

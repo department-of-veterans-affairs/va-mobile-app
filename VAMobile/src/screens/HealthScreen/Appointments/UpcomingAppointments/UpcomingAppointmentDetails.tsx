@@ -44,6 +44,7 @@ import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
@@ -281,7 +282,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <AppointmentCancellationInfo appointment={appointment} goBack={goBack} />
         ) : (
           <TextArea>
-            <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
+            <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('pastAppointmentDetails.toScheduleAnotherAppointment'))}>
               {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
             </TextView>
           </TextArea>

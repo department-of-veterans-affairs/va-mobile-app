@@ -32,7 +32,7 @@ const VeteransCrisisLineNumbers: FC = () => {
           testID="veteransCrisisLineCrisisCallNumberTestID"
           displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
           a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed.a11y')}
-          numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')}
+          numberOrUrlLink={t('988')}
           linkType={LinkTypeOptionsConstants.call}
           fireAnalytic={fireAnalyticFn}
           {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
@@ -43,7 +43,7 @@ const VeteransCrisisLineNumbers: FC = () => {
           testID="veteransCrisisLineTextNumberTestID"
           displayedText={t('veteransCrisisLine.textNumberDisplayed')}
           a11yLabel={t('veteransCrisisLine.textNumberDisplayed.a11y')}
-          numberOrUrlLink={t('veteransCrisisLine.textNumber')}
+          numberOrUrlLink={t('838255')}
           linkType={LinkTypeOptionsConstants.text}
           fireAnalytic={fireAnalyticFn}
           {...a11yHintProp(t('veteransCrisisLine.textA11yHint'))}
@@ -65,7 +65,7 @@ const VeteransCrisisLineNumbers: FC = () => {
           testID="veteransCrisisLineHearingLossNumberTestID"
           displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}
           a11yLabel={t('veteransCrisisLine.hearingLossNumberDisplayed')}
-          numberOrUrlLink={t('veteransCrisisLine.hearingLossNumber')}
+          numberOrUrlLink={t('8007994889')}
           linkType={LinkTypeOptionsConstants.callTTY}
           fireAnalytic={fireAnalyticFn}
           {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}

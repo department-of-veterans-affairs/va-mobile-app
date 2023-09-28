@@ -35,7 +35,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
     displayedText: t('upcomingAppointmentDetails.findYourVALocation'),
     linkType: LinkTypeOptionsConstants.externalLink,
     numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
-    a11yLabel: t('upcomingAppointmentDetails.findYourVALocation.a11yLabel'),
+    a11yLabel: a11yLabelVA(t('upcomingAppointmentDetails.findYourVALocation')),
     accessibilityHint: t('upcomingAppointmentDetails.findYourVALocation.a11yHint'),
   }
 
@@ -46,7 +46,9 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
 
   if (isCovidVaccine) {
     title = t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.title')
+    titleA11yLabel = a11yLabelVA(t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.title'))
     body = t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.body')
+    bodyA11yLabel = a11yLabelVA(t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.body'))
   } else {
     switch (appointmentType) {
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
@@ -145,7 +147,6 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         <VAButton
           onPress={onCancelAppointment}
           label={t('upcomingAppointmentDetails.cancelAppointment')}
-          a11yHint={t('upcomingAppointmentDetails.cancelAppointment.a11yHint')}
           buttonType={ButtonTypesConstants.buttonDestructive}
           {...testIdProps(t('upcomingAppointmentDetails.cancelAppointment'))}
         />

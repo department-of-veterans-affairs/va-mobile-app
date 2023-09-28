@@ -10,8 +10,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState } from 'store/slices/personalInformationSlice'
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, ScreenIDTypesConstants, UserDataProfile } from 'store/api/types'
 import { RootState } from 'store'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { registerReviewEvent } from 'utils/inAppReviews'
-import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
@@ -146,7 +146,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')} testID="ContactInfoTestID">
-      <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter}>
+      <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
         {t('contactInformation.editNote')}
       </TextView>
       <Pressable onPress={navigateTo('HowWillYou')} accessibilityRole="link" accessible={true}>

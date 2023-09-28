@@ -5,6 +5,8 @@ import React, { FC } from 'react'
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 type PaymentMissingScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentMissing'>
@@ -19,13 +21,13 @@ const PaymentMissing: FC<PaymentMissingScreenProps> = () => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('payments.ifIAmMissingPayemt')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.missingOrNoPayments.body.1.a11yLabel')}>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('payments.missingOrNoPayments.body.1'))}>
           {t('payments.missingOrNoPayments.body.1')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('payments.missingPayments.body.2.a11yLabel')}>
           {t('payments.missingPayments.body.2')}
         </TextView>
-        <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />
+        <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={displayedTextPhoneNumber(t('8008271000'))} />
       </Box>
     </LargePanel>
   )

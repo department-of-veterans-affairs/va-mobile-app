@@ -28,7 +28,7 @@ describe('Sign In', () => {
   })
 
   it(':ios: should show webview with log in options', async () => {
-    await element(by.text('Back')).tap()
+    await element(by.text('Close')).tap()
     await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
     await element(by.text('Done')).tap()
