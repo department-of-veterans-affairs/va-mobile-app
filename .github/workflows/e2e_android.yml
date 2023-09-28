@@ -85,8 +85,36 @@ jobs:
       - name: Bundle Android app
         run: yarn e2e:android-build
 
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
+        
+      - name: AVD cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-28
+
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 28
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
       - name: Run e2e tests for Android
-        run: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 28
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          run: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
       - name: Upload artifacts on failure
         if: failure()
