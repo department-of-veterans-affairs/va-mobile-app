@@ -4,6 +4,7 @@ import React, { FC, ReactNode } from 'react'
 import { Box, ClickForActionLink, CollapsibleAlert, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
 import { Facility } from 'api/types/FacilityData'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -29,7 +30,7 @@ const CernerAlert: FC = () => {
   // if facilities === cernerFacilities size then that means all facilities are cernerFacilities
   const allCernerFacilities = facilitiesInfo.length === cernerFacilities.length
   const headerText = allCernerFacilities ? t('cernerAlert.header.all') : t('cernerAlert.header.some')
-  const headerA11yLabel = allCernerFacilities ? t('cernerAlert.header.all.a11yLabel') : t('cernerAlert.header.some.a11yLabel')
+  const headerA11yLabel = allCernerFacilities ? a11yLabelVA(t('cernerAlert.header.all')) : a11yLabelVA(t('cernerAlert.header.some'))
 
   const accordionContent = (): ReactNode => {
     const body = cernerFacilities.map((facility: Facility) => {
@@ -39,7 +40,7 @@ const CernerAlert: FC = () => {
           key={facility.id}
           mb={theme.dimensions.standardMarginBetween}
           selectable={true}
-          accessibilityLabel={`${facility.name} (${t('cernerAlert.nowUsing')})`}>
+          accessibilityLabel={`${facility.name} (${a11yLabelVA(t('cernerAlert.nowUsing'))})`}>
           {facility.name}
           <TextView variant="MobileBody">{` (${t('cernerAlert.nowUsing')})`}</TextView>
         </TextView>
@@ -51,7 +52,7 @@ const CernerAlert: FC = () => {
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,
       numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
-      a11yLabel: t('goToMyVAHealth.a11yLabel'),
+      a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
       testID: 'goToMyVAHealthTestID',
     }
 
@@ -61,7 +62,7 @@ const CernerAlert: FC = () => {
           {t('cernerAlert.ourRecordsShow')}
         </TextView>
         {body}
-        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('cernerAlert.footer.a11yLabel')}>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('cernerAlert.footer'))}>
           {t('cernerAlert.footer')}
         </TextView>
         <ClickForActionLink {...linkToCallProps} />

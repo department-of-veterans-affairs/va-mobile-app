@@ -46,7 +46,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <TextView {...bodyTextProps}>
               {t('loaGate.readMore.itemOne')}
-              <TextView {...titleTextProps}>{t('loaGate.readMore.itemOne.and')}</TextView>
+              <TextView {...titleTextProps}>{t('and')}</TextView>
             </TextView>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>

@@ -10,8 +10,9 @@ import { DisabilityRatingState, MilitaryServiceState, PersonalInformationState }
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 import { getBirthDate } from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/PersonalInformationScreen'
-import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useTheme } from 'utils/hooks'
 // import PhotoUpload from 'components/PhotoUpload'
 
@@ -21,7 +22,8 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
   const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { serviceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((state) => state.militaryService)
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
-  const accessToMilitaryInfo = useHasMilitaryInformationAccess()
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -138,16 +140,11 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
             <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
               {t('veteranStatus.fixAnError.2')}
             </TextView>
-            <ClickToCallPhoneNumber phone={t('howDoIUpdate.profileNumber')} a11yLabel={t('howDoIUpdate.profileNumber.a11yLabel')} colorOverride={'veteranStatus'} />
+            <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={displayedTextPhoneNumber(t('8008271000'))} colorOverride={'veteranStatus'} />
             <TextView variant="MobileBody" color="primaryContrast" my={theme.dimensions.condensedMarginBetween}>
               {t('veteranStatus.fixAnError.3')}
             </TextView>
-            <ClickToCallPhoneNumber
-              phone={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed')}
-              a11yLabel={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed.a11yLabel')}
-              colorOverride={'veteranStatus'}
-              ttyBypass={true}
-            />
+            <ClickToCallPhoneNumber phone={t('8005389552')} displayedText={displayedTextPhoneNumber(t('8005389552'))} colorOverride={'veteranStatus'} ttyBypass={true} />
           </Box>
         </Box>
       </Box>

@@ -1,20 +1,12 @@
 import 'react-native'
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
-import { context, mockNavProps, render, RenderAPI, waitFor, when } from 'testUtils'
 
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import * as api from 'store/api'
-import { InitialState, initialClaimsAndAppealsState, ErrorsState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
+import { InitialState, initialClaimsAndAppealsState, initialErrorsState } from 'store/slices'
 import ClaimDetailsScreen from './ClaimDetailsScreen'
-import { ErrorComponent, LoadingComponent } from 'components'
-import ClaimStatus from './ClaimStatus/ClaimStatus'
-import ClaimDetails from './ClaimDetails/ClaimDetails'
 import { claim } from '../claimData'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackNavigationOptions } from '@react-navigation/stack'
 
 jest.mock('@react-navigation/native', () => {
@@ -28,17 +20,39 @@ jest.mock('@react-navigation/native', () => {
   }
 })
 
-context('ClaimDetailsScreen', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-  let navHeaderSpy: any
-  let goBack: jest.Mock
-  let abortLoadSpy: jest.Mock
+jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
+  let original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
+  return {
+    ...original,
+    useAuthorizedServices: jest.fn().mockReturnValue({
+      status: "success",
+      data: {
+        appeals: true,
+        appointments: true,
+        claims: true,
+        decisionLetters: true,
+        directDepositBenefits: true,
+        directDepositBenefitsUpdate: true,
+        disabilityRating: true,
+        genderIdentity: true,
+        lettersAndDocuments: true,
+        militaryServiceHistory: true,
+        paymentHistory: true,
+        preferredName: true,
+        prescriptions: true,
+        scheduleAppointments: true,
+        secureMessaging: true,
+        userProfileUpdate: true
+      }
+    })
+  }
+})
 
-  const initializeTestInstance = (loadingClaim = false, errorsState: ErrorsState = initialErrorsState) => {
-    goBack = jest.fn()
-    abortLoadSpy = jest.fn()
+context('ClaimDetailsScreen', () => {
+  let props: any
+  let navHeaderSpy: any
+
+  const initializeTestInstance = () => {
     props = mockNavProps(
       undefined,
       {
@@ -49,44 +63,27 @@ context('ClaimDetailsScreen', () => {
             back: options.headerLeft ? options.headerLeft({}) : undefined,
           }
         },
-        goBack,
+        goBack: jest.fn(),
       },
       { params: { claimID: '0', claimType: 'ACTIVE' } },
     )
 
-    component = render(<ClaimDetailsScreen {...props} />, {
+    render(<ClaimDetailsScreen {...props} />, {
       preloadedState: {
         ...InitialState,
         claimsAndAppeals: {
           ...initialClaimsAndAppealsState,
-          loadingClaim,
           claim: claim,
-          cancelLoadingDetailScreen: {
-            abort: abortLoadSpy,
-          },
         },
-        errors: errorsState,
+        errors: initialErrorsState,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
-
-  it('should initialize', async () => {
-    await waitFor(() => {
-      initializeTestInstance()
-      expect(component).toBeTruthy()
-    })
-  })
 
   describe('when loadingClaim is set to true', () => {
     it('should show loading screen', async () => {
-      when(api.get as jest.Mock)
-
-      await waitFor(() => {
-        initializeTestInstance(false)
-        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-      })
+      initializeTestInstance()
+      expect(screen.getByText('Loading your claim details...')).toBeTruthy()
     })
   })
 
@@ -98,11 +95,7 @@ context('ClaimDetailsScreen', () => {
           .mockResolvedValue({ data: claim })
         initializeTestInstance()
       })
-
-      await waitFor(() => {
-        testInstance.findByType(SegmentedControl).props.onChange('Status')
-      })
-      expect(testInstance.findAllByType(ClaimStatus).length).toEqual(1)
+      expect(screen.getByTestId('Step 1 of 5. completed. Claim received June 6, 2019')).toBeTruthy()
     })
   })
 
@@ -114,12 +107,10 @@ context('ClaimDetailsScreen', () => {
           .mockResolvedValue({ data: claim })
         initializeTestInstance()
       })
-
-      await waitFor(() => {
-        testInstance.findByType(SegmentedControl).props.onChange('Details')
-      })
       fireEvent.press(screen.getByText('Details'))
-      expect(testInstance.findAllByType(ClaimDetails).length).toEqual(1)
+      fireEvent.press(screen.getByText('Details'))
+
+      expect(screen.getByText('Claim type')).toBeTruthy()
     })
   })
 
@@ -130,24 +121,10 @@ context('ClaimDetailsScreen', () => {
         .mockRejectedValue({ networkError: true } as api.APIError)
 
       await waitFor(() => {
-        initializeTestInstance(false)
+        initializeTestInstance()
       })
 
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
-    })
-
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.CIVIL_SERVICE_LETTER_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-      await waitFor(() => {
-        initializeTestInstance(false, errorState)
-        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
-      })
+      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
     })
   })
 })

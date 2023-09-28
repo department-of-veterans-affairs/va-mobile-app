@@ -19,7 +19,6 @@ import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { SnackbarMessages } from 'components/SnackBar'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { dispatchUpdateAuthorizedServices } from './authorizedServicesSlice'
 import {
   getAddressDataFromSuggestedAddress,
   getAddressValidationScenarioFromAddressValidationData,
@@ -100,15 +99,12 @@ export const getProfileInfo =
       dispatch(dispatchStartGetProfileInfo())
       const user = await get<UserData>('/v1/user')
       const profile = user?.data.attributes.profile
-      const authorizedServices = user?.data.attributes.authorizedServices
       dispatch(dispatchFinishGetProfileInfo({ profile }))
-      dispatch(dispatchUpdateAuthorizedServices({ authorizedServices }))
       await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `getProfileInfo: ${personalInformationNonFatalErrorString}`)
         dispatch(dispatchFinishGetProfileInfo({ error }))
-        dispatch(dispatchUpdateAuthorizedServices({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }
