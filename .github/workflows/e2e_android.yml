@@ -28,14 +28,6 @@ env:
   FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
   # Filepath for firebase distribution key. Also used by fastlane
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
-  # Android Emulator Setup Variables
-  EMULATOR_NAME: nexus
-  ANDROID_ARCH: x86_64
-  ANDROID_TARGET: google_apis_playstore
-  API_LEVEL: 28
-  ANDROID_BUILD_TOOLS_VERSION: 28.0.1
-  ANDROID_SDK_PACKAGES: system-images;android-28;google_apis_playstore;x86_64 platforms;android-28 build-tools;28.0.1 platform-tools emulator
-  EMULATOR_TIMEOUT: 350
 
 jobs:
   e2e-android:
@@ -74,25 +66,8 @@ jobs:
           java-version: 17
           distribution: 'microsoft'
       
-      - name: Add avdmanager and sdkmanager to system PATH
-        run: |
-            echo "$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/${{ env.ANDROID_BUILD_TOOLS_VERSION }}" >> $GITHUB_PATH
-      
-      - name: Install Sdk   
-        run: |
-           yes Y | sdkmanager --licenses
-           sdkmanager --install ${ANDROID_SDK_PACKAGES}
-
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"'
-          echo ls -al /dev/kvm
-          sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-          sudo apt-get update
-          sudo apt-get install -y libvirt-clients libvirt-daemon-system libvirt-daemon virtinst bridge-utils qemu qemu-system-x86
-          sudo usermod -a -G kvm,libvirt $USER
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
 
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
@@ -109,18 +84,18 @@ jobs:
 
       - name: Bundle Android app
         run: yarn e2e:android-build
-  
-      - name: Build emulator
-        run: |
-            echo "no" | avdmanager --verbose create avd --force -n $EMULATOR_NAME --abi "${ANDROID_TARGET}/${ANDROID_ARCH}" -k "system-images;android-${API_LEVEL};${ANDROID_TARGET};${ANDROID_ARCH}"
 
-      - name: Launch emulator
-        run: |
-          bash ${GITHUB_WORKSPACE}/.github/scripts/start_emu_headless.sh
-          EMULATOR_TIMEOUT=$EMULATOR_TIMEOUT EMULATOR_NAME=$EMULATOR_NAME ${GITHUB_WORKSPACE}/.github/scripts/start_emu_headless.sh
+      - name: Get device name
+        id: device
+        run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator.device.avdName)" >> $GITHUB_OUTPUT
 
       - name: Run e2e tests for Android
-        run: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 28
+          arch: x86_64
+          avd-name: ${{ steps.device.outputs.AVD_NAME }}
+          script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
       - name: Upload artifacts on failure
         if: failure()
