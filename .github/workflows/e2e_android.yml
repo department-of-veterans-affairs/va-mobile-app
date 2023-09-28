@@ -28,7 +28,7 @@ env:
   FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
   # Filepath for firebase distribution key. Also used by fastlane
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
-  
+  # Android Emulator Setup Variables
   EMULATOR_NAME: nexus
   ANDROID_ARCH: x86_64
   ANDROID_TARGET: google_apis_playstore
@@ -95,7 +95,8 @@ jobs:
 
       - name: Add avdmanager and sdkmanager to system PATH
         run: |
-            echo "$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/${{ env.ANDROID_BUILD_TOOLS_VERSION }}" >> $GITHUB_PATH
+            echo "$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platfrom-tools:$ANDROID_HOME/build-tools/${{ env.ANDROID_BUILD_TOOLS_VERSION }}" >> $GITHUB_PATH
+      
       - name: Install Sdk   
         run: |
            yes Y | sdkmanager --licenses
