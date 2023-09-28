@@ -129,71 +129,40 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
  * @param newJsonValue - string or boolean: new value for the json object
  */
 
-export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue, newEndpoint=false) {
+export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue, isNewEndpoint=false) {
 	
-  if(newEndpoint == true) {
-    fs.readFile('./src/api/demoMocks/' + mockFileName, 'utf8', (error, data) => {
-      if(error){
-        console.log(error);
-        return;
-       }
+  const mockDirectory = isNewEndpoint ? './src/api/demoMocks/' : './src/store/api/demo/mocks/'
   
-      const jsonParsed = JSON.parse(data)
-      var mockDataVariable
-      var mockDataKeyValue
-      for(var x=0; x<jsonProperty.length; x++) {
-        if (x == 0) {
-          mockDataVariable = jsonParsed[jsonProperty[x]]
-        } else if (x == jsonProperty.length - 1) {
-          mockDataVariable[jsonProperty[x]] = newJsonValue
-        } else {
-          if (jsonProperty[x].constructor == Object) {
-            var key = String(Object.keys(jsonProperty[x]))
-            var value = jsonProperty[x][key]
-            mockDataKeyValue = mockDataVariable[key]
-            mockDataVariable = mockDataKeyValue[value]
-          } else {
-            mockDataVariable = mockDataVariable[jsonProperty[x]]
-          }
-        }				
-      }
+  fs.readFile(mockDirectory + mockFileName, 'utf8', (error, data) => {
+    if(error){
+      console.log(error);
+      return;
+    }
 
-      fs.writeFile('./src/api/demoMocks/' + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
-        if (err) { return console.log(err) }
-      })
-	  })
-  } else {
-    fs.readFile('./src/store/api/demo/mocks/' + mockFileName, 'utf8', (error, data) => {
-      if(error){
-        console.log(error);
-        return;
-      }
-
-      const jsonParsed = JSON.parse(data)
-      var mockDataVariable
-      var mockDataKeyValue
-      for(var x=0; x<jsonProperty.length; x++) {
-        if (x == 0) {
-          mockDataVariable = jsonParsed[jsonProperty[x]]
-        } else if (x == jsonProperty.length - 1) {
-          mockDataVariable[jsonProperty[x]] = newJsonValue
+    const jsonParsed = JSON.parse(data)
+    var mockDataVariable
+    var mockDataKeyValue
+    for(var x=0; x<jsonProperty.length; x++) {
+      if (x == 0) {
+        mockDataVariable = jsonParsed[jsonProperty[x]]
+      } else if (x == jsonProperty.length - 1) {
+        mockDataVariable[jsonProperty[x]] = newJsonValue
+      } else {
+        if (jsonProperty[x].constructor == Object) {
+          var key = String(Object.keys(jsonProperty[x]))
+          var value = jsonProperty[x][key]
+          mockDataKeyValue = mockDataVariable[key]
+          mockDataVariable = mockDataKeyValue[value]
         } else {
-          if (jsonProperty[x].constructor == Object) {
-            var key = String(Object.keys(jsonProperty[x]))
-            var value = jsonProperty[x][key]
-            mockDataKeyValue = mockDataVariable[key]
-            mockDataVariable = mockDataKeyValue[value]
-          } else {
-            mockDataVariable = mockDataVariable[jsonProperty[x]]
-          }
-        }				
-      }
-	
-      fs.writeFile('./src/store/api/demo/mocks/' + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
-        if (err) { return console.log(err) }
-      })
-	  })
-  }
+          mockDataVariable = mockDataVariable[jsonProperty[x]]
+        }
+      }				
+    }
+
+    fs.writeFile(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
+      if (err) { return console.log(err) }
+    })
+  }) 
 }
 
 /** This function will check and verify if the image provided matches the image in the _imagesnapshot_ folder
