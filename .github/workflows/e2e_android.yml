@@ -113,13 +113,6 @@ jobs:
           avd-name: Pixel_4_XL_API_31
           script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
-      - name: Upload artifacts on failure
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
-          path: VAMobile/artifacts
-
       - name: Inform Slack of Failure
         if: failure()
         run: |
@@ -128,3 +121,10 @@ jobs:
             --data '{"thread_ts":"'${{env:SLACK_THREAD_TS}}'","text":"Failed! Please check workflow for results."}' \
             https://slack.com/api/chat.postMessage|
             jq -r '.ts')
+
+      - name: Upload artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
+          path: VAMobile/artifacts
