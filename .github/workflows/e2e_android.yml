@@ -113,7 +113,7 @@ jobs:
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
-            --data '{"thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results."}' \
+            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'", "thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
             https://slack.com/api/chat.postMessage%7C
             jq -r '.ts')
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
