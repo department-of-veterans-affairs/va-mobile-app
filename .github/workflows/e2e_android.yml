@@ -109,7 +109,6 @@ jobs:
           script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
       - name: Inform Slack of Failure
-        if: failure()
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
