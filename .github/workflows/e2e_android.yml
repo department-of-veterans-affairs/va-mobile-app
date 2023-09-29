@@ -6,7 +6,9 @@ name: '[e2e] Android Detox Test Run'
 
 on:
   workflow_dispatch:
-  # pull_request:
+  # Run on weekdays 4:00 AM UTC
+  schedule:
+    - cron: '0 4 * * 1,2,3,4,5'
   push:
 
 defaults:
@@ -28,9 +30,20 @@ env:
   FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
   # Filepath for firebase distribution key. Also used by fastlane
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
+  # Slack API token used by fastlane
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
+  start_slack_thread:
+    name: Start Slack thread
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-build-alerts
+      message: 'E2E Android build process starting. Please see :thread: for results. This process may take a while.'
+
   e2e-android:
+    needs: start_slack_thread
     runs-on: macos-latest-xl
     steps:
       - uses: actions/checkout@v3
@@ -82,20 +95,43 @@ jobs:
       - name: Set app environment variables
         run: yarn env:staging
 
+      - name: Set SLACK_THREAD_TS environment variable
+        if: inputs.slack_thread_ts
+        run: echo SLACK_THREAD_TS=${{needs.start_slack_thread.outputs.thread_ts}} >> $GITHUB_ENV
+
       - name: Bundle Android app
         run: yarn e2e:android-build
 
-      - name: Get device name
-        id: device
-        run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator.device.avdName)" >> $GITHUB_OUTPUT
+      - name: AVD cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-28
+
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 28
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
 
       - name: Run e2e tests for Android
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
           api-level: 28
+          cores: 2
           arch: x86_64
-          avd-name: ${{ steps.device.outputs.AVD_NAME }}
+          avd-name: avd-28
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
           script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
       - name: Upload artifacts on failure
@@ -104,3 +140,4 @@ jobs:
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
           path: VAMobile/artifacts
+
