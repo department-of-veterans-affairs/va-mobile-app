@@ -103,9 +103,9 @@ jobs:
         with:
           working-directory: VAMobile
           api-level: 28
+          force-avd-creation: false
+          disable-animations: true
           cores: 2
-          ram-size: 512M
-          heap-size: 2048M
           arch: x86_64
           avd-name: Pixel_4_XL_API_31
           script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
