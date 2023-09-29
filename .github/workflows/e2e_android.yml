@@ -119,3 +119,11 @@ jobs:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
           path: VAMobile/artifacts
 
+      - name: Inform Slack of Failure
+        if: failure()
+        run: |
+          SLACK_THREAD_TS=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"thread_ts":"'${{env:SLACK_THREAD_TS}}'","text":"Failed! Please check workflow for results."}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
