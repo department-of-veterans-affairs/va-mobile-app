@@ -276,7 +276,7 @@ export const prefetchAppointments =
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `prefetchAppointments: ${appointmenNonFatalErrorString}`)
         dispatch(dispatchFinishPrefetchAppointments({ upcoming: undefined, past: undefined, error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
+        dispatch(dispatchSetError({ errorType: CommonErrorTypesConstants.APP_LEVEL_ERROR_APPOINTMENTS, screenID }))
       }
     }
   }
