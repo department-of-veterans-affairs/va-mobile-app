@@ -13,15 +13,15 @@ import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/anal
 const saveEmail = (emailData: SaveEmailData) => {
   const endpoint = '/v0/user/emails'
 
-  if (!emailData.id) {
-    return post<EditResponseData>(endpoint, emailData as unknown as APIParams)
+  if (emailData.id) {
+    return put<EditResponseData>(endpoint, emailData as unknown as APIParams)
   }
 
-  return put<EditResponseData>(endpoint, emailData as unknown as APIParams)
+  return post<EditResponseData>(endpoint, emailData as unknown as APIParams)
 }
 
 /**
- * Returns a mutation for updating an email
+ * Returns a mutation for saving an email
  */
 export const useSaveEmail = () => {
   const queryClient = useQueryClient()

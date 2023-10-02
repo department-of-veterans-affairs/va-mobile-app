@@ -9,7 +9,7 @@ import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/anal
 import { validateAddress } from './validateAddress'
 
 /**
- * Creates or updates a user's address depending on whether an `id` field is present
+ * Creates or updates a user's address depending on whether the `id` field is present
  */
 export const saveAddress = async ({ addressData, revalidate }: SaveAddressParameters) => {
   const addressEndpoint = '/v0/user/addresses'
