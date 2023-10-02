@@ -1,4 +1,3 @@
-export * from './createPhoneNumber'
 export * from './deleteAddress'
 export * from './deleteEmail'
 export * from './deletePhoneNumber'
