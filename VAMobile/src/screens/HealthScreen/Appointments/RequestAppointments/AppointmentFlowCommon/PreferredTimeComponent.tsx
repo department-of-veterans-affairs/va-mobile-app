@@ -53,7 +53,7 @@ const PreferredTimeComponent: FC<PreferredTimeComponentProps> = ({ selectedTimes
         minHeight: 64,
         a11yValue: selected ? t('selected') : undefined,
         a11yRole: 'checkbox',
-        testId: `${item.label} ${t('option', { count: index + 1, totalOptions: timesList.length })}`,
+        testId: `${item.label} ${t('optionOutOfTotal', { count: index + 1, totalOptions: timesList.length })}`,
       }
 
       return checkBox

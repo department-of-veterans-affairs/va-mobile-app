@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { AlertBox, Box } from 'components'
 import { ClaimAttributesData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { getUserPhase, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import ClaimPhase from './ClaimPhase'
 import theme from 'styles/themes/standardTheme'
@@ -22,7 +23,7 @@ export type ClaimTimelineProps = {
 const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes, claimID }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const numberOfRequests = numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline)
+  const count = numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline)
   const itemsNeededFromVet = needItemsFromVet(attributes)
   // need to check and see if there is a warning box above and adjust margins accordingly
   const mt = itemsNeededFromVet ? 0 : theme.dimensions.condensedMarginBetween
@@ -31,7 +32,7 @@ const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes, claimID }) => {
     <Box>
       {itemsNeededFromVet && !attributes.waiverSubmitted && (
         <Box my={theme.dimensions.standardMarginBetween}>
-          <AlertBox border={'warning'} title={t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })} />
+          <AlertBox border={'warning'} titleA11yLabel={a11yLabelVA(t('claimPhase.youHaveFileRequest', { count }))} title={t('claimPhase.youHaveFileRequest', { count })} />
         </Box>
       )}
       <Box borderColor={'primary'} borderTopWidth={theme.dimensions.borderWidth} mt={mt} mb={theme.dimensions.condensedMarginBetween}>

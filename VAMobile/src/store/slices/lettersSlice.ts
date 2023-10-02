@@ -33,6 +33,7 @@ const lettersNonFatalErrorString = 'Letters Service Error'
 
 export type LettersState = {
   loading: boolean
+  loadingLetterBeneficiaryData: boolean
   error?: Error
   letters: LettersList
   letterBeneficiaryData?: LetterBeneficiaryData
@@ -43,6 +44,7 @@ export type LettersState = {
 
 export const initialLettersState: LettersState = {
   loading: false,
+  loadingLetterBeneficiaryData: false,
   letters: [] as LettersList,
   mostRecentServices: [],
   downloading: false,
@@ -165,7 +167,7 @@ const lettersSlice = createSlice({
     },
 
     dispatchStartGetLetterBeneficiaryData: (state) => {
-      state.loading = true
+      state.loadingLetterBeneficiaryData = true
     },
 
     dispatchFinishGetLetterBeneficiaryData: (state, action: PayloadAction<{ letterBeneficiaryData?: LetterBeneficiaryData; error?: Error }>) => {
@@ -187,7 +189,7 @@ const lettersSlice = createSlice({
       state.letterBeneficiaryData = letterBeneficiaryData
       state.mostRecentServices = mostRecentServices
       state.error = error
-      state.loading = false
+      state.loadingLetterBeneficiaryData = false
     },
 
     dispatchStartDownloadLetter: (state) => {

@@ -9,7 +9,8 @@ import { PaymentsStackParamList } from '../PaymentsStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackScreenProps } from '@react-navigation/stack'
-import { testIdProps } from 'utils/accessibility'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
@@ -89,7 +90,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
   return (
     <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')} testID="DirectDepositEditAccount">
       <Box mx={gutter}>
-        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
+        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} accessibilityLabel={a11yLabelVA(t('directDeposit.viewAndEditText'))}>
           {t('directDeposit.viewAndEditText')}
         </TextView>
       </Box>
@@ -101,7 +102,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
         </TextView>
       </Box>
       <Box mx={gutter} mb={contentMarginBottom}>
-        <ClickToCallPhoneNumber phone={t('8008271000.displayText')} />
+        <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} />
       </Box>
     </FeatureLandingTemplate>
   )

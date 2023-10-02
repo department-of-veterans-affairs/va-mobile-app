@@ -28,7 +28,8 @@ import { LettersState, downloadLetter, getLetterBeneficiaryData } from 'store/sl
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp } from 'utils/accessibility'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -41,7 +42,9 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError } = useSelector<RootState, LettersState>((state) => state.letters)
+  const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError, loadingLetterBeneficiaryData } = useSelector<RootState, LettersState>(
+    (state) => state.letters,
+  )
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(true)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(true)
@@ -214,7 +217,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     )
   }
 
-  if (downloading || !letterBeneficiaryData) {
+  if (loadingLetterBeneficiaryData || downloading || !letterBeneficiaryData) {
     return (
       <FeatureLandingTemplate backLabel={t('letters.overview.viewLetters')} backLabelOnPress={navigation.goBack} title={t('letters.details.title')}>
         <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
@@ -250,10 +253,10 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         <SimpleList
           items={getBenefitAndDisabilityToggleList()}
           title={t('letters.benefitService.benefitAndDisabilityInfo')}
-          titleA11yLabel={t('letters.benefitService.benefitAndDisabilityInfoA11yLabel')}
+          titleA11yLabel={a11yLabelVA(t('letters.benefitService.benefitAndDisabilityInfo'))}
         />
 
-        <TextView {...testIdProps(t('letters.benefitService.sendMessageIfIncorrectInfoA11yLabel'))} variant="MobileBody" m={theme.dimensions.standardMarginBetween}>
+        <TextView accessibilityLabel={a11yLabelVA(t('letters.benefitService.sendMessageIfIncorrectInfo'))} variant="MobileBody" m={theme.dimensions.standardMarginBetween}>
           {t('letters.benefitService.sendMessageIfIncorrectInfo')}
         </TextView>
 
@@ -264,7 +267,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
             numberOrUrlLink={LINK_URL_ASK_VA_GOV}
             linkUrlIconType={LinkUrlIconType.Arrow}
             {...a11yHintProp(t('letters.benefitService.sendMessageA11yHint'))}
-            a11yLabel={t('letters.benefitService.sendMessageA11yLabel')}
+            a11yLabel={a11yLabelVA(t('letters.benefitService.sendMessage'))}
           />
         </Box>
 

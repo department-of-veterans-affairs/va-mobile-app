@@ -542,7 +542,7 @@
           "quantity": null,
           "refillDate": null,
           "refillRemaining": null,
-          "refillStatus": "suspended",
+          "refillStatus": "active",
           "refillSubmitDate": "2022-08-04T13:59:40.000Z",
           "stationNumber": "999"
         },
@@ -637,7 +637,7 @@
         "id": "40142594",
         "type": "Prescription",
         "attributes": {
-          "refillStatus": "nonVerified",
+          "refillStatus": "expired",
           "refillSubmitDate": null,
           "refillDate": "2022-06-26T04:00:00.000Z",
           "refillRemaining": 1,

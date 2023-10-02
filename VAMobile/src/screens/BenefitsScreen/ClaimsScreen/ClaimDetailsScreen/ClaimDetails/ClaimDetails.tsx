@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { Box, TextArea, TextView, VABulletList } from 'components'
 import { ClaimData } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 
 type ClaimDetailsProps = {
@@ -41,10 +42,10 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
         <TextView variant="MobileBody" paragraphSpacing={true}>
           {formattedDateFiled}
         </TextView>
-        <TextView accessibilityLabel={t('claimDetails.yourRepresentative.a11yLabel')} variant="MobileBodyBold">
+        <TextView accessibilityLabel={a11yLabelVA(t('claimDetails.yourRepresentative'))} variant="MobileBodyBold">
           {t('claimDetails.yourRepresentative')}
         </TextView>
-        <TextView variant="MobileBody" accessibilityLabel={attributes?.vaRepresentative ? undefined : t('contactYourVA.a11yLabel')}>
+        <TextView variant="MobileBody" accessibilityLabel={attributes?.vaRepresentative ? undefined : a11yLabelVA(t('contactYourVA'))}>
           {attributes?.vaRepresentative || t('contactYourVA')}
         </TextView>
       </TextArea>

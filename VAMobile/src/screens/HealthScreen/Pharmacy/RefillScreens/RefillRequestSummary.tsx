@@ -8,6 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/types'
 import { PrescriptionState, requestRefills } from 'store/slices'
 import { RootState } from 'store'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -83,7 +84,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
           border: 'error',
           title: t('prescriptions.refillRequestSummary.mix', { count: requestFailed.length }),
           text: t('prescriptions.refillRequestSummary.tryAgain'),
-          textA11yLabel: t('prescriptions.refillRequestSummary.tryAgain.a11yLabel'),
+          textA11yLabel: a11yLabelVA(t('prescriptions.refillRequestSummary.tryAgain')),
         }
         break
     }
@@ -177,10 +178,10 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       <Box {...borderProps}>
         <TextView variant="HelperTextBold">{t('prescriptions.refillRequestSummary.whatsNext')}</TextView>
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.success.1.a11y')} paragraphSpacing={true}>
+          <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescriptions.refillRequestSummary.yourRefills.success.1'))} paragraphSpacing={true}>
             {t('prescriptions.refillRequestSummary.yourRefills.success.1')}
           </TextView>
-          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.success.2.a11y')}>
+          <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescriptions.refillRequestSummary.yourRefills.success.2'))}>
             {t('prescriptions.refillRequestSummary.yourRefills.success.2')}
           </TextView>
         </Box>

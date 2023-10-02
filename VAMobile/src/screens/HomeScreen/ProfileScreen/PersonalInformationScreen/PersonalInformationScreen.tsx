@@ -13,15 +13,15 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { UserDataProfile } from 'store/api/types'
 import { Waygate, featureEnabled, waygateEnabled } from 'utils/remoteConfig'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY, stringToTitleCase } from 'utils/formattingUtils'
 import { registerReviewEvent } from 'utils/inAppReviews'
-import { testIdProps } from 'utils/accessibility'
 import { useDemographics } from 'api/demographics/getDemographics'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { useSelector } from 'react-redux'
 
-const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
+export const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
   if (profile && profile.birthDate) {
     const formattedBirthDate = formatDateMMMMDDYYYY(profile.birthDate)
     return t('dynamicField', { field: formattedBirthDate })
@@ -139,7 +139,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const screenContent = (): ReactNode => {
     return (
       <Box>
-        <TextView {...testIdProps(t('contactInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter}>
+        <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
           {t('contactInformation.editNote')}
         </TextView>
         <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>
