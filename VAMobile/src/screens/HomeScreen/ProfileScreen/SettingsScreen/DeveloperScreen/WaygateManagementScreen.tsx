@@ -1,25 +1,12 @@
-import {
-  AccordionCollapsible,
-  Box,
-  ButtonDecoratorType,
-  ButtonTypesConstants,
-  FeatureLandingTemplate,
-  SimpleList,
-  SimpleListItemObj,
-  TextArea,
-  TextView,
-  VAButton,
-} from 'components'
-import { logout } from 'store/slices/authSlice'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import React, { FC, ReactFragment, ReactNode, useState } from 'react'
-import remoteConfig from '@react-native-firebase/remote-config'
+import { AccordionCollapsible, Box, FeatureLandingTemplate, TextView } from 'components'
+import { useTheme } from 'utils/hooks'
+import React, { FC, ReactNode, useState } from 'react'
 
-import { FeatureToggleType, featureEnabled, getWaygateToggles, setDebugConfig } from 'utils/remoteConfig'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps } from '@react-navigation/stack'
 import { forEach } from 'underscore'
+import { getWaygateToggles } from 'utils/remoteConfig'
 import { useTranslation } from 'react-i18next'
 
 type WaygateManagementScreenProps = StackScreenProps<HomeStackParamList, 'WaygateManagement'>
@@ -27,9 +14,7 @@ type WaygateManagementScreenProps = StackScreenProps<HomeStackParamList, 'Waygat
 const WaygateManagementScreen: FC<WaygateManagementScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
-  const navigateTo = useRouteNavigation()
-  const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
+  const { gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const currentWaygateConfig = getWaygateToggles()
   const [toggles, setToggles] = useState({ ...currentWaygateConfig })
 
