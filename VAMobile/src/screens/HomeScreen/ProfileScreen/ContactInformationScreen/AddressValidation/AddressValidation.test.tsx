@@ -78,7 +78,7 @@ describe('AddressValidation', () => {
   })
 
   describe('when the address validation scenario type is SHOW_SUGGESTIONS_OVERRIDE', () => {
-    it('displays the alert texts', async () => {
+    it('displays the alert texts', () => {
       const collapsibleAlert = screen.getByText('Verify your address')
 
       expect(collapsibleAlert).toBeTruthy()
@@ -88,7 +88,7 @@ describe('AddressValidation', () => {
   })
 
   describe('when use this address button is pressed', () => {
-    it('calls updateAddress', async () => {
+    it('calls updateAddress', () => {
       fireEvent.press(screen.getByTestId('youEnteredTestID'))
       fireEvent.press((screen.getByRole('button', { name: 'Use this address' })))
       expect(saveAddressSpy).toBeCalled()
