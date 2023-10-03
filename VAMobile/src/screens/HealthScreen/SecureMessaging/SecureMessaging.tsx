@@ -5,9 +5,9 @@ import React, { FC, useEffect } from 'react'
 import _ from 'underscore'
 
 import { Box, ErrorComponent, FeatureLandingTemplate } from 'components'
-import { DowntimeFeatureTypeConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -84,7 +84,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
 
   const onTabUpdate = (index: number): void => {
     if (secureMessagingTab !== index) {
-      if (index === SecureMessagingTabTypesConstants.FOLDERS) {
+      if (index === SegmentedControlIndexes.FOLDERS) {
         _.forEach(folders, (folder) => {
           if (folder.attributes.name === FolderNameTypeConstants.drafts) {
             logAnalyticsEvent(Events.vama_sm_folders(folder.attributes.count))
@@ -108,8 +108,8 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
         </Box>
         <CernerAlertSM />
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {secureMessagingTab === SecureMessagingTabTypesConstants.INBOX && <Inbox />}
-          {secureMessagingTab === SecureMessagingTabTypesConstants.FOLDERS && <Folders />}
+          {secureMessagingTab === SegmentedControlIndexes.INBOX && <Inbox />}
+          {secureMessagingTab === SegmentedControlIndexes.FOLDERS && <Folders />}
         </Box>
       </Box>
     </FeatureLandingTemplate>
