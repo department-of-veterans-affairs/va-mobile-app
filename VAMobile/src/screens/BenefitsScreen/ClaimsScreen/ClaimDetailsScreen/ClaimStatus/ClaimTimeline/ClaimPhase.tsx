@@ -138,7 +138,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   if (phase === current) {
     status = t('claimPhase.heading.a11y.current')
   } else if (phase < current) {
-    status = t('claimPhase.heading.a11y.completed')
+    status = t('completed')
   }
 
   let testID = `${t('claimPhase.heading.a11y.step', { step: phase })} ${status} ${heading}`

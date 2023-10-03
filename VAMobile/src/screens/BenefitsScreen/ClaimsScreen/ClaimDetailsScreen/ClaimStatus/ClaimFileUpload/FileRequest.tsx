@@ -38,12 +38,13 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
       navigateTo('FileRequestDetails', { claimID, request })()
     }
 
-    return map(requests, (request) => {
+    return map(requests, (request, index) => {
       const { displayName } = request
       const hasUploaded = hasUploadedOrReceived(request)
+      const statusLabel = hasUploaded ? t('completed') : '.'
       const item: SimpleListItemObj = {
         text: displayName || '',
-        testId: displayName,
+        testId: `${t('fileRequest.buttonA11y', { requestNumber: index + 1, totalCount: requests.length })} ${statusLabel} ${displayName}`,
         onPress: () => {
           onDetailsPress(request)
         },
