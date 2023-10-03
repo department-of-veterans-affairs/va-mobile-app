@@ -1,15 +1,11 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { Switch as RNSwitch } from 'react-native'
+import { screen } from '@testing-library/react-native'
 
-import { ErrorComponent } from 'components'
-import { context, mockNavProps, render, RenderAPI } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { PushPreference } from 'store/api'
 import NotificationsSettingsScreen from './NotificationsSettingsScreen'
-import { waitFor } from '@testing-library/react-native'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 
@@ -39,9 +35,6 @@ jest.mock('store/slices/', () => {
 })
 
 context('NotificationsSettingsScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
   const apptPrefOn: PushPreference = {
     preferenceId: 'appointment_reminders',
     preferenceName: 'Appointment Reminders',
@@ -54,11 +47,11 @@ context('NotificationsSettingsScreen', () => {
     value: false,
   }
 
-  const initializeTestInstance = (notificationsEnabled: boolean, systemNotificationsOn: boolean, preferences: PushPreference[], errorsState: ErrorsState = initialErrorsState) => {
+  const renderWithProps = (notificationsEnabled: boolean, systemNotificationsOn: boolean, preferences: PushPreference[], errorsState: ErrorsState = initialErrorsState) => {
     const props = mockNavProps()
     mockPushEnabled = notificationsEnabled
 
-    component = render(<NotificationsSettingsScreen {...props} />, {
+    render(<NotificationsSettingsScreen {...props} />, {
       preloadedState: {
         ...InitialState,
         notifications: {
@@ -69,34 +62,30 @@ context('NotificationsSettingsScreen', () => {
         errors: errorsState,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
-  beforeEach(async () => {
-    initializeTestInstance(false, true, [apptPrefOn])
-  })
-
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
 
   describe('appointment reminders switch', () => {
-    it('value should be true when pref is set to true', async () => {
-      await waitFor(() => {
-        const rnSwitch = testInstance.findAllByType(RNSwitch)[0]
-        expect(rnSwitch.props.value).toEqual(true)
-      })
+    it('value should be true when pref is set to true', () => {
+      renderWithProps(false, true, [apptPrefOn])
+      expect(screen.getByRole('switch', { name: 'Appointment Reminders'}).props.accessibilityState.checked).toEqual(true)
     })
 
-    it('value should be false when pref is set to true', async () => {
-      initializeTestInstance(false, true, [apptPrefOff])
-      const rnSwitch = testInstance.findAllByType(RNSwitch)[0]
-      expect(rnSwitch.props.value).toEqual(false)
+    it('value should be false when pref is set to true', () => {
+      renderWithProps(false, true, [apptPrefOff])
+      expect(screen.getByRole('switch', { name: 'Appointment Reminders'}).props.accessibilityState.checked).toEqual(false)
+    })
+  })
+
+  describe('when system notifications are disabled', () => {
+    it('hides the notification switches', () => {
+      renderWithProps(false, false, [apptPrefOff])
+      expect(screen.queryByRole('switch', { name: 'Appointment Reminders'})).toBeFalsy()
+      expect(screen.getByText("Once you have turned on notifications in your phone's settings, the options to select what type of alerts you would like to receive will appear here.")).toBeTruthy()
     })
   })
 
   describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async () => {
+    it('should render error component when the stores screenID matches the components screenID', () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -105,11 +94,11 @@ context('NotificationsSettingsScreen', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance(false, true, [apptPrefOn], errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+      renderWithProps(false, true, [apptPrefOn], errorState)
+      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
     })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
+    it('should not render error component when the stores screenID does not match the components screenID', () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -118,8 +107,8 @@ context('NotificationsSettingsScreen', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance(false, true, [apptPrefOn], errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      renderWithProps(false, true, [apptPrefOn], errorState)
+      expect(screen.queryByText("The app can't be loaded.")).toBeFalsy()
     })
   })
 })
