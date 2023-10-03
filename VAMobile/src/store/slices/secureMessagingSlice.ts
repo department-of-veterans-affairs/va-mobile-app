@@ -27,7 +27,6 @@ import {
   SecureMessagingSignatureData,
   SecureMessagingSignatureDataAttributes,
   SecureMessagingSystemFolderIdConstants,
-  SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
   SecureMessagingThreads,
 } from 'store/api/types'
@@ -59,7 +58,7 @@ export type SecureMessagingState = {
   hasLoadedRecipients: boolean
   hasLoadedInbox: boolean
   fileDownloadError?: Error
-  secureMessagingTab?: SecureMessagingTabTypes
+  secureMessagingTab: number
   error?: APIError
   inbox: SecureMessagingFolderData
   inboxMessages: SecureMessagingMessageList
@@ -109,6 +108,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   messagesById: {} as SecureMessagingMessageMap,
   threads: [] as SecureMessagingThreads,
   recipients: [] as SecureMessagingRecipientDataList,
+  secureMessagingTab: 0,
 
   paginationMetaByFolderId: {
     [SecureMessagingSystemFolderIdConstants.INBOX]: {} as SecureMessagingPaginationMeta,
@@ -332,9 +332,9 @@ export const getMessage =
  * Redux action to update the messaging tab
  */
 export const updateSecureMessagingTab =
-  (secureMessagingTab: SecureMessagingTabTypes): AppThunk =>
+  (secureMessagingTabIndex: number): AppThunk =>
   async (dispatch) => {
-    dispatch(dispatchUpdateSecureMessagingTab(secureMessagingTab))
+    dispatch(dispatchUpdateSecureMessagingTab(secureMessagingTabIndex))
   }
 
 export const downloadFileAttachment =
@@ -986,7 +986,7 @@ const secureMessagingSlice = createSlice({
       state.deleteDraftFailed = false
     },
 
-    dispatchUpdateSecureMessagingTab: (state, action: PayloadAction<SecureMessagingTabTypes>) => {
+    dispatchUpdateSecureMessagingTab: (state, action: PayloadAction<number>) => {
       state.secureMessagingTab = action.payload
     },
   },

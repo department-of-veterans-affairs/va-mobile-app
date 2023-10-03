@@ -1,10 +1,11 @@
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 import _ from 'underscore'
 
-import { Box, ErrorComponent, FeatureLandingTemplate, SegmentedControl } from 'components'
-import { DowntimeFeatureTypeConstants, SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import { DowntimeFeatureTypeConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from '../HealthStackScreens'
@@ -34,7 +35,6 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   const inboxUnreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { folders, secureMessagingTab, termsAndConditionError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
@@ -53,10 +53,6 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
       // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag
       // prefetch inbox message list
       dispatch(fetchInboxMessages(1, ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
-      // sets the inbox tab on initial load
-      if (!secureMessagingTab) {
-        dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
-      }
       // fetch folders list
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
     }
@@ -86,10 +82,9 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
     )
   }
 
-  const onTabUpdate = (selection: string): void => {
-    const tab = selection as SecureMessagingTabTypes
-    if (secureMessagingTab !== tab) {
-      if (tab === SecureMessagingTabTypesConstants.FOLDERS) {
+  const onTabUpdate = (index: number): void => {
+    if (secureMessagingTab !== index) {
+      if (index === SecureMessagingTabTypesConstants.FOLDERS) {
         _.forEach(folders, (folder) => {
           if (folder.attributes.name === FolderNameTypeConstants.drafts) {
             logAnalyticsEvent(Events.vama_sm_folders(folder.attributes.count))
@@ -100,7 +95,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
         logAnalyticsEvent(Events.vama_snackbar_null('SecureMessaging tab change'))
       }
       snackBar?.hideAll()
-      dispatch(updateSecureMessagingTab(tab))
+      dispatch(updateSecureMessagingTab(index))
     }
   }
 
@@ -109,13 +104,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
       <StartNewMessageButton />
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-          <SegmentedControl
-            values={controlValues}
-            titles={controlLabels}
-            onChange={onTabUpdate}
-            selected={controlValues.indexOf(secureMessagingTab || SecureMessagingTabTypesConstants.INBOX)}
-            accessibilityHints={a11yHints}
-          />
+          <SegmentedControl labels={controlLabels} onChange={onTabUpdate} selected={secureMessagingTab} a11yHints={a11yHints} />
         </Box>
         <CernerAlertSM />
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
