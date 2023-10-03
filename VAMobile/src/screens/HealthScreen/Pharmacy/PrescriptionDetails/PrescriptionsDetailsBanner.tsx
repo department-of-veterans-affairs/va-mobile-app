@@ -4,7 +4,8 @@ import React, { FC, useEffect } from 'react'
 import { Box, ClickToCallPhoneNumber, CollapsibleAlert, TextView, VABulletList, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { displayedTextPhoneNumber, getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
@@ -23,12 +24,12 @@ const PrescriptionsDetailsBanner: FC = () => {
       {
         text: t('prescription.details.banner.bullet1'),
         boldedText: ' ' + t('or'),
-        a11yLabel: t('prescription.details.banner.bullet1.a11yLabel') + ' ' + t('or'),
+        a11yLabel: a11yLabelVA(t('prescription.details.banner.bullet1')) + ' ' + t('or'),
       },
       {
         text: t('prescription.details.banner.bullet2'),
         boldedText: ' ' + t('or'),
-        a11yLabel: t('prescription.details.banner.bullet2.a11yLabel') + ' ' + t('or'),
+        a11yLabel: a11yLabelVA(t('prescription.details.banner.bullet2')) + ' ' + t('or'),
       },
       {
         text: t('prescription.details.banner.bullet3'),
@@ -40,7 +41,7 @@ const PrescriptionsDetailsBanner: FC = () => {
 
     return (
       <>
-        <TextView variant="MobileBody" mb={standardMarginBetween}>
+        <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescription.details.banner.body1'))} mb={standardMarginBetween}>
           {t('prescription.details.banner.body1')}
         </TextView>
         <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -51,7 +52,7 @@ const PrescriptionsDetailsBanner: FC = () => {
         </Box>
         <ClickToCallPhoneNumber
           phone={t('5418307563')}
-          displayedText={`${t('automatedPhoneSystem')} ${t('5418307563.displayText')}`}
+          displayedText={`${t('automatedPhoneSystem')} ${displayedTextPhoneNumber(t('5418307563'))}`}
           a11yLabel={`${t('automatedPhoneSystem')} ${getNumberAccessibilityLabelFromString(t('5418307563'))}`}
         />
       </>

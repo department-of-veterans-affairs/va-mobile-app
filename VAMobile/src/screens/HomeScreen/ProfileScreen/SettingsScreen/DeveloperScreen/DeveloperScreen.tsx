@@ -8,7 +8,6 @@ import { Box, ButtonTypesConstants, FeatureLandingTemplate, TextArea, TextView, 
 
 import { AnalyticsState } from 'store/slices'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
-import { AuthorizedServicesState } from 'store/slices/authorizedServicesSlice'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import { FeatureConstants, getLocalVersion, getStoreVersion, getVersionSkipped, overrideLocalVersion, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -18,6 +17,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { resetReviewActionCount } from 'utils/inAppReviews'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 import getEnv, { EnvVars } from 'utils/env'
 
@@ -26,7 +26,7 @@ type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, '
 const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
-  const authorizedServices = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { data: userAuthorizedServices } = useAuthorizedServices()
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -173,23 +173,21 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
         </TextArea>
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
-        {Object.keys(authorizedServices).map((key: string) => {
-          if (key === 'error') {
-            return null
-          }
-          const val = (authorizedServices[key as keyof AuthorizedServicesState] || 'false').toString()
-          return (
-            <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
-              <TextArea
-                onPress={(): void => {
-                  onCopy(val)
-                }}>
-                <TextView variant="MobileBodyBold">{key}</TextView>
-                <TextView>{val}</TextView>
-              </TextArea>
-            </Box>
-          )
-        })}
+        {userAuthorizedServices
+          ? Object.entries(userAuthorizedServices).map((key) => {
+              return (
+                <Box key={key[0]} mt={theme.dimensions.condensedMarginBetween}>
+                  <TextArea
+                    onPress={(): void => {
+                      onCopy(key[1].toString())
+                    }}>
+                    <TextView variant="MobileBodyBold">{key}</TextView>
+                    <TextView>{key[1].toString()}</TextView>
+                  </TextArea>
+                </Box>
+              )
+            })
+          : undefined}
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>

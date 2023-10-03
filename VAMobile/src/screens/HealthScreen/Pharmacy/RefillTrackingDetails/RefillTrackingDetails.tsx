@@ -11,7 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, getTrackingInfo } from 'store/slices'
 import { PrescriptionTrackingInfoAttributeData, PrescriptionTrackingInfoOtherItem } from 'store/api'
 import { RootState } from 'store'
-import { a11yLabelID } from 'utils/a11yLabel'
+import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -212,7 +212,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
             {t('prescriptions.refillTracking.upTo15Days')}
           </TextView>
         </Box>
-        <TextView variant="HelperText" accessibilityLabel={t('prescriptions.refillTracking.deliveryChanges.a11yLabel')}>
+        <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('prescriptions.refillTracking.deliveryChanges'))}>
           {t('prescriptions.refillTracking.deliveryChanges')}
         </TextView>
         {renderTrackingCards()}

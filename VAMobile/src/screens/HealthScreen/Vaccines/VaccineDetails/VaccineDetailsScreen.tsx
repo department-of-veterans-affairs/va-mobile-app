@@ -10,6 +10,7 @@ import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { VaccineState, getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/slices/vaccineSlice'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
@@ -47,7 +48,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
 
   if (detailsLoading) {
     return (
-      <FeatureLandingTemplate backLabel={t('vaVaccines')} backLabelA11y={t('vaVaccines.a11y')} backLabelOnPress={navigation.goBack} title={t('details')}>
+      <FeatureLandingTemplate backLabel={t('vaVaccines')} backLabelA11y={a11yLabelVA(t('vaVaccines'))} backLabelOnPress={navigation.goBack} title={t('details')}>
         <LoadingComponent text={t('vaccines.details.loading')} />
       </FeatureLandingTemplate>
     )
@@ -67,7 +68,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
   const isCovidVaccine = vaccine.attributes?.groupName?.toUpperCase()?.includes(COVID19)
 
   return (
-    <FeatureLandingTemplate backLabel={t('vaVaccines')} backLabelA11y={t('vaVaccines.a11y')} backLabelOnPress={navigation.goBack} title={t('details')}>
+    <FeatureLandingTemplate backLabel={t('vaVaccines')} backLabelA11y={a11yLabelVA(t('vaVaccines'))} backLabelOnPress={navigation.goBack} title={t('details')}>
       <Box mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -134,7 +135,9 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
         </TextArea>
         {isPartialData && (
           <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-            <TextView variant="HelperText">{t('vaccines.details.weBaseThis')}</TextView>
+            <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('vaccines.details.weBaseThis'))}>
+              {t('vaccines.details.weBaseThis')}
+            </TextView>
           </Box>
         )}
       </Box>

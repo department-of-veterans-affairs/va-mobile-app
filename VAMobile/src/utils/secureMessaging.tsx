@@ -407,7 +407,7 @@ export const saveDraftWithAttachmentAlert = (
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('secureMessaging.keepEditing'),
+          text: t('keepEditing'),
         },
         {
           text: t('secureMessaging.saveDraft'),

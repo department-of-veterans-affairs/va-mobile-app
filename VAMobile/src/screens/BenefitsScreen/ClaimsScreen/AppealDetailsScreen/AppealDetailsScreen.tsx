@@ -8,12 +8,10 @@ import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealType
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppealIssues from './AppealIssues/AppealIssues'
@@ -48,13 +46,6 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   useEffect(() => {
     dispatch(getAppeal(appealID, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
   }, [dispatch, appealID])
-
-  const onTabChange = (tab: number) => {
-    setSelectedTab(tab)
-    if (selectedTab !== tab) {
-      logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
-    }
-  }
 
   const getFilteredIssues = (): Array<string> => {
     // Only show issues with a lastAction of null, this signifies the issue is active
@@ -120,7 +111,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
           <TextView variant="MobileBody">{t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}</TextView>
           <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={segmentedControlA11yHints} />
+            <SegmentedControl labels={controlLabels} onChange={setSelectedTab} selected={selectedTab} a11yHints={segmentedControlA11yHints} />
           </Box>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>

@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
 
-import { AuthorizedServicesState } from 'store/slices'
 import { BackButton, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -20,6 +19,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
@@ -38,7 +38,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const [selectedTab, setSelectedTab] = useState(0)
 
   const { claimID, claimType, focusOnSnackbar } = route.params
-  const { decisionLetters: decisionLettersAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { data: userAuthorizedServices } = useAuthorizedServices()
   const { claim, loadingClaim, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
@@ -83,7 +83,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
     }, [claimID, claim, attributes]),
   )
 
-  const backLabel = featureEnabled('decisionLettersWaygate') && decisionLettersAuthorized ? t('claimsHistory.title') : t('claims.title')
+  const backLabel = featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters ? t('claimsHistory.title') : t('claims.title')
 
   if (useError(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID)) {
     return (
@@ -96,7 +96,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   if (loadingClaim) {
     return (
       <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
-        <LoadingComponent text={t('cliamInformation.loading')} />
+        <LoadingComponent text={t('claimInformation.loading')} />
       </FeatureLandingTemplate>
     )
   }
@@ -105,7 +105,6 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
     if (tab !== selectedTab && claim) {
       const analyticsEvent = tab === controlLabels.indexOf(t('claimDetails.status')) ? Events.vama_claim_status_tab : Events.vama_claim_details_tab
       logAnalyticsEvent(analyticsEvent(claim.id, claim.attributes.claimType, claim.attributes.phase, claim.attributes.dateFiled))
-      logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
     }
     setSelectedTab(tab)
   }

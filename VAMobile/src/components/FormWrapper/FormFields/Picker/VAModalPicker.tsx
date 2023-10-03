@@ -97,6 +97,9 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     if (!disabled) {
       setIsFocused(true)
       setModalVisible(true)
+      if (!snackBar) {
+        logAnalyticsEvent(Events.vama_snackbar_null('VAModalPicker'))
+      }
       snackBar?.hideAll()
     }
   }, [disabled, labelKey, testID, t])

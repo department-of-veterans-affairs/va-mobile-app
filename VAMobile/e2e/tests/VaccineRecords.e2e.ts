@@ -38,7 +38,7 @@ describe('Vaccine Records Screen', () => {
     await expect(element(by.text('Reaction'))).toExist()
     await expect(element(by.text('None noted')).atIndex(1)).toExist()
     await expect(element(by.id('Notes Dose #2 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.'))).toExist()
-    await expect(element(by.text('We base this information on your current V\ufeffA health records. If you have any questions, contact your health care team.'))).toExist()
+    await expect(element(by.label('We base this information on your current  V-A  health records. If you have any questions, contact your health care team.'))).toExist()
   })
 
   it('should tap on VA vaccines and navigate back to the vaccines list', async () => {

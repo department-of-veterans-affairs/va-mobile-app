@@ -5,6 +5,7 @@ import { AlertBox, Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { StackScreenProps } from '@react-navigation/stack'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 type HowToUpdateDirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'HowToUpdateDirectDeposit'>
@@ -37,7 +38,7 @@ const HowToUpdateDirectDepositScreen: FC<HowToUpdateDirectDepositScreenProps> = 
             <TextView mt={standardMarginBetween} variant="MobileBody" paragraphSpacing={true}>
               {t('howToUpdateDirectDeposit.card.callUs')}
             </TextView>
-            <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={t('8008271000.displayText')} />
+            <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={displayedTextPhoneNumber(t('8008271000'))} />
           </TextArea>
         </Box>
       </FeatureLandingTemplate>

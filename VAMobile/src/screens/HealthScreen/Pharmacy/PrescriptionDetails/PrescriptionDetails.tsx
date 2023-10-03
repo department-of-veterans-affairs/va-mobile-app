@@ -11,6 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
 import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { RootState } from 'store'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { useAppDispatch, useDestructiveActionSheet, useDowntime, useExternalLink, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
@@ -77,7 +78,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const getGoToMyVAHealthButton = () => {
     const buttonProps: VAButtonProps = {
       label: t('goToMyVAHealth'),
-      testID: t('goToMyVAHealth.a11yLabel'),
+      testID: a11yLabelVA(t('goToMyVAHealth')),
       buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: redirectLink,
       iconProps: {
@@ -148,14 +149,14 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
 
   if (loadingHistory) {
     return (
-      <ChildTemplate backLabel={t('prescriptions')} backLabelOnPress={navigation.goBack} title={t('prescriptionDetails')}>
+      <ChildTemplate backLabel={t('prescription.title')} backLabelOnPress={navigation.goBack} title={t('prescriptionDetails')}>
         <LoadingComponent text={t('prescription.details.loading')} />
       </ChildTemplate>
     )
   }
 
   return (
-    <ChildTemplate backLabel={t('prescriptions')} backLabelOnPress={navigation.goBack} title={t('prescriptionDetails')}>
+    <ChildTemplate backLabel={t('prescription.title')} backLabelOnPress={navigation.goBack} title={t('prescriptionDetails')}>
       {getBanner()}
       {getRefillVAHealthButton()}
       <Box mb={contentMarginBottom}>
@@ -187,7 +188,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
           <DetailsTextSections
             leftSectionTitle={t('prescription.details.vaFacilityHeader')}
             leftSectionValue={facilityName || noneNoted}
-            leftSectionTitleLabel={t('prescription.details.vaFacilityHeaderLabel')}>
+            leftSectionTitleLabel={a11yLabelVA(t('prescription.details.vaFacilityHeader'))}>
             <ClickToCallPhoneNumber phone={facilityPhoneNumber} />
           </DetailsTextSections>
         </TextArea>
