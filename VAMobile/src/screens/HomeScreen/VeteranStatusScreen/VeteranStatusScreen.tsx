@@ -140,23 +140,11 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
             <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
               {t('veteranStatus.fixAnError.2')}
             </TextView>
-            <ClickToCallPhoneNumber
-              phone={t('8008271000')}
-              displayedText={displayedTextPhoneNumber(t('8008271000'))}
-              colorOverride={'veteranStatus'}
-              clickToCallTestID="veteranStatusDOBDisabilityErrorPhoneTestID"
-              ttyTestID="veteranStatusDOBDisabilityErrorTTYTestID"
-            />
+            <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={displayedTextPhoneNumber(t('8008271000'))} colorOverride={'veteranStatus'} />
             <TextView variant="MobileBody" color="primaryContrast" my={theme.dimensions.condensedMarginBetween}>
               {t('veteranStatus.fixAnError.3')}
             </TextView>
-            <ClickToCallPhoneNumber
-              phone={t('8005389552')}
-              displayedText={displayedTextPhoneNumber(t('8005389552'))}
-              colorOverride={'veteranStatus'}
-              ttyBypass={true}
-              clickToCallTestID="veteranStatusPeriodServiceErrorPhoneTestID"
-            />
+            <ClickToCallPhoneNumber phone={t('8005389552')} displayedText={displayedTextPhoneNumber(t('8005389552'))} colorOverride={'veteranStatus'} ttyBypass={true} />
           </Box>
         </Box>
       </Box>

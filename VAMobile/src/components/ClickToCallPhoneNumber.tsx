@@ -20,14 +20,10 @@ type ClickToCallPhoneNumberProps = {
   ttyBypass?: boolean
   /** color bypass */
   colorOverride?: string
-  /** Optional TestID */
-  clickToCallTestID?: string
-  /** Optional TestID */
-  ttyTestID?: string
 }
 
 /**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
-const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center, a11yLabel, ttyBypass, colorOverride, clickToCallTestID, ttyTestID }) => {
+const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center, a11yLabel, ttyBypass, colorOverride }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   if (!phone) {
@@ -42,7 +38,6 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
     numberOrUrlLink: getNumbersFromString(phoneNumber),
     a11yLabel: a11yLabel || getNumberAccessibilityLabelFromString(phoneNumber),
     colorOverride: colorOverride,
-    testID: clickToCallTestID,
   }
 
   const ttyProps: LinkButtonProps = {
@@ -51,13 +46,12 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
     numberOrUrlLink: t('contactVA.tty.number'),
     a11yLabel: t('contactVA.tty.number.a11yLabel'),
     colorOverride: colorOverride,
-    testID: ttyTestID,
   }
 
   return (
     <Box alignItems={center ? 'center' : undefined}>
-      <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
-      {!ttyBypass && <ClickForActionLink {...ttyProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />}
+      <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} testID="CallVATestID" />
+      {!ttyBypass && <ClickForActionLink {...ttyProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} testID="CallTTYTestID" />}
     </Box>
   )
 }

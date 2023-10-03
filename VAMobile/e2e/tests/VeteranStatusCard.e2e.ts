@@ -14,9 +14,9 @@ export const VeteranStatusCardConstants = {
   VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT: 'September 01, 1998 – January 01, 2000',
   VETERAN_STATUS_DATE_OF_BIRTH_TEXT: 'January 01, 1950',
   VETERAN_STATUS_DISCLAIMER_TEXT: 'You can use this Veteran status to prove you served in the United States Uniformed Services. This status doesn\'t entitle you to any VA benefits.',
-  VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_ID: 'veteranStatusDOBDisabilityErrorPhoneTestID',
-  VETERAN_STATUS_DOB_DISABILITY_ERROR_TTY_ID: 'veteranStatusDOBDisabilityErrorTTYTestID',
-  VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_ID: 'veteranStatusPeriodServiceErrorPhoneTestID',
+  VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_TEXT: '800-827-1000',
+  VETERAN_STATUS_DOB_DISABILITY_ERROR_TTY_TEXT: 'TTY: 711',
+  VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT: '800-538-9552',
 }
 
 beforeAll(async () => {
@@ -33,29 +33,33 @@ export async function validateVeteranStatusDesign() {
   await expect(element(by.id('veteranStatusMilitaryServiceTestID')).atIndex(0)).toExist()
   await expect(element(by.id('veteranStatusDOBTestID'))).toExist()
   await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DISCLAIMER_TEXT))).toExist()
-  await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_ID))).toExist()
-  await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_TTY_ID))).toExist()
-  await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_ID))).toExist()
+  await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_TEXT))).toExist()
+  await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_TTY_TEXT))).toExist()
+  await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT))).toExist()
   var veteranStatusCardBranchIcon = await element(by.id('VeteranStatusUSCoastGuardTestID')).takeScreenshot('veteranStatusCardBranchIcon')
 	checkImages(veteranStatusCardBranchIcon)
 }
 
 export async function tapPhoneAndTTYLinks() {
   it(':android: should tap phone and TTY links', async () => {
-    await waitFor(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_ID))).toBeVisible().whileElement(by.id('veteranStatusTestID')).scroll(200, 'down')
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_ID)).tap()
+    await waitFor(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_TEXT))).toBeVisible().whileElement(by.id('veteranStatusTestID')).scroll(200, 'down')
+    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_TEXT)).tap()
     await setTimeout(1000)
     await device.takeScreenshot('VeteranStatusDOBorDisabilityErrorPhoneNumber')
     await device.launchApp({ newInstance: false })
 
-    await waitFor(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_TTY_ID))).toBeVisible().whileElement(by.id('veteranStatusTestID')).scroll(200, 'down')
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_TTY_ID)).tap()
+    await waitFor(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_TTY_TEXT))).toBeVisible().whileElement(by.id('veteranStatusTestID')).scroll(200, 'down')
+    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_TTY_TEXT)).tap()
+    try {
+      await element(by.text('Dismiss')).tap()
+      await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT)).tap()
+    } catch (e) {} 
     await setTimeout(1000)
     await device.takeScreenshot('VeteranStatusDOBorDisabilityErrorTTY')
     await device.launchApp({ newInstance: false })
 
-    await waitFor(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_ID))).toBeVisible().whileElement(by.id('veteranStatusTestID')).scroll(200, 'down')
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_ID)).tap()
+    await waitFor(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT))).toBeVisible().whileElement(by.id('veteranStatusTestID')).scroll(200, 'down')
+    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT)).tap()
     await setTimeout(1000)
     await device.takeScreenshot('VeteranStatusPeriodOfServiceErrorPhoneNumber')
     await device.launchApp({ newInstance: false })
