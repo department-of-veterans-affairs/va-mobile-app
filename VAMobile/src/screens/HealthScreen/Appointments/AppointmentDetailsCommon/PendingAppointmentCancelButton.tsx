@@ -72,10 +72,10 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
       <Box mt={theme.dimensions.standardMarginBetween}>
         <VAButton
           onPress={onCancel}
-          label={t('appointments.pending.cancelRequest')}
+          label={t('cancelRequest')}
           a11yHint={t('appointments.pending.cancelRequest.a11yHint')}
           buttonType={ButtonTypesConstants.buttonDestructive}
-          {...testIdProps(t('appointments.pending.cancelRequest'))}
+          {...testIdProps(t('cancelRequest'))}
         />
       </Box>
     )

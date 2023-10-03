@@ -6,6 +6,7 @@ import { Box, LargePanel, TextView } from 'components'
 import { HiddenTitle } from 'styles/common'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
 type HowWillYouScreenProps = StackScreenProps<HomeStackParamList, 'HowWillYou'>
@@ -33,7 +34,7 @@ const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
           {t('howWillYou.useInfo.1')}
         </TextView>
-        <TextView variant="MobileBody" accessibilityLabel={t('howWillYou.useInfo.2.a11yLabel')}>
+        <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('howWillYou.useInfo.2'))}>
           {t('howWillYou.useInfo.2')}
         </TextView>
       </Box>

@@ -8,6 +8,7 @@ import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { oneOfFeaturesInDowntime } from 'utils/hooks'
 
 export type ErrorComponentProps = {
@@ -45,15 +46,13 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
             onTryAgain={tryAgain}
             errorText={t('secureMessaging.sendError.ifTheAppStill')}
             errorA11y={t('secureMessaging.sendError.ifTheAppStill.a11y')}
-            callPhone={t('8773270022.displayText')}
+            callPhone={displayedTextPhoneNumber(t('8773270022'))}
           />
         )
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING:
-        return (
-          <CallHelpCenter titleText={t('disabilityRating.errorTitle')} titleA11yHint={t('disabilityRating.errorTitleA11y')} callPhone={t('disabilityRating.errorPhoneNumber')} />
-        )
+        return <CallHelpCenter titleText={t('disabilityRating.errorTitle')} callPhone={displayedTextPhoneNumber(t('8008271000'))} />
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE:
-        return <CallHelpCenter onTryAgain={tryAgain} titleText={t('errors.callHelpCenter.vaAppNotWorking')} callPhone={t('8006982411.displayText')} />
+        return <CallHelpCenter onTryAgain={tryAgain} titleText={t('errors.callHelpCenter.vaAppNotWorking')} callPhone={displayedTextPhoneNumber(t('8006982411'))} />
       default:
         return <CallHelpCenter onTryAgain={tryAgain} />
     }

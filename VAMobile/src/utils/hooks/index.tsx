@@ -15,7 +15,7 @@ import { AppDispatch, RootState } from 'store'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
-import { DowntimeWindowsByFeatureType, ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
+import { DowntimeWindowsByFeatureType, ErrorsState, SecureMessagingState } from 'store/slices'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -224,16 +224,6 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
   }
 }
 
-/**
- * Returns whether user has cerner facilities or not
- *
- * @returns boolean showing if the user has cerner facilities
- */
-export const useHasCernerFacilities = (): boolean => {
-  const { cernerFacilities } = useSelector<RootState, PatientState>((state) => state.patient)
-  return cernerFacilities.length > 0
-}
-
 export type useDestructiveActionSheetButtonProps = {
   /** text of button */
   text: string
@@ -287,7 +277,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
         title: props.title,
         titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
         message: props.message,
-        messageTextStyle: { textAlign: 'center', color: currentTheme.colors.text.primary },
+        messageTextStyle: { fontWeight: 'normal', textAlign: 'center', color: currentTheme.colors.text.primary },
         textStyle: { color: currentTheme.colors.text.primary },
         destructiveButtonIndex: newDestructiveButtonIndex,
         destructiveColor: currentTheme.colors.text.error,

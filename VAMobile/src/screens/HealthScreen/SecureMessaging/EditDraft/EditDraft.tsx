@@ -53,6 +53,7 @@ import {
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
 import { SubjectLengthValidationFn, formatSubject, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
@@ -288,7 +289,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
-      <FullScreenSubtask title={t('editDraft')} leftButtonText={t('cancel')} menuViewActions={MenViewActions}>
+      <FullScreenSubtask title={t('editDraft')} leftButtonText={t('cancel')} menuViewActions={MenViewActions} scrollViewRef={scrollViewRef}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -307,7 +308,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         leftButtonText={t('cancel')}
         onLeftButtonPress={() => {
           goToDrafts(false)
-        }}>
+        }}
+        scrollViewRef={scrollViewRef}>
         <LoadingComponent text={text} />
       </FullScreenSubtask>
     )
@@ -319,7 +321,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         leftButtonText={t('cancel')}
         onLeftButtonPress={() => {
           goToDrafts(false)
-        }}>
+        }}
+        scrollViewRef={scrollViewRef}>
         <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
       </FullScreenSubtask>
     )
@@ -464,7 +467,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         <AlertBox
           title={t('secureMessaging.startNewMessage.noMatchWithProvider')}
           text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
-          textA11yLabel={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
+          textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           border="error"
           scrollViewRef={scrollViewRef}>
           <Box mt={theme.dimensions.standardMarginBetween}>

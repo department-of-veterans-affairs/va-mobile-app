@@ -23,8 +23,6 @@ import {
 import { AppDispatch, AppThunk } from 'store'
 import { EnvironmentTypesConstants } from 'constants/common'
 import { Events, UserAnalytics } from 'constants/analytics'
-import { dispatchClearAuthorizedServices } from './authorizedServicesSlice'
-import { dispatchClearCerner } from './patientSlice'
 import { dispatchClearLoadedAppointments } from './appointmentsSlice'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
 import { dispatchClearLoadedMessages } from './secureMessagingSlice'
@@ -107,6 +105,20 @@ export const initialAuthState: AuthState = {
   displayBiometricsPreferenceScreen: false,
   showLaoGate: false,
   authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
+}
+
+/*
+Call postLoggedIn to finish login setup on the BE, Success is empty and we don't show anything on failure
+*/
+
+const postLoggedIn = async () => {
+  try {
+    await api.post('/v0/user/logged-in')
+  } catch (error) {
+    if (isErrorObject(error)) {
+      logNonFatalErrorToFirebase(error, 'logged-in Url: /v0/user/logged-in')
+    }
+  }
 }
 
 /**
@@ -490,6 +502,7 @@ export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch
     const authCredentials = await processAuthResponse(response)
     await dispatch(dispatchSetAnalyticsLogin())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
+    postLoggedIn()
   } catch (err) {
     console.error(err)
     logNonFatalErrorToFirebase(err, `attemptIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
@@ -575,8 +588,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     dispatch(dispatchClearLoadedAppointments())
     dispatch(dispatchClearLoadedMessages())
     dispatch(dispatchClearLoadedClaimsAndAppeals())
-    dispatch(dispatchClearAuthorizedServices())
-    dispatch(dispatchClearCerner())
     dispatch(dispatchProfileLogout())
     dispatch(dispatchMilitaryHistoryLogout())
     dispatch(dispatchDisabilityRatingLogout())
@@ -701,6 +712,7 @@ export const handleTokenCallbackUrl =
       await logAnalyticsEvent(Events.vama_login_success(SISEnabled))
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin({ authCredentials }))
+      postLoggedIn()
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: ${authNonFatalErrorString}`)

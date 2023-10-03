@@ -188,11 +188,11 @@ context('AppointmentCancellationInfo', () => {
       initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE, 'BOOKED', appointmentPhoneData, true)
     })
     it('should display the correct cancellation title', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('To cancel this appointment, call your V\ufeffA  medical center')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('To cancel this appointment, call your VA  medical center')
     })
     it('should display the correct cancellation body', async () => {
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(
-        "COVID-19 appointments can't be canceled online. Please call the V\ufeffA facility to cancel your appointment.",
+        "COVID-19 appointments can't be canceled online. Please call the VA facility to cancel your appointment.",
       )
     })
     it('should display the correct location name', async () => {

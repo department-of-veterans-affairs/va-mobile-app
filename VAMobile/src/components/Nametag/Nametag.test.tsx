@@ -5,9 +5,38 @@ import { ReactTestInstance } from 'react-test-renderer'
 
 import { context, render, RenderAPI } from 'testUtils'
 import Nametag from './Nametag'
-import { initialAuthorizedServicesState, InitialState } from 'store/slices'
+import { InitialState } from 'store/slices'
 import { TextView, VAIcon } from 'components'
 import { ServiceData } from 'store/api/types'
+
+
+jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
+  let original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
+  return {
+    ...original,
+    useAuthorizedServices: jest.fn().mockReturnValue({
+      status: "success",
+      data: {
+        appeals: true,
+        appointments: true,
+        claims: true,
+        decisionLetters: true,
+        directDepositBenefits: true,
+        directDepositBenefitsUpdate: true,
+        disabilityRating: true,
+        genderIdentity: true,
+        lettersAndDocuments: true,
+        militaryServiceHistory: true,
+        paymentHistory: true,
+        preferredName: true,
+        prescriptions: true,
+        scheduleAppointments: true,
+        secureMessaging: true,
+        userProfileUpdate: true
+      }
+    })
+  }
+})
 
 context('Nametag', () => {
   let component: RenderAPI
@@ -61,10 +90,6 @@ context('Nametag', () => {
           ...InitialState.militaryService,
           mostRecentBranch: mostRecentBranch || 'United States Air Force',
           serviceHistory: [{} as ServiceData],
-        },
-        authorizedServices: {
-          ...initialAuthorizedServicesState,
-          militaryServiceHistory: true,
         },
         disabilityRating: {
           ...InitialState.disabilityRating,
@@ -132,10 +157,6 @@ context('Nametag', () => {
             ...InitialState.militaryService,
             serviceHistory: [],
           },
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: true,
-          },
         },
       })
 
@@ -150,10 +171,6 @@ context('Nametag', () => {
       component = render(<Nametag />, {
         preloadedState: {
           ...InitialState,
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: false,
-          },
         },
       })
 

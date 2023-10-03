@@ -1936,15 +1936,21 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@department-of-veterans-affairs/mobile-component-library@0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.0.18.tgz#30b7ffda0e0bc902f5774cb8ad6c648cb19dcde3"
-  integrity sha512-6I7CqouMEudP59iikKY19mNg6oJzYpUR3W4OqCUVCtca3O3pxSoX4fxBQ+cw8fhnPeuivBEwm59DkFfd0SPlOw==
+"@department-of-veterans-affairs/mobile-component-library@0.0.22":
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.0.22.tgz#b050f28a76952a23ec47ea71579e258ad4344aea"
+  integrity sha512-/vCCGxuTVBT0RgXi7vswCk+KhXhHdnqXicNFatU2jqrXvJjWh0nx+JeSFYbVWNNR7pBeYade4LEA7ZZCrq6kzw==
   dependencies:
+    "@department-of-veterans-affairs/mobile-tokens" "0.0.10"
     "@os-team/i18next-react-native-language-detector" "^1.0.28"
     i18next "^23.4.3"
     react-i18next "^13.0.3"
     styled-components "^6.0.7"
+
+"@department-of-veterans-affairs/mobile-tokens@0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.0.10.tgz#e69ebd6da87cb83930a555deacf302d51f656051"
+  integrity sha512-mkct8S3aM0Da2MfhGZHuIONZfq2ws0QMpOItuBpwx7dr+EXNPvtXRwygLal2+7yjMzD8zSf/4x1S756DNUuHwQ==
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
@@ -7576,9 +7582,9 @@ electron-to-chromium@^1.4.477:
   integrity sha512-0NmjlYBLKVHva4GABWAaHuPJolnDuL0AhV3h1hES6rcLCWEIbRL6/8TghfsVwkx6TEroQVdliX7+aLysUpKvjw==
 
 electron@^11.1.0, electron@^25.0.1:
-  version "25.8.0"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-25.8.0.tgz#60c84f1f256924ac5a0aff13276b901b0c43767a"
-  integrity sha512-T3kC1a/3ntSaYMCVVfUUc9v7myPzi6J2GP0Ad/CyfWKDPp054dGyKxb2EEjKnxQQ7wfjsT1JTEdBG04x6ekVBw==
+  version "25.8.1"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-25.8.1.tgz#092fab5a833db4d9240d4d6f36218cf7ca954f86"
+  integrity sha512-GtcP1nMrROZfFg0+mhyj1hamrHvukfF6of2B/pcWxmWkd5FVY1NJib0tlhiorFZRzQN5Z+APLPr7aMolt7i2AQ==
   dependencies:
     "@electron/get" "^2.0.0"
     "@types/node" "^18.11.18"

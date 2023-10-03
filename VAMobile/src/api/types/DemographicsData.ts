@@ -25,3 +25,11 @@ export type GenderIdentityOptionsPayload = {
     }
   }
 }
+
+export type GenderIdentityUpdatePayload = {
+  code: string
+}
+
+export type PreferredNameUpdatePayload = {
+  text: string
+}

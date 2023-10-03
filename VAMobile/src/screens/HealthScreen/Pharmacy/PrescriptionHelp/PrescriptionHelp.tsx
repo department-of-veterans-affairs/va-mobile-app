@@ -5,6 +5,7 @@ import React, { FC, useEffect } from 'react'
 import { Box, ClosePanelButton, LargePanel, TextView, VABulletList, VABulletListText } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { usePanelHeaderStyles } from 'utils/hooks/headerStyles'
 import { useTheme } from 'utils/hooks'
 
@@ -44,7 +45,7 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
           {t('prescription.help.listHeader')}
         </TextView>
         <VABulletList listOfText={medicationNoIncludedList} />
-        <TextView variant="MobileBody" accessibilityLabel={t('prescription.help.footer.a11yLabel')}>
+        <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescription.help.footer'))}>
           {t('prescription.help.footer')}
         </TextView>
       </Box>
