@@ -865,7 +865,6 @@
   "notifications.settings.alert.text": "To get notifications from the VA mobile app, you'll need to turn them on in your system settings.",
   "notifications.settings.alert.title": "Turn on push notifications",
   "notifications.settings.personalize.heading": "Personalize Notifications",
-  "notifications.settings.personalize.text.systemNotificationsOff": "Once you have turned on notifications in your phone's settings, the options to select what type of alerts you would like to receive will appear here.",
   "notifications.settings.personalize.text.systemNotificationsOn": "Select what type of alerts you would like to receive.",
   "notifications.settings.privacy": "Your privacy is important. We will not display any personal information in your notifications.",
   "notifications.settings.switch.a11yHint": "Select whether to turn on push notifications for {{ notificationChannelName }}",

@@ -80,10 +80,6 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
     )
   }
 
-  const personalizeText = systemNotificationsOn
-    ? t('notifications.settings.personalize.text.systemNotificationsOn')
-    : t('notifications.settings.personalize.text.systemNotificationsOff')
-
   const preferenceList = (): ReactNode => {
     const prefsItems = preferences.map((pref): SimpleListItemObj => {
       return {
@@ -107,14 +103,19 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
   return (
     <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.title')}>
       <Box mb={contentMarginBottom}>
-        {!systemNotificationsOn && <Box mb={standardMarginBetween}>{alert()}</Box>}
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter}>
-          {t('notifications.settings.personalize.heading')}
-        </TextView>
-        <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={gutter} mt={condensedMarginBetween}>
-          {personalizeText}
-        </TextView>
-        {systemNotificationsOn && preferenceList()}
+        {!systemNotificationsOn ? (
+          alert()
+        ) : (
+          <>
+            <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter}>
+              {t('notifications.settings.personalize.heading')}
+            </TextView>
+            <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={gutter} mt={condensedMarginBetween}>
+              {t('notifications.settings.personalize.text.systemNotificationsOn')}
+            </TextView>
+            {preferenceList()}
+          </>
+        )}
         <TextView variant={'TableFooterLabel'} mx={gutter} mt={condensedMarginBetween}>
           {t('notifications.settings.privacy')}
         </TextView>

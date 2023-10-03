@@ -80,7 +80,7 @@ context('NotificationsSettingsScreen', () => {
     it('hides the notification switches', () => {
       renderWithProps(false, false, [apptPrefOff])
       expect(screen.queryByRole('switch', { name: 'Appointment Reminders'})).toBeFalsy()
-      expect(screen.getByText("Once you have turned on notifications in your phone's settings, the options to select what type of alerts you would like to receive will appear here.")).toBeTruthy()
+      expect(screen.getByText("To get notifications from the VA mobile app, you'll need to turn them on in your system settings.")).toBeTruthy()
     })
   })
 
