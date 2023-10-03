@@ -24,15 +24,35 @@ const WaygateManagementScreen: FC<WaygateManagementScreenProps> = ({ navigation 
       const { enabled, errorMsgTitle, errorMsgBody, appUpdateButton, allowFunction, denyAccess } = WG
       toggleItems.push(
         <AccordionCollapsible
-          header={<TextView variant="MobileBodyBold">{index + ' ' + enabled}</TextView>}
+          header={
+            <Box justifyContent="space-between" flexDirection="row" flexWrap="wrap" mr={5}>
+              <TextView variant="ActionBar">{index}</TextView>
+              <TextView variant="MobileBodyBold">{`${enabled}`}</TextView>
+            </Box>
+          }
           expandedInitialValue={!enabled}
           expandedContent={
-            <Box>
-              <TextView>{'errorMsgTitle ' + errorMsgTitle}</TextView>
-              <TextView>{'errorMsgBody ' + errorMsgBody}</TextView>
-              <TextView>{'appUpdateButton ' + appUpdateButton}</TextView>
-              <TextView>{'allowFunction ' + allowFunction}</TextView>
-              <TextView>{'denyAccess ' + denyAccess}</TextView>
+            <Box mr={20}>
+              <Box justifyContent="space-between" flexDirection="row" flexWrap="wrap">
+                <TextView variant="MobileBodyBold">{'appUpdateButton: '}</TextView>
+                <TextView>{`${appUpdateButton}`}</TextView>
+              </Box>
+              <Box justifyContent="space-between" flexDirection="row" flexWrap="wrap">
+                <TextView variant="MobileBodyBold">{'allowFunction: '}</TextView>
+                <TextView>{`${allowFunction}`}</TextView>
+              </Box>
+              <Box justifyContent="space-between" flexDirection="row" flexWrap="wrap">
+                <TextView variant="MobileBodyBold">{'denyAccess: '}</TextView>
+                <TextView>{`${denyAccess}`}</TextView>
+              </Box>
+              <Box justifyContent="space-between" flexDirection="column" flexWrap="wrap">
+                <TextView variant="MobileBodyBold">{'errorMsgTitle: '}</TextView>
+                <TextView>{errorMsgTitle}</TextView>
+              </Box>
+              <Box justifyContent="space-between" flexDirection="column">
+                <TextView variant="MobileBodyBold">{'errorMsgBody: '}</TextView>
+                <TextView>{errorMsgBody}</TextView>
+              </Box>
             </Box>
           }
         />,
@@ -43,6 +63,20 @@ const WaygateManagementScreen: FC<WaygateManagementScreenProps> = ({ navigation 
 
   return (
     <FeatureLandingTemplate backLabel={t('remoteConfig.title')} backLabelOnPress={navigation.goBack} title={t('waygateManagement.title')}>
+      <Box mx={gutter}>
+        <TextView>
+          <TextView variant="MobileBodyBold">Enabled:</TextView> 'false' = waygate.
+        </TextView>
+        <TextView>
+          <TextView variant="MobileBodyBold">appUpdateButton:</TextView> 'true' = button.
+        </TextView>
+        <TextView>
+          <TextView variant="MobileBodyBold">allowFunction:</TextView> 'false' = hinder access.
+        </TextView>
+        <TextView>
+          <TextView variant="MobileBodyBold">denyAccess:</TextView> 'true' = native Alert.
+        </TextView>
+      </Box>
       <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter} mt={standardMarginBetween}>
         Waygate Toggles
       </TextView>
