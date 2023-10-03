@@ -6,7 +6,6 @@ import _ from 'underscore'
 
 import {
   AlertBox,
-  BackButton,
   Box,
   ButtonTypesConstants,
   CollapsibleView,
@@ -22,7 +21,6 @@ import {
   TextView,
   VAButton,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import {
   CategoryTypeFields,
   CategoryTypes,
@@ -35,6 +33,7 @@ import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { InteractionManager, Pressable, ScrollView } from 'react-native'
+import { MenuViewActionsType } from 'components/Menu'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import {
@@ -58,7 +57,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
-import MenuView, { MenuViewActionsType } from 'components/Menu'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
@@ -252,20 +250,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       onPress: onDeletePressed,
     },
   ]
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => (
-        <BackButton
-          onPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
-          canGoBack={props.canGoBack}
-          label={BackButtonLabelConstants.cancel}
-          showCarat={false}
-        />
-      ),
-      headerRight: () => (!noRecipientsReceived || isReplyDraft) && <MenuView actions={MenViewActions} />,
-    })
-  })
 
   /**
    * Intercept navigation action before leaving the screen, used the handle OS swipe/hardware back behavior

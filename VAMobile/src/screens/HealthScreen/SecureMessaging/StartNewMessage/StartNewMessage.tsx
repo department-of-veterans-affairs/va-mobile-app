@@ -6,7 +6,6 @@ import _ from 'underscore'
 
 import {
   AlertBox,
-  BackButton,
   Box,
   ButtonTypesConstants,
   CollapsibleView,
@@ -18,11 +17,9 @@ import {
   LoadingComponent,
   MessageAlert,
   PickerItem,
-  SaveButton,
   TextArea,
   VAButton,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import {
   CategoryTypeFields,
   CategoryTypes,
@@ -144,23 +141,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     } else {
       navigation.goBack
     }
-  })
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={navigation.goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-      headerRight: () =>
-        !noRecipientsReceived && (
-          <SaveButton
-            onSave={() => {
-              setOnSaveDraftClicked(true)
-              setOnSendClicked(true)
-            }}
-            disabled={false}
-            a11yHint={t('secureMessaging.saveDraft.a11yHint')}
-          />
-        ),
-    })
   })
 
   useEffect(() => {
