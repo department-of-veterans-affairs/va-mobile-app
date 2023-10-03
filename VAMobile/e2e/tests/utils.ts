@@ -53,7 +53,8 @@ export async function loginToDemoMode(skipOnboarding = true) {
 	await element(by.text('Dismiss')).tap()
   } catch (e) {} 
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(21)
-  if (DEMO_PASSWORD != undefined) {
+  // await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText('VAMobApp23')
+  if (DEMO_PASSWORD !== undefined) {
     await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
   }
   
@@ -61,7 +62,7 @@ export async function loginToDemoMode(skipOnboarding = true) {
 
   await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
-  if(skipOnboarding == true) {
+  if(skipOnboarding === true) {
     const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
 
     if (ifCarouselSkipBtnExist) {
