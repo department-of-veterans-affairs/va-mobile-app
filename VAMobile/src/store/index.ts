@@ -15,7 +15,6 @@ import notificationReducer from 'store/slices/notificationSlice'
 import paymentsReducer from 'store/slices/paymentsSlice'
 import personalInformationReducer from 'store/slices/personalInformationSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
-import requestAppointmentReducer from 'store/slices/requestAppointmentSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
@@ -42,7 +41,6 @@ const store = configureStore({
     snackBar: snackbarReducer,
     vaccine: vaccineReducer,
     payments: paymentsReducer,
-    requestAppointment: requestAppointmentReducer,
     prescriptions: prescriptionsReducer,
     settings: settingsReducer,
   },
