@@ -55,7 +55,7 @@ export async function loginToDemoMode(skipOnboarding = true) {
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(21)
 
   if (DEMO_PASSWORD !== undefined) {
-    await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
+    await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).replaceText(DEMO_PASSWORD)
   }
   
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
