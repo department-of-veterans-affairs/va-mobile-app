@@ -1,7 +1,7 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
@@ -26,7 +26,7 @@ import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericL
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
 
-const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
+const BenefitsScreen: FC<BenefitsScreenProps> = () => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
