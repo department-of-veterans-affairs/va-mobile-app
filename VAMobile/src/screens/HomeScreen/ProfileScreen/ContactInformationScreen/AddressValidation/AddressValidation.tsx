@@ -154,7 +154,6 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   const getFooterButtons = (): ReactElement => {
     const useThisAddressButtonProps = {
       testID: t('editAddress.validation.useThisAddress'),
-      a11yHint: t('editAddress.validation.useThisAddress.a11yHint'),
       label: t('editAddress.validation.useThisAddress'),
       onPress: onUseThisAddress,
     }
@@ -162,7 +161,6 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
     const editAddressButtonProps = {
       label: t('editAddress.validation.editAddress'),
       testID: t('editAddress.validation.editAddress.a11yLabel'),
-      a11yHint: t('editAddress.validation.editAddress.a11yHint'),
       onPress: onEditAddress,
     }
 

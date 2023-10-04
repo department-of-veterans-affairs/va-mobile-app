@@ -88,7 +88,6 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     const debugButton: Array<SimpleListItemObj> = [
       {
         text: t('debug.title'),
-        a11yHintText: t('debug.a11yHint'),
         onPress: onDebug,
       },
     ]

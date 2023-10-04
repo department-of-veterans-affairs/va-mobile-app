@@ -77,7 +77,6 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
         textLines,
         a11yValue,
         onPress,
-        a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }),
         testId: getTestIDFromTextLines(textLines),
       })
     })

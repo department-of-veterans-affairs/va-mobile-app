@@ -79,7 +79,6 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
       <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('appointments')}
-          a11yHint={t('appointments.a11yHint')}
           onPress={onAppointments}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
@@ -119,7 +118,6 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
         />
         <LargeNavButton
           title={t('covid19Updates.title')}
-          a11yHint={t('covid19Updates.a11yHint')}
           onPress={onCoronaVirusFAQ}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}

@@ -74,14 +74,13 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   const buttonDataList: Array<SimpleListItemObj> = [
-    { text: t('contactVA.title'), a11yHintText: a11yLabelVA(t('contactVA.a11yHint')), onPress: onContactVA, testId: a11yLabelVA(t('contactVA.title')) },
+    { text: t('contactVA.title'), onPress: onContactVA, testId: a11yLabelVA(t('contactVA.title')) },
     {
       text: t('findLocation.title'),
-      a11yHintText: a11yLabelVA(t('findLocation.a11yHint')),
       onPress: onFacilityLocator,
       testId: a11yLabelVA(t('findLocation.title')),
     },
-    { text: t('covid19Updates.title'), a11yHintText: t('covid19Updates.a11yHint'), onPress: onCoronaVirusFAQ, testId: t('covid19Updates.title') },
+    { text: t('covid19Updates.title'), onPress: onCoronaVirusFAQ, testId: t('covid19Updates.title') },
   ]
 
   const profileIconProps: VAIconProps = {

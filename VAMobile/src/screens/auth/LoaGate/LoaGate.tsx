@@ -60,13 +60,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
           </Box>
         </CollapsibleView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-          <VAButton
-            onPress={startAuth}
-            label={t('continueToSignin')}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-            a11yHint={t('continueToSignin.a11yHint')}
-            testID={t('continueToSignin')}
-          />
+          <VAButton onPress={startAuth} label={t('continueToSignin')} buttonType={ButtonTypesConstants.buttonPrimary} testID={t('continueToSignin')} />
         </Box>
       </Box>
     </FullScreenSubtask>

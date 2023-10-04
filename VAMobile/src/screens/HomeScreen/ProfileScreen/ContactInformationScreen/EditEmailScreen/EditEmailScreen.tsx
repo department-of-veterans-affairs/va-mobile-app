@@ -189,12 +189,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {profile?.contactEmail?.emailAddress && (
           <Box my={theme.dimensions.standardMarginBetween}>
-            <VAButton
-              onPress={onDeletePressed}
-              label={t('contactInformation.removeData', { pageName: emailTitle })}
-              buttonType={ButtonTypesConstants.buttonDestructive}
-              a11yHint={t('contactInformation.removeData.a11yHint', { pageName: emailTitle })}
-            />
+            <VAButton onPress={onDeletePressed} label={t('contactInformation.removeData', { pageName: emailTitle })} buttonType={ButtonTypesConstants.buttonDestructive} />
           </Box>
         )}
         {formContainsError && (
