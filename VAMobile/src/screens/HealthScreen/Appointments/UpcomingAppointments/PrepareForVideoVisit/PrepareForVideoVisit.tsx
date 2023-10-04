@@ -9,7 +9,7 @@ import { useTheme } from 'utils/hooks'
 
 type PrepareForVideoVisitProps = StackScreenProps<HealthStackParamList, 'PrepareForVideoVisit'>
 
-const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => {
+const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
