@@ -15,7 +15,6 @@ import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useHeaderStyles } from 'utils/hooks/headerStyles'
 import { useSelector } from 'react-redux'
 import Appointments from './Appointments'
 import CernerAlert from './CernerAlert'
@@ -147,11 +146,8 @@ const HealthScreenStack = createStackNavigator()
  * Stack screen for the Health tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const HealthStackScreen: FC<HealthStackScreenProps> = () => {
-  const headerStyles = useHeaderStyles()
-
   return (
     <HealthScreenStack.Navigator
-      screenOptions={headerStyles}
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {

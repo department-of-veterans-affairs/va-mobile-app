@@ -1,9 +1,8 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import { Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
-import { HiddenTitle } from 'styles/common'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'

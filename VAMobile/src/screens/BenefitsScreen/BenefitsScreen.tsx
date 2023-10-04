@@ -12,7 +12,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useHeaderStyles } from 'utils/hooks/headerStyles'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
@@ -87,11 +86,8 @@ const BenefitsScreenStack = createStackNavigator()
  * Stack screen for the Benefits tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
-  const headerStyles = useHeaderStyles()
-
   return (
     <BenefitsScreenStack.Navigator
-      screenOptions={headerStyles}
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {

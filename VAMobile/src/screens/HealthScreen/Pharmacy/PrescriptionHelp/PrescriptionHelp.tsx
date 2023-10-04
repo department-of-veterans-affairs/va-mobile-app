@@ -1,19 +1,17 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
-import { Box, ClosePanelButton, LargePanel, TextView, VABulletList, VABulletListText } from 'components'
+import { Box, LargePanel, TextView, VABulletList, VABulletListText } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { usePanelHeaderStyles } from 'utils/hooks/headerStyles'
 import { useTheme } from 'utils/hooks'
 
 type PrescriptionHelpProps = StackScreenProps<HealthStackParamList, 'PrescriptionHelp'>
 
-const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
+const PrescriptionHelp: FC<PrescriptionHelpProps> = () => {
   const theme = useTheme()
-  const headerStyle = usePanelHeaderStyles()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
@@ -29,13 +27,6 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = ({ navigation }) => {
       text: t('prescription.help.item3'),
     },
   ]
-
-  useEffect(() => {
-    navigation.setOptions({
-      ...headerStyle,
-      headerLeft: (props) => <ClosePanelButton buttonText={t('close')} onPress={props.onPress} buttonTextColor={'showAll'} />,
-    })
-  }, [navigation, headerStyle, t])
 
   return (
     <LargePanel testID="PrescriptionsHelpTestID" title={t('prescriptionsHelp')} rightButtonText={t('close')}>
