@@ -2,7 +2,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
+import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
@@ -67,12 +67,6 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
       dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
     }
   }, [dispatch, smNotInDowntime])
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
-    })
-  }, [navigation])
 
   return (
     <CategoryLanding title={t('health.title')}>

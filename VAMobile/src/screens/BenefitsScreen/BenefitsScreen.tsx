@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
-import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
+import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DisabilityRatingState } from 'store/slices'
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
@@ -32,12 +32,6 @@ const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const { data: userAuthorizedServices } = useAuthorizedServices()
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
-    })
-  }, [navigation])
 
   const ratingPercent = ratingData?.combinedDisabilityRating
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
