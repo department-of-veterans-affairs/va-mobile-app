@@ -104,7 +104,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
       <StartNewMessageButton />
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-          <SegmentedControl labels={controlLabels} onChange={onTabUpdate} selected={secureMessagingTab} a11yHints={a11yHints} />
+          <SegmentedControl labels={controlLabels} onChange={onTabUpdate} selected={secureMessagingTab} a11yHints={a11yHints} a11yLabels={[t('secureMessaging.inbox')]} />
         </Box>
         <CernerAlertSM />
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
