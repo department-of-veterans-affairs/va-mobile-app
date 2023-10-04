@@ -35,7 +35,7 @@ const NoFolderMessages: FC = () => {
             {t('secureMessaging.folders.noFolderMessages')}
           </TextView>
           <Box width={'100%'}>
-            <VAButton buttonType={'buttonPrimary'} label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} a11yHint={t('secureMessaging.goToInbox.a11yHint')} />
+            <VAButton buttonType={'buttonPrimary'} label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
           </Box>
         </Box>
       </VAScrollView>

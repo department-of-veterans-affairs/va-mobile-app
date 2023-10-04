@@ -5,7 +5,6 @@ import React, { FC } from 'react'
 import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp } from 'utils/accessibility'
 import { a11yLabelID } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
@@ -46,7 +45,6 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = () => {
           a11yLabel={a11yLabelID(t('8005389552'))}
           numberOrUrlLink={t('8005389552')}
           linkType={LinkTypeOptionsConstants.call}
-          {...a11yHintProp(t('militaryInformation.incorrectServiceInfo.DMDCNumber.a11yHint'))}
         />
       </Box>
     </LargePanel>

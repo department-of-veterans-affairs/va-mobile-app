@@ -40,7 +40,6 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
     textDecorationColor: 'link',
     accessibilityRole: 'link',
     accessibilityLabel: a11yLabelVA(t('howDoIUpdate.learnToChangeLegalName')),
-    accessibilityHint: t('howDoIUpdate.learnToChangeLegalName.a11yHint'),
     paragraphSpacing: true,
   }
 

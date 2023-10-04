@@ -87,7 +87,6 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
-          a11yHint={t('secureMessaging.a11yHint')}
           onPress={onSecureMessaging}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
@@ -99,7 +98,6 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
         {featureEnabled('prescriptions') && (
           <LargeNavButton
             title={t('prescription.title')}
-            a11yHint={t('prescription.A11yHint')}
             onPress={onPharmacy}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}

@@ -54,7 +54,6 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
 
   const notificationsRow: SimpleListItemObj = {
     text: t('notifications.title'),
-    a11yHintText: t('notifications.a11yHint'),
     onPress: navigateTo('NotificationsSettings'),
   }
 
@@ -76,7 +75,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   const items: Array<SimpleListItemObj> = _.flatten([
-    { text: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: onManage },
+    { text: t('manageAccount.title'), onPress: onManage },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? biometricRow : [],
     notificationsRow,

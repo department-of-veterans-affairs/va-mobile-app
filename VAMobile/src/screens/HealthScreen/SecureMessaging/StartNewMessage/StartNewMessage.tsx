@@ -288,7 +288,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {
                 label: t('secureMessaging.formMessage.addFiles'),
-                a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
                 onPress: onAddFiles,
               }
             : undefined,
@@ -393,7 +392,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
                 setOnSendClicked(true)
                 setOnSaveDraftClicked(false)
               }}
-              a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
               buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>

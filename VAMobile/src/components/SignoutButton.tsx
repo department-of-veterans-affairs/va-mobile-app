@@ -35,15 +35,7 @@ const SignoutButton: FC = ({}) => {
     })
   }
 
-  return (
-    <VAButton
-      onPress={onShowConfirm}
-      label={t('logout.title')}
-      buttonType={ButtonTypesConstants.buttonDestructive}
-      a11yHint={t('logout.a11yHint')}
-      {...testIdProps(t('logout.title'))}
-    />
-  )
+  return <VAButton onPress={onShowConfirm} label={t('logout.title')} buttonType={ButtonTypesConstants.buttonDestructive} {...testIdProps(t('logout.title'))} />
 }
 
 export default SignoutButton

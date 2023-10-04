@@ -19,7 +19,6 @@ const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID }) => {
     label: t('reply'),
     buttonType: ButtonTypesConstants.buttonPrimary,
     onPress: onPress,
-    a11yHint: t('secureMessaging.reply.a11yHint'),
     iconProps: { name: 'Reply', fill: 'navBar' },
     testID: 'replyTestID',
   }
