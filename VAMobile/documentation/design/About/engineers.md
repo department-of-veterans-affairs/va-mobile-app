@@ -9,7 +9,7 @@ Before a new component, or new version of an old component, is released it shoul
 
 ### Automatically
 
-We will have automated checks run on the components where we can. For our main client, the VA Flagship app we currently have [a Github actions workflow](https://github.com/department-of-veterans-affairs/va-mobile-library/blob/main/.github/workflows/check-component-integrations.yml) that will run each time a pull request is merged into the `main` branch. This automated workflow will simulate the VA Flagship app using the latest component package and run any associated tests to ensure no unintentional breakage happens.
+We will have automated checks run on the components where we can. For our main client, the VA Flagship app we currently have [a Github actions workflow](https://github.com/department-of-veterans-affairs/va-mobile-library/blob/main/.github/workflows/check-component-integrations.yml) that will run each time a pull request is merged into the `main` branch. This automated workflow will simulate the VA Flagship app using the latest component package and run any associated tests to ensure no unintentional breakage happens. The workflow can also be run manually from the [Check Component Integrations action](https://github.com/department-of-veterans-affairs/va-mobile-library/actions/workflows/check-component-integrations.yml).
 
 As more clients are added to the system, more tests will be added to the workflow. The tests themselves are managed by the client team and any app included (at this time) needs to be in a publicly accessible repository.
 
