@@ -44,7 +44,6 @@ export const InitialState: RootState = {
   auth: initialAuthState,
   directDeposit: initialDirectDepositState,
   militaryService: initialMilitaryServiceState,
-
   decisionLetters: initialDecisionLettersState,
   letters: initialLettersState,
   appointments: initialAppointmentsState,
