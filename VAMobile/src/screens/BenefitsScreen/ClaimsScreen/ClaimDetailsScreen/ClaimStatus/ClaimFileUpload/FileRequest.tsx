@@ -62,7 +62,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
         },
         claimsRequestNumber: requestNumber,
         fileUploaded: hasUploaded,
-        a11yHintText: t('fileRequest.buttonA11yHint'),
+        a11yHintText: hasUploaded ? t('fileRequest.buttonA11yHint.uploaded') : t('fileRequest.buttonA11yHint.needed'),
       }
 
       if (!hasUploaded) {
