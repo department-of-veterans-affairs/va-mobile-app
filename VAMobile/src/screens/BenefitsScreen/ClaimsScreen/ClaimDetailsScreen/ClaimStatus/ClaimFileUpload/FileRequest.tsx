@@ -38,17 +38,17 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
       navigateTo('FileRequestDetails', { claimID, request })()
     }
 
-    const getA11yLabel = (requestNumber: number, displayName?: string, uploaded?: boolean) => {
+    const getA11yLabel = (requestIndex: number, displayName?: string, uploaded?: boolean) => {
       const nameContainsRequestNumber = displayName && /Request \d/.test(displayName)
       const status = uploaded ? t('uploaded') : t('needed')
 
       if (!displayName) {
-        return `${t('fileRequest.buttonA11y', { requestNumber, totalCount: requests.length })} ${status}`
+        return `${t('fileRequest.buttonA11y', { requestNumber: requestIndex, totalCount: requests.length })} ${status}`
       }
 
       return nameContainsRequestNumber
         ? `${displayName} ${t('fileRequest.buttonA11y.totalCount', { totalCount: requests.length })} ${status}`
-        : `${t('fileRequest.buttonA11y', { requestNumber, totalCount: requests.length })} ${status}. ${displayName}`
+        : `${t('fileRequest.buttonA11y', { requestNumber: requestIndex, totalCount: requests.length })} ${status}. ${displayName}`
     }
 
     return map(requests, (request, index) => {
