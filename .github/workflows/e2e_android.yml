@@ -95,10 +95,6 @@ jobs:
       - name: Set app environment variables
         run: yarn env:staging
 
-      - name: Setup metro
-        working-directory: VAMobile
-        run: yarn start
-
       - name: Bundle Android app
         run: yarn e2e:android-build
 
