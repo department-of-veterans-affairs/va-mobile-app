@@ -1,3 +1,5 @@
+export type addressTypes = 'DOMESTIC' | 'INTERNATIONAL' | 'OVERSEAS MILITARY'
+
 export const addressTypeFields: {
   domestic: addressTypes
   international: addressTypes
@@ -8,7 +10,7 @@ export const addressTypeFields: {
   overseasMilitary: 'OVERSEAS MILITARY',
 }
 
-export type addressTypes = 'DOMESTIC' | 'INTERNATIONAL' | 'OVERSEAS MILITARY'
+export type ProfileAddressType = 'mailingAddress' | 'residentialAddress'
 
 export type addressPouTypes = 'RESIDENCE/CHOICE' | 'CORRESPONDENCE'
 
@@ -33,6 +35,16 @@ export type AddressData = {
 
 export type AddressValidationData = {
   data: Array<SuggestedAddress>
+}
+
+export type ValidateAddressData = {
+  confirmedSuggestedAddresses?: Array<SuggestedAddress>
+  validationKey?: number
+}
+
+export type SaveAddressParameters = {
+  addressData: AddressData
+  revalidate?: boolean
 }
 
 export type SuggestedAddressAttributeType = {
@@ -113,6 +125,13 @@ export const AddressValidationScenarioTypesConstants: {
   SHOW_SUGGESTIONS_OVERRIDE: 'SHOW_SUGGESTIONS_OVERRIDE',
   SHOW_SUGGESTIONS_NO_CONFIRMED: 'SHOW_SUGGESTIONS_NO_CONFIRMED',
   SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE: 'SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE',
+}
+
+export const AddressPouToProfileAddressFieldType: {
+  [key in addressPouTypes]: ProfileAddressType
+} = {
+  ['RESIDENCE/CHOICE']: 'residentialAddress',
+  CORRESPONDENCE: 'mailingAddress',
 }
 
 export type AddressValidationScenarioTypes =
