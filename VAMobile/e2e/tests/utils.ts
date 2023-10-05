@@ -142,12 +142,12 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 		var mockDataVariable
 		var mockDataKeyValue
 		for(var x=0; x<jsonProperty.length; x++) {
-			if (x == 0) {
+			if (x === 0) {
 				mockDataVariable = jsonParsed[jsonProperty[x]]
-			} else if (x == jsonProperty.length - 1) {
+			} else if (x === jsonProperty.length - 1) {
 				mockDataVariable[jsonProperty[x]] = newJsonValue
 			} else {
-				if (jsonProperty[x].constructor == Object) {
+				if (jsonProperty[x].constructor === Object) {
 					var key = String(Object.keys(jsonProperty[x]))
 					var value = jsonProperty[x][key]
 					mockDataKeyValue = mockDataVariable[key]
