@@ -106,7 +106,7 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: Pixel_4_XL_API_31
+          avd-name: Pixel_4_XL_API_28
           script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
       # - name: Inform Slack of Failure
