@@ -1936,15 +1936,21 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@department-of-veterans-affairs/mobile-component-library@0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.0.18.tgz#30b7ffda0e0bc902f5774cb8ad6c648cb19dcde3"
-  integrity sha512-6I7CqouMEudP59iikKY19mNg6oJzYpUR3W4OqCUVCtca3O3pxSoX4fxBQ+cw8fhnPeuivBEwm59DkFfd0SPlOw==
+"@department-of-veterans-affairs/mobile-component-library@0.0.22":
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.0.22.tgz#b050f28a76952a23ec47ea71579e258ad4344aea"
+  integrity sha512-/vCCGxuTVBT0RgXi7vswCk+KhXhHdnqXicNFatU2jqrXvJjWh0nx+JeSFYbVWNNR7pBeYade4LEA7ZZCrq6kzw==
   dependencies:
+    "@department-of-veterans-affairs/mobile-tokens" "0.0.10"
     "@os-team/i18next-react-native-language-detector" "^1.0.28"
     i18next "^23.4.3"
     react-i18next "^13.0.3"
     styled-components "^6.0.7"
+
+"@department-of-veterans-affairs/mobile-tokens@0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.0.10.tgz#e69ebd6da87cb83930a555deacf302d51f656051"
+  integrity sha512-mkct8S3aM0Da2MfhGZHuIONZfq2ws0QMpOItuBpwx7dr+EXNPvtXRwygLal2+7yjMzD8zSf/4x1S756DNUuHwQ==
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
@@ -12837,9 +12843,9 @@ postcss-value-parser@^4.0.2:
   integrity sha512-97DXOFbQJhk71ne5/Mt6cOu6yxsSfM0QGQyl0L25Gca4yGWEGJaig7l7gbCX623VqTBNGLRLaVUCnNkcedlRSQ==
 
 postcss@^8.4.23:
-  version "8.4.28"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.28.tgz#c6cc681ed00109072816e1557f889ef51cf950a5"
-  integrity sha512-Z7V5j0cq8oEKyejIKfpD8b4eBy9cwW2JWPk0+fB1HOAMsfHbnAXLLS+PfVWlzMSLQaWttKDt607I0XHmpE67Vw==
+  version "8.4.31"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.31.tgz#92b451050a9f914da6755af352bdc0192508656d"
+  integrity sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==
   dependencies:
     nanoid "^3.3.6"
     picocolors "^1.0.0"

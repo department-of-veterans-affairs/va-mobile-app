@@ -233,8 +233,15 @@ export type QueriesData = Array<{
   queryKey: QueryKey
   data: any
 }>
+
+type RenderParams = {
+  preloadedState?: any // TODO: Update this type to Partial<RootState> and fix broken tests
+  navigationProvided?: boolean,
+  queriesData?: QueriesData
+}
+
 //@ts-ignore
-function render(ui, { preloadedState, navigationProvided = false , ...renderOptions } = {}, queriesData?: QueriesData) {
+function render(ui, { preloadedState, navigationProvided = false, queriesData, ...renderOptions }: RenderParams = {}) {
   //@ts-ignore
   function Wrapper({ children }) {
     let store = mockStore(preloadedState)

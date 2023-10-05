@@ -50,7 +50,7 @@ describe('EditPhoneNumberScreen', () => {
 
   describe('Phone number text input', () => {
     describe('when the length is less than or equal to 10 digits', () => {
-      it('displays just the numbers in the text input', async () => {
+      it('displays just the numbers in the text input', () => {
         const phoneNumberInput = screen.getByTestId('phoneNumberTestID')
 
         fireEvent.changeText(phoneNumberInput, '12345')
@@ -60,7 +60,7 @@ describe('EditPhoneNumberScreen', () => {
     })
 
     describe('when the new text is greater than 10 digits', () => {
-      it('does not update phoneNumber to the new value', async () => {
+      it('does not update phoneNumber to the new value', () => {
         const phoneNumberInput = screen.getByTestId('phoneNumberTestID')
 
         expect(phoneNumberInput.props.value).toBe('858-123-4567')
@@ -71,7 +71,7 @@ describe('EditPhoneNumberScreen', () => {
     })
 
     describe('when there are 10 digits', () => {
-      it('sets the value of the input to the formatted number', async () => {
+      it('sets the value of the input to the formatted number', () => {
         const phoneNumberInput = screen.getByTestId('phoneNumberTestID')
 
         fireEvent.changeText(phoneNumberInput, '1234567890')
@@ -89,7 +89,7 @@ describe('EditPhoneNumberScreen', () => {
   })
 
   describe('when the number input is invalid', () => {
-    it('displays an error AlertBox and a field error', async () => {
+    it('displays an error AlertBox and a field error', () => {
       const phoneNumberInput = screen.getByTestId('phoneNumberTestID')
 
       fireEvent.changeText(phoneNumberInput, '')

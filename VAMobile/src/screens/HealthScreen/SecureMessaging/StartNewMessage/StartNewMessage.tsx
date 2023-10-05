@@ -197,7 +197,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
-      <FullScreenSubtask title={t('secureMessaging.startNewMessage')} leftButtonText={t('cancel')}>
+      <FullScreenSubtask title={t('secureMessaging.startNewMessage')} leftButtonText={t('cancel')} scrollViewRef={scrollViewRef}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -213,7 +213,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       ? t('secureMessaging.deleteDraft.loading')
       : t('secureMessaging.formMessage.startNewMessage.loading')
     return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} scrollViewRef={scrollViewRef}>
         <LoadingComponent text={text} />
       </FullScreenSubtask>
     )
@@ -221,7 +221,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
   if (sendingMessage) {
     return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} scrollViewRef={scrollViewRef}>
         <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
       </FullScreenSubtask>
     )

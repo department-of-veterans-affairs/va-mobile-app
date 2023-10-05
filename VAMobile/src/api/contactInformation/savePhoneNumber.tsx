@@ -1,40 +1,40 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Params as APIParams, EditResponseData, post, put } from 'store/api'
-import { SaveEmailData } from 'api/types'
+import { PhoneData } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
 import { contactInformationKeys } from './queryKeys'
 import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 
 /**
- * Creates or updates a user's email depending on whether the `id` field is present
+ * Creates or updates a user's phone number depending on whether the `id` field is present
  */
-const saveEmail = (emailData: SaveEmailData) => {
-  const endpoint = '/v0/user/emails'
+const savePhoneNumber = (phoneData: PhoneData) => {
+  const endpoint = '/v0/user/phones'
 
-  if (emailData.id) {
-    return put<EditResponseData>(endpoint, emailData as unknown as APIParams)
+  if (phoneData.id) {
+    return put<EditResponseData>(endpoint, phoneData as unknown as APIParams)
   }
 
-  return post<EditResponseData>(endpoint, emailData as unknown as APIParams)
+  return post<EditResponseData>(endpoint, phoneData as unknown as APIParams)
 }
 
 /**
- * Returns a mutation for saving an email
+ * Returns a mutation for saving a phone number
  */
-export const useSaveEmail = () => {
+export const useSavePhoneNumber = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: saveEmail,
+    mutationFn: savePhoneNumber,
     onSuccess: async () => {
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       queryClient.invalidateQueries({ queryKey: contactInformationKeys.contactInformation })
     },
-    onError: (error) => {
+    onError: async (error) => {
       if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, 'saveEmail: Service error')
+        logNonFatalErrorToFirebase(error, 'savePhoneNumber: Service error')
       }
     },
   })

@@ -1,24 +1,11 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { TouchableWithoutFeedback } from 'react-native'
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
-import { context, findByTypeWithText, mockNavProps, QueriesData, render, RenderAPI, waitFor, when } from 'testUtils'
+import { mockNavProps, QueriesData, render, when } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
-import { VASelector, VAModalPicker, VATextInput, TextView, AlertBox, VAButton } from 'components'
-import { MilitaryStates } from 'constants/militaryStates'
-import { States } from 'constants/states'
-import { SnackbarMessages } from 'components/SnackBar'
 import { AddressData, DeliveryPointValidationTypesConstants, UserContactInformation } from 'api/types'
-import { contactInformationKeys } from 'api/contactInformation/queryKeys'
+import { contactInformationKeys } from 'api/contactInformation'
 import { post } from 'store/api'
-import AddressValidation from '../AddressValidation'
-
-const snackbarMessages: SnackbarMessages = {
-  successMsg: 'Mailing address saved',
-  errorMsg: 'Mailing address could not be saved',
-}
 
 const residentialAddress: AddressData = {
   id: 0,
@@ -49,19 +36,10 @@ const mailingAddress: AddressData = {
   zipCodeSuffix: '1234',
 }
 
-jest.mock('@react-navigation/stack', () => {
-  return {
-    useHeaderHeight: jest.fn().mockReturnValue(44),
-    createStackNavigator: jest.fn(),
-    createBottomTabNavigator: jest.fn(),
-  }
-})
-
 const mockAlertSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useAlert: () => mockAlertSpy,
@@ -69,9 +47,9 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('@react-navigation/native', () => {
-  let actual = jest.requireActual('@react-navigation/native')
+  const original = jest.requireActual('@react-navigation/native')
   return {
-    ...actual,
+    ...original,
     useNavigation: () => ({
       setOptions: jest.fn(),
       goBack: jest.fn(),
@@ -79,18 +57,11 @@ jest.mock('@react-navigation/native', () => {
   }
 })
 
-context('EditAddressScreen', () => {
-  let component: RenderAPI
+describe('EditAddressScreen', () => {
   let props: any
-  let testInstance: ReactTestInstance
   let goBackSpy: any
 
-  const getSaveButton = () => testInstance.findAllByType(TouchableWithoutFeedback)[1]
-
-  const initializeTestInstance = (
-    isResidential?: boolean, contactInformation?: Partial<UserContactInformation>
-
-  ) => {
+  const renderWithData = (isResidential?: boolean, contactInformation?: Partial<UserContactInformation>) => {
     goBackSpy = jest.fn()
 
     props = mockNavProps(
@@ -107,7 +78,7 @@ context('EditAddressScreen', () => {
       },
     )
 
-    let queriesData
+    let queriesData: QueriesData | undefined
 
     if (contactInformation) {
       queriesData = [{
@@ -115,207 +86,146 @@ context('EditAddressScreen', () => {
         data: {
           ...contactInformation
         }
-      }] as QueriesData
+      }]
     }
 
-    component = render(<EditAddressScreen {...props} />, undefined, queriesData)
-
-    testInstance = component.UNSAFE_root
+    render(<EditAddressScreen {...props} />, {queriesData})
   }
 
   beforeEach(() => {
-    initializeTestInstance()
+    renderWithData()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
+  describe('when the checkbox is pressed', () => {
+    it('updates the value of selected', () => {
+      const checkbox = screen.getByRole('checkbox', { checked: false })
 
-  describe('when the checkbox is clicked', () => {
-    it('should update the value of selected', async () => {
-      const checkbox = testInstance.findByType(VASelector)
-      expect(checkbox.props.selected).toEqual(false)
-      const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[2]
-      act(() => {
-        checkboxTouchable.props.onPress()
-      })
-      expect(checkbox.props.selected).toEqual(true)
+      fireEvent.press(checkbox)
+      expect(screen.getByRole('checkbox', { checked: true })).toBeTruthy()
     })
 
     describe('when the checkbox is unchecked', () => {
-      it('should clear the country field', async () => {
-        const checkbox = testInstance.findByType(VASelector)
+      beforeEach(() => {
+        renderWithData(false, {mailingAddress})
+        const checkbox = screen.getByRole('checkbox', { checked: false })
 
-        const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[2]
-        act(() => {
-          checkboxTouchable.props.onPress()
-        })
-        expect(checkbox.props.selected).toEqual(true)
-
-        act(() => {
-          checkboxTouchable.props.onPress()
-        })
-        expect(checkbox.props.selected).toEqual(false)
-
-        const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
-        expect(countryPicker.props.selectedValue).not.toBeTruthy()
-      })
-    })
-
-    it('should set state, city, and military post office to empty strings', async () => {
-      const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[2]
-      act(() => {
-        checkboxTouchable.props.onPress()
+        fireEvent.press(checkbox)
+        expect(screen.getByRole('checkbox', { checked: true })).toBeTruthy()
+        
+        fireEvent.press(checkbox)
+        expect(screen.getByRole('checkbox', { checked: false })).toBeTruthy()
       })
 
-      const cityVATextInput = testInstance.findAllByType(VATextInput)[3]
-      expect(cityVATextInput.props.value).toEqual('')
-      const statePicker = testInstance.findAllByType(VAModalPicker)[1]
-      expect(statePicker.props.selectedValue).toEqual('')
-
-      const mailingAddress: AddressData = {
-        id: 0,
-        addressLine1: '1707 Tiburon Blvd',
-        addressLine2: 'Address line 2',
-        addressLine3: 'Address line 3',
-        addressPou: 'RESIDENCE/CHOICE',
-        addressType: 'OVERSEAS MILITARY',
-        city: 'Tiburon',
-        countryCodeIso3: '1',
-        internationalPostalCode: '1',
-        province: 'province',
-        stateCode: 'CA',
-        zipCode: '94920',
-        zipCodeSuffix: '1234',
-      }
-
-      initializeTestInstance(undefined, {mailingAddress})
-
-      const checkboxTouchable2 = testInstance.findAllByType(TouchableWithoutFeedback)[0]
-      act(() => {
-        checkboxTouchable2.props.onPress()
+      it('clears the country field', () => {
+        expect(screen.getByTestId('countryPickerTestID').props.selectedValue).not.toBeTruthy()
       })
 
-      const militaryPOPicker = testInstance.findAllByType(VAModalPicker)[1]
-      // picker resets the value to undefined
-      expect(militaryPOPicker.props.selectedValue).toBeFalsy()
+      it('sets state, city, and military post office to empty strings', () => {
+        expect(screen.getByTestId('cityTestID').props.value).toEqual('')
+        expect(screen.getByTestId('stateTestID').props.children).toEqual('')
+        expect(screen.queryByTestId('militaryPostOfficeTestID')).toBeFalsy
+      })
     })
   })
 
   describe('when the user selects a country with the picker', () => {
-    it('should update the value of country', async () => {
-      const countryRNPickerSelect = testInstance.findAllByType(VAModalPicker)[0]
-      act(() => {
-        countryRNPickerSelect.props.onSelectionChange('new country value')
-      })
+    it('updates the value of country', () => {
+      const countrySelector = screen.getByTestId('countryPickerTestID')
 
-      const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
-      expect(countryPicker.props.selectedValue).toEqual('new country value')
+      fireEvent.press(countrySelector)
+      fireEvent.press(screen.getByText('Algeria'))
+      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+      expect(countrySelector.props.children).toEqual('Algeria')
     })
 
     describe('when the old value and new value of country are not both domestic or both international', () => {
-      it('should set state and zip code to empty strings', async () => {
-        const mailingAddress: AddressData = {
-          id: 0,
-          addressLine1: '1707 Tiburon Blvd',
-          addressLine2: 'Address line 2',
-          addressLine3: 'Address line 3',
-          addressPou: 'RESIDENCE/CHOICE',
-          addressType: 'DOMESTIC',
-          city: 'Tiburon',
-          countryCodeIso3: 'USA',
-          internationalPostalCode: '1',
-          province: 'province',
-          stateCode: 'CA',
-          zipCode: '94920',
-          zipCodeSuffix: '1234',
-        }
-        initializeTestInstance(undefined, { mailingAddress })
-        const countryRNPickerSelect = testInstance.findAllByType(VAModalPicker)[0]
-        act(() => {
-          countryRNPickerSelect.props.onSelectionChange('new country')
-        })
+      it('sets state and zip code to empty strings', () => {
+        renderWithData(false, {mailingAddress})
+        const zipCodeInput = screen.getByTestId('zipCodeTestID')
 
-        const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
-        expect(stateVATextInput.props.value).toEqual('')
-        const zipCodeVATextInput = testInstance.findAllByType(VATextInput)[5]
-        expect(zipCodeVATextInput.props.value).toEqual('')
+        expect(screen.getByTestId('stateTestID').props.children).toEqual('California')
+        expect(zipCodeInput.props.value).toEqual(mailingAddress.zipCode)
+
+        fireEvent.press(screen.getByTestId('countryPickerTestID'))
+        fireEvent.press(screen.getByText('Algeria'))
+        fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+
+        expect(screen.getByTestId('stateTestID').props.value).toEqual('')
+        expect(zipCodeInput.props.value).toEqual('')
       })
     })
 
     describe('when the old and new value of country are both domestic or international', () => {
-      it('should keep the values of state and zip code', async () => {
+      it('keeps the values of state and zip code', () => {
         const mailingAddress: AddressData = {
           id: 0,
-          addressLine1: '1707 Tiburon Blvd',
-          addressLine2: 'Address line 2',
+          addressLine1: '4313 Cassin Way',
+          addressLine2: 'Suite 992',
           addressLine3: 'Address line 3',
-          addressPou: 'RESIDENCE/CHOICE',
+          addressPou: 'CORRESPONDENCE',
           addressType: 'INTERNATIONAL',
-          city: 'Tiburon',
-          countryCodeIso3: 'AGO',
+          city: 'Lake Lucybury',
+          countryCodeIso3: 'AUS',
           internationalPostalCode: '1',
           province: 'province',
-          stateCode: 'CA',
-          zipCode: '94920',
-          zipCodeSuffix: '1234',
+          stateCode: 'Northern Territory',
+          zipCode: '5922',
+          zipCodeSuffix: '',
         }
-        initializeTestInstance(undefined, { mailingAddress })
-        const countryRNPickerSelect = testInstance.findAllByType(VAModalPicker)[0]
-        act(() => {
-          countryRNPickerSelect.props.onSelectionChange('ATG')
-        })
 
-        const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
-        expect(stateVATextInput.props.value).toEqual('CA')
-        const zipCodeVATextInput = testInstance.findAllByType(VATextInput)[5]
-        expect(zipCodeVATextInput.props.value).toEqual('94920')
+        renderWithData(false, { mailingAddress })
+
+        expect(screen.getByTestId('stateTestID').props.value).toEqual('Northern Territory')
+        expect(screen.getByTestId('zipCodeTestID').props.value).toEqual('5922')
+
+        fireEvent.press(screen.getByTestId('countryPickerTestID'))
+        fireEvent.press(screen.getByText('Algeria'))
+        fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+        
+        expect(screen.getByTestId('stateTestID').props.value).toEqual('Northern Territory')
+        expect(screen.getByTestId('zipCodeTestID').props.value).toEqual('5922')
       })
     })
   })
 
   describe('when the user enters a new address line 1', () => {
-    it('should update the value of addressLine1', async () => {
-      const addressLine1VATextInput = testInstance.findAllByType(VATextInput)[0]
-      act(() => {
-        addressLine1VATextInput.props.onChange('new addressLine1')
-      })
-      expect(addressLine1VATextInput.props.value).toEqual('new addressLine1')
+    it('updates the value of addressLine1', () => {
+      const streetAddressLine1Input = screen.getByTestId('streetAddressLine1TestID')
+
+      fireEvent.changeText(streetAddressLine1Input, 'New Address Line 1')
+      expect(streetAddressLine1Input.props.value).toEqual('New Address Line 1')
     })
   })
 
   describe('when the user enters a new address line 2', () => {
-    it('should update the value of addressLine2', async () => {
-      const addressLine2VATextInput = testInstance.findAllByType(VATextInput)[1]
-      act(() => {
-        addressLine2VATextInput.props.onChange('new addressLine2')
-      })
-      expect(addressLine2VATextInput.props.value).toEqual('new addressLine2')
+    it('updates the value of addressLine2', () => {
+      const streetAddressLine2Input = screen.getByTestId('streetAddressLine2TestID')
+
+      fireEvent.changeText(streetAddressLine2Input, 'New Address Line 2')
+      expect(streetAddressLine2Input.props.value).toEqual('New Address Line 2')
     })
   })
 
   describe('when the user enters a new address line 3', () => {
-    it('should update the value of addressLine3', async () => {
-      const addressLine3VATextInput = testInstance.findAllByType(VATextInput)[2]
-      act(() => {
-        addressLine3VATextInput.props.onChange('new addressLine3')
-      })
-      expect(addressLine3VATextInput.props.value).toEqual('new addressLine3')
+    it('updates the value of addressLine3', () => {
+      const streetAddressLine3Input = screen.getByTestId('streetAddressLine3TestID')
+
+      fireEvent.changeText(streetAddressLine3Input, 'New Address Line 3')
+      expect(streetAddressLine3Input.props.value).toEqual('New Address Line 3')
     })
   })
 
   describe('when the user enters a new city', () => {
-    it('should update the value of city', async () => {
-      const cityVATextInput = testInstance.findAllByType(VATextInput)[3]
-      act(() => {
-        cityVATextInput.props.onChange('new city')
-      })
-      expect(cityVATextInput.props.value).toEqual('new city')
+    it('updates the value of city', () => {
+      const cityInput = screen.getByTestId('cityTestID')
+
+      fireEvent.changeText(cityInput, 'New city')
+      expect(cityInput.props.value).toEqual('New city')
     })
   })
 
   describe('when the user selects a military post office with the picker', () => {
-    it('should update the value of militaryPostOffice', async () => {
+    it('updates the value of militaryPostOffice', () => {
       const mailingAddress: AddressData = {
         id: 0,
         addressLine1: '1707 Tiburon Blvd',
@@ -332,58 +242,50 @@ context('EditAddressScreen', () => {
         zipCodeSuffix: '1234',
       }
 
-      initializeTestInstance(undefined, { mailingAddress })
+      renderWithData(false, { mailingAddress })
+      const militaryPostOfficeSelector = screen.getByTestId('militaryPostOfficeTestID')
 
-      const militaryPostOfficeRNPickerSelect = testInstance.findAllByType(VAModalPicker)[1]
-      act(() => {
-        militaryPostOfficeRNPickerSelect.props.onSelectionChange('APO')
-      })
-
-      const militaryPOPicker = testInstance.findAllByType(VAModalPicker)[1]
-      expect(militaryPOPicker.props.selectedValue).toEqual('APO')
+      fireEvent.press(militaryPostOfficeSelector)
+      fireEvent.press(screen.getByText('APO'))
+      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+      expect(militaryPostOfficeSelector.props.children).toEqual('APO')
     })
   })
 
   describe('when the user selects a state with the picker', () => {
-    it('should update the value of state', async () => {
-      const stateRNPickerSelect = testInstance.findAllByType(VAModalPicker)[1]
-      act(() => {
-        stateRNPickerSelect.props.onSelectionChange('NY')
-      })
-
-      const statePicker = testInstance.findAllByType(VAModalPicker)[1]
-      expect(statePicker.props.selectedValue).toEqual('NY')
+    it('updates the value of state', () => {
+      fireEvent.press(screen.getByTestId('stateTestID'))
+      fireEvent.press(screen.getByText('California'))
+      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+      expect(screen.getByTestId('stateTestID').props.children).toEqual('California')
     })
   })
 
   describe('when the user enters a new zip code', () => {
-    it('should update the value of zip code', async () => {
-      const zipCodeVATextInput = testInstance.findAllByType(VATextInput)[4]
-      act(() => {
-        zipCodeVATextInput.props.onChange('new zipcode')
-      })
-      expect(zipCodeVATextInput.props.value).toEqual('new zipcode')
+    it('updates the value of zip code', () => {
+      const zipCodeInput = screen.getByTestId('zipCodeTestID')
+
+      fireEvent.changeText(zipCodeInput, '1234')
+      expect(zipCodeInput.props.value).toEqual('1234')
     })
   })
 
   describe('when a text input item does not exist', () => {
-    it('should set it to an empty string initially', async () => {
-      initializeTestInstance()
-      const addressLine1VATextInput = testInstance.findAllByType(VATextInput)[0]
-      expect(addressLine1VATextInput.props.value).toEqual('')
+    it('sets it to an empty string initially', () => {
+      const streetAddressLine1Input = screen.getByTestId('streetAddressLine1TestID')
+      expect(streetAddressLine1Input.props.value).toEqual('')
     })
   })
 
   describe('when a picker item does not exist', () => {
-    it('should set it to an empty string initially', async () => {
-      initializeTestInstance()
-      const statePicker = testInstance.findAllByType(VAModalPicker)[1]
-      expect(statePicker.props.selectedValue).toEqual('')
+    it('sets it to an empty string initially', () => {
+      const stateSelector = screen.getByTestId('stateTestID')
+      expect(stateSelector.props.children).toEqual('')
     })
   })
 
   describe('when the address type is OVERSEAS MILITARY', () => {
-    it('should initialize the checkbox with the value true', async () => {
+    it('initializes the checkbox with the value true', () => {
       const mailingAddress: AddressData = {
         id: 0,
         addressLine1: '1707 Tiburon Blvd',
@@ -400,22 +302,20 @@ context('EditAddressScreen', () => {
         zipCodeSuffix: '1234',
       }
 
-      initializeTestInstance(undefined, { mailingAddress })
+      renderWithData(false, { mailingAddress })
 
-      const checkbox = testInstance.findByType(VASelector)
-      expect(checkbox.props.selected).toEqual(true)
+      expect(screen.getByRole('checkbox', { checked: true })).toBeTruthy()
     })
   })
 
   describe('when the address type is not OVERSEAS MILITARY', () => {
-    it('should initialize the checkbox with the value false', async () => {
-      const checkbox = testInstance.findByType(VASelector)
-      expect(checkbox.props.selected).toEqual(false)
+    it('initializes the checkbox with the value false', () => {
+      expect(screen.getByRole('checkbox', { checked: false })).toBeTruthy()
     })
   })
 
   describe('when checkboxSelected is true', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       const mailingAddress: AddressData = {
         id: 0,
         addressLine1: '1707 Tiburon Blvd',
@@ -432,107 +332,77 @@ context('EditAddressScreen', () => {
         zipCodeSuffix: '1234',
       }
 
-      initializeTestInstance(undefined, { mailingAddress })
+      renderWithData(false, { mailingAddress })
     })
 
     describe('when the country is not already USA', () => {
-      it('should set country to USA', async () => {
-        const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
-        expect(countryPicker.props.selectedValue).toEqual('USA')
+      it('sets the country value to USA', () => {
+        expect(screen.getByTestId('countryPickerTestID').props.children).toEqual('United States')
       })
     })
 
-    it('should disable and hide the country picker', async () => {
-      const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
-      expect(countryPicker.props.disabled).toEqual(true)
-      expect(countryPicker.parent?.props.display).toEqual('none')
+    it('disables and hides the country picker', () => {
+      expect(screen.queryByText('countryPickerTestID')).toBeFalsy()
     })
 
-    it('should set the state picker pickerOptions to MilitaryStates', async () => {
-      const statePicker = testInstance.findAllByType(VAModalPicker)[2]
-      expect(statePicker.props.pickerOptions).toEqual(MilitaryStates)
+    it('sets the state picker pickerOptions to MilitaryStates', () => {
+      fireEvent.press(screen.getByTestId('stateTestID'))
+      expect(screen.getByText('Armed Forces Americas (AA)')).toBeTruthy()
     })
 
-    it('should render the military post office picker instead of the city text input', async () => {
-      const pickers = testInstance.findAllByType(VAModalPicker)
-      expect(pickers[1].props.labelKey).toEqual('editAddress.militaryPostOffices')
-
-      const textInputs = testInstance.findAllByType(VATextInput)
-      expect(textInputs[0].props.labelKey).toEqual('editAddress.streetAddressLine1')
-      expect(textInputs[1].props.labelKey).toEqual('editAddress.streetAddressLine2')
-      expect(textInputs[2].props.labelKey).toEqual('editAddress.streetAddressLine3')
-      expect(textInputs[3].props.labelKey).toEqual('editAddress.zipCode')
+    it('renders the military post office picker instead of the city text input', () => {
+      expect(screen.queryByText('City (Required)')).toBeFalsy()
+      expect(screen.getByText('APO/FPO/DPO (Required)')).toBeTruthy()
     })
   })
 
   describe('when checkboxSelected is false', () => {
-    it('should set the state picker pickerOptions to States', async () => {
-      const statePicker = testInstance.findAllByType(VAModalPicker)[1]
-      expect(statePicker.props.pickerOptions).toEqual(States)
+    it('sets the state picker pickerOptions to States', () => {
+      expect(screen.getByRole('checkbox', { checked: false }))
+      fireEvent.press(screen.getByTestId('stateTestID'))
+      expect(screen.getByText('Alabama')).toBeTruthy()
     })
 
-    it('should enable the country picker', async () => {
-      const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
-      expect(countryPicker.props.disabled).toEqual(false)
+    it('enables the country picker', () => {
+      fireEvent.press(screen.getByTestId('countryPickerTestID'))
+      expect(screen.getByText('Algeria')).toBeTruthy()
     })
 
-    it('should render the city text input instead of the military post office picker', async () => {
-      const textInputs = testInstance.findAllByType(VATextInput)
-      expect(textInputs[3].props.labelKey).toEqual('editAddress.city')
-
-      const pickers = testInstance.findAllByType(VAModalPicker)
-      expect(pickers[0].props.labelKey).toEqual('editAddress.country')
-      expect(pickers[1].props.labelKey).toEqual('editAddress.state')
+    it('renders the city text input instead of the military post office picker', () => {
+      expect(screen.queryByText('APO/FPO/DPO (Required)')).toBeFalsy()
+      expect(screen.getByText('City (Required)')).toBeTruthy()
     })
   })
 
   describe('when the country is domestic', () => {
-    it('should render state picker', async () => {
-      const mailingAddress: AddressData = {
-        id: 0,
-        addressLine1: '1707 Tiburon Blvd',
-        addressLine2: 'Address line 2',
-        addressLine3: 'Address line 3',
-        addressPou: 'RESIDENCE/CHOICE',
-        addressType: 'DOMESTIC',
-        city: 'Tiburon',
-        countryCodeIso3: 'USA',
-        internationalPostalCode: '1',
-        province: 'province',
-        stateCode: 'CA',
-        zipCode: '94920',
-        zipCodeSuffix: '1234',
-      }
-
-      initializeTestInstance(undefined, { mailingAddress })
-
-      const statePicker = testInstance.findAllByType(VAModalPicker)[1]
-      expect(statePicker.props.labelKey).toEqual('editAddress.state')
+    it('renders the state picker', () => {
+      fireEvent.press(screen.getByTestId('stateTestID'))
+      expect(screen.getByText('Alabama'))
     })
   })
 
   describe('when the country is not domestic', () => {
-    it('should render state text input', async () => {
+    it('renders state text input', () => {
       const mailingAddress: AddressData = {
         id: 0,
-        addressLine1: '1707 Tiburon Blvd',
-        addressLine2: 'Address line 2',
+        addressLine1: '4313 Cassin Way',
+        addressLine2: 'Suite 992',
         addressLine3: 'Address line 3',
-        addressPou: 'RESIDENCE/CHOICE',
+        addressPou: 'CORRESPONDENCE',
         addressType: 'INTERNATIONAL',
-        city: 'Tiburon',
-        countryCodeIso3: 'ALB',
+        city: 'Lake Lucybury',
+        countryCodeIso3: 'AUS',
         internationalPostalCode: '1',
         province: 'province',
-        stateCode: 'CA',
-        zipCode: '94920',
-        zipCodeSuffix: '1234',
+        stateCode: 'Northern Territory',
+        zipCode: '5922',
+        zipCodeSuffix: '',
       }
 
-      initializeTestInstance(undefined, { mailingAddress })
+      renderWithData(false, { mailingAddress })
 
-      const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
-      expect(stateVATextInput.props.labelKey).toEqual('editAddress.state')
+      fireEvent.press(screen.getByTestId('stateTestID'))
+      expect(screen.queryByText('Alabama')).toBeFalsy()
     })
   })
 
@@ -553,8 +423,9 @@ context('EditAddressScreen', () => {
         zipCode: '96278',
       }
 
-      initializeTestInstance(undefined, { mailingAddress })
-      getSaveButton().props.onPress()
+      renderWithData(false, { mailingAddress })
+
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
       await waitFor(() => expect(goBackSpy).toBeCalled())
     })
   })
@@ -614,84 +485,59 @@ context('EditAddressScreen', () => {
             ],
           })
 
-      initializeTestInstance(undefined, { mailingAddress })
-      getSaveButton().props.onPress()
+      renderWithData(false, { mailingAddress })
+
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
       await waitFor(() => expect(post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', mailingAddress, undefined, abortSignal))
-      await waitFor(() => expect(testInstance.findAllByType(AddressValidation).length).toEqual(1))
+      await waitFor(() => expect(screen.getByText('Verify your address')).toBeTruthy())
     })
   })
 
   describe('when content is invalid for domestic address', () => {
-    it('should display an AlertBox and a field error for each required field', async () => {
-      act(() => {
-        const pickers = testInstance.findAllByType(VAModalPicker)
-        pickers.forEach((picker) => {
-          picker.props.onSelectionChange('')
-        })
+    it('displays an AlertBox and a field error for each required field', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
-        const textInputs = testInstance.findAllByType(VATextInput)
-        textInputs.forEach((textInput) => {
-          textInput.props.onChange('')
-        })
-
-        getSaveButton().props.onPress()
-      })
-
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-
-      // TODO: find a better way to pick the right textview
-      expect(findByTypeWithText(testInstance, TextView, 'Country is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'State is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()
+      expect(screen.getByText('Please check your mailing address')).toBeTruthy()
+      expect(screen.getByText('Country is required')).toBeTruthy()
+      expect(screen.getByText('Street address is required')).toBeTruthy()
+      expect(screen.getByText('City is required')).toBeTruthy()
+      expect(screen.getByText('State is required')).toBeTruthy()
+      expect(screen.getByText('Postal code is required')).toBeTruthy()
     })
   })
 
   describe('when content is invalid for military address', () => {
-    it('should display an AlertBox and a field error for each required field', async () => {
-      act(() => {
-        testInstance.findByType(VASelector).props.onSelectionChange(true)
-      })
+    it('displays an AlertBox and a field error for each required field', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
-      act(() => {
-        getSaveButton().props.onPress()
-      })
-
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()
+      expect(screen.getByText('Please check your mailing address')).toBeTruthy()
+      expect(screen.getByText('Street address is required')).toBeTruthy()
+      expect(screen.getByText('Postal code is required')).toBeTruthy()
     })
   })
 
   describe('when content is invalid for an international address', () => {
-    it('should display an AlertBox and a field error for each required field', async () => {
-      act(() => {
-        testInstance.findAllByType(VAModalPicker)[0].props.onSelectionChange('AFG')
-      })
+    it('displays an AlertBox and a field error for each required field', () => {
+      fireEvent.press(screen.getByTestId('countryPickerTestID'))
+      fireEvent.press(screen.getByText('Algeria'))
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
-      act(() => {
-        getSaveButton().props.onPress()
-      })
-
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(findByTypeWithText(testInstance, TextView, 'Street address is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'City is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Postal code is required')).toBeTruthy()
+      expect(screen.getByText('Street address is required')).toBeTruthy()
+      expect(screen.getByText('City is required')).toBeTruthy()
+      expect(screen.getByText('Postal code is required')).toBeTruthy()
     })
   })
 
   describe('when the address is residential and there is address data', () => {
-    it('should display the remove button', () => {
-      initializeTestInstance(true, { residentialAddress, mailingAddress })
-      const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons[buttons.length - 1].props.label).toEqual('Remove home address')
+    it('displays the remove button', () => {
+      renderWithData(true, { residentialAddress })
+      expect(screen.getByRole('button', { name: 'Remove home address' })).toBeTruthy
     })
   })
 
   describe('validateAddress', () => {
     describe('when INTERNATIONAL', () => {
-      it('should pass province and internationalPostalCode as part of the expected payload', async () => {
+      it('passes province and internationalPostalCode as part of the expected payload', async () => {
         const mailingAddress: AddressData = {
           id: 0,
           addressLine1: '127 Harvest Moon Dr',
@@ -707,11 +553,9 @@ context('EditAddressScreen', () => {
           zipCode: '',
         }
 
-        initializeTestInstance(undefined, { mailingAddress })
+        renderWithData(false, { mailingAddress })
 
-        act(() => {
-          getSaveButton().props.onPress()
-        })
+        fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
         const abortController = new AbortController()
         const abortSignal = abortController.signal
@@ -738,7 +582,7 @@ context('EditAddressScreen', () => {
     })
 
     describe('when DOMESTIC', () => {
-      it('should pass stateCode and zipCode as part of the expected payload', async () => {
+      it('passes stateCode and zipCode as part of the expected payload', async () => {
         const mailingAddress: AddressData = {
           id: 0,
           addressLine1: '1707 Tiburon Blvd',
@@ -755,11 +599,9 @@ context('EditAddressScreen', () => {
           zipCodeSuffix: '1234',
         }
 
-        initializeTestInstance(undefined, { mailingAddress })
+        renderWithData(false, { mailingAddress })
 
-        act(() => {
-          getSaveButton().props.onPress()
-        })
+        fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
         const abortController = new AbortController()
         const abortSignal = abortController.signal
@@ -786,7 +628,7 @@ context('EditAddressScreen', () => {
     })
 
     describe('when OVERSEAS MILITARY', () => {
-      it('should pass stateCode and zipCode as part of the expected payload', async () => {
+      it('passes stateCode and zipCode as part of the expected payload', async () => {
         const mailingAddress: AddressData = {
           id: 0,
           addressLine1: 'Unit 2050 Box 4190',
@@ -802,10 +644,9 @@ context('EditAddressScreen', () => {
           zipCode: '96278',
         }
 
-        initializeTestInstance(undefined, { mailingAddress })
-        act(() => {
-          getSaveButton().props.onPress()
-        })
+        renderWithData(false, { mailingAddress })
+
+        fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
         const abortController = new AbortController()
         const abortSignal = abortController.signal
@@ -832,28 +673,10 @@ context('EditAddressScreen', () => {
   })
 
   describe('delete address', () => {
-    it('should call the useDestructive hook', async () => {
-      const residentialAddress: AddressData = {
-        id: 25,
-        addressLine1: '1707 Tiburon Blvd',
-        addressLine2: 'Address line 2',
-        addressLine3: 'Address line 3',
-        addressPou: 'RESIDENCE/CHOICE',
-        addressType: 'DOMESTIC',
-        city: 'Tiburon',
-        countryCodeIso3: 'USA',
-        province: 'province',
-        stateCode: 'CA',
-        zipCode: '94920',
-        zipCodeSuffix: '1234',
-      }
+    it('calls the useDestructive hook', () => {
+      renderWithData(true, { residentialAddress })
 
-      initializeTestInstance(true, { residentialAddress })
-
-      act(() => {
-        testInstance.findByType(VAButton).props.onPress()
-      })
-
+      fireEvent.press(screen.getByRole('button', { name: 'Remove home address' }))
       expect(mockAlertSpy).toHaveBeenCalled()
     })
   })

@@ -289,7 +289,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
-      <FullScreenSubtask title={t('editDraft')} leftButtonText={t('cancel')} menuViewActions={MenViewActions}>
+      <FullScreenSubtask title={t('editDraft')} leftButtonText={t('cancel')} menuViewActions={MenViewActions} scrollViewRef={scrollViewRef}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -308,7 +308,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         leftButtonText={t('cancel')}
         onLeftButtonPress={() => {
           goToDrafts(false)
-        }}>
+        }}
+        scrollViewRef={scrollViewRef}>
         <LoadingComponent text={text} />
       </FullScreenSubtask>
     )
@@ -320,7 +321,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         leftButtonText={t('cancel')}
         onLeftButtonPress={() => {
           goToDrafts(false)
-        }}>
+        }}
+        scrollViewRef={scrollViewRef}>
         <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
       </FullScreenSubtask>
     )
