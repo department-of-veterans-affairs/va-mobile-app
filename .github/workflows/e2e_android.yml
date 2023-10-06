@@ -42,28 +42,8 @@ jobs:
   #     channel_name: va-mobile-build-alerts
   #     message: 'E2E Android build process starting. Please see :thread: for results. This process may take a while.'
 
-  get_avd_name:
-    runs-on: ubuntu-latest
-    outputs:
-          AVD_NAME: ${{ steps.AVD_NAME.outputs.value }}
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
-          
-      - name: Extract AVD_NAME from .detoxrc.json
-        uses: sergeysova/jq-action@v2
-        id: AVD_NAME
-        with:
-          cmd: 'jq .devices.emulator.device.avdName VAMobile/.detoxrc.json -r'
-
-      - name: Show my AVD_NAME
-        run: 'echo "AVD_NAME ${{ steps.AVD_NAME.outputs.value }}"' 
-
-
   e2e-android:
     # needs: start_slack_thread
-    needs: get_avd_name
     runs-on: macos-latest-xl
     steps:
       - uses: actions/checkout@v3
