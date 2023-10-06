@@ -123,11 +123,11 @@ jobs:
         with:
           working-directory: VAMobile
           api-level: 28
-          profile: pixel_4_xl
+          profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: ${{ needs.get_avd_name.outputs.AVD_NAME }}"
+          avd-name: Pixel_4_XL_API_28
           script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
       # - name: Inform Slack of Failure
