@@ -123,7 +123,7 @@ jobs:
         with:
           working-directory: VAMobile
           api-level: 28
-          profile: pixel_6_pro
+          profile: pixel_4_xl
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
