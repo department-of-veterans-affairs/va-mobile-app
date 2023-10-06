@@ -100,12 +100,7 @@ jobs:
 
       - name: Get_AVD_Name
         working-directory: VAMobile
-        run: |
-          content=`cat ./.detoxrc.json`
-          content="${content//'%'/'%25'}"
-          content="${content//$'\n'/'%0A'}"
-          content="${content//$'\r'/'%0D'}"
-          echo AVD_Name="${{fromJson(content).devices.emulator.device.avdName}}" >> $GITHUB_OUTPUT
+        run: echo AVD_Name="${{fromJson(cat ./.detoxrc.json).devices.emulator.device.avdName}}" >> $GITHUB_OUTPUT
 
       - name: Run e2e tests for Android
         uses: reactivecircus/android-emulator-runner@v2
