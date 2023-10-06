@@ -100,7 +100,7 @@ jobs:
 
       - id: Get_AVD_Name
         run: |
-          content=`cat ./path/to/package.json`
+          content=`cat ./detoxrc.json`
           content="${content//'%'/'%25'}"
           content="${content//$'\n'/'%0A'}"
           content="${content//$'\r'/'%0D'}"
