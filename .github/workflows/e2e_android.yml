@@ -98,6 +98,14 @@ jobs:
       - name: Bundle Android app
         run: yarn e2e:android-build
 
+      - id: Get_AVD_Name
+        run: |
+          content=`cat ./path/to/package.json`
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          echo "::set-output name=packageJson::$content"
+
       - name: Run e2e tests for Android
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -107,7 +115,7 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: Pixel_4_XL_API_28
+          avd-name: "${{fromJson(steps.Get_AVD_Name.outputs.packageJson).devices.emulator.device.avdName}}"
           script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
       # - name: Inform Slack of Failure
