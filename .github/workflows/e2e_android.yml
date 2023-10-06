@@ -102,7 +102,7 @@ jobs:
           content="${content//'%'/'%25'}"
           content="${content//$'\n'/'%0A'}"
           content="${content//$'\r'/'%0D'}"
-          echo "::set-output name=packageJson::$content"
+          echo packageJson="{{$content}} >> $GITHUB_OUTPUT
 
       - name: Get_AVD_Name
         run: echo AVD_Name="${{fromJson(steps.Setup_JSON_File.outputs.packageJson).devices.emulator.device.avdName}}" >> $GITHUB_OUTPUT
