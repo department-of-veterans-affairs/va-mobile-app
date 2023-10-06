@@ -105,7 +105,7 @@ jobs:
           content="${content//'%'/'%25'}"
           content="${content//$'\n'/'%0A'}"
           content="${content//$'\r'/'%0D'}"
-          echo AVD_Name=${{fromJson(content).devices.emulator.device.avdName}} >> $GITHUB_OUTPUT
+          echo AVD_Name=${{fromJson($content).devices.emulator.device.avdName}} >> $GITHUB_OUTPUT
 
       - name: Run e2e tests for Android
         uses: reactivecircus/android-emulator-runner@v2
