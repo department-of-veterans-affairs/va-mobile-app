@@ -99,6 +99,7 @@ jobs:
         run: yarn e2e:android-build
 
       - id: Get_AVD_Name
+        working-directory: VAMobile
         run: |
           content=`cat ./detoxrc.json`
           content="${content//'%'/'%25'}"
