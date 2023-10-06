@@ -1,7 +1,15 @@
 {
-  "testRunner": "jest",
-  "runnerConfig": "detoxconfig.js",
-  
+  "testRunner" : {
+    "$0": "jest",
+    "args": {
+        "config": "detoxconfig.js"
+    },
+    "jest": {
+        "setuupTimeout": 300000,
+        "reportSpecs": false,
+        "reportWorkerAssign": false
+    }
+  }, 
   "skipLegacyWorkersInjection": true,
   "apps": {
     "ios": {

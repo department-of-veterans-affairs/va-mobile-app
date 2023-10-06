@@ -7,7 +7,10 @@ module.exports = {
   maxWorkers: 1,
   testEnvironment: "./e2e/environment",
   setupFilesAfterEnv: ["./e2e/setup.ts"],
-  testRunner: "jest-circus/runner",
+  verbose: true,
+  reporters: ['detox/runners/jest/reporter'],
+  globalSetup: 'detox/runners/jest/globalSetup',
+  globalTeardown: 'detox/runners/jest/globalTeardown',
   testTimeout: 120000,
   testRegex: "\\.e2e\\.ts$",
   transform: {
@@ -20,8 +23,6 @@ module.exports = {
       },
     ],
   },
-  reporters: ["detox/runners/jest/streamlineReporter"],
-  verbose: true,
   transformIgnorePatterns: ['jest-runner', '/node_modules/(?!native-base)/'],
   moduleNameMapper: {
     '@env': '<rootDir>/env/test.env.ts'
