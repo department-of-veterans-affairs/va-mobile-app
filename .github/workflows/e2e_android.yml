@@ -95,20 +95,20 @@ jobs:
       - name: Set app environment variables
         run: yarn env:staging
 
-      - name: Bundle Android app
-        run: yarn e2e:android-build
-
       - name: Setup_JSON_File
+        working-directory: VAMobile
         run: |
-          content=`cat ./path/to/package.json`
+          content=`cat ./.detoxrc.json`
           content="${content//'%'/'%25'}"
           content="${content//$'\n'/'%0A'}"
           content="${content//$'\r'/'%0D'}"
           echo "::set-output name=packageJson::$content"
 
       - name: Get_AVD_Name
-        working-directory: VAMobile
         run: echo AVD_Name="${{fromJson(steps.Setup_JSON_File.outputs.packageJson).devices.emulator.device.avdName}}" >> $GITHUB_OUTPUT
+
+      - name: Bundle Android app
+        run: yarn e2e:android-build
 
       - name: Run e2e tests for Android
         uses: reactivecircus/android-emulator-runner@v2
