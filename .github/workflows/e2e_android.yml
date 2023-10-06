@@ -116,7 +116,7 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: "${{fromJson(steps.Get_AVD_Name.outputs.packageJson).avdName}}"
+          avd-name: "${{fromJson(steps.Get_AVD_Name.outputs.packageJson).devices.emulator.device.avdName}}"
           script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
       # - name: Inform Slack of Failure
