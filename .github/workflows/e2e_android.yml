@@ -50,10 +50,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+          
       - name: Extract AVD_NAME from .detoxrc.json
         uses: sergeysova/jq-action@v2
         id: AVD_NAME
         with:
+          working-directory: VAMobile
           cmd: 'jq .devices.emulator.device.avdName .detoxrc.json -r'
 
       - name: Show my AVD_NAME
