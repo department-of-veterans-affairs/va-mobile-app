@@ -95,17 +95,14 @@ jobs:
       - name: Set app environment variables
         run: yarn env:staging
 
-      - name: Setup_JSON_File
-        working-directory: VAMobile
-        run: |
-          content=`cat ./.detoxrc.json`
-          content="${content//'%'/'%25'}"
-          content="${content//$'\n'/'%0A'}"
-          content="${content//$'\r'/'%0D'}"
-          echo packageJson="{{$content}}" >> $GITHUB_OUTPUT
+      - name: Extract AVD_NAME from .detoxrc.json
+        uses: sergeysova/jq-action@v2
+        id: AVD_NAME
+        with:
+          cmd: 'jq .devices.emulator.device.avdName .detoxrc.json -r'
 
-      - name: Get_AVD_Name
-        run: echo AVD_Name="${{fromJson(steps.Setup_JSON_File.outputs.packageJson).devices.emulator.device.avdName}}" >> $GITHUB_OUTPUT
+      - name: Show my AVD_NAME
+        run: 'echo "AVD_NAME ${{ steps.AVD_NAME.outputs.value }}"'
 
       - name: Bundle Android app
         run: yarn e2e:android-build
@@ -119,7 +116,7 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: "${{steps.Get_AVD_Name.outputs.AVD_Name}}"
+          avd-name: ${{ steps.AVD_NAME.outputs.value }}"'
           script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
       # - name: Inform Slack of Failure
