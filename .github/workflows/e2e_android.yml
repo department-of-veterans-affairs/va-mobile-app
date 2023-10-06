@@ -98,9 +98,17 @@ jobs:
       - name: Bundle Android app
         run: yarn e2e:android-build
 
+      - name: Setup_JSON_File
+        run: |
+          content=`cat ./path/to/package.json`
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          echo "::set-output name=packageJson::$content"
+
       - name: Get_AVD_Name
         working-directory: VAMobile
-        run: echo AVD_Name="${{fromJson(cat ./.detoxrc.json).devices.emulator.device.avdName}}" >> $GITHUB_OUTPUT
+        run: echo AVD_Name="${{fromJson(steps.Setup_JSON_File.outputs.packageJson).devices.emulator.device.avdName}}" >> $GITHUB_OUTPUT
 
       - name: Run e2e tests for Android
         uses: reactivecircus/android-emulator-runner@v2
@@ -111,7 +119,7 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: ${{ steps.Get_AVD_Name.outputs.AVD_Name }}
+          avd-name: "${{steps.Get_AVD_Name.outputs.AVD_Name}}"
           script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
       # - name: Inform Slack of Failure
