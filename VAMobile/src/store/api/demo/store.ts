@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-import { AddressData, PaymentAccountData, SecureMessagingSystemFolderIdConstants } from '../types'
+import { AddressData } from 'api/types'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
 import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from './decisionLetters'
@@ -11,6 +11,7 @@ import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
 import { Params } from '../api'
 import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from './payments'
+import { PaymentAccountData, SecureMessagingSystemFolderIdConstants } from '../types'
 import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from './prescriptions'
 import {
   ProfileDemoReturnTypes,
@@ -131,6 +132,7 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/payments.json'),
     import('./mocks/prescriptions.json'),
     import('./mocks/notifications.json'),
+    import('./mocks/contactInformation.json'),
     import('../../../api/demoMocks/getAuthorizedServices.json'),
     import('../../../api/demoMocks/getFacilitiesInfo.json'),
     import('./mocks/demographics.json'),

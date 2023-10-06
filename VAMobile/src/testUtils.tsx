@@ -9,7 +9,7 @@ import path from 'path'
 import { AnyAction, configureStore, Store } from '@reduxjs/toolkit'
 import { NavigationContainer } from '@react-navigation/native'
 import { ReactTestInstance } from 'react-test-renderer'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, QueryKey } from '@tanstack/react-query'
 
 import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
@@ -231,8 +231,19 @@ ctxFn.skip = (name: string, fn: () => void) => {
 
 export const context = ctxFn
 
+export type QueriesData = Array<{
+  queryKey: QueryKey
+  data: any
+}>
+
+type RenderParams = {
+  preloadedState?: any // TODO: Update this type to Partial<RootState> and fix broken tests
+  navigationProvided?: boolean,
+  queriesData?: QueriesData
+}
+
 //@ts-ignore
-function render(ui, { preloadedState, navigationProvided = false, ...renderOptions } = {}) {
+function render(ui, { preloadedState, navigationProvided = false, queriesData, ...renderOptions }: RenderParams = {}) {
   //@ts-ignore
   function Wrapper({ children }) {
     let store = mockStore(preloadedState)
@@ -247,8 +258,13 @@ function render(ui, { preloadedState, navigationProvided = false, ...renderOptio
         warn: console.warn,
         // Silence the error console
         error: () => {},
-      }
+      },
     });
+    if (queriesData?.length) {
+      queriesData.forEach(({ queryKey, data }) => {
+        queryClient.setQueryData(queryKey, data)
+      })
+    }
     if (navigationProvided) {
       return (
         <QueryClientProvider client={queryClient}>
