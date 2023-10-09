@@ -131,8 +131,8 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/payments.json'),
     import('./mocks/prescriptions.json'),
     import('./mocks/notifications.json'),
-    import('../../../api/demoMocks/getAuthorizedServices.json'),
-    import('../../../api/demoMocks/getFacilitiesInfo.json'),
+    import('./mocks/getAuthorizedServices.json'),
+    import('./mocks/getFacilitiesInfo.json'),
     import('./mocks/demographics.json'),
   ])
   const transformedData = data.map((file) => transformDates(file))

@@ -1,0 +1,28 @@
+{
+  "/v0/user/authorized-services": {
+    "data": {
+      "type": "user",
+      "id": "abe3f152-90b0-45cb-8776-4958bad0e0ef",
+      "attributes": {
+        "authorizedServices": {
+          "appeals": true,
+          "appointments": true,
+          "claims": true,
+          "decisionLetters": true,
+          "directDepositBenefits": true,
+          "directDepositBenefitsUpdate": true,
+          "disabilityRating": true,
+          "genderIdentity": true,
+          "lettersAndDocuments": true,
+          "militaryServiceHistory": true,
+          "paymentHistory": true,
+          "preferredName": true,
+          "prescriptions": true,
+          "scheduleAppointments": true,
+          "secureMessaging": true,
+          "userProfileUpdate": true
+        }
+      }
+    }
+  }
+}
