@@ -1,6 +1,3 @@
-import { AddressData } from './AddressData'
-import { PhoneData } from './PhoneData'
-
 export type SigninServiceTypes = 'IDME' | 'DSL' | 'MHV' | 'LOGINGOV'
 
 export const SigninServiceTypesConstants: {
@@ -21,19 +18,9 @@ export type UserDataProfile = {
   middleName: string
   lastName: string
   fullName: string
-  contactEmail: EmailData
   signinEmail: string
   birthDate: string
   genderIdentity: string
-  addresses: string
-  residentialAddress?: AddressData
-  mailingAddress?: AddressData
-  homePhoneNumber: PhoneData
-  formattedHomePhone?: string
-  mobilePhoneNumber: PhoneData
-  formattedMobilePhone?: string
-  workPhoneNumber: PhoneData
-  formattedWorkPhone?: string
   signinService: SigninServiceTypes
 }
 
@@ -46,11 +33,6 @@ export type Facility = {
 export type CernerData = {
   isCernerPatient: boolean
   facilities: Array<Facility>
-}
-
-export type EmailData = {
-  id: string
-  emailAddress: string
 }
 
 export type VAServices =

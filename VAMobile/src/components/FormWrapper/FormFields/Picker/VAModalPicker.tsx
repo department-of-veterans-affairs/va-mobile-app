@@ -243,6 +243,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
   const commonButtonProps: TextViewProps = {
     variant: 'MobileBody',
+    color: 'link',
     allowFontScaling: false,
     py: 3, // bump up the padding to make touch target a bit bigger #2740
   }

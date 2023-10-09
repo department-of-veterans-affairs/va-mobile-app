@@ -5,7 +5,7 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, render } from 'testUtils'
 
 import AppealCurrentStatus from './AppealCurrentStatus'
-import { AppealAOJTypes, AppealStatusData, AppealTypes, EmailData, PhoneData } from 'store/api/types'
+import { AppealAOJTypes, AppealStatusData, AppealTypes } from 'store/api/types'
 import { TextView } from 'components'
 import { InitialState } from 'store/slices'
 import { RenderAPI } from '@testing-library/react-native'
@@ -50,14 +50,8 @@ context('AppealStatus', () => {
             firstName: '',
             middleName: '',
             lastName: '',
-            genderIdentity: null,
-            contactEmail: {} as EmailData,
             signinEmail: '',
             birthDate: '',
-            addresses: '',
-            homePhoneNumber: {} as PhoneData,
-            mobilePhoneNumber: {} as PhoneData,
-            workPhoneNumber: {} as PhoneData,
             fullName: 'Larry Brown',
             signinService: 'IDME',
           },
