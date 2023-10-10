@@ -98,7 +98,7 @@ context('PersonalInformationScreen', () => {
         signinEmail: 'Gary.Washington@idme.com',
         signinService: 'IDME',
         fullName: 'Gary Washington',
-        birthDate: ''
+        birthDate: null
       }
       initializeTestInstance(personalInfoData)
       expect(screen.getByText('This information is not available right now')).toBeTruthy()
