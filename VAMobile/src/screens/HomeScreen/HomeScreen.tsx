@@ -32,9 +32,7 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-
   const { t } = useTranslation(NAMESPACE.COMMON)
-
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
 

@@ -7,14 +7,12 @@ import { context, mockNavProps, render } from 'testUtils'
 import AppealCurrentStatus from './AppealCurrentStatus'
 import { AppealAOJTypes, AppealStatusData, AppealTypes } from 'store/api/types'
 import { TextView } from 'components'
-import { InitialState } from 'store/slices'
 import { RenderAPI } from '@testing-library/react-native'
 
 const mockExternalLinkSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
 
   return {
     ...original,
@@ -41,23 +39,7 @@ context('AppealStatus', () => {
       programArea,
     })
 
-    component = render(<AppealCurrentStatus {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        personalInformation: {
-          ...InitialState.personalInformation,
-          profile: {
-            firstName: '',
-            middleName: '',
-            lastName: '',
-            signinEmail: '',
-            birthDate: '',
-            fullName: 'Larry Brown',
-            signinService: 'IDME',
-          },
-        },
-      },
-    })
+    component = render(<AppealCurrentStatus {...props} />)
 
     testInstance = component.UNSAFE_root
   }

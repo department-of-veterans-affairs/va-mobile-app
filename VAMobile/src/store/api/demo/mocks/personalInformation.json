@@ -1,0 +1,16 @@
+{
+    "/v2/user": {
+      "data": {
+        "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+        "type": "user",
+        "attributes": {
+          "firstName": "KIMBERLY",
+          "middleName": null,
+          "lastName": "WASHINGTON",
+          "signinEmail": "vets.gov.user+228@gmail.com",
+          "signinService": "IDME",
+          "birthDate": "1950-01-01"
+        }
+      }
+    }
+}
