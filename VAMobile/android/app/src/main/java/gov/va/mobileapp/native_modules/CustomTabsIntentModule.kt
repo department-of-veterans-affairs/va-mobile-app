@@ -82,6 +82,9 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
                             }
                             .build()
 
+            // Prevent login issues on Android when Firefox is the default browser
+            customTabsIntent.intent.flags = FLAG_ACTIVITY_NEW_TASK
+
             context.currentActivity?.apply { customTabsIntent.launchUrl(this, authURI) }
             promise.resolve(true)
         } catch (e: Throwable) {
