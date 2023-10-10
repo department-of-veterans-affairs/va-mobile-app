@@ -78,17 +78,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded) {
       dispatch(completeSync())
     }
-  }, [
-    dispatch,
-    loggedIn,
-    loggingOut,
-    loadingUserAuthorizedServices,
-    militaryHistoryLoaded,
-    userAuthorizedServices?.militaryServiceHistory,
-    t,
-    disabilityRatingLoaded,
-    syncing,
-  ])
+  }, [dispatch, loggedIn, loggingOut, loadingUserAuthorizedServices, militaryHistoryLoaded, userAuthorizedServices?.militaryServiceHistory, t, disabilityRatingLoaded, syncing])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>

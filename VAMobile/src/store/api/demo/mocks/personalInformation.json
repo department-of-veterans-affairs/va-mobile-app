@@ -5,7 +5,7 @@
         "type": "user",
         "attributes": {
           "firstName": "KIMBERLY",
-          "middleName": "",
+          "middleName": null,
           "lastName": "WASHINGTON",
           "signinEmail": "vets.gov.user+228@gmail.com",
           "signinService": "IDME",

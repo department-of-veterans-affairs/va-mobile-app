@@ -11,7 +11,6 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
-import { getBirthDate, getFullName } from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/PersonalInformationScreen'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { useTheme } from 'utils/hooks'
@@ -31,7 +30,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
   const ratingPercent = ratingData?.combinedDisabilityRating
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
   const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
-  const fullName = getFullName(personalInfo)
+  const fullName = personalInfo?.fullName
 
   const getPeriodOfService: React.ReactNode = map(serviceHistory, (service: ServiceData) => {
     const branch = t('militaryInformation.branch', { branch: service.branchOfService })
@@ -129,7 +128,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
               {t('personalInformation.dateOfBirth')}
             </TextView>
             <TextView variant="MobileBody" color="primaryContrast">
-              {getBirthDate(personalInfo?.birthDate, t)}
+              {personalInfo?.birthDate || t('personalInformation.informationNotAvailable')}
             </TextView>
           </Box>
           <Box mb={theme.dimensions.formMarginBetween}>

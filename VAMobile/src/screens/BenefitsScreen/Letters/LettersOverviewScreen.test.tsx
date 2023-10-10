@@ -6,7 +6,6 @@ import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 import { Pressable } from 'react-native'
 import { LettersOverviewScreen } from './index'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
-import { InitialState } from 'store/slices'
 import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
@@ -33,11 +32,7 @@ context('LettersOverviewScreen', () => {
 
     const props = mockNavProps()
 
-    component = render(<LettersOverviewScreen {...props} />, {
-      preloadedState: {
-        ...InitialState,
-      },
-    })
+    component = render(<LettersOverviewScreen {...props} />)
 
     testInstance = component.UNSAFE_root
   }

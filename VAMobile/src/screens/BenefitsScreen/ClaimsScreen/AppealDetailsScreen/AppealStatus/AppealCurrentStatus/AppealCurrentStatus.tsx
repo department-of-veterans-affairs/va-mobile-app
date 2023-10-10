@@ -16,7 +16,6 @@ import {
 import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getFullName } from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/PersonalInformationScreen'
 import { useExternalLink, useTheme } from 'utils/hooks'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import AppealDecision from '../AppealDecision/AppealDecision'
@@ -304,7 +303,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
   const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
   const { data: personalInfo } = usePersonalInformation()
-  const fullName = getFullName(personalInfo)
+  const fullName = personalInfo?.fullName || ''
   const marginTop = theme.dimensions.condensedMarginBetween
   const statusHeadingAndTitle = getStatusHeadingAndTitle(status, aoj, appealType, fullName, t, docketName || 'UNDF DOCKET')
 

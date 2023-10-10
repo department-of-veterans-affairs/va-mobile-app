@@ -7,7 +7,6 @@ import { MilitaryServiceState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { Pressable, PressableProps } from 'react-native'
 import { RootState } from 'store'
-import { getFullName } from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/PersonalInformationScreen'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -22,7 +21,7 @@ export const Nametag: FC = () => {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const fullName = getFullName(personalInfo)
+  const fullName = personalInfo?.fullName
 
   const branch = mostRecentBranch || ''
 

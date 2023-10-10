@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { PersonalInformationData, PersonalInformationPayload } from 'api/types/PersonalInformationData'
+import { PersonalInformationData, PersonalInformationPayload } from 'api/types'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { get } from 'store/api'
+import { getAllFieldsThatExist } from 'utils/common'
 import { personalInformationKeys } from './queryKeys'
 
 /**
@@ -9,7 +11,19 @@ import { personalInformationKeys } from './queryKeys'
  */
 export const getPersonalInformation = async (): Promise<PersonalInformationData | undefined> => {
   const response = await get<PersonalInformationPayload>('/v2/user')
-  return response?.data.attributes
+  const personalInformation = response?.data.attributes
+
+  if (personalInformation) {
+    const birthDay = personalInformation.birthDate
+    return {
+      ...personalInformation,
+      fullName:
+        getAllFieldsThatExist([personalInformation.firstName, personalInformation?.middleName || '', personalInformation.lastName])
+          .join(' ')
+          .trim() || '',
+      birthDate: formatDateMMMMDDYYYY(birthDay || '') || null,
+    }
+  }
 }
 
 /**

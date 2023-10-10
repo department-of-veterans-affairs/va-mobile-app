@@ -8,30 +8,15 @@ import { Box, BoxProps, ErrorComponent, FeatureLandingTemplate, LargeNavButton, 
 import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationData } from 'api/types/PersonalInformationData'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled } from 'utils/remoteConfig'
-import { formatDateMMMMDDYYYY, stringToTitleCase } from 'utils/formattingUtils'
-import { getAllFieldsThatExist } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
+import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDemographics } from 'api/demographics/getDemographics'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-
-export const getBirthDate = (birthDate: string | undefined, t: TFunction): string => {
-  if (birthDate) {
-    const formattedBirthDate = formatDateMMMMDDYYYY(birthDate)
-    return t('dynamicField', { field: formattedBirthDate })
-  } else {
-    return t('personalInformation.informationNotAvailable')
-  }
-}
-
-export const getFullName = (personalInfo: PersonalInformationData | undefined): string => {
-  return personalInfo ? getAllFieldsThatExist([personalInfo.firstName, personalInfo.middleName, personalInfo.lastName]).join(' ').trim() || '' : ''
-}
 
 const getPreferredName = (demographics: UserDemographics | undefined, t: TFunction): string => {
   if (demographics?.preferredName) {
@@ -120,7 +105,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     )
   }
 
-  const birthdate = getBirthDate(personalInfo?.birthDate, t)
+  const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
 
   //ToDo add feature flag display logic for preferredName and genderIdentity cards once it is merged into the nav update
 
