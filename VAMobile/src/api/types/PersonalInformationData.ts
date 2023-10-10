@@ -13,11 +13,4 @@ export type PersonalInformationPayload = {
   }
 }
 
-export type PersonalInformationData = {
-  firstName: string
-  middleName: string
-  lastName: string
-  signinEmail: string
-  signinService: string
-  birthDate: string
-}
+export type PersonalInformationData = PersonalInformationPayload['data']['attributes']
