@@ -46,10 +46,10 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
     <VAScrollView>
       <Box {...alertWrapperProps}>
         <AlertBox border={'informational'} title={t('prescriptions.notFound.title')} titleA11yLabel={a11yLabelVA(t('prescriptions.notFound.title'))}>
-          <TextView pt={theme.paragraphSpacing.spacing20FontSize} paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('prescriptions.notFound.yourVA'))}>
+          <TextView pt={theme.paragraphSpacing.spacing20FontSize} mb={theme.dimensions.condensedMarginBetween} accessibilityLabel={a11yLabelVA(t('prescriptions.notFound.yourVA'))}>
             {t('prescriptions.notFound.yourVA')}
           </TextView>
-          <VABulletList listOfText={medicationNoIncludedList} paragraphSpacing={true} />
+          <VABulletList listOfText={medicationsNotIncludedList} paragraphSpacing={true} />
           <TextView paragraphSpacing={true}>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
           <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
         </AlertBox>
