@@ -8,7 +8,7 @@ export type PersonalInformationPayload = {
       lastName: string
       signinEmail: string
       signinService: string
-      birthDate: string
+      birthDate: string | null
     }
   }
 }
