@@ -73,6 +73,12 @@ jobs:
           bundler-cache: true
           working-directory: VAMobile/android
 
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'microsoft'
+
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
