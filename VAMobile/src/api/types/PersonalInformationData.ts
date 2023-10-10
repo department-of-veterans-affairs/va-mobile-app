@@ -4,7 +4,7 @@ export type PersonalInformationPayload = {
     type: string
     attributes: {
       firstName: string
-      middleName: string
+      middleName: string | null
       lastName: string
       signinEmail: string
       signinService: string
