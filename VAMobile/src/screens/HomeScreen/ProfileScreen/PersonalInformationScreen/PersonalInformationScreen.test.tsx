@@ -131,7 +131,7 @@ context('PersonalInformationScreen', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance(null, errorState)
+      initializeTestInstance(undefined, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
@@ -144,7 +144,7 @@ context('PersonalInformationScreen', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance(null, errorState)
+      initializeTestInstance(undefined, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
