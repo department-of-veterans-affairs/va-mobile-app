@@ -7,7 +7,6 @@ import { context, mockNavProps, render } from 'testUtils'
 import AppealCurrentStatus from './AppealCurrentStatus'
 import { AppealAOJTypes, AppealStatusData, AppealTypes } from 'store/api/types'
 import { TextView } from 'components'
-import { InitialState } from 'store/slices'
 import { RenderAPI } from '@testing-library/react-native'
 
 const mockExternalLinkSpy = jest.fn()
@@ -40,11 +39,7 @@ context('AppealStatus', () => {
       programArea,
     })
 
-    component = render(<AppealCurrentStatus {...props} />, {
-      preloadedState: {
-        ...InitialState,
-      },
-    })
+    component = render(<AppealCurrentStatus {...props} />)
 
     testInstance = component.UNSAFE_root
   }

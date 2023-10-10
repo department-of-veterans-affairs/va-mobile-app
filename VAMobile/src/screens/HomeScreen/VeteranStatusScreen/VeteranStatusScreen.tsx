@@ -30,7 +30,6 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
   const ratingPercent = ratingData?.combinedDisabilityRating
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
   const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
-  const fullName = personalInfo?.fullName
 
   const getPeriodOfService: React.ReactNode = map(serviceHistory, (service: ServiceData) => {
     const branch = t('militaryInformation.branch', { branch: service.branchOfService })
@@ -94,7 +93,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
           </Box> */}
           <Box my={theme.dimensions.formMarginBetween}>
             <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
-              {fullName}
+              {personalInfo?.fullName}
             </TextView>
             {accessToMilitaryInfo && (
               <Box display="flex" flexDirection="row">

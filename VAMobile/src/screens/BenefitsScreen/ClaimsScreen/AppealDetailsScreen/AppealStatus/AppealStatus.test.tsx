@@ -5,7 +5,6 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 import AppealStatus from './AppealStatus'
 import { TextArea, TextView } from 'components'
-import { InitialState } from 'store/slices'
 
 context('AppealStatus', () => {
   let component: RenderAPI
@@ -30,11 +29,7 @@ context('AppealStatus', () => {
       isActiveAppeal,
     })
 
-    component = render(<AppealStatus {...props} />, {
-      preloadedState: {
-        ...InitialState,
-      },
-    })
+    component = render(<AppealStatus {...props} />)
 
     testInstance = component.UNSAFE_root
   }

@@ -17,11 +17,10 @@ export const getPersonalInformation = async (): Promise<PersonalInformationData 
     const birthDay = personalInformation.birthDate
     return {
       ...personalInformation,
-      fullName:
-        getAllFieldsThatExist([personalInformation.firstName, personalInformation?.middleName || '', personalInformation.lastName])
-          .join(' ')
-          .trim() || '',
-      birthDate: formatDateMMMMDDYYYY(birthDay || '') || null,
+      fullName: getAllFieldsThatExist([personalInformation.firstName, personalInformation?.middleName || '', personalInformation.lastName])
+        .join(' ')
+        .trim(),
+      birthDate: birthDay && formatDateMMMMDDYYYY(birthDay),
     }
   }
 }
