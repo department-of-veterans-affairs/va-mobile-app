@@ -7,7 +7,7 @@ import { when } from 'jest-when'
 
 import PersonalInformationScreen from './index'
 import { ServiceData } from 'store/api/types'
-import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 import { ErrorComponent } from 'components'
 import {
   ErrorsState,
@@ -18,6 +18,7 @@ import {
 } from 'store/slices'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { PersonalInformationData } from 'api/types'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -42,34 +43,6 @@ jest.mock('../../../../api/demographics/getDemographics', () => {
   }
 })
 
-jest.mock('../../../../api/personalInformation/getPersonalInformation', () => {
-  let original = jest.requireActual('../../../../api/personalInformation/getPersonalInformation')
-  return {
-    ...original,
-    usePersonalInformation: jest.fn().mockReturnValue({
-      status: "success",
-      data: {
-        firstName: 'Ben',
-        middleName: 'J',
-        lastName: 'Morgan',
-        signinEmail: '',
-        signinService: '',
-        birthDate: '1990-05-08',
-      }
-    }).mockReturnValueOnce({
-      status: "success",
-      data: {
-        firstName: 'Ben',
-        middleName: 'J',
-        lastName: 'Morgan',
-        signinEmail: '',
-        signinService: '',
-        birthDate: '',
-      }
-    })
-  }
-})
-
 context('PersonalInformationScreen', () => {
   let store: any
   let component: RenderAPI
@@ -78,7 +51,7 @@ context('PersonalInformationScreen', () => {
   let navigateToResidentialAddressSpy: jest.Mock
   let navigateToMailingAddressSpy: jest.Mock
 
-  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState) => {
+  const initializeTestInstance = (data?: PersonalInformationData, errorsState: ErrorsState = initialErrorsState) => {
     navigateToMailingAddressSpy = jest.fn()
     navigateToResidentialAddressSpy = jest.fn()
 
@@ -96,7 +69,9 @@ context('PersonalInformationScreen', () => {
         goBack: jest.fn(),
       },
       {
-        params: {},
+        params: {
+          ...data
+        }
       },
     )
 
@@ -114,18 +89,34 @@ context('PersonalInformationScreen', () => {
     testInstance = component.UNSAFE_root
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
-  })
-
   describe('when there is no birth date', () => {
     it('should display the message This information is not available right now', async () => {
+      const personalInfoData: PersonalInformationData = {
+        firstName: 'Gary',
+        middleName: null,
+        lastName: 'Washington',
+        signinEmail: 'Gary.Washington@idme.com',
+        signinService: 'IDME',
+        fullName: 'Gary Washington',
+        birthDate: ''
+      }
+      initializeTestInstance(personalInfoData)
       expect(screen.getByText('This information is not available right now')).toBeTruthy()
     })
   })
 
   describe('when there is a birth date', () => {
     it('should display the birth date in the format Month day, year', async () => {
+      const personalInfoData: PersonalInformationData = {
+        firstName: 'Gary',
+        middleName: null,
+        lastName: 'Washington',
+        signinEmail: 'Gary.Washington@idme.com',
+        signinService: 'IDME',
+        fullName: 'Gary Washington',
+        birthDate: 'May 08, 1990'
+      }
+      initializeTestInstance(personalInfoData)
       expect(screen.getByText('May 08, 1990')).toBeTruthy()
     })
   })
@@ -140,7 +131,7 @@ context('PersonalInformationScreen', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance(errorState)
+      initializeTestInstance(null, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
@@ -153,7 +144,7 @@ context('PersonalInformationScreen', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance(errorState)
+      initializeTestInstance(null, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
