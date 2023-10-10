@@ -21,7 +21,7 @@ const PrescriptionHistoryNoPrescriptions: FC = () => {
     mb: theme.dimensions.contentMarginBottom,
   }
 
-  const medicationNoIncludedList: Array<VABulletListText> = [
+  const medicationsNotIncludedList: Array<VABulletListText> = [
     {
       text: t('prescription.help.item1'),
       a11yLabel: a11yLabelVA(t('prescription.help.item1')),
