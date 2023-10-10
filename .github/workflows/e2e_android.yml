@@ -9,7 +9,6 @@ on:
   # Run on weekdays 4:00 AM UTC
   # schedule:
   #   - cron: '0 4 * * 1,2,3,4,5'
-  push:
   
 defaults:
   run:
@@ -31,7 +30,7 @@ env:
   # Filepath for firebase distribution key. Also used by fastlane
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
   # Slack API token used by fastlane
-  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  # SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
   # start_slack_thread:

@@ -9,7 +9,6 @@ on:
   # Run on weekdays 4:00 AM UTC
   # schedule:
   #   - cron: '0 4 * * 1,2,3,4,5'
-  push:
 
 defaults:
   run:
@@ -21,7 +20,7 @@ env:
   # IAM production app client secret
   APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
   # Slack API token used by fastlane
-  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  # SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
   # start_slack_thread:
