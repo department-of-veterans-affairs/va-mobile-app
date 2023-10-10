@@ -9,6 +9,7 @@ on:
   # Run on weekdays 4:00 AM UTC
   # schedule:
   #   - cron: '0 4 * * 1,2,3,4,5'
+  push:
   
 defaults:
   run:
@@ -71,15 +72,6 @@ jobs:
           ruby-version: '3.0.2'
           bundler-cache: true
           working-directory: VAMobile/android
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: 'microsoft'
-      
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
 
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
