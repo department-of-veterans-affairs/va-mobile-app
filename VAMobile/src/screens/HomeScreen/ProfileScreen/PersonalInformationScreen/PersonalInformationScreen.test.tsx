@@ -57,8 +57,6 @@ jest.mock('../../../../api/personalInformation/getPersonalInformation', () => {
         birthDate: '1990-05-08',
       }
     }).mockReturnValueOnce({
-      isLoading: true,
-    }).mockReturnValueOnce({
       status: "success",
       data: {
         firstName: 'Ben',
