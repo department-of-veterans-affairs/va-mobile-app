@@ -40,7 +40,7 @@ import { isIOS } from 'utils/platform'
 import { linking } from 'constants/linking'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
-import { useAppDispatch, useIsScreenReaderEnabled } from 'utils/hooks'
+import { useAppDispatch, useFontScale, useIsScreenReaderEnabled } from 'utils/hooks'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
@@ -165,6 +165,8 @@ export const AuthGuard: FC = () => {
   const topPaddingAsHeaderStyles = useTopPaddingAsHeaderStyles()
   const [currNewState, setCurrNewState] = useState('active')
   const screenReaderEnabled = useIsScreenReaderEnabled()
+  const fontScaleFunction = useFontScale()
+  const sendUsesLargeTextScal = fontScaleFunction(30)
 
   const snackBarProps: Partial<ToastProps> = {
     duration: SnackBarConstants.duration,
@@ -189,9 +191,12 @@ export const AuthGuard: FC = () => {
   }, [isVoiceOverTalkBackRunning, dispatch, currNewState])
 
   useEffect(() => {
-    dispatch(sendUsesLargeTextAnalytics())
     dispatch(sendUsesScreenReaderAnalytics())
   }, [dispatch, screenReaderEnabled])
+
+  useEffect(() => {
+    dispatch(sendUsesLargeTextAnalytics())
+  }, [dispatch, sendUsesLargeTextScal])
 
   useEffect(() => {
     // Listener for the current app state, updates isVoiceOverTalkBackRunning when app state is active and voice over/talk back
