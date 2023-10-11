@@ -129,9 +129,9 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
  * @param newJsonValue - string or boolean: new value for the json object
  */
 
-export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue, isNewEndpoint=false) {
+export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue) {
 	
-  const mockDirectory = isNewEndpoint ? './src/api/demoMocks/' : './src/store/api/demo/mocks/'
+  const mockDirectory = './src/store/api/demo/mocks/'
   
   fs.readFile(mockDirectory + mockFileName, 'utf8', (error, data) => {
     if(error){

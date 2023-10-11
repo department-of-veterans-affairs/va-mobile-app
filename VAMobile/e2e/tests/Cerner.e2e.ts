@@ -1,7 +1,6 @@
 import { expect, device, by, element} from 'detox'
 import {loginToDemoMode, openHealth, changeMockData, openAppointments, openMessages } from './utils'
 import { setTimeout } from 'timers/promises'
-import { transpileModule } from 'typescript'
 
 export const CernerIdConstants = {
   GO_TO_VA_HEALTH_LINK_ID: 'goToMyVAHealthTestID',
