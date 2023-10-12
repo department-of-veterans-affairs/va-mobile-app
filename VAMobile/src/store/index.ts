@@ -13,7 +13,6 @@ import lettersReducer from 'store/slices/lettersSlice'
 import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
 import paymentsReducer from 'store/slices/paymentsSlice'
-import personalInformationReducer from 'store/slices/personalInformationSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
@@ -26,7 +25,6 @@ const store = configureStore({
     auth: authReducer,
     accessibility: accessabilityReducer,
     demo: demoReducer,
-    personalInformation: personalInformationReducer,
     errors: errorReducer,
     analytics: analyticsReducer,
     appointments: appointmentsReducer,

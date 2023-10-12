@@ -3,7 +3,6 @@ import React from 'react'
 
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { screen } from '@testing-library/react-native'
-import { InitialState } from 'store/slices'
 import ClaimsHistoryScreen from './ClaimsHistoryScreen'
 import * as api from 'store/api'
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -139,15 +138,7 @@ const mockPaginationAppealsClaimsServiceError: ClaimsAndAppealsGetDataMeta = {
 
 context('ClaimsHistoryScreen', () => {
   const initializeTestInstance = () => {
-    const preloadedState = {
-      ...InitialState,
-      personalInformation: {
-        ...InitialState.personalInformation,
-        needsDataLoad: false,
-      },
-    }
-
-    render(<ClaimsHistoryScreen {...mockNavProps()} />, { preloadedState })
+    render(<ClaimsHistoryScreen {...mockNavProps()} />)
   }
 
   describe('when claims service and appeals service are both not authorized', () => {

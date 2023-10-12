@@ -8,27 +8,15 @@ import { Box, BoxProps, ErrorComponent, FeatureLandingTemplate, LargeNavButton, 
 import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState } from 'store/slices/personalInformationSlice'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
-import { UserDataProfile } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled } from 'utils/remoteConfig'
-import { formatDateMMMMDDYYYY, stringToTitleCase } from 'utils/formattingUtils'
 import { registerReviewEvent } from 'utils/inAppReviews'
+import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDemographics } from 'api/demographics/getDemographics'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
-import { useSelector } from 'react-redux'
-
-export const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
-  if (profile && profile.birthDate) {
-    const formattedBirthDate = formatDateMMMMDDYYYY(profile.birthDate)
-    return t('dynamicField', { field: formattedBirthDate })
-  } else {
-    return t('personalInformation.informationNotAvailable')
-  }
-}
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 
 const getPreferredName = (demographics: UserDemographics | undefined, t: TFunction): string => {
   if (demographics?.preferredName) {
@@ -51,7 +39,7 @@ type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'Pers
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { profile, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { data: personalInfo, isLoading: loadingPersonalInfo, isError: getPersonalInfoError } = usePersonalInformation()
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const navigateTo = useRouteNavigation()
   const { data: demographics, isFetching: loadingDemographics, isError: getDemographicsError, refetch: refetchDemographics } = useDemographics()
@@ -101,7 +89,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     }
   }
 
-  if (screenError || getDemographicsError || getGenderIdentityOptionsError) {
+  if (screenError || getDemographicsError || getGenderIdentityOptionsError || getPersonalInfoError) {
     return (
       <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={screenError ? undefined : onTryAgain} />
@@ -109,7 +97,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     )
   }
 
-  if (loading || loadingGenderIdentityOptions || loadingDemographics) {
+  if (loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics) {
     return (
       <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
         <LoadingComponent text={t('personalInformation.loading')} />
@@ -117,7 +105,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     )
   }
 
-  const birthdate = getBirthDate(profile, t)
+  const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
 
   //ToDo add feature flag display logic for preferredName and genderIdentity cards once it is merged into the nav update
 

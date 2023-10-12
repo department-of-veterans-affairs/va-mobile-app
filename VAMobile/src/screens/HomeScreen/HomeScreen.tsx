@@ -8,15 +8,10 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useDemographics } from 'api/demographics/getDemographics'
-import { useSelector } from 'react-redux'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -37,21 +32,9 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
-
   const { t } = useTranslation(NAMESPACE.COMMON)
-
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const { data: demographics, isLoading: loadingDemographics } = useDemographics()
-  const name = loadingDemographics ? '' : demographics?.preferredName || profile?.firstName || ''
-
-  useEffect(() => {
-    // Fetch the profile information
-    if (name === '') {
-      dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
-    }
-  }, [dispatch, name])
 
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = () => {

@@ -10,7 +10,7 @@ import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScre
 import { ErrorObject } from 'store/api'
 import { Events } from 'constants/analytics'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
-import { PhoneData } from 'store/api/types/PhoneData'
+import { PhoneData } from 'api/types/PhoneData'
 import { StackCardInterpolatedStyle, StackCardInterpolationProps } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
