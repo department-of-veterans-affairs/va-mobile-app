@@ -39,7 +39,7 @@ type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'Pers
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { data: personalInfo, isLoading: loadingPersonalInfo, isError: getPersonalInfoError } = usePersonalInformation()
+  const { data: personalInfo, isLoading: loadingPersonalInfo } = usePersonalInformation()
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const navigateTo = useRouteNavigation()
   const { data: demographics, isFetching: loadingDemographics, isError: getDemographicsError, refetch: refetchDemographics } = useDemographics()
@@ -89,7 +89,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     }
   }
 
-  if (screenError || getDemographicsError || getGenderIdentityOptionsError || getPersonalInfoError) {
+  if (screenError || getDemographicsError || getGenderIdentityOptionsError) {
     return (
       <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={screenError ? undefined : onTryAgain} />
