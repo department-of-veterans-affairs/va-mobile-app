@@ -140,15 +140,17 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
               subText={getPreferredName(demographics, t)}
               onPress={navigateTo('PreferredName')}
             />
-            <LargeNavButton
-              title={t('personalInformation.genderIdentity.title')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-              borderColor={'secondary'}
-              borderColorActive={'primaryDarkest'}
-              borderStyle={'solid'}
-              subText={getGenderIdentity(demographics, t, genderIdentityOptions)}
-              onPress={navigateTo('GenderIdentity')}
-            />
+            {genderIdentityOptions && (
+              <LargeNavButton
+                title={t('personalInformation.genderIdentity.title')}
+                borderWidth={theme.dimensions.buttonBorderWidth}
+                borderColor={'secondary'}
+                borderColorActive={'primaryDarkest'}
+                borderStyle={'solid'}
+                subText={getGenderIdentity(demographics, t, genderIdentityOptions)}
+                onPress={navigateTo('GenderIdentity')}
+              />
+            )}
           </>
         )}
       </Box>
