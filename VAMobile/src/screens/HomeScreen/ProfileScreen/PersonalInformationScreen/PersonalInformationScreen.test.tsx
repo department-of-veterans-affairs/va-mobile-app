@@ -97,20 +97,7 @@ context('PersonalInformationScreen', () => {
 
   describe("when demographics information isn't set", () => {
     it('displays message on sharing gender identity and preferred name', async () => {
-      const queriesData = [{
-        queryKey: personalInformationKeys.personalInformation,
-        data: {
-          firstName: 'Gary',
-          middleName: null,
-          lastName: 'Washington',
-          signinEmail: 'Gary.Washington@idme.com',
-          signinService: 'IDME',
-          fullName: 'Gary Washington',
-          birthDate: null
-        }
-      }]
-
-      renderWithData(queriesData)
+      renderWithData()
       await waitFor(() => expect(screen.getByText('Sharing your gender identity is optional.')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Sharing your preferred name is optional.')).toBeTruthy())
     })
@@ -119,20 +106,8 @@ context('PersonalInformationScreen', () => {
   describe('when the gender identity is set', () => {
     it("displays the user's gender identity", async () => {
       const demographics = { genderIdentity: 'M', preferredName: ''}
-      const queriesData = [{
-        queryKey: personalInformationKeys.personalInformation,
-        data: {
-          firstName: 'Gary',
-          middleName: null,
-          lastName: 'Washington',
-          signinEmail: 'Gary.Washington@idme.com',
-          signinService: 'IDME',
-          fullName: 'Gary Washington',
-          birthDate: 'May 08, 1990'
-        }
-      }]
 
-      renderWithData(queriesData, demographics)
+      renderWithData(undefined, demographics)
       await waitFor(() => expect(screen.getByText('Man')).toBeTruthy())
     })
   })
@@ -140,21 +115,20 @@ context('PersonalInformationScreen', () => {
   describe('when the preferred name is set', () => {
     it("displays the user's preferred name", async () => {
       const demographics = { genderIdentity: '', preferredName: 'Gar'}
-      const queriesData = [{
-        queryKey: personalInformationKeys.personalInformation,
-        data: {
-          firstName: 'Gary',
-          middleName: null,
-          lastName: 'Washington',
-          signinEmail: 'Gary.Washington@idme.com',
-          signinService: 'IDME',
-          fullName: 'Gary Washington',
-          birthDate: 'May 08, 1990'
-        }
-      }]
 
-      renderWithData(queriesData, demographics)
+      renderWithData(undefined, demographics)
       await waitFor(() => expect(screen.getByText('Gar')).toBeTruthy())
+    })
+  })
+
+  describe('when fetching gender identity options fails', () => {
+    it('displays error component', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/user/gender_identity/edit')
+        .mockRejectedValue('Error')
+
+      renderWithData()
+      await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
     })
   })
 })
