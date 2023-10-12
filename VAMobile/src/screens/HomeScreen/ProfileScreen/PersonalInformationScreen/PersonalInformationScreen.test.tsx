@@ -12,24 +12,24 @@ jest.mock('utils/remoteConfig')
 when(featureEnabled as jest.Mock).calledWith('preferredNameGenderWaygate').mockReturnValue(true)
 
 when(get as jest.Mock)
-      .calledWith('/v0/user/gender_identity/edit')
-      .mockResolvedValue({
-        data: {
-          id: '23fe358d-6e82-4541-804c-ce7562ba28f4',
-          type: 'GenderIdentityOptions',
-          attributes: {
-            options: {
-              m: 'Man',
-              b: 'Non-Binary',
-              tm: 'Transgender Man',
-              tf: 'Transgender Woman',
-              f: 'Woman',
-              n: 'Prefer not to answer',
-              o: 'A gender not listed here'
-            },
-          },
-        }
-      } as GenderIdentityOptionsPayload)
+  .calledWith('/v0/user/gender_identity/edit')
+  .mockResolvedValue({
+    data: {
+      id: '23fe358d-6e82-4541-804c-ce7562ba28f4',
+      type: 'GenderIdentityOptions',
+      attributes: {
+        options: {
+          m: 'Man',
+          b: 'Non-Binary',
+          tm: 'Transgender Man',
+          tf: 'Transgender Woman',
+          f: 'Woman',
+          n: 'Prefer not to answer',
+          o: 'A gender not listed here'
+        },
+      },
+    }
+  } as GenderIdentityOptionsPayload)
 
 context('PersonalInformationScreen', () => {
   let props: any
@@ -95,8 +95,8 @@ context('PersonalInformationScreen', () => {
     })
   })
 
-  describe("when the gender identity isn't set", () => {
-    it('displays message on sharing gender identity', async () => {
+  describe("when demographics information isn't set", () => {
+    it('displays message on sharing gender identity and preferred name', async () => {
       const queriesData = [{
         queryKey: personalInformationKeys.personalInformation,
         data: {
@@ -112,6 +112,7 @@ context('PersonalInformationScreen', () => {
 
       renderWithData(queriesData)
       await waitFor(() => expect(screen.getByText('Sharing your gender identity is optional.')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Sharing your preferred name is optional.')).toBeTruthy())
     })
   })
 
@@ -133,6 +134,27 @@ context('PersonalInformationScreen', () => {
 
       renderWithData(queriesData, demographics)
       await waitFor(() => expect(screen.getByText('Man')).toBeTruthy())
+    })
+  })
+
+  describe('when the preferred name is set', () => {
+    it("displays the user's preferred name", async () => {
+      const demographics = { genderIdentity: '', preferredName: 'Gar'}
+      const queriesData = [{
+        queryKey: personalInformationKeys.personalInformation,
+        data: {
+          firstName: 'Gary',
+          middleName: null,
+          lastName: 'Washington',
+          signinEmail: 'Gary.Washington@idme.com',
+          signinService: 'IDME',
+          fullName: 'Gary Washington',
+          birthDate: 'May 08, 1990'
+        }
+      }]
+
+      renderWithData(queriesData, demographics)
+      await waitFor(() => expect(screen.getByText('Gar')).toBeTruthy())
     })
   })
 })
