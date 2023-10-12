@@ -14,7 +14,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDemographics } from 'api/demographics/getDemographics'
-import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 
@@ -39,9 +39,10 @@ type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'Pers
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { data: personalInfo, isLoading: loadingPersonalInfo } = usePersonalInformation()
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const navigateTo = useRouteNavigation()
+  const personalInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
+  const { data: personalInfo, isLoading: loadingPersonalInfo } = usePersonalInformation()
   const { data: demographics, isFetching: loadingDemographics, isError: getDemographicsError, refetch: refetchDemographics } = useDemographics()
   const {
     data: genderIdentityOptions,
@@ -79,7 +80,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     borderStyle: 'solid',
   }
 
-  const screenError = useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
   const onTryAgain = () => {
     if (getDemographicsError) {
       refetchDemographics()
@@ -89,10 +89,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     }
   }
 
-  if (screenError || getDemographicsError || getGenderIdentityOptionsError) {
+  if (personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError) {
     return (
       <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={screenError ? undefined : onTryAgain} />
+        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={onTryAgain} />
       </FeatureLandingTemplate>
     )
   }
@@ -106,8 +106,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   }
 
   const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
-
-  //ToDo add feature flag display logic for preferredName and genderIdentity cards once it is merged into the nav update
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')} testID="PersonalInformationTestID">
