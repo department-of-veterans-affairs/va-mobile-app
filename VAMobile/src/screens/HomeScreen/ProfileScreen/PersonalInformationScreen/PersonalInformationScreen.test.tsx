@@ -34,7 +34,7 @@ when(get as jest.Mock)
 context('PersonalInformationScreen', () => {
   let props: any
 
-  const initializeTestInstance = (queriesData?: QueriesData, demographics?: UserDemographics) => {
+  const renderWithData = (queriesData?: QueriesData, demographics?: UserDemographics) => {
     when(get as jest.Mock)
       .calledWith('/v0/user/demographics')
       .mockResolvedValue({
@@ -61,7 +61,7 @@ context('PersonalInformationScreen', () => {
 
   describe('when there is no birth date', () => {
     it('should display the message This information is not available right now', async () => {
-      initializeTestInstance([{
+      renderWithData([{
         queryKey: personalInformationKeys.personalInformation,
         data: {
           firstName: 'Gary',
@@ -79,7 +79,7 @@ context('PersonalInformationScreen', () => {
 
   describe('when there is a birth date', () => {
     it('should display the birth date in the format Month day, year', async () => {
-      initializeTestInstance([{
+      renderWithData([{
         queryKey: personalInformationKeys.personalInformation,
         data: {
           firstName: 'Gary',
@@ -110,7 +110,7 @@ context('PersonalInformationScreen', () => {
         }
       }]
 
-      initializeTestInstance(queriesData)
+      renderWithData(queriesData)
       await waitFor(() => expect(screen.getByText('Sharing your gender identity is optional.')).toBeTruthy())
     })
   })
@@ -131,7 +131,7 @@ context('PersonalInformationScreen', () => {
         }
       }]
 
-      initializeTestInstance(queriesData, demographics)
+      renderWithData(queriesData, demographics)
       await waitFor(() => expect(screen.getByText('Man')).toBeTruthy())
     })
   })
