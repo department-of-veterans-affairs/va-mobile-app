@@ -5,7 +5,7 @@ import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { ClaimsAndAppealsState, PersonalInformationState, getProfileInfo, prefetchClaimsAndAppeals } from 'store/slices'
+import { ClaimsAndAppealsState, prefetchClaimsAndAppeals } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -34,9 +34,6 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
   const claimsAndAppealsAccess = userAuthorizedServices?.claims || userAuthorizedServices?.appeals
-  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>(
-    (state) => state.personalInformation,
-  )
   const controlLabels = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
   const [selectedTab, setSelectedTab] = useState(0)
@@ -44,17 +41,9 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
   const claimsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
-  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
 
   const title = featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters ? t('claimsHistory.title') : t('claims.title')
   const backLabel = featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters ? t('claims.title') : t('benefits.title')
-
-  useEffect(() => {
-    // Fetch the profile information
-    if (personalInformationNeedsUpdate && profileNotInDowntime) {
-      dispatch(getProfileInfo(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
-    }
-  }, [dispatch, personalInformationNeedsUpdate, profileNotInDowntime])
 
   // load claims and appeals and filter upon mount
   // fetch the first page of Active and Closed
@@ -70,9 +59,6 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
     if (claimsAndAppealsAccess) {
       dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
     }
-    if (personalInformationNeedsUpdate) {
-      dispatch(getProfileInfo(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
-    }
   }
 
   if (useError(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID) || getUserAuthorizedServicesError) {
@@ -83,7 +69,7 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
     )
   }
 
-  if (loadingClaimsAndAppeals || personalInformationLoading || loadingUserAuthorizedServices) {
+  if (loadingClaimsAndAppeals || loadingUserAuthorizedServices) {
     return (
       <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title}>
         <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />

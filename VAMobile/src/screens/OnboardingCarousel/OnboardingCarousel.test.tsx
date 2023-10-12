@@ -6,7 +6,7 @@ import { context, render, RenderAPI } from 'testUtils'
 import { ReactTestInstance } from 'react-test-renderer'
 
 import OnboardingCarousel from './OnboardingCarousel'
-import { completeFirstTimeLogin, InitialState } from 'store/slices'
+import { completeFirstTimeLogin } from 'store/slices'
 import { Carousel } from 'components'
 
 jest.mock('store/slices', () => {
@@ -27,24 +27,7 @@ context('OnboardingCarousel', () => {
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    component = render(<OnboardingCarousel />, {
-      preloadedState: {
-        ...InitialState,
-        personalInformation: {
-          ...InitialState.personalInformation,
-          profile: {
-            middleName: '',
-            lastName: '',
-            genderIdentity: null,
-            signinEmail: '',
-            birthDate: '',
-            fullName: '',
-            firstName: 'Billy',
-            signinService: 'IDME',
-          },
-        },
-      },
-    })
+    component = render(<OnboardingCarousel />)
 
     testInstance = component.UNSAFE_root
   })

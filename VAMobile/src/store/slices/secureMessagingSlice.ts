@@ -138,26 +138,12 @@ export const initialSecureMessagingState: SecureMessagingState = {
  */
 export const fetchInboxMessages =
   (page: number, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
+  async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(fetchInboxMessages(page, screenID))))
     dispatch(dispatchStartFetchInboxMessages())
 
     try {
-      // TODO story #25035, remove once ready
-      const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
-        throw {
-          json: {
-            errors: [
-              {
-                code: SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS,
-              },
-            ],
-          },
-        }
-      }
-
       const folderID = SecureMessagingSystemFolderIdConstants.INBOX
       const inboxMessages = await api.get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
         page: page.toString(),

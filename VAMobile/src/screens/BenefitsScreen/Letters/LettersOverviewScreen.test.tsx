@@ -3,13 +3,9 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, render, RenderAPI } from 'testUtils'
-
 import { Pressable } from 'react-native'
 import { LettersOverviewScreen } from './index'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
-import NoLettersScreen from './NoLettersScreen'
-import { InitialState, initialPersonalInformationState } from 'store/slices'
-import { LoadingComponent } from 'components'
 import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
@@ -27,7 +23,7 @@ context('LettersOverviewScreen', () => {
   let testInstance: ReactTestInstance
   let mockNavigateToSpy: jest.Mock
 
-  const initializeTestInstance = (personalInformationLoading = false, personalInformationError = false) => {
+  const initializeTestInstance = () => {
     mockNavigateToSpy = jest.fn()
     when(mockNavigationSpy)
       .mockReturnValue(() => {})
@@ -36,16 +32,7 @@ context('LettersOverviewScreen', () => {
 
     const props = mockNavProps()
 
-    component = render(<LettersOverviewScreen {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        personalInformation: {
-          ...initialPersonalInformationState,
-          loading: personalInformationLoading,
-          error: personalInformationError ? { networkError: true } : undefined,
-        },
-      },
-    })
+    component = render(<LettersOverviewScreen {...props} />)
 
     testInstance = component.UNSAFE_root
   }
@@ -56,20 +43,6 @@ context('LettersOverviewScreen', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
-  })
-
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance(true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-    })
-  })
-
-  describe('when an error occurs loading profile info', () => {
-    it('should show No Letters screen', async () => {
-      initializeTestInstance(false, true)
-      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
-    })
   })
 
   it('should go to edit address when the address is pressed', async () => {

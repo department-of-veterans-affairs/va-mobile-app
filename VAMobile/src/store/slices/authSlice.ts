@@ -30,7 +30,6 @@ import { dispatchClearPaymentsOnLogout } from './paymentsSlice'
 import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
 import { dispatchDisabilityRatingLogout } from './disabilityRatingSlice'
 import { dispatchMilitaryHistoryLogout } from './militaryServiceSlice'
-import { dispatchProfileLogout } from './personalInformationSlice'
 import { dispatchResetTappedForegroundNotification } from './notificationSlice'
 import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { dispatchVaccineLogout } from './vaccineSlice'
@@ -588,7 +587,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     dispatch(dispatchClearLoadedAppointments())
     dispatch(dispatchClearLoadedMessages())
     dispatch(dispatchClearLoadedClaimsAndAppeals())
-    dispatch(dispatchProfileLogout())
     dispatch(dispatchMilitaryHistoryLogout())
     dispatch(dispatchDisabilityRatingLogout())
     dispatch(dispatchClearPaymentsOnLogout())

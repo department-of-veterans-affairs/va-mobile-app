@@ -11,7 +11,7 @@ import {
   addressPouTypes,
 } from 'api/types'
 import { DemoStore } from './store'
-import { DirectDepositData, EditResponseData, LettersData, MilitaryServiceHistoryData, PaymentAccountData, UserData } from '../types'
+import { DirectDepositData, EditResponseData, LettersData, MilitaryServiceHistoryData, PaymentAccountData } from '../types'
 import { MOCK_EDIT_RESPONSE } from './utils'
 import { Params } from '../api'
 
@@ -22,14 +22,13 @@ export type ProfileDemoStore = {
   '/v0/military-service-history': MilitaryServiceHistoryData
   '/v0/letters': LettersData
   '/v0/payment-information/benefits': DirectDepositData
-  '/v1/user': UserData
   '/v0/user/contact-info': ContactInformationPayload
 }
 
 /**
  * Type to define the mock returns to keep type safety
  */
-export type ProfileDemoReturnTypes = AddressValidationData | DirectDepositData | DirectDepositData | EditResponseData | LettersData | MilitaryServiceHistoryData | UserData
+export type ProfileDemoReturnTypes = AddressValidationData | DirectDepositData | DirectDepositData | EditResponseData | LettersData | MilitaryServiceHistoryData
 
 /**
  * Function used to update the user's phone numbers. This avoids reuse for the PUT/POST calls required for phones

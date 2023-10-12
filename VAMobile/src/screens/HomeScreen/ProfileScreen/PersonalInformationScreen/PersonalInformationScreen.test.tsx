@@ -6,19 +6,19 @@ import { screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
 import PersonalInformationScreen from './index'
-import { BranchesOfServiceConstants, ServiceData, UserDataProfile } from 'store/api/types'
-import { context, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
-import { ErrorComponent, LoadingComponent } from 'components'
+import { ServiceData } from 'store/api/types'
+import { context, mockNavProps, QueriesData, render, RenderAPI } from 'testUtils'
+import { ErrorComponent } from 'components'
 import {
   ErrorsState,
   initialAuthState,
   initialErrorsState,
   initializeErrorsByScreenID,
   initialMilitaryServiceState,
-  initialPersonalInformationState,
 } from 'store/slices'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -43,29 +43,15 @@ jest.mock('../../../../api/demographics/getDemographics', () => {
   }
 })
 
-const authorizedMilitaryState = {
-  militaryService: {
-    ...initialMilitaryServiceState,
-    mostRecentBranch: BranchesOfServiceConstants.AirForce,
-    serviceHistory: [{} as ServiceData],
-  },
-}
-
-const personalInformationState = {
-  ...initialPersonalInformationState,
-  needsDataLoad: false,
-}
-
 context('PersonalInformationScreen', () => {
   let store: any
   let component: RenderAPI
   let testInstance: ReactTestInstance
-  let profile: UserDataProfile
   let props: any
   let navigateToResidentialAddressSpy: jest.Mock
   let navigateToMailingAddressSpy: jest.Mock
 
-  const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState) => {
+  const initializeTestInstance = (data?: QueriesData, errorsState: ErrorsState = initialErrorsState) => {
     navigateToMailingAddressSpy = jest.fn()
     navigateToResidentialAddressSpy = jest.fn()
 
@@ -82,30 +68,10 @@ context('PersonalInformationScreen', () => {
         navigate: jest.fn(),
         goBack: jest.fn(),
       },
-      {
-        params: {},
-      },
     )
-
-    profile = {
-      preferredName: '',
-      firstName: 'Ben',
-      middleName: 'J',
-      lastName: 'Morgan',
-      fullName: 'Ben J Morgan',
-      genderIdentity: '',
-      signinEmail: 'ben@gmail.com',
-      birthDate: '1990-05-08',
-      signinService: 'IDME',
-    }
 
     store = {
       auth: { ...initialAuthState },
-      personalInformation: {
-        ...personalInformationState,
-        profile,
-        loading,
-      },
       errors: errorsState,
       militaryService: {
         ...initialMilitaryServiceState,
@@ -113,52 +79,44 @@ context('PersonalInformationScreen', () => {
       },
     }
 
-    component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
+    component = render(<PersonalInformationScreen {...props} />, { preloadedState: store, queriesData: data })
 
     testInstance = component.UNSAFE_root
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
-  })
-
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance(true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+  describe('when there is no birth date', () => {
+    it('should display the message This information is not available right now', async () => {
+      initializeTestInstance([{
+        queryKey: personalInformationKeys.personalInformation,
+        data: {
+          firstName: 'Gary',
+          middleName: null,
+          lastName: 'Washington',
+          signinEmail: 'Gary.Washington@idme.com',
+          signinService: 'IDME',
+          fullName: 'Gary Washington',
+          birthDate: null
+        }
+      }])
+      expect(screen.getByText('This information is not available right now')).toBeTruthy()
     })
   })
 
   describe('when there is a birth date', () => {
     it('should display the birth date in the format Month day, year', async () => {
-      expect(screen.queryByText('May 08, 1990')).toBeTruthy()
-    })
-  })
-
-  describe('when there is no birth date', () => {
-    it('should display the message This information is not available right now', async () => {
-      profile.birthDate = ''
-
-      store = {
-        auth: { ...initialAuthState },
-        personalInformation: {
-          ...personalInformationState,
-          profile,
-        },
-        ...authorizedMilitaryState,
-      }
-
-      await waitFor(() => {
-        component = render(<PersonalInformationScreen {...props} />, { preloadedState: store })
-      })
-
-      testInstance = component.UNSAFE_root
-
-      expect(screen.queryByText('This information is not available right now')).toBeTruthy()
+      initializeTestInstance([{
+        queryKey: personalInformationKeys.personalInformation,
+        data: {
+          firstName: 'Gary',
+          middleName: null,
+          lastName: 'Washington',
+          signinEmail: 'Gary.Washington@idme.com',
+          signinService: 'IDME',
+          fullName: 'Gary Washington',
+          birthDate: 'May 08, 1990'
+        }
+      }])
+      expect(screen.getByText('May 08, 1990')).toBeTruthy()
     })
   })
 
@@ -172,7 +130,7 @@ context('PersonalInformationScreen', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance(false, errorState)
+      initializeTestInstance(undefined, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
@@ -185,7 +143,7 @@ context('PersonalInformationScreen', () => {
         errorsByScreenID,
       }
 
-      initializeTestInstance(false, errorState)
+      initializeTestInstance(undefined, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
