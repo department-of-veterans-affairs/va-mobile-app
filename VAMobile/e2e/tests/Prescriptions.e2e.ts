@@ -12,7 +12,7 @@ export const PrescriptionsE2eIdConstants = {
 	PRESCRIPTION_FILTER_RESET_ID: 'resetFilterTestID',
 	PRESCRIPTION_SORT_ID: 'openSortTestID',
 	PRESCRIPTION_REFILL_WARNING_TEXT: 'We can\'t refill some of your prescriptions in the app',
-	PRESCRIPTION_ALL_DESCRIPTION_LABEL: 'This list only shows your  V-A  prescriptions and isn’t intended to be a plan of care.',
+	PRESCRIPTION_ALL_DESCRIPTION_LABEL: 'This list only shows prescriptions filled by  V-A  pharmacies and may not include all your medications.',
 	PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All VA prescriptions (31)',
 	PRESCRIPTION_PENDING_NUMBER_OF_PRESCRIPTIONS_TEXT: 'Pending refills (8)',
 	PRESCRIPTION_TRACKING_NUMBER_OF_PRESCRIPTION_TEXT: 'Refills with tracking information (5)',
