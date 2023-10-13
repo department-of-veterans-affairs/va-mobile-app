@@ -1,37 +1,164 @@
 name: Feature Request
-description: Use this template to formally request a feature for the VA Mobile App team to evaluate.
+description: Use this template to formally request a feature for the VA Mobile App team to evaluate for the VA Health and Benefits App. 
 title: "Feature Request: [name of feature]"
 labels: [ feature-request ]
 assignees: [ timwright12, Hallm13 ]
+
 body:
 - type: input
-  id: fullname
+  id: submittorfullname
   attributes:
-    label: Full Name
+    label: Submittor's Full Name
     description: Add your full name here
     placeholder: Example Name
   validations:
     required: true
+    
 - type: input
-  id: email
+  id: submittoremail
   attributes:
-    label: Email
+    label: Submittor's Email
     description: Your email address so we can contact you with any follow-up questions.
     placeholder: 'example@va.gov'
   validations:
     required: true
+    
 - type: input
   id: featurelabel
   attributes:
-    label: What would you like to add as a new feature?
-    description: Give us a short name or description for this feature, so we know what to call it.
+    label: FeatureName
+    description: Give us a name to your feature submission
   validations:
     required: true
-- type: textarea
-  id: description
+    
+- type: dropdown
+  id: featuretype
   attributes:
-    label: Please explain how it would work.
-    description: Giving us an explanation of how you feel this feature should work will help us better in planning and scoping the request.
+    label: What type of work is being requested?
+    options: 
+       - New feature build
+       - Enhancing existing feature in the Flagship App
+       - Discovery
+       - Content update
+       - Research request
+       - Analytics request 
+  validations:
+    required: true
+
+- type: dropdown
+  id: specificfeature
+  attributes:
+    label: What existing VA Health and Benefits App features does this apply to? 
+    options: 
+       - All features
+       - Global design system
+       - New feature (add in description)
+       - Other (add in description)
+       - Prescription Refills
+       - Secure Messaging
+       - Direct Deposits 
+       - Disability Ratings
+       - Payments
+       - Letters
+       - Vaccines
+       - Proof of Veteran Status 
+       - Appointments
+       - Covid-19
+       - About VA
+  validations:
+    required: true
+    
+- type: input
+  id: featureduedate
+  attributes:
+    label: Due Date
+    description: If there is a specific due date, add the date. If not then put no due date.  
+  validations:
+    required: true
+    
+- type: input
+  id: featureinweb
+  attributes:
+    label: Does this feature exist on Va.gov or Va.gov ecosystem?
+    description: If yes please share its Va.gov url, github, usage metrics, dashboards etc. If no, then put no. 
+  validations:
+    required: true
+    
+- type: input
+  id: featuredocumentation
+  attributes:
+    label: Do you have any supporting materials to share (product brief, github, user flows, dashboards, metics, screenshots, web version of the feature, research, etc)
+    description: If yes please add the name and link for each, if not put no.
+  validations:
+    required: true
+    
+ - type: input
+  id: featureproblem
+  attributes:
+    label: What problem is this solving? 
+    description:Provide details of the current problem(s) Veterans are experiencing that this feature would resolve or reduce?
+  validations:
+    required: true
+    
+ - type: input
+  id: featuretargetaudience
+  attributes:
+    label: What is the target audience for this feature? 
+    description: Provide details on the Veteran group / persona this feature will impact (demographics, behavorial, psychological, etc)
+  validations:
+    required: true
+    
+ - type: input
+  id: featuredescription
+  attributes:
+    label: Feature Description
+    description: Provide details describing the feature, how it would work, and other relevant info. It will be used for Mobile to properly scope and plan. 
+  validations:
+    required: true
+
+ - type: input
+  id: featureriskassumptions
+  attributes:
+    label: Feature risks and assumptions. 
+    description: Provide list of risk and assumptions made or need to account for within this feature request (integration readiness, feasibility, testing ability, timing, etc)
+  validations:
+    required: true
+
+    
+- type: checkboxes
+  id: featureinternalteams
+  attributes:
+    label: What mobile teams would be impacted?
+    options: 
+       - Design
+       - Content 
+       - Product
+       - Analytics
+       - Frontend Engineering
+       - Backend Engineering
+       - Quality Assurance / Testing
+       - Research
+       - Accessibility
+  validations:
+    required: true
+    
+ - type: input
+  id: featureexternalteams
+  attributes:
+    label: What non-Mobile teams will need to be involved and have you discussed this with them?
+    description: Please list out the applicable VA teams involved and their relevant contacts (POs, PMs, etc). For team team please denote if you have spoken to them about this feature request.
+  validations:
+    required: true
+    
+- type: dropdown
+  id: featureoctoobjectives
+  attributes:
+    label: What OCTO objective best applies to this feature
+    options: 
+       - Veterans use authenticated experience that are highly personalied and valuable
+       - 100% of eligible Veterans can use health services most applicable to them
+       - Increase active user base
+       - Inform and guide other VA teams 
   validations:
     required: true
 
