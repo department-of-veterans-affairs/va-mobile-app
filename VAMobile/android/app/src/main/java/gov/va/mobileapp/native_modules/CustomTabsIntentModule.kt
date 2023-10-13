@@ -88,7 +88,7 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
             val browserIntent = Intent("android.intent.action.VIEW", Uri.parse("https://"));
             val resolveInfo = context.packageManager.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY);
             val packageName = resolveInfo?.activityInfo?.packageName;
-            if (packageName != null && (packageName.contains("firefox") || packageName.contains("opera")) {
+            if (packageName != null && (packageName.contains("firefox") || packageName.contains("opera"))) {
                 // Default browser is Firefox. Need flag for login to succeed
                 customTabsIntent.intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
                 customTabsIntent.intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
