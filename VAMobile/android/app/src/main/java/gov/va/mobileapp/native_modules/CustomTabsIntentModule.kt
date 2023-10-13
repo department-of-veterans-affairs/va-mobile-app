@@ -1,6 +1,8 @@
 package gov.va.mobileapp.native_modules
 
+import android.content.Intent
 import android.content.Intent.*
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
@@ -82,8 +84,15 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
                             }
                             .build()
 
-            // Prevent login issues on Android when Firefox is the default browser
-            customTabsIntent.intent.flags = FLAG_ACTIVITY_NEW_TASK
+            // Check default browser to prevent Firefox login issue (Android only)
+            val browserIntent = Intent("android.intent.action.VIEW", Uri.parse("https://"));
+            val resolveInfo = context.packageManager.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY);
+            val packageName = resolveInfo?.activityInfo?.packageName;
+            if (packageName != null && packageName.contains("firefox")) {
+                // Default browser is Firefox. Need flag for login to succeed
+                customTabsIntent.intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+                customTabsIntent.intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
+            }
 
             context.currentActivity?.apply { customTabsIntent.launchUrl(this, authURI) }
             promise.resolve(true)
