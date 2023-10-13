@@ -15,8 +15,9 @@ export const getAuthorizedServices = async (): Promise<UserAuthorizedServicesDat
 /**
  * Returns a query for user demographics
  */
-export const useAuthorizedServices = () => {
+export const useAuthorizedServices = (options?: { enabled?: boolean }) => {
   return useQuery({
+    ...options,
     queryKey: authorizedServicesKeys.authorizedServices,
     queryFn: () => getAuthorizedServices(),
     meta: {

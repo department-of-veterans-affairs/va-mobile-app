@@ -12,29 +12,6 @@ export const SigninServiceTypesConstants: {
   LOGINGOV: 'LOGINGOV',
 }
 
-export type UserDataProfile = {
-  firstName: string
-  preferredName: string
-  middleName: string
-  lastName: string
-  fullName: string
-  signinEmail: string
-  birthDate: string
-  genderIdentity: string
-  signinService: SigninServiceTypes
-}
-
-export type Facility = {
-  facilityId: string
-  isCerner: boolean
-  facilityName: string
-}
-
-export type CernerData = {
-  isCernerPatient: boolean
-  facilities: Array<Facility>
-}
-
 export type VAServices =
   | 'appeals'
   | 'appointments'
@@ -82,8 +59,6 @@ export type UserData = {
     attributes: {
       id: string
       type: string
-      profile: UserDataProfile
-      health: CernerData
     }
   }
 }
