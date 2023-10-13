@@ -1,0 +1,40 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: '/VAMobile'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '08:00'
+      timezone: America/New_York
+    groups:
+      babel:
+        patterns:
+          - '@babel*'
+          - 'babel-plugin-module-resolver'
+      eslint:
+        patterns:
+          - 'eslint*'
+          - 'eslint-plugin-tsdoc'
+      firebase:
+        patterns:
+          - '@react-native-firebase*'
+      jest:
+        patterns:
+          - 'jest*'
+          - 'babel-jest'
+          - 'ts-jest'
+      react-navigation:
+        patterns:
+          - '@react-navigation*'
+          - 'react-navigation'
+      redux:
+        patterns:
+          - '*redux*'
+      wdio:
+        patterns:
+          - '@wdio*'
+          - 'wdio-chromedriver-service'
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
