@@ -18,7 +18,7 @@
             "name": "Cheyenne VA Medical Center",
             "city": "Cheyenne",
             "state": "WY",
-            "cerner": false,
+            "cerner": true,
             "miles": "3.17"
           }
         ]
