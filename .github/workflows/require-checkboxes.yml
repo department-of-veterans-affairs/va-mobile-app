@@ -3,6 +3,8 @@ name: Require Checklist
 on:
   pull_request:
     types: [opened, edited, synchronize]
+  pull_request_review_comment:
+    types: [created, deleted, edited]
 
 jobs:
   run-check:
