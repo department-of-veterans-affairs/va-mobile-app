@@ -91,7 +91,6 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
             if (packageName != null && packageName.contains("firefox")) {
                 // Default browser is Firefox. Need flag for login to succeed
                 customTabsIntent.intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
-                customTabsIntent.intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
             }
 
             context.currentActivity?.apply { customTabsIntent.launchUrl(this, authURI) }
