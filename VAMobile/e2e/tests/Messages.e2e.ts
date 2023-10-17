@@ -201,17 +201,16 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
   })
 
-  /*it('should tap the talk to the veterans crisis line now and verify it is displayed', async () => {
+  it('should tap the talk to the veterans crisis line now and verify it is displayed', async () => {
     await element(by.id('talk-to-the-veterans-crisis-line-now')).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
     await element(by.text('Done')).tap()
-  })*/
+  })
 
   it('should tap on the only use messages for non-urgent needs and verify the correct info is displayed', async () => {
-    await expect(element(by.text('Only use messages for non-urgent needs'))).toExist()
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scrollTo('bottom')
-    //await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
-    await element(by.text('Only use messages for non-urgent needs')).tap()
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(300, 'down', NaN, 0.8)
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
+    //await element(by.text('Only use messages for non-urgent needs')).tap()
     await expect(element(by.text('Only use messages for non-urgent needs')))
     await expect(element(by.text('Your care team may take up to 3 business days to reply.'))).toExist()
     await expect(element(by.text('If you need help sooner, use one of these urgent communication options:'))).toExist()
