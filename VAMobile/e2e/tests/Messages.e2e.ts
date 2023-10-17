@@ -58,7 +58,7 @@ beforeAll(async () => {
 })
 
 describe('Messages Screen', () => { 
-	it('should match the Claims history page design', async () => {
+	it('should match the messages page design', async () => {
 		await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
 		await expect(element(by.text('Inbox (3)'))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
@@ -66,7 +66,7 @@ describe('Messages Screen', () => {
 		await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID))).toExist()	
 	})
 
-  it('should verify that the Claims inbox is scrollable', async () => {
+  it('should verify that the messages inbox is scrollable', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('bottom')
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_10_ID))).toBeVisible()
   })
@@ -208,9 +208,9 @@ describe('Messages Screen', () => {
   })
 
   it('should tap on the only use messages for non-urgent needs and verify the correct info is displayed', async () => {
-    //await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scrollTo('bottom')
-    await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toBeVisible().whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(200, 'down')
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scrollTo('bottom')
+    //await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
+    await element(by.text('Only use messages for non-urgent needs')).tap()
     await expect(element(by.text('Only use messages for non-urgent needs')))
     await expect(element(by.text('Your care team may take up to 3 business days to reply.'))).toExist()
     await expect(element(by.text('If you need help sooner, use one of these urgent communication options:'))).toExist()
@@ -345,7 +345,7 @@ describe('Messages Screen', () => {
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
     await element(by.text('Drafts (3)')).tap()
     await expect(element(by.text('Test: Test Inquiry'))).toExist()
-    await element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry')).tap()
+    await element(by.text('Test: Test Inquiry')).tap()
   })
 
   it('should enter some text into the draft message, tap cancel and verify the action sheet that appears', async () => {
