@@ -12,10 +12,11 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
+import { Events } from 'constants/analytics'
 
 const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
@@ -61,6 +62,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const onDebug = navigateTo('Developer')
 
   const onShare = async (): Promise<void> => {
+    logAnalyticsEvent(Events.vama_click(t('shareApp.title'), t('settings.title')))
     try {
       await Share.share({
         message: t('shareApp.text', { appleStoreLink: APPLE_STORE_LINK, googlePlayLink: GOOGLE_PLAY_LINK }),
