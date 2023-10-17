@@ -2,9 +2,9 @@ import { Alert, Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, useState } from 'react'
 
-import { AlertBox, Box, BoxProps, ErrorComponent, FeatureLandingTemplate, LargeNavButton, LoadingComponent, TextView, TextViewProps } from 'components'
+import { Box, BoxProps, ErrorComponent, FeatureLandingTemplate, LargeNavButton, LoadingComponent, TextView, TextViewProps, WaygateWrapper } from 'components'
 import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -12,8 +12,8 @@ import { PersonalInformationState } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { UserDataProfile } from 'store/api/types'
-import { Waygate, featureEnabled, waygateEnabled } from 'utils/remoteConfig'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { featureEnabled, waygateNativeAlert } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY, stringToTitleCase } from 'utils/formattingUtils'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { useDemographics } from 'api/demographics/getDemographics'
@@ -101,102 +101,73 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     }
   }
 
-  if (screenError || getDemographicsError || getGenderIdentityOptionsError) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={screenError ? undefined : onTryAgain} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loading || loadingGenderIdentityOptions || loadingDemographics) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-        <LoadingComponent text={t('personalInformation.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
   const birthdate = getBirthDate(profile, t)
+  const errorCheck = screenError || getDemographicsError || getGenderIdentityOptionsError
+  const loadingCheck = loading || loadingGenderIdentityOptions || loadingDemographics
 
-  const waygateCheck = (wg: Waygate): ReactNode => {
-    if (wg.enabled) {
-      return screenContent()
-    } else if (wg.enabled === false && wg.allowFunction === true) {
-      return (
-        <Box>
-          <Box mb={theme.dimensions.condensedMarginBetween}>
-            <AlertBox border="warning" title={wg.errorMsgTitle} text={wg.errorMsgBody} />
-          </Box>
-          {screenContent()}
-        </Box>
-      )
-    } else {
-      return <AlertBox border="warning" title={wg.errorMsgTitle} text={wg.errorMsgBody} />
+  const onGenderIdentity = () => {
+    if (waygateNativeAlert('WG_GenderIdentityScreen')) {
+      navigateTo('GenderIdentity')
     }
   }
 
-  const screenContent = (): ReactNode => {
-    return (
-      <Box>
-        <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
-          {t('contactInformation.editNote')}
-        </TextView>
-        <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>
-          <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
-        </Pressable>
-        <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <Box {...boxProps}>
-            <Box flexDirection={'row'} flexWrap={'wrap'} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
-              <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading">
-                {t('personalInformation.dateOfBirth')}
-              </TextView>
-            </Box>
-            <TextView variant={'MobileBody'}>{birthdate}</TextView>
-          </Box>
-          <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })} accessibilityRole="link" accessible={true}>
-            <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
-          </Pressable>
-          {featureEnabled('preferredNameGenderWaygate') && (
-            <>
-              <LargeNavButton
-                title={t('personalInformation.preferredName.title')}
-                borderWidth={theme.dimensions.buttonBorderWidth}
-                borderColor={'secondary'}
-                borderColorActive={'primaryDarkest'}
-                borderStyle={'solid'}
-                subText={getPreferredName(demographics, t)}
-                onPress={navigateTo('PreferredName')}
-              />
-              <LargeNavButton
-                title={t('personalInformation.genderIdentity.title')}
-                borderWidth={theme.dimensions.buttonBorderWidth}
-                borderColor={'secondary'}
-                borderColorActive={'primaryDarkest'}
-                borderStyle={'solid'}
-                subText={getGenderIdentity(demographics, t, genderIdentityOptions)}
-                onPress={() => {
-                  Alert.alert("The app isn't working right now", 'While we fix the problem, you can still get your VA health and benefits information on VA.gov.', [
-                    {
-                      text: 'OK',
-                      style: 'cancel',
-                    },
-                  ])
-                }}
-                // onPress={navigateTo('GenderIdentity')}
-              />
-            </>
-          )}
-        </Box>
-      </Box>
-    )
+  const onPreferredName = () => {
+    if (waygateNativeAlert('WG_PreferredNameScreen')) {
+      navigateTo('PreferredName')
+    }
   }
-
-  //ToDo add feature flag display logic for preferredName and genderIdentity cards once it is merged into the nav update
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')} testID="PersonalInformationTestID">
-      {waygateCheck(waygateEnabled('WG_PersonalInformationScreen'))}
+      {errorCheck ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={screenError ? undefined : onTryAgain} />
+      ) : loadingCheck ? (
+        <LoadingComponent text={t('personalInformation.loading')} />
+      ) : (
+        <WaygateWrapper waygate="WG_PersonalInformationScreen">
+          <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
+            {t('contactInformation.editNote')}
+          </TextView>
+          <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>
+            <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
+          </Pressable>
+          <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            <Box {...boxProps}>
+              <Box flexDirection={'row'} flexWrap={'wrap'} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
+                <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading">
+                  {t('personalInformation.dateOfBirth')}
+                </TextView>
+              </Box>
+              <TextView variant={'MobileBody'}>{birthdate}</TextView>
+            </Box>
+            <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })} accessibilityRole="link" accessible={true}>
+              <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
+            </Pressable>
+            {featureEnabled('preferredNameGenderWaygate') && (
+              <>
+                <LargeNavButton
+                  title={t('personalInformation.preferredName.title')}
+                  borderWidth={theme.dimensions.buttonBorderWidth}
+                  borderColor={'secondary'}
+                  borderColorActive={'primaryDarkest'}
+                  borderStyle={'solid'}
+                  subText={getPreferredName(demographics, t)}
+                  onPress={onPreferredName}
+                />
+                <LargeNavButton
+                  title={t('personalInformation.genderIdentity.title')}
+                  borderWidth={theme.dimensions.buttonBorderWidth}
+                  borderColor={'secondary'}
+                  borderColorActive={'primaryDarkest'}
+                  borderStyle={'solid'}
+                  subText={getGenderIdentity(demographics, t, genderIdentityOptions)}
+                  onPress={onGenderIdentity}
+                />
+              </>
+            )}
+          </Box>
+        </WaygateWrapper>
+      )}
     </FeatureLandingTemplate>
   )
 }

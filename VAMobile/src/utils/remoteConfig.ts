@@ -1,3 +1,5 @@
+import { Alert } from 'react-native'
+import { ReactFragment } from 'react'
 import { logNonFatalErrorToFirebase } from './analytics'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import getEnv from 'utils/env'
@@ -250,6 +252,20 @@ export const featureEnabled = (feature: FeatureToggleType): boolean => {
 
 export const waygateEnabled = (feature: WaygateToggleType): Waygate => {
   return !fetchRemote ? waygateConfig[feature] : (remoteConfig().getValue(feature) as unknown as Waygate)
+}
+
+export const waygateNativeAlert = (feature: WaygateToggleType): boolean => {
+  const waygate = waygateEnabled(feature)
+  if (waygate.enabled === false && waygate.denyAccess === true && waygate.errorMsgTitle) {
+    Alert.alert(waygate.errorMsgTitle, waygate.errorMsgBody, [
+      {
+        text: 'OK',
+        style: 'cancel',
+      },
+    ])
+    return false
+  }
+  return true
 }
 
 /**
