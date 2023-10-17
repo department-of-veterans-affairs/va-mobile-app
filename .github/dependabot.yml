@@ -15,7 +15,9 @@ updates:
       eslint:
         patterns:
           - 'eslint*'
-          - 'eslint-plugin-tsdoc'
+          - '@react-native-community/eslint-config'
+          - '@typescript-eslint/eslint-plugin'
+          - '@typescript-eslint/parser'
       firebase:
         patterns:
           - '@react-native-firebase*'
