@@ -171,7 +171,8 @@ describe('Messages Screen', () => {
 
   it('should tap keep editing and send the message', async () => {
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
-    await element(by.id(MessagesE2eIdConstants.REPLY_PAGE_TEST_ID)).scrollTo('bottom')
+    //await element(by.id(MessagesE2eIdConstants.REPLY_PAGE_TEST_ID)).scrollTo('bottom')
+    await element(by.id(MessagesE2eIdConstants.REPLY_PAGE_TEST_ID)).scroll(300, 'down', NaN, 0.8)
     await element(by.id(MessagesE2eIdConstants.SEND_BUTTON_ID)).tap()
     await expect(element(by.text('Message sent'))).toExist()
     await element(by.text('Dismiss')).tap()
