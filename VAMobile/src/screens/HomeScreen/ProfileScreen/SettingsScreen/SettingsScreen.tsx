@@ -1,19 +1,19 @@
 import { Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
-import { AuthState, setBiometricsPreference } from 'store/slices'
-import { Box, ButtonDecoratorType, FeatureLandingTemplate, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj } from 'components'
+import { AuthState, logout, setBiometricsPreference } from 'store/slices'
+import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, VAButton } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
@@ -29,6 +29,28 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const launchExternalLink = useExternalLink()
   const { canStoreWithBiometric, shouldStoreWithBiometric, settingBiometricPreference, supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+  const dispatchLogout = useDispatch()
+  const signOutAlert = useDestructiveActionSheet()
+  const _logout = () => {
+    dispatchLogout(logout())
+  }
+
+  const onShowConfirm = (): void => {
+    signOutAlert({
+      title: t('logout.confirm.text'),
+      destructiveButtonIndex: 1,
+      cancelButtonIndex: 0,
+      buttons: [
+        {
+          text: t('cancel'),
+        },
+        {
+          text: t('logout.title'),
+          onPress: _logout,
+        },
+      ],
+    })
+  }
 
   const onToggleTouchId = (): void => {
     // toggle the value from previous state
@@ -114,7 +136,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
           {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
         </Box>
         <Box px={theme.dimensions.gutter}>
-          <SignoutButton />
+          <VAButton onPress={onShowConfirm} label={t('logout.title')} buttonType={ButtonTypesConstants.buttonDestructive} />
         </Box>
       </Box>
       <AppVersionAndBuild />
