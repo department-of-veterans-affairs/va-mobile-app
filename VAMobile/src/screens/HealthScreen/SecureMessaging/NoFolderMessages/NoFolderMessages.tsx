@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SegmentedControlIndexes } from 'constants/secureMessaging'
 import { ViewStyle } from 'react-native'
 import { updateSecureMessagingTab } from 'store/slices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -17,7 +17,7 @@ const NoFolderMessages: FC = () => {
   const navigateTo = useRouteNavigation()
 
   const onGoToInbox = (): void => {
-    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+    dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
     navigateTo('SecureMessaging')()
   }
 

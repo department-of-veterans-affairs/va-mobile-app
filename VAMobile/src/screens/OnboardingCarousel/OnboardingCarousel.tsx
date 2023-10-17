@@ -5,11 +5,10 @@ import { Carousel, TextLine } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord } from 'utils/formattingUtils'
 
-import { PersonalInformationState, completeFirstTimeLogin } from 'store/slices'
-import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { completeFirstTimeLogin } from 'store/slices'
 import { useAppDispatch } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
 
 const OnboardingPayments: FC = () => {
@@ -77,8 +76,8 @@ const OnboardingHealth: FC = () => {
 
 const OnboardingAppOverview: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const firstName = profile?.firstName ? `${capitalizeWord(profile?.firstName)}` : ''
+  const { data: personalInfo } = usePersonalInformation()
+  const firstName = personalInfo?.firstName ? `${capitalizeWord(personalInfo?.firstName)}` : ''
 
   return (
     <GenericOnboarding

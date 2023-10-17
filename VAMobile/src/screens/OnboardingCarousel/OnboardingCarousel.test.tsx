@@ -2,12 +2,11 @@ import 'react-native'
 import React from 'react'
 
 // Note: test renderer must be required after react-native.
-import { context, mockStore, render, RenderAPI } from 'testUtils'
-import { act, ReactTestInstance } from 'react-test-renderer'
+import { context, render, RenderAPI } from 'testUtils'
+import { ReactTestInstance } from 'react-test-renderer'
 
 import OnboardingCarousel from './OnboardingCarousel'
-import { EmailData, PhoneData } from 'store/api/types'
-import { completeFirstTimeLogin, InitialState } from 'store/slices'
+import { completeFirstTimeLogin } from 'store/slices'
 import { Carousel } from 'components'
 
 jest.mock('store/slices', () => {
@@ -28,29 +27,7 @@ context('OnboardingCarousel', () => {
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    component = render(<OnboardingCarousel />, {
-      preloadedState: {
-        ...InitialState,
-        personalInformation: {
-          ...InitialState.personalInformation,
-          profile: {
-            middleName: '',
-            lastName: '',
-            genderIdentity: null,
-            contactEmail: {} as EmailData,
-            signinEmail: '',
-            birthDate: '',
-            addresses: '',
-            homePhoneNumber: {} as PhoneData,
-            mobilePhoneNumber: {} as PhoneData,
-            workPhoneNumber: {} as PhoneData,
-            fullName: '',
-            firstName: 'Billy',
-            signinService: 'IDME',
-          },
-        },
-      },
-    })
+    component = render(<OnboardingCarousel />)
 
     testInstance = component.UNSAFE_root
   })

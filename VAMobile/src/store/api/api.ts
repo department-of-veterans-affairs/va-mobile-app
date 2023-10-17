@@ -67,6 +67,7 @@ const doRequest = async function (
     headers: {
       authorization: `Bearer ${_token}`,
       'X-Key-Inflection': 'camel',
+      'Source-App-Name': 'va-health-benefits-app',
       ...(featureEnabled('SIS') ? { 'Authentication-Method': 'SIS' } : {}),
     },
     ...({ signal: abortSignal } || {}),
