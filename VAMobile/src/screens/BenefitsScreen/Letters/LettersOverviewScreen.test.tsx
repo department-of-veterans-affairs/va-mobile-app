@@ -8,6 +8,15 @@ import { LettersOverviewScreen } from './index'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 let mockNavigationSpy = jest.fn()
+jest.mock('@react-navigation/native', () => {
+  let actual = jest.requireActual('@react-navigation/native')
+  return {
+    ...actual,
+    useNavigation: () => ({
+      navigate: mockNavigationSpy,
+    }),
+  }
+})
 
 context('LettersOverviewScreen', () => {
   let component: RenderAPI
@@ -15,11 +24,7 @@ context('LettersOverviewScreen', () => {
 
   const initializeTestInstance = () => {
 
-    const props = mockNavProps(undefined,
-      {
-        navigate: mockNavigationSpy,
-      },
-    )
+    const props = mockNavProps()
 
     component = render(<LettersOverviewScreen {...props} />)
 
