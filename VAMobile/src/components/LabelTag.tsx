@@ -1,4 +1,4 @@
-import { Pressable, PressableProps } from 'react-native'
+import { Pressable, PressableProps, useWindowDimensions } from 'react-native'
 import React, { FC } from 'react'
 
 import { useTheme } from 'utils/hooks'
@@ -40,9 +40,10 @@ export type LabelTagProps = {
 /**Common component to show a text inside a tag*/
 const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yLabel }) => {
   const theme = useTheme()
+  const fontScale = useWindowDimensions().fontScale
 
   const textView = (
-    <TextView flexWrap={'wrap'} color={'labelTag'} variant={'LabelTag'} px={12} py={4}>
+    <TextView flexWrap={'wrap'} color={'labelTag'} variant={'LabelTag'} pl={fontScale >= 2 ? 30 : 12} pr={fontScale >= 2 ? 8 : 12} py={fontScale >= 2 ? 8 : 4}>
       {text}
     </TextView>
   )
@@ -96,9 +97,9 @@ const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yL
       name: 'Info',
       fill: 'tagInfoIcon',
       fill2: 'transparent',
-      height: 16,
-      width: 16,
-      mr: 10,
+      height: fontScale >= 2 ? 10 : 16,
+      width: fontScale >= 2 ? 10 : 16,
+      mr: fontScale >= 2 ? 5 : 10,
     }
 
     return (
