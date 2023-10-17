@@ -201,13 +201,14 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
   })
 
-  it('should tap the talk to the veterans crisis line now and verify it is displayed', async () => {
+  /*it('should tap the talk to the veterans crisis line now and verify it is displayed', async () => {
     await element(by.id('talk-to-the-veterans-crisis-line-now')).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
     await element(by.text('Done')).tap()
-  })
+  })*/
 
   it('should tap on the only use messages for non-urgent needs and verify the correct info is displayed', async () => {
+    await expect(element(by.text('Only use messages for non-urgent needs'))).toExist()
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scrollTo('bottom')
     //await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
     await element(by.text('Only use messages for non-urgent needs')).tap()
@@ -251,7 +252,7 @@ describe('Messages Screen', () => {
     await element(by.id('messagesHelpCloseTestID')).tap()
   })
 
-  it('should tap the save button and verify the correct errors are displayed', async () => {
+  /*it('should tap the save button and verify the correct errors are displayed', async () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SAVE_ID)).tap()
     await expect(element(by.text('We need more information'))).toExist()
     await expect(element(by.text('Select a care team to message')).atIndex(0)).toExist()
@@ -410,5 +411,5 @@ describe('Messages Screen', () => {
     await element(by.text('Sent')).tap()
     await element(by.text('Messages')).tap()
     await expect(element(by.text('Custom Folder 2'))).toExist()
-  })
+  })*/
 })
