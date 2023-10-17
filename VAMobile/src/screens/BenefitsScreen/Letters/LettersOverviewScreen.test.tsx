@@ -6,31 +6,20 @@ import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 import { Pressable } from 'react-native'
 import { LettersOverviewScreen } from './index'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
-import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
-
-jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useRouteNavigation: () => mockNavigationSpy,
-  }
-})
 
 context('LettersOverviewScreen', () => {
   let component: RenderAPI
   let testInstance: ReactTestInstance
-  let mockNavigateToSpy: jest.Mock
 
   const initializeTestInstance = () => {
-    mockNavigateToSpy = jest.fn()
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS })
-      .mockReturnValue(mockNavigateToSpy)
 
-    const props = mockNavProps()
+    const props = mockNavProps(undefined,
+      {
+        navigate: mockNavigationSpy,
+      },
+    )
 
     component = render(<LettersOverviewScreen {...props} />)
 
@@ -47,6 +36,6 @@ context('LettersOverviewScreen', () => {
 
   it('should go to edit address when the address is pressed', async () => {
     testInstance.findAllByType(Pressable)[0].props.onPress()
-    expect(mockNavigateToSpy).toHaveBeenCalled()
+    expect(mockNavigationSpy).toHaveBeenCalledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS })
   })
 })
