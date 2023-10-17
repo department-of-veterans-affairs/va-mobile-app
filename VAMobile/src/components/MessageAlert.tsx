@@ -6,7 +6,7 @@ import { AlertBox, Box, ButtonTypesConstants, TextView, VABulletList, VAButton }
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SecureMessagingState, resetReplyTriageError, resetSendMessageFailed } from 'store/slices'
-import { SecureMessagingTabTypesConstants } from 'store/api/types/SecureMessagingData'
+import { SegmentedControlIndexes } from 'constants/secureMessaging'
 import { updateSecureMessagingTab } from 'store/slices'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
@@ -34,7 +34,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
 
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
-    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+    dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
     dispatch(resetReplyTriageError())
     navigateTo('SecureMessaging')()
   }

@@ -20,11 +20,11 @@ import {
   VAButton,
 } from 'components'
 import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE, SegmentedControlIndexes } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import {
   SecureMessagingState,
   dispatchSetActionStart,
@@ -138,7 +138,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     if (saveDraftComplete) {
-      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
+      dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
       navigation.navigate('SecureMessaging')
       navigation.navigate('FolderMessages', {
         folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
@@ -152,7 +152,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
-      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+      dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
       navigation.navigate('SecureMessaging')
     }
   }, [sendMessageComplete, dispatch, navigation])

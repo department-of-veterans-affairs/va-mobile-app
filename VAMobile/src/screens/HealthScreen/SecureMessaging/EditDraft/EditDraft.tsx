@@ -21,16 +21,9 @@ import {
   TextView,
   VAButton,
 } from 'components'
-import {
-  CategoryTypeFields,
-  CategoryTypes,
-  ScreenIDTypesConstants,
-  SecureMessagingFormData,
-  SecureMessagingSystemFolderIdConstants,
-  SecureMessagingTabTypesConstants,
-} from 'store/api/types'
+import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import { MenuViewActionsType } from 'components/Menu'
@@ -428,7 +421,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
-    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+    dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
     navigation.navigate('SecureMessaging')
   }
 
