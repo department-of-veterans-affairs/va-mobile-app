@@ -164,7 +164,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       ? t('secureMessaging.deletingChanges.loading')
       : t('secureMessaging.viewMessage.loading')
     return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} scrollViewRef={scrollViewRef}>
         <LoadingComponent text={text} />
       </FullScreenSubtask>
     )
@@ -172,7 +172,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   if (sendingMessage) {
     return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} scrollViewRef={scrollViewRef}>
         <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
       </FullScreenSubtask>
     )

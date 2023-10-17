@@ -531,7 +531,7 @@ context('claimsAndAppeals', () => {
     })
 
     it('should update the claim event as uploaded', async () => {
-      const mockStorePersonalInformation: Partial<RootState> = {
+      const mockClaim: Partial<RootState> = {
         claimsAndAppeals: {
           ...initialClaimsAndAppealsState,
           claim: {
@@ -561,7 +561,7 @@ context('claimsAndAppeals', () => {
         },
       }
 
-      const store = realStore(mockStorePersonalInformation)
+      const store = realStore(mockClaim)
       await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, files, 'file'))
       const { claimsAndAppeals } = store.getState()
 

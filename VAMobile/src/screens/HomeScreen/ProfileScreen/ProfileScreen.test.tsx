@@ -9,7 +9,6 @@ import {
   initialErrorsState,
   initializeErrorsByScreenID,
   initialMilitaryServiceState,
-  initialPersonalInformationState,
 } from 'store/slices'
 import ProfileScreen from './ProfileScreen'
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -71,10 +70,6 @@ context('ProfileScreen', () => {
       preloadedState: {
         auth: { ...initialAuthState },
         militaryService: { ...initialMilitaryServiceState, loading: militaryInformationLoading },
-        personalInformation: {
-          ...initialPersonalInformationState,
-          needsDataLoad: false,
-        },
         errors: errorState,
       },
     })

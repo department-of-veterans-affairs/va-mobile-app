@@ -105,6 +105,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
     if (tab !== selectedTab && claim) {
       const analyticsEvent = tab === controlLabels.indexOf(t('claimDetails.status')) ? Events.vama_claim_status_tab : Events.vama_claim_details_tab
       logAnalyticsEvent(analyticsEvent(claim.id, claim.attributes.claimType, claim.attributes.phase, claim.attributes.dateFiled))
+      logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
     }
     setSelectedTab(tab)
   }

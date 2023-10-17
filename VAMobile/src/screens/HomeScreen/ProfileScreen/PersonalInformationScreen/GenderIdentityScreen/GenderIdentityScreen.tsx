@@ -97,6 +97,10 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
   }
 
   const getIdentityTypes = (): Array<radioOption<string>> => {
+    if (!genderIdentityOptions) {
+      return []
+    }
+
     return Object.keys(genderIdentityOptions).map((key: string) => {
       return {
         labelKey: genderIdentityOptions[key],
