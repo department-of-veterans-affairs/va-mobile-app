@@ -262,11 +262,11 @@ export const deletePhoto = (deleteCallbackIfUri: (response: Asset[]) => void, de
  * @param fs - fontscale function
  */
 export const getIndicatorCommonProps = (fs: (val: number) => number) => {
-  const indicatorDiameter = 30
+  const indicatorDiameter = fs(30)
   return {
-    height: fs(indicatorDiameter),
-    width: fs(indicatorDiameter),
-    borderRadius: fs(indicatorDiameter),
+    height: indicatorDiameter > 35 ? 35 : indicatorDiameter,
+    width: indicatorDiameter > 35 ? 35 : indicatorDiameter,
+    borderRadius: indicatorDiameter > 35 ? 35 : indicatorDiameter,
     justifyContent: 'center',
     textAlign: 'center',
     alignItems: 'center',
@@ -284,12 +284,12 @@ export const getIndicatorValue = (number: number, useCheckMark: boolean): ReactE
   if (useCheckMark) {
     return (
       <Box justifyContent={'center'} alignItems={'center'}>
-        <VAIcon width={15} height={15} name={'CheckMark'} fill="#fff" />
+        <VAIcon width={15} height={15} name={'CheckMark'} fill="#fff" preventScaling={true} />
       </Box>
     )
   } else {
     return (
-      <TextView variant="ClaimPhase" textAlign={'center'} mt={-2.5}>
+      <TextView variant="ClaimPhase" textAlign={'center'} mt={-2.5} allowFontScaling={false}>
         {number}
       </TextView>
     )

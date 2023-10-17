@@ -12,7 +12,7 @@ export const PrescriptionsE2eIdConstants = {
 	PRESCRIPTION_FILTER_RESET_ID: 'resetFilterTestID',
 	PRESCRIPTION_SORT_ID: 'openSortTestID',
 	PRESCRIPTION_REFILL_WARNING_TEXT: 'We can\'t refill some of your prescriptions in the app',
-	PRESCRIPTION_ALL_DESCRIPTION_LABEL: 'This list only shows your  V-A  prescriptions and isn’t intended to be a plan of care.',
+	PRESCRIPTION_ALL_DESCRIPTION_LABEL: 'This list only shows prescriptions filled by  V-A  pharmacies and may not include all your medications.',
 	PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All VA prescriptions (31)',
 	PRESCRIPTION_PENDING_NUMBER_OF_PRESCRIPTIONS_TEXT: 'Pending refills (8)',
 	PRESCRIPTION_TRACKING_NUMBER_OF_PRESCRIPTION_TEXT: 'Refills with tracking information (5)',
@@ -318,8 +318,10 @@ describe('Prescriptions Screen', () => {
 		checkImages(tempPath)
 		await expect(element(by.text('This list may not include all your medications '))).toExist()
 		await expect(element(by.text('Medications not included:'))).toExist()
-		await expect(element(by.text('New prescriptions'))).toExist()
-		await expect(element(by.text('Medications administrated at a clinic or ER'))).toExist()
+		await expect(element(by.text('New prescriptions not yet processed by a VA pharmacy'))).toExist()
+		await expect(element(by.text('Prescriptions filled at non-VA pharmacies'))).toExist()
+		await expect(element(by.text('Prescriptions that are inactive for more than 180 days'))).toExist()
+		await expect(element(by.text('Medications administered at a clinic or ER'))).toExist()
 		await expect(element(by.text('Self-entered medications'))).toExist()
 		await expect(element(by.label('If you have questions about your  V-A  prescriptions, call the  V-A  pharmacy number on your prescription label.'))).toExist()
 		await element(by.text('Close')).tap()
