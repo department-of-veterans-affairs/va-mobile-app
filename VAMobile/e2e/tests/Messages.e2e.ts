@@ -171,7 +171,6 @@ describe('Messages Screen', () => {
 
   it('should tap keep editing and send the message', async () => {
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
-    //await element(by.id(MessagesE2eIdConstants.REPLY_PAGE_TEST_ID)).scrollTo('bottom')
     await element(by.id(MessagesE2eIdConstants.REPLY_PAGE_TEST_ID)).scroll(300, 'down', NaN, 0.8)
     await element(by.id(MessagesE2eIdConstants.SEND_BUTTON_ID)).tap()
     await expect(element(by.text('Message sent'))).toExist()
@@ -209,7 +208,8 @@ describe('Messages Screen', () => {
   })
 
   it('should tap on the only use messages for non-urgent needs and verify the correct info is displayed', async () => {
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scrollTo('bottom')
+    //await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scrollTo('bottom')
+    await waitFor(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toBeVisible().whileElement(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(200, 'down')
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
     await expect(element(by.text('Only use messages for non-urgent needs')))
     await expect(element(by.text('Your care team may take up to 3 business days to reply.'))).toExist()
@@ -344,6 +344,7 @@ describe('Messages Screen', () => {
   it('should navigate to the drafts folder and click the newest message', async () => {
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
     await element(by.text('Drafts (3)')).tap()
+    await expect(element(by.text('Test: Test Inquiry'))).toExist()
     await element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry')).tap()
   })
 
