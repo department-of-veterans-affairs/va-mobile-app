@@ -285,6 +285,16 @@ export const Events = {
       },
     }
   },
+  vama_click: (text_clicked: string, screen_name: string, additional_details?: string): Event => {
+    return {
+      name: 'vama_click',
+      params: {
+        text_clicked,
+        screen_name,
+        additional_details,
+      },
+    }
+  },
   vama_covid_links: (referringScreen: string): Event => {
     return {
       name: 'vama_covid_links',
@@ -877,6 +887,16 @@ export const Events = {
       name: 'vama_snackbar_null',
       params: {
         location,
+      },
+    }
+  },
+  vama_toggle: (toggle_name: string, status: boolean, screen_name: string): Event => {
+    return {
+      name: 'vama_toggle',
+      params: {
+        toggle_name,
+        status,
+        screen_name,
       },
     }
   },
