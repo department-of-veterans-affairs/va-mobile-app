@@ -120,7 +120,7 @@ context('FileRequest', () => {
 
     describe('on click of a file request', () => {
       it('should navigate to file request details page', async () => {
-        fireEvent.press(screen.getByTestId('Request 1'))
+        fireEvent.press(screen.getByRole('button', { name: 'Request 1' }))
         expect(mockNavigateToFileRequestdetailsSpy).toHaveBeenCalled()
       })
     })
