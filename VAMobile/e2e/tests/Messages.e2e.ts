@@ -210,7 +210,6 @@ describe('Messages Screen', () => {
   it('should tap on the only use messages for non-urgent needs and verify the correct info is displayed', async () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(300, 'down', NaN, 0.8)
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
-    //await element(by.text('Only use messages for non-urgent needs')).tap()
     await expect(element(by.text('Only use messages for non-urgent needs')))
     await expect(element(by.text('Your care team may take up to 3 business days to reply.'))).toExist()
     await expect(element(by.text('If you need help sooner, use one of these urgent communication options:'))).toExist()
@@ -251,7 +250,7 @@ describe('Messages Screen', () => {
     await element(by.id('messagesHelpCloseTestID')).tap()
   })
 
-  /*it('should tap the save button and verify the correct errors are displayed', async () => {
+  it('should tap the save button and verify the correct errors are displayed', async () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SAVE_ID)).tap()
     await expect(element(by.text('We need more information'))).toExist()
     await expect(element(by.text('Select a care team to message')).atIndex(0)).toExist()
@@ -342,7 +341,11 @@ describe('Messages Screen', () => {
   })
 
   it('should navigate to the drafts folder and click the newest message', async () => {
-    await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
+    if(device.getPlatform() === 'android') {
+      await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
+    } else {
+      await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).tap()
+    }
     await element(by.text('Drafts (3)')).tap()
     await expect(element(by.text('Test: Test Inquiry'))).toExist()
     await element(by.text('Test: Test Inquiry')).tap()
@@ -410,5 +413,5 @@ describe('Messages Screen', () => {
     await element(by.text('Sent')).tap()
     await element(by.text('Messages')).tap()
     await expect(element(by.text('Custom Folder 2'))).toExist()
-  })*/
+  })
 })
