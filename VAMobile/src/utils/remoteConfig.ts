@@ -1,5 +1,4 @@
 import { Alert } from 'react-native'
-import { ReactFragment } from 'react'
 import { logNonFatalErrorToFirebase } from './analytics'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import getEnv from 'utils/env'

@@ -1,5 +1,5 @@
-import { AccordionCollapsible, Box, FeatureLandingTemplate, TextView } from 'components'
-import { useTheme } from 'utils/hooks'
+import { AccordionCollapsible, Box, ButtonTypesConstants, FeatureLandingTemplate, TextView, VAButton } from 'components'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useState } from 'react'
 
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -13,10 +13,12 @@ type WaygateManagementScreenProps = StackScreenProps<HomeStackParamList, 'Waygat
 
 const WaygateManagementScreen: FC<WaygateManagementScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
+
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const { gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const currentWaygateConfig = getWaygateToggles()
-  const [toggles, setToggles] = useState({ ...currentWaygateConfig })
+  const [toggles] = useState({ ...currentWaygateConfig })
 
   const toggleList = (): ReactNode => {
     const toggleItems: Array<ReactNode> = []
@@ -26,7 +28,7 @@ const WaygateManagementScreen: FC<WaygateManagementScreenProps> = ({ navigation 
         <AccordionCollapsible
           header={
             <Box justifyContent="space-between" flexDirection="row" flexWrap="wrap" mr={5}>
-              <TextView variant="ActionBar">{index}</TextView>
+              <VAButton onPress={navigateTo('WaygateEditScreen', { index })} label={index} buttonType={ButtonTypesConstants.buttonPrimary} />
               <TextView variant="MobileBodyBold">{`${enabled}`}</TextView>
             </Box>
           }

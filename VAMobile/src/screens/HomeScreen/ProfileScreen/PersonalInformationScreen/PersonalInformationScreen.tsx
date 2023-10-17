@@ -1,4 +1,4 @@
-import { Alert, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
@@ -107,13 +107,13 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   const onGenderIdentity = () => {
     if (waygateNativeAlert('WG_GenderIdentityScreen')) {
-      navigateTo('GenderIdentity')
+      navigation.navigate('GenderIdentity')
     }
   }
 
   const onPreferredName = () => {
     if (waygateNativeAlert('WG_PreferredNameScreen')) {
-      navigateTo('PreferredName')
+      navigation.navigate('PreferredName')
     }
   }
 
