@@ -34,7 +34,7 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
       wg.denyAccess = denyAccessOverride
       navigation.goBack()
     }
-  }, [onSaveClicked, navigation, wg])
+  }, [onSaveClicked, navigation, wg, enabledOverride, appUpdateButtonOverride, allowFunctionOverride, denyAccessOverride])
 
   const toggleItems: SimpleListItemObj[] = [
     {
