@@ -33,13 +33,7 @@ const ErrorAlert: FC<ErrorAlertProps> = ({ onTryAgain, title, text }) => {
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox border="error" title={title || t('errorAlert.title')} text={text}>
           <Box mt={theme.dimensions.standardMarginBetween} accessibilityRole="button">
-            <VAButton
-              onPress={onTryAgain}
-              label={t('refresh')}
-              buttonType={ButtonTypesConstants.buttonPrimary}
-              testID={t('refresh')}
-              a11yHint={t('refreshScreen.button.a11yHint')}
-            />
+            <VAButton onPress={onTryAgain} label={t('refresh')} buttonType={ButtonTypesConstants.buttonPrimary} testID={t('refresh')} />
           </Box>
         </AlertBox>
       </Box>
