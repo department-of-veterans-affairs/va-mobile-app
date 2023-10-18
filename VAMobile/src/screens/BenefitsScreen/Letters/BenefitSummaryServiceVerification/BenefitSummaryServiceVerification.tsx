@@ -125,21 +125,10 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
 
     if (!!monthlyAwardAmount || !!awardEffectiveDate) {
-      let text = ''
-      if (!!monthlyAwardAmount && !!awardEffectiveDate) {
-        text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
-          monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount),
-          date: formatDateMMMMDDYYYY(awardEffectiveDate),
-        })
-      } else if (monthlyAwardAmount) {
-        text = t('letters.benefitService.monthlyAward', {
-          monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount),
-        })
-      } else if (awardEffectiveDate) {
-        text = t('letters.benefitService.effectiveDate', {
-          date: formatDateMMMMDDYYYY(awardEffectiveDate),
-        })
-      }
+      const text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
+        monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount || 0),
+        date: awardEffectiveDate ? formatDateMMMMDDYYYY(awardEffectiveDate) : t('letters.benefitService.effectiveDateInvalid'),
+      })
 
       toggleListItems.push({
         text: text,
