@@ -28,7 +28,7 @@ const WaygateManagementScreen: FC<WaygateManagementScreenProps> = ({ navigation 
         <AccordionCollapsible
           header={
             <Box justifyContent="space-between" flexDirection="row" flexWrap="wrap" mr={5}>
-              <VAButton onPress={navigateTo('WaygateEditScreen', { index })} label={index} buttonType={ButtonTypesConstants.buttonPrimary} />
+              <VAButton onPress={navigateTo('WaygateEditScreen', { waygateName: index, waygate: WG })} label={index} buttonType={ButtonTypesConstants.buttonPrimary} />
               <TextView variant="MobileBodyBold">{`${enabled}`}</TextView>
             </Box>
           }

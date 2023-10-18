@@ -1,18 +1,12 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
-import { EMAIL_REGEX_EXP } from 'constants/common'
+import { Box, ButtonDecoratorType, FullScreenSubtask, SimpleList, SimpleListItemObj, TextView } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, deleteEmail, finishEditEmail, updateEmail } from 'store/slices'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SnackbarMessages } from 'components/SnackBar'
-import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useError, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useTheme } from 'utils/hooks'
 
 type WaygateEditScreenProps = StackScreenProps<HomeStackParamList, 'WaygateEditScreen'>
 
@@ -20,31 +14,72 @@ type WaygateEditScreenProps = StackScreenProps<HomeStackParamList, 'WaygateEditS
  * Screen for editing a users email in the personal info section
  */
 const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) => {
-  const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { waygate } = route.params
-  const { profile, emailSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-  const emailId = profile?.contactEmail?.id
-  const deleteEmailAlert = useAlert()
-  const confirmAlert = useDestructiveActionSheet()
-  const screenReaderEnabled = useIsScreenReaderEnabled()
-  const [email, setEmail] = useState(profile?.contactEmail?.emailAddress || '')
-  const [formContainsError, setFormContainsError] = useState(false)
+  const { waygateName, waygate } = route.params
   const [onSaveClicked, setOnSaveClicked] = useState(false)
-  const [deleting, setDeleting] = useState(false)
-  const [saveDisabled, setSaveDisabled] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
+  const title = 'Edit: ' + waygateName
+  const wg = waygate
+
+  const toggleItems: SimpleListItemObj[] = [
+    {
+      text: 'Enabled',
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: wg.enabled,
+      },
+      onPress: () => {
+        wg.enabled = !wg.enabled
+      },
+    },
+    {
+      text: 'appUpdateButton',
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: waygate.appUpdateButton,
+      },
+      onPress: () => {
+        waygate.appUpdateButton = !waygate.appUpdateButton
+      },
+    },
+    {
+      text: 'allowFunction',
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: waygate.allowFunction,
+      },
+      onPress: () => {
+        waygate.allowFunction = !waygate.allowFunction
+      },
+    },
+    {
+      text: 'denyAccess',
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: waygate.denyAccess,
+      },
+      onPress: () => {
+        waygate.denyAccess = !waygate.denyAccess
+      },
+    },
+  ]
 
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={t('waygateEditScreen.title')}
+      title={title}
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}>
-      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter} />
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <SimpleList items={toggleItems} />
+        <TextView variant="MobileBodyBold">errorMsgTitle</TextView>
+        <TextView>{waygate.errorMsgTitle}</TextView>
+        <TextView variant="MobileBodyBold">errorMsgBody</TextView>
+        <TextView>{waygate.errorMsgBody}</TextView>
+      </Box>
     </FullScreenSubtask>
   )
 }
