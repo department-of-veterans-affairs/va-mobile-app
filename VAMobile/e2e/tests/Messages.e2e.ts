@@ -341,6 +341,10 @@ describe('Messages Screen', () => {
   })
 
   it('should navigate to the drafts folder and click the newest message', async () => {
+    await device.launchApp({ newInstance: true })
+    await loginToDemoMode()
+    await openHealth()
+    await openMessages()
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
     await expect(element(by.text('Drafts (3)'))).toExist()
     await element(by.text('Drafts (3)')).tap()
@@ -370,7 +374,7 @@ describe('Messages Screen', () => {
     await expect(element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry'))).toExist()
   })
 
-  it('should open the previous editing draft and verify that no changes are displayed', async () => {
+  it('should open the previous editing draft and verify that no changes are displayed', async () => {   
     await element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry')).tap()
     await expect(element(by.text('VA Flagship mobile applications interface 2_DAYT29'))).toExist()
     await expect(element(by.text('Test'))).toExist()
