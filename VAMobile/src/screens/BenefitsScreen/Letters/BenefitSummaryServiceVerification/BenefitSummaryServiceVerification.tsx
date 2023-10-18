@@ -124,24 +124,22 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     const { monthlyAwardAmount, awardEffectiveDate, serviceConnectedPercentage, hasChapter35Eligibility, hasServiceConnectedDisabilities } =
       letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
 
-    if (!!monthlyAwardAmount || !!awardEffectiveDate) {
-      const text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
-        monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount || 0),
-        date: awardEffectiveDate ? formatDateMMMMDDYYYY(awardEffectiveDate) : t('letters.benefitService.effectiveDateInvalid'),
-      })
+    const text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
+      monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount || 0),
+      date: awardEffectiveDate ? formatDateMMMMDDYYYY(awardEffectiveDate) : t('letters.benefitService.effectiveDateInvalid'),
+    })
 
-      toggleListItems.push({
-        text: text,
-        testId: text.replace(',', ''),
-        onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
-        decorator: ButtonDecoratorType.Switch,
-        decoratorProps: {
-          on: monthlyAwardToggle,
-          a11yHint: t('letters.benefitService.monthlyAwardA11yHint'),
-          testID: 'monthly-award',
-        },
-      })
-    }
+    toggleListItems.push({
+      text: text,
+      testId: text.replace(',', ''),
+      onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: monthlyAwardToggle,
+        a11yHint: t('letters.benefitService.monthlyAwardA11yHint'),
+        testID: 'monthly-award',
+      },
+    })
 
     if (serviceConnectedPercentage) {
       const percentText = t('letters.benefitService.combinedServiceConnectingRating', {
