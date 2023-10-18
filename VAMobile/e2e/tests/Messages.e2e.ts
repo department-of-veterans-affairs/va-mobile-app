@@ -344,8 +344,7 @@ describe('Messages Screen', () => {
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
     await expect(element(by.text('Drafts (3)'))).toExist()
     await element(by.text('Drafts (3)')).tap()
-    //await expect(element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry'))).toExist()
-    await expect(element(by.text('Test: Test Inquiry'))).toExist()
+    await waitFor(element(by.text('Test: Test Inquiry'))).toBeVisible().whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scroll(300, 'down', NaN, 0.8)
     await element(by.text('Test: Test Inquiry')).tap()
   })
 
