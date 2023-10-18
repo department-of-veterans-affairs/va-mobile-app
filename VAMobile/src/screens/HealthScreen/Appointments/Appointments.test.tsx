@@ -125,7 +125,7 @@ context('AppointmentsScreen', () => {
           .mockRejectedValue({ networkError: true } as api.APIError)
         initializeTestInstance()
       })
-      expect(screen.getByText("We're sorry. Something went wrong on our end. Please refresh this screen or try again later.")).toBeTruthy()
+      expect(screen.getByText("We're having trouble getting your appointments. Refresh this screen or try again later.")).toBeTruthy()
     })
   })
 

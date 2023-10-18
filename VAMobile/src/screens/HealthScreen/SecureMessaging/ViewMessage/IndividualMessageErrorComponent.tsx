@@ -36,7 +36,7 @@ const IndividualMessageErrorComponent: FC = () => {
                   label={t('refresh')}
                   buttonType={ButtonTypesConstants.buttonPrimary}
                   testID={t('refresh')}
-                  a11yHint={t('errors.callHelpCenter.button.a11yHint')}
+                  a11yHint={t('refreshScreen.button.a11yHint')}
                 />
               </Box>
             )}
