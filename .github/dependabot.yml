@@ -12,6 +12,7 @@ updates:
         patterns:
           - '@babel*'
           - 'babel-plugin-module-resolver'
+          - 'metro-react-native-babel-preset'
       eslint:
         patterns:
           - 'eslint*'
@@ -21,22 +22,19 @@ updates:
       firebase:
         patterns:
           - '@react-native-firebase*'
-      jest:
-        patterns:
-          - 'jest*'
-          - 'babel-jest'
-          - 'ts-jest'
       react-navigation:
         patterns:
-          - '@react-navigation*'
-          - 'react-navigation'
+          - '*react-navigation*'
       redux:
         patterns:
           - '*redux*'
+      unit-tests:
+        patterns:
+          - '*jest*'
+          - '@testing-library*'
       wdio:
         patterns:
-          - '@wdio*'
-          - 'wdio-chromedriver-service'
+          - '*wdio*'
     ignore:
       - dependency-name: '*'
         update-types: ['version-update:semver-major']
