@@ -18,13 +18,21 @@ const PrescriptionHelp: FC<PrescriptionHelpProps> = () => {
   const medicationNoIncludedList: Array<VABulletListText> = [
     {
       text: t('prescription.help.item1'),
+      a11yLabel: a11yLabelVA(t('prescription.help.item1')),
     },
     {
       text: t('prescription.help.item2'),
-      a11yLabel: t('prescription.help.item2.a11yLabel'),
+      a11yLabel: a11yLabelVA(t('prescription.help.item2')),
     },
     {
       text: t('prescription.help.item3'),
+    },
+    {
+      text: t('prescription.help.item4'),
+      a11yLabel: t('prescription.help.item4.a11yLabel'),
+    },
+    {
+      text: t('prescription.help.item5'),
     },
   ]
 

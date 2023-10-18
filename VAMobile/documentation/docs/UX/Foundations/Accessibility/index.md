@@ -68,5 +68,5 @@ Section 508 is a federal law that requires all U.S. government agencies to make 
 * [Accessibility checklist for UX designers](/docs/UX/Foundations/Accessibility/a11y-checklist-ux-designers)
 * [Accessibility checklist for content designers](/docs/UX/Foundations/Accessibility/a11y-checklist-content-designers)
 * [Haptic feedback](/docs/Flagship%20design%20library/Patterns/haptics)
-* [VA.gov mobile accessibility testing plan on Github](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/Foundations/Accessibility#:~:text=VA.gov%20Mobile%20Accessibility%20Testing%20Plan%20on%20Github)
+* [VA.gov mobile accessibility testing plan](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/Foundations/Accessibility/testing-plan)
 * [Draft native mobile accessibility (a11y) resources & articles on Google docs](https://docs.google.com/document/d/1D2PFg7Am9FkTt4HgMK2leEh_AliiSSf7MCWu-FLf9fI/edit#heading=h.t09yqccug4vs)
