@@ -1,4 +1,4 @@
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
@@ -59,8 +59,13 @@ const PaymentsScreenStack = createStackNavigator()
  * Stack screen for the Payments tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const PaymentsStackScreen: FC<PaymentsStackScreenProps> = () => {
+  const screenOptions = {
+    headerShown: false,
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+  }
   return (
     <PaymentsScreenStack.Navigator
+      screenOptions={screenOptions}
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {

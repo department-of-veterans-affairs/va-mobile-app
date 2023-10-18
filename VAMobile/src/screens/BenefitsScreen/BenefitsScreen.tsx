@@ -1,4 +1,4 @@
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
@@ -80,8 +80,13 @@ const BenefitsScreenStack = createStackNavigator()
  * Stack screen for the Benefits tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
+  const screenOptions = {
+    headerShown: false,
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+  }
   return (
     <BenefitsScreenStack.Navigator
+      screenOptions={screenOptions}
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {
