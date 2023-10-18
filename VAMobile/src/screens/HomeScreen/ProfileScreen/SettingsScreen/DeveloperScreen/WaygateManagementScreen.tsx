@@ -1,12 +1,13 @@
 import { AccordionCollapsible, Box, ButtonTypesConstants, FeatureLandingTemplate, TextView, VAButton } from 'components'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps } from '@react-navigation/stack'
 import { forEach } from 'underscore'
 import { getWaygateToggles } from 'utils/remoteConfig'
+import { useIsFocused } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 
 type WaygateManagementScreenProps = StackScreenProps<HomeStackParamList, 'WaygateManagement'>
@@ -18,7 +19,20 @@ const WaygateManagementScreen: FC<WaygateManagementScreenProps> = ({ navigation 
   const navigateTo = useRouteNavigation()
   const { gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const currentWaygateConfig = getWaygateToggles()
-  const [toggles] = useState({ ...currentWaygateConfig })
+  const [toggles, setToggles] = useState({ ...currentWaygateConfig })
+  const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const isFocused = useIsFocused()
+
+  useEffect(() => {
+    isFocused && setToggles(getWaygateToggles())
+  }, [isFocused, setToggles])
+
+  useEffect(() => {
+    if (onSaveClicked) {
+      //ToDo: save toggles to async storage
+      navigation.goBack()
+    }
+  }, [onSaveClicked, toggles, navigation])
 
   const toggleList = (): ReactNode => {
     const toggleItems: Array<ReactNode> = []
@@ -63,8 +77,14 @@ const WaygateManagementScreen: FC<WaygateManagementScreenProps> = ({ navigation 
     return <Box mt={condensedMarginBetween}>{toggleItems}</Box>
   }
 
+  const headerButton = {
+    label: t('save'),
+    icon: undefined,
+    onPress: () => setOnSaveClicked(true),
+  }
+
   return (
-    <FeatureLandingTemplate backLabel={t('remoteConfig.title')} backLabelOnPress={navigation.goBack} title={t('waygateManagement.title')}>
+    <FeatureLandingTemplate backLabel={t('remoteConfig.title')} backLabelOnPress={navigation.goBack} title={t('waygateManagement.title')} headerButton={headerButton}>
       <Box mx={gutter}>
         <TextView>
           <TextView variant="MobileBodyBold">Enabled:</TextView> 'false' = waygate.
