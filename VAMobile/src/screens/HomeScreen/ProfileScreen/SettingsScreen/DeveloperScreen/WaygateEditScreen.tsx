@@ -1,7 +1,7 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { Box, ButtonDecoratorType, FullScreenSubtask, SimpleList, SimpleListItemObj, TextView } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -16,52 +16,58 @@ type WaygateEditScreenProps = StackScreenProps<HomeStackParamList, 'WaygateEditS
 const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { waygateName, waygate } = route.params
-  const [onSaveClicked, setOnSaveClicked] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
+  const { waygateName, waygate } = route.params
   const title = 'Edit: ' + waygateName
   const wg = waygate
+  const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [enabledOverride, setEnabledOverride] = useState(wg.enabled)
+  const [appUpdateButtonOverride, setAppUpdateButtonOverride] = useState(wg.appUpdateButton)
+  const [allowFunctionOverride, setAllowFunctionOverride] = useState(wg.allowFunction)
+  const [denyAccessOverride, setDenyAccessOverride] = useState(wg.denyAccess)
+
+  useEffect(() => {
+    if (onSaveClicked) {
+      wg.enabled = enabledOverride
+      wg.appUpdateButton = appUpdateButtonOverride
+      wg.allowFunction = allowFunctionOverride
+      wg.denyAccess = denyAccessOverride
+      navigation.goBack()
+    }
+  }, [onSaveClicked, navigation, wg])
 
   const toggleItems: SimpleListItemObj[] = [
     {
       text: 'Enabled',
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
-        on: wg.enabled,
+        on: enabledOverride,
       },
-      onPress: () => {
-        wg.enabled = !wg.enabled
-      },
+      onPress: (): void => setEnabledOverride(!enabledOverride),
     },
     {
       text: 'appUpdateButton',
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
-        on: waygate.appUpdateButton,
+        on: appUpdateButtonOverride,
       },
-      onPress: () => {
-        waygate.appUpdateButton = !waygate.appUpdateButton
-      },
+      onPress: (): void => setAppUpdateButtonOverride(!appUpdateButtonOverride),
     },
     {
       text: 'allowFunction',
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
-        on: waygate.allowFunction,
+        on: allowFunctionOverride,
       },
-      onPress: () => {
-        waygate.allowFunction = !waygate.allowFunction
-      },
+      onPress: (): void => setAllowFunctionOverride(!allowFunctionOverride),
     },
     {
       text: 'denyAccess',
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
-        on: waygate.denyAccess,
+        on: denyAccessOverride,
       },
-      onPress: () => {
-        waygate.denyAccess = !waygate.denyAccess
-      },
+      onPress: (): void => setDenyAccessOverride(!denyAccessOverride),
     },
   ]
 
