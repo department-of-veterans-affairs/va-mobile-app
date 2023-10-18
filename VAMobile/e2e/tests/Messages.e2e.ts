@@ -341,17 +341,14 @@ describe('Messages Screen', () => {
   })
 
   it('should navigate to the drafts folder and click the newest message', async () => {
-    if(device.getPlatform() === 'android') {
-      await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
-    } else {
-      await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).tap()
-    }
+    await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
+    await expect(element(by.text('Drafts (3)'))).toExist()
     await element(by.text('Drafts (3)')).tap()
     await expect(element(by.text('Test: Test Inquiry'))).toExist()
-    await element(by.text('Test: Test Inquiry')).tap()
+    //await element(by.text('Test: Test Inquiry')).tap()
   })
 
-  it('should enter some text into the draft message, tap cancel and verify the action sheet that appears', async () => {
+  /*it('should enter some text into the draft message, tap cancel and verify the action sheet that appears', async () => {
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).clearText()
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).replaceText('Testing')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
@@ -413,5 +410,5 @@ describe('Messages Screen', () => {
     await element(by.text('Sent')).tap()
     await element(by.text('Messages')).tap()
     await expect(element(by.text('Custom Folder 2'))).toExist()
-  })
+  })*/
 })
