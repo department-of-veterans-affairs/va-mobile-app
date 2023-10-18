@@ -344,8 +344,9 @@ describe('Messages Screen', () => {
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
     await expect(element(by.text('Drafts (3)'))).toExist()
     await element(by.text('Drafts (3)')).tap()
+    await expect(element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry'))).toExist()
     await expect(element(by.text('Test: Test Inquiry'))).toExist()
-    //await element(by.text('Test: Test Inquiry')).tap()
+    await element(by.text('Test: Test Inquiry')).tap()
   })
 
   /*it('should enter some text into the draft message, tap cancel and verify the action sheet that appears', async () => {
