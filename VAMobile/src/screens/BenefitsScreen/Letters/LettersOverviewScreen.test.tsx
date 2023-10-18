@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
+import { fireEvent, screen } from '@testing-library/react-native'
 import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 import { Pressable } from 'react-native'
 import { LettersOverviewScreen } from './index'
@@ -19,28 +19,20 @@ jest.mock('@react-navigation/native', () => {
 })
 
 context('LettersOverviewScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
   const initializeTestInstance = () => {
-
     const props = mockNavProps()
-
-    component = render(<LettersOverviewScreen {...props} />)
-
-    testInstance = component.UNSAFE_root
+    render(<LettersOverviewScreen {...props} />)
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  it('should go to edit address when the address is pressed', async () => {
-    testInstance.findAllByType(Pressable)[0].props.onPress()
+  it('initializes correctly and should go to edit address when the address is pressed', async () => {
+    expect(screen.getByText('Downloaded documents will list your address as:')).toBeTruthy()
+    expect(screen.getByText('If this address is incorrect you may want to update it, but your letter will still be valid even with the incorrect address.')).toBeTruthy()
+    expect(screen.getByText('Review letters')).toBeTruthy()
+    fireEvent.press(screen.getByText('Mailing address'))
     expect(mockNavigationSpy).toHaveBeenCalledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS })
   })
 })
