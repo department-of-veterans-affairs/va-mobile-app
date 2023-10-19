@@ -14,9 +14,7 @@ import { initialLettersState } from 'store/slices/lettersSlice'
 import { initialMilitaryServiceState } from 'store/slices/militaryServiceSlice'
 import { initialNotificationsState } from 'store/slices/notificationSlice'
 import { initialPaymentsState } from 'store/slices/paymentsSlice'
-import { initialPersonalInformationState } from 'store/slices/personalInformationSlice'
 import { initialPrescriptionState } from './prescriptionSlice'
-import { initialRequestAppointmentState } from 'store/slices/requestAppointmentSlice'
 import { initialSecureMessagingState } from 'store/slices/secureMessagingSlice'
 import { initialSettingsState } from 'store/slices/settingsSlice'
 import { initialSnackBarState } from 'store/slices/snackBarSlice'
@@ -33,12 +31,10 @@ export * from './errorSlice'
 export * from './lettersSlice'
 export * from './militaryServiceSlice'
 export * from './notificationSlice'
-export * from './personalInformationSlice'
 export * from './secureMessagingSlice'
 export * from './snackBarSlice'
 export * from './vaccineSlice'
 export * from './paymentsSlice'
-export * from './requestAppointmentSlice'
 export * from './prescriptionSlice'
 export * from './settingsSlice'
 
@@ -46,7 +42,6 @@ export const InitialState: RootState = {
   auth: initialAuthState,
   directDeposit: initialDirectDepositState,
   militaryService: initialMilitaryServiceState,
-  personalInformation: initialPersonalInformationState,
   decisionLetters: initialDecisionLettersState,
   letters: initialLettersState,
   appointments: initialAppointmentsState,
@@ -61,7 +56,6 @@ export const InitialState: RootState = {
   vaccine: initialVaccineState,
   snackBar: initialSnackBarState,
   payments: initialPaymentsState,
-  requestAppointment: initialRequestAppointmentState,
   prescriptions: initialPrescriptionState,
   settings: initialSettingsState,
 }

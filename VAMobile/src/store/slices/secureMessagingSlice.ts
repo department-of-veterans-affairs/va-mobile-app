@@ -27,7 +27,6 @@ import {
   SecureMessagingSignatureData,
   SecureMessagingSignatureDataAttributes,
   SecureMessagingSystemFolderIdConstants,
-  SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
   SecureMessagingThreads,
 } from 'store/api/types'
@@ -59,7 +58,7 @@ export type SecureMessagingState = {
   hasLoadedRecipients: boolean
   hasLoadedInbox: boolean
   fileDownloadError?: Error
-  secureMessagingTab?: SecureMessagingTabTypes
+  secureMessagingTab: number
   error?: APIError
   inbox: SecureMessagingFolderData
   inboxMessages: SecureMessagingMessageList
@@ -109,6 +108,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   messagesById: {} as SecureMessagingMessageMap,
   threads: [] as SecureMessagingThreads,
   recipients: [] as SecureMessagingRecipientDataList,
+  secureMessagingTab: 0,
 
   paginationMetaByFolderId: {
     [SecureMessagingSystemFolderIdConstants.INBOX]: {} as SecureMessagingPaginationMeta,
@@ -138,26 +138,12 @@ export const initialSecureMessagingState: SecureMessagingState = {
  */
 export const fetchInboxMessages =
   (page: number, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
+  async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(fetchInboxMessages(page, screenID))))
     dispatch(dispatchStartFetchInboxMessages())
 
     try {
-      // TODO story #25035, remove once ready
-      const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
-        throw {
-          json: {
-            errors: [
-              {
-                code: SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS,
-              },
-            ],
-          },
-        }
-      }
-
       const folderID = SecureMessagingSystemFolderIdConstants.INBOX
       const inboxMessages = await api.get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
         page: page.toString(),
@@ -332,9 +318,9 @@ export const getMessage =
  * Redux action to update the messaging tab
  */
 export const updateSecureMessagingTab =
-  (secureMessagingTab: SecureMessagingTabTypes): AppThunk =>
+  (secureMessagingTabIndex: number): AppThunk =>
   async (dispatch) => {
-    dispatch(dispatchUpdateSecureMessagingTab(secureMessagingTab))
+    dispatch(dispatchUpdateSecureMessagingTab(secureMessagingTabIndex))
   }
 
 export const downloadFileAttachment =
@@ -986,7 +972,7 @@ const secureMessagingSlice = createSlice({
       state.deleteDraftFailed = false
     },
 
-    dispatchUpdateSecureMessagingTab: (state, action: PayloadAction<SecureMessagingTabTypes>) => {
+    dispatchUpdateSecureMessagingTab: (state, action: PayloadAction<number>) => {
       state.secureMessagingTab = action.payload
     },
   },

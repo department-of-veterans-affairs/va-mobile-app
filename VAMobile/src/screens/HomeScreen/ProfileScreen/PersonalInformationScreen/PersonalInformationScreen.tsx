@@ -8,27 +8,15 @@ import { Box, BoxProps, ErrorComponent, FeatureLandingTemplate, LargeNavButton, 
 import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState } from 'store/slices/personalInformationSlice'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
-import { UserDataProfile } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled, waygateNativeAlert } from 'utils/remoteConfig'
-import { formatDateMMMMDDYYYY, stringToTitleCase } from 'utils/formattingUtils'
 import { registerReviewEvent } from 'utils/inAppReviews'
+import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDemographics } from 'api/demographics/getDemographics'
-import { useError, useTheme } from 'utils/hooks'
+import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
-import { useSelector } from 'react-redux'
-
-export const getBirthDate = (profile: UserDataProfile | undefined, t: TFunction): string => {
-  if (profile && profile.birthDate) {
-    const formattedBirthDate = formatDateMMMMDDYYYY(profile.birthDate)
-    return t('dynamicField', { field: formattedBirthDate })
-  } else {
-    return t('personalInformation.informationNotAvailable')
-  }
-}
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 
 const getPreferredName = (demographics: UserDemographics | undefined, t: TFunction): string => {
   if (demographics?.preferredName) {
@@ -51,8 +39,9 @@ type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'Pers
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { profile, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
+  const personalInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
+  const { data: personalInfo, isLoading: loadingPersonalInfo } = usePersonalInformation()
   const { data: demographics, isFetching: loadingDemographics, isError: getDemographicsError, refetch: refetchDemographics } = useDemographics()
   const {
     data: genderIdentityOptions,
@@ -90,7 +79,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     borderStyle: 'solid',
   }
 
-  const screenError = useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
   const onTryAgain = () => {
     if (getDemographicsError) {
       refetchDemographics()
@@ -100,9 +88,9 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     }
   }
 
-  const birthdate = getBirthDate(profile, t)
-  const errorCheck = screenError || getDemographicsError || getGenderIdentityOptionsError
-  const loadingCheck = loading || loadingGenderIdentityOptions || loadingDemographics
+  const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
+  const errorCheck = personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError
+  const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
 
   const onGenderIdentity = () => {
     if (waygateNativeAlert('WG_GenderIdentityScreen')) {
@@ -131,7 +119,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')} testID="PersonalInformationTestID">
       {errorCheck ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={screenError ? undefined : onTryAgain} />
+        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={onTryAgain} />
       ) : loadingCheck ? (
         <LoadingComponent text={t('personalInformation.loading')} />
       ) : (
@@ -165,6 +153,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
                   subText={getPreferredName(demographics, t)}
                   onPress={onPreferredName}
                 />
+                {genderIdentityOptions && (
                 <LargeNavButton
                   title={t('personalInformation.genderIdentity.title')}
                   borderWidth={theme.dimensions.buttonBorderWidth}
@@ -174,6 +163,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
                   subText={getGenderIdentity(demographics, t, genderIdentityOptions)}
                   onPress={onGenderIdentity}
                 />
+                )}
               </>
             )}
           </Box>

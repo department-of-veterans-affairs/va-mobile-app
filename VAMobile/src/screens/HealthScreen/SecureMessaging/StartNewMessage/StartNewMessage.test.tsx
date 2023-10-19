@@ -3,8 +3,6 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
-
 import { context, mockNavProps, render } from 'testUtils'
 import StartNewMessage from './StartNewMessage'
 import { initializeErrorsByScreenID, InitialState, saveDraft, updateSecureMessagingTab } from 'store/slices'
@@ -80,7 +78,6 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
 context('StartNewMessage', () => {
   let props: any
   let goBack: jest.Mock
-  let navHeaderSpy: any
   let navigateSpy: jest.Mock
 
   const initializeTestInstance = (
@@ -101,12 +98,7 @@ context('StartNewMessage', () => {
         addListener: mockUseComposeCancelConfirmationSpy,
         navigate: navigateSpy,
         goBack,
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-            save: options.headerRight ? options.headerRight({}) : undefined,
-          }
-        },
+        setOptions: jest.fn(),
       },
       { params: params },
     )
@@ -204,7 +196,7 @@ context('StartNewMessage', () => {
   describe('when returning from confirmation screen', () => {
     it('should show Recheck Info if validation had failed', async () => {
       initializeTestInstance(undefined, undefined, undefined, undefined, { saveDraftConfirmFailed: true })
-      navHeaderSpy.save.props.onSave()
+      fireEvent.press(screen.getByText('Save'))
       expect(screen.getByText("We need more information")).toBeTruthy()
     })
   })
@@ -227,7 +219,7 @@ context('StartNewMessage', () => {
 
   describe('when pressing the back button', () => {
     it('should go to inbox if all fields empty', async () => {
-      navHeaderSpy.back.props.onPress()
+      fireEvent.press(screen.getByText('Cancel'))
       expect(goBack).toHaveBeenCalled()
     })
 
@@ -235,7 +227,7 @@ context('StartNewMessage', () => {
       fireEvent.press(screen.getByTestId('picker'))
       fireEvent.press(screen.getByTestId('General'))
       fireEvent.press(screen.getByTestId('Done'))
-      navHeaderSpy.back.props.onPress()
+      fireEvent.press(screen.getByText('Cancel'))
       expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
     })
   })

@@ -1,13 +1,12 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag, WaygateWrapper } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, getProfileInfo } from 'store/slices/personalInformationSlice'
 import { RootState } from 'store'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -24,11 +23,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
-  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<RootState, PersonalInformationState>((s) => s.personalInformation)
 
-  const profileNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.userProfileUpdate)
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
-
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -38,22 +34,12 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
    * than checking the needsDataLoad flag because if something went wrong we assume we want to reload all of the necessary data
    */
   const getInfoTryAgain = (): void => {
-    // Fetch the profile information
-    dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
-
     refetchUserAuthorizedServices()
     // Get the service history to populate the profile banner
     if (userAuthorizedServices?.militaryServiceHistory) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
   }
-
-  useEffect(() => {
-    // Fetch the profile information
-    if (personalInformationNeedsUpdate && profileNotInDowntime && !personalInformationLoading) {
-      dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
-    }
-  }, [dispatch, personalInformationNeedsUpdate, profileNotInDowntime, personalInformationLoading])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
@@ -86,7 +72,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     }
   }
 
-  const loadingCheck = militaryInformationLoading || personalInformationLoading || loadingUserAuthorizedServices
+  const loadingCheck = militaryInformationLoading || loadingUserAuthorizedServices
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
 
   return (

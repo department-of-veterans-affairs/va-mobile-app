@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
-import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SnackbarMessages } from 'components/SnackBar'
 import {
   resetHasLoadedRecipients,
@@ -62,7 +62,7 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
           navigateTo('StartNewMessage', { saveDraftConfirmFailed: true })()
         } else {
           dispatch(saveDraft(messageData, snackbarMessages, draftMessageID, !!replyToID, replyToID, true))
-          dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
+          dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
         }
       }
 

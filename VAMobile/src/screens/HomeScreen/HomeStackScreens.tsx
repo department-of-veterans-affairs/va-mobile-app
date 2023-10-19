@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
-import { PhoneData, PhoneType } from 'store/api/types'
+import { PhoneData, PhoneType } from 'api/types'
 import { Waygate } from 'utils/remoteConfig'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import EditEmailScreen from './ProfileScreen/ContactInformationScreen/EditEmailScreen'

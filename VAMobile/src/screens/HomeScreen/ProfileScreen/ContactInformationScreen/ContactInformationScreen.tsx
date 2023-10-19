@@ -5,39 +5,37 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps, WaygateWrapper } from 'components'
+import { FormattedPhoneType, PhoneData, PhoneKey, PhoneTypeConstants } from 'api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState } from 'store/slices/personalInformationSlice'
-import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, ScreenIDTypesConstants, UserDataProfile } from 'store/api/types'
-import { RootState } from 'store'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { UserContactInformation } from 'api/types/ContactInformation'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { registerReviewEvent } from 'utils/inAppReviews'
-import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useContactInformation } from 'api/contactInformation/getContactInformation'
+import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { waygateNativeAlert } from 'utils/remoteConfig'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
-type phoneType = 'homePhoneNumber' | 'workPhoneNumber' | 'mobilePhoneNumber'
-
-const getTextForPhoneData = (profile: UserDataProfile | undefined, profileField: ProfileFormattedFieldType, phoneType: phoneType, t: TFunction): Array<TextLine> => {
+const getTextForPhoneData = (contactInformation: UserContactInformation | undefined, formattedPhoneType: FormattedPhoneType, phoneKey: PhoneKey, t: TFunction): Array<TextLine> => {
   const textIDs: Array<TextLine> = []
 
-  if (profile && profile[profileField]) {
-    const extension = profile[phoneType].extension
+  if (contactInformation && contactInformation[formattedPhoneType]) {
+    const extension = contactInformation[phoneKey]?.extension
     if (extension) {
-      textIDs.push({ text: t('contactInformation.phoneWithExtension', { number: profile[profileField] as string, extension }) })
+      textIDs.push({ text: t('contactInformation.phoneWithExtension', { number: contactInformation[formattedPhoneType] as string, extension }) })
     } else {
-      textIDs.push({ text: t('dynamicField', { field: profile[profileField] as string }) })
+      textIDs.push({ text: t('dynamicField', { field: contactInformation[formattedPhoneType] as string }) })
     }
   } else {
-    textIDs.push({ text: t('contactInformation.addYour', { field: t(`contactInformation.${phoneType}`) }) })
+    textIDs.push({ text: t('contactInformation.addYour', { field: t(`contactInformation.${phoneKey}`) }) })
   }
 
   return textIDs
 }
 
 const getPhoneNumberData = (
-  profile: UserDataProfile | undefined,
+  contactInformation: UserContactInformation | undefined,
   t: TFunction,
   onHomePhone: () => void,
   onWorkPhone: () => void,
@@ -47,9 +45,9 @@ const getPhoneNumberData = (
   let workText: Array<TextLine> = [{ text: t('contactInformation.work'), variant: 'MobileBodyBold' }]
   let cellText: Array<TextLine> = [{ text: t('contactInformation.mobile'), variant: 'MobileBodyBold' }]
 
-  homeText = homeText.concat(getTextForPhoneData(profile, 'formattedHomePhone', 'homePhoneNumber', t))
-  workText = workText.concat(getTextForPhoneData(profile, 'formattedWorkPhone', 'workPhoneNumber', t))
-  cellText = cellText.concat(getTextForPhoneData(profile, 'formattedMobilePhone', 'mobilePhoneNumber', t))
+  homeText = homeText.concat(getTextForPhoneData(contactInformation, 'formattedHomePhone', 'homePhone', t))
+  workText = workText.concat(getTextForPhoneData(contactInformation, 'formattedWorkPhone', 'workPhone', t))
+  cellText = cellText.concat(getTextForPhoneData(contactInformation, 'formattedMobilePhone', 'mobilePhone', t))
 
   return [
     { textLines: homeText, a11yHintText: t('contactInformation.editOrAddHomeNumber'), onPress: onHomePhone, testId: 'homePhoneTestID' },
@@ -58,11 +56,11 @@ const getPhoneNumberData = (
   ]
 }
 
-const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<DefaultListItemObj> => {
+const getEmailAddressData = (contactInformation: UserContactInformation | undefined, t: TFunction, onEmailAddress: () => void): Array<DefaultListItemObj> => {
   const textLines: Array<TextLine> = [{ text: t('contactInformation.emailAddress'), variant: 'MobileBodyBold' }]
 
-  if (profile?.contactEmail?.emailAddress) {
-    textLines.push({ text: t('dynamicField', { field: profile.contactEmail.emailAddress }) })
+  if (contactInformation?.contactEmail?.emailAddress) {
+    textLines.push({ text: t('dynamicField', { field: contactInformation.contactEmail.emailAddress }) })
   } else {
     textLines.push({ text: t('contactInformation.addYour', { field: t('contactInformation.emailAddress').toLowerCase() }) })
   }
@@ -75,7 +73,8 @@ type ContactInformationScreenProps = StackScreenProps<HomeStackParamList, 'Conta
 const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { profile, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { data: contactInformation, isLoading: loadingContactInformation, isError: contactInformationError, refetch: refetchContactInformation } = useContactInformation()
+  const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
 
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
 
@@ -111,7 +110,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
       navigateTo('EditPhoneNumber', {
         displayTitle: t('editPhoneNumber.homePhoneTitle'),
         phoneType: PhoneTypeConstants.HOME,
-        phoneData: profile ? profile.homePhoneNumber : ({} as PhoneData),
+        phoneData: contactInformation?.homePhone || ({} as PhoneData),
       })()
     }
   }
@@ -121,7 +120,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
       navigateTo('EditPhoneNumber', {
         displayTitle: t('editPhoneNumber.workPhoneTitle'),
         phoneType: PhoneTypeConstants.WORK,
-        phoneData: profile ? profile.workPhoneNumber : ({} as PhoneData),
+        phoneData: contactInformation?.workPhone || ({} as PhoneData),
       })()
     }
   }
@@ -131,7 +130,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
       navigateTo('EditPhoneNumber', {
         displayTitle: t('editPhoneNumber.mobilePhoneTitle'),
         phoneType: PhoneTypeConstants.MOBILE,
-        phoneData: profile ? profile.mobilePhoneNumber : ({} as PhoneData),
+        phoneData: contactInformation?.mobilePhone || ({} as PhoneData),
       })()
     }
   }
@@ -161,9 +160,9 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')} testID="ContactInfoTestID">
-      {useError(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID) ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} />
-      ) : loading ? (
+      {(contactInformationInDowntime || contactInformationError) ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} onTryAgain={refetchContactInformation} />
+      ) : loadingContactInformation ? (
         <LoadingComponent text={t('contactInformation.loading')} />
       ) : (
         <WaygateWrapper waygate="WG_ContactInformationScreen">
@@ -176,8 +175,8 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
             </TextView>
           </Pressable>
           <AddressSummary addressData={addressData} title={t('contactInformation.addresses')} />
-          <DefaultList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone)} title={t('contactInformation.phoneNumbers')} />
-          <DefaultList items={getEmailAddressData(profile, t, onEmailAddress)} title={t('contactInformation.contactEmailAddress')} />
+          <DefaultList items={getPhoneNumberData(contactInformation, t, onHomePhone, onWorkPhone, onCellPhone)} title={t('contactInformation.phoneNumbers')} />
+          <DefaultList items={getEmailAddressData(contactInformation, t, onEmailAddress)} title={t('contactInformation.contactEmailAddress')} />
           <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
             {t('contactInformation.thisIsEmailWeUseToContactNote')}
           </TextView>
