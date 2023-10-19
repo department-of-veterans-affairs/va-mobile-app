@@ -160,7 +160,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')} testID="ContactInfoTestID">
-      {(contactInformationInDowntime || contactInformationError) ? (
+      {contactInformationInDowntime || contactInformationError ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} onTryAgain={refetchContactInformation} />
       ) : loadingContactInformation ? (
         <LoadingComponent text={t('contactInformation.loading')} />
