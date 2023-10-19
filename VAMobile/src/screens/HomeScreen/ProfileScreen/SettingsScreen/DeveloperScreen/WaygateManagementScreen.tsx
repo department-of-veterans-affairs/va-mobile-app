@@ -5,10 +5,10 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps } from '@react-navigation/stack'
+import { forEach } from 'underscore'
 import { getWaygateToggles } from 'utils/remoteConfig'
 import { useIsFocused } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import _, { forEach } from 'underscore'
 
 type WaygateManagementScreenProps = StackScreenProps<HomeStackParamList, 'WaygateManagement'>
 
