@@ -276,12 +276,12 @@ export const activateRemoteConfig = async (): Promise<void> => {
      * If in staging or production, fetch and activate remote settings.  Otherwise,
      * we'll use the devConfig for local development.
      */
-    if (fetchRemote) {
-      console.debug('Remote Config: Fetching and activating')
-      await remoteConfig().fetch(RC_CACHE_TIME)
-      await remoteConfig().activate()
-      console.debug('Remote Config: Activated config')
-    }
+    // if (fetchRemote) {
+    console.debug('Remote Config: Fetching and activating')
+    await remoteConfig().fetch(RC_CACHE_TIME)
+    await remoteConfig().activate()
+    console.debug('Remote Config: Activated config')
+    // }
 
     await loadOverrides()
     await loadWaygateOverrides()
@@ -376,14 +376,16 @@ export const getFeatureToggles = (): FeatureToggleValues => {
 }
 
 export const getWaygateToggles = (): WaygateToggleValues => {
-  if (!fetchRemote) {
-    return waygateConfig
-  }
+  // if (!fetchRemote) {
+  //   return waygateConfig
+  // }
 
-  const toggles = {} as WaygateToggleValues
+  const toggles = waygateConfig
   Object.keys(remoteConfig().getAll()).forEach((key) => {
     if (key.startsWith('WG')) {
-      toggles[key as WaygateToggleType] = remoteConfig().getValue(key) as unknown as Waygate
+      toggles[key as WaygateToggleType] = JSON.parse(remoteConfig().getValue(key).asString()) as unknown as Waygate
+      console.log('waygates1: ' + JSON.parse(remoteConfig().getValue(key).asString()))
+      console.log('waygates2: ' + JSON.stringify(JSON.parse(remoteConfig().getValue(key).asString()), undefined, 2))
     }
   })
   return toggles

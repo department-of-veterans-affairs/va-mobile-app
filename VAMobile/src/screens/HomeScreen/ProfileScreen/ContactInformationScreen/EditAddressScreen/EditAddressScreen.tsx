@@ -549,8 +549,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     )
   }
 
-
-
   const loadingCheck = deletingAddress || savingAddress || validatingAddress
   const addressValidation = showAddressValidation && validationData
   const addressValues = getAddressValues()
@@ -567,13 +565,14 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       {loadingCheck ? (
         <LoadingComponent text={deletingAddress ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')} />
       ) : addressValidation ? (
-        <AddressValidation 
+        <AddressValidation
           addressEntered={getAddressDataPayload(addressValues, contactInformation)}
           addressId={contactInformation?.[addressType]?.id || 0}
           snackbarMessages={snackbarMessages}
           validationData={validationData}
           saveAddress={saveAddress}
-          setShowAddressValidation={setShowAddressValidation} />
+          setShowAddressValidation={setShowAddressValidation}
+        />
       ) : (
         <WaygateWrapper waygate="WG_EditAddressScreen">
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
