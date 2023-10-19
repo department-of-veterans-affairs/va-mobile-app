@@ -17,7 +17,7 @@ import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 type headerButton = {
   label: string
   labelA11y?: string
-  icon?: VAIconProps
+  icon: VAIconProps
   onPress: () => void
   testID?: string
 }
