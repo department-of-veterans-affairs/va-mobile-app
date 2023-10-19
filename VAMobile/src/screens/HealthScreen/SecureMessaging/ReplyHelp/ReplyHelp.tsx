@@ -3,7 +3,6 @@ import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import VeteransCrisisLineNumbers from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 
@@ -63,7 +62,6 @@ const ReplyHelp: FC = () => {
           a11yLabel={t('secureMessaging.replyHelp.call911.a11y')}
           numberOrUrlLink={t('911')}
           linkType={LinkTypeOptionsConstants.call}
-          {...a11yHintProp(t('secureMessaging.replyHelp.call911.a11yHint'))}
         />
       </Box>
     </LargePanel>
