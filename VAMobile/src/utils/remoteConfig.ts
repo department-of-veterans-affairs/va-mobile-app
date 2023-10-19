@@ -87,13 +87,9 @@ export type WaygateToggleType =
   | 'WG_MilitaryInformationScreen'
   | 'WG_IncorrectServiceInfoScreen'
   | 'WG_SettingsScreen'
-  | 'WG_ShareAppButton'
-  | 'WG_PrivacyPolicyButton'
   | 'WG_ManageYourAccountScreen'
   | 'WG_NotificationsSettingsScreen'
   | 'WG_ContactVAScreen'
-  | 'WG_FindVAButton'
-  | 'WG_Covid19Button'
 
 type WaygateToggleValues = {
   WG_HomeScreen: Waygate
@@ -112,13 +108,9 @@ type WaygateToggleValues = {
   // TODO: Should we add 'missing information' type blockers? NoMilitaryInfoScreen?
   WG_IncorrectServiceInfoScreen: Waygate
   WG_SettingsScreen: Waygate
-  WG_ShareAppButton: Waygate
-  WG_PrivacyPolicyButton: Waygate
   WG_ManageYourAccountScreen: Waygate
   WG_NotificationsSettingsScreen: Waygate
   WG_ContactVAScreen: Waygate
-  WG_FindVAButton: Waygate
-  WG_Covid19Button: Waygate
 }
 
 export let waygateConfig: WaygateToggleValues = {
@@ -242,22 +234,6 @@ export let waygateConfig: WaygateToggleValues = {
     allowFunction: false,
     denyAccess: false,
   },
-  WG_ShareAppButton: {
-    enabled: true,
-    errorMsgTitle: undefined,
-    errorMsgBody: undefined,
-    appUpdateButton: false,
-    allowFunction: false,
-    denyAccess: false,
-  },
-  WG_PrivacyPolicyButton: {
-    enabled: true,
-    errorMsgTitle: undefined,
-    errorMsgBody: undefined,
-    appUpdateButton: false,
-    allowFunction: false,
-    denyAccess: false,
-  },
   WG_ManageYourAccountScreen: {
     enabled: true,
     errorMsgTitle: undefined,
@@ -275,22 +251,6 @@ export let waygateConfig: WaygateToggleValues = {
     denyAccess: false,
   },
   WG_ContactVAScreen: {
-    enabled: true,
-    errorMsgTitle: undefined,
-    errorMsgBody: undefined,
-    appUpdateButton: false,
-    allowFunction: false,
-    denyAccess: false,
-  },
-  WG_FindVAButton: {
-    enabled: true,
-    errorMsgTitle: undefined,
-    errorMsgBody: undefined,
-    appUpdateButton: false,
-    allowFunction: false,
-    denyAccess: false,
-  },
-  WG_Covid19Button: {
     enabled: true,
     errorMsgTitle: undefined,
     errorMsgBody: undefined,

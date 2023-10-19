@@ -31,8 +31,10 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygate }) =
         {children}
       </Box>
     )
-  } else {
+  } else if (waygateOpen.enabled === false && waygateOpen.allowFunction === false) {
     return waygateAlertBox(waygateOpen)
+  } else {
+    return <Box>{children}</Box>
   }
 }
 

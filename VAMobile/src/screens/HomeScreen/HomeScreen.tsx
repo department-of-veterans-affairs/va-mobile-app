@@ -44,21 +44,17 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   const onFacilityLocator = () => {
-    if (waygateNativeAlert('WG_FindVAButton')) {
-      logAnalyticsEvent(Events.vama_find_location())
-      navigation.navigate('Webview', {
-        url: WEBVIEW_URL_FACILITY_LOCATOR,
-        displayTitle: t('webview.vagov'),
-        loadingMessage: t('webview.valocation.loading'),
-      })
-    }
+    logAnalyticsEvent(Events.vama_find_location())
+    navigation.navigate('Webview', {
+      url: WEBVIEW_URL_FACILITY_LOCATOR,
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('webview.valocation.loading'),
+    })
   }
 
   const onCoronaVirusFAQ = () => {
-    if (waygateNativeAlert('WG_Covid19Button')) {
-      dispatch(logCOVIDClickAnalytics('home_screen'))
-      navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
-    }
+    dispatch(logCOVIDClickAnalytics('home_screen'))
+    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
 
   const buttonDataList: Array<SimpleListItemObj> = [
