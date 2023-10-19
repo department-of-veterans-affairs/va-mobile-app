@@ -1,9 +1,9 @@
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
-import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -36,12 +36,6 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
-    })
-  }, [navigation])
-
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
@@ -57,14 +51,13 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   const buttonDataList: Array<SimpleListItemObj> = [
-    { text: t('contactVA.title'), a11yHintText: a11yLabelVA(t('contactVA.a11yHint')), onPress: onContactVA, testId: a11yLabelVA(t('contactVA.title')) },
+    { text: t('contactVA.title'), onPress: onContactVA, testId: a11yLabelVA(t('contactVA.title')) },
     {
       text: t('findLocation.title'),
-      a11yHintText: a11yLabelVA(t('findLocation.a11yHint')),
       onPress: onFacilityLocator,
       testId: a11yLabelVA(t('findLocation.title')),
     },
-    { text: t('covid19Updates.title'), a11yHintText: t('covid19Updates.a11yHint'), onPress: onCoronaVirusFAQ, testId: t('covid19Updates.title') },
+    { text: t('covid19Updates.title'), onPress: onCoronaVirusFAQ, testId: t('covid19Updates.title') },
   ]
 
   const profileIconProps: VAIconProps = {
