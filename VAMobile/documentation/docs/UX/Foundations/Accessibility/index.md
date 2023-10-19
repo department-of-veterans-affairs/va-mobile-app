@@ -24,10 +24,9 @@ All content throughout the app is clear and direct to ensure that users understa
 
 ### Go beyond guideline standards
 
-The VA Mobile app targets WCAG 2.2 Level AA and Level AAA success criteria, and section 508 guidelines. For more information, see the following resources:
+The VA Mobile app targets WCAG 2.2 Level AA and Level AAA success criteria and section 508 guidelines. For more information, see the following resources:
 
-- [WCAG 2.1](https://www.w3.org/TR/WCAG21/)
-- [WCAG 2.2 (draft)](https://www.w3.org/TR/WCAG22/)
+- [WCAG 2.2](https://www.w3.org/TR/WCAG22/)
 - [508 guidelines](https://www.access-board.gov/ict/#508-chapter-1-application-and-administration)
 
 
@@ -68,5 +67,5 @@ Section 508 is a federal law that requires all U.S. government agencies to make 
 * [Accessibility checklist for UX designers](/docs/UX/Foundations/Accessibility/a11y-checklist-ux-designers)
 * [Accessibility checklist for content designers](/docs/UX/Foundations/Accessibility/a11y-checklist-content-designers)
 * [Haptic feedback](/docs/Flagship%20design%20library/Patterns/haptics)
-* [VA.gov mobile accessibility testing plan](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/Foundations/Accessibility/testing-plan)
-* [Draft native mobile accessibility (a11y) resources & articles on Google docs](https://docs.google.com/document/d/1D2PFg7Am9FkTt4HgMK2leEh_AliiSSf7MCWu-FLf9fI/edit#heading=h.t09yqccug4vs)
+* [VA.gov mobile accessibility testing plan](/docs/UX/Foundations/Accessibility/testing-plan)
+* [Native mobile app accessibility resources & articles](/docs/UX/Foundations/Accessibility/resources)
