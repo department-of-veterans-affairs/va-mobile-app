@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
+import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, WaygateWrapper } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SnackbarMessages } from 'components/SnackBar'
@@ -134,56 +134,29 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
     },
   ]
 
-  if (preferredNameMutation.isLoading) {
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
-        <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
-      </FullScreenSubtask>
-    )
-  }
-
-  const waygateCheck = (wg: Waygate): ReactNode => {
-    if (wg.enabled) {
-      return screenContent()
-    } else if (wg.enabled === false && wg.allowFunction === true) {
-      return (
-        <Box>
-          <Box mb={theme.dimensions.condensedMarginBetween}>
-            <AlertBox border="warning" title={wg.errorMsgTitle} text={wg.errorMsgBody} />
-          </Box>
-          {screenContent()}
-        </Box>
-      )
-    } else {
-      return <AlertBox border="error" title={wg.errorMsgTitle} text={wg.errorMsgBody} />
-    }
-  }
-
-  const screenContent = (): ReactNode => {
-    return (
-      <Box mx={theme.dimensions.gutter}>
-        <FormWrapper
-          fieldsList={formFieldsList}
-          onSave={onSave}
-          resetErrors={resetErrors}
-          setResetErrors={setResetErrors}
-          onSaveClicked={onSaveClicked}
-          setOnSaveClicked={setOnSaveClicked}
-        />
-      </Box>
-    )
-  }
-
-  const wg = waygateEnabled('WG_PreferredNameScreen')
-
   return (
     <FullScreenSubtask
       leftButtonText={t('cancel')}
       onLeftButtonPress={onConfirmCancel}
       title={t('personalInformation.preferredName.title')}
-      primaryContentButtonText={wg.enabled || wg.allowFunction ? t('save') : undefined}
+      primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
-      {waygateCheck(wg)}
+      {preferredNameMutation.isLoading ? (
+        <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
+      ) : (
+        <WaygateWrapper waygate="WG_PreferredNameScreen">
+          <Box mx={theme.dimensions.gutter}>
+            <FormWrapper
+              fieldsList={formFieldsList}
+              onSave={onSave}
+              resetErrors={resetErrors}
+              setResetErrors={setResetErrors}
+              onSaveClicked={onSaveClicked}
+              setOnSaveClicked={setOnSaveClicked}
+            />
+          </Box>
+        </WaygateWrapper>
+      )}
     </FullScreenSubtask>
   )
 }

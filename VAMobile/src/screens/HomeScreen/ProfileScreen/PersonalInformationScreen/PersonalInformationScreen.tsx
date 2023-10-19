@@ -17,7 +17,7 @@ import { featureEnabled, waygateNativeAlert } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY, stringToTitleCase } from 'utils/formattingUtils'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { useDemographics } from 'api/demographics/getDemographics'
-import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useError, useTheme } from 'utils/hooks'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { useSelector } from 'react-redux'
 
@@ -53,7 +53,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const theme = useTheme()
   const { profile, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
-  const navigateTo = useRouteNavigation()
   const { data: demographics, isFetching: loadingDemographics, isError: getDemographicsError, refetch: refetchDemographics } = useDemographics()
   const {
     data: genderIdentityOptions,
@@ -117,6 +116,18 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     }
   }
 
+  const onUpdateName = () => {
+    if (waygateNativeAlert('WG_PreferredNameScreen')) {
+      navigation.navigate('HowDoIUpdate', { screenType: 'name' })
+    }
+  }
+
+  const onUpdateDOB = () => {
+    if (waygateNativeAlert('WG_PreferredNameScreen')) {
+      navigation.navigate('HowDoIUpdate', { screenType: 'DOB' })
+    }
+  }
+
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')} testID="PersonalInformationTestID">
       {errorCheck ? (
@@ -128,7 +139,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
             {t('contactInformation.editNote')}
           </TextView>
-          <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>
+          <Pressable onPress={onUpdateName} accessibilityRole="link" accessible={true}>
             <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
           </Pressable>
           <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
@@ -140,7 +151,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
               </Box>
               <TextView variant={'MobileBody'}>{birthdate}</TextView>
             </Box>
-            <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })} accessibilityRole="link" accessible={true}>
+            <Pressable onPress={onUpdateDOB} accessibilityRole="link" accessible={true}>
               <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
             </Pressable>
             {featureEnabled('preferredNameGenderWaygate') && (

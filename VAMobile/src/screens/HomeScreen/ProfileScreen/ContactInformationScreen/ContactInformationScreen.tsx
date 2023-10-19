@@ -4,7 +4,7 @@ import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
+import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps, WaygateWrapper } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState } from 'store/slices/personalInformationSlice'
@@ -14,6 +14,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { waygateNativeAlert } from 'utils/remoteConfig'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 type phoneType = 'homePhoneNumber' | 'workPhoneNumber' | 'mobilePhoneNumber'
@@ -87,35 +88,65 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
     registerReviewEvent()
     setReviewEventRegistered(true)
   }
-  const onMailingAddress = navigateTo('EditAddress', {
-    displayTitle: t('contactInformation.mailingAddress'),
-    addressType: profileAddressOptions.MAILING_ADDRESS,
-  })
+  const onMailingAddress = () => {
+    if (waygateNativeAlert('WG_EditAddressScreen')) {
+      navigateTo('EditAddress', {
+        displayTitle: t('contactInformation.mailingAddress'),
+        addressType: profileAddressOptions.MAILING_ADDRESS,
+      })()
+    }
+  }
 
-  const onResidentialAddress = navigateTo('EditAddress', {
-    displayTitle: t('contactInformation.residentialAddress'),
-    addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
-  })
+  const onResidentialAddress = () => {
+    if (waygateNativeAlert('WG_EditAddressScreen')) {
+      navigateTo('EditAddress', {
+        displayTitle: t('contactInformation.residentialAddress'),
+        addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
+      })()
+    }
+  }
 
-  const onHomePhone = navigateTo('EditPhoneNumber', {
-    displayTitle: t('editPhoneNumber.homePhoneTitle'),
-    phoneType: PhoneTypeConstants.HOME,
-    phoneData: profile ? profile.homePhoneNumber : ({} as PhoneData),
-  })
+  const onHomePhone = () => {
+    if (waygateNativeAlert('WG_EditPhoneNumberScreen')) {
+      navigateTo('EditPhoneNumber', {
+        displayTitle: t('editPhoneNumber.homePhoneTitle'),
+        phoneType: PhoneTypeConstants.HOME,
+        phoneData: profile ? profile.homePhoneNumber : ({} as PhoneData),
+      })()
+    }
+  }
 
-  const onWorkPhone = navigateTo('EditPhoneNumber', {
-    displayTitle: t('editPhoneNumber.workPhoneTitle'),
-    phoneType: PhoneTypeConstants.WORK,
-    phoneData: profile ? profile.workPhoneNumber : ({} as PhoneData),
-  })
+  const onWorkPhone = () => {
+    if (waygateNativeAlert('WG_EditPhoneNumberScreen')) {
+      navigateTo('EditPhoneNumber', {
+        displayTitle: t('editPhoneNumber.workPhoneTitle'),
+        phoneType: PhoneTypeConstants.WORK,
+        phoneData: profile ? profile.workPhoneNumber : ({} as PhoneData),
+      })()
+    }
+  }
 
-  const onCellPhone = navigateTo('EditPhoneNumber', {
-    displayTitle: t('editPhoneNumber.mobilePhoneTitle'),
-    phoneType: PhoneTypeConstants.MOBILE,
-    phoneData: profile ? profile.mobilePhoneNumber : ({} as PhoneData),
-  })
+  const onCellPhone = () => {
+    if (waygateNativeAlert('WG_EditPhoneNumberScreen')) {
+      navigateTo('EditPhoneNumber', {
+        displayTitle: t('editPhoneNumber.mobilePhoneTitle'),
+        phoneType: PhoneTypeConstants.MOBILE,
+        phoneData: profile ? profile.mobilePhoneNumber : ({} as PhoneData),
+      })()
+    }
+  }
 
-  const onEmailAddress = navigateTo('EditEmail')
+  const onEmailAddress = () => {
+    if (waygateNativeAlert('WG_EditEmailScreen')) {
+      navigation.navigate('EditEmail')
+    }
+  }
+
+  const onHowWillYou = () => {
+    if (waygateNativeAlert('WG_HowWillYouScreen')) {
+      navigation.navigate('HowWillYou')
+    }
+  }
 
   const linkProps: TextViewProps = {
     variant: 'MobileBodyLink',
@@ -128,38 +159,30 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
   ]
 
-  if (useError(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loading) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')}>
-        <LoadingComponent text={t('contactInformation.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')} testID="ContactInfoTestID">
-      <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
-        {t('contactInformation.editNote')}
-      </TextView>
-      <Pressable onPress={navigateTo('HowWillYou')} accessibilityRole="link" accessible={true}>
-        <TextView testID="howWeUseContactInfoLinkTestID" {...linkProps}>
-          {t('contactInformation.howWillYouUseContactInfo')}
-        </TextView>
-      </Pressable>
-      <AddressSummary addressData={addressData} title={t('contactInformation.addresses')} />
-      <DefaultList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone)} title={t('contactInformation.phoneNumbers')} />
-      <DefaultList items={getEmailAddressData(profile, t, onEmailAddress)} title={t('contactInformation.contactEmailAddress')} />
-      <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
-        {t('contactInformation.thisIsEmailWeUseToContactNote')}
-      </TextView>
+      {useError(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID) ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} />
+      ) : loading ? (
+        <LoadingComponent text={t('contactInformation.loading')} />
+      ) : (
+        <WaygateWrapper waygate="WG_ContactInformationScreen">
+          <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
+            {t('contactInformation.editNote')}
+          </TextView>
+          <Pressable onPress={onHowWillYou} accessibilityRole="link" accessible={true}>
+            <TextView testID="howWeUseContactInfoLinkTestID" {...linkProps}>
+              {t('contactInformation.howWillYouUseContactInfo')}
+            </TextView>
+          </Pressable>
+          <AddressSummary addressData={addressData} title={t('contactInformation.addresses')} />
+          <DefaultList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone)} title={t('contactInformation.phoneNumbers')} />
+          <DefaultList items={getEmailAddressData(profile, t, onEmailAddress)} title={t('contactInformation.contactEmailAddress')} />
+          <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
+            {t('contactInformation.thisIsEmailWeUseToContactNote')}
+          </TextView>
+        </WaygateWrapper>
+      )}
     </FeatureLandingTemplate>
   )
 }

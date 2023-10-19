@@ -160,10 +160,10 @@ const waygateUseCase1: Waygate = {
 export let waygateConfig: WaygateToggleValues = {
   WG_HomeScreen: waygateDefault,
   WG_ProfileScreen: waygateDefault,
-  WG_PersonalInformationScreen: waygateUseCase3,
+  WG_PersonalInformationScreen: waygateDefault,
   WG_HowDoIUpdateScreen: waygateDefault,
-  WG_PreferredNameScreen: waygateUseCase2,
-  WG_GenderIdentityScreen: waygateUseCase1,
+  WG_PreferredNameScreen: waygateDefault,
+  WG_GenderIdentityScreen: waygateDefault,
   WG_WhatToKnowScreen: waygateDefault,
   WG_ContactInformationScreen: waygateDefault,
   WG_HowWillYouScreen: waygateDefault,
