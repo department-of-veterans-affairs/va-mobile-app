@@ -37,6 +37,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   const onShowConfirm = (): void => {
+    logAnalyticsEvent(Events.vama_click(t('logout.title'), t('settings.title')))
     signOutAlert({
       title: t('logout.confirm.text'),
       destructiveButtonIndex: 1,
