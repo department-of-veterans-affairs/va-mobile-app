@@ -19,13 +19,12 @@ const WaygateManagementScreen: FC<WaygateManagementScreenProps> = ({ navigation 
   const navigateTo = useRouteNavigation()
   const { gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
   const currentWaygateConfig = getWaygateToggles()
-  const [toggles] = useState({ ...currentWaygateConfig })
-  // const [toggles, setToggles] = useState({ ...currentWaygateConfig })
-  // const isFocused = useIsFocused()
+  const [toggles, setToggles] = useState({ ...currentWaygateConfig })
+  const isFocused = useIsFocused()
 
-  // useEffect(() => {
-  //   isFocused && setToggles(getWaygateToggles())
-  // }, [isFocused, setToggles])
+  useEffect(() => {
+    isFocused && setToggles(getWaygateToggles())
+  }, [isFocused, setToggles])
 
   const toggleList = (): ReactNode => {
     const toggleItems: Array<ReactNode> = []
