@@ -468,7 +468,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: 'editAddress.liveOnMilitaryBase',
         selected: checkboxSelected,
         onSelectionChange: onCheckboxChange,
-        a11yHint: t('editAddress.liveOnMilitaryBaseA11yHint'),
         testID: 'USMilitaryBaseCheckboxTestID',
       },
     },
@@ -582,7 +581,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
               onPress={onDeletePressed}
               label={t('contactInformation.removeData', { pageName: lowerCaseTitle })}
               buttonType={ButtonTypesConstants.buttonDestructive}
-              a11yHint={t('contactInformation.removeData.a11yHint', { pageName: lowerCaseTitle })}
               testID="EditAddressSaveTestID"
             />
           </Box>

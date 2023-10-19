@@ -96,21 +96,9 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
       {!hasUploaded && (
         <Box {...boxProps}>
           <Box mt={standardMarginBetween} mx={gutter} mb={contentMarginBottom}>
-            <VAButton
-              onPress={onFilePress}
-              label={t('fileUpload.selectAFile')}
-              testID={t('fileUpload.selectAFile')}
-              buttonType={ButtonTypesConstants.buttonSecondary}
-              a11yHint={t('fileUpload.selectAFileA11yHint')}
-            />
+            <VAButton onPress={onFilePress} label={t('fileUpload.selectAFile')} testID={t('fileUpload.selectAFile')} buttonType={ButtonTypesConstants.buttonSecondary} />
             <Box mt={theme.dimensions.condensedMarginBetween}>
-              <VAButton
-                onPress={onPhotoPress}
-                label={t('fileUpload.takePhotos')}
-                testID={t('fileUpload.takePhotos')}
-                buttonType={ButtonTypesConstants.buttonSecondary}
-                a11yHint={t('fileUpload.takePhotosA11yHint')}
-              />
+              <VAButton onPress={onPhotoPress} label={t('fileUpload.takePhotos')} testID={t('fileUpload.takePhotos')} buttonType={ButtonTypesConstants.buttonSecondary} />
             </Box>
           </Box>
         </Box>
