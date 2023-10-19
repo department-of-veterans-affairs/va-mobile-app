@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
-import { Box, ButtonDecoratorType, FullScreenSubtask, SimpleList, SimpleListItemObj, TextView } from 'components'
+import { Box, ButtonDecoratorType, FullScreenSubtask, SimpleList, SimpleListItemObj, TextView, VATextInput } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
@@ -25,6 +25,8 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
   const [appUpdateButtonOverride, setAppUpdateButtonOverride] = useState(wg.appUpdateButton)
   const [allowFunctionOverride, setAllowFunctionOverride] = useState(wg.allowFunction)
   const [denyAccessOverride, setDenyAccessOverride] = useState(wg.denyAccess)
+  const [errorMsgTitleOverride, setErrorMsgTitleOverride] = useState(wg.errorMsgTitle)
+  const [errorMsgBodyOverride, setErrorMsgBodyOverride] = useState(wg.errorMsgBody)
 
   useEffect(() => {
     if (onSaveClicked) {
@@ -32,6 +34,8 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
       wg.appUpdateButton = appUpdateButtonOverride
       wg.allowFunction = allowFunctionOverride
       wg.denyAccess = denyAccessOverride
+      wg.errorMsgTitle = errorMsgTitleOverride
+      wg.errorMsgBody = errorMsgBodyOverride
       navigation.goBack()
     }
   }, [onSaveClicked, navigation, wg, enabledOverride, appUpdateButtonOverride, allowFunctionOverride, denyAccessOverride])
@@ -82,9 +86,21 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <SimpleList items={toggleItems} />
         <TextView variant="MobileBodyBold">errorMsgTitle</TextView>
-        <TextView>{waygate.errorMsgTitle}</TextView>
+        <VATextInput
+          inputType="none"
+          value={waygate.errorMsgTitle}
+          onChange={(val) => {
+            setErrorMsgTitleOverride(val)
+          }}
+        />
         <TextView variant="MobileBodyBold">errorMsgBody</TextView>
-        <TextView>{waygate.errorMsgBody}</TextView>
+        <VATextInput
+          inputType="none"
+          value={waygate.errorMsgBody}
+          onChange={(val) => {
+            setErrorMsgBodyOverride(val)
+          }}
+        />
       </Box>
     </FullScreenSubtask>
   )
