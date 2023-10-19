@@ -154,15 +154,15 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
                   onPress={onPreferredName}
                 />
                 {genderIdentityOptions && (
-                <LargeNavButton
-                  title={t('personalInformation.genderIdentity.title')}
-                  borderWidth={theme.dimensions.buttonBorderWidth}
-                  borderColor={'secondary'}
-                  borderColorActive={'primaryDarkest'}
-                  borderStyle={'solid'}
-                  subText={getGenderIdentity(demographics, t, genderIdentityOptions)}
-                  onPress={onGenderIdentity}
-                />
+                  <LargeNavButton
+                    title={t('personalInformation.genderIdentity.title')}
+                    borderWidth={theme.dimensions.buttonBorderWidth}
+                    borderColor={'secondary'}
+                    borderColorActive={'primaryDarkest'}
+                    borderStyle={'solid'}
+                    subText={getGenderIdentity(demographics, t, genderIdentityOptions)}
+                    onPress={onGenderIdentity}
+                  />
                 )}
               </>
             )}
