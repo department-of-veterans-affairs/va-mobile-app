@@ -371,11 +371,11 @@ describe('Messages Screen', () => {
   it('should tap cancel, then delete changes, and verify that the draft is still in the list', async () => {
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
     await element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_DELETE_TEXT)).tap()
-    await expect(element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry'))).toExist()
+    await expect(element(by.text('Test: Test Inquiry'))).toExist()
   })
 
   it('should open the previous editing draft and verify that no changes are displayed', async () => {   
-    await element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry')).tap()
+    await element(by.text('Test: Test Inquiry')).tap()
     await expect(element(by.text('VA Flagship mobile applications interface 2_DAYT29'))).toExist()
     await expect(element(by.text('Test'))).toExist()
     await expect(element(by.text('Test Inquiry'))).toExist()
@@ -392,7 +392,7 @@ describe('Messages Screen', () => {
   })
 
   it('should open a draft message and verify it can be deleted from the more menu option', async () => {
-    await element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry')).tap()
+    await element(by.text('Test: Test Inquiry')).tap()
     await element(by.text('More')).tap()
     await element(by.text('Delete')).tap()
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
