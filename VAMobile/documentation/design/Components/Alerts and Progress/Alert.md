@@ -1,11 +1,7 @@
 ---
 title: Alert
+draft: true
 ---
-
-import CodeBlock from '@theme/CodeBlock'
-import AlertBoxString from '!!raw-loader!@componentsDocs/AlertBox'
-import ComponentTopInfo from '../../../../src/components/ComponentInfo'
-import Screenshot from '@site/static/img/components/AlertBox.png'
 
 Alerts are an in-content way to keep users informed of important and sometimes time-sensitive changes.
 
@@ -71,18 +67,9 @@ On the website and mobile app, do not use the Alert component for:
 * Focusable elements within an Alert should include: heading, body copy, phone numbers, and buttons.
 * [accessibilityLabel](https://reactnative.dev/docs/accessibility#accessibilitylabel) and [accessibilityLabelledBy](https://reactnative.dev/docs/accessibility#accessibilitylabelledby-android) should be used where appropriate.
 
-### Related
-* [Native alerts](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Patterns/confirmation-messages/)
-* [Snackbar](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Components/Alerts%20and%20Progress/Snackbar)
-
 ### Code usage
 Link to Storybook coming soon
 
-export const exampleString = `<AlertBox 
-  title="Alert header text here" 
-  text="Alert body text here"
-  textA11yLabel="Alert text a11y label here"
-  border="warning"
-/>`
-
-<ComponentTopInfo componentName="AlertBox" example={exampleString} codeString={AlertBoxString} />
+### Related
+* [Native alerts](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Patterns/confirmation-messages/)
+* [Snackbar](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Components/Alerts%20and%20Progress/Snackbar)

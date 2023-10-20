@@ -6,19 +6,20 @@ A segmented control is used to switch between related views of information withi
 
 ## Examples
 
-### Storybook
+### Two segments
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--2-segments)	|	[Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7332-11330&mode=design&t=lRnzcV3CBx2yby7N-4)
+<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/segmented-control--2-segments&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
-#### [Two segments](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--2-segments)
-<iframe width="400" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?id=segmented-control--2-segments&viewMode=story" allowfullscreen></iframe>
 
-#### [Three segments](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--3-segments)
-<iframe width="400" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?id=segmented-control--3-segments&viewMode=story" allowfullscreen></iframe>
+### Three segments
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--3-segments)	|	[Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7332-11330&mode=design&t=lRnzcV3CBx2yby7N-4)
+<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/segmented-control--3-segments&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
-#### [Four segments](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--4-segments)
-<iframe width="400" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?id=segmented-control--4-segments&viewMode=story" allowfullscreen></iframe>
 
-### Figma
-<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7332-11330&mode=design&t=lRnzcV3CBx2yby7N-4" allowfullscreen></iframe>
+### Four segments
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--4-segments)	|	[Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7332-11330&mode=design&t=lRnzcV3CBx2yby7N-4)
+<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/segmented-control--4-segments&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+
 
 ## Usage
 A segmented control consists of a horizontal set of 2-4 segments, each of which functions as a button. One option is always selected. The component does not scroll horizontally.
