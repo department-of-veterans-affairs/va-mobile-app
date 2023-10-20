@@ -55,5 +55,5 @@ export const MAIL_TO_REGEX_EXP = new RegExp(
 export const PHONE_REGEX_EXP = new RegExp(/^[-0-9()+]{10,}/)
 
 export const URL_REGEX_EXP = new RegExp(/^((https:|http:)\S*)/)
-export const URL2_REGEX_EXP = new RegExp(/^(www\.\S*)|([a-zA-Z]*\.([a-z]){2,3})/)
+export const URL2_REGEX_EXP = new RegExp(/^(www\.\S*)|^([a-zA-Z]*\.([a-z]){2,3})/)
 export const ASCENDING = 'ascending'
