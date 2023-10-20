@@ -6,7 +6,6 @@ import _ from 'underscore'
 
 import {
   AlertBox,
-  BackButton,
   Box,
   ButtonTypesConstants,
   CollapsibleView,
@@ -18,21 +17,12 @@ import {
   LoadingComponent,
   MessageAlert,
   PickerItem,
-  SaveButton,
   TextArea,
   VAButton,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import {
-  CategoryTypeFields,
-  CategoryTypes,
-  ScreenIDTypesConstants,
-  SecureMessagingFormData,
-  SecureMessagingSystemFolderIdConstants,
-  SecureMessagingTabTypesConstants,
-} from 'store/api/types'
+import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE, SegmentedControlIndexes } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -50,6 +40,7 @@ import {
 } from 'store/slices'
 import { SnackbarMessages } from 'components/SnackBar'
 import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
   useAppDispatch,
@@ -146,23 +137,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={navigation.goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-      headerRight: () =>
-        !noRecipientsReceived && (
-          <SaveButton
-            onSave={() => {
-              setOnSaveDraftClicked(true)
-              setOnSendClicked(true)
-            }}
-            disabled={false}
-            a11yHint={t('secureMessaging.saveDraft.a11yHint')}
-          />
-        ),
-    })
-  })
-
-  useEffect(() => {
     if (attachmentFileToAdd === undefined) {
       return
     }
@@ -175,7 +149,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     if (saveDraftComplete) {
-      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
+      dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
       navigation.navigate('SecureMessaging')
       navigation.navigate('FolderMessages', {
         folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
@@ -196,7 +170,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
-      <FullScreenSubtask title={t('secureMessaging.startNewMessage')} leftButtonText={t('cancel')}>
+      <FullScreenSubtask title={t('secureMessaging.startNewMessage')} leftButtonText={t('cancel')} scrollViewRef={scrollViewRef}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -212,7 +186,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       ? t('secureMessaging.deleteDraft.loading')
       : t('secureMessaging.formMessage.startNewMessage.loading')
     return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} scrollViewRef={scrollViewRef}>
         <LoadingComponent text={text} />
       </FullScreenSubtask>
     )
@@ -220,7 +194,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
   if (sendingMessage) {
     return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} scrollViewRef={scrollViewRef}>
         <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
       </FullScreenSubtask>
     )
@@ -307,7 +281,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {
                 label: t('secureMessaging.formMessage.addFiles'),
-                a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
                 onPress: onAddFiles,
               }
             : undefined,
@@ -332,7 +305,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
-    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+    dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
     navigation.navigate('SecureMessaging')
   }
 
@@ -361,7 +334,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
         <AlertBox
           title={t('secureMessaging.startNewMessage.noMatchWithProvider')}
           text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
-          textA11yLabel={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
+          textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           border="error">
           <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
         </AlertBox>
@@ -412,7 +385,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
                 setOnSendClicked(true)
                 setOnSaveDraftClicked(false)
               }}
-              a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
               buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>

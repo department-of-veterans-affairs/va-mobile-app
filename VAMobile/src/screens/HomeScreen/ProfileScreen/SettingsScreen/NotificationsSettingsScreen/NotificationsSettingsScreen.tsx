@@ -58,7 +58,7 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
 
   if (hasError) {
     return (
-      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.settings.title')}>
+      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
       </FeatureLandingTemplate>
     )
@@ -66,7 +66,7 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
 
   if (loadingPreferences || registeringDevice) {
     return (
-      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.settings.title')}>
+      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.title')}>
         <LoadingComponent text={t('notifications.loading')} />
       </FeatureLandingTemplate>
     )
@@ -74,15 +74,11 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
 
   if (settingPreference) {
     return (
-      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.settings.title')}>
+      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.title')}>
         <LoadingComponent text={t('notifications.saving')} />
       </FeatureLandingTemplate>
     )
   }
-
-  const personalizeText = systemNotificationsOn
-    ? t('notifications.settings.personalize.text.systemNotificationsOn')
-    : t('notifications.settings.personalize.text.systemNotificationsOff')
 
   const preferenceList = (): ReactNode => {
     const prefsItems = preferences.map((pref): SimpleListItemObj => {
@@ -105,16 +101,21 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
     )
   }
   return (
-    <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.settings.title')}>
+    <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.title')}>
       <Box mb={contentMarginBottom}>
-        {!systemNotificationsOn && alert()}
-        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter}>
-          {t('notifications.settings.personalize.heading')}
-        </TextView>
-        <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={gutter} mt={condensedMarginBetween}>
-          {personalizeText}
-        </TextView>
-        {preferenceList()}
+        {systemNotificationsOn ? (
+          <>
+            <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter}>
+              {t('notifications.settings.personalize.heading')}
+            </TextView>
+            <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={gutter} mt={condensedMarginBetween}>
+              {t('notifications.settings.personalize.text.systemNotificationsOn')}
+            </TextView>
+            {preferenceList()}
+          </>
+        ) : (
+          alert()
+        )}
         <TextView variant={'TableFooterLabel'} mx={gutter} mt={condensedMarginBetween}>
           {t('notifications.settings.privacy')}
         </TextView>

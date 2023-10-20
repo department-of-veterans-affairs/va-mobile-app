@@ -6,6 +6,7 @@ import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, 
 import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 const IndividualMessageErrorComponent: FC = () => {
@@ -27,16 +28,10 @@ const IndividualMessageErrorComponent: FC = () => {
             <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
               {t('secureMessaging.sendError.ifTheAppStill')}
             </TextView>
-            <ClickToCallPhoneNumber displayedText={t('8773270022.displayText')} phone={t('8773270022')} />
+            <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
             {tryAgain && (
               <Box mt={standardMarginBetween} accessibilityRole="button">
-                <VAButton
-                  onPress={tryAgain}
-                  label={t('refresh')}
-                  buttonType={ButtonTypesConstants.buttonPrimary}
-                  testID={t('refresh')}
-                  a11yHint={t('errors.callHelpCenter.button.a11yHint')}
-                />
+                <VAButton onPress={tryAgain} label={t('refresh')} buttonType={ButtonTypesConstants.buttonPrimary} testID={t('refresh')} />
               </Box>
             )}
           </Box>

@@ -24,7 +24,6 @@ import {
 } from 'store/api/types'
 import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail } from 'store/slices'
 import {
-  BackButton,
   Box,
   ButtonTypesConstants,
   ClickForActionLink,
@@ -38,12 +37,12 @@ import {
   VAButton,
   VAButtonProps,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
@@ -84,12 +83,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       ),
     )
   }, [dispatch, appointmentID, pendingAppointment, attributes])
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => <BackButton onPress={goBack} canGoBack={true} label={BackButtonLabelConstants.back} showCarat={true} />,
-    })
-  })
 
   useEffect(() => {
     if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.FAIL) {
@@ -281,7 +274,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <AppointmentCancellationInfo appointment={appointment} goBack={goBack} />
         ) : (
           <TextArea>
-            <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
+            <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('pastAppointmentDetails.toScheduleAnotherAppointment'))}>
               {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
             </TextView>
           </TextArea>

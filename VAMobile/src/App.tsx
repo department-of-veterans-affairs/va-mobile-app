@@ -40,7 +40,7 @@ import { isIOS } from 'utils/platform'
 import { linking } from 'constants/linking'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
-import { useAppDispatch } from 'utils/hooks'
+import { useAppDispatch, useFontScale, useIsScreenReaderEnabled } from 'utils/hooks'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
@@ -164,6 +164,9 @@ export const AuthGuard: FC = () => {
   // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
   const topPaddingAsHeaderStyles = useTopPaddingAsHeaderStyles()
   const [currNewState, setCurrNewState] = useState('active')
+  const screenReaderEnabled = useIsScreenReaderEnabled()
+  const fontScaleFunction = useFontScale()
+  const sendUsesLargeTextScal = fontScaleFunction(30)
 
   const snackBarProps: Partial<ToastProps> = {
     duration: SnackBarConstants.duration,
@@ -188,10 +191,12 @@ export const AuthGuard: FC = () => {
   }, [isVoiceOverTalkBackRunning, dispatch, currNewState])
 
   useEffect(() => {
-    // only run on app load
-    dispatch(sendUsesLargeTextAnalytics())
     dispatch(sendUsesScreenReaderAnalytics())
-  }, [dispatch])
+  }, [dispatch, screenReaderEnabled])
+
+  useEffect(() => {
+    dispatch(sendUsesLargeTextAnalytics())
+  }, [dispatch, sendUsesLargeTextScal])
 
   useEffect(() => {
     // Listener for the current app state, updates isVoiceOverTalkBackRunning when app state is active and voice over/talk back
@@ -292,7 +297,7 @@ export const AuthedApp: FC = () => {
 
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
-  const healthScreens = getHealthScreens(useTranslation(NAMESPACE.COMMON).t)
+  const healthScreens = getHealthScreens()
   const paymentsScreens = getPaymentsScreens()
 
   // When applicable, this will open the deep link from the notification that launched the app once sign in

@@ -5,9 +5,38 @@ import { ReactTestInstance } from 'react-test-renderer'
 
 import { context, render, RenderAPI } from 'testUtils'
 import Nametag from './Nametag'
-import { initialAuthorizedServicesState, InitialState } from 'store/slices'
+import { InitialState } from 'store/slices'
 import { TextView, VAIcon } from 'components'
 import { ServiceData } from 'store/api/types'
+
+
+jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
+  let original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
+  return {
+    ...original,
+    useAuthorizedServices: jest.fn().mockReturnValue({
+      status: "success",
+      data: {
+        appeals: true,
+        appointments: true,
+        claims: true,
+        decisionLetters: true,
+        directDepositBenefits: true,
+        directDepositBenefitsUpdate: true,
+        disabilityRating: true,
+        genderIdentity: true,
+        lettersAndDocuments: true,
+        militaryServiceHistory: true,
+        paymentHistory: true,
+        preferredName: true,
+        prescriptions: true,
+        scheduleAppointments: true,
+        secureMessaging: true,
+        userProfileUpdate: true
+      }
+    })
+  }
+})
 
 context('Nametag', () => {
   let component: RenderAPI
@@ -17,54 +46,10 @@ context('Nametag', () => {
     component = render(<Nametag />, {
       preloadedState: {
         ...InitialState,
-        personalInformation: {
-          ...InitialState.personalInformation,
-          profile: {
-            preferredName: '',
-            firstName: 'Ben',
-            middleName: 'J',
-            lastName: 'Morgan',
-            fullName: 'Jerry Mills',
-            genderIdentity: '',
-            contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
-            signinEmail: 'ben@gmail.com',
-            birthDate: '1990-05-08',
-            addresses: '',
-            homePhoneNumber: {
-              id: 1,
-              areaCode: '858',
-              countryCode: '1',
-              phoneNumber: '6901289',
-              phoneType: 'HOME',
-            },
-            formattedHomePhone: '(858)-690-1289',
-            mobilePhoneNumber: {
-              id: 1,
-              areaCode: '858',
-              countryCode: '1',
-              phoneNumber: '6901288',
-              phoneType: 'HOME',
-            },
-            formattedMobilePhone: '(858)-690-1288',
-            workPhoneNumber: {
-              id: 1,
-              areaCode: '858',
-              countryCode: '1',
-              phoneNumber: '6901287',
-              phoneType: 'HOME',
-            },
-            formattedWorkPhone: '(858)-690-1287',
-            signinService: 'IDME',
-          },
-        },
         militaryService: {
           ...InitialState.militaryService,
           mostRecentBranch: mostRecentBranch || 'United States Air Force',
           serviceHistory: [{} as ServiceData],
-        },
-        authorizedServices: {
-          ...initialAuthorizedServicesState,
-          militaryServiceHistory: true,
         },
         disabilityRating: {
           ...InitialState.disabilityRating,
@@ -132,10 +117,6 @@ context('Nametag', () => {
             ...InitialState.militaryService,
             serviceHistory: [],
           },
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: true,
-          },
         },
       })
 
@@ -150,10 +131,6 @@ context('Nametag', () => {
       component = render(<Nametag />, {
         preloadedState: {
           ...InitialState,
-          authorizedServices: {
-            ...initialAuthorizedServicesState,
-            militaryServiceHistory: false,
-          },
         },
       })
 

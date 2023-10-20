@@ -1,12 +1,9 @@
 import 'react-native'
 import React from 'react'
-import { DateTime, Settings } from 'luxon'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance } from 'react-test-renderer'
-import { screen } from '@testing-library/react-native'
-
-import { context, findByTypeWithSubstring, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
 import { HomeScreen } from './HomeScreen'
 
 const mockNavigateToSpy = jest.fn()
@@ -54,7 +51,7 @@ context('HomeScreen', () => {
   describe('when VA COVID-19 updates is pressed', () => {
     it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', async () => {
       await waitFor(() => {
-        findByTestID(testInstance, ' V-A  COVID-19 updates').props.onPress()
+        findByTestID(testInstance, 'COVID-19 updates').props.onPress()
         const expectNavArgs = {
           url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
           displayTitle: 'va.gov',

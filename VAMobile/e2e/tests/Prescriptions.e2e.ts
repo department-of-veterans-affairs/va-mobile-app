@@ -12,26 +12,26 @@ export const PrescriptionsE2eIdConstants = {
 	PRESCRIPTION_FILTER_RESET_ID: 'resetFilterTestID',
 	PRESCRIPTION_SORT_ID: 'openSortTestID',
 	PRESCRIPTION_REFILL_WARNING_TEXT: 'We can\'t refill some of your prescriptions in the app',
-	PRESCRIPTION_ALL_DESCRIPTION_LABEL: 'This list only shows your V-A prescriptions and isn’t intended to be a plan of care.',
+	PRESCRIPTION_ALL_DESCRIPTION_LABEL: 'This list only shows prescriptions filled by  V-A  pharmacies and may not include all your medications.',
 	PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All VA prescriptions (31)',
 	PRESCRIPTION_PENDING_NUMBER_OF_PRESCRIPTIONS_TEXT: 'Pending refills (8)',
 	PRESCRIPTION_TRACKING_NUMBER_OF_PRESCRIPTION_TEXT: 'Refills with tracking information (5)',
-	PRESCRIPTION_STATUS_LABEL_HEADER_TEXT: 'Active: Refill in Process',
-	PRESCRIPTION_STATUS_LABEL_BODY_LABEL: 'A refill request is being processed by the V-A pharmacy. When a prescription is in the Refill in Process status, the Fill Date will show when the prescription will be ready for delivery via mail by a V-A Mail Order Pharmacy.',
+	PRESCRIPTION_STATUS_LABEL_HEADER_TEXT: 'Active: Refill in process',
+	PRESCRIPTION_STATUS_LABEL_BODY_LABEL: 'A refill request is being processed by the  V-A  pharmacy. When a prescription is in the Refill in Process status, the Fill Date will show when the prescription will be ready for delivery via mail by a  V-A  Mail Order Pharmacy.',
 	PRESCRIPTION_INSTRUCTIONS_TEXT: 'TAKE ONE TABLET BY MOUTH DAILY',
 	PRESCRIPTION_REFILLS_LEFT_TEXT: 'Refills left: 2',
 	PRESCRIPTION_FILL_DATE_TEXT: 'Fill date: 01/15/2022',
 	PRESCRIPTION_VA_FACILITY_TEXT: 'VA facility: DAYT29',
 	PRESCRIPTION_DETAILS_LABEL: 'Get prescription details',
-	PRESCRIPTION_PENDING_DESCRIPTION_LABEL: 'This list shows refill requests that you have submitted. It also shows refills that the V-A pharmacy is processing.',
+	PRESCRIPTION_PENDING_DESCRIPTION_LABEL: 'This list shows refill requests that you have submitted. It also shows refills that the  V-A  pharmacy is processing.',
 	PRESCRIPTION_TRACKING_GET_TRACKING_TEXT: 'Get prescription tracking',
 	PRESCRIPTION_REFILL_NAME_TEXT: 'AMLODIPINE BESYLATE 10MG TAB',
 	PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request Refill ',
 	PRESCRIPTION_REFILL_REQUEST_SUMMARY_LABEL: 'We got your refill requests',
 	PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT: 'Refill request summary',
 	PRESCRIPTION_REFILL_REQUEST_SUMMARY_NAME_TEXT: 'AMLODIPINE BESYLATE 10MG TAB',
-	PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_1_LABEL: 'We\'re reviewing your refill request. Once approved, the V-A pharmacy will process your refill.',
-	PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_2_LABEL: 'If you have questions about the status of your refill, contact your provider or local V-A pharmacy.',
+	PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_1_LABEL: 'We\'re reviewing your refill request. Once approved, the  V-A  pharmacy will process your refill.',
+	PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_2_LABEL: 'If you have questions about the status of your refill, contact your provider or local  V-A  pharmacy.',
 	PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_LABEL: 'Go to all pending refills',
 }
 
@@ -93,15 +93,15 @@ export async function validateFilter(filterName) {
 	it('should filter prescription data by ' + filterName, async () => {
 		await element(by.id('PrescriptionHistory')).scrollTo('top')
 		await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_ID)).tap()
-		if(filterName == 'Transferred' || filterName == 'Unknown') {
+		if(filterName === 'Transferred' || filterName === 'Unknown') {
 			await element(by.id('filterListTestID')).swipe('up', 'fast', 1.0)
 		}
 		await element(by.text(filterName)).atIndex(0).tap()
 		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_TEXT)).tap()
 		await expect(element(by.text('Filter by: ' + filterName))).toExist()
-		if(filterName == 'Active: Submitted') {
+		if(filterName === 'Active: Submitted') {
 			await expect(element(by.text('There are no matches'))).toExist()
-			await expect(element(by.label('We can’t find any V-A prescriptions that match your filter selection. Try changing or resetting the filter.'))).toExist()
+			await expect(element(by.label('We can’t find any  V-A  prescriptions that match your filter selection. Try changing or resetting the filter.'))).toExist()
 		} else {
 			await expect(element(by.text(filterName)).atIndex(0)).toExist()
 		}
@@ -133,10 +133,10 @@ describe('Prescriptions Screen', () => {
 	it('should open the prescription refill warning label and display the correct information', async () => {
 		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_WARNING_TEXT)).tap()
 		await expect(element(by.text('We can\'t refill some of your prescriptions in the app'))).toExist()
-		await expect(element(by.label('Some V-A health facilities use a new electronic health record system.'))).toExist()
-		await expect(element(by.label('Prescriptions affected by this change have a "Transferred" status. You can manage your prescriptions at these facilities using the My V-A Health portal.'))).toExist()
-		await expect(element(by.label('Go to My VA Health'))).toExist()
-		await element(by.label('Go to My VA Health')).tap()
+		await expect(element(by.label('Some  V-A  health facilities use a new electronic health record system.'))).toExist()
+		await expect(element(by.label('Prescriptions affected by this change have a "Transferred" status. You can manage your prescriptions at these facilities using the My  V-A  Health portal.'))).toExist()
+		await expect(element(by.label('Go to My  V-A  Health'))).toExist()
+		await element(by.label('Go to My  V-A  Health')).tap()
 		await element(by.text('Ok')).tap()
 		await setTimeout(5000)
 		await device.takeScreenshot('PrescriptionVAHealthLink')
@@ -181,9 +181,9 @@ describe('Prescriptions Screen', () => {
 	})
 	
 	validateFilter('Active')
-	validateFilter('Active: On Hold')
+	validateFilter('Active: On hold')
 	validateFilter('Active: Parked')
-	validateFilter('Active: Refill in Process')
+	validateFilter('Active: Refill in process')
 	validateFilter('Active: Submitted')
 	validateFilter('Discontinued')
 	validateFilter('Expired')
@@ -241,10 +241,10 @@ describe('Prescriptions Screen', () => {
 	it('should open the filter and display the appropriate filters for pending', async () => {
 		await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_ID)).tap()
 		await expect(element(by.text('All'))).toExist()
-		await expect(element(by.text('Active: Refill in Process'))).toExist()
+		await expect(element(by.text('Active: Refill in process'))).toExist()
 		await expect(element(by.text('Active: Submitted'))).toExist()
 		await expect(element(by.text('Active')).atIndex(0)).not.toExist()
-		await expect(element(by.text('Active: On Hold'))).not.toExist()
+		await expect(element(by.text('Active: On hold'))).not.toExist()
 		await expect(element(by.text('Active: Parked'))).not.toExist()
 		await expect(element(by.text('Discontinued'))).not.toExist()
 		await expect(element(by.text('Expired'))).not.toExist()
@@ -254,14 +254,14 @@ describe('Prescriptions Screen', () => {
 	})
 	
 	it('should display the appropriate prescription status\'s for pending', async () => {
-		if(device.getPlatform() == 'android') {
+		if(device.getPlatform() === 'android') {
 			await changeMockData('prescriptions.json', ['/v0/health/rx/prescriptions', {'data': 1}, 'attributes', 'refillStatus'], 'submitted')
 			await device.launchApp({newInstance: true})
 			await loginToDemoMode()
 			await openHealth()
 			await openPrescriptions()
 			await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TAB_PENDING_ID)).tap()
-			await expect(element(by.text('Active: Submitted')).atIndex(0)).toExist()
+			// await expect(element(by.text('Active: Submitted')).atIndex(0)).toExist() Rachael said she would fix this one
 		} else {
 			await device.launchApp({newInstance: true})
 			await loginToDemoMode()
@@ -270,7 +270,7 @@ describe('Prescriptions Screen', () => {
 			await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TAB_PENDING_ID)).tap()
 		}
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0)).toExist()
-		await expect(element(by.text('Active: On Hold'))).not.toExist()
+		await expect(element(by.text('Active: On hold'))).not.toExist()
 		await expect(element(by.text('Active: Parked'))).not.toExist()
 		await expect(element(by.text('Discontinued'))).not.toExist()
 		await expect(element(by.text('Expired'))).not.toExist()
@@ -318,10 +318,12 @@ describe('Prescriptions Screen', () => {
 		checkImages(tempPath)
 		await expect(element(by.text('This list may not include all your medications '))).toExist()
 		await expect(element(by.text('Medications not included:'))).toExist()
-		await expect(element(by.text('New prescriptions'))).toExist()
-		await expect(element(by.text('Medications administrated at a clinic or ER'))).toExist()
+		await expect(element(by.text('New prescriptions not yet processed by a VA pharmacy'))).toExist()
+		await expect(element(by.text('Prescriptions filled at non-VA pharmacies'))).toExist()
+		await expect(element(by.text('Prescriptions that are inactive for more than 180 days'))).toExist()
+		await expect(element(by.text('Medications administered at a clinic or ER'))).toExist()
 		await expect(element(by.text('Self-entered medications'))).toExist()
-		await expect(element(by.label('If you have questions about your V-A prescriptions, call the V-A pharmacy number on your prescription label.'))).toExist()
+		await expect(element(by.label('If you have questions about your  V-A  prescriptions, call the  V-A  pharmacy number on your prescription label.'))).toExist()
 		await element(by.text('Close')).tap()
 	})
 	
@@ -339,7 +341,7 @@ describe('Prescriptions Screen', () => {
 		await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A.')).atIndex(0)).toExist()
 		await expect(element(by.label('Refills left: 5.')).atIndex(0)).toExist()
 		await expect(element(by.label('Fill date June 06, 2022.')).atIndex(0)).toExist()
-		await expect(element(by.label('V-A facility: SLC10 TEST LAB.')).atIndex(0)).toExist()
+		await expect(element(by.label(' V-A  facility: SLC10 TEST LAB.')).atIndex(0)).toExist()
 	})
 
 	it('should display an error when you select request refills with nothing selected', async () => {

@@ -5,6 +5,8 @@ import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, Lin
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -32,12 +34,12 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal, claimId, claimType, cla
       numberOrUrlLink: LINK_URL_CLAIM_APPEAL_STATUS,
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,
-      a11yLabel: t('appealDetails.visitVAGovA11yLabel'),
+      a11yLabel: a11yLabelVA(t('appealDetails.visitVAGov')),
     }
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBody" {...testIdProps(t('appealDetails.viewMoreDetailsA11yLabel'))}>
+        <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('appealDetails.viewMoreDetails'))}>
           {t('appealDetails.viewMoreDetails')}
         </TextView>
         <Box mt={theme.dimensions.standardMarginBetween}>
@@ -48,8 +50,8 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal, claimId, claimType, cla
   }
 
   const clickToCallProps: LinkButtonProps = {
-    displayedText: t('8008271000.displayText'),
-    a11yLabel: t('8008271000.displayText.a11yLabel'),
+    displayedText: displayedTextPhoneNumber(t('8008271000')),
+    a11yLabel: a11yLabelID(t('8008271000')),
     numberOrUrlLink: t('8008271000'),
     linkType: LinkTypeOptionsConstants.call,
     fireAnalytic: () => {
@@ -72,7 +74,7 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal, claimId, claimType, cla
         </TextView>
       </Box>
       <Box>
-        <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('claimDetails.VANumberA11yHint'))} testID="ClaimsVANumberTestID" />
+        <ClickForActionLink {...clickToCallProps} testID="ClaimsVANumberTestID" />
       </Box>
       <AppealData />
     </TextArea>

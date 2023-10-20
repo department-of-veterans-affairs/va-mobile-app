@@ -1,7 +1,8 @@
 import { context, realStore } from 'testUtils'
 import _ from 'underscore'
 import * as api from '../api'
-import { SecureMessagingTabTypesConstants, SecureMessagingFormData } from 'store/api/types'
+import { SecureMessagingFormData } from 'store/api/types'
+import { SegmentedControlIndexes } from 'constants/secureMessaging'
 import FileViewer from 'react-native-file-viewer'
 import { when } from 'jest-when'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
@@ -64,7 +65,7 @@ context('secureMessaging', () => {
   describe('updateSecureMessagingTab', () => {
     it('should dispatch the correct action', async () => {
       const store = realStore()
-      await store.dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+      await store.dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
 
       const actions = store.getActions()
       const action = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_UPDATE_TAB })

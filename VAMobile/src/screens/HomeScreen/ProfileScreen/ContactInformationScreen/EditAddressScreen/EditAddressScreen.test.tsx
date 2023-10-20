@@ -1,45 +1,40 @@
-import 'react-native'
 import React from 'react'
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
-import { fireEvent, screen } from '@testing-library/react-native'
-import { context, mockNavProps, render } from 'testUtils'
+import { mockNavProps, QueriesData, render, when } from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
-import { UserDataProfile } from 'store/api/types'
-import { validateAddress, ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
-import { ScreenIDTypesConstants } from 'store/api/types'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { SnackbarMessages } from 'components/SnackBar'
+import { AddressData, DeliveryPointValidationTypesConstants, UserContactInformation } from 'api/types'
+import { contactInformationKeys } from 'api/contactInformation'
+import { post } from 'store/api'
 
-const snackbarMessages: SnackbarMessages = {
-  successMsg: 'Mailing address saved',
-  errorMsg: 'Mailing address could not be saved',
+const residentialAddress: AddressData = {
+  id: 0,
+  addressLine1: '10 Laurel Way',
+  addressPou: 'RESIDENCE/CHOICE',
+  addressType: 'DOMESTIC',
+  city: 'Novato',
+  countryCodeIso3: '1',
+  internationalPostalCode: '1',
+  province: 'province',
+  stateCode: 'CA',
+  zipCode: '94920',
+  zipCodeSuffix: '1234',
 }
-
-jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    validateAddress: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    deleteAddress: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-
-    finishValidateAddress: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
+const mailingAddress: AddressData = {
+  id: 1,
+  addressLine1: '1707 Tiburon Blvd',
+  addressLine2: 'Address line 2',
+  addressLine3: 'Address line 3',
+  addressPou: 'RESIDENCE/CHOICE',
+  addressType: 'DOMESTIC',
+  city: 'Tiburon',
+  countryCodeIso3: '1',
+  internationalPostalCode: '1',
+  province: 'province',
+  stateCode: 'CA',
+  zipCode: '94920',
+  zipCodeSuffix: '1234',
+}
 
 const mockAlertSpy = jest.fn()
 
@@ -52,9 +47,9 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('@react-navigation/native', () => {
-  let actual = jest.requireActual('@react-navigation/native')
+  const original = jest.requireActual('@react-navigation/native')
   return {
-    ...actual,
+    ...original,
     useNavigation: () => ({
       setOptions: jest.fn(),
       goBack: jest.fn(),
@@ -62,18 +57,11 @@ jest.mock('@react-navigation/native', () => {
   }
 })
 
-context('EditAddressScreen', () => {
+describe('EditAddressScreen', () => {
   let props: any
-  let profileInfo: UserDataProfile
   let goBackSpy: any
 
-  const initializeTestInstance = (
-    profile?: UserDataProfile,
-    addressSaved?: any,
-    isResidential?: boolean,
-    errorsState: ErrorsState = initialErrorsState,
-    showValidation = false,
-  ) => {
+  const renderWithData = (isResidential?: boolean, contactInformation?: Partial<UserContactInformation>) => {
     goBackSpy = jest.fn()
 
     props = mockNavProps(
@@ -90,112 +78,153 @@ context('EditAddressScreen', () => {
       },
     )
 
-    render(<EditAddressScreen {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        personalInformation: {
-          profile,
-          loading: false,
-          addressSaved,
-          showValidation,
-          needsDataLoad: false,
-          emailSaved: false,
-          preloadComplete: false,
-          phoneNumberSaved: false,
-        },
-        errors: errorsState,
-      },
-    })
+    if (contactInformation) {
+      queriesData = [{
+        queryKey: contactInformationKeys.contactInformation,
+        data: {
+          ...contactInformation
+        }
+      }]
+    }
+
+    render(<EditAddressScreen {...props} />, {queriesData})
   }
 
   beforeEach(() => {
-    profileInfo = {
-      preferredName: '',
-      firstName: 'Ben',
-      middleName: 'J',
-      lastName: 'Morgan',
-      fullName: 'Ben J Morgan',
-      genderIdentity: '',
-      contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
-      signinEmail: 'ben@gmail.com',
-      birthDate: '1990-05-08',
-      addresses: '',
-      residentialAddress: {
-        id: 0,
-        addressLine1: '10 Laurel Way',
-        addressPou: 'RESIDENCE/CHOICE',
-        addressType: 'DOMESTIC',
-        city: 'Novato',
-        countryCodeIso3: '1',
-        internationalPostalCode: '1',
-        province: 'province',
-        stateCode: 'CA',
-        zipCode: '94920',
-        zipCodeSuffix: '1234',
-      },
-      mailingAddress: {
-        id: 1,
-        addressLine1: '1707 Tiburon Blvd',
-        addressLine2: 'Address line 2',
-        addressLine3: 'Address line 3',
-        addressPou: 'RESIDENCE/CHOICE',
-        addressType: 'DOMESTIC',
-        city: 'Tiburon',
-        countryCodeIso3: '1',
-        internationalPostalCode: '1',
-        province: 'province',
-        stateCode: 'CA',
-        zipCode: '94920',
-        zipCodeSuffix: '1234',
-      },
-      homePhoneNumber: {
-        id: 1,
-        areaCode: '858',
-        countryCode: '1',
-        phoneNumber: '6901289',
-        phoneType: 'HOME',
-      },
-      formattedHomePhone: '(858)-690-1289',
-      mobilePhoneNumber: {
-        id: 1,
-        areaCode: '858',
-        countryCode: '1',
-        phoneNumber: '6901288',
-        phoneType: 'HOME',
-      },
-      formattedMobilePhone: '(858)-690-1288',
-      workPhoneNumber: {
-        id: 1,
-        areaCode: '858',
-        countryCode: '1',
-        phoneNumber: '6901287',
-        phoneType: 'HOME',
-      },
-      formattedWorkPhone: '(858)-690-1287',
-      signinService: 'IDME',
-    }
-
-    initializeTestInstance(profileInfo)
+    renderWithData()
   })
 
-  describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+  describe('when the checkbox is pressed', () => {
+    it('updates the value of selected', () => {
+      const checkbox = screen.getByRole('checkbox', { checked: false })
 
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
+      fireEvent.press(checkbox)
+      expect(screen.getByRole('checkbox', { checked: true })).toBeTruthy()
+    })
 
-      initializeTestInstance(profileInfo, undefined, undefined, errorState)
-      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
+    describe('when the checkbox is unchecked', () => {
+      beforeEach(() => {
+        renderWithData(false, {mailingAddress})
+        const checkbox = screen.getByRole('checkbox', { checked: false })
+
+        fireEvent.press(checkbox)
+        expect(screen.getByRole('checkbox', { checked: true })).toBeTruthy()
+        
+        fireEvent.press(checkbox)
+        expect(screen.getByRole('checkbox', { checked: false })).toBeTruthy()
+      })
+
+      it('clears the country field', () => {
+        expect(screen.getByTestId('countryPickerTestID').props.selectedValue).not.toBeTruthy()
+      })
+
+      it('sets state, city, and military post office to empty strings', () => {
+        expect(screen.getByTestId('cityTestID').props.value).toEqual('')
+        expect(screen.getByTestId('stateTestID').props.children).toEqual('')
+        expect(screen.queryByTestId('militaryPostOfficeTestID')).toBeFalsy
+      })
     })
   })
 
-  describe('when the address type is OVERSEAS MILITARY', () => {
-    it('should initialize the checkbox with the value true', async () => {
-      profileInfo.mailingAddress = {
+  describe('when the user selects a country with the picker', () => {
+    it('updates the value of country', () => {
+      const countrySelector = screen.getByTestId('countryPickerTestID')
+
+      fireEvent.press(countrySelector)
+      fireEvent.press(screen.getByText('Algeria'))
+      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+      expect(countrySelector.props.children).toEqual('Algeria')
+    })
+
+    describe('when the old value and new value of country are not both domestic or both international', () => {
+      it('sets state and zip code to empty strings', () => {
+        renderWithData(false, {mailingAddress})
+        const zipCodeInput = screen.getByTestId('zipCodeTestID')
+
+        expect(screen.getByTestId('stateTestID').props.children).toEqual('California')
+        expect(zipCodeInput.props.value).toEqual(mailingAddress.zipCode)
+
+        fireEvent.press(screen.getByTestId('countryPickerTestID'))
+        fireEvent.press(screen.getByText('Algeria'))
+        fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+
+        expect(screen.getByTestId('stateTestID').props.value).toEqual('')
+        expect(zipCodeInput.props.value).toEqual('')
+      })
+    })
+
+    describe('when the old and new value of country are both domestic or international', () => {
+      it('keeps the values of state and zip code', () => {
+        const mailingAddress: AddressData = {
+          id: 0,
+          addressLine1: '4313 Cassin Way',
+          addressLine2: 'Suite 992',
+          addressLine3: 'Address line 3',
+          addressPou: 'CORRESPONDENCE',
+          addressType: 'INTERNATIONAL',
+          city: 'Lake Lucybury',
+          countryCodeIso3: 'AUS',
+          internationalPostalCode: '1',
+          province: 'province',
+          stateCode: 'Northern Territory',
+          zipCode: '5922',
+          zipCodeSuffix: '',
+        }
+
+        renderWithData(false, { mailingAddress })
+
+        expect(screen.getByTestId('stateTestID').props.value).toEqual('Northern Territory')
+        expect(screen.getByTestId('zipCodeTestID').props.value).toEqual('5922')
+
+        fireEvent.press(screen.getByTestId('countryPickerTestID'))
+        fireEvent.press(screen.getByText('Algeria'))
+        fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+        
+        expect(screen.getByTestId('stateTestID').props.value).toEqual('Northern Territory')
+        expect(screen.getByTestId('zipCodeTestID').props.value).toEqual('5922')
+      })
+    })
+  })
+
+  describe('when the user enters a new address line 1', () => {
+    it('updates the value of addressLine1', () => {
+      const streetAddressLine1Input = screen.getByTestId('streetAddressLine1TestID')
+
+      fireEvent.changeText(streetAddressLine1Input, 'New Address Line 1')
+      expect(streetAddressLine1Input.props.value).toEqual('New Address Line 1')
+    })
+  })
+
+  describe('when the user enters a new address line 2', () => {
+    it('updates the value of addressLine2', () => {
+      const streetAddressLine2Input = screen.getByTestId('streetAddressLine2TestID')
+
+      fireEvent.changeText(streetAddressLine2Input, 'New Address Line 2')
+      expect(streetAddressLine2Input.props.value).toEqual('New Address Line 2')
+    })
+  })
+
+  describe('when the user enters a new address line 3', () => {
+    it('updates the value of addressLine3', () => {
+      const streetAddressLine3Input = screen.getByTestId('streetAddressLine3TestID')
+
+      fireEvent.changeText(streetAddressLine3Input, 'New Address Line 3')
+      expect(streetAddressLine3Input.props.value).toEqual('New Address Line 3')
+    })
+  })
+
+  describe('when the user enters a new city', () => {
+    it('updates the value of city', () => {
+      const cityInput = screen.getByTestId('cityTestID')
+
+      fireEvent.changeText(cityInput, 'New city')
+      expect(cityInput.props.value).toEqual('New city')
+    })
+  })
+
+  describe('when the user selects a military post office with the picker', () => {
+    it('updates the value of militaryPostOffice', () => {
+      const mailingAddress: AddressData = {
         id: 0,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
@@ -211,104 +240,259 @@ context('EditAddressScreen', () => {
         zipCodeSuffix: '1234',
       }
 
-      initializeTestInstance(profileInfo)
-      expect(screen.getByAccessibilityValue({"text": "Filled - United States",})).toBeTruthy()
-    })
-  })
+      renderWithData(false, { mailingAddress })
+      const militaryPostOfficeSelector = screen.getByTestId('militaryPostOfficeTestID')
 
-  describe('when the checkbox is clicked', () => {
-    it('should behave correctly', async () => {
-      expect(screen.queryByAccessibilityValue({"text": "Filled - United States",})).toBeFalsy()
-      expect(screen.getByTestId('countryPickerTestID')).toBeTruthy()
-      expect(screen.getByTestId('cityTestID')).toBeTruthy()
-      expect(screen.queryByTestId('militaryPostOfficeTestID')).toBeFalsy()
-      fireEvent.press(screen.getByTestId('USMilitaryBaseCheckboxTestID'))
-      expect(screen.getByAccessibilityValue({"text": "Filled - United States",})).toBeTruthy()
-      expect(screen.getByTestId('militaryPostOfficeTestID')).toBeTruthy()
-      expect(screen.queryByTestId('cityTestID')).toBeFalsy()
-
-      fireEvent.press(screen.getByTestId('USMilitaryBaseCheckboxTestID'))
-      expect(screen.queryByAccessibilityValue({"text": "Filled - United States",})).toBeFalsy()
-    })
-
-    it('should set state, city, and military post office to empty strings', async () => {
-      expect(screen.getByDisplayValue('Tiburon')).toBeTruthy()
-      expect(screen.getByText('California')).toBeTruthy()
-      expect(screen.getByDisplayValue('94920')).toBeTruthy()
-      fireEvent.press(screen.getByTestId('USMilitaryBaseCheckboxTestID'))
-      expect(screen.queryByDisplayValue('Tiburon')).toBeFalsy()
-      expect(screen.queryByText('California')).toBeFalsy()
-      expect(screen.queryByDisplayValue('94920')).toBeFalsy()
-      fireEvent.press(screen.getByTestId('militaryPostOfficeTestID'))
+      fireEvent.press(militaryPostOfficeSelector)
       fireEvent.press(screen.getByText('APO'))
-      fireEvent.press(screen.getByText('Done'))
-      fireEvent.press(screen.getByTestId('USMilitaryBaseCheckboxTestID'))
-      expect(screen.queryByText('APO')).toBeFalsy()
+      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+      expect(militaryPostOfficeSelector.props.children).toEqual('APO')
     })
   })
 
-  describe('when the user selects a country with the picker', () => {
-    it('should update the value of country and if before and after country values are not both domestic or both international should clear state and zip values otherwise retain them', async () => {
-      expect(screen.getByText('California')).toBeTruthy()
-      expect(screen.getByDisplayValue('94920')).toBeTruthy()
+  describe('when the user selects a state with the picker', () => {
+    it('updates the value of state', () => {
+      fireEvent.press(screen.getByTestId('stateTestID'))
+      fireEvent.press(screen.getByText('California'))
+      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+      expect(screen.getByTestId('stateTestID').props.children).toEqual('California')
+    })
+  })
 
+  describe('when the user enters a new zip code', () => {
+    it('updates the value of zip code', () => {
+      const zipCodeInput = screen.getByTestId('zipCodeTestID')
+
+      fireEvent.changeText(zipCodeInput, '1234')
+      expect(zipCodeInput.props.value).toEqual('1234')
+    })
+  })
+
+  describe('when a text input item does not exist', () => {
+    it('sets it to an empty string initially', () => {
+      const streetAddressLine1Input = screen.getByTestId('streetAddressLine1TestID')
+      expect(streetAddressLine1Input.props.value).toEqual('')
+    })
+  })
+
+  describe('when a picker item does not exist', () => {
+    it('sets it to an empty string initially', () => {
+      const stateSelector = screen.getByTestId('stateTestID')
+      expect(stateSelector.props.children).toEqual('')
+    })
+  })
+
+  describe('when the address type is OVERSEAS MILITARY', () => {
+    it('initializes the checkbox with the value true', () => {
+      const mailingAddress: AddressData = {
+        id: 0,
+        addressLine1: '1707 Tiburon Blvd',
+        addressLine2: 'Address line 2',
+        addressLine3: 'Address line 3',
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'OVERSEAS MILITARY',
+        city: 'Tiburon',
+        countryCodeIso3: '1',
+        internationalPostalCode: '1',
+        province: 'province',
+        stateCode: 'CA',
+        zipCode: '94920',
+        zipCodeSuffix: '1234',
+      }
+
+      renderWithData(false, { mailingAddress })
+
+      expect(screen.getByRole('checkbox', { checked: true })).toBeTruthy()
+    })
+  })
+
+  describe('when the address type is not OVERSEAS MILITARY', () => {
+    it('initializes the checkbox with the value false', () => {
+      expect(screen.getByRole('checkbox', { checked: false })).toBeTruthy()
+    })
+  })
+
+  describe('when checkboxSelected is true', () => {
+    beforeEach(() => {
+      const mailingAddress: AddressData = {
+        id: 0,
+        addressLine1: '1707 Tiburon Blvd',
+        addressLine2: 'Address line 2',
+        addressLine3: 'Address line 3',
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'OVERSEAS MILITARY',
+        city: 'Tiburon',
+        countryCodeIso3: '1',
+        internationalPostalCode: '1',
+        province: 'province',
+        stateCode: 'CA',
+        zipCode: '94920',
+        zipCodeSuffix: '1234',
+      }
+
+      renderWithData(false, { mailingAddress })
+    })
+
+    describe('when the country is not already USA', () => {
+      it('sets the country value to USA', () => {
+        expect(screen.getByTestId('countryPickerTestID').props.children).toEqual('United States')
+      })
+    })
+
+    it('disables and hides the country picker', () => {
+      expect(screen.queryByText('countryPickerTestID')).toBeFalsy()
+    })
+
+    it('sets the state picker pickerOptions to MilitaryStates', () => {
+      fireEvent.press(screen.getByTestId('stateTestID'))
+      expect(screen.getByText('Armed Forces Americas (AA)')).toBeTruthy()
+    })
+
+    it('renders the military post office picker instead of the city text input', () => {
+      expect(screen.queryByText('City (Required)')).toBeFalsy()
+      expect(screen.getByText('APO/FPO/DPO (Required)')).toBeTruthy()
+    })
+  })
+
+  describe('when checkboxSelected is false', () => {
+    it('sets the state picker pickerOptions to States', () => {
+      expect(screen.getByRole('checkbox', { checked: false }))
+      fireEvent.press(screen.getByTestId('stateTestID'))
+      expect(screen.getByText('Alabama')).toBeTruthy()
+    })
+
+    it('enables the country picker', () => {
       fireEvent.press(screen.getByTestId('countryPickerTestID'))
-      fireEvent.press(screen.getByText('Albania'))
-      fireEvent.press(screen.getByText('Done'))
-      expect(screen.getByAccessibilityValue({"text": "Filled - Albania",})).toBeTruthy()
-      expect(screen.queryByText('California')).toBeFalsy()
-      expect(screen.queryByDisplayValue('94920')).toBeFalsy()
+      expect(screen.getByText('Algeria')).toBeTruthy()
+    })
 
-      fireEvent.changeText(screen.getByTestId('cityTestID'), 'Berat')
-      fireEvent.changeText(screen.getByTestId('stateTestID'), 'Rruga Antipatrea')
-      fireEvent.changeText(screen.getByTestId('zipCodeTestID'), '5001')
-      expect(screen.getByDisplayValue('Berat')).toBeTruthy()
-      expect(screen.getByDisplayValue('Rruga Antipatrea')).toBeTruthy()
-      expect(screen.getByDisplayValue('5001')).toBeTruthy()
+    it('renders the city text input instead of the military post office picker', () => {
+      expect(screen.queryByText('APO/FPO/DPO (Required)')).toBeFalsy()
+      expect(screen.getByText('City (Required)')).toBeTruthy()
+    })
 
-      fireEvent.press(screen.getByTestId('countryPickerTestID'))
-      fireEvent.press(screen.getByText('Algeria'))
-      fireEvent.press(screen.getByText('Done'))
-      expect(screen.getByDisplayValue('Berat')).toBeTruthy()
-      expect(screen.getByDisplayValue('Rruga Antipatrea')).toBeTruthy()
-      expect(screen.getByDisplayValue('5001')).toBeTruthy()
+  describe('when the country is domestic', () => {
+    it('renders the state picker', () => {
+      fireEvent.press(screen.getByTestId('stateTestID'))
+      expect(screen.getByText('Alabama'))
     })
   })
 
-  describe('when addressSaved is true', () => {
-    it('should call navigation goBack', async () => {
-      initializeTestInstance(profileInfo, true)
-      expect(goBackSpy).toBeCalled()
+  describe('when the country is not domestic', () => {
+    it('renders state text input', () => {
+      const mailingAddress: AddressData = {
+        id: 0,
+        addressLine1: '4313 Cassin Way',
+        addressLine2: 'Suite 992',
+        addressLine3: 'Address line 3',
+        addressPou: 'CORRESPONDENCE',
+        addressType: 'INTERNATIONAL',
+        city: 'Lake Lucybury',
+        countryCodeIso3: 'AUS',
+        internationalPostalCode: '1',
+        province: 'province',
+        stateCode: 'Northern Territory',
+        zipCode: '5922',
+        zipCodeSuffix: '',
+      }
+
+      renderWithData(false, { mailingAddress })
+
+      fireEvent.press(screen.getByTestId('stateTestID'))
+      expect(screen.queryByText('Alabama')).toBeFalsy()
     })
   })
 
-  describe('when showValidation is true', () => {
-    it('should display the AddressValidation component', async () => {
-      initializeTestInstance(profileInfo, undefined, undefined, undefined, true)
-      expect(screen.getByText('You entered:')).toBeTruthy()
+  describe('when address is saved', () => {
+    it('calls navigation goBack', async () => {
+      const mailingAddress: AddressData = {
+        id: 0,
+        addressLine1: 'Unit 2050 Box 4190',
+        addressLine2: '',
+        addressLine3: '',
+        addressPou: 'CORRESPONDENCE',
+        addressType: 'OVERSEAS MILITARY',
+        city: 'APO',
+        countryCodeIso3: 'USA',
+        internationalPostalCode: '',
+        province: '',
+        stateCode: 'AP',
+        zipCode: '96278',
+      }
+
+      renderWithData(false, { mailingAddress })
+
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      await waitFor(() => expect(goBackSpy).toBeCalled())
+    })
+  })
+
+  describe('when there are suggested addresses', () => {
+    it('displays the AddressValidation component', async () => {
+      const mailingAddress: AddressData = {
+        id: 0,
+        addressLine1: 'Unit 2050 Box 4190',
+        addressLine2: '',
+        addressLine3: '',
+        addressPou: 'CORRESPONDENCE',
+        addressType: 'OVERSEAS MILITARY',
+        city: 'APO',
+        countryCodeIso3: 'USA',
+        countryName: "United States",
+        internationalPostalCode: '',
+        stateCode: 'AP',
+        zipCode: '96278',
+      }
+
+      const abortController = new AbortController()
+      const abortSignal = abortController.signal
+
+      when(post as jest.Mock)
+        .calledWith('/v0/user/addresses/validate', mailingAddress, undefined, abortSignal)
+        .mockResolvedValue(
+          {
+            data: [
+              {
+                id: 1,
+                type: 'mock_type',
+                attributes: {
+                  addressLine1: '1707 Tiburon Blvd',
+                  addressLine2: 'Address line 2',
+                  addressLine3: 'Address line 3',
+                  addressPou: 'RESIDENCE/CHOICE',
+                  addressType: 'DOMESTIC',
+                  city: 'Tiburon',
+                  countryCodeIso3: '1',
+                  internationalPostalCode: '1',
+                  province: 'province',
+                  stateCode: 'CA',
+                  zipCode: '94920',
+                  zipCodeSuffix: '1234',
+                },
+                meta: {
+                  address: {
+                    confidenceScore: 68,
+                    addressType: 'DOMESTIC',
+                    deliveryPointValidation: DeliveryPointValidationTypesConstants.MISSING_UNIT_NUMBER,
+                    residentialDeliveryIndicator: 'RESIDENTIAL',
+                  },
+                  validationKey: 315989,
+                },
+              },
+            ],
+          })
+
+      renderWithData(false, { mailingAddress })
+
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      await waitFor(() => expect(post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', mailingAddress, undefined, abortSignal))
+      await waitFor(() => expect(screen.getByText('Verify your address')).toBeTruthy())
     })
   })
 
   describe('when content is invalid for domestic address', () => {
-    it('should display an AlertBox and a field error for each required field', async () => {
-      profileInfo.mailingAddress = {
-        id: 0,
-        addressLine1: '',
-        addressLine2: '',
-        addressLine3: '',
-        addressPou: 'RESIDENCE/CHOICE',
-        addressType: 'DOMESTIC',
-        city: '',
-        countryCodeIso3: '',
-        internationalPostalCode: '',
-        province: '',
-        stateCode: '',
-        zipCode: '',
-        zipCodeSuffix: '',
-      }
-
-      initializeTestInstance(profileInfo)
-      fireEvent.press(screen.getByText('Save'))
+    it('displays an AlertBox and a field error for each required field', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
       expect(screen.getByText('Please check your mailing address')).toBeTruthy()
       expect(screen.getByText('Country is required')).toBeTruthy()
       expect(screen.getByText('Street address is required')).toBeTruthy()
@@ -319,9 +503,8 @@ context('EditAddressScreen', () => {
   })
 
   describe('when content is invalid for military address', () => {
-    it('should display an AlertBox and a field error for each required field', async () => {
-      fireEvent.press(screen.getByTestId('USMilitaryBaseCheckboxTestID'))
-      fireEvent.press(screen.getByText('Save'))
+    it('displays an AlertBox and a field error for each required field', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
       expect(screen.getByText('Please check your mailing address')).toBeTruthy()
       expect(screen.getByText('Street address is required')).toBeTruthy()
       expect(screen.getByText('Postal code is required')).toBeTruthy()
@@ -329,12 +512,10 @@ context('EditAddressScreen', () => {
   })
 
   describe('when content is invalid for an international address', () => {
-    it('should display an AlertBox and a field error for each required field', async () => {
+    it('displays an AlertBox and a field error for each required field', () => {
       fireEvent.press(screen.getByTestId('countryPickerTestID'))
-      fireEvent.press(screen.getByText('Albania'))
-      fireEvent.press(screen.getByText('Done'))
-      fireEvent.press(screen.getByText('Save'))
-      expect(screen.getByText('Please check your mailing address')).toBeTruthy()
+      fireEvent.press(screen.getByText('Algeria'))
+      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
       expect(screen.getByText('Street address is required')).toBeTruthy()
       expect(screen.getByText('City is required')).toBeTruthy()
       expect(screen.getByText('Postal code is required')).toBeTruthy()
@@ -342,16 +523,16 @@ context('EditAddressScreen', () => {
   })
 
   describe('when the address is residential and there is address data', () => {
-    it('should display the remove button', () => {
-      initializeTestInstance(profileInfo, false, true)
-      expect(screen.getByText('Remove home address')).toBeTruthy()
+    it('displays the remove button', () => {
+      renderWithData(true, { residentialAddress })
+      expect(screen.getByRole('button', { name: 'Remove home address' })).toBeTruthy
     })
   })
 
   describe('validateAddress', () => {
     describe('when INTERNATIONAL', () => {
-      it('should pass province and internationalPostalCode as part of the expected payload', async () => {
-        profileInfo.mailingAddress = {
+      it('passes province and internationalPostalCode as part of the expected payload', async () => {
+        const mailingAddress: AddressData = {
           id: 0,
           addressLine1: '127 Harvest Moon Dr',
           addressLine2: '',
@@ -366,10 +547,14 @@ context('EditAddressScreen', () => {
           zipCode: '',
         }
 
-        initializeTestInstance(profileInfo)
-        fireEvent.press(screen.getByText('Save'))
+        renderWithData(false, { mailingAddress })
 
-        expect(validateAddress).toBeCalledWith(
+        fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+
+        const abortController = new AbortController()
+        const abortSignal = abortController.signal
+
+        await waitFor(() => expect(post).toBeCalledWith('/v0/user/addresses/validate',
           {
             id: 0,
             addressLine1: '127 Harvest Moon Dr',
@@ -384,15 +569,15 @@ context('EditAddressScreen', () => {
             zipCode: '',
             province: 'Ontario',
           },
-          snackbarMessages,
-          ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
-        )
+          undefined,
+          abortSignal
+        ))
       })
     })
 
     describe('when DOMESTIC', () => {
-      it('should pass stateCode and zipCode as part of the expected payload', async () => {
-        profileInfo.mailingAddress = {
+      it('passes stateCode and zipCode as part of the expected payload', async () => {
+        const mailingAddress: AddressData = {
           id: 0,
           addressLine1: '1707 Tiburon Blvd',
           addressLine2: 'Address line 2',
@@ -407,11 +592,14 @@ context('EditAddressScreen', () => {
           zipCode: '94920',
           zipCodeSuffix: '1234',
         }
+        renderWithData(false, { mailingAddress })
 
-        initializeTestInstance(profileInfo)
-        fireEvent.press(screen.getByText('Save'))
+        fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
-        expect(validateAddress).toBeCalledWith(
+        const abortController = new AbortController()
+        const abortSignal = abortController.signal
+
+        await waitFor(() => (expect(post).toBeCalledWith('/v0/user/addresses/validate',
           {
             id: 0,
             addressLine1: '1707 Tiburon Blvd',
@@ -426,15 +614,15 @@ context('EditAddressScreen', () => {
             zipCode: '94920',
             internationalPostalCode: '',
           },
-          snackbarMessages,
-          ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
-        )
+          undefined,
+          abortSignal
+        )))
       })
     })
 
     describe('when OVERSEAS MILITARY', () => {
-      it('should pass stateCode and zipCode as part of the expected payload', async () => {
-        profileInfo.mailingAddress = {
+      it('passes stateCode and zipCode as part of the expected payload', async () => {
+        const mailingAddress: AddressData = {
           id: 0,
           addressLine1: 'Unit 2050 Box 4190',
           addressLine2: '',
@@ -448,52 +636,39 @@ context('EditAddressScreen', () => {
           stateCode: 'AP',
           zipCode: '96278',
         }
+        renderWithData(false, { mailingAddress })
 
-        initializeTestInstance(profileInfo)
-        fireEvent.press(screen.getByText('Save'))
+        fireEvent.press(screen.getByRole('button', { name: 'Save' }))
 
-        expect(validateAddress).toBeCalledWith(
+        const abortController = new AbortController()
+        const abortSignal = abortController.signal
+
+        await waitFor(() => expect(post).toBeCalledWith('/v0/user/addresses/validate', 
           {
-            id: 0,
-            addressLine1: 'Unit 2050 Box 4190',
-            addressLine2: '',
+            addressLine1: 'Unit 2050 Box 4190', 
+            addressLine2: '', 
             addressLine3: '',
-            addressPou: 'CORRESPONDENCE',
-            addressType: 'OVERSEAS MILITARY',
-            countryName: 'United States',
-            city: 'APO',
-            countryCodeIso3: 'USA',
-            internationalPostalCode: '',
-            stateCode: 'AP',
-            zipCode: '96278',
-          },
-          snackbarMessages,
-          ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
-        )
+            addressPou: "CORRESPONDENCE", 
+            addressType: "OVERSEAS MILITARY", 
+            city: 'APO', 
+            countryCodeIso3: "USA", 
+            countryName: "United States", 
+            id: 0, 
+            internationalPostalCode: "", 
+            stateCode: "AP", "zipCode": "96278"
+          }, 
+          undefined,
+          abortSignal
+        ))
       })
     })
   })
 
   describe('delete address', () => {
-    it('should call the useDestructive hook', async () => {
-      profileInfo.residentialAddress = {
-        id: 25,
-        addressLine1: '1707 Tiburon Blvd',
-        addressLine2: 'Address line 2',
-        addressLine3: 'Address line 3',
-        addressPou: 'RESIDENCE/CHOICE',
-        addressType: 'DOMESTIC',
-        city: 'Tiburon',
-        countryCodeIso3: 'USA',
-        province: 'province',
-        stateCode: 'CA',
-        zipCode: '94920',
-        zipCodeSuffix: '1234',
-      }
+    it('calls the useDestructive hook', () => {
+      renderWithData(true, { residentialAddress })
 
-      initializeTestInstance(profileInfo, false, true)
-      fireEvent.press(screen.getByText('Remove home address'))
-
+      fireEvent.press(screen.getByRole('button', { name: 'Remove home address' }))
       expect(mockAlertSpy).toHaveBeenCalled()
     })
   })

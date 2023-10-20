@@ -6,14 +6,12 @@ import { context, render, mockNavProps } from 'testUtils'
 import {
   DirectDepositState,
   ErrorsState,
-  initialAuthorizedServicesState,
   initialAuthState,
   initialErrorsState,
   initializeErrorsByScreenID,
   initialMilitaryServiceState,
-  initialPersonalInformationState,
 } from 'store/slices'
-import { ServiceData, UserDataProfile } from 'store/api/types'
+import { ServiceData } from 'store/api/types'
 import DirectDepositScreen from './index'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -28,10 +26,6 @@ jest.mock('utils/hooks', () => {
 })
 
 const authorizedMilitaryState = {
-  authorizedServices: {
-    ...initialAuthorizedServicesState,
-    militaryServiceHistory: true,
-  },
   militaryService: {
     ...initialMilitaryServiceState,
     serviceHistory: [{} as ServiceData],
@@ -92,11 +86,6 @@ context('DirectDepositScreen', () => {
       render(<DirectDepositScreen {...mockNavProps()} />, {
         preloadedState: {
           auth: { ...initialAuthState },
-          personalInformation: {
-            ...initialPersonalInformationState,
-            profile: {} as UserDataProfile,
-            needsDataLoad: false,
-          },
           ...authorizedMilitaryState,
         },
       })

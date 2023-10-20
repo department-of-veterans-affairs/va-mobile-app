@@ -15,11 +15,9 @@ import {
 } from 'store/api/types'
 import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState } from 'store/slices'
-import { RootState } from 'store'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useExternalLink, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import AppealDecision from '../AppealDecision/AppealDecision'
 import getEnv from 'utils/env'
 
@@ -304,10 +302,10 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
-  const { profile } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
-
+  const { data: personalInfo } = usePersonalInformation()
+  const fullName = personalInfo?.fullName || ''
   const marginTop = theme.dimensions.condensedMarginBetween
-  const statusHeadingAndTitle = getStatusHeadingAndTitle(status, aoj, appealType, profile?.fullName || '', t, docketName || 'UNDF DOCKET')
+  const statusHeadingAndTitle = getStatusHeadingAndTitle(status, aoj, appealType, fullName, t, docketName || 'UNDF DOCKET')
 
   const renderStatusDetails = (): ReactElement => {
     const { details } = statusHeadingAndTitle

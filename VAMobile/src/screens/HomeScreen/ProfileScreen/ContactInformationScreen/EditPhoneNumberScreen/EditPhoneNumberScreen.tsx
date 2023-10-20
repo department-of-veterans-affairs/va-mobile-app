@@ -3,19 +3,17 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, deleteUsersNumber, editUsersNumber, finishEditPhoneNumber } from 'store/slices/personalInformationSlice'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { PhoneData, PhoneType, PhoneTypeToFormattedNumber, UserContactInformation } from 'api/types'
 import { SnackbarMessages } from 'components/SnackBar'
-import { dispatchClearErrors } from 'store/slices/errorSlice'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
-import { getFormattedPhoneNumber } from 'utils/common'
-import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useError, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { getFormattedPhoneNumber, isErrorObject, showSnackBar } from 'utils/common'
+import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { useContactInformation } from 'api/contactInformation/getContactInformation'
+import { useDeletePhoneNumber, useSavePhoneNumber } from 'api/contactInformation'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
 
@@ -31,18 +29,17 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
-  const [deleting, setDeleting] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
 
-  const { phoneNumberSaved, loading } = useSelector<RootState, PersonalInformationState>((state) => state.personalInformation)
+  const { data: contactInformation } = useContactInformation()
+  const { mutate: deletePhoneNumber, isLoading: deletingPhoneNumber, isSuccess: phoneNumberDeleted } = useDeletePhoneNumber()
+  const { mutate: savePhoneNumber, isLoading: savingPhoneNumber, isSuccess: phoneNumberSaved } = useSavePhoneNumber()
 
   useEffect(() => {
-    if (phoneNumberSaved) {
-      dispatch(finishEditPhoneNumber())
-      setDeleting(false)
+    if (phoneNumberDeleted || phoneNumberSaved) {
       navigation.goBack()
     }
-  }, [phoneNumberSaved, navigation, dispatch])
+  }, [phoneNumberDeleted, phoneNumberSaved, navigation])
 
   const saveSnackbarMessages: SnackbarMessages = {
     successMsg: t('contactInformation.phoneNumber.saved', { type: displayTitle }),
@@ -90,9 +87,39 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   const onSave = (): void => {
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
-    const numberId = phoneData && phoneData.id ? phoneData.id : 0
 
-    dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId, saveSnackbarMessages, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+    let phoneDataPayload: PhoneData = {
+      areaCode: onlyDigitsNum.substring(0, 3),
+      countryCode: '1',
+      phoneNumber: onlyDigitsNum.substring(3),
+      phoneType,
+    }
+
+    if (extension) {
+      phoneDataPayload = {
+        ...phoneDataPayload,
+        extension,
+      }
+    }
+
+    const phoneNumberExists = (contactInformation || {})[PhoneTypeToFormattedNumber[phoneType as PhoneType] as keyof UserContactInformation]
+
+    if (phoneNumberExists && phoneData.id) {
+      phoneDataPayload = {
+        ...phoneDataPayload,
+        id: phoneData.id,
+      }
+    }
+
+    const save = (): void => {
+      const mutateOptions = {
+        onSuccess: () => showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
+        onError: (error: unknown) => isErrorObject(error) && showSnackBar(saveSnackbarMessages.errorMsg, dispatch, save, false, true, true),
+      }
+      savePhoneNumber(phoneDataPayload, mutateOptions)
+    }
+
+    save()
   }
 
   const removeSnackbarMessages: SnackbarMessages = {
@@ -101,8 +128,14 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }
 
   const onDelete = (): void => {
-    setDeleting(true)
-    dispatch(deleteUsersNumber(phoneType, removeSnackbarMessages, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+    if (phoneData) {
+      const mutateOptions = {
+        onSuccess: () => showSnackBar(removeSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
+        onError: (error: unknown) =>
+          isErrorObject(error) && showSnackBar(removeSnackbarMessages.errorMsg, dispatch, () => deletePhoneNumber(phoneData, mutateOptions), false, true, true),
+      }
+      deletePhoneNumber(phoneData, mutateOptions)
+    }
   }
 
   const setPhoneNumberOnChange = (text: string): void => {
@@ -136,25 +169,11 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     return (onlyDigitsNum.length !== MAX_DIGITS && onlyDigitsNum.length > 0) || !onlyDigitsNum
   }
 
-  const goBack = () => {
-    navigation.goBack()
-    // clear errors so it doesnt persist on other phone edit screens
-    dispatch(dispatchClearErrors(ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
-  }
-
-  if (useError(ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID)) {
-    return (
-      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={goBack}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (loading || phoneNumberSaved) {
-    const loadingText = deleting ? t('contactInformation.delete.phone') : t('contactInformation.savingPhoneNumber')
+  if (deletingPhoneNumber || savingPhoneNumber) {
+    const loadingText = deletingPhoneNumber ? t('contactInformation.delete.phone') : t('contactInformation.savingPhoneNumber')
 
     return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={goBack}>
+      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
         <LoadingComponent text={loadingText} />
       </FullScreenSubtask>
     )
@@ -217,18 +236,13 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       scrollViewRef={scrollViewRef}
       title={displayTitle}
       leftButtonText={t('cancel')}
-      onLeftButtonPress={goBack}
+      onLeftButtonPress={navigation.goBack}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         {getFormattedPhoneNumber(phoneData) !== '' && (
           <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-            <VAButton
-              onPress={onDeletePressed}
-              label={t('contactInformation.removeData', { pageName: buttonTitle })}
-              buttonType={ButtonTypesConstants.buttonDestructive}
-              a11yHint={t('contactInformation.removeData.a11yHint', { pageName: buttonTitle })}
-            />
+            <VAButton onPress={onDeletePressed} label={t('contactInformation.removeData', { pageName: buttonTitle })} buttonType={ButtonTypesConstants.buttonDestructive} />
           </Box>
         )}
         <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />

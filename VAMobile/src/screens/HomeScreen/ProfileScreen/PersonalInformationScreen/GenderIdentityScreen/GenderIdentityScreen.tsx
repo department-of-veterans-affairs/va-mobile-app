@@ -8,8 +8,10 @@ import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { SnackbarMessages } from 'components/SnackBar'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useBeforeNavBackListener, useDestructiveActionSheet, useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
+import { showSnackBar } from 'utils/common'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useDemographics } from 'api/demographics/getDemographics'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { useUpdateGenderIdentity } from 'api/demographics/updateGenderIdentity'
@@ -30,12 +32,18 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
   const genderIdentityMutation = useUpdateGenderIdentity()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const confirmAlert = useDestructiveActionSheet()
   const genderIdentityInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID)
 
   const [error, setError] = useState('')
   const [genderIdentity, setGenderIdentity] = useState(demographics?.genderIdentity)
+
+  const snackbarMessages: SnackbarMessages = {
+    successMsg: t('personalInformation.genderIdentity.saved'),
+    errorMsg: t('personalInformation.genderIdentity.not.saved'),
+  }
 
   useEffect(() => {
     if (genderIdentityMutation.isSuccess) {
@@ -70,15 +78,29 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
     setGenderIdentity(value)
   }
 
+  const updateGenderIdentity = () => {
+    if (genderIdentity) {
+      const mutateOptions = {
+        onSuccess: () => showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true),
+        onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, updateGenderIdentity, false, true, true),
+      }
+      genderIdentityMutation.mutate(genderIdentity, mutateOptions)
+    }
+  }
+
   const onSave = (): void => {
     if (genderIdentity) {
-      genderIdentityMutation.mutate(genderIdentity)
+      updateGenderIdentity()
     } else {
       setError(t('selectOption'))
     }
   }
 
   const getIdentityTypes = (): Array<radioOption<string>> => {
+    if (!genderIdentityOptions) {
+      return []
+    }
+
     return Object.keys(genderIdentityOptions).map((key: string) => {
       return {
         labelKey: genderIdentityOptions[key],

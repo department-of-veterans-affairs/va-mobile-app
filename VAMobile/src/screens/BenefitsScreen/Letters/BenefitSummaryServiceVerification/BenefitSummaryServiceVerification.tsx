@@ -28,7 +28,8 @@ import { LettersState, downloadLetter, getLetterBeneficiaryData } from 'store/sl
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp } from 'utils/accessibility'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -112,7 +113,6 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
         on: includeMilitaryServiceInfoToggle,
-        a11yHint: t('letters.benefitService.includeMilitaryServiceInfoA11yHint'),
         testID: 'include-military-service-information',
       },
     },
@@ -252,10 +252,10 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         <SimpleList
           items={getBenefitAndDisabilityToggleList()}
           title={t('letters.benefitService.benefitAndDisabilityInfo')}
-          titleA11yLabel={t('letters.benefitService.benefitAndDisabilityInfoA11yLabel')}
+          titleA11yLabel={a11yLabelVA(t('letters.benefitService.benefitAndDisabilityInfo'))}
         />
 
-        <TextView {...testIdProps(t('letters.benefitService.sendMessageIfIncorrectInfoA11yLabel'))} variant="MobileBody" m={theme.dimensions.standardMarginBetween}>
+        <TextView accessibilityLabel={a11yLabelVA(t('letters.benefitService.sendMessageIfIncorrectInfo'))} variant="MobileBody" m={theme.dimensions.standardMarginBetween}>
           {t('letters.benefitService.sendMessageIfIncorrectInfo')}
         </TextView>
 
@@ -266,7 +266,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
             numberOrUrlLink={LINK_URL_ASK_VA_GOV}
             linkUrlIconType={LinkUrlIconType.Arrow}
             {...a11yHintProp(t('letters.benefitService.sendMessageA11yHint'))}
-            a11yLabel={t('letters.benefitService.sendMessageA11yLabel')}
+            a11yLabel={a11yLabelVA(t('letters.benefitService.sendMessage'))}
           />
         </Box>
 
@@ -276,7 +276,6 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
             label={t('letters.benefitService.viewLetter')}
             testID={t('letters.benefitService.viewLetter')}
             buttonType={ButtonTypesConstants.buttonPrimary}
-            a11yHint={t('letters.benefitService.viewLetterA11yHint')}
           />
         </Box>
       </Box>

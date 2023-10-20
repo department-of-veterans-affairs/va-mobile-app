@@ -1,8 +1,8 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useLayoutEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 
-import { Box, ClosePanelButton, ErrorComponent, FullScreenSubtask, LoadingComponent, MultiTouchCard, MultiTouchCardProps, TextView } from 'components'
+import { Box, ErrorComponent, FullScreenSubtask, LoadingComponent, MultiTouchCard, MultiTouchCardProps, TextView } from 'components'
 import { ClickForActionLink } from 'components'
 import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
@@ -11,12 +11,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, getTrackingInfo } from 'store/slices'
 import { PrescriptionTrackingInfoAttributeData, PrescriptionTrackingInfoOtherItem } from 'store/api'
 import { RootState } from 'store'
-import { a11yLabelID } from 'utils/a11yLabel'
+import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
-import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener, useDowntime, useError, useTheme } from 'utils/hooks'
-import { usePanelHeaderStyles } from 'utils/hooks/headerStyles'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
@@ -44,27 +42,12 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   const { prescription } = route.params
   const dispatch = useAppDispatch()
   const { loadingTrackingInfo, trackingInfo } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
-  const headerStyle = usePanelHeaderStyles()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID)
   const noneNoted = t('noneNoted')
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      ...headerStyle,
-      headerLeft: (props) => (
-        <ClosePanelButton
-          buttonText={t('close')}
-          onPress={props.onPress}
-          buttonTextColor={'showAll'}
-          focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on modal
-        />
-      ),
-    })
-  }, [navigation, headerStyle, t])
 
   useEffect(() => {
     if (!prescriptionInDowntime) {
@@ -212,7 +195,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
             {t('prescriptions.refillTracking.upTo15Days')}
           </TextView>
         </Box>
-        <TextView variant="HelperText" accessibilityLabel={t('prescriptions.refillTracking.deliveryChanges.a11yLabel')}>
+        <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('prescriptions.refillTracking.deliveryChanges'))}>
           {t('prescriptions.refillTracking.deliveryChanges')}
         </TextView>
         {renderTrackingCards()}
