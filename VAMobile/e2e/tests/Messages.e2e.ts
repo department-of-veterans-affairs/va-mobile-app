@@ -147,7 +147,7 @@ describe('Messages Screen', () => {
   })
 
   it('should close the action sheet and tap cancel', async () => {
-    if(device.getPlatform() == 'android') {
+    if(device.getPlatform() === 'android') {
       await element(by.text('Cancel ')).tap()
       await element(by.text('Cancel')).atIndex(1).tap()
     } else {
