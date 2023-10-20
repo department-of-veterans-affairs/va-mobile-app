@@ -2,7 +2,7 @@ import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
+import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView, WaygateWrapper } from 'components'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
@@ -18,6 +18,7 @@ import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'ut
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useStartAuth } from 'utils/hooks/auth'
+import { waygateNativeAlert } from 'utils/remoteConfig'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
@@ -61,7 +62,11 @@ const LoginScreen: FC = () => {
     })
   }
 
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
+  const onCrisisLine = () => {
+    if (waygateNativeAlert('WG_VeteransCrisisLineScreen')) {
+      navigateTo('VeteransCrisisLine')()
+    }
+  }
 
   const findLocationProps: BoxProps = {
     flexDirection: 'row',
@@ -99,6 +104,7 @@ const LoginScreen: FC = () => {
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
+      <WaygateWrapper waygate="WG_LoginScreen" />
       <Box flex={1} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween} testID="va-icon">
           <VAIcon testID="VAIcon" name={'Logo'} />

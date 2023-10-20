@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, LargePanel, TextView } from 'components'
+import { Box, LargePanel, TextView, WaygateWrapper } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { UserAnalytics } from 'constants/analytics'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -34,36 +34,36 @@ const VeteransCrisisLineScreen: FC = () => {
 
   return (
     <LargePanel title={t('veteransCrisisLine.title')} rightButtonText={t('done')}>
-      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
-          {t('veteransCrisisLine.weAreHereForYou')}
-        </TextView>
-        <Box mt={standardMarginBetween}>
-          <TextView variant="MobileBody" paragraphSpacing={true}>
-            {t('veteransCrisisLine.connectWithResponders')}
+      <WaygateWrapper waygate="WG_VeteransCrisisLineScreen">
+        <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
+            {t('veteransCrisisLine.weAreHereForYou')}
           </TextView>
+          <Box mt={standardMarginBetween}>
+            <TextView variant="MobileBody" paragraphSpacing={true}>
+              {t('veteransCrisisLine.connectWithResponders')}
+            </TextView>
+          </Box>
+          <VeteransCrisisLineNumbers />
+          <Box mt={standardMarginBetween}>
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {t('veteransCrisisLine.getMoreResources')}
+            </TextView>
+          </Box>
+          <Box mt={standardMarginBetween}>
+            <TextView
+              variant="MobileBody"
+              color="link"
+              onPress={redirectToVeteransCrisisLineLink}
+              accessibilityRole="link"
+              {...a11yHintProp(t('veteransCrisisLine.urlA11yHint'))}
+              {...testIdProps(t('veteransCrisisLine.urlA11yLabel'))}
+              testID="veteransCrisisLineGetMoreResourcesTestID">
+              {t('veteransCrisisLine.urlDisplayed')}
+            </TextView>
+          </Box>
         </Box>
-
-        <VeteransCrisisLineNumbers />
-
-        <Box mt={standardMarginBetween}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('veteransCrisisLine.getMoreResources')}
-          </TextView>
-        </Box>
-        <Box mt={standardMarginBetween}>
-          <TextView
-            variant="MobileBody"
-            color="link"
-            onPress={redirectToVeteransCrisisLineLink}
-            accessibilityRole="link"
-            {...a11yHintProp(t('veteransCrisisLine.urlA11yHint'))}
-            {...testIdProps(t('veteransCrisisLine.urlA11yLabel'))}
-            testID="veteransCrisisLineGetMoreResourcesTestID">
-            {t('veteransCrisisLine.urlDisplayed')}
-          </TextView>
-        </Box>
-      </Box>
+      </WaygateWrapper>
     </LargePanel>
   )
 }

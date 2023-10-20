@@ -2,7 +2,7 @@ import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps, WaygateWrapper } from 'components'
 import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
@@ -11,9 +11,10 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackScreenProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
+import { waygateNativeAlert } from 'utils/remoteConfig'
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
 type MilitaryInformationScreenProps = StackScreenProps<HomeStackParamList, 'MilitaryInformation'>
@@ -53,7 +54,11 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
     }
   })
 
-  const navigateTo = useRouteNavigation()
+  const onIncorrectService = () => {
+    if (waygateNativeAlert('WG_IncorrectServiceInfoScreen')) {
+      navigation.navigate('IncorrectServiceInfo')
+    }
+  }
 
   const linkProps: TextViewProps = {
     variant: 'MobileBody',
@@ -62,32 +67,29 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
     mb: theme.dimensions.contentMarginBottom,
     accessibilityRole: 'link',
     ...testIdProps(t('militaryInformation.incorrectServiceInfo')),
-    onPress: navigateTo('IncorrectServiceInfo'),
+    onPress: onIncorrectService,
     textDecoration: 'underline',
     textDecorationColor: 'link',
   }
 
-  if (useError(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID) || getUserAuthorizedServicesError) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
+  const errorCheck = useError(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID) || getUserAuthorizedServicesError
+  const loadingCheck = loading || loadingUserAuthorizedServices
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')}>
-      {loading || loadingUserAuthorizedServices ? (
+      {errorCheck ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
+      ) : loadingCheck ? (
         <LoadingComponent text={t('militaryInformation.loading')} />
       ) : !userAuthorizedServices?.militaryServiceHistory || serviceHistory.length < 1 ? (
         <NoMilitaryInformationAccess />
       ) : (
-        <>
+        <WaygateWrapper waygate="WG_MilitaryInformationScreen">
           <Box mb={theme.dimensions.standardMarginBetween} mt={-theme.dimensions.standardMarginBetween}>
             <DefaultList items={historyItems} title={t('militaryInformation.periodOfService')} />
           </Box>
           <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>
-        </>
+        </WaygateWrapper>
       )}
     </FeatureLandingTemplate>
   )

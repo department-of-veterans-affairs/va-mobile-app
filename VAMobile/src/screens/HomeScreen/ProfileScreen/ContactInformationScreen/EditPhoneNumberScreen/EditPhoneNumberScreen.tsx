@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton, WaygateWrapper } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -239,22 +239,30 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       onLeftButtonPress={navigation.goBack}
       rightButtonText={t('save')}
       onRightButtonPress={() => setOnSaveClicked(true)}>
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        {getFormattedPhoneNumber(phoneData) !== '' && (
-          <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-            <VAButton onPress={onDeletePressed} label={t('contactInformation.removeData', { pageName: buttonTitle })} buttonType={ButtonTypesConstants.buttonDestructive} />
+      <WaygateWrapper waygate="WG_EditPhoneNumberScreen">
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          {getFormattedPhoneNumber(phoneData) !== '' && (
+            <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+              <VAButton onPress={onDeletePressed} label={t('contactInformation.removeData', { pageName: buttonTitle })} buttonType={ButtonTypesConstants.buttonDestructive} />
+            </Box>
+          )}
+          <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />
+          {formContainsError && (
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <AlertBox scrollViewRef={scrollViewRef} title={t('editPhoneNumber.checkPhoneNumber')} border="error" focusOnError={onSaveClicked} />
+            </Box>
+          )}
+          <Box mt={theme.dimensions.formMarginBetween} mx={theme.dimensions.gutter}>
+            <FormWrapper
+              fieldsList={formFieldsList}
+              onSave={onSave}
+              setFormContainsError={setFormContainsError}
+              onSaveClicked={onSaveClicked}
+              setOnSaveClicked={setOnSaveClicked}
+            />
           </Box>
-        )}
-        <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />
-        {formContainsError && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox scrollViewRef={scrollViewRef} title={t('editPhoneNumber.checkPhoneNumber')} border="error" focusOnError={onSaveClicked} />
-          </Box>
-        )}
-        <Box mt={theme.dimensions.formMarginBetween} mx={theme.dimensions.gutter}>
-          <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         </Box>
-      </Box>
+      </WaygateWrapper>
     </FullScreenSubtask>
   )
 }
