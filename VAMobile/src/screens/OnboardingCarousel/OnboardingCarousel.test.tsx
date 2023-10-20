@@ -2,10 +2,10 @@ import 'react-native'
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
-import { context, render } from 'testUtils'
+import { QueriesData, context, render } from 'testUtils'
 import OnboardingCarousel from './OnboardingCarousel'
-import { EmailData, PhoneData } from 'store/api/types'
-import { completeFirstTimeLogin, InitialState } from 'store/slices'
+import { completeFirstTimeLogin } from 'store/slices'
+import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
@@ -21,34 +21,27 @@ jest.mock('store/slices', () => {
 })
 
 context('OnboardingCarousel', () => {
+  const renderWithData = (queriesData?: QueriesData) => {
+    render(<OnboardingCarousel />, { queriesData })
+  }
+
   beforeEach(() => {
-    render(<OnboardingCarousel />, {
-      preloadedState: {
-        ...InitialState,
-        personalInformation: {
-          ...InitialState.personalInformation,
-          profile: {
-            middleName: '',
-            lastName: '',
-            genderIdentity: null,
-            contactEmail: {} as EmailData,
-            signinEmail: '',
-            birthDate: '',
-            addresses: '',
-            homePhoneNumber: {} as PhoneData,
-            mobilePhoneNumber: {} as PhoneData,
-            workPhoneNumber: {} as PhoneData,
-            fullName: '',
-            firstName: 'Billy',
-            signinService: 'IDME',
-          },
-        },
-      },
-    })
+    renderWithData([{
+      queryKey: personalInformationKeys.personalInformation,
+      data: {
+        firstName: 'Gary',
+        middleName: null,
+        lastName: 'Washington',
+        signinEmail: 'Gary.Washington@idme.com',
+        signinService: 'IDME',
+        fullName: 'Gary Washington',
+        birthDate: null
+      }
+    }])
   })
 
   it('renders correctly through out each screen and calls completeFirstTimeLogin once you get to the end', async () => {
-    expect(screen.getByText('Welcome, Billy')).toBeTruthy()
+    expect(screen.getByText('Welcome, Gary')).toBeTruthy()
     expect(screen.getByText('With this app, you can manage your VA health care, benefits, and payments from your phone or tablet.')).toBeTruthy()
     fireEvent.press(screen.getByText('Next'))
     expect(screen.getByText('Manage your health care')).toBeTruthy()
