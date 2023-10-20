@@ -396,17 +396,17 @@ export const getFeatureToggles = (): FeatureToggleValues => {
 }
 
 export const getWaygateToggles = (): WaygateToggleValues => {
-  if (!fetchRemote) {
-    return waygateConfig
-  }
+  // if (!fetchRemote) {
+  return waygateConfig
+  // }
 
-  const toggles = waygateConfig
-  Object.keys(remoteConfig().getAll()).forEach((key) => {
-    if (key.startsWith('WG')) {
-      toggles[key as WaygateToggleType] = JSON.parse(remoteConfig().getValue(key).asString()) as unknown as Waygate
-      console.log('waygates1: ' + JSON.parse(remoteConfig().getValue(key).asString()))
-      console.log('waygates2: ' + JSON.stringify(JSON.parse(remoteConfig().getValue(key).asString()), undefined, 2))
-    }
-  })
-  return toggles
+  // const toggles = waygateConfig
+  // Object.keys(remoteConfig().getAll()).forEach((key) => {
+  //   if (key.startsWith('WG')) {
+  //     toggles[key as WaygateToggleType] = JSON.parse(remoteConfig().getValue(key).asString()) as unknown as Waygate
+  //     console.log('waygates1: ' + JSON.parse(remoteConfig().getValue(key).asString()))
+  //     console.log('waygates2: ' + JSON.stringify(JSON.parse(remoteConfig().getValue(key).asString()), undefined, 2))
+  //   }
+  // })
+  // return toggles
 }
