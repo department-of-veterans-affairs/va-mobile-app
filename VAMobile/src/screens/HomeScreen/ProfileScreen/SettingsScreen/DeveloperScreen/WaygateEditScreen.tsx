@@ -88,7 +88,7 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
         <TextView variant="MobileBodyBold">errorMsgTitle</TextView>
         <VATextInput
           inputType="none"
-          value={waygate.errorMsgTitle}
+          value={errorMsgTitleOverride}
           onChange={(val) => {
             setErrorMsgTitleOverride(val)
           }}
@@ -96,7 +96,7 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
         <TextView variant="MobileBodyBold">errorMsgBody</TextView>
         <VATextInput
           inputType="none"
-          value={waygate.errorMsgBody}
+          value={errorMsgBodyOverride}
           onChange={(val) => {
             setErrorMsgBodyOverride(val)
           }}
