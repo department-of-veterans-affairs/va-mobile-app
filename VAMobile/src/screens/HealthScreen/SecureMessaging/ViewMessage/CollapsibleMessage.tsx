@@ -10,7 +10,8 @@ import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'sto
 import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useAppDispatch, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { getLinkifiedText } from 'utils/secureMessaging'
+import { useAppDispatch, useExternalLink, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
@@ -27,6 +28,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
+  const launchLink = useExternalLink()
   const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, hasAttachments, attachments, senderName, sentDate, body } = message
@@ -52,13 +54,19 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     dispatch(downloadFileAttachment(file, key))
   }
 
+  const getBody = (): ReactNode => {
+    /** this does preserve newline characters just not spaces, TODO:change the mobile body link text views to be clickable and launch the right things */
+    if (body) {
+      return getLinkifiedText(body, launchLink)
+    }
+    return <></>
+  }
+
   const getExpandedContent = (): ReactNode => {
     return (
       <Box>
         <Box mt={condensedMarginBetween} accessible={true}>
-          <TextView variant="MobileBody" selectable={true}>
-            {body}
-          </TextView>
+          {getBody()}
           {loadingAttachments && !attachments?.length && attachmentBoolean && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
               <LoadingComponent justTheSpinnerIcon={true} />

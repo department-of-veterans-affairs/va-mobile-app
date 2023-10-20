@@ -3,10 +3,14 @@ import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-pick
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { TFunction } from 'i18next'
 import DocumentPicker from 'react-native-document-picker'
+import React, { ReactNode } from 'react'
 import _ from 'underscore'
 
+import { Box, InlineTextWithIconsProps, MessageListItemObj, PickerItem, TextView, VAIconProps } from 'components'
 import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
+import { EventParams, logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
 import { Events } from 'constants/analytics'
 import {
   FolderNameTypeConstants,
@@ -16,11 +20,10 @@ import {
   READ,
   TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
-import { InlineTextWithIconsProps, MessageListItemObj, PickerItem, VAIconProps } from 'components'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
-import { getFormattedMessageTime, stringToTitleCase } from 'utils/formattingUtils'
+import { getFormattedMessageTime, getNumberAccessibilityLabelFromString, getNumbersFromString, stringToTitleCase } from 'utils/formattingUtils'
 import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
 import theme from 'styles/themes/standardTheme'
 
 const MAX_SUBJECT_LENGTH = 50
@@ -418,4 +421,135 @@ export const saveDraftWithAttachmentAlert = (
   } else {
     dispatchSaveDraft()
   }
+}
+
+export const getLinkifiedText = (body: string, launchExternalLink: (url: string, eventParams?: EventParams | undefined) => void): ReactNode => {
+  const textReconstructedBody: Array<ReactNode> = []
+  const bodySplit = body.split(' ')
+  let dontAddNextString = false
+  _.forEach(bodySplit, (text, index) => {
+    if (dontAddNextString) {
+      //if previous entry was a phone number with xxx xxx xxxx format need to not add xxxx again
+      dontAddNextString = false
+      return
+    }
+
+    if (index !== 0 && index !== bodySplit.length - 1) {
+      //phone number with spaces xxx xxx xxxx format
+      const previousText = bodySplit[index - 1]
+      const nextText = bodySplit[index + 1]
+      if (
+        previousText.length === 3 &&
+        text.length === 3 &&
+        nextText.length === 4 &&
+        PHONE_REGEX_EXP.test(previousText) &&
+        PHONE_REGEX_EXP.test(text) &&
+        PHONE_REGEX_EXP.test(nextText)
+      ) {
+        textReconstructedBody.pop()
+        textReconstructedBody.pop()
+        textReconstructedBody.push(
+          <TouchableWithoutFeedback
+            onPress={() => {
+              launchExternalLink('tel:' + previousText + text + nextText)
+            }}
+            accessibilityRole="link"
+            accessible={true}
+            accessibilityLabel={getNumberAccessibilityLabelFromString(previousText + text + nextText)}>
+            <TextView variant="MobileBodyLink">{previousText + ' ' + text + ' ' + nextText}</TextView>
+          </TouchableWithoutFeedback>,
+        )
+        textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+        dontAddNextString = true
+        return
+      }
+    }
+
+    const emailMatch = EMAIL_REGEX_EXP.exec(text)
+    const mailToMatch = MAIL_TO_REGEX_EXP.exec(text)
+    const phoneMatch = PHONE_REGEX_EXP.exec(text)
+    const urlMatch = URL_REGEX_EXP.exec(text)
+    const url2Match = URL2_REGEX_EXP.exec(text)
+    if (emailMatch) {
+      //matches <email address> only
+      textReconstructedBody.push(
+        <TouchableWithoutFeedback
+          onPress={() => {
+            launchExternalLink('mailto:' + text)
+          }}
+          accessibilityRole="link"
+          accessible={true}
+          accessibilityLabel={text}>
+          <TextView variant="MobileBodyLink">{text}</TextView>
+        </TouchableWithoutFeedback>,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+    } else if (mailToMatch) {
+      // matches mailto:<email address>
+      textReconstructedBody.push(
+        <TouchableWithoutFeedback
+          onPress={() => {
+            launchExternalLink(text)
+          }}
+          accessibilityRole="link"
+          accessible={true}
+          accessibilityLabel={text}>
+          <TextView variant="MobileBodyLink">{text}</TextView>
+        </TouchableWithoutFeedback>,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+    } else if (phoneMatch) {
+      // matches 8006982411 800-698-2411 1-800-698-2411 (800)698-2411 (800)-698-2411 +8006982411 +18006982411
+      textReconstructedBody.push(
+        <TouchableWithoutFeedback
+          onPress={() => {
+            launchExternalLink('tel:' + getNumbersFromString(text))
+          }}
+          accessibilityRole="link"
+          accessible={true}
+          accessibilityLabel={getNumberAccessibilityLabelFromString(getNumbersFromString(text))}>
+          <TextView variant="MobileBodyLink">{text}</TextView>
+        </TouchableWithoutFeedback>,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+    } else if (urlMatch) {
+      // matches any https, http url
+      textReconstructedBody.push(<TextView variant="MobileBody">{'\n'}</TextView>)
+      textReconstructedBody.push(
+        <TouchableWithoutFeedback
+          onPress={() => {
+            launchExternalLink(text)
+          }}
+          accessibilityRole="link"
+          accessible={true}
+          accessibilityLabel={text}>
+          <TextView variant="MobileBodyLink">{text}</TextView>
+        </TouchableWithoutFeedback>,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+    } else if (url2Match) {
+      // matches links like www.gooog.com or google.com (limit is 2 or 3 characters after the . to turn it into a link - may need to update this if we need to include other domains greater than 3 digits)
+      textReconstructedBody.push(
+        <TouchableWithoutFeedback
+          onPress={() => {
+            launchExternalLink('https://' + text)
+          }}
+          accessibilityRole="link"
+          accessible={true}
+          accessibilityLabel={text}>
+          <TextView variant="MobileBodyLink">{text}</TextView>
+        </TouchableWithoutFeedback>,
+      )
+      textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
+    } else {
+      textReconstructedBody.push(<TextView variant="MobileBody">{text + ' '}</TextView>)
+    }
+  })
+  return (
+    <Box>
+      <TextView selectable={true} paragraphSpacing={true}>
+        {textReconstructedBody}
+      </TextView>
+    </Box>
+  )
 }
