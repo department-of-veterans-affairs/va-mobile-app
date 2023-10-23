@@ -57,7 +57,7 @@ describe('Appeals', () => {
     await expect(element(by.text(AppealsIdConstants.APPEAL_VISIT_VA_TEXT))).toExist()
   })
 
-  /*it('should tap on issues and verify the issues page design', async () => {
+  it('should tap on issues and verify the issues page design', async () => {
     await element(by.text(AppealsIdConstants.ISSUES_TAB_TEXT)).tap()
     await expect(element(by.text(AppealsIdConstants.APPEAL_TYPE_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_DETAILS_TEXT))).toExist()
@@ -85,7 +85,7 @@ describe('Appeals', () => {
     await expect(element(by.id('Your appeal was sent to the Board of Veterans\' Appeals On November 22, 2011'))).toExist()
   })
 
-  it('should scroll to the bottom of the appeals screen', async () => {
+  /*it('should scroll to the bottom of the appeals screen', async () => {
     await element(by.id(AppealsIdConstants.APPEALS_DETAILS_ID)).scrollTo('bottom')
   })
 
