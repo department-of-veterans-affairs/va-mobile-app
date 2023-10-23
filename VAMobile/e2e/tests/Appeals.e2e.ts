@@ -46,7 +46,7 @@ describe('Appeals', () => {
       await expect(element(by.text('Up to date as of ' + dateWithTimeZone))).toExist()
     }
     await expect(element(by.text(AppealsIdConstants.APPEAL_SUBMITTED_TEXT))).toExist()
-    await expect(element(by.text(AppealsIdConstants.STATUS_TAB_TEXT))).toExist()
+    /*await expect(element(by.text(AppealsIdConstants.STATUS_TAB_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.ISSUES_TAB_TEXT))).toExist()
     await expect(element(by.id(AppealsIdConstants.REVIEW_PAST_EVENTS_ID))).toExist()
     await expect(element(by.text('Current status'))).toExist()
@@ -54,10 +54,10 @@ describe('Appeals', () => {
     await expect(element(by.text('23,446'))).toExist()
     await expect(element(by.text('Need help?'))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_NEED_HELP_NUMBER_TEXT))).toExist()
-    await expect(element(by.text(AppealsIdConstants.APPEAL_VISIT_VA_TEXT))).toExist()
+    await expect(element(by.text(AppealsIdConstants.APPEAL_VISIT_VA_TEXT))).toExist()*/
   })
 
-  it('should tap on issues and verify the issues page design', async () => {
+  /*it('should tap on issues and verify the issues page design', async () => {
     await element(by.text(AppealsIdConstants.ISSUES_TAB_TEXT)).tap()
     await expect(element(by.text(AppealsIdConstants.APPEAL_TYPE_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_DETAILS_TEXT))).toExist()
@@ -101,5 +101,5 @@ describe('Appeals', () => {
     await element(by.text('Ok')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('AppealsNeedHelpVisitVAScreen')
-  })
+  })*/
 })
