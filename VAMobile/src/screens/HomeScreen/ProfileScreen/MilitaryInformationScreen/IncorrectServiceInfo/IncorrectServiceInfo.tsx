@@ -1,12 +1,10 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView } from 'components'
-import { HiddenTitle } from 'styles/common'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp } from 'utils/accessibility'
 import { a11yLabelID } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
@@ -18,19 +16,9 @@ type IncorrectServiceInfoScreenProps = StackScreenProps<HomeStackParamList, 'Inc
  *
  * Returns incorrectServiceInfoScreen component
  */
-const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation }) => {
+const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => (
-        <HiddenTitle accessibilityLabel={t('militaryInformation.incorrectServiceInfo.header')} accessibilityRole="header">
-          {t('militaryInformation.incorrectServiceInfo.header')}
-        </HiddenTitle>
-      ),
-    })
-  })
 
   return (
     <LargePanel title={t('profile.help.title')} rightButtonText={t('close')} testID="IncorrectServiceTestID">
@@ -57,7 +45,6 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
           a11yLabel={a11yLabelID(t('8005389552'))}
           numberOrUrlLink={t('8005389552')}
           linkType={LinkTypeOptionsConstants.call}
-          {...a11yHintProp(t('militaryInformation.incorrectServiceInfo.DMDCNumber.a11yHint'))}
         />
       </Box>
     </LargePanel>

@@ -315,7 +315,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
               label={t('fileUpload.submit')}
               testID={t('fileUpload.submit')}
               buttonType={ButtonTypesConstants.buttonPrimary}
-              a11yHint={t('fileUpload.uploadA11yHint')}
             />
           </Box>
         </Box>

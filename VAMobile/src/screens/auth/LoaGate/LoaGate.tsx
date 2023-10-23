@@ -38,7 +38,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
         <TextView paragraphSpacing={true} {...bodyTextProps}>
           {t('loaGate.p2')}
         </TextView>
-        <CollapsibleView text={t('loaGate.expandMsg')} showInTextArea={false} a11yHint={t('loaGate.expandMsg.a11yHint')}>
+        <CollapsibleView text={t('loaGate.expandMsg')} showInTextArea={false}>
           <TextView paragraphSpacing={true} {...bodyTextProps}>
             {t('loaGate.readMore.p1')}
           </TextView>
@@ -60,13 +60,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
           </Box>
         </CollapsibleView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-          <VAButton
-            onPress={startAuth}
-            label={t('continueToSignin')}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-            a11yHint={t('continueToSignin.a11yHint')}
-            testID={t('continueToSignin')}
-          />
+          <VAButton onPress={startAuth} label={t('continueToSignin')} buttonType={ButtonTypesConstants.buttonPrimary} testID={t('continueToSignin')} />
         </Box>
       </Box>
     </FullScreenSubtask>
