@@ -8,8 +8,8 @@ on:
   pull_request:
   push:
     paths-ignore:
-      - 'VAMobile/documentation/design'
-      - 'VAMobile/documentation/docs'
+      - 'VAMobile/documentation/design/**'
+      - 'VAMobile/documentation/docs/**'
     branches:
       - main
       - develop
