@@ -6,10 +6,10 @@ name: '[Code Quality] Code Checks'
 
 on:
   pull_request:
-  push:
     paths-ignore:
       - 'documentation/design/**'
       - 'documentation/docs/**'
+  push:
     branches:
       - main
       - develop
