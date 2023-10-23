@@ -15,7 +15,7 @@ As more clients are added to the system, more tests will be added to the workflo
 
 Automated tests will be able to check each instance of the component, so it is also important to manually test component integrations where appropriate.
 
-### Manually
+### Manually?
 
 There are a couple ways to manually check if a component works inside an app environment. The first is to use [local dependency linking through yarn commands](https://classic.yarnpkg.com/lang/en/docs/cli/link/). This creates a symlink to the local component from the app. There are some [Metro config changes that need to happen for this to work](https://github.com/facebook/metro/issues/1) and support is a little iffy at the moment, but it's certainly an option, although not highly recommended at this point.
 
