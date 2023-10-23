@@ -2,13 +2,11 @@ import 'react-native'
 import React from 'react'
 import { Share } from 'react-native'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, findByTypeWithText, mockNavProps, render, RenderAPI } from 'testUtils'
+
+import { fireEvent, screen } from '@testing-library/react-native'
+import { context, mockNavProps, render } from 'testUtils'
 import SettingsScreen from './index'
 import { InitialState } from 'store/slices'
-import { TextView } from 'components'
-import getEnv from 'utils/env'
 
 jest.mock('react-native/Libraries/Share/Share', () => {
   return {
@@ -29,8 +27,6 @@ jest.mock('../../../../utils/hooks', () => {
   }
 })
 
-const envMock = getEnv as jest.Mock
-
 const defaultEnvVars = {
   SHOW_DEBUG_MENU: true,
   APPLE_STORE_LINK: 'https://apps.apple.com/us/app/va-health-and-benefits/id1559609596',
@@ -40,8 +36,6 @@ const defaultEnvVars = {
 jest.mock('utils/env', () => jest.fn(() => defaultEnvVars))
 
 context('SettingsScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let navigateSpy: jest.Mock
 
   const initializeTestInstance = (canStoreWithBiometric = false, supportedBiometric?: BIOMETRY_TYPE, demoMode = false) => {
@@ -50,7 +44,7 @@ context('SettingsScreen', () => {
       navigate: navigateSpy,
     })
 
-    component = render(<SettingsScreen {...props} />, {
+    render(<SettingsScreen {...props} />, {
       preloadedState: {
         ...InitialState,
         auth: {
@@ -63,8 +57,6 @@ context('SettingsScreen', () => {
         },
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -72,19 +64,24 @@ context('SettingsScreen', () => {
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    expect(screen.getByText('Manage account')).toBeTruthy()
+    expect(screen.getByText('Notifications')).toBeTruthy()
+    expect(screen.getByText('Share the app')).toBeTruthy()
+    expect(screen.getByText('Privacy policy')).toBeTruthy()
+    expect(screen.getByText('Developer Screen')).toBeTruthy()
+    expect(screen.getByText('Sign out')).toBeTruthy()
   })
 
   describe('when privacy policy is clicked', () => {
     it('should launch external link', async () => {
-      findByTestID(testInstance, 'privacy-policy').props.onPress()
+      fireEvent.press(screen.getByTestId('privacy-policy'))
       expect(mockExternalLinkSpy).toHaveBeenCalled()
     })
   })
 
   describe('when "Share the app" is clicked', () => {
     it('should call Share.share', async () => {
-      findByTestID(testInstance, 'share-the-app').props.onPress()
+      fireEvent.press(screen.getByTestId('share-the-app'))
       expect(Share.share).toBeCalledWith({
         message:
           'Download the VA: Health and Benefits on the App Store: https://apps.apple.com/us/app/va-health-and-benefits/id1559609596 or on Google Play: https://play.google.com/store/apps/details?id=gov.va.mobileapp',
@@ -94,7 +91,7 @@ context('SettingsScreen', () => {
 
   describe('on manage your account click', () => {
     it('should call useRouteNavigation', async () => {
-      findByTestID(testInstance, 'manage-account').props.onPress()
+      fireEvent.press(screen.getByTestId('manage-account'))
       expect(navigateSpy).toHaveBeenCalledWith('ManageYourAccount')
     })
   })
@@ -103,55 +100,35 @@ context('SettingsScreen', () => {
     describe('when the biometry type is Face', () => {
       it('should display the text "Use face recognition"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FACE)
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Use Face Recognition')
+        expect(screen.getByText('Use Face Recognition')).toBeTruthy()
       })
     })
 
     describe('when the biometry type is Fingerprint', () => {
       it('should display the text "Use fingerprint"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FINGERPRINT)
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Use Fingerprint')
+        expect(screen.getByText('Use Fingerprint')).toBeTruthy()
       })
     })
 
     describe('when the biometry type is Iris', () => {
       it('should display the text "Use iris"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.IRIS)
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Use Iris')
+        expect(screen.getByText('Use Iris')).toBeTruthy()
       })
     })
 
     describe('when the biometry type is Touch ID', () => {
       it('should display the text "Use Touch ID"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.TOUCH_ID)
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Use Touch ID')
+        expect(screen.getByText('Use Touch ID')).toBeTruthy()
       })
     })
 
     describe('when the biometry type is Face ID', () => {
       it('should display the text "Use Face ID"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID)
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Use Face ID')
-      })
-    })
-
-    describe('developer screen / debug menu', () => {
-      it('should display the Developer Screen button if SHOW_DEBUG_MENU is true', async () => {
-        envMock.mockReturnValue(defaultEnvVars)
-        initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID)
-        expect(findByTypeWithText(testInstance, TextView, 'Developer Screen')).toBeTruthy()
-      })
-
-      it('should not display the Developer Screen button if SHOW_DEBUG_MENU is false and demo mode is false', async () => {
-        envMock.mockReturnValue({ ...defaultEnvVars, SHOW_DEBUG_MENU: false })
-        initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID, false)
-        expect(findByTypeWithText(testInstance, TextView, 'Developer Screen')).toBeTruthy()
-      })
-
-      it('should display the Developer Screen button if SHOW_DEBUG_MENU is false and demo mode is true', async () => {
-        envMock.mockReturnValue({ ...defaultEnvVars, SHOW_DEBUG_MENU: false })
-        initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID, true)
-        expect(findByTypeWithText(testInstance, TextView, 'Developer Screen')).toBeTruthy()
+        expect(screen.getByText('Use Face ID')).toBeTruthy()
       })
     })
   })

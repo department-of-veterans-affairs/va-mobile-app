@@ -1,26 +1,18 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { act } from 'react-test-renderer'
-import { context, mockNavProps, render } from 'testUtils'
 
+import { screen } from '@testing-library/react-native'
+import { context, mockNavProps, render } from 'testUtils'
 import ManageYourAccount from './ManageYourAccount'
-import { InitialState } from 'store/slices'
 
 context('ManageYourAccount', () => {
-  let component: any
-
   beforeEach(() => {
     const props = mockNavProps(undefined, { setOptions: jest.fn() })
-
-    component = render(<ManageYourAccount {...props} />, {
-      preloadedState: {
-        ...InitialState,
-      },
-    })
+    render(<ManageYourAccount {...props} />)
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    expect(screen.getByText('Manage account')).toBeTruthy()
+    expect(screen.getByText('To confirm or update your sign-in email, go to the website where you manage your account information.')).toBeTruthy()
   })
 })
