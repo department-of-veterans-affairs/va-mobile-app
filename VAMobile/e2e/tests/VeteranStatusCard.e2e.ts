@@ -10,7 +10,6 @@ export const VeteranStatusCardConstants = {
   VETERAN_STATUS_DISABILITY_RATING_TEXT: '100% service connected',
   VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT: 'United States Army',
   VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_1_TEXT: 'July 13, 1970 – August 31, 1998',
-  VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_2_TEXT: 'United States Coast Guard',
   VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT: 'September 01, 1998 – January 01, 2000',
   VETERAN_STATUS_DATE_OF_BIRTH_TEXT: 'January 01, 1950',
   VETERAN_STATUS_DISCLAIMER_TEXT: 'You can use this Veteran status to prove you served in the United States Uniformed Services. This status doesn\'t entitle you to any VA benefits.',
@@ -54,13 +53,13 @@ export async function tapPhoneAndTTYLinks() {
       await element(by.text('Dismiss')).tap()
       await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT)).tap()
     } catch (e) {} 
-    await setTimeout(1000)
+    await setTimeout(7000)
     await device.takeScreenshot('VeteranStatusDOBorDisabilityErrorTTY')
     await device.launchApp({ newInstance: false })
 
     await waitFor(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT))).toBeVisible().whileElement(by.id('veteranStatusTestID')).scroll(200, 'down')
     await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT)).tap()
-    await setTimeout(1000)
+    await setTimeout(7000)
     await device.takeScreenshot('VeteranStatusPeriodOfServiceErrorPhoneNumber')
     await device.launchApp({ newInstance: false })
   })
@@ -86,13 +85,13 @@ describe('Veteran Status Card', () => {
   it('should verify the period of service matches the period of service in the app', async () => {
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT))).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_1_TEXT))).toExist()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_2_TEXT)).atIndex(1)).toExist()
+    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_MILITARY_BRANCH_TEXT)).atIndex(1)).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT))).toExist()
     await element(by.text('Close')).tap()
     await openMilitaryInformation()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT))).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_1_TEXT))).toExist()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_2_TEXT))).toExist()
+    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_MILITARY_BRANCH_TEXT))).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT))).toExist()
     await element(by.text('Profile')).tap()
   })
