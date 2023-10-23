@@ -85,7 +85,7 @@ describe('Appeals', () => {
     await expect(element(by.id('Your appeal was sent to the Board of Veterans\' Appeals On November 22, 2011'))).toExist()
   })
 
-  /*it('should scroll to the bottom of the appeals screen', async () => {
+  it('should scroll to the bottom of the appeals screen', async () => {
     await element(by.id(AppealsIdConstants.APPEALS_DETAILS_ID)).scrollTo('bottom')
   })
 
@@ -101,5 +101,5 @@ describe('Appeals', () => {
     await element(by.text('Ok')).tap()
     await setTimeout(5000)
     await device.takeScreenshot('AppealsNeedHelpVisitVAScreen')
-  })*/
+  })
 })
