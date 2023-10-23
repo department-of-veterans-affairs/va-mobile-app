@@ -141,7 +141,7 @@ export const filterAndSortPrescriptions =
         break
       case PrescriptionSortOptionConstants.REFILL_DATE:
         sortedList = sortBy(filteredList, (a) => {
-          return new Date(a.attributes.refillDate || '')
+          return new Date(a.attributes.refillDate || 0)
         })
         break
     }
