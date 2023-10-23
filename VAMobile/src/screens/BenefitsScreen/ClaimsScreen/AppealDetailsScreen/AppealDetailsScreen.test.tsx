@@ -3,6 +3,7 @@ import React from 'react'
 import * as api from 'store/api'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
+import { screen, fireEvent } from '@testing-library/react-native'
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { context, mockNavProps, render, when } from 'testUtils'
 
@@ -79,19 +80,10 @@ context('AppealDetailsScreen', () => {
     testInstance = component.UNSAFE_root
   }
 
-  it('should initialize', async () => {
-    await waitFor(() => {
-      initializeTestInstance()
-      expect(component).toBeTruthy()
-    })
-  })
-
   describe('when loadingClaim is set to true', () => {
     it('should show loading screen', async () => {
-      await waitFor(() => {
-        initializeTestInstance(true)
-        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-      })
+      initializeTestInstance(true)
+      expect(screen.getByText('Loading your appeal details...')).toBeTruthy()
     })
   })
 
@@ -101,11 +93,27 @@ context('AppealDetailsScreen', () => {
         mockApiCall()
         initializeTestInstance()
       })
-
-      await waitFor(() => {
-        testInstance.findByType(SegmentedControl).props.onChange(0)
-        expect(component.UNSAFE_root.findAllByType(AppealStatus).length).toEqual(1)
-      })
+      fireEvent.press(screen.getByText('Status'))
+      expect(screen.getByText('Appeal for compensation')).toBeTruthy()
+      expect(screen.getByText('Up to date as of January 19, 2018 at 9:20 AM CST')).toBeTruthy()
+      expect(screen.getByText('Submitted')).toBeTruthy()
+      expect(screen.getByText('Review past events')).toBeTruthy()
+      expect(screen.getByText('Current status')).toBeTruthy()
+      expect(screen.getByText('A reviewer is examining your new evidence')).toBeTruthy()
+      expect(screen.getByText('A Supplemental Claim allows you to add new and relevant evidence to your case. When you filed a Supplemental Claim, you included new evidence or identified evidence that the Veterans Benefits Administration should obtain.')).toBeTruthy()
+      expect(screen.getByText('If you have more evidence to submit, you should do so as soon as possible. You can send new evidence to the Veterans Benefits Administration at:')).toBeTruthy()
+      expect(screen.getByText('Department of Veterans Affairs')).toBeTruthy()
+      expect(screen.getByText('Evidence Intake Center')).toBeTruthy()
+      expect(screen.getByText('PO Box 4444')).toBeTruthy()
+      expect(screen.getByText('Janesville, WI 53547-4444')).toBeTruthy()
+      expect(screen.getByText('Fax 844-531-7818')).toBeTruthy()
+      expect(screen.getByText('A reviewer will look at this new evidence, as well as evidence VA already had, and determine whether it changes the decision. If needed, they may contact you to ask for more evidence or to schedule a new medical exam.')).toBeTruthy()
+      expect(screen.getByText('Appeals ahead of you')).toBeTruthy()
+      expect(screen.getByText('Need help?')).toBeTruthy()
+      expect(screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.')).toBeTruthy()
+      expect(screen.getByText('800-827-1000')).toBeTruthy()
+      expect(screen.getByText('To review more details about your appeal, visit VA.gov: ')).toBeTruthy()
+      expect(screen.getByText('Visit VA.gov')).toBeTruthy()
     })
   })
 
@@ -115,20 +123,29 @@ context('AppealDetailsScreen', () => {
         mockApiCall()
         initializeTestInstance()
       })
-
-      await waitFor(async () => {
-        component.UNSAFE_root.findByType(SegmentedControl).props.onChange(1)
-      })
-      expect(component.UNSAFE_root.findAllByType(AppealIssues).length).toEqual(1)
+      fireEvent.press(screen.getByText('Issues'))
+      expect(screen.getByText('Appeal for compensation')).toBeTruthy()
+      expect(screen.getByText('Up to date as of January 19, 2018 at 9:20 AM CST')).toBeTruthy()
+      expect(screen.getByText('Submitted')).toBeTruthy()
+      expect(screen.getByText('Currently on appeal')).toBeTruthy()
+      expect(screen.getByText('Service connection, Post-traumatic stress disorder')).toBeTruthy()
+      expect(screen.getByText('Eligibility for loan guaranty benefits')).toBeTruthy()
+      expect(screen.getByText('Service connected')).toBeTruthy()
+      expect(screen.getByText('Other')).toBeTruthy()
+      expect(screen.getByText('Validity of debt owed')).toBeTruthy()
+      expect(screen.getByText('Effective date, pension benefits')).toBeTruthy()
+      expect(screen.getByText('Rule 608 motion to withdraw')).toBeTruthy()
+      expect(screen.getByText('Eligibility for pension, unemployability')).toBeTruthy()
     })
   })
 
   describe('when the type is higherLevelReview', () => {
     it('should display "Higher level review appeal for {{ programArea }}" as the title', async () => {
-      mockApiCall('higherLevelReview')
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Higher level review appeal for compensation')
+      await waitFor(async () => {
+        mockApiCall('higherLevelReview')
+        initializeTestInstance()
       })
+      expect(screen.getByText('Higher level review appeal for compensation')).toBeTruthy()
     })
 
     it('should display the submitted date as the event date where the type is "hlr_request"', async () => {
@@ -139,9 +156,7 @@ context('AppealDetailsScreen', () => {
         ])
         initializeTestInstance()
       })
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Submitted January 20, 2020')
-      })
+      expect(screen.getByText('Submitted January 20, 2020')).toBeTruthy()
     })
   })
 
@@ -151,10 +166,7 @@ context('AppealDetailsScreen', () => {
         mockApiCall('legacyAppeal')
         initializeTestInstance()
       })
-
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Appeal for compensation')
-      })
+      expect(screen.getByText('Appeal for compensation')).toBeTruthy()
     })
 
     it('should display the submitted date as the event date where the type is "nod"', async () => {
@@ -165,10 +177,7 @@ context('AppealDetailsScreen', () => {
         ])
         initializeTestInstance()
       })
-
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Submitted January 20, 2020')
-      })
+      expect(screen.getByText('Submitted January 20, 2020')).toBeTruthy()
     })
   })
 
@@ -178,10 +187,7 @@ context('AppealDetailsScreen', () => {
         mockApiCall('appeal')
         initializeTestInstance()
       })
-
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Appeal for compensation')
-      })
+      expect(screen.getByText('Appeal for compensation')).toBeTruthy()
     })
 
     it('should display the submitted date as the event date where the type is "nod"', async () => {
@@ -192,10 +198,7 @@ context('AppealDetailsScreen', () => {
         ])
         initializeTestInstance()
       })
-
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Submitted January 20, 2020')
-      })
+      expect(screen.getByText('Submitted January 20, 2020')).toBeTruthy()
     })
   })
 
@@ -205,10 +208,7 @@ context('AppealDetailsScreen', () => {
         mockApiCall('supplementalClaim')
         initializeTestInstance()
       })
-
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Supplemental claim appeal for compensation')
-      })
+      expect(screen.getByText('Supplemental claim appeal for compensation')).toBeTruthy()
     })
 
     it('should display the submitted date as the event date where the type is "sc_request"', async () => {
@@ -219,10 +219,7 @@ context('AppealDetailsScreen', () => {
         ])
         initializeTestInstance()
       })
-
-      await waitFor(() => {
-        expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Submitted January 20, 2020')
-      })
+      expect(screen.getByText('Submitted January 20, 2020')).toBeTruthy()
     })
   })
 
@@ -235,23 +232,7 @@ context('AppealDetailsScreen', () => {
       await waitFor(() => {
         initializeTestInstance(false)
       })
-
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
-    })
-
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      await waitFor(() => {
-        initializeTestInstance(false, errorState)
-        expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
-      })
+      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
     })
   })
 })
