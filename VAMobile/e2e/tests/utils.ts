@@ -160,7 +160,7 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 			}				
 		}
 	
-		fs.writeFile('./src/store/api/demo/mocks/' + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
+		fs.writeFile(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
 			if (err) { return console.log(err) }
 		})
 	})
