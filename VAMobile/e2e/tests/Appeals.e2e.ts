@@ -19,7 +19,9 @@ export const AppealsIdConstants = {
 export async function getDateWithTimeZone(dateString: string) {
   var date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', {zone: 'America/Chicago'})
   var dateUTC = date.toLocal()
+  console.log(dateUTC)
   var dateTime = dateUTC.toLocaleString(Object.assign(DateTime.DATETIME_FULL, {day: '2-digit'}))
+  console.log('dateTime ' + dateTime)
   return dateTime
 }
 
