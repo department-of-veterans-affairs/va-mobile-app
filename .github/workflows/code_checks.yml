@@ -6,6 +6,9 @@ name: '[Code Quality] Code Checks'
 
 on:
   pull_request:
+    paths-ignore:
+      - 'VAMobile/documentation/design/**'
+      - 'VAMobile/documentation/docs/**'
   push:
     paths-ignore:
       - 'VAMobile/documentation/design/**'
