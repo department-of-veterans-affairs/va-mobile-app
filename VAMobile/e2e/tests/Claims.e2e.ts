@@ -147,7 +147,7 @@ describe('Claims Screen', () => {
   })
 
   it('should navigate back to the request <x> select a file screen', async () => {
-    if(device.getPlatform() == 'android') {
+    if(device.getPlatform() === 'android') {
       await element(by.text(ClaimsE2eIdConstants.CANCEL_TEXT)).tap()
     } else {
       await element(by.text(ClaimsE2eIdConstants.CANCEL_TEXT)).atIndex(1).tap()
@@ -165,7 +165,7 @@ describe('Claims Screen', () => {
   
   it('should select take or select photos and verify the options given', async () => {
     await element(by.id('takePhotosTestID')).scrollTo('bottom')
-    if(device.getPlatform() == 'android') {
+    if(device.getPlatform() === 'android') {
       await element(by.id(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).atIndex(0).tap()
     } else {
       await element(by.id(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).atIndex(1).tap()
@@ -175,7 +175,7 @@ describe('Claims Screen', () => {
   })
 
   it('should navigate back to the file request screen', async () => {
-    if(device.getPlatform() == 'android') {
+    if(device.getPlatform() === 'android') {
       await element(by.text(ClaimsE2eIdConstants.CANCEL_TEXT)).tap()
 
     } else {
