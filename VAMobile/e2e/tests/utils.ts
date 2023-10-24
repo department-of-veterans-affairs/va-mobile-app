@@ -54,15 +54,16 @@ export async function loginToDemoMode(skipOnboarding = true) {
 	await element(by.text('Dismiss')).tap()
   } catch (e) {} 
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(21)
-  if (DEMO_PASSWORD != undefined) {
-    await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
+
+  if (DEMO_PASSWORD !== undefined) {
+    await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).replaceText(DEMO_PASSWORD)
   }
   
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
   await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
-  if(skipOnboarding == true) {
+  if(skipOnboarding === true) {
     const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
 
     if (ifCarouselSkipBtnExist) {
@@ -142,12 +143,12 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 		var mockDataVariable
 		var mockDataKeyValue
 		for(var x=0; x<jsonProperty.length; x++) {
-			if (x == 0) {
+			if (x === 0) {
 				mockDataVariable = jsonParsed[jsonProperty[x]]
-			} else if (x == jsonProperty.length - 1) {
+			} else if (x === jsonProperty.length - 1) {
 				mockDataVariable[jsonProperty[x]] = newJsonValue
 			} else {
-				if (jsonProperty[x].constructor == Object) {
+				if (jsonProperty[x].constructor === Object) {
 					var key = String(Object.keys(jsonProperty[x]))
 					var value = jsonProperty[x][key]
 					mockDataKeyValue = mockDataVariable[key]

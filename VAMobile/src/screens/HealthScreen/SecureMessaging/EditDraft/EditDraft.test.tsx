@@ -3,8 +3,6 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
-
 import { context, mockNavProps, render } from 'testUtils'
 import EditDraft from './EditDraft'
 import { initializeErrorsByScreenID, InitialState, updateSecureMessagingTab } from 'store/slices'
@@ -145,7 +143,6 @@ const mockMessages: SecureMessagingMessageMap = {
 context('EditDraft', () => {
   let props: any
   let goBack: jest.Mock
-  let navHeaderSpy: any
   let navigateSpy: jest.Mock
 
   const initializeTestInstance = ({
@@ -168,11 +165,7 @@ context('EditDraft', () => {
         addListener: mockUseComposeCancelConfirmationSpy,
         navigate: navigateSpy,
         goBack,
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-          }
-        },
+        setOptions: jest.fn(),
       },
       { params: { attachmentFileToAdd: {}, messageID } },
     )
@@ -270,7 +263,7 @@ context('EditDraft', () => {
   describe('when pressing the back button', () => {
     it('should ask for confirmation if any field filled in', async () => {
       fireEvent.changeText(screen.getByTestId('messageText'), 'Random String')
-      navHeaderSpy.back.props.onPress()
+      fireEvent.press(screen.getByText('Cancel'))
       expect(goBack).not.toHaveBeenCalled()
       expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
     })

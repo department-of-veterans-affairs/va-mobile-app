@@ -74,7 +74,7 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal, claimId, claimType, cla
         </TextView>
       </Box>
       <Box>
-        <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('claimDetails.VANumberA11yHint'))} testID="ClaimsVANumberTestID" />
+        <ClickForActionLink {...clickToCallProps} testID="ClaimsVANumberTestID" />
       </Box>
       <AppealData />
     </TextArea>

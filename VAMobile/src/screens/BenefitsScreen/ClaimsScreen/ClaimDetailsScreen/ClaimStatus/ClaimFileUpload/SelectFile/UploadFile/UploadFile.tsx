@@ -188,7 +188,6 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
             label={t('fileUpload.submit')}
             testID={t('fileUpload.submit')}
             buttonType={ButtonTypesConstants.buttonPrimary}
-            a11yHint={t('fileUpload.uploadFileA11yHint')}
           />
         </Box>
       </Box>

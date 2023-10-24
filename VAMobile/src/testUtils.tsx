@@ -28,7 +28,6 @@ import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
 import vaccineReducer from 'store/slices/vaccineSlice'
 import paymentsReducer from 'store/slices/paymentsSlice'
-import requestAppoitnmentReducer from 'store/slices/requestAppointmentSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import { InitialState } from 'store/slices'
@@ -146,7 +145,6 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       snackBar: snackbarReducer,
       vaccine: vaccineReducer,
       payments: paymentsReducer,
-      requestAppointment: requestAppoitnmentReducer,
       prescriptions: prescriptionsReducer,
       settings: settingsReducer,
     },

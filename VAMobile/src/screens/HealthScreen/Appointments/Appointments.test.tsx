@@ -7,7 +7,6 @@ import * as api from 'store/api'
 import Appointments from './Appointments'
 import { InitialState } from 'store/slices'
 import { AppointmentsErrorServiceTypesConstants } from 'store/api/types'
-import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
   let original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
@@ -60,12 +59,7 @@ jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
 jest.mock('utils/remoteConfig')
 
 context('AppointmentsScreen', () => {
-  const initializeTestInstance = (
-    requestsEnabled: boolean = false,
-  ) => {
-
-    let mockFeatureEnabled = featureEnabled as jest.Mock
-    when(mockFeatureEnabled).calledWith('appointmentRequests').mockReturnValue(requestsEnabled)
+  const initializeTestInstance = () => {
 
     render(<Appointments {...mockNavProps()} />, {
       preloadedState: {
@@ -125,39 +119,7 @@ context('AppointmentsScreen', () => {
           .mockRejectedValue({ networkError: true } as api.APIError)
         initializeTestInstance()
       })
-      expect(screen.getByText("We're sorry. Something went wrong on our end. Please refresh this screen or try again later.")).toBeTruthy()
-    })
-  })
-
-  describe('Appointment Requests', () => {
-    it('does not display prescriptions button if feature toggle disabled', async () => {
-      await waitFor(() => {
-        when(api.get as jest.Mock)
-          .calledWith(`/v0/appointments`, expect.anything())
-          .mockResolvedValue({
-            data: [],
-            meta: {
-              errors: [],
-            },
-          })
-        initializeTestInstance()
-      })
-      expect(screen.queryByText('Request appointment')).toBeFalsy()
-    })
-
-    it('does not display prescriptions button if feature toggle enabled', async () => {
-      await waitFor(() => {
-        when(api.get as jest.Mock)
-          .calledWith(`/v0/appointments`, expect.anything())
-          .mockResolvedValue({
-            data: [],
-            meta: {
-              errors: [],
-            },
-          })
-        initializeTestInstance( true )
-      })
-      expect(screen.getByText('Request appointment')).toBeTruthy()
+      expect(screen.getByText("We're having trouble getting your appointments. Refresh this screen or try again later.")).toBeTruthy()
     })
   })
 })
