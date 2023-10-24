@@ -25,7 +25,6 @@ import ProfileScreen from './ProfileScreen/ProfileScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
 import SettingsScreen from './ProfileScreen/SettingsScreen'
-import WaygateManagementScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/WaygateManagementScreen'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -142,7 +141,6 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
       <HomeScreenStack.Screen name="NotificationsSettings" component={NotificationsSettingsScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="RemoteConfig" component={RemoteConfigScreen} options={{ headerShown: false }} />
-      <HomeScreenStack.Screen name="WaygateManagement" component={WaygateManagementScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="Sandbox" component={SandboxScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />
     </HomeScreenStack.Navigator>

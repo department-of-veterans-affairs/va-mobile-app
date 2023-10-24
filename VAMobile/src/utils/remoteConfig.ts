@@ -11,6 +11,7 @@ const RC_FETCH_TIMEOUT = 10000 // 10 sec
 const RC_CACHE_TIME = 30 * 60 * 1000 // 30 min
 const REMOTE_CONFIG_OVERRIDES_KEY = '@store_remote_config_overrides'
 const WAYGATE_OVERRIDES_KEY = '@store_waygate_overrides'
+export let overrideRemote = false
 
 /* Valid feature toggles.  Should match firebase */
 export type FeatureToggleType =
@@ -40,7 +41,7 @@ type FeatureToggleValues = {
   patientCheckInWaygate: boolean
 }
 
-export const productionDefaults: FeatureToggleValues = {
+export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
   prescriptions: true,
   SIS: true,
@@ -54,7 +55,7 @@ export const productionDefaults: FeatureToggleValues = {
   patientCheckInWaygate: true,
 }
 
-export let devConfig: FeatureToggleValues = productionDefaults
+export let devConfig: FeatureToggleValues = defaults
 
 export type Waygate = {
   // true means waygate is 'open' so no waygate display, false will display waygate.
@@ -107,7 +108,6 @@ type WaygateToggleValues = {
   WG_EditPhoneNumberScreen: Waygate
   WG_EditEmailScreen: Waygate
   WG_MilitaryInformationScreen: Waygate
-  // TODO: Should we add 'missing information' type blockers? NoMilitaryInfoScreen?
   WG_IncorrectServiceInfoScreen: Waygate
   WG_SettingsScreen: Waygate
   WG_ManageYourAccountScreen: Waygate
@@ -289,22 +289,21 @@ export const activateRemoteConfig = async (): Promise<void> => {
     // Sets timeout for remote config fetch
     await remoteConfig().setConfigSettings({ fetchTimeMillis: RC_FETCH_TIMEOUT })
     // Sets defaults for remote config for use prior to fetching and activating
-    await remoteConfig().setDefaults(productionDefaults)
-    console.debug('Remote Config: Defaults set', productionDefaults)
+    await remoteConfig().setDefaults(defaults)
+    console.debug('Remote Config: Defaults set', defaults)
 
     /**
      * If in staging or production, fetch and activate remote settings.  Otherwise,
      * we'll use the devConfig for local development.
      */
-    // if (fetchRemote) {
-    console.debug('Remote Config: Fetching and activating')
-    await remoteConfig().fetch(RC_CACHE_TIME)
-    await remoteConfig().activate()
-    console.debug('Remote Config: Activated config')
-    // }
+    if (fetchRemote) {
+      console.debug('Remote Config: Fetching and activating')
+      await remoteConfig().fetch(RC_CACHE_TIME)
+      await remoteConfig().activate()
+      console.debug('Remote Config: Activated config')
+    }
 
     await loadOverrides()
-    await loadWaygateOverrides()
   } catch (err) {
     logNonFatalErrorToFirebase(err, 'activateRemoteConfig: Firebase Remote Config Error')
     console.debug('activateRemoteConfig: Failed to activate remote config')
@@ -320,21 +319,17 @@ export const loadOverrides = async (): Promise<void> => {
   try {
     const overrides = await AsyncStorage.getItem(REMOTE_CONFIG_OVERRIDES_KEY)
     if (overrides) {
+      overrideRemote = true
       devConfig = JSON.parse(overrides) as FeatureToggleValues
+    }
+
+    const waygateOverrides = await AsyncStorage.getItem(WAYGATE_OVERRIDES_KEY)
+    if (waygateOverrides) {
+      overrideRemote = true
+      waygateConfig = JSON.parse(waygateOverrides) as WaygateToggleValues
     }
   } catch (err) {
     logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
-  }
-}
-
-export const loadWaygateOverrides = async (): Promise<void> => {
-  try {
-    const overrides = await AsyncStorage.getItem(WAYGATE_OVERRIDES_KEY)
-    if (overrides) {
-      waygateConfig = JSON.parse(overrides)
-    }
-  } catch (err) {
-    logNonFatalErrorToFirebase(err, 'loadWaygateOverrides: AsyncStorage error')
   }
 }
 
@@ -344,11 +339,29 @@ export const loadWaygateOverrides = async (): Promise<void> => {
  * we'll return the value of the key in devConfig, otherwise we return the remoteConfig value
  */
 export const featureEnabled = (feature: FeatureToggleType): boolean => {
-  return !fetchRemote ? devConfig[feature] : remoteConfig().getValue(feature)?.asBoolean()
+  return overrideRemote ? devConfig[feature] : remoteConfig().getValue(feature)?.asBoolean()
 }
 
 export const waygateEnabled = (feature: WaygateToggleType): Waygate => {
-  return !fetchRemote ? waygateConfig[feature] : (remoteConfig().getValue(feature) as unknown as Waygate)
+  if (overrideRemote) {
+    return waygateConfig[feature]
+  } else {
+    const waygate = remoteConfig().getValue(feature)?.asString()
+    console.log('waygateEnabled ' + feature + ': ' + waygate)
+    if (waygate) {
+      return JSON.parse(waygate) as Waygate
+    } else {
+      return {
+        enabled: true,
+        errorMsgTitle: undefined,
+        errorMsgBody: undefined,
+        appUpdateButton: false,
+        allowFunction: false,
+        denyAccess: false,
+      }
+    }
+  }
+  // let waygate = overrideRemote ? waygateConfig[feature] : (remoteConfig().getValue(feature)?.asString())
 }
 
 export const waygateNativeAlert = (feature: WaygateToggleType): boolean => {
@@ -366,15 +379,24 @@ export const waygateNativeAlert = (feature: WaygateToggleType): boolean => {
 }
 
 /**
- * Sets overrideRemote to true with the values passed. The app will use these overrides instead of fetched config or productionDefaults
+ * Sets overrideRemote to true with the values passed. The app will use these overrides instead of fetched config or defaults
  * NOTE: This should ONLY ever be invoked from within of our developer settings UI
  * @param config - An object of FeatureToggleValues type that contains the config we want to override our remote config with
  */
 export const setDebugConfig = async (config: FeatureToggleValues): Promise<void> => {
+  overrideRemote = true
   devConfig = config
 
   // Store overrides in AsyncStorage so they persist with app quits
   AsyncStorage.setItem(REMOTE_CONFIG_OVERRIDES_KEY, JSON.stringify(config))
+}
+
+export const setWaygateDebugConfig = async (config: WaygateToggleValues): Promise<void> => {
+  overrideRemote = true
+  waygateConfig = config
+
+  // Store overrides in AsyncStorage so they persist with app quits
+  AsyncStorage.setItem(WAYGATE_OVERRIDES_KEY, JSON.stringify(config))
 }
 
 /**
@@ -382,7 +404,7 @@ export const setDebugConfig = async (config: FeatureToggleValues): Promise<void>
  * devConfig. Otherwise we'll return the values from remoteConfig()
  */
 export const getFeatureToggles = (): FeatureToggleValues => {
-  if (!fetchRemote) {
+  if (overrideRemote) {
     return devConfig
   }
 
@@ -396,17 +418,16 @@ export const getFeatureToggles = (): FeatureToggleValues => {
 }
 
 export const getWaygateToggles = (): WaygateToggleValues => {
-  // if (!fetchRemote) {
-  return waygateConfig
-  // }
+  if (overrideRemote) {
+    return waygateConfig
+  }
 
-  // const toggles = waygateConfig
-  // Object.keys(remoteConfig().getAll()).forEach((key) => {
-  //   if (key.startsWith('WG')) {
-  //     toggles[key as WaygateToggleType] = JSON.parse(remoteConfig().getValue(key).asString()) as unknown as Waygate
-  //     console.log('waygates1: ' + JSON.parse(remoteConfig().getValue(key).asString()))
-  //     console.log('waygates2: ' + JSON.stringify(JSON.parse(remoteConfig().getValue(key).asString()), undefined, 2))
-  //   }
-  // })
-  // return toggles
+  //this just initializes the waygate list without having to first create them all in firebase.
+  const toggles = waygateConfig
+  Object.keys(remoteConfig().getAll()).forEach((key) => {
+    if (key.startsWith('WG')) {
+      toggles[key as WaygateToggleType] = JSON.parse(remoteConfig().getValue(key).asString()) as unknown as Waygate
+    }
+  })
+  return toggles
 }

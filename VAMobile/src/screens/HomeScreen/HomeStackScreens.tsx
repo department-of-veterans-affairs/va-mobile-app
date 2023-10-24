@@ -41,7 +41,6 @@ export type HomeStackParamList = WebviewStackParams & {
   Settings: undefined
   HapticsDemoScreen: undefined
   WaygateEditScreen: { waygateName: string; waygate: Waygate }
-  WaygateManagement: undefined
   WhatToKnow: undefined
 }
 
