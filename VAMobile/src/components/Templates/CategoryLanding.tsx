@@ -27,9 +27,11 @@ export type CategoryLandingProps = {
   headerButton?: headerButton
   /** Optional ScrollView props to pass through to VAScrollView if desired */
   scrollViewProps?: VAScrollViewProps
+  /** optional testID for scrollView */
+  testID?: string
 }
 
-export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps }) => {
+export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps, testID }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
@@ -97,7 +99,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <HeaderBanner {...headerProps} />
-      <VAScrollView scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
+      <VAScrollView testID={testID} scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
         <View onLayout={getTransitionHeaderHeight}>
           <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
           {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}

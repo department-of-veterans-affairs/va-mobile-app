@@ -69,7 +69,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   }, [dispatch, smNotInDowntime])
 
   return (
-    <CategoryLanding title={t('health.title')}>
+    <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
       <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('appointments')}
