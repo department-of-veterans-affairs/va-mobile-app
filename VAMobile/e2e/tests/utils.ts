@@ -21,6 +21,7 @@ export const CommonE2eIdConstants = {
   PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
   DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
+  HOME_TAB_BUTTON_TEXT: 'Home',
   PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
   LETTERS_ROW_TEXT: 'VA letters and documents',
   DISABILITY_RATING_ROW_TEXT: 'Disability rating',
@@ -131,12 +132,14 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
  */
 
 export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue: string | boolean) {
-			
-	fs.readFile('./src/store/api/demo/mocks/' + mockFileName, 'utf8', (error, data) => {
-		 if(error){
-			console.log(error);
-			return;
-		 }
+	
+  const mockDirectory = './src/store/api/demo/mocks/'
+  
+  fs.readFile(mockDirectory + mockFileName, 'utf8', (error, data) => {
+    if(error){
+      console.log(error);
+      return;
+    }
 
 		const jsonParsed = JSON.parse(data)
 		var mockDataVariable
@@ -158,7 +161,7 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 			}				
 		}
 	
-		fs.writeFile('./src/store/api/demo/mocks/' + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
+		fs.writeFile(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
 			if (err) { return console.log(err) }
 		})
 	})
