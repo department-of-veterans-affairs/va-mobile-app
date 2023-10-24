@@ -58,7 +58,7 @@ beforeAll(async () => {
 })
 
 describe('Messages Screen', () => { 
-	it('should match the Claims history page design', async () => {
+	it('should match the messages page design', async () => {
 		await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
 		await expect(element(by.text('Inbox (3)'))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
@@ -66,7 +66,7 @@ describe('Messages Screen', () => {
 		await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID))).toExist()	
 	})
 
-  it('should verify that the Claims inbox is scrollable', async () => {
+  it('should verify that the messages inbox is scrollable', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('bottom')
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_10_ID))).toBeVisible()
   })
@@ -171,7 +171,7 @@ describe('Messages Screen', () => {
 
   it('should tap keep editing and send the message', async () => {
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
-    await element(by.id(MessagesE2eIdConstants.REPLY_PAGE_TEST_ID)).scrollTo('bottom')
+    await element(by.id(MessagesE2eIdConstants.REPLY_PAGE_TEST_ID)).scroll(300, 'down', NaN, 0.8)
     await element(by.id(MessagesE2eIdConstants.SEND_BUTTON_ID)).tap()
     await expect(element(by.text('Message sent'))).toExist()
     await element(by.text('Dismiss')).tap()
@@ -208,7 +208,7 @@ describe('Messages Screen', () => {
   })
 
   it('should tap on the only use messages for non-urgent needs and verify the correct info is displayed', async () => {
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scrollTo('bottom')
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(300, 'down', NaN, 0.8)
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
     await expect(element(by.text('Only use messages for non-urgent needs')))
     await expect(element(by.text('Your care team may take up to 3 business days to reply.'))).toExist()
@@ -341,9 +341,15 @@ describe('Messages Screen', () => {
   })
 
   it('should navigate to the drafts folder and click the newest message', async () => {
+    await device.launchApp({ newInstance: true })
+    await loginToDemoMode()
+    await openHealth()
+    await openMessages()
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
+    await expect(element(by.text('Drafts (3)'))).toExist()
     await element(by.text('Drafts (3)')).tap()
-    await element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry')).tap()
+    await waitFor(element(by.text('Test: Test Inquiry'))).toBeVisible().whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scroll(300, 'down', NaN, 0.8)
+    await element(by.text('Test: Test Inquiry')).tap()
   })
 
   it('should enter some text into the draft message, tap cancel and verify the action sheet that appears', async () => {
@@ -365,11 +371,11 @@ describe('Messages Screen', () => {
   it('should tap cancel, then delete changes, and verify that the draft is still in the list', async () => {
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
     await element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_DELETE_TEXT)).tap()
-    await expect(element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry'))).toExist()
+    await expect(element(by.text('Test: Test Inquiry'))).toExist()
   })
 
-  it('should open the previous editing draft and verify that no changes are displayed', async () => {
-    await element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry')).tap()
+  it('should open the previous editing draft and verify that no changes are displayed', async () => {   
+    await element(by.text('Test: Test Inquiry')).tap()
     await expect(element(by.text('VA Flagship mobile applications interface 2_DAYT29'))).toExist()
     await expect(element(by.text('Test'))).toExist()
     await expect(element(by.text('Test Inquiry'))).toExist()
@@ -386,7 +392,7 @@ describe('Messages Screen', () => {
   })
 
   it('should open a draft message and verify it can be deleted from the more menu option', async () => {
-    await element(by.id('DRAFT - Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Test: Test Inquiry')).tap()
+    await element(by.text('Test: Test Inquiry')).tap()
     await element(by.text('More')).tap()
     await element(by.text('Delete')).tap()
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
