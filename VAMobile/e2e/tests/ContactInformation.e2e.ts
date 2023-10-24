@@ -35,11 +35,13 @@ export async function updateAddress() {
   await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('3101 N Fort Valley Rd')
   await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
   await element(by.id('EditAddressTestID')).scrollTo('bottom')
-  await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
+  await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).typeText('Flagstaff')
+  await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
   await element(by.id('stateTestID')).tap()
   await element(by.text('Arizona')).atIndex(0).tap()
   await element(by.text('Done')).tap()
-  await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).replaceText('86001')
+  await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).typeText('86001')
+  await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
 }
 
 export async function validateAddresses(addressID, addressType) {
