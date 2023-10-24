@@ -31,13 +31,7 @@ const IndividualMessageErrorComponent: FC = () => {
             <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
             {tryAgain && (
               <Box mt={standardMarginBetween} accessibilityRole="button">
-                <VAButton
-                  onPress={tryAgain}
-                  label={t('refresh')}
-                  buttonType={ButtonTypesConstants.buttonPrimary}
-                  testID={t('refresh')}
-                  a11yHint={t('errors.callHelpCenter.button.a11yHint')}
-                />
+                <VAButton onPress={tryAgain} label={t('refresh')} buttonType={ButtonTypesConstants.buttonPrimary} testID={t('refresh')} />
               </Box>
             )}
           </Box>

@@ -1,13 +1,10 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
-
+import { ReactTestInstance } from 'react-test-renderer'
+import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 import AppealStatus from './AppealStatus'
-import { UserDataProfile } from 'store/api/types'
 import { TextArea, TextView } from 'components'
-import { InitialState } from 'store/slices'
 
 context('AppealStatus', () => {
   let component: RenderAPI
@@ -32,15 +29,7 @@ context('AppealStatus', () => {
       isActiveAppeal,
     })
 
-    component = render(<AppealStatus {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        personalInformation: {
-          ...InitialState.personalInformation,
-          profile: {} as UserDataProfile,
-        },
-      },
-    })
+    component = render(<AppealStatus {...props} />)
 
     testInstance = component.UNSAFE_root
   }

@@ -6,7 +6,6 @@ import _ from 'underscore'
 
 import {
   AlertBox,
-  BackButton,
   Box,
   ButtonTypesConstants,
   CollapsibleView,
@@ -22,19 +21,12 @@ import {
   TextView,
   VAButton,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import {
-  CategoryTypeFields,
-  CategoryTypes,
-  ScreenIDTypesConstants,
-  SecureMessagingFormData,
-  SecureMessagingSystemFolderIdConstants,
-  SecureMessagingTabTypesConstants,
-} from 'store/api/types'
+import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { InteractionManager, Pressable, ScrollView } from 'react-native'
+import { MenuViewActionsType } from 'components/Menu'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import {
@@ -58,7 +50,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
-import MenuView, { MenuViewActionsType } from 'components/Menu'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
@@ -253,20 +244,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     },
   ]
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => (
-        <BackButton
-          onPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
-          canGoBack={props.canGoBack}
-          label={BackButtonLabelConstants.cancel}
-          showCarat={false}
-        />
-      ),
-      headerRight: () => (!noRecipientsReceived || isReplyDraft) && <MenuView actions={MenViewActions} />,
-    })
-  })
-
   /**
    * Intercept navigation action before leaving the screen, used the handle OS swipe/hardware back behavior
    */
@@ -289,7 +266,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
-      <FullScreenSubtask title={t('editDraft')} leftButtonText={t('cancel')} menuViewActions={MenViewActions}>
+      <FullScreenSubtask title={t('editDraft')} leftButtonText={t('cancel')} menuViewActions={MenViewActions} scrollViewRef={scrollViewRef}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -308,7 +285,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         leftButtonText={t('cancel')}
         onLeftButtonPress={() => {
           goToDrafts(false)
-        }}>
+        }}
+        scrollViewRef={scrollViewRef}>
         <LoadingComponent text={text} />
       </FullScreenSubtask>
     )
@@ -320,7 +298,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         leftButtonText={t('cancel')}
         onLeftButtonPress={() => {
           goToDrafts(false)
-        }}>
+        }}
+        scrollViewRef={scrollViewRef}>
         <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
       </FullScreenSubtask>
     )
@@ -419,7 +398,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {
                 label: t('secureMessaging.formMessage.addFiles'),
-                a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
                 onPress: onAddFiles,
               }
             : undefined,
@@ -443,7 +421,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
-    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+    dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
     navigation.navigate('SecureMessaging')
   }
 
@@ -534,7 +512,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
                 setOnSendClicked(true)
                 setOnSaveDraftClicked(false)
               }}
-              a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
               buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>

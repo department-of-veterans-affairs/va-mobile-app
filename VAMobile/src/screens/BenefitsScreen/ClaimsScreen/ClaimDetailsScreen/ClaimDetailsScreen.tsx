@@ -4,11 +4,10 @@ import { TFunction } from 'i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 
-import { BackButton, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
 import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { Events } from 'constants/analytics'
@@ -37,7 +36,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const controlLabels = [t('claimDetails.status'), t('claimDetails.details')]
   const [selectedTab, setSelectedTab] = useState(0)
 
-  const { claimID, claimType, focusOnSnackbar } = route.params
+  const { claimID, claimType } = route.params
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { claim, loadingClaim, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
@@ -48,22 +47,6 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
     if (loadingClaim) {
       cancelLoadingDetailScreen?.abort()
     }
-  })
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => (
-        <BackButton
-          onPress={() => {
-            navigation.goBack()
-          }}
-          focusOnButton={focusOnSnackbar ? false : true}
-          canGoBack={props.canGoBack}
-          label={BackButtonLabelConstants.back}
-          showCarat={true}
-        />
-      ),
-    })
   })
 
   useEffect(() => {
@@ -105,6 +88,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
     if (tab !== selectedTab && claim) {
       const analyticsEvent = tab === controlLabels.indexOf(t('claimDetails.status')) ? Events.vama_claim_status_tab : Events.vama_claim_details_tab
       logAnalyticsEvent(analyticsEvent(claim.id, claim.attributes.claimType, claim.attributes.phase, claim.attributes.dateFiled))
+      logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
     }
     setSelectedTab(tab)
   }

@@ -1,18 +1,19 @@
+import { UseMutateFunction } from '@tanstack/react-query'
+import { ViewStyle } from 'react-native'
 import { map, pick } from 'underscore'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 
-import { AddressData, ScreenIDTypesConstants, SuggestedAddress } from 'store/api/types'
+import { AddressData, SaveAddressParameters, SuggestedAddress, ValidateAddressData } from 'api/types'
 import { Box, ButtonTypesConstants, RadioGroup, TextArea, TextView, VAButton, VAScrollView, radioOption } from 'components'
+import { EditResponseData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, finishValidateAddress, updateAddress } from 'store/slices'
-import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
-import { ViewStyle } from 'react-native'
-import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
+import { getAddressDataFromSuggestedAddress, getAddressDataPayload } from 'utils/personalInformation'
+import { showSnackBar } from 'utils/common'
 import { useAppDispatch, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useContactInformation } from 'api/contactInformation'
 import CollapsibleAlert from 'components/CollapsibleAlert'
 
 /**
@@ -22,17 +23,21 @@ export type AddressValidationProps = {
   addressEntered: AddressData
   addressId: number
   snackbarMessages: SnackbarMessages
+  validationData: ValidateAddressData
+  saveAddress: UseMutateFunction<EditResponseData | undefined, unknown, SaveAddressParameters, unknown>
+  setShowAddressValidation: (shouldShow: boolean) => void
 }
 
-const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, addressId, snackbarMessages }) => {
+const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, addressId, snackbarMessages, validationData, saveAddress, setShowAddressValidation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
   const theme = useTheme()
+  const { data: contactInformation } = useContactInformation()
   const [error, setError] = useState('')
 
   const { standardMarginBetween, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
-  const { validationKey, confirmedSuggestedAddresses } = useSelector<RootState, PersonalInformationState>((storeState) => storeState.personalInformation)
+  const { confirmedSuggestedAddresses, validationKey } = validationData
   const [selectedSuggestedAddress, setSelectedSuggestedAddress] = useState<AddressData | SuggestedAddress>()
 
   const scrollStyles: ViewStyle = {
@@ -54,7 +59,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   })
 
   const onEditAddress = (): void => {
-    dispatch(finishValidateAddress())
+    setShowAddressValidation(false)
   }
 
   const onSetSuggestedAddress = (address: SuggestedAddress | AddressData): void => {
@@ -74,24 +79,34 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
       return
     }
 
-    let address: AddressData
+    let addressData: AddressData
 
     if ('attributes' in selectedSuggestedAddress) {
-      address = getAddressDataFromSuggestedAddress(selectedSuggestedAddress, addressId)
+      addressData = getAddressDataFromSuggestedAddress(selectedSuggestedAddress, addressId)
       revalidate = true
     } else {
-      address = selectedSuggestedAddress
+      addressData = selectedSuggestedAddress
     }
 
-    //removes null properties
-    address = pick(address, (value) => {
+    // removes null properties
+    addressData = pick(addressData, (value) => {
       return !!value
     }) as AddressData
 
     // need to send validation key with all addresses
-    address.validationKey = validationKey
+    addressData.validationKey = validationKey
 
-    dispatch(updateAddress(address, snackbarMessages, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID, revalidate))
+    addressData = getAddressDataPayload(addressData, contactInformation)
+
+    const save = () => {
+      const mutateOptions = {
+        onSuccess: () => showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true),
+        onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, () => save, false, true),
+      }
+      saveAddress({ addressData, revalidate }, mutateOptions)
+    }
+
+    save()
   }
 
   const getSuggestedAddressLabelArgs = (address: SuggestedAddress | AddressData): { [key: string]: string } => {
@@ -154,7 +169,6 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
   const getFooterButtons = (): ReactElement => {
     const useThisAddressButtonProps = {
       testID: t('editAddress.validation.useThisAddress'),
-      a11yHint: t('editAddress.validation.useThisAddress.a11yHint'),
       label: t('editAddress.validation.useThisAddress'),
       onPress: onUseThisAddress,
     }
@@ -162,7 +176,6 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
     const editAddressButtonProps = {
       label: t('editAddress.validation.editAddress'),
       testID: t('editAddress.validation.editAddress.a11yLabel'),
-      a11yHint: t('editAddress.validation.editAddress.a11yHint'),
       onPress: onEditAddress,
     }
 
