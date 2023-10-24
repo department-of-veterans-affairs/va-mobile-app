@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
-import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { AlertBox, Box, ChildTemplate, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker } from 'components'
 import { DateTime } from 'luxon'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
@@ -117,37 +116,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     })
     return filteredFolder
   }
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => (
-        <BackButton
-          onPress={() => {
-            navigation.goBack()
-          }}
-          canGoBack={props.canGoBack}
-          label={BackButtonLabelConstants.back}
-          showCarat={true}
-          backButtonTestID="viewMessageBackTestID"
-        />
-      ),
-      headerRight: () =>
-        currentFolderIdParam !== SecureMessagingSystemFolderIdConstants.SENT ? (
-          <VAModalPicker
-            displayButton={true}
-            selectedValue={newCurrentFolderID}
-            onSelectionChange={onMove}
-            pickerOptions={getFolders()}
-            labelKey={'pickerMoveMessageToFolder'}
-            buttonText={'pickerLaunchBtn'}
-            confirmBtnText={'pickerLaunchBtn'}
-            key={newCurrentFolderID}
-          />
-        ) : (
-          <></>
-        ),
-    })
-  })
 
   const backLabel =
     Number(folderWhereMessagePreviousewas.current) === SecureMessagingSystemFolderIdConstants.INBOX

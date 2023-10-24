@@ -16,6 +16,9 @@ on:
       thread_ts:
         description: 'Timestamp of the Slack thread that was created.'
         value: ${{ jobs.start_thread.outputs.thread_ts }}
+      channel_id:
+        description: 'Channel ID in Slack where thread that was created.'
+        value: ${{ jobs.get_channel_id.outputs.channel_id }}
 
 env:
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}

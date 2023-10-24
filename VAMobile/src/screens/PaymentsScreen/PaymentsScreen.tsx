@@ -1,4 +1,4 @@
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
@@ -7,7 +7,6 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from './PaymentsStackScreens'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useHeaderStyles } from 'utils/hooks/headerStyles'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
@@ -60,11 +59,13 @@ const PaymentsScreenStack = createStackNavigator()
  * Stack screen for the Payments tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const PaymentsStackScreen: FC<PaymentsStackScreenProps> = () => {
-  const headerStyles = useHeaderStyles()
-
+  const screenOptions = {
+    headerShown: false,
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+  }
   return (
     <PaymentsScreenStack.Navigator
-      screenOptions={headerStyles}
+      screenOptions={screenOptions}
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {

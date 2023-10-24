@@ -113,7 +113,6 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
           label={t('fileUpload.takeOrSelectPhotos')}
           testID={t('fileUpload.takePhotos')}
           buttonType={ButtonTypesConstants.buttonPrimary}
-          a11yHint={t('fileUpload.takePhotosWithCameraA11yHint')}
         />
       </Box>
     </FullScreenSubtask>

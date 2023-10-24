@@ -35,7 +35,6 @@ const VeteransCrisisLineNumbers: FC = () => {
           numberOrUrlLink={t('988')}
           linkType={LinkTypeOptionsConstants.call}
           fireAnalytic={fireAnalyticFn}
-          {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
         />
       </Box>
       <Box mt={standardMarginBetween}>
@@ -46,7 +45,6 @@ const VeteransCrisisLineNumbers: FC = () => {
           numberOrUrlLink={t('838255')}
           linkType={LinkTypeOptionsConstants.text}
           fireAnalytic={fireAnalyticFn}
-          {...a11yHintProp(t('veteransCrisisLine.textA11yHint'))}
         />
       </Box>
       <Box mt={standardMarginBetween}>
@@ -68,7 +66,6 @@ const VeteransCrisisLineNumbers: FC = () => {
           numberOrUrlLink={t('8007994889')}
           linkType={LinkTypeOptionsConstants.callTTY}
           fireAnalytic={fireAnalyticFn}
-          {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
         />
       </Box>
     </>

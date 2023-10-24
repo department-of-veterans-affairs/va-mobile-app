@@ -6,7 +6,6 @@ import CookieManager from '@react-native-cookies/cookies'
 import analytics from '@react-native-firebase/analytics'
 import crashlytics from '@react-native-firebase/crashlytics'
 import performance from '@react-native-firebase/perf'
-import qs from 'querystringify'
 
 import * as api from 'store/api'
 import {
@@ -425,7 +424,7 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: qs.stringify({
+      body: new URLSearchParams({
         refresh_token: refreshToken,
         ...(!SISEnabled
           ? {
@@ -435,7 +434,7 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
               redirect_uri: AUTH_IAM_REDIRECT_URL,
             }
           : {}),
-      }),
+      }).toString(),
     })
 
     console.debug('refreshAccessToken: completed refresh request')
@@ -486,7 +485,7 @@ export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: qs.stringify({
+      body: new URLSearchParams({
         refresh_token: refreshToken,
         ...(!SISEnabled
           ? {
@@ -496,7 +495,7 @@ export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch
               redirect_uri: AUTH_IAM_REDIRECT_URL,
             }
           : {}),
-      }),
+      }).toString(),
     })
     const authCredentials = await processAuthResponse(response)
     await dispatch(dispatchSetAnalyticsLogin())
@@ -551,24 +550,22 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
 
     if (tokenMatchesServiceType) {
+      const queryString = SISEnabled
+        ? new URLSearchParams({ refresh_token: refreshToken ?? '' }).toString()
+        : new URLSearchParams({
+            token: token ?? '',
+            client_id: AUTH_IAM_CLIENT_ID,
+            client_secret: AUTH_IAM_CLIENT_SECRET,
+            redirect_uri: AUTH_IAM_REDIRECT_URL,
+          }).toString()
+
       const response = await fetch(SISEnabled ? AUTH_SIS_REVOKE_URL : AUTH_IAM_REVOKE_URL, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: qs.stringify({
-          ...(!SISEnabled
-            ? {
-                token,
-                client_id: AUTH_IAM_CLIENT_ID,
-                client_secret: AUTH_IAM_CLIENT_SECRET,
-                redirect_uri: AUTH_IAM_REDIRECT_URL,
-              }
-            : {
-                refresh_token: refreshToken,
-              }),
-        }),
+        body: queryString,
       })
       console.debug('logout:', response.status)
       console.debug('logout:', await response.text())
@@ -693,9 +690,9 @@ export const handleTokenCallbackUrl =
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: qs.stringify({
+        body: new URLSearchParams({
           grant_type: 'authorization_code',
-          code_verifier: getState().auth.codeVerifier,
+          code_verifier: getState().auth.codeVerifier ?? '',
           code,
           ...(!SISEnabled
             ? {
@@ -704,7 +701,7 @@ export const handleTokenCallbackUrl =
                 redirect_uri: AUTH_IAM_REDIRECT_URL,
               }
             : {}),
-        }),
+        }).toString(),
       })
       const authCredentials = await processAuthResponse(response)
       await logAnalyticsEvent(Events.vama_login_success(SISEnabled))
@@ -741,7 +738,7 @@ export const startWebLogin = (): AppThunk => async (dispatch) => {
   // TODO: modify code challenge and state based on
   // what will be used in LoginSuccess.js for the token exchange.
   // The code challenge is a SHA256 hash of the code verifier string.
-  const params = qs.stringify({
+  const params = new URLSearchParams({
     code_challenge_method: 'S256',
     code_challenge: 'tDKCgVeM7b8X2Mw7ahEeSPPFxr7TGPc25IV5ex0PvHI',
     application: 'vamobile',
@@ -756,7 +753,7 @@ export const startWebLogin = (): AppThunk => async (dispatch) => {
           state: '12345',
         }
       : {}),
-  })
+  }).toString()
 
   const url = `${SISEnabled ? AUTH_SIS_ENDPOINT : AUTH_IAM_ENDPOINT}?${params}`
   dispatch(dispatchShowWebLogin(url))
