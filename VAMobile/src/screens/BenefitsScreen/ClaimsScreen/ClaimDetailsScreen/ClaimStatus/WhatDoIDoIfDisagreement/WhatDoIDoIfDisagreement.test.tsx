@@ -1,18 +1,14 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { context, render, mockNavProps, RenderAPI } from 'testUtils'
-import { act, ReactTestInstance } from 'react-test-renderer'
 
+import { context, render, mockNavProps } from 'testUtils'
+import { screen, fireEvent } from '@testing-library/react-native'
 import WhatDoIDoIfDisagreement from './WhatDoIDoIfDisagreement'
-import { TextView } from 'components'
 
 const mockExternalLinkSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
-
   return {
     ...original,
     useExternalLink: () => mockExternalLinkSpy,
@@ -20,23 +16,16 @@ jest.mock('utils/hooks', () => {
 })
 
 context('WhatDoIDoIfDisagreement', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
   beforeEach(() => {
     const props = mockNavProps({}, {}, { params: { display: '', value: 'active' } })
-    component = render(<WhatDoIDoIfDisagreement {...props} />)
-    testInstance = component.UNSAFE_root
+    render(<WhatDoIDoIfDisagreement {...props} />)
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  describe('on click of the decision review link', () => {
-    it('should launch external link', async () => {
-      testInstance.findAllByType(TextView)[4].props.onPress()
-      expect(mockExternalLinkSpy).toHaveBeenCalled()
-    })
+    expect(screen.getByText('What should I do if I disagree with your decision on my VA disability claim?')).toBeTruthy()
+    expect(screen.getByText('If you disagree with a claim decision that you received on or after February 19, 2019, you can ask us to review the decision. You have 3 decision review options to choose from.')).toBeTruthy()
+    expect(screen.getByText('Learn about your decision review options.')).toBeTruthy()
+    fireEvent.press(screen.getByText('Learn about your decision review options.'))
+    expect(mockExternalLinkSpy).toHaveBeenCalled()
   })
 })
