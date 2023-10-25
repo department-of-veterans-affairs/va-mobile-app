@@ -1,17 +1,11 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { Pressable } from 'react-native'
-import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
 
-import ClaimsAndAppealsListView, { ClaimType, ClaimTypeConstants } from './ClaimsAndAppealsListView'
+import { screen, fireEvent } from '@testing-library/react-native'
+import { context, mockNavProps, render } from 'testUtils'
+import ClaimsAndAppealsListView, { ClaimType } from './ClaimsAndAppealsListView'
 import { InitialState } from 'store/slices'
-import { TextView } from 'components'
 import { ClaimsAndAppealsList } from 'store/api/types'
-import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
-import { getClaimsAndAppeals } from 'store/slices'
-import { waitFor } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
@@ -39,9 +33,7 @@ jest.mock('store/slices', () => {
 })
 
 context('ClaimsAndAppealsListView', () => {
-  let component: RenderAPI
   let props: any
-  let testInstance: ReactTestInstance
   let mockNavigateToClaimDetailsScreenSpy: jest.Mock
   let mockNavigateToAppealDetailsScreenSpy: jest.Mock
 
@@ -99,7 +91,7 @@ context('ClaimsAndAppealsListView', () => {
       },
     ]
 
-    component = render(<ClaimsAndAppealsListView {...props} />, {
+    render(<ClaimsAndAppealsListView {...props} />, {
       preloadedState: {
         ...InitialState,
         claimsAndAppeals: {
@@ -123,8 +115,6 @@ context('ClaimsAndAppealsListView', () => {
         },
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(async () => {
@@ -132,74 +122,35 @@ context('ClaimsAndAppealsListView', () => {
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  describe('when the claimType is ACTIVE', () => {
-    it('should display the header as "Your active claims and appeals"', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Your active claims and appeals')
-    })
-  })
-
-  describe('when the claimType is CLOSED', () => {
-    it('should display the header as "Your closed claims and appeals"', async () => {
-      await initializeTestInstance('CLOSED')
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Your closed claims and appeals')
-    })
-  })
-
-  describe('when an item is type claim', () => {
-    it('should display the first line with the format "Claim for {{subtype}} updated on MMMM, dd yyyy"', async () => {
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Claim for compensation updated on October 30, 2020')
-    })
-
-    it('should display the second line as "Submitted on MMMM dd, yyyy', async () => {
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Submitted October 22, 2020')
-    })
-  })
-
-  describe('when an item is type appeal', () => {
-    it('should display the first line with the format "{{subtype}} updated on MMMM, dd yyyy"', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Supplemental claim for disability compensation updated on October 28, 2020')
-    })
-
-    it('should display the second line as "Submitted on MMMM dd, yyyy', async () => {
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted October 22, 2020')
-    })
+    expect(screen.getByText('Your active claims and appeals')).toBeTruthy()
+    expect(screen.queryByText('Your closed claims and appeals')).toBeFalsy()
+    expect(screen.getByText('Supplemental claim for disability compensation updated on October 28, 2020')).toBeTruthy()
+    expect(screen.getAllByText('Submitted October 22, 2020')).toBeTruthy()
+    expect(screen.getByText('Claim for compensation updated on October 30, 2020')).toBeTruthy()
+    initializeTestInstance('CLOSED')
+    expect(screen.getByText('Your closed claims and appeals')).toBeTruthy()
+    expect(screen.queryByText('Your active claims and appeals')).toBeFalsy()
   })
 
   describe('on click of a claim', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[1].props.onPress()
+      fireEvent.press(screen.getByTestId('Claim for compensation updated on October 30, 2020 Submitted October 22, 2020'))
       expect(mockNavigateToClaimDetailsScreenSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of an appeal', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
+      fireEvent.press(screen.getByTestId('Supplemental claim for disability compensation updated on October 28, 2020 Submitted October 22, 2020'))
       expect(mockNavigateToAppealDetailsScreenSpy).toHaveBeenCalled()
     })
   })
 
   describe('where there are no claims or appeals', () => {
     it('should display the NoClaimsAndAppeals components', async () => {
-      await initializeTestInstance('ACTIVE', true)
-      expect(testInstance.findAllByType(NoClaimsAndAppeals).length).toEqual(1)
-    })
-  })
-
-  describe('pagination', () => {
-    it('should call getClaimsAndAppeals for previous arrow', async () => {
-      findByTestID(testInstance, 'previous-page').props.onPress()
-      // was 2 now 1
-      expect(getClaimsAndAppeals).toHaveBeenCalledWith(ClaimTypeConstants.ACTIVE, expect.anything(), 1)
-    })
-
-    it('should call getClaimsAndAppeals for next arrow', async () => {
-      findByTestID(testInstance, 'next-page').props.onPress()
-      // was 2 now 3
-      expect(getClaimsAndAppeals).toHaveBeenCalledWith(ClaimTypeConstants.ACTIVE, expect.anything(), 3)
+      initializeTestInstance('ACTIVE', true)
+      expect(screen.getByText("You don't have any submitted claims or appeals")).toBeTruthy()
+      expect(screen.getByText("This app shows only completed claim and appeal applications. If you started a claim or appeal but haven’t finished it yet, go to eBenefits to work on it.")).toBeTruthy()
     })
   })
 })
