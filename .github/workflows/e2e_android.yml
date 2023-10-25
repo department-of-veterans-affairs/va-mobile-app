@@ -5,6 +5,9 @@
 name: '[e2e] Android Detox Test Run'
 
 on:
+  push:
+    branches:
+      - 'dependabot/**'
   workflow_dispatch:
   # Run on weekdays 4:00 AM UTC
   # schedule:
