@@ -1,19 +1,14 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, render } from 'testUtils'
 
+import { screen, fireEvent } from '@testing-library/react-native'
+import { context, mockNavProps, render } from 'testUtils'
 import AppealCurrentStatus from './AppealCurrentStatus'
 import { AppealAOJTypes, AppealStatusData, AppealTypes } from 'store/api/types'
-import { TextView } from 'components'
-import { RenderAPI } from '@testing-library/react-native'
 
 const mockExternalLinkSpy = jest.fn()
-
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-
   return {
     ...original,
     useExternalLink: () => mockExternalLinkSpy,
@@ -21,17 +16,13 @@ jest.mock('utils/hooks', () => {
 })
 
 context('AppealStatus', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-
   let status: AppealStatusData = {
     details: {},
     type: 'scheduled_hearing',
   }
 
   const initializeTestInstance = (status: AppealStatusData, aoj: AppealAOJTypes, appealType: AppealTypes, docketName: string, programArea: string) => {
-    props = mockNavProps({
+    const props = mockNavProps({
       status,
       aoj,
       appealType,
@@ -39,9 +30,7 @@ context('AppealStatus', () => {
       programArea,
     })
 
-    component = render(<AppealCurrentStatus {...props} />)
-
-    testInstance = component.UNSAFE_root
+    render(<AppealCurrentStatus {...props} />)
   }
 
   beforeEach(() => {
@@ -49,18 +38,16 @@ context('AppealStatus', () => {
   })
 
   it('should initialize', async () => {
-    expect(component).toBeTruthy()
+    expect(screen.getByText('Current status')).toBeTruthy()
+    expect(screen.getByText('Your hearing has been scheduled')).toBeTruthy()
+    expect(screen.getByText('Your  hearing is scheduled for  at .')).toBeTruthy()
   })
 
   describe('when the status type is scheduled_hearing', () => {
-    it('should display the scheduled_hearing data', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Your hearing has been scheduled')
-    })
-
     describe('when the appealType is appeal', () => {
       it('should display the note text', async () => {
         initializeTestInstance(status, 'vba', 'appeal', '', 'compensation')
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Note:')
+        expect(screen.getByText('Note: If you have new evidence, you can only submit it at your hearing or within the 90 days after your hearing. Please don’t submit additional evidence now.')).toBeTruthy()
       })
     })
   })
@@ -72,13 +59,16 @@ context('AppealStatus', () => {
 
     it('should display the pending_hearing_scheduling data', async () => {
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual("You're waiting for your hearing to be scheduled")
+      expect(screen.getByText("You're waiting for your hearing to be scheduled")).toBeTruthy()
+      expect(screen.getByText("You requested a  hearing. We'll schedule your hearing, and, you’ll receive a notice in the mail at least 30 days before the hearing date.")).toBeTruthy()
     })
 
     describe('when the appealType is appeal', () => {
       it('should display the note text', async () => {
         initializeTestInstance(status, 'vba', 'appeal', '', 'compensation')
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Note:')
+        expect(screen.getByText("You're waiting for your hearing to be scheduled")).toBeTruthy()
+        expect(screen.getByText("You requested a  hearing. We'll schedule your hearing, and, you’ll receive a notice in the mail at least 30 days before the hearing date.")).toBeTruthy()
+        expect(screen.getByText('Note: If you have new evidence, you can only submit it at your hearing or within the 90 days after your hearing. Please don’t submit additional evidence now.')).toBeTruthy()
       })
     })
   })
@@ -90,13 +80,16 @@ context('AppealStatus', () => {
 
     it('should display the on_docket data', async () => {
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Your appeal is waiting to be sent to a judge')
+      expect(screen.getByText('Your appeal is waiting to be sent to a judge')).toBeTruthy()
+      expect(screen.getByText("Your appeal is at the Board of Veterans’ Appeals, waiting to be sent to a Veterans Law Judge. Staff at the Board will make sure your case is complete, accurate, and ready to be decided by a judge.")).toBeTruthy()
     })
 
     describe('when the appealType is appeal', () => {
       it('should display the note text', async () => {
         initializeTestInstance(status, 'vba', 'appeal', '', 'compensation')
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Note:')
+        expect(screen.getByText('Your appeal is waiting to be sent to a judge')).toBeTruthy()
+        expect(screen.getByText("Your appeal is at the Board of Veterans’ Appeals, waiting to be sent to a Veterans Law Judge. Staff at the Board will make sure your case is complete, accurate, and ready to be decided by a judge.")).toBeTruthy()
+        expect(screen.getByText("Note: Please don’t submit additional evidence. The judge will only consider evidence that VA already has.")).toBeTruthy()
       })
     })
   })
@@ -105,7 +98,10 @@ context('AppealStatus', () => {
     it('should display the pending_certification_ssoc data', async () => {
       status.type = 'pending_certification_ssoc'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Please review your Supplemental Statement of the Case')
+      expect(screen.getByText('Please review your Supplemental Statement of the Case')).toBeTruthy()
+      expect(screen.getByText("The Veterans Benefits Administration sent you a Supplemental Statement of the Case on . This is because one or both of these is true:")).toBeTruthy()
+      expect(screen.getByText("You, your legal representative, your health care provider, or VA added new evidence to your appeal and asked VA to review it before certifying to the Board")).toBeTruthy()
+      expect(screen.getByText("VA determined it needed to provide you with more help to develop your appeal, such as helping you get treatment records or giving you a physical exam if needed.")).toBeTruthy()
     })
   })
 
@@ -113,7 +109,8 @@ context('AppealStatus', () => {
     it('should display the pending_certification data', async () => {
       status.type = 'pending_certification'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The Decision Review Officer is finishing their review of your appeal')
+      expect(screen.getByText('The Decision Review Officer is finishing their review of your appeal')).toBeTruthy()
+      expect(screen.getByText("The Veterans Benefits Administration received your VA Form 9 and will send your appeal to the Board of Veterans’ Appeals. But first, the Decision Review Officer must certify that they have finished reviewing all of the evidence related to your appeal.")).toBeTruthy()
     })
   })
 
@@ -121,7 +118,12 @@ context('AppealStatus', () => {
     it('should display the pending_form9 data', async () => {
       status.type = 'pending_form9'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Please review your Statement of the Case')
+      expect(screen.getByText('Please review your Statement of the Case')).toBeTruthy()
+      expect(screen.getByText("The Veterans Benefits Administration sent you a Statement of the Case on . The Statement of the Case explains the reasons why they couldn't fully grant your appeal.")).toBeTruthy()
+      expect(screen.getByText("You’ll have to take one of these actions within 60 days from the date on the Statement of the Case:")).toBeTruthy()
+      expect(screen.getByLabelText("Submit VA Form 9 to continue your appeal to the Board of Veterans' Appeals,")).toBeTruthy()
+      expect(screen.getByText("or")).toBeTruthy()
+      expect(screen.getByText("Opt in to the new decision review process")).toBeTruthy()
     })
   })
 
@@ -132,15 +134,15 @@ context('AppealStatus', () => {
 
     it('should display the pending_soc data', async () => {
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('A Decision Review Officer is reviewing your appeal')
+      expect(screen.getByText('A Decision Review Officer is reviewing your appeal')).toBeTruthy()
+      expect(screen.getByText("The Veterans Benefits Administration received your Notice of Disagreement. A Decision Review Officer (DRO) will review all of the evidence related to your appeal, including any new evidence you sent. The DRO may contact you to ask for more evidence or medical exams as needed. When the DRO has completed their review, they’ll determine whether or not they can grant your appeal.")).toBeTruthy()
     })
 
     describe('when aoj is other', () => {
       it('should display the aoj description as Agency of Original Jurisdiction', async () => {
         initializeTestInstance(status, 'other', 'higherLevelReview', '', 'compensation')
-        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
-          'The Agency of Original Jurisdiction received your Notice of Disagreement. A Decision Review Officer (DRO) will review all of the evidence related to your appeal, including any new evidence you sent. The DRO may contact you to ask for more evidence or medical exams as needed. When the DRO has completed their review, they’ll determine whether or not they can grant your appeal.',
-        )
+        expect(screen.getByText('A Decision Review Officer is reviewing your appeal')).toBeTruthy()
+        expect(screen.getByText('The Agency of Original Jurisdiction received your Notice of Disagreement. A Decision Review Officer (DRO) will review all of the evidence related to your appeal, including any new evidence you sent. The DRO may contact you to ask for more evidence or medical exams as needed. When the DRO has completed their review, they’ll determine whether or not they can grant your appeal.')).toBeTruthy()
       })
     })
   })
@@ -149,7 +151,8 @@ context('AppealStatus', () => {
     it('should display the stayed data', async () => {
       status.type = 'stayed'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The Board is waiting until a higher court makes a decision')
+      expect(screen.getByText('The Board is waiting until a higher court makes a decision')).toBeTruthy()
+      expect(screen.getByText("A higher court has asked the Board of Veterans’ Appeals to hold open a group of appeals awaiting review. Yours is one of the appeals held open. The higher court believes that a decision it will make on a different appeal could affect yours.")).toBeTruthy()
     })
   })
 
@@ -157,7 +160,8 @@ context('AppealStatus', () => {
     it('should display the at_vso data', async () => {
       status.type = 'at_vso'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Your appeal is with your Veterans Service Organization')
+      expect(screen.getByText('Your appeal is with your Veterans Service Organization')).toBeTruthy()
+      expect(screen.getByText('is reviewing your appeal to make additional arguments in support of your case. For more information, please contact .')).toBeTruthy()
     })
   })
 
@@ -165,7 +169,8 @@ context('AppealStatus', () => {
     it('should display the bva_development data', async () => {
       status.type = 'bva_development'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The judge is seeking more information before making a decision')
+      expect(screen.getByText('The judge is seeking more information before making a decision')).toBeTruthy()
+      expect(screen.getByText("The Board of Veterans’ Appeals is seeking evidence or an outside opinion from a legal, medical, or other professional in order to make a decision about your appeal.")).toBeTruthy()
     })
   })
 
@@ -176,13 +181,16 @@ context('AppealStatus', () => {
 
     it('should display the decision_in_progress data', async () => {
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('A judge is reviewing your appeal')
+      expect(screen.getByText('A judge is reviewing your appeal')).toBeTruthy()
+      expect(screen.getByText("Your appeal is at the Board of Veterans’ Appeals being reviewed by a Veterans Law Judge.")).toBeTruthy()
     })
 
     describe('when the appeal type is legacyAppeal', () => {
       it('should display the if you submit evidence text', async () => {
         initializeTestInstance(status, 'vba', 'legacyAppeal', '', 'compensation')
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('If you submit evidence that isn’t already included in your case, it may delay your appeal.')
+        expect(screen.getByText('A judge is reviewing your appeal')).toBeTruthy()
+        expect(screen.getByText("Your appeal is at the Board of Veterans’ Appeals being reviewed by a Veterans Law Judge.")).toBeTruthy()
+        expect(screen.getByText("If you submit evidence that isn’t already included in your case, it may delay your appeal.")).toBeTruthy()
       })
     })
   })
@@ -191,7 +199,9 @@ context('AppealStatus', () => {
     it('should display the remand data', async () => {
       status.type = 'remand'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The Board made a decision on your appeal')
+      expect(screen.getByText('The Board made a decision on your appeal')).toBeTruthy()
+      expect(screen.getByText("The Board of Veterans’ Appeals sent you a decision on your appeal. Here’s an overview:")).toBeTruthy()
+      expect(screen.getByText('Please see your decision for more details.')).toBeTruthy()
     })
   })
 
@@ -199,7 +209,9 @@ context('AppealStatus', () => {
     it('should display the bva_decision data', async () => {
       status.type = 'bva_decision'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The Board made a decision on your appeal')
+      expect(screen.getByText('The Board made a decision on your appeal')).toBeTruthy()
+      expect(screen.getByText("The Board of Veterans’ Appeals sent you a decision on your appeal. Here’s an overview:")).toBeTruthy()
+      expect(screen.getByText('Please see your decision for more details.')).toBeTruthy()
     })
   })
 
@@ -207,7 +219,8 @@ context('AppealStatus', () => {
     it('should display the field_grant data', async () => {
       status.type = 'field_grant'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The Veterans Benefits Administration granted your appeal')
+      expect(screen.getByText('The Veterans Benefits Administration granted your appeal')).toBeTruthy()
+      expect(screen.getByText("The Veterans Benefits Administration agreed with you and decided to overturn the original decision. If this decision changes your disability rating or eligibility for VA benefits, you should see this change made in 1 to 2 months.")).toBeTruthy()
     })
   })
 
@@ -215,7 +228,8 @@ context('AppealStatus', () => {
     it('should display the withdrawn data', async () => {
       status.type = 'withdrawn'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('You withdrew your appeal')
+      expect(screen.getByText('You withdrew your appeal')).toBeTruthy()
+      expect(screen.getByText('You chose not to continue your appeal. If this information is incorrect, please contact your Veterans Service Organization or representative for more information.')).toBeTruthy()
     })
   })
 
@@ -223,7 +237,8 @@ context('AppealStatus', () => {
     it('should display the ftr data', async () => {
       status.type = 'ftr'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Your appeal was closed')
+      expect(screen.getByText('Your appeal was closed')).toBeTruthy()
+      expect(screen.getByText("You didn’t take an action VA requested in order to continue your appeal. If this information is incorrect, or if you want to reopen your appeal, please contact your Veterans Service Organization or representative for more information.")).toBeTruthy()
     })
   })
 
@@ -231,7 +246,8 @@ context('AppealStatus', () => {
     it('should display the ramp data', async () => {
       status.type = 'ramp'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('You opted in to the Rapid Appeals Modernization Program (RAMP)')
+      expect(screen.getByText('You opted in to the Rapid Appeals Modernization Program (RAMP)')).toBeTruthy()
+      expect(screen.getByText("You chose to participate in the new Supplemental Claim or Higher-Level Review options. This doesn’t mean that your appeal has been closed. If this information is incorrect, please contact your Veterans Service Organization or representative as soon as possible.")).toBeTruthy()
     })
   })
 
@@ -239,7 +255,8 @@ context('AppealStatus', () => {
     it('should display the death data', async () => {
       status.type = 'death'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The appeal was closed')
+      expect(screen.getByText('The appeal was closed')).toBeTruthy()
+      expect(screen.getByText('VA records indicate that  is deceased, so this appeal has been closed. If this information is incorrect, please contact your Veterans Service Organization or representative as soon as possible.')).toBeTruthy()
     })
   })
 
@@ -247,7 +264,8 @@ context('AppealStatus', () => {
     it('should display the reconsideration data', async () => {
       status.type = 'reconsideration'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Your Motion for Reconsideration was denied')
+      expect(screen.getByText('Your Motion for Reconsideration was denied')).toBeTruthy()
+      expect(screen.getByText("The Board of Veterans’ Appeals declined to reopen your appeal. Please contact your Veterans Service Organization or representative for more information.")).toBeTruthy()
     })
   })
 
@@ -255,7 +273,8 @@ context('AppealStatus', () => {
     it('should display the other_close data', async () => {
       status.type = 'other_close'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Your appeal was closed')
+      expect(screen.getByText('Your appeal was closed')).toBeTruthy()
+      expect(screen.getByText('Your appeal was dismissed or closed. Please contact your Veterans Service Organization or representative for more information.')).toBeTruthy()
     })
   })
 
@@ -263,7 +282,8 @@ context('AppealStatus', () => {
     it('should display the remand_ssoc data', async () => {
       status.type = 'remand_ssoc'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Please review your Supplemental Statement of the Case')
+      expect(screen.getByText('Please review your Supplemental Statement of the Case')).toBeTruthy()
+      expect(screen.getByText("The Veterans Benefits Administration sent you a Supplemental Statement of the Case on  because, after completing the remand instructions from the Board, they couldn’t fully grant your appeal.")).toBeTruthy()
     })
   })
 
@@ -274,12 +294,16 @@ context('AppealStatus', () => {
     })
 
     it('should display the merged data', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Your appeal was merged')
+      expect(screen.getByText('Your appeal was merged')).toBeTruthy()
+      expect(screen.getByText("Your appeal was merged with another appeal. The Board of Veterans'  Appeals merges appeals so that you can receive a single decision on as many appealed issues as possible. This appeal was merged with an older appeal that was closest to receiving a Board decision.")).toBeTruthy()
+      expect(screen.getByText('Check')).toBeTruthy()
+      expect(screen.getByText('Your claims and appeals')).toBeTruthy()
+      expect(screen.getByText('for the appeal that contains the issues merged from this appeal.')).toBeTruthy()
     })
 
     describe('on click of the link text view', () => {
       it('should launch external link', async () => {
-        testInstance.findAllByType(TextView)[3].props.onPress()
+        fireEvent.press(screen.getByText('Check'))
         expect(mockExternalLinkSpy).toHaveBeenCalled()
       })
     })
@@ -289,7 +313,12 @@ context('AppealStatus', () => {
     it('should display the statutory_opt_in data', async () => {
       status.type = 'statutory_opt_in'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('You requested a decision review under the Appeals Modernization Act')
+      expect(screen.getByText('You requested a decision review under the Appeals Modernization Act')).toBeTruthy()
+      expect(screen.getByText('A new law, the Veterans Appeals Improvement and Modernization Act, took effect on February 19, 2019. Although your appeal started before the new law took effect, you asked for it to be converted into one of the new decision review options.')).toBeTruthy()
+      expect(screen.getByText('Check')).toBeTruthy()
+      expect(screen.getByText('Your claims and appeals')).toBeTruthy()
+      expect(screen.getByText('for the decision review that contains the issues from this appeal, or learn more about')).toBeTruthy()
+      expect(screen.getByText('decision reviews under the Appeals Modernization Act')).toBeTruthy()
     })
   })
 
@@ -297,10 +326,12 @@ context('AppealStatus', () => {
     it('should display the evidentiary_period data', async () => {
       status.type = 'evidentiary_period'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Your appeals file is open for new evidence')
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual(
-        'Because you requested the Direct Review appeal option, the Board of Veterans’ Appeals will hold your case open for new evidence for 90 days. You can send new evidence to the Board at:',
-      )
+      expect(screen.getByText('Your appeals file is open for new evidence')).toBeTruthy()
+      expect(screen.getByText('Because you requested the Direct Review appeal option, the Board of Veterans’ Appeals will hold your case open for new evidence for 90 days. You can send new evidence to the Board at:')).toBeTruthy()
+      expect(screen.getByText("Board of Veterans’ Appeals")).toBeTruthy()
+      expect(screen.getByText('PO Box 27063')).toBeTruthy()
+      expect(screen.getByText('Washington, DC 20038')).toBeTruthy()
+      expect(screen.getByText('Fax 844-678-8979')).toBeTruthy()
     })
   })
 
@@ -308,7 +339,10 @@ context('AppealStatus', () => {
     it('should display the post_bva_dta_decision data', async () => {
       status.type = 'post_bva_dta_decision'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The Veterans Benefits Administration corrected an error')
+      expect(screen.getByText('The Veterans Benefits Administration corrected an error')).toBeTruthy()
+      expect(screen.getByText("In the  decision, a judge at the Board of Veterans’ Appeals identified an error that needed to be corrected. A reviewer at the Veterans Benefits Administration completed the judge’s instructions and sent you a new decision on . Here's an overview:")).toBeTruthy()
+      expect(screen.getByText('Please see your decision for more details.')).toBeTruthy()
+      expect(screen.getByText('If you disagree with either the Board decision or the Veterans Benefits Administration decision, you can request another review. The review options available to you depend on which decision you disagree with.')).toBeTruthy()
     })
   })
 
@@ -316,7 +350,9 @@ context('AppealStatus', () => {
     it('should display the bva_decision_effectuation data', async () => {
       status.type = 'bva_decision_effectuation'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The Veterans Benefits Administration corrected an error')
+      expect(screen.getByText('The Veterans Benefits Administration corrected an error')).toBeTruthy()
+      expect(screen.getByText('On , a judge at the Board of Veterans’ Appeals made a decision that changes your disability rating or eligibility for benefits. On , the Veterans Benefits Administration sent you a new decision that updates your benefits.')).toBeTruthy()
+      expect(screen.getByText('If you disagree with either the Board decision or the Veterans Benefits Administration decision, you can request another review. The review options available to you depend on which decision you disagree with.')).toBeTruthy()
     })
   })
 
@@ -324,8 +360,14 @@ context('AppealStatus', () => {
     it('should display the sc_received data', async () => {
       status.type = 'sc_received'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('A reviewer is examining your new evidence')
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Evidence Intake Center')
+      expect(screen.getByText('A Supplemental Claim allows you to add new and relevant evidence to your case. When you filed a Supplemental Claim, you included new evidence or identified evidence that the Veterans Benefits Administration should obtain.')).toBeTruthy()
+      expect(screen.getByText('If you have more evidence to submit, you should do so as soon as possible. You can send new evidence to the Veterans Benefits Administration at:')).toBeTruthy()
+      expect(screen.getByText('Department of Veterans Affairs')).toBeTruthy()
+      expect(screen.getByText('Evidence Intake Center')).toBeTruthy()
+      expect(screen.getByText('PO Box 4444')).toBeTruthy()
+      expect(screen.getByText('Janesville, WI 53547-4444')).toBeTruthy()
+      expect(screen.getByText('Fax 844-531-7818')).toBeTruthy()
+      expect(screen.getByText('A reviewer will look at this new evidence, as well as evidence VA already had, and determine whether it changes the decision. If needed, they may contact you to ask for more evidence or to schedule a new medical exam.')).toBeTruthy()
     })
   })
 
@@ -333,8 +375,10 @@ context('AppealStatus', () => {
     it('should display the sc_received data', async () => {
       status.type = 'sc_received'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'education')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('A reviewer is examining your new evidence')
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('If you have more evidence to submit, you should do so as soon as possible.')
+      expect(screen.getByText('A reviewer is examining your new evidence')).toBeTruthy()
+      expect(screen.getByText('A Supplemental Claim allows you to add new and relevant evidence to your case. When you filed a Supplemental Claim, you included new evidence or identified evidence that the Veterans Benefits Administration should obtain.')).toBeTruthy()
+      expect(screen.getByText('If you have more evidence to submit, you should do so as soon as possible.')).toBeTruthy()
+      expect(screen.getByText('A reviewer will look at this new evidence, as well as evidence VA already had, and determine whether it changes the decision. If needed, they may contact you to ask for more evidence or to schedule a new medical exam.')).toBeTruthy()
     })
   })
 
@@ -342,7 +386,9 @@ context('AppealStatus', () => {
     it('should display the sc_decision data', async () => {
       status.type = 'sc_decision'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The Veterans Benefits Administration made a decision')
+      expect(screen.getByText('The Veterans Benefits Administration made a decision')).toBeTruthy()
+      expect(screen.getByText('The Veterans Benefits Administration sent you a decision on your Supplemental Claim. Here’s an overview:')).toBeTruthy()
+      expect(screen.getByText('Please see your decision for more details.')).toBeTruthy()
     })
   })
 
@@ -350,7 +396,8 @@ context('AppealStatus', () => {
     it('should display the sc_closed data', async () => {
       status.type = 'sc_closed'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Your Supplemental Claim was closed')
+      expect(screen.getByText('Your Supplemental Claim was closed')).toBeTruthy()
+      expect(screen.getByText('Your Supplemental Claim was closed. Please contact VA or your Veterans Service Organization or representative for more information.')).toBeTruthy()
     })
   })
 
@@ -358,7 +405,10 @@ context('AppealStatus', () => {
     it('should display the hlr_received data', async () => {
       status.type = 'hlr_received'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('A higher-level reviewer is taking a new look at your case')
+      expect(screen.getByText('A higher-level reviewer is taking a new look at your case')).toBeTruthy()
+      expect(screen.getByText('By requesting a Higher-Level Review, you asked for a higher-level reviewer at the Veterans Benefits Administration to look at your case and determine whether they can change the decision based on a difference of opinion or because VA made an error.')).toBeTruthy()
+      expect(screen.getByText('Note:')).toBeTruthy()
+      expect(screen.getByText('Please don’t submit additional evidence. The reviewer will only consider evidence that VA already has.')).toBeTruthy()
     })
   })
 
@@ -366,7 +416,9 @@ context('AppealStatus', () => {
     it('should display the hlr_decision data', async () => {
       status.type = 'hlr_decision'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The Veterans Benefits Administration made a decision')
+      expect(screen.getByText('The Veterans Benefits Administration made a decision')).toBeTruthy()
+      expect(screen.getByText('The Veterans Benefits Administration sent you a decision on your Higher-Level Review. Here’s an overview:')).toBeTruthy()
+      expect(screen.getByText('Please see your decision for more details.')).toBeTruthy()
     })
   })
 
@@ -374,7 +426,8 @@ context('AppealStatus', () => {
     it('should display the hlr_dta_error data', async () => {
       status.type = 'hlr_dta_error'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('The Veterans Benefits Administration is correcting an error')
+      expect(screen.getByText('The Veterans Benefits Administration is correcting an error')).toBeTruthy()
+      expect(screen.getByText('During their review, the higher-level reviewer identified an error that must be corrected before deciding your case. If needed, VA may contact you to ask for more evidence or to schedule a new medical exam.')).toBeTruthy()
     })
   })
 
@@ -382,7 +435,8 @@ context('AppealStatus', () => {
     it('should display the hlr_closed data', async () => {
       status.type = 'hlr_closed'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Your Higher-Level Review was closed')
+      expect(screen.getByText('Your Higher-Level Review was closed')).toBeTruthy()
+      expect(screen.getByText('Your Higher-Level Review was closed. Please contact VA or your Veterans Service Organization or representative for more information.')).toBeTruthy()
     })
   })
 
@@ -390,7 +444,8 @@ context('AppealStatus', () => {
     it('should display the remand_return data', async () => {
       status.type = 'remand_return'
       initializeTestInstance(status, 'vba', 'higherLevelReview', 'directReview', 'compensation')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual("Your appeal was returned to the Board of Veterans' Appeals")
+      expect(screen.getByText("Your appeal was returned to the Board of Veterans' Appeals")).toBeTruthy()
+      expect(screen.getByText("The Veterans Benefits Administration finished their work on the remand and will return your case to the Board of Veterans’ Appeals.")).toBeTruthy()
     })
   })
 })

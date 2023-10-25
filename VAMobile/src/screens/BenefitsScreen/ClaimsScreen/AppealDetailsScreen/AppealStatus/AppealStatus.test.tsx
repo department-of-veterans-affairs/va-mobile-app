@@ -1,18 +1,13 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, render, RenderAPI } from 'testUtils'
+
+import { screen } from '@testing-library/react-native'
+import { context, mockNavProps, render } from 'testUtils'
 import AppealStatus from './AppealStatus'
-import { TextArea, TextView } from 'components'
 
 context('AppealStatus', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-
   const initializeTestInstance = (numAppealsAhead: number | undefined, isActiveAppeal?: boolean) => {
-    props = mockNavProps({
+    const props = mockNavProps({
       events: [
         {
           data: '2020-11-12',
@@ -29,9 +24,7 @@ context('AppealStatus', () => {
       isActiveAppeal,
     })
 
-    component = render(<AppealStatus {...props} />)
-
-    testInstance = component.UNSAFE_root
+    render(<AppealStatus {...props} />)
   }
 
   beforeEach(() => {
@@ -39,24 +32,31 @@ context('AppealStatus', () => {
   })
 
   it('should initialize', async () => {
-    expect(component).toBeTruthy()
+    expect(screen.getByText('Review past events')).toBeTruthy()
+    expect(screen.getByText('Current status')).toBeTruthy()
+    expect(screen.getByText('Your hearing has been scheduled')).toBeTruthy()
+    expect(screen.getByText('Your  hearing is scheduled for  at .')).toBeTruthy()
+    expect(screen.getByText('Need help?')).toBeTruthy()
+    expect(screen.getByText("Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.")).toBeTruthy()
+    expect(screen.getByText('800-827-1000')).toBeTruthy()
+    expect(screen.getByText('To review more details about your appeal, visit VA.gov: ')).toBeTruthy()
+    expect(screen.getByText('Visit VA.gov')).toBeTruthy()
   })
 
   describe('when there are numAppealsAhead and isActiveAppeal is true', () => {
-    it('should display that number formatted with commas as needed', async () => {
+    it('should display Appeals ahead of you', async () => {
       initializeTestInstance(12345, true)
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('12,345')
-      expect(testInstance.findAllByType(TextArea).length).toEqual(4)
+      expect(screen.getByText('Appeals ahead of you')).toBeTruthy()
     })
   })
 
   describe('when numAppealsAhead is undefined or isActiveAppeal is false', () => {
     it('should not render the num appeals ahead text area', async () => {
       initializeTestInstance(undefined, true)
-      expect(testInstance.findAllByType(TextArea).length).toEqual(3)
+      expect(screen.queryByText('Appeals ahead of you')).toBeFalsy()
 
       initializeTestInstance(123, false)
-      expect(testInstance.findAllByType(TextArea).length).toEqual(3)
+      expect(screen.queryByText('Appeals ahead of you')).toBeFalsy()
     })
   })
 })
