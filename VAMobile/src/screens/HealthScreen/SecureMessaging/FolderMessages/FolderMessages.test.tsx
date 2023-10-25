@@ -1,8 +1,6 @@
 import 'react-native'
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
 
 import { context, mockNavProps, render } from 'testUtils'
 import FolderMessages from './FolderMessages'

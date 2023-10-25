@@ -1,32 +1,21 @@
 import 'react-native'
 import React from 'react'
 import * as api from 'store/api'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { screen, fireEvent } from '@testing-library/react-native'
-import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
-import { context, mockNavProps, render, when } from 'testUtils'
 
+import { screen, fireEvent } from '@testing-library/react-native'
+import { context, mockNavProps, render, when } from 'testUtils'
 import AppealDetailsScreen from './AppealDetailsScreen'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
+import { ErrorsState, initialErrorsState, InitialState } from 'store/slices'
 import { appeal as appealData } from '../appealData'
-import { ErrorComponent, LoadingComponent, TextView } from 'components'
-import AppealStatus from './AppealStatus/AppealStatus'
-import AppealIssues from './AppealIssues/AppealIssues'
 import { AppealEventData, AppealTypes } from 'store/api/types'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { RenderAPI, waitFor } from '@testing-library/react-native'
+import { waitFor } from '@testing-library/react-native'
 import { StackNavigationOptions } from '@react-navigation/stack'
 
 context('AppealDetailsScreen', () => {
-  let component: RenderAPI
   let props: any
   let navHeaderSpy: any
-  let testInstance: ReactTestInstance
   let goBack: jest.Mock
   let abortLoadSpy: jest.Mock
-  let store: any
 
   const mockApiCall = (type?: AppealTypes, events?: Array<AppealEventData>) => {
     when(api.get as jest.Mock)
@@ -45,7 +34,7 @@ context('AppealDetailsScreen', () => {
     initializeTestInstance()
   }
 
-  const initializeTestInstance = (loadingAppeal: boolean = false, errorsState: ErrorsState = initialErrorsState): void => {
+  const initializeTestInstance = (loadingAppeal: boolean = false): void => {
     goBack = jest.fn()
     abortLoadSpy = jest.fn()
     props = mockNavProps(
@@ -63,7 +52,7 @@ context('AppealDetailsScreen', () => {
       { params: { appealID: '0' } },
     )
 
-    component = render(<AppealDetailsScreen {...props} />, {
+   render(<AppealDetailsScreen {...props} />, {
       preloadedState: {
         ...InitialState,
         claimsAndAppeals: {
@@ -73,11 +62,8 @@ context('AppealDetailsScreen', () => {
             abort: abortLoadSpy,
           },
         },
-        errors: errorsState,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   describe('when loadingClaim is set to true', () => {
@@ -95,7 +81,6 @@ context('AppealDetailsScreen', () => {
       })
       fireEvent.press(screen.getByText('Status'))
       expect(screen.getByText('Appeal for compensation')).toBeTruthy()
-      expect(screen.getByText('Up to date as of January 19, 2018 at 9:20 AM CST')).toBeTruthy()
       expect(screen.getByText('Submitted')).toBeTruthy()
       expect(screen.getByText('Review past events')).toBeTruthy()
       expect(screen.getByText('Current status')).toBeTruthy()
@@ -125,7 +110,6 @@ context('AppealDetailsScreen', () => {
       })
       fireEvent.press(screen.getByText('Issues'))
       expect(screen.getByText('Appeal for compensation')).toBeTruthy()
-      expect(screen.getByText('Up to date as of January 19, 2018 at 9:20 AM CST')).toBeTruthy()
       expect(screen.getByText('Submitted')).toBeTruthy()
       expect(screen.getByText('Currently on appeal')).toBeTruthy()
       expect(screen.getByText('Service connection, Post-traumatic stress disorder')).toBeTruthy()

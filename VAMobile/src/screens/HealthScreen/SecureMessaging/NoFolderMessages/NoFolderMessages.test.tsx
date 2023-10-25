@@ -1,9 +1,7 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { fireEvent, screen } from '@testing-library/react-native'
 
+import { fireEvent, screen } from '@testing-library/react-native'
 import { context, render } from 'testUtils'
 import NoFolderMessages from './NoFolderMessages'
 import { updateSecureMessagingTab } from 'store/slices'

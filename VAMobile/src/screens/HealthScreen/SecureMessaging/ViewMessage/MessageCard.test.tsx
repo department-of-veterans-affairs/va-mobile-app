@@ -1,10 +1,9 @@
 import 'react-native'
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
-// Note: test renderer must be required after react-native.
+
 import { context, render } from 'testUtils'
 import { downloadFileAttachment } from 'store/slices'
-import { ErrorsState, initialErrorsState, InitialState } from 'store/slices'
 import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import MessageCard from './MessageCard'
 import Mock = jest.Mock
@@ -47,7 +46,7 @@ context('MessageCard', () => {
       },
     ]
 
-    const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, isInitialMessage: boolean = false) => {
+    const initializeTestInstance = () => {
       onPressSpy = jest.fn(() => {})
 
       let messageAttributes: SecureMessagingMessageAttributes = {
@@ -66,15 +65,10 @@ context('MessageCard', () => {
       }
       let mockProps = {
         message: messageAttributes,
-        isInitialMessage: isInitialMessage,
+        isInitialMessage: false,
       }
 
-      render(<MessageCard {...mockProps} />, {
-        preloadedState: {
-          ...InitialState,
-          errors: errorsState,
-        },
-      })
+      render(<MessageCard {...mockProps} />)
     }
 
     beforeEach(() => {

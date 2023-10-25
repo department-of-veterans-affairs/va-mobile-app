@@ -1,10 +1,8 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockNavProps, render, RenderAPI } from 'testUtils'
+import { act } from 'react-test-renderer'
+import { context, render } from 'testUtils'
 import { useComposeCancelConfirmation } from './ComposeCancelConfirmation'
 import { SecureMessagingFormData } from 'store/api'
 import { FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
@@ -57,8 +55,6 @@ jest.mock('store/slices', () => {
 })
 
 context('useComposeCancelConfirmation', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let navigateToSecureMessagingSpy: jest.Mock
   let navigateToStartNewMessageSpy: jest.Mock
   let navigateToViewMessageScreenSpy: jest.Mock
@@ -102,19 +98,13 @@ context('useComposeCancelConfirmation', () => {
       })
       return <></>
     }
-
-    component = render(<TestComponent />)
-
-    testInstance = component.UNSAFE_root
+    render(<TestComponent />)
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
   describe('New Message', () => {
     describe('on clicking discard', () => {
       it('should go back to the previous page', async () => {

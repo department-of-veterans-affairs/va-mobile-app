@@ -77,6 +77,7 @@ describe('EditAddressScreen', () => {
         },
       },
     )
+    let queriesData: QueriesData | undefined
 
     if (contactInformation) {
       queriesData = [{
