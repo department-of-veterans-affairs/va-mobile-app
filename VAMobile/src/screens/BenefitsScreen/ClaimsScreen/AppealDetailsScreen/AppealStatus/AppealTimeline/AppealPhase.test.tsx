@@ -1,30 +1,21 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { screen, fireEvent } from '@testing-library/react-native'
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, render, RenderAPI } from 'testUtils'
 
+import { screen } from '@testing-library/react-native'
+import { context, mockNavProps, render } from 'testUtils'
 import AppealPhase from './AppealPhase'
 import { AppealEventTypes } from 'store/api/types'
-import { TextView } from 'components'
 
 context('AppealPhase', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-
   const initializeTestInstance = (type: AppealEventTypes): void => {
-    props = mockNavProps({
+    const props = mockNavProps({
       event: {
         date: '2015-04-24',
         type,
       },
     })
 
-    component = render(<AppealPhase {...props} />)
-
-    testInstance = component.UNSAFE_root
+    render(<AppealPhase {...props} />)
   }
 
   beforeEach(() => {

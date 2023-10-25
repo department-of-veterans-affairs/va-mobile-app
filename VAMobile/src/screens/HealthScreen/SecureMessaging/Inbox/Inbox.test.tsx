@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
-import { context, mockNavProps, render} from 'testUtils'
+import { context, render} from 'testUtils'
 import Inbox from './Inbox'
 import { CategoryTypeFields, CategoryTypes } from 'store/api/types'
 import { initialSecureMessagingState } from 'store/slices'
@@ -35,7 +35,6 @@ context('Inbox', () => {
   const initializeTestInstance = (category: CategoryTypes = CategoryTypeFields.other, subjectLine: string = 'Default subject line', loading: boolean = false) => {
     mockNavigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
-    const props = mockNavProps()
 
     render(<Inbox />, {
       preloadedState: {
