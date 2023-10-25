@@ -41,9 +41,9 @@ export type LabelTagProps = {
 const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yLabel }) => {
   const theme = useTheme()
   const fontScale = useWindowDimensions().fontScale
-
+  const adjustSize = fontScale >= 2
   const textView = (
-    <TextView flexWrap={'wrap'} color={'labelTag'} variant={'LabelTag'} pl={fontScale >= 2 ? 30 : 12} pr={fontScale >= 2 ? 8 : 12} py={fontScale >= 2 ? 8 : 4}>
+    <TextView flexWrap={'wrap'} color={'labelTag'} variant={'LabelTag'} pl={adjustSize ? 30 : 12} pr={adjustSize ? 8 : 12} py={adjustSize ? 8 : 4}>
       {text}
     </TextView>
   )
@@ -97,9 +97,9 @@ const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yL
       name: 'Info',
       fill: 'tagInfoIcon',
       fill2: 'transparent',
-      height: fontScale >= 2 ? 10 : 16,
-      width: fontScale >= 2 ? 10 : 16,
-      mr: fontScale >= 2 ? 5 : 10,
+      height: adjustSize ? 10 : 16,
+      width: adjustSize ? 10 : 16,
+      mr: adjustSize ? 5 : 10,
     }
 
     return (
