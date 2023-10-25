@@ -6,6 +6,7 @@ import AddressValidation from './AddressValidation'
 import { SnackbarMessages } from 'components/SnackBar'
 import { AddressData, ValidateAddressData } from 'api/types'
 
+
 const mockAddress: AddressData = {
   addressLine1: '2248 San Miguel Ave.',
   addressPou: 'CORRESPONDENCE',
@@ -61,8 +62,8 @@ jest.mock('@react-navigation/native', () => {
   return {
     ...actual,
     useNavigation: () => ({
-      navigate: mockedNavigate,
-      goBack: mockedNavigationGoBack,
+      navigate: jest.fn(),
+      goBack: jest.fn(),
       setOptions: jest.fn(),
     }),
   }
