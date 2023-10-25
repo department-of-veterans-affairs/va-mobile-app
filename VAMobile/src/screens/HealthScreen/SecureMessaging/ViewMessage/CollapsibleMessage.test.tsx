@@ -1,10 +1,9 @@
 import 'react-native'
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
-// Note: test renderer must be required after react-native.
+
 import { context, render } from 'testUtils'
 import { downloadFileAttachment } from 'store/slices'
-import { ErrorsState, initialErrorsState, InitialState } from 'store/slices'
 import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import CollapsibleMessage from './CollapsibleMessage'
 import Mock = jest.Mock
@@ -37,7 +36,7 @@ context('CollapsibleMessage', () => {
     },
   ]
 
-  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, isInitialMessage: boolean = false) => {
+  const initializeTestInstance = (isInitialMessage: boolean = false) => {
     onPressSpy = jest.fn(() => {})
 
     let messageAttributes: SecureMessagingMessageAttributes = {
@@ -59,12 +58,7 @@ context('CollapsibleMessage', () => {
       isInitialMessage: isInitialMessage,
     }
 
-    render(<CollapsibleMessage {...mockProps} />, {
-      preloadedState: {
-        ...InitialState,
-        errors: errorsState,
-      },
-    })
+    render(<CollapsibleMessage {...mockProps} />)
   }
 
   beforeEach(() => {
@@ -78,7 +72,7 @@ context('CollapsibleMessage', () => {
   })
 
   it('does not render CollapsibleMessage when it is the initialMessage', () => {
-    initializeTestInstance(initialErrorsState, true)
+    initializeTestInstance(true)
     expect(screen.queryByText('John Smith')).toBeFalsy()
   })
 

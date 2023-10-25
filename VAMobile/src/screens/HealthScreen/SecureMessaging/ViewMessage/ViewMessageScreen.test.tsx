@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
-import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store/slices'
+import { initialSecureMessagingState } from 'store/slices'
 import ViewMessageScreen from './ViewMessageScreen'
 import { DateTime } from 'luxon'
 
@@ -89,7 +89,6 @@ context('ViewMessageScreen', () => {
       { params: { messageID: messageID } },
     )} />, {
       preloadedState: {
-        auth: { ...initialAuthState },
         secureMessaging: {
           ...initialSecureMessagingState,
           loading: loading,
@@ -97,7 +96,6 @@ context('ViewMessageScreen', () => {
           threads: threadList,
           messageIDsOfError: messageIDsOfError,
         },
-        errors: initialErrorsState,
       },
     })
   }
