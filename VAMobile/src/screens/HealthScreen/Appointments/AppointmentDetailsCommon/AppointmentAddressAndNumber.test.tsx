@@ -3,7 +3,6 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { render } from 'testUtils'
-import { InitialState } from 'store/slices'
 import AppointmentAddressAndNumber from './AppointmentAddressAndNumber'
 import { AppointmentAttributes, AppointmentPhone, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
 
@@ -30,7 +29,7 @@ describe('AppointmentAddressAndNumber', () => {
       location: { name, address, phone },
       ...(attributes || {}),
     } as AppointmentAttributes
-    render(<AppointmentAddressAndNumber attributes={props} />, { preloadedState: { ...InitialState } })
+    render(<AppointmentAddressAndNumber attributes={props} />)
   }
 
   beforeEach(() => {
