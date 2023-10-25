@@ -1,21 +1,14 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
 
+import { screen } from '@testing-library/react-native'
 import * as api from 'store/api'
-import { context, findByTypeWithText, mockNavProps, render, RenderAPI, when } from 'testUtils'
+import { context, mockNavProps, render, when } from 'testUtils'
 import { initialAuthState, initialErrorsState, initialVaccineState } from 'store/slices'
-import { LoadingComponent, TextView } from 'components'
 import VaccineListScreen from './VaccineListScreen'
 import { waitFor } from '@testing-library/react-native'
 
 context('VaccineListScreen', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-
   const vaccineData: api.VaccineList = [
     {
       id: 'I2-A7XD2XUPAZQ5H4Y5D6HJ352GEQ000000',
@@ -47,51 +40,36 @@ context('VaccineListScreen', () => {
     },
   ]
 
-  const initializeTestInstance = (loaded: boolean = true, noVaccines: boolean = false) => {
-    props = mockNavProps()
+  const initializeTestInstance = (loaded: boolean = false, noVaccines: boolean = false) => {
+    const props = mockNavProps()
 
-    component = render(<VaccineListScreen {...props} />, {
+    render(<VaccineListScreen {...props} />, {
       preloadedState: {
         auth: { ...initialAuthState },
         vaccine: {
           ...initialVaccineState,
-          loading: !loaded,
+          loading: loaded,
         },
         errors: initialErrorsState,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
+    when(api.get as jest.Mock)
+        .calledWith('/v1/health/immunizations', expect.anything())
+        .mockResolvedValue({ data: vaccineData })
     await waitFor(() => {
-      initializeTestInstance()
-      expect(component).toBeTruthy()
+      initializeTestInstance(false)
     })
+    expect(screen.getByText('FLU vaccine')).toBeTruthy()
+    expect(screen.getByText('COVID-19 vaccine')).toBeTruthy()
   })
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      await waitFor(() => {
-        initializeTestInstance(false)
-        expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-      })
-    })
-  })
-
-  describe('when showing the list', () => {
-    it('should show the correct list items', async () => {
-      when(api.get as jest.Mock)
-        .calledWith('/v1/health/immunizations', expect.anything())
-        .mockResolvedValue({ data: vaccineData })
-
-      await waitFor(() => {
-        initializeTestInstance()
-      })
-
-      expect(findByTypeWithText(testInstance, TextView, 'COVID-19 vaccine')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'FLU vaccine')).toBeTruthy()
+      initializeTestInstance(true)
+      expect(screen.getByText('Loading your vaccine record...')).toBeTruthy()
     })
   })
 
@@ -102,10 +80,13 @@ context('VaccineListScreen', () => {
         .mockResolvedValue({ data: [] })
 
       await waitFor(() => {
-        initializeTestInstance(true, true)
+        initializeTestInstance(false, true)
       })
-
-      expect(findByTypeWithText(testInstance, TextView, "We couldn't find information about your V\ufeffA vaccines")).toBeTruthy()
+      expect(screen.getByText("We couldn't find information about your VA vaccines")).toBeTruthy()
+      expect(screen.getByText("We're sorry. We update your vaccine records every 24 hours, but new records can take up to 36 hours to appear.")).toBeTruthy()
+      expect(screen.getByText("If you think your vaccine records should be here, call our MyVA411 main information line. We're here 24/7.")).toBeTruthy()
+      expect(screen.getByText('800-698-2411')).toBeTruthy()
+      expect(screen.getByText('TTY: 711')).toBeTruthy()
     })
   })
 })

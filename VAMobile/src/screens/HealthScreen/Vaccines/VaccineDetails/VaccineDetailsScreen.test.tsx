@@ -1,25 +1,17 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, findByTypeWithText, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
-import { initialAuthState, initialErrorsState, initialVaccineState } from 'store/slices'
-import { TextView } from 'components'
+import { screen } from '@testing-library/react-native'
+import { context, mockNavProps, render } from 'testUtils'
+import { initialVaccineState } from 'store/slices'
 import VaccineDetailsScreen from './VaccineDetailsScreen'
 
 context('VaccineDetailsScreen', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
 
   const initializeTestInstance = (vId: string = 'N7A6Q5AU6W5C6O4O7QEDZ3SJXM000000', loaded: boolean = true) => {
-    props = mockNavProps(undefined, undefined, { params: { vaccineId: vId } })
-
-    component = render(<VaccineDetailsScreen {...props} />, {
+    const props = mockNavProps(undefined, undefined, { params: { vaccineId: vId } })
+    render(<VaccineDetailsScreen {...props} />, {
       preloadedState: {
-        auth: { ...initialAuthState },
         vaccine: {
           ...initialVaccineState,
           vaccinesById: {
@@ -92,32 +84,32 @@ context('VaccineDetailsScreen', () => {
           },
           loading: !loaded,
         },
-        errors: initialErrorsState,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   it('initializes correctly', async () => {
     initializeTestInstance()
-    expect(component).toBeTruthy()
-  })
+    expect(screen.getByText('December 18, 2020')).toBeTruthy()
+    expect(screen.getByText('COVID-19 vaccine')).toBeTruthy()
+    expect(screen.getByText('Type and dosage')).toBeTruthy()
+    expect(screen.getByText('COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose')).toBeTruthy()
+    expect(screen.getByText('Janssen')).toBeTruthy()
+    expect(screen.getByText('Series status')).toBeTruthy()
+    expect(screen.getByText('Series 1 of 1')).toBeTruthy()
+    expect(screen.getByText('Provider')).toBeTruthy()
+    expect(screen.getByText('None noted')).toBeTruthy()
+    expect(screen.getByText('Reaction')).toBeTruthy()
+    expect(screen.getByText('Notes')).toBeTruthy()
+    expect(screen.getByText('Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.')).toBeTruthy()
+    expect(screen.getByText('We base this information on your current VA health records. If you have any questions, contact your health care team.')).toBeTruthy()
+    expect(screen.queryByText('facility 1')).toBeFalsy()
+    expect(screen.queryByText('123 abc street')).toBeFalsy()
+    expect(screen.queryByText('Tiburon, CA 94920')).toBeFalsy()
 
-  describe('when showing the vaccine', () => {
-    it('should show fields from the vaccine data', async () => {
-      initializeTestInstance()
-      expect(findByTypeWithText(testInstance, TextView, 'COVID-19 vaccine')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Fever')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Janssen')).toBeTruthy()
-    })
-
-    it('should show show location data', async () => {
-      initializeTestInstance('HASLOCATION')
-      expect(findByTypeWithText(testInstance, TextView, 'facility 1')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, '123 abc street')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Tiburon, CA 94920')).toBeTruthy()
-    })
+    initializeTestInstance('HASLOCATION')
+    expect(screen.getByText('facility 1')).toBeTruthy()
+    expect(screen.getByText('123 abc street')).toBeTruthy()
+    expect(screen.getByText('Tiburon, CA 94920')).toBeTruthy()
   })
 })
