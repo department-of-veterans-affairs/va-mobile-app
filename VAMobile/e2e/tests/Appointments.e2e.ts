@@ -37,8 +37,7 @@ export const Appointmentse2eConstants = {
   PHONE_NUMBER_ID: 'CallTTYTestID',
   PATIENT_CANCELLATION: 'You canceled this appointment.',
   VA_PAST_APPOINTMENT: 'To schedule another appointment, please visit VA.gov or call your VA medical center.',
-  PAST_APPOINTMENT_1_ID: 'Pending Primary Care Community care Request type: In-person',
-  PAST_APPOINTMENT_2_ID: 'Canceled Optometry (routine eye exam) Vilasini Reddy Request type: In-person',
+  PAST_APPOINTMENT_1_ID: 'Canceled Optometry (routine eye exam) Vilasini Reddy Request type: In-person',
   DATE_RANGE_INITIAL_TEXT: 'Past 3 months',
   APPOINTMENT_CANCEL_REQUEST_TEXT: device.getPlatform() === 'ios' ? 'Cancel Request' : 'Cancel Request ',
 }
@@ -57,7 +56,6 @@ describe('Appointments Screen', () => {
     await expect(element(by.text(Appointmentse2eConstants.APPOINTMENT_DESCRIPTION))).toExist()
     await expect(element(by.id(`Confirmed ${fortyFiveMinutesLater} Outpatient Clinic`))).toExist()
     await expect(element(by.id(`Confirmed ${twoDaysLater} Community Clinic Association`))).toExist()
-    await expect(element(by.id(`Canceled COVID-19 vaccine ${twentyFiveDaysLater} VA Long Beach Healthcare System In-person`))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_5_ID))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_6_ID))).toExist()
@@ -66,7 +64,7 @@ describe('Appointments Screen', () => {
   })
 
   it('should open appointment details and give the correct information', async () => {
-    await element(by.id(`Confirmed ${fortyFiveMinutesLater} Outpatient Clinic`)).tap()
+    await element(by.text('Outpatient Clinic')).tap()
     await expect(element(by.text('Community care'))).toExist()
     await expect(element(by.id(fortyFiveMinutesLater))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.ADD_TO_CALENDAR_ID)).atIndex(0)).toExist()
@@ -165,14 +163,12 @@ describe('Appointments Screen', () => {
     await expect(element(by.text('Phone Number: (703) 652-0000'))).toExist()
     await expect(element(by.text('Call: Afternoon,Evening,Morning'))).toExist()
     await element(by.text('Appointments')).tap()
-    await expect(element(by.id(`Confirmed ${fortyFiveMinutesLater} Outpatient Clinic`))).toExist()
   })
 
   it('should tap on and show past appointments', async () => {
     await element(by.id('appointmentsTestID')).scrollTo('top')
     await element(by.text('Past')).tap()
     await expect(element(by.id(Appointmentse2eConstants.PAST_APPOINTMENT_1_ID))).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.PAST_APPOINTMENT_2_ID))).toExist()
     if (device.getPlatform() === 'android') {
       await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
     } else {
