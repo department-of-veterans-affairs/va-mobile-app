@@ -371,6 +371,7 @@ describe('EditAddressScreen', () => {
       expect(screen.queryByText('APO/FPO/DPO (Required)')).toBeFalsy()
       expect(screen.getByText('City (Required)')).toBeTruthy()
     })
+  })
 
   describe('when the country is domestic', () => {
     it('renders the state picker', () => {
