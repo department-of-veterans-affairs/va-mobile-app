@@ -1,26 +1,18 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { render, context, RenderAPI, waitFor, mockNavProps, findByTypeWithText } from 'testUtils'
 
+import { render, context, mockNavProps } from 'testUtils'
+import { screen } from '@testing-library/react-native'
 import PrescriptionDetails from './PrescriptionDetails'
-import { ReactTestInstance } from 'react-test-renderer'
-import { initialAuthState } from 'store/slices'
 import { initialPrescriptionState } from 'store/slices/prescriptionSlice'
-import { ClickForActionLink, FooterButton, TextView, VAButton } from 'components'
 import { PrescriptionAttributeData, RefillStatusConstants } from 'store/api/types'
-import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 
 context('PrescriptionDetails', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
   const initializeTestInstance = (mockAttributeData: Partial<PrescriptionAttributeData> = {}) => {
     const props = mockNavProps(undefined, undefined, { params: { prescriptionId: '13650544' } })
 
-    component = render(<PrescriptionDetails {...props} />, {
+    render(<PrescriptionDetails {...props} />, {
       preloadedState: {
-        auth: { ...initialAuthState },
         prescriptions: {
           ...initialPrescriptionState,
           prescriptionsById: {
@@ -51,28 +43,21 @@ context('PrescriptionDetails', () => {
         },
       },
     })
-    testInstance = component.UNSAFE_root
   }
-
-  it('initializes correctly', async () => {
-    initializeTestInstance()
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-    })
-  })
 
   describe('when showing prescription details data', () => {
     it('should show prescription fields', async () => {
       initializeTestInstance()
-      expect(findByTypeWithText(testInstance, TextView, 'Instructions')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Refills left')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Fill date')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Quantity')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Expires on')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Ordered on')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'VA facility')).toBeTruthy()
+      expect(screen.getByText('Instructions')).toBeTruthy()
+      expect(screen.getByText('Refills left')).toBeTruthy()
+      expect(screen.getByText('Fill date')).toBeTruthy()
+      expect(screen.getByText('Quantity')).toBeTruthy()
+      expect(screen.getByText('Expires on')).toBeTruthy()
+      expect(screen.getByText('Ordered on')).toBeTruthy()
+      expect(screen.getByText('VA facility')).toBeTruthy()
 
-      expect(testInstance.findAllByType(ClickForActionLink)).toHaveLength(2)
+      expect(screen.getByText('(217) 636-6712')).toBeTruthy()
+      expect(screen.getByText('TTY: 711')).toBeTruthy()
     })
   })
 
@@ -88,23 +73,15 @@ context('PrescriptionDetails', () => {
         facilityName: '',
         prescriptionNumber: '',
       })
-      const texts = testInstance.findAllByType(TextView)
-
-      expect(texts[4].props.children).toEqual('Rx #: None noted')
-      expect(texts[6].props.children).toEqual('Instructions')
-      expect(texts[7].props.children).toEqual('None noted')
-      expect(texts[8].props.children).toEqual('Refills left')
-      expect(texts[9].props.children).toEqual('None noted')
-      expect(texts[10].props.children).toEqual('Fill date')
-      expect(texts[11].props.children).toEqual('None noted')
-      expect(texts[12].props.children).toEqual('Quantity')
-      expect(texts[13].props.children).toEqual('None noted')
-      expect(texts[14].props.children).toEqual('Expires on')
-      expect(texts[15].props.children).toEqual('None noted')
-      expect(texts[16].props.children).toEqual('Ordered on')
-      expect(texts[17].props.children).toEqual('None noted')
-      expect(texts[18].props.children).toEqual('VA facility')
-      expect(texts[19].props.children).toEqual('None noted')
+      expect(screen.getByText('Rx #: None noted')).toBeTruthy()
+      expect(screen.getByText('Instructions')).toBeTruthy()
+      expect(screen.getAllByText('None noted')).toBeTruthy()
+      expect(screen.getByText('Refills left')).toBeTruthy()
+      expect(screen.getByText('Fill date')).toBeTruthy()
+      expect(screen.getByText('Quantity')).toBeTruthy()
+      expect(screen.getByText('Expires on')).toBeTruthy()
+      expect(screen.getByText('Ordered on')).toBeTruthy()
+      expect(screen.getByText('VA facility')).toBeTruthy()
     })
   })
 
@@ -114,19 +91,14 @@ context('PrescriptionDetails', () => {
         initializeTestInstance({
           refillStatus: RefillStatusConstants.TRANSFERRED,
         })
-
-        const button = testInstance.findAllByType(VAButton)
-        expect(button.length).toBe(1)
-        expect(button[0].props.label).toEqual('Go to My VA Health')
+        expect(screen.getByText('Go to My VA Health')).toBeTruthy()
       })
     })
 
     describe('when status is not RefillStatusConstants.TRANSFERRED', () => {
       it('should not display FooterButton', async () => {
         initializeTestInstance()
-
-        const button = testInstance.findAllByType(VAButton)
-        expect(button.length).toBe(0)
+        expect(screen.queryByText('Go to My VA Health')).toBeFalsy()
       })
     })
   })
@@ -137,19 +109,14 @@ context('PrescriptionDetails', () => {
         initializeTestInstance({
           isRefillable: true,
         })
-
-        const button = testInstance.findAllByType(VAButton)
-        expect(button.length).toBe(1)
-        expect(button[0].props.label).toEqual('Request refill')
+        expect(screen.getByText('Request refill')).toBeTruthy()
       })
     })
 
     describe('when isRefillable is false', () => {
       it('should not display FooterButton', async () => {
         initializeTestInstance()
-
-        const button = testInstance.findAllByType(VAButton)
-        expect(button.length).toBe(0)
+        expect(screen.queryByText('Request refill')).toBeFalsy()
       })
     })
   })
@@ -161,17 +128,14 @@ context('PrescriptionDetails', () => {
           refillStatus: RefillStatusConstants.TRANSFERRED,
         })
 
-        const prescriptionsDetailsBanner = testInstance.findAllByType(PrescriptionsDetailsBanner)
-        expect(prescriptionsDetailsBanner.length).toBe(1)
+        expect(screen.getByText("We can't refill this prescription in the app")).toBeTruthy()
       })
     })
 
     describe('when status is not RefillStatusConstants.TRANSFERRED', () => {})
     it('should not display the PrescriptionsDetailsBanner', async () => {
       initializeTestInstance()
-
-      const prescriptionsDetailsBanner = testInstance.findAllByType(PrescriptionsDetailsBanner)
-      expect(prescriptionsDetailsBanner.length).toBe(0)
+      expect(screen.queryByText("We can't refill this prescription in the app")).toBeFalsy()
     })
   })
 })
