@@ -8,9 +8,7 @@ const todaysDate = DateTime.local()
 const longDateFormat = 'DDDD t ZZZZ'
 const shortDateFormat = 'MM-dd-yyyy'
 
-//const fortyFiveMinutesLater = todaysDate.setZone('America/Los_Angeles').plus({ minutes: 45 }).toFormat(longDateFormat)
-const twoDaysLater = todaysDate.setZone('America/New_York').plus({ days: 2 }).toFormat(longDateFormat)
-const twentyFiveDaysLater = todaysDate.setZone('America/Los_Angeles').plus({ days: 25 }).toFormat(longDateFormat)
+const twoDaysLater = todaysDate.setZone('America/New_York').plus({ days: 2 }).toLocaleString(DateTime.DATE_HUGE)
 const sixtyThreeDaysLaterShort = todaysDate.plus({ days: 63 }).toFormat(shortDateFormat)
 const sixtyFourDaysLaterShort = todaysDate.plus({ days: 64 }).toFormat(shortDateFormat)
 
@@ -23,6 +21,7 @@ const nineMonthsEarlier = todaysDate.minus({ months: 9 }).endOf('month').endOf('
 const currentYear = todaysDate.get('year')
 const lastYearDateTime = todaysDate.minus({ years: 1 })
 const lastYear = lastYearDateTime.get('year')
+var fortyFiveMinutesLater
 
 export const Appointmentse2eConstants = {
   APPOINTMENT_DESCRIPTION: "Here are your appointments. This list includes appointments you've requested but not yet confirmed.",
@@ -46,6 +45,7 @@ beforeAll(async () => {
   await loginToDemoMode()
   await openHealth()
   await openAppointments()
+  fortyFiveMinutesLater = todaysDate.setZone('America/Los_Angeles').plus({ minutes: 45 }).toFormat(longDateFormat)
   await waitFor(element(by.text('Upcoming')))
     .toExist()
     .withTimeout(10000)
@@ -54,9 +54,8 @@ beforeAll(async () => {
 describe('Appointments Screen', () => {
   it('should match the appointments page design', async () => {
     await expect(element(by.text(Appointmentse2eConstants.APPOINTMENT_DESCRIPTION))).toExist()
-    const fortyFiveMinutesLater = todaysDate.setZone('America/Los_Angeles').plus({ minutes: 45 }).toFormat(longDateFormat)
     await expect(element(by.id(`Confirmed ${fortyFiveMinutesLater} Outpatient Clinic`))).toExist()
-    await expect(element(by.id(`Confirmed ${twoDaysLater} Community Clinic Association`))).toExist()
+    await expect(element(by.text(`${twoDaysLater}`))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_5_ID))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_6_ID))).toExist()
@@ -64,7 +63,7 @@ describe('Appointments Screen', () => {
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_8_ID))).toExist()
   })
 
-  /*it('should open appointment details and give the correct information', async () => {
+  it('should open appointment details and give the correct information', async () => {
     await element(by.text('Outpatient Clinic')).tap()
     await expect(element(by.text('Community care'))).toExist()
     await expect(element(by.id(fortyFiveMinutesLater))).toExist()
@@ -217,5 +216,5 @@ describe('Appointments Screen', () => {
     await element(by.id('getDateRangeTestID')).tap()
     await element(by.text('All of ' + lastYear)).tap()
     await element(by.text('Done')).tap()
-  })*/
+  })
 })
