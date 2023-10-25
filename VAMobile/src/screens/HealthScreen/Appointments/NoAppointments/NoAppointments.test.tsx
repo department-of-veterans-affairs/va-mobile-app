@@ -1,29 +1,15 @@
 import 'react-native'
 import React from 'react'
 
-// Note: test renderer must be required after react-native.
-import { context, render, RenderAPI, waitFor } from 'testUtils'
-
+import { context, render } from 'testUtils'
+import { screen } from '@testing-library/react-native'
 import NoAppointments from './NoAppointments'
-import { InitialState } from 'store/slices'
 
 context('NoAppointments', () => {
-  let component: RenderAPI
-  let testInstance: any
-
-  beforeEach(async () => {
-    await waitFor(() => {
-      component = render(<NoAppointments subText="You don't have any appointments in this range" />, {
-        preloadedState: {
-          ...InitialState,
-        },
-      })
-    })
-
-    testInstance = component.UNSAFE_root
-  })
-
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    render(<NoAppointments subText="You don't have any appointments in this range" />)
+    expect(screen.getByText("You don’t have any appointments")).toBeTruthy()
+    expect(screen.getByText("You don't have any appointments in this range")).toBeTruthy()
+    expect(screen.getByText('Visit VA.gov')).toBeTruthy()
   })
 })

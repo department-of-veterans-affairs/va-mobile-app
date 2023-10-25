@@ -69,7 +69,6 @@ context('SyncScreen', () => {
       disabilityRating: { ...initialDisabilityRatingState, preloadComplete: !disabilityRatingLoading },
       militaryService: { ...initialMilitaryServiceState, preloadComplete: !militaryLoading },
     }
-
     render(<SyncScreen />, { preloadedState: store })
   }
 

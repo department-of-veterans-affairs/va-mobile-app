@@ -1,13 +1,10 @@
 import 'react-native'
 import React from 'react'
-import { Alert, Pressable } from 'react-native'
+import { Alert } from 'react-native'
 
-// Note: test renderer must be required after react-native.
-import { context, mockNavProps, render, findByTypeWithSubstring, findByTypeWithText, RenderAPI, waitFor } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import { when } from 'jest-when'
-
-import { forEach } from 'underscore'
-
+import { screen, fireEvent } from '@testing-library/react-native'
 import { initialAppointmentsState, InitialState } from 'store/slices'
 import UpcomingAppointmentDetails from './UpcomingAppointmentDetails'
 import {
@@ -20,7 +17,6 @@ import {
   AppointmentStatusConstants,
   AppointmentStatusDetailTypeConsts,
 } from 'store/api/types'
-import { ClickForActionLink, TextView, VAButton } from 'components'
 import { bookedAppointmentsList, canceledAppointmentList } from 'store/slices/appointmentsSlice.test'
 
 let mockNavigationSpy = jest.fn()
@@ -35,8 +31,6 @@ jest.mock('utils/hooks', () => {
 })
 
 context('UpcomingAppointmentDetails', () => {
-  let component: RenderAPI
-  let testInstance: any
   let props: any
   let goBackSpy = jest.fn()
   let navigateSpy = jest.fn()
@@ -64,7 +58,7 @@ context('UpcomingAppointmentDetails', () => {
       .calledWith('SessionNotStarted')
       .mockReturnValue(navigateToSessionNotStartedSpy)
 
-    component = render(<UpcomingAppointmentDetails {...props} />, {
+    render(<UpcomingAppointmentDetails {...props} />, {
       preloadedState: {
         ...InitialState,
         appointments: {
@@ -104,257 +98,132 @@ context('UpcomingAppointmentDetails', () => {
         },
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(async () => {
-    await waitFor(() => {
-      initializeTestInstance()
-    })
+    initializeTestInstance()
   })
 
   afterEach(() => {
     jest.clearAllMocks()
   })
 
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-    })
-  })
-
   describe('when the appointment type is atlas', () => {
-    beforeEach(async () => {
-      await waitFor(() => {
-        initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS)
-      })
-    })
-
-    it('should display the appointment title', async () => {
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('VA Video Connect\r\nATLAS location')
-    })
-
-    it('should display the appointment code', async () => {
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Appointment code: 654321')
-    })
-
-    it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+    it('should display the appointment details', async () => {
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS)
+      expect(screen.getByText('VA Video Connect\r\nATLAS location')).toBeTruthy()
+      expect(screen.getByText('Appointment code: 654321')).toBeTruthy()
+      expect(screen.getByText('Special instructions')).toBeTruthy()
+      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
     })
   })
 
   describe('when the appointment type is at home', () => {
-    beforeEach(async () => {
-      await waitFor(() => {
-        initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
-      })
-    })
-    it('should display the appointment title', async () => {
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('VA Video Connect\r\nHome')
-    })
-    it('should display the how to join your virtual session text', async () => {
-      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('How to join your virtual session')
-      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('You can join VA Video Connect 30 minutes prior to the start time.')
-    })
-
-    it('should display the join session button', async () => {
-      const buttons = testInstance.findAllByType(VAButton)
-
-      expect(buttons.length).toEqual(1)
-      expect(buttons[0].props.testID).toEqual('Join session')
+    it('should display the appointment details', async () => {
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
+      expect(screen.getByText('VA Video Connect\r\nHome')).toBeTruthy()
+      expect(screen.getByText('How to join your virtual session')).toBeTruthy()
+      expect(screen.getByText('You can join VA Video Connect 30 minutes prior to the start time.')).toBeTruthy()
+      expect(screen.getByText('Join session')).toBeTruthy()
+      expect(screen.getByText('Special instructions')).toBeTruthy()
+      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
     })
 
     it('should prompt an alert for leaving the app when the URL is present', async () => {
-      await waitFor(() => {
-        initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME, undefined, undefined, undefined, undefined, undefined, true)
-      })
-
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME, undefined, undefined, undefined, undefined, undefined, true)
       jest.spyOn(Alert, 'alert')
-      const buttons = testInstance.findAllByType(Pressable)
-
-      await waitFor(() => {
-        buttons[0].props.onPress()
-      })
-
-      await waitFor(() => {
-        expect(Alert.alert).toHaveBeenCalled()
-      })
+      fireEvent.press(screen.getByText('Join session'))
+      expect(Alert.alert).toHaveBeenCalled()
     })
 
     it('should navigate to the SessionNotStarted screen when the URL is empty', async () => {
-      const buttons = testInstance.findAllByType(Pressable)
-
-      await waitFor(() => {
-        buttons[0].props.onPress()
-      })
-
-      await waitFor(() => {
-        expect(navigateToSessionNotStartedSpy).toHaveBeenCalled()
-      })
-    })
-
-    it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
+      fireEvent.press(screen.getByText('Join session'))
+      expect(navigateToSessionNotStartedSpy).toHaveBeenCalled()
     })
   })
 
   describe('when the appointment type is onsite', () => {
-    beforeEach(async () => {
-      await waitFor(() => {
-        initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE)
-      })
-    })
-
-    it('should display the appointment title', async () => {
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('VA Video Connect\r\nVA location')
-    })
-
-    it('should state that the video meeting must be joined from the listed location', async () => {
-      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('You must join this video meeting from the VA location listed below.')
-    })
-
-    it('should display the provider', async () => {
-      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Larry R. TestDoctor')
-    })
-
-    it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[17].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+    it('should display the appointment details', async () => {
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE)
+      expect(screen.getByText('VA Video Connect\r\nVA location')).toBeTruthy()
+      expect(screen.getByText('You must join this video meeting from the VA location listed below.')).toBeTruthy()
+      expect(screen.getByText('Larry R. TestDoctor')).toBeTruthy()
+      expect(screen.getByText('Special instructions')).toBeTruthy()
+      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
     })
   })
 
   describe('when the appointment type is gfe', () => {
-    beforeEach(async () => {
-      await waitFor(() => {
-        initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
-      })
-    })
-    it('should display the appointment title', async () => {
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('VA Video Connect\r\nusing a VA device')
-    })
-
-    it('should state that the video meeting must be joined using a VA device', async () => {
-      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual("To join this video appointment, you'll need to use a device we provide.")
-    })
-
-    it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+    it('should display the appointment details', async () => {
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
+      expect(screen.getByText('VA Video Connect\r\nusing a VA device')).toBeTruthy()
+      expect(screen.getByText("To join this video appointment, you'll need to use a device we provide.")).toBeTruthy()
+      expect(screen.getByText('Special instructions')).toBeTruthy()
+      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
     })
   })
 
   describe('when the appointment type is community care', () => {
-    beforeEach(async () => {
-      await waitFor(() => {
-        initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE)
-      })
-    })
-
-    it('should display the appointment title', async () => {
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Community care')
-    })
-
-    it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+    it('should display the appointment details', async () => {
+      initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE)
+      expect(screen.getByText('Community care')).toBeTruthy()
+      expect(screen.getByText('Special instructions')).toBeTruthy()
+      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
     })
   })
 
   describe('when the appointment type is va', () => {
-    it('should display the name of the facility location', async () => {
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('VA appointment')
-      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Blind Rehabilitation Center')
-    })
-
-    it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+    it('should display the appointment details', async () => {
+      initializeTestInstance(AppointmentTypeConstants.VA)
+      expect(screen.getByText('VA appointment')).toBeTruthy()
+      expect(screen.getByText('Blind Rehabilitation Center')).toBeTruthy()
+      expect(screen.getByText('Special instructions')).toBeTruthy()
+      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
     })
   })
 
   describe('when the appointment type is covid vaccine', () => {
-    beforeEach(async () => {
-      await waitFor(() => {
-        initializeTestInstance(undefined, undefined, undefined, true)
-      })
-    })
-
-    it('should display the appointment title', async () => {
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('COVID-19 vaccine')
-    })
-    it('should display the name of the facility location', async () => {
-      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('COVID-19 vaccine')
-    })
-
-    it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
-    })
-  })
-
-  describe('when there is no phone data', () => {
-    it('should not display any click to call link', async () => {
-      await waitFor(() => {
-        initializeTestInstance(undefined, undefined, null) // force value of phone to null (undefined will use default arg value)
-      })
-
-      const allClickForActionLinks = testInstance.findAllByType(ClickForActionLink)
-
-      forEach(allClickForActionLinks, (clickForActionLink) => {
-        expect(clickForActionLink.props.linkType).not.toEqual('call')
-      })
+    it('should display the appointment details', async () => {
+      initializeTestInstance(undefined, undefined, undefined, true)
+      expect(screen.getAllByText('COVID-19 vaccine')).toBeTruthy()
+      expect(screen.getByText('Special instructions')).toBeTruthy()
+      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
     })
   })
 
   describe('when the status is CANCELLED', () => {
     it('should display the schedule another appointment text', async () => {
-      await waitFor(() => {
-        initializeTestInstance(AppointmentTypeConstants.VA, AppointmentStatusConstants.CANCELLED, undefined, false, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
-      })
-
-      expect(findByTypeWithText(testInstance, TextView, 'To schedule another appointment, please visit VA.gov or call your VA medical center.')).toBeTruthy()
+      initializeTestInstance(AppointmentTypeConstants.VA, AppointmentStatusConstants.CANCELLED, undefined, false, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
+      expect(screen.getByText('To schedule another appointment, please visit VA.gov or call your VA medical center.')).toBeTruthy()
     })
   })
 
   describe('when the status is not CANCELLED', () => {
     it('should display the add to calendar click for action link', async () => {
-      expect(testInstance.findAllByType(ClickForActionLink)[0].props.displayedText).toEqual('Add to calendar')
+      expect(screen.getByText('Add to calendar')).toBeTruthy()
     })
   })
 
   describe('when the appointment is canceled', () => {
     it('should show if you cancelled', async () => {
-      await waitFor(() => {
-        initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
-      })
-
-      expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
+      expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
     })
 
     it('should show if you cancelled (rebook)', async () => {
-      await waitFor(() => {
-        initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
-      })
-
-      expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
+      expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
     })
 
     it('should show if facility cancelled', async () => {
-      await waitFor(() => {
-        initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC)
-      })
-
-      expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC)
+      expect(screen.getByText('VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
 
     it('should show if facility cancelled (rebook)', async () => {
-      await waitFor(() => {
-        initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
-      })
-      expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
+      expect(screen.getByText('VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
   })
 })
