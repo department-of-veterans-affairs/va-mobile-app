@@ -2,8 +2,7 @@ import 'react-native'
 import React from 'react'
 
 import { context, render } from 'testUtils'
-import { initialAuthState, initialErrorsState } from 'store/slices'
-import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { fireEvent, screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
 import PaymentsScreen from './index'
 
@@ -85,19 +84,12 @@ context('PaymentsScreen', () => {
       .calledWith('PaymentHistory')
       .mockReturnValue(navigateToPaymentHistorySpy)
 
-    render(<PaymentsScreen />, {
-      preloadedState: {
-        auth: { ...initialAuthState },
-        errors: initialErrorsState,
-      },
-    })
+    render(<PaymentsScreen />)
   }
 
   describe('when user does not have directDepositBenefits', () => {
     it('should navigate to HowToUpdateDirectDeposit', async () => {
-      await waitFor(() => {
-        initializeTestInstance()
-      })
+      initializeTestInstance()
       fireEvent.press(screen.getByText('Direct deposit information'))
       expect(navigateToHowToUpdateDirectDepositSpy).toHaveBeenCalled()
     })
@@ -105,9 +97,7 @@ context('PaymentsScreen', () => {
 
   describe('when user does have directDepositBenefits', () => {
     it('should navigate to DirectDeposit', async () => {
-      await waitFor(() => {
-        initializeTestInstance()
-      })
+      initializeTestInstance()
       fireEvent.press(screen.getByText('Direct deposit information'))
       expect(navigateToDirectDepositSpy).toHaveBeenCalled()
     })
@@ -115,9 +105,7 @@ context('PaymentsScreen', () => {
 
   describe('when user click on VA payment history', () => {
     it('should navigate to PaymentHistory', async () => {
-      await waitFor(() => {
-        initializeTestInstance()
-      })
+      initializeTestInstance()
       fireEvent.press(screen.getByText('VA payment history'))
       expect(navigateToPaymentHistorySpy).toHaveBeenCalled()
     })

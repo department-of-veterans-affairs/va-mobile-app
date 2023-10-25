@@ -3,7 +3,7 @@ import React from 'react'
 
 import { context, mockNavProps, render, screen, fireEvent } from 'testUtils'
 import EditDirectDepositScreen from './EditDirectDepositScreen'
-import { updateBankInfo, InitialState, initialDirectDepositState, initialErrorsState } from 'store/slices'
+import { updateBankInfo, initialDirectDepositState } from 'store/slices'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 jest.mock('store/slices', () => {
@@ -41,14 +41,12 @@ context('EditDirectDepositScreen', () => {
 
     render(<EditDirectDepositScreen {...props} />, {
       preloadedState: {
-        ...InitialState,
         directDeposit: {
           ...initialDirectDepositState,
           saving,
           bankInfoUpdated: bankInfoUpdated,
           invalidRoutingNumberError: invalidRoutingNumberError,
         },
-        errors: initialErrorsState,
       },
     })
   }

@@ -1,19 +1,14 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
 
-import { context, mockNavProps, render, RenderAPI } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import { initialAuthState, initialPaymentsState } from 'store/slices'
 import PaymentDetailsScreen from './PaymentDetailsScreen'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { screen } from '@testing-library/react-native'
 
 context('PaymentDetailsScreen', () => {
-  let component: RenderAPI
   let props: any
-  let testInstance: ReactTestInstance
   let paymentDate: string
   let formattedDate: string
 
@@ -29,7 +24,7 @@ context('PaymentDetailsScreen', () => {
     paymentDate = '2021-02-01T00:00:00.000-07:00'
     formattedDate = formatDateUtc(paymentDate, 'MMMM d, yyyy')
 
-    component = render(<PaymentDetailsScreen {...props} />, {
+    render(<PaymentDetailsScreen {...props} />, {
       preloadedState: {
         auth: { ...initialAuthState },
         payments: {
@@ -63,13 +58,7 @@ context('PaymentDetailsScreen', () => {
         },
       },
     })
-    testInstance = component.UNSAFE_root
   }
-
-  it('initializes correctly', async () => {
-    initializeTestInstance()
-    expect(component).toBeTruthy()
-  })
 
   describe('when showing payment info', () => {
     it('should show payment details information when direct deposit', async () => {
