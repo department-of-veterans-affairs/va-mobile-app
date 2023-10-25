@@ -1,22 +1,15 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, findByTypeWithSubstring, render, RenderAPI } from 'testUtils'
 
-import { InitialState } from 'store/slices'
+import { screen } from '@testing-library/react-native'
+import { context, render } from 'testUtils'
 import PreferredAppointmentType from './PreferredAppointmentType'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 import { AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants } from 'store/api/types/AppointmentData'
-import { TextView } from 'components'
 
 context('PreferredAppointmentType', () => {
-  let component: RenderAPI
-  let props: any
-  let testInstance: ReactTestInstance
-
   const initializeTestInstance = (appointmentType: AppointmentType, phoneOnly: boolean = false): void => {
-    props = {
+    const props = {
       ...defaultAppointmentAttributes,
       appointmentType,
       phoneOnly,
@@ -24,24 +17,27 @@ context('PreferredAppointmentType', () => {
       status: AppointmentStatusConstants.SUBMITTED,
     }
 
-    component = render(<PreferredAppointmentType attributes={props} />, {
-      preloadedState: {
-        ...InitialState,
-      },
-    })
-
-    testInstance = component.UNSAFE_root
+    render(<PreferredAppointmentType attributes={props} />)
   }
 
-  it('initializes correctly', async () => {
-    initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE)
-    expect(component).toBeTruthy()
+  describe('when appointmentType is COMMUNITY_CARE', () => {
+    it('and phoneOnly is false should show "Office visit"', async () => {
+      initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE)
+      expect(screen.getByText('Preferred type of appointment')).toBeTruthy()
+      expect(screen.getByText('Office visit')).toBeTruthy()
+    })
   })
 
   describe('when appointmentType is video', () => {
     it('should show "Video"', async () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS)
-      expect(findByTypeWithSubstring(testInstance, TextView, 'Video')).toBeTruthy()
+      expect(screen.getByText('Video')).toBeTruthy()
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
+      expect(screen.getByText('Video')).toBeTruthy()
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
+      expect(screen.getByText('Video')).toBeTruthy()
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE)
+      expect(screen.getByText('Video')).toBeTruthy()
     })
   })
 
@@ -49,7 +45,7 @@ context('PreferredAppointmentType', () => {
     describe('and phoneOnly is true ', () => {
       it('should show "Phone call"', async () => {
         initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE, true)
-        expect(findByTypeWithSubstring(testInstance, TextView, 'Phone call')).toBeTruthy()
+        expect(screen.getByText('Phone call')).toBeTruthy()
       })
     })
   })
@@ -58,7 +54,7 @@ context('PreferredAppointmentType', () => {
     describe('and phoneOnly is false ', () => {
       it('should show "Office visit"', async () => {
         initializeTestInstance(AppointmentTypeConstants.VA)
-        expect(findByTypeWithSubstring(testInstance, TextView, 'Office visit')).toBeTruthy()
+        expect(screen.getByText('Office visit')).toBeTruthy()
       })
     })
   })
