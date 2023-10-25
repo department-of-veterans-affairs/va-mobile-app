@@ -1,23 +1,19 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { context, findByTypeWithText, mockNavProps, mockStore, render } from 'testUtils'
-import { act, ReactTestInstance } from 'react-test-renderer'
 
+import { context, mockNavProps, render } from 'testUtils'
+import { screen, fireEvent } from '@testing-library/react-native'
 import UploadFile from './UploadFile'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { InitialState } from 'store/slices'
-import { TextView, VAButton, VAModalPicker, VASelector } from 'components'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ImagePickerResponse } from 'react-native-image-picker'
-import { RenderAPI } from '@testing-library/react-native'
 
 const mockAlertSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
-  const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
     ...original,
     useRouteNavigation: () => {
@@ -28,11 +24,7 @@ jest.mock('utils/hooks', () => {
 })
 
 context('UploadFile', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let props: any
   let navigateToSpy: jest.Mock
-
   let request = {
     type: 'still_need_from_you_list',
     date: '2020-07-16',
@@ -50,9 +42,9 @@ context('UploadFile', () => {
       size: 100,
     } as DocumentPickerResponse
 
-    props = mockNavProps(undefined, { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, fileUploaded: file, imageUploaded } })
+    const props = mockNavProps(undefined, { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, fileUploaded: file, imageUploaded } })
 
-    component = render(<UploadFile {...props} />, {
+    render(<UploadFile {...props} />, {
       preloadedState: {
         ...InitialState,
         claimsAndAppeals: {
@@ -61,8 +53,6 @@ context('UploadFile', () => {
         },
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -70,27 +60,29 @@ context('UploadFile', () => {
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    expect(screen.getByText('Upload files')).toBeTruthy()
+    expect(screen.getByTestId('File 1 0.1 kilobytes')).toBeTruthy()
+    expect(screen.getByTestId('Document type picker required')).toBeTruthy()
+    expect(screen.getByLabelText('The file I uploaded is evidence for this claim. (Required) ')).toBeTruthy()
+    expect(screen.getByText('Submit file')).toBeTruthy()
   })
 
   describe('on click of the upload button', () => {
     it('should display an error if the checkbox is not checked', async () => {
-      act(() => {
-        testInstance.findByType(VAModalPicker).props.onSelectionChange('L228')
-        testInstance.findAllByType(VAButton)[0].props.onPress()
-      })
-
-      expect(findByTypeWithText(testInstance, TextView, 'Check the box to confirm the information is correct')).toBeTruthy()
+      fireEvent.press(screen.getByTestId('Document type picker required'))
+      fireEvent.press(screen.getByTestId('Civilian Police Reports'))
+      fireEvent.press(screen.getByTestId('Done'))
+      fireEvent.press(screen.getByTestId('Submit file'))
+      expect(screen.getByText('Check the box to confirm the information is correct')).toBeTruthy()
       expect(mockAlertSpy).not.toHaveBeenCalled()
     })
 
     it('should bring up confirmation requirements are met', async () => {
-      act(() => {
-        testInstance.findByType(VAModalPicker).props.onSelectionChange('L228')
-        testInstance.findByType(VASelector).props.onSelectionChange(true)
-        testInstance.findAllByType(VAButton)[0].props.onPress()
-      })
-
+      fireEvent.press(screen.getByTestId('Document type picker required'))
+      fireEvent.press(screen.getByTestId('Civilian Police Reports'))
+      fireEvent.press(screen.getByTestId('Done'))
+      fireEvent.press(screen.getByLabelText('The file I uploaded is evidence for this claim. (Required) '))
+      fireEvent.press(screen.getByTestId('Submit file'))
       expect(mockAlertSpy).toHaveBeenCalled()
     })
   })

@@ -1,15 +1,12 @@
 import React from 'react'
 
 import { context, mockNavProps, render } from 'testUtils'
-import { act, ReactTestInstance } from 'react-test-renderer'
-
+import { screen, fireEvent } from '@testing-library/react-native'
 import AskForClaimDecision from './AskForClaimDecision'
 import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState, submitClaimDecision } from 'store/slices'
-import { AlertBox, VASelector, ErrorComponent, VAButton, TextView } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
-import { RenderAPI } from '@testing-library/react-native'
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
@@ -25,30 +22,21 @@ jest.mock('store/slices', () => {
 })
 
 context('AskForClaimDecision', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let props: any
-  let store: any
-  let navHeaderSpy: any
   let navigateSpy: any
-  let goBackSpy: any
-
   const initializeTestInstance = (submittedDecision: boolean, error?: Error, errorsState: ErrorsState = initialErrorsState, decisionLetterSent = true): void => {
     navigateSpy = jest.fn()
-    goBackSpy = jest.fn()
-
-    props = mockNavProps(
+    const props = mockNavProps(
       undefined,
       {
         navigate: navigateSpy,
-        goBack: goBackSpy,
+        goBack: jest.fn(),
       },
       {
         params: { claimID: 'id' },
       },
     )
 
-    component = render(<AskForClaimDecision {...props} />, {
+    render(<AskForClaimDecision {...props} />, {
       preloadedState: {
         ...InitialState,
         claimsAndAppeals: {
@@ -68,8 +56,6 @@ context('AskForClaimDecision', () => {
         errors: errorsState,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
@@ -77,14 +63,16 @@ context('AskForClaimDecision', () => {
   })
 
   it('should initialize', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  describe('when submittedDecision is false', () => {
-    it('should display an VASelector', async () => {
-      expect(testInstance.findAllByType(VASelector).length).toEqual(1)
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(0)
-    })
+    expect(screen.getByText('Claim evaluation')).toBeTruthy()
+    expect(screen.getByText('Evaluation details')).toBeTruthy()
+    expect(screen.getByText("We sent you a letter in the mail asking for more evidence to support your claim. We’ll wait 30 days for your evidence. If you don’t have anything more you want to submit, let us know and we’ll go ahead and make a decision on your claim.")).toBeTruthy()
+    expect(screen.getByText('Taking the full 30 days won’t affect:')).toBeTruthy()
+    expect(screen.getByText('Whether you get VA benefits')).toBeTruthy()
+    expect(screen.getByText('The payment amount')).toBeTruthy()
+    expect(screen.getByText('Whether you get our help to gather evidence to support your claim')).toBeTruthy()
+    expect(screen.getByText('The date benefits will begin if we approve your claim')).toBeTruthy()
+    expect(screen.getByText("I have submitted all evidence that will support my claim and I’m not going to turn in any more information. I would like VA to make a decision on my claim based on the information already provided. (Required)")).toBeTruthy()
+    expect(screen.getByText('Request claim evaluation')).toBeTruthy()
   })
 
   describe('on click of the back button', () => {
@@ -92,7 +80,6 @@ context('AskForClaimDecision', () => {
       describe('if the claim is closed', () => {
         it('should call navigation navigate for the ClaimDetailsScreen with claimType set to CLOSED', async () => {
           initializeTestInstance(true)
-
           expect(navigateSpy).toHaveBeenCalledWith('ClaimDetailsScreen', { claimID: 'id', claimType: 'CLOSED', focusOnSnackbar: true })
         })
       })
@@ -109,14 +96,9 @@ context('AskForClaimDecision', () => {
   describe('on click of submit', () => {
     describe('if the check box is not checked', () => {
       it('should display the field error', async () => {
-        act(() => {
-          testInstance.findByType(VASelector).props.onSelectionChange(false)
-          testInstance.findByType(VAButton).props.onPress()
-        })
-
+        fireEvent.press(screen.getByText('Request claim evaluation'))
         expect(submitClaimDecision).not.toHaveBeenCalled()
-        const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[textViews.length - 3].props.children).toEqual('Check the box to confirm the information is correct.')
+        expect(screen.getByText('Check the box to confirm the information is correct.')).toBeTruthy()
       })
     })
   })
@@ -132,20 +114,7 @@ context('AskForClaimDecision', () => {
       }
 
       initializeTestInstance(false, undefined, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
-    })
-
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      initializeTestInstance(false, undefined, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
     })
   })
 })

@@ -1,16 +1,12 @@
 import React from 'react'
 
-import { context, render, RenderAPI } from 'testUtils'
-import { ReactTestInstance } from 'react-test-renderer'
+import { context, render } from 'testUtils'
 import { claim } from '../../../claimData'
-import ClaimPhase from './ClaimPhase'
-import { AlertBox } from '../../../../../../components'
+import { screen } from '@testing-library/react-native'
 import ClaimTimeline from './ClaimTimeline'
 
 context('ClaimTimeline', () => {
   let props: any
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   const { attributes } = claim
 
   const initializeTestInstance = (needItemsFromVeteran: boolean) => {
@@ -19,25 +15,19 @@ context('ClaimTimeline', () => {
       attributes: { ...claim.attributes, eventsTimeline: events },
     }
 
-    component = render(<ClaimTimeline {...props} />)
-
-    testInstance = component.UNSAFE_root
+    render(<ClaimTimeline {...props} />)
   }
 
-  // make sure the component works
-  describe('initializes with the correct elements', () => {
-    it('initializes correctly without alert', async () => {
-      initializeTestInstance(false)
-      expect(component).toBeTruthy()
-      expect(testInstance.findAllByType(ClaimPhase).length).toEqual(5)
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(0)
-    })
-  })
+  it('initializes correctly', async () => {
+    initializeTestInstance(false)
+    expect(screen.queryByText('You have 2 file requests from VA')).toBeFalsy()
+    expect(screen.getByTestId('Step 1 of 5. completed. Claim received June 6, 2019')).toBeTruthy()
+    expect(screen.getByTestId('Step 2 of 5. completed. Initial review June 6, 2019')).toBeTruthy()
+    expect(screen.getByTestId('Step 3 of 5. current. Evidence gathering, review, and decision July 16, 2020')).toBeTruthy()
+    expect(screen.getByTestId('Step 4 of 5.  Preparation for notification')).toBeTruthy()
+    expect(screen.getByTestId('Step 5 of 5.  Complete')).toBeTruthy()
 
-  it('initializes correctly with alert', async () => {
     initializeTestInstance(true)
-    expect(component).toBeTruthy()
-    expect(testInstance.findAllByType(ClaimPhase).length).toEqual(5)
-    expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+    expect(screen.getAllByText('You have 2 file requests from VA')).toBeTruthy()
   })
 })

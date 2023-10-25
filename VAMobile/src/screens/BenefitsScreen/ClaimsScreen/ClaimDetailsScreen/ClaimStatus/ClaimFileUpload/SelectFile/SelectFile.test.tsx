@@ -1,11 +1,9 @@
 import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { context, mockNavProps, render, RenderAPI } from 'testUtils'
-import { act, ReactTestInstance } from 'react-test-renderer'
 
+import { context, mockNavProps, render } from 'testUtils'
+import { screen, fireEvent } from '@testing-library/react-native'
 import SelectFile from './SelectFile'
-import { VAButton } from 'components'
 
 let mockShowActionSheetWithOptions = jest.fn()
 jest.mock('@expo/react-native-action-sheet', () => {
@@ -27,10 +25,6 @@ jest.mock('react-native-image-picker', () => {
 })
 
 context('SelectFile', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let props: any
-
   let request = {
     type: 'still_need_from_you_list',
     date: '2020-07-16',
@@ -40,11 +34,8 @@ context('SelectFile', () => {
   }
 
   const initializeTestInstance = () => {
-    props = mockNavProps(undefined, { addListener: jest.fn(), setOptions: jest.fn() }, { params: { request } })
-
-    component = render(<SelectFile {...props} />)
-
-    testInstance = component.UNSAFE_root
+    const props = mockNavProps(undefined, { addListener: jest.fn(), setOptions: jest.fn() }, { params: { request } })
+    render(<SelectFile {...props} />)
   }
 
   beforeEach(() => {
@@ -52,15 +43,19 @@ context('SelectFile', () => {
   })
 
   it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    expect(screen.getByText('Select a file to upload for the request')).toBeTruthy()
+    expect(screen.getByText("To submit evidence that supports this claim, please select a file from your phone's files. You can only submit 1 file with this request.")).toBeTruthy()
+    expect(screen.getByText('Maximum file size:')).toBeTruthy()
+    expect(screen.getByText('50 MB')).toBeTruthy()
+    expect(screen.getByText('Accepted file types:')).toBeTruthy()
+    expect(screen.getByText('PDF (unlocked), GIF, JPEG, JPG, BMP, TXT')).toBeTruthy()
+    expect(screen.getByText('Select a file')).toBeTruthy()
   })
 
   describe('on click of select a file', () => {
     it('should call showActionSheetWithOptions and display the action sheet', async () => {
-      testInstance.findByType(VAButton).props.onPress()
-
+      fireEvent.press(screen.getByText('Select a file'))
       expect(mockShowActionSheetWithOptions).toHaveBeenCalled()
-
       const actionSheetConfig = mockShowActionSheetWithOptions.mock.calls[0][0]
       expect(actionSheetConfig.options).toEqual(['File Folder', 'Cancel'])
     })
