@@ -15,7 +15,7 @@ const HowWillYouScreen: FC<HowWillYouScreenProps> = () => {
   const theme = useTheme()
 
   return (
-    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')} rightButtonTestID="ContactInfoCloseTestID">
+    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')} rightButtonTestID="ContactInfoCloseTestID" waygate="WG_HowWillYouScreen">
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('contactInformation.howWillYouUseContactInfo')}

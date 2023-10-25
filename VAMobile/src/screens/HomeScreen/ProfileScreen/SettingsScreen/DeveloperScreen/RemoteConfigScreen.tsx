@@ -69,7 +69,6 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
   const toggleWaygateList = (): ReactNode => {
     const toggleItems: Array<ReactNode> = []
     forEach(waygateToggles, (wg, index) => {
-      console.log('wg parse: ' + wg)
       const { enabled, errorMsgTitle, errorMsgBody, appUpdateButton, allowFunction, denyAccess } = wg
       toggleItems.push(
         <AccordionCollapsible

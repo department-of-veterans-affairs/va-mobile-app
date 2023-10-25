@@ -22,7 +22,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygate }) =
   }
 
   const waygateOpen = waygateEnabled(waygate)
-  console.log('waygateCheck-' + waygate + ': ' + JSON.stringify(waygateOpen, undefined, 2))
+  console.log('WG: ' + waygate + ' : ' + JSON.stringify(waygateOpen, undefined, 2))
   if (waygateOpen.enabled) {
     return <Box>{children}</Box>
   } else if (waygateOpen.enabled === false && waygateOpen.allowFunction === true) {

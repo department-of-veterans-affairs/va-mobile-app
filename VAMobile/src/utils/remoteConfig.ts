@@ -92,6 +92,7 @@ export type WaygateToggleType =
   | 'WG_NotificationsSettingsScreen'
   | 'WG_ContactVAScreen'
   | 'WG_VeteransCrisisLineScreen'
+  | 'WG_VeteranStatusScreen'
   | 'WG_LoginScreen'
 
 type WaygateToggleValues = {
@@ -114,6 +115,7 @@ type WaygateToggleValues = {
   WG_NotificationsSettingsScreen: Waygate
   WG_ContactVAScreen: Waygate
   WG_VeteransCrisisLineScreen: Waygate
+  WG_VeteranStatusScreen: Waygate
   WG_LoginScreen: Waygate
 }
 
@@ -270,6 +272,14 @@ export let waygateConfig: WaygateToggleValues = {
     allowFunction: false,
     denyAccess: false,
   },
+  WG_VeteranStatusScreen: {
+    enabled: true,
+    errorMsgTitle: undefined,
+    errorMsgBody: undefined,
+    appUpdateButton: false,
+    allowFunction: false,
+    denyAccess: false,
+  },
   WG_LoginScreen: {
     enabled: true,
     errorMsgTitle: undefined,
@@ -347,7 +357,6 @@ export const waygateEnabled = (feature: WaygateToggleType): Waygate => {
     return waygateConfig[feature]
   } else {
     const waygate = remoteConfig().getValue(feature)?.asString()
-    console.log('waygateEnabled ' + feature + ': ' + waygate)
     if (waygate) {
       return JSON.parse(waygate) as Waygate
     } else {

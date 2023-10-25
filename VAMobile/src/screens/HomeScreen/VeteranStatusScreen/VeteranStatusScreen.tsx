@@ -83,7 +83,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
   }
 
   return (
-    <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')} dividerMarginBypass={true}>
+    <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')} dividerMarginBypass={true} waygate="WG_VeteranStatusScreen">
       <Box backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant} flex={1}>
         <Box mx={theme.dimensions.gutter} alignItems="center" mt={theme.dimensions.standardMarginBetween}>
           <VAIcon name={'Logo'} />

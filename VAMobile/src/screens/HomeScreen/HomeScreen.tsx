@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps, WaygateWrapper } from 'components'
+import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -83,20 +83,18 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <CategoryLanding headerButton={headerButton}>
-      <Box flex={1} justifyContent="flex-start">
-        <WaygateWrapper waygate="WG_HomeScreen">
-          <EncourageUpdateAlert />
-          <Nametag />
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
-              {t('aboutVA')}
-            </TextView>
-          </Box>
-          <Box mb={theme.dimensions.contentMarginBottom}>
-            <SimpleList items={buttonDataList} />
-          </Box>
-        </WaygateWrapper>
+    <CategoryLanding headerButton={headerButton} waygate="WG_HomeScreen">
+      <Box>
+        <EncourageUpdateAlert />
+        <Nametag />
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+          <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
+            {t('aboutVA')}
+          </TextView>
+        </Box>
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <SimpleList items={buttonDataList} />
+        </Box>
       </Box>
     </CategoryLanding>
   )

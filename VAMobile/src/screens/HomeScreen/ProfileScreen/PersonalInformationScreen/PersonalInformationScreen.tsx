@@ -105,13 +105,13 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   }
 
   const onUpdateName = () => {
-    if (waygateNativeAlert('WG_PreferredNameScreen')) {
+    if (waygateNativeAlert('WG_HowDoIUpdateScreen')) {
       navigation.navigate('HowDoIUpdate', { screenType: 'name' })
     }
   }
 
   const onUpdateDOB = () => {
-    if (waygateNativeAlert('WG_PreferredNameScreen')) {
+    if (waygateNativeAlert('WG_HowDoIUpdateScreen')) {
       navigation.navigate('HowDoIUpdate', { screenType: 'DOB' })
     }
   }

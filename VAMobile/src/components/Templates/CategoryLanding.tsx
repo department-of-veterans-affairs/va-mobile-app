@@ -2,7 +2,8 @@ import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StatusBar, 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, useState } from 'react'
 
-import { CrisisLineCta, TextView, TextViewProps, VAIconProps } from 'components'
+import { CrisisLineCta, TextView, TextViewProps, VAIconProps, WaygateWrapper } from 'components'
+import { WaygateToggleType } from 'utils/remoteConfig'
 import { useIsScreenReaderEnabled, useRouteNavigation, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
@@ -27,9 +28,11 @@ export type CategoryLandingProps = {
   headerButton?: headerButton
   /** Optional ScrollView props to pass through to VAScrollView if desired */
   scrollViewProps?: VAScrollViewProps
+  /** Optional waygate to be made a requirement later */
+  waygate?: WaygateToggleType
 }
 
-export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps }) => {
+export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps, waygate }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
@@ -97,13 +100,25 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <HeaderBanner {...headerProps} />
-      <VAScrollView scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
-        <View onLayout={getTransitionHeaderHeight}>
-          <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
-          {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
-        </View>
-        {children}
-      </VAScrollView>
+      {waygate ? (
+        <WaygateWrapper waygate={waygate}>
+          <VAScrollView scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
+            <View onLayout={getTransitionHeaderHeight}>
+              <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
+              {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
+            </View>
+            {children}
+          </VAScrollView>
+        </WaygateWrapper>
+      ) : (
+        <VAScrollView scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
+          <View onLayout={getTransitionHeaderHeight}>
+            <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
+            {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
+          </View>
+          {children}
+        </VAScrollView>
+      )}
     </View>
   )
 }

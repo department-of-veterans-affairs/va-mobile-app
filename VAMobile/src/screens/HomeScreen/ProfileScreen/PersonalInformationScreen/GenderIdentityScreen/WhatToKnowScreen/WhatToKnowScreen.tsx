@@ -18,7 +18,7 @@ const WhatToKnowScreen: FC<WhatToKnowScreenProps> = () => {
   }
 
   return (
-    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
+    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')} waygate={'WG_WhatToKnowScreen'}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('personalInformation.genderIdentity.whatToKnow.title')}

@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag, WaygateWrapper } from 'components'
+import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
@@ -76,7 +76,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
 
   return (
-    <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack}>
+    <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack} waygate="WG_ProfileScreen">
       {errorCheck ? (
         <Box>
           <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
@@ -97,7 +97,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
           <LoadingComponent text={t('profile.loading')} />
         </Box>
       ) : (
-        <WaygateWrapper waygate="WG_ProfileScreen">
+        <>
           <NameTag />
           <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             {userAuthorizedServices?.userProfileUpdate && (
@@ -137,7 +137,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
               borderStyle={'solid'}
             />
           </Box>
-        </WaygateWrapper>
+        </>
       )}
     </ChildTemplate>
   )
