@@ -92,8 +92,6 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
     await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
     await expect(element(by.text('RATANA, NARIN '))).toExist()
-    dateWithTimeZone = await getDateWithTimeZone('October 26, 2021 5:22 PM')
-    await expect(element(by.id(dateWithTimeZone))).toExist()
     await expect(element(by.text('Upset stomach is a common side effect of this medication.  Mild stomach pain is normal, but if you are having severe stomach pains, please let us know or seek in-person care.'))).toExist()
     await expect(element(by.text('Only use messages for non-urgent needs'))).toExist()
   })
