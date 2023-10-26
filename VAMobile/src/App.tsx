@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { utils } from '@react-native-firebase/app'
 import KeyboardManager from 'react-native-keyboard-manager'
 import React, { FC, useEffect, useRef, useState } from 'react'
-import Toast from 'react-native-toast-notifications'
+import Toast, { useToast } from 'react-native-toast-notifications'
 import ToastContainer from 'react-native-toast-notifications'
 import analytics from '@react-native-firebase/analytics'
 import crashlytics from '@react-native-firebase/crashlytics'
@@ -293,6 +293,8 @@ export const AppTabs: FC = () => {
 
 export const AuthedApp: FC = () => {
   const headerStyles = useHeaderStyles()
+  const toast = useToast()
+  const [message, setMessage] = useState(null)
   const { initialUrl } = useSelector<RootState, NotificationsState>((state) => state.notifications)
 
   const homeScreens = getHomeScreens()
@@ -307,6 +309,16 @@ export const AuthedApp: FC = () => {
       Linking.openURL(initialUrl)
     }
   }, [initialUrl])
+
+  useEffect(() => {
+    //initially Toast is set to null until it is first used. So when we call showsnackbar it calls hideall on a null reference. this should first set that reference
+    if (message) {
+      toast.show(message, {
+        type: 'danger',
+      })
+      setMessage(null)
+    }
+  }, [toast])
 
   return (
     <>
