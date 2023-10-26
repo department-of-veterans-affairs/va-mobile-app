@@ -29,8 +29,8 @@ export type CategoryLandingProps = {
   /** Optional ScrollView props to pass through to VAScrollView if desired */
   scrollViewProps?: VAScrollViewProps
   /** optional testID for scrollView */
-  testID?: string  
-/** Optional waygate to be made a requirement later */
+  testID?: string
+  /** Optional waygate to be made a requirement later */
   waygate?: WaygateToggleType
 }
 
