@@ -4,7 +4,7 @@ import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { Box, BoxProps, ErrorComponent, FeatureLandingTemplate, LargeNavButton, LoadingComponent, TextView, TextViewProps, WaygateWrapper } from 'components'
+import { Box, BoxProps, ErrorComponent, FeatureLandingTemplate, LargeNavButton, LoadingComponent, TextView, TextViewProps } from 'components'
 import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -117,13 +117,18 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')} testID="PersonalInformationTestID">
+    <FeatureLandingTemplate
+      backLabel={t('profile.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('personalInformation.title')}
+      testID="PersonalInformationTestID"
+      waygate="WG_PersonalInformationScreen">
       {errorCheck ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={onTryAgain} />
       ) : loadingCheck ? (
         <LoadingComponent text={t('personalInformation.loading')} />
       ) : (
-        <WaygateWrapper waygate="WG_PersonalInformationScreen">
+        <>
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
             {t('contactInformation.editNote')}
           </TextView>
@@ -167,7 +172,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
               </>
             )}
           </Box>
-        </WaygateWrapper>
+        </>
       )}
     </FeatureLandingTemplate>
   )

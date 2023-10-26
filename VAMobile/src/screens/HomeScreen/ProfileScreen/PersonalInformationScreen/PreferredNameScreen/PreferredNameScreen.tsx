@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, WaygateWrapper } from 'components'
+import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SnackbarMessages } from 'components/SnackBar'
@@ -139,22 +139,21 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
       onLeftButtonPress={onConfirmCancel}
       title={t('personalInformation.preferredName.title')}
       primaryContentButtonText={t('save')}
-      onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
+      onPrimaryContentButtonPress={() => setOnSaveClicked(true)}
+      waygate="WG_PreferredNameScreen">
       {preferredNameMutation.isLoading ? (
         <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
       ) : (
-        <WaygateWrapper waygate="WG_PreferredNameScreen">
-          <Box mx={theme.dimensions.gutter}>
-            <FormWrapper
-              fieldsList={formFieldsList}
-              onSave={onSave}
-              resetErrors={resetErrors}
-              setResetErrors={setResetErrors}
-              onSaveClicked={onSaveClicked}
-              setOnSaveClicked={setOnSaveClicked}
-            />
-          </Box>
-        </WaygateWrapper>
+        <Box mx={theme.dimensions.gutter}>
+          <FormWrapper
+            fieldsList={formFieldsList}
+            onSave={onSave}
+            resetErrors={resetErrors}
+            setResetErrors={setResetErrors}
+            onSaveClicked={onSaveClicked}
+            setOnSaveClicked={setOnSaveClicked}
+          />
+        </Box>
       )}
     </FullScreenSubtask>
   )

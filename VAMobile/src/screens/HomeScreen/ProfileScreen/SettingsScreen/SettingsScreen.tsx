@@ -6,7 +6,7 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, logout, setBiometricsPreference } from 'store/slices'
-import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, VAButton, WaygateWrapper } from 'components'
+import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, VAButton } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -127,11 +127,11 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const loadingCheck = settingBiometricPreference
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')}>
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')} waygate="WG_SettingsScreen">
       {loadingCheck ? (
         <LoadingComponent text={t('biometricsPreference.saving')} />
       ) : (
-        <WaygateWrapper waygate="WG_SettingsScreen">
+        <>
           <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
             <Box mb={theme.dimensions.standardMarginBetween}>
               <SimpleList items={items} />
@@ -142,7 +142,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
             </Box>
           </Box>
           <AppVersionAndBuild />
-        </WaygateWrapper>
+        </>
       )}
     </FeatureLandingTemplate>
   )

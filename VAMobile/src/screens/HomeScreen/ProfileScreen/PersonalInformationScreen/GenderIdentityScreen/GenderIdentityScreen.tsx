@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, ErrorComponent, FullScreenSubtask, LoadingComponent, RadioGroup, RadioGroupProps, TextView, WaygateWrapper, radioOption } from 'components'
+import { Box, ErrorComponent, FullScreenSubtask, LoadingComponent, RadioGroup, RadioGroupProps, TextView, radioOption } from 'components'
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -140,27 +140,26 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={t('save')}
-      onPrimaryContentButtonPress={onSave}>
+      onPrimaryContentButtonPress={onSave}
+      waygate="WG_GenderIdentityScreen">
       {errorCheck ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID} onTryAgain={onTryAgain} />
       ) : loadingCheck ? (
         <LoadingComponent text={loadingGenderIdentityOptions ? t('personalInformation.genderIdentity.loading') : t('personalInformation.genderIdentity.saving')} />
       ) : (
-        <WaygateWrapper waygate="WG_GenderIdentityScreen">
-          <Box mx={theme.dimensions.gutter}>
-            <TextView variant="MobileBody" mb={error ? theme.dimensions.condensedMarginBetween : undefined} paragraphSpacing={error ? false : true}>
-              {t('personalInformation.genderIdentity.changeSelection')}
-              <TextView variant="MobileBodyBold">{t('personalInformation.genderIdentity.preferNotToAnswer')}</TextView>
-              <TextView variant="MobileBody">.</TextView>
+        <Box mx={theme.dimensions.gutter}>
+          <TextView variant="MobileBody" mb={error ? theme.dimensions.condensedMarginBetween : undefined} paragraphSpacing={error ? false : true}>
+            {t('personalInformation.genderIdentity.changeSelection')}
+            <TextView variant="MobileBodyBold">{t('personalInformation.genderIdentity.preferNotToAnswer')}</TextView>
+            <TextView variant="MobileBody">.</TextView>
+          </TextView>
+          <RadioGroup {...radioGroupProps} />
+          <Pressable onPress={goToHelp} accessibilityRole="link" accessible={true}>
+            <TextView variant="MobileBodyLink" paragraphSpacing={true}>
+              {t('personalInformation.genderIdentity.whatToKnow')}
             </TextView>
-            <RadioGroup {...radioGroupProps} />
-            <Pressable onPress={goToHelp} accessibilityRole="link" accessible={true}>
-              <TextView variant="MobileBodyLink" paragraphSpacing={true}>
-                {t('personalInformation.genderIdentity.whatToKnow')}
-              </TextView>
-            </Pressable>
-          </Box>
-        </WaygateWrapper>
+          </Pressable>
+        </Box>
       )}
     </FullScreenSubtask>
   )

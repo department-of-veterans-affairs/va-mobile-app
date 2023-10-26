@@ -17,7 +17,6 @@ import {
   VAButton,
   VATextInputTypes,
   ValidationFunctionItems,
-  WaygateWrapper,
 } from 'components'
 import { Countries } from 'constants/countries'
 import { GenerateAddressMessages } from 'translations/en/functions'
@@ -561,7 +560,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       onLeftButtonPress={onCancel}
       rightButtonText={!loadingCheck ? t('save') : undefined}
       onRightButtonPress={!loadingCheck ? () => setOnSaveClicked(true) : undefined}
-      testID="EditAddressTestID">
+      testID="EditAddressTestID"
+      waygate="WG_EditAddressScreen">
       {loadingCheck ? (
         <LoadingComponent text={deletingAddress ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')} />
       ) : addressValidation ? (
@@ -574,34 +574,32 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           setShowAddressValidation={setShowAddressValidation}
         />
       ) : (
-        <WaygateWrapper waygate="WG_EditAddressScreen">
-          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-            {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
-              <Box mb={theme.dimensions.standardMarginBetween}>
-                <VAButton
-                  onPress={onDeletePressed}
-                  label={t('contactInformation.removeData', { pageName: lowerCaseTitle })}
-                  buttonType={ButtonTypesConstants.buttonDestructive}
-                  testID="EditAddressSaveTestID"
-                />
-              </Box>
-            )}
-            {formContainsError && (
-              <Box mb={theme.dimensions.standardMarginBetween}>
-                <AlertBox title={t('editAddress.alertError')} border="error" scrollViewRef={scrollViewRef} focusOnError={onSaveClicked} />
-              </Box>
-            )}
-            <FormWrapper
-              fieldsList={formFieldsList}
-              onSave={onSave}
-              setFormContainsError={setFormContainsError}
-              resetErrors={resetErrors}
-              setResetErrors={setResetErrors}
-              onSaveClicked={onSaveClicked}
-              setOnSaveClicked={setOnSaveClicked}
-            />
-          </Box>
-        </WaygateWrapper>
+        <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <VAButton
+                onPress={onDeletePressed}
+                label={t('contactInformation.removeData', { pageName: lowerCaseTitle })}
+                buttonType={ButtonTypesConstants.buttonDestructive}
+                testID="EditAddressSaveTestID"
+              />
+            </Box>
+          )}
+          {formContainsError && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AlertBox title={t('editAddress.alertError')} border="error" scrollViewRef={scrollViewRef} focusOnError={onSaveClicked} />
+            </Box>
+          )}
+          <FormWrapper
+            fieldsList={formFieldsList}
+            onSave={onSave}
+            setFormContainsError={setFormContainsError}
+            resetErrors={resetErrors}
+            setResetErrors={setResetErrors}
+            onSaveClicked={onSaveClicked}
+            setOnSaveClicked={setOnSaveClicked}
+          />
+        </Box>
       )}
     </FullScreenSubtask>
   )

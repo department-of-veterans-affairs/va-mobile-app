@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton, WaygateWrapper } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
 import { EMAIL_REGEX_EXP } from 'constants/common'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -184,31 +184,24 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       onLeftButtonPress={navigation.goBack}
       rightButtonText={!loadingCheck ? t('save') : undefined}
       onRightButtonPress={!loadingCheck ? () => setOnSaveClicked(true) : undefined}
-      rightButtonDisabled={saveDisabled}>
+      rightButtonDisabled={saveDisabled}
+      waygate="WG_EditEmailScreen">
       {savingEmail || deletingEmail ? (
         <LoadingComponent text={deletingEmail ? t('contactInformation.delete.emailAddress') : t('contactInformation.savingEmailAddress')} />
       ) : (
-        <WaygateWrapper waygate="WG_EditEmailScreen">
-          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-            {contactInformation?.contactEmail?.emailAddress && (
-              <Box my={theme.dimensions.standardMarginBetween}>
-                <VAButton onPress={onDeletePressed} label={t('contactInformation.removeData', { pageName: emailTitle })} buttonType={ButtonTypesConstants.buttonDestructive} />
-              </Box>
-            )}
-            {formContainsError && (
-              <Box mb={theme.dimensions.standardMarginBetween}>
-                <AlertBox scrollViewRef={scrollViewRef} title={t('editEmail.alertError')} border="error" focusOnError={onSaveClicked} />
-              </Box>
-            )}
-            <FormWrapper
-              fieldsList={formFieldsList}
-              onSave={onSave}
-              setFormContainsError={setFormContainsError}
-              onSaveClicked={onSaveClicked}
-              setOnSaveClicked={setOnSaveClicked}
-            />
-          </Box>
-        </WaygateWrapper>
+        <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          {contactInformation?.contactEmail?.emailAddress && (
+            <Box my={theme.dimensions.standardMarginBetween}>
+              <VAButton onPress={onDeletePressed} label={t('contactInformation.removeData', { pageName: emailTitle })} buttonType={ButtonTypesConstants.buttonDestructive} />
+            </Box>
+          )}
+          {formContainsError && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AlertBox scrollViewRef={scrollViewRef} title={t('editEmail.alertError')} border="error" focusOnError={onSaveClicked} />
+            </Box>
+          )}
+          <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+        </Box>
       )}
     </FullScreenSubtask>
   )

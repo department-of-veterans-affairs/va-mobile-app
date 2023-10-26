@@ -2,7 +2,7 @@ import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps, WaygateWrapper } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
@@ -76,7 +76,7 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
   const loadingCheck = loading || loadingUserAuthorizedServices
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')}>
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')} waygate="WG_MilitaryInformationScreen">
       {errorCheck ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
       ) : loadingCheck ? (
@@ -84,12 +84,12 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
       ) : !userAuthorizedServices?.militaryServiceHistory || serviceHistory.length < 1 ? (
         <NoMilitaryInformationAccess />
       ) : (
-        <WaygateWrapper waygate="WG_MilitaryInformationScreen">
+        <>
           <Box mb={theme.dimensions.standardMarginBetween} mt={-theme.dimensions.standardMarginBetween}>
             <DefaultList items={historyItems} title={t('militaryInformation.periodOfService')} />
           </Box>
           <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>
-        </WaygateWrapper>
+        </>
       )}
     </FeatureLandingTemplate>
   )

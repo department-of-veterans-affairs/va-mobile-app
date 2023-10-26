@@ -4,7 +4,7 @@ import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps, WaygateWrapper } from 'components'
+import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { FormattedPhoneType, PhoneData, PhoneKey, PhoneTypeConstants } from 'api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -159,13 +159,18 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   ]
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')} testID="ContactInfoTestID">
+    <FeatureLandingTemplate
+      backLabel={t('profile.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('contactInformation.title')}
+      testID="ContactInfoTestID"
+      waygate="WG_ContactInformationScreen">
       {contactInformationInDowntime || contactInformationError ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} onTryAgain={refetchContactInformation} />
       ) : loadingContactInformation ? (
         <LoadingComponent text={t('contactInformation.loading')} />
       ) : (
-        <WaygateWrapper waygate="WG_ContactInformationScreen">
+        <>
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
             {t('contactInformation.editNote')}
           </TextView>
@@ -180,7 +185,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
           <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
             {t('contactInformation.thisIsEmailWeUseToContactNote')}
           </TextView>
-        </WaygateWrapper>
+        </>
       )}
     </FeatureLandingTemplate>
   )
