@@ -1,7 +1,8 @@
-import { expect, device, by, element } from 'detox'
+import { expect, device, by, element, waitFor } from 'detox'
 import { loginToDemoMode, openContactInfo, openProfile } from './utils'
 
 export const ContactInfoE2eIdConstants = {
+  CONTACT_INFO_PAGE_ID: 'ContactInfoTestID',
   MAILING_ADDRESS_ID: 'Mailing address 3101 N Fort Valley Rd Flagstaff, AZ, 86001',
   HOME_ADDRESS_ID: 'Home address Add your home address',
   HOME_PHONE_ID: 'homePhoneTestID',
@@ -46,21 +47,24 @@ export async function updateAddress() {
 
 export async function validateAddresses(addressID, addressType) {
   it('should open and update the ' + addressType + ' address', async () => {
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
+    await waitFor(element(by.id(addressID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(addressID)).tap()
-    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).typeText('2')
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
     if(addressType === 'Home') {
       await updateAddress()
     }
   })
 
-  it('should tap on the cancel button and verify a delete changes pop up appears', async () => {
+  it(addressType + ': should tap on the cancel button and verify a delete changes pop up appears', async () => {
     await element(by.text('Cancel')).tap()
     await expect(element(by.text('Delete changes to your ' + addressType.toLowerCase() + ' address?'))).toExist()
     await expect(element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT))).toExist()
     await expect(element(by.text(ContactInfoE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
   })
 
-  it('should tap keep editing and return to the ' + addressType + ' address screen', async () => {
+  it(addressType + ': should tap keep editing and return to the ' + addressType + ' address screen', async () => {
     await element(by.text(ContactInfoE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)).tap()
     await expect(element(by.text('United States'))).toExist()
     await expect(element(by.text('3101 N Fort Valley Rd')).atIndex(0)).toExist()
@@ -70,21 +74,24 @@ export async function validateAddresses(addressID, addressType) {
     await expect(element(by.text('86001'))).toExist()
   })
 
-  it('should tap on the cancel button, tap delete, and return to the contact info screen', async () => {
+  it(addressType + ': should tap on the cancel button, tap delete, and return to the contact info screen', async () => {
     await element(by.text('Cancel')).tap()
     await element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(addressID))).toExist()
   })
 
   it('should open and update the ' + addressType + ' address', async () => {
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
+    await waitFor(element(by.id(addressID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(addressID)).tap()
-    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).typeText('2')
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
     if(addressType === 'Home') {
       await updateAddress()
     }
   })
 
-  it('should tap on the save button and verify your address screen is displayed', async () => {
+  it(addressType + ': should tap on the save button and verify your address screen is displayed', async () => {
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.id('verifyYourAddressTestID'))).toExist()
     await element(by.id('verifyYourAddressTestID')).tap()
@@ -102,12 +109,12 @@ export async function validateAddresses(addressID, addressType) {
     await expect(element(by.text('86001'))).toExist()
   })
 
-  it('should tap on the save button and verify your address screen is displayed', async () => {
+  it(addressType + ': should tap on the save button and verify your address screen is displayed', async () => {
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.id('verifyYourAddressTestID'))).toExist()
   })
 
-  it('should tap on use this address and return to the contact information screen', async () => {
+  it(addressType + ': should tap on use this address and return to the contact information screen', async () => {
     await element(by.id('suggestedAddressTestID')).tap()
     await element(by.id('Use this address')).tap()
     await expect(element(by.text(addressType + ' address saved'))).toExist()
@@ -121,9 +128,8 @@ export async function validateAddresses(addressID, addressType) {
 
 export async function validatePhoneNumbers(phoneID, phoneType) {
   it ('should open the ' + phoneType + ' phone number', async () => {
-    if(phoneType === 'Mobile') {
-      await element(by.id('ContactInfoTestID')).scrollTo('bottom')
-    }
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
+    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(phoneID)).tap()
   })
 
@@ -131,10 +137,11 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).replaceText('1234')
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
   })
 
-  it('should tap on the cancel button and verify a delete changes pop up appears', async () => {
+  it(phoneType + ': should tap on the cancel button and verify a delete changes pop up appears', async () => {
     await element(by.text('Cancel')).tap()
     await expect(element(by.text('Delete changes to your ' + phoneType.toLowerCase() + ' phone number?'))).toExist()
     await expect(element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT))).toExist()
@@ -147,24 +154,29 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
     await expect(element(by.text('1234'))).toExist()    
   })
 
-  it('should tap cancel, tap delete changes, and verify the contact info page is displayed', async () => {
+  it(phoneType + ': should tap cancel, tap delete changes, and verify the contact info page is displayed', async () => {
     await element(by.text('Cancel')).tap()
     await element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(phoneID))).toExist()
   })
 
   it('should update the ' + phoneType + ' with an extension', async () => {
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
+    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(phoneID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).replaceText('1234')
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.text(phoneType + ' phone saved'))).toExist()
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
   })
   
   it('should update the ' + phoneType + ' phone number and remove the extension', async () => {
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
+    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(phoneID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).clearText()
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
@@ -175,9 +187,8 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
 
 export async function removeContactInfoFeature(contactInfoTypeText, type) {
   it ('should tap remove ' + type + ' and verify the remove pop up appears', async () => {
-    if(type === 'mobile phone' || type === 'email address') {
-      await element(by.id('ContactInfoTestID')).scrollTo('bottom')
-    }
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
+    await waitFor(element(by.id(contactInfoTypeText))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(contactInfoTypeText)).tap()
     await element(by.text('Remove ' + type)).tap()
     await expect(element(by.text('Remove your ' + type + '?'))).toExist()
@@ -240,25 +251,29 @@ describe('Contact Info Screen', () => {
   validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
 
   it ('should open the email address', async () => {
-    await element(by.id('ContactInfoTestID')).scrollTo('bottom')
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
   })
 
   it('should update the email address with a +', async () => {
-    await element(by.id('emailAddressEditTestID')).replaceText('attended1+@gmail.com')
+    await element(by.id('emailAddressEditTestID')).clearText()
+    await element(by.id('emailAddressEditTestID')).typeText('attended1+@gmail.com')
+    await element(by.id('emailAddressEditTestID')).tapReturnKey()
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.text('Email address saved'))).toExist()
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
   })
 
   it('should update the email address and remove the +', async () => {
-    await element(by.id('ContactInfoTestID')).scrollTo('bottom')
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
-    await element(by.id('emailAddressEditTestID')).replaceText('attended1@gmail.com')
+    await element(by.id('emailAddressEditTestID')).clearText()
+    await element(by.id('emailAddressEditTestID')).typeText('attended1@gmail.com')
+    await element(by.id('emailAddressEditTestID')).tapReturnKey()
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.text('Email address saved'))).toExist()
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
-    await element(by.id('ContactInfoTestID')).scrollTo('top')
+    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
   })
 
   removeContactInfoFeature('Home address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001', 'home address')
