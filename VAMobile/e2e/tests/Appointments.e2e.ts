@@ -26,9 +26,6 @@ const lastYear = lastYearDateTime.get('year')
 
 export const Appointmentse2eConstants = {
   APPOINTMENT_DESCRIPTION: "Here are your appointments. This list includes appointments you've requested but not yet confirmed.",
-  APPOINTMENT_1_ID: `Confirmed ${fortyFiveMinutesLater} Outpatient Clinic`,
-  APPOINTMENT_2_ID: `Confirmed ${twoDaysLater} Community Clinic Association`,
-  APPOINTMENT_3_ID: `Canceled COVID-19 vaccine ${twentyFiveDaysLater} VA Long Beach Healthcare System In-person`,
   APPOINTMENT_4_ID: 'Pending Optometry (routine eye exam) Vilasini Reddy Request type: In-person',
   APPOINTMENT_5_ID: 'Pending Optometry (routine eye exam) Community care Request type: In-person',
   APPOINTMENT_6_ID: 'Canceled Optometry (routine eye exam) Community care Request type: In-person',
@@ -58,9 +55,9 @@ beforeAll(async () => {
 describe('Appointments Screen', () => {
   it('should match the appointments page design', async () => {
     await expect(element(by.text(Appointmentse2eConstants.APPOINTMENT_DESCRIPTION))).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_1_ID))).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_2_ID))).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_3_ID))).toExist()
+    await expect(element(by.id(`Confirmed ${fortyFiveMinutesLater} Outpatient Clinic`))).toExist()
+    await expect(element(by.id(`Confirmed ${twoDaysLater} Community Clinic Association`))).toExist()
+    await expect(element(by.id(`Canceled COVID-19 vaccine ${twentyFiveDaysLater} VA Long Beach Healthcare System In-person`))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_5_ID))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_6_ID))).toExist()
@@ -69,7 +66,7 @@ describe('Appointments Screen', () => {
   })
 
   it('should open appointment details and give the correct information', async () => {
-    await element(by.id(Appointmentse2eConstants.APPOINTMENT_1_ID)).tap()
+    await element(by.id(`Confirmed ${fortyFiveMinutesLater} Outpatient Clinic`)).tap()
     await expect(element(by.text('Community care'))).toExist()
     await expect(element(by.id(fortyFiveMinutesLater))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.ADD_TO_CALENDAR_ID)).atIndex(0)).toExist()
@@ -168,12 +165,12 @@ describe('Appointments Screen', () => {
     await expect(element(by.text('Phone Number: (703) 652-0000'))).toExist()
     await expect(element(by.text('Call: Afternoon,Evening,Morning'))).toExist()
     await element(by.text('Appointments')).tap()
-    await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_1_ID))).toExist()
+    await expect(element(by.id(`Confirmed ${fortyFiveMinutesLater} Outpatient Clinic`))).toExist()
   })
 
   it('should tap on and show past appointments', async () => {
     await element(by.id('appointmentsTestID')).scrollTo('top')
-    await element(by.id('Past')).tap()
+    await element(by.text('Past')).tap()
     await expect(element(by.id(Appointmentse2eConstants.PAST_APPOINTMENT_1_ID))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.PAST_APPOINTMENT_2_ID))).toExist()
     if (device.getPlatform() === 'android') {

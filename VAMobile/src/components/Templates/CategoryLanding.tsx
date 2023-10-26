@@ -28,11 +28,13 @@ export type CategoryLandingProps = {
   headerButton?: headerButton
   /** Optional ScrollView props to pass through to VAScrollView if desired */
   scrollViewProps?: VAScrollViewProps
-  /** Optional waygate to be made a requirement later */
+  /** optional testID for scrollView */
+  testID?: string  
+/** Optional waygate to be made a requirement later */
   waygate?: WaygateToggleType
 }
 
-export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps, waygate }) => {
+export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps, testID, waygate }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
@@ -102,7 +104,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
       <HeaderBanner {...headerProps} />
       {waygate ? (
         <WaygateWrapper waygate={waygate}>
-          <VAScrollView scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
+          <VAScrollView testID={testID} scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
             <View onLayout={getTransitionHeaderHeight}>
               <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
               {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
@@ -111,7 +113,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
           </VAScrollView>
         </WaygateWrapper>
       ) : (
-        <VAScrollView scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
+        <VAScrollView testID={testID} scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
           <View onLayout={getTransitionHeaderHeight}>
             <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
             {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
