@@ -55,7 +55,7 @@ context('MultiTouchCard', () => {
   })
 
   describe('when bottomContent is clicked', () => {
-    it('calls the onPress function', async () => {
+    it('calls the onPress function', () => {
       fireEvent.press(screen.getByA11yHint('Hint for bottom content'))
       expect(onPressSpy).toBeCalled()
     })

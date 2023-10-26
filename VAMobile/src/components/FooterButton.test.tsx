@@ -12,7 +12,7 @@ context('FooterButton', () => {
   })
 
   it('renders text', () => {
-    expect(screen.getByText('Button text')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Button text' })).toBeTruthy()
   })
 
   it('renders icon', () => {
@@ -20,7 +20,7 @@ context('FooterButton', () => {
   })
 
   it('calls onPress when clicked', () => {
-    fireEvent.press(screen.getByText('Button text'))
+    fireEvent.press(screen.getByRole('button', { name: 'Button text' }))
     expect(onPressSpy).toHaveBeenCalled()
   })
 })

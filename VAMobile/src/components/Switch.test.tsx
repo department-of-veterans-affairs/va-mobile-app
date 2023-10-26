@@ -11,10 +11,12 @@ context('Switch', () => {
     render(<Switch onPress={onPressSpy} a11yHint="Test switch" />)
   })
 
-  describe('when the switch is clicked', () => {
-    it('calls the onPress function', async () => {
-      fireEvent.press(screen.getByA11yHint('Test switch'))
-      expect(onPressSpy).toBeCalled()
-    })
+  it('renders a11yHint for switch', () => {
+    expect(screen.getByA11yHint('Test switch')).toBeTruthy()
+  })
+
+  it('calls onPress when switch is pressed', () => {
+    fireEvent.press(screen.getByRole('switch'))
+    expect(onPressSpy).toBeCalled()
   })
 })

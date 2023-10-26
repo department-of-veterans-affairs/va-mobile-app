@@ -59,7 +59,7 @@ context('MessageList', () => {
   })
 
   it('should call onPress when one of the buttons has been clicked', () => {
-    fireEvent.press(screen.getByTestId('inbox-item-no-attachment-read'))
+    fireEvent.press(screen.getByRole('button', { name: 'another line' }))
     expect(onPressSpy).toBeCalled()
   })
 

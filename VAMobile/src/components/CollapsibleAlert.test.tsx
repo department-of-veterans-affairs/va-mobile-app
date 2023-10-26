@@ -11,11 +11,11 @@ context('CollapsibleAlert', () => {
   })
 
   it('renders header text', () => {
-    expect(screen.getByText('HEADER')).toBeTruthy()
+    expect(screen.getByRole('tab', { name: 'HEADER' })).toBeTruthy()
   })
 
   it('shows body text when pressed', () => {
-    fireEvent.press(screen.getByText('HEADER'))
+    fireEvent.press(screen.getByRole('tab', { name: 'HEADER' }))
     expect(screen.getByText('EXPANDED')).toBeTruthy()
   })
 })
