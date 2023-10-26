@@ -54,10 +54,12 @@ context('MultiTouchCard', () => {
     expect(screen.getByText('bottom line 2')).toBeTruthy()
   })
 
-  describe('when bottomContent is clicked', () => {
-    it('calls the onPress function', () => {
-      fireEvent.press(screen.getByA11yHint('Hint for bottom content'))
-      expect(onPressSpy).toBeCalled()
-    })
+  it('renders a11yHint for bottomContent', () => {
+    expect(screen.getByA11yHint('Hint for bottom content')).toBeTruthy()
+  })
+
+  it('calls onPress function on bottomContent click', () => {
+    fireEvent.press(screen.getByRole('button', { name: 'bottom line 1' }))
+    expect(onPressSpy).toBeCalled()
   })
 })
