@@ -38,9 +38,8 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
   const isFocused = useIsFocused()
 
   useEffect(() => {
-    isFocused && setWaygateToggles(getWaygateToggles())
-    setWaygateDebugConfig(waygateToggles)
-  }, [isFocused, setWaygateToggles])
+    isFocused && setWaygateDebugConfig(waygateToggles)
+  }, [isFocused, waygateToggles])
 
   const toggleList = (): ReactNode => {
     const toggleItems = Object.keys(toggles).map((key): SimpleListItemObj => {

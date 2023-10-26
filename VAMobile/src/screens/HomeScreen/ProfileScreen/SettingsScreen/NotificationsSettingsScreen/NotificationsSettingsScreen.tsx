@@ -2,18 +2,7 @@ import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
-import {
-  AlertBox,
-  Box,
-  ButtonDecoratorType,
-  ErrorComponent,
-  FeatureLandingTemplate,
-  LoadingComponent,
-  SimpleList,
-  SimpleListItemObj,
-  TextView,
-  VAButton,
-} from 'components'
+import { AlertBox, Box, ButtonDecoratorType, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { Notifications } from 'react-native-notifications'
