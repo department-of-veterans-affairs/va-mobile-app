@@ -34,7 +34,7 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
   const currentConfig = getFeatureToggles()
   const [toggles, setToggles] = useState({ ...currentConfig })
   const currentWaygateConfig = getWaygateToggles()
-  const [waygateToggles, setWaygateToggles] = useState({ ...currentWaygateConfig })
+  const [waygateToggles] = useState({ ...currentWaygateConfig })
   const isFocused = useIsFocused()
 
   useEffect(() => {
