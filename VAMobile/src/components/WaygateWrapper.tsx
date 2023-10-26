@@ -25,7 +25,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygate }) =
   console.log('WG: ' + waygate + ' : ' + JSON.stringify(waygateOpen, undefined, 2))
   if (waygateOpen.enabled) {
     return <>{children}</>
-  } else if (waygateOpen.enabled === false && waygateOpen.allowFunction === true) {
+  } else if ((waygateOpen.enabled === false && waygateOpen.allowFunction === true) || waygate === 'WG_LoginScreen') {
     return (
       <>
         {waygateAlertBox(waygateOpen)}
