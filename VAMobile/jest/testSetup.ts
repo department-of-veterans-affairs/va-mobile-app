@@ -70,6 +70,20 @@ jest.mock('../src/utils/hooks', () => {
   }
 })
 
+jest.mock('../src/utils/remoteConfig', () => {
+  let original = jest.requireActual('../src/utils/remoteConfig')
+  return {
+    ...original,
+    waygateEnabled: jest.fn().mockReturnValue({enabled: true,
+      errorMsgTitle: undefined,
+      errorMsgBody: undefined,
+      appUpdateButton: false,
+      allowFunction: false,
+      denyAccess: false,
+    }),
+  }
+})
+
 jest.mock('../src/utils/platform', () => {
   let original = jest.requireActual('../src/utils/platform')
   return {
