@@ -24,7 +24,7 @@ jobs:
       # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
       - uses: actions/setup-node@v3
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: 'VAMobile/.nvmrc'
           # cache: 'yarn'
           # cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
