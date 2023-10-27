@@ -81,6 +81,7 @@ jest.mock('../src/utils/waygateConfig', () => {
       allowFunction: false,
       denyAccess: false,
     }),
+    waygateNativeAlert: jest.fn().mockReturnValue(true),
   }
 })
 
