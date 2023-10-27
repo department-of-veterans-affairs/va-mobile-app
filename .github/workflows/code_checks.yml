@@ -40,8 +40,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
-          # cache: 'yarn'
-          # cache-dependency-path: 'VAMobile/yarn.lock'
+          # node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install dependencies
         run: yarn install --frozen-lockfile --non-interactive
       - name: yarn test
