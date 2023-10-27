@@ -124,7 +124,6 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
         onSelectionChange,
         labelKey: 'askForClaimDecision.haveSubmittedAllEvidence',
         a11yLabel: a11yLabelVA(t('askForClaimDecision.haveSubmittedAllEvidence')),
-        a11yHint: t('askForClaimDecision.haveSubmittedAllEvidenceA11yHint'),
         isRequiredField: true,
       },
       fieldErrorMessage: t('askForClaimDecision.checkToConfirmInformation'),
@@ -154,7 +153,6 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
             onPress={(): void => setOnSaveClicked(true)}
             label={t('askForClaimDecision.submit')}
             testID={t('askForClaimDecision.submit')}
-            a11yHint={t('askForClaimDecision.submitA11yHint')}
             buttonType={ButtonTypesConstants.buttonPrimary}
           />
         </Box>

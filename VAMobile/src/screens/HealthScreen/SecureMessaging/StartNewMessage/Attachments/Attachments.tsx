@@ -5,9 +5,8 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components'
 
-import { AlertBox, BackButton, Box, FullScreenSubtask, TextView, VABulletList } from 'components'
+import { AlertBox, Box, FullScreenSubtask, TextView, VABulletList } from 'components'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Events } from 'constants/analytics'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
@@ -48,12 +47,6 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     if (isActionSheetVisible) {
       e.preventDefault()
     }
-  })
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-    })
   })
 
   useEffect(() => {

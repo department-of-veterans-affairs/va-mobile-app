@@ -41,7 +41,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
           </TextView>
         </Box>
         <Box>
-          <TextView variant="HelperText" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
+          <TextView variant="HelperText" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween} testID="veteranStatusMilitaryServiceTestID">
             {t('militaryInformation.history', { begin: service.formattedBeginDate, end: service.formattedEndDate })}
           </TextView>
         </Box>
@@ -70,20 +70,20 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
 
     switch (branch) {
       case BranchesOfServiceConstants.AirForce:
-        return <VAIcon testID="United States Air Force" name="AirForce" {...dimensions} />
+        return <VAIcon testID="VeteranStatusUSAFIconTestID" name="AirForce" {...dimensions} />
       case BranchesOfServiceConstants.Army:
-        return <VAIcon testID="United States Army" name="Army" {...dimensions} />
+        return <VAIcon testID="VeteranStatusUSArmyIconTestID" name="Army" {...dimensions} />
       case BranchesOfServiceConstants.CoastGuard:
-        return <VAIcon testID="United States Coast Guard" name="CoastGuard" {...dimensions} />
+        return <VAIcon testID="VeteranStatusUSCoastGuardTestID" name="CoastGuard" {...dimensions} />
       case BranchesOfServiceConstants.MarineCorps:
-        return <VAIcon testID="United States Marine Corps" name="MarineCorps" {...dimensions} />
+        return <VAIcon testID="VeteranStatusUSMarineTestID" name="MarineCorps" {...dimensions} />
       case BranchesOfServiceConstants.Navy:
-        return <VAIcon testID="United States Navy" name="Navy" {...dimensions} />
+        return <VAIcon testID="VeteranStatusUSNavyTestID" name="Navy" {...dimensions} />
     }
   }
 
   return (
-    <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')} dividerMarginBypass={true} removeInsets={true}>
+    <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')} dividerMarginBypass={true} removeInsets={true} testID="veteranStatusTestID">
       <Box mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight} alignItems="center" mt={theme.dimensions.standardMarginBetween}>
         <VAIcon name={'Logo'} />
         {/* <Box my={theme.dimensions.standardMarginBetween}>

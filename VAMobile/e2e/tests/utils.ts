@@ -21,6 +21,7 @@ export const CommonE2eIdConstants = {
   PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
   DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
+  HOME_TAB_BUTTON_TEXT: 'Home',
   PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
   LETTERS_ROW_TEXT: 'VA letters and documents',
   DISABILITY_RATING_ROW_TEXT: 'Disability rating',
@@ -53,15 +54,16 @@ export async function loginToDemoMode(skipOnboarding = true) {
 	await element(by.text('Dismiss')).tap()
   } catch (e) {} 
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(21)
-  if (DEMO_PASSWORD != undefined) {
-    await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
+
+  if (DEMO_PASSWORD !== undefined) {
+    await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).replaceText(DEMO_PASSWORD)
   }
   
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
   await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
-  if(skipOnboarding == true) {
+  if(skipOnboarding === true) {
     const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
 
     if (ifCarouselSkipBtnExist) {
@@ -130,23 +132,25 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
  */
 
 export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue: string | boolean) {
-			
-	fs.readFile('./src/store/api/demo/mocks/' + mockFileName, 'utf8', (error, data) => {
-		 if(error){
-			console.log(error);
-			return;
-		 }
+	
+  const mockDirectory = './src/store/api/demo/mocks/'
+  
+  fs.readFile(mockDirectory + mockFileName, 'utf8', (error, data) => {
+    if(error){
+      console.log(error);
+      return;
+    }
 
 		const jsonParsed = JSON.parse(data)
 		var mockDataVariable
 		var mockDataKeyValue
 		for(var x=0; x<jsonProperty.length; x++) {
-			if (x == 0) {
+			if (x === 0) {
 				mockDataVariable = jsonParsed[jsonProperty[x]]
-			} else if (x == jsonProperty.length - 1) {
+			} else if (x === jsonProperty.length - 1) {
 				mockDataVariable[jsonProperty[x]] = newJsonValue
 			} else {
-				if (jsonProperty[x].constructor == Object) {
+				if (jsonProperty[x].constructor === Object) {
 					var key = String(Object.keys(jsonProperty[x]))
 					var value = jsonProperty[x][key]
 					mockDataKeyValue = mockDataVariable[key]
@@ -157,7 +161,7 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 			}				
 		}
 	
-		fs.writeFile('./src/store/api/demo/mocks/' + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
+		fs.writeFile(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
 			if (err) { return console.log(err) }
 		})
 	})
