@@ -68,7 +68,6 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
             label={t('letters.benefitService.viewLetter')}
             testID={t('letters.benefitService.viewLetter')}
             buttonType={ButtonTypesConstants.buttonPrimary}
-            a11yHint={t('letters.serviceVerificationLetter.viewLetterA11yHint')}
           />
         </TextArea>
       </Box>

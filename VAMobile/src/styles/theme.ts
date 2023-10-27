@@ -46,7 +46,6 @@ export type VATextColors = {
   error: string
   placeholder: string
   checkboxDisabled: string
-  covid19Vaccinations: string
   claimPhase: string
   input: string
   inputFocused: string
@@ -60,7 +59,6 @@ export type VATextColors = {
   bodyText: string
   showAll: string
   defaultMenuItem: string
-  AppointmentRequestCtaBtnText: string
   warningTag: string
   statusDescription: string
   tabSelectorInactive: string
@@ -91,7 +89,6 @@ export type VAIconColors = {
   checkboxDisabled: string
   checkboxDisabledContrast: string
   spinner: string
-  covid19Vaccinations: string
   photoAdd: string
   pickerIcon: string
   pagination: string
@@ -114,7 +111,6 @@ export type VAIconColors = {
 
 export type VATypographyThemeVariants = {
   ActionBar: string
-  AppointmentRequestCtaBtnText: string
   BitterBoldHeading: string
   ClaimPhase: string
   DescriptiveBackButton: string
@@ -149,13 +145,11 @@ export type VABackgroundColors = {
   shadow: string
   profileBanner: string
   ctaButton: string
-  covid19Vaccinations: string
   completedPhase: string
   currentPhase: string
   upcomingPhase: string
   splashScreen: string
   carousel: string
-  covid19VaccinationsActive: string
   unreadMessagesTag: string
   navHeader: string
   modalOverlay: string

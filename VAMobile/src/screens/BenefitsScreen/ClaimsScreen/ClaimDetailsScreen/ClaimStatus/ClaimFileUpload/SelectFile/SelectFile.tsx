@@ -132,13 +132,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
         </TextArea>
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <VAButton
-            onPress={onSelectFile}
-            label={t('fileUpload.selectAFile')}
-            testID={buttonTestId}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-            a11yHint={t('fileUpload.selectAFileWithPhoneA11yHint')}
-          />
+          <VAButton onPress={onSelectFile} label={t('fileUpload.selectAFile')} testID={buttonTestId} buttonType={ButtonTypesConstants.buttonPrimary} />
         </Box>
       </Box>
     </FullScreenSubtask>
