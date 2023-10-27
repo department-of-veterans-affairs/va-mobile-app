@@ -1,11 +1,9 @@
-import 'react-native'
 import { Linking } from 'react-native'
 import React from 'react'
-
 import { screen, fireEvent } from '@testing-library/react-native'
+
 import { context, mockNavProps, render } from 'testUtils'
 import { ClaimType } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { InitialState } from 'store/slices'
 import { claim } from '../../claimData'
 import ClaimStatus from './ClaimStatus'
 
@@ -28,11 +26,7 @@ context('ClaimStatus', () => {
       claim: { ...claim, attributes: { ...claim.attributes, maxEstDate: maxEstDate } },
       claimType,
     })
-    render(<ClaimStatus {...props} />, {
-      preloadedState: {
-        ...InitialState,
-      },
-    })
+    render(<ClaimStatus {...props} />)
   }
 
   beforeEach(() => {
@@ -40,7 +34,7 @@ context('ClaimStatus', () => {
     initializeTestInstance(maxEstDate, 'ACTIVE')
   })
 
-  it('should initialize', async () => {
+  it('Renders ClaimStatus', () => {
     expect(screen.getAllByText('You have 2 file requests from VA')).toBeTruthy()
     expect(screen.getByTestId('Step 1 of 5. completed. Claim received June 6, 2019')).toBeTruthy()
     expect(screen.getByTestId('Step 2 of 5. completed. Initial review June 6, 2019')).toBeTruthy()
@@ -56,16 +50,16 @@ context('ClaimStatus', () => {
 
   describe('when the claimType is ACTIVE', () => {
     describe('on click of Find out why we sometimes combine claims. list item', () => {
-      it('should call useRouteNavigation', async () => {
-        fireEvent.press(screen.getByText('Why does VA sometimes combine claims?'))
+      it('should call useRouteNavigation', () => {
+        fireEvent.press(screen.getByRole('button', { name: 'Why does VA sometimes combine claims?' }))
         expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote')
         expect(mockNavigationResultSpy).toHaveBeenCalledWith()
       })
     })
 
     describe('on click of What should I do if I disagree with VA’s decision on my disability claim? list item', () => {
-      it('should call useRouteNavigation', async () => {
-        fireEvent.press(screen.getByText("What should I do if I disagree with VA's decision on my disability claim?"))
+      it('should call useRouteNavigation', () => {
+        fireEvent.press(screen.getByRole('button', { name: "What should I do if I disagree with VA's decision on my disability claim?" }))
         expect(mockNavigationSpy).toHaveBeenCalledWith('WhatDoIDoIfDisagreement', { claimID: '600156928', claimStep: 3, claimType: 'Compensation' })
         expect(mockNavigationResultSpy).toHaveBeenCalledWith()
       })
@@ -73,7 +67,7 @@ context('ClaimStatus', () => {
   })
 
   describe('when the claimType is CLOSED', () => {
-    it('should display text detailing decision packet information and should display the date for the event in the events timeline where the type is "completed"', async () => {
+    it('should display text detailing decision packet information and should display the date for the event in the events timeline where the type is "completed"', () => {
       initializeTestInstance('', 'CLOSED')
       expect(screen.getByText('We mailed you a decision letter. It should arrive within 10 days after the date we decided your claim. It can sometimes take longer.')).toBeTruthy()
       expect(screen.getByText('We decided your claim on January 31, 2019')).toBeTruthy()
@@ -81,8 +75,8 @@ context('ClaimStatus', () => {
   })
 
   describe('on click of the call click for action link', () => {
-    it('should call Linking openURL', async () => {
-      fireEvent.press(screen.getByText('800-827-1000'))
+    it('should call Linking openURL', () => {
+      fireEvent.press(screen.getByRole('link', { name: '800-827-1000' }))
       expect(Linking.openURL).toHaveBeenCalled()
     })
   })

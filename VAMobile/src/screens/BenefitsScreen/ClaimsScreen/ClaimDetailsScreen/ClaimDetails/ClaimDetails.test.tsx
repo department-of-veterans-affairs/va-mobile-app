@@ -1,12 +1,11 @@
-import 'react-native'
 import React from 'react'
-
 import { screen } from '@testing-library/react-native'
+
 import { context, mockNavProps, render } from 'testUtils'
 import ClaimDetails from './ClaimDetails'
 
 context('ClaimDetails', () => {
-  const initializeTestInstance = (): void => {
+  beforeEach(() => {
     const props = mockNavProps({
       claim: {
         id: '600156928',
@@ -54,10 +53,9 @@ context('ClaimDetails', () => {
     })
 
     render(<ClaimDetails {...props} />)
-  }
+  })
 
-  it('should initialize', async () => {
-    initializeTestInstance()
+  it('renders claim details', () => {
     expect(screen.getByText('Claim type')).toBeTruthy()
     expect(screen.getByText('Compensation')).toBeTruthy()
     expect(screen.getByText("What you've claimed")).toBeTruthy()

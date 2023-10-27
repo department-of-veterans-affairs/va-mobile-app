@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { screen, fireEvent } from '@testing-library/react-native'
+
 import { context, mockNavProps, render } from 'testUtils'
 import ClaimsAndAppealsListView, { ClaimType } from './ClaimsAndAppealsListView'
 import { InitialState } from 'store/slices'
@@ -117,11 +116,11 @@ context('ClaimsAndAppealsListView', () => {
     })
   }
 
-  beforeEach(async () => {
+  beforeEach(() => {
     initializeTestInstance('ACTIVE')
   })
 
-  it('initializes correctly', async () => {
+  it('Renders ClaimsAndAppealsListView', () => {
     expect(screen.getByText('Your active claims and appeals')).toBeTruthy()
     expect(screen.queryByText('Your closed claims and appeals')).toBeFalsy()
     expect(screen.getByText('Supplemental claim for disability compensation updated on October 28, 2020')).toBeTruthy()
@@ -133,21 +132,21 @@ context('ClaimsAndAppealsListView', () => {
   })
 
   describe('on click of a claim', () => {
-    it('should call useRouteNavigation', async () => {
-      fireEvent.press(screen.getByTestId('Claim for compensation updated on October 30, 2020 Submitted October 22, 2020'))
+    it('should call useRouteNavigation', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Claim for compensation updated on October 30, 2020 Submitted October 22, 2020' }))
       expect(mockNavigateToClaimDetailsScreenSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of an appeal', () => {
-    it('should call useRouteNavigation', async () => {
-      fireEvent.press(screen.getByTestId('Supplemental claim for disability compensation updated on October 28, 2020 Submitted October 22, 2020'))
+    it('should call useRouteNavigation', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Supplemental claim for disability compensation updated on October 28, 2020 Submitted October 22, 2020' }))
       expect(mockNavigateToAppealDetailsScreenSpy).toHaveBeenCalled()
     })
   })
 
   describe('where there are no claims or appeals', () => {
-    it('should display the NoClaimsAndAppeals components', async () => {
+    it('should display the NoClaimsAndAppeals components', () => {
       initializeTestInstance('ACTIVE', true)
       expect(screen.getByText("You don't have any submitted claims or appeals")).toBeTruthy()
       expect(screen.getByText("This app shows only completed claim and appeal applications. If you started a claim or appeal but haven’t finished it yet, go to eBenefits to work on it.")).toBeTruthy()
