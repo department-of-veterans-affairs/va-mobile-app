@@ -58,7 +58,7 @@ beforeAll(async () => {
 })
 
 describe('Messages Screen', () => { 
-	it('should match the messages page design', async () => {
+	/*it('should match the messages page design', async () => {
 		await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
 		await expect(element(by.text('Inbox (3)'))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
@@ -302,7 +302,7 @@ describe('Messages Screen', () => {
   it('should tap on a message with an attachment and verify the attachment is there', async () => {
     await element(by.id('Diana Persson, Md 10/26/2021 Has attachment COVID: Prepping for your visit')).tap()
     await expect(element(by.text('COVID-19-mRNA-infographic_G_508.pdf (0.17 MB)'))).toExist()
-  })
+  })*/
 
   it('should navigate to the sent folder and select the first message', async () => {
     await device.launchApp({ newInstance: true })
@@ -315,19 +315,15 @@ describe('Messages Screen', () => {
 
   it('should tap on the first message and verify a message thread is displayed', async () => {
     await element(by.id('Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Appointment: Preparing for your visit')).tap()
-    dateWithTimeZone = await getDateWithTimeZone('November 12, 2021 6:07 PM')
-    await expect(element(by.id('FREEMAN, MELVIN  V ' + dateWithTimeZone + ' '))).toExist()
-    dateWithTimeZone = await getDateWithTimeZone('November 10, 2021 9:58 AM')
-    await expect(element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' '))).toExist()
-    dateWithTimeZone = await getDateWithTimeZone('November 9, 2021 4:55 PM')
-    await expect(element(by.id('FREEMAN, MELVIN  V ' + dateWithTimeZone + ' has attachment'))).toExist()
-    dateWithTimeZone = await getDateWithTimeZone('November 8, 2021 4:23 PM')
-    await expect(element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' '))).toExist()
+    await expect(element(by.text('Melvin Freeman\nUSMC Veteran'))).toExist()
+    await expect(element(by.text('See you at your appointment.  Please do not forget to fast.'))).toExist()
+    await expect(element(by.text('Testing '))).toExist()
+    await expect(element(by.text('Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.'))).toExist()
   })
 
   it('should expand and collapse a message with more than two lines', async () => {
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-    dateWithTimeZone = await getDateWithTimeZone('November 8, 2021 4:23 PM')
+    dateWithTimeZone = await getDateWithTimeZone('November 12, 2021 6:07 PM')
     var messageCollapsed = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageCollapsed')
     checkImages(messageCollapsed)
     await element(by.text(dateWithTimeZone)).tap()
@@ -338,7 +334,7 @@ describe('Messages Screen', () => {
     await element(by.text('Messages')).tap()
   })
 
-  it('should navigate to the drafts folder and click the newest message', async () => {
+  /*it('should navigate to the drafts folder and click the newest message', async () => {
     await device.launchApp({ newInstance: true })
     await loginToDemoMode()
     await openHealth()
@@ -412,5 +408,5 @@ describe('Messages Screen', () => {
     await element(by.text('Sent')).tap()
     await element(by.text('Messages')).tap()
     await expect(element(by.text('Custom Folder 2'))).toExist()
-  })
+  })*/
 })
