@@ -315,6 +315,7 @@ describe('Messages Screen', () => {
 
   it('should tap on the first message and verify a message thread is displayed', async () => {
     await element(by.id('Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Appointment: Preparing for your visit')).tap()
+    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     await expect(element(by.text('Melvin Freeman\nUSMC Veteran'))).toExist()
     await expect(element(by.text('See you at your appointment.  Please do not forget to fast.'))).toExist()
     await expect(element(by.text('Testing '))).toExist()
