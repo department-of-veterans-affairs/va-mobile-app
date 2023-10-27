@@ -16,13 +16,7 @@ export const isIOS = (): boolean => {
   return getPlatform() === PlatformType.IOS
 }
 
-export const isIpad = (): boolean => {
-  if (getPlatform() === PlatformType.IOS) {
-    const platformIOS = Platform as PlatformIOSStatic
-    return platformIOS.isPad
-  }
-  return false
-}
+export const isIpad = () => isIOS() && (Platform as PlatformIOSStatic).isPad
 
 export const isAndroid = (): boolean => {
   return getPlatform() === PlatformType.ANDROID
