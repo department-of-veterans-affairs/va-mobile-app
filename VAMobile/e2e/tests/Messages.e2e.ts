@@ -325,11 +325,11 @@ describe('Messages Screen', () => {
   it('should expand and collapse a message with more than two lines', async () => {
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     dateWithTimeZone = await getDateWithTimeZone('November 12, 2021 6:07 PM')
-    var messageCollapsed = device.takeScreenshot('MessageCollapsed')
+    var messageCollapsed = await device.takeScreenshot('MessageCollapsed')
     checkImages(messageCollapsed)
     await element(by.text('Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.')).tap()
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-    var messageExpanded = device.takeScreenshot('MessageExpanded')
+    var messageExpanded = await device.takeScreenshot('MessageExpanded')
     checkImages(messageExpanded)
     await element(by.text('Sent')).tap()
     await element(by.text('Messages')).tap()
