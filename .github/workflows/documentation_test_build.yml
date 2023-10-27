@@ -5,10 +5,10 @@ name: '[Documentation] Test Build'
 on:
   pull_request:
     branches: [develop]
-    # paths: 
-    #   - VAMobile/src/components/**
-    #   - VAMobile/documentation/**
-    #   - VAMobile/src/utils/hooks.tsx
+    paths: 
+      - VAMobile/src/components/**
+      - VAMobile/documentation/**
+      - VAMobile/src/utils/hooks.tsx
 
 jobs:
   test-deploy:
