@@ -316,7 +316,6 @@ describe('Messages Screen', () => {
   it('should tap on the first message and verify a message thread is displayed', async () => {
     await element(by.id('Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Appointment: Preparing for your visit')).tap()
     dateWithTimeZone = await getDateWithTimeZone('November 12, 2021 6:07 PM')
-    console.log(dateWithTimeZone)
     await expect(element(by.id('FREEMAN, MELVIN  V ' + dateWithTimeZone + ' '))).toExist()
     dateWithTimeZone = await getDateWithTimeZone('November 10, 2021 9:58 AM')
     await expect(element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' '))).toExist()
