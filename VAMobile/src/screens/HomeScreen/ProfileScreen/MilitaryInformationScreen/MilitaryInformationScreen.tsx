@@ -14,7 +14,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/remoteConfig'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
 type MilitaryInformationScreenProps = StackScreenProps<HomeStackParamList, 'MilitaryInformation'>

@@ -9,7 +9,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/remoteConfig'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 

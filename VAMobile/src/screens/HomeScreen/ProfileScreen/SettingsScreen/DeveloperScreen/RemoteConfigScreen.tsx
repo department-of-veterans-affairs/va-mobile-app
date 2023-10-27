@@ -15,11 +15,12 @@ import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 import remoteConfig from '@react-native-firebase/remote-config'
 
-import { FeatureToggleType, getFeatureToggles, getWaygateToggles, setDebugConfig, setWaygateDebugConfig } from 'utils/remoteConfig'
+import { FeatureToggleType, getFeatureToggles, setDebugConfig } from 'utils/remoteConfig'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps } from '@react-navigation/stack'
 import { forEach } from 'underscore'
+import { getWaygateToggles, setWaygateDebugConfig } from 'utils/waygateConfig'
 import { useIsFocused } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 

@@ -3,7 +3,7 @@ import React from 'react'
 
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { PhoneData, PhoneType } from 'api/types'
-import { Waygate } from 'utils/remoteConfig'
+import { Waygate } from 'utils/waygateConfig'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import EditEmailScreen from './ProfileScreen/ContactInformationScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './ProfileScreen/ContactInformationScreen/EditPhoneNumberScreen'

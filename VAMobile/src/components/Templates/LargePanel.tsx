@@ -5,7 +5,7 @@ import React, { FC } from 'react'
 import { FooterButton, VAScrollView, WaygateWrapper } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { View, ViewStyle } from 'react-native'
-import { WaygateToggleType } from 'utils/remoteConfig'
+import { WaygateToggleType } from 'utils/waygateConfig'
 import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 

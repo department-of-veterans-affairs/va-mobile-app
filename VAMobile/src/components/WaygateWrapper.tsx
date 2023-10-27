@@ -1,7 +1,7 @@
 import { AlertBox, Box } from 'components'
 import React, { FC, ReactElement } from 'react'
 
-import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/remoteConfig'
+import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/waygateConfig'
 import { useTheme } from 'utils/hooks'
 
 export type WaygateWrapperProps = {

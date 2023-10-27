@@ -70,8 +70,8 @@ jest.mock('../src/utils/hooks', () => {
   }
 })
 
-jest.mock('../src/utils/remoteConfig', () => {
-  let original = jest.requireActual('../src/utils/remoteConfig')
+jest.mock('../src/utils/waygateConfig', () => {
+  let original = jest.requireActual('../src/utils/waygateConfig')
   return {
     ...original,
     waygateEnabled: jest.fn().mockReturnValue({enabled: true,

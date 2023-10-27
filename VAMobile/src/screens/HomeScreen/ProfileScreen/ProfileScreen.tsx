@@ -11,7 +11,7 @@ import { RootState } from 'store'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/remoteConfig'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 

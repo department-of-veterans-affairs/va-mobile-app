@@ -14,7 +14,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/remoteConfig'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 const getTextForPhoneData = (contactInformation: UserContactInformation | undefined, formattedPhoneType: FormattedPhoneType, phoneKey: PhoneKey, t: TFunction): Array<TextLine> => {

@@ -3,7 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useState } from 'react'
 
 import { TextView, TextViewProps, VAIconProps, WaygateWrapper } from 'components'
-import { WaygateToggleType } from 'utils/remoteConfig'
+import { WaygateToggleType } from 'utils/waygateConfig'
 import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
