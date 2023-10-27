@@ -65,7 +65,7 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID))).toExist()
 		await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID))).toExist()	
 	})
-
+ 
   it('should verify that the messages inbox is scrollable', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('bottom')
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_10_ID))).toBeVisible()
@@ -325,11 +325,11 @@ describe('Messages Screen', () => {
   it('should expand and collapse a message with more than two lines', async () => {
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     dateWithTimeZone = await getDateWithTimeZone('November 12, 2021 6:07 PM')
-    var messageCollapsed = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageCollapsed')
+    var messageCollapsed = await element(by.id('FREEMAN, MELVIN  V ' + dateWithTimeZone + ' ')).takeScreenshot('MessageCollapsed')
     checkImages(messageCollapsed)
     await element(by.text(dateWithTimeZone)).tap()
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-    var messageExpanded = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageExpanded')
+    var messageExpanded = await element(by.id('FREEMAN, MELVIN  V ' + dateWithTimeZone + ' ')).takeScreenshot('MessageExpanded')
     checkImages(messageExpanded)
     await element(by.text('Sent')).tap()
     await element(by.text('Messages')).tap()
