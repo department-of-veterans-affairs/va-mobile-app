@@ -1,10 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { overrideRemote, devConfig, featureEnabled, activateRemoteConfig, setDebugConfig } from 'utils/remoteConfig'
-import { setWaygateDebugConfig, waygateConfig } from './waygateConfig'
 
 const mockGetItem = AsyncStorage.getItem as jest.Mock
 const mockSetItem = AsyncStorage.setItem as jest.Mock
 const mockSetDefaultsSpy = jest.fn()
+
+jest.mock('@react-native-firebase/remote-config', () => () => ({
+  fetch: jest.fn(() => Promise.resolve()),
+  getValue: jest.fn(() => ({
+    asBoolean: () => true,
+  })),
+  getAll: jest.fn(() => false),
+  activate: jest.fn(() => Promise.resolve()),
+  setConfigSettings: jest.fn(() => Promise.resolve()),
+  setDefaults: mockSetDefaultsSpy,
+}))
 
 const mockOverrides = {
   appointmentRequests: true,
@@ -20,8 +30,6 @@ const mockOverrides = {
   patientCheckInWaygate: true,
 }
 
-const mockWaygateOverrides = waygateConfig
-
 describe('activate', () => {
   it('should call setDefaults with devConfig', async () => {
     await activateRemoteConfig()
@@ -35,7 +43,6 @@ describe('activate', () => {
     expect(overrideRemote).toBe(false)
     expect(featureEnabled('testFeature')).toBe(true)
     await setDebugConfig(mockOverrides)
-    await setWaygateDebugConfig(mockWaygateOverrides)
     expect(mockSetItem).toHaveBeenCalledWith('@store_remote_config_overrides', JSON.stringify(mockOverrides))
     expect(overrideRemote).toBe(true)
     expect(featureEnabled('testFeature')).toBe(false)
