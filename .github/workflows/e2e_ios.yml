@@ -6,8 +6,8 @@ name: '[e2e] iOS Detox Test Run'
 
 on:
   push:
-    branches:
-      - 'dependabot/**'
+    # branches:
+    #   - 'dependabot/**'
   workflow_dispatch:
 
 defaults:
