@@ -135,9 +135,14 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   })
 
   it('should update the ' + phoneType + ' phone with an extension', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()
+    if(phoneType === 'Work') {     
+      await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
+      await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()
+    } else {
+      await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
+      await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
+      await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()   
+    }
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
   })
@@ -164,9 +169,14 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   it('should update the ' + phoneType + ' with an extension', async () => {
     await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(phoneID)).tap()
-    //await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).replaceText('276-608-6180')
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()
+    if(phoneType === 'Work') { 
+      await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
+      await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()
+    } else {
+      await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
+      await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
+      await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()   
+    }
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
