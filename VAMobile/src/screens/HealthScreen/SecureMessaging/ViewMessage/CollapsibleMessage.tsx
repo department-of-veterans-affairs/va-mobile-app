@@ -127,6 +127,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   )
 
   const loadMessageError = messageIDsOfError?.includes(message.messageId)
+  
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,

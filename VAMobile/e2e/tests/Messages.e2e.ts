@@ -50,6 +50,8 @@ export const MessagesE2eIdConstants = {
 }
 
 var dateWithTimeZone
+var messageCollapsed
+var messageExpanded
 
 beforeAll(async () => {
   await loginToDemoMode()
@@ -326,18 +328,18 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     if(device.getPlatform() === 'ios') {
       dateWithTimeZone = await getDateWithTimeZone('October 1, 2021 5:23 PM')
-      var messageCollapsed = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageCollapsed')
+      messageCollapsed = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageCollapsed')
       checkImages(messageCollapsed)
       await element(by.text(dateWithTimeZone)).tap()
       await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-      var messageExpanded = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageExpanded')
+      messageExpanded = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageExpanded')
       checkImages(messageExpanded)
     } else {
-      var messageCollapsed = await device.takeScreenshot('MessageCollapsed')
+      messageCollapsed = await device.takeScreenshot('MessageCollapsed')
       checkImages(messageCollapsed)
       await element(by.text('Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.')).tap()
       await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-      var messageExpanded = await device.takeScreenshot('MessageExpanded')
+      messageExpanded = await device.takeScreenshot('MessageExpanded')
     }
     await element(by.text('Sent')).tap()
     await element(by.text('Messages')).tap()
