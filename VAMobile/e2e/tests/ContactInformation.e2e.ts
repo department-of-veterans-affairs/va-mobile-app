@@ -243,8 +243,8 @@ describe('Contact Info Screen', () => {
     await element(by.text('Close')).atIndex(0).tap()
   })
 
-  //validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
-  //validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home') 
+  validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
+  validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home') 
   validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
   validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
