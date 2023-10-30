@@ -58,7 +58,7 @@ beforeAll(async () => {
 })
 
 describe('Messages Screen', () => { 
-	/*it('should match the messages page design', async () => {
+	it('should match the messages page design', async () => {
 		await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
 		await expect(element(by.text('Inbox (3)'))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
@@ -302,7 +302,7 @@ describe('Messages Screen', () => {
   it('should tap on a message with an attachment and verify the attachment is there', async () => {
     await element(by.id('Diana Persson, Md 10/26/2021 Has attachment COVID: Prepping for your visit')).tap()
     await expect(element(by.text('COVID-19-mRNA-infographic_G_508.pdf (0.17 MB)'))).toExist()
-  })*/
+  })
 
   it('should navigate to the sent folder and select the first message', async () => {
     await device.launchApp({ newInstance: true })
@@ -335,7 +335,7 @@ describe('Messages Screen', () => {
     await element(by.text('Messages')).tap()
   })
 
-  /*it('should navigate to the drafts folder and click the newest message', async () => {
+  it('should navigate to the drafts folder and click the newest message', async () => {
     await device.launchApp({ newInstance: true })
     await loginToDemoMode()
     await openHealth()
@@ -409,5 +409,5 @@ describe('Messages Screen', () => {
     await element(by.text('Sent')).tap()
     await element(by.text('Messages')).tap()
     await expect(element(by.text('Custom Folder 2'))).toExist()
-  })*/
+  })
 })
