@@ -51,7 +51,7 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
 
   return (
     <Box alignItems={center ? 'center' : undefined}>
-      <ClickForActionLink {...clickToCallProps} testID="CallVATestID" fireAnalytic={fireAnalytic}/>
+      <ClickForActionLink {...clickToCallProps} testID="CallVATestID" fireAnalytic={fireAnalytic} />
       {!ttyBypass && <ClickForActionLink {...ttyProps} testID="CallTTYTestID" />}
     </Box>
   )
