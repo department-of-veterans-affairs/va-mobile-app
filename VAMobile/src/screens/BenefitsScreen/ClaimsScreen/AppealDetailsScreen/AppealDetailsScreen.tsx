@@ -117,7 +117,9 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
           <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
             {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
           </TextView>
-          <TextView variant="MobileBody">{t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}</TextView>
+          <TextView variant="MobileBody" testID="appealsUpToDateTestID">
+            {t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}
+          </TextView>
           <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={segmentedControlA11yHints} />

@@ -141,7 +141,11 @@ describe('Claims Screen', () => {
   })
 
   it('should tap select a file and verify the options given', async () => {
-    await element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(1).tap()
+    if(device.getPlatform() === 'android') {
+      await element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(0).tap()
+    } else {
+      await element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(0).tap()
+    }
     await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_FILE_FOLDER_OPTION_TEXT))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.CANCEL_TEXT))).toExist()
   })
