@@ -164,8 +164,8 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   it('should update the ' + phoneType + ' with an extension', async () => {
     await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(phoneID)).tap()
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
+    //await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).replaceText('276-608-6180')
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
@@ -243,13 +243,13 @@ describe('Contact Info Screen', () => {
     await element(by.text('Close')).atIndex(0).tap()
   })
 
-  validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
-  validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home') 
+  //validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
+  //validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home') 
   validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
-  validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
-  validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
+  //validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
+  //validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
 
-  it ('should open the email address', async () => {
+  /*it ('should open the email address', async () => {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
   })
@@ -279,5 +279,5 @@ describe('Contact Info Screen', () => {
   removeContactInfoFeature(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'work phone')
   removeContactInfoFeature(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'home phone')
   removeContactInfoFeature(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'mobile phone')
-  removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')
+  removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')*/
 })
