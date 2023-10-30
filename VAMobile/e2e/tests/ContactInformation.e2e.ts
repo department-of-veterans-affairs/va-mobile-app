@@ -129,7 +129,6 @@ export async function validateAddresses(addressID, addressType) {
 
 export async function validatePhoneNumbers(phoneID, phoneType) {
   it ('should open the ' + phoneType + ' phone number', async () => {
-    //await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
     await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(phoneID)).tap()
   })
@@ -187,12 +186,10 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   it('should update the ' + phoneType + ' phone number and remove the extension', async () => {
     await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(phoneID)).tap()
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).clearText()
+    //await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).clearText()
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
-    try {
-      await expect(element(by.text(phoneType + ' phone saved'))).toExist()
-      await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
-    } catch (ex) {}
+    await expect(element(by.text(phoneType + ' phone saved'))).toExist()
+    await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
   })
 }
 
