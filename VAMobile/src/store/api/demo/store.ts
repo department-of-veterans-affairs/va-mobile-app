@@ -133,8 +133,8 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/prescriptions.json'),
     import('./mocks/notifications.json'),
     import('./mocks/contactInformation.json'),
-    import('../../../api/demoMocks/getAuthorizedServices.json'),
-    import('../../../api/demoMocks/getFacilitiesInfo.json'),
+    import('./mocks/getAuthorizedServices.json'),
+    import('./mocks/getFacilitiesInfo.json'),
     import('./mocks/demographics.json'),
     import('./mocks/personalInformation.json'),
   ])

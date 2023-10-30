@@ -189,16 +189,6 @@ export type SecureMessagingFolderMessagesMap = {
   [key: string]: SecureMessagingFolderMessagesGetData
 }
 
-export type SecureMessagingTabTypes = 'Inbox' | 'Folders'
-
-export const SecureMessagingTabTypesConstants: {
-  INBOX: SecureMessagingTabTypes
-  FOLDERS: SecureMessagingTabTypes
-} = {
-  INBOX: 'Inbox',
-  FOLDERS: 'Folders',
-}
-
 export type SecureMessagingRecipientsMetaSortName = 'ASC' | 'DESC'
 
 export type SecureMessagingRecipientsMetaSort = {

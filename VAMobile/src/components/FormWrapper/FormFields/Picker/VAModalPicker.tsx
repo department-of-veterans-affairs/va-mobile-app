@@ -201,7 +201,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     }
 
     return (
-      <TouchableWithoutFeedback {...props} {...testIdProps(getTranslation(buttonText || '', t))} {...a11yHintProp(t('pickerLaunchBtn.a11yHint'))}>
+      <TouchableWithoutFeedback {...props} {...testIdProps(getTranslation(buttonText || '', t))}>
         <Box pr={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerLeftButtonFromTextPadding}>
           <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
             {getTranslation(buttonText || '', t)}

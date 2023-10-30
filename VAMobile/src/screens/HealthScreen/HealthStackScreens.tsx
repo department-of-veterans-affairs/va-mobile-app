@@ -1,18 +1,15 @@
 import { ImagePickerResponse } from 'react-native-image-picker'
-import { TFunction } from 'i18next'
-import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { FormHeaderType } from 'constants/secureMessaging'
-import { GeneralHelpScreen, SubTypeHelpScreen, TypeOfCareNotListedHelpScreen } from './Appointments/RequestAppointments/AppointmentFlowHelpScreens'
 import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import Attachments from './SecureMessaging/StartNewMessage/Attachments/Attachments'
 import ConfirmContactInfo from './Appointments/UpcomingAppointments/CheckIn/ConfirmContactInfo'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
-import NoRequestAppointmentAccess from './Appointments/RequestAppointments/NoRequestAppointmentAccess/NoRequestAppointmentAccess'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
 import RefillRequestSummary from './Pharmacy/RefillScreens/RefillRequestSummary'
@@ -20,7 +17,6 @@ import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
 import RefillTrackingModal from './Pharmacy/RefillTrackingDetails/RefillTrackingDetails'
 import ReplyHelp from './SecureMessaging/ReplyHelp/ReplyHelp'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
-import RequestAppointmentScreen from './Appointments/RequestAppointments/RequestAppointmentScreen'
 import SessionNotStarted from './Appointments/UpcomingAppointments/SessionNotStarted'
 import StartNewMessage from './SecureMessaging/StartNewMessage/StartNewMessage'
 import StatusDefinition from './Pharmacy/StatusDefinition/StatusDefinition'
@@ -96,7 +92,6 @@ export type HealthStackParamList = WebviewStackParams & {
   VaccineDetails: {
     vaccineId: string
   }
-  RequestAppointmentScreen: undefined
   GeneralHelpScreen: {
     title: string
     description: string
@@ -104,7 +99,6 @@ export type HealthStackParamList = WebviewStackParams & {
   SubTypeHelpScreen: {
     careTypeId: string
   }
-  NoRequestAppointmentAccess: undefined
   TypeOfCareNotListedHelpScreen: undefined
   PrescriptionHistory: {
     startingTab?: PrescriptionHistoryTabs | undefined
@@ -127,7 +121,7 @@ export type HealthStackParamList = WebviewStackParams & {
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
 
-export const getHealthScreens = (t: TFunction) => {
+export const getHealthScreens = () => {
   return [
     <HealthStack.Screen key={'PrepareForVideoVisit'} name="PrepareForVideoVisit" component={PrepareForVideoVisit} options={LARGE_PANEL_OPTIONS} />,
     <HealthStack.Screen key={'StartNewMessage'} name="StartNewMessage" component={StartNewMessage} options={FULLSCREEN_SUBTASK_OPTIONS} />,
@@ -135,45 +129,6 @@ export const getHealthScreens = (t: TFunction) => {
     <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'ReplyHelp'} name="ReplyHelp" component={ReplyHelp} options={LARGE_PANEL_OPTIONS} />,
-    <HealthStack.Screen key={'NoRequestAppointmentAccess'} name="NoRequestAppointmentAccess" component={NoRequestAppointmentAccess} options={{ headerShown: false }} />,
-    <HealthStack.Group
-      key={'ModalsScreens'}
-      screenOptions={{
-        presentation: 'modal',
-        ...TransitionPresets.ModalTransition,
-        headerShown: true,
-      }}>
-      <HealthStack.Screen
-        key={'GeneralHelpScreen'}
-        name="GeneralHelpScreen"
-        component={GeneralHelpScreen}
-        options={{
-          title: t('requestAppointments.generalHelpPageTitle'),
-        }}
-      />
-      <HealthStack.Screen
-        key={'SubTypeHelpScreen'}
-        name="SubTypeHelpScreen"
-        component={SubTypeHelpScreen}
-        options={{
-          title: t('requestAppointment.modalNeedHelpChoosingLinkTitle'),
-        }}
-      />
-      <HealthStack.Screen
-        key={'TypeOfCareNotListedHelpScreen'}
-        name="TypeOfCareNotListedHelpScreen"
-        component={TypeOfCareNotListedHelpScreen}
-        options={{
-          title: t('requestAppointment.typeOfCareNotListedModalTitle'),
-        }}
-      />
-      <HealthStack.Screen
-        key={'RequestAppointmentScreen'}
-        name="RequestAppointmentScreen"
-        component={RequestAppointmentScreen}
-        options={{ ...TransitionPresets.SlideFromRightIOS }}
-      />
-    </HealthStack.Group>,
     <HealthStack.Screen key={'ConfirmContactInfo'} name="ConfirmContactInfo" component={ConfirmContactInfo} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'RefillRequestSummary'} name="RefillRequestSummary" component={RefillRequestSummary} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HealthStack.Screen key={'RefillScreenModal'} name="RefillScreenModal" component={RefillScreenModal} options={FULLSCREEN_SUBTASK_OPTIONS} />,

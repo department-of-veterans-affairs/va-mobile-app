@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { CallHelpCenter, DowntimeError, NetworkConnectionError } from 'components'
+import { CallHelpCenter, DowntimeError, ErrorAlert, NetworkConnectionError } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
@@ -51,6 +51,8 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
         )
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING:
         return <CallHelpCenter titleText={t('disabilityRating.errorTitle')} callPhone={displayedTextPhoneNumber(t('8008271000'))} />
+      case CommonErrorTypesConstants.APP_LEVEL_ERROR_APPOINTMENTS:
+        return <ErrorAlert text={t('appointments.errorText')} onTryAgain={tryAgain} />
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE:
         return <CallHelpCenter onTryAgain={tryAgain} titleText={t('errors.callHelpCenter.vaAppNotWorking')} callPhone={displayedTextPhoneNumber(t('8006982411'))} />
       default:

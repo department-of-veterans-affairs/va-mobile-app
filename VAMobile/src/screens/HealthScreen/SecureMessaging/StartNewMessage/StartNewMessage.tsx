@@ -6,7 +6,6 @@ import _ from 'underscore'
 
 import {
   AlertBox,
-  BackButton,
   Box,
   ButtonTypesConstants,
   CollapsibleView,
@@ -18,21 +17,12 @@ import {
   LoadingComponent,
   MessageAlert,
   PickerItem,
-  SaveButton,
   TextArea,
   VAButton,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import {
-  CategoryTypeFields,
-  CategoryTypes,
-  ScreenIDTypesConstants,
-  SecureMessagingFormData,
-  SecureMessagingSystemFolderIdConstants,
-  SecureMessagingTabTypesConstants,
-} from 'store/api/types'
+import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE, SegmentedControlIndexes } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -147,23 +137,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={navigation.goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-      headerRight: () =>
-        !noRecipientsReceived && (
-          <SaveButton
-            onSave={() => {
-              setOnSaveDraftClicked(true)
-              setOnSendClicked(true)
-            }}
-            disabled={false}
-            a11yHint={t('secureMessaging.saveDraft.a11yHint')}
-          />
-        ),
-    })
-  })
-
-  useEffect(() => {
     if (attachmentFileToAdd === undefined) {
       return
     }
@@ -176,7 +149,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     if (saveDraftComplete) {
-      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
+      dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
       navigation.navigate('SecureMessaging')
       navigation.navigate('FolderMessages', {
         folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
@@ -308,7 +281,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {
                 label: t('secureMessaging.formMessage.addFiles'),
-                a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
                 onPress: onAddFiles,
               }
             : undefined,
@@ -333,7 +305,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
-    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+    dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
     navigation.navigate('SecureMessaging')
   }
 
@@ -413,7 +385,6 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
                 setOnSendClicked(true)
                 setOnSaveDraftClicked(false)
               }}
-              a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
               buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>

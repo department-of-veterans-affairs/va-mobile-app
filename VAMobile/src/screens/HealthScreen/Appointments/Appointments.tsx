@@ -5,7 +5,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, FooterButton } from 'components'
+import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState } from 'store/slices'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -15,9 +15,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { featureEnabled } from 'utils/remoteConfig'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
@@ -40,7 +39,6 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
 const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
@@ -51,8 +49,6 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
 
   const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
-  const navigateToRequestAppointments = navigateTo('RequestAppointmentScreen')
-  const navigateToNoRequestAppointmentAccess = navigateTo('NoRequestAppointmentAccess')
 
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
@@ -124,13 +120,6 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     return <></>
   }
 
-  const onRequestAppointmentPress = () => {
-    userAuthorizedServices?.scheduleAppointments ? navigateToRequestAppointments() : navigateToNoRequestAppointmentAccess()
-  }
-  const requestAppointmentsFooter = featureEnabled('appointmentRequests') ? (
-    <FooterButton onPress={onRequestAppointmentPress} text={t('requestAppointments.launchModalBtnTitle')} />
-  ) : undefined
-
   const scrollViewProps: VAScrollViewProps = {
     scrollViewRef: scrollViewRef,
   }
@@ -141,7 +130,6 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
       backLabelOnPress={navigation.goBack}
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
-      footerContent={requestAppointmentsFooter}
       testID="appointmentsTestID">
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
