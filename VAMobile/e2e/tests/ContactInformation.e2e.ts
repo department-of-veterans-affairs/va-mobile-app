@@ -176,7 +176,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   })
   
   it('should update the ' + phoneType + ' phone number and remove the extension', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
+    //await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
     await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(phoneID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).clearText()
