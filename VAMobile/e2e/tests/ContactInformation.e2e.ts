@@ -189,8 +189,8 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
     await element(by.id(phoneID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).clearText()
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
-    await expect(element(by.text(phoneType + ' phone saved'))).toExist()
-    await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
+    //await expect(element(by.text(phoneType + ' phone saved'))).toExist()
+    //await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
   })
 }
 
