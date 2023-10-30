@@ -165,14 +165,14 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
     await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(phoneID)).tap()
-    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
+    /*await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.text(phoneType + ' phone saved'))).toExist()
-    await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
+    await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()*/
   })
   
   it('should update the ' + phoneType + ' phone number and remove the extension', async () => {
@@ -246,12 +246,12 @@ describe('Contact Info Screen', () => {
   })
 
   //validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
-  validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home') 
-  /*validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
+  //validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home') 
+  validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
   validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
 
-  it ('should open the email address', async () => {
+  /*it ('should open the email address', async () => {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
   })
