@@ -1,5 +1,6 @@
 import { expect, device, by, element, waitFor } from 'detox'
 import { loginToDemoMode, openContactInfo, openProfile } from './utils'
+import { setTimeout } from "timers/promises"
 
 export const ContactInfoE2eIdConstants = {
   CONTACT_INFO_PAGE_ID: 'ContactInfoTestID',
@@ -147,6 +148,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   })
 
   it(phoneType + ': should tap on the cancel button and verify a delete changes pop up appears', async () => {
+    await setTimeout(2000)
     await element(by.text('Cancel')).tap()
     await expect(element(by.text('Delete changes to your ' + phoneType.toLowerCase() + ' phone number?'))).toExist()
     await expect(element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT))).toExist()
@@ -160,6 +162,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   })
 
   it(phoneType + ': should tap cancel, tap delete changes, and verify the contact info page is displayed', async () => {
+    await setTimeout(2000)
     await element(by.text('Cancel')).tap()
     await element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(phoneID))).toExist()
@@ -178,6 +181,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
     }
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
+    await setTimeout(2000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.text(phoneType + ' phone saved'))).toExist()
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
@@ -186,7 +190,9 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   it('should update the ' + phoneType + ' phone number and remove the extension', async () => {
     await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(phoneID)).tap()
-    //await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).clearText()
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).clearText()
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
+    await setTimeout(2000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.text(phoneType + ' phone saved'))).toExist()
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
