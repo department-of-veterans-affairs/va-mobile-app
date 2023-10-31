@@ -104,7 +104,7 @@ sidebar_position: 5
 
    ![Google services file](/img/devSetupImage/google-service-android-file.png)
 
-- Open a terminal and type `nvm use` and press enter set the node version for the project (if the version isn't installed, it will prompt you with the install command). If you don't have nvm you can install it from the [nvm documentation site](https://github.com/nvm-sh/nvm). Note: if you natively have the correct Node version installed you won't need nvm, but it's still good to have.
+- Open a terminal and type `nvm use` and press enter to set the node version for the project (if the version isn't installed, it will prompt you with the install command). If you don't have nvm you can install it from the [nvm documentation site](https://github.com/nvm-sh/nvm). Note: if you natively have the correct Node version installed you won't need nvm, but it's still good to have.
 
 - In a terminal type `yarn` or `yarn install` and press enter to install the projects dependencies. This will create the `node_modules` folder.
 
