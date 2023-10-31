@@ -733,7 +733,7 @@
   "letters.benefitService.disabledDueToService": "You {{areOrNot}} considered to be totally and permanently disabled solely due to your service-connected disabilities.",
   "letters.benefitService.disabledDueToServiceA11yHint": "Select whether to include service connected permanent disability information in your letter",
   "letters.benefitService.dischargeType": "Discharge type",
-  "letters.benefitService.effectiveDateInvalid": "invalid date",
+  "letters.benefitService.effectiveDateInvalid": "an invalid date",
   "letters.benefitService.includeMilitaryServiceInfo": "Include military service information",
   "letters.benefitService.includeMilitaryServiceInfoA11yHint": "Select whether to include military service information in your letter",
   "letters.benefitService.loading": "Loading your letter information...",
