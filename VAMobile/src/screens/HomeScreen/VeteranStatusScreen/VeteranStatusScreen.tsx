@@ -85,19 +85,19 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
   return (
     <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')} dividerMarginBypass={true} removeInsets={true} testID="veteranStatusTestID">
       <Box mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight} alignItems="center" mt={theme.dimensions.standardMarginBetween}>
-        <VAIcon name={'Logo'} />
+        <VAIcon testID="VeteranStatusCardVAIcon" name={'Logo'} />
         {/* <Box my={theme.dimensions.standardMarginBetween}>
         //TODO: Put back PhotoUpload later after concerns have been met
           <PhotoUpload width={100} height={100} />
         </Box> */}
         <Box my={theme.dimensions.formMarginBetween}>
-          <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
+          <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast" testID="veteranStatusFullNameTestID">
             {personalInfo?.fullName}
           </TextView>
           {accessToMilitaryInfo && (
             <Box display="flex" flexDirection="row">
               {getBranchSeal()}
-              <TextView ml={10} variant="MobileBody" color="primaryContrast">
+              <TextView ml={10} variant="MobileBody" color="primaryContrast" testID="veteranStatusBranchTestID">
                 {branch}
               </TextView>
             </Box>
@@ -110,7 +110,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
             <TextView variant="MobileBodyBold" color="primaryContrast">
               {t('disabilityRating.title')}
             </TextView>
-            <TextView variant="MobileBody" color="primaryContrast">
+            <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDisabilityRatingTestID">
               {combinedPercentText}
             </TextView>
           </Box>
@@ -125,7 +125,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
           <TextView variant="MobileBodyBold" color="primaryContrast">
             {t('personalInformation.dateOfBirth')}
           </TextView>
-          <TextView variant="MobileBody" color="primaryContrast">
+          <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDOBTestID">
             {personalInfo?.birthDate || t('personalInformation.informationNotAvailable')}
           </TextView>
         </Box>
