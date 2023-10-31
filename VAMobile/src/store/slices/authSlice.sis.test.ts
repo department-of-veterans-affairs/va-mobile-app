@@ -162,7 +162,7 @@ context('authAction SIS', () => {
 
     it('should skip logout fetch if refresh token type does not match login type from SIS', async () => {
       // default is IAM, so setting refreshTokenType to SIS should invoke a mismatch
-      when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.IAM)
+      when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.SIS)
 
       const store = realStore()
       await store.dispatch(handleTokenCallbackUrl('asdfasdfasdf'))
@@ -485,9 +485,7 @@ context('authAction SIS', () => {
       const store = realStore()
       const kcMock = Keychain.getInternetCredentials as jest.Mock
 
-      // refreshTokenType is SIS but SIS is disabled by feature toggle
-      when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.IAM)
-
+      when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.SIS)
       when(getItemMock).calledWith('@store_creds_bio').mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
       const hic = Keychain.hasInternetCredentials as jest.Mock
       hic.mockResolvedValue(true)
