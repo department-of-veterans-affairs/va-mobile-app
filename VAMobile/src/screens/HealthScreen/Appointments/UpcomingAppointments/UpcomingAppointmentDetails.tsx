@@ -133,7 +133,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   // TODO abstract some of these render functions into their own components - too many in one file
-  const SpecialInstructions = (): ReactElement => {
+  const renderSpecialInstructions = (): ReactElement => {
     if (comment) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
@@ -161,7 +161,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     }
   }
 
-  const VideoAppointment_HowToJoin = (): ReactElement => {
+  const renderVideoAppointmentInstructions = (): ReactElement => {
     const isGFE = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
     const isVideoAppt = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE || isGFE
 
@@ -179,7 +179,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const VAVCAtHome_AppointmentData = (): ReactElement => {
+  const renderAtHomeVideoConnectAppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
       const onPrepareForVideoVisit = () => {
         dispatch(clearAppointmentCancellation())
@@ -236,7 +236,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const Atlas_AppointmentData = (): ReactElement => {
+  const renderAtlasVideoConnectAppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS && !isAppointmentCanceled && code) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
@@ -251,7 +251,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const AddToCalendar = (): ReactElement => {
+  const renderAddToCalendarLink = (): ReactElement => {
     if (!isAppointmentCanceled && !pendingAppointment) {
       return (
         <Box my={theme.dimensions.standardMarginBetween}>
@@ -297,18 +297,18 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         <AppointmentAlert attributes={attributes} />
         <TextArea>
           <AppointmentTypeAndDate attributes={attributes} isPastAppointment={false} />
-          <AddToCalendar />
+          {renderAddToCalendarLink()}
 
-          <VideoAppointment_HowToJoin />
+          {renderVideoAppointmentInstructions()}
 
-          <VAVCAtHome_AppointmentData />
+          {renderAtHomeVideoConnectAppointmentData()}
 
           <ProviderName attributes={attributes} />
 
           <AppointmentAddressAndNumber attributes={attributes} />
 
-          <Atlas_AppointmentData />
-          <SpecialInstructions />
+          {renderAtlasVideoConnectAppointmentData()}
+          {renderSpecialInstructions()}
           {featureEnabled('patientCheckIn') && (
             <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
               <VAButton onPress={navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
