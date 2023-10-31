@@ -23,10 +23,12 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({ inlineIcon, 
   return (
     <Box flexDirection={'row'} flexGrow={1}>
       <Box ml={leftIconProps ? 0 : 16} mt={7} mr={themes.dimensions.condensedMarginBetween}>
-        {!inlineIcon && leftIconProps && <VAIcon name={leftIconProps.name} width={leftIconProps.width} height={leftIconProps.height} fill={leftIconProps.fill} />}
+        {!inlineIcon && leftIconProps && (
+          <VAIcon name={leftIconProps.name} width={leftIconProps.width} height={leftIconProps.height} fill={leftIconProps.fill} testID={leftIconProps.testID} />
+        )}
       </Box>
       {inlineIcon && leftIconProps ? (
-        <VAIcon name={leftIconProps.name} width={leftIconProps.width} height={leftIconProps.height} fill={leftIconProps.fill} />
+        <VAIcon name={leftIconProps.name} width={leftIconProps.width} height={leftIconProps.height} fill={leftIconProps.fill} testID={leftIconProps.testID} />
       ) : (
         <TextView mr={themes.dimensions.condensedMarginBetween} flex={7} variant={leftTextProps.variant} textAlign={leftTextProps.textAlign} color={leftTextProps.color}>
           {leftTextProps.text}
@@ -39,7 +41,7 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({ inlineIcon, 
       )}
       {rightIconProps && (
         <Box mt={7}>
-          <VAIcon name={rightIconProps.name} width={rightIconProps.width} height={rightIconProps.height} fill={rightIconProps.fill} />
+          <VAIcon name={rightIconProps.name} width={rightIconProps.width} height={rightIconProps.height} fill={rightIconProps.fill} testID={rightIconProps.testID} />
         </Box>
       )}
     </Box>
