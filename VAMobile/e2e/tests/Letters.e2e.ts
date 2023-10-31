@@ -1,5 +1,5 @@
 import { by, device, element, expect } from 'detox'
-import { checkIfElementIsPresent, loginToDemoMode, openBenefits, openLetters } from './utils'
+import { checkIfElementIsPresent, loginToDemoMode, openBenefits, openLetters, resetInAppReview } from './utils'
 
 export const LettersConstants = {
   MAILING_ADDRESS: '3101 N Fort Valley Rd',
@@ -71,6 +71,15 @@ describe('VA Letters and Documents Screen', () => {
 
   for (const letterType of LettersConstants.LETTER_TYPES) {
     it(`should view ${letterType.name}`, async () => {
+
+      // need in-app reset in iOS before checking proof of service card to avoid false fail
+      if(device.getPlatform() === 'ios' && letterType.name == 'Proof of service card') {
+        await resetInAppReview()
+        await openBenefits()
+        await openLetters()
+        await element(by.text('Review letters')).tap()
+      }
+
       await element(by.text(letterType.name)).tap()
       await expect(element(by.text(letterType.name))).toExist()
       await expect(element(by.text(letterType.description))).toExist()
