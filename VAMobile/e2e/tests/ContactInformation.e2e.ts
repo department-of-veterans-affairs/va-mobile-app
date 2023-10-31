@@ -30,7 +30,6 @@ export const ContactInfoE2eIdConstants = {
 }
 
 export async function updateAddress() {
-  //await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
   await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
   await expect(element(by.text('United States'))).toExist()
   await element(by.text('United States')).tap()
