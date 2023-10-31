@@ -86,24 +86,20 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
                             }
                             .build()
 
-            // Get list of apps that can handle VIEW intents and Custom Tab service connections
+            // Get full list of installed packages that handle https URLs
             // https://developer.chrome.com/docs/android/custom-tabs/howto-custom-tab-check/
-            val activityIntent = Intent(ACTION_VIEW, Uri.parse("https://www.example.com"))
-            val packageManager = context.packageManager
-            val viewIntentHandlers = packageManager.queryIntentActivities(activityIntent, PackageManager.MATCH_ALL)
-            val intentHandlerPackageNames = viewIntentHandlers.map { it.activityInfo.packageName }.toTypedArray().asList()
+            val intent = Intent(ACTION_VIEW, Uri.parse("https://www.example.com"))
+            val intentHandlers = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL)
+            val intentHandlerPackages = intentHandlers.map {
+                it.activityInfo.packageName
+            }.toTypedArray().asList()
 
-            // Get an installed package that supports Custom Tabs
-            val packageName = CustomTabsClient.getPackageName(
-                context,
-                intentHandlerPackageNames,
-                true /* ignore default */
-            )
+            // From the above list, find a package that supports Custom Tabs. If no installed
+            // packages support Custom Tabs, packageName will be set to null here
+            val packageName = CustomTabsClient.getPackageName(context, intentHandlerPackages)
 
-            // If any installed browser supports Custom Tabs, use that browser. Otherwise fall back
-            // to the default browser (best we can do)
-            // TODO: Alert the user to enable Chrome/install Firefox if no installed browsers
-            // support custom tabs
+            // If packageName is present, that package supports Custom Tabs, so use it
+            // TODO: Inform user when no installed packages support Custom Tabs
             if (!packageName.isNullOrEmpty()) {
                 customTabsIntent.intent.setPackage(packageName)
 
