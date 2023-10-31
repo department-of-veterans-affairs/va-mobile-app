@@ -18,12 +18,7 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
     @ReactMethod
     fun beginAuthSession(
             authEndPoint: String,
-            clientId: String,
-            redirectUrl: String,
-            authScopes: String,
             codeChallenge: String,
-            state: String,
-            SISEnabled: Boolean,
             promise: Promise
     ) {
         try {
@@ -34,18 +29,8 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
                                 with(it) {
                                     appendQueryParameter("code_challenge_method", "S256")
                                     appendQueryParameter("code_challenge", codeChallenge)
-
-                                    if (SISEnabled) {
-                                        appendQueryParameter("application", "vamobile")
-                                        appendQueryParameter("oauth", "true")
-                                    } else {
-                                        appendQueryParameter("client_id", clientId)
-                                        appendQueryParameter("redirect_uri", redirectUrl)
-                                        appendQueryParameter("scope", authScopes)
-                                        appendQueryParameter("response_type", "code")
-                                        appendQueryParameter("response_mode", "query")
-                                        appendQueryParameter("state", state)
-                                    }
+                                    appendQueryParameter("application", "vamobile")
+                                    appendQueryParameter("oauth", "true")
                                 }
                             }
                             .build()

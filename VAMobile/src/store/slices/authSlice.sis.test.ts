@@ -101,7 +101,6 @@ context('authAction SIS', () => {
     }
     const envMock = getEnv as jest.Mock
     envMock.mockReturnValue(defaultEnvParams)
-    when(mockFeatureEnabled).calledWith('SIS').mockReturnValue(true)
     when(getItemMock).calledWith('refreshTokenType').mockResolvedValue(LoginServiceTypeConstants.SIS)
     when(getItemMock).calledWith('@store_refresh_token_encrypted_component').mockResolvedValue(encryptedComponent)
 
@@ -595,7 +594,6 @@ context('authAction SIS', () => {
       expect(storeState.loggedIn).toBeTruthy()
       // expect(storeState.canStoreWithBiometric).toBeTruthy()
       // expect(storeState.shouldStoreWithBiometric).toBeTruthy()
-      when(mockFeatureEnabled).calledWith('SIS').mockReturnValue(true)
       await store.dispatch(setBiometricsPreference(true))
       storeState = store.getState().auth
       // expect(storeState.canStoreWithBiometric).toBeTruthy()
