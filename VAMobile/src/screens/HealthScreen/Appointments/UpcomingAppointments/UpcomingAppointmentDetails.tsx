@@ -58,16 +58,26 @@ type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'U
 // export const JOIN_SESSION_WINDOW_MINUTES = 30
 
 const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route, navigation }) => {
-  const { appointmentID } = route.params
+  let { appointmentID } = route.params
+  const { vetextID } = route.params
 
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
-  const { upcomingAppointmentsById, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { upcomingAppointmentsById, loading, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>(
+    (state) => state.appointments,
+  )
 
-  const appointment = upcomingAppointmentsById?.[appointmentID]
+  const appointment =
+    (appointmentID && upcomingAppointmentsById?.[appointmentID]) ||
+    (upcomingAppointmentsById && Object.values(upcomingAppointmentsById).find((appointmentData) => appointmentData.attributes.vetextId === vetextID))
+
+  if (!appointmentID) {
+    appointmentID = appointment?.id
+  }
+
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, location, startDateUtc, minutesDuration, comment, status, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
   const { name, code, url, lat, long, address } = location || ({} as AppointmentLocation)
@@ -75,15 +85,16 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const pendingAppointment = isAPendingAppointment(attributes)
 
   useEffect(() => {
-    dispatch(
-      trackAppointmentDetail(
-        pendingAppointment,
-        appointmentID,
-        getAppointmentAnalyticsStatus(attributes),
-        attributes.appointmentType.toString(),
-        getAppointmentAnalyticsDays(attributes),
-      ),
-    )
+    attributes &&
+      dispatch(
+        trackAppointmentDetail(
+          pendingAppointment,
+          appointmentID,
+          getAppointmentAnalyticsStatus(attributes),
+          attributes.appointmentType.toString(),
+          getAppointmentAnalyticsDays(attributes),
+        ),
+      )
   }, [dispatch, appointmentID, pendingAppointment, attributes])
 
   useEffect(() => {
@@ -117,9 +128,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const calendarAnalytics = (): void => {
-    logAnalyticsEvent(
-      Events.vama_apt_add_cal(appointmentID, getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
-    )
+    appointmentID &&
+      logAnalyticsEvent(
+        Events.vama_apt_add_cal(appointmentID, getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
+      )
   }
 
   const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()
@@ -291,10 +303,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     )
   }
 
-  if (loadingAppointmentCancellation) {
+  if (loadingAppointmentCancellation || loading) {
+    const loadingText = loadingAppointmentCancellation ? t('upcomingAppointmentDetails.loadingAppointmentCancellation') : t('appointmentDetails.loading')
+
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
-        <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
+        <LoadingComponent text={loadingText} />
       </FeatureLandingTemplate>
     )
   }
@@ -326,7 +340,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <PreferredAppointmentType attributes={attributes} />
           <AppointmentReason attributes={attributes} />
           <ContactInformation attributes={attributes} />
-          <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointment?.id} />
+          <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointmentID} />
         </TextArea>
 
         {readerCancelInformation()}
