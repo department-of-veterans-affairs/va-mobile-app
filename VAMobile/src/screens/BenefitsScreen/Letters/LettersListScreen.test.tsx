@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
-
 import { fireEvent, screen } from '@testing-library/react-native'
+
 import { context, mockNavProps, waitFor, render } from 'testUtils'
 import { initialLettersState, InitialState } from 'store/slices'
 import { APIError, LettersList } from 'store/api/types'
@@ -204,14 +204,14 @@ context('LettersListScreen', () => {
     await waitFor(() => {
       initializeTestInstance(lettersData)
     })
-    expect(screen.getByText('Benefit summary letter')).toBeTruthy()
-    expect(screen.getByText('Benefit verification letter')).toBeTruthy()
-    expect(screen.getByText('Civil service preference letter')).toBeTruthy()
-    expect(screen.getByText('Commissary letter')).toBeTruthy()
-    expect(screen.getByText('Proof of creditable prescription drug coverage letter')).toBeTruthy()
-    expect(screen.getByText('Proof of minimum essential coverage letter')).toBeTruthy()
-    expect(screen.getByText('Proof of service card')).toBeTruthy()
-    expect(screen.getByText('Service verification letter')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Benefit summary letter' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Benefit verification letter'})).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Civil service preference letter'})).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Commissary letter'})).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Proof of creditable prescription drug coverage letter'})).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Proof of minimum essential coverage letter'})).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Proof of service card'})).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Service verification letter'})).toBeTruthy()
   })
 
   describe('when a link is clicked', () => {
@@ -219,7 +219,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-      fireEvent.press(screen.getByText('Benefit summary letter'))
+      fireEvent.press(screen.getByRole('button', { name: 'Benefit summary letter'}))
       expect(mockNavigateToBenefitSummarySpy).toHaveBeenCalled()
     })
 
@@ -227,7 +227,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-      fireEvent.press(screen.getByText('Benefit verification letter'))
+      fireEvent.press(screen.getByRole('button', { name: 'Benefit verification letter'}))
       expect(mockNavigateToBenefitVerificationSpy).toHaveBeenCalled()
     })
 
@@ -235,7 +235,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-      fireEvent.press(screen.getByText('Civil service preference letter'))
+      fireEvent.press(screen.getByRole('button', { name: 'Civil service preference letter'}))
       expect(mockNavigateToCivilServiceLetterSpy).toHaveBeenCalled()
     })
 
@@ -243,7 +243,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-      fireEvent.press(screen.getByText('Commissary letter'))
+      fireEvent.press(screen.getByRole('button', { name: 'Commissary letter'}))
       expect(mockNavigateToCommissaryLetterSpy).toHaveBeenCalled()
     })
 
@@ -251,7 +251,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-      fireEvent.press(screen.getByText('Proof of creditable prescription drug coverage letter'))
+      fireEvent.press(screen.getByRole('button', { name: 'Proof of creditable prescription drug coverage letter'}))
       expect(mockNavigateToProofOfPrescriptionLetterSpy).toHaveBeenCalled()
     })
 
@@ -259,7 +259,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-      fireEvent.press(screen.getByText('Proof of minimum essential coverage letter'))
+      fireEvent.press(screen.getByRole('button', { name: 'Proof of minimum essential coverage letter'}))
       expect(mockNavigateToProofOfMinimumEssentialLetterSpy).toHaveBeenCalled()
     })
 
@@ -267,7 +267,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-      fireEvent.press(screen.getByText('Proof of service card'))
+      fireEvent.press(screen.getByRole('button', { name: 'Proof of service card'}))
       expect(mockNavigateToProofOfServiceLetterSpy).toHaveBeenCalled()
     })
 
@@ -275,7 +275,7 @@ context('LettersListScreen', () => {
       await waitFor(() => {
         initializeTestInstance(lettersData)
       })
-      fireEvent.press(screen.getByText('Service verification letter'))
+      fireEvent.press(screen.getByRole('button', { name: 'Service verification letter'}))
       expect(mockNavigateToServiceVerificationLetterSpy).toHaveBeenCalled()
     })
   })

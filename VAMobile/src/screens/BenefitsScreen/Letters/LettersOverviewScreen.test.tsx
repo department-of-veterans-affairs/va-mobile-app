@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
-
 import { screen, fireEvent } from '@testing-library/react-native'
+
 import { context, mockNavProps, render } from 'testUtils'
 import { LettersOverviewScreen } from './index'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
@@ -29,27 +29,26 @@ context('LettersOverviewScreen', () => {
       .calledWith('LettersList')
       .mockReturnValue(mockNavigateToSpy)
 
-    const props = mockNavProps()
-    render(<LettersOverviewScreen {...props} />)
+    render(<LettersOverviewScreen {...mockNavProps()} />)
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     expect(screen.getByText('Downloaded documents will list your address as:')).toBeTruthy()
     expect(screen.getByTestId('Mailing address Add your mailing address')).toBeTruthy()
     expect(screen.getByText('If this address is incorrect you may want to update it, but your letter will still be valid even with the incorrect address.')).toBeTruthy()
-    expect(screen.getByText('Review letters')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Review letters' })).toBeTruthy()
   })
 
-  it('should go to edit address when the address is pressed', async () => {
+  it('should go to edit address when the address is pressed', () => {
     fireEvent.press(screen.getByTestId('Mailing address Add your mailing address'))
     expect(mockNavigateToSpy).toHaveBeenCalled()
   })
-  it('should go to letters list screen when Review letters is pressed', async () => {
-    fireEvent.press(screen.getByText('Review letters'))
+  it('should go to letters list screen when Review letters is pressed', () => {
+    fireEvent.press(screen.getByRole('button', { name: 'Review letters' }))
     expect(mockNavigateToSpy).toHaveBeenCalled()
   })
 })
