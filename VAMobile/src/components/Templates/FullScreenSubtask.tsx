@@ -98,11 +98,6 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveActionSheet()
   const waygateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
-  console.log('waygateScreen: ' + waygateScreen)
-  console.log('0:' + useNavigationState((state) => state.routes[state.routes.length - 0]?.name))
-  console.log('1:' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name))
-  console.log('2:' + useNavigationState((state) => state.routes[state.routes.length - 2]?.name))
-  console.log('3:' + useNavigationState((state) => state.routes[state.routes.length - 3]?.name))
 
   const titleTextProps: TextViewProps = {
     variant: 'BitterBoldHeading',

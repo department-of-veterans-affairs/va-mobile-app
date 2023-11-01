@@ -69,11 +69,6 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   const theme = useTheme()
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
   const waygateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
-  console.log('waygateScreen: ' + waygateScreen)
-  console.log('0:' + useNavigationState((state) => state.routes[state.routes.length - 0]?.name))
-  console.log('1:' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name))
-  console.log('2:' + useNavigationState((state) => state.routes[state.routes.length - 2]?.name))
-  console.log('3:' + useNavigationState((state) => state.routes[state.routes.length - 3]?.name))
 
   const [scrollOffset, setScrollOffset] = useState(0)
   const [trackScrollOffset, setTrackScrollOffset] = useState(true)

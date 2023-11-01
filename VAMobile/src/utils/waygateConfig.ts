@@ -110,8 +110,6 @@ export let waygateConfig: WaygateToggleValues = {
 }
 
 export const waygateEnabled = (feature: WaygateToggleType): Waygate => {
-  console.log('overrideRemote is: ' + overrideRemote)
-  console.log('waygate is: ' + feature)
   if (overrideRemote) {
     return waygateConfig[feature] ? waygateConfig[feature] : { ...waygateDefault }
   } else {
