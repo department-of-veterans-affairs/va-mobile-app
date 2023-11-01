@@ -43,7 +43,7 @@ context('ClaimStatus', () => {
     expect(screen.getByTestId('Step 5 of 5.  Complete')).toBeTruthy()
     expect(screen.getByText('Why does VA sometimes combine claims?')).toBeTruthy()
     expect(screen.getByText("What should I do if I disagree with VA's decision on my disability claim?")).toBeTruthy()
-    expect(screen.getByText('Need help?')).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy()
     expect(screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.')).toBeTruthy()
     expect(screen.getByText('800-827-1000')).toBeTruthy()
   })
