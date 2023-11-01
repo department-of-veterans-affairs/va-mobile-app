@@ -11,6 +11,6 @@ context('AlertBox', () => {
 
   it('initializes correctly', async () => {
     expect(screen.getByText('My warning')).toBeTruthy()
-    expect(screen.getByText('Warning title')).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'Warning title' })).toBeTruthy()
   })
 })

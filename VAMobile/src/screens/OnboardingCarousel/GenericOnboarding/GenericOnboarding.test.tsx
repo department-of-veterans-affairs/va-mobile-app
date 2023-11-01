@@ -14,13 +14,13 @@ context('GenericOnboarding', () => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(screen.getByText('header')).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByRole('header', { name: 'header' })).toBeTruthy()
     expect(screen.getByText('text')).toBeTruthy()
   })
 
   describe('when displayLogo is true', () => {
-    it('should display a VAIcon', async () => {
+    it('should display a VAIcon', () => {
       initializeTestInstance(true)
       expect(screen.getByTestId('VAIconOnboardingLogo')).toBeTruthy()
     })
