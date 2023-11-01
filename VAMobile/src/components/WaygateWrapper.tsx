@@ -1,5 +1,5 @@
 import { AlertBox, Box } from 'components'
-import React, { FC, ReactElement } from 'react'
+import React, { FC } from 'react'
 
 import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/waygateConfig'
 import { useTheme } from 'utils/hooks'

@@ -138,7 +138,7 @@ export const loadWaygateOverrides = async (): Promise<void> => {
 
 /**
  *
- * @param feature
+ * @param feature-this is the waygateName that we are checking for
  * @returns false when a waygateNativeAlert is displayed and denies continued navigation
  */
 export const waygateNativeAlert = (feature: WaygateToggleType): boolean => {

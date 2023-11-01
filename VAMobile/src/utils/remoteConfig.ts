@@ -88,8 +88,8 @@ export const activateRemoteConfig = async (): Promise<void> => {
   }
 }
 
-export const setOverrideRemote = (overrideRemote: boolean) => {
-  overrideRemote = overrideRemote
+export const setOverrideRemote = (setOverride: boolean) => {
+  overrideRemote = setOverride
 }
 
 /**
