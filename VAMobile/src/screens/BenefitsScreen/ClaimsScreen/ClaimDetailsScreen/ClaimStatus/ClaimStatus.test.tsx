@@ -45,7 +45,7 @@ context('ClaimStatus', () => {
     expect(screen.getByText("What should I do if I disagree with VA's decision on my disability claim?")).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy()
     expect(screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.')).toBeTruthy()
-    expect(screen.getByText('800-827-1000')).toBeTruthy()
+    expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
   })
 
   describe('when the claimType is ACTIVE', () => {
