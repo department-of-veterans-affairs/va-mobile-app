@@ -38,6 +38,7 @@ export const CommonE2eIdConstants = {
   VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
   CLAIMS_BUTTON_TEXT: 'Claims',
   CLAIMS_HISTORY_BUTTON_TEXT: 'Claims history',
+  CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
 }
 
 
