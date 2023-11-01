@@ -1,10 +1,10 @@
 import 'react-native'
 import React from 'react'
-
 import { screen } from '@testing-library/react-native'
+
 import * as api from 'store/api'
 import { context, mockNavProps, render, when } from 'testUtils'
-import { initialAuthState, initialErrorsState, initialVaccineState } from 'store/slices'
+import { initialVaccineState } from 'store/slices'
 import VaccineListScreen from './VaccineListScreen'
 import { waitFor } from '@testing-library/react-native'
 
@@ -40,17 +40,13 @@ context('VaccineListScreen', () => {
     },
   ]
 
-  const initializeTestInstance = (loaded: boolean = false, noVaccines: boolean = false) => {
-    const props = mockNavProps()
-
-    render(<VaccineListScreen {...props} />, {
+  const initializeTestInstance = (loaded: boolean = false) => {
+    render(<VaccineListScreen {...mockNavProps()} />, {
       preloadedState: {
-        auth: { ...initialAuthState },
         vaccine: {
           ...initialVaccineState,
           loading: loaded,
         },
-        errors: initialErrorsState,
       },
     })
   }
@@ -60,7 +56,7 @@ context('VaccineListScreen', () => {
         .calledWith('/v1/health/immunizations', expect.anything())
         .mockResolvedValue({ data: vaccineData })
     await waitFor(() => {
-      initializeTestInstance(false)
+      initializeTestInstance()
     })
     expect(screen.getByText('FLU vaccine')).toBeTruthy()
     expect(screen.getByText('COVID-19 vaccine')).toBeTruthy()
@@ -80,13 +76,13 @@ context('VaccineListScreen', () => {
         .mockResolvedValue({ data: [] })
 
       await waitFor(() => {
-        initializeTestInstance(false, true)
+        initializeTestInstance()
       })
-      expect(screen.getByText("We couldn't find information about your VA vaccines")).toBeTruthy()
+      expect(screen.getByRole('header', { name: "We couldn't find information about your VA vaccines" })).toBeTruthy()
       expect(screen.getByText("We're sorry. We update your vaccine records every 24 hours, but new records can take up to 36 hours to appear.")).toBeTruthy()
       expect(screen.getByText("If you think your vaccine records should be here, call our MyVA411 main information line. We're here 24/7.")).toBeTruthy()
-      expect(screen.getByText('800-698-2411')).toBeTruthy()
-      expect(screen.getByText('TTY: 711')).toBeTruthy()
+      expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
     })
   })
 })

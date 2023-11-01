@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
-
 import { screen } from '@testing-library/react-native'
+
 import { context, mockNavProps, render } from 'testUtils'
 import { initialVaccineState } from 'store/slices'
 import VaccineDetailsScreen from './VaccineDetailsScreen'
@@ -88,7 +88,7 @@ context('VaccineDetailsScreen', () => {
     })
   }
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     initializeTestInstance()
     expect(screen.getByText('December 18, 2020')).toBeTruthy()
     expect(screen.getByText('COVID-19 vaccine')).toBeTruthy()
