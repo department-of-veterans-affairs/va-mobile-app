@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
+import { useNavigationState } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
@@ -39,8 +40,6 @@ export type LargePanelProps = {
   testID?: string
   /** bypass divider marginbottom */
   dividerMarginBypass?: boolean
-  /** optional Waygate property to be made required later */
-  waygate?: WaygateToggleType
 }
 
 export const LargePanel: FC<LargePanelProps> = ({
@@ -57,13 +56,13 @@ export const LargePanel: FC<LargePanelProps> = ({
   onFooterButtonPress,
   testID,
   dividerMarginBypass,
-  waygate,
 }) => {
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveActionSheet()
   const theme = useTheme()
   const message = t('areYouSure')
+  const waygateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
 
   const leftTitleButtonPress = () => {
     confirmAlert({
@@ -112,21 +111,12 @@ export const LargePanel: FC<LargePanelProps> = ({
     <>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
-        {waygate ? (
-          <WaygateWrapper waygate={waygate}>
-            <VAScrollView testID={testID}>
-              {children}
-              {footerButtonText && onFooterButtonPress && (
-                <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />
-              )}
-            </VAScrollView>
-          </WaygateWrapper>
-        ) : (
+        <WaygateWrapper waygateName={waygateScreen as WaygateToggleType}>
           <VAScrollView testID={testID}>
             {children}
             {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
           </VAScrollView>
-        )}
+        </WaygateWrapper>
       </View>
     </>
   )

@@ -49,25 +49,25 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   }, [dispatch, militaryHistoryNeedsUpdate, userAuthorizedServices?.militaryServiceHistory, mhNotInDowntime])
 
   const onPersonalInformation = () => {
-    if (waygateNativeAlert('WG_PersonalInformationScreen')) {
+    if (waygateNativeAlert('WG_PersonalInformation')) {
       navigation.navigate('PersonalInformation')
     }
   }
 
   const onContactInformation = () => {
-    if (waygateNativeAlert('WG_ContactInformationScreen')) {
+    if (waygateNativeAlert('WG_ContactInformation')) {
       navigation.navigate('ContactInformation')
     }
   }
 
   const onMilitaryInformation = () => {
-    if (waygateNativeAlert('WG_MilitaryInformationScreen')) {
+    if (waygateNativeAlert('WG_MilitaryInformation')) {
       navigation.navigate('MilitaryInformation')
     }
   }
 
   const onSettings = () => {
-    if (waygateNativeAlert('WG_SettingsScreen')) {
+    if (waygateNativeAlert('WG_Settings')) {
       navigation.navigate('Settings')
     }
   }
@@ -76,7 +76,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
 
   return (
-    <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack} waygate="WG_ProfileScreen">
+    <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack}>
       {errorCheck ? (
         <Box>
           <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />

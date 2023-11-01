@@ -8,17 +8,14 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
-type WaygateEditScreenProps = StackScreenProps<HomeStackParamList, 'WaygateEditScreen'>
+type WaygateEditScreenProps = StackScreenProps<HomeStackParamList, 'WaygateEdit'>
 
-/**
- * Screen for editing a users email in the personal info section
- */
 const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const scrollViewRef = useRef<ScrollView>(null)
   const { waygateName, waygate } = route.params
-  const title = 'Edit: ' + waygateName
+  const title = `Edit: ${waygateName}`
   const wg = waygate
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [enabledOverride, setEnabledOverride] = useState(wg.enabled)

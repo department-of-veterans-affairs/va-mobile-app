@@ -40,7 +40,7 @@ export type HomeStackParamList = WebviewStackParams & {
   Sandbox: undefined
   Settings: undefined
   HapticsDemoScreen: undefined
-  WaygateEditScreen: { waygateName: string; waygate: Waygate }
+  WaygateEdit: { waygateName: string; waygate: Waygate }
   WhatToKnow: undefined
 }
 
@@ -57,7 +57,7 @@ export const getHomeScreens = () => {
     <HomeStack.Screen key={'HowDoIUpdate'} name="HowDoIUpdate" component={HowDoIUpdateScreen} options={LARGE_PANEL_OPTIONS} />,
     <HomeStack.Screen key={'HowWillYou'} name="HowWillYou" component={HowWillYouScreen} options={LARGE_PANEL_OPTIONS} />,
     <HomeStack.Screen key={'IncorrectServiceInfo'} name="IncorrectServiceInfo" component={IncorrectServiceInfo} options={LARGE_PANEL_OPTIONS} />,
-    <HomeStack.Screen key={'WaygateEdit'} name="WaygateEditScreen" component={WaygateEditScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <HomeStack.Screen key={'WaygateEdit'} name="WaygateEdit" component={WaygateEditScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HomeStack.Screen key={'WhatToKnow'} name="WhatToKnow" component={WhatToKnowScreen} options={LARGE_PANEL_OPTIONS} />,
   ]
 }

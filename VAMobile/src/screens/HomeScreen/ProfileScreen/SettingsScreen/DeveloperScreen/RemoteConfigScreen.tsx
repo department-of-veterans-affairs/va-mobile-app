@@ -74,7 +74,7 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
         <AccordionCollapsible
           header={
             <Box justifyContent="space-between" flexDirection="row" flexWrap="wrap" mr={5}>
-              <VAButton onPress={navigateTo('WaygateEditScreen', { waygateName: index, waygate: wg })} label={index} buttonType={ButtonTypesConstants.buttonPrimary} />
+              <VAButton onPress={navigateTo('WaygateEdit', { waygateName: index, waygate: wg })} label={index} buttonType={ButtonTypesConstants.buttonPrimary} />
               <TextView variant="MobileBodyBold">{`${enabled}`}</TextView>
             </Box>
           }

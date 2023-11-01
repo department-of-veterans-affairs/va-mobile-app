@@ -37,7 +37,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const theme = useTheme()
 
   const onContactVA = () => {
-    if (waygateNativeAlert('WG_ContactVAScreen')) {
+    if (waygateNativeAlert('WG_ContactVA')) {
       navigation.navigate('ContactVA')
     }
   }
@@ -71,7 +71,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   const onProfile = () => {
-    if (waygateNativeAlert('WG_ProfileScreen')) {
+    if (waygateNativeAlert('WG_Profile')) {
       navigation.navigate('Profile')
     }
   }
@@ -83,7 +83,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <CategoryLanding headerButton={headerButton} waygate="WG_HomeScreen">
+    <CategoryLanding headerButton={headerButton}>
       <Box>
         <EncourageUpdateAlert />
         <Nametag />
@@ -140,7 +140,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
       <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="RemoteConfig" component={RemoteConfigScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen name="Sandbox" component={SandboxScreen} options={{ headerShown: false }} />
-      <HomeScreenStack.Screen name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="HapticsDemo" component={HapticsDemoScreen} options={{ headerShown: false }} />
     </HomeScreenStack.Navigator>
   )
 }

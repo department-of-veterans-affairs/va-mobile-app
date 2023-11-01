@@ -63,7 +63,7 @@ const LoginScreen: FC = () => {
   }
 
   const onCrisisLine = () => {
-    if (waygateNativeAlert('WG_VeteransCrisisLineScreen')) {
+    if (waygateNativeAlert('WG_VeteransCrisisLine')) {
       navigateTo('VeteransCrisisLine')()
     }
   }
@@ -104,7 +104,7 @@ const LoginScreen: FC = () => {
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
-      <WaygateWrapper waygate="WG_LoginScreen" />
+      <WaygateWrapper waygateName="WG_Login" />
       <Box flex={1} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween} testID="va-icon">
           <VAIcon testID="VAIcon" name={'Logo'} />

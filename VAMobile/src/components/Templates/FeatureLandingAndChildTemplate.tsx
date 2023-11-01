@@ -1,4 +1,5 @@
 import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
+import { useNavigationState } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useState } from 'react'
 
@@ -62,12 +63,17 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   footerContent,
   scrollViewProps,
   testID,
-  waygate,
 }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
+  const waygateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
+  console.log('waygateScreen: ' + waygateScreen)
+  console.log('0:' + useNavigationState((state) => state.routes[state.routes.length - 0]?.name))
+  console.log('1:' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name))
+  console.log('2:' + useNavigationState((state) => state.routes[state.routes.length - 2]?.name))
+  console.log('3:' + useNavigationState((state) => state.routes[state.routes.length - 3]?.name))
 
   const [scrollOffset, setScrollOffset] = useState(0)
   const [trackScrollOffset, setTrackScrollOffset] = useState(true)
@@ -122,35 +128,19 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <HeaderBanner {...headerProps} />
-      {waygate ? (
-        <WaygateWrapper waygate={waygate}>
-          <VAScrollView
-            testID={testID}
-            scrollEventThrottle={1}
-            onScroll={(event) => {
-              transitionHeader(event.nativeEvent.contentOffset.y)
-            }}
-            {...scrollViewProps}>
-            <View onLayout={getTransitionHeaderHeight}>{!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}</View>
-            {children}
-          </VAScrollView>
-          {footerContent}
-        </WaygateWrapper>
-      ) : (
-        <>
-          <VAScrollView
-            testID={testID}
-            scrollEventThrottle={1}
-            onScroll={(event) => {
-              transitionHeader(event.nativeEvent.contentOffset.y)
-            }}
-            {...scrollViewProps}>
-            <View onLayout={getTransitionHeaderHeight}>{!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}</View>
-            {children}
-          </VAScrollView>
-          {footerContent}
-        </>
-      )}
+      <WaygateWrapper waygateName={waygateScreen as WaygateToggleType}>
+        <VAScrollView
+          testID={testID}
+          scrollEventThrottle={1}
+          onScroll={(event) => {
+            transitionHeader(event.nativeEvent.contentOffset.y)
+          }}
+          {...scrollViewProps}>
+          <View onLayout={getTransitionHeaderHeight}>{!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}</View>
+          {children}
+        </VAScrollView>
+        {footerContent}
+      </WaygateWrapper>
     </View>
   )
 }

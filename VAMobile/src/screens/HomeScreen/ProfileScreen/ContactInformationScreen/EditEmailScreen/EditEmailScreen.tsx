@@ -184,8 +184,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       onLeftButtonPress={navigation.goBack}
       rightButtonText={!loadingCheck ? t('save') : undefined}
       onRightButtonPress={!loadingCheck ? () => setOnSaveClicked(true) : undefined}
-      rightButtonDisabled={saveDisabled}
-      waygate="WG_EditEmailScreen">
+      rightButtonDisabled={saveDisabled}>
       {savingEmail || deletingEmail ? (
         <LoadingComponent text={deletingEmail ? t('contactInformation.delete.emailAddress') : t('contactInformation.savingEmailAddress')} />
       ) : (

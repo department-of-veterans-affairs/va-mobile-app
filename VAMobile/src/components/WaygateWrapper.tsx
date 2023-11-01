@@ -6,37 +6,32 @@ import { useTheme } from 'utils/hooks'
 
 export type WaygateWrapperProps = {
   /** the waygate name to check for */
-  waygate: WaygateToggleType
+  waygateName: WaygateToggleType
 }
 
-/**A common component for the react native switch component*/
-export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygate }) => {
+export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName }) => {
   const theme = useTheme()
 
-  const waygateAlertBox = (wg: Waygate): ReactElement => {
+  const waygateAlertBox = (waygate: Waygate) => {
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
-        <AlertBox border="warning" title={wg.errorMsgTitle} text={wg.errorMsgBody} />
+        <AlertBox border="warning" title={waygate.errorMsgTitle} text={waygate.errorMsgBody} />
       </Box>
     )
   }
 
-  const waygateOpen = waygateEnabled(waygate)
-  console.log('WG: ' + waygate + ' : ' + JSON.stringify(waygateOpen, undefined, 2))
-  if (waygateOpen.enabled) {
-    return <>{children}</>
-  } else if ((waygateOpen.enabled === false && waygateOpen.allowFunction === true) || waygate === 'WG_LoginScreen') {
+  const waygate = waygateEnabled(waygateName)
+  if (waygate.enabled === false) {
+    const showScreenContent = waygate.allowFunction === true || waygateName === 'WG_Login'
     return (
       <>
-        {waygateAlertBox(waygateOpen)}
-        {children}
+        {waygateAlertBox(waygate)}
+        {showScreenContent && children}
       </>
     )
-  } else if (waygateOpen.enabled === false && waygateOpen.allowFunction === false) {
-    return waygateAlertBox(waygateOpen)
-  } else {
-    return <>{children}</>
   }
+
+  return <>{children}</>
 }
 
 export default WaygateWrapper

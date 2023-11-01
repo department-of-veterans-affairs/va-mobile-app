@@ -21,7 +21,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = () => {
   const theme = useTheme()
 
   return (
-    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')} testID="IncorrectServiceTestID" waygate="WG_IncorrectServiceInfoScreen">
+    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')} testID="IncorrectServiceTestID">
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('militaryInformation.incorrectServiceInfo')}

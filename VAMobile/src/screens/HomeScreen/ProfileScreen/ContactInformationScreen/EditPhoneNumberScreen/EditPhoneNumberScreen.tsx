@@ -238,8 +238,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       rightButtonText={t('save')}
-      onRightButtonPress={() => setOnSaveClicked(true)}
-      waygate="WG_EditPhoneNumberScreen">
+      onRightButtonPress={() => setOnSaveClicked(true)}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         {getFormattedPhoneNumber(phoneData) !== '' && (
           <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>

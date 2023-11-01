@@ -101,7 +101,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
   }
 
   return (
-    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')} waygate="WG_HowDoIUpdateScreen">
+    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
       {renderUI()}
     </LargePanel>
   )

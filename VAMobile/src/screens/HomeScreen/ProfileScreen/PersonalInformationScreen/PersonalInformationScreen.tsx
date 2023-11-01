@@ -94,36 +94,31 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
 
   const onGenderIdentity = () => {
-    if (waygateNativeAlert('WG_GenderIdentityScreen')) {
+    if (waygateNativeAlert('WG_GenderIdentity')) {
       navigation.navigate('GenderIdentity')
     }
   }
 
   const onPreferredName = () => {
-    if (waygateNativeAlert('WG_PreferredNameScreen')) {
+    if (waygateNativeAlert('WG_PreferredName')) {
       navigation.navigate('PreferredName')
     }
   }
 
   const onUpdateName = () => {
-    if (waygateNativeAlert('WG_HowDoIUpdateScreen')) {
+    if (waygateNativeAlert('WG_HowDoIUpdate')) {
       navigation.navigate('HowDoIUpdate', { screenType: 'name' })
     }
   }
 
   const onUpdateDOB = () => {
-    if (waygateNativeAlert('WG_HowDoIUpdateScreen')) {
+    if (waygateNativeAlert('WG_HowDoIUpdate')) {
       navigation.navigate('HowDoIUpdate', { screenType: 'DOB' })
     }
   }
 
   return (
-    <FeatureLandingTemplate
-      backLabel={t('profile.title')}
-      backLabelOnPress={navigation.goBack}
-      title={t('personalInformation.title')}
-      testID="PersonalInformationTestID"
-      waygate="WG_PersonalInformationScreen">
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')} testID="PersonalInformationTestID">
       {errorCheck ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={onTryAgain} />
       ) : loadingCheck ? (

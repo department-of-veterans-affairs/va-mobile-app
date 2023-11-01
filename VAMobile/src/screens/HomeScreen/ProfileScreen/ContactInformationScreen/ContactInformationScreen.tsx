@@ -88,7 +88,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
     setReviewEventRegistered(true)
   }
   const onMailingAddress = () => {
-    if (waygateNativeAlert('WG_EditAddressScreen')) {
+    if (waygateNativeAlert('WG_EditAddress')) {
       navigateTo('EditAddress', {
         displayTitle: t('contactInformation.mailingAddress'),
         addressType: profileAddressOptions.MAILING_ADDRESS,
@@ -97,7 +97,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   }
 
   const onResidentialAddress = () => {
-    if (waygateNativeAlert('WG_EditAddressScreen')) {
+    if (waygateNativeAlert('WG_EditAddress')) {
       navigateTo('EditAddress', {
         displayTitle: t('contactInformation.residentialAddress'),
         addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
@@ -106,7 +106,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   }
 
   const onHomePhone = () => {
-    if (waygateNativeAlert('WG_EditPhoneNumberScreen')) {
+    if (waygateNativeAlert('WG_EditPhoneNumber')) {
       navigateTo('EditPhoneNumber', {
         displayTitle: t('editPhoneNumber.homePhoneTitle'),
         phoneType: PhoneTypeConstants.HOME,
@@ -116,7 +116,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   }
 
   const onWorkPhone = () => {
-    if (waygateNativeAlert('WG_EditPhoneNumberScreen')) {
+    if (waygateNativeAlert('WG_EditPhoneNumber')) {
       navigateTo('EditPhoneNumber', {
         displayTitle: t('editPhoneNumber.workPhoneTitle'),
         phoneType: PhoneTypeConstants.WORK,
@@ -126,7 +126,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   }
 
   const onCellPhone = () => {
-    if (waygateNativeAlert('WG_EditPhoneNumberScreen')) {
+    if (waygateNativeAlert('WG_EditPhoneNumber')) {
       navigateTo('EditPhoneNumber', {
         displayTitle: t('editPhoneNumber.mobilePhoneTitle'),
         phoneType: PhoneTypeConstants.MOBILE,
@@ -136,13 +136,13 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   }
 
   const onEmailAddress = () => {
-    if (waygateNativeAlert('WG_EditEmailScreen')) {
+    if (waygateNativeAlert('WG_EditEmail')) {
       navigation.navigate('EditEmail')
     }
   }
 
   const onHowWillYou = () => {
-    if (waygateNativeAlert('WG_HowWillYouScreen')) {
+    if (waygateNativeAlert('WG_HowWillYou')) {
       navigation.navigate('HowWillYou')
     }
   }
@@ -159,12 +159,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   ]
 
   return (
-    <FeatureLandingTemplate
-      backLabel={t('profile.title')}
-      backLabelOnPress={navigation.goBack}
-      title={t('contactInformation.title')}
-      testID="ContactInfoTestID"
-      waygate="WG_ContactInformationScreen">
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')} testID="ContactInfoTestID">
       {contactInformationInDowntime || contactInformationError ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} onTryAgain={refetchContactInformation} />
       ) : loadingContactInformation ? (

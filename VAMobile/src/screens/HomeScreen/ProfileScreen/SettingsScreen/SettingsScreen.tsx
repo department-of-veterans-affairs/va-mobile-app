@@ -72,13 +72,13 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   const onManage = () => {
-    if (waygateNativeAlert('WG_ManageYourAccountScreen')) {
+    if (waygateNativeAlert('WG_ManageYourAccount')) {
       navigation.navigate('ManageYourAccount')
     }
   }
 
   const onNotifications = () => {
-    if (waygateNativeAlert('WG_NotificationsSettingsScreen')) {
+    if (waygateNativeAlert('WG_NotificationsSettings')) {
       navigation.navigate('NotificationsSettings')
     }
   }
@@ -127,7 +127,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const loadingCheck = settingBiometricPreference
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')} waygate="WG_SettingsScreen">
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')}>
       {loadingCheck ? (
         <LoadingComponent text={t('biometricsPreference.saving')} />
       ) : (

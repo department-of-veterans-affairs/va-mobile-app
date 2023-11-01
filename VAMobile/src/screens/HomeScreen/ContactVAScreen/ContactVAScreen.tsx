@@ -23,7 +23,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const onCrisisLine = () => {
-    if (waygateNativeAlert('WG_VeteransCrisisLineScreen')) {
+    if (waygateNativeAlert('WG_VeteransCrisisLine')) {
       navigation.navigate('VeteransCrisisLine')
     }
   }
@@ -31,12 +31,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
 
   return (
-    <FeatureLandingTemplate
-      backLabel={t('home.title')}
-      backLabelOnPress={navigation.goBack}
-      title={t('contactVA.title')}
-      titleA11y={a11yLabelVA(t('contactVA.title'))}
-      waygate="WG_ContactVAScreen">
+    <FeatureLandingTemplate backLabel={t('home.title')} backLabelOnPress={navigation.goBack} title={t('contactVA.title')} titleA11y={a11yLabelVA(t('contactVA.title'))}>
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>

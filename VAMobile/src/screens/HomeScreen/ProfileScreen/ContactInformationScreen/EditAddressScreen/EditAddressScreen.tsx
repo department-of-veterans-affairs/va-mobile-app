@@ -538,16 +538,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     })
   }
 
-  if (deletingAddress || savingAddress || validatingAddress) {
-    const loadingText = deletingAddress ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')
-
-    return (
-      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={onCancel}>
-        <LoadingComponent text={loadingText} />
-      </FullScreenSubtask>
-    )
-  }
-
   const loadingCheck = deletingAddress || savingAddress || validatingAddress
   const addressValidation = showAddressValidation && validationData
   const addressValues = getAddressValues()
@@ -560,8 +550,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       onLeftButtonPress={onCancel}
       rightButtonText={!loadingCheck ? t('save') : undefined}
       onRightButtonPress={!loadingCheck ? () => setOnSaveClicked(true) : undefined}
-      testID="EditAddressTestID"
-      waygate="WG_EditAddressScreen">
+      testID="EditAddressTestID">
       {loadingCheck ? (
         <LoadingComponent text={deletingAddress ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')} />
       ) : addressValidation ? (

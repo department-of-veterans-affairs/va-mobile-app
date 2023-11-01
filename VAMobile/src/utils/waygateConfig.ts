@@ -16,55 +16,61 @@ export type Waygate = {
   appUpdateButton?: boolean
   // Whether to announce but not hinder access
   allowFunction?: boolean
-  // Whether to deny access all together to screen
+  // Whether to deny access all together to
   denyAccess?: boolean
 }
 
 export type WaygateToggleType =
-  | 'WG_HomeScreen'
-  | 'WG_ProfileScreen'
-  | 'WG_PersonalInformationScreen'
-  | 'WG_HowDoIUpdateScreen'
-  | 'WG_PreferredNameScreen'
-  | 'WG_GenderIdentityScreen'
-  | 'WG_WhatToKnowScreen'
-  | 'WG_ContactInformationScreen'
-  | 'WG_HowWillYouScreen'
-  | 'WG_EditAddressScreen'
-  | 'WG_EditPhoneNumberScreen'
-  | 'WG_EditEmailScreen'
-  | 'WG_MilitaryInformationScreen'
-  | 'WG_IncorrectServiceInfoScreen'
-  | 'WG_SettingsScreen'
-  | 'WG_ManageYourAccountScreen'
-  | 'WG_NotificationsSettingsScreen'
-  | 'WG_ContactVAScreen'
-  | 'WG_VeteransCrisisLineScreen'
-  | 'WG_VeteranStatusScreen'
-  | 'WG_LoginScreen'
+  | 'WG_Home'
+  | 'WG_Profile'
+  | 'WG_PersonalInformation'
+  | 'WG_HowDoIUpdate'
+  | 'WG_PreferredName'
+  | 'WG_GenderIdentity'
+  | 'WG_WhatToKnow'
+  | 'WG_ContactInformation'
+  | 'WG_HowWillYou'
+  | 'WG_EditAddress'
+  | 'WG_EditPhoneNumber'
+  | 'WG_EditEmail'
+  | 'WG_MilitaryInformation'
+  | 'WG_IncorrectServiceInfo'
+  | 'WG_Settings'
+  | 'WG_ManageYourAccount'
+  | 'WG_NotificationsSettings'
+  | 'WG_ContactVA'
+  | 'WG_VeteransCrisisLine'
+  | 'WG_VeteranStatus'
+  | 'WG_Login'
+  | 'WG_RemoteConfig'
+  | 'WG_Developer'
+  | 'WG_WaygateEdit'
 
 type WaygateToggleValues = {
-  WG_HomeScreen: Waygate
-  WG_ProfileScreen: Waygate
-  WG_PersonalInformationScreen: Waygate
-  WG_HowDoIUpdateScreen: Waygate
-  WG_PreferredNameScreen: Waygate
-  WG_GenderIdentityScreen: Waygate
-  WG_WhatToKnowScreen: Waygate
-  WG_ContactInformationScreen: Waygate
-  WG_HowWillYouScreen: Waygate
-  WG_EditAddressScreen: Waygate
-  WG_EditPhoneNumberScreen: Waygate
-  WG_EditEmailScreen: Waygate
-  WG_MilitaryInformationScreen: Waygate
-  WG_IncorrectServiceInfoScreen: Waygate
-  WG_SettingsScreen: Waygate
-  WG_ManageYourAccountScreen: Waygate
-  WG_NotificationsSettingsScreen: Waygate
-  WG_ContactVAScreen: Waygate
-  WG_VeteransCrisisLineScreen: Waygate
-  WG_VeteranStatusScreen: Waygate
-  WG_LoginScreen: Waygate
+  WG_Home: Waygate
+  WG_Profile: Waygate
+  WG_PersonalInformation: Waygate
+  WG_HowDoIUpdate: Waygate
+  WG_PreferredName: Waygate
+  WG_GenderIdentity: Waygate
+  WG_WhatToKnow: Waygate
+  WG_ContactInformation: Waygate
+  WG_HowWillYou: Waygate
+  WG_EditAddress: Waygate
+  WG_EditPhoneNumber: Waygate
+  WG_EditEmail: Waygate
+  WG_MilitaryInformation: Waygate
+  WG_IncorrectServiceInfo: Waygate
+  WG_Settings: Waygate
+  WG_ManageYourAccount: Waygate
+  WG_NotificationsSettings: Waygate
+  WG_ContactVA: Waygate
+  WG_VeteransCrisisLine: Waygate
+  WG_VeteranStatus: Waygate
+  WG_Login: Waygate
+  WG_RemoteConfig: Waygate
+  WG_Developer: Waygate
+  WG_WaygateEdit: Waygate
 }
 
 const waygateDefault: Waygate = {
@@ -77,45 +83,43 @@ const waygateDefault: Waygate = {
 }
 
 export let waygateConfig: WaygateToggleValues = {
-  WG_HomeScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_ProfileScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_PersonalInformationScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_HowDoIUpdateScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_PreferredNameScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_GenderIdentityScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_WhatToKnowScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_ContactInformationScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_HowWillYouScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_EditAddressScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_EditPhoneNumberScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_EditEmailScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_MilitaryInformationScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_IncorrectServiceInfoScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_SettingsScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_ManageYourAccountScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_NotificationsSettingsScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_ContactVAScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_VeteransCrisisLineScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_VeteranStatusScreen: JSON.parse(JSON.stringify(waygateDefault)),
-  WG_LoginScreen: JSON.parse(JSON.stringify(waygateDefault)),
+  WG_Home: { ...waygateDefault },
+  WG_Profile: { ...waygateDefault },
+  WG_PersonalInformation: { ...waygateDefault },
+  WG_HowDoIUpdate: { ...waygateDefault },
+  WG_PreferredName: { ...waygateDefault },
+  WG_GenderIdentity: { ...waygateDefault },
+  WG_WhatToKnow: { ...waygateDefault },
+  WG_ContactInformation: { ...waygateDefault },
+  WG_HowWillYou: { ...waygateDefault },
+  WG_EditAddress: { ...waygateDefault },
+  WG_EditPhoneNumber: { ...waygateDefault },
+  WG_EditEmail: { ...waygateDefault },
+  WG_MilitaryInformation: { ...waygateDefault },
+  WG_IncorrectServiceInfo: { ...waygateDefault },
+  WG_Settings: { ...waygateDefault },
+  WG_ManageYourAccount: { ...waygateDefault },
+  WG_NotificationsSettings: { ...waygateDefault },
+  WG_ContactVA: { ...waygateDefault },
+  WG_VeteransCrisisLine: { ...waygateDefault },
+  WG_VeteranStatus: { ...waygateDefault },
+  WG_Login: { ...waygateDefault },
+  WG_RemoteConfig: { ...waygateDefault },
+  WG_Developer: { ...waygateDefault },
+  WG_WaygateEdit: { ...waygateDefault },
 }
 
 export const waygateEnabled = (feature: WaygateToggleType): Waygate => {
+  console.log('overrideRemote is: ' + overrideRemote)
+  console.log('waygate is: ' + feature)
   if (overrideRemote) {
-    return waygateConfig[feature]
+    return waygateConfig[feature] ? waygateConfig[feature] : { ...waygateDefault }
   } else {
     const waygate = remoteConfig().getValue(feature)?.asString()
     if (waygate) {
       return JSON.parse(waygate) as Waygate
     } else {
-      return {
-        enabled: true,
-        errorMsgTitle: undefined,
-        errorMsgBody: undefined,
-        appUpdateButton: false,
-        allowFunction: false,
-        denyAccess: false,
-      }
+      return { ...waygateDefault }
     }
   }
 }
@@ -132,6 +136,11 @@ export const loadWaygateOverrides = async (): Promise<void> => {
   }
 }
 
+/**
+ *
+ * @param feature
+ * @returns false when a waygateNativeAlert is displayed and denies continued navigation
+ */
 export const waygateNativeAlert = (feature: WaygateToggleType): boolean => {
   const waygate = waygateEnabled(feature)
   if (waygate.enabled === false && waygate.denyAccess === true && waygate.errorMsgTitle) {

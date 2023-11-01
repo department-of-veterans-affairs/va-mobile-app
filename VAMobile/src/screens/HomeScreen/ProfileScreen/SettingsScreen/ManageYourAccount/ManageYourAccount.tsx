@@ -14,7 +14,7 @@ const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
   const theme = useTheme()
 
   return (
-    <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('manageAccount.title')} waygate="WG_ManageYourAccountScreen">
+    <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('manageAccount.title')}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

@@ -139,8 +139,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
       onLeftButtonPress={onConfirmCancel}
       title={t('personalInformation.preferredName.title')}
       primaryContentButtonText={t('save')}
-      onPrimaryContentButtonPress={() => setOnSaveClicked(true)}
-      waygate="WG_PreferredNameScreen">
+      onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
       {preferredNameMutation.isLoading ? (
         <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
       ) : (

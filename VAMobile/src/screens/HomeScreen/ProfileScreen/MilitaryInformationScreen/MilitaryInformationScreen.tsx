@@ -55,7 +55,7 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
   })
 
   const onIncorrectService = () => {
-    if (waygateNativeAlert('WG_IncorrectServiceInfoScreen')) {
+    if (waygateNativeAlert('WG_IncorrectServiceInfo')) {
       navigation.navigate('IncorrectServiceInfo')
     }
   }
@@ -76,7 +76,7 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
   const loadingCheck = loading || loadingUserAuthorizedServices
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')} waygate="WG_MilitaryInformationScreen">
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')}>
       {errorCheck ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
       ) : loadingCheck ? (

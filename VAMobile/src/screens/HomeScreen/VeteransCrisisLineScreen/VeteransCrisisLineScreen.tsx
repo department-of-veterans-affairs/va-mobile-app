@@ -33,7 +33,7 @@ const VeteransCrisisLineScreen: FC = () => {
   }
 
   return (
-    <LargePanel title={t('veteransCrisisLine.title')} rightButtonText={t('done')} waygate={'WG_VeteransCrisisLineScreen'}>
+    <LargePanel title={t('veteransCrisisLine.title')} rightButtonText={t('done')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
           {t('veteransCrisisLine.weAreHereForYou')}

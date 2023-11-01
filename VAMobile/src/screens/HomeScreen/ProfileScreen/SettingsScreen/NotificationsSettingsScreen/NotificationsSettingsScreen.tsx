@@ -70,7 +70,7 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
   const loadingCheck = loadingPreferences || registeringDevice || settingPreference
 
   return (
-    <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.title')} waygate="WG_NotificationsSettingsScreen">
+    <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.title')}>
       {hasError ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
       ) : loadingCheck ? (

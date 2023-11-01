@@ -140,8 +140,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={t('save')}
-      onPrimaryContentButtonPress={onSave}
-      waygate="WG_GenderIdentityScreen">
+      onPrimaryContentButtonPress={onSave}>
       {errorCheck ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID} onTryAgain={onTryAgain} />
       ) : loadingCheck ? (

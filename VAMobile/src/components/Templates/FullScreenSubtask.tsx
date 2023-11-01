@@ -1,4 +1,5 @@
 import { StackActions, useNavigation } from '@react-navigation/native'
+import { useNavigationState } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, Ref } from 'react'
 
@@ -89,7 +90,6 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   navigationMultiStepCancelScreen,
   showCrisisLineCta = false,
   testID,
-  waygate,
 }) => {
   const theme = useTheme()
   const navigation = useNavigation()
@@ -97,6 +97,12 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveActionSheet()
+  const waygateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
+  console.log('waygateScreen: ' + waygateScreen)
+  console.log('0:' + useNavigationState((state) => state.routes[state.routes.length - 0]?.name))
+  console.log('1:' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name))
+  console.log('2:' + useNavigationState((state) => state.routes[state.routes.length - 2]?.name))
+  console.log('3:' + useNavigationState((state) => state.routes[state.routes.length - 3]?.name))
 
   const titleTextProps: TextViewProps = {
     variant: 'BitterBoldHeading',
@@ -177,61 +183,29 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
-      {waygate ? (
-        <WaygateWrapper waygate={waygate}>
-          <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
-            {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
-            {title && (
-              <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
-                <TextView {...titleTextProps}>{title}</TextView>
-              </Box>
-            )}
-            {children}
-          </VAScrollView>
-          {primaryContentButtonText && onPrimaryContentButtonPress && (
-            <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
-              {secondaryContentButtonText && onSecondaryContentButtonPress && (
-                <Box ml={theme.dimensions.gutter} flex={1}>
-                  <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
-                </Box>
-              )}
-              <Box
-                ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter}
-                mr={theme.dimensions.gutter}
-                flex={1}>
-                <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} testID={primaryButtonTestID} />
-              </Box>
+      <WaygateWrapper waygateName={waygateScreen as WaygateToggleType}>
+        <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
+          {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
+          {title && (
+            <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
+              <TextView {...titleTextProps}>{title}</TextView>
             </Box>
           )}
-        </WaygateWrapper>
-      ) : (
-        <>
-          <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
-            {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
-            {title && (
-              <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
-                <TextView {...titleTextProps}>{title}</TextView>
+          {children}
+        </VAScrollView>
+        {primaryContentButtonText && onPrimaryContentButtonPress && (
+          <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+            {secondaryContentButtonText && onSecondaryContentButtonPress && (
+              <Box ml={theme.dimensions.gutter} flex={1}>
+                <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
               </Box>
             )}
-            {children}
-          </VAScrollView>
-          {primaryContentButtonText && onPrimaryContentButtonPress && (
-            <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
-              {secondaryContentButtonText && onSecondaryContentButtonPress && (
-                <Box ml={theme.dimensions.gutter} flex={1}>
-                  <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
-                </Box>
-              )}
-              <Box
-                ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter}
-                mr={theme.dimensions.gutter}
-                flex={1}>
-                <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} testID={primaryButtonTestID} />
-              </Box>
+            <Box ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter} mr={theme.dimensions.gutter} flex={1}>
+              <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} testID={primaryButtonTestID} />
             </Box>
-          )}
-        </>
-      )}
+          </Box>
+        )}
+      </WaygateWrapper>
     </View>
   )
 }
