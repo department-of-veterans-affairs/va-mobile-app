@@ -148,7 +148,7 @@ context('BenefitSummaryServiceVerification', () => {
   describe('when the awardEffectiveDate does not exist and the monthly award amount does not exist', () => {
     it('should not display that switch on the screen', async () => {
       initializeTestInstance(undefined, undefined, 88)
-      expect(screen.queryByText('Your current monthly payment is $0.00. The effective date of the last change to your current award was invalid date.')).toBeFalsy()
+      expect(screen.queryByText('Your current monthly payment is $0.00. The effective date of the last change to your current award was an invalid date.')).toBeFalsy()
     })
   })
 
