@@ -6,8 +6,8 @@ name: '[e2e] Android Detox Test Run'
 
 on:
   push:
-    #branches:
-    #  - 'dependabot/**'
+    branches:
+      - 'dependabot/**'
   workflow_dispatch:
   # Run on weekdays 4:00 AM UTC
   # schedule:
@@ -107,7 +107,7 @@ jobs:
           disable-animations: true
           arch: x86_64
           avd-name: Pixel_4_XL_API_28
-          script: yarn e2e:android-test /e2e/tests/PushNotifications.e2e --take-screenshots failing --updateSnapshot --headless
+          script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
       # - name: Inform Slack of Failure
       #   id: post_failure
