@@ -69,7 +69,7 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
   const toggleWaygateList = (): ReactNode => {
     const toggleItems: Array<ReactNode> = []
     forEach(waygateToggles, (wg, index) => {
-      const { enabled, errorMsgTitle, errorMsgBody, appUpdateButton, allowFunction, denyAccess } = wg
+      const { enabled, type, errorMsgTitle, errorMsgBody, appUpdateButton } = wg
       toggleItems.push(
         <AccordionCollapsible
           header={
@@ -86,12 +86,8 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
                 <TextView>{`${appUpdateButton}`}</TextView>
               </Box>
               <Box justifyContent="space-between" flexDirection="row" flexWrap="wrap">
-                <TextView variant="MobileBodyBold">{'allowFunction: '}</TextView>
-                <TextView>{`${allowFunction}`}</TextView>
-              </Box>
-              <Box justifyContent="space-between" flexDirection="row" flexWrap="wrap">
-                <TextView variant="MobileBodyBold">{'denyAccess: '}</TextView>
-                <TextView>{`${denyAccess}`}</TextView>
+                <TextView variant="MobileBodyBold">{'type: '}</TextView>
+                <TextView>{type}</TextView>
               </Box>
               <Box justifyContent="space-between" flexDirection="column" flexWrap="wrap">
                 <TextView variant="MobileBodyBold">{'errorMsgTitle: '}</TextView>

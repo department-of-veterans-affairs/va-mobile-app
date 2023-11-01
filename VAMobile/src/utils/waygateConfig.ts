@@ -8,16 +8,14 @@ const WAYGATE_OVERRIDES_KEY = '@store_waygate_overrides'
 export type Waygate = {
   // true means waygate is 'open' so no waygate display, false will display waygate.
   enabled: boolean
+  // string choice for type of waygate to display: 'denyAccess' | 'allowFunction' | 'denyContent'
+  type?: string
   // Title for Alertbox
   errorMsgTitle?: string
   // Body for Alertbox
   errorMsgBody?: string
   // Whether to display the app update button
   appUpdateButton?: boolean
-  // Whether to announce but not hinder access
-  allowFunction?: boolean
-  // Whether to deny access all together to
-  denyAccess?: boolean
 }
 
 export type WaygateToggleType =
@@ -75,11 +73,10 @@ type WaygateToggleValues = {
 
 const waygateDefault: Waygate = {
   enabled: true,
+  type: undefined,
   errorMsgTitle: undefined,
   errorMsgBody: undefined,
   appUpdateButton: false,
-  allowFunction: false,
-  denyAccess: false,
 }
 
 export let waygateConfig: WaygateToggleValues = {
@@ -141,7 +138,7 @@ export const loadWaygateOverrides = async (): Promise<void> => {
  */
 export const waygateNativeAlert = (feature: WaygateToggleType): boolean => {
   const waygate = waygateEnabled(feature)
-  if (waygate.enabled === false && waygate.denyAccess === true && waygate.errorMsgTitle) {
+  if (waygate.enabled === false && waygate.type === 'DenyAccess' && waygate.errorMsgTitle) {
     Alert.alert(waygate.errorMsgTitle, waygate.errorMsgBody, [
       {
         text: 'OK',

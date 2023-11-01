@@ -20,8 +20,7 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [enabledOverride, setEnabledOverride] = useState(wg.enabled)
   const [appUpdateButtonOverride, setAppUpdateButtonOverride] = useState(wg.appUpdateButton)
-  const [allowFunctionOverride, setAllowFunctionOverride] = useState(wg.allowFunction)
-  const [denyAccessOverride, setDenyAccessOverride] = useState(wg.denyAccess)
+  const [typeOverride, setTypeOverride] = useState(wg.type)
   const [errorMsgTitleOverride, setErrorMsgTitleOverride] = useState(wg.errorMsgTitle)
   const [errorMsgBodyOverride, setErrorMsgBodyOverride] = useState(wg.errorMsgBody)
 
@@ -29,13 +28,12 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
     if (onSaveClicked) {
       wg.enabled = enabledOverride
       wg.appUpdateButton = appUpdateButtonOverride
-      wg.allowFunction = allowFunctionOverride
-      wg.denyAccess = denyAccessOverride
+      wg.type = typeOverride
       wg.errorMsgTitle = errorMsgTitleOverride
       wg.errorMsgBody = errorMsgBodyOverride
       navigation.goBack()
     }
-  }, [onSaveClicked, navigation, wg, enabledOverride, appUpdateButtonOverride, allowFunctionOverride, denyAccessOverride, errorMsgTitleOverride, errorMsgBodyOverride])
+  }, [onSaveClicked, navigation, wg, enabledOverride, appUpdateButtonOverride, errorMsgTitleOverride, errorMsgBodyOverride])
 
   const toggleItems: SimpleListItemObj[] = [
     {
@@ -54,22 +52,6 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
       },
       onPress: (): void => setAppUpdateButtonOverride(!appUpdateButtonOverride),
     },
-    {
-      text: 'allowFunction',
-      decorator: ButtonDecoratorType.Switch,
-      decoratorProps: {
-        on: allowFunctionOverride,
-      },
-      onPress: (): void => setAllowFunctionOverride(!allowFunctionOverride),
-    },
-    {
-      text: 'denyAccess',
-      decorator: ButtonDecoratorType.Switch,
-      decoratorProps: {
-        on: denyAccessOverride,
-      },
-      onPress: (): void => setDenyAccessOverride(!denyAccessOverride),
-    },
   ]
 
   return (
@@ -82,6 +64,14 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
       onRightButtonPress={() => setOnSaveClicked(true)}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <SimpleList items={toggleItems} />
+        <TextView variant="MobileBodyBold">type (DenyAccess, AllowFunction, DenyContent)</TextView>
+        <VATextInput
+          inputType="none"
+          value={typeOverride}
+          onChange={(val) => {
+            setTypeOverride(val)
+          }}
+        />
         <TextView variant="MobileBodyBold">errorMsgTitle</TextView>
         <VATextInput
           inputType="none"

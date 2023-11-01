@@ -22,7 +22,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName 
 
   const waygate = waygateEnabled(waygateName)
   if (waygate.enabled === false) {
-    const showScreenContent = waygate.allowFunction === true || waygateName === 'WG_Login'
+    const showScreenContent = waygate.type === 'AllowFunction' || waygateName === 'WG_Login'
     return (
       <>
         {waygateAlertBox(waygate)}
