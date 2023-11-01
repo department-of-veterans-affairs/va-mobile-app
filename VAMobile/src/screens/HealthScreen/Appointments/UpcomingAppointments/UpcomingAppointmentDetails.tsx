@@ -21,6 +21,7 @@ import {
   AppointmentStatusConstants,
   AppointmentTypeConstants,
   AppointmentTypeToID,
+  ScreenIDTypesConstants,
 } from 'store/api/types'
 import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail } from 'store/slices'
 import {
@@ -28,6 +29,7 @@ import {
   Box,
   ButtonTypesConstants,
   ClickForActionLink,
+  ErrorComponent,
   FeatureLandingTemplate,
   LinkButtonProps,
   LinkTypeOptionsConstants,
@@ -50,7 +52,7 @@ import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingA
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
 import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
@@ -304,11 +306,17 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   if (loadingAppointmentCancellation || loading) {
-    const loadingText = loadingAppointmentCancellation ? t('upcomingAppointmentDetails.loadingAppointmentCancellation') : t('appointmentDetails.loading')
-
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
-        <LoadingComponent text={loadingText} />
+        <LoadingComponent text={loadingAppointmentCancellation ? t('upcomingAppointmentDetails.loadingAppointmentCancellation') : t('appointmentDetails.loading')} />
+      </FeatureLandingTemplate>
+    )
+  }
+
+  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
+    return (
+      <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
   }
