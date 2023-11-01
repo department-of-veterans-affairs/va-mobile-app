@@ -29,8 +29,6 @@ export const CommonE2eIdConstants = {
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
   VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
   MESSAGES_ROW_TEXT: 'Messages',
-  SIGN_OUT_BTN_ID: 'Sign out',
-  SIGN_OUT_CONFIRM_TEXT: 'Sign out?',
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'You’re leaving the app',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
