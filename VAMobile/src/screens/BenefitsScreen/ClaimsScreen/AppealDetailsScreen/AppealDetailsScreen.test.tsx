@@ -1,15 +1,13 @@
-import 'react-native'
 import React from 'react'
-import * as api from 'store/api'
+import { StackNavigationOptions } from '@react-navigation/stack'
+import { screen, fireEvent, waitFor } from '@testing-library/react-native'
 
-import { screen, fireEvent } from '@testing-library/react-native'
+import * as api from 'store/api'
 import { context, mockNavProps, render, when } from 'testUtils'
 import AppealDetailsScreen from './AppealDetailsScreen'
 import { InitialState } from 'store/slices'
 import { appeal as appealData } from '../appealData'
 import { AppealEventData, AppealTypes } from 'store/api/types'
-import { waitFor } from '@testing-library/react-native'
-import { StackNavigationOptions } from '@react-navigation/stack'
 
 context('AppealDetailsScreen', () => {
   let props: any
