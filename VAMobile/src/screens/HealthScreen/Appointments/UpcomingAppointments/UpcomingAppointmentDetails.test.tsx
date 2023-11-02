@@ -1,10 +1,9 @@
-import 'react-native'
 import React from 'react'
 import { Alert } from 'react-native'
+import { screen, fireEvent } from '@testing-library/react-native'
+import { when } from 'jest-when'
 
 import { context, mockNavProps, render } from 'testUtils'
-import { when } from 'jest-when'
-import { screen, fireEvent } from '@testing-library/react-native'
 import { initialAppointmentsState, InitialState } from 'store/slices'
 import UpcomingAppointmentDetails from './UpcomingAppointmentDetails'
 import {
@@ -100,7 +99,7 @@ context('UpcomingAppointmentDetails', () => {
     })
   }
 
-  beforeEach(async () => {
+  beforeEach(() => {
     initializeTestInstance()
   })
 
@@ -109,7 +108,7 @@ context('UpcomingAppointmentDetails', () => {
   })
 
   describe('when the appointment type is atlas', () => {
-    it('should display the appointment details', async () => {
+    it('should display the appointment details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS)
       expect(screen.getByText('VA Video Connect\r\nATLAS location')).toBeTruthy()
       expect(screen.getByText('Appointment code: 654321')).toBeTruthy()
@@ -119,7 +118,7 @@ context('UpcomingAppointmentDetails', () => {
   })
 
   describe('when the appointment type is at home', () => {
-    it('should display the appointment details', async () => {
+    it('should display the appointment details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
       expect(screen.getByText('VA Video Connect\r\nHome')).toBeTruthy()
       expect(screen.getByText('How to join your virtual session')).toBeTruthy()
@@ -129,14 +128,14 @@ context('UpcomingAppointmentDetails', () => {
       expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
     })
 
-    it('should prompt an alert for leaving the app when the URL is present', async () => {
+    it('should prompt an alert for leaving the app when the URL is present', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME, undefined, undefined, undefined, undefined, undefined, true)
       jest.spyOn(Alert, 'alert')
       fireEvent.press(screen.getByText('Join session'))
       expect(Alert.alert).toHaveBeenCalled()
     })
 
-    it('should navigate to the SessionNotStarted screen when the URL is empty', async () => {
+    it('should navigate to the SessionNotStarted screen when the URL is empty', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
       fireEvent.press(screen.getByText('Join session'))
       expect(navigateToSessionNotStartedSpy).toHaveBeenCalled()
@@ -144,7 +143,7 @@ context('UpcomingAppointmentDetails', () => {
   })
 
   describe('when the appointment type is onsite', () => {
-    it('should display the appointment details', async () => {
+    it('should display the appointment details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE)
       expect(screen.getByText('VA Video Connect\r\nVA location')).toBeTruthy()
       expect(screen.getByText('You must join this video meeting from the VA location listed below.')).toBeTruthy()
@@ -155,7 +154,7 @@ context('UpcomingAppointmentDetails', () => {
   })
 
   describe('when the appointment type is gfe', () => {
-    it('should display the appointment details', async () => {
+    it('should display the appointment details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
       expect(screen.getByText('VA Video Connect\r\nusing a VA device')).toBeTruthy()
       expect(screen.getByText("To join this video appointment, you'll need to use a device we provide.")).toBeTruthy()
@@ -165,7 +164,7 @@ context('UpcomingAppointmentDetails', () => {
   })
 
   describe('when the appointment type is community care', () => {
-    it('should display the appointment details', async () => {
+    it('should display the appointment details', () => {
       initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE)
       expect(screen.getByText('Community care')).toBeTruthy()
       expect(screen.getByText('Special instructions')).toBeTruthy()
@@ -174,7 +173,7 @@ context('UpcomingAppointmentDetails', () => {
   })
 
   describe('when the appointment type is va', () => {
-    it('should display the appointment details', async () => {
+    it('should display the appointment details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA)
       expect(screen.getByText('VA appointment')).toBeTruthy()
       expect(screen.getByText('Blind Rehabilitation Center')).toBeTruthy()
@@ -184,7 +183,7 @@ context('UpcomingAppointmentDetails', () => {
   })
 
   describe('when the appointment type is covid vaccine', () => {
-    it('should display the appointment details', async () => {
+    it('should display the appointment details', () => {
       initializeTestInstance(undefined, undefined, undefined, true)
       expect(screen.getAllByText('COVID-19 vaccine')).toBeTruthy()
       expect(screen.getByText('Special instructions')).toBeTruthy()
@@ -193,35 +192,35 @@ context('UpcomingAppointmentDetails', () => {
   })
 
   describe('when the status is CANCELLED', () => {
-    it('should display the schedule another appointment text', async () => {
+    it('should display the schedule another appointment text', () => {
       initializeTestInstance(AppointmentTypeConstants.VA, AppointmentStatusConstants.CANCELLED, undefined, false, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
       expect(screen.getByText('To schedule another appointment, please visit VA.gov or call your VA medical center.')).toBeTruthy()
     })
   })
 
   describe('when the status is not CANCELLED', () => {
-    it('should display the add to calendar click for action link', async () => {
+    it('should display the add to calendar click for action link', () => {
       expect(screen.getByText('Add to calendar')).toBeTruthy()
     })
   })
 
   describe('when the appointment is canceled', () => {
-    it('should show if you cancelled', async () => {
+    it('should show if you cancelled', () => {
       initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
     })
 
-    it('should show if you cancelled (rebook)', async () => {
+    it('should show if you cancelled (rebook)', () => {
       initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
     })
 
-    it('should show if facility cancelled', async () => {
+    it('should show if facility cancelled', () => {
       initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC)
       expect(screen.getByText('VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
 
-    it('should show if facility cancelled (rebook)', async () => {
+    it('should show if facility cancelled (rebook)', () => {
       initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
       expect(screen.getByText('VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })

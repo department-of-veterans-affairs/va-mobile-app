@@ -1,9 +1,8 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
-import { screen } from '@testing-library/react-native'
-import { initialAppointmentsState, InitialState } from 'store/slices'
+import { initialAppointmentsState } from 'store/slices'
 import PastAppointmentDetails from './PastAppointmentDetails'
 import {
   AppointmentType,
@@ -28,7 +27,6 @@ context('PastAppointmentDetails', () => {
 
     render(<PastAppointmentDetails {...props} />, {
       preloadedState: {
-        ...InitialState,
         appointments: {
           ...initialAppointmentsState,
           loading: false,
@@ -63,7 +61,7 @@ context('PastAppointmentDetails', () => {
     })
   }
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     initializeTestInstance()
     expect(screen.getByText('VA appointment')).toBeTruthy()
     expect(screen.getByText('Saturday, February 6, 2021\n11:53 AM PST')).toBeTruthy()
@@ -77,7 +75,7 @@ context('PastAppointmentDetails', () => {
   })
 
   describe('when the appointment type is VA_VIDEO_CONNECT_GFE or VA_VIDEO_CONNECT_HOME', () => {
-    it('should render only 7 TextViews to display appointment type, date information, and the schedule text', async () => {
+    it('should render only 7 TextViews to display appointment type, date information, and the schedule text', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
       expect(screen.getByText('VA Video Connect\r\nusing a VA device')).toBeTruthy()
 
@@ -88,7 +86,7 @@ context('PastAppointmentDetails', () => {
 
   describe('when the appointment type is VA_VIDEO_CONNECT_ONSITE', () => {
     describe('when the practitioner object exists', () => {
-      it('should render a TextView with the practitioners full name', async () => {
+      it('should render a TextView with the practitioners full name', () => {
         initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE)
         expect(screen.getByText('Larry R. TestDoctor')).toBeTruthy()
       })
@@ -96,29 +94,29 @@ context('PastAppointmentDetails', () => {
   })
 
   describe('when the appointment is canceled', () => {
-    it('should show if you cancelled', async () => {
+    it('should show if you cancelled', () => {
       initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT)
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
     })
 
-    it('should show if you cancelled (rebook)', async () => {
+    it('should show if you cancelled (rebook)', () => {
       initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
     })
 
-    it('should show if facility cancelled', async () => {
+    it('should show if facility cancelled', () => {
       initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC)
       expect(screen.getByText('VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
 
-    it('should show if facility cancelled (rebook)', async () => {
+    it('should show if facility cancelled (rebook)', () => {
       initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
       expect(screen.getByText('VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
   })
 
   describe('when the appointment type is covid vaccine', () => {
-    it('should display the title name as covid', async () => {
+    it('should display the title name as covid', () => {
       initializeTestInstance(undefined, undefined, undefined, true)
       expect(screen.getAllByText('COVID-19 vaccine')).toBeTruthy()
     })

@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { screen, fireEvent } from '@testing-library/react-native'
+
 import { context, mockNavProps, render } from 'testUtils'
 import PastAppointments from './PastAppointments'
 import {} from 'store/slices'
@@ -159,7 +158,7 @@ context('PastAppointments', () => {
     initializeTestInstance(appointmentData())
   })
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     expect(screen.getByText('Select a date range')).toBeTruthy()
     expect(screen.getAllByText('Past 3 months')).toBeTruthy()
     expect(screen.getByTestId('Confirmed Saturday, February 6, 2021 11:53 AM PST VA Long Beach Healthcare System In-person')).toBeTruthy()
@@ -169,14 +168,14 @@ context('PastAppointments', () => {
   })
 
   describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
+    it('should show loading screen', () => {
       initializeTestInstance(undefined, true)
       expect(screen.getByText('Loading your appointments...')).toBeTruthy()
     })
   })
 
   describe('when a appointment is clicked', () => {
-    it('should call useRouteNavigation', async () => {
+    it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByTestId('Confirmed Saturday, February 6, 2021 11:53 AM PST VA Long Beach Healthcare System In-person'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('PastAppointmentDetails', { appointmentID: '1' })
       expect(mockNavigateToSpy).toHaveBeenCalled()
@@ -184,35 +183,35 @@ context('PastAppointments', () => {
   })
 
   describe('when the status is CANCELLED', () => {
-    it('should render the first line of the appointment item as the text "Canceled"', async () => {
+    it('should render the first line of the appointment item as the text "Canceled"', () => {
       initializeTestInstance(appointmentData(AppointmentStatusConstants.CANCELLED))
       expect(screen.getByText('Canceled')).toBeTruthy()
     })
   })
 
   describe('when the status is CANCELLED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "Canceled"', async () => {
+    it('should render the first line of the appointment item as the text "Canceled"', () => {
       initializeTestInstance(appointmentData(AppointmentStatusConstants.CANCELLED, true))
       expect(screen.getByText('Canceled')).toBeTruthy()
     })
   })
 
   describe('when the status is SUBMITTED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "Pending"', async () => {
+    it('should render the first line of the appointment item as the text "Pending"', () => {
       initializeTestInstance(appointmentData(AppointmentStatusConstants.SUBMITTED, true))
       expect(screen.getByText('Pending')).toBeTruthy()
     })
   })
 
   describe('when there are no appointments', () => {
-    it('should render NoAppointments', async () => {
+    it('should render NoAppointments', () => {
       initializeTestInstance()
       expect(screen.getByText("You don’t have any appointments")).toBeTruthy()
     })
   })
 
   describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async () => {
+    it('should render error component when the stores screenID matches the components screenID', () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -224,7 +223,7 @@ context('PastAppointments', () => {
       expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
     })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async () => {
+    it('should not render error component when the stores screenID does not match the components screenID', () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -238,7 +237,7 @@ context('PastAppointments', () => {
   })
 
   describe('when the dropdown value is updated', () => {
-    it('should call getAppointmentsInDateRange', async () => {
+    it('should call getAppointmentsInDateRange', () => {
       fireEvent.press(screen.getByTestId('getDateRangeTestID picker'))
       fireEvent.press(screen.getByAccessibilityValue({
         "text": "2 of 6",

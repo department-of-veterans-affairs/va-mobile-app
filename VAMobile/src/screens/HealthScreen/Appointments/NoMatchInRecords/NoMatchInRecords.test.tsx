@@ -1,12 +1,11 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import NoMatchInRecords from './NoMatchInRecords'
 
 context('NoMatchInRecords', () => {
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     render(<NoMatchInRecords />)
     expect(screen.getByText("We couldn't match your information to our VA patient records")).toBeTruthy()
     expect(screen.getByText("We're sorry. We couldn't find a match for you in our VA patient records.")).toBeTruthy()

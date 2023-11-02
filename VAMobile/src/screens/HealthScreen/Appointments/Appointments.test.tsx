@@ -1,8 +1,7 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import * as api from 'store/api'
 import Appointments from './Appointments'
 import { AppointmentsErrorServiceTypesConstants } from 'store/api/types'

@@ -1,8 +1,7 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import PrepareForVideoVisit from './PrepareForVideoVisit'
 
 context('PrepareForVideoVisit', () => {
@@ -11,7 +10,7 @@ context('PrepareForVideoVisit', () => {
     render(<PrepareForVideoVisit {...props} />)
   })
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     expect(screen.getByText('Before your appointment:')).toBeTruthy()
     expect(screen.getByText("If you’re using an iPad or iPhone for your appointment, you’ll need to download the VA Video Connect iOS app beforehand. If you’re using any other device, you don’t need to download any software or app before your appointment.")).toBeTruthy()
     expect(screen.getByText("You’ll need to have access to a web camera and microphone. You can use an external camera and microphone if your device doesn’t have one.")).toBeTruthy()
