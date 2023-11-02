@@ -305,18 +305,18 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     )
   }
 
-  if (loadingAppointmentCancellation || loading) {
-    return (
-      <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
-        <LoadingComponent text={loadingAppointmentCancellation ? t('upcomingAppointmentDetails.loadingAppointmentCancellation') : t('appointmentDetails.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
   if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
+  }
+
+  if (loadingAppointmentCancellation || loading) {
+    return (
+      <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
+        <LoadingComponent text={loadingAppointmentCancellation ? t('upcomingAppointmentDetails.loadingAppointmentCancellation') : t('appointmentDetails.loading')} />
       </FeatureLandingTemplate>
     )
   }
