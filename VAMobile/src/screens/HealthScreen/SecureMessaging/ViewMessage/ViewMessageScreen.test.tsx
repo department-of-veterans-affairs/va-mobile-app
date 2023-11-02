@@ -1,12 +1,11 @@
-import 'react-native'
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
+import { DateTime } from 'luxon'
 
 import { context, mockNavProps, render } from 'testUtils'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
 import { initialSecureMessagingState } from 'store/slices'
 import ViewMessageScreen from './ViewMessageScreen'
-import { DateTime } from 'luxon'
 
 // Contains message Ids grouped together by thread
 const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
@@ -112,7 +111,7 @@ context('ViewMessageScreen', () => {
   })
 
   describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
+    it('should show loading screen', () => {
       initializeTestInstance({}, [], true)
       expect(screen.getByText('Loading your message...')).toBeTruthy()
     })
@@ -144,7 +143,7 @@ context('ViewMessageScreen', () => {
       beforeEach(() => {
         initializeTestInstance(mockMessagesById, mockThreads, false, 3, [1])
       })
-      it('should show AlertBox with "Message could not be found" title', async () => {
+      it('should show AlertBox with "Message could not be found" title', () => {
         expect(screen.getByText('mock sender 1')).toBeTruthy()
         fireEvent.press(screen.getByText('mock sender 1'))
         expect(screen.getByText("If the app still doesn't work, call the My HealtheVet Help Desk. We're here Monday-Friday, 8:00 a.m.-8:00 p.m. ET.")).toBeTruthy()

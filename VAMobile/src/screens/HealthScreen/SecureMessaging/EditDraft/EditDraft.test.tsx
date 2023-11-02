@@ -1,4 +1,3 @@
-import 'react-native'
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 
@@ -225,13 +224,13 @@ context('EditDraft', () => {
       })
     })
 
-    it('should display an AlertBox', async () => {
+    it('should display an AlertBox', () => {
       expect(screen.getByText("We can't match you with a provider")).toBeTruthy()
     })
 
     describe('on click of the go to inbox button', () => {
-      it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
-        fireEvent.press(screen.getByText('Go to inbox'))
+      it('should call useRouteNavigation and updateSecureMessagingTab', () => {
+        fireEvent.press(screen.getByRole('button', { name: 'Go to inbox' }))
         expect(navigateSpy).toHaveBeenCalled()
         expect(updateSecureMessagingTab).toHaveBeenCalled()
       })
@@ -239,28 +238,28 @@ context('EditDraft', () => {
   })
 
   describe('when hasLoadedRecipients is false', () => {
-    it('should display the LoadingComponent', async () => {
+    it('should display the LoadingComponent', () => {
       initializeTestInstance({ loading: true })
       expect(screen.getByText("Loading your draft...")).toBeTruthy()
     })
   })
 
   describe('when there is an error', () => {
-    it('should display the ErrorComponent', async () => {
+    it('should display the ErrorComponent', () => {
       initializeTestInstance({ screenID: ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID })
       expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
     })
   })
 
   describe('on click of the collapsible view', () => {
-    it('should show the Reply Help panel', async () => {
+    it('should show the Reply Help panel', () => {
       fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs'))
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
   describe('when pressing the back button', () => {
-    it('should ask for confirmation if any field filled in', async () => {
+    it('should ask for confirmation if any field filled in', () => {
       fireEvent.changeText(screen.getByTestId('messageText'), 'Random String')
       fireEvent.press(screen.getByText('Cancel'))
       expect(goBack).not.toHaveBeenCalled()
@@ -269,7 +268,7 @@ context('EditDraft', () => {
   })
 
   describe('on click of add files button', () => {
-    it('should call useRouteNavigation', async () => {
+    it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByLabelText('Add Files'))
       expect(mockNavigationSpy).toHaveBeenCalled()
     })

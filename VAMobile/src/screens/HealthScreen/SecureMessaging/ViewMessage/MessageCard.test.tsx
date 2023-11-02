@@ -1,14 +1,13 @@
-import 'react-native'
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
+import { DateTime } from 'luxon'
 
 import { context, render } from 'testUtils'
 import { downloadFileAttachment } from 'store/slices'
 import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import MessageCard from './MessageCard'
-import Mock = jest.Mock
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { DateTime } from 'luxon'
+import Mock = jest.Mock
 
 let mockNavigationSpy = jest.fn()
 jest.mock('@react-navigation/native', () => {
@@ -83,12 +82,12 @@ context('MessageCard', () => {
     expect(screen.getByLabelText('Only use messages for non-urgent needs')).toBeTruthy()
   })
 
-  it('clicking on Only use messages for non-urgent needs should open largePanel', async () => {
+  it('clicking on Only use messages for non-urgent needs should open largePanel', () => {
       fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs'))
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
 
-  it('clicking on attachment should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', async () => {
+  it('clicking on attachment should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', () => {
     fireEvent.press(screen.getByText('testAttachment (1 MB)'))
     expect(downloadFileAttachment).toBeCalledWith(listOfAttachments[0], 'attachment-1')
   })

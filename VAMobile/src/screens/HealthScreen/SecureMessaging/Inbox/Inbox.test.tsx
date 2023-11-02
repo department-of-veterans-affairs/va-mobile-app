@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { fireEvent, screen } from '@testing-library/react-native'
+
 import { context, render} from 'testUtils'
 import Inbox from './Inbox'
 import { CategoryTypeFields, CategoryTypes } from 'store/api/types'
@@ -79,7 +78,7 @@ context('Inbox', () => {
   })
 
   describe('when there are no inbox messages', () => {
-    it('should render NoInboxMessages', async () => {
+    it('should render NoInboxMessages', () => {
       render(<Inbox />, {
         preloadedState: {
           secureMessaging: {
@@ -93,7 +92,7 @@ context('Inbox', () => {
   })
 
   describe('when a message is clicked', () => {
-    it('should call useRouteNavigation', async () => {
+    it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByTestId('Unread: Mock Sender Invalid DateTime General: Default subject line'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessageScreen', { currentPage: 2, folderID: 0, messageID: 1, messagesLeft: 1 })
       expect(mockNavigateToSpy).toHaveBeenCalled()
@@ -101,63 +100,63 @@ context('Inbox', () => {
   })
 
   describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
+    it('should show loading screen', () => {
       initializeTestInstance(CategoryTypeFields.other, '', true)
       expect(screen.getByText('Loading your messages...')).toBeTruthy()
     })
   })
 
   describe('when subject line is empty', () => {
-    it('should show only category with no colon or space after', async () => {
+    it('should show only category with no colon or space after', () => {
       initializeTestInstance(CategoryTypeFields.other, '')
       expect(screen.getByText('General')).toBeTruthy()
     })
   })
 
   describe('when subject category is OTHER', () => {
-    it('should show correct text', async () => {
+    it('should show correct text', () => {
       initializeTestInstance(CategoryTypeFields.other)
       expect(screen.getByText('General: Default subject line')).toBeTruthy()
     })
   })
 
   describe('when subject category is GENERAL', () => {
-    it('should show correct text', async () => {
+    it('should show correct text', () => {
       initializeTestInstance(CategoryTypeFields.general)
       expect(screen.getByText('General: Default subject line')).toBeTruthy()
     })
   })
 
   describe('when subject category is APPOINTMENTS', () => {
-    it('should show correct text', async () => {
+    it('should show correct text', () => {
       initializeTestInstance(CategoryTypeFields.appointment)
       expect(screen.getByText('Appointment: Default subject line')).toBeTruthy()
     })
   })
 
   describe('when subject category is MEDICATION', () => {
-    it('should show correct text', async () => {
+    it('should show correct text', () => {
       initializeTestInstance(CategoryTypeFields.medication)
       expect(screen.getByText('Medication: Default subject line')).toBeTruthy()
     })
   })
 
   describe('when subject category is TEST_RESULTS', () => {
-    it('should show correct text', async () => {
+    it('should show correct text', () => {
       initializeTestInstance(CategoryTypeFields.test)
       expect(screen.getByText('Test: Default subject line')).toBeTruthy()
     })
   })
 
   describe('when subject category is EDUCATION', () => {
-    it('should show correct text', async () => {
+    it('should show correct text', () => {
       initializeTestInstance(CategoryTypeFields.education)
       expect(screen.getByText('Education: Default subject line')).toBeTruthy()
     })
   })
 
   describe('when subject category is COVID', () => {
-    it('should show correct text', async () => {
+    it('should show correct text', () => {
       initializeTestInstance(CategoryTypeFields.covid)
       expect(screen.getByText('COVID: Default subject line')).toBeTruthy()
     })

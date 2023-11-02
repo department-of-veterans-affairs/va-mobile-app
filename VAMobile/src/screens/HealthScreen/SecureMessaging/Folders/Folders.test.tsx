@@ -1,8 +1,6 @@
-import 'react-native'
 import React from 'react'
-import { Pressable } from 'react-native'
-
 import { screen, fireEvent } from '@testing-library/react-native'
+
 import { context, mockNavProps, render } from 'testUtils'
 import { ErrorsState, initialSecureMessagingState, initialErrorsState } from 'store/slices'
 import Folder from './Folders'
@@ -102,21 +100,21 @@ context('Folder', () => {
   })
 
   describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
+    it('should show loading screen', () => {
       initializeTestInstance([], true)
       expect(screen.getByText('Loading your folders...')).toBeTruthy()
     })
   })
 
   describe('when system folders are visible', () => {
-    it('should show the Drafts folder', async () => {
-      expect(screen.getByText('Drafts (2)')).toBeTruthy()
+    it('should show the Drafts folder', () => {
+      expect(screen.getByRole('button', { name: 'Drafts (2)' })).toBeTruthy()
     })
   })
 
   describe('when a folder is clicked', () => {
-    it('should call useRouteNavigation', async () => {
-      fireEvent.press(screen.getByText('Drafts (2)'))
+    it('should call useRouteNavigation', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Drafts (2)' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { folderID: -2, folderName: 'Drafts' })
       expect(mockNavigateToSpy).toHaveBeenCalled()
     })

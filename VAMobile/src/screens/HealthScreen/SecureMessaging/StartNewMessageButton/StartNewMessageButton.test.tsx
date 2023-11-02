@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { fireEvent, screen } from '@testing-library/react-native'
+
 import { context, render } from 'testUtils'
 import StartNewMessageButton from './StartNewMessageButton'
 
@@ -22,8 +21,8 @@ context('StartNewMessageFooter', () => {
   })
 
   describe('on click of the footer button', () => {
-    it('should call useRouteNavigation', async () => {
-      fireEvent.press(screen.getByText('Start new message'))
+    it('should call useRouteNavigation', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Start new message' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
     })
   })

@@ -1,13 +1,12 @@
-import 'react-native'
 import React from 'react'
-
 import { fireEvent, screen } from '@testing-library/react-native'
 import DocumentPicker from 'react-native-document-picker'
 import { ImagePickerResponse } from 'react-native-image-picker'
+import { when } from 'jest-when'
+
 import { context, mockNavProps, render, waitFor } from 'testUtils'
 import Attachments from './Attachments'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { when } from 'jest-when'
 
 let mockShowActionSheetWithOptions = jest.fn()
 jest.mock('@expo/react-native-action-sheet', () => {

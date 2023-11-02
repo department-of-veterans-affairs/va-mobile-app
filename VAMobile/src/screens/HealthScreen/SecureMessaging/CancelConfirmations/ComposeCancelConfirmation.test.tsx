@@ -1,14 +1,13 @@
-import 'react-native'
 import React from 'react'
-
+import { when } from 'jest-when'
 import { act } from 'react-test-renderer'
+
 import { context, render } from 'testUtils'
 import { useComposeCancelConfirmation } from './ComposeCancelConfirmation'
 import { SecureMessagingFormData } from 'store/api'
 import { FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { CategoryTypeFields } from 'store/api/types'
 import { useDestructiveActionSheetProps } from 'utils/hooks'
-import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
 
@@ -107,7 +106,7 @@ context('useComposeCancelConfirmation', () => {
 
   describe('New Message', () => {
     describe('on clicking discard', () => {
-      it('should go back to the previous page', async () => {
+      it('should go back to the previous page', () => {
         act(() => {
           discardButtonSpy()
         })
@@ -116,7 +115,7 @@ context('useComposeCancelConfirmation', () => {
     })
 
     describe('on clicking save draft', () => {
-      it('should go back to compose if form not valid', async () => {
+      it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
         act(() => {
           saveDraftButtonSpy()
@@ -128,7 +127,7 @@ context('useComposeCancelConfirmation', () => {
 
   describe('Reply', () => {
     describe('on clicking discard', () => {
-      it('should go back to the message the user was viewing', async () => {
+      it('should go back to the message the user was viewing', () => {
         initializeTestInstance({ body: 'test reply', category: CategoryTypeFields.appointment }, undefined, true, FormHeaderTypeConstants.reply, 2)
         act(() => {
           discardButtonSpy()
@@ -138,7 +137,7 @@ context('useComposeCancelConfirmation', () => {
     })
 
     describe('on clicking save draft', () => {
-      it('should go back to compose if form not valid', async () => {
+      it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
         act(() => {
           saveDraftButtonSpy()
@@ -150,7 +149,7 @@ context('useComposeCancelConfirmation', () => {
 
   describe('Draft', () => {
     describe('on clicking discard', () => {
-      it('should go back to drafts folder', async () => {
+      it('should go back to drafts folder', () => {
         initializeTestInstance({ body: 'test reply', category: CategoryTypeFields.appointment }, 1, true, FormHeaderTypeConstants.draft, undefined)
         act(() => {
           discardButtonSpy()
@@ -160,7 +159,7 @@ context('useComposeCancelConfirmation', () => {
     })
 
     describe('on clicking save draft', () => {
-      it('should go back to compose if form not valid', async () => {
+      it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
         act(() => {
           saveDraftButtonSpy()

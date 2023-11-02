@@ -1,14 +1,13 @@
-import 'react-native'
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
+import { DateTime } from 'luxon'
 
 import { context, render } from 'testUtils'
 import { downloadFileAttachment } from 'store/slices'
 import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import CollapsibleMessage from './CollapsibleMessage'
-import Mock = jest.Mock
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { DateTime } from 'luxon'
+import Mock = jest.Mock
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
@@ -76,7 +75,7 @@ context('CollapsibleMessage', () => {
     expect(screen.queryByText('John Smith')).toBeFalsy()
   })
 
-  it('should render AttachmentLink content correctly when collapsibleMessage is expanded and should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', async () => {
+  it('should render AttachmentLink content correctly when collapsibleMessage is expanded and should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', () => {
     fireEvent.press(screen.getByText('John Smith'))
     expect(screen.getByText('testAttachment (1 MB)')).toBeTruthy()
     fireEvent.press(screen.getByText('testAttachment (1 MB)'))
