@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { fireEvent, screen } from '@testing-library/react-native'
+
 import { context, mockNavProps, render, waitFor } from 'testUtils'
 import GenderIdentityScreen from './GenderIdentityScreen'
 import { GenderIdentityOptions } from 'api/types/DemographicsData'
@@ -47,24 +46,24 @@ context('GenderIdentityScreen', () => {
     render(<GenderIdentityScreen {...props} />)
   }
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     initializeTestInstance()
     expect(screen.getByText('Gender identity')).toBeTruthy()
     expect(screen.getByText('You can change your selection at any time. If you decide you no longer want to share your gender identity, select Prefer not to answer.')).toBeTruthy()
-    expect(screen.getByText('Man')).toBeTruthy()
-    expect(screen.getByText('Non-binary')).toBeTruthy()
-    expect(screen.getByText('Transgender man')).toBeTruthy()
-    expect(screen.getByText('Transgender woman')).toBeTruthy()
-    expect(screen.getByText('Woman')).toBeTruthy()
-    expect(screen.getAllByText('Prefer not to answer')).toBeTruthy()
-    expect(screen.getByText('A gender not listed here')).toBeTruthy()
-    expect(screen.getByText('What to know before you decide to share your gender identity')).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Man' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Non-binary' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Transgender man' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Transgender woman' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Woman' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Prefer not to answer' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'A gender not listed here' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'What to know before you decide to share your gender identity' })).toBeTruthy()
   })
 
-  it('shows an error message on save when a gender identity type has not been selected', async () => {
+  it('shows an error message on save when a gender identity type has not been selected', () => {
     initializeTestInstance()
 
-    fireEvent.press(screen.getByText('Save'))
+    fireEvent.press(screen.getByRole('button', { name: 'Save' }))
     expect(screen.queryByText('Select an option')).toBeTruthy()
   })
 

@@ -51,9 +51,6 @@ const validationData: ValidateAddressData = {
   }],
   validationKey: 1
 }
-
-const mockedNavigate = jest.fn()
-const mockedNavigationGoBack = jest.fn()
 const saveAddressSpy = jest.fn()
 const setShowAddressValidationSpy = jest.fn()
 
