@@ -278,7 +278,7 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nReal}>
-            <NavigationContainer>
+            <NavigationContainer initialState={{routes: []}}>
               <ThemeProvider theme={theme}>
                 <SafeAreaProvider>{children}</SafeAreaProvider>
               </ThemeProvider>
