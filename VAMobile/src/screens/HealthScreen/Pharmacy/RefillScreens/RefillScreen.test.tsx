@@ -1,12 +1,11 @@
-import 'react-native'
 import React from 'react'
+import { screen, fireEvent } from '@testing-library/react-native'
+import { DateTime } from 'luxon'
 
 import { render, context, waitFor, mockNavProps } from 'testUtils'
-import { screen, fireEvent } from '@testing-library/react-native'
 import { RefillScreen } from './RefillScreen'
 import { RootState } from 'store'
 import { ErrorsState, initialErrorsState, initialPrescriptionState, PrescriptionState } from 'store/slices'
-import { DateTime } from 'luxon'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
 
 context('RefillScreen', () => {

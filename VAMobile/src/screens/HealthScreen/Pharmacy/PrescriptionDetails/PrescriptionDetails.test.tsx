@@ -1,8 +1,7 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { render, context, mockNavProps } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import PrescriptionDetails from './PrescriptionDetails'
 import { initialPrescriptionState } from 'store/slices/prescriptionSlice'
 import { PrescriptionAttributeData, RefillStatusConstants } from 'store/api/types'
@@ -46,7 +45,7 @@ context('PrescriptionDetails', () => {
   }
 
   describe('when showing prescription details data', () => {
-    it('should show prescription fields', async () => {
+    it('should show prescription fields', () => {
       initializeTestInstance()
       expect(screen.getByText('Instructions')).toBeTruthy()
       expect(screen.getByText('Refills left')).toBeTruthy()
@@ -56,13 +55,13 @@ context('PrescriptionDetails', () => {
       expect(screen.getByText('Ordered on')).toBeTruthy()
       expect(screen.getByText('VA facility')).toBeTruthy()
 
-      expect(screen.getByText('(217) 636-6712')).toBeTruthy()
-      expect(screen.getByText('TTY: 711')).toBeTruthy()
+      expect(screen.getByRole('link', { name: '(217) 636-6712' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
     })
   })
 
   describe('when there is no data provided', () => {
-    it('should show None Noted for applicable properties', async () => {
+    it('should show None Noted for applicable properties', () => {
       initializeTestInstance({
         instructions: '',
         refillRemaining: undefined,
@@ -87,43 +86,43 @@ context('PrescriptionDetails', () => {
 
   describe('Go to My VA Health button', () => {
     describe('when status is RefillStatusConstants.TRANSFERRED', () => {
-      it('should display FooterButton', async () => {
+      it('should display FooterButton', () => {
         initializeTestInstance({
           refillStatus: RefillStatusConstants.TRANSFERRED,
         })
-        expect(screen.getByText('Go to My VA Health')).toBeTruthy()
+        expect(screen.getByRole('button', { name: 'Go to My VA Health' })).toBeTruthy()
       })
     })
 
     describe('when status is not RefillStatusConstants.TRANSFERRED', () => {
-      it('should not display FooterButton', async () => {
+      it('should not display FooterButton', () => {
         initializeTestInstance()
-        expect(screen.queryByText('Go to My VA Health')).toBeFalsy()
+        expect(screen.queryByRole('button', { name: 'Go to My VA Health' })).toBeFalsy()
       })
     })
   })
 
   describe('RequestRefillButton', () => {
     describe('when isRefillable is true', () => {
-      it('should display FooterButton', async () => {
+      it('should display FooterButton', () => {
         initializeTestInstance({
           isRefillable: true,
         })
-        expect(screen.getByText('Request refill')).toBeTruthy()
+        expect(screen.getByRole('button', { name: 'Request refill' })).toBeTruthy()
       })
     })
 
     describe('when isRefillable is false', () => {
-      it('should not display FooterButton', async () => {
+      it('should not display FooterButton', () => {
         initializeTestInstance()
-        expect(screen.queryByText('Request refill')).toBeFalsy()
+        expect(screen.queryByRole('button', { name: 'Request refill' })).toBeFalsy()
       })
     })
   })
 
   describe('PrescriptionDetailsBanner', () => {
     describe('when status is RefillStatusConstants.TRANSFERRED', () => {
-      it('should display the PrescriptionsDetailsBanner', async () => {
+      it('should display the PrescriptionsDetailsBanner', () => {
         initializeTestInstance({
           refillStatus: RefillStatusConstants.TRANSFERRED,
         })
@@ -133,7 +132,7 @@ context('PrescriptionDetails', () => {
     })
 
     describe('when status is not RefillStatusConstants.TRANSFERRED', () => {})
-    it('should not display the PrescriptionsDetailsBanner', async () => {
+    it('should not display the PrescriptionsDetailsBanner', () => {
       initializeTestInstance()
       expect(screen.queryByText("We can't refill this prescription in the app")).toBeFalsy()
     })

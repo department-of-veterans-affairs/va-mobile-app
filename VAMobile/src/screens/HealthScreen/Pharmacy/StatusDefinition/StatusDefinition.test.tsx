@@ -1,8 +1,7 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { render, context, mockNavProps } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import StatusDefinition from './StatusDefinition'
 import { RefillStatus, RefillStatusConstants } from 'store/api/types'
 
@@ -21,7 +20,7 @@ context('StatusDefinition', () => {
     render(<StatusDefinition {...props} />)
   }
 
-  it('should display a glossary definition for a refill status', async () => {
+  it('should display a glossary definition for a refill status', () => {
     initializeTestInstance({
       display: 'Active',
       value: RefillStatusConstants.ACTIVE,

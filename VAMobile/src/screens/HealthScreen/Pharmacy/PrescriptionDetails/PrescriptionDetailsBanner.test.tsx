@@ -1,8 +1,7 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { render, context } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 
 context('PrescriptionsDetailsBanner', () => {
@@ -10,7 +9,7 @@ context('PrescriptionsDetailsBanner', () => {
     render(<PrescriptionsDetailsBanner />)
   }
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     initializeTestInstance()
     expect(screen.getByText("We can't refill this prescription in the app")).toBeTruthy()
   })

@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { screen } from '@testing-library/react-native'
+
 import { context, render } from 'testUtils'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 
@@ -16,7 +15,7 @@ jest.mock('utils/hooks', () => {
 })
 
 context('PrescriptionHistoryNotAuthorized', () => {
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     render(<PrescriptionHistoryNotAuthorized />)
     expect(screen.getByText("You can't access your VA prescriptions")).toBeTruthy()
     expect(screen.getByText('To access your VA prescriptions, upgrade your My HealtheVet account to a Premium account.')).toBeTruthy()

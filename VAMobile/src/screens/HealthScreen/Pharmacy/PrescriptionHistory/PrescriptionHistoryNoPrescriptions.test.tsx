@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { screen } from '@testing-library/react-native'
+
 import { context, render } from 'testUtils'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 
@@ -16,7 +15,7 @@ jest.mock('utils/hooks', () => {
 })
 
 context('PrescriptionHistoryNoPrescriptions', () => {
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     render(<PrescriptionHistoryNoPrescriptions />)
     expect(screen.getByText("We can't find any VA prescriptions for you")).toBeTruthy()
     expect(screen.getByText("Your VA prescription list in the app won’t include:")).toBeTruthy()

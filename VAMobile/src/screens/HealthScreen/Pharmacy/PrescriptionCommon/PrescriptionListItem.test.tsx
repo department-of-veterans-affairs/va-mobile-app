@@ -1,8 +1,7 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { render, context } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import PrescriptionListItem, { PrescriptionListItemProps } from './PrescriptionListItem'
 import { PrescriptionAttributeData } from 'store/api'
 import { defaultPrescriptionsList as mockData, emptyStatePrescriptionList as emptyMockData } from 'utils/tests/prescription'
@@ -22,7 +21,7 @@ context('PrescriptionListItem', () => {
 
   describe('when there is no data provided', () => {
     describe('and hideInstructions is set to true', () => {
-      it('should show None noted for everything besides instructions', async () => {
+      it('should show None noted for everything besides instructions', () => {
         initializeTestInstance(
           {
             ...emptyMockData[0].attributes,
@@ -38,7 +37,7 @@ context('PrescriptionListItem', () => {
     })
 
     describe('and hideInstructions is set to false', () => {
-      it('should show None noted for everything including instructions', async () => {
+      it('should show None noted for everything including instructions', () => {
         initializeTestInstance(
           {
             ...emptyMockData[0].attributes,
