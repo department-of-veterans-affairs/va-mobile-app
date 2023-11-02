@@ -113,7 +113,7 @@ context('SyncScreen', () => {
   })
 
   describe('sync completion', () => {
-    it('should complete the sync when all loading is finished', () => {
+    it('should complete the sync when all loading is finished', async () => {
       initializeTestInstance(false, false, true, false)
       await waitFor(() => {
         expect(completeSync).toHaveBeenCalled()
