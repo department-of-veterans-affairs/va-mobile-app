@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { screen, fireEvent } from '@testing-library/react-native'
+
 import { context, render } from 'testUtils'
 import WebviewControls from './WebviewControls'
 import Mock = jest.Mock
@@ -27,23 +26,23 @@ context('WebviewControls', () => {
     render(<WebviewControls {...props} />)
   })
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     expect(screen.getByTestId('Back')).toBeTruthy()
     expect(screen.getByTestId('Forward')).toBeTruthy()
     expect(screen.getByTestId('Open in browser')).toBeTruthy()
   })
 
-  it('should call onBackPressed on back', async () => {
+  it('should call onBackPressed on back', () => {
     fireEvent.press(screen.getByTestId('Back'))
     expect(onBackSpy).toBeCalled()
   })
 
-  it('should call onForwardPressed on forward', async () => {
+  it('should call onForwardPressed on forward', () => {
     fireEvent.press(screen.getByTestId('Forward'))
     expect(onForwardSpy).toBeCalled()
   })
 
-  it('should call onOpenPressed on open', async () => {
+  it('should call onOpenPressed on open', () => {
     fireEvent.press(screen.getByTestId('Open in browser'))
     expect(onOpenSpy).toBeCalled()
   })

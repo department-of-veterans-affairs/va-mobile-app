@@ -1,10 +1,10 @@
 import React from 'react'
+import { Linking } from 'react-native'
+import { screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
-import { screen } from '@testing-library/react-native'
-import { Linking } from 'react-native'
 import { AuthGuard } from './App'
-import { handleTokenCallbackUrl, initialAuthState, initialSnackBarState } from 'store/slices'
+import { handleTokenCallbackUrl, initialAuthState } from 'store/slices'
 
 jest.mock('./utils/remoteConfig', () => ({
   activateRemoteConfig: jest.fn(() => Promise.resolve()),
@@ -38,7 +38,7 @@ context('App', () => {
   })
 
   describe('AuthGuard', () => {
-    it('should render loading spinner while initializing', async () => {
+    it('should render loading spinner while initializing', () => {
       render(<AuthGuard />, {
         preloadedState: {
           auth: { ...initialAuthState, initializing: true },
@@ -48,7 +48,7 @@ context('App', () => {
       expect(screen.getByTestId('Splash-page')).toBeTruthy()
     })
 
-    it('should initilize by registering for linking', async () => {
+    it('should initilize by registering for linking', () => {
       render(<AuthGuard />, {
         preloadedState: {
           auth: { ...initialAuthState },
@@ -57,7 +57,7 @@ context('App', () => {
       expect(Linking.addEventListener).toHaveBeenCalled()
     })
 
-    it('should dispatch handleTokenCallbackUrl when auth token result comes back', async () => {
+    it('should dispatch handleTokenCallbackUrl when auth token result comes back', () => {
       render(<AuthGuard />, {
         preloadedState: {
           auth: { ...initialAuthState, initializing: false },
@@ -74,7 +74,7 @@ context('App', () => {
       expect(handleTokenCallbackUrl).toHaveBeenCalled()
     })
 
-    it('should not dispatch handleTokenCallbackUrl when not an auth result url', async () => {
+    it('should not dispatch handleTokenCallbackUrl when not an auth result url', () => {
       render(<AuthGuard />, {
         preloadedState: {
           auth: { ...initialAuthState, initializing: false },
@@ -92,7 +92,7 @@ context('App', () => {
       expect(handleTokenCallbackUrl).not.toHaveBeenCalled()
     })
 
-    it('should render Login when not authorized', async () => {
+    it('should render Login when not authorized', () => {
       render(<AuthGuard />, {
         preloadedState: {
           auth: { ...initialAuthState, initializing: false },
@@ -105,16 +105,13 @@ context('App', () => {
       expect(screen.queryByText('Payments')).toBeFalsy()
     })
 
-    it('should render AuthedApp when authorized', async () => {
+    it('should render AuthedApp when authorized', () => {
       render(<AuthGuard />, {
         preloadedState: {
           auth: {
             ...initialAuthState,
             initializing: false,
             loggedIn: true,
-          },
-          snackBar: {
-            ...initialSnackBarState,
           },
           settings: {
             remoteConfigActivated: true,

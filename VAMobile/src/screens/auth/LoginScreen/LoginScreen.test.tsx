@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { screen } from '@testing-library/react-native'
+
 import { render, context } from 'testUtils'
 import LoginScreen from './LoginScreen'
 
@@ -11,9 +10,9 @@ context('LoginScreen', () => {
     render(<LoginScreen />)
   })
 
-  it('initializes correctly', async () => {
-    expect(screen.getByText('Sign in')).toBeTruthy()
-    expect(screen.getByText('Find a VA location')).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByRole('button', { name: 'Sign in' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Find a VA location' })).toBeTruthy()
     expect(screen.getByTestId('AppVersionTestID')).toBeTruthy()
   })
 })

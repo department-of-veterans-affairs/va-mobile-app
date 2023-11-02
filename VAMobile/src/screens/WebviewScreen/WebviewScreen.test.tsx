@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { screen } from '@testing-library/react-native'
+
 import { context, mockNavProps, render } from 'testUtils'
 import WebviewScreen from './WebviewScreen'
 
@@ -25,7 +24,7 @@ context('WebviewScreen', () => {
     render(<WebviewScreen {...props} />)
   })
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     expect(screen.getByTestId('Webview-page')).toBeTruthy()
     expect(screen.getByTestId('Webview-web')).toBeTruthy()
     expect(screen.getByTestId('Back')).toBeTruthy()
