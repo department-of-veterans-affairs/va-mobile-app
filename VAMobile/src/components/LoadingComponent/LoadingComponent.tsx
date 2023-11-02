@@ -13,8 +13,8 @@ export type LoadingComponentProps = {
   a11yLabel?: string
   /** Param to show the spinner icon only and not the full page with text */
   justTheSpinnerIcon?: boolean
-  /** Param to show the spinner icon only and not the full page with text */
-  noBoxSpinner?: boolean
+  /** Param to show the spinner with text, but no box */
+  inlineSpinner?: boolean
   /** spinner height*/
   spinnerHeight?: number
   /** spinner width */
@@ -24,7 +24,7 @@ export type LoadingComponentProps = {
 }
 
 /**A common component to show a loading spinner */
-const LoadingComponent: FC<LoadingComponentProps> = ({ text, a11yLabel, justTheSpinnerIcon, spinnerHeight, spinnerWidth, spinnerColor, noBoxSpinner }) => {
+const LoadingComponent: FC<LoadingComponentProps> = ({ text, a11yLabel, justTheSpinnerIcon, spinnerHeight, spinnerWidth, spinnerColor, inlineSpinner }) => {
   const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
@@ -66,7 +66,7 @@ const LoadingComponent: FC<LoadingComponentProps> = ({ text, a11yLabel, justTheS
         <Box alignItems="center" justifyContent="center">
           {getSpinner()}
         </Box>
-      ) : noBoxSpinner ? (
+      ) : inlineSpinner ? (
         <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
           {getSpinner()}
           <Box mt={theme.dimensions.condensedMarginBetween}>
