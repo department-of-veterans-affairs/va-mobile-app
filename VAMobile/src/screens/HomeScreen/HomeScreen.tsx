@@ -3,15 +3,18 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
+import { AuthState } from 'store/slices'
 import { Box, CategoryLanding, EncourageUpdateAlert, FocusedNavHeaderText, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -35,6 +38,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const { notificationPayload } = useSelector<RootState, AuthState>((state) => state.auth)
 
   useEffect(() => {
     navigation.setOptions({
@@ -80,6 +84,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   return (
     <CategoryLanding headerButton={headerButton}>
       <Box flex={1} justifyContent="flex-start">
+        <TextView mb={10}>{`Notification Payload: ${JSON.stringify(notificationPayload)}`}</TextView>
         <EncourageUpdateAlert />
         <Nametag />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
