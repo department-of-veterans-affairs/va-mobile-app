@@ -1,17 +1,13 @@
-import 'react-native'
 import React from 'react'
-
 import { fireEvent, screen } from '@testing-library/react-native'
+
 import { context, render, mockNavProps } from 'testUtils'
 import {
   DirectDepositState,
   ErrorsState,
-  initialAuthState,
   initialErrorsState,
   initializeErrorsByScreenID,
-  initialMilitaryServiceState,
 } from 'store/slices'
-import { ServiceData } from 'store/api/types'
 import DirectDepositScreen from './index'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -24,13 +20,6 @@ jest.mock('utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
-
-const authorizedMilitaryState = {
-  militaryService: {
-    ...initialMilitaryServiceState,
-    serviceHistory: [{} as ServiceData],
-  },
-}
 
 context('DirectDepositScreen', () => {
   let mockNavigateToSpy: jest.Mock
@@ -53,10 +42,8 @@ context('DirectDepositScreen', () => {
 
     render(<DirectDepositScreen {...mockNavProps()} />, {
       preloadedState: {
-        auth: { ...initialAuthState },
         directDeposit,
         errors: errorsState,
-        ...authorizedMilitaryState,
       },
     })
   }
@@ -66,14 +53,14 @@ context('DirectDepositScreen', () => {
   })
 
   describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
+    it('should show loading screen', () => {
       initializeTestInstance(true)
       expect(screen.getByText('Loading your direct deposit information...'))
     })
   })
 
   describe('when there is bank data', () => {
-    it('should display the button with the given bank data', async () => {
+    it('should display the button with the given bank data', () => {
       expect(screen.getByText('Account'))
       expect(screen.getByText('BoA'))
       expect(screen.getByText('******1234'))
@@ -82,19 +69,14 @@ context('DirectDepositScreen', () => {
   })
 
   describe('when there is no bank data', () => {
-    it('should render the button with the text Add your bank account information', async () => {
-      render(<DirectDepositScreen {...mockNavProps()} />, {
-        preloadedState: {
-          auth: { ...initialAuthState },
-          ...authorizedMilitaryState,
-        },
-      })
+    it('should render the button with the text Add your bank account information', () => {
+      render(<DirectDepositScreen {...mockNavProps()} />)
       expect(screen.getByText('Add your bank account information'))
     })
   })
 
   describe('when bank info is clicked', () => {
-    it('should call navigation navigate', async () => {
+    it('should call navigation navigate', () => {
       fireEvent.press(screen.getByTestId('account-boa-******1234-savings-account'))
       expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit', { displayTitle: 'Edit account' })
       expect(mockNavigateToSpy).toHaveBeenCalled()
@@ -102,7 +84,7 @@ context('DirectDepositScreen', () => {
   })
 
   describe('when common error occurs', () => {
-    it('should render error component', async () => {
+    it('should render error component', () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 

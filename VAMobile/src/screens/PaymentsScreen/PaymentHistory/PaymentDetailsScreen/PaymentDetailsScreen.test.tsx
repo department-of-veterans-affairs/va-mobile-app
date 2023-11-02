@@ -1,11 +1,10 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
-import { initialAuthState, initialPaymentsState } from 'store/slices'
+import { initialPaymentsState } from 'store/slices'
 import PaymentDetailsScreen from './PaymentDetailsScreen'
 import { formatDateUtc } from 'utils/formattingUtils'
-import { screen } from '@testing-library/react-native'
 
 context('PaymentDetailsScreen', () => {
   let props: any
@@ -26,7 +25,6 @@ context('PaymentDetailsScreen', () => {
 
     render(<PaymentDetailsScreen {...props} />, {
       preloadedState: {
-        auth: { ...initialAuthState },
         payments: {
           ...initialPaymentsState,
           paymentsById: {
@@ -61,11 +59,10 @@ context('PaymentDetailsScreen', () => {
   }
 
   describe('when showing payment info', () => {
-    it('should show payment details information when direct deposit', async () => {
+    it('should show payment details information when direct deposit', () => {
       initializeTestInstance()
       expect(screen.getByText(formattedDate)).toBeTruthy()
-      expect(screen.getByText(formattedDate)).toBeTruthy()
-      expect(screen.getByText('Compensation & Pension - Recurring')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Compensation & Pension - Recurring' })).toBeTruthy()
       expect(screen.getByText('Amount')).toBeTruthy()
       expect(screen.getByText('$3,746.20')).toBeTruthy()
       expect(screen.getByText('Method')).toBeTruthy()
@@ -76,10 +73,10 @@ context('PaymentDetailsScreen', () => {
       expect(screen.getByText('********0567')).toBeTruthy()
     })
 
-    it('should show payment details information when paper check', async () => {
+    it('should show payment details information when paper check', () => {
       initializeTestInstance('2')
       expect(screen.getByText(formattedDate)).toBeTruthy()
-      expect(screen.getByText('Compensation & Pension - Recurring')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Compensation & Pension - Recurring' })).toBeTruthy()
       expect(screen.getByText('Amount')).toBeTruthy()
       expect(screen.getByText('$3,746.20')).toBeTruthy()
       expect(screen.getByText('Method')).toBeTruthy()
