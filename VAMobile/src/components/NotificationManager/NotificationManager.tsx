@@ -1,4 +1,4 @@
-import { AuthState, dispatchSetNotificationPayload } from 'store/slices'
+import { AuthState } from 'store/slices'
 import { Events } from 'constants/analytics'
 import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
@@ -56,8 +56,6 @@ const NotificationManager: FC = ({ children }) => {
         dispatch(dispatchSetTappedForegroundNotification())
       }
 
-      dispatch(dispatchSetNotificationPayload(notification.payload))
-
       // Open deep link from the notification when present. If the user is
       // not logged in, store the link so it can be opened after authentication.
       if (notification.payload.url) {
@@ -84,7 +82,6 @@ const NotificationManager: FC = ({ children }) => {
       .then((notification) => {
         logAnalyticsEvent(Events.vama_notification_click(notification?.payload.url))
         console.debug('Initial notification was:', notification || 'N/A')
-        dispatch(dispatchSetNotificationPayload(notification?.payload))
 
         if (notification?.payload.url) {
           dispatch(dispatchSetInitialUrl(notification.payload.url))
