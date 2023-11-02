@@ -33,7 +33,7 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
       wg.errorMsgBody = errorMsgBodyOverride
       navigation.goBack()
     }
-  }, [onSaveClicked, navigation, wg, enabledOverride, appUpdateButtonOverride, errorMsgTitleOverride, errorMsgBodyOverride])
+  }, [onSaveClicked, navigation, wg, enabledOverride, appUpdateButtonOverride, typeOverride, errorMsgTitleOverride, errorMsgBodyOverride])
 
   const toggleItems: SimpleListItemObj[] = [
     {
