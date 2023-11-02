@@ -146,14 +146,6 @@
     "wdio-chromedriver-service": "^7.2.2",
     "webdriverio": "^7.26.0"
   },
-  "jest-junit": {
-    "suiteName": "vamobile",
-    "outputName": "junit-vamobile.xml",
-    "suiteNameTemplate": "vamobile.\"{title}\"",
-    "classNameTemplate": "vamobile.\"{classname}\"",
-    "outputDirectory": "./coverage/junit",
-    "addFileAttribute": "true"
-  },
   "resolutions": {
     "@react-native-firebase/app/**/json5": "^1.0.2",
     "@react-native-firebase/app/**/minimist": "^1.2.6",
