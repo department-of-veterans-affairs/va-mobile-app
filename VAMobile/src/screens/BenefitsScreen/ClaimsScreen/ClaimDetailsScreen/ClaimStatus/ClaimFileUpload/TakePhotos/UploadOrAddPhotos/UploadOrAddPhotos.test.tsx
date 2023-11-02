@@ -1,8 +1,7 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import UploadOrAddPhotos from './UploadOrAddPhotos'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { InitialState } from 'store/slices'
@@ -44,14 +43,14 @@ context('UploadOrAddPhotos', () => {
     })
   }
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     initializeTestInstance()
-    expect(screen.getByText('Upload photos')).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'Upload photos' })).toBeTruthy()
     expect(screen.getByText('Add photo')).toBeTruthy()
     expect(screen.getByText('of 10 photos')).toBeTruthy()
     expect(screen.getByText('0 Bytes of 50MB')).toBeTruthy()
     expect(screen.getByTestId('Document type picker required')).toBeTruthy()
     expect(screen.getByRole('checkbox')).toBeTruthy()
-    expect(screen.getByText('Submit file')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Submit file' })).toBeTruthy()
   })
 })

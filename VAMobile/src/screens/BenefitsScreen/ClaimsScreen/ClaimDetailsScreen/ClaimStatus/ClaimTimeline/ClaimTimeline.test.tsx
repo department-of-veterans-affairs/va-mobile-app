@@ -1,8 +1,8 @@
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
 import { claim } from '../../../claimData'
-import { screen } from '@testing-library/react-native'
 import ClaimTimeline from './ClaimTimeline'
 
 context('ClaimTimeline', () => {
@@ -18,7 +18,7 @@ context('ClaimTimeline', () => {
     render(<ClaimTimeline {...props} />)
   }
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     initializeTestInstance(false)
     expect(screen.queryByText('You have 2 file requests from VA')).toBeFalsy()
     expect(screen.getByTestId('Step 1 of 5. completed. Claim received June 6, 2019')).toBeTruthy()

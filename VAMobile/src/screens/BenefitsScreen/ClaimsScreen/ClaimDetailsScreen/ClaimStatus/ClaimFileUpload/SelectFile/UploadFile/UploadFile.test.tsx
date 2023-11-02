@@ -1,13 +1,12 @@
-import 'react-native'
 import React from 'react'
+import { ImagePickerResponse } from 'react-native-image-picker'
+import { screen, fireEvent } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
-import { screen, fireEvent } from '@testing-library/react-native'
 import UploadFile from './UploadFile'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { InitialState } from 'store/slices'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { ImagePickerResponse } from 'react-native-image-picker'
 
 const mockAlertSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -59,8 +58,8 @@ context('UploadFile', () => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(screen.getByText('Upload files')).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByRole('header', { name: 'Upload files' })).toBeTruthy()
     expect(screen.getByTestId('File 1 0.1 kilobytes')).toBeTruthy()
     expect(screen.getByTestId('Document type picker required')).toBeTruthy()
     expect(screen.getByLabelText('The file I uploaded is evidence for this claim. (Required) ')).toBeTruthy()
@@ -68,7 +67,7 @@ context('UploadFile', () => {
   })
 
   describe('on click of the upload button', () => {
-    it('should display an error if the checkbox is not checked', async () => {
+    it('should display an error if the checkbox is not checked', () => {
       fireEvent.press(screen.getByTestId('Document type picker required'))
       fireEvent.press(screen.getByTestId('Civilian Police Reports'))
       fireEvent.press(screen.getByTestId('Done'))
@@ -77,7 +76,7 @@ context('UploadFile', () => {
       expect(mockAlertSpy).not.toHaveBeenCalled()
     })
 
-    it('should bring up confirmation requirements are met', async () => {
+    it('should bring up confirmation requirements are met', () => {
       fireEvent.press(screen.getByTestId('Document type picker required'))
       fireEvent.press(screen.getByTestId('Civilian Police Reports'))
       fireEvent.press(screen.getByTestId('Done'))

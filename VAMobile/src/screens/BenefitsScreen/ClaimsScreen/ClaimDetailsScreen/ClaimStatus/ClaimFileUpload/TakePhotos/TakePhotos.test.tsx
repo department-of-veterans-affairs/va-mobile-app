@@ -1,8 +1,7 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import TakePhotos from './TakePhotos'
 
 context('TakePhotos', () => {
@@ -19,16 +18,16 @@ context('TakePhotos', () => {
     render(<TakePhotos {...props} />)
   }
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     initializeTestInstance()
     expect(screen.getByText('This feature is not yet accessible to screen readers')).toBeTruthy()
-    expect(screen.getByText('Select photos to upload for')).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'Select photos to upload for' })).toBeTruthy()
     expect(screen.getByText('To submit evidence that supports this claim, take a picture of each page of your file. Then upload the photos to this app.')).toBeTruthy()
     expect(screen.getByText("You can submit up to 10 photos. If you need to submit a file that's more than 10 pages, you may want to upload your file on VA.gov.")).toBeTruthy()
     expect(screen.getByText('Maximum file size:')).toBeTruthy()
     expect(screen.getByText('50 MB')).toBeTruthy()
     expect(screen.getByText('Accepted file types:')).toBeTruthy()
     expect(screen.getByText('PDF (unlocked), GIF, JPEG, JPG, BMP, TXT')).toBeTruthy()
-    expect(screen.getByText('Take or select photos')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Take or select photos' })).toBeTruthy()
   })
 })

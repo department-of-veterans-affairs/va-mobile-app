@@ -1,14 +1,14 @@
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import PhaseIndicator from './PhaseIndicator'
 
 context('PhaseIndicator', () => {
   const initializeTextInstance = (phase: number, current: number) => {
     render(<PhaseIndicator phase={phase} current={current} />)
   }
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     initializeTextInstance(1, 1)
     expect(screen.getByText('1')).toBeTruthy()
     initializeTextInstance(1, 2)
