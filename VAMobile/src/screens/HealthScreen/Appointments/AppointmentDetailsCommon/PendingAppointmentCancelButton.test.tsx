@@ -1,8 +1,7 @@
-import 'react-native'
 import React from 'react'
+import { screen, fireEvent } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
-import { screen, fireEvent } from '@testing-library/react-native'
 import PendingAppointmentCancelButton from './PendingAppointmentCancelButton'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
@@ -26,10 +25,10 @@ context('PendingAppointmentCancelButton', () => {
     render(<PendingAppointmentCancelButton attributes={props} />)
   }
 
-  it('initializes correctly and should call the useDestructive hook', async () => {
+  it('initializes correctly and should call the useDestructive hook', () => {
     initializeTestInstance()
-    expect(screen.getByText('Cancel request')).toBeTruthy()
-    fireEvent.press(screen.getByText('Cancel request'))
+    expect(screen.getByRole('button', { name: 'Cancel request' })).toBeTruthy()
+    fireEvent.press(screen.getByRole('button', { name: 'Cancel request' }))
     expect(mockAlertSpy).toHaveBeenCalled()
   })
 })

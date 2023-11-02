@@ -1,8 +1,7 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import PreferredDateAndTime from './PreferredDateAndTime'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
@@ -33,7 +32,7 @@ context('PreferredDateAndTime', () => {
     render(<PreferredDateAndTime attributes={props} />)
   }
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     initializeTestInstance()
     expect(screen.getByText('Preferred date and time')).toBeTruthy()
     expect(screen.getByText('10/01/2021 in the afternoon')).toBeTruthy()

@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { screen } from '@testing-library/react-native'
+
 import { context, render } from 'testUtils'
 import PreferredAppointmentType from './PreferredAppointmentType'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
@@ -21,7 +20,7 @@ context('PreferredAppointmentType', () => {
   }
 
   describe('when appointmentType is COMMUNITY_CARE', () => {
-    it('and phoneOnly is false should show "Office visit"', async () => {
+    it('and phoneOnly is false should show "Office visit"', () => {
       initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE)
       expect(screen.getByText('Preferred type of appointment')).toBeTruthy()
       expect(screen.getByText('Office visit')).toBeTruthy()
@@ -29,7 +28,7 @@ context('PreferredAppointmentType', () => {
   })
 
   describe('when appointmentType is video', () => {
-    it('should show "Video"', async () => {
+    it('should show "Video"', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS)
       expect(screen.getByText('Video')).toBeTruthy()
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
@@ -43,7 +42,7 @@ context('PreferredAppointmentType', () => {
 
   describe('when appointmentType is COMMUNITY_CARE ', () => {
     describe('and phoneOnly is true ', () => {
-      it('should show "Phone call"', async () => {
+      it('should show "Phone call"', () => {
         initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE, true)
         expect(screen.getByText('Phone call')).toBeTruthy()
       })
@@ -52,7 +51,7 @@ context('PreferredAppointmentType', () => {
 
   describe('when appointmentType VA', () => {
     describe('and phoneOnly is false ', () => {
-      it('should show "Office visit"', async () => {
+      it('should show "Office visit"', () => {
         initializeTestInstance(AppointmentTypeConstants.VA)
         expect(screen.getByText('Office visit')).toBeTruthy()
       })

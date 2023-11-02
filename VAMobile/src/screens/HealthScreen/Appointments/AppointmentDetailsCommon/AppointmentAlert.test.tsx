@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { screen } from '@testing-library/react-native'
+
 import { context, render } from 'testUtils'
 import AppointmentAlert from './AppointmentAlert'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
@@ -24,31 +23,31 @@ context('AppointmentAlert', () => {
     render(<AppointmentAlert attributes={props} />)
   }
 
-  it('should not show alert for booked appointments', async () => {
+  it('should not show alert for booked appointments', () => {
     initializeTestInstance()
     expect(screen.queryByText('VA Long Beach Healthcare System canceled this appointment.')).toBeFalsy()
   })
 
-  it('should not show alert for hidden appointments', async () => {
+  it('should not show alert for hidden appointments', () => {
     initializeTestInstance(AppointmentStatusConstants.HIDDEN)
     expect(screen.queryByText('VA Long Beach Healthcare System canceled this appointment.')).toBeFalsy()
   })
 
   describe('when an appointment is CANCELLED', () => {
     describe('when a facility cancels an appointment', () => {
-      it('should display facility name', async () => {
+      it('should display facility name', () => {
         initializeTestInstance(AppointmentStatusConstants.CANCELLED)
         expect(screen.getByText('VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
       })
 
-      it('should display "facility"', async () => {
+      it('should display "facility"', () => {
         initializeTestInstance(AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK, { name: '' })
         expect(screen.getByText('Facility canceled this appointment.')).toBeTruthy()
       })
     })
 
     describe('when you cancels an appointment', () => {
-      it('should display "You"', async () => {
+      it('should display "You"', () => {
         initializeTestInstance(AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT)
         expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
       })
@@ -56,7 +55,7 @@ context('AppointmentAlert', () => {
   })
 
   describe('when an appointment is SUBMITTED', () => {
-    it('should display facility name', async () => {
+    it('should display facility name', () => {
       initializeTestInstance(AppointmentStatusConstants.SUBMITTED)
       expect(screen.getByText('The time and date of this appointment are still to be determined.')).toBeTruthy()
     })
