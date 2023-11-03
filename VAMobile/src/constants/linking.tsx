@@ -55,6 +55,7 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'HealthTab',
                   state: {
+                    // The ID from the notification payload is sent encoded, so it needs to be decoded
                     routes: [{ name: 'Health' }, { name: 'Appointments' }, { name: 'UpcomingAppointmentDetails', params: { vetextID: decodeURIComponent(pathParts[1]) } }],
                   },
                 },
