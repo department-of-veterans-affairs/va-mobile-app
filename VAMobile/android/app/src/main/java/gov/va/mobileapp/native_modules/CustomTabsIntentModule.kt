@@ -112,7 +112,7 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
             })
             cookieManager?.flush()
         } catch (e: Exception) {
-            promise.reject(e)
+            promise.resolve(false)
         }
     }
 
