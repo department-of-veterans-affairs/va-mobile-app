@@ -11,4 +11,5 @@
 
 @interface RCT_EXTERN_MODULE(RNAuthSession, NSObject)
 RCT_EXTERN_METHOD(beginAuthSession: (NSString *)authUrl codeChallenge:(NSString *)codeChallenge resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(clearCookies: resolver:(RCTPromiseResolveBlock)resolve)
 @end
