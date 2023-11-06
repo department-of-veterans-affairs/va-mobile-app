@@ -29,8 +29,6 @@ export const CommonE2eIdConstants = {
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
   VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
   MESSAGES_ROW_TEXT: 'Messages',
-  SIGN_OUT_BTN_ID: 'Sign out',
-  SIGN_OUT_CONFIRM_TEXT: 'Sign out?',
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'You’re leaving the app',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
@@ -40,6 +38,9 @@ export const CommonE2eIdConstants = {
   VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
   CLAIMS_BUTTON_TEXT: 'Claims',
   CLAIMS_HISTORY_BUTTON_TEXT: 'Claims history',
+  CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
+  DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
+  RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
 }
 
 
@@ -178,6 +179,23 @@ export async function checkImages(screenshotPath) {
 		failureThresholdType: 'percent'})
 }
 
+/*This function resets the in-app review counter then relaunches app, so the review pop-up doesn't break tests
+ * 
+ * @param matchString - string of the text or id to match
+ * @param findbyText - boolean to search by testID or Text
+ * @param cancelPopUp - boolean to either cancel the popUp or leave the app
+ */
+export async function resetInAppReview() {
+  await device.launchApp({ newInstance: true })
+  await loginToDemoMode()
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+	await element(by.id(CommonE2eIdConstants.RESET_INAPP_REVIEW_BUTTON_TEXT)).tap()
+  await device.launchApp({ newInstance: true })
+  await loginToDemoMode()	
+}
+
 /**
  * Single-source collection for 'open this screen' functions
  * Having multiple functions repeats the line of code, but
@@ -258,6 +276,10 @@ export async function openClaims() {
 
 export async function openClaimsHistory() {
 	await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap() 
+}
+
+export async function openDeveloperScreen() { 
+  await element(by.text(CommonE2eIdConstants.DEVELOPER_SCREEN_ROW_TEXT)).tap()
 }
 
 /**

@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
-import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
+import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
@@ -49,16 +49,10 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal, claimId, claimType, cla
     )
   }
 
-  const clickToCallProps: LinkButtonProps = {
-    displayedText: displayedTextPhoneNumber(t('8008271000')),
-    a11yLabel: a11yLabelID(t('8008271000')),
-    numberOrUrlLink: t('8008271000'),
-    linkType: LinkTypeOptionsConstants.call,
-    fireAnalytic: () => {
-      if (claimId && claimType && claimPhase) {
-        logAnalyticsEvent(Events.vama_claim_call(claimId, claimType, claimPhase))
-      }
-    },
+  const fireAnalytic = () => {
+    if (claimId && claimType && claimPhase) {
+      logAnalyticsEvent(Events.vama_claim_call(claimId, claimType, claimPhase))
+    }
   }
 
   return (
@@ -73,9 +67,7 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal, claimId, claimType, cla
           {t('claimDetails.callVA')}
         </TextView>
       </Box>
-      <Box>
-        <ClickForActionLink {...clickToCallProps} testID="ClaimsVANumberTestID" />
-      </Box>
+      <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} fireAnalytic={fireAnalytic} />
       {renderAppealData()}
     </TextArea>
   )
