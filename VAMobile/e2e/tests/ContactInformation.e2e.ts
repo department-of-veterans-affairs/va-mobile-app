@@ -156,6 +156,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   })
 
   it(phoneType + ': should tap on the cancel button and verify a delete changes pop up appears', async () => {
+    await waitFor(element(by.text('Cancel'))).toBeVisible().withTimeout(4000)
     await element(by.text('Cancel')).tap()
     await expect(element(by.text('Delete changes to your ' + phoneType.toLowerCase() + ' phone number?'))).toExist()
     await expect(element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT))).toExist()
@@ -169,7 +170,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   })
 
   it(phoneType + ': should tap cancel, tap delete changes, and verify the contact info page is displayed', async () => {
-    await waitFor(element(by.text('Cancel'))).toBeVisible().withTimeout(4000)
+    //await waitFor(element(by.text('Cancel'))).toBeVisible().withTimeout(4000)
     await element(by.text('Cancel')).tap()
     await element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(phoneID))).toExist()
