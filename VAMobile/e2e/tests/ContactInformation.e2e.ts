@@ -142,13 +142,16 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
     if(phoneType === 'Work') {     
       await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
       await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()
+      await setTimeout(2000)
     } else {
       await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
       await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
       await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()   
+      await setTimeout(2000)
     }
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
+    await setTimeout(2000)
   })
 
   it(phoneType + ': should tap on the cancel button and verify a delete changes pop up appears', async () => {
@@ -178,10 +181,12 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
     if(phoneType === 'Work') { 
       await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
       await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()
+      await setTimeout(2000)
     } else {
       await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
       await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
       await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).tapReturnKey()   
+      await setTimeout(2000)
     }
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
