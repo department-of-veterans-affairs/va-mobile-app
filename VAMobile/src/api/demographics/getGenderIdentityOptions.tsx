@@ -28,7 +28,6 @@ export const useGenderIdentityOptions = () => {
   return useQuery({
     queryKey: demographicsKeys.genderIdentityOptions,
     queryFn: () => getGenderIdentityOptions(),
-    initialData: {},
     meta: {
       analyticsUserProperty: UserAnalytics.vama_uses_profile(),
       errorName: 'getGenderIdentityOptions: Service error',

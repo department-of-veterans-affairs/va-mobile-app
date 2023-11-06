@@ -1,5 +1,5 @@
 import { expect, device, by, element, waitFor } from 'detox'
-import { loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
 import { setTimeout } from "timers/promises"
 
 export const ClaimsE2eIdConstants = {
@@ -26,7 +26,6 @@ export const ClaimsE2eIdConstants = {
   MAXIMUM_FILE_SIZE_LABEL: '50 megabytes',
   CLAIMS_DETAILS_SCREEN_ID: 'ClaimDetailsScreen',
   CLAIMS_HISTORY_TEXT: 'Claims history',
-  CANCEL_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
 }
 
 beforeAll(async () => {
@@ -88,9 +87,9 @@ describe('Claims Screen', () => {
   it('should verify that the need help? section display the correct information', async () => {
     await expect(element(by.text('Need help?'))).toExist()
     await expect(element(by.text('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'))).toExist()
-    await expect(element(by.id('ClaimsVANumberTestID'))).toExist()
+    await expect(element(by.text('CallVATestID'))).toExist()
     if (device.getPlatform() === 'android') {
-			await element(by.id('ClaimsVANumberTestID')).tap()
+			await element(by.id('CallVATestID')).tap()
 			await setTimeout(5000)
 			await device.takeScreenshot('ClaimsNeedHelpAndroidCallingScreen')
 			await device.launchApp({newInstance: false})
@@ -141,18 +140,22 @@ describe('Claims Screen', () => {
   })
 
   it('should tap select a file and verify the options given', async () => {
-    await element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(1).tap()
+    if(device.getPlatform() === 'android') {
+      await element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(0).tap()
+    } else {
+      await element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(0).tap()
+    }
     await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_FILE_FOLDER_OPTION_TEXT))).toExist()
-    await expect(element(by.text(ClaimsE2eIdConstants.CANCEL_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT))).toExist()
   })
 
   it('should navigate back to the request <x> select a file screen', async () => {
-    if(device.getPlatform() == 'android') {
-      await element(by.text(ClaimsE2eIdConstants.CANCEL_TEXT)).tap()
+    if(device.getPlatform() === 'android') {
+      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
     } else {
-      await element(by.text(ClaimsE2eIdConstants.CANCEL_TEXT)).atIndex(1).tap()
+      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).atIndex(1).tap()
     }
-    await element(by.text('Cancel')).tap() 
+    await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap() 
   })
 
   it('should select take or select photos and verify the correct infomation is displayed', async () => {
@@ -165,7 +168,7 @@ describe('Claims Screen', () => {
   
   it('should select take or select photos and verify the options given', async () => {
     await element(by.id('takePhotosTestID')).scrollTo('bottom')
-    if(device.getPlatform() == 'android') {
+    if(device.getPlatform() === 'android') {
       await element(by.id(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).atIndex(0).tap()
     } else {
       await element(by.id(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).atIndex(1).tap()
@@ -175,13 +178,13 @@ describe('Claims Screen', () => {
   })
 
   it('should navigate back to the file request screen', async () => {
-    if(device.getPlatform() == 'android') {
-      await element(by.text(ClaimsE2eIdConstants.CANCEL_TEXT)).tap()
+    if(device.getPlatform() === 'android') {
+      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
 
     } else {
-      await element(by.text(ClaimsE2eIdConstants.CANCEL_TEXT)).atIndex(1).tap()
+      await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).atIndex(1).tap()
     }
-    await element(by.text('Cancel')).tap() 
+    await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap() 
     await element(by.text('Requests')).tap()
   })
 
@@ -219,10 +222,10 @@ describe('Claims Screen', () => {
   it('should verify that the need help? section display the correct information for closed claims', async () => {
     await expect(element(by.text('Need help?'))).toExist()
     await expect(element(by.text('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'))).toExist()
-    await expect(element(by.id('ClaimsVANumberTestID'))).toExist()
+    await expect(element(by.id('CallVATestID'))).toExist()
     if (device.getPlatform() === 'android') {
       await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
-			await element(by.id('ClaimsVANumberTestID')).tap()
+			await element(by.id('CallVATestID')).tap()
 			await setTimeout(5000)
 			await device.takeScreenshot('AndroidCallingScreen')
 			await device.launchApp({newInstance: false})

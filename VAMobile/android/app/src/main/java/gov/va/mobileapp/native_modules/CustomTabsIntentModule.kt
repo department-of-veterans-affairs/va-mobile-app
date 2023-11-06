@@ -1,6 +1,8 @@
 package gov.va.mobileapp.native_modules
 
+import android.content.Intent
 import android.content.Intent.*
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
@@ -16,12 +18,7 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
     @ReactMethod
     fun beginAuthSession(
             authEndPoint: String,
-            clientId: String,
-            redirectUrl: String,
-            authScopes: String,
             codeChallenge: String,
-            state: String,
-            SISEnabled: Boolean,
             promise: Promise
     ) {
         try {
@@ -32,18 +29,8 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
                                 with(it) {
                                     appendQueryParameter("code_challenge_method", "S256")
                                     appendQueryParameter("code_challenge", codeChallenge)
-
-                                    if (SISEnabled) {
-                                        appendQueryParameter("application", "vamobile")
-                                        appendQueryParameter("oauth", "true")
-                                    } else {
-                                        appendQueryParameter("client_id", clientId)
-                                        appendQueryParameter("redirect_uri", redirectUrl)
-                                        appendQueryParameter("scope", authScopes)
-                                        appendQueryParameter("response_type", "code")
-                                        appendQueryParameter("response_mode", "query")
-                                        appendQueryParameter("state", state)
-                                    }
+                                    appendQueryParameter("application", "vamobile")
+                                    appendQueryParameter("oauth", "true")
                                 }
                             }
                             .build()
@@ -82,8 +69,14 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
                             }
                             .build()
 
-            // Prevent login issues on Android when Firefox is the default browser
-            customTabsIntent.intent.flags = FLAG_ACTIVITY_NEW_TASK
+            // Check default browser to prevent Firefox login issue (Android only)
+            val browserIntent = Intent("android.intent.action.VIEW", Uri.parse("https://"));
+            val resolveInfo = context.packageManager.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY);
+            val packageName = resolveInfo?.activityInfo?.packageName;
+            if (packageName != null && packageName.contains("firefox")) {
+                // Default browser is Firefox. Need flag for login to succeed
+                customTabsIntent.intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+            }
 
             context.currentActivity?.apply { customTabsIntent.launchUrl(this, authURI) }
             promise.resolve(true)

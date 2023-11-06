@@ -43,10 +43,6 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 30,
   },
-  AppointmentRequestCtaBtnText: {
-    fontSize: 18,
-    lineHeight: 27,
-  },
   BitterBoldHeading: {
     fontSize: 26,
     lineHeight: 32,
@@ -133,7 +129,6 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
 const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
   return {
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
-    AppointmentRequestCtaBtnText: buildFont('SourceSansPro-Bold', fontSizes.AppointmentRequestCtaBtnText, scheme.text.AppointmentRequestCtaBtnText),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
     DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.descriptiveBackButton),

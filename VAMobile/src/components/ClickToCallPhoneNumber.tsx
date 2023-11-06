@@ -4,7 +4,6 @@ import React, { FC } from 'react'
 import { AppointmentPhone } from 'store/api/types'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp } from 'utils/accessibility'
 import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'utils/formattingUtils'
 
 type ClickToCallPhoneNumberProps = {
@@ -20,10 +19,12 @@ type ClickToCallPhoneNumberProps = {
   ttyBypass?: boolean
   /** color bypass */
   colorOverride?: string
+  /** optional function to fire analytic events when the link is clicked */
+  fireAnalytic?: () => void
 }
 
 /**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
-const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center, a11yLabel, ttyBypass, colorOverride }) => {
+const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center, a11yLabel, ttyBypass, colorOverride, fireAnalytic }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   if (!phone) {
@@ -50,8 +51,8 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
 
   return (
     <Box alignItems={center ? 'center' : undefined}>
-      <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} testID="CallVATestID" />
-      {!ttyBypass && <ClickForActionLink {...ttyProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} testID="CallTTYTestID" />}
+      <ClickForActionLink {...clickToCallProps} testID="CallVATestID" fireAnalytic={fireAnalytic} />
+      {!ttyBypass && <ClickForActionLink {...ttyProps} testID="CallTTYTestID" />}
     </Box>
   )
 }

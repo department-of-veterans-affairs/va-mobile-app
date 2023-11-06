@@ -242,12 +242,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       <Box mb={theme.dimensions.contentMarginBottom}>
         {getFormattedPhoneNumber(phoneData) !== '' && (
           <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-            <VAButton
-              onPress={onDeletePressed}
-              label={t('contactInformation.removeData', { pageName: buttonTitle })}
-              buttonType={ButtonTypesConstants.buttonDestructive}
-              a11yHint={t('contactInformation.removeData.a11yHint', { pageName: buttonTitle })}
-            />
+            <VAButton onPress={onDeletePressed} label={t('contactInformation.removeData', { pageName: buttonTitle })} buttonType={ButtonTypesConstants.buttonDestructive} />
           </Box>
         )}
         <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />

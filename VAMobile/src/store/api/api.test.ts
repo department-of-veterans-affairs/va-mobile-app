@@ -65,13 +65,4 @@ context('api', () => {
     expect(fetch).toHaveBeenCalledWith('https://test-api/foo', expect.objectContaining({ method: 'POST', body, headers }))
     expect(result).toEqual(expect.objectContaining({ res: 'response' }))
   })
-
-  it('should handle 401 and make the call again', async () => {
-    fetch.mockResolvedValueOnce({ status: 401, text: () => Promise.resolve('unauthorized') }).mockResolvedValueOnce({ status: 200, json: () => Promise.resolve({ foo: 'test' }) })
-
-    setRefreshToken('refresh')
-
-    const result = await get<Types.UserData>('/foo')
-    expect(result).toEqual(expect.objectContaining({ foo: 'test' }))
-  })
 })

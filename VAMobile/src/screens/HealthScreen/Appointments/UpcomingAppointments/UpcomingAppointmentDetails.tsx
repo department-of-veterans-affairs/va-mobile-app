@@ -25,7 +25,6 @@ import {
 } from 'store/api/types'
 import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail } from 'store/slices'
 import {
-  BackButton,
   Box,
   ButtonTypesConstants,
   ClickForActionLink,
@@ -40,7 +39,6 @@ import {
   VAButton,
   VAButtonProps,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -98,12 +96,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         ),
       )
   }, [dispatch, appointmentID, pendingAppointment, attributes])
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => <BackButton onPress={goBack} canGoBack={true} label={BackButtonLabelConstants.back} showCarat={true} />,
-    })
-  })
 
   useEffect(() => {
     if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.FAIL) {

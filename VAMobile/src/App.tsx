@@ -297,7 +297,7 @@ export const AuthedApp: FC = () => {
 
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
-  const healthScreens = getHealthScreens(useTranslation(NAMESPACE.COMMON).t)
+  const healthScreens = getHealthScreens()
   const paymentsScreens = getPaymentsScreens()
 
   // When applicable, this will open the deep link from the notification that launched the app once sign in

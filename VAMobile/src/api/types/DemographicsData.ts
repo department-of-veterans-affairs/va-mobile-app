@@ -1,5 +1,7 @@
 export type DemographicsPayload = {
   data: {
+    id: string
+    type: string
     attributes: {
       genderIdentity: string
       preferredName: string
