@@ -36,14 +36,17 @@ export async function updateAddress() {
   await element(by.text('Done')).tap()
   await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('3101 N Fort Valley Rd')
   await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
+  await setTimeout(2000)
   await element(by.id('EditAddressTestID')).scrollTo('bottom')
   await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).typeText('Flagstaff')
   await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
+  await setTimeout(2000)
   await element(by.id('stateTestID')).tap()
   await element(by.text('Arizona')).atIndex(0).tap()
   await element(by.text('Done')).tap()
   await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).typeText('86001')
   await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
+  await setTimeout(2000)
 }
 
 export async function validateAddresses(addressID, addressType) {
@@ -53,6 +56,7 @@ export async function validateAddresses(addressID, addressType) {
     await element(by.id(addressID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).typeText('2')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
+    await setTimeout(2000)
     if(addressType === 'Home') {
       await updateAddress()
     }
@@ -87,6 +91,7 @@ export async function validateAddresses(addressID, addressType) {
     await element(by.id(addressID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).typeText('2')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
+    await setTimeout(2000)
     if(addressType === 'Home') {
       await updateAddress()
     }
@@ -272,6 +277,7 @@ describe('Contact Info Screen', () => {
     await element(by.id('emailAddressEditTestID')).clearText()
     await element(by.id('emailAddressEditTestID')).typeText('attended1+@gmail.com')
     await element(by.id('emailAddressEditTestID')).tapReturnKey()
+    await setTimeout(2000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.text('Email address saved'))).toExist()
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
@@ -283,6 +289,7 @@ describe('Contact Info Screen', () => {
     await element(by.id('emailAddressEditTestID')).clearText()
     await element(by.id('emailAddressEditTestID')).typeText('attended1@gmail.com')
     await element(by.id('emailAddressEditTestID')).tapReturnKey()
+    await setTimeout(2000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.text('Email address saved'))).toExist()
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
