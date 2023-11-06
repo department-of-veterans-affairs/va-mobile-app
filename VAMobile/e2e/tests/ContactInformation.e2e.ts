@@ -194,6 +194,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
     await waitFor(element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT))).toBeVisible().withTimeout(4000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.text(phoneType + ' phone saved'))).toExist()
+    await waitFor(element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT))).toBeVisible().withTimeout(4000)
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
   })
   
@@ -205,6 +206,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
     await waitFor(element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT))).toBeVisible().withTimeout(4000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.text(phoneType + ' phone saved'))).toExist()
+    await waitFor(element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT))).toBeVisible().withTimeout(4000)
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
   })
 }
