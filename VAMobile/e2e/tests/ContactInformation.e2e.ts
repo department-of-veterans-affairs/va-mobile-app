@@ -190,7 +190,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
     }
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).typeText('1234')
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
-    await waitFor(element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID))).toBeVisible().withTimeout(2000)
+    await waitFor(element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT))).toBeVisible().withTimeout(2000)
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
     await expect(element(by.text(phoneType + ' phone saved'))).toExist()
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
