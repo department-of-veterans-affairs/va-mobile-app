@@ -72,9 +72,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     (state) => state.appointments,
   )
 
-  const appointment =
-    (appointmentID && upcomingAppointmentsById?.[appointmentID]) ||
-    (upcomingAppointmentsById && Object.values(upcomingAppointmentsById).find((appointmentData) => appointmentData.attributes.vetextId === vetextID))
+  const appointment = appointmentID
+    ? upcomingAppointmentsById?.[appointmentID]
+    : Object.values(upcomingAppointmentsById || []).find((appointmentData) => appointmentData.attributes.vetextId === vetextID)
 
   if (!appointmentID) {
     appointmentID = appointment?.id
