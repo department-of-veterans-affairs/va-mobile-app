@@ -232,6 +232,7 @@ export async function removeContactInfoFeature(contactInfoTypeText, type) {
   it('should remove the ' + type + ' and verify it has been removed in contact info', async () => {
     await element(by.text('Remove ' + type)).tap()
     await element(by.text(ContactInfoE2eIdConstants.REMOVE_REMOVE_TEXT)).tap()
+    await waitFor(element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT))).toBeVisible().withTimeout(4000)
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
     if(type === 'home phone' || type == 'work phone'){
       await expect(element(by.text('Add your ' + type + ' number'))).toExist()
