@@ -1,20 +1,36 @@
 ---
 title: Button
+draft: true
 ---
-
-import CodeBlock from '@theme/CodeBlock'
-import VAButtonString from '!!raw-loader!@componentsDocs/VAButton'
-import ComponentTopInfo from '../../../../src/components/ComponentInfo'
 
 A button draws attention to important actions with a large selectable surface.
 
 ### Examples
 
 #### Default
-<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4" allowfullscreen></iframe>
+<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10341-3287&mode=design&t=itJXJkPhyWC7fqJm-4" allowfullscreen></iframe>
 
 #### Variations
-<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-17256&mode=design&t=Os8aP9kEAvkcrH1D-4" allowfullscreen></iframe>
+<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10341-3309&mode=design&t=itJXJkPhyWC7fqJm-4" allowfullscreen></iframe>
+
+#### Default
+
+##### Primary
+Add Storybook link
+
+##### Secondary
+Add Storybook link
+
+#### Base
+
+##### Primary
+Add Storybook link
+
+##### Secondary
+Add Storybook link
+
+#### Destructive
+Add Storybook link
 
 ### Usage
 [Refer to the VA Design System for usage guidance](https://design.va.gov/components/button/)
@@ -30,6 +46,9 @@ A button draws attention to important actions with a large selectable surface.
 #### Placement
 * Buttons generally appear on their own line at the bottom of a form or section.
 * Primary buttons usually appear first, or to the left, of a secondary button.
+
+### Code usage
+Link to Storybook coming soon
 
 ### Content considerations
 * Reference the [VA Design System's content considerations for buttons](https://design.va.gov/components/alert#content-considerations)
@@ -48,16 +67,3 @@ A button draws attention to important actions with a large selectable surface.
 * [Button - USWDS](https://designsystem.digital.gov/components/button/)
 * [Button - HIG](https://developer.apple.com/design/human-interface-guidelines/buttons)
 * [Button - Material Design](https://m3.material.io/components/buttons/guidelines)
-
-### Code usage
-Link to Storybook coming soon
-
-export const exampleString = `<VAButton 
-onPress={() => { console.log('button pressed') }} 
-label={'my button'} 
-textColor="primaryContrast" 
-backgroundColor="button" 
-disabledText="my instructions to enable this button" 
-iconProps={{ name: 'PaperClip', width: 16, height: 18 }} />`
-
-<ComponentTopInfo componentName="VAButton" example={exampleString} codeString={VAButtonString} />

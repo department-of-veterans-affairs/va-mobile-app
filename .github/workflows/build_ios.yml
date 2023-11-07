@@ -90,7 +90,7 @@ jobs:
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version-file: 'VAMobile/.nvmrc'
           # cache: 'yarn'
           # cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install npm dependencies
