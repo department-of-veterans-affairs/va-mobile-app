@@ -1,5 +1,4 @@
 import { StackActions, useNavigation } from '@react-navigation/native'
-import { useNavigationState } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, Ref } from 'react'
 
@@ -8,7 +7,6 @@ import { MenuViewActionsType } from 'components/Menu'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScrollView, View, ViewStyle } from 'react-native'
 import { VAIconProps } from 'components/VAIcon'
-import { WaygateToggleType } from 'utils/waygateConfig'
 import { useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
@@ -63,8 +61,6 @@ export type FullScreenSubtaskProps = {
   showCrisisLineCta?: boolean
   /** Optional testID */
   testID?: string
-  /** Temporarily conditionally provided waygate name */
-  waygate?: WaygateToggleType
 }
 
 export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
@@ -97,7 +93,6 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveActionSheet()
-  const waygateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
 
   const titleTextProps: TextViewProps = {
     variant: 'BitterBoldHeading',
@@ -178,7 +173,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
-      <WaygateWrapper waygateName={waygateScreen as WaygateToggleType}>
+      <WaygateWrapper>
         <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
           {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
           {title && (

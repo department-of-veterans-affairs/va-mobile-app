@@ -1,12 +1,10 @@
 import { useNavigation } from '@react-navigation/native'
-import { useNavigationState } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { FooterButton, VAScrollView, WaygateWrapper } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { View, ViewStyle } from 'react-native'
-import { WaygateToggleType } from 'utils/waygateConfig'
 import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
@@ -62,7 +60,6 @@ export const LargePanel: FC<LargePanelProps> = ({
   const confirmAlert = useDestructiveActionSheet()
   const theme = useTheme()
   const message = t('areYouSure')
-  const waygateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
 
   const leftTitleButtonPress = () => {
     confirmAlert({
@@ -111,7 +108,7 @@ export const LargePanel: FC<LargePanelProps> = ({
     <>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
-        <WaygateWrapper waygateName={waygateScreen as WaygateToggleType}>
+        <WaygateWrapper>
           <VAScrollView testID={testID}>
             {children}
             {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}

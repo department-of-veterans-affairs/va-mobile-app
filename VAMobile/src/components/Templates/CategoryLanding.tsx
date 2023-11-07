@@ -1,10 +1,8 @@
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
-import { useNavigationState } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, useState } from 'react'
 
 import { CrisisLineCta, TextView, TextViewProps, VAIconProps, WaygateWrapper } from 'components'
-import { WaygateToggleType } from 'utils/waygateConfig'
 import { useIsScreenReaderEnabled, useRouteNavigation, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
@@ -39,7 +37,6 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
-  const waygateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
 
   const [scrollOffset, setScrollOffset] = useState(0)
   const [trackScrollOffset, setTrackScrollOffset] = useState(true)
@@ -102,7 +99,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <HeaderBanner {...headerProps} />
-      <WaygateWrapper waygateName={waygateScreen as WaygateToggleType}>
+      <WaygateWrapper>
         <VAScrollView testID={testID} scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
           <View onLayout={getTransitionHeaderHeight}>
             <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />

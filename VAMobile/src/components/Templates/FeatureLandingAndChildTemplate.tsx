@@ -1,10 +1,8 @@
 import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
-import { useNavigationState } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useState } from 'react'
 
 import { TextView, TextViewProps, VAIconProps, WaygateWrapper } from 'components'
-import { WaygateToggleType } from 'utils/waygateConfig'
 import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
@@ -45,8 +43,6 @@ export type ChildTemplateProps = {
   scrollViewProps?: VAScrollViewProps
   /** Optional TestID for scrollView */
   testID?: string
-  /** Temporarily Optional Waygate toggle value */
-  waygate?: WaygateToggleType
 }
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
@@ -68,7 +64,6 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
-  const waygateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
 
   const [scrollOffset, setScrollOffset] = useState(0)
   const [trackScrollOffset, setTrackScrollOffset] = useState(true)
@@ -123,7 +118,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <HeaderBanner {...headerProps} />
-      <WaygateWrapper waygateName={waygateScreen as WaygateToggleType}>
+      <WaygateWrapper>
         <VAScrollView
           testID={testID}
           scrollEventThrottle={1}

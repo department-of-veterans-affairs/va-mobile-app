@@ -163,12 +163,10 @@ export const getWaygateToggles = (): WaygateToggleValues => {
     return waygateConfig
   }
 
-  //this just initializes the waygate list without having to first create them all in firebase.
-  const toggles = waygateConfig
   Object.keys(remoteConfig().getAll()).forEach((key) => {
     if (key.startsWith('WG')) {
-      toggles[key as WaygateToggleType] = JSON.parse(remoteConfig().getValue(key).asString()) as unknown as Waygate
+      waygateConfig[key as WaygateToggleType] = JSON.parse(remoteConfig().getValue(key).asString()) as unknown as Waygate
     }
   })
-  return toggles
+  return waygateConfig
 }
