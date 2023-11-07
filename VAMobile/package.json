@@ -187,5 +187,8 @@
     "react-native/@react-native-community/**/fast-xml-parser": "^4.2.4",
     "watch/**/merge": "^2.1.1",
     "webdriverio/devtools/ua-parser-js": "^1.0.33"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
