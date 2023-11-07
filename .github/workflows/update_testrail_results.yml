@@ -1,0 +1,77 @@
+#
+# Detox e2e tests in CI
+#
+
+name: '[e2e] Update TestRail Results'
+
+on:
+  push:
+    branches:
+      - 'dependabot/**'
+  workflow_dispatch:
+  workflow_call:
+    secrets:
+      TEST_RAIL_USER:
+        description: "TestRail robot userid"
+        required: true
+      TEST_RAIL_KEY:
+        description: "TestRail api key"
+        required: true
+  # Run on weekdays 4:00 AM UTC
+  # schedule:
+  #   - cron: '0 4 * * 1,2,3,4,5'
+  
+defaults:
+  run:
+    working-directory: VAMobile
+
+env:
+  # IAM staging app client secret
+  APP_CLIENT_SECRET: ${{ secrets.APP_CLIENT_SECRET }}
+  # IAM production app client secret
+  APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
+  # Android Key Store Key Alias
+  ANDROID_KS_KEY_ALIAS: ${{ secrets.ANDROID_KS_KEY_ALIAS }}
+  # Android Key Store Key Alias Password
+  ANDROID_KS_KEY_PW: ${{ secrets.ANDROID_KS_KEY_PW }}
+  # Android Key Store Key Password
+  ANDROID_KS_PW: ${{ secrets.ANDROID_KS_PW }}
+  # App ID for Android project in Firebase
+  FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+  # Filepath for firebase distribution key. Also used by fastlane
+  FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
+  # Slack API token used by fastlane
+  # SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+
+jobs:
+  # start_slack_thread:
+  #   name: Start Slack thread
+  #   uses: ./.github/workflows/start_slack_thread.yml
+  #   secrets: inherit
+  #   with:
+  #     channel_name: va-mobile-build-alerts
+  #     message: 'E2E Android build process starting. Please see :thread: for results. This process may take a while.'
+
+  send-test-results-to-testrail:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Execute automated tests
+        uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/e2e_ios.yml@develop
+      - name: Python setup
+        if: always()
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+      - name: TestRail CLI upload results
+        if: always()
+        run: |
+          pip install trcli
+          trcli -y \
+            -h https://dsvavsp.testrail.io/ \
+            --project "VA Mobile App" \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            parse_junit \
+            --title "Automated Tests from GitHub workflow" \
+            -f "e2e/test_reports/e2e-junit.xml"

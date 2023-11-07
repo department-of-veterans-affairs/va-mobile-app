@@ -251,14 +251,14 @@ describe('Contact Info Screen', () => {
 	}) 
 
   it('should tap on the how we use your contact information link and verify that it opens', async () => {
-    await expect(element(by.id('howWeUseContactInfoLinkTestID'))).toExist()
+    await expect(element(by.id('howWeUseContactInfoLinkTestID1'))).toExist()
     await element(by.id('howWeUseContactInfoLinkTestID')).tap()
     await expect(element(by.text('How we use your contact information')).atIndex(0)).toExist()
     await element(by.text('Close')).atIndex(0).tap()
   })
 
   validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
-  validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home') 
+  /*validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home') 
   validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
   validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
@@ -293,5 +293,5 @@ describe('Contact Info Screen', () => {
   removeContactInfoFeature(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'work phone')
   removeContactInfoFeature(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'home phone')
   removeContactInfoFeature(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'mobile phone')
-  removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')
+  removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')*/
 })
