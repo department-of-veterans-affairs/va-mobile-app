@@ -98,6 +98,7 @@
     "@types/detox": "^18.1.0",
     "@types/jest": "^27.5.2",
     "@types/jest-when": "^2.7.4",
+    "@types/lodash": "^4.14.200",
     "@types/luxon": "^2.4.0",
     "@types/node": "^18.11.9",
     "@types/react-native": "0.72.1",
