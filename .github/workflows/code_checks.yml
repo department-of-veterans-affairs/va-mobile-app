@@ -29,7 +29,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: yarn install --frozen-lockfile --non-interactive
+          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - run: yarn lint:ci
   test:
     runs-on: ubuntu-4-cores-latest
