@@ -125,7 +125,7 @@ jobs:
             -k ${{secrets.TEST_RAIL_KEY}} \
             parse_junit \
             --title "Automated Tests from GitHub workflow" \
-            -f "VAMobile/e2e/test_reports/e2e-junit.xml"
+            -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit.xml"
 
 #jobs:
   # start_slack_thread:
