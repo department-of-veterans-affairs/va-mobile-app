@@ -1,4 +1,3 @@
-import 'react-native'
 import React from 'react'
 import { screen } from '@testing-library/react-native'
 
@@ -91,7 +90,7 @@ context('VaccineDetailsScreen', () => {
   it('initializes correctly', () => {
     initializeTestInstance()
     expect(screen.getByText('December 18, 2020')).toBeTruthy()
-    expect(screen.getByText('COVID-19 vaccine')).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'COVID-19 vaccine' })).toBeTruthy()
     expect(screen.getByText('Type and dosage')).toBeTruthy()
     expect(screen.getByText('COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose')).toBeTruthy()
     expect(screen.getByText('Janssen')).toBeTruthy()

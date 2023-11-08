@@ -1,4 +1,3 @@
-import 'react-native'
 import React from 'react'
 import { screen } from '@testing-library/react-native'
 
@@ -63,7 +62,7 @@ context('VaccineListScreen', () => {
   })
 
   describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
+    it('should show loading screen', () => {
       initializeTestInstance(true)
       expect(screen.getByText('Loading your vaccine record...')).toBeTruthy()
     })

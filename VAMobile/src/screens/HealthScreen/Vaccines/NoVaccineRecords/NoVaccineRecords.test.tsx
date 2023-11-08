@@ -1,10 +1,10 @@
-import 'react-native'
 import React from 'react'
+import { Linking } from 'react-native'
 import { screen, fireEvent } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
 import NoVaccineRecords from './NoVaccineRecords'
-import { Linking } from 'react-native'
+
 
 context('NoVaccineRecords', () => {
   beforeEach(() => {
