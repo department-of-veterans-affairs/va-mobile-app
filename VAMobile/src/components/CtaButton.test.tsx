@@ -1,23 +1,27 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import Mock = jest.Mock
+import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, render, RenderAPI } from 'testUtils'
+import { context, render } from 'testUtils'
 import CtaButton from './CtaButton'
+import TextView from './TextView'
 
 context('CtaButton', () => {
-  let component: RenderAPI
-  let onPressSpy: Mock
+  const onPressSpy = jest.fn()
 
   beforeEach(() => {
-    onPressSpy = jest.fn(() => {})
-
-    component = render(<CtaButton />)
+    render(
+      <CtaButton onPress={onPressSpy}>
+        <TextView>Some text</TextView>
+      </CtaButton>,
+    )
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('renders a11yLabel', () => {
+    expect(screen.getByLabelText('talk-to-the-veterans-crisis-line-now')).toBeTruthy()
+  })
+
+  it('calls onPress when clicked', () => {
+    fireEvent.press(screen.getByRole('button', { name: 'Some text' }))
+    expect(onPressSpy).toBeCalled()
   })
 })
