@@ -1,6 +1,7 @@
 name: '[e2e] Update TestRail Results'
 
 on:
+  workflow_call:
   push:
     #branches:
     #  - 'dependabot/**'
