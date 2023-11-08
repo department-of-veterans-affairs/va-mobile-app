@@ -2,7 +2,7 @@ import React from 'react'
 import { screen, fireEvent } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
-import { render, context, waitFor, mockNavProps } from 'testUtils'
+import { render, context, mockNavProps } from 'testUtils'
 import { RefillScreen } from './RefillScreen'
 import { RootState } from 'store'
 import { ErrorsState, initialErrorsState, initialPrescriptionState, PrescriptionState } from 'store/slices'
@@ -32,44 +32,38 @@ context('RefillScreen', () => {
   }
 
   describe('no there are no refillable prescriptions', () => {
-    it('should show NoRefills component', async () => {
-      await waitFor(() => {
-        initializeTestInstance({
-          refillablePrescriptions: [],
-        })
+    it('should show NoRefills component', () => {
+      initializeTestInstance({
+        refillablePrescriptions: [],
       })
       expect(screen.getByText('You have no prescriptions for refill')).toBeTruthy()
     })
   })
 
   describe('if no prescription is selected', () => {
-    it('should show alert for no prescription selected', async () => {
-      await waitFor(() => {
-        initializeTestInstance({
-          prescriptionsNeedLoad: false,
-          refillablePrescriptions: mockData,
-        })
+    it('should show alert for no prescription selected', () => {
+      initializeTestInstance({
+        prescriptionsNeedLoad: false,
+        refillablePrescriptions: mockData,
       })
-      fireEvent.press(screen.getByText('Request refills'))
+      fireEvent.press(screen.getByRole('button', { name: 'Request refills'}))
       expect(screen.getByText('Please select a prescription')).toBeTruthy()
     })
   })
 
   describe('when there is a downtime message for rx refill', () => {
     it('should show PRESCRIPTION_REFILL_SCREEN_ID downtime message', async () => {
-      await waitFor(() => {
-        initializeTestInstance(
-          {},
-          {
-            downtimeWindowsByFeature: {
-              rx_refill: {
-                startTime: DateTime.now().plus({ days: -1 }),
-                endTime: DateTime.now().plus({ days: 1 }),
-              },
+      initializeTestInstance(
+        {},
+        {
+          downtimeWindowsByFeature: {
+            rx_refill: {
+              startTime: DateTime.now().plus({ days: -1 }),
+              endTime: DateTime.now().plus({ days: 1 }),
             },
           },
-        )
-      })
+        },
+      )
       expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy()
     })
   })

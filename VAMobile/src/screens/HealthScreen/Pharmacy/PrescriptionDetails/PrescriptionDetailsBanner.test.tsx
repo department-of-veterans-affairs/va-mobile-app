@@ -5,12 +5,8 @@ import { render, context } from 'testUtils'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 
 context('PrescriptionsDetailsBanner', () => {
-  const initializeTestInstance = () => {
-    render(<PrescriptionsDetailsBanner />)
-  }
-
   it('initializes correctly', () => {
-    initializeTestInstance()
+    render(<PrescriptionsDetailsBanner />)
     expect(screen.getByText("We can't refill this prescription in the app")).toBeTruthy()
   })
 })

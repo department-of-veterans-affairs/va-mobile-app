@@ -1,10 +1,11 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
+import { DateTime } from 'luxon'
+import { when } from 'jest-when'
 
 import { render, context, waitFor, mockNavProps } from 'testUtils'
 import * as api from 'store/api'
 import RefillTrackingDetails from './RefillTrackingDetails'
-import { screen } from '@testing-library/react-native'
 import { ErrorsState, initialErrorsState } from 'store/slices'
 import { RootState } from 'store'
 import {
@@ -13,8 +14,6 @@ import {
   emptyStateTrackingInfoList as emptyTrackingMockData,
   multipleTrackingInfoList as multipleTrackingInfoData,
 } from 'utils/tests/prescription'
-import { DateTime } from 'luxon'
-import { when } from 'jest-when'
 import { PrescriptionData } from 'store/api'
 
 context('RefillTrackingDetails', () => {
