@@ -1,4 +1,3 @@
-import 'react-native'
 import React from 'react'
 import { screen } from '@testing-library/react-native'
 
@@ -83,7 +82,7 @@ context('DisabilityRatingsScreen', () => {
     expect(screen.getByText("Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.")).toBeTruthy()
     expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
-    expect(screen.queryByText('You do not have a VA combined disability rating on record.')).toBeFalsy()
+    expect(screen.queryByRole('header', { name: 'You do not have a VA combined disability rating on record.' })).toBeFalsy()
   })
 
   describe('when loading is set to true', () => {
@@ -96,7 +95,7 @@ context('DisabilityRatingsScreen', () => {
   describe('when there is no disability ratings', () => {
     it('should render no disability ratings', () => {
       initializeTestInstance({} as RatingData)
-      expect(screen.getByText('You do not have a VA combined disability rating on record.')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'You do not have a VA combined disability rating on record.' })).toBeTruthy()
     })
   })
 
@@ -111,7 +110,7 @@ context('DisabilityRatingsScreen', () => {
       }
 
       initializeTestInstance(ratingDataMock, undefined, errorState)
-      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
+      expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy()
     })
   })
 })

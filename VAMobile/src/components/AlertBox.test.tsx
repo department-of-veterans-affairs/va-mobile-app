@@ -1,4 +1,3 @@
-import 'react-native'
 import React from 'react'
 
 import { context, render, screen } from 'testUtils'
@@ -9,7 +8,7 @@ context('AlertBox', () => {
     render(<AlertBox border="warning" text={'My warning'} title={'Warning title'} />)
   })
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     expect(screen.getByText('My warning')).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Warning title' })).toBeTruthy()
   })

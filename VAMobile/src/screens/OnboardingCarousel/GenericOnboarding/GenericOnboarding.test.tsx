@@ -1,9 +1,8 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
 import GenericOnboarding from './GenericOnboarding'
-import { screen } from '@testing-library/react-native'
 
 context('GenericOnboarding', () => {
   const initializeTestInstance = (displayLogo: boolean = false) => {
