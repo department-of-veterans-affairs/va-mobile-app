@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionAttributeData } from 'store/api/types'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from './PrescriptionUtils'
 import { useTheme } from 'utils/hooks'
 import RefillTag from './RefillTag'
@@ -20,11 +21,10 @@ export type PrescriptionListItemProps = {
 /** common component to show the prescription info on a list  */
 const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hideInstructions, includeRefillTag }) => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
   const { instructions, refillRemaining, prescriptionName, prescriptionNumber, facilityName, refillDate } = prescription
-  const noneNoted = tc('noneNoted')
+  const noneNoted = t('noneNoted')
 
   const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
   const [dateMMddyyyy, dateA11yLabel] = getDateTextAndLabel(t, refillDate)
@@ -66,7 +66,7 @@ const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hid
       <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${t('prescriptions.sort.fillDate')} ${dateA11yLabel}.`}>
         {`${t('prescriptions.sort.fillDate')}: ${dateMMddyyyy}`}
       </TextView>
-      <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${t('prescription.vaFacility.a11yLabel')} ${facilityName || noneNoted}.`}>
+      <TextView variant={'HelperText'} mt={condensedMarginBetween} accessibilityLabel={`${a11yLabelVA(t('prescription.vaFacility'))} ${facilityName || noneNoted}.`}>
         {`${t('prescription.vaFacility')} ${facilityName || noneNoted}`}
       </TextView>
     </Box>

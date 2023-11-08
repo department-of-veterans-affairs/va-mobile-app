@@ -1,3 +1,4 @@
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { filter, pluck } from 'underscore'
 import { useTranslation } from 'react-i18next'
@@ -5,12 +6,14 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SegmentedControl, TextView } from 'components'
+import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppealIssues from './AppealIssues/AppealIssues'
@@ -23,8 +26,8 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const controlValues = [t('claimDetails.status'), t('appealDetails.issuesTab')]
-  const [selectedTab, setSelectedTab] = useState(controlValues[0])
+  const controlLabels = [t('claimDetails.status'), t('appealDetails.issuesTab')]
+  const [selectedTab, setSelectedTab] = useState(0)
   const segmentedControlA11yHints = [
     t('appealDetails.viewYourAppeal', { tabName: t('claimDetails.status') }),
     t('appealDetails.viewYourAppeal', { tabName: t('appealDetails.issuesTab') }),
@@ -45,6 +48,13 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   useEffect(() => {
     dispatch(getAppeal(appealID, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
   }, [dispatch, appealID])
+
+  const onTabChange = (tab: number) => {
+    setSelectedTab(tab)
+    if (selectedTab !== tab) {
+      logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
+    }
+  }
 
   const getFilteredIssues = (): Array<string> => {
     // Only show issues with a lastAction of null, this signifies the issue is active
@@ -107,20 +117,16 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
           <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
             {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
           </TextView>
-          <TextView variant="MobileBody">{t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}</TextView>
+          <TextView variant="MobileBody" testID="appealsUpToDateTestID">
+            {t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}
+          </TextView>
           <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl
-              values={controlValues}
-              titles={controlValues}
-              onChange={setSelectedTab}
-              selected={controlValues.indexOf(selectedTab)}
-              accessibilityHints={segmentedControlA11yHints}
-            />
+            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={segmentedControlA11yHints} />
           </Box>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          {appeal && selectedTab === t('claimDetails.status') && (
+          {appeal && selectedTab === 0 && (
             <AppealStatus
               events={events}
               status={status}
@@ -132,7 +138,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
               programArea={programArea}
             />
           )}
-          {appeal && selectedTab === t('appealDetails.issuesTab') && <AppealIssues issues={getFilteredIssues()} />}
+          {appeal && selectedTab === 1 && <AppealIssues issues={getFilteredIssues()} />}
         </Box>
       </Box>
     </FeatureLandingTemplate>

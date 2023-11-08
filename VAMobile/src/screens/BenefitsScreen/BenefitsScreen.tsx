@@ -1,17 +1,17 @@
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
-import { AuthorizedServicesState, DisabilityRatingState } from 'store/slices'
 import { BenefitsStackParamList } from './BenefitsStackScreens'
-import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
+import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
+import { DisabilityRatingState } from 'store/slices'
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
-import { useHeaderStyles } from 'utils/hooks/headerStyles'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
@@ -26,24 +26,18 @@ import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericL
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
 
-const BenefitsScreen: FC<BenefitsScreenProps> = ({ navigation }) => {
+const BenefitsScreen: FC<BenefitsScreenProps> = () => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
-  const { decisionLetters: decisionLettersAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
-    })
-  }, [navigation])
+  const { data: userAuthorizedServices } = useAuthorizedServices()
 
   const ratingPercent = ratingData?.combinedDisabilityRating
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
   const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
 
-  const claimsDestination = featureEnabled('decisionLettersWaygate') && decisionLettersAuthorized ? 'Claims' : 'ClaimsHistory'
+  const claimsDestination = featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters ? 'Claims' : 'ClaimsHistory'
 
   return (
     <CategoryLanding title={t('benefits.title')}>
@@ -86,11 +80,13 @@ const BenefitsScreenStack = createStackNavigator()
  * Stack screen for the Benefits tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
-  const headerStyles = useHeaderStyles()
-
+  const screenOptions = {
+    headerShown: false,
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+  }
   return (
     <BenefitsScreenStack.Navigator
-      screenOptions={headerStyles}
+      screenOptions={screenOptions}
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {

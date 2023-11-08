@@ -1,14 +1,13 @@
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 
-import { AuthorizedServicesState } from 'store/slices'
-import { BackButton, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SegmentedControl, TextView } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
 import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { Events } from 'constants/analytics'
@@ -19,6 +18,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
@@ -33,11 +33,11 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const controlValues = [t('claimDetails.status'), t('claimDetails.details')]
-  const [selectedTab, setSelectedTab] = useState(controlValues[0])
+  const controlLabels = [t('claimDetails.status'), t('claimDetails.details')]
+  const [selectedTab, setSelectedTab] = useState(0)
 
-  const { claimID, claimType, focusOnSnackbar } = route.params
-  const { decisionLetters: decisionLettersAuthorized } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { claimID, claimType } = route.params
+  const { data: userAuthorizedServices } = useAuthorizedServices()
   const { claim, loadingClaim, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
@@ -47,22 +47,6 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
     if (loadingClaim) {
       cancelLoadingDetailScreen?.abort()
     }
-  })
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => (
-        <BackButton
-          onPress={() => {
-            navigation.goBack()
-          }}
-          focusOnButton={focusOnSnackbar ? false : true}
-          canGoBack={props.canGoBack}
-          label={BackButtonLabelConstants.back}
-          showCarat={true}
-        />
-      ),
-    })
   })
 
   useEffect(() => {
@@ -82,7 +66,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
     }, [claimID, claim, attributes]),
   )
 
-  const backLabel = featureEnabled('decisionLettersWaygate') && decisionLettersAuthorized ? t('claimsHistory.title') : t('claims.title')
+  const backLabel = featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters ? t('claimsHistory.title') : t('claims.title')
 
   if (useError(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID)) {
     return (
@@ -95,15 +79,16 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   if (loadingClaim) {
     return (
       <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
-        <LoadingComponent text={t('cliamInformation.loading')} />
+        <LoadingComponent text={t('claimInformation.loading')} />
       </FeatureLandingTemplate>
     )
   }
 
-  const onTabChange = (tab: string) => {
+  const onTabChange = (tab: number) => {
     if (tab !== selectedTab && claim) {
-      const analyticsEvent = tab === 'Status' ? Events.vama_claim_status_tab : Events.vama_claim_details_tab
+      const analyticsEvent = tab === controlLabels.indexOf(t('claimDetails.status')) ? Events.vama_claim_status_tab : Events.vama_claim_details_tab
       logAnalyticsEvent(analyticsEvent(claim.id, claim.attributes.claimType, claim.attributes.phase, claim.attributes.dateFiled))
+      logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
     }
     setSelectedTab(tab)
   }
@@ -120,12 +105,12 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
           </TextView>
           <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl values={controlValues} titles={controlValues} onChange={onTabChange} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
+            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={a11yHints} />
           </Box>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          {claim && selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
-          {claim && selectedTab === t('claimDetails.details') && <ClaimDetails claim={claim} />}
+          {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
+          {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
         </Box>
       </Box>
     </FeatureLandingTemplate>

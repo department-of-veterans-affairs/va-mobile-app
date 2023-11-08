@@ -132,6 +132,28 @@ assignees:
 
 </details>
 
+
+### Questions 
+<details>
+<summary>Open Questions</summary>
+
+</details>
+
+<details>
+<summary>Closed Questions</summary>
+
+| Question |  Answer |
+|--------|----------|
+| | |
+| | |
+
+</details>
+
+### Change / Decision Log 
+
+Product will need to create on in the Github folder and link it here. 
+
+
 # Checklist
 
 <details>
@@ -220,6 +242,7 @@ assignees:
 - [ ] What is the roll out plan? (Do we need a feature toggle? is this going to be available to every user immediately or do we want to roll out to a few users first)
 - [ ] Does this project require api integration? if yes, what api endpoint are we integrating with and what is the expected response body?
 - [ ] Do we want to capture analytics for this projects (i.e. update GA, add logs to grafana/datadog etc)?If yes, what metrics would we like to capture?
+- [ ] Do we need to update our in-app review code to include this new feature?
 
 </details>
 

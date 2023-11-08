@@ -151,7 +151,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         selectedValue: documentType,
         onSelectionChange: onDocumentTypeChange,
         pickerOptions: DocumentTypes526,
-        labelKey: 'common:fileUpload.documentType',
+        labelKey: 'fileUpload.documentType',
         isRequiredField: true,
         disabled: false,
       },
@@ -160,7 +160,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     {
       fieldType: FieldType.Selector,
       fieldProps: {
-        labelKey: 'common:fileUpload.evidenceOnlyPhoto',
+        labelKey: 'fileUpload.evidenceOnlyPhoto',
         selected: confirmed,
         onSelectionChange: onCheckboxChange,
         isRequiredField: true,
@@ -217,6 +217,9 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   }
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
+    if (!snackBar) {
+      logAnalyticsEvent(Events.vama_snackbar_null('Claim add photos'))
+    }
     snackBar?.hideAll()
     if (response && response.assets && response.assets.length + (imagesList?.length || 0) > MAX_NUM_PHOTOS) {
       setErrorMessage(t('fileUpload.tooManyPhotosError'))
@@ -312,7 +315,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
               label={t('fileUpload.submit')}
               testID={t('fileUpload.submit')}
               buttonType={ButtonTypesConstants.buttonPrimary}
-              a11yHint={t('fileUpload.uploadA11yHint')}
             />
           </Box>
         </Box>

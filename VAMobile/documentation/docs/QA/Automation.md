@@ -7,7 +7,7 @@ Implementing robust UI automation for the mobile team supports several team goal
 
 Phases include:
 - **Tool assessment & initial implementation**: Completed Q3 2022
-- **Release candidate script automation**: Slated for Q2 2023
+- **Release candidate script automation**: Slated for Q4 2023
 - **Key end-to-end test automation**: _Future_
 
 ## Detox: our UI automation tool
@@ -69,3 +69,4 @@ In addition to making sure that the automated tests are functioning well, an eng
 > - Detox help can be found here: https://wix.github.io/Detox/docs/19.x/api/matchers
 > - Because our test case suite is so large, it may be best to exclusively run just the test you are working on by doing `yarn e2e:<android/ios>-test /e2e/tests/<yourName.e2e.ts>`.
 > - If you change anything in the app code, you will need to run `yarn e2e:<android/ios>-build` beforehand
+> - Your demo mode password locally must be set to '' (null) in order to successfully run detox cases.

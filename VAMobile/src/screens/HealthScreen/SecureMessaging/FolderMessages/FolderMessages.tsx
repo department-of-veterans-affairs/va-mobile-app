@@ -2,8 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { BackButton, Box, ChildTemplate, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { Box, ChildTemplate, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -20,8 +19,7 @@ type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessage
 const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const { folderID, folderName } = route.params
 
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<RootState, SecureMessagingState>(
@@ -29,7 +27,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   )
 
   const paginationMetaData = paginationMetaByFolderId?.[folderID]
-  const title = tc('text.raw', { text: folderName })
+  const title = t('text.raw', { text: folderName })
 
   useEffect(() => {
     // Load first page messages
@@ -59,25 +57,9 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     navigation.navigate(screen, args)
   }
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => (
-        <BackButton
-          onPress={() => {
-            navigation.goBack()
-          }}
-          canGoBack={props.canGoBack}
-          label={BackButtonLabelConstants.back}
-          focusOnButton={deleteDraftComplete ? false : true}
-          showCarat={true}
-        />
-      ),
-    })
-  })
-
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {
     return (
-      <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
+      <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
       </ChildTemplate>
     )
@@ -86,7 +68,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   if (loading) {
     const text = t('secureMessaging.messages.loading')
     return (
-      <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
+      <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
         <LoadingComponent text={text} />
       </ChildTemplate>
     )
@@ -97,7 +79,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
 
   if (messages.length === 0) {
     return (
-      <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
+      <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
         <NoFolderMessages />
       </ChildTemplate>
     )
@@ -131,7 +113,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   }
 
   return (
-    <ChildTemplate backLabel={tc('messages')} backLabelOnPress={navigation.goBack} title={title}>
+    <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
       <StartNewMessageButton />
       <Box mt={theme.dimensions.standardMarginBetween}>
         <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} />

@@ -1,17 +1,15 @@
 import {
   AddressData,
+  AddressPouToProfileAddressFieldType,
   AddressValidationData,
   AddressValidationScenarioTypes,
   AddressValidationScenarioTypesConstants,
   DeliveryPointValidationTypesConstants,
-  PhoneData,
-  PhoneType,
-  PhoneTypeConstants,
   SuggestedAddress,
-  UserDataProfile,
+  UserContactInformation,
   addressTypeFields,
-} from 'store/api/types'
-import { filter, sortBy } from 'underscore'
+} from 'api/types'
+import { filter, omit, sortBy } from 'underscore'
 
 export const getAddressValidationScenarioFromAddressValidationData = (suggestedAddresses: Array<SuggestedAddress>): AddressValidationScenarioTypes | undefined => {
   if (!suggestedAddresses) {
@@ -98,13 +96,12 @@ export const getAddressDataFromSuggestedAddress = (suggestedAddress: SuggestedAd
   }
 }
 
-export const getPhoneDataForPhoneType = (phoneType: PhoneType, profile: UserDataProfile): PhoneData | undefined => {
-  switch (phoneType) {
-    case PhoneTypeConstants.HOME:
-      return profile.homePhoneNumber
-    case PhoneTypeConstants.MOBILE:
-      return profile.mobilePhoneNumber
-    case PhoneTypeConstants.WORK:
-      return profile.workPhoneNumber
-  }
+/**
+ * Returns address data with the `id` field present or omitted based on whether the user already has the address field saved
+ */
+export const getAddressDataPayload = (addressData: AddressData, contactInformation?: UserContactInformation): AddressData => {
+  const addressPou = addressData.addressPou
+  const addressFieldType = AddressPouToProfileAddressFieldType[addressPou]
+  const newAddress = !(contactInformation || {})[addressFieldType as keyof UserContactInformation]
+  return newAddress ? omit(addressData, 'id') : addressData
 }

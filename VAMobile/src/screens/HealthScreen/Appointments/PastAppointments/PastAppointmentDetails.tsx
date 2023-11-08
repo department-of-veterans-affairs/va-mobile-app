@@ -18,8 +18,8 @@ import { Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from '../../../../utils/appointments'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 
@@ -29,8 +29,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
   const { appointmentID } = route.params
 
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { pastAppointmentsById } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
@@ -63,7 +62,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
     return (
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
+          <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('pastAppointmentDetails.toScheduleAnotherAppointment'))}>
             {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
           </TextView>
         </TextArea>
@@ -72,7 +71,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
   }
 
   return (
-    <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}>
+    <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <AppointmentAlert attributes={attributes} />
         <TextArea>

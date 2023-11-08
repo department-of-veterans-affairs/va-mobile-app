@@ -1,4 +1,5 @@
-import { includes } from 'underscore'
+import { Events } from './analytics'
+import { logAnalyticsEvent } from 'utils/analytics'
 
 export const DEFAULT_PAGE_SIZE = 10
 
@@ -30,39 +31,12 @@ export const SnackBarConstants: {
   duration: 900000,
 }
 
-const screensToCloseSnackbarOnNavigation = [
-  'AppealDetailsScreen',
-  'Appointments',
-  'AskForClaimDecision',
-  'ClaimDetails',
-  'ClaimDetailsScreen',
-  'ClaimLettersScreen',
-  'StartNewMessage',
-  'DirectDeposit',
-  'EditDirectDeposit',
-  'EditDraft',
-  'EditPhoneNumber',
-  'FileRequest',
-  'FolderMessages',
-  'PersonalInformation',
-  'ContactInformation',
-  'ReplyMessage',
-  'SecureMessaging',
-  'SelectFile',
-  'TakePhotos',
-  'UpcomingAppointmentDetails',
-  'UploadFile',
-  'UploadOrAddPhotos',
-  'ViewMessageScreen',
-  'LettersOverview',
-]
-
 export const CloseSnackbarOnNavigation = (screenName: string | undefined) => {
   if (screenName) {
-    const screen = screenName.split('-')[0]
-    if (includes(screensToCloseSnackbarOnNavigation, screen)) {
-      snackBar?.hideAll()
+    if (!snackBar) {
+      logAnalyticsEvent(Events.vama_snackbar_null(`CloseSnackbarOnNavigation - ${screenName.split('-')[0]}`))
     }
+    snackBar?.hideAll()
   }
 }
 

@@ -15,7 +15,7 @@ import { AppDispatch, RootState } from 'store'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
-import { DowntimeWindowsByFeatureType, ErrorsState, PatientState, SecureMessagingState } from 'store/slices'
+import { DowntimeWindowsByFeatureType, ErrorsState, SecureMessagingState } from 'store/slices'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -25,7 +25,7 @@ import { WebProtocolTypesConstants } from 'constants/common'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { getTheme } from 'styles/themes/standardTheme'
-import { isAndroid, isIOS } from 'utils/platform'
+import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
 /**
@@ -224,16 +224,6 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
   }
 }
 
-/**
- * Returns whether user has cerner facilities or not
- *
- * @returns boolean showing if the user has cerner facilities
- */
-export const useHasCernerFacilities = (): boolean => {
-  const { cernerFacilities } = useSelector<RootState, PatientState>((state) => state.patient)
-  return cernerFacilities.length > 0
-}
-
 export type useDestructiveActionSheetButtonProps = {
   /** text of button */
   text: string
@@ -280,19 +270,19 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
       newDestructiveButtonIndex = destructiveButtonIndex - 1
     }
 
-    // Don't pass cancelButtonIndex because doing so would hide the button on iPad
     // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
     showActionSheetWithOptions(
       {
         title: props.title,
         titleTextStyle: { fontWeight: 'bold', textAlign: 'center', color: currentTheme.colors.text.primary },
         message: props.message,
-        messageTextStyle: { textAlign: 'center', color: currentTheme.colors.text.primary },
+        messageTextStyle: { fontWeight: 'normal', textAlign: 'center', color: currentTheme.colors.text.primary },
         textStyle: { color: currentTheme.colors.text.primary },
         destructiveButtonIndex: newDestructiveButtonIndex,
         destructiveColor: currentTheme.colors.text.error,
         options: newButtons.map((button) => stringToTitleCase(isIOS() ? button.text : button.text + ' ')),
         containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
+        cancelButtonIndex: isIpad() ? undefined : newButtons.length - 1,
       },
       (buttonIndex) => {
         if (buttonIndex || buttonIndex === 0) {
@@ -426,7 +416,7 @@ export function useAttachments(): [
 ] {
   const [attachmentsList, setAttachmentsList] = useState<Array<imageDocumentResponseType>>([])
   const destructiveAlert = useDestructiveActionSheet()
-  const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const addAttachment = (attachmentFileToAdd: imageDocumentResponseType) => {
     setAttachmentsList([...attachmentsList, attachmentFileToAdd])
@@ -438,15 +428,15 @@ export function useAttachments(): [
 
   const removeAttachment = (attachmentFileToRemove: imageDocumentResponseType) => {
     destructiveAlert({
-      title: t('health:secureMessaging.attachments.removeAttachment'),
+      title: t('secureMessaging.attachments.removeAttachment'),
       destructiveButtonIndex: 1,
       cancelButtonIndex: 0,
       buttons: [
         {
-          text: t('health:secureMessaging.attachments.keep'),
+          text: t('secureMessaging.attachments.keep'),
         },
         {
-          text: t('common:remove'),
+          text: t('remove'),
           onPress: () => {
             onRemove(attachmentFileToRemove)
           },
@@ -489,8 +479,9 @@ export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i
       options: casedOptionText,
     }
 
-    // Don't pass cancelButtonIndex because doing so would hide the button on iPad
-    delete casedOptions.cancelButtonIndex
+    if (isIpad()) {
+      delete casedOptions.cancelButtonIndex
+    }
 
     showActionSheetWithOptions(casedOptions, callback)
   }

@@ -5,6 +5,7 @@ import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionHistoryTabs } from 'store/api/types'
 import { ViewStyle } from 'react-native'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
 type PrescriptionHistoryNoMatchesProps = {
@@ -15,7 +16,7 @@ type PrescriptionHistoryNoMatchesProps = {
 }
 
 const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ currentTab, isFiltered }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   const getFilteredTabString = () => {
@@ -32,7 +33,7 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ c
   const getFilteredNoMatch = () => {
     let contenta11y = {}
     if (currentTab === PrescriptionHistoryTabConstants.ALL) {
-      contenta11y = { accessibilityLabel: t('prescription.history.empty.filtered.all.a11y') }
+      contenta11y = { accessibilityLabel: a11yLabelVA(t('prescription.history.empty.filtered.all')) }
     }
     return (
       <>
@@ -58,7 +59,11 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ c
             <TextView textAlign={'center'} variant="MobileBodyBold">
               {t('prescription.history.empty.title')}
             </TextView>
-            <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" accessibilityLabel={t('prescription.history.empty.message.a11y')}>
+            <TextView
+              pt={theme.dimensions.condensedMarginBetween}
+              textAlign={'center'}
+              variant="MobileBody"
+              accessibilityLabel={a11yLabelVA(t('prescription.history.empty.message'))}>
               {t('prescription.history.empty.message')}
             </TextView>
           </>
@@ -73,7 +78,7 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ c
               pt={theme.dimensions.condensedMarginBetween}
               textAlign={'center'}
               variant="MobileBody"
-              accessibilityLabel={t('prescription.history.empty.pending.message.a11y')}>
+              accessibilityLabel={a11yLabelVA(t('prescription.history.empty.pending.message'))}>
               {t('prescription.history.empty.pending.message')}
             </TextView>
           </>
@@ -87,7 +92,11 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ c
             <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody">
               {t('prescription.history.empty.tracking.p1')}
             </TextView>
-            <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" accessibilityLabel={t('prescription.history.empty.tracking.p2.a11y')}>
+            <TextView
+              pt={theme.dimensions.condensedMarginBetween}
+              textAlign={'center'}
+              variant="MobileBody"
+              accessibilityLabel={a11yLabelVA(t('prescription.history.empty.tracking.p2'))}>
               {t('prescription.history.empty.tracking.p2')}
             </TextView>
           </>

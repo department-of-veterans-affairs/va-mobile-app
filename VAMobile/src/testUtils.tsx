@@ -9,12 +9,12 @@ import path from 'path'
 import { AnyAction, configureStore, Store } from '@reduxjs/toolkit'
 import { NavigationContainer } from '@react-navigation/native'
 import { ReactTestInstance } from 'react-test-renderer'
+import { QueryClient, QueryClientProvider, QueryKey } from '@tanstack/react-query'
 
 import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
 import appointmentsReducer from 'store/slices/appointmentsSlice'
 import authReducer from 'store/slices/authSlice'
-import authorizedServicesReducer from 'store/slices/authorizedServicesSlice'
 import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
 import demoReducer from 'store/slices/demoSlice'
 import directDepositReducer from 'store/slices/directDepositSlice'
@@ -24,13 +24,10 @@ import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import lettersReducer from 'store/slices/lettersSlice'
 import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
-import patientReducer from 'store/slices/patientSlice'
-import personalInformationReducer from 'store/slices/personalInformationSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
 import vaccineReducer from 'store/slices/vaccineSlice'
 import paymentsReducer from 'store/slices/paymentsSlice'
-import requestAppoitnmentReducer from 'store/slices/requestAppointmentSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import { InitialState } from 'store/slices'
@@ -134,8 +131,6 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       auth: authReducer,
       accessibility: accessabilityReducer,
       demo: demoReducer,
-      personalInformation: personalInformationReducer,
-      authorizedServices: authorizedServicesReducer,
       errors: errorReducer,
       analytics: analyticsReducer,
       appointments: appointmentsReducer,
@@ -146,12 +141,10 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       letters: lettersReducer,
       militaryService: militaryServiceReducer,
       notifications: notificationReducer,
-      patient: patientReducer,
       secureMessaging: secureMessagingReducer,
       snackBar: snackbarReducer,
       vaccine: vaccineReducer,
       payments: paymentsReducer,
-      requestAppointment: requestAppoitnmentReducer,
       prescriptions: prescriptionsReducer,
       settings: settingsReducer,
     },
@@ -234,32 +227,65 @@ ctxFn.skip = (name: string, fn: () => void) => {
 
 export const context = ctxFn
 
+export type QueriesData = Array<{
+  queryKey: QueryKey
+  data: any
+}>
+
+type RenderParams = {
+  preloadedState?: any // TODO: Update this type to Partial<RootState> and fix broken tests
+  navigationProvided?: boolean,
+  queriesData?: QueriesData
+}
+
 //@ts-ignore
-function render(ui, { preloadedState, navigationProvided = false, ...renderOptions } = {}) {
+function render(ui, { preloadedState, navigationProvided = false, queriesData, ...renderOptions }: RenderParams = {}) {
   //@ts-ignore
   function Wrapper({ children }) {
     let store = mockStore(preloadedState)
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+      },
+      logger: {
+        log: console.log,
+        warn: console.warn,
+        // Silence the error console
+        error: () => {},
+      },
+    });
+    if (queriesData?.length) {
+      queriesData.forEach(({ queryKey, data }) => {
+        queryClient.setQueryData(queryKey, data)
+      })
+    }
     if (navigationProvided) {
       return (
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nReal}>
-            <ThemeProvider theme={theme}>
-              <SafeAreaProvider>{children}</SafeAreaProvider>
-            </ThemeProvider>
-          </I18nextProvider>
-        </Provider>
+        <QueryClientProvider client={queryClient}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nReal}>
+              <ThemeProvider theme={theme}>
+                <SafeAreaProvider>{children}</SafeAreaProvider>
+              </ThemeProvider>
+            </I18nextProvider>
+          </Provider>
+        </QueryClientProvider>
       )
     }
     return (
-      <Provider store={store}>
-        <I18nextProvider i18n={i18nReal}>
-          <NavigationContainer>
-            <ThemeProvider theme={theme}>
-              <SafeAreaProvider>{children}</SafeAreaProvider>
-            </ThemeProvider>
-          </NavigationContainer>
-        </I18nextProvider>
-      </Provider>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nReal}>
+            <NavigationContainer>
+              <ThemeProvider theme={theme}>
+                <SafeAreaProvider>{children}</SafeAreaProvider>
+              </ThemeProvider>
+            </NavigationContainer>
+          </I18nextProvider>
+        </Provider>
+      </QueryClientProvider>
     )
   }
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })

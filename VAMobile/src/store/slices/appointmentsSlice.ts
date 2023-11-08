@@ -243,7 +243,7 @@ export const prefetchAppointments =
 
       // use loaded data if we have it
       const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, pastPagination, 1, DEFAULT_PAGE_SIZE)
-      if (loadedPastAppointments) {
+      if (loadedPastAppointments && getState().appointments.pastCcServiceError === false && getState().appointments.pastVaServiceError === false) {
         pastAppointments = loadedPastAppointments
       } else {
         pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
@@ -258,7 +258,7 @@ export const prefetchAppointments =
 
       // use loaded data if we have it
       const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, upcomingPagination, 1, DEFAULT_PAGE_SIZE)
-      if (loadedUpcomingAppointments) {
+      if (loadedUpcomingAppointments && getState().appointments.upcomingCcServiceError === false && getState().appointments.upcomingVaServiceError === false) {
         upcomingAppointments = loadedUpcomingAppointments
       } else {
         upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
@@ -276,7 +276,7 @@ export const prefetchAppointments =
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `prefetchAppointments: ${appointmenNonFatalErrorString}`)
         dispatch(dispatchFinishPrefetchAppointments({ upcoming: undefined, past: undefined, error }))
-        dispatch(dispatchSetError({ errorType: CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD, screenID }))
+        dispatch(dispatchSetError({ errorType: CommonErrorTypesConstants.APP_LEVEL_ERROR_APPOINTMENTS, screenID }))
       }
     }
   }

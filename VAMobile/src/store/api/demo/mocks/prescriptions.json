@@ -506,8 +506,7 @@
         }
       },
       {
-        "attributes":
-        {
+        "attributes": {
           "dispensedDate": "2022-08-02T04:00:00.000Z",
           "expirationDate": null,
           "facilityName": "",
@@ -528,8 +527,7 @@
         "type": "Prescription"
       },
       {
-        "attributes":
-        {
+        "attributes": {
           "dispensedDate": "2022-08-02T04:00:00.000Z",
           "expirationDate": null,
           "facilityName": "",
@@ -542,7 +540,7 @@
           "quantity": null,
           "refillDate": null,
           "refillRemaining": null,
-          "refillStatus": "suspended",
+          "refillStatus": "active",
           "refillSubmitDate": "2022-08-04T13:59:40.000Z",
           "stationNumber": "999"
         },
@@ -637,7 +635,7 @@
         "id": "40142594",
         "type": "Prescription",
         "attributes": {
-          "refillStatus": "nonVerified",
+          "refillStatus": "expired",
           "refillSubmitDate": null,
           "refillDate": "2022-06-26T04:00:00.000Z",
           "refillRemaining": 1,
@@ -701,8 +699,7 @@
   "/v0/health/rx/prescriptions/21142623/tracking": {
     "data": [
       {
-        "attributes":
-        {
+        "attributes": {
           "prescriptionName": "HALCINONIDE 0.1% OINT",
           "prescriptionNumber": "2720334",
           "ndcNumber": "00013264681",
@@ -714,7 +711,7 @@
         }
       },
       {
-        "attributes":  {
+        "attributes": {
           "deliveryService": "USPS",
           "otherPrescriptions": [
             {

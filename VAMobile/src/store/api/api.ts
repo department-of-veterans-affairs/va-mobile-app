@@ -1,5 +1,4 @@
 import { ReduxToolkitStore } from 'store'
-import { featureEnabled } from 'utils/remoteConfig'
 import { logout, refreshAccessToken } from 'store/slices'
 import { transform } from './demo/store'
 import _ from 'underscore'
@@ -67,7 +66,8 @@ const doRequest = async function (
     headers: {
       authorization: `Bearer ${_token}`,
       'X-Key-Inflection': 'camel',
-      ...(featureEnabled('SIS') ? { 'Authentication-Method': 'SIS' } : {}),
+      'Source-App-Name': 'va-health-benefits-app',
+      'Authentication-Method': 'SIS',
     },
     ...({ signal: abortSignal } || {}),
   }
@@ -110,8 +110,6 @@ const call = async function <T>(
     let response
     let responseBody
 
-    const SISEnabled = featureEnabled('SIS')
-
     try {
       response = await doRequest(method, endpoint, params, contentType, abortSignal)
     } catch (networkError) {
@@ -123,12 +121,12 @@ const call = async function <T>(
       throw { networkError: true }
     }
 
-    // For SIS, a 403 alone doesn't indicate that the token has expired. We also need to check the response body for a specific message.
-    if (SISEnabled && response.status === 403) {
+    // a 403 alone doesn't indicate that the token has expired. We also need to check the response body for a specific message.
+    if (response.status === 403) {
       responseBody = await response.json()
     }
 
-    const accessTokenExpired = SISEnabled ? response.status === 403 && responseBody?.errors === 'Access token has expired' : response.status === 401
+    const accessTokenExpired = response.status === 403 && responseBody?.errors === 'Access token has expired'
 
     if (accessTokenExpired) {
       console.debug('API: Authentication failed for ' + endpoint + ', attempting to refresh access token')

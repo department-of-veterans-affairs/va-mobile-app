@@ -18,7 +18,7 @@ export type CrisisLineCtaProps = {
  * @returns CrisisLineCta component
  */
 const CrisisLineCta: FC<CrisisLineCtaProps> = ({ onPress }) => {
-  const { t } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const props = { onPress }
 

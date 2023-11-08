@@ -68,7 +68,7 @@ export const getFormattedDateTimeYear = (dateTime: string): string => {
  */
 export const getFormattedMessageTime = (dateTime: string): string => {
   const date = DateTime.fromISO(dateTime)
-  if (DateTime.now().minus({ hours: 24 }) < date) {
+  if (DateTime.now().day === date.day && DateTime.now().month === date.month && DateTime.now().year === date.year) {
     return date.toFormat('t')
   } else {
     return date.toFormat('D')
@@ -281,6 +281,15 @@ export const getNumbersFromString = (text: string): string => {
  */
 export const getNumberAccessibilityLabelFromString = (text: string): string => {
   return getNumbersFromString(text).split('').join(' ')
+}
+
+/**
+ * Converts 1234567890 to 123-456-7890
+ * @param phoneNumber - string that has the phone number
+ */
+
+export const displayedTextPhoneNumber = (phoneNumber: string): string => {
+  return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
 }
 
 /**

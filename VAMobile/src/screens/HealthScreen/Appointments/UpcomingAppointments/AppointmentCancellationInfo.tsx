@@ -22,8 +22,7 @@ type AppointmentCancellationInfoProps = {
 }
 
 const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ appointment }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const confirmAlert = useDestructiveActionSheet()
   const dispatch = useAppDispatch()
@@ -36,7 +35,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
     displayedText: t('upcomingAppointmentDetails.findYourVALocation'),
     linkType: LinkTypeOptionsConstants.externalLink,
     numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
-    a11yLabel: t('upcomingAppointmentDetails.findYourVALocation.a11yLabel'),
+    a11yLabel: a11yLabelVA(t('upcomingAppointmentDetails.findYourVALocation')),
     accessibilityHint: t('upcomingAppointmentDetails.findYourVALocation.a11yHint'),
   }
 
@@ -47,7 +46,9 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
 
   if (isCovidVaccine) {
     title = t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.title')
+    titleA11yLabel = a11yLabelVA(t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.title'))
     body = t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.body')
+    bodyA11yLabel = a11yLabelVA(t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.body'))
   } else {
     switch (appointmentType) {
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
@@ -119,16 +120,16 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
     }
 
     confirmAlert({
-      title: tc('appointments.cancelThisAppointment'),
+      title: t('appointments.cancelThisAppointment'),
       cancelButtonIndex: 1,
       destructiveButtonIndex: 0,
       buttons: [
         {
-          text: tc('appointments.cancelAppointment'),
+          text: t('appointments.cancelAppointment'),
           onPress: onPress,
         },
         {
-          text: tc('appointments.keepAppointment'),
+          text: t('appointments.keepAppointment'),
         },
       ],
     })
@@ -146,7 +147,6 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         <VAButton
           onPress={onCancelAppointment}
           label={t('upcomingAppointmentDetails.cancelAppointment')}
-          a11yHint={t('upcomingAppointmentDetails.cancelAppointment.a11yHint')}
           buttonType={ButtonTypesConstants.buttonDestructive}
           {...testIdProps(t('upcomingAppointmentDetails.cancelAppointment'))}
         />

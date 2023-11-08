@@ -8,6 +8,7 @@ import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'co
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { TimeFrameTypeConstants } from 'constants/appointments'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { deepCopyObject } from 'utils/common'
 import { getGroupedAppointments } from 'utils/appointments'
 import { getUpcomingAppointmentDateRange } from '../Appointments'
@@ -19,8 +20,7 @@ import NoAppointments from '../NoAppointments/NoAppointments'
 type UpcomingAppointmentsProps = Record<string, unknown>
 
 const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -36,7 +36,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   }
 
   if (_.isEmpty(currentPageUpcomingAppointmentsByYear)) {
-    return <NoAppointments subText={t('noAppointments.youCanSchedule')} subTextA11yLabel={t('noAppointments.youCanScheduleA11yLabel')} />
+    return <NoAppointments subText={t('noAppointments.youCanSchedule')} subTextA11yLabel={a11yLabelVA(t('noAppointments.youCanSchedule'))} />
   }
 
   const requestPage = (requestedPage: number) => {
@@ -67,7 +67,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>
-      {getGroupedAppointments(currentPageUpcomingAppointmentsByYear || {}, theme, { t, tc }, onUpcomingAppointmentPress, false, paginationByTimeFrame.upcoming)}
+      {getGroupedAppointments(currentPageUpcomingAppointmentsByYear || {}, theme, { t }, onUpcomingAppointmentPress, false, paginationByTimeFrame.upcoming)}
       <Box flex={1} mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>

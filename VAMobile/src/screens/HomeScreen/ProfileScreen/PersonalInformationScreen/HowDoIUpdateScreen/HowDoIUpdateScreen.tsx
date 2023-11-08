@@ -5,6 +5,8 @@ import React, { FC, ReactElement } from 'react'
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView, TextViewProps } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -25,7 +27,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
     textDecoration: 'underline',
     textDecorationColor: 'link',
     accessibilityRole: 'link',
-    accessibilityLabel: t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yLabel'),
+    accessibilityLabel: a11yLabelVA(t('howDoIUpdate.findYourNearestVAMedicalCenter')),
     accessibilityHint: t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yHint'),
     paragraphSpacing: true,
   }
@@ -37,8 +39,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
     textDecoration: 'underline',
     textDecorationColor: 'link',
     accessibilityRole: 'link',
-    accessibilityLabel: t('howDoIUpdate.learnToChangeLegalName.a11yLabel'),
-    accessibilityHint: t('howDoIUpdate.learnToChangeLegalName.a11yHint'),
+    accessibilityLabel: a11yLabelVA(t('howDoIUpdate.learnToChangeLegalName')),
     paragraphSpacing: true,
   }
 
@@ -55,21 +56,21 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
   const renderVAMedicalCenterSection = (): ReactElement => {
     return (
       <Box>
-        <TextView variant="MobileBody" accessibilityLabel={t('howDoIUpdate.ifEnrolledInVAHealth.a11yLabel')} paragraphSpacing={true}>
+        <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('howDoIUpdate.ifEnrolledInVAHealth'))} paragraphSpacing={true}>
           {t('howDoIUpdate.ifEnrolledInVAHealth')}
         </TextView>
         <TextView {...linkProps}>{t('howDoIUpdate.findYourNearestVAMedicalCenter')}</TextView>
         <TextView variant="MobileBody" accessibilityLabel={t('howDoIUpdate.ifNotEnrolledInVAHealth.a11yLabel')} paragraphSpacing={true}>
           {t('howDoIUpdate.ifNotEnrolledInVAHealth')}
         </TextView>
-        <ClickToCallPhoneNumber phone={t('howDoIUpdate.profileNumber')} a11yLabel={t('howDoIUpdate.profileNumber.a11yLabel')} />
+        <ClickToCallPhoneNumber phone={t('8008271000')} a11yLabel={a11yLabelID(t('8008271000'))} displayedText={displayedTextPhoneNumber(t('8008271000'))} />
       </Box>
     )
   }
 
   const nameUpdateScreen = (): ReactElement => {
     return (
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('howDoIUpdate.name.title')}
         </TextView>
@@ -87,7 +88,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
 
   const dateOfBirthUpdateScreen = (): ReactElement => {
     return (
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('howDoIUpdate.dateOfBirth.title')}
         </TextView>

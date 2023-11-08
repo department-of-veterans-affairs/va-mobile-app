@@ -3,12 +3,13 @@ import React from 'react'
 import * as api from 'store/api'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { context, mockNavProps, render, when } from 'testUtils'
 
 import AppealDetailsScreen from './AppealDetailsScreen'
 import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { appeal as appealData } from '../appealData'
-import { ErrorComponent, LoadingComponent, SegmentedControl, TextView } from 'components'
+import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import AppealStatus from './AppealStatus/AppealStatus'
 import AppealIssues from './AppealIssues/AppealIssues'
 import { AppealEventData, AppealTypes } from 'store/api/types'
@@ -102,7 +103,7 @@ context('AppealDetailsScreen', () => {
       })
 
       await waitFor(() => {
-        testInstance.findByType(SegmentedControl).props.onChange('Status')
+        testInstance.findByType(SegmentedControl).props.onChange(0)
         expect(component.UNSAFE_root.findAllByType(AppealStatus).length).toEqual(1)
       })
     })
@@ -116,7 +117,7 @@ context('AppealDetailsScreen', () => {
       })
 
       await waitFor(async () => {
-        component.UNSAFE_root.findByType(SegmentedControl).props.onChange('Issues')
+        component.UNSAFE_root.findByType(SegmentedControl).props.onChange(1)
       })
       expect(component.UNSAFE_root.findAllByType(AppealIssues).length).toEqual(1)
     })

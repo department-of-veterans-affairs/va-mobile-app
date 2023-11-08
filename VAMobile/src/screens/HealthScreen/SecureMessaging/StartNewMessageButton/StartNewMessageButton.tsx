@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useTheme } from 'utils/hooks'
 
 const StartNewMessageButton: FC = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation<StackNavigationProp<HealthStackParamList, keyof HealthStackParamList>>()
   const theme = useTheme()
   const onPress = () => {
@@ -23,7 +23,6 @@ const StartNewMessageButton: FC = () => {
     label: t('secureMessaging.startNewMessage'),
     buttonType: ButtonTypesConstants.buttonPrimary,
     onPress: onPress,
-    a11yHint: t('secureMessaging.startNewMessage.a11yHint'),
     iconProps: { name: 'Compose', fill: 'navBar' },
     testID: 'startNewMessageButtonTestID',
   }

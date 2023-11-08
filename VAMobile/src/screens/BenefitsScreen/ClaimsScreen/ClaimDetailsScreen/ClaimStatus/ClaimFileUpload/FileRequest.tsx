@@ -12,6 +12,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -27,7 +28,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
   const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
 
-  const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
+  const count = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
   const getRequests = (): Array<SimpleListItemObj> => {
     let requestNumber = 1
@@ -37,18 +38,31 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
       navigateTo('FileRequestDetails', { claimID, request })()
     }
 
-    return map(requests, (request) => {
+    const getA11yLabel = (requestIndex: number, displayName?: string, uploaded?: boolean) => {
+      const nameContainsRequestNumber = displayName && /Request \d/.test(displayName)
+      const status = uploaded ? t('uploaded') : t('needed')
+
+      if (!displayName) {
+        return `${t('fileRequest.buttonA11y', { requestNumber: requestIndex, totalCount: requests.length })} ${status}`
+      }
+
+      return nameContainsRequestNumber
+        ? `${displayName} ${t('fileRequest.buttonA11y.totalCount', { totalCount: requests.length })} ${status}`
+        : `${t('fileRequest.buttonA11y', { requestNumber: requestIndex, totalCount: requests.length })} ${status}. ${displayName}`
+    }
+
+    return map(requests, (request, index) => {
       const { displayName } = request
       const hasUploaded = hasUploadedOrReceived(request)
       const item: SimpleListItemObj = {
         text: displayName || '',
-        testId: displayName,
+        testId: getA11yLabel(index + 1, displayName, hasUploaded),
         onPress: () => {
           onDetailsPress(request)
         },
         claimsRequestNumber: requestNumber,
         fileUploaded: hasUploaded,
-        a11yHintText: t('fileRequest.buttonA11yHint'),
+        a11yHintText: hasUploaded ? t('fileRequest.buttonA11yHint.uploaded') : t('fileRequest.buttonA11yHint.needed'),
       }
 
       if (!hasUploaded) {
@@ -69,7 +83,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
 
   const viewEvaluationDetailsPress = () => {
     if (claim) {
-      logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, numberOfRequests))
+      logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, count))
     }
     navigateTo('AskForClaimDecision', { claimID })()
   }
@@ -77,8 +91,13 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
   return (
     <ChildTemplate backLabel={t('claim.backLabel')} backLabelOnPress={navigation.goBack} title={t('fileRequest.title')} testID="fileRequestPageTestID">
       <Box mb={contentMarginBottom}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" mb={condensedMarginBetween} mx={gutter}>
-          {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
+        <TextView
+          variant="MobileBodyBold"
+          accessibilityRole="header"
+          accessibilityLabel={a11yLabelVA(t('claimPhase.youHaveFileRequest', { count }))}
+          mb={condensedMarginBetween}
+          mx={gutter}>
+          {t('claimPhase.youHaveFileRequest', { count })}
         </TextView>
         <Box>
           <SimpleList items={getRequests()} />

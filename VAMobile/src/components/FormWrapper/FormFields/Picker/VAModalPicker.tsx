@@ -97,6 +97,9 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     if (!disabled) {
       setIsFocused(true)
       setModalVisible(true)
+      if (!snackBar) {
+        logAnalyticsEvent(Events.vama_snackbar_null('VAModalPicker'))
+      }
       snackBar?.hideAll()
     }
   }, [disabled, labelKey, testID, t])
@@ -148,7 +151,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   })
 
   const currentlySelectedOption = allPickerOptions.find((el) => el.value === selectedValue)
-  const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:picker')
+  const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'picker')
 
   const parentProps: AccessibilityProps = {
     ...a11yValueProp({ text: generateA11yValue(currentlySelectedOption?.label, isFocused, t) }),
@@ -198,7 +201,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     }
 
     return (
-      <TouchableWithoutFeedback {...props} {...testIdProps(getTranslation(buttonText || '', t))} {...a11yHintProp(t('pickerLaunchBtn.a11yHint'))}>
+      <TouchableWithoutFeedback {...props} {...testIdProps(getTranslation(buttonText || '', t))}>
         <Box pr={theme.dimensions.headerButtonSpacing} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerLeftButtonFromTextPadding}>
           <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
             {getTranslation(buttonText || '', t)}
@@ -222,7 +225,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const topPadding = insets.top + 60
 
   const cancelLabel = t('cancel')
-  const confirmLabel = getTranslation(confirmBtnText || 'common:done', t)
+  const confirmLabel = getTranslation(confirmBtnText || 'done', t)
 
   const cancelButtonProps: PressableProps = {
     accessible: true,
@@ -240,6 +243,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
   const commonButtonProps: TextViewProps = {
     variant: 'MobileBody',
+    color: 'link',
     allowFontScaling: false,
     py: 3, // bump up the padding to make touch target a bit bigger #2740
   }

@@ -8,14 +8,12 @@ import { context, waitFor, render, RenderAPI, mockNavProps } from 'testUtils'
 import {
   DirectDepositState,
   ErrorsState,
-  initialAuthorizedServicesState,
   initialAuthState,
   initialErrorsState,
   initializeErrorsByScreenID,
   initialMilitaryServiceState,
-  initialPersonalInformationState,
 } from 'store/slices'
-import { ServiceData, UserDataProfile } from 'store/api/types'
+import { ServiceData } from 'store/api/types'
 import DirectDepositScreen from './index'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -31,10 +29,6 @@ jest.mock('utils/hooks', () => {
 })
 
 const authorizedMilitaryState = {
-  authorizedServices: {
-    ...initialAuthorizedServicesState,
-    militaryServiceHistory: true,
-  },
   militaryService: {
     ...initialMilitaryServiceState,
     serviceHistory: [{} as ServiceData],
@@ -109,11 +103,6 @@ context('DirectDepositScreen', () => {
       component = render(<DirectDepositScreen {...mockNavProps()} />, {
         preloadedState: {
           auth: { ...initialAuthState },
-          personalInformation: {
-            ...initialPersonalInformationState,
-            profile: {} as UserDataProfile,
-            needsDataLoad: false,
-          },
           ...authorizedMilitaryState,
         },
       })
@@ -126,11 +115,6 @@ context('DirectDepositScreen', () => {
       component = render(<DirectDepositScreen {...mockNavProps()} />, {
         preloadedState: {
           auth: { ...initialAuthState },
-          personalInformation: {
-            ...initialPersonalInformationState,
-            profile: { bank_data: { bank_account_number: null, bank_account_type: null, bank_name: null } } as unknown as UserDataProfile,
-            needsDataLoad: false,
-          },
           ...authorizedMilitaryState,
         },
       })

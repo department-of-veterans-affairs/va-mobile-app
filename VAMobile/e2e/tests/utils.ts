@@ -21,6 +21,7 @@ export const CommonE2eIdConstants = {
   PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
   DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
+  HOME_TAB_BUTTON_TEXT: 'Home',
   PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
   LETTERS_ROW_TEXT: 'VA letters and documents',
   DISABILITY_RATING_ROW_TEXT: 'Disability rating',
@@ -28,8 +29,6 @@ export const CommonE2eIdConstants = {
   MILITARY_INFORMATION_ROW_TEXT: 'Military information',
   VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
   MESSAGES_ROW_TEXT: 'Messages',
-  SIGN_OUT_BTN_ID: 'Sign out',
-  SIGN_OUT_CONFIRM_TEXT: 'Sign out?',
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'You’re leaving the app',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
@@ -39,6 +38,9 @@ export const CommonE2eIdConstants = {
   VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
   CLAIMS_BUTTON_TEXT: 'Claims',
   CLAIMS_HISTORY_BUTTON_TEXT: 'Claims history',
+  CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
+  DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
+  RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
 }
 
 
@@ -47,21 +49,22 @@ export const CommonE2eIdConstants = {
 export async function loginToDemoMode(skipOnboarding = true) {
   await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
     .toExist()
-    .withTimeout(10000)
+    .withTimeout(60000)
   try {
 	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
 	await element(by.text('Dismiss')).tap()
   } catch (e) {} 
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(21)
-  if (DEMO_PASSWORD != undefined) {
-    await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).typeText(DEMO_PASSWORD)
+
+  if (DEMO_PASSWORD !== undefined) {
+    await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).replaceText(DEMO_PASSWORD)
   }
   
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
   await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
-  if(skipOnboarding == true) {
+  if(skipOnboarding === true) {
     const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
 
     if (ifCarouselSkipBtnExist) {
@@ -130,23 +133,25 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
  */
 
 export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue: string | boolean) {
-			
-	fs.readFile('./src/store/api/demo/mocks/' + mockFileName, 'utf8', (error, data) => {
-		 if(error){
-			console.log(error);
-			return;
-		 }
+	
+  const mockDirectory = './src/store/api/demo/mocks/'
+  
+  fs.readFile(mockDirectory + mockFileName, 'utf8', (error, data) => {
+    if(error){
+      console.log(error);
+      return;
+    }
 
 		const jsonParsed = JSON.parse(data)
 		var mockDataVariable
 		var mockDataKeyValue
 		for(var x=0; x<jsonProperty.length; x++) {
-			if (x == 0) {
+			if (x === 0) {
 				mockDataVariable = jsonParsed[jsonProperty[x]]
-			} else if (x == jsonProperty.length - 1) {
+			} else if (x === jsonProperty.length - 1) {
 				mockDataVariable[jsonProperty[x]] = newJsonValue
 			} else {
-				if (jsonProperty[x].constructor == Object) {
+				if (jsonProperty[x].constructor === Object) {
 					var key = String(Object.keys(jsonProperty[x]))
 					var value = jsonProperty[x][key]
 					mockDataKeyValue = mockDataVariable[key]
@@ -157,7 +162,7 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 			}				
 		}
 	
-		fs.writeFile('./src/store/api/demo/mocks/' + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
+		fs.writeFile(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
 			if (err) { return console.log(err) }
 		})
 	})
@@ -172,6 +177,23 @@ export async function checkImages(screenshotPath) {
 		comparisonMethod: 'ssim',
 		failureThreshold: 0.01,
 		failureThresholdType: 'percent'})
+}
+
+/*This function resets the in-app review counter then relaunches app, so the review pop-up doesn't break tests
+ * 
+ * @param matchString - string of the text or id to match
+ * @param findbyText - boolean to search by testID or Text
+ * @param cancelPopUp - boolean to either cancel the popUp or leave the app
+ */
+export async function resetInAppReview() {
+  await device.launchApp({ newInstance: true })
+  await loginToDemoMode()
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+	await element(by.id(CommonE2eIdConstants.RESET_INAPP_REVIEW_BUTTON_TEXT)).tap()
+  await device.launchApp({ newInstance: true })
+  await loginToDemoMode()	
 }
 
 /**
@@ -254,6 +276,10 @@ export async function openClaims() {
 
 export async function openClaimsHistory() {
 	await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap() 
+}
+
+export async function openDeveloperScreen() { 
+  await element(by.text(CommonE2eIdConstants.DEVELOPER_SCREEN_ROW_TEXT)).tap()
 }
 
 /**

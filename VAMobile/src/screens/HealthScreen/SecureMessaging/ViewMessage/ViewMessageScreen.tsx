@@ -3,12 +3,11 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
-import { AlertBox, BackButton, Box, ChildTemplate, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { AlertBox, Box, ChildTemplate, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker } from 'components'
 import { DateTime } from 'luxon'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -53,8 +52,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   const folderWhereMessageIs = useRef(currentFolderIdParam.toString())
   const folderWhereMessagePreviousewas = useRef(folderWhereMessageIs.current)
 
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { messagesById, threads, loading, loadingFile, loadingInbox, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<
@@ -92,12 +90,11 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   }, [dispatch, folders])
 
   const getFolders = (): PickerItem[] => {
-    let indexOfDeleted: number | undefined
     const filteredFolder = _.filter(folders, (folder) => {
       const folderName = folder.attributes.name
-      return folderName !== FolderNameTypeConstants.drafts && folderName !== FolderNameTypeConstants.sent
-    }).map((folder, index) => {
-      let label = folder.attributes.name
+      return folderName !== FolderNameTypeConstants.drafts && folderName !== FolderNameTypeConstants.sent && folderName !== FolderNameTypeConstants.deleted
+    }).map((folder) => {
+      const label = folder.attributes.name
 
       const icon = {
         fill: 'defaultMenuItem',
@@ -105,13 +102,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         width: theme.fontSizes.MobileBody.fontSize,
         name: 'Folder',
       } as VAIconProps
-
-      if (label === FolderNameTypeConstants.deleted) {
-        label = TRASH_FOLDER_NAME
-        icon.fill = 'error'
-        icon.name = 'Trash'
-        indexOfDeleted = index
-      }
 
       if (label === FolderNameTypeConstants.inbox) {
         icon.fill = 'defaultMenuItem'
@@ -124,54 +114,18 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         icon,
       }
     })
-
-    if (indexOfDeleted !== undefined) {
-      filteredFolder.unshift(filteredFolder.splice(indexOfDeleted, 1)[0])
-    }
-
     return filteredFolder
   }
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => (
-        <BackButton
-          onPress={() => {
-            navigation.goBack()
-          }}
-          canGoBack={props.canGoBack}
-          label={BackButtonLabelConstants.back}
-          showCarat={true}
-          backButtonTestID="viewMessageBackTestID"
-        />
-      ),
-      headerRight: () =>
-        currentFolderIdParam !== SecureMessagingSystemFolderIdConstants.SENT ? (
-          <VAModalPicker
-            displayButton={true}
-            selectedValue={newCurrentFolderID}
-            onSelectionChange={onMove}
-            pickerOptions={getFolders()}
-            labelKey={'common:pickerMoveMessageToFolder'}
-            buttonText={'common:pickerLaunchBtn'}
-            confirmBtnText={'common:pickerLaunchBtn'}
-            key={newCurrentFolderID}
-          />
-        ) : (
-          <></>
-        ),
-    })
-  })
-
   const backLabel =
     Number(folderWhereMessagePreviousewas.current) === SecureMessagingSystemFolderIdConstants.INBOX
-      ? tc('messages')
-      : tc('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
+      ? t('messages')
+      : t('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
   if (useError(screenID) || messageIDsOfError?.includes(messageID)) {
     return (
-      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
         <ErrorComponent screenID={screenID} />
       </ChildTemplate>
     )
@@ -179,7 +133,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   if (loading || loadingFile || loadingInbox || movingMessage) {
     return (
-      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')}>
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
         <LoadingComponent
           text={loadingFile ? t('secureMessaging.viewMessage.loadingAttachment') : movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
         />
@@ -224,7 +178,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     currentFolderIdParam === SecureMessagingSystemFolderIdConstants.SENT
       ? undefined
       : {
-          label: tc('pickerLaunchBtn'),
+          label: t('pickerLaunchBtn'),
           icon: moveIconProps,
           onPress: () => {
             logAnalyticsEvent(Events.vama_sm_move())
@@ -233,16 +187,16 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
         }
 
   return (
-    <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={tc('reviewMessage')} headerButton={headerButton} testID="viewMessageTestID">
+    <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')} headerButton={headerButton} testID="viewMessageTestID">
       {headerButton && showModalPicker && (
         <VAModalPicker
           selectedValue={newCurrentFolderID}
           onSelectionChange={onMove}
           onClose={() => setShowModalPicker(false)}
           pickerOptions={getFolders()}
-          labelKey={'common:pickerMoveMessageToFolder'}
-          buttonText={'common:pickerLaunchBtn'}
-          confirmBtnText={'common:pickerLaunchBtn'}
+          labelKey={'pickerMoveMessageToFolder'}
+          buttonText={'pickerLaunchBtn'}
+          confirmBtnText={'pickerLaunchBtn'}
           key={newCurrentFolderID}
           showModalByDefault={true}
         />

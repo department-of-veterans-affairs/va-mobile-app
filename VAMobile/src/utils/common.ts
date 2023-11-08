@@ -8,13 +8,15 @@ import { contains, isEmpty, map } from 'underscore'
 import { AppDispatch } from 'store'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ErrorObject } from 'store/api'
+import { Events } from 'constants/analytics'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
-import { PhoneData } from 'store/api/types/PhoneData'
+import { PhoneData } from 'api/types/PhoneData'
 import { StackCardInterpolatedStyle, StackCardInterpolationProps } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
 import { TextLineWithIconProps } from 'components'
 import { formatPhoneNumber } from './formattingUtils'
+import { logAnalyticsEvent } from './analytics'
 import { updatBottomOffset } from 'store/slices/snackBarSlice'
 import theme from 'styles/themes/standardTheme'
 
@@ -174,14 +176,14 @@ export const bytesToFinalSizeDisplay = (bytes: number, t: TFunction, includePare
 
   if (bytes < 10) {
     // Less than 0.01 KB, display with Bytes size unit
-    fileSize = `${bytes} ${t('common:Bytes')}`
+    fileSize = `${bytes} ${t('Bytes')}`
   } else if (bytes < 10000) {
     // Less than 0.01 MB, display with KB size unit
     const kb = bytesToKilobytes(bytes)
-    fileSize = `${kb} ${t('common:KB')}`
+    fileSize = `${kb} ${t('KB')}`
   } else {
     const mb = bytesToMegabytes(bytes)
-    fileSize = `${mb} ${t('common:MB')}`
+    fileSize = `${mb} ${t('MB')}`
   }
 
   return includeParens ? `(${fileSize})` : fileSize
@@ -201,14 +203,14 @@ export const bytesToFinalSizeDisplayA11y = (bytes: number, t: TFunction, include
 
   if (bytes < 10) {
     // Less than 0.01 KB, display with Bytes size unit
-    fileSize = `${bytes} ${t('common:Bytes')}`
+    fileSize = `${bytes} ${t('Bytes')}`
   } else if (bytes < 10000) {
     // Less than 0.01 MB, display with KB size unit
     const kb = bytesToKilobytes(bytes)
-    fileSize = `${kb} ${t('common:KB.a11y')}`
+    fileSize = `${kb} ${t('KB.a11y')}`
   } else {
     const mb = bytesToMegabytes(bytes)
-    fileSize = `${mb} ${t('common:MB.a11y')}`
+    fileSize = `${mb} ${t('MB.a11y')}`
   }
 
   return includeParens ? `(${fileSize})` : fileSize
@@ -309,6 +311,9 @@ export const deepCopyObject = <T>(item: Record<string, unknown>): T => {
  * @returns snackbar
  */
 export function showSnackBar(message: string, dispatch: AppDispatch, actionPressed?: () => void, isUndo?: boolean, isError?: boolean, withNavBar = false): void {
+  if (!snackBar) {
+    logAnalyticsEvent(Events.vama_snackbar_null('showSnackBar'))
+  }
   snackBar?.hideAll()
   dispatch(updatBottomOffset(withNavBar ? theme.dimensions.snackBarBottomOffsetWithNav : theme.dimensions.snackBarBottomOffset))
   snackBar?.show(message, {

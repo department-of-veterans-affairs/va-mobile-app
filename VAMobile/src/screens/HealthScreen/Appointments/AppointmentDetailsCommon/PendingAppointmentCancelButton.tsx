@@ -19,8 +19,7 @@ type PendingAppointmentCancelButtonProps = {
 
 const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = ({ attributes, appointmentID }) => {
   const isAppointmentPending = isAPendingAppointment(attributes)
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const confirmAlert = useDestructiveActionSheet()
@@ -54,16 +53,16 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
         ),
       )
       confirmAlert({
-        title: tc('appointments.cancelRequest'),
+        title: t('appointments.cancelRequest'),
         cancelButtonIndex: 1,
         destructiveButtonIndex: 0,
         buttons: [
           {
-            text: tc('cancelRequest'),
+            text: t('cancelRequest'),
             onPress: onPress,
           },
           {
-            text: tc('keepRequest'),
+            text: t('keepRequest'),
           },
         ],
       })
@@ -73,10 +72,10 @@ const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = 
       <Box mt={theme.dimensions.standardMarginBetween}>
         <VAButton
           onPress={onCancel}
-          label={t('appointments.pending.cancelRequest')}
+          label={t('cancelRequest')}
           a11yHint={t('appointments.pending.cancelRequest.a11yHint')}
           buttonType={ButtonTypesConstants.buttonDestructive}
-          {...testIdProps(t('appointments.pending.cancelRequest'))}
+          {...testIdProps(t('cancelRequest'))}
         />
       </Box>
     )

@@ -8,6 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/types'
 import { PrescriptionState, requestRefills } from 'store/slices'
 import { RootState } from 'store'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -27,8 +28,7 @@ type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'Prescri
 const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const [status, setStatus] = useState<REQUEST_STATUS>()
   const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
   const { refillRequestSummaryItems, showLoadingScreenRequestRefillsRetry } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
@@ -54,7 +54,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       setStatus(REQUEST_STATUS.MIX)
     }
     setRequestFailed(requestFailedItems)
-  }, [refillRequestSummaryItems, tc, requestFailed.length])
+  }, [refillRequestSummaryItems, t, requestFailed.length])
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -84,7 +84,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
           border: 'error',
           title: t('prescriptions.refillRequestSummary.mix', { count: requestFailed.length }),
           text: t('prescriptions.refillRequestSummary.tryAgain'),
-          textA11yLabel: t('prescriptions.refillRequestSummary.tryAgain.a11yLabel'),
+          textA11yLabel: a11yLabelVA(t('prescriptions.refillRequestSummary.tryAgain')),
         }
         break
     }
@@ -99,7 +99,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
                   const prescriptionIds = requestFailed.map((prescription) => prescription.id)
                   logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
                 }}
-                label={tc('tryAgain')}
+                label={t('tryAgain')}
                 buttonType="buttonPrimary"
                 a11yHint={t('prescriptions.refillRequestSummary.tryAgain.a11yLabel')}
               />
@@ -139,7 +139,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         accessibilityLabel: `${prescriptionName}. ${rxNumberA11yLabel}. ${
           request.submitted ? t('prescriptions.refillRequestSummary.pendingRefills.requestSubmitted') : t('prescriptions.refillRequestSummary.pendingRefills.requestFailed')
         }`,
-        accessibilityValue: { text: tc('listPosition', { position: index + 1, total: refillRequestSummaryItems.length }) },
+        accessibilityValue: { text: t('listPosition', { position: index + 1, total: refillRequestSummaryItems.length }) },
         accessible: true,
       }
 
@@ -178,10 +178,10 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
       <Box {...borderProps}>
         <TextView variant="HelperTextBold">{t('prescriptions.refillRequestSummary.whatsNext')}</TextView>
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.success.1.a11y')} paragraphSpacing={true}>
+          <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescriptions.refillRequestSummary.yourRefills.success.1'))} paragraphSpacing={true}>
             {t('prescriptions.refillRequestSummary.yourRefills.success.1')}
           </TextView>
-          <TextView variant="MobileBody" accessibilityLabel={t('prescriptions.refillRequestSummary.yourRefills.success.2.a11y')}>
+          <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescriptions.refillRequestSummary.yourRefills.success.2'))}>
             {t('prescriptions.refillRequestSummary.yourRefills.success.2')}
           </TextView>
         </Box>
@@ -201,7 +201,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   if (showLoadingScreenRequestRefillsRetry) {
     return (
       <FullScreenSubtask
-        leftButtonText={tc('close')}
+        leftButtonText={t('close')}
         onLeftButtonPress={() => {
           onNavToHistory()
         }}>
@@ -213,11 +213,11 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   return (
     <>
       <FullScreenSubtask
-        leftButtonText={tc('close')}
+        leftButtonText={t('close')}
         onLeftButtonPress={() => {
           onNavToHistory()
         }}
-        title={tc('refillRequest')}>
+        title={t('refillRequest')}>
         <Box mb={theme.dimensions.contentMarginBottom}>
           {renderAlert()}
           <TextArea>

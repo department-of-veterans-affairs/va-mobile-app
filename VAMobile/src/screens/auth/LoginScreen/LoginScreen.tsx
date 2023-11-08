@@ -23,7 +23,7 @@ import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
-  const { t } = useTranslation([NAMESPACE.COMMON, NAMESPACE.HOME])
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
   const { authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
 
@@ -56,8 +56,8 @@ const LoginScreen: FC = () => {
     logAnalyticsEvent(Events.vama_find_location())
     navigation.navigate('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
-      displayTitle: t('common:webview.vagov'),
-      loadingMessage: t('common:webview.valocation.loading'),
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('webview.valocation.loading'),
     })
   }
 
@@ -104,15 +104,11 @@ const LoginScreen: FC = () => {
           <VAIcon testID="VAIcon" name={'Logo'} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={80}>
-          <VAButton onPress={onLoginInit} label={t('common:signin')} a11yHint={t('common:signin.a11yHint')} buttonType={ButtonTypesConstants.buttonWhite} hideBorder={true} />
-          <Pressable
-            onPress={onFacilityLocator}
-            {...testIdProps(a11yLabelVA(t('home:findLocation.title')))}
-            accessibilityHint={a11yLabelVA(t('home:findLocation.a11yHint'))}
-            accessibilityRole="button">
+          <VAButton onPress={onLoginInit} label={t('signin')} buttonType={ButtonTypesConstants.buttonWhite} hideBorder={true} />
+          <Pressable onPress={onFacilityLocator} {...testIdProps(a11yLabelVA(t('findLocation.title')))} accessibilityRole="button">
             <Box {...findLocationProps}>
               <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
-                {t('home:findLocation.title')}
+                {t('findLocation.title')}
               </TextView>
               <VAIcon name="ChevronRight" fill="#FFF" width={10} height={15} />
             </Box>

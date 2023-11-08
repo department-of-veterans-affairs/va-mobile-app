@@ -4,20 +4,20 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SegmentedControlIndexes } from 'constants/secureMessaging'
 import { ViewStyle } from 'react-native'
 import { updateSecureMessagingTab } from 'store/slices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 
 const NoFolderMessages: FC = () => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
 
   const onGoToInbox = (): void => {
-    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+    dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
     navigateTo('SecureMessaging')()
   }
 
@@ -35,7 +35,7 @@ const NoFolderMessages: FC = () => {
             {t('secureMessaging.folders.noFolderMessages')}
           </TextView>
           <Box width={'100%'}>
-            <VAButton buttonType={'buttonPrimary'} label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} a11yHint={t('secureMessaging.goToInbox.a11yHint')} />
+            <VAButton buttonType={'buttonPrimary'} label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
           </Box>
         </Box>
       </VAScrollView>

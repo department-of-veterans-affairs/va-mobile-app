@@ -24,6 +24,16 @@ NativeModules.RNInAppUpdate = {
   requestStoreVersion: jest.fn().mockReturnValue('2.0.0'),
 }
 
+NativeModules.SettingsManager = {
+  ...NativeModules.SettingsManager,
+  settings: {AppleLocale: 'en_US'}
+}
+
+NativeModules.I18nManager = {
+  ...NativeModules.I18nManager,
+  localeIdentifier: 'en_US'
+}
+
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
 import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock'

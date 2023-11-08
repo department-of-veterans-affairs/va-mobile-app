@@ -1,8 +1,8 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useLayoutEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 
-import { Box, ClosePanelButton, ErrorComponent, FullScreenSubtask, LoadingComponent, MultiTouchCard, MultiTouchCardProps, TextView } from 'components'
+import { Box, ErrorComponent, FullScreenSubtask, LoadingComponent, MultiTouchCard, MultiTouchCardProps, TextView } from 'components'
 import { ClickForActionLink } from 'components'
 import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
@@ -11,12 +11,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, getTrackingInfo } from 'store/slices'
 import { PrescriptionTrackingInfoAttributeData, PrescriptionTrackingInfoOtherItem } from 'store/api'
 import { RootState } from 'store'
-import { a11yLabelID } from 'utils/a11yLabel'
+import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
-import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener, useDowntime, useError, useTheme } from 'utils/hooks'
-import { usePanelHeaderStyles } from 'utils/hooks/headerStyles'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
 
@@ -44,28 +42,12 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   const { prescription } = route.params
   const dispatch = useAppDispatch()
   const { loadingTrackingInfo, trackingInfo } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
-  const headerStyle = usePanelHeaderStyles()
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID)
-  const noneNoted = tc('noneNoted')
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      ...headerStyle,
-      headerLeft: (props) => (
-        <ClosePanelButton
-          buttonText={tc('close')}
-          onPress={props.onPress}
-          buttonTextColor={'showAll'}
-          focusOnButton={isIOS() ? false : true} // this is done due to ios not reading the button name on modal
-        />
-      ),
-    })
-  }, [navigation, headerStyle, tc])
+  const noneNoted = t('noneNoted')
 
   useEffect(() => {
     if (!prescriptionInDowntime) {
@@ -83,7 +65,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   // 2. Error message specific to this page
   if (prescriptionInDowntime) {
     return (
-      <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
+      <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -91,7 +73,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
 
   if (hasError) {
     return (
-      <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
+      <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID} />
       </FullScreenSubtask>
     )
@@ -99,7 +81,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
 
   if (loadingTrackingInfo) {
     return (
-      <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
+      <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
         <LoadingComponent text={t('prescriptions.refillTracking.loading')} />
       </FullScreenSubtask>
     )
@@ -177,7 +159,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
         <Box key={index} mt={30}>
           {trackingInfo?.length > 1 ? (
             <Box mb={condensedMarginBetween}>
-              <TextView variant={'MobileBodyBold'}>{`${tc('package')} ${tc('listPosition', { position: index + 1, total: totalTracking })}`}</TextView>
+              <TextView variant={'MobileBodyBold'}>{`${t('package')} ${t('listPosition', { position: index + 1, total: totalTracking })}`}</TextView>
             </Box>
           ) : (
             <></>
@@ -205,7 +187,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   }
 
   return (
-    <FullScreenSubtask title={tc('prescriptionTracking')} rightButtonText={tc('close')}>
+    <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')}>
       <Box mx={gutter} mb={contentMarginBottom}>
         {renderHeader()}
         <Box mt={standardMarginBetween}>
@@ -213,8 +195,8 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
             {t('prescriptions.refillTracking.upTo15Days')}
           </TextView>
         </Box>
-        <TextView variant="HelperText" accessibilityLabel={tc('prescriptions.refillTracking.deliveryChanges.a11yLabel')}>
-          {tc('prescriptions.refillTracking.deliveryChanges')}
+        <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('prescriptions.refillTracking.deliveryChanges'))}>
+          {t('prescriptions.refillTracking.deliveryChanges')}
         </TextView>
         {renderTrackingCards()}
       </Box>

@@ -9,6 +9,7 @@ import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScre
 import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
@@ -48,7 +49,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
 
   const collapsibleContent = (): ReactNode => {
     const linkToCallProps: LinkButtonProps = {
-      a11yLabel: t('fileUpload.goToVaGov.a11yLabel'),
+      a11yLabel: a11yLabelVA(t('fileUpload.goToVaGov')),
       displayedText: t('fileUpload.goToVaGov'),
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,
@@ -57,7 +58,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('fileUpload.accessibilityAlert.body.a11y')}>
+        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('fileUpload.accessibilityAlert.body'))}>
           {t('fileUpload.accessibilityAlert.body')}
         </TextView>
         <ClickForActionLink {...linkToCallProps} />
@@ -112,7 +113,6 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
           label={t('fileUpload.takeOrSelectPhotos')}
           testID={t('fileUpload.takePhotos')}
           buttonType={ButtonTypesConstants.buttonPrimary}
-          a11yHint={t('fileUpload.takePhotosWithCameraA11yHint')}
         />
       </Box>
     </FullScreenSubtask>

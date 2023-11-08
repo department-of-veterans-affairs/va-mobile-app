@@ -11,6 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
 import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { RootState } from 'store'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { useAppDispatch, useDestructiveActionSheet, useDowntime, useExternalLink, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
@@ -30,9 +31,8 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const submitRefillAlert = useDestructiveActionSheet()
   const dispatch = useAppDispatch()
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
-  const noneNoted = tc('noneNoted')
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const noneNoted = t('noneNoted')
 
   const { contentMarginBottom } = theme.dimensions
 
@@ -77,8 +77,8 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   }
   const getGoToMyVAHealthButton = () => {
     const buttonProps: VAButtonProps = {
-      label: tc('goToMyVAHealth'),
-      testID: tc('goToMyVAHealth.a11yLabel'),
+      label: t('goToMyVAHealth'),
+      testID: a11yLabelVA(t('goToMyVAHealth')),
       buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: redirectLink,
       iconProps: {
@@ -108,7 +108,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
           cancelButtonIndex: 0,
           buttons: [
             {
-              text: tc('cancel'),
+              text: t('cancel'),
               onPress: () => {
                 logAnalyticsEvent(Events.vama_rx_request_cancel(prescriptionIds))
               },
@@ -149,14 +149,14 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
 
   if (loadingHistory) {
     return (
-      <ChildTemplate backLabel={tc('prescriptions')} backLabelOnPress={navigation.goBack} title={tc('prescriptionDetails')}>
+      <ChildTemplate backLabel={t('prescription.title')} backLabelOnPress={navigation.goBack} title={t('prescriptionDetails')}>
         <LoadingComponent text={t('prescription.details.loading')} />
       </ChildTemplate>
     )
   }
 
   return (
-    <ChildTemplate backLabel={tc('prescriptions')} backLabelOnPress={navigation.goBack} title={tc('prescriptionDetails')}>
+    <ChildTemplate backLabel={t('prescription.title')} backLabelOnPress={navigation.goBack} title={t('prescriptionDetails')}>
       {getBanner()}
       {getRefillVAHealthButton()}
       <Box mb={contentMarginBottom}>
@@ -188,7 +188,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
           <DetailsTextSections
             leftSectionTitle={t('prescription.details.vaFacilityHeader')}
             leftSectionValue={facilityName || noneNoted}
-            leftSectionTitleLabel={t('prescription.details.vaFacilityHeaderLabel')}>
+            leftSectionTitleLabel={a11yLabelVA(t('prescription.details.vaFacilityHeader'))}>
             <ClickToCallPhoneNumber phone={facilityPhoneNumber} />
           </DetailsTextSections>
         </TextArea>

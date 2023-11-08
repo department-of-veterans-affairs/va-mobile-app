@@ -4,7 +4,6 @@ import React, { FC } from 'react'
 import { AppointmentPhone } from 'store/api/types'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp } from 'utils/accessibility'
 import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'utils/formattingUtils'
 
 type ClickToCallPhoneNumberProps = {
@@ -16,11 +15,17 @@ type ClickToCallPhoneNumberProps = {
   center?: boolean
   /** accessibility label - otherwise; defaults to the actual phone number */
   a11yLabel?: string
+  /** tty bypass */
+  ttyBypass?: boolean
+  /** color bypass */
+  colorOverride?: string
+  /** optional function to fire analytic events when the link is clicked */
+  fireAnalytic?: () => void
 }
 
 /**A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info*/
-const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center, a11yLabel }) => {
-  const { t } = useTranslation(NAMESPACE.HOME)
+const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center, a11yLabel, ttyBypass, colorOverride, fireAnalytic }) => {
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   if (!phone) {
     return <></>
@@ -33,6 +38,7 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
     linkType: LinkTypeOptionsConstants.call,
     numberOrUrlLink: getNumbersFromString(phoneNumber),
     a11yLabel: a11yLabel || getNumberAccessibilityLabelFromString(phoneNumber),
+    colorOverride: colorOverride,
   }
 
   const ttyProps: LinkButtonProps = {
@@ -40,12 +46,13 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
     linkType: LinkTypeOptionsConstants.callTTY,
     numberOrUrlLink: t('contactVA.tty.number'),
     a11yLabel: t('contactVA.tty.number.a11yLabel'),
+    colorOverride: colorOverride,
   }
 
   return (
     <Box alignItems={center ? 'center' : undefined}>
-      <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} testID="CallVATestID" />
-      <ClickForActionLink {...ttyProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} testID="CallTTYTestID" />
+      <ClickForActionLink {...clickToCallProps} testID="CallVATestID" fireAnalytic={fireAnalytic} />
+      {!ttyBypass && <ClickForActionLink {...ttyProps} testID="CallTTYTestID" />}
     </Box>
   )
 }

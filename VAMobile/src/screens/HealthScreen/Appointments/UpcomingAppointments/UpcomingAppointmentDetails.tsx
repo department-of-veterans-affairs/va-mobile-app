@@ -21,13 +21,14 @@ import {
   AppointmentStatusConstants,
   AppointmentTypeConstants,
   AppointmentTypeToID,
+  ScreenIDTypesConstants,
 } from 'store/api/types'
 import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail } from 'store/slices'
 import {
-  BackButton,
   Box,
   ButtonTypesConstants,
   ClickForActionLink,
+  ErrorComponent,
   FeatureLandingTemplate,
   LinkButtonProps,
   LinkTypeOptionsConstants,
@@ -38,18 +39,18 @@ import {
   VAButton,
   VAButtonProps,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
 import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
@@ -57,17 +58,26 @@ type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'U
 // export const JOIN_SESSION_WINDOW_MINUTES = 30
 
 const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route, navigation }) => {
-  const { appointmentID } = route.params
+  let { appointmentID } = route.params
+  const { vetextID } = route.params
 
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
-  const { upcomingAppointmentsById, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { upcomingAppointmentsById, loading, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>(
+    (state) => state.appointments,
+  )
 
-  const appointment = upcomingAppointmentsById?.[appointmentID]
+  const appointment = appointmentID
+    ? upcomingAppointmentsById?.[appointmentID]
+    : Object.values(upcomingAppointmentsById || []).find((appointmentData) => appointmentData.attributes.vetextId === vetextID)
+
+  if (!appointmentID) {
+    appointmentID = appointment?.id
+  }
+
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, location, startDateUtc, minutesDuration, comment, status, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
   const { name, code, url, lat, long, address } = location || ({} as AppointmentLocation)
@@ -75,22 +85,17 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const pendingAppointment = isAPendingAppointment(attributes)
 
   useEffect(() => {
-    dispatch(
-      trackAppointmentDetail(
-        pendingAppointment,
-        appointmentID,
-        getAppointmentAnalyticsStatus(attributes),
-        attributes.appointmentType.toString(),
-        getAppointmentAnalyticsDays(attributes),
-      ),
-    )
+    attributes &&
+      dispatch(
+        trackAppointmentDetail(
+          pendingAppointment,
+          appointmentID,
+          getAppointmentAnalyticsStatus(attributes),
+          attributes.appointmentType.toString(),
+          getAppointmentAnalyticsDays(attributes),
+        ),
+      )
   }, [dispatch, appointmentID, pendingAppointment, attributes])
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => <BackButton onPress={goBack} canGoBack={true} label={BackButtonLabelConstants.back} showCarat={true} />,
-    })
-  })
 
   useEffect(() => {
     if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.FAIL) {
@@ -117,9 +122,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const calendarAnalytics = (): void => {
-    logAnalyticsEvent(
-      Events.vama_apt_add_cal(appointmentID, getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
-    )
+    appointmentID &&
+      logAnalyticsEvent(
+        Events.vama_apt_add_cal(appointmentID, getAppointmentAnalyticsStatus(attributes), attributes.appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
+      )
   }
 
   const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()
@@ -282,7 +288,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <AppointmentCancellationInfo appointment={appointment} goBack={goBack} />
         ) : (
           <TextArea>
-            <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
+            <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('pastAppointmentDetails.toScheduleAnotherAppointment'))}>
               {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
             </TextView>
           </TextArea>
@@ -291,16 +297,24 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     )
   }
 
-  if (loadingAppointmentCancellation) {
+  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
     return (
-      <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')}>
-        <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
+      <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
+      </FeatureLandingTemplate>
+    )
+  }
+
+  if (loadingAppointmentCancellation || loading) {
+    return (
+      <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
+        <LoadingComponent text={loadingAppointmentCancellation ? t('upcomingAppointmentDetails.loadingAppointmentCancellation') : t('appointmentDetails.loading')} />
       </FeatureLandingTemplate>
     )
   }
 
   return (
-    <FeatureLandingTemplate backLabel={tc('appointments')} backLabelOnPress={navigation.goBack} title={tc('details')} testID="UpcomingApptDetailsTestID">
+    <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')} testID="UpcomingApptDetailsTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>
         <AppointmentAlert attributes={attributes} />
         <TextArea>
@@ -319,14 +333,14 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <SpecialInstructions />
           {featureEnabled('patientCheckIn') && (
             <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
-              <VAButton onPress={navigateTo('ConfirmContactInfo')} label={tc('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
+              <VAButton onPress={navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
             </Box>
           )}
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
           <AppointmentReason attributes={attributes} />
           <ContactInformation attributes={attributes} />
-          <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointment?.id} />
+          <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointmentID} />
         </TextArea>
 
         {readerCancelInformation()}

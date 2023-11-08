@@ -1,16 +1,13 @@
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { AuthorizedServicesState } from 'store/slices'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from './PaymentsStackScreens'
-import { RootState } from 'store'
-import { useHeaderStyles } from 'utils/hooks/headerStyles'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentDetailsScreen from './PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
@@ -19,14 +16,14 @@ import PaymentHistoryScreen from './PaymentHistory/PaymentHistoryScreen'
 type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
 
 const PaymentsScreen: FC<PaymentsScreenProps> = () => {
-  const { directDepositBenefits, directDepositBenefitsUpdate } = useSelector<RootState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { data: userAuthorizedServices } = useAuthorizedServices()
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
   const onPayments = navigateTo('PaymentHistory')
-  const onDirectDeposit = directDepositBenefitsUpdate ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
+  const onDirectDeposit = userAuthorizedServices?.directDepositBenefitsUpdate ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
 
   return (
     <CategoryLanding title={t('payments.title')}>
@@ -39,7 +36,7 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
         />
-        {directDepositBenefits && (
+        {userAuthorizedServices?.directDepositBenefits && (
           <LargeNavButton
             title={t('directDeposit.information')}
             onPress={onDirectDeposit}
@@ -62,11 +59,13 @@ const PaymentsScreenStack = createStackNavigator()
  * Stack screen for the Payments tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const PaymentsStackScreen: FC<PaymentsStackScreenProps> = () => {
-  const headerStyles = useHeaderStyles()
-
+  const screenOptions = {
+    headerShown: false,
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+  }
   return (
     <PaymentsScreenStack.Navigator
-      screenOptions={headerStyles}
+      screenOptions={screenOptions}
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {

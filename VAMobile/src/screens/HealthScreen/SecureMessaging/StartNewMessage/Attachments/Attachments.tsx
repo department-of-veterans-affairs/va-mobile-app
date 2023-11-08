@@ -5,9 +5,8 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components'
 
-import { AlertBox, BackButton, Box, FullScreenSubtask, TextView, VABulletList } from 'components'
+import { AlertBox, Box, FullScreenSubtask, TextView, VABulletList } from 'components'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Events } from 'constants/analytics'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
@@ -31,8 +30,7 @@ const StyledImage = styled(Image)<ImageMaxWidthAndHeight>`
 type AttachmentsProps = StackScreenProps<HealthStackParamList, 'Attachments'>
 
 const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -49,12 +47,6 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     if (isActionSheetVisible) {
       e.preventDefault()
     }
-  })
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />,
-    })
   })
 
   useEffect(() => {
@@ -161,18 +153,18 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const { uri } = image.assets ? image.assets[0] : ({} as Asset)
 
   const bullets = [
-    { text: tc('attachments.bulletOne') },
-    { text: tc('attachments.bulletTwo') },
-    { text: tc('attachments.bulletThree'), a11yLabel: tc('attachments.bulletThree.a11yLabel') },
-    { text: tc('attachments.bulletFour'), a11yLabel: tc('attachments.bulletFour.a11yLabel') },
-    { text: tc('attachments.bulletFive') },
+    { text: t('attachments.bulletOne') },
+    { text: t('attachments.bulletTwo') },
+    { text: t('attachments.bulletThree'), a11yLabel: t('attachments.bulletThree.a11yLabel') },
+    { text: t('attachments.bulletFour'), a11yLabel: t('attachments.bulletFour.a11yLabel') },
+    { text: t('attachments.bulletFive') },
   ]
 
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
-      title={tc('secureMessaging.startNewMessage.attachments.title')}
-      leftButtonText={tc('cancel')}
+      title={t('secureMessaging.startNewMessage.attachments.title')}
+      leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={displaySelectFile ? t('secureMessaging.attachments.selectAFile') : t('secureMessaging.startNewMessage.attach')}
       onPrimaryContentButtonPress={displaySelectFile ? onSelectAFile : onAttach}>

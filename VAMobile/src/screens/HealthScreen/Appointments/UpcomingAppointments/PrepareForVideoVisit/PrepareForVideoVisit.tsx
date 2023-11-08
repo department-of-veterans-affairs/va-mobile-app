@@ -1,32 +1,20 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import { Box, LargePanel, TextView } from 'components'
 import { HealthStackParamList } from '../../../HealthStackScreens'
-import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
 type PrepareForVideoVisitProps = StackScreenProps<HealthStackParamList, 'PrepareForVideoVisit'>
 
-const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => {
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = () => {
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => (
-        <HiddenTitle accessibilityLabel={t('prepareForVideoVisit.title')} accessibilityRole="header">
-          {t('prepareForVideoVisit.title')}
-        </HiddenTitle>
-      ),
-    })
-  })
-
   return (
-    <LargePanel title={tc('appointmentsHelp')} rightButtonText={tc('close')}>
+    <LargePanel title={t('appointmentsHelp')} rightButtonText={t('close')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('prepareForVideoVisit.beforeYourAppointment')}

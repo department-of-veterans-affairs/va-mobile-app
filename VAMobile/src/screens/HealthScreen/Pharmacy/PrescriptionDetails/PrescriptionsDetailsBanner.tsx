@@ -4,14 +4,14 @@ import React, { FC, useEffect } from 'react'
 import { Box, ClickToCallPhoneNumber, CollapsibleAlert, TextView, VABulletList, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { displayedTextPhoneNumber, getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
 const PrescriptionsDetailsBanner: FC = () => {
   const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.HEALTH)
-  const { t: tc } = useTranslation(NAMESPACE.COMMON)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
@@ -23,25 +23,25 @@ const PrescriptionsDetailsBanner: FC = () => {
     const bullets = [
       {
         text: t('prescription.details.banner.bullet1'),
-        boldedText: ' ' + tc('or'),
-        a11yLabel: t('prescription.details.banner.bullet1.a11yLabel') + ' ' + tc('or'),
+        boldedText: ' ' + t('or'),
+        a11yLabel: a11yLabelVA(t('prescription.details.banner.bullet1')) + ' ' + t('or'),
       },
       {
         text: t('prescription.details.banner.bullet2'),
-        boldedText: ' ' + tc('or'),
-        a11yLabel: t('prescription.details.banner.bullet2.a11yLabel') + ' ' + tc('or'),
+        boldedText: ' ' + t('or'),
+        a11yLabel: a11yLabelVA(t('prescription.details.banner.bullet2')) + ' ' + t('or'),
       },
       {
         text: t('prescription.details.banner.bullet3'),
-        boldedText: ' ' + tc('or'),
-        a11yLabel: t('prescription.details.banner.bullet3') + ' ' + tc('or'),
+        boldedText: ' ' + t('or'),
+        a11yLabel: t('prescription.details.banner.bullet3') + ' ' + t('or'),
       },
       { text: t('prescription.details.banner.bullet4') },
     ]
 
     return (
       <>
-        <TextView variant="MobileBody" mb={standardMarginBetween}>
+        <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescription.details.banner.body1'))} mb={standardMarginBetween}>
           {t('prescription.details.banner.body1')}
         </TextView>
         <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -51,9 +51,9 @@ const PrescriptionsDetailsBanner: FC = () => {
           <VABulletList listOfText={bullets} />
         </Box>
         <ClickToCallPhoneNumber
-          phone={tc('5418307563')}
-          displayedText={`${tc('automatedPhoneSystem')} ${tc('5418307563.displayText')}`}
-          a11yLabel={`${tc('automatedPhoneSystem')} ${getNumberAccessibilityLabelFromString(tc('5418307563'))}`}
+          phone={t('5418307563')}
+          displayedText={`${t('automatedPhoneSystem')} ${displayedTextPhoneNumber(t('5418307563'))}`}
+          a11yLabel={`${t('automatedPhoneSystem')} ${getNumberAccessibilityLabelFromString(t('5418307563'))}`}
         />
       </>
     )

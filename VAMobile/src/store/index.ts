@@ -3,7 +3,6 @@ import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
 import appointmentsReducer from 'store/slices/appointmentsSlice'
 import authReducer from 'store/slices/authSlice'
-import authorizedServicesReducer from 'store/slices/authorizedServicesSlice'
 import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
 import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import demoReducer from 'store/slices/demoSlice'
@@ -13,11 +12,8 @@ import errorReducer from 'store/slices/errorSlice'
 import lettersReducer from 'store/slices/lettersSlice'
 import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
-import patientReducer from 'store/slices/patientSlice'
 import paymentsReducer from 'store/slices/paymentsSlice'
-import personalInformationReducer from 'store/slices/personalInformationSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
-import requestAppointmentReducer from 'store/slices/requestAppointmentSlice'
 import secureMessagingReducer from 'store/slices/secureMessagingSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 import snackbarReducer from 'store/slices/snackBarSlice'
@@ -29,8 +25,6 @@ const store = configureStore({
     auth: authReducer,
     accessibility: accessabilityReducer,
     demo: demoReducer,
-    personalInformation: personalInformationReducer,
-    authorizedServices: authorizedServicesReducer,
     errors: errorReducer,
     analytics: analyticsReducer,
     appointments: appointmentsReducer,
@@ -41,12 +35,10 @@ const store = configureStore({
     letters: lettersReducer,
     militaryService: militaryServiceReducer,
     notifications: notificationReducer,
-    patient: patientReducer,
     secureMessaging: secureMessagingReducer,
     snackBar: snackbarReducer,
     vaccine: vaccineReducer,
     payments: paymentsReducer,
-    requestAppointment: requestAppointmentReducer,
     prescriptions: prescriptionsReducer,
     settings: settingsReducer,
   },

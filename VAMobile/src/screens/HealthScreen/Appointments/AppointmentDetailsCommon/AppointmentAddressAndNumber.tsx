@@ -5,6 +5,7 @@ import { AppointmentAttributes, AppointmentLocation, AppointmentType, Appointmen
 import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { getAllFieldsThatExist } from 'utils/common'
 import { getDirectionsUrl } from 'utils/location'
 import { isAPendingAppointment } from 'utils/appointments'
@@ -25,7 +26,7 @@ type AppointmentAddressAndNumberProps = {
 }
 
 const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ attributes }) => {
-  const { t } = useTranslation([NAMESPACE.HEALTH, NAMESPACE.COMMON])
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const { appointmentType, healthcareService, location, isCovidVaccine, healthcareProvider } = attributes || ({} as AppointmentAttributes)
   const { address, phone } = location || ({} as AppointmentLocation)
 
@@ -39,7 +40,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     let headerText: string | undefined
 
     if (isCovidVaccine) {
-      headerText = t('health:upcomingAppointments.covidVaccine')
+      headerText = t('upcomingAppointments.covidVaccine')
     } else if (appointmentType === AppointmentTypeConstants.VA || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE) {
       headerText = healthcareService
     }
@@ -110,21 +111,21 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     let missingAddressA11yLabel = ''
     let showFacilityLocatorLink = false
     if (hasPhone && hasName && !hasPartialAddress) {
-      missingAddressMessage = t('common:upcomingAppointmentDetails.phoneAndNameButNoAddress')
+      missingAddressMessage = t('upcomingAppointmentDetails.phoneAndNameButNoAddress')
     } else if (hasPhone && !hasName && !hasPartialAddress) {
-      missingAddressMessage = t('common:upcomingAppointmentDetails.phoneButNoNameOrAddress')
+      missingAddressMessage = t('upcomingAppointmentDetails.phoneButNoNameOrAddress')
     } else if (!hasPhone && !hasPartialAddress) {
-      missingAddressMessage = t('common:upcomingAppointmentDetails.noPhoneOrAddress')
-      missingAddressA11yLabel = t('common:upcomingAppointmentDetails.noPhoneOrAddress.a11yLabel')
+      missingAddressMessage = t('upcomingAppointmentDetails.noPhoneOrAddress')
+      missingAddressA11yLabel = a11yLabelVA(t('upcomingAppointmentDetails.noPhoneOrAddress'))
       showFacilityLocatorLink = true
     }
 
     const findYourVALocationProps: LinkButtonProps = {
-      displayedText: t('common:upcomingAppointmentDetails.findYourVAFacility'),
+      displayedText: t('upcomingAppointmentDetails.findYourVAFacility'),
       linkType: LinkTypeOptionsConstants.externalLink,
       numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
-      a11yLabel: t('common:upcomingAppointmentDetails.findYourVAFacility.a11yLabel'),
-      accessibilityHint: t('common:upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
+      a11yLabel: a11yLabelVA(t('upcomingAppointmentDetails.findYourVAFacility')),
+      accessibilityHint: t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
     }
 
     return (
@@ -142,12 +143,12 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
         <Box>
           {hasMappableAddress && (
             <ClickForActionLink
-              displayedText={`${t('common:directions')}`}
-              a11yLabel={`${t('common:directions')}`}
+              displayedText={`${t('directions')}`}
+              a11yLabel={`${t('directions')}`}
               linkType={'directions'}
               numberOrUrlLink={getDirectionsUrl(location)}
               testID="directionsTestID"
-              {...a11yHintProp(t('common:directions.a11yHint'))}
+              {...a11yHintProp(t('directions.a11yHint'))}
             />
           )}
           {showFacilityLocatorLink && <ClickForActionLink {...findYourVALocationProps} />}

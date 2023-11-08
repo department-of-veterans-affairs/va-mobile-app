@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
-import { PhoneData, PhoneType } from 'store/api/types'
+import { PhoneData, PhoneType } from 'api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import EditEmailScreen from './ProfileScreen/ContactInformationScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './ProfileScreen/ContactInformationScreen/EditPhoneNumberScreen'
@@ -12,6 +12,7 @@ import HowWillYouScreen from './ProfileScreen/ContactInformationScreen/HowWillYo
 import InAppRecruitmentScreen from './ProfileScreen/SettingsScreen/InAppRecruitmentScreen/InAppRecruitmentScreen'
 import IncorrectServiceInfo from './ProfileScreen/MilitaryInformationScreen/IncorrectServiceInfo'
 import PreferredNameScreen from './ProfileScreen/PersonalInformationScreen/PreferredNameScreen'
+import VeteranStatusScreen from './VeteranStatusScreen/VeteranStatusScreen'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WhatToKnowScreen from './ProfileScreen/PersonalInformationScreen/GenderIdentityScreen/WhatToKnowScreen'
 
@@ -19,6 +20,7 @@ export type HomeStackParamList = WebviewStackParams & {
   Home: undefined
   Profile: undefined
   ContactVA: undefined
+  VeteranStatus: undefined
   VeteransCrisisLine: undefined
   Developer: undefined
   EditEmail: undefined
@@ -46,6 +48,7 @@ const HomeStack = createStackNavigator<HomeStackParamList>()
 export const getHomeScreens = () => {
   return [
     <HomeStack.Screen key={'VeteransCrisisLine'} name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />,
+    <HomeStack.Screen key={'VeteranStatus'} name="VeteranStatus" component={VeteranStatusScreen} options={LARGE_PANEL_OPTIONS} />,
     <HomeStack.Screen key={'PreferredName'} name="PreferredName" component={PreferredNameScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HomeStack.Screen key={'EditPhoneNumber'} name="EditPhoneNumber" component={EditPhoneNumberScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HomeStack.Screen key={'EditEmail'} name="EditEmail" component={EditEmailScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
