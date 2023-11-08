@@ -56,6 +56,7 @@ export const defaultAppointmentAttributes: AppointmentAttributes = {
   isCovidVaccine: false,
   isPending: false,
   cancelId: '12',
+  vetextId: '600;3210206',
 }
 
 export const defaultAppoinment: AppointmentData = {
