@@ -29,7 +29,7 @@ import { dispatchClearPaymentsOnLogout } from './paymentsSlice'
 import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
 import { dispatchDisabilityRatingLogout } from './disabilityRatingSlice'
 import { dispatchMilitaryHistoryLogout } from './militaryServiceSlice'
-import { dispatchResetTappedForegroundNotification } from './notificationSlice'
+import { DEVICE_ENDPOINT_SID, dispatchResetTappedForegroundNotification } from './notificationSlice'
 import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { dispatchVaccineLogout } from './vaccineSlice'
 import { isAndroid } from 'utils/platform'
@@ -521,6 +521,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     await clearStoredAuthCreds()
     api.setAccessToken(undefined)
     api.setRefreshToken(undefined)
+    await AsyncStorage.removeItem(DEVICE_ENDPOINT_SID)
     // we're truly logging out here, so in order to log back in
     // the prompt type needs to be "login" instead of unlock
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
