@@ -26,7 +26,6 @@ jobs:
   #     message: 'E2E Android build process starting. Please see :thread: for results. This process may take a while.'
 
   execute_automated_tests:
-    runs-on: ubuntu-latest
     name: Execute automated tests
     #uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/e2e_ios.yml@develop
     uses: ./.github/workflows/e2e_ios.yml
