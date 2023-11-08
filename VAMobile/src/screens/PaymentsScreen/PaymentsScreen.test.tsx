@@ -1,9 +1,8 @@
-import 'react-native'
 import React from 'react'
-
-import { context, render } from 'testUtils'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
+
+import { context, render } from 'testUtils'
 import PaymentsScreen from './index'
 
 const mockNavigationSpy = jest.fn()
@@ -88,25 +87,25 @@ context('PaymentsScreen', () => {
   }
 
   describe('when user does not have directDepositBenefits', () => {
-    it('should navigate to HowToUpdateDirectDeposit', async () => {
+    it('should navigate to HowToUpdateDirectDeposit', () => {
       initializeTestInstance()
-      fireEvent.press(screen.getByText('Direct deposit information'))
+      fireEvent.press(screen.getByRole('menuitem', { name: 'Direct deposit information' }))
       expect(navigateToHowToUpdateDirectDepositSpy).toHaveBeenCalled()
     })
   })
 
   describe('when user does have directDepositBenefits', () => {
-    it('should navigate to DirectDeposit', async () => {
+    it('should navigate to DirectDeposit', () => {
       initializeTestInstance()
-      fireEvent.press(screen.getByText('Direct deposit information'))
+      fireEvent.press(screen.getByRole('menuitem', { name: 'Direct deposit information' }))
       expect(navigateToDirectDepositSpy).toHaveBeenCalled()
     })
   })
 
   describe('when user click on VA payment history', () => {
-    it('should navigate to PaymentHistory', async () => {
+    it('should navigate to PaymentHistory', () => {
       initializeTestInstance()
-      fireEvent.press(screen.getByText('VA payment history'))
+      fireEvent.press(screen.getByRole('menuitem', { name: 'VA payment history' }))
       expect(navigateToPaymentHistorySpy).toHaveBeenCalled()
     })
   })
