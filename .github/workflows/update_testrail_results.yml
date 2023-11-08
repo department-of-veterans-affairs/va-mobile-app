@@ -30,34 +30,34 @@ jobs:
     name: Execute automated tests
     #uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/e2e_ios.yml@develop
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/e2e_ios.yml@feature/7189-rachael-github-actions-testRail-integration
-    steps:
-      - name: Upload e2e-junit
-        uses: actions/upload-artifact@v3
-        with:
-          name: e2e-junit
-          path: e2e/test_reports/e2e-junit.xml
+    #steps:
+    #  - name: Upload e2e-junit
+    #    uses: actions/upload-artifact@v3
+    #    with:
+    #      name: e2e-junit
+    #      path: e2e/test_reports/e2e-junit.xml
 
-  send-test-results-to-testrail:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download junit file
-        uses: actions/download-artifact@v3
-        with:
-          name: e2e-junit
-      - name: Python setup
-        if: always()
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.x'
-      - name: TestRail CLI upload results
-        if: always()
-        run: |
-          pip install trcli
-          trcli -y \
-            -h https://dsvavsp.testrail.io/ \
-            --project "VA Mobile App" \
-            --project-id 29 \
-            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-            parse_junit \
-            --title "Automated Tests from GitHub workflow" \
-            -f "e2e-junit.xml"
+  #send-test-results-to-testrail:
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - name: Download junit file
+  #      uses: actions/download-artifact@v3
+  #      with:
+  #        name: e2e-junit
+  #    - name: Python setup
+  #      if: always()
+  #      uses: actions/setup-python@v3
+  #      with:
+  #        python-version: '3.x'
+  #    - name: TestRail CLI upload results
+  #      if: always()
+  #      run: |
+  #        pip install trcli
+  #        trcli -y \
+  #          -h https://dsvavsp.testrail.io/ \
+  #          --project "VA Mobile App" \
+  #          --project-id 29 \
+  #          -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+  #          parse_junit \
+  #          --title "Automated Tests from GitHub workflow" \
+  #          -f "e2e-junit.xml"
