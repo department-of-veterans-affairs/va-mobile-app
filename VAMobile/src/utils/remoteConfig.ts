@@ -1,3 +1,4 @@
+import { loadWaygateOverrides } from 'utils/waygateConfig'
 import { logNonFatalErrorToFirebase } from './analytics'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import getEnv from 'utils/env'
@@ -9,7 +10,6 @@ const fetchRemote = !__DEV__ && !IS_TEST
 const RC_FETCH_TIMEOUT = 10000 // 10 sec
 const RC_CACHE_TIME = 30 * 60 * 1000 // 30 min
 const REMOTE_CONFIG_OVERRIDES_KEY = '@store_remote_config_overrides'
-
 export let overrideRemote = false
 
 /* Valid feature toggles.  Should match firebase */
@@ -40,11 +40,11 @@ type FeatureToggleValues = {
   patientCheckInWaygate: boolean
 }
 
-export let devConfig: FeatureToggleValues = {
-  appointmentRequests: true,
+export const defaults: FeatureToggleValues = {
+  appointmentRequests: false,
   prescriptions: true,
   SIS: true,
-  testFeature: true,
+  testFeature: false,
   inAppUpdates: true,
   preferredNameGenderWaygate: true,
   haptics: true,
@@ -54,19 +54,7 @@ export let devConfig: FeatureToggleValues = {
   patientCheckInWaygate: true,
 }
 
-export const productionDefaults: FeatureToggleValues = {
-  appointmentRequests: false,
-  prescriptions: true,
-  SIS: true,
-  testFeature: false,
-  inAppUpdates: false,
-  preferredNameGenderWaygate: true,
-  haptics: true,
-  whatsNewUI: true,
-  decisionLettersWaygate: true,
-  patientCheckIn: false,
-  patientCheckInWaygate: true,
-}
+export let devConfig: FeatureToggleValues = defaults
 
 /**
  * Sets up Remote Config, sets defaults, fetches and activates config from firebase
@@ -76,11 +64,7 @@ export const activateRemoteConfig = async (): Promise<void> => {
   try {
     // Sets timeout for remote config fetch
     await remoteConfig().setConfigSettings({ fetchTimeMillis: RC_FETCH_TIMEOUT })
-    console.debug(`Remote Config: Set fetch timeout to ${RC_FETCH_TIMEOUT / 1000} seconds`)
-
-    console.debug('Remote Config: Setting defaults')
     // Sets defaults for remote config for use prior to fetching and activating
-    const defaults = fetchRemote ? productionDefaults : devConfig
     await remoteConfig().setDefaults(defaults)
     console.debug('Remote Config: Defaults set', defaults)
 
@@ -91,7 +75,6 @@ export const activateRemoteConfig = async (): Promise<void> => {
     if (fetchRemote) {
       console.debug('Remote Config: Fetching and activating')
       await remoteConfig().fetch(RC_CACHE_TIME)
-      console.debug('Remote Config: Fetched latest remote config')
       await remoteConfig().activate()
       console.debug('Remote Config: Activated config')
     }
@@ -105,22 +88,24 @@ export const activateRemoteConfig = async (): Promise<void> => {
   }
 }
 
+export const setOverrideRemote = (setOverride: boolean) => {
+  overrideRemote = setOverride
+}
+
 /**
  * Checks if we have any feature toggle overrides stored in AsyncStorage and loads them if so
  */
 export const loadOverrides = async (): Promise<void> => {
   try {
+    overrideRemote = false
+    await loadWaygateOverrides()
     const overrides = await AsyncStorage.getItem(REMOTE_CONFIG_OVERRIDES_KEY)
     if (overrides) {
-      console.debug('Remote Config: Found overrides in AsyncStorage. Applying')
       overrideRemote = true
       devConfig = JSON.parse(overrides) as FeatureToggleValues
-    } else {
-      console.debug('Remote Config: No overrides found in AsyncStorage')
     }
   } catch (err) {
     logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
-    console.debug('loadOverrides: Failed to load overrides from AsyncStorage')
   }
 }
 
@@ -134,7 +119,7 @@ export const featureEnabled = (feature: FeatureToggleType): boolean => {
 }
 
 /**
- * Sets overrideRemote to true with the values passed. The app will use these overrides instead of fetched config or productionDefaults
+ * Sets overrideRemote to true with the values passed. The app will use these overrides instead of fetched config or defaults
  * NOTE: This should ONLY ever be invoked from within of our developer settings UI
  * @param config - An object of FeatureToggleValues type that contains the config we want to override our remote config with
  */
@@ -157,7 +142,9 @@ export const getFeatureToggles = (): FeatureToggleValues => {
 
   const toggles = {} as FeatureToggleValues
   Object.keys(remoteConfig().getAll()).forEach((key) => {
-    toggles[key as FeatureToggleType] = remoteConfig().getValue(key).asBoolean()
+    if (!key.startsWith('WG')) {
+      toggles[key as FeatureToggleType] = remoteConfig().getValue(key).asBoolean()
+    }
   })
   return toggles
 }

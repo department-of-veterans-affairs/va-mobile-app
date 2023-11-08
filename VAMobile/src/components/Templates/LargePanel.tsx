@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { FooterButton, VAScrollView } from 'components'
+import { FooterButton, VAScrollView, WaygateWrapper } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { View, ViewStyle } from 'react-native'
 import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
@@ -108,10 +108,12 @@ export const LargePanel: FC<LargePanelProps> = ({
     <>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
-        <VAScrollView testID={testID}>
-          {children}
-          {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
-        </VAScrollView>
+        <WaygateWrapper>
+          <VAScrollView testID={testID}>
+            {children}
+            {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
+          </VAScrollView>
+        </WaygateWrapper>
       </View>
     </>
   )

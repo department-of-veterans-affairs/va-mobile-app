@@ -3,6 +3,7 @@ import React from 'react'
 
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { PhoneData, PhoneType } from 'api/types'
+import { Waygate } from 'utils/waygateConfig'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import EditEmailScreen from './ProfileScreen/ContactInformationScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './ProfileScreen/ContactInformationScreen/EditPhoneNumberScreen'
@@ -13,6 +14,7 @@ import IncorrectServiceInfo from './ProfileScreen/MilitaryInformationScreen/Inco
 import PreferredNameScreen from './ProfileScreen/PersonalInformationScreen/PreferredNameScreen'
 import VeteranStatusScreen from './VeteranStatusScreen/VeteranStatusScreen'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
+import WaygateEditScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/WaygateEditScreen'
 import WhatToKnowScreen from './ProfileScreen/PersonalInformationScreen/GenderIdentityScreen/WhatToKnowScreen'
 
 export type HomeStackParamList = WebviewStackParams & {
@@ -38,6 +40,7 @@ export type HomeStackParamList = WebviewStackParams & {
   Sandbox: undefined
   Settings: undefined
   HapticsDemoScreen: undefined
+  WaygateEdit: { waygateName: string; waygate: Waygate }
   WhatToKnow: undefined
 }
 
@@ -54,6 +57,7 @@ export const getHomeScreens = () => {
     <HomeStack.Screen key={'HowDoIUpdate'} name="HowDoIUpdate" component={HowDoIUpdateScreen} options={LARGE_PANEL_OPTIONS} />,
     <HomeStack.Screen key={'HowWillYou'} name="HowWillYou" component={HowWillYouScreen} options={LARGE_PANEL_OPTIONS} />,
     <HomeStack.Screen key={'IncorrectServiceInfo'} name="IncorrectServiceInfo" component={IncorrectServiceInfo} options={LARGE_PANEL_OPTIONS} />,
+    <HomeStack.Screen key={'WaygateEdit'} name="WaygateEdit" component={WaygateEditScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HomeStack.Screen key={'WhatToKnow'} name="WhatToKnow" component={WhatToKnowScreen} options={LARGE_PANEL_OPTIONS} />,
   ]
 }

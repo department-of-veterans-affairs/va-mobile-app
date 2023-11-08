@@ -2,7 +2,7 @@ import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } fr
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactNode, useState } from 'react'
 
-import { TextView, TextViewProps, VAIconProps } from 'components'
+import { TextView, TextViewProps, VAIconProps, WaygateWrapper } from 'components'
 import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
@@ -118,8 +118,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <HeaderBanner {...headerProps} />
-
-      <>
+      <WaygateWrapper>
         <VAScrollView
           testID={testID}
           scrollEventThrottle={1}
@@ -131,7 +130,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
           {children}
         </VAScrollView>
         {footerContent}
-      </>
+      </WaygateWrapper>
     </View>
   )
 }

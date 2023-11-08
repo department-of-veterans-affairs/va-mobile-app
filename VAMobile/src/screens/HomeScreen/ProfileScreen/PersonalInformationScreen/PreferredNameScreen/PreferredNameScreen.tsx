@@ -133,14 +133,6 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
     },
   ]
 
-  if (preferredNameMutation.isLoading) {
-    return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
-        <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
-      </FullScreenSubtask>
-    )
-  }
-
   return (
     <FullScreenSubtask
       leftButtonText={t('cancel')}
@@ -148,16 +140,20 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
       title={t('personalInformation.preferredName.title')}
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
-      <Box mx={theme.dimensions.gutter}>
-        <FormWrapper
-          fieldsList={formFieldsList}
-          onSave={onSave}
-          resetErrors={resetErrors}
-          setResetErrors={setResetErrors}
-          onSaveClicked={onSaveClicked}
-          setOnSaveClicked={setOnSaveClicked}
-        />
-      </Box>
+      {preferredNameMutation.isLoading ? (
+        <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
+      ) : (
+        <Box mx={theme.dimensions.gutter}>
+          <FormWrapper
+            fieldsList={formFieldsList}
+            onSave={onSave}
+            resetErrors={resetErrors}
+            setResetErrors={setResetErrors}
+            onSaveClicked={onSaveClicked}
+            setOnSaveClicked={setOnSaveClicked}
+          />
+        </Box>
+      )}
     </FullScreenSubtask>
   )
 }

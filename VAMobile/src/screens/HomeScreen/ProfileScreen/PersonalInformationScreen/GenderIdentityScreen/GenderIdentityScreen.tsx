@@ -131,29 +131,8 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
     }
   }
 
-  if (genderIdentityInDowntime || getDemographicsError || getGenderIdentityOptionsError) {
-    return (
-      <FullScreenSubtask title={t('personalInformation.genderIdentity.title')} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID} onTryAgain={onTryAgain} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (loadingGenderIdentityOptions) {
-    return (
-      <FullScreenSubtask title={t('personalInformation.genderIdentity.title')} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
-        <LoadingComponent text={t('personalInformation.genderIdentity.loading')} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (genderIdentityMutation.isLoading) {
-    return (
-      <FullScreenSubtask title={t('personalInformation.genderIdentity.title')} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
-        <LoadingComponent text={t('personalInformation.genderIdentity.saving')} />
-      </FullScreenSubtask>
-    )
-  }
+  const errorCheck = genderIdentityInDowntime || getDemographicsError || getGenderIdentityOptionsError
+  const loadingCheck = loadingGenderIdentityOptions || genderIdentityMutation.isLoading
 
   return (
     <FullScreenSubtask
@@ -162,19 +141,25 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={onSave}>
-      <Box mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBody" mb={error ? theme.dimensions.condensedMarginBetween : undefined} paragraphSpacing={error ? false : true}>
-          {t('personalInformation.genderIdentity.changeSelection')}
-          <TextView variant="MobileBodyBold">{t('personalInformation.genderIdentity.preferNotToAnswer')}</TextView>
-          <TextView variant="MobileBody">.</TextView>
-        </TextView>
-        <RadioGroup {...radioGroupProps} />
-        <Pressable onPress={goToHelp} accessibilityRole="link" accessible={true}>
-          <TextView variant="MobileBodyLink" paragraphSpacing={true}>
-            {t('personalInformation.genderIdentity.whatToKnow')}
+      {errorCheck ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID} onTryAgain={onTryAgain} />
+      ) : loadingCheck ? (
+        <LoadingComponent text={loadingGenderIdentityOptions ? t('personalInformation.genderIdentity.loading') : t('personalInformation.genderIdentity.saving')} />
+      ) : (
+        <Box mx={theme.dimensions.gutter}>
+          <TextView variant="MobileBody" mb={error ? theme.dimensions.condensedMarginBetween : undefined} paragraphSpacing={error ? false : true}>
+            {t('personalInformation.genderIdentity.changeSelection')}
+            <TextView variant="MobileBodyBold">{t('personalInformation.genderIdentity.preferNotToAnswer')}</TextView>
+            <TextView variant="MobileBody">.</TextView>
           </TextView>
-        </Pressable>
-      </Box>
+          <RadioGroup {...radioGroupProps} />
+          <Pressable onPress={goToHelp} accessibilityRole="link" accessible={true}>
+            <TextView variant="MobileBodyLink" paragraphSpacing={true}>
+              {t('personalInformation.genderIdentity.whatToKnow')}
+            </TextView>
+          </Pressable>
+        </Box>
+      )}
     </FullScreenSubtask>
   )
 }

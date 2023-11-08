@@ -14,9 +14,10 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDemographics } from 'api/demographics/getDemographics'
-import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 const getPreferredName = (demographics: UserDemographics | undefined, t: TFunction): string => {
   if (demographics?.preferredName) {
@@ -40,7 +41,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
-  const navigateTo = useRouteNavigation()
   const personalInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
   const { data: personalInfo, isLoading: loadingPersonalInfo } = usePersonalInformation()
   const { data: demographics, isFetching: loadingDemographics, isError: getDemographicsError, refetch: refetchDemographics } = useDemographics()
@@ -89,69 +89,87 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     }
   }
 
-  if (personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={onTryAgain} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-        <LoadingComponent text={t('personalInformation.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
   const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
+  const errorCheck = personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError
+  const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
+
+  const onGenderIdentity = () => {
+    if (waygateNativeAlert('WG_GenderIdentity')) {
+      navigation.navigate('GenderIdentity')
+    }
+  }
+
+  const onPreferredName = () => {
+    if (waygateNativeAlert('WG_PreferredName')) {
+      navigation.navigate('PreferredName')
+    }
+  }
+
+  const onUpdateName = () => {
+    if (waygateNativeAlert('WG_HowDoIUpdate')) {
+      navigation.navigate('HowDoIUpdate', { screenType: 'name' })
+    }
+  }
+
+  const onUpdateDOB = () => {
+    if (waygateNativeAlert('WG_HowDoIUpdate')) {
+      navigation.navigate('HowDoIUpdate', { screenType: 'DOB' })
+    }
+  }
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')} testID="PersonalInformationTestID">
-      <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
-        {t('contactInformation.editNote')}
-      </TextView>
-      <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>
-        <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
-      </Pressable>
-      <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-        <Box {...boxProps}>
-          <Box flexDirection={'row'} flexWrap={'wrap'} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
-            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading">
-              {t('personalInformation.dateOfBirth')}
-            </TextView>
-          </Box>
-          <TextView variant={'MobileBody'}>{birthdate}</TextView>
-        </Box>
-        <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })} accessibilityRole="link" accessible={true}>
-          <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
-        </Pressable>
-        {featureEnabled('preferredNameGenderWaygate') && (
-          <>
-            <LargeNavButton
-              title={t('personalInformation.preferredName.title')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-              borderColor={'secondary'}
-              borderColorActive={'primaryDarkest'}
-              borderStyle={'solid'}
-              subText={getPreferredName(demographics, t)}
-              onPress={navigateTo('PreferredName')}
-            />
-            {genderIdentityOptions && (
-              <LargeNavButton
-                title={t('personalInformation.genderIdentity.title')}
-                borderWidth={theme.dimensions.buttonBorderWidth}
-                borderColor={'secondary'}
-                borderColorActive={'primaryDarkest'}
-                borderStyle={'solid'}
-                subText={getGenderIdentity(demographics, t, genderIdentityOptions)}
-                onPress={navigateTo('GenderIdentity')}
-              />
+      {errorCheck ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={onTryAgain} />
+      ) : loadingCheck ? (
+        <LoadingComponent text={t('personalInformation.loading')} />
+      ) : (
+        <>
+          <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
+            {t('contactInformation.editNote')}
+          </TextView>
+          <Pressable onPress={onUpdateName} accessibilityRole="link" accessible={true}>
+            <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
+          </Pressable>
+          <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            <Box {...boxProps}>
+              <Box flexDirection={'row'} flexWrap={'wrap'} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
+                <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading">
+                  {t('personalInformation.dateOfBirth')}
+                </TextView>
+              </Box>
+              <TextView variant={'MobileBody'}>{birthdate}</TextView>
+            </Box>
+            <Pressable onPress={onUpdateDOB} accessibilityRole="link" accessible={true}>
+              <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
+            </Pressable>
+            {featureEnabled('preferredNameGenderWaygate') && (
+              <>
+                <LargeNavButton
+                  title={t('personalInformation.preferredName.title')}
+                  borderWidth={theme.dimensions.buttonBorderWidth}
+                  borderColor={'secondary'}
+                  borderColorActive={'primaryDarkest'}
+                  borderStyle={'solid'}
+                  subText={getPreferredName(demographics, t)}
+                  onPress={onPreferredName}
+                />
+                {genderIdentityOptions && (
+                  <LargeNavButton
+                    title={t('personalInformation.genderIdentity.title')}
+                    borderWidth={theme.dimensions.buttonBorderWidth}
+                    borderColor={'secondary'}
+                    borderColorActive={'primaryDarkest'}
+                    borderStyle={'solid'}
+                    subText={getGenderIdentity(demographics, t, genderIdentityOptions)}
+                    onPress={onGenderIdentity}
+                  />
+                )}
+              </>
             )}
-          </>
-        )}
-      </Box>
+          </Box>
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }
