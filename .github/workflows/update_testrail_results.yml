@@ -99,6 +99,7 @@ jobs:
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
   send-test-results-to-testrail:
+    needs: e2e-ios
     runs-on: ubuntu-latest
     steps:
       - name: Download junit file
