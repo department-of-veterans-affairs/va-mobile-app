@@ -27,14 +27,7 @@ jobs:
 
   execute_automated_tests:
     name: Execute automated tests
-    #uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/e2e_ios.yml@develop
     uses: ./.github/workflows/e2e_ios.yml
-    #steps:
-    #  - name: Upload e2e-junit
-    #    uses: actions/upload-artifact@v3
-    #    with:
-    #      name: e2e-junit
-    #      path: e2e/test_reports/e2e-junit.xml
 
   #send-test-results-to-testrail:
   #  runs-on: ubuntu-latest
