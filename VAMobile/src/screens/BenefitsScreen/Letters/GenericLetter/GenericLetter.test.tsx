@@ -1,4 +1,3 @@
-import 'react-native'
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 
@@ -41,7 +40,7 @@ context('GenericLetter', () => {
   it('initializes correctly', () => {
     expect(screen.getByText('Review letters')).toBeTruthy()
     expect(screen.getByTestId('Letters: header-page')).toBeTruthy()
-    expect(screen.getByText('Review letter')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Review letter' })).toBeTruthy()
   })
 
   describe('when downloading is set to true', () => {
