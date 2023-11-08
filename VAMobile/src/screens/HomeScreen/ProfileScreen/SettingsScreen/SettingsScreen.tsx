@@ -11,6 +11,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { featureEnabled } from 'utils/remoteConfig'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useAppDispatch, useDestructiveActionSheet, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -106,7 +107,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     canStoreWithBiometric ? biometricRow : [],
     notificationsRow,
     { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
-    { text: t('inAppRecruitment.giveFeedback'), a11yHinText: t('inAppRecruitment.giveFeedback.a11yHint'), onPress: onFeedback },
+    featureEnabled('inAppRecruitment') ? { text: t('inAppRecruitment.giveFeedback'), a11yHinText: t('inAppRecruitment.giveFeedback.a11yHint'), onPress: onFeedback } : [],
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
