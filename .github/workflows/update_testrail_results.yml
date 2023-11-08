@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Execute automated tests
     #uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/e2e_ios.yml@develop
-    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/e2e_ios.yml@feature/7189-rachael-github-actions-testRail-integration
+    uses: ./.github/workflows/e2e_ios.yml
     #steps:
     #  - name: Upload e2e-junit
     #    uses: actions/upload-artifact@v3
