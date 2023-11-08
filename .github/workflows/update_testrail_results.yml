@@ -121,7 +121,8 @@ jobs:
             -h https://dsvavsp.testrail.io/ \
             --project "VA Mobile App" \
             --project-id 29 \
-            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            -u "${{secrets.TEST_RAIL_USER}} \
+            -k ${{secrets.TEST_RAIL_KEY}}" \
             parse_junit \
             --title "Automated Tests from GitHub workflow" \
             -f "e2e-junit.xml"
