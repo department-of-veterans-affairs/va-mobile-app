@@ -62,8 +62,8 @@ jobs:
             -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit.xml"
 
   execute_automated_tests_android:
-    if: ${{ always() }}
-    needs: [execute_automated_tests_ios, send_test_results_to_testrail_ios]
+    #if: ${{ always() }}
+    #needs: [execute_automated_tests_ios, send_test_results_to_testrail_ios]
     name: Execute automated tests
     uses: ./.github/workflows/e2e_android.yml
     secrets: inherit
