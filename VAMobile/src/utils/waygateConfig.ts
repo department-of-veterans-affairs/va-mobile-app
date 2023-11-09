@@ -67,6 +67,14 @@ export type WaygateToggleType =
   | 'WG_PrescriptionHelp'
   | 'WG_StatusDefinition'
   | 'WG_SessionNotStarted'
+  | 'WG_Payments'
+  | 'WG_PaymentsDetails'
+  | 'WG_DirectDeposit'
+  | 'WG_HowToUpdateDirectDeposit'
+  | 'WG_PaymentHistory'
+  | 'WG_PaymentIssue'
+  | 'WG_PaymentMissing'
+  | 'WG_EditDirectDeposit'
 
 type WaygateToggleValues = {
   WG_Home: Waygate
@@ -117,6 +125,14 @@ type WaygateToggleValues = {
   WG_PrescriptionHelp: Waygate
   WG_StatusDefinition: Waygate
   WG_SessionNotStarted: Waygate
+  WG_Payments: Waygate
+  WG_PaymentsDetails: Waygate
+  WG_DirectDeposit: Waygate
+  WG_HowToUpdateDirectDeposit: Waygate
+  WG_PaymentHistory: Waygate
+  WG_PaymentIssue: Waygate
+  WG_PaymentMissing: Waygate
+  WG_EditDirectDeposit: Waygate
 }
 
 const waygateDefault: Waygate = {
@@ -176,6 +192,14 @@ export let waygateConfig: WaygateToggleValues = {
   WG_PrescriptionHelp: { ...waygateDefault },
   WG_StatusDefinition: { ...waygateDefault },
   WG_SessionNotStarted: { ...waygateDefault },
+  WG_Payments: { ...waygateDefault },
+  WG_PaymentsDetails: { ...waygateDefault },
+  WG_DirectDeposit: { ...waygateDefault },
+  WG_HowToUpdateDirectDeposit: { ...waygateDefault },
+  WG_PaymentHistory: { ...waygateDefault },
+  WG_PaymentIssue: { ...waygateDefault },
+  WG_PaymentMissing: { ...waygateDefault },
+  WG_EditDirectDeposit: { ...waygateDefault },
 }
 
 export const waygateEnabled = (feature: WaygateToggleType): Waygate => {

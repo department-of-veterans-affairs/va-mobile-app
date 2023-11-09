@@ -15,6 +15,7 @@ import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } f
 import { useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type DirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'DirectDeposit'>
 
@@ -65,7 +66,11 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
       {
         textLines: textLines,
         a11yHintText: t('directDeposit.addBankAccountInformationHint'),
-        onPress: navigateTo('EditDirectDeposit', { displayTitle: bankData ? t('directDeposit.edit.title') : t('directDeposit.add.title') }),
+        onPress: () => {
+          if (waygateNativeAlert('WG_EditDirectDeposit')) {
+            navigateTo('EditDirectDeposit', { displayTitle: bankData ? t('directDeposit.edit.title') : t('directDeposit.add.title') })
+          }
+        },
         decoratorProps: { accessibilityRole: 'button' },
       },
     ]

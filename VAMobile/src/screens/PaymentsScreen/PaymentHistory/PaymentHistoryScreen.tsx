@@ -15,6 +15,7 @@ import { deepCopyObject } from 'utils/common'
 import { getGroupedPayments } from 'utils/payments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>
@@ -58,7 +59,9 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   }
 
   const onPaymentPress = (paymentID: string): void => {
-    navigateTo('PaymentDetails', { paymentID })()
+    if (waygateNativeAlert('WG_PaymentsDetails')) {
+      navigateTo('PaymentDetails', { paymentID })()
+    }
   }
 
   const textViewProps: TextViewProps = {
@@ -162,7 +165,11 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
       <Box {...testIdProps('', false, 'payments-page')}>
         <Box mx={gutter} mb={standardMarginBetween}>
           <Pressable
-            onPress={navigateTo('PaymentMissing')}
+            onPress={() => {
+              if (waygateNativeAlert('WG_PaymentMissing')) {
+                navigateTo('PaymentMissing')
+              }
+            }}
             accessibilityRole="link"
             accessible={true}
             {...testIdProps(t('payments.ifIAmMissingPayemt'))}
