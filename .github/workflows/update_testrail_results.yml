@@ -29,8 +29,8 @@ jobs:
   #  secrets: inherit
 
   send_test_results_to_testrail_ios:
-    if: ${{ always() }}
-    needs: [execute_automated_tests_ios, execute_automated_tests_android]
+    #if: ${{ always() }}
+    #needs: [execute_automated_tests_ios, execute_automated_tests_android]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
