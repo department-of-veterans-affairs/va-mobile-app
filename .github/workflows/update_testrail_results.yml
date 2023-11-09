@@ -63,7 +63,7 @@ jobs:
 
   execute_automated_tests_android:
     if: ${{ always() }}
-    needs: [execute_automated_test_ios, send_test_results_to_testrail_ios]
+    needs: [execute_automated_tests_ios, send_test_results_to_testrail_ios]
     name: Execute automated tests
     uses: ./.github/workflows/e2e_android.yml
     secrets: inherit
