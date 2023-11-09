@@ -12,7 +12,6 @@ module.exports = {
     outputDirectory: '<rootDir>/e2e/test_reports',
     outputName: 'e2e-junit.xml',
   } ]],
-  testResultsProcessor: 'jest-json-reporter',
   globalSetup: 'detox/runners/jest/globalSetup',
   globalTeardown: 'detox/runners/jest/globalTeardown',
   testTimeout: 120000,
