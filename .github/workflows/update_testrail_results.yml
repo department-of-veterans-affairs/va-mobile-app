@@ -17,7 +17,7 @@ defaults:
   run:
     working-directory: VAMobile
 
-env:
+#env:
   # IAM staging app client secret
   #APP_CLIENT_SECRET: ${{ secrets.APP_CLIENT_SECRET }}
   # IAM production app client secret
