@@ -146,5 +146,5 @@ jobs:
       - name: Upload e2e-junit
         uses: actions/upload-artifact@v3
         with:
-          name: e2e-junit
+          name: e2e-junit-android
           path: VAMobile/e2e/test_reports/e2e-junit.xml
