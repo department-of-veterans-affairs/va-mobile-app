@@ -28,7 +28,7 @@ jobs:
   #  uses: ./.github/workflows/e2e_android.yml
   #  secrets: inherit
 
-  send_test_results_to_testrail_ios:
+  send_test_results_to_testrail:
     #if: ${{ always() }}
     #needs: [execute_automated_tests_ios, execute_automated_tests_android]
     runs-on: ubuntu-latest
@@ -39,33 +39,20 @@ jobs:
       #  uses: actions/download-artifact@v3
       #  with:
       #    name: e2e-junit
-      - name: 'Find Run ID in testRail'
-        id: run-id-selection
+     # - name: 'Find run ID in testRail'
+     #   id: run-id-selection
+     #   run: | 
+     #     resp=$(curl -X GET -H 'Content-Type: application/json' \
+     #         -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+     #         "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&is_completed=0" | jq '.runs[] | select(.name =="Regression pass for release") | .id')
+     #     echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
+      - name: 'Find section ID in testRail'
+        id: section-id-selection
         run: | 
           resp=$(curl -X GET -H 'Content-Type: application/json' \
               -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-              "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&offset=0&is_completed=0" | jq '.runs[] | select(.name =="Regression pass for release") | .id')
-          echo "$resp"
-        #run: |
-          #for((i=0; ; i+=250)); do
-          #  echo "i=$i"
-          #  resp=$(curl -X GET -H 'Content-Type: application/json' \
-          #      -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-          #      "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&offset=$ii&is_completed=0" | jq '.runs[$i].name')
-            #if [[ "$resp" == 'Regression pass for release' ]];
-            #then
-            #  $(curl -X GET -H 'Content-Type: application/json' \
-            #  -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-            #  "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&offset=0&is_completed=0" | jq '.runs[i].id')
-            #  echo "$test_run_id"
-            #  echo "TEST_RUN_ID=$test_run_id" >> "$GITHUB_OUTPUT"
-            #fi
-          #done
-        #run: |
-        #  resp=$(curl -X GET -H 'Content-Type: application/json' \
-        #      -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-        #      "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&offset=0&is_completed=0" | jq '.runs[0].id')
-        #  echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
+              "https://dsvavsp.testrail.io//index.php?/api/v2/get_sections/29" | jq '.sections[] | select(.name =="Automated") | .id')
+              echo "$resp"
       #- name: Python setup
       #  if: always()
       #  uses: actions/setup-python@v3
