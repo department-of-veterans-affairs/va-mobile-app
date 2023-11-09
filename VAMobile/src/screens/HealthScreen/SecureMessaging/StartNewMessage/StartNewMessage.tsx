@@ -54,6 +54,7 @@ import {
 } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
 
@@ -150,12 +151,13 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   useEffect(() => {
     if (saveDraftComplete) {
       dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
-      navigation.navigate('SecureMessaging')
-      navigation.navigate('FolderMessages', {
-        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-        folderName: FolderNameTypeConstants.drafts,
-        draftSaved: true,
-      })
+      waygateNativeAlert('WG_SecureMessaging') && navigation.navigate('SecureMessaging')
+      waygateNativeAlert('WG_FolderMessages') &&
+        navigation.navigate('FolderMessages', {
+          folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+          folderName: FolderNameTypeConstants.drafts,
+          draftSaved: true,
+        })
     }
   }, [saveDraftComplete, navigation, dispatch])
 
@@ -164,7 +166,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
       dispatch(resetHasLoadedRecipients())
-      navigation.navigate('SecureMessaging')
+      waygateNativeAlert('WG_SecureMessaging') && navigation.navigate('SecureMessaging')
     }
   }, [sendMessageComplete, dispatch, navigation])
 
@@ -224,8 +226,10 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   }
 
   const onAddFiles = () => {
-    logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
-    navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
+    if (waygateNativeAlert('WG_Attachments')) {
+      logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
+      navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
+    }
   }
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -306,7 +310,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
     dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-    navigation.navigate('SecureMessaging')
+    waygateNativeAlert('WG_SecureMessaging') && navigation.navigate('SecureMessaging')
   }
 
   const onMessageSendOrSave = (): void => {
@@ -342,8 +346,10 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     }
 
     const navigateToReplyHelp = () => {
-      logAnalyticsEvent(Events.vama_sm_nonurgent())
-      navigation.navigate('ReplyHelp')
+      if (waygateNativeAlert('WG_ReplyHelp')) {
+        logAnalyticsEvent(Events.vama_sm_nonurgent())
+        navigation.navigate('ReplyHelp')
+      }
     }
 
     return (

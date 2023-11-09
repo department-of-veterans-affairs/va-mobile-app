@@ -57,6 +57,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFocusEffect } from '@react-navigation/native'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
@@ -287,8 +288,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   }
 
   const prescriptionDetailsClicked = (prescriptionID: string) => {
-    logAnalyticsEvent(Events.vama_rx_details(prescriptionID))
-    return navigation.navigate('PrescriptionDetails', { prescriptionId: prescriptionID })
+    if (waygateNativeAlert('WG_PrescriptionDetails')) {
+      logAnalyticsEvent(Events.vama_rx_details(prescriptionID))
+      return navigation.navigate('PrescriptionDetails', { prescriptionId: prescriptionID })
+    }
   }
 
   const prescriptionItems = () => {
@@ -350,8 +353,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           ...cardProps,
           bottomContent,
           bottomOnPress() {
-            logAnalyticsEvent(Events.vama_rx_trackdet(prescription.id))
-            navigation.navigate('RefillTrackingModal', { prescription: prescription })
+            if (waygateNativeAlert('WG_RefillTrackingModal')) {
+              logAnalyticsEvent(Events.vama_rx_trackdet(prescription.id))
+              navigation.navigate('RefillTrackingModal', { prescription: prescription })
+            }
           },
         }
       }
@@ -592,7 +597,11 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     const requestRefillButtonProps: VAButtonProps = {
       label: t('prescription.history.startRefillRequest'),
       buttonType: ButtonTypesConstants.buttonPrimary,
-      onPress: navigateTo('RefillScreenModal'),
+      onPress: () => {
+        if (waygateNativeAlert('WG_RefillScreenModal')) {
+          navigateTo('RefillScreenModal')
+        }
+      },
     }
     return (
       <Box mx={theme.dimensions.buttonPadding}>
@@ -645,8 +654,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     label: t('help'),
     icon: helpIconProps,
     onPress: () => {
-      logAnalyticsEvent(Events.vama_rx_help())
-      navigation.navigate('PrescriptionHelp')
+      if (waygateNativeAlert('WG_PrescriptionHelp')) {
+        logAnalyticsEvent(Events.vama_rx_help())
+        navigation.navigate('PrescriptionHelp')
+      }
     },
   }
 

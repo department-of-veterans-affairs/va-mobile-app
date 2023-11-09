@@ -15,6 +15,7 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
 type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineList'>
@@ -36,7 +37,11 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
 
     const vaccineButton: DefaultListItemObj = {
       textLines,
-      onPress: navigateTo('VaccineDetails', { vaccineId: vaccine.id }),
+      onPress: () => {
+        if (waygateNativeAlert('WG_VaccineDetails')) {
+          navigateTo('VaccineDetails', { vaccineId: vaccine.id })
+        }
+      },
       a11yHintText: t('vaccines.list.a11yHint'),
       a11yValue: t('listPosition', { position: index + 1, total: vaccines.length }),
       testId: getA11yLabelText(textLines),

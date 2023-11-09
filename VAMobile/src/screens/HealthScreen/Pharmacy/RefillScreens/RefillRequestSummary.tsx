@@ -15,6 +15,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 const enum REQUEST_STATUS {
@@ -34,9 +35,11 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const { refillRequestSummaryItems, showLoadingScreenRequestRefillsRetry } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
 
   const onNavToHistory = () => {
-    dispatch(dispatchSetPrescriptionsNeedLoad())
-    dispatch(dispatchClearLoadingRequestRefills())
-    navigation.navigate('PrescriptionHistory', {})
+    if (waygateNativeAlert('WG_PrescriptionHistory')) {
+      dispatch(dispatchSetPrescriptionsNeedLoad())
+      dispatch(dispatchClearLoadingRequestRefills())
+      navigation.navigate('PrescriptionHistory', {})
+    }
   }
 
   useEffect(() => {
@@ -187,9 +190,11 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         </Box>
         <VAButton
           onPress={() => {
-            dispatch(dispatchSetPrescriptionsNeedLoad())
-            dispatch(dispatchClearLoadingRequestRefills())
-            navigation.navigate('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })
+            if (waygateNativeAlert('WG_PrescriptionHistory')) {
+              dispatch(dispatchSetPrescriptionsNeedLoad())
+              dispatch(dispatchClearLoadingRequestRefills())
+              navigation.navigate('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })
+            }
           }}
           label={t('prescriptions.refillRequestSummary.pendingRefills')}
           buttonType="buttonSecondary"

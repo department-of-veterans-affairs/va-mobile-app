@@ -17,6 +17,7 @@ import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useDowntime, usePrevious, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import NoRefills from './NoRefills'
 import SelectionList from 'components/SelectionList'
@@ -53,7 +54,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     if (prevLoadingRequestRefills && prevLoadingRequestRefills !== submittingRequestRefills) {
-      navigation.navigate('RefillRequestSummary')
+      waygateNativeAlert('WG_RefillRequestSummary') && navigation.navigate('RefillRequestSummary')
     }
   }, [navigation, submittingRequestRefills, prevLoadingRequestRefills])
 

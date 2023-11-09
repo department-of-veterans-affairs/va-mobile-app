@@ -35,7 +35,7 @@ const LoginScreen: FC = () => {
   const startAuth = useStartAuth()
   const theme = useTheme()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
-  const TAPS_FOR_DEMO = 20
+  const TAPS_FOR_DEMO = 1
   let demoTaps = 0
 
   useEffect(() => {

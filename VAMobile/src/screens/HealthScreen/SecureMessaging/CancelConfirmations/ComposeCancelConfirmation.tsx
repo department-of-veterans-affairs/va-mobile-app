@@ -71,7 +71,7 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
         resetAlerts()
         if (isReply && replyToID) {
           dispatch(resetReplyTriageError())
-          navigateTo('ViewMessageScreen', { messageID: replyToID })()
+          navigateTo('ViewMessage', { messageID: replyToID })()
         } else if (isEditDraft) {
           goToDrafts(false)
         } else {
