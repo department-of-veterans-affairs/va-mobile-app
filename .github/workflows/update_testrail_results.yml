@@ -44,7 +44,7 @@ jobs:
         run: | 
           resp=$(curl -X GET -H 'Content-Type: application/json' \
               -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-              "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&offset=0&is_completed=0" | jq -r '.runs[] | select(.name =='Regression pass for release') | .id')
+              "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&offset=0&is_completed=0" | jq '.runs[] | select(.name =="Regression pass for release") | .id')
         #run: |
           #for((i=0; ; i+=250)); do
           #  echo "i=$i"
