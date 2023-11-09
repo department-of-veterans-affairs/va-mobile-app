@@ -51,5 +51,11 @@ module.exports = {
         memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
       },
     ],
+    'react/no-unstable-nested-components': [
+      'warn',
+      {
+        allowAsProps: true,
+      }
+    ]
   },
 }
