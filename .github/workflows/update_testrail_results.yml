@@ -106,7 +106,7 @@ jobs:
 
   send-test-results-to-testrail:
     if: ${{ always() }}
-    needs: e2e-ios
+    needs: execute_automated_tests_ios
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
