@@ -27,6 +27,7 @@ jobs:
   execute_automated_tests:
     name: Execute automated tests
     uses: ./.github/workflows/e2e_ios.yml
+    secrets: inherit
 
   #works
   #e2e-ios:
