@@ -52,7 +52,7 @@ jobs:
               test_run_id = $(jq '.runs[0].id' << "$resp")
               echo "$test_run_id"
               echo "TEST_RUN_ID=$test_run_id" >> "$GITHUB_OUTPUT"
-          done
+              break
         #run: |
         #  resp=$(curl -X GET -H 'Content-Type: application/json' \
         #      -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
