@@ -272,7 +272,7 @@ context('AppealStatus', () => {
     it('should display the other_close data', () => {
       status.type = 'other_close'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: 'Your Motion for Reconsideration was denied' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Your appeal was closed' })).toBeTruthy()
       expect(screen.getByText('Your appeal was dismissed or closed. Please contact your Veterans Service Organization or representative for more information.')).toBeTruthy()
     })
   })
