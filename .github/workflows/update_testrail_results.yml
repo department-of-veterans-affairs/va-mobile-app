@@ -18,75 +18,77 @@ defaults:
     working-directory: VAMobile
 
 jobs:
-  #execute_automated_tests_ios:
-  #  name: Execute automated tests
-  #  uses: ./.github/workflows/e2e_ios.yml
-  #  secrets: inherit
+  execute_automated_tests_ios:
+    name: Execute automated tests
+    uses: ./.github/workflows/e2e_ios.yml
+    secrets: inherit
   
-  #execute_automated_tests_android:
-  #  name: Execute automated tests
-  #  uses: ./.github/workflows/e2e_android.yml
-  #  secrets: inherit
+  execute_automated_tests_android:
+    name: Execute automated tests
+    uses: ./.github/workflows/e2e_android.yml
+    secrets: inherit
 
   send_test_results_to_testrail:
-    #if: ${{ always() }}
-    #needs: [execute_automated_tests_ios, execute_automated_tests_android]
+    if: ${{ always() }}
+    needs: [execute_automated_tests_ios, execute_automated_tests_android]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      #- name: Download junit file
-      #  uses: actions/download-artifact@v3
-      #  with:
-      #    name: e2e-junit
-     # - name: 'Find run ID in testRail'
-     #   id: run-id-selection
-     #   run: | 
-     #     resp=$(curl -X GET -H 'Content-Type: application/json' \
-     #         -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-     #         "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&is_completed=0" | jq '.runs[] | select(.name =="Regression pass for release") | .id')
-     #     echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
+      - name: Download junit file
+        uses: actions/download-artifact@v3
+        with:
+          name: e2e-junit
+      - name: 'Find run ID in testRail'
+        id: run-id-selection
+        run: | 
+          resp=$(curl -X GET -H 'Content-Type: application/json' \
+              -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+              "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&is_completed=0" | jq '.runs[] | select(.name =="Regression pass for release") | .id')
+          echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
       - name: 'Find section ID in testRail'
         id: section-id-selection
         run: | 
           resp=$(curl -X GET -H 'Content-Type: application/json' \
               -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
               "https://dsvavsp.testrail.io//index.php?/api/v2/get_sections/29" | jq '.sections[] | select(.name =="Automated") | .id')
-              echo "$resp"
-      #- name: Python setup
-      #  if: always()
-      #  uses: actions/setup-python@v3
-      #  with:
-      #    python-version: '3.x'
-      #- name: TestRail CLI upload results
-      #  if: always()
-      #  run: |
-      #    pip install trcli
-      #    trcli -y \
-      #      -h https://dsvavsp.testrail.io/ \
-      #      --project "VA Mobile App" \
-      #      --project-id 29 \
-      #      -u ${{secrets.TEST_RAIL_USER}} \
-      #      -k ${{secrets.TEST_RAIL_KEY}} \
-      #      parse_junit \
-      #      --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
-      #      --title "Regression pass for release" \
-      #      -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit.xml"
-      #- name: Download junit file
-      #  uses: actions/download-artifact@v3
-      #  with:
-      #    name: e2e-junit-android
-      #- name: TestRail CLI upload results
-      #  if: always()
-      #  run: |
-      #    pip install trcli
-      #    trcli -y \
-      #      -h https://dsvavsp.testrail.io/ \
-      #      --project "VA Mobile App" \
-      #      --project-id 29 \
-      #      -u ${{secrets.TEST_RAIL_USER}} \
-      #      -k ${{secrets.TEST_RAIL_KEY}} \
-      #      parse_junit \
-      #      --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
-      #      --title "Regression pass for release" \
-      #      -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit.xml"
+          echo "SECTION_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
+      - name: Python setup
+        if: always()
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+      - name: TestRail CLI upload results
+        if: always()
+        run: |
+          pip install trcli
+          trcli -y \
+            -h https://dsvavsp.testrail.io/ \
+            --project "VA Mobile App" \
+            --project-id 29 \
+            -u ${{secrets.TEST_RAIL_USER}} \
+            -k ${{secrets.TEST_RAIL_KEY}} \
+            parse_junit \
+            --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
+            --section-id ${{steps.section-id-selection.outputs.SECTION_RUN_ID}} \
+            --title "Regression pass for release" \
+            -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit.xml"
+      - name: Download junit file
+        uses: actions/download-artifact@v3
+        with:
+          name: e2e-junit-android
+      - name: TestRail CLI upload results
+        if: always()
+        run: |
+          pip install trcli
+          trcli -y \
+            -h https://dsvavsp.testrail.io/ \
+            --project "VA Mobile App" \
+            --project-id 29 \
+            -u ${{secrets.TEST_RAIL_USER}} \
+            -k ${{secrets.TEST_RAIL_KEY}} \
+            parse_junit \
+            --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
+            --section-id ${{steps.section-id-selection.outputs.SECTION_RUN_ID}} \
+            --title "Regression pass for release" \
+            -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit.xml"
