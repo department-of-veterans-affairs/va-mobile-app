@@ -84,7 +84,7 @@ describe('Claims Screen', () => {
     await element(by.text('Close')).tap()
   })
 
-  it('should verify that the need help? section display the correct information', async () => {
+  it('open claim: should verify that the need help? section display the correct information', async () => {
     await expect(element(by.text('Need help?'))).toExist()
     await expect(element(by.text('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'))).toExist()
     await expect(element(by.id('CallVATestID'))).toExist()
@@ -219,7 +219,7 @@ describe('Claims Screen', () => {
     await expect(element(by.id(ClaimsE2eIdConstants.GET_CLAIMS_LETTER_BUTTON_ID))).toExist()
   })
 
-  it('should verify that the need help? section display the correct information for closed claims', async () => {
+  it('closed claim: should verify that the need help? section display the correct information for closed claims', async () => {
     await expect(element(by.text('Need help?'))).toExist()
     await expect(element(by.text('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'))).toExist()
     await expect(element(by.id('CallVATestID'))).toExist()

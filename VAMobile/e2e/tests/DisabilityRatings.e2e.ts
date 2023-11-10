@@ -17,7 +17,7 @@ beforeAll(async () => {
   await openDisabilityRating()
 })
 
-describe('Veterans Crisis Line', () => {
+describe('Disability Ratings', () => {
   it('should match the disability ratings page design', async () => {
     await expect(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toExist()
     await expect(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toExist()
