@@ -30,7 +30,7 @@ describe(':android: Cerner Notice', () => {
     await expect(element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID))).toExist()
   })
 
-  it('should tap the go to My VA Health link and verify the correct webpage is opened', async () => {
+  it('verify the correct webpage My Health link is opened', async () => {
     await element(by.id(CernerIdConstants.HEALTH_CATEGORY_ID)).scrollTo('bottom')
     await element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID)).tap()
     await element(by.text('Ok')).tap()
@@ -45,14 +45,14 @@ describe(':android: Cerner Notice', () => {
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_FACILITY_2_TEXT))).not.toExist()
   })
 
-  it('should tap on appointments and verify the cerner notification is present and collapsed', async () => {
+  it('verify the cerner notification is present and collapsed', async () => {
     await element(by.id(CernerIdConstants.HEALTH_CATEGORY_ID)).scrollTo('top')
     await openAppointments()
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_HEADING_TEXT))).toExist()
     await expect(element(by.text('Our records show you`re registered at:'))).not.toExist()
   })
 
-  it('should tap back, tap on messages and verify the cerner notification is present and collapsed', async () => {
+  it('tap on messages and verify the cerner notification is present and collapsed', async () => {
     await element(by.text('Health')).atIndex(0).tap()
     await openMessages()
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_MESSAGES_HEADER_TEXT))).toExist()

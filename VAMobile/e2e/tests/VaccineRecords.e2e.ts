@@ -25,7 +25,7 @@ describe('Vaccine Records Screen', () => {
     await expect(element(by.id(VaccinesE2eIdConstants.VACCINE_6_ID))).toExist()
   })
   
-  it('should tap on a COVID-19 record and verify the correct information is displayed', async () => {
+  it('verify COVID-19 record information', async () => {
     await element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID)).tap()
     await expect(element(by.text('January 14, 2021'))).toExist()
     await expect(element(by.text('COVID-19 vaccine'))).toExist()
@@ -45,7 +45,7 @@ describe('Vaccine Records Screen', () => {
     await element(by.text('VA vaccines')).tap()
   })
   
-  it('should tap on a non COVID-19 record and verify that no manufacturer info is displayed', async () => {
+  it('verify no manugacturer for non COVID-19 record', async () => {
     await element(by.id(VaccinesE2eIdConstants.VACCINE_3_ID)).tap()
     await expect(element(by.text('Manufacturer'))).not.toExist()
     await element(by.text('VA vaccines')).tap()
