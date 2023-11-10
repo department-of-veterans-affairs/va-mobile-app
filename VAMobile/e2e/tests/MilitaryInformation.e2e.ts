@@ -53,10 +53,10 @@ describe('Military Information Screen', () => {
 		await expect(element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_BODY_LABEL_1))).toExist()
 		await expect(element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_BODY_LABEL_2))).toExist()
 		await expect(element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_BODY_LABEL_3))).toExist()
-		await expect(element(by.id('CallVATestID'))).toExist()
+		await expect(element(by.id('incorrectServiceDMDCNumberTestID'))).toExist()
 		await element(by.id('IncorrectServiceTestID')).swipe('up')
 		if (device.getPlatform() === 'android') {
-			await element(by.id('CallVATestID')).tap()
+			await element(by.id('incorrectServiceDMDCNumberTestID')).tap()
 			await setTimeout(5000)
 			var tempPath = await device.takeScreenshot('AndroidCallingScreen')
 			await device.launchApp({newInstance: false})
