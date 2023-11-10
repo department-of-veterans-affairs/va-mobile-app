@@ -14,6 +14,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import CollapsibleAlert from 'components/CollapsibleAlert'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import getEnv from 'utils/env'
@@ -43,7 +44,9 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
       setError(t('fileUpload.tooManyPhotosError'))
     } else {
-      navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })()
+      if (waygateNativeAlert('WG_UploadOrAddPhotos')) {
+        navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })()
+      }
     }
   }
 

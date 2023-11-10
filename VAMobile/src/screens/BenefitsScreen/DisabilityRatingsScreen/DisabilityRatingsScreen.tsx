@@ -167,30 +167,6 @@ const DisabilityRatingsScreen: FC = () => {
     )
   }
 
-  if (useError(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID)) {
-    return (
-      <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
-      </ChildTemplate>
-    )
-  }
-
-  if (loading) {
-    return (
-      <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
-        <LoadingComponent text={t('disabilityRating.loading')} />
-      </ChildTemplate>
-    )
-  }
-
-  if (individualRatingsList.length === 0) {
-    return (
-      <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
-        <NoDisabilityRatings />
-      </ChildTemplate>
-    )
-  }
-
   const clickToCallProps: LinkButtonProps = {
     displayedText: t('disabilityRating.learnAboutLinkTitle'),
     linkType: LinkTypeOptionsConstants.url,
@@ -208,14 +184,26 @@ const DisabilityRatingsScreen: FC = () => {
     accessibilityRole: 'header',
   }
 
+  const errorCheck = useError(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID)
+
   return (
     <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')} testID="disabilityRatingTestID">
-      <Box>{getCombinedTotalSection()}</Box>
-      <Box mb={condensedMarginBetween}>
-        <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
-      </Box>
-      <Box mb={condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
-      <Box mb={contentMarginBottom}>{getNeedHelpSection()}</Box>
+      {errorCheck ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
+      ) : loading ? (
+        <LoadingComponent text={t('disabilityRating.loading')} />
+      ) : individualRatingsList.length === 0 ? (
+        <NoDisabilityRatings />
+      ) : (
+        <>
+          <Box>{getCombinedTotalSection()}</Box>
+          <Box mb={condensedMarginBetween}>
+            <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
+          </Box>
+          <Box mb={condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
+          <Box mb={contentMarginBottom}>{getNeedHelpSection()}</Box>
+        </>
+      )}
     </ChildTemplate>
   )
 }

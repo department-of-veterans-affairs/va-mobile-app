@@ -90,57 +90,47 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
     return event?.date || ''
   }
 
-  if (useError(ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID)) {
-    return (
-      <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingAppeal) {
-    return (
-      <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')}>
-        <LoadingComponent text={t('appealDetails.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
   const formattedUpdatedDate = formatDateMMMMDDYYYY(updated || '')
   const formattedUpdatedTime = getFormattedTimeForTimeZone(updated || '')
   const formattedSubmittedDate = formatDateMMMMDDYYYY(getSubmittedDate())
 
   return (
     <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')} testID="appealsDetailsTestID">
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <Box mx={theme.dimensions.gutter}>
-          <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
-            {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
-          </TextView>
-          <TextView variant="MobileBody" testID="appealsUpToDateTestID">
-            {t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}
-          </TextView>
-          <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={segmentedControlA11yHints} />
+      {useError(ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID) ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID} />
+      ) : loadingAppeal ? (
+        <LoadingComponent text={t('appealDetails.loading')} />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <Box mx={theme.dimensions.gutter}>
+            <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
+              {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
+            </TextView>
+            <TextView variant="MobileBody" testID="appealsUpToDateTestID">
+              {t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}
+            </TextView>
+            <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={segmentedControlA11yHints} />
+            </Box>
+          </Box>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            {appeal && selectedTab === 0 && (
+              <AppealStatus
+                events={events}
+                status={status}
+                aoj={aoj}
+                appealType={type}
+                docketName={docket?.type}
+                numAppealsAhead={docket?.ahead}
+                isActiveAppeal={active}
+                programArea={programArea}
+              />
+            )}
+            {appeal && selectedTab === 1 && <AppealIssues issues={getFilteredIssues()} />}
           </Box>
         </Box>
-        <Box mt={theme.dimensions.condensedMarginBetween}>
-          {appeal && selectedTab === 0 && (
-            <AppealStatus
-              events={events}
-              status={status}
-              aoj={aoj}
-              appealType={type}
-              docketName={docket?.type}
-              numAppealsAhead={docket?.ahead}
-              isActiveAppeal={active}
-              programArea={programArea}
-            />
-          )}
-          {appeal && selectedTab === 1 && <AppealIssues issues={getFilteredIssues()} />}
-        </Box>
-      </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }

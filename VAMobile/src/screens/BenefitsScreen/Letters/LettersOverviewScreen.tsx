@@ -7,6 +7,7 @@ import { Box, ButtonTypesConstants, FeatureLandingTemplate, TextView, VAButton }
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOverview'>
@@ -19,13 +20,22 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const onViewPressed = navigateTo('LettersList')
-  const onAddressPress = navigateTo('EditAddress', {
-    displayTitle: t('contactInformation.mailingAddress'),
-    addressType: profileAddressOptions.MAILING_ADDRESS,
-  })
+  const onViewLetters = () => {
+    if (waygateNativeAlert('WG_LettersList')) {
+      navigateTo('LettersList')()
+    }
+  }
 
-  const addressData: Array<addressDataField> = [{ addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onAddressPress }]
+  const onEditAddress = () => {
+    if (waygateNativeAlert('WG_EditAddress')) {
+      navigateTo('EditAddress', {
+        displayTitle: t('contactInformation.mailingAddress'),
+        addressType: profileAddressOptions.MAILING_ADDRESS,
+      })()
+    }
+  }
+
+  const addressData: Array<addressDataField> = [{ addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onEditAddress }]
 
   return (
     <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.title')} {...testIdProps('Letters-page')}>
@@ -38,7 +48,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
       </TextView>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
         <VAButton
-          onPress={onViewPressed}
+          onPress={onViewLetters}
           label={t('letters.overview.viewLetters')}
           buttonType={ButtonTypesConstants.buttonPrimary}
           a11yHint={t('letters.overview.viewLetters.hint')}

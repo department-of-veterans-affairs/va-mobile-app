@@ -43,6 +43,24 @@ export type WaygateToggleType =
   | 'WG_RemoteConfig'
   | 'WG_Developer'
   | 'WG_WaygateEdit'
+  | 'WG_DisabilityRatings'
+  | 'WG_Claims'
+  | 'WG_ClaimsHistory'
+  | 'WG_LettersOverview'
+  | 'WG_LettersList'
+  | 'WG_BenefitSummaryServiceVerificationLetter'
+  | 'WG_ClaimLettersScreen'
+  | 'WG_ClaimDetailsScreen'
+  | 'WG_AppealDetailsScreen'
+  | 'WG_ConsolidatedClaimsNote'
+  | 'WG_WhatDoIDoIfDisagreement'
+  | 'WG_FileRequest'
+  | 'WG_FileRequestDetails'
+  | 'WG_AskForClaimDecision'
+  | 'WG_SelectFile'
+  | 'WG_TakePhotos'
+  | 'WG_UploadFile'
+  | 'WG_UploadOrAddPhotos'
 
 type WaygateToggleValues = {
   WG_Home: Waygate
@@ -69,6 +87,24 @@ type WaygateToggleValues = {
   WG_RemoteConfig: Waygate
   WG_Developer: Waygate
   WG_WaygateEdit: Waygate
+  WG_DisabilityRatings: Waygate
+  WG_Claims: Waygate
+  WG_ClaimsHistory: Waygate
+  WG_LettersOverview: Waygate
+  WG_LettersList: Waygate
+  WG_BenefitSummaryServiceVerificationLetter: Waygate
+  WG_ClaimLettersScreen: Waygate
+  WG_ClaimDetailsScreen: Waygate
+  WG_AppealDetailsScreen: Waygate
+  WG_ConsolidatedClaimsNote: Waygate
+  WG_WhatDoIDoIfDisagreement: Waygate
+  WG_FileRequest: Waygate
+  WG_FileRequestDetails: Waygate
+  WG_AskForClaimDecision: Waygate
+  WG_SelectFile: Waygate
+  WG_TakePhotos: Waygate
+  WG_UploadFile: Waygate
+  WG_UploadOrAddPhotos: Waygate
 }
 
 const waygateDefault: Waygate = {
@@ -104,6 +140,24 @@ export let waygateConfig: WaygateToggleValues = {
   WG_RemoteConfig: { ...waygateDefault },
   WG_Developer: { ...waygateDefault },
   WG_WaygateEdit: { ...waygateDefault },
+  WG_DisabilityRatings: { ...waygateDefault },
+  WG_Claims: { ...waygateDefault },
+  WG_ClaimsHistory: { ...waygateDefault },
+  WG_LettersOverview: { ...waygateDefault },
+  WG_LettersList: { ...waygateDefault },
+  WG_BenefitSummaryServiceVerificationLetter: { ...waygateDefault },
+  WG_ClaimLettersScreen: { ...waygateDefault },
+  WG_ClaimDetailsScreen: { ...waygateDefault },
+  WG_AppealDetailsScreen: { ...waygateDefault },
+  WG_ConsolidatedClaimsNote: { ...waygateDefault },
+  WG_WhatDoIDoIfDisagreement: { ...waygateDefault },
+  WG_FileRequest: { ...waygateDefault },
+  WG_FileRequestDetails: { ...waygateDefault },
+  WG_AskForClaimDecision: { ...waygateDefault },
+  WG_SelectFile: { ...waygateDefault },
+  WG_TakePhotos: { ...waygateDefault },
+  WG_UploadFile: { ...waygateDefault },
+  WG_UploadOrAddPhotos: { ...waygateDefault },
 }
 
 export const waygateEnabled = (feature: WaygateToggleType): Waygate => {

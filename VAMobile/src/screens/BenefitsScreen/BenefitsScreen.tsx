@@ -13,6 +13,7 @@ import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
@@ -37,14 +38,32 @@ const BenefitsScreen: FC<BenefitsScreenProps> = () => {
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
   const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
 
-  const claimsDestination = featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters ? 'Claims' : 'ClaimsHistory'
+  const onDisabilityRatings = () => {
+    if (waygateNativeAlert('WG_DisabilityRatings')) {
+      navigateTo('DisabilityRatings')()
+    }
+  }
+
+  const onClaims = () => {
+    if (featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters && waygateNativeAlert('WG_Claims')) {
+      navigateTo('Claims')()
+    } else if (waygateNativeAlert('WG_ClaimsHistory')) {
+      navigateTo('ClaimsHistory')()
+    }
+  }
+
+  const onLetters = () => {
+    if (waygateNativeAlert('WG_LettersOverview')) {
+      navigateTo('LettersOverview')()
+    }
+  }
 
   return (
     <CategoryLanding title={t('benefits.title')}>
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('disabilityRating.title')}
-          onPress={navigateTo('DisabilityRatings')}
+          onPress={onDisabilityRatings}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
@@ -53,7 +72,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = () => {
         />
         <LargeNavButton
           title={t('claims.title')}
-          onPress={navigateTo(claimsDestination)}
+          onPress={onClaims}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
@@ -61,7 +80,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = () => {
         />
         <LargeNavButton
           title={t('lettersAndDocs.title')}
-          onPress={navigateTo('LettersOverview')}
+          onPress={onLetters}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}

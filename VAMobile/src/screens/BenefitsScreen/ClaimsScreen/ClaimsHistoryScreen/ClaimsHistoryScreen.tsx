@@ -61,30 +61,6 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
     }
   }
 
-  if (useError(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID) || getUserAuthorizedServicesError) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title}>
-        <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingClaimsAndAppeals || loadingUserAuthorizedServices) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title}>
-        <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (!claimsAndAppealsAccess) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title}>
-        <NoClaimsAndAppealsAccess />
-      </FeatureLandingTemplate>
-    )
-  }
-
   const serviceErrorAlert = (): ReactElement => {
     // if there is a claims service error or an appeals service error
     if (!!claimsServiceError || !!appealsServiceError) {
@@ -126,19 +102,27 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
 
   return (
     <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title}>
-      <Box flex={1} justifyContent="flex-start" mb={theme.dimensions.contentMarginBottom}>
-        {!claimsAndAppealsServiceErrors && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={accessibilityHints} />
-          </Box>
-        )}
-        {serviceErrorAlert()}
-        {!claimsAndAppealsServiceErrors && (
-          <Box flex={1}>
-            <ClaimsAndAppealsListView claimType={claimType} />
-          </Box>
-        )}
-      </Box>
+      {useError(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID) || getUserAuthorizedServicesError ? (
+        <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
+      ) : loadingClaimsAndAppeals || loadingUserAuthorizedServices ? (
+        <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
+      ) : !claimsAndAppealsAccess ? (
+        <NoClaimsAndAppealsAccess />
+      ) : (
+        <Box flex={1} justifyContent="flex-start" mb={theme.dimensions.contentMarginBottom}>
+          {!claimsAndAppealsServiceErrors && (
+            <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+              <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={accessibilityHints} />
+            </Box>
+          )}
+          {serviceErrorAlert()}
+          {!claimsAndAppealsServiceErrors && (
+            <Box flex={1}>
+              <ClaimsAndAppealsListView claimType={claimType} />
+            </Box>
+          )}
+        </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }

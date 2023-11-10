@@ -14,6 +14,7 @@ import { sendClaimStep3FileRequestAnalytics } from 'store/slices/claimsAndAppeal
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import PhaseIndicator from './PhaseIndicator'
 
 /** returns the heading string by phase */
@@ -159,7 +160,9 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
 
   const fileRequestsPress = () => {
     logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
-    navigateTo('FileRequest', { claimID })()
+    if (waygateNativeAlert('WG_FileRequest')) {
+      navigateTo('FileRequest', { claimID })()
+    }
   }
 
   return (
