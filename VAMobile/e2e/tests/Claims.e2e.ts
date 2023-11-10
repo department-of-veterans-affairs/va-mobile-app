@@ -105,17 +105,17 @@ describe('Claims Screen', () => {
     await expect(element(by.text('Received January 01, 2021'))).toExist()
   })
   
-  it('should verify that the review file request button is visible in step 3(evidence gathering, review, and decision)', async () => {
+  it('should verify that the review file request button is visible in step 3', async () => {
 		await waitFor(element(by.text('Review file requests'))).toBeVisible().whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scroll(100, 'down')
   })
 
-  it('should tap to expand step 3 and verify that the review file request button is still visible', async () => {
+  it('should tap to expand step 3 and verify that the review file request button is visible', async () => {
     await element(by.id('Step 3 of 5. current. Evidence gathering, review, and decision June 4, 2021')).tap()
     await expect(element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_BUTTON_ID))).toExist()
     await element(by.id('Step 3 of 5. current. Evidence gathering, review, and decision June 4, 2021')).tap()
   })
 
-  it('should tap on review file requests and verify the number of requests matches the label in claim details', async () => {
+  it('should tap on review file requests and verify the number of requests', async () => {
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_BUTTON_ID)).tap()
     await expect(element(by.label('You have 3 file requests from  V-A '))).toExist()
   })
@@ -219,7 +219,7 @@ describe('Claims Screen', () => {
     await expect(element(by.id(ClaimsE2eIdConstants.GET_CLAIMS_LETTER_BUTTON_ID))).toExist()
   })
 
-  it('closed claim: should verify that the need help? section display the correct information for closed claims', async () => {
+  it('closed claim: should verify that the need help? section display the correct information', async () => {
     await expect(element(by.text('Need help?'))).toExist()
     await expect(element(by.text('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'))).toExist()
     await expect(element(by.id('CallVATestID'))).toExist()
