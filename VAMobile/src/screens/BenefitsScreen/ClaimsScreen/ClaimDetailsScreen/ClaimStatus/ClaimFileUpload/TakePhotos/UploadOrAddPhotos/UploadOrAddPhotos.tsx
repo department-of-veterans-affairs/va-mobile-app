@@ -257,9 +257,9 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         logAnalyticsEvent(Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
         navigation.dispatch(StackActions.pop(2))
       }}>
-        {loadingFileUpload ? (
-          <LoadingComponent text={t('fileUpload.loading')} />
-        ) : (
+      {loadingFileUpload ? (
+        <LoadingComponent text={t('fileUpload.loading')} />
+      ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           {!!errorMessage && (
             <Box mb={theme.dimensions.standardMarginBetween}>
