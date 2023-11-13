@@ -37,7 +37,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const sentEvent = useRef(false)
 
-  const ActiveClaimStatusDetails = (): ReactElement => {
+  const renderActiveClaimStatusDetails = (): ReactElement => {
     // alternative check if need to update: isClosedClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
     const isActiveClaim = claimType === ClaimTypeConstants.ACTIVE
 
@@ -77,7 +77,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
     return <></>
   }
 
-  const ClosedClaimStatusDetails = (): ReactElement => {
+  const renderClosedClaimStatusDetails = (): ReactElement => {
     const isClosedClaim = claimType === ClaimTypeConstants.CLOSED
 
     if (isClosedClaim) {
@@ -126,8 +126,8 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
 
   return (
     <Box {...testIdProps('Your-claim: Status-tab-claim-details-page')}>
-      <ActiveClaimStatusDetails />
-      <ClosedClaimStatusDetails />
+      {renderActiveClaimStatusDetails()}
+      {renderClosedClaimStatusDetails()}
       <NeedHelpData claimId={claim.id} claimType={claim.attributes.claimType} claimPhase={claim.attributes.phase} />
     </Box>
   )
