@@ -29,6 +29,7 @@ const VeteransCrisisLineNumbers: FC = () => {
     <>
       <Box>
         <ClickToCallPhoneNumber
+          ttyBypass
           phone={t('988')}
           a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed.a11y')}
           displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
@@ -57,11 +58,12 @@ const VeteransCrisisLineNumbers: FC = () => {
         />
       </Box>
       <Box mt={standardMarginBetween}>
-        <ClickToCallPhoneNumber
-          ttyBypass
-          phone={t('8007994889')}
-          a11yLabel={t('veteransCrisisLine.hearingLossNumberDisplayed')}
+        <ClickForActionLink
+          testID="veteransCrisisLineHearingLossNumberTestID"
           displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}
+          a11yLabel={t('veteransCrisisLine.hearingLossNumberDisplayed')}
+          numberOrUrlLink={t('8007994889')}
+          linkType={LinkTypeOptionsConstants.callTTY}
           fireAnalytic={fireAnalyticFn}
         />
       </Box>

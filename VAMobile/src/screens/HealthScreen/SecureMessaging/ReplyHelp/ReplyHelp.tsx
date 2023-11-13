@@ -56,7 +56,7 @@ const ReplyHelp: FC = () => {
             ]}
           />
         </Box>
-        <ClickToCallPhoneNumber phone={t('911')} a11yLabel={t('secureMessaging.replyHelp.call911.a11y')} displayedText={t('secureMessaging.replyHelp.call911')} />
+        <ClickToCallPhoneNumber ttyBypass phone={t('911')} a11yLabel={t('secureMessaging.replyHelp.call911.a11y')} displayedText={t('secureMessaging.replyHelp.call911')} />
       </Box>
     </LargePanel>
   )
