@@ -226,8 +226,8 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   }
 
   const onAddFiles = () => {
+    logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
     if (waygateNativeAlert('WG_Attachments')) {
-      logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
       navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
     }
   }
@@ -346,8 +346,8 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     }
 
     const navigateToReplyHelp = () => {
+      logAnalyticsEvent(Events.vama_sm_nonurgent())
       if (waygateNativeAlert('WG_ReplyHelp')) {
-        logAnalyticsEvent(Events.vama_sm_nonurgent())
         navigation.navigate('ReplyHelp')
       }
     }
