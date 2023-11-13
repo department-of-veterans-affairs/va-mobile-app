@@ -10,7 +10,7 @@ const APP_VERSION_SKIPPED_UPDATE_VAL = '@store_app_version_skipped'
 const APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL = '@store_app_whats_new_version_skipped'
 const APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL = '@store_app_version_encourage_update_local_override'
 const APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL = '@store_app_version_whats_new_local_override'
-const { APPLE_STORE_LINK } = getEnv()
+const { APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
 export const FeatureConstants: {
   ENCOURAGEUPDATE: number
@@ -128,7 +128,7 @@ export const getStoreVersion = async (): Promise<string> => {
  */
 
 export const openAppStore = () => {
-  const link = APPLE_STORE_LINK
+  const link = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
   Linking.canOpenURL(link).then(
     (supported) => {
       supported && Linking.openURL(link)
