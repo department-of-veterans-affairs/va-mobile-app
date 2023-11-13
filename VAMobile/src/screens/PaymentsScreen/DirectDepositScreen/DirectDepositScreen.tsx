@@ -68,7 +68,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
         a11yHintText: t('directDeposit.addBankAccountInformationHint'),
         onPress: () => {
           if (waygateNativeAlert('WG_EditDirectDeposit')) {
-            navigateTo('EditDirectDeposit', { displayTitle: bankData ? t('directDeposit.edit.title') : t('directDeposit.add.title') })
+            navigateTo('EditDirectDeposit', { displayTitle: bankData ? t('directDeposit.edit.title') : t('directDeposit.add.title') })()
           }
         },
         decoratorProps: { accessibilityRole: 'button' },

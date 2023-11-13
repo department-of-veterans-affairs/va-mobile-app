@@ -599,7 +599,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: () => {
         if (waygateNativeAlert('WG_RefillScreenModal')) {
-          navigateTo('RefillScreenModal')
+          navigateTo('RefillScreenModal')()
         }
       },
     }

@@ -39,7 +39,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
       textLines,
       onPress: () => {
         if (waygateNativeAlert('WG_VaccineDetails')) {
-          navigateTo('VaccineDetails', { vaccineId: vaccine.id })
+          navigateTo('VaccineDetails', { vaccineId: vaccine.id })()
         }
       },
       a11yHintText: t('vaccines.list.a11yHint'),

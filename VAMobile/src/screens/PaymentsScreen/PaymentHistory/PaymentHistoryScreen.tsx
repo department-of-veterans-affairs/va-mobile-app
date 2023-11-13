@@ -167,7 +167,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
           <Pressable
             onPress={() => {
               if (waygateNativeAlert('WG_PaymentMissing')) {
-                navigateTo('PaymentMissing')
+                navigateTo('PaymentMissing')()
               }
             }}
             accessibilityRole="link"

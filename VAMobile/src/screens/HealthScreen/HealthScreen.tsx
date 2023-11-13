@@ -46,22 +46,22 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
 
   const onAppointments = () => {
     if (waygateNativeAlert('WG_Appointments')) {
-      navigateTo('Appointments')
+      navigateTo('Appointments')()
     }
   }
   const onSecureMessaging = () => {
     if (waygateNativeAlert('WG_SecureMessaging')) {
-      navigateTo('SecureMessaging')
+      navigateTo('SecureMessaging')()
     }
   }
   const onVaVaccines = () => {
     if (waygateNativeAlert('WG_VaccineList')) {
-      navigateTo('VaccineList')
+      navigateTo('VaccineList')()
     }
   }
   const pharmacyNavHandler = () => {
     if (waygateNativeAlert('WG_PrescriptionHistory')) {
-      navigateTo('PrescriptionHistory')
+      navigateTo('PrescriptionHistory')()
     }
   }
   const onPharmacy = () => {
