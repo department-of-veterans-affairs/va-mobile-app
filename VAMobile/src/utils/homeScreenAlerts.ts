@@ -124,7 +124,7 @@ export const getStoreVersion = async (): Promise<string> => {
 }
 
 /**
- * opens the Apple Store when they confirm they want to update the app
+ * opens the Apple or Google Play Store
  */
 
 export const openAppStore = () => {
