@@ -2,8 +2,8 @@ name: '[e2e] Update TestRail Results'
 
 on:
   push:
-    #branches:
-    #  - 'dependabot/**'
+    branches:
+      - 'dependabot/**'
     secrets:
       TEST_RAIL_USER:
         description: "TestRail robot userid"
