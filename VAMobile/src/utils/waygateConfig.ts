@@ -68,7 +68,7 @@ export type WaygateToggleType =
   | 'WG_StatusDefinition'
   | 'WG_SessionNotStarted'
   | 'WG_Payments'
-  | 'WG_PaymentsDetails'
+  | 'WG_PaymentDetails'
   | 'WG_DirectDeposit'
   | 'WG_HowToUpdateDirectDeposit'
   | 'WG_PaymentHistory'
@@ -126,7 +126,7 @@ type WaygateToggleValues = {
   WG_StatusDefinition: Waygate
   WG_SessionNotStarted: Waygate
   WG_Payments: Waygate
-  WG_PaymentsDetails: Waygate
+  WG_PaymentDetails: Waygate
   WG_DirectDeposit: Waygate
   WG_HowToUpdateDirectDeposit: Waygate
   WG_PaymentHistory: Waygate
@@ -193,7 +193,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_StatusDefinition: { ...waygateDefault },
   WG_SessionNotStarted: { ...waygateDefault },
   WG_Payments: { ...waygateDefault },
-  WG_PaymentsDetails: { ...waygateDefault },
+  WG_PaymentDetails: { ...waygateDefault },
   WG_DirectDeposit: { ...waygateDefault },
   WG_HowToUpdateDirectDeposit: { ...waygateDefault },
   WG_PaymentHistory: { ...waygateDefault },

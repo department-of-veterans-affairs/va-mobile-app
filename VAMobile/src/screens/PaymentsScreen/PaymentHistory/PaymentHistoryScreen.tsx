@@ -59,7 +59,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   }
 
   const onPaymentPress = (paymentID: string): void => {
-    if (waygateNativeAlert('WG_PaymentsDetails')) {
+    if (waygateNativeAlert('WG_PaymentDetails')) {
       navigateTo('PaymentDetails', { paymentID })()
     }
   }
