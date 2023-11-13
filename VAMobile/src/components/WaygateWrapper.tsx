@@ -28,7 +28,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName 
           <Box my={theme.dimensions.standardMarginBetween}>
             <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8006982411'))} phone={t('8006982411')} a11yLabel={a11yLabelID(t('8006982411'))} />
           </Box>
-          {waygate.appUpdateButton === true && <VAButton onPress={openAppStore} label={t('encourageUpdate.update')} buttonType={ButtonTypesConstants.buttonPrimary} />}
+          {waygate.appUpdateButton === true && <VAButton onPress={openAppStore} label={t('updateNow')} buttonType={ButtonTypesConstants.buttonPrimary} />}
         </AlertBox>
       </Box>
     )
