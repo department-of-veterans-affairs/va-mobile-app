@@ -19,7 +19,7 @@ beforeAll(async () => {
 })
 
 export async function verifyMilitaryInfo(militaryBranch) {
-	it('verify that ' + militaryBranch + ' is shown on the correct pages and that the seal is correct', async () => {
+	it('verify' + militaryBranch + ' is shown and seal is correct', async () => {
 		//changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
 		//await changeMockData('profile.json', ['/v0/military-service-history', 'data', 'attributes', {'serviceHistory': 0}, 'branchOfService'], militaryBranch)
 		//await device.launchApp({newInstance: true})
@@ -37,7 +37,7 @@ export async function verifyMilitaryInfo(militaryBranch) {
 	})
 }
 
-describe('Military Information Screen', () => { 
+describe('Military Info Screen', () => { 
 	verifyMilitaryInfo('United States Coast Guard')
 	//changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
 	/*verifyMilitaryInfo('United States Army')

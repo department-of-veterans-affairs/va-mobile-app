@@ -191,7 +191,7 @@ describe('Messages Screen', () => {
     await element(by.text('Messages')).tap()
   })
 
-  it('should tap start new message and verify the correct info is displayed', async () => {
+  it('tap start new message and verify information', async () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID))).toExist()
@@ -201,7 +201,7 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
   })
 
-  it('new message: verify talk to the veterans crisis line now is displayed', async () => {
+  it('new message: verify talk to the veterans crisis line now', async () => {
     await element(by.id('talk-to-the-veterans-crisis-line-now')).tap()
     await expect(element(by.text('Veterans Crisis Line'))).toExist()
     await element(by.text('Done')).tap()
@@ -250,7 +250,7 @@ describe('Messages Screen', () => {
     await element(by.id('messagesHelpCloseTestID')).tap()
   })
 
-  it('should tap the save button and verify the correct errors are displayed', async () => {
+  it('verify the correct errors displayed on save', async () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SAVE_ID)).tap()
     await expect(element(by.text('We need more information'))).toExist()
     await expect(element(by.text('Select a care team to message')).atIndex(0)).toExist()
@@ -277,7 +277,7 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SUBJECT_ID)).clearText()
   }) 
 
-  it('should tap cancel and verify the correct action sheet info is displayed', async() => {
+  it('verify cancel action sheet display', async() => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
     await expect(element(by.text('Delete message you started or save as draft?'))).toExist()
     await expect(element(by.text('If you save as a draft, we\'ll remove the attachments.'))).toExist()
@@ -286,13 +286,13 @@ describe('Messages Screen', () => {
     await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT))).toExist()
   })
 
-  it('tap keep editing and verify the previous made fields are filled', async () => {
+  it('verify the previous made fields are filled on keep editing', async () => {
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
     await expect(element(by.text('VA Flagship mobile applications interface_DAYT29'))).toExist()
     await expect(element(by.text('Medication'))).toExist()
   })
 
-  it('verify the user is returned to the messages screen on delete', async () => {
+  it('verify the user is returned to messages inbox on delete', async () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CANCEL_ID)).tap()
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
@@ -306,7 +306,7 @@ describe('Messages Screen', () => {
     await expect(element(by.text('COVID-19-mRNA-infographic_G_508.pdf (0.17 MB)'))).toExist()
   })
 
-  it('should navigate to the sent folder and select the first message', async () => {
+  it('navigate to the sent folder and select the first message', async () => {
     await device.launchApp({ newInstance: true })
     await loginToDemoMode()
     await openHealth()
@@ -315,7 +315,7 @@ describe('Messages Screen', () => {
     await element(by.text('Sent')).tap()
   })
 
-  it('should tap on the first message and verify a message thread is displayed', async () => {
+  it('verify a message threads', async () => {
     await element(by.id('Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Appointment: Preparing for your visit')).tap()
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     await expect(element(by.text('Melvin Freeman\nUSMC Veteran'))).toExist()
@@ -324,7 +324,7 @@ describe('Messages Screen', () => {
     await expect(element(by.text('Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.'))).toExist()
   })
 
-  it('should expand and collapse a message with more than two lines', async () => {
+  it('verify message threads with more than two lines', async () => {
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     if(device.getPlatform() === 'ios') {
       dateWithTimeZone = await getDateWithTimeZone('October 1, 2021 5:23 PM')
@@ -345,7 +345,7 @@ describe('Messages Screen', () => {
     await element(by.text('Messages')).tap()
   })
 
-  it('should navigate to the drafts folder and click the newest message', async () => {
+  it('click the newest message in drafts folder', async () => {
     await device.launchApp({ newInstance: true })
     await loginToDemoMode()
     await openHealth()
@@ -357,7 +357,7 @@ describe('Messages Screen', () => {
     await element(by.text('Test: Test Inquiry')).tap()
   })
 
-  it('should enter some text into the draft message, tap cancel and verify action sheet', async () => {
+  it('verify action sheet for edited drafts message', async () => {
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).clearText()
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_MESSAGE_FIELD_ID)).replaceText('Testing')
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
@@ -368,7 +368,7 @@ describe('Messages Screen', () => {
     await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT))).toExist()
   })
 
-  it('should tap keep editing and verify the text previously entered is displayed', async () => {
+  it('drafts: verify the previous made fields are filled on keep editing', async () => {
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
     await expect(element(by.text('Testing'))).toExist()
   })
@@ -379,7 +379,7 @@ describe('Messages Screen', () => {
     await expect(element(by.text('Test: Test Inquiry'))).toExist()
   })
 
-  it('should open the previous editing draft and verify that no changes were made', async () => {   
+  it('verify that no changes were made to draft after cancel', async () => {   
     await element(by.text('Test: Test Inquiry')).tap()
     await expect(element(by.text('VA Flagship mobile applications interface 2_DAYT29'))).toExist()
     await expect(element(by.text('Test'))).toExist()

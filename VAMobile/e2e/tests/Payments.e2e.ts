@@ -39,7 +39,7 @@ describe('Payments Screen', () => {
 		await element(by.text('Close')).tap() 
 	})
 
-	it('should tap on a payment and verify the payment details for paper check', async () => {
+	it('payment details: verify the payment details for paper check', async () => {
 		await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_1_ID)).atIndex(0).tap()
 		await expect(element(by.text('June 1, 2017'))).toExist()
 		await expect(element(by.text('Regular Chapter 31'))).toExist()
@@ -48,7 +48,7 @@ describe('Payments Screen', () => {
 		await expect(element(by.id(PaymentsE2eIDConstants.PAYMENT_INFO_INCORRECT_ID))).toExist()
 	})
 
-	it('verify what if my payment information doesn\'t look right information', async () => {
+	it('verify what if my payment information doesn\'t look right info', async () => {
 		await element(by.id(PaymentsE2eIDConstants.PAYMENT_INFO_INCORRECT_ID)).tap()
 		await expect(element(by.text('What if my payment information doesn\'t look right?')).atIndex(1)).toExist()
 		if (device.getPlatform() === 'android') {
