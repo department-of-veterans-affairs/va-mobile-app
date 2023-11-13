@@ -15,6 +15,8 @@ export const SettingsE2eIdConstants = {
   SHARE_APP_SCREEN_TEXT:
     'Download the VA: Health and Benefits on the App Store: https://apps.apple.com/us/app/va-health-and-benefits/id1559609596 or on Google Play: https://play.google.com/store/apps/details?id=gov.va.mobileapp',
   PRIVACY_ROW_TEXT: 'Privacy policy',
+  SIGN_OUT_BTN_ID: 'Sign out', 
+  SIGN_OUT_CONFIRM_TEXT: device.getPlatform() === 'ios' ? 'Sign Out' : 'Sign Out ',
 }
 
 beforeAll(async () => {
@@ -72,15 +74,14 @@ describe('Settings Screen', () => {
   })
 
   it('should show and dismiss signout popup', async () => {
-    await element(by.text(CommonE2eIdConstants.SIGN_OUT_BTN_ID)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.SIGN_OUT_CONFIRM_TEXT))).toExist()
-    await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
+    await element(by.text(SettingsE2eIdConstants.SIGN_OUT_BTN_ID)).atIndex(0).tap()
+    await expect(element(by.text(SettingsE2eIdConstants.SIGN_OUT_CONFIRM_TEXT))).toExist()
+    await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
   })
 
   it('should sign out', async () => {
-    await element(by.text(CommonE2eIdConstants.SIGN_OUT_BTN_ID)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.SIGN_OUT_CONFIRM_TEXT))).toExist()
-    await element(by.text('Sign Out')).tap()
-    await expect(element(by.text('Sign in'))).toExist()
+    await element(by.text(SettingsE2eIdConstants.SIGN_OUT_BTN_ID)).atIndex(0).tap()
+    await element(by.text(SettingsE2eIdConstants.SIGN_OUT_CONFIRM_TEXT)).tap()
+    await expect(element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID))).toExist()
   })
 })

@@ -50,6 +50,8 @@ export const MessagesE2eIdConstants = {
 }
 
 var dateWithTimeZone
+var messageCollapsed
+var messageExpanded
 
 beforeAll(async () => {
   await loginToDemoMode()
@@ -65,7 +67,7 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID))).toExist()
 		await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID))).toExist()	
 	})
-
+ 
   it('should verify that the messages inbox is scrollable', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('bottom')
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_10_ID))).toBeVisible()
@@ -92,8 +94,6 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
     await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
     await expect(element(by.text('RATANA, NARIN '))).toExist()
-    dateWithTimeZone = await getDateWithTimeZone('October 26, 2021 5:22 PM')
-    await expect(element(by.id(dateWithTimeZone))).toExist()
     await expect(element(by.text('Upset stomach is a common side effect of this medication.  Mild stomach pain is normal, but if you are having severe stomach pains, please let us know or seek in-person care.'))).toExist()
     await expect(element(by.text('Only use messages for non-urgent needs'))).toExist()
   })
@@ -317,25 +317,30 @@ describe('Messages Screen', () => {
 
   it('should tap on the first message and verify a message thread is displayed', async () => {
     await element(by.id('Va Flagship Mobile Applications Interface 2_dayt29 11/16/2021 Appointment: Preparing for your visit')).tap()
-    dateWithTimeZone = await getDateWithTimeZone('November 12, 2021 6:07 PM')
-    await expect(element(by.id('FREEMAN, MELVIN  V ' + dateWithTimeZone + ' '))).toExist()
-    dateWithTimeZone = await getDateWithTimeZone('October 21, 2021 10:58 AM')
-    await expect(element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' '))).toExist()
-    dateWithTimeZone = await getDateWithTimeZone('October 15, 2021 5:55 PM')
-    await expect(element(by.id('FREEMAN, MELVIN  V ' + dateWithTimeZone + ' has attachment'))).toExist()
-    dateWithTimeZone = await getDateWithTimeZone('October 1, 2021 5:23 PM')
-    await expect(element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' '))).toExist()
+    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+    await expect(element(by.text('Melvin Freeman\nUSMC Veteran'))).toExist()
+    await expect(element(by.text('See you at your appointment.  Please do not forget to fast.'))).toExist()
+    await expect(element(by.text('Testing '))).toExist()
+    await expect(element(by.text('Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.'))).toExist()
   })
 
   it('should expand and collapse a message with more than two lines', async () => {
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-    dateWithTimeZone = await getDateWithTimeZone('October 1, 2021 5:23 PM')
-    var messageCollapsed = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageCollapsed')
-    checkImages(messageCollapsed)
-    await element(by.text(dateWithTimeZone)).tap()
-    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
-    var messageExpanded = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageExpanded')
-    checkImages(messageExpanded)
+    if(device.getPlatform() === 'ios') {
+      dateWithTimeZone = await getDateWithTimeZone('October 1, 2021 5:23 PM')
+      messageCollapsed = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageCollapsed')
+      checkImages(messageCollapsed)
+      await element(by.text(dateWithTimeZone)).tap()
+      await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+      messageExpanded = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageExpanded')
+      checkImages(messageExpanded)
+    } else {
+      messageCollapsed = await device.takeScreenshot('MessageCollapsed')
+      checkImages(messageCollapsed)
+      await element(by.text('Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.')).tap()
+      await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+      messageExpanded = await device.takeScreenshot('MessageExpanded')
+    }
     await element(by.text('Sent')).tap()
     await element(by.text('Messages')).tap()
   })

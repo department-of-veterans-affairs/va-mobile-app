@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { find, map, sortBy } from 'underscore'
+import { chain, find, map } from 'underscore'
 
 import * as api from '../api'
 import { AppThunk } from 'store'
@@ -112,9 +112,11 @@ const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
 }
 
 export const sortByLatestDate = (claimsAndAppeals: ClaimsAndAppealsList): ClaimsAndAppealsList => {
-  return sortBy(claimsAndAppeals || [], (claimAndAppeal) => {
-    return new Date(claimAndAppeal.attributes.updatedAt)
-  }).reverse()
+  return chain(claimsAndAppeals)
+    .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.dateFiled))
+    .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.updatedAt))
+    .reverse()
+    .value()
 }
 
 // Return data that looks like ClaimsAndAppealsGetData if data was loaded previously otherwise null
@@ -462,8 +464,8 @@ const claimsAndAppealsSlice = createSlice({
       const appealsServiceError = !!activeAndClosedMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
       const curLoadedActive = state.loadedClaimsAndAppeals.ACTIVE
       const curLoadedClosed = state.loadedClaimsAndAppeals.CLOSED
-      const activeList = activeData?.data || []
-      const closedList = closedData?.data || []
+      const activeList = sortByLatestDate(activeData?.data || [])
+      const closedList = sortByLatestDate(closedData?.data || [])
 
       state.claimsServiceError = claimsServiceError
       state.appealsServiceError = appealsServiceError
@@ -488,7 +490,7 @@ const claimsAndAppealsSlice = createSlice({
       const claimsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
       const appealsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
       const curLoadedClaimsAndAppeals = state.loadedClaimsAndAppeals[claimType]
-      const claimsAndAppealsList = claimsAndAppeals?.data || []
+      const claimsAndAppealsList = sortByLatestDate(claimsAndAppeals?.data || [])
 
       state.claimsServiceError = claimsServiceError
       state.appealsServiceError = appealsServiceError
