@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants } from 'components'
+import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkTypeOptionsConstants } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { UserAnalytics } from 'constants/analytics'
 import { a11yHintProp } from 'utils/accessibility'
@@ -28,12 +28,11 @@ const VeteransCrisisLineNumbers: FC = () => {
   return (
     <>
       <Box>
-        <ClickForActionLink
-          testID="veteransCrisisLineCrisisCallNumberTestID"
-          displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
+        <ClickToCallPhoneNumber
+          ttyBypass
+          phone={t('988')}
           a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed.a11y')}
-          numberOrUrlLink={t('988')}
-          linkType={LinkTypeOptionsConstants.call}
+          displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
           fireAnalytic={fireAnalyticFn}
         />
       </Box>
