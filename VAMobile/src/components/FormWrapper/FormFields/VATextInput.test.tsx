@@ -4,12 +4,15 @@ import { Pressable, TextInput } from 'react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
+import { screen } from '@testing-library/react-native'
 import Mock = jest.Mock
 
 import { context, render, RenderAPI, waitFor } from 'testUtils'
 import VATextInput, { VATextInputTypes } from './VATextInput'
 import { Box, TextView } from '../../index'
 import { isIOS } from 'utils/platform'
+import { getCombinedNodeFlags } from 'typescript'
+import { getInputBorderColor } from './formFieldUtils'
 
 let mockIsIOS = jest.fn()
 jest.mock('utils/platform', () => ({
@@ -32,7 +35,7 @@ context('VATextInput', () => {
     labelKey = 'profile:contactInformation.emailAddress',
     isTextArea = false,
   ) => {
-    onChangeSpy = jest.fn(() => {})
+    onChangeSpy = jest.fn(() => { })
 
     isIOSMock.mockReturnValue(false)
 
@@ -92,21 +95,22 @@ context('VATextInput', () => {
   describe('when there is helper text', () => {
     it('should display it', async () => {
       initializeTestInstance('email', '', 'back.a11yHint')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Navigates to the previous page')
+      expect(screen.getByText('Navigates to the previous page')).toBeTruthy()
+      expect(testInstance.findByProps({ 'children': 'Navigates to the previous page' })).toBeTruthy()
     })
   })
 
   describe('when there is an error', () => {
     it('should display it', async () => {
       initializeTestInstance('email', '', '', 'ERROR')
-      const allTextViews = testInstance.findAllByType(TextView)
-      expect(allTextViews[allTextViews.length - 1].props.children).toEqual('ERROR')
+      expect(screen.getByText('ERROR')).toBeTruthy()
+      expect(testInstance.findByProps({ 'children': 'ERROR' })).toBeTruthy()
     })
 
     it('should set the border color to error and make the border thicker', async () => {
       initializeTestInstance('email', '', '', 'ERROR')
-      expect(testInstance.findAllByType(Box)[4].props.borderColor).toEqual('error')
-      expect(testInstance.findAllByType(Box)[4].props.borderWidth).toEqual(2)
+      expect(testInstance.findByProps({ 'borderColor': 'error' })).toBeTruthy()
+      expect(testInstance.findByProps({ 'borderWidth': 2 })).toBeTruthy()
     })
   })
 })
