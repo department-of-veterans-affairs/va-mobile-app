@@ -9,7 +9,8 @@ import VAModalPicker from './VAModalPicker'
 import TextView from 'components/TextView'
 import BaseListItem from 'components/BaseListItem'
 import { InitialState } from 'store/slices'
-import { RenderAPI } from '@testing-library/react-native'
+import { RenderAPI, fireEvent, screen } from '@testing-library/react-native'
+import 'common.json'
 
 context('VAModalPicker', () => {
   let component: RenderAPI
@@ -84,11 +85,11 @@ context('VAModalPicker', () => {
   describe('when an option is selected', () => {
     it('should update selected to the value of that option and select done', async () => {
       await waitFor(() => {
-        selectionButtons[0].props.onPress()
+        fireEvent.press(component.getByTestId('Java'))
       })
 
       await waitFor(() => {
-        doneButton.props.onPress()
+        fireEvent.press(doneButton)
       })
 
       expect(selected).toEqual('java')
@@ -96,9 +97,9 @@ context('VAModalPicker', () => {
 
     it('should not update selected to the value of that option and select cancel', async () => {
       await waitFor(() => {
-        selectionButtons[0].props.onPress()
+        fireEvent.press(component.getByTestId('Java'))
 
-        cancelButton.props.onPress()
+        fireEvent.press(cancelButton)
 
         expect(selected).not.toEqual('java')
       })
@@ -107,30 +108,37 @@ context('VAModalPicker', () => {
 
   describe('when labelKey exists', () => {
     it('should render a textview for the label', async () => {
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[7].props.children).toEqual(['Number', ' ', ''])
-      expect(textViews.length).toEqual(9)
+      // const textViews = testInstance.findAllByType(TextView)
+      expect(component.getByTestId('Number picker')).toBeTruthy()
+      expect(screen.getAllByText('Number').length).toBeGreaterThan(0)
+      // expect(textViews[7].props.children).toEqual(['Number', ' ', ''])
+      // expect(textViews.length).toEqual(9)
     })
   })
 
   describe('when there is helper text', () => {
     it('should display it', async () => {
       await initializeTestInstance('js', 'label', 'back.a11yHint')
-      expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('Navigates to the previous page')
+      expect(screen.getByText('Navigates to the previous page')).toBeTruthy()
+      expect(testInstance.findByProps({ children: 'Navigates to the previous page' })).toBeTruthy()
+      // expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('Navigates to the previous page')
     })
   })
 
   describe('when there is an error', () => {
     it('should display it', async () => {
       await initializeTestInstance('email', 'label', '', 'ERROR')
-      const allTextViews = testInstance.findAllByType(TextView)
-      expect(allTextViews[allTextViews.length - 2].props.children).toEqual('ERROR')
+      expect(screen.getByText('ERROR')).toBeTruthy()
+      expect(testInstance.findByProps({ children: 'ERROR' })).toBeTruthy()
+      // const allTextViews = testInstance.findAllByType(TextView)
+      // expect(allTextViews[allTextViews.length - 2].props.children).toEqual('ERROR')
     })
   })
 
   describe('when isRequiredField is true', () => {
     it('should display (Required)', async () => {
       await initializeTestInstance('email', 'label', '', '', true)
+      expect(screen.getByText(['label', ' ', '(Required)'].join(" "))).toBeTruthy()
       const textViews = testInstance.findAllByType(TextView)
       expect(textViews[7].props.children).toEqual(['label', ' ', '(Required)'])
       expect(textViews.length).toEqual(9)
