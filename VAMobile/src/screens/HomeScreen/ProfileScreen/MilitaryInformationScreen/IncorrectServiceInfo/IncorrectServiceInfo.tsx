@@ -5,7 +5,6 @@ import React, { FC } from 'react'
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yLabelID } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
@@ -39,7 +38,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = () => {
         <TextView accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.3')} variant="MobileBody" paragraphSpacing={true}>
           {t('militaryInformation.incorrectServiceInfo.body.3')}
         </TextView>
-        <ClickToCallPhoneNumber a11yLabel={a11yLabelID(t('8005389552'))} displayedText={displayedTextPhoneNumber(t('8005389552'))} phone={t('8005389552')} />
+        <ClickToCallPhoneNumber phone={t('8005389552')} displayedText={displayedTextPhoneNumber(t('8005389552'))} />
       </Box>
     </LargePanel>
   )
