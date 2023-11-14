@@ -264,12 +264,12 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
     textLines.push(
       { text: t('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       { text: t('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', mb: condensedMarginBetween },
-      { text: t('text.raw', { text: typeOfCare ? typeOfCare : t('appointments.noTypeOfCare') }), variant: 'MobileBody', mb: 5 },
-      { text: t('text.raw', { text: healthcareProvider ? healthcareProvider : t('appointments.noProvider') }), variant: 'MobileBody', mb: 5 },
+      { text: t('text.raw', { text: typeOfCare ? typeOfCare : t('appointments.noTypeOfCare') }), variant: 'HelperText', mb: 5 },
+      { text: t('text.raw', { text: healthcareProvider ? healthcareProvider : t('appointments.noProvider') }), variant: 'HelperText', mb: 5 },
       {
         text: t('text.raw', { text: getAppointmentTypeIconText(appointmentType, t, phoneOnly) }),
         iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
-        variant: 'MobileBody',
+        variant: 'HelperText',
       },
     )
     return textLines

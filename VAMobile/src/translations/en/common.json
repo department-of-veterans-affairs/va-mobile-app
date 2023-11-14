@@ -193,7 +193,7 @@
   "appointmentList.connectGFE": "VA Video Connect - GFE",
   "appointmentList.connectOnsite": "VA Video Connect - Onsite",
   "appointmentList.inPerson": "In-person",
-  "appointmentList.phoneOnly": "Phone call",
+  "appointmentList.phoneOnly": "Phone",
   "appointmentList.youRequested": "Request type: {{typeOfVisit}}",
   "appointments": "Appointments",
   "appointments.appointment": "Appointment",
