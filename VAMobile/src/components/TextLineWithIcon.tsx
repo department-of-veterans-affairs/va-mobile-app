@@ -22,7 +22,7 @@ export const TextLineWithIcon: FC<TextLineWithIconProps> = ({ iconProps, text, v
   return (
     <Box flexDirection={'row'} alignItems={'center'}>
       <Box ml={iconNotOwnRow ? 0 : themes.dimensions.listItemDecoratorMarginLeft} mr={themes.dimensions.condensedMarginBetween}>
-        {iconProps && <VAIcon name={iconProps.name} width={iconProps.width} height={iconProps.height} fill={iconProps.fill} />}
+        {iconProps && <VAIcon name={iconProps.name} width={iconProps.width} height={iconProps.height} fill={iconProps.fill} testID={iconProps.testID} />}
         {!iconProps && <Box mr={16} />}
       </Box>
       {iconNotOwnRow && (
