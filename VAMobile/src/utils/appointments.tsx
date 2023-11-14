@@ -261,16 +261,14 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
   }
 
   if (phoneOnly) {
-    const pendingAppointmentText = t('appointmentList.youRequested', { typeOfVisit: getPendingAppointmentRequestTypeText(appointmentType, t, phoneOnly) })
-    const nonPendingAppointmentText = t('text.raw', { text: getAppointmentTypeIconText(appointmentType, t, phoneOnly) })
     textLines.push(
       { text: t('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       { text: t('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', mb: condensedMarginBetween },
       { text: t('text.raw', { text: typeOfCare ? typeOfCare : t('appointments.noTypeOfCare') }), variant: 'MobileBody', mb: 5 },
       { text: t('text.raw', { text: healthcareProvider ? healthcareProvider : t('appointments.noProvider') }), variant: 'MobileBody', mb: 5 },
       {
-        text: isPendingAppointment ? pendingAppointmentText : nonPendingAppointmentText,
-        iconProps: isPendingAppointment ? undefined : getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
+        text: t('text.raw', { text: getAppointmentTypeIconText(appointmentType, t, phoneOnly) }),
+        iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
         variant: 'MobileBody',
       },
     )
