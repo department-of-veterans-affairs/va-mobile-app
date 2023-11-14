@@ -18,7 +18,7 @@ beforeAll(async () => {
 	await loginToDemoMode()
 })
 
-export async function verifyMilitaryInfo(militaryBranch) {
+export async function verifyMilitaryInfo(militaryBranch: string) {
 	it('should tap through and verify that ' + militaryBranch + ' is shown on the home, profile, and military information page and that the seal is correct', async () => {
 		//changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
 		//await changeMockData('profile.json', ['/v0/military-service-history', 'data', 'attributes', {'serviceHistory': 0}, 'branchOfService'], militaryBranch)
