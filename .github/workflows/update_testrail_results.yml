@@ -2,6 +2,13 @@ name: '[e2e] Update TestRail Results'
 
 on:
   workflow_call:
+    secrets:
+      TEST_RAIL_USER:
+        description: "TestRail robot userid"
+        required: true
+      TEST_RAIL_KEY:
+        description: "TestRail api key"
+        required: true
   
 defaults:
   run:
