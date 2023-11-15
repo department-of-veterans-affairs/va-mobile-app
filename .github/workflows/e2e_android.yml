@@ -153,3 +153,4 @@ jobs:
     needs: [e2e-android]
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
+    secrets: inherit
