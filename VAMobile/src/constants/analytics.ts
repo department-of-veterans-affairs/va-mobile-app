@@ -1010,6 +1010,12 @@ export const UserAnalytics = {
       value: 'true',
     }
   },
+  vama_uses_notifications: (value: boolean): UserAnalytic => {
+    return {
+      name: 'vama_uses_notifications',
+      value: value.toString(),
+    }
+  },
   vama_uses_preferred_name: (): UserAnalytic => {
     return {
       name: 'vama_uses_preferred_name',
