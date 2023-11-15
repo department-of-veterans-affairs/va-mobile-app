@@ -2948,7 +2948,7 @@
         "active": true,
         "alerts": [
           {
-            "type": "scheduled_hearing",
+            "type": "merged",
             "details": {
               "date": "2021-02-24",
               "type": "video",
@@ -3030,7 +3030,112 @@
         "location": "bva",
         "programArea": "compensation",
         "status": {
-          "type": "scheduled_hearing",
+          "type": "merged",
+          "details": {
+            "date": "2021-02-24",
+            "type": "video",
+            "location": "Louisville regional office"
+          }
+        },
+        "type": "legacyAppeal",
+        "updated": "2021-12-03T13:39:54-05:00"
+      }
+    }
+  },
+  "/v0/appeal/2221531": {
+    "data": {
+      "id": "2221531",
+      "type": "appeal",
+      "attributes": {
+        "appealIds": [
+          "2221530"
+        ],
+        "active": true,
+        "alerts": [
+          {
+            "type": "statutory_opt_in",
+            "details": {
+              "date": "2021-02-24",
+              "type": "video",
+              "location": "Louisville regional office"
+            }
+          }
+        ],
+        "aod": false,
+        "aoj": "vba",
+        "description": "Service connection, ureteral stricture, and 2 others",
+        "docket": {
+          "front": true,
+          "total": 140135,
+          "ahead": 23446,
+          "ready": 2428,
+          "month": "2009-03-01",
+          "docketMonth": "2011-01-01",
+          "eta": null
+        },
+        "events": [
+          {
+            "type": "claim_decision",
+            "date": "2008-04-11"
+          },
+          {
+            "type": "nod",
+            "date": "2008-06-12"
+          },
+          {
+            "type": "soc",
+            "date": "2009-03-11"
+          },
+          {
+            "type": "form9",
+            "date": "2009-03-23"
+          },
+          {
+            "type": "ssoc",
+            "date": "2010-01-26"
+          },
+          {
+            "type": "ssoc",
+            "date": "2010-07-22"
+          },
+          {
+            "type": "ssoc",
+            "date": "2011-09-26"
+          },
+          {
+            "type": "certified",
+            "date": "2011-11-22"
+          }
+        ],
+        "evidence": [],
+        "incompleteHistory": false,
+        "issues": [
+          {
+            "description": "Service connection, ureteral stricture",
+            "diagnosticCode": "7518",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          },
+          {
+            "description": "Service connection, varicose veins",
+            "diagnosticCode": "7120",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          },
+          {
+            "description": "Service connection, generalized anxiety disorder",
+            "diagnosticCode": "9400",
+            "active": true,
+            "lastAction": null,
+            "date": null
+          }
+        ],
+        "location": "bva",
+        "programArea": "compensation",
+        "status": {
+          "type": "statutory_opt_in",
           "details": {
             "date": "2021-02-24",
             "type": "video",
