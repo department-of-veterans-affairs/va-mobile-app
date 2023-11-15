@@ -9,11 +9,9 @@ on:
     branches:
       - 'dependabot/**'
   workflow_dispatch:
-  workflow_call:
-    inputs:
-      environment:
-        type: string
-        default: staging
+  workflow_run:
+    workflows: ['[TestRail] Start RC Run']
+    types: [completed]
 
 defaults:
   run:
@@ -99,3 +97,9 @@ jobs:
         with:
           name: e2e-junit
           path: VAMobile/e2e/test_reports/e2e-junit.xml
+
+  send_test_results_to_testrail:
+    if: github.event_name == 'workflow_run'
+    needs: [e2e-ios]
+    name: Update testRail Results
+    uses: ./.github/workflows/update_testrail_results.yml

@@ -9,11 +9,9 @@ on:
     branches:
       - 'dependabot/**'
   workflow_dispatch:
-  workflow_call:
-    inputs:
-      environment:
-        type: string
-        default: staging
+  workflow_run:
+    workflows: ['[TestRail] Start RC Run']
+    types: [completed]
   # Run on weekdays 4:00 AM UTC
   # schedule:
   #   - cron: '0 4 * * 1,2,3,4,5'
@@ -112,7 +110,7 @@ jobs:
           disable-animations: true
           arch: x86_64
           avd-name: Pixel_4_XL_API_28
-          script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
+          script: yarn e2e:android-test /e2e/tests/Appeals.e2e --take-screenshots failing --updateSnapshot --headless
 
       # - name: Inform Slack of Failure
       #   id: post_failure
@@ -146,5 +144,12 @@ jobs:
       - name: Upload e2e-junit
         uses: actions/upload-artifact@v3
         with:
-          name: e2e-junit-android
+          name: e2e-junit
           path: VAMobile/e2e/test_reports/e2e-junit.xml
+      
+  send_test_results_to_testrail:
+    #if: github.event_name == 'workflow_run'
+    if: ${{ always() }}
+    needs: [e2e-android]
+    name: Update testRail Results
+    uses: ./.github/workflows/update_testrail_results.yml
