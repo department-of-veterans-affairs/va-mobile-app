@@ -478,6 +478,11 @@ export const Events = {
       name: 'vama_gender_id_success',
     }
   },
+  vama_givefb_close: (): Event => {
+    return {
+      name: 'vama_givefb_close',
+    }
+  },
   vama_letter_download: (letterName: string): Event => {
     return {
       name: 'vama_letter_download',

@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView, VABulletList, VAButton } from 'components'
+import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { useTheme } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 type InAppRecruitmentScreenProps = StackScreenProps<HomeStackParamList, 'InAppRecruitment'>
@@ -16,6 +18,10 @@ const { LINK_URL_IN_APP_RECRUITMENT, LINK_URL_VETERAN_USABILITY_PROJECT } = getE
 const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+
+  useBeforeNavBackListener(navigation, () => {
+    logAnalyticsEvent(Events.vama_givefb_close())
+  })
 
   const onPress = () => {
     navigation.navigate('Webview', { url: LINK_URL_IN_APP_RECRUITMENT, displayTitle: t('webview.vagov'), loadingMessage: t('inAppRecruitment.goToQuestionnaire.loading') })
