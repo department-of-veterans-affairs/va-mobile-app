@@ -70,6 +70,8 @@ export type WebviewStackParams = {
     displayTitle: string
     /** Text to appear with a lock icon in the header */
     loadingMessage?: string
+    /** Function to call before navigating backwards */
+    onBackPressed?: () => void
   }
 }
 
@@ -86,7 +88,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
   const [canGoForward, setCanGoForward] = useState(false)
   const [currentUrl, setCurrentUrl] = useState('')
 
-  const { url, displayTitle, loadingMessage } = route.params
+  const { url, displayTitle, loadingMessage, onBackPressed } = route.params
 
   const onReloadPressed = (): void => {
     webviewRef?.current.reload()
@@ -101,6 +103,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
   })
 
   const backPressed = (): void => {
+    onBackPressed && onBackPressed()
     webviewRef?.current.goBack()
   }
 

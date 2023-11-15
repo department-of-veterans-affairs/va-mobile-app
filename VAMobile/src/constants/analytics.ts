@@ -493,6 +493,11 @@ export const Events = {
       name: 'vama_givefb_launch',
     }
   },
+  vama_givefb_wv_close: (): Event => {
+    return {
+      name: 'vama_givefb_wv_close',
+    }
+  },
   vama_letter_download: (letterName: string): Event => {
     return {
       name: 'vama_letter_download',
