@@ -60,6 +60,7 @@ const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation })
             numberOrUrlLink={LINK_URL_VETERAN_USABILITY_PROJECT}
             linkType={LinkTypeOptionsConstants.url}
             a11yLabel={t('inAppRecruitment.learnMore')}
+            fireAnalytic={() => logAnalyticsEvent(Events.vama_givefb_info())}
           />
         </Box>
         <TextView variant="HelperText" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('inAppRecruitment.contracts'))}>
