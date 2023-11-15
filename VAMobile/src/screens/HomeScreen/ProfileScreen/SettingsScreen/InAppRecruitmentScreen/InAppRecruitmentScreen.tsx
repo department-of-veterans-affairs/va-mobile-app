@@ -24,6 +24,7 @@ const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation })
   })
 
   const onPress = () => {
+    logAnalyticsEvent(Events.vama_givefb_launch())
     navigation.navigate('Webview', { url: LINK_URL_IN_APP_RECRUITMENT, displayTitle: t('webview.vagov'), loadingMessage: t('inAppRecruitment.goToQuestionnaire.loading') })
   }
 

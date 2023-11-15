@@ -483,6 +483,11 @@ export const Events = {
       name: 'vama_givefb_close',
     }
   },
+  vama_givefb_info: (): Event => {
+    return {
+      name: 'vama_givefb_info',
+    }
+  },
   vama_letter_download: (letterName: string): Event => {
     return {
       name: 'vama_letter_download',
