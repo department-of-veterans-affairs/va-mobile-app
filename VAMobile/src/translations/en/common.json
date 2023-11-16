@@ -898,7 +898,7 @@
   "payments.title": "Payments",
   "payments.viewDetails": "Review details of this payment",
   "paymentsHelp.title": "Payments help",
-  "pending": "Pending",
+  "pending": "pending",
   "personalInformation.dateOfBirth": "Date of birth",
   "personalInformation.genderIdentity.changeSelection": "You can change your selection at any time. If you decide you no longer want to share your gender identity, select ",
   "personalInformation.genderIdentity.deleteChange": "Delete change to gender identity selection?",
