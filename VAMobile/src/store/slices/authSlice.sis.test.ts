@@ -21,6 +21,7 @@ import {
   startWebLogin,
 } from './authSlice'
 import { AUTH_STORAGE_TYPE, LoginServiceTypeConstants, LOGIN_PROMPT_TYPE } from 'store/api/types'
+import { featureEnabled } from 'utils/remoteConfig'
 
 export const ActionTypes: {
   AUTH_START_LOGIN: string
@@ -39,11 +40,6 @@ jest.mock('utils/remoteConfig')
 jest.mock('../../utils/platform', () => ({
   isAndroid: jest.fn(() => false),
   isIOS: jest.fn(),
-}))
-
-jest.mock('../../utils/rnAuthSesson', () => ({
-  startAuthSession: jest.fn(),
-  clearCookies: jest.fn(),
 }))
 
 jest.mock('../../utils/env', () =>
@@ -77,6 +73,8 @@ const defaultEnvParams = {
 }
 
 const sampleIdToken = 'TEST_TOKEN';
+
+let mockFeatureEnabled = featureEnabled as jest.Mock
 const getItemMock = AsyncStorage.getItem as jest.Mock
 
 let mockedAuthResponse: { data: { access_token: string; refresh_token: string; id_token: string } }
