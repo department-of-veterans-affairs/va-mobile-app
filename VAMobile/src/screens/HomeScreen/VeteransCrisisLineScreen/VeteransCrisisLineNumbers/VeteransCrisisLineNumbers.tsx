@@ -29,7 +29,7 @@ const VeteransCrisisLineNumbers: FC = () => {
     <>
       <Box>
         <ClickToCallPhoneNumber
-          ttyBypass
+          ttyBypass={true}
           phone={t('988')}
           a11yLabel={t('veteransCrisisLine.crisisCallNumberDisplayed.a11y')}
           displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
