@@ -7,6 +7,7 @@
 
 import Foundation
 import AuthenticationServices
+import WebKit
 
 /// This module allows the React-Native bridge to set up and use the ASWebAuthenticationSession flow for iOS devices.
 @objc(RNAuthSession)
@@ -76,6 +77,21 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
     session?.prefersEphemeralWebBrowserSession = true
     session?.start()
   }
+ 
+ /// Clears the devices cookies
+ /// - Parameters:
+ ///   - useWebKit: bool to use webkit or not
+ ///   - resolve: React Native Promise resolver.
+ /// - Returns: resolves true or false if it was able to clear the users cookies
+ @objc(resolver:)
+ func clearCookies(resolver resolve: @escaping RCTPromiseResolveBlock)-> Void {
+     let cookieStorage = HTTPCookieStorage.shared
+     for c in cookieStorage.cookies ?? [] {
+         cookieStorage.deleteCookie(c)
+     }
+     UserDefaults.standard.synchronize()
+     resolve(true)
+ }
   
   // defaults the presentation anchor for the ASWebAuthenticationSession
   func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
