@@ -2,7 +2,6 @@ import * as Keychain from 'react-native-keychain'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { utils } from '@react-native-firebase/app'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import CookieManager from '@react-native-cookies/cookies'
 import analytics from '@react-native-firebase/analytics'
 import crashlytics from '@react-native-firebase/crashlytics'
 import performance from '@react-native-firebase/perf'
@@ -22,6 +21,7 @@ import {
 import { AppDispatch, AppThunk } from 'store'
 import { EnvironmentTypesConstants } from 'constants/common'
 import { Events, UserAnalytics } from 'constants/analytics'
+import { clearCookies } from 'utils/rnAuthSesson'
 import { dispatchClearLoadedAppointments } from './appointmentsSlice'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
 import { dispatchClearLoadedMessages } from './secureMessagingSlice'
@@ -378,7 +378,7 @@ export const refreshTokenMatchesLoginService = async (): Promise<boolean> => {
 export const refreshAccessToken = async (refreshToken: string): Promise<boolean> => {
   console.debug('refreshAccessToken: Refreshing access token')
   try {
-    await CookieManager.clearAll()
+    await clearCookies()
 
     // If there's a mismatch between the login service of our feature flag and the type of token we have stored, skip refresh and return false
     const tokenMatchesService = await refreshTokenMatchesLoginService()
@@ -432,7 +432,7 @@ export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | unde
 
 export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch, refreshToken: string): Promise<void> => {
   try {
-    await CookieManager.clearAll()
+    await clearCookies()
     const refreshTokenMatchesLoginType = await refreshTokenMatchesLoginService()
 
     if (!refreshTokenMatchesLoginType) {
@@ -496,7 +496,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
       refreshToken = await retrieveRefreshToken()
     }
 
-    await CookieManager.clearAll()
+    await clearCookies()
     const tokenMatchesServiceType = await refreshTokenMatchesLoginService()
 
     if (tokenMatchesServiceType) {
@@ -625,7 +625,7 @@ export const handleTokenCallbackUrl =
       const { code } = parseCallbackUrlParams(url)
       // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
       console.debug('handleTokenCallbackUrl: POST to', AUTH_SIS_TOKEN_EXCHANGE_URL)
-      await CookieManager.clearAll()
+      await clearCookies()
       const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
         method: 'POST',
         headers: {
@@ -667,7 +667,7 @@ export const sendLoginStartAnalytics = (): AppThunk => async () => {
 }
 
 export const startWebLogin = (): AppThunk => async (dispatch) => {
-  await CookieManager.clearAll()
+  await clearCookies()
   // TODO: modify code challenge and state based on
   // what will be used in LoginSuccess.js for the token exchange.
   // The code challenge is a SHA256 hash of the code verifier string.

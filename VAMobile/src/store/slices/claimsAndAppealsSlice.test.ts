@@ -575,7 +575,7 @@ context('claimsAndAppeals', () => {
 
       await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, multiFiles, 'file'))
 
-      expect(api.post as jest.Mock).toBeCalledWith('/v0/claim/id/documents/multi-image', { document_type: 'L228', files: ['imgstring', 'imgstring'], tracked_item_id: 1 })
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/claim/id/documents/multi-image', { document_type: 'L228', files: ['imgstring', 'imgstring'], trackedItemId: 1 })
     })
   })
 
