@@ -7,7 +7,7 @@ import _ from 'underscore'
 
 import { AuthState, logout, setBiometricsPreference } from 'store/slices'
 import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, VAButton } from 'components'
-import { DemoState } from 'store/slices/demoSlice'
+// import { DemoState } from 'store/slices/demoSlice'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -17,7 +17,7 @@ import { useAppDispatch, useDestructiveActionSheet, useExternalLink, useRouteNav
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
-const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
+const { LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
 type SettingsScreenProps = StackScreenProps<HomeStackParamList, 'Settings'>
 
@@ -28,7 +28,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
   const { canStoreWithBiometric, shouldStoreWithBiometric, settingBiometricPreference, supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
-  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+  // const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const dispatchLogout = useDispatch()
   const signOutAlert = useDestructiveActionSheet()
   const _logout = () => {
@@ -133,7 +133,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
       <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <SimpleList items={items} />
-          {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
+          {debugMenu()}
         </Box>
         <Box px={theme.dimensions.gutter}>
           <VAButton onPress={onShowConfirm} label={t('logout.title')} buttonType={ButtonTypesConstants.buttonDestructive} />
