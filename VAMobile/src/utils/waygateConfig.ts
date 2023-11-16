@@ -43,6 +43,7 @@ export type WaygateToggleType =
   | 'WG_RemoteConfig'
   | 'WG_Developer'
   | 'WG_WaygateEdit'
+  | 'WG_Benefits'
   | 'WG_DisabilityRatings'
   | 'WG_Claims'
   | 'WG_ClaimsHistory'
@@ -87,6 +88,7 @@ type WaygateToggleValues = {
   WG_RemoteConfig: Waygate
   WG_Developer: Waygate
   WG_WaygateEdit: Waygate
+  WG_Benefits: Waygate
   WG_DisabilityRatings: Waygate
   WG_Claims: Waygate
   WG_ClaimsHistory: Waygate
@@ -140,6 +142,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_RemoteConfig: { ...waygateDefault },
   WG_Developer: { ...waygateDefault },
   WG_WaygateEdit: { ...waygateDefault },
+  WG_Benefits: { ...waygateDefault },
   WG_DisabilityRatings: { ...waygateDefault },
   WG_Claims: { ...waygateDefault },
   WG_ClaimsHistory: { ...waygateDefault },
