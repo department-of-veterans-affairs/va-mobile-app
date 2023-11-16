@@ -143,6 +143,12 @@ jest.mock('@react-native-async-storage/async-storage', () => {
   }
 })
 
+jest.mock('@react-native-cookies/cookies', () => {
+  return {
+    clearAll: jest.fn(),
+  }
+})
+
 jest.mock('@react-native-community/clipboard', () => {
   return {
     setString: jest.fn(),
