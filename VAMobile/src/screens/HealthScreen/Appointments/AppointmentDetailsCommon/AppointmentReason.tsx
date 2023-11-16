@@ -14,18 +14,21 @@ type AppointmentReasonProps = {
 const AppointmentReason: FC<AppointmentReasonProps> = ({ attributes }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { reason } = attributes || ({} as AppointmentAttributes)
+  const { reason, phoneOnly } = attributes || ({} as AppointmentAttributes)
   const isPendingAppointment = isAPendingAppointment(attributes)
 
-  if (isPendingAppointment || !reason) {
+  if (!phoneOnly && (isPendingAppointment || !reason)) {
     return <></>
   } else {
+    const phoneApptReason = reason || t('notNoted')
     return (
-      <Box my={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('upcomingAppointmentDetails.reason')}
+      <Box mt={phoneOnly ? undefined : theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
+          {phoneOnly ? t('upcomingAppointmentDetails.sharedProvider') : t('upcomingAppointmentDetails.reason')}
         </TextView>
-        <TextView variant="MobileBody">{reason}</TextView>
+        <TextView variant="MobileBody" paragraphSpacing={phoneOnly && isPendingAppointment}>
+          {phoneOnly ? t('upcomingAppointmentDetails.reasonDetails', { reason: phoneApptReason }) : reason}
+        </TextView>
       </Box>
     )
   }

@@ -10,6 +10,7 @@ export const IS_TEST = true
 export const WEBVIEW_URL_CHANGE_LEGAL_NAME='https://www.va.gov/resources/how-to-change-your-legal-name-on-file-with-va/'
 export const WEBVIEW_URL_CORONA_FAQ = 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions'
 export const WEBVIEW_URL_FACILITY_LOCATOR = 'https://www.va.gov/find-locations/'
+export const LINK_URL_VA_SCHEDULING = 'https://www.va.gov/health-care/schedule-view-va-appointments/'
 export const LINK_URL_VETERANS_CRISIS_LINE = 'https://www.veteranscrisisline.net/'
 export const LINK_URL_VETERANS_CRISIS_LINE_GET_HELP = 'https://www.veteranscrisisline.net/get-help/chat'
 export const LINK_URL_SCHEDULE_APPOINTMENTS = 'https://www.va.gov/health-care/schedule-view-va-appointments/'

@@ -16,11 +16,11 @@ const ContactInformation: FC<ContactInformationProps> = ({ attributes }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const { patientEmail, patientPhoneNumber, bestTimeToCall, appointmentType } = attributes || ({} as AppointmentAttributes)
+  const { patientEmail, patientPhoneNumber, bestTimeToCall, appointmentType, phoneOnly } = attributes || ({} as AppointmentAttributes)
 
   if (isAppointmentPending) {
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={phoneOnly ? undefined : theme.dimensions.standardMarginBetween}>
         {(!!patientEmail || !!patientPhoneNumber || !!bestTimeToCall?.length) && (
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('appointments.pending.yourContactDetails')}

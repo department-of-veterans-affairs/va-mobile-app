@@ -2,7 +2,7 @@ import { FC, ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 
-import { AppointmentAttributes, AppointmentStatusConstants, AppointmentTypeToA11yLabel, AppointmentTypeToID } from 'store/api/types'
+import { AppointmentAttributes, AppointmentStatusConstants, AppointmentStatusDetailTypeConsts, AppointmentTypeToA11yLabel, AppointmentTypeToID } from 'store/api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
@@ -18,7 +18,8 @@ type AppointmentTypeAndDateProps = {
 const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes, isPastAppointment = false }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { appointmentType, startDateUtc, timeZone, isCovidVaccine, typeOfCare, status, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, startDateUtc, timeZone, isCovidVaccine, typeOfCare, status, serviceCategoryName, phoneOnly, statusDetail, healthcareProvider, location } =
+    attributes || ({} as AppointmentAttributes)
 
   const isAppointmentPending = isAPendingAppointment(attributes)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
@@ -27,6 +28,32 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes, i
   const date = getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone)
   const time = getFormattedTimeForTimeZone(startDateUtc, timeZone)
   const covid19Text = t('upcomingAppointments.covidVaccine')
+
+  if (phoneOnly) {
+    let who = t('appointments.canceled.whoCanceled.you')
+    if (statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK) {
+      who = healthcareProvider ? healthcareProvider : location?.name || t('appointments.canceled.whoCanceled.facility')
+    }
+    const apptTitle = isAppointmentCanceled ? t('appointments.phone.canceledTitle') : isPastAppointment ? t('appointments.phone.pastTitle') : t('appointments.phone.upcomingTitle')
+    const apptBody = isAppointmentCanceled
+      ? t('appointments.pending.cancelled.theTimeAndDate', { who })
+      : isPastAppointment
+      ? t('appointments.pastBody')
+      : isAppointmentPending
+      ? t('appointments.pending.submitted.pendingRequestTypeOfCare', { typeOfCare })
+      : t('appointments.phone.upcomingBody')
+    return (
+      <Box>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+          {apptTitle}
+        </TextView>
+        <TextView variant={'MobileBody'} paragraphSpacing={true}>
+          {apptBody}
+        </TextView>
+        {isAppointmentPending ? undefined : <TextView variant={'MobileBodyBold'} mb={theme.dimensions.standardMarginBetween}>{`${date}\n${time}`}</TextView>}
+      </Box>
+    )
+  }
 
   let content
   if (isAppointmentPending) {

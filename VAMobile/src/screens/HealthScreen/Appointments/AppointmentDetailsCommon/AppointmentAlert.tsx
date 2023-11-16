@@ -15,13 +15,13 @@ const AppointmentAlert: FC<AppointmentAlertProps> = ({ attributes }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const { status, statusDetail, location } = attributes || ({} as AppointmentAttributes)
+  const { status, statusDetail, location, phoneOnly } = attributes || ({} as AppointmentAttributes)
   const appointmentBooked = status === AppointmentStatusConstants.BOOKED
   const appointmentHidden = status === AppointmentStatusConstants.HIDDEN
   const appointmentCanceled = status === AppointmentStatusConstants.CANCELLED
 
   // dont show alerts for booked or hidden appointments
-  if (appointmentBooked || appointmentHidden) {
+  if (appointmentBooked || appointmentHidden || phoneOnly) {
     return <></>
   }
 

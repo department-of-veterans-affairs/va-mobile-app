@@ -1108,7 +1108,7 @@
             "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
-            "reason": "routine-follow-up",
+            "reason": null,
             "isCovidVaccine": null,
             "isPending": false,
             "proposedTimes":[
@@ -1249,7 +1249,7 @@
           }
         },
         {
-          "id": "7a48912a6d02b0fc016d20b4ccb9001a",
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a55",
           "type": "appointment",
           "attributes":
           {

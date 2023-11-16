@@ -28,7 +28,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   const dispatch = useAppDispatch()
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, isCovidVaccine, cancelId, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, location, isCovidVaccine, cancelId, serviceCategoryName, phoneOnly } = attributes || ({} as AppointmentAttributes)
   const { name, phone } = location || ({} as AppointmentLocation)
 
   const findYourVALocationProps: LinkButtonProps = {
@@ -44,7 +44,13 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   let body
   let bodyA11yLabel
 
-  if (isCovidVaccine) {
+  if (phoneOnly) {
+    title = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')
+    body =
+      (appointmentType === AppointmentTypeConstants.VA || phoneOnly) && !isCovidVaccine && cancelId
+        ? t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.inAppCancel.body')
+        : t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')
+  } else if (isCovidVaccine) {
     title = t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.title')
     titleA11yLabel = a11yLabelVA(t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.title'))
     body = t('upcomingAppointmentDetails.cancelCovidVaccineAppointment.body')
@@ -143,22 +149,29 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
         {body}
       </TextView>
-      {appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine && cancelId ? (
-        <VAButton
-          onPress={onCancelAppointment}
-          label={t('upcomingAppointmentDetails.cancelAppointment')}
-          buttonType={ButtonTypesConstants.buttonDestructive}
-          {...testIdProps(t('upcomingAppointmentDetails.cancelAppointment'))}
-        />
+      {(appointmentType === AppointmentTypeConstants.VA || phoneOnly) && !isCovidVaccine && cancelId ? (
+        <>
+          {phoneOnly ? linkOrPhone : undefined}
+          <Box mt={phoneOnly ? theme.dimensions.standardMarginBetween : undefined}>
+            <VAButton
+              onPress={onCancelAppointment}
+              label={t('upcomingAppointmentDetails.cancelAppointment')}
+              buttonType={ButtonTypesConstants.buttonDestructive}
+              {...testIdProps(t('upcomingAppointmentDetails.cancelAppointment'))}
+            />
+          </Box>
+        </>
       ) : (
         <>
           {serviceCategoryName === 'COMPENSATION & PENSION' ? (
             <></>
           ) : (
             <>
-              <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(name)}>
-                {name}
-              </TextView>
+              {phoneOnly ? undefined : (
+                <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(name)}>
+                  {name}
+                </TextView>
+              )}
               {linkOrPhone}
             </>
           )}
