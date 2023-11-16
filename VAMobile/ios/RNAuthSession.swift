@@ -83,8 +83,8 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
  ///   - useWebKit: bool to use webkit or not
  ///   - resolve: React Native Promise resolver.
  /// - Returns: resolves true or false if it was able to clear the users cookies
- @objc(resolver:)
- func clearCookies(resolver resolve: @escaping RCTPromiseResolveBlock)-> Void {
+@objc(clearCookies:)
+ func clearCookies(_ resolve: @escaping RCTPromiseResolveBlock)-> Void {
      let cookieStorage = HTTPCookieStorage.shared
      for c in cookieStorage.cookies ?? [] {
          cookieStorage.deleteCookie(c)
