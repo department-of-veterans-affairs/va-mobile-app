@@ -186,14 +186,14 @@ context('LettersListScreen', () => {
   }
 
   describe('when lettersAndDocuments is set to false', () => {
-    it('should show noLettersScreen', async () => {
+    it('should show noLettersScreen', () => {
       initializeTestInstance(lettersData, false, false)
       expect(screen.getByText("We couldn't find information about your VA letters")).toBeTruthy()
     })
   })
 
   describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
+    it('should show loading screen', () => {
       initializeTestInstance(lettersData, true)
       expect(screen.getByText('Loading your letters list...')).toBeTruthy()
     })
