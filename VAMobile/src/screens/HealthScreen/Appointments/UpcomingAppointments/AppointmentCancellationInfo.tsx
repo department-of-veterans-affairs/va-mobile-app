@@ -149,7 +149,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
         {body}
       </TextView>
-      {((appointmentType === AppointmentTypeConstants.VA) || phoneOnly) && !isCovidVaccine && cancelId ? (
+      {(appointmentType === AppointmentTypeConstants.VA || phoneOnly) && !isCovidVaccine && cancelId ? (
         <>
           {phoneOnly ? linkOrPhone : undefined}
           <Box mt={phoneOnly ? theme.dimensions.standardMarginBetween : undefined}>
