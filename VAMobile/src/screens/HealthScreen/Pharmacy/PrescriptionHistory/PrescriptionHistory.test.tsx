@@ -1,11 +1,10 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { render, context, mockNavProps } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import PrescriptionHistory from './PrescriptionHistory'
 import { PrescriptionHistoryTabs, PrescriptionsGetData } from 'store/api'
-import { initialAuthState, initialPrescriptionState } from 'store/slices'
+import { initialPrescriptionState } from 'store/slices'
 import { PrescriptionHistoryTabConstants } from 'store/api/types'
 
 
@@ -271,7 +270,6 @@ context('PrescriptionHistory', () => {
 
     render(<PrescriptionHistory {...props} />, {
       preloadedState: {
-        auth: { ...initialAuthState },
         prescriptions: {
           ...initialPrescriptionState,
           prescriptions: data,
@@ -321,26 +319,26 @@ context('PrescriptionHistory', () => {
   })
 
   describe('Initializes correctly', () => {
-    it('should show the names and instructions of prescriptions and StartRefillRequest button', async () => {
+    it('should show the names and instructions of prescriptions and StartRefillRequest button', () => {
       expect(screen.getByText('ACETAMINOPHEN 160MG/5ML ALC-F LIQUID')).toBeTruthy()
       expect(screen.getByText('TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY')).toBeTruthy()
       expect(screen.getByText('ACETAMINOPHEN 325MG TAB')).toBeTruthy()
       expect(screen.getByText('TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy()
-      expect(screen.getByText('Start refill request')).toBeTruthy()
+      expect(screen.getByRole('button', { name: 'Start refill request' })).toBeTruthy()
       expect(screen.queryByText("We can't refill some of your prescriptions in the app")).toBeFalsy()
     })
   })
 
   describe('when there is a transferred prescription', () => {
-    it('should show the alert for transferred prescriptions', async () => {
+    it('should show the alert for transferred prescriptions', () => {
       initializeTestInstance(true)
       expect(screen.getByText("We can't refill some of your prescriptions in the app")).toBeTruthy()
     })
   })
   describe('when currentTab is not PrescriptionHistoryTabConstants.ALL', () => {
-    it('should not show StartRefillRequest button', async () => {
+    it('should not show StartRefillRequest button', () => {
       initializeTestInstance(false, PrescriptionHistoryTabConstants.TRACKING)
-      expect(screen.queryByText('Start refill request')).toBeFalsy()
+      expect(screen.queryByRole('button', { name: 'Start refill request' })).toBeFalsy()
     })
   })
 })
