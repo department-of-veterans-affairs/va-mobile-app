@@ -84,18 +84,6 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
     })
   }, [documentType])
 
-  if (loadingFileUpload) {
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={() => {
-          navigation.dispatch(StackActions.pop(2))
-        }}>
-        <LoadingComponent text={t('fileUpload.loading')} />
-      </FullScreenSubtask>
-    )
-  }
-
   const onUploadConfirmed = () => {
     logAnalyticsEvent(Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'file'))
     dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, filesList, 'file'))
@@ -172,25 +160,31 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
         logAnalyticsEvent(Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'file'))
         navigation.dispatch(StackActions.pop(2))
       }}>
-      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {request.displayName}
-        </TextView>
-      </Box>
-      <FileList files={[fileUploaded]} onDelete={onFileDelete} />
-      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
-        <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
-        <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-          <VAButton
-            onPress={() => {
-              setOnSaveClicked(true)
-            }}
-            label={t('fileUpload.submit')}
-            testID={t('fileUpload.submit')}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-          />
-        </Box>
-      </Box>
+      {loadingFileUpload ? (
+        <LoadingComponent text={t('fileUpload.loading')} />
+      ) : (
+        <>
+          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {request.displayName}
+            </TextView>
+          </Box>
+          <FileList files={[fileUploaded]} onDelete={onFileDelete} />
+          <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
+            <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+            <Box mt={theme.dimensions.textAndButtonLargeMargin}>
+              <VAButton
+                onPress={() => {
+                  setOnSaveClicked(true)
+                }}
+                label={t('fileUpload.submit')}
+                testID={t('fileUpload.submit')}
+                buttonType={ButtonTypesConstants.buttonPrimary}
+              />
+            </Box>
+          </Box>
+        </>
+      )}
     </FullScreenSubtask>
   )
 }

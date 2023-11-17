@@ -8,6 +8,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
@@ -16,9 +17,17 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
+  const onClaimsHistory = () => {
+    if (waygateNativeAlert('WG_ClaimsHistory')) {
+      navigateTo('ClaimsHistory')()
+    }
+  }
+
   const onClaimLettersPress = () => {
-    logAnalyticsEvent(Events.vama_ddl_landing_click())
-    navigateTo('ClaimLettersScreen')()
+    if (waygateNativeAlert('WG_ClaimLettersScreen')) {
+      logAnalyticsEvent(Events.vama_ddl_landing_click())
+      navigateTo('ClaimLettersScreen')()
+    }
   }
 
   return (
@@ -26,7 +35,7 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('claimsHistory.title')}
-          onPress={navigateTo('ClaimsHistory')}
+          onPress={onClaimsHistory}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}

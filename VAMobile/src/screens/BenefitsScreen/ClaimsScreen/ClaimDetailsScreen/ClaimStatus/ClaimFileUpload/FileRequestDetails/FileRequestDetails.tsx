@@ -11,6 +11,7 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { hasUploadedOrReceived } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
 
@@ -55,12 +56,16 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
 
   const onFilePress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'file'))
-    navigateTo('SelectFile', { claimID, request })()
+    if (waygateNativeAlert('WG_SelectFile')) {
+      navigateTo('SelectFile', { claimID, request })()
+    }
   }
 
   const onPhotoPress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'photo'))
-    navigateTo('TakePhotos', { claimID, request })()
+    if (waygateNativeAlert('WG_TakePhotos')) {
+      navigateTo('TakePhotos', { claimID, request })()
+    }
   }
 
   return (

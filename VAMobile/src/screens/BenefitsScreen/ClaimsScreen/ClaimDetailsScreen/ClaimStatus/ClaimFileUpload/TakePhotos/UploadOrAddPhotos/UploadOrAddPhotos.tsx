@@ -94,18 +94,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     })
   }, [documentType])
 
-  if (loadingFileUpload) {
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={() => {
-          navigation.dispatch(StackActions.pop(2))
-        }}>
-        <LoadingComponent text={t('fileUpload.loading')} />
-      </FullScreenSubtask>
-    )
-  }
-
   const onUploadConfirmed = () => {
     logAnalyticsEvent(Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
     dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, imagesList || [], 'photo'))
@@ -269,56 +257,60 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         logAnalyticsEvent(Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
         navigation.dispatch(StackActions.pop(2))
       }}>
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        {!!errorMessage && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox scrollViewRef={scrollViewRef} title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" focusOnError={onSaveClicked} />
-          </Box>
-        )}
-        <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
-          {request.displayName}
-        </TextView>
-        <Box
-          backgroundColor={'contentBox'}
-          borderTopWidth={1}
-          borderTopColor="primary"
-          borderBottomWidth={1}
-          borderBottomColor="primary"
-          pt={theme.dimensions.standardMarginBetween}
-          pb={theme.dimensions.standardMarginBetween}
-          display="flex"
-          flexDirection="row"
-          flexWrap="wrap">
-          {displayImages()}
-        </Box>
-        <Box
-          justifyContent="space-between"
-          flexDirection="row"
-          flexWrap="wrap"
-          mx={theme.dimensions.gutter}
-          mt={theme.dimensions.condensedMarginBetween}
-          mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="HelperText">{t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}</TextView>
-          <TextView
-            variant="HelperText"
-            accessibilityLabel={t('fileUpload.ofFiftyMB.a11y', { sizeOfPhotos: bytesToFinalSizeDisplayA11y(totalBytesUsed ? totalBytesUsed : 0, t, false) })}>
-            {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
+      {loadingFileUpload ? (
+        <LoadingComponent text={t('fileUpload.loading')} />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          {!!errorMessage && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AlertBox scrollViewRef={scrollViewRef} title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" focusOnError={onSaveClicked} />
+            </Box>
+          )}
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
+            {request.displayName}
           </TextView>
-        </Box>
-        <Box mx={theme.dimensions.gutter}>
-          <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
-          <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-            <VAButton
-              onPress={() => {
-                setOnSaveClicked(true)
-              }}
-              label={t('fileUpload.submit')}
-              testID={t('fileUpload.submit')}
-              buttonType={ButtonTypesConstants.buttonPrimary}
-            />
+          <Box
+            backgroundColor={'contentBox'}
+            borderTopWidth={1}
+            borderTopColor="primary"
+            borderBottomWidth={1}
+            borderBottomColor="primary"
+            pt={theme.dimensions.standardMarginBetween}
+            pb={theme.dimensions.standardMarginBetween}
+            display="flex"
+            flexDirection="row"
+            flexWrap="wrap">
+            {displayImages()}
+          </Box>
+          <Box
+            justifyContent="space-between"
+            flexDirection="row"
+            flexWrap="wrap"
+            mx={theme.dimensions.gutter}
+            mt={theme.dimensions.condensedMarginBetween}
+            mb={theme.dimensions.standardMarginBetween}>
+            <TextView variant="HelperText">{t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}</TextView>
+            <TextView
+              variant="HelperText"
+              accessibilityLabel={t('fileUpload.ofFiftyMB.a11y', { sizeOfPhotos: bytesToFinalSizeDisplayA11y(totalBytesUsed ? totalBytesUsed : 0, t, false) })}>
+              {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
+            </TextView>
+          </Box>
+          <Box mx={theme.dimensions.gutter}>
+            <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+            <Box mt={theme.dimensions.textAndButtonLargeMargin}>
+              <VAButton
+                onPress={() => {
+                  setOnSaveClicked(true)
+                }}
+                label={t('fileUpload.submit')}
+                testID={t('fileUpload.submit')}
+                buttonType={ButtonTypesConstants.buttonPrimary}
+              />
+            </Box>
           </Box>
         </Box>
-      </Box>
+      )}
     </FullScreenSubtask>
   )
 }
