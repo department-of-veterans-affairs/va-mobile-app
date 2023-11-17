@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { fireEvent, screen } from '@testing-library/react-native'
+
 import { context, mockNavProps, waitFor, render } from 'testUtils'
 import { initialLettersState, InitialState } from 'store/slices'
 import { APIError, LettersList } from 'store/api/types'
@@ -10,6 +9,15 @@ import { when } from 'jest-when'
 import * as api from 'store/api'
 
 let mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => {
+      return mockNavigationSpy
+    },
+  }
+})
 
 jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
   let original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
@@ -111,8 +119,6 @@ const lettersData: LettersList = [
 ]
 
 context('LettersListScreen', () => {
-  let props: any
-
   const initializeTestInstance = (lettersList: LettersList | null, loading = false, throwError: boolean = false) => {
 
     if (throwError) {
@@ -134,13 +140,7 @@ context('LettersListScreen', () => {
       storeVals.letters.letters = lettersList
     }
 
-    props = mockNavProps(undefined,
-      {
-        navigate: mockNavigationSpy,
-      },
-    )
-
-    render(<LettersListScreen {...props} />, {
+    render(<LettersListScreen {...mockNavProps()} />, {
       preloadedState: {
         ...storeVals,
       },

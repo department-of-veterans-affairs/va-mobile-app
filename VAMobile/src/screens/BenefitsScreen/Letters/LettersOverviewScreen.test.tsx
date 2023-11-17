@@ -1,9 +1,7 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
 import { fireEvent, screen } from '@testing-library/react-native'
-import { context, mockNavProps, render, RenderAPI } from 'testUtils'
-import { Pressable } from 'react-native'
+
+import { context, mockNavProps, render } from 'testUtils'
 import { LettersOverviewScreen } from './index'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
@@ -12,9 +10,7 @@ jest.mock('@react-navigation/native', () => {
   let actual = jest.requireActual('@react-navigation/native')
   return {
     ...actual,
-    useNavigation: () => ({
-      navigate: mockNavigationSpy,
-    }),
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 

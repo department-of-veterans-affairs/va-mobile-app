@@ -1,5 +1,5 @@
 import { Pressable } from 'react-native'
-import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
@@ -9,7 +9,6 @@ import { Events } from 'constants/analytics'
 import { FormattedPhoneType, PhoneData, PhoneKey, PhoneTypeConstants } from 'api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { UserContactInformation } from 'api/types/ContactInformation'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -17,7 +16,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useNavigation } from '@react-navigation/native'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 const getTextForPhoneData = (contactInformation: UserContactInformation | undefined, formattedPhoneType: FormattedPhoneType, phoneKey: PhoneKey, t: TFunction): Array<TextLine> => {
@@ -78,7 +76,6 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   const theme = useTheme()
   const { data: contactInformation, isLoading: loadingContactInformation, isError: contactInformationError, refetch: refetchContactInformation } = useContactInformation()
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
-  const navigationRoot = useNavigation<StackNavigationProp<RootNavStackParamList, keyof RootNavStackParamList>>()
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
 
   const navigateTo = useRouteNavigation()
@@ -122,20 +119,20 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
       addressType: profileAddressOptions.MAILING_ADDRESS,
       onPress: () => {
         logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('contactInformation.title')))
-        navigationRoot.navigate('EditAddress', {
+        navigateTo('EditAddress', {
           displayTitle: t('contactInformation.mailingAddress'),
           addressType: profileAddressOptions.MAILING_ADDRESS,
-        })
+        })()
       },
     },
     {
       addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
       onPress: () => {
         logAnalyticsEvent(Events.vama_click(t('contactInformation.residentialAddress'), t('contactInformation.title')))
-        navigationRoot.navigate('EditAddress', {
+        navigateTo('EditAddress', {
           displayTitle: t('contactInformation.residentialAddress'),
           addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
-        })
+        })()
       },
     },
   ]

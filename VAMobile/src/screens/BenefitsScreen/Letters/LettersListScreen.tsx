@@ -15,7 +15,7 @@ import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 import NoLettersScreen from './NoLettersScreen'
@@ -29,62 +29,63 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
+  const navigateTo = useRouteNavigation()
 
   const letterPressFn = (letterType: LetterTypes, letterName: string): void | undefined => {
     switch (letterType) {
       case LetterTypeConstants.benefitSummary:
-        return navigation.navigate('BenefitSummaryServiceVerificationLetter')
+        return navigateTo('BenefitSummaryServiceVerificationLetter')()
       case LetterTypeConstants.serviceVerification:
-        return navigation.navigate('GenericLetter', {
+        return navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.serviceVerificationLetter.description'),
           letterType,
           screenID: ScreenIDTypesConstants.SERVICE_VERIFICATION_LETTER_SCREEN_ID,
-        })
+        })()
       case LetterTypeConstants.commissary:
-        return navigation.navigate('GenericLetter', {
+        return navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.commissary.description'),
           letterType,
           screenID: ScreenIDTypesConstants.COMMISSARY_LETTER_SCREEN_ID,
-        })
+        })()
       case LetterTypeConstants.civilService:
-        return navigation.navigate('GenericLetter', {
+        return navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.civilService.description'),
           letterType,
           screenID: ScreenIDTypesConstants.CIVIL_SERVICE_LETTER_SCREEN_ID,
-        })
+        })()
       case LetterTypeConstants.benefitVerification:
-        return navigation.navigate('GenericLetter', {
+        return navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.benefitVerification.description'),
           letterType,
           screenID: ScreenIDTypesConstants.BENEFIT_VERIFICATION_LETTER_SCREEN_ID,
           descriptionA11yLabel: a11yLabelVA(t('letters.benefitVerification.description')),
-        })
+        })()
       case LetterTypeConstants.proofOfService:
-        return navigation.navigate('GenericLetter', {
+        return navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.proofOfService.description'),
           letterType,
           screenID: ScreenIDTypesConstants.PROOF_OF_SERVICE_LETTER_SCREEN_ID,
-        })
+        })()
       case LetterTypeConstants.medicarePartd:
-        return navigation.navigate('GenericLetter', {
+        return navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.proofOfCrediblePrescription.description'),
           letterType,
           screenID: ScreenIDTypesConstants.PROOF_OF_CREDIBLE_PRESCRIPTION_LETTER_SCREEN_ID,
-        })
+        })()
       case LetterTypeConstants.minimumEssentialCoverage:
-        return navigation.navigate('GenericLetter', {
+        return navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.minimumEssentialCoverage.description'),
           letterType,
           screenID: ScreenIDTypesConstants.PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN_ID,
           descriptionA11yLabel: t('letters.minimumEssentialCoverageA11yLabel.description'),
-        })
+        })()
       default:
         return undefined
     }
