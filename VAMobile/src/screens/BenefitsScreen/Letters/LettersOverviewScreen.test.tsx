@@ -1,12 +1,13 @@
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
+import { context, mockNavProps, render, when } from 'testUtils'
 import { LettersOverviewScreen } from './index'
+import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('@react-navigation/native', () => {
-  let actual = jest.requireActual('@react-navigation/native')
+jest.mock('utils/hooks', () => {
+  let actual = jest.requireActual('utils/hooks')
   return {
     ...actual,
     useRouteNavigation: () => mockNavigationSpy,
@@ -14,8 +15,22 @@ jest.mock('@react-navigation/native', () => {
 })
 
 context('LettersOverviewScreen', () => {
+  let mockNavigateToAddressSpy: jest.Mock
+  let mockNavigateToLettersSpy: jest.Mock
   const initializeTestInstance = () => {
+    mockNavigateToAddressSpy = jest.fn()
+    mockNavigateToLettersSpy = jest.fn()
     const props = mockNavProps()
+    when(mockNavigationSpy)
+      .mockReturnValue(() => {})
+      .calledWith('EditAddress', {
+        displayTitle: 'Mailing address',
+        addressType: profileAddressOptions.MAILING_ADDRESS,
+      })
+      .mockReturnValue(mockNavigateToAddressSpy)
+      .calledWith('LettersList')
+      .mockReturnValue(mockNavigateToLettersSpy)
+
     render(<LettersOverviewScreen {...props} />)
   }
 
@@ -32,10 +47,10 @@ context('LettersOverviewScreen', () => {
 
   it('should go to edit address when the address is pressed', () => {
     fireEvent.press(screen.getByRole('button', { name: 'Mailing address Add your mailing address' }))
-    expect(mockNavigationSpy).toHaveBeenCalled()
+    expect(mockNavigateToAddressSpy).toHaveBeenCalled()
   })
   it('should go to letters list screen when Review letters is pressed', () => {
     fireEvent.press(screen.getByRole('button', { name: 'Review letters' }))
-    expect(mockNavigationSpy).toHaveBeenCalled()
+    expect(mockNavigateToLettersSpy).toHaveBeenCalled()
   })
 })
