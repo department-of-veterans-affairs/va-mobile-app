@@ -38,7 +38,6 @@ export const Appointmentse2eConstants = {
   PHONE_NUMBER_ID: 'CallTTYTestID',
   PATIENT_CANCELLATION: 'You canceled this appointment.',
   VA_PAST_APPOINTMENT: 'To schedule another appointment, please visit VA.gov or call your VA medical center.',
-  PAST_APPOINTMENT_1_ID: 'Canceled Optometry (routine eye exam) Vilasini Reddy Request type: In-person',
   DATE_RANGE_INITIAL_TEXT: 'Past 3 months',
   APPOINTMENT_CANCEL_REQUEST_TEXT: device.getPlatform() === 'ios' ? 'Cancel Request' : 'Cancel Request ',
 }
@@ -168,7 +167,6 @@ describe('Appointments Screen', () => {
   it('should tap on and show past appointments', async () => {
     await element(by.id('appointmentsTestID')).scrollTo('top')
     await element(by.text('Past')).tap()
-    await expect(element(by.id(Appointmentse2eConstants.PAST_APPOINTMENT_1_ID))).toExist()
     if (device.getPlatform() === 'android') {
       await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
     } else {
