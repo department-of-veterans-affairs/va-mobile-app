@@ -50,6 +50,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
@@ -138,11 +139,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const goToDraftFolder = useCallback(
     (draftSaved: boolean): void => {
-      navigation.navigate('FolderMessages', {
-        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-        folderName: FolderNameTypeConstants.drafts,
-        draftSaved,
-      })
+      if (waygateNativeAlert('WG_FolderMessages')) {
+        navigation.navigate('FolderMessages', {
+          folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+          folderName: FolderNameTypeConstants.drafts,
+          draftSaved,
+        })
+      }
     },
     [navigation],
   )
@@ -159,12 +162,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
-      navigation.navigate('SecureMessaging')
-      navigation.navigate('FolderMessages', {
-        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-        folderName: FolderNameTypeConstants.drafts,
-        draftSaved: false,
-      })
+      waygateNativeAlert('WG_SecureMessaging') && navigation.navigate('SecureMessaging')
+      waygateNativeAlert('WG_FolderMessages') &&
+        navigation.navigate('FolderMessages', {
+          folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+          folderName: FolderNameTypeConstants.drafts,
+          draftSaved: false,
+        })
     }
   }, [sendMessageComplete, dispatch, navigation])
 
@@ -333,7 +337,9 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
-    navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
+    if (waygateNativeAlert('WG_Attachments')) {
+      navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
+    }
   }
 
   let formFieldsList: Array<FormFieldType<unknown>> = []
@@ -420,9 +426,11 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   ]
 
   const onGoToInbox = (): void => {
-    dispatch(resetSendMessageFailed())
-    dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-    navigation.navigate('SecureMessaging')
+    if (waygateNativeAlert('WG_SecureMessaging')) {
+      dispatch(resetSendMessageFailed())
+      dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
+      navigation.navigate('SecureMessaging')
+    }
   }
 
   const onMessageSendOrSave = (): void => {
@@ -455,7 +463,9 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
     const navigateToReplyHelp = () => {
       logAnalyticsEvent(Events.vama_sm_nonurgent())
-      navigation.navigate('ReplyHelp')
+      if (waygateNativeAlert('WG_ReplyHelp')) {
+        navigation.navigate('ReplyHelp')
+      }
     }
 
     return (

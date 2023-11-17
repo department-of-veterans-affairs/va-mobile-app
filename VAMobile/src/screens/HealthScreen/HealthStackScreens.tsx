@@ -49,7 +49,7 @@ export type HealthStackParamList = WebviewStackParams & {
     folderName: string
     draftSaved: boolean
   }
-  ViewMessageScreen: {
+  ViewMessage: {
     messageID: number
     folderID?: number
     currentPage?: number

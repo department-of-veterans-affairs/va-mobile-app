@@ -129,7 +129,7 @@ context('Inbox', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() => {
         testInstance.findAllByType(Pressable)[0].props.onPress()
-        expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessageScreen', { currentPage: 2, folderID: 0, messageID: 1, messagesLeft: 1 })
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessage', { currentPage: 2, folderID: 0, messageID: 1, messagesLeft: 1 })
         expect(mockNavigateToSpy).toHaveBeenCalled()
       })
     })

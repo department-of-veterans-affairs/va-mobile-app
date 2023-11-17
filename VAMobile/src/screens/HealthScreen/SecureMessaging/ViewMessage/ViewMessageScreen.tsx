@@ -23,7 +23,7 @@ import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
 import MessageCard from './MessageCard'
 
-type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
+type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessage'>
 
 /**
  * Accepts a message, map of all messages, and array of messageIds in the current thread.  Gets each messageId from the message map, sorts by

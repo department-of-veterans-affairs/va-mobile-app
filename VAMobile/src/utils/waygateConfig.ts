@@ -43,6 +43,38 @@ export type WaygateToggleType =
   | 'WG_RemoteConfig'
   | 'WG_Developer'
   | 'WG_WaygateEdit'
+  | 'WG_Health'
+  | 'WG_Appointments'
+  | 'WG_FolderMessages'
+  | 'WG_PastAppointmentDetails'
+  | 'WG_PrescriptionDetails'
+  | 'WG_PrescriptionHistory'
+  | 'WG_SecureMessaging'
+  | 'WG_UpcomingAppointmentDetails'
+  | 'WG_VaccineDetails'
+  | 'WG_VaccineList'
+  | 'WG_ViewMessage'
+  | 'WG_PrepareForVideoVisit'
+  | 'WG_StartNewMessage'
+  | 'WG_ReplyMessage'
+  | 'WG_EditDraft'
+  | 'WG_Attachments'
+  | 'WG_ReplyHelp'
+  | 'WG_ConfirmContactInfo'
+  | 'WG_RefillRequestSummary'
+  | 'WG_RefillScreenModal'
+  | 'WG_RefillTrackingModal'
+  | 'WG_PrescriptionHelp'
+  | 'WG_StatusDefinition'
+  | 'WG_SessionNotStarted'
+  | 'WG_Payments'
+  | 'WG_PaymentDetails'
+  | 'WG_DirectDeposit'
+  | 'WG_HowToUpdateDirectDeposit'
+  | 'WG_PaymentHistory'
+  | 'WG_PaymentIssue'
+  | 'WG_PaymentMissing'
+  | 'WG_EditDirectDeposit'
   | 'WG_Benefits'
   | 'WG_DisabilityRatings'
   | 'WG_Claims'
@@ -88,6 +120,38 @@ type WaygateToggleValues = {
   WG_RemoteConfig: Waygate
   WG_Developer: Waygate
   WG_WaygateEdit: Waygate
+  WG_Health: Waygate
+  WG_Appointments: Waygate
+  WG_FolderMessages: Waygate
+  WG_PastAppointmentDetails: Waygate
+  WG_PrescriptionDetails: Waygate
+  WG_PrescriptionHistory: Waygate
+  WG_SecureMessaging: Waygate
+  WG_UpcomingAppointmentDetails: Waygate
+  WG_VaccineDetails: Waygate
+  WG_VaccineList: Waygate
+  WG_ViewMessage: Waygate
+  WG_PrepareForVideoVisit: Waygate
+  WG_StartNewMessage: Waygate
+  WG_ReplyMessage: Waygate
+  WG_EditDraft: Waygate
+  WG_Attachments: Waygate
+  WG_ReplyHelp: Waygate
+  WG_ConfirmContactInfo: Waygate
+  WG_RefillRequestSummary: Waygate
+  WG_RefillScreenModal: Waygate
+  WG_RefillTrackingModal: Waygate
+  WG_PrescriptionHelp: Waygate
+  WG_StatusDefinition: Waygate
+  WG_SessionNotStarted: Waygate
+  WG_Payments: Waygate
+  WG_PaymentDetails: Waygate
+  WG_DirectDeposit: Waygate
+  WG_HowToUpdateDirectDeposit: Waygate
+  WG_PaymentHistory: Waygate
+  WG_PaymentIssue: Waygate
+  WG_PaymentMissing: Waygate
+  WG_EditDirectDeposit: Waygate
   WG_Benefits: Waygate
   WG_DisabilityRatings: Waygate
   WG_Claims: Waygate
@@ -142,6 +206,38 @@ export let waygateConfig: WaygateToggleValues = {
   WG_RemoteConfig: { ...waygateDefault },
   WG_Developer: { ...waygateDefault },
   WG_WaygateEdit: { ...waygateDefault },
+  WG_Health: { ...waygateDefault },
+  WG_Appointments: { ...waygateDefault },
+  WG_FolderMessages: { ...waygateDefault },
+  WG_PastAppointmentDetails: { ...waygateDefault },
+  WG_PrescriptionDetails: { ...waygateDefault },
+  WG_PrescriptionHistory: { ...waygateDefault },
+  WG_SecureMessaging: { ...waygateDefault },
+  WG_UpcomingAppointmentDetails: { ...waygateDefault },
+  WG_VaccineDetails: { ...waygateDefault },
+  WG_VaccineList: { ...waygateDefault },
+  WG_ViewMessage: { ...waygateDefault },
+  WG_PrepareForVideoVisit: { ...waygateDefault },
+  WG_StartNewMessage: { ...waygateDefault },
+  WG_ReplyMessage: { ...waygateDefault },
+  WG_EditDraft: { ...waygateDefault },
+  WG_Attachments: { ...waygateDefault },
+  WG_ReplyHelp: { ...waygateDefault },
+  WG_ConfirmContactInfo: { ...waygateDefault },
+  WG_RefillRequestSummary: { ...waygateDefault },
+  WG_RefillScreenModal: { ...waygateDefault },
+  WG_RefillTrackingModal: { ...waygateDefault },
+  WG_PrescriptionHelp: { ...waygateDefault },
+  WG_StatusDefinition: { ...waygateDefault },
+  WG_SessionNotStarted: { ...waygateDefault },
+  WG_Payments: { ...waygateDefault },
+  WG_PaymentDetails: { ...waygateDefault },
+  WG_DirectDeposit: { ...waygateDefault },
+  WG_HowToUpdateDirectDeposit: { ...waygateDefault },
+  WG_PaymentHistory: { ...waygateDefault },
+  WG_PaymentIssue: { ...waygateDefault },
+  WG_PaymentMissing: { ...waygateDefault },
+  WG_EditDirectDeposit: { ...waygateDefault },
   WG_Benefits: { ...waygateDefault },
   WG_DisabilityRatings: { ...waygateDefault },
   WG_Claims: { ...waygateDefault },

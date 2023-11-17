@@ -8,6 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from './PaymentsStackScreens'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentDetailsScreen from './PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
@@ -22,8 +23,18 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
-  const onPayments = navigateTo('PaymentHistory')
-  const onDirectDeposit = userAuthorizedServices?.directDepositBenefitsUpdate ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
+  const onPayments = () => {
+    if (waygateNativeAlert('WG_PaymentHistory')) {
+      navigateTo('PaymentHistory')()
+    }
+  }
+  const onDirectDeposit = () => {
+    if (userAuthorizedServices?.directDepositBenefitsUpdate && waygateNativeAlert('WG_DirectDeposit')) {
+      navigateTo('DirectDeposit')()
+    } else if (waygateNativeAlert('WG_HowToUpdateDirectDeposit')) {
+      navigateTo('HowToUpdateDirectDeposit')()
+    }
+  }
 
   return (
     <CategoryLanding title={t('payments.title')}>

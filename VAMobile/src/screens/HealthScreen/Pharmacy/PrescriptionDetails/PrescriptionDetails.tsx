@@ -15,6 +15,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { useAppDispatch, useDestructiveActionSheet, useDowntime, useExternalLink, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import DetailsTextSections from './DetailsTextSections'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 import getEnv from 'utils/env'
@@ -117,11 +118,13 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
               text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
               onPress: () => {
                 // Call refill request so its starts the loading screen and then go to the modal
-                if (!prescriptionInDowntime) {
-                  logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
-                  dispatch(requestRefills([prescription]))
+                if (waygateNativeAlert('WG_RefillScreenModal')) {
+                  if (!prescriptionInDowntime) {
+                    logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
+                    dispatch(requestRefills([prescription]))
+                  }
+                  navigation.navigate('RefillScreenModal')
                 }
-                navigation.navigate('RefillScreenModal')
               },
             },
           ],

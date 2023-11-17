@@ -16,6 +16,7 @@ import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import Appointments from './Appointments'
 import CernerAlert from './CernerAlert'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
@@ -43,10 +44,26 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { data: userAuthorizedServices } = useAuthorizedServices()
 
-  const onAppointments = navigateTo('Appointments')
-  const onSecureMessaging = navigateTo('SecureMessaging')
-  const onVaVaccines = navigateTo('VaccineList')
-  const pharmacyNavHandler = navigateTo('PrescriptionHistory')
+  const onAppointments = () => {
+    if (waygateNativeAlert('WG_Appointments')) {
+      navigateTo('Appointments')()
+    }
+  }
+  const onSecureMessaging = () => {
+    if (waygateNativeAlert('WG_SecureMessaging')) {
+      navigateTo('SecureMessaging')()
+    }
+  }
+  const onVaVaccines = () => {
+    if (waygateNativeAlert('WG_VaccineList')) {
+      navigateTo('VaccineList')()
+    }
+  }
+  const pharmacyNavHandler = () => {
+    if (waygateNativeAlert('WG_PrescriptionHistory')) {
+      navigateTo('PrescriptionHistory')()
+    }
+  }
   const onPharmacy = () => {
     // If rx list is already loaded, reload it to ensure freshness
     if (!prescriptionsNeedLoad) {
@@ -163,7 +180,7 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
       <HealthScreenStack.Screen name="UpcomingAppointmentDetails" component={UpcomingAppointmentDetails} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="VaccineDetails" component={VaccineDetailsScreen} options={{ headerShown: false }} />
       <HealthScreenStack.Screen name="VaccineList" component={VaccineListScreen} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="ViewMessageScreen" component={ViewMessageScreen} options={{ headerShown: false }} />
+      <HealthScreenStack.Screen name="ViewMessage" component={ViewMessageScreen} options={{ headerShown: false }} />
     </HealthScreenStack.Navigator>
   )
 }

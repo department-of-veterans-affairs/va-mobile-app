@@ -14,6 +14,7 @@ import { RootState } from 'store'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type PaymentDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentDetails'>
 
@@ -95,7 +96,11 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ navigation, route
         </TextArea>
         <Box mx={gutter} mt={contentMarginTop}>
           <Pressable
-            onPress={navigateTo('PaymentIssue')}
+            onPress={() => {
+              if (waygateNativeAlert('WG_PaymentIssue')) {
+                navigateTo('PaymentIssue')()
+              }
+            }}
             {...testIdProps(t('payments.ifMyPaymentDoesNotLookRight'))}
             testID="paymentInfoIncorrectTestID"
             accessibilityRole="link"
