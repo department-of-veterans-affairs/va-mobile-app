@@ -16,6 +16,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = StackScreenProps<BenefitsStackParamList, 'LettersList'>
@@ -29,10 +30,16 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
 
+  const onBenefitSummary = () => {
+    if (waygateNativeAlert('WG_BenefitSummaryServiceVerificationLetter')) {
+      navigateTo('BenefitSummaryServiceVerificationLetter')()
+    }
+  }
+
   const letterPressFn = (letterType: LetterTypes, letterName: string): OnPressHandler | undefined => {
     switch (letterType) {
       case LetterTypeConstants.benefitSummary:
-        return navigateTo('BenefitSummaryServiceVerificationLetter')
+        return onBenefitSummary
       case LetterTypeConstants.serviceVerification:
         return navigateTo('GenericLetter', {
           header: letterName,
@@ -108,29 +115,8 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, userAuthorizedServices?.lettersAndDocuments, lettersNotInDowntime])
 
-  if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID) || getUserAuthorizedServicesError) {
-    return (
-      <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.viewLetters')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loading || loadingUserAuthorizedServices) {
-    return (
-      <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.viewLetters')}>
-        <LoadingComponent text={t('letters.list.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (!userAuthorizedServices?.lettersAndDocuments || !letters || letters.length === 0) {
-    return (
-      <FeatureLandingTemplate backLabel={t('letters.overview.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.viewLetters')}>
-        <NoLettersScreen />
-      </FeatureLandingTemplate>
-    )
-  }
+  const errorCheck = useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID) || getUserAuthorizedServicesError
+  const noLettersCheck = !userAuthorizedServices?.lettersAndDocuments || !letters || letters.length === 0
 
   return (
     <FeatureLandingTemplate
@@ -138,9 +124,17 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
       backLabelOnPress={navigation.goBack}
       title={t('letters.overview.viewLetters')}
       {...testIdProps('Letters-list-page')}>
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <SimpleList items={letterButtons} />
-      </Box>
+      {errorCheck ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
+      ) : loading || loadingUserAuthorizedServices ? (
+        <LoadingComponent text={t('letters.list.loading')} />
+      ) : noLettersCheck ? (
+        <NoLettersScreen />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <SimpleList items={letterButtons} />
+        </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }

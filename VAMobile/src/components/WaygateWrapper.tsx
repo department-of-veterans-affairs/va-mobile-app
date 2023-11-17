@@ -1,4 +1,4 @@
-import { AlertBox, Box, ClickToCallPhoneNumber } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, VAButton } from 'components'
 import { useNavigationState } from '@react-navigation/native'
 import React, { FC } from 'react'
 
@@ -6,6 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/waygateConfig'
 import { a11yLabelID } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { openAppStore } from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
@@ -24,7 +25,10 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName 
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
         <AlertBox border={waygate.type === 'DenyContent' ? 'error' : 'warning'} title={waygate.errorMsgTitle} text={waygate.errorMsgBody}>
-          <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8006982411'))} phone={t('8006982411')} a11yLabel={a11yLabelID(t('8006982411'))} />
+          <Box my={theme.dimensions.standardMarginBetween}>
+            <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8006982411'))} phone={t('8006982411')} a11yLabel={a11yLabelID(t('8006982411'))} />
+          </Box>
+          {waygate.appUpdateButton === true && <VAButton onPress={openAppStore} label={t('updateNow')} buttonType={ButtonTypesConstants.buttonPrimary} />}
         </AlertBox>
       </Box>
     )
