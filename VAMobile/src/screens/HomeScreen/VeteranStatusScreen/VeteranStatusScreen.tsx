@@ -41,7 +41,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
           </TextView>
         </Box>
         <Box>
-          <TextView variant="HelperText" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
+          <TextView variant="HelperText" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween} testID="veteranStatusMilitaryServiceTestID">
             {t('militaryInformation.history', { begin: service.formattedBeginDate, end: service.formattedEndDate })}
           </TextView>
         </Box>
@@ -70,35 +70,35 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
 
     switch (branch) {
       case BranchesOfServiceConstants.AirForce:
-        return <VAIcon testID="United States Air Force" name="AirForce" {...dimensions} />
+        return <VAIcon testID="VeteranStatusUSAFIconTestID" name="AirForce" {...dimensions} />
       case BranchesOfServiceConstants.Army:
-        return <VAIcon testID="United States Army" name="Army" {...dimensions} />
+        return <VAIcon testID="VeteranStatusUSArmyIconTestID" name="Army" {...dimensions} />
       case BranchesOfServiceConstants.CoastGuard:
-        return <VAIcon testID="United States Coast Guard" name="CoastGuard" {...dimensions} />
+        return <VAIcon testID="VeteranStatusUSCoastGuardTestID" name="CoastGuard" {...dimensions} />
       case BranchesOfServiceConstants.MarineCorps:
-        return <VAIcon testID="United States Marine Corps" name="MarineCorps" {...dimensions} />
+        return <VAIcon testID="VeteranStatusUSMarineTestID" name="MarineCorps" {...dimensions} />
       case BranchesOfServiceConstants.Navy:
-        return <VAIcon testID="United States Navy" name="Navy" {...dimensions} />
+        return <VAIcon testID="VeteranStatusUSNavyTestID" name="Navy" {...dimensions} />
     }
   }
 
   return (
-    <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')} dividerMarginBypass={true}>
+    <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')} dividerMarginBypass={true} testID="veteranStatusTestID">
       <Box backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant} flex={1}>
         <Box mx={theme.dimensions.gutter} alignItems="center" mt={theme.dimensions.standardMarginBetween}>
-          <VAIcon name={'Logo'} />
+          <VAIcon testID="VeteranStatusCardVAIcon" name={'Logo'} />
           {/* <Box my={theme.dimensions.standardMarginBetween}>
           //TODO: Put back PhotoUpload later after concerns have been met
             <PhotoUpload width={100} height={100} />
           </Box> */}
           <Box my={theme.dimensions.formMarginBetween}>
-            <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast">
+            <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast" testID="veteranStatusFullNameTestID">
               {personalInfo?.fullName}
             </TextView>
             {accessToMilitaryInfo && (
               <Box display="flex" flexDirection="row">
                 {getBranchSeal()}
-                <TextView ml={10} variant="MobileBody" color="primaryContrast">
+                <TextView ml={10} variant="MobileBody" color="primaryContrast" testID="veteranStatusBranchTestID">
                   {branch}
                 </TextView>
               </Box>
@@ -111,7 +111,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
               <TextView variant="MobileBodyBold" color="primaryContrast">
                 {t('disabilityRating.title')}
               </TextView>
-              <TextView variant="MobileBody" color="primaryContrast">
+              <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDisabilityRatingTestID">
                 {combinedPercentText}
               </TextView>
             </Box>
@@ -126,7 +126,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
             <TextView variant="MobileBodyBold" color="primaryContrast">
               {t('personalInformation.dateOfBirth')}
             </TextView>
-            <TextView variant="MobileBody" color="primaryContrast">
+            <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDOBTestID">
               {personalInfo?.birthDate || t('personalInformation.informationNotAvailable')}
             </TextView>
           </Box>

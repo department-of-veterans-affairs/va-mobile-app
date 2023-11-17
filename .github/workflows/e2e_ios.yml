@@ -5,6 +5,9 @@
 name: '[e2e] iOS Detox Test Run'
 
 on:
+  push:
+    branches:
+      - 'dependabot/**'
   workflow_dispatch:
 
 defaults:
@@ -47,7 +50,7 @@ jobs:
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version-file: 'VAMobile/.nvmrc'
           cache: 'yarn'
           cache-dependency-path: './VAMobile/yarn.lock'
 
@@ -78,7 +81,7 @@ jobs:
 
       - name: Run e2e tests for iOS
         run: yarn e2e:ios-test --take-screenshots failing --updateSnapshot
-      
+
       - name: Upload artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v3

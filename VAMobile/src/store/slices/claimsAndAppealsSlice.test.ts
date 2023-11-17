@@ -101,15 +101,15 @@ context('claimsAndAppeals', () => {
 
   const activeClaimsAndAppealsList: api.ClaimsAndAppealsList = [
     {
-      id: '1',
-      type: 'appeal',
+      id: '4',
+      type: 'claim',
       attributes: {
-        subtype: 'supplementalClaim',
+        subtype: 'Compensation',
         completed: false,
         decisionLetterSent: false,
-        dateFiled: '2020-10-22',
-        updatedAt: '2020-10-28',
-        displayTitle: 'supplemental claim for disability compensation',
+        dateFiled: '2020-06-11',
+        updatedAt: '2020-12-07',
+        displayTitle: 'Compensation',
       },
     },
     {
@@ -125,30 +125,30 @@ context('claimsAndAppeals', () => {
       },
     },
     {
-      id: '4',
-      type: 'claim',
+      id: '1',
+      type: 'appeal',
       attributes: {
-        subtype: 'Compensation',
+        subtype: 'supplementalClaim',
         completed: false,
         decisionLetterSent: false,
-        dateFiled: '2020-06-11',
-        updatedAt: '2020-12-07',
-        displayTitle: 'Compensation',
+        dateFiled: '2020-10-22',
+        updatedAt: '2020-10-28',
+        displayTitle: 'supplemental claim for disability compensation',
       },
     },
   ]
 
   const closedClaimsAndAppealsList: api.ClaimsAndAppealsList = [
     {
-      id: '2',
-      type: 'appeal',
+      id: '5',
+      type: 'claim',
       attributes: {
-        subtype: 'supplementalClaim',
+        subtype: 'Compensation',
         completed: true,
         decisionLetterSent: true,
-        dateFiled: '2020-10-22',
-        updatedAt: '2020-10-28',
-        displayTitle: 'supplemental claim for disability compensation',
+        dateFiled: '2020-06-11',
+        updatedAt: '2020-12-07',
+        displayTitle: 'Disability',
       },
     },
     {
@@ -164,15 +164,15 @@ context('claimsAndAppeals', () => {
       },
     },
     {
-      id: '5',
-      type: 'claim',
+      id: '2',
+      type: 'appeal',
       attributes: {
-        subtype: 'Compensation',
+        subtype: 'supplementalClaim',
         completed: true,
         decisionLetterSent: true,
-        dateFiled: '2020-06-11',
-        updatedAt: '2020-12-07',
-        displayTitle: 'Disability',
+        dateFiled: '2020-10-22',
+        updatedAt: '2020-10-28',
+        displayTitle: 'supplemental claim for disability compensation',
       },
     },
   ]
@@ -575,7 +575,7 @@ context('claimsAndAppeals', () => {
 
       await store.dispatch(uploadFileToClaim('id', snackbarMessages, claimEventData, multiFiles, 'file'))
 
-      expect(api.post as jest.Mock).toBeCalledWith('/v0/claim/id/documents/multi-image', { document_type: 'L228', files: ['imgstring', 'imgstring'], tracked_item_id: 1 })
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/claim/id/documents/multi-image', { document_type: 'L228', files: ['imgstring', 'imgstring'], trackedItemId: 1 })
     })
   })
 
