@@ -343,7 +343,7 @@ export const uploadFileToClaim =
         const payload = JSON.parse(
           JSON.stringify({
             files: fileStrings,
-            tracked_item_id: request.trackedItemId,
+            trackedItemId: request.trackedItemId,
             document_type: request.documentType,
           }),
         )
