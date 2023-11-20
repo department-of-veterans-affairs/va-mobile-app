@@ -43,6 +43,7 @@ import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { Text } from 'react-native'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -318,6 +319,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       <Box mb={theme.dimensions.contentMarginBottom}>
         <AppointmentAlert attributes={attributes} />
         <TextArea>
+          <Text>{`vetextID: ${JSON.stringify(appointment)}`}</Text>
           <AppointmentTypeAndDate attributes={attributes} isPastAppointment={false} />
           <AddToCalendar />
 
