@@ -1,14 +1,12 @@
-import 'react-native'
 import React from 'react'
-
 import { fireEvent, screen } from '@testing-library/react-native'
+
 import { context, mockNavProps, render } from 'testUtils'
 import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerification'
-import { InitialState, downloadLetter } from 'store/slices'
+import { downloadLetter } from 'store/slices'
 import { CharacterOfServiceConstants, LetterTypeConstants } from 'store/api/types'
 
 const mockExternalLinkSpy = jest.fn()
-
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   return {
@@ -45,7 +43,6 @@ context('BenefitSummaryServiceVerification', () => {
 
     render(<BenefitSummaryServiceVerification {...props} />, {
       preloadedState: {
-        ...InitialState,
         letters: {
           loading: false,
           letters: [],
@@ -92,20 +89,30 @@ context('BenefitSummaryServiceVerification', () => {
     initializeTestInstance(123, date, 88)
   })
 
-  it('should display the dynamic data', async () => {
-    expect(screen.getByText('Army')).toBeTruthy()
-    expect(screen.getByText('Honorable')).toBeTruthy()
-    expect(screen.getByText('January 01, 1990')).toBeTruthy()
-    expect(screen.getByText('October 01, 1993')).toBeTruthy()
-    expect(screen.getByText('Your current monthly payment is $123.00. The effective date of the last change to your current payment was June 06, 2013.')).toBeTruthy()
-    expect(screen.getByText('Your combined service-connected rating is 88%.')).toBeTruthy()
-    expect(screen.getByText("You aren't considered to be totally and permanently disabled solely due to your service-connected disabilities.")).toBeTruthy()
-    expect(screen.getByText("You don't have one or more service-connected disabilities.")).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByRole('header', { name: 'Benefit summary and service verification letter' })).toBeTruthy()
+    expect(screen.getByText('This letter shows your service history and some benefit information. You can customize this letter and use it for many things, including to apply for housing assistance, civil service jobs, and state or local property and car tax relief.')).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'Choose what information you want to include in your letter.' })).toBeTruthy()
+    expect(screen.getAllByRole('header', { name: 'Military service information' })).toBeTruthy()
+    expect(screen.getByTestId('branch-of-service-army')).toBeTruthy()
+    expect(screen.getByTestId('discharge-type-honorable')).toBeTruthy()
+    expect(screen.getByTestId('Active duty start January 01, 1990')).toBeTruthy()
+    expect(screen.getByTestId('Separation date October 01, 1993')).toBeTruthy()
+    expect(screen.getByText("Our records list your 3 most recent service periods. You may have more service periods that aren't listed here." )).toBeTruthy()
+    expect(screen.getByRole('switch', { name: 'Include military service information' })).toBeTruthy()
+    expect(screen.getAllByRole('header', { name: 'VA disability rating and compensation information' })).toBeTruthy()
+    expect(screen.getByRole('switch', { name: 'Your current monthly payment is $123.00. The effective date of the last change to your current payment was June 06, 2013.' })).toBeTruthy()
+    expect(screen.getByRole('switch', { name: 'Your combined service-connected rating is 88%.' })).toBeTruthy()
+    expect(screen.getByRole('switch', { name: "You aren't considered to be totally and permanently disabled solely due to your service-connected disabilities." })).toBeTruthy()
+    expect(screen.getByRole('switch', { name: "You don't have one or more service-connected disabilities." })).toBeTruthy()
+    expect(screen.getByText('If your service period or disability status information is incorrect, contact us online through Ask VA.')).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Go to Ask VA' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Review letter' })).toBeTruthy()
   })
 
   describe('on click of go to ask va', () => {
-    it('should launch external link', async () => {
-      fireEvent.press(screen.getByText('Go to Ask VA'))
+    it('should launch external link', () => {
+      fireEvent.press(screen.getByRole('link', { name: 'Go to Ask VA' }))
       expect(mockExternalLinkSpy).toHaveBeenCalledWith('https://ask.va.gov/')
     })
   })
@@ -118,8 +125,8 @@ context('BenefitSummaryServiceVerification', () => {
   })
 
   describe('when Review letter is pressed', () => {
-    it('should call downloadLetter', async () => {
-      fireEvent.press(screen.getByText('Review letter'))
+    it('should call downloadLetter', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Review letter' }))
       const letterOptions = {
         chapter35Eligibility: true,
         militaryService: true,
@@ -134,28 +141,28 @@ context('BenefitSummaryServiceVerification', () => {
   describe('when the monthly award amount does not exist but the awardEffectiveDate does', () => {
     it('should display "Your current monthly award is $0.00. The effective date of the last change to your current award was {{date}}." for that switch', async () => {
       initializeTestInstance(undefined, date, 88)
-      expect(screen.getByText('Your current monthly payment is $0.00. The effective date of the last change to your current payment was June 06, 2013.')).toBeTruthy()
+      expect(screen.getByRole('switch', { name: 'Your current monthly payment is $0.00. The effective date of the last change to your current payment was June 06, 2013.' })).toBeTruthy()
     })
   })
 
   describe('when the awardEffectiveDate does not exist but the monthly payment amount does', () => {
     it('should display "Your current monthly award is ${{monthlyAwardAmount}}. The effective date of the last change to your current payment was invalid date." for that switch', async () => {
       initializeTestInstance(123, undefined, 88)
-      expect(screen.getByText('Your current monthly payment is $123.00. The effective date of the last change to your current payment was an invalid date.'))
+      expect(screen.getByRole('switch', { name:'Your current monthly payment is $123.00. The effective date of the last change to your current payment was an invalid date.' }))
     })
   })
 
   describe('when the awardEffectiveDate does not exist and the monthly award amount does not exist', () => {
     it('should not display that switch on the screen', async () => {
       initializeTestInstance(undefined, undefined, 88)
-      expect(screen.queryByText('Your current monthly payment is $0.00. The effective date of the last change to your current award was an invalid date.')).toBeFalsy()
+      expect(screen.queryByRole('switch', { name: 'Your current monthly payment is $0.00. The effective date of the last change to your current award was an invalid date.' })).toBeFalsy()
     })
   })
 
   describe('when the service connected percentage does not exist', () => {
-    it('should not display that switch', async () => {
+    it('should not display that switch', () => {
       initializeTestInstance(123, date)
-      expect(screen.queryByText('Your combined service-connected rating is 88%')).toBeFalsy()
+      expect(screen.queryByRole('switch', { name: 'Your combined service-connected rating is 88%.' })).toBeFalsy()
     })
   })
 

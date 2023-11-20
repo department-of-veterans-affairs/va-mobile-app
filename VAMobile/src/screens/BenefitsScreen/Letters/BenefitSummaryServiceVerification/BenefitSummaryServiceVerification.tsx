@@ -113,7 +113,6 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
         on: includeMilitaryServiceInfoToggle,
-        a11yHint: t('letters.benefitService.includeMilitaryServiceInfoA11yHint'),
         testID: 'include-military-service-information',
       },
     },
@@ -264,7 +263,6 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
             label={t('letters.benefitService.viewLetter')}
             testID={t('letters.benefitService.viewLetter')}
             buttonType={ButtonTypesConstants.buttonPrimary}
-            a11yHint={t('letters.benefitService.viewLetterA11yHint')}
           />
         </Box>
       </Box>

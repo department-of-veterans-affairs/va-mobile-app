@@ -4,6 +4,129 @@
       "data": [
         {
           "type": "appointment",
+          "id": "33",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "status": "BOOKED",
+            "phoneOnly": true,
+            "statusDetail": null,
+            "isCovidVaccine": false,
+            "startDateLocal": "{{now - 3 days}}",
+            "startDateUtc": "{{now - 3 days utc}}",
+            "minutesDuration": 60,
+            "comment": null,
+            "timeZone": "America/Denver",
+            "healthcareService": "Phone consultation",
+            "healthcareProvider": "John Smith",
+            "reason": null,
+            "location": {
+              "id": "983GC",
+              "lat": 40.553875,
+              "long": -105.08795,
+              "name":"Fort Collins VA Clinic",
+              "address": {
+                "street": "2509 Research Boulevard",
+                "city": "Fort Collins",
+                "state": "CO",
+                "zipCode": "80526-8108"
+              },
+              "phone": {
+                "number": "224-1550",
+                "extension": null,
+                "areaCode": "970"
+              },
+              "url": null,
+              "code": null
+            },
+            "serviceCategoryName": null,
+            "typeOfCare": "Phone consultation",
+            "vetextId": null
+          }
+        },
+        {
+          "type": "appointment",
+          "id": "34",
+          "attributes": {
+            "appointmentType": "COMMUNITY_CARE",
+            "status": "CANCELLED",
+            "phoneOnly": true,
+            "statusDetail": null,
+            "isCovidVaccine": false,
+            "startDateLocal": "{{now - 4 days}}",
+            "startDateUtc": "{{now - 4 days utc}}",
+            "minutesDuration": 60,
+            "comment": null,
+            "timeZone": "America/Denver",
+            "healthcareService": "Phone consultation",
+            "healthcareProvider": null,
+            "reason": null,
+            "location": {
+              "id": "983GC",
+              "lat": 40.553875,
+              "long": -105.08795,
+              "name":"Fort Collins VA Clinic",
+              "address": {
+                "street": "2509 Research Boulevard",
+                "city": "Fort Collins",
+                "state": "CO",
+                "zipCode": "80526-8108"
+              },
+              "phone": {
+                "number": "224-1550",
+                "extension": null,
+                "areaCode": "970"
+              },
+              "url": null,
+              "code": null
+            },
+            "serviceCategoryName": null,
+            "typeOfCare": null,
+            "vetextId": null
+          }
+        },
+        {
+          "type": "appointment",
+          "id": "53",
+          "attributes": {
+            "appointmentType": "VA",
+            "status": "BOOKED",
+            "phoneOnly": false,
+            "statusDetail": null,
+            "isCovidVaccine": false,
+            "startDateLocal": "{{now - 2 days}}",
+            "startDateUtc": "{{now - 2 days utc}}",
+            "minutesDuration": 60,
+            "comment": null,
+            "timeZone": "America/Denver",
+            "healthcareService": "C&P BEV AUDIO FTC",
+            "healthcareProvider": null,
+            "reason": null,
+            "location": {
+              "id": "983GC",
+              "lat": 40.553875,
+              "long": -105.08795,
+              "name":"Fort Collins VA Clinic",
+              "address": {
+                "street": "2509 Research Boulevard",
+                "city": "Fort Collins",
+                "state": "CO",
+                "zipCode": "80526-8108"
+              },
+              "phone": {
+                "number": "224-1550",
+                "extension": null,
+                "areaCode": "970"
+              },
+              "url": null,
+              "code": null
+            },
+            "serviceCategoryName": "COMPENSATION & PENSION",
+            "typeOfCare": "Audiology and speech (including hearing aid support)",
+            "vetextId": null
+          }
+        },
+        {
+          "type": "appointment",
           "id": "4",
           "attributes": {
             "appointmentType": "VA",
@@ -568,6 +691,132 @@
     "upcoming": {
       "data": [
         {
+          "id": "8a48e2fe7956f4d30179cddf3f3d00az",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami Alsahhar",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 5 days}}",
+            "startDateUtc": "{{now + 5 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health"
+          }
+        },
+        {
+          "id": "8a48e2fe7956f4d30179cddf3f3d00aa",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": "C&P BEV AUDIO FTC",
+            "location": {
+              "id": "983GC",
+              "name": "Fort Collins VA Clinic",
+              "address": {
+                "street": "2509 Research Boulevard",
+                "city": "Fort Collins",
+                "state": "CO",
+                "zipCode": "80526-8108"
+              },
+              "lat": 40.553875,
+              "long": -105.08795,
+              "phone": {
+                "areaCode": "970",
+                "number": "224-1550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 12 days}}",
+            "startDateUtc": "{{now + 12 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": "COMPENSATION & PENSION",
+            "typeOfCare": "Audiology and speech (including hearing aid support)"
+          }
+        },
+        {
+          "id": "8a48e2fe7956f4d30179cddf3f3d00ab",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": "C&P BEV AUDIO FTC",
+            "location": {
+              "id": "983GC",
+              "name": "Fort Collins VA Clinic",
+              "address": {
+                "street": "2509 Research Boulevard",
+                "city": "Fort Collins",
+                "state": "CO",
+                "zipCode": "80526-8108"
+              },
+              "lat": 40.553875,
+              "long": -105.08795,
+              "phone": {
+                "areaCode": "970",
+                "number": "224-1550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 60,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 10 days}}",
+            "startDateUtc": "{{now + 10 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": "COMPENSATION & PENSION",
+            "typeOfCare": "Audiology and speech (including hearing aid support)"
+          }
+        },
+        {
           "id": "8a48e2fe7956f4d30179cddf3f3d00ac",
           "type": "appointment",
           "attributes": {
@@ -817,6 +1066,246 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a1",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": "13",
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": null,
+            "location":
+            {
+              "id": null,
+              "name": "Test clinic 2",
+              "address":
+              {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone":
+              {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": true,
+            "startDateLocal": "{{now + 3 days}}",
+            "startDateUtc": "{{now + 3 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes":[
+              {
+                "date": "{{now + 16 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 17 days short}}",
+                "time": "PM"
+              }
+            ],
+            "typeOfCare": null,
+            "patientPhoneNumber": "(703) 652-0000",
+            "patientEmail": "samatha.girla@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+          }
+        },
+        {
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a2",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": "Phone consultation",
+            "location":
+            {
+              "id": null,
+              "name": "Test clinic 2",
+              "address":
+              {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone":
+              {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": true,
+            "startDateLocal": "{{now + 3 days}}",
+            "startDateUtc": "{{now + 3 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes":[
+              {
+                "date": "{{now + 16 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 17 days short}}",
+                "time": "PM"
+              }
+            ],
+            "typeOfCare": "Phone consultation",
+            "patientPhoneNumber": "(703) 652-0000",
+            "patientEmail": "samatha.girla@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+          }
+        },
+        {
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a3",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": "13",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": "Phone consultation",
+            "location":
+            {
+              "id": null,
+              "name": "Test clinic 2",
+              "address":
+              {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone":
+              {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": true,
+            "startDateLocal": "{{now + 5 days}}",
+            "startDateUtc": "{{now + 5 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes":[
+              {
+                "date": "{{now + 16 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 17 days short}}",
+                "time": "PM"
+              }
+            ],
+            "typeOfCare": "Phone consultation",
+            "patientPhoneNumber": "(703) 652-0000",
+            "patientEmail": "samatha.girla@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+          }
+        },
+        {
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "COMMUNITY_CARE",
+            "cancelId": "13",
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": "Phone consultation",
+            "location":
+            {
+              "id": null,
+              "name": "Test clinic 2",
+              "address":
+              {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone":
+              {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": true,
+            "startDateLocal": "{{now + 4 days}}",
+            "startDateUtc": "{{now + 4 days utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes":[
+              {
+                "date": "{{now + 16 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 17 days short}}",
+                "time": "PM"
+              }
+            ],
+            "typeOfCare": "Phone consultation",
+            "patientPhoneNumber": "(703) 652-0000",
+            "patientEmail": "samatha.girla@va.gov",
+            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
           }
         },
         {

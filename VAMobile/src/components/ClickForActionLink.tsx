@@ -173,13 +173,11 @@ const ClickForActionLink: FC<LinkButtonProps> = ({
   }
 
   return (
-    <TouchableWithoutFeedback {...pressableProps}>
+    <TouchableWithoutFeedback testID={testID} {...pressableProps}>
       <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} alignItems={'center'}>
         <VAIcon name={getIconName()} fill={colorOverride ? (colorOverride as ColorVariant) : 'link'} fill2={colorOverride ? 'transparent' : ''} width={25} height={25} />
         <Box flexShrink={1}>
-          <TextView testID={testID} {...textViewProps}>
-            {displayedText}
-          </TextView>
+          <TextView {...textViewProps}>{displayedText}</TextView>
         </Box>
       </Box>
     </TouchableWithoutFeedback>

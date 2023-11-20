@@ -23,7 +23,6 @@ const StartNewMessageButton: FC = () => {
     label: t('secureMessaging.startNewMessage'),
     buttonType: ButtonTypesConstants.buttonPrimary,
     onPress: onPress,
-    a11yHint: t('secureMessaging.startNewMessage.a11yHint'),
     iconProps: { name: 'Compose', fill: 'navBar' },
     testID: 'startNewMessageButtonTestID',
   }

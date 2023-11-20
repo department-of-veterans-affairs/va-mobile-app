@@ -39,9 +39,7 @@ const getListItemsForFolders = (
     listItems.push({
       text: `${t('text.raw', { text: nameOfFolder })}${draftDisplay ? ` (${count})` : ''}`,
       onPress: () => onFolderPress(folderId, nameOfFolder),
-      a11yHintText: draftDisplay
-        ? t('secureMessaging.folders.count.a11yHint', { count, folderName: nameOfFolder })
-        : t('secureMessaging.foldersViewMessages.a11yHint', { folderName: nameOfFolder }),
+      a11yHintText: draftDisplay ? t('secureMessaging.folders.count.a11yHint', { count, folderName: nameOfFolder }) : undefined,
       a11yValue: t('listPosition', { position: index + 1, total: visibleFolders.length }),
       testId: t('text.raw', { text: nameOfFolder }),
     })

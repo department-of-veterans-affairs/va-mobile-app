@@ -1,8 +1,8 @@
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
-import { Box, CategoryLanding, FocusedNavHeaderText, LargeNavButton } from 'components'
+import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HealthStackParamList } from './HealthStackScreens'
@@ -15,7 +15,6 @@ import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useHeaderStyles } from 'utils/hooks/headerStyles'
 import { useSelector } from 'react-redux'
 import Appointments from './Appointments'
 import CernerAlert from './CernerAlert'
@@ -69,18 +68,11 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, smNotInDowntime])
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
-    })
-  }, [navigation])
-
   return (
-    <CategoryLanding title={t('health.title')}>
+    <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
       <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('appointments')}
-          a11yHint={t('appointments.a11yHint')}
           onPress={onAppointments}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
@@ -89,7 +81,6 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
-          a11yHint={t('secureMessaging.a11yHint')}
           onPress={onSecureMessaging}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
@@ -101,7 +92,6 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
         {featureEnabled('prescriptions') && (
           <LargeNavButton
             title={t('prescription.title')}
-            a11yHint={t('prescription.A11yHint')}
             onPress={onPharmacy}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
@@ -120,7 +110,6 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
         />
         <LargeNavButton
           title={t('covid19Updates.title')}
-          a11yHint={t('covid19Updates.a11yHint')}
           onPress={onCoronaVirusFAQ}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
@@ -147,11 +136,13 @@ const HealthScreenStack = createStackNavigator()
  * Stack screen for the Health tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 const HealthStackScreen: FC<HealthStackScreenProps> = () => {
-  const headerStyles = useHeaderStyles()
-
+  const screenOptions = {
+    headerShown: false,
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+  }
   return (
     <HealthScreenStack.Navigator
-      screenOptions={headerStyles}
+      screenOptions={screenOptions}
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {
