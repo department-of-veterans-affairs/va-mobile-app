@@ -10,7 +10,7 @@ on:
       - 'dependabot/**'
   workflow_dispatch:
   workflow_run:
-    workflows: ['[TestRail] Start RC Run']
+    workflows: ['[Release] New Release Issue']
     types: [completed]
   # Run on weekdays 4:00 AM UTC
   # schedule:
@@ -148,7 +148,7 @@ jobs:
           path: VAMobile/e2e/test_reports/e2e-junit.xml
       
   send_test_results_to_testrail:
-    if: github.event_name == 'workflow_run' && '!cancelled()'
+    if: github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped'
     needs: [e2e-android]
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
