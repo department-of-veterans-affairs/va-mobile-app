@@ -5,6 +5,9 @@
 name: '[e2e] Android Detox Test Run'
 
 on:
+  push:
+    branches:
+      - 'dependabot/**'
   workflow_dispatch:
   # Run on weekdays 4:00 AM UTC
   # schedule:
@@ -81,7 +84,7 @@ jobs:
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version-file: 'VAMobile/.nvmrc'
           cache: 'yarn'
           cache-dependency-path: './VAMobile/yarn.lock'
 

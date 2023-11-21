@@ -21,14 +21,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      # Sets up node with v16 and restores global cache so we don't have to re-download dependencies
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
-          # cache: 'yarn'
-          # cache-dependency-path: 'VAMobile/yarn.lock'
+          node-version-file: 'VAMobile/.nvmrc'
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - run: yarn lint:ci
   test:
     runs-on: ubuntu-4-cores-latest
@@ -40,11 +41,13 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
-          # cache: 'yarn'
-          # cache-dependency-path: 'VAMobile/yarn.lock'
+          node-version-file: 'VAMobile/.nvmrc'
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: yarn test
         # GHA does not have test splitting built in, so we run this script to split our tests into chunks and run
         # jest with the specified files.  The number at the end is the # of chunks we're splitting the tests into.

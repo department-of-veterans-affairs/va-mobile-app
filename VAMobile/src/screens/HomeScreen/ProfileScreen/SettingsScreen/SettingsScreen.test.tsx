@@ -6,6 +6,10 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { context, mockNavProps, render } from 'testUtils'
 import SettingsScreen from './index'
 import { InitialState } from 'store/slices'
+import { featureEnabled } from 'utils/remoteConfig'
+
+jest.mock('utils/remoteConfig')
+when(featureEnabled as jest.Mock).calledWith('inAppRecruitment').mockReturnValue(true)
 
 jest.mock('react-native/Libraries/Share/Share', () => {
   return {
