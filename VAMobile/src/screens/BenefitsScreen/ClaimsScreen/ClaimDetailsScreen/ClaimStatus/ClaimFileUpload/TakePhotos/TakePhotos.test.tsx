@@ -20,7 +20,7 @@ context('TakePhotos', () => {
 
   it('initializes correctly', () => {
     initializeTestInstance()
-    expect(screen.getByText('This feature is not yet accessible to screen readers')).toBeTruthy()
+    expect(screen.getByRole('tab', { name: 'This feature is not yet accessible to screen readers' })).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Select photos to upload for' })).toBeTruthy()
     expect(screen.getByText('To submit evidence that supports this claim, take a picture of each page of your file. Then upload the photos to this app.')).toBeTruthy()
     expect(screen.getByText("You can submit up to 10 photos. If you need to submit a file that's more than 10 pages, you may want to upload your file on VA.gov.")).toBeTruthy()
