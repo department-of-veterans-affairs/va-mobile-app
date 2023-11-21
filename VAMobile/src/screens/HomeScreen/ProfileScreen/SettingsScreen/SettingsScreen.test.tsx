@@ -71,7 +71,7 @@ context('SettingsScreen', () => {
     expect(screen.getByText('Notifications')).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Share the app' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Privacy policy' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Developer Screen' })).toBeTruthy()
+    expect(screen.getByText('Developer Screen')).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Sign out' })).toBeTruthy()
   })
 
