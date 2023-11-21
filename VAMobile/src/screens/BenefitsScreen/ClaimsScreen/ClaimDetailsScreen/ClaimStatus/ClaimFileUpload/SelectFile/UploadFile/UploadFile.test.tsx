@@ -81,7 +81,7 @@ context('UploadFile', () => {
       fireEvent.press(screen.getByTestId('Civilian Police Reports'))
       fireEvent.press(screen.getByTestId('Done'))
       fireEvent.press(screen.getByLabelText('The file I uploaded is evidence for this claim. (Required) '))
-      fireEvent.press(screen.getByTestId('Submit file'))
+      fireEvent.press(screen.getByRole('button', { name: 'Submit file' }))
       expect(mockAlertSpy).toHaveBeenCalled()
     })
   })
