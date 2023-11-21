@@ -49,7 +49,7 @@ context('UploadOrAddPhotos', () => {
     expect(screen.getByText('Add photo')).toBeTruthy()
     expect(screen.getByText('of 10 photos')).toBeTruthy()
     expect(screen.getByText('0 Bytes of 50MB')).toBeTruthy()
-    expect(screen.getByTestId('Document type picker required')).toBeTruthy()
+    expect(screen.getByRole('spinbutton', { name: 'Document type (Required)' })).toBeTruthy()
     expect(screen.getByRole('checkbox')).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Submit file' })).toBeTruthy()
   })
