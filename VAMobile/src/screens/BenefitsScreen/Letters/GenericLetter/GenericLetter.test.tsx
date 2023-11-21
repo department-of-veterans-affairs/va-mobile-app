@@ -1,13 +1,9 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance, act } from 'react-test-renderer'
-import { Pressable } from 'react-native'
+import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import { LetterTypeConstants, LetterTypes } from 'store/api/types'
-import { initialLettersState, InitialState, downloadLetter } from 'store/slices'
-import { AlertBox, BasicError, LoadingComponent } from 'components'
+import { initialLettersState, downloadLetter } from 'store/slices'
 import GenericLetter from './GenericLetter'
 
 jest.mock('store/slices', () => {
@@ -24,16 +20,10 @@ jest.mock('store/slices', () => {
 })
 
 context('GenericLetter', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let props: any
-
   const initializeTestInstance = (downloading = false, letterType: LetterTypes = LetterTypeConstants.commissary, hasDownloadError = false) => {
-    props = mockNavProps(undefined, undefined, { params: { header: 'header', description: 'desc', letterType } })
-
-    component = render(<GenericLetter {...props} />, {
+    const props = mockNavProps(undefined, undefined, { params: { header: 'header', description: 'desc', letterType } })
+    render(<GenericLetter {...props} />, {
       preloadedState: {
-        ...InitialState,
         letters: {
           ...initialLettersState,
           downloading: downloading,
@@ -41,49 +31,49 @@ context('GenericLetter', () => {
         },
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByText('Review letters')).toBeTruthy()
+    expect(screen.getByTestId('Letters: header-page')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Review letter' })).toBeTruthy()
   })
 
   describe('when downloading is set to true', () => {
-    it('should show loading screen', async () => {
+    it('should show loading screen', () => {
       initializeTestInstance(true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      expect(screen.getByText('Loading your letter...')).toBeTruthy()
     })
   })
 
   describe('when an error occurs', () => {
-    it('should render error component when there is a letter download error', async () => {
+    it('should render error component when there is a letter download error', () => {
       initializeTestInstance(false, undefined, true)
-      expect(testInstance.findAllByType(BasicError)).toHaveLength(1)
+      expect(screen.getByText('Your letter could not be downloaded.')).toBeTruthy()
     })
 
-    it('should not render error component when there is no letter download error', async () => {
+    it('should not render error component when there is no letter download error', () => {
       initializeTestInstance(false, undefined, false)
-      expect(testInstance.findAllByType(BasicError)).toHaveLength(0)
+      expect(screen.queryByText('Your letter could not be downloaded.')).toBeFalsy()
     })
   })
 
   describe('when view letter is pressed', () => {
-    it('should call downloadLetter with the given letter type', async () => {
+    it('should call downloadLetter with the given letter type', () => {
       initializeTestInstance(false, LetterTypeConstants.minimumEssentialCoverage)
-      testInstance.findByType(Pressable).props.onPress()
+      fireEvent.press(screen.getByRole('button', { name: 'Review letter' }))
       expect(downloadLetter).toBeCalledWith(LetterTypeConstants.minimumEssentialCoverage)
     })
   })
 
   describe('when the letter type is service verification', () => {
-    it('should display an alert box', async () => {
+    it('should display an alert box', () => {
       initializeTestInstance(false, LetterTypeConstants.serviceVerification)
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      expect(screen.getByText('You can now use your Benefit Summary letter instead of this Service Verification letter.')).toBeTruthy()
     })
   })
 })

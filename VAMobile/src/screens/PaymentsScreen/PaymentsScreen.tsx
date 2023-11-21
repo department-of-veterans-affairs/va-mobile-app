@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from './PaymentsStackScreens'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -77,10 +78,10 @@ const PaymentsStackScreen: FC<PaymentsStackScreenProps> = () => {
         },
       }}>
       <PaymentsScreenStack.Screen name="Payments" component={PaymentsScreen} options={{ headerShown: false }} />
-      <PaymentsScreenStack.Screen name="PaymentDetails" component={PaymentDetailsScreen} options={{ headerShown: false }} />
-      <PaymentsScreenStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ headerShown: false }} />
-      <PaymentsScreenStack.Screen name="HowToUpdateDirectDeposit" component={HowToUpdateDirectDepositScreen} options={{ headerShown: false }} />
-      <PaymentsScreenStack.Screen name="PaymentHistory" component={PaymentHistoryScreen} options={{ headerShown: false }} />
+      <PaymentsScreenStack.Screen name="PaymentDetails" component={PaymentDetailsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <PaymentsScreenStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <PaymentsScreenStack.Screen name="HowToUpdateDirectDeposit" component={HowToUpdateDirectDepositScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <PaymentsScreenStack.Screen name="PaymentHistory" component={PaymentHistoryScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
     </PaymentsScreenStack.Navigator>
   )
 }

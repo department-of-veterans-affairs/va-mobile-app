@@ -3,12 +3,10 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView, VABulletList, VAButton } from 'components'
-import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 type InAppRecruitmentScreenProps = StackScreenProps<HomeStackParamList, 'InAppRecruitment'>
@@ -19,18 +17,8 @@ const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation })
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  useBeforeNavBackListener(navigation, () => {
-    logAnalyticsEvent(Events.vama_givefb_close())
-  })
-
   const onPress = () => {
-    logAnalyticsEvent(Events.vama_givefb_launch())
-    navigation.navigate('Webview', {
-      url: LINK_URL_IN_APP_RECRUITMENT,
-      displayTitle: t('webview.vagov'),
-      loadingMessage: t('inAppRecruitment.goToQuestionnaire.loading'),
-      onBackPressed: () => logAnalyticsEvent(Events.vama_givefb_wv_close()),
-    })
+    navigation.navigate('Webview', { url: LINK_URL_IN_APP_RECRUITMENT, displayTitle: t('webview.vagov'), loadingMessage: t('inAppRecruitment.goToQuestionnaire.loading') })
   }
 
   return (
@@ -65,7 +53,6 @@ const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation })
             numberOrUrlLink={LINK_URL_VETERAN_USABILITY_PROJECT}
             linkType={LinkTypeOptionsConstants.url}
             a11yLabel={t('inAppRecruitment.learnMore')}
-            fireAnalytic={() => logAnalyticsEvent(Events.vama_givefb_info())}
           />
         </Box>
         <TextView variant="HelperText" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('inAppRecruitment.contracts'))}>
