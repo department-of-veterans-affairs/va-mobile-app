@@ -104,7 +104,7 @@ context('Attachments', () => {
         await waitFor(() => {
           promise
         })
-        fireEvent.press(screen.getByText('Attach'))
+        fireEvent.press(screen.getByRole('button', { name: 'Attach' }))
         expect(mockNavigateToEditDraftSpy).toHaveBeenCalled()
       })
     })
