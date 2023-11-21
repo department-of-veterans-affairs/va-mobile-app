@@ -1,11 +1,9 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import * as api from 'store/api'
 import Appointments from './Appointments'
-import { InitialState } from 'store/slices'
 import { AppointmentsErrorServiceTypesConstants } from 'store/api/types'
 
 jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
@@ -60,12 +58,7 @@ jest.mock('utils/remoteConfig')
 
 context('AppointmentsScreen', () => {
   const initializeTestInstance = () => {
-
-    render(<Appointments {...mockNavProps()} />, {
-      preloadedState: {
-        ...InitialState,
-      },
-    })
+    render(<Appointments {...mockNavProps()} />)
   }
 
   describe('when appointments is not authorized', () => {
@@ -102,7 +95,7 @@ context('AppointmentsScreen', () => {
           .mockResolvedValue({
             data: [],
             meta: {
-              errors: [{ source: AppointmentsErrorServiceTypesConstants.COMMUNITY_CARE }],
+              errors: [{ source: AppointmentsErrorServiceTypesConstants.VA }],
             },
           })
         initializeTestInstance()

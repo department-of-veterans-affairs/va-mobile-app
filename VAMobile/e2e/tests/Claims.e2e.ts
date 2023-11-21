@@ -87,7 +87,7 @@ describe('Claims Screen', () => {
   it('should verify that the need help? section display the correct information', async () => {
     await expect(element(by.text('Need help?'))).toExist()
     await expect(element(by.text('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'))).toExist()
-    await expect(element(by.text('CallVATestID'))).toExist()
+    await expect(element(by.id('CallVATestID'))).toExist()
     if (device.getPlatform() === 'android') {
 			await element(by.id('CallVATestID')).tap()
 			await setTimeout(5000)
