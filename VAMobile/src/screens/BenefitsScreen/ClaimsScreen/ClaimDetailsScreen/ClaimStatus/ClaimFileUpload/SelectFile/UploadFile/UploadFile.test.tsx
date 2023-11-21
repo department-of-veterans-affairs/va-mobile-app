@@ -77,9 +77,9 @@ context('UploadFile', () => {
     })
 
     it('should bring up confirmation requirements are met', () => {
-      fireEvent.press(screen.getByTestId('Document type picker required'))
-      fireEvent.press(screen.getByTestId('Civilian Police Reports'))
-      fireEvent.press(screen.getByTestId('Done'))
+      fireEvent.press(screen.getByRole('spinbutton', { name: 'Document type picker required' }))
+      fireEvent.press(screen.getByRole('menuitem', { name: 'Civilian Police Reports' }))
+      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
       fireEvent.press(screen.getByLabelText('The file I uploaded is evidence for this claim. (Required) '))
       fireEvent.press(screen.getByRole('button', { name: 'Submit file' }))
       expect(mockAlertSpy).toHaveBeenCalled()
