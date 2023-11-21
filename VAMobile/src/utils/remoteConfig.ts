@@ -17,6 +17,7 @@ export type FeatureToggleType =
   | 'appointmentRequests'
   | 'prescriptions'
   | 'testFeature'
+  | 'inAppRecruitment'
   | 'inAppUpdates'
   | 'preferredNameGenderWaygate'
   | 'haptics'
@@ -29,6 +30,7 @@ type FeatureToggleValues = {
   appointmentRequests: boolean
   prescriptions: boolean
   testFeature: boolean
+  inAppRecruitment: boolean
   inAppUpdates: boolean
   preferredNameGenderWaygate: boolean
   haptics: boolean
@@ -42,6 +44,7 @@ export let devConfig: FeatureToggleValues = {
   appointmentRequests: true,
   prescriptions: true,
   testFeature: true,
+  inAppRecruitment: true,
   inAppUpdates: true,
   preferredNameGenderWaygate: true,
   haptics: true,
@@ -55,6 +58,7 @@ export const productionDefaults: FeatureToggleValues = {
   appointmentRequests: false,
   prescriptions: true,
   testFeature: false,
+  inAppRecruitment: false,
   inAppUpdates: false,
   preferredNameGenderWaygate: true,
   haptics: true,
