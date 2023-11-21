@@ -93,7 +93,7 @@ context('Attachments', () => {
         const promise = Promise.resolve({ uri: 'uri', name: 'custom-file-name.docx', type: 'docx' } as DocumentPickerResponse)
         jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(promise)
 
-        fireEvent.press(screen.getByText('Select a file'))
+        fireEvent.press(screen.getByRole('button', { name: 'Select a file' }))
 
         const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
