@@ -9,6 +9,7 @@ import EditPhoneNumberScreen from './ProfileScreen/ContactInformationScreen/Edit
 import GenderIdentityScreen from './ProfileScreen/PersonalInformationScreen/GenderIdentityScreen'
 import HowDoIUpdateScreen from './ProfileScreen/PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import HowWillYouScreen from './ProfileScreen/ContactInformationScreen/HowWillYouScreen'
+import InAppRecruitmentScreen from './ProfileScreen/SettingsScreen/InAppRecruitmentScreen/InAppRecruitmentScreen'
 import IncorrectServiceInfo from './ProfileScreen/MilitaryInformationScreen/IncorrectServiceInfo'
 import PreferredNameScreen from './ProfileScreen/PersonalInformationScreen/PreferredNameScreen'
 import VeteranStatusScreen from './VeteranStatusScreen/VeteranStatusScreen'
@@ -27,6 +28,7 @@ export type HomeStackParamList = WebviewStackParams & {
   GenderIdentity: undefined
   HowDoIUpdate: { screenType: string }
   HowWillYou: undefined
+  InAppRecruitment: undefined
   IncorrectServiceInfo: undefined
   ManageYourAccount: undefined
   MilitaryInformation: undefined
@@ -53,6 +55,7 @@ export const getHomeScreens = () => {
     <HomeStack.Screen key={'GenderIdentity'} name="GenderIdentity" component={GenderIdentityScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />,
     <HomeStack.Screen key={'HowDoIUpdate'} name="HowDoIUpdate" component={HowDoIUpdateScreen} options={LARGE_PANEL_OPTIONS} />,
     <HomeStack.Screen key={'HowWillYou'} name="HowWillYou" component={HowWillYouScreen} options={LARGE_PANEL_OPTIONS} />,
+    <HomeStack.Screen key={'InAppRecruitment'} name="InAppRecruitment" component={InAppRecruitmentScreen} options={LARGE_PANEL_OPTIONS} />,
     <HomeStack.Screen key={'IncorrectServiceInfo'} name="IncorrectServiceInfo" component={IncorrectServiceInfo} options={LARGE_PANEL_OPTIONS} />,
     <HomeStack.Screen key={'WhatToKnow'} name="WhatToKnow" component={WhatToKnowScreen} options={LARGE_PANEL_OPTIONS} />,
   ]
