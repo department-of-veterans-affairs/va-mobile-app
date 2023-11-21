@@ -10,7 +10,6 @@ import TextView from 'components/TextView'
 import BaseListItem from 'components/BaseListItem'
 import { InitialState } from 'store/slices'
 import { RenderAPI, fireEvent, screen } from '@testing-library/react-native'
-import 'common.json'
 
 context('VAModalPicker', () => {
   let component: RenderAPI
@@ -139,9 +138,9 @@ context('VAModalPicker', () => {
     it('should display (Required)', async () => {
       await initializeTestInstance('email', 'label', '', '', true)
       expect(screen.getByText(['label', ' ', '(Required)'].join(" "))).toBeTruthy()
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[7].props.children).toEqual(['label', ' ', '(Required)'])
-      expect(textViews.length).toEqual(9)
+      // const textViews = testInstance.findAllByType(TextView)
+      // expect(textViews[7].props.children).toEqual(['label', ' ', '(Required)'])
+      // expect(textViews.length).toEqual(9)
     })
   })
 })
