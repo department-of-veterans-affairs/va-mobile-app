@@ -269,7 +269,7 @@ context('EditDraft', () => {
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', () => {
-      fireEvent.press(screen.getByLabelText('Add Files'))
+      fireEvent.press(screen.getByRole('button', { name: 'Add Files' }))
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
