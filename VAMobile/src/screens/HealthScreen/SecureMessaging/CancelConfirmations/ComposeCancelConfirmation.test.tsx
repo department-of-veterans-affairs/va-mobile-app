@@ -1,6 +1,5 @@
 import React from 'react'
 import { when } from 'jest-when'
-import { act } from 'react-test-renderer'
 
 import { context, render } from 'testUtils'
 import { useComposeCancelConfirmation } from './ComposeCancelConfirmation'
@@ -107,9 +106,7 @@ context('useComposeCancelConfirmation', () => {
   describe('New Message', () => {
     describe('on clicking discard', () => {
       it('should go back to the previous page', () => {
-        act(() => {
-          discardButtonSpy()
-        })
+        discardButtonSpy()
         expect(navigateToSecureMessagingSpy).toHaveBeenCalled()
       })
     })
@@ -117,9 +114,7 @@ context('useComposeCancelConfirmation', () => {
     describe('on clicking save draft', () => {
       it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
-        act(() => {
-          saveDraftButtonSpy()
-        })
+        saveDraftButtonSpy()
         expect(navigateToStartNewMessageSpy).toHaveBeenCalled()
       })
     })
@@ -129,9 +124,7 @@ context('useComposeCancelConfirmation', () => {
     describe('on clicking discard', () => {
       it('should go back to the message the user was viewing', () => {
         initializeTestInstance({ body: 'test reply', category: CategoryTypeFields.appointment }, undefined, true, FormHeaderTypeConstants.reply, 2)
-        act(() => {
-          discardButtonSpy()
-        })
+        discardButtonSpy()
         expect(navigateToViewMessageScreenSpy).toHaveBeenCalled()
       })
     })
@@ -139,9 +132,7 @@ context('useComposeCancelConfirmation', () => {
     describe('on clicking save draft', () => {
       it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
-        act(() => {
-          saveDraftButtonSpy()
-        })
+        saveDraftButtonSpy()
         expect(navigateToStartNewMessageSpy).toHaveBeenCalled()
       })
     })
@@ -151,9 +142,7 @@ context('useComposeCancelConfirmation', () => {
     describe('on clicking discard', () => {
       it('should go back to drafts folder', () => {
         initializeTestInstance({ body: 'test reply', category: CategoryTypeFields.appointment }, 1, true, FormHeaderTypeConstants.draft, undefined)
-        act(() => {
-          discardButtonSpy()
-        })
+        discardButtonSpy()
         expect(navigateToDraftFolderNotSavedSpy).toHaveBeenCalled()
       })
     })
@@ -161,9 +150,7 @@ context('useComposeCancelConfirmation', () => {
     describe('on clicking save draft', () => {
       it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
-        act(() => {
-          saveDraftButtonSpy()
-        })
+        saveDraftButtonSpy()
         expect(navigateToStartNewMessageSpy).toHaveBeenCalled()
       })
     })
