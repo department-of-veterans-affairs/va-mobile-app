@@ -144,8 +144,8 @@ context('ViewMessageScreen', () => {
         initializeTestInstance(mockMessagesById, mockThreads, false, 3, [1])
       })
       it('should show AlertBox with "Message could not be found" title', () => {
-        expect(screen.getByText('mock sender 1')).toBeTruthy()
-        fireEvent.press(screen.getByText('mock sender 1'))
+        expect(screen.getByRole('tab', { name: 'mock sender 1' })).toBeTruthy()
+        fireEvent.press(screen.getByRole('tab', { name: 'mock sender 1' }))
         expect(screen.getByText("If the app still doesn't work, call the My HealtheVet Help Desk. We're here Monday-Friday, 8:00 a.m.-8:00 p.m. ET.")).toBeTruthy()
         expect(screen.getByText('Message could not be found')).toBeTruthy()
       })
