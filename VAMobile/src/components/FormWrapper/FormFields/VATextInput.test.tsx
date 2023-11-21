@@ -1,18 +1,15 @@
 import 'react-native'
 import React from 'react'
-import { Pressable, TextInput } from 'react-native'
+import { TextInput } from 'react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 import { screen } from '@testing-library/react-native'
 import Mock = jest.Mock
 
 import { context, render, RenderAPI, waitFor } from 'testUtils'
 import VATextInput, { VATextInputTypes } from './VATextInput'
-import { Box, TextView } from '../../index'
 import { isIOS } from 'utils/platform'
-import { getCombinedNodeFlags } from 'typescript'
-import { getInputBorderColor } from './formFieldUtils'
 
 let mockIsIOS = jest.fn()
 jest.mock('utils/platform', () => ({

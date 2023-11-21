@@ -6,8 +6,6 @@ import { ReactTestInstance } from 'react-test-renderer'
 import { context, render, waitFor } from 'testUtils'
 import { PickerItem } from './VAModalPicker'
 import VAModalPicker from './VAModalPicker'
-import TextView from 'components/TextView'
-import BaseListItem from 'components/BaseListItem'
 import { InitialState } from 'store/slices'
 import { RenderAPI, fireEvent, screen } from '@testing-library/react-native'
 
@@ -18,7 +16,6 @@ context('VAModalPicker', () => {
   let pickerOptions: Array<PickerItem>
   let doneButton: any
   let cancelButton: any
-  let selectionButtons: any
 
   const initializeTestInstance = async (
     selectedValue: string,
@@ -63,7 +60,6 @@ context('VAModalPicker', () => {
 
     doneButton = testInstance.findByProps({ accessibilityLabel: 'Done' })
     cancelButton = testInstance.findByProps({ accessibilityLabel: 'Cancel' })
-    selectionButtons = testInstance.findAllByType(BaseListItem)
   }
 
   beforeEach(async () => {
@@ -107,11 +103,8 @@ context('VAModalPicker', () => {
 
   describe('when labelKey exists', () => {
     it('should render a textview for the label', async () => {
-      // const textViews = testInstance.findAllByType(TextView)
       expect(component.getByTestId('Number picker')).toBeTruthy()
       expect(screen.getAllByText('Number').length).toBeGreaterThan(0)
-      // expect(textViews[7].props.children).toEqual(['Number', ' ', ''])
-      // expect(textViews.length).toEqual(9)
     })
   })
 
@@ -120,7 +113,6 @@ context('VAModalPicker', () => {
       await initializeTestInstance('js', 'label', 'back.a11yHint')
       expect(screen.getByText('Navigates to the previous page')).toBeTruthy()
       expect(testInstance.findByProps({ children: 'Navigates to the previous page' })).toBeTruthy()
-      // expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('Navigates to the previous page')
     })
   })
 
@@ -129,8 +121,6 @@ context('VAModalPicker', () => {
       await initializeTestInstance('email', 'label', '', 'ERROR')
       expect(screen.getByText('ERROR')).toBeTruthy()
       expect(testInstance.findByProps({ children: 'ERROR' })).toBeTruthy()
-      // const allTextViews = testInstance.findAllByType(TextView)
-      // expect(allTextViews[allTextViews.length - 2].props.children).toEqual('ERROR')
     })
   })
 
@@ -138,9 +128,6 @@ context('VAModalPicker', () => {
     it('should display (Required)', async () => {
       await initializeTestInstance('email', 'label', '', '', true)
       expect(screen.getByText(['label', ' ', '(Required)'].join(" "))).toBeTruthy()
-      // const textViews = testInstance.findAllByType(TextView)
-      // expect(textViews[7].props.children).toEqual(['label', ' ', '(Required)'])
-      // expect(textViews.length).toEqual(9)
     })
   })
 })

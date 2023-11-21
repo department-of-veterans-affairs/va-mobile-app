@@ -2,12 +2,11 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { act, ReactTestInstance } from 'react-test-renderer'
+import { ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 
 import { context, findByTestID, render, RenderAPI, screen, waitFor } from 'testUtils'
 import VASelector, { SelectorType } from './VASelector'
-import { TextView } from '../../index'
 import Mock = jest.Mock
 
 context('VASelector', () => {
