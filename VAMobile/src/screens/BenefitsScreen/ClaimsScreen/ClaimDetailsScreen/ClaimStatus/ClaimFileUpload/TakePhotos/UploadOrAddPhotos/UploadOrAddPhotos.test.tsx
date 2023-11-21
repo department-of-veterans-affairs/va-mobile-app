@@ -46,7 +46,7 @@ context('UploadOrAddPhotos', () => {
   it('initializes correctly', () => {
     initializeTestInstance()
     expect(screen.getByRole('header', { name: 'Upload photos' })).toBeTruthy()
-    expect(screen.getByText('Add photo')).toBeTruthy()
+   expect(screen.getByRole('button', { name: 'Add photo' })).toBeTruthy()
     expect(screen.getByText('of 10 photos')).toBeTruthy()
     expect(screen.getByText('0 Bytes of 50MB')).toBeTruthy()
     expect(screen.getByRole('spinbutton', { name: 'Document type (Required)' })).toBeTruthy()
