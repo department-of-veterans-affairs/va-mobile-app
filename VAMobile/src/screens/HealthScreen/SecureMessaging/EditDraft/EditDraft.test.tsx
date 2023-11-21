@@ -247,7 +247,7 @@ context('EditDraft', () => {
   describe('when there is an error', () => {
     it('should display the ErrorComponent', () => {
       initializeTestInstance({ screenID: ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID })
-      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
+      expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy()
     })
   })
 
