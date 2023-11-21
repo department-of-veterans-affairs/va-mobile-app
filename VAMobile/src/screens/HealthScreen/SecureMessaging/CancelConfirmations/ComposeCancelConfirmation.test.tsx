@@ -1,16 +1,12 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { when } from 'jest-when'
 
-import { context, mockNavProps, render, RenderAPI } from 'testUtils'
+import { context, render } from 'testUtils'
 import { useComposeCancelConfirmation } from './ComposeCancelConfirmation'
 import { SecureMessagingFormData } from 'store/api'
 import { FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { CategoryTypeFields } from 'store/api/types'
 import { useDestructiveActionSheetProps } from 'utils/hooks'
-import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
 
@@ -57,8 +53,6 @@ jest.mock('store/slices', () => {
 })
 
 context('useComposeCancelConfirmation', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let navigateToSecureMessagingSpy: jest.Mock
   let navigateToStartNewMessageSpy: jest.Mock
   let navigateToViewMessageScreenSpy: jest.Mock
@@ -102,35 +96,25 @@ context('useComposeCancelConfirmation', () => {
       })
       return <></>
     }
-
-    component = render(<TestComponent />)
-
-    testInstance = component.UNSAFE_root
+    render(<TestComponent />)
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
   describe('New Message', () => {
     describe('on clicking discard', () => {
-      it('should go back to the previous page', async () => {
-        act(() => {
-          discardButtonSpy()
-        })
+      it('should go back to the previous page', () => {
+        discardButtonSpy()
         expect(navigateToSecureMessagingSpy).toHaveBeenCalled()
       })
     })
 
     describe('on clicking save draft', () => {
-      it('should go back to compose if form not valid', async () => {
+      it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
-        act(() => {
-          saveDraftButtonSpy()
-        })
+        saveDraftButtonSpy()
         expect(navigateToStartNewMessageSpy).toHaveBeenCalled()
       })
     })
@@ -138,21 +122,17 @@ context('useComposeCancelConfirmation', () => {
 
   describe('Reply', () => {
     describe('on clicking discard', () => {
-      it('should go back to the message the user was viewing', async () => {
+      it('should go back to the message the user was viewing', () => {
         initializeTestInstance({ body: 'test reply', category: CategoryTypeFields.appointment }, undefined, true, FormHeaderTypeConstants.reply, 2)
-        act(() => {
-          discardButtonSpy()
-        })
+        discardButtonSpy()
         expect(navigateToViewMessageScreenSpy).toHaveBeenCalled()
       })
     })
 
     describe('on clicking save draft', () => {
-      it('should go back to compose if form not valid', async () => {
+      it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
-        act(() => {
-          saveDraftButtonSpy()
-        })
+        saveDraftButtonSpy()
         expect(navigateToStartNewMessageSpy).toHaveBeenCalled()
       })
     })
@@ -160,21 +140,17 @@ context('useComposeCancelConfirmation', () => {
 
   describe('Draft', () => {
     describe('on clicking discard', () => {
-      it('should go back to drafts folder', async () => {
+      it('should go back to drafts folder', () => {
         initializeTestInstance({ body: 'test reply', category: CategoryTypeFields.appointment }, 1, true, FormHeaderTypeConstants.draft, undefined)
-        act(() => {
-          discardButtonSpy()
-        })
+        discardButtonSpy()
         expect(navigateToDraftFolderNotSavedSpy).toHaveBeenCalled()
       })
     })
 
     describe('on clicking save draft', () => {
-      it('should go back to compose if form not valid', async () => {
+      it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
-        act(() => {
-          saveDraftButtonSpy()
-        })
+        saveDraftButtonSpy()
         expect(navigateToStartNewMessageSpy).toHaveBeenCalled()
       })
     })
