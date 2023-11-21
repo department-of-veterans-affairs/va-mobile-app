@@ -78,7 +78,7 @@ context('CernerAlertSM', () => {
   })
 
   it('should only show cerner facilities, not other facilities and should call mockExternalLinkSpy when link is selected', () => {
-    expect(screen.getByText("Make sure you're in the right health portal")).toBeTruthy()
+    expect(screen.getByRole('tab', { name: "Make sure you're in the right health portal" })).toBeTruthy()
     fireEvent.press(screen.getByRole('tab', { name: "Make sure you're in the right health portal" }))
     expect(screen.getByText("Sending a message to a care team at FacilityOne?")).toBeTruthy()
     expect(screen.queryByText("FacilityTwo")).toBeFalsy()
