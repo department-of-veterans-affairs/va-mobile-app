@@ -261,7 +261,7 @@ context('EditDraft', () => {
   describe('when pressing the back button', () => {
     it('should ask for confirmation if any field filled in', () => {
       fireEvent.changeText(screen.getByTestId('messageText'), 'Random String')
-      fireEvent.press(screen.getByText('Cancel'))
+      fireEvent.press(screen.getByRole('button', { name: 'Cancel' }))
       expect(goBack).not.toHaveBeenCalled()
       expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled()
     })
