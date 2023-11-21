@@ -38,6 +38,8 @@ export type LargePanelProps = {
   testID?: string
   /** bypass divider marginbottom */
   dividerMarginBypass?: boolean
+  /** scrollview insets removal - used for when wanting to extend background color when in landscape mode across the screen, default is false */
+  removeInsets?: boolean
 }
 
 export const LargePanel: FC<LargePanelProps> = ({
@@ -54,6 +56,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   onFooterButtonPress,
   testID,
   dividerMarginBypass,
+  removeInsets,
 }) => {
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -104,11 +107,17 @@ export const LargePanel: FC<LargePanelProps> = ({
     flex: 1,
   }
 
+  const containerStyle: ViewStyle = {
+    flexGrow: 1,
+    backgroundColor: theme.colors.background.veteranStatus,
+    justifyContent: 'center',
+  }
+
   return (
     <>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
-        <VAScrollView testID={testID}>
+        <VAScrollView testID={testID} removeInsets={removeInsets} contentContainerStyle={removeInsets ? containerStyle : undefined}>
           {children}
           {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
         </VAScrollView>
