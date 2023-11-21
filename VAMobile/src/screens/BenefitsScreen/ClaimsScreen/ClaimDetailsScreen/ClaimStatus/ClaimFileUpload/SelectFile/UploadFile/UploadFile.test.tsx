@@ -68,11 +68,11 @@ context('UploadFile', () => {
 
   describe('on click of the upload button', () => {
     it('should display an error if the checkbox is not checked', () => {
-      fireEvent.press(screen.getByTestId('Document type picker required'))
-      fireEvent.press(screen.getByTestId('Civilian Police Reports'))
-      fireEvent.press(screen.getByTestId('Done'))
-      fireEvent.press(screen.getByTestId('Submit file'))
-      expect(screen.getByText('Check the box to confirm the information is correct')).toBeTruthy()
+      fireEvent.press(screen.getByRole('spinbutton', { name: 'Document type picker required' }))
+      fireEvent.press(screen.getByRole('menuitem', { name: 'Civilian Police Reports' }))
+      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+      fireEvent.press(screen.getByRole('button', { name: 'Submit file' }))
+      expect(screen.getByRole('checkbox', { name: 'Check the box to confirm the information is correct' })).toBeTruthy()
       expect(mockAlertSpy).not.toHaveBeenCalled()
     })
 
