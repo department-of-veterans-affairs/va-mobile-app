@@ -1,9 +1,8 @@
-import 'react-native'
 import React from 'react'
 import { Share } from 'react-native'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
-
 import { fireEvent, screen } from '@testing-library/react-native'
+
 import { context, mockNavProps, render } from 'testUtils'
 import SettingsScreen from './index'
 import { InitialState } from 'store/slices'
@@ -63,25 +62,25 @@ context('SettingsScreen', () => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(screen.getByText('Manage account')).toBeTruthy()
-    expect(screen.getByText('Notifications')).toBeTruthy()
-    expect(screen.getByText('Share the app')).toBeTruthy()
-    expect(screen.getByText('Privacy policy')).toBeTruthy()
-    expect(screen.getByText('Developer Screen')).toBeTruthy()
-    expect(screen.getByText('Sign out')).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByRole('button', { name: 'Manage account' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Notifications' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Share the app' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Privacy policy' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Developer Screen' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Sign out' })).toBeTruthy()
   })
 
   describe('when privacy policy is clicked', () => {
-    it('should launch external link', async () => {
-      fireEvent.press(screen.getByTestId('privacy-policy'))
+    it('should launch external link', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Privacy policy' }))
       expect(mockExternalLinkSpy).toHaveBeenCalled()
     })
   })
 
   describe('when "Share the app" is clicked', () => {
-    it('should call Share.share', async () => {
-      fireEvent.press(screen.getByTestId('share-the-app'))
+    it('should call Share.share', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Share the app' }))
       expect(Share.share).toBeCalledWith({
         message:
           'Download the VA: Health and Benefits on the App Store: https://apps.apple.com/us/app/va-health-and-benefits/id1559609596 or on Google Play: https://play.google.com/store/apps/details?id=gov.va.mobileapp',
@@ -90,45 +89,45 @@ context('SettingsScreen', () => {
   })
 
   describe('on manage your account click', () => {
-    it('should call useRouteNavigation', async () => {
-      fireEvent.press(screen.getByTestId('manage-account'))
+    it('should call useRouteNavigation', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Manage account' }))
       expect(navigateSpy).toHaveBeenCalledWith('ManageYourAccount')
     })
   })
 
   describe('when canStoreWithBiometric is true', () => {
     describe('when the biometry type is Face', () => {
-      it('should display the text "Use face recognition"', async () => {
+      it('should display the text "Use face recognition"', () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FACE)
-        expect(screen.getByText('Use Face Recognition')).toBeTruthy()
+        expect(screen.getByRole('switch', { name: 'Use Face Recognition' })).toBeTruthy()
       })
     })
 
     describe('when the biometry type is Fingerprint', () => {
-      it('should display the text "Use fingerprint"', async () => {
+      it('should display the text "Use fingerprint"', () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FINGERPRINT)
-        expect(screen.getByText('Use Fingerprint')).toBeTruthy()
+        expect(screen.getByRole('switch', { name: 'Use Fingerprint' })).toBeTruthy()
       })
     })
 
     describe('when the biometry type is Iris', () => {
-      it('should display the text "Use iris"', async () => {
+      it('should display the text "Use iris"', () => {
         initializeTestInstance(true, BIOMETRY_TYPE.IRIS)
-        expect(screen.getByText('Use Iris')).toBeTruthy()
+        expect(screen.getByRole('switch', { name: 'Use Iris' })).toBeTruthy()
       })
     })
 
     describe('when the biometry type is Touch ID', () => {
-      it('should display the text "Use Touch ID"', async () => {
+      it('should display the text "Use Touch ID"', () => {
         initializeTestInstance(true, BIOMETRY_TYPE.TOUCH_ID)
-        expect(screen.getByText('Use Touch ID')).toBeTruthy()
+        expect(screen.getByRole('switch', { name: 'Use Touch ID' })).toBeTruthy()
       })
     })
 
     describe('when the biometry type is Face ID', () => {
-      it('should display the text "Use Face ID"', async () => {
+      it('should display the text "Use Face ID"', () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID)
-        expect(screen.getByText('Use Face ID')).toBeTruthy()
+        expect(screen.getByRole('switch', { name: 'Use Face ID' })).toBeTruthy()
       })
     })
   })

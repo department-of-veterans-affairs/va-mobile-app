@@ -12,7 +12,7 @@ context('PreferredNameScreen', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByText('Preferred name')).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'Preferred name' })).toBeTruthy()
     expect(screen.getByText("Share the name you'd like us to use when you come in to VA.")).toBeTruthy()
     expect(screen.getByText('25 characters maximum')).toBeTruthy()
     expect(screen.getByTestId('preferredNameTestID')).toBeTruthy()

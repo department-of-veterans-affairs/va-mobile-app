@@ -55,7 +55,7 @@ context('HowDoIUpdateScreen', () => {
     initializeTestInstance('name')
     expect(screen.getByRole('header', { name: 'How to update or fix an error in your legal name' })).toBeTruthy()
     expect(screen.getByText("If you've changed your legal name, you'll need to tell us so we can change your name in our records.")).toBeTruthy()
-    expect(screen.getByText('Learn how to change your legal name on file with the VA')).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Learn how to change your legal name on file with the VA' })).toBeTruthy()
     expect(screen.getByText("If our records have a misspelling or other error in your name, you can request a correction. Here's how to request a correction:")).toBeTruthy()
     expect(screen.getByText("If you're enrolled in the VA health care program, contact your nearest VA medical center.")).toBeTruthy()
     expect(screen.getByRole('link', { name: 'Find nearest VA medical center' })).toBeTruthy()

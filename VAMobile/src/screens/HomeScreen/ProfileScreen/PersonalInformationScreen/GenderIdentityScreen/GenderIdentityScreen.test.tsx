@@ -79,8 +79,8 @@ context('GenderIdentityScreen', () => {
     })
 
     initializeTestInstance()
-    await waitFor(async () => {
-      expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy()
+    await waitFor(() => {
+      expect(screen.getByRole('header', { name: "The VA mobile app isn't working right now" })).toBeTruthy()
     })
   })
 })

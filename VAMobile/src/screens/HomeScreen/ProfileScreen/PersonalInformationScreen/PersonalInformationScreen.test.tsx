@@ -64,11 +64,11 @@ context('PersonalInformationScreen', () => {
     expect(screen.getByText('Loading your personal information...')).toBeTruthy()
     await waitFor(() => expect(screen.getByLabelText('Personal information')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Any updates you make here will also update in your VA.gov profile.')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('How to update or fix an error in your legal name')).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('link', { name: 'How to update or fix an error in your legal name' })).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Date of birth')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('How to fix an error in your date of birth')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Preferred name')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Gender identity')).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('link', { name: 'How to fix an error in your date of birth' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Preferred name' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Gender identity' })).toBeTruthy())
   })
 
   describe('when there is no birth date', () => {
