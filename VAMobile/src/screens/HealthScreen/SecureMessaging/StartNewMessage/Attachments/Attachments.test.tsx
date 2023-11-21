@@ -114,7 +114,7 @@ context('Attachments', () => {
         const failCasePromise = Promise.resolve({ uri: 'uri', name: 'custom-file-name.docx', type: 'docx', size: 90000000 } as DocumentPickerResponse)
         jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
 
-        fireEvent.press(screen.getByText('Select a file'))
+        fireEvent.press(screen.getByRole('button', { name: 'Select a file' }))
 
         const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
