@@ -3,7 +3,7 @@ import { Share } from 'react-native'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
+import { context, mockNavProps, render, when } from 'testUtils'
 import SettingsScreen from './index'
 import { InitialState } from 'store/slices'
 import { featureEnabled } from 'utils/remoteConfig'
