@@ -20,7 +20,7 @@ const AppointmentAlert: FC<AppointmentAlertProps> = ({ attributes }) => {
   const appointmentHidden = status === AppointmentStatusConstants.HIDDEN
   const appointmentCanceled = status === AppointmentStatusConstants.CANCELLED
 
-  // dont show alerts for booked or hidden appointments
+  // dont show alerts for booked or hidden appointments or phone appointments
   if (appointmentBooked || appointmentHidden || phoneOnly) {
     return <></>
   }
