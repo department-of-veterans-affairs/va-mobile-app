@@ -5,7 +5,7 @@ import 'jest-styled-components'
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 
-import { context, findByTestID, render, RenderAPI, waitFor } from 'testUtils'
+import { context, findByTestID, render, RenderAPI, screen, waitFor } from 'testUtils'
 import VASelector, { SelectorType } from './VASelector'
 import { TextView } from '../../index'
 import Mock = jest.Mock
@@ -110,8 +110,8 @@ context('VASelector', () => {
       const checkBoxError = findByTestID(testInstance, 'CheckBoxError')
       expect(checkBoxError).toBeTruthy()
 
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 2].props.children).toEqual('ERROR MESSAGE')
+      expect(testInstance.findByProps({ children: 'ERROR MESSAGE' })).toBeTruthy()
+      expect(screen.getByText('ERROR MESSAGE')).toBeTruthy()
     })
   })
 })
