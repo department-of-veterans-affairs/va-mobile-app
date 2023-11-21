@@ -1,23 +1,18 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import Mock = jest.Mock
+import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
 import CrisisLineCta from './CrisisLineCta'
-import { RenderAPI } from '@testing-library/react-native'
 
 context('CrisisLineCta', () => {
-  let component: RenderAPI
-  let onPressSpy: Mock
+  const onPressSpy = jest.fn()
 
   beforeEach(() => {
-    onPressSpy = jest.fn(() => {})
-    component = render(<CrisisLineCta onPress={onPressSpy} />)
+    render(<CrisisLineCta onPress={onPressSpy} />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('calls onPress function on click', () => {
+    fireEvent.press(screen.getByRole('button', { name: 'Talk to the Veterans Crisis Line now' }))
+    expect(onPressSpy).toBeCalled()
   })
 })

@@ -1,12 +1,14 @@
 package gov.va.mobileapp.native_modules
 
 import android.content.Intent
-import android.content.Intent.*
+import android.content.Intent.ACTION_VIEW
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.webkit.CookieManager
 import android.webkit.ValueCallback
 import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
@@ -83,13 +85,27 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
                             }
                             .build()
 
-            // Check default browser to prevent Firefox login issue (Android only)
-            val browserIntent = Intent("android.intent.action.VIEW", Uri.parse("https://"));
-            val resolveInfo = context.packageManager.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY);
-            val packageName = resolveInfo?.activityInfo?.packageName;
-            if (packageName != null && packageName.contains("firefox")) {
-                // Default browser is Firefox. Need flag for login to succeed
-                customTabsIntent.intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+            // Get full list of installed packages that handle https URLs
+            // https://developer.chrome.com/docs/android/custom-tabs/howto-custom-tab-check/
+            val intent = Intent(ACTION_VIEW, Uri.parse("https://www.example.com"))
+            val intentHandlers = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL)
+            val intentHandlerPackages = intentHandlers.map {
+                it.activityInfo.packageName
+            }.toTypedArray().asList()
+
+            // From the above list, find a package that supports Custom Tabs. If no installed
+            // packages support Custom Tabs, packageName will be set to null here
+            val packageName = CustomTabsClient.getPackageName(context, intentHandlerPackages)
+
+            // If packageName is present, that package supports Custom Tabs, so use it
+            // TODO: Inform user when no installed packages support Custom Tabs
+            if (!packageName.isNullOrEmpty()) {
+                customTabsIntent.intent.setPackage(packageName)
+
+                // Firefox needs a new task for login to succeed
+                if (packageName.contains("firefox")) {
+                    customTabsIntent.intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+                }
             }
 
             context.currentActivity?.apply { customTabsIntent.launchUrl(this, authURI) }
