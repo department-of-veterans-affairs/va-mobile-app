@@ -88,7 +88,7 @@ context('MessageCard', () => {
     })
 
   it('clicking on attachment should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', () => {
-    fireEvent.press(screen.getByText('testAttachment (1 MB)'))
+    fireEvent.press(screen.getByRole('button', { name: 'testAttachment (1 MB)' }))
     expect(downloadFileAttachment).toBeCalledWith(listOfAttachments[0], 'attachment-1')
   })
 })
