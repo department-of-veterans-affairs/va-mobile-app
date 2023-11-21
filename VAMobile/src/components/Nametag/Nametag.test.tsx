@@ -1,21 +1,30 @@
-import 'react-native'
 import React from 'react'
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
+import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, render, RenderAPI } from 'testUtils'
+import { context, render } from 'testUtils'
 import Nametag from './Nametag'
 import { InitialState } from 'store/slices'
-import { TextView, VAIcon } from 'components'
-import { ServiceData } from 'store/api/types'
+import { BranchesOfServiceConstants } from 'store/api/types'
 
+const mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => {
+      return mockNavigationSpy
+    },
+  }
+})
+const navigateToSpy = jest.fn()
+mockNavigationSpy.mockReturnValue(navigateToSpy)
 
 jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
   let original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({
-      status: "success",
+      status: 'success',
       data: {
         appeals: true,
         appointments: true,
@@ -32,24 +41,31 @@ jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
         prescriptions: true,
         scheduleAppointments: true,
         secureMessaging: true,
-        userProfileUpdate: true
-      }
-    })
+        userProfileUpdate: true,
+      },
+    }),
   }
 })
 
 context('Nametag', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
-  const prepInstanceWithStore = (mostRecentBranch?: string) => {
-    component = render(<Nametag />, {
+  const renderWithBranch = (mostRecentBranch: string) => {
+    render(<Nametag />, {
       preloadedState: {
         ...InitialState,
         militaryService: {
           ...InitialState.militaryService,
-          mostRecentBranch: mostRecentBranch || 'United States Air Force',
-          serviceHistory: [{} as ServiceData],
+          mostRecentBranch,
+          serviceHistory: [
+            {
+              branchOfService: 'United States Air Force',
+              beginDate: '1998-09-01',
+              endDate: '2000-01-01',
+              formattedBeginDate: 'September 01, 1998',
+              formattedEndDate: 'January 01, 2000',
+              characterOfDischarge: 'Honorable',
+              honorableServiceIndicator: 'Y',
+            },
+          ],
         },
         disabilityRating: {
           ...InitialState.disabilityRating,
@@ -62,81 +78,46 @@ context('Nametag', () => {
         },
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
-    prepInstanceWithStore('United States Air Force')
+    jest.clearAllMocks()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
-  describe('when the military branch is United States Air Force', () => {
-    it('should display the AirForce component', async () => {
-      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('AirForce')
+  for (const branch of Object.values(BranchesOfServiceConstants)) {
+    it(`displays correct icon and text for ${branch}`, () => {
+      renderWithBranch(branch)
+      expect(screen.getByTestId(branch)).toBeTruthy()
+      expect(screen.getByRole('button', { name: branch })).toBeTruthy()
     })
+  }
+
+  it('navigates on button press', () => {
+    renderWithBranch('United States Air Force')
+    fireEvent.press(screen.getByRole('button', { name: 'United States Air Force' }))
+    expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
+    expect(navigateToSpy).toHaveBeenCalledWith()
   })
 
-  describe('when the military branch is United States Army', () => {
-    it('should display the Army component', async () => {
-      prepInstanceWithStore('United States Army')
-      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Army')
-    })
-  })
-
-  describe('when the military branch is United States Coast Guard', () => {
-    it('should display the CoastGuard component', async () => {
-      prepInstanceWithStore('United States Coast Guard')
-      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('CoastGuard')
-    })
-  })
-
-  describe('when the military branch is United States Marine Corps', () => {
-    it('should display the MarineCorps component', async () => {
-      prepInstanceWithStore('United States Marine Corps')
-      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('MarineCorps')
-    })
-  })
-
-  describe('when the military branch is United States Navy', () => {
-    it('should display the Navy component', async () => {
-      prepInstanceWithStore('United States Navy')
-      expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('Navy')
-    })
-  })
-
-  describe('when the service history is empty', () => {
-    it('should not display the Branch name', async () => {
-      component = render(<Nametag />, {
-        preloadedState: {
-          ...InitialState,
-          militaryService: {
-            ...InitialState.militaryService,
-            serviceHistory: [],
-          },
+  it('does not display branch when service history is empty', () => {
+    render(<Nametag />, {
+      preloadedState: {
+        ...InitialState,
+        militaryService: {
+          ...InitialState.militaryService,
+          serviceHistory: [],
         },
-      })
-
-      testInstance = component.UNSAFE_root
-
-      expect(testInstance.findAllByType(TextView)).toHaveLength(1)
+      },
     })
+    expect(screen.queryByRole('button')).toBeFalsy()
   })
 
-  describe('when the user does not have militaryServiceHistory authorized service', () => {
-    it('should not display the Branch name', async () => {
-      component = render(<Nametag />, {
-        preloadedState: {
-          ...InitialState,
-        },
-      })
-
-      testInstance = component.UNSAFE_root
-
-      expect(testInstance.findAllByType(TextView)).toHaveLength(1)
+  it('does not display branch when militaryService is absent', () => {
+    render(<Nametag />, {
+      preloadedState: {
+        ...InitialState,
+      },
     })
+    expect(screen.queryByRole('button')).toBeFalsy()
   })
 })
