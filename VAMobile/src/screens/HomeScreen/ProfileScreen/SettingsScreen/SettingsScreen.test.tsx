@@ -4,11 +4,15 @@ import { Share } from 'react-native'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, findByTypeWithText, mockNavProps, render, RenderAPI } from 'testUtils'
+import { context, findByTestID, findByTypeWithText, mockNavProps, render, RenderAPI, when } from 'testUtils'
 import SettingsScreen from './index'
 import { InitialState } from 'store/slices'
 import { TextView } from 'components'
 import getEnv from 'utils/env'
+import { featureEnabled } from 'utils/remoteConfig'
+
+jest.mock('utils/remoteConfig')
+when(featureEnabled as jest.Mock).calledWith('inAppRecruitment').mockReturnValue(true)
 
 jest.mock('react-native/Libraries/Share/Share', () => {
   return {

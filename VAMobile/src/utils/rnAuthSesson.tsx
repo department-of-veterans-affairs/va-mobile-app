@@ -19,11 +19,3 @@ export const startAuthSession = async (codeChallenge: string): Promise<string> =
     return await CustomTabs.beginAuthSession(AUTH_SIS_ENDPOINT, codeChallenge)
   }
 }
-
-export const clearCookies = async (): Promise<boolean> => {
-  if (isIOS()) {
-    return await RnAuthSession.clearCookies()
-  } else {
-    return await CustomTabs.clearCookies()
-  }
-}

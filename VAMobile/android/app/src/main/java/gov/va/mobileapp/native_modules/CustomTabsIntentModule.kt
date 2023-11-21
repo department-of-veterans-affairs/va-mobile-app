@@ -5,8 +5,6 @@ import android.content.Intent.ACTION_VIEW
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.webkit.CookieManager
-import android.webkit.ValueCallback
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
@@ -18,18 +16,6 @@ import gov.va.mobileapp.R
 
 class CustomTabsIntentModule(private val context: ReactApplicationContext) :
         ReactContextBaseJavaModule(context) {
-
-    @Throws(java.lang.Exception::class)
-    private fun getCookieManager(): CookieManager? {
-        return try {
-            val cookieManager = CookieManager.getInstance()
-            cookieManager.setAcceptCookie(true)
-            cookieManager
-        } catch (e: java.lang.Exception) {
-            throw java.lang.Exception(e)
-        }
-    }
-
 
     @ReactMethod
     fun beginAuthSession(
@@ -112,23 +98,6 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
             promise.resolve(true)
         } catch (e: Throwable) {
             promise.reject("Custom Tabs Error", e)
-        }
-    }
-
-    @ReactMethod
-    fun clearCookies(
-        promise: Promise
-    ) {
-        try {
-            val cookieManager: CookieManager? = getCookieManager()
-            cookieManager?.removeAllCookies(ValueCallback<Boolean?> { value ->
-                promise.resolve(
-                    value
-                )
-            })
-            cookieManager?.flush()
-        } catch (e: Exception) {
-            promise.resolve(false)
         }
     }
 
