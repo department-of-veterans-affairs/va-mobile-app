@@ -96,7 +96,7 @@ context('AskForClaimDecision', () => {
   describe('on click of submit', () => {
     describe('if the check box is not checked', () => {
       it('should display the field error', () => {
-        fireEvent.press(screen.getByText('Request claim evaluation'))
+        fireEvent.press(screen.getByRole('button', { name: 'Request claim evaluation' }))
         expect(submitClaimDecision).not.toHaveBeenCalled()
         expect(screen.getByText('Check the box to confirm the information is correct.')).toBeTruthy()
       })
