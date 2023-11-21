@@ -1,9 +1,9 @@
 import React from 'react'
-import ClaimPhase from './ClaimPhase'
+import { screen, fireEvent } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
 import { context, render } from 'testUtils'
-import { screen, fireEvent } from '@testing-library/react-native'
+import ClaimPhase from './ClaimPhase'
 import { claim } from '../../../claimData'
 
 const mockNavigationSpy = jest.fn()
