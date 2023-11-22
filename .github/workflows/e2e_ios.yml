@@ -83,7 +83,7 @@ jobs:
         run: yarn e2e:ios-build
 
       - name: Run e2e tests for iOS
-        run: yarn e2e:android-test /e2e/tests/ContactInformation.e2e --take-screenshots failing --updateSnapshot
+        run: yarn e2e:ios-test /e2e/tests/ContactInformation.e2e --take-screenshots failing --updateSnapshot
 
       - name: Upload artifacts on failure
         if: failure()
