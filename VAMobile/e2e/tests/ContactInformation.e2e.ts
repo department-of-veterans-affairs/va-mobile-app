@@ -308,7 +308,7 @@ export async function verifyNonUSorMilitaryAddresses(addressID, addressType) {
     await expect(element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID))).not.toExist()
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('123 Main St')
     await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
-    await element(by.id(ContactInfoE2eIdConstants.MILITARY_POST_OFFICE_ID)).tap()
+    await element(by.text('APO/FPO/DPO (Required)')).tap()
     await element(by.text('FPO')).tap()
     await element(by.text('Done')).tap()
     await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
