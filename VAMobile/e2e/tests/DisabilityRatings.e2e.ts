@@ -17,7 +17,7 @@ beforeAll(async () => {
   await openDisabilityRating()
 })
 
-describe('Veterans Crisis Line', () => {
+describe('Disability Ratings', () => {
   it('should match the disability ratings page design', async () => {
     await expect(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toExist()
     await expect(element(by.text(DisabilityRatingsIdConstants.COMBINED_DISABILITY_RATING_TEXT))).toExist()
@@ -28,7 +28,7 @@ describe('Veterans Crisis Line', () => {
     await expect(element(by.text('Need Help?'))).toExist()
   })
 
-  it('should tap About VA disability ratings and verify the correct information is displayed', async () => {
+  it('verify About VA disability ratings information', async () => {
     await element(by.id(DisabilityRatingsIdConstants.DISABILITY_RATING_PAGE_ID)).scrollTo('bottom')
     await element(by.id(DisabilityRatingsIdConstants.ABOUT_DISABILITY_RATINGS_LINK_ID)).tap()
     await element(by.text('Ok')).tap()
@@ -37,7 +37,7 @@ describe('Veterans Crisis Line', () => {
     await device.launchApp({ newInstance: false })
   })
 
-  it('should tap the links in the get help section and verify the correct information', async() => {
+  it('verify links in the get help section', async() => {
     if (device.getPlatform() === 'android') {
 			await element(by.text('800-827-1000')).tap()
 			await device.takeScreenshot('DisabilityRatingAndroidCallingScreen')
