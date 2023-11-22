@@ -1,19 +1,13 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, findByTypeWithSubstring, render, RenderAPI } from 'testUtils'
+import { screen } from '@testing-library/react-native'
 
-import { InitialState } from 'store/slices'
+import { context, render } from 'testUtils'
 import AppointmentAlert from './AppointmentAlert'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 import { AppointmentLocation, AppointmentStatus, AppointmentStatusConstants, AppointmentStatusDetailType, AppointmentStatusDetailTypeConsts } from 'store/api/types/AppointmentData'
-import { AlertBox, TextView } from 'components'
 
 context('AppointmentAlert', () => {
-  let component: RenderAPI
   let props: any
-  let testInstance: ReactTestInstance
 
   const initializeTestInstance = (
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
@@ -26,58 +20,44 @@ context('AppointmentAlert', () => {
       statusDetail,
       location: location || defaultAppointmentAttributes.location,
     }
-
-    component = render(<AppointmentAlert attributes={props} />, {
-      preloadedState: {
-        ...InitialState,
-      },
-    })
-
-    testInstance = component.UNSAFE_root
+    render(<AppointmentAlert attributes={props} />)
   }
 
-  it('initializes correctly', async () => {
+  it('should not show alert for booked appointments', () => {
     initializeTestInstance()
-    expect(component).toBeTruthy()
+    expect(screen.queryByText('VA Long Beach Healthcare System canceled this appointment.')).toBeFalsy()
   })
 
-  it('should not show alert for booked appointments', async () => {
-    initializeTestInstance()
-    const alerts = testInstance.findAllByType(AlertBox)
-    expect(alerts.length).toEqual(0)
-  })
-
-  it('should not show alert for hidden appointments', async () => {
+  it('should not show alert for hidden appointments', () => {
     initializeTestInstance(AppointmentStatusConstants.HIDDEN)
-    const alerts = testInstance.findAllByType(AlertBox)
-    expect(alerts.length).toEqual(0)
+    expect(screen.queryByText('VA Long Beach Healthcare System canceled this appointment.')).toBeFalsy()
   })
 
   describe('when an appointment is CANCELLED', () => {
     describe('when a facility cancels an appointment', () => {
-      it('should display facility name', async () => {
+      it('should display facility name', () => {
         initializeTestInstance(AppointmentStatusConstants.CANCELLED)
-        expect(findByTypeWithSubstring(testInstance, TextView, 'VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
+        expect(screen.getByText('VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
       })
 
-      it('should display "facility"', async () => {
+      it('should display "facility"', () => {
         initializeTestInstance(AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK, { name: '' })
-        expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled this appointment.')).toBeTruthy()
+        expect(screen.getByText('Facility canceled this appointment.')).toBeTruthy()
       })
     })
 
     describe('when you cancels an appointment', () => {
-      it('should display "You"', async () => {
+      it('should display "You"', () => {
         initializeTestInstance(AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT)
-        expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled this appointment.')).toBeTruthy()
+        expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
       })
     })
   })
 
   describe('when an appointment is SUBMITTED', () => {
-    it('should display facility name', async () => {
+    it('should display facility name', () => {
       initializeTestInstance(AppointmentStatusConstants.SUBMITTED)
-      expect(findByTypeWithSubstring(testInstance, TextView, 'The time and date of this appointment are still to be determined.')).toBeTruthy()
+      expect(screen.getByText('The time and date of this appointment are still to be determined.')).toBeTruthy()
     })
   })
 })

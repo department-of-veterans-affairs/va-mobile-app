@@ -52,7 +52,7 @@ beforeAll(async () => {
     .withTimeout(10000)
 })
 
-describe('Personal Information Screen', () => {
+describe('Personal Info Screen', () => {
   it('should match design', async () => {
     await expect(element(by.text('Date of birth'))).toExist()
     await expect(element(by.text('January 01, 1950'))).toExist()

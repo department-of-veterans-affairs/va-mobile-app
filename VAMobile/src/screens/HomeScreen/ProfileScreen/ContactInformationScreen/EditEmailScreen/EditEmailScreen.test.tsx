@@ -30,7 +30,7 @@ describe('EditEmailScreen', () => {
   })
 
   describe('when an email exists', () => {
-    it('initializes the text input with the current email', async () => {
+    it('initializes the text input with the current email', () => {
       renderWithOptions([{
         queryKey: contactInformationKeys.contactInformation,
         data: {
@@ -41,7 +41,7 @@ describe('EditEmailScreen', () => {
         }
       }])
   
-      await waitFor(() => expect(screen.getByDisplayValue('my@email.com')).toBeTruthy())
+      expect(screen.getByDisplayValue('my@email.com')).toBeTruthy()
     })
   })
 
@@ -54,23 +54,19 @@ describe('EditEmailScreen', () => {
   })
 
   describe('when the email does not have an @ followed by text on save', () => {
-    it('displays an AlertBox and field error', async () => {
+    it('displays an AlertBox and field error', () => {
       fireEvent.changeText(screen.getByTestId('emailAddressEditTestID'), 'myemail')
       fireEvent.press((screen.getByRole('button', { name: 'Save' })))
-      await waitFor(() => {
-        expect(screen.getByText('Check your email address')).toBeTruthy()
-        expect(screen.getByText('Enter your email address again using this format: X@X.com')).toBeTruthy()
-      })
+      expect(screen.getByText('Check your email address')).toBeTruthy()
+      expect(screen.getByText('Enter your email address again using this format: X@X.com')).toBeTruthy()
     })
   })
 
   describe('when the email input is empty on save', () => {
-    it('displays an AlertBox and field error', async () => {
+    it('displays an AlertBox and field error', () => {
       fireEvent.press((screen.getByRole('button', { name: 'Save' })))
-      await waitFor(() => {
-        expect(screen.getByText('Check your email address')).toBeTruthy()
-        expect(screen.getByText('Enter your email address again using this format: X@X.com')).toBeTruthy()
-      })
+      expect(screen.getByText('Check your email address')).toBeTruthy()
+      expect(screen.getByText('Enter your email address again using this format: X@X.com')).toBeTruthy()
     })
   })
 

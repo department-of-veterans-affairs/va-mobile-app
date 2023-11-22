@@ -1,13 +1,8 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, render, RenderAPI } from 'testUtils'
-import { VAButton } from 'components'
+import { context, render } from 'testUtils'
 import ReplyMessageButton from './ReplyMessageButton'
-import { waitFor } from '@testing-library/react-native'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -21,25 +16,17 @@ jest.mock('utils/hooks', () => {
 })
 
 context('ReplyMessageButton', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let navigateToSpy: jest.Mock
 
   beforeEach(() => {
     navigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(navigateToSpy)
-    component = render(<ReplyMessageButton messageID={1} />)
-
-    testInstance = component.UNSAFE_root
-  })
-
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+    render(<ReplyMessageButton messageID={1} />)
   })
 
   describe('on click of the footer button', () => {
-    it('should call useRouteNavigation', async () => {
-      testInstance.findByType(VAButton).props.onPress()
+    it('should call useRouteNavigation', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Reply' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('ReplyMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {}, messageID: 1 })
       expect(navigateToSpy).toHaveBeenCalled()
     })

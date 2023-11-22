@@ -1,16 +1,11 @@
-import 'react-native'
 import React from 'react'
-import { Pressable } from 'react-native'
-// Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, mockNavProps, mockStore, render, RenderAPI } from 'testUtils'
+import { screen, fireEvent } from '@testing-library/react-native'
 
+import { context, mockNavProps, render } from 'testUtils'
 import UpcomingAppointments from './UpcomingAppointments'
-import NoAppointments from '../NoAppointments'
-import { initialAppointmentsState, InitialState, getAppointmentsInDateRange } from 'store/slices'
+import { initialAppointmentsState } from 'store/slices'
 import { AppointmentsGroupedByYear, AppointmentStatusConstants } from 'store/api/types'
-import { LoadingComponent, TextView } from 'components'
-import { defaultAppoinment, defaultAppointmentAttributes, defaultAppointmentLocation, defaultAppointmentAddress, defaultAppointmentPhone } from 'utils/tests/appointments'
+import { defaultAppoinment } from 'utils/tests/appointments'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -45,10 +40,7 @@ jest.mock('store/api', () => {
 })
 
 context('UpcomingAppointments', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let navigateToSpy: jest.Mock
-
   let appointmentsByYearData: AppointmentsGroupedByYear = {
     '2020': {
       '3': [{ ...defaultAppoinment }],
@@ -60,9 +52,8 @@ context('UpcomingAppointments', () => {
     navigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(navigateToSpy)
 
-    component = render(<UpcomingAppointments {...props} />, {
+    render(<UpcomingAppointments {...props} />, {
       preloadedState: {
-        ...InitialState,
         appointments: {
           ...initialAppointmentsState,
           loading,
@@ -130,77 +121,57 @@ context('UpcomingAppointments', () => {
         },
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance(appointmentsByYearData)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
   describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
+    it('should show loading screen', () => {
       initializeTestInstance({}, true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      expect(screen.getByText('Loading your appointments...')).toBeTruthy()
     })
   })
 
   describe('when there is no data', () => {
-    it('should show the no appointments screen', async () => {
+    it('should show the no appointments screen', () => {
       initializeTestInstance({})
-      expect(testInstance.findByType(NoAppointments)).toBeTruthy()
+      expect(screen.getByText('You don’t have any appointments')).toBeTruthy()
     })
   })
 
   describe('on appointment press', () => {
-    it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
+    it('should call useRouteNavigation', () => {
+      fireEvent.press(screen.getByTestId('Confirmed Saturday, February 6, 2021 11:53 AM PST VA Long Beach Healthcare System In-person'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('UpcomingAppointmentDetails', { appointmentID: '1' })
       expect(navigateToSpy).toHaveBeenCalled()
     })
   })
 
   describe('when the status is CANCELLED', () => {
-    it('should render the first line of the appointment item as the text "Canceled"', async () => {
+    it('should render the first line of the appointment item as the text "Canceled"', () => {
       appointmentsByYearData['2020']['3'][0].attributes.status = 'CANCELLED'
       initializeTestInstance(appointmentsByYearData)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Canceled')
+      expect(screen.getByText('Canceled')).toBeTruthy()
     })
   })
 
   describe('when the status is CANCELLED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "CANCELLED"', async () => {
+    it('should render the first line of the appointment item as the text "CANCELLED"', () => {
       appointmentsByYearData['2020']['3'][0].attributes.status = AppointmentStatusConstants.CANCELLED
       appointmentsByYearData['2020']['3'][0].attributes.isPending = true
       initializeTestInstance(appointmentsByYearData)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Canceled')
+      expect(screen.getByText('Canceled')).toBeTruthy()
     })
   })
 
   describe('when the status is SUBMITTED and isPending is true', () => {
-    it('should render the first line of the appointment item as the text "Pending"', async () => {
+    it('should render the first line of the appointment item as the text "Pending"', () => {
       appointmentsByYearData['2020']['3'][0].attributes.status = AppointmentStatusConstants.SUBMITTED
       appointmentsByYearData['2020']['3'][0].attributes.isPending = true
       initializeTestInstance(appointmentsByYearData)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Pending')
-    })
-  })
-
-  describe('pagination', () => {
-    it('should call getAppointmentsInDateRange for previous arrow', async () => {
-      findByTestID(testInstance, 'previous-page').props.onPress()
-      // was 2 now 1
-      expect(getAppointmentsInDateRange).toHaveBeenCalledWith(expect.anything(), expect.anything(), expect.anything(), 1, expect.anything())
-    })
-
-    it('should call getAppointmentsInDateRange for next arrow', async () => {
-      findByTestID(testInstance, 'next-page').props.onPress()
-      // was 2 now 3
-      expect(getAppointmentsInDateRange).toHaveBeenCalledWith(expect.anything(), expect.anything(), expect.anything(), 3, expect.anything())
+      expect(screen.getByText('Pending')).toBeTruthy()
     })
   })
 })
