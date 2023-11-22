@@ -37,6 +37,7 @@ env:
 
 jobs:
   start_slack_thread:
+    if: github.event_name == 'schedule'
     name: Start Slack thread
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
@@ -111,7 +112,7 @@ jobs:
 
       - name: Inform Slack of Failure
         id: post_failure
-        if: failure()
+        if: failure() && github.event_name == 'schedule'
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
@@ -122,7 +123,7 @@ jobs:
 
       - name: Inform Slack of success
         id: post_success
-        if: ${{!failure()}}
+        if: ${{!failure()}} && github.event_name == 'schedule'
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
