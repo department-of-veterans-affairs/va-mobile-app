@@ -6,12 +6,12 @@ name: '[e2e] iOS Detox Test Run'
 
 on:
   push:
-    #branches:
-    #  - 'dependabot/**'
-  #workflow_dispatch:
-  #workflow_run:
-  #  workflows: ['[Release] New Release Issue']
-  #  types: [completed]
+    branches:
+      - 'dependabot/**'
+  workflow_dispatch:
+  workflow_run:
+    workflows: ['[Release] New Release Issue']
+    types: [completed]
 
 defaults:
   run:
@@ -83,7 +83,7 @@ jobs:
         run: yarn e2e:ios-build
 
       - name: Run e2e tests for iOS
-        run: yarn e2e:ios-test /e2e/tests/ContactInformation.e2e --take-screenshots failing --updateSnapshot
+        run: yarn e2e:ios-test --take-screenshots failing --updateSnapshot
 
       - name: Upload artifacts on failure
         if: failure()
@@ -98,9 +98,9 @@ jobs:
           name: e2e-junit
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
-  #send_test_results_to_testrail:
-  #  if: github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped'
-  #  needs: [e2e-ios]
-  #  name: Update testRail Results
-  #  uses: ./.github/workflows/update_testrail_results.yml
-  #  secrets: inherit
+  send_test_results_to_testrail:
+    if: github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped'
+    needs: [e2e-ios]
+    name: Update testRail Results
+    uses: ./.github/workflows/update_testrail_results.yml
+    secrets: inherit

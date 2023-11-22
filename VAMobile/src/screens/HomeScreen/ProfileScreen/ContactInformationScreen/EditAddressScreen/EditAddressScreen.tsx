@@ -374,6 +374,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           includeBlankPlaceholder: true,
           labelKey: 'editAddress.militaryPostOffices',
           isRequiredField: true,
+          testID: 'militaryPostOfficeTestID',
         },
         fieldErrorMessage: t('editAddress.validOptionFieldError'),
       }
@@ -407,6 +408,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           labelKey: 'editAddress.state',
           includeBlankPlaceholder: true,
           isRequiredField: true,
+          testID: 'stateTestID',
         },
         fieldErrorMessage: checkboxSelected ? t('editAddress.validOptionFieldError') : t('editAddress.stateFieldError'),
       }
@@ -479,6 +481,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         includeBlankPlaceholder: true,
         isRequiredField: true,
         disabled: checkboxSelected,
+        testID: 'countryPickerTestID',
       },
       fieldErrorMessage: t('editAddress.countryFieldError'),
       hideField: checkboxSelected,

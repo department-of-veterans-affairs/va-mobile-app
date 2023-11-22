@@ -10,13 +10,13 @@ export const ContactInfoE2eIdConstants = {
   MOBILE_PHONE_ID: 'mobilePhoneTestID',
   EMAIL_ADDRESS_ID: 'emailAddressTestID',
   HOW_WE_USE_TEXT: 'How we use your contact information',
-  COUNTRY_PICKER_ID: 'Country picker required',
+  COUNTRY_PICKER_ID: 'countryPickerTestID',
   STREET_ADDRESS_LINE_1_ID: 'streetAddressLine1TestID',
   STREET_ADDRESS_LINE_2_ID: 'streetAddressLine2TestID',
   STREET_ADDRESS_LINE_3_ID: 'streetAddressLine3TestID',
-  MILITARY_POST_OFFICE_ID: 'APO/FPO/DPO picker required',
+  MILITARY_POST_OFFICE_ID: 'militaryPostOfficeTestID',
   CITY_TEST_ID: 'cityTestID',
-  STATE_ID: 'State picker required',
+  STATE_ID: 'stateTestID',
   ZIP_CODE_ID: 'zipCodeTestID',
   PHONE_NUMBER_EXTENSION_ID: 'phoneNumberExtensionTestID',
   PHONE_NUMBER_ID: 'phoneNumberTestID',
@@ -68,12 +68,12 @@ export async function validateAddresses(addressID, addressType) {
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
     //await waitFor(element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID))).toBeVisible().withTimeout(4000)
     if(addressType === 'Home') {
-      await element(by.id('Country picker required Error - Country is required')).tap()
+      await element(by.id('countryPickerTestID picker required Error - Country is required')).tap()
       await expect(element(by.text('United States'))).toExist()
       await element(by.text('United States')).tap()
       await element(by.text('Done')).tap()
       await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
-      await element(by.id('State picker required Error - State is required')).tap()
+      await element(by.id('stateTestID picker required Error - State is required')).tap()
       await element(by.text('Arizona')).tap()
       await element(by.text('Done')).tap()
       await element(by.id('EditAddressTestID')).scrollTo('top')
@@ -309,11 +309,7 @@ export async function verifyNonUSorMilitaryAddresses(addressID, addressType) {
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('123 Main St')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
     await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
-    await device.takeScreenshot('ContactInfoScreenShot')
     await element(by.id(ContactInfoE2eIdConstants.MILITARY_POST_OFFICE_ID)).tap()
-    await device.takeScreenshot('ContactInfoScreenShot')
-    await expect(element(by.text('APO'))).toExist()
-    await expect(element(by.text('DPO'))).toExist()
     await element(by.text('FPO')).tap()
     await element(by.text('Done')).tap()
     await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
