@@ -24,7 +24,7 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal, claimId, claimType, cla
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const AppealData = (): ReactElement => {
+  const renderAppealData = (): ReactElement => {
     if (!isAppeal) {
       return <></>
     }
@@ -68,7 +68,7 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal, claimId, claimType, cla
         </TextView>
       </Box>
       <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} fireAnalytic={fireAnalytic} />
-      <AppealData />
+      {renderAppealData()}
     </TextArea>
   )
 }

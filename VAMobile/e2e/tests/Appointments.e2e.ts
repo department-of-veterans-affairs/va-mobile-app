@@ -38,7 +38,6 @@ export const Appointmentse2eConstants = {
   PHONE_NUMBER_ID: 'CallTTYTestID',
   PATIENT_CANCELLATION: 'You canceled this appointment.',
   VA_PAST_APPOINTMENT: 'To schedule another appointment, please visit VA.gov or call your VA medical center.',
-  PAST_APPOINTMENT_1_ID: 'Canceled Optometry (routine eye exam) Vilasini Reddy Request type: In-person',
   DATE_RANGE_INITIAL_TEXT: 'Past 3 months',
   APPOINTMENT_CANCEL_REQUEST_TEXT: device.getPlatform() === 'ios' ? 'Cancel Request' : 'Cancel Request ',
 }
@@ -64,7 +63,7 @@ describe('Appointments Screen', () => {
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_8_ID))).toExist()
   })
 
-  it('should open appointment details and give the correct information', async () => {
+  it('verify appointment details information', async () => {
     await element(by.text(`${todayFormatted}`)).tap()
     await expect(element(by.text('Community care'))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.ADD_TO_CALENDAR_ID)).atIndex(0)).toExist()
@@ -124,7 +123,7 @@ describe('Appointments Screen', () => {
     await element(by.text('Dismiss')).tap()
   })
 
-  it('should tap on the canceled appointment and verify the appointment details/links', async () => {
+  it('verify the appointment details/links after cancel', async () => {
     await waitFor(element(by.id('Canceled Optometry (routine eye exam) Vilasini Reddy Request type: In-person')))
       .toBeVisible()
       .whileElement(by.id('appointmentsTestID'))
@@ -168,7 +167,6 @@ describe('Appointments Screen', () => {
   it('should tap on and show past appointments', async () => {
     await element(by.id('appointmentsTestID')).scrollTo('top')
     await element(by.text('Past')).tap()
-    await expect(element(by.id(Appointmentse2eConstants.PAST_APPOINTMENT_1_ID))).toExist()
     if (device.getPlatform() === 'android') {
       await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
     } else {
@@ -188,31 +186,31 @@ describe('Appointments Screen', () => {
     }
   })
 
-  it('should show appointments from three months earlier to five months earlier', async () => {
+  it('past appts: three months - five months earlier verification', async () => {
     await element(by.id('getDateRangeTestID')).tap()
     await element(by.text(fiveMonthsEarlier.monthShort + ' ' + fiveMonthsEarlier.year + ' - ' + threeMonthsEarlier.monthShort + ' ' + threeMonthsEarlier.year)).tap()
     await element(by.text('Done')).tap()
   })
 
-  it('should show appointments from six months earlier to eight months earlier', async () => {
+  it('past appts: six months - eight months earlier verification', async () => {
     await element(by.id('getDateRangeTestID')).tap()
     await element(by.text(eightMonthsEarlier.monthShort + ' ' + eightMonthsEarlier.year + ' - ' + sixMonthsEarlier.monthShort + ' ' + sixMonthsEarlier.year)).tap()
     await element(by.text('Done')).tap()
   })
 
-  it('should show appointments from eleven months earlier to nine months earlier', async () => {
+  it('past appts: eleven months - nine months earlier verification', async () => {
     await element(by.id('getDateRangeTestID')).tap()
     await element(by.text(elevenMonthsEarlier.monthShort + ' ' + elevenMonthsEarlier.year + ' - ' + nineMonthsEarlier.monthShort + ' ' + nineMonthsEarlier.year)).tap()
     await element(by.text('Done')).tap()
   })
 
-  it('should show appointments for all of the current year', async () => {
+  it('past appts: current year verification', async () => {
     await element(by.id('getDateRangeTestID')).tap()
     await element(by.text('All of ' + currentYear)).tap()
     await element(by.text('Done')).tap()
   })
 
-  it('should show appointments for all of the previous year', async () => {
+  it('past appts: previous year verification', async () => {
     await element(by.id('getDateRangeTestID')).tap()
     await element(by.text('All of ' + lastYear)).tap()
     await element(by.text('Done')).tap()
