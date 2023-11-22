@@ -7,14 +7,13 @@ context('VAModalPicker', () => {
   let selected: string
 
   const initializeTestInstance = (
-    selectedValue: string = 'js',
     labelKey: string = '',
     helperTextKey: string = '',
     isRequiredField: boolean = false,
     error: string = ''
   ) => {
     const props = {
-      selectedValue,
+      selectedValue: 'js',
       onSelectionChange: (updatedSelected: string) => {
         selected = updatedSelected
       },
@@ -45,7 +44,7 @@ context('VAModalPicker', () => {
 
   describe('when an option is selected', () => {
     beforeEach(() => {
-      initializeTestInstance('js')
+      initializeTestInstance()
     })
 
     it('should update selected to the value of that option and select done', () => {
@@ -66,9 +65,8 @@ context('VAModalPicker', () => {
   })
 
   describe('when labelKey and helper text exist', () => {
-
     beforeEach(() => {
-      initializeTestInstance('js', 'Back', 'back.a11yHint')
+      initializeTestInstance('Back', 'back.a11yHint')
     })
 
     it('should render a textview for the label if present', () => {
@@ -83,7 +81,7 @@ context('VAModalPicker', () => {
 
   describe('when there is an error, or a field is required', () => {
     beforeEach(() => {
-      initializeTestInstance('js', 'label', 'back.a11yHint', true, 'ERROR')
+      initializeTestInstance('label', 'back.a11yHint', true, 'ERROR')
     })
 
     it('should display error text', () => {
