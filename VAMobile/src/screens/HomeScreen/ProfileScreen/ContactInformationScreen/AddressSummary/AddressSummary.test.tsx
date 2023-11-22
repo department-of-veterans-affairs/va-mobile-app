@@ -116,9 +116,7 @@ describe('AddressSummary', () => {
           zipCode: '94920',
           zipCodeSuffix: '1234',
         }
-
         renderWithData({mailingAddress})
-
         expect(screen.getByText('Tiburon, Armed Forces Americas (AA) 94920')).toBeTruthy()
       })
     })
@@ -140,7 +138,6 @@ describe('AddressSummary', () => {
           zipCode: '94920',
           zipCodeSuffix: '1234',
         }
-
         renderWithData({mailingAddress})
 
         expect(screen.getByText('Armed Forces Americas (AA) 94920')).toBeTruthy()
@@ -158,7 +155,7 @@ describe('AddressSummary', () => {
         addressPou: 'RESIDENCE/CHOICE',
         addressType: 'INTERNATIONAL',
         city: 'Bolton',
-        countryCodeIso3: '1',
+        countryCodeIso3: 'ESP',
         internationalPostalCode: 'L7E 2W1',
         province: 'Ontario',
         stateCode: 'CA',
@@ -206,7 +203,7 @@ describe('AddressSummary', () => {
           zipCode: '',
           zipCodeSuffix: '',
         }
-        
+
         renderWithData({mailingAddress})
         expect(screen.getByText('Add your mailing address')).toBeTruthy()
       })

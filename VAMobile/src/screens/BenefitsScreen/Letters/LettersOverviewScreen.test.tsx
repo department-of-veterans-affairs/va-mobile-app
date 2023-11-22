@@ -1,34 +1,37 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
-import { when } from 'jest-when'
+import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
+import { context, mockNavProps, render, when } from 'testUtils'
 import { LettersOverviewScreen } from './index'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 let mockNavigationSpy = jest.fn()
-
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  let actual = jest.requireActual('utils/hooks')
   return {
-    ...original,
+    ...actual,
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 context('LettersOverviewScreen', () => {
-  let mockNavigateToSpy: jest.Mock
-
+  let mockNavigateToAddressSpy: jest.Mock
+  let mockNavigateToLettersSpy: jest.Mock
   const initializeTestInstance = () => {
-    mockNavigateToSpy = jest.fn()
+    mockNavigateToAddressSpy = jest.fn()
+    mockNavigateToLettersSpy = jest.fn()
+    const props = mockNavProps()
     when(mockNavigationSpy)
       .mockReturnValue(() => {})
-      .calledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS })
-      .mockReturnValue(mockNavigateToSpy)
+      .calledWith('EditAddress', {
+        displayTitle: 'Mailing address',
+        addressType: profileAddressOptions.MAILING_ADDRESS,
+      })
+      .mockReturnValue(mockNavigateToAddressSpy)
       .calledWith('LettersList')
-      .mockReturnValue(mockNavigateToSpy)
+      .mockReturnValue(mockNavigateToLettersSpy)
 
-    render(<LettersOverviewScreen {...mockNavProps()} />)
+    render(<LettersOverviewScreen {...props} />)
   }
 
   beforeEach(() => {
@@ -44,10 +47,10 @@ context('LettersOverviewScreen', () => {
 
   it('should go to edit address when the address is pressed', () => {
     fireEvent.press(screen.getByRole('button', { name: 'Mailing address Add your mailing address' }))
-    expect(mockNavigateToSpy).toHaveBeenCalled()
+    expect(mockNavigateToAddressSpy).toHaveBeenCalled()
   })
   it('should go to letters list screen when Review letters is pressed', () => {
     fireEvent.press(screen.getByRole('button', { name: 'Review letters' }))
-    expect(mockNavigateToSpy).toHaveBeenCalled()
+    expect(mockNavigateToLettersSpy).toHaveBeenCalled()
   })
 })

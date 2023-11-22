@@ -6,6 +6,7 @@ import React, { FC } from 'react'
 import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { Events } from 'constants/analytics'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -117,17 +118,17 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
         },
       }}>
       <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
-      <HomeScreenStack.Screen name="ContactVA" component={ContactVAScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="ContactVA" component={ContactVAScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
-      <HomeScreenStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ headerShown: false }} />
-      <HomeScreenStack.Screen name="ContactInformation" component={ContactInformationScreen} options={{ headerShown: false }} />
-      <HomeScreenStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={{ headerShown: false }} />
-      <HomeScreenStack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
-      <HomeScreenStack.Screen name="ManageYourAccount" component={ManageYourAccount} options={{ headerShown: false }} />
-      <HomeScreenStack.Screen name="NotificationsSettings" component={NotificationsSettingsScreen} options={{ headerShown: false }} />
-      <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={{ headerShown: false }} />
-      <HomeScreenStack.Screen name="RemoteConfig" component={RemoteConfigScreen} options={{ headerShown: false }} />
-      <HomeScreenStack.Screen name="Sandbox" component={SandboxScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen name="ContactInformation" component={ContactInformationScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen name="Settings" component={SettingsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen name="ManageYourAccount" component={ManageYourAccount} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen name="NotificationsSettings" component={NotificationsSettingsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen name="RemoteConfig" component={RemoteConfigScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen name="Sandbox" component={SandboxScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />
     </HomeScreenStack.Navigator>
   )

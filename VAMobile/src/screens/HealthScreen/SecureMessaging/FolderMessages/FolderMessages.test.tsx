@@ -1,8 +1,5 @@
-import 'react-native'
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
 
 import { context, mockNavProps, render } from 'testUtils'
 import FolderMessages from './FolderMessages'
@@ -124,38 +121,38 @@ context('FolderMessages', () => {
   })
 
   describe('when a message is pressed', () => {
-    it('should call navigate', async () => {
+    it('should call navigate', () => {
       fireEvent.press(screen.getByTestId('Recipient Invalid DateTime Has attachment General: subject'))
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
   describe('when loading is true', () => {
-    it('should render the LoadingComponent', async () => {
+    it('should render the LoadingComponent', () => {
       initializeTestInstance(true)
       expect(screen.getByText('Loading your messages...')).toBeTruthy()
     })
   })
 
   describe('when there are no messages', () => {
-    it('should render the NoFolderMessages', async () => {
+    it('should render the NoFolderMessages', () => {
       initializeTestInstance(false, true)
       expect(screen.getByText("You don't have any messages in this folder")).toBeTruthy()
     })
   })
 
   describe('pagination', () => {
-    it('should call listFolderMessages for previous arrow', async () => {
+    it('should call listFolderMessages for previous arrow', () => {
       fireEvent.press(screen.getByTestId('previous-page'))
       expect(listFolderMessages).toHaveBeenCalledWith(-1, 1, expect.anything())
     })
 
-    it('should call listFolderMessages for next arrow', async () => {
+    it('should call listFolderMessages for next arrow', () => {
       fireEvent.press(screen.getByTestId('next-page'))
       expect(listFolderMessages).toHaveBeenCalledWith(-1, 3, expect.anything())
     })
 
-    it('should show pagination if it is not a system folder', async () => {
+    it('should show pagination if it is not a system folder', () => {
       initializeTestInstance(false, false, 1)
       expect(screen.getByTestId('next-page')).toBeTruthy()
       expect(screen.getByTestId('previous-page')).toBeTruthy()
@@ -164,12 +161,12 @@ context('FolderMessages', () => {
   })
 
   describe('drafts', () => {
-    it('should mark messages as a draft', async () => {
+    it('should mark messages as a draft', () => {
       initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
       expect(screen.getByText('DRAFT - Recipient')).toBeTruthy()
     })
 
-    it('should show pagination', async () => {
+    it('should show pagination', () => {
       initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
       expect(screen.getByTestId('next-page')).toBeTruthy()
       expect(screen.getByTestId('previous-page')).toBeTruthy()
