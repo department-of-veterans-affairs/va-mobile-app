@@ -9,6 +9,9 @@ on:
     branches:
       - 'dependabot/**'
   workflow_dispatch:
+  workflow_run:
+    workflows: ['[Release] New Release Issue']
+    types: [completed]
   # Run on weekdays 4:00 AM UTC
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
@@ -138,3 +141,16 @@ jobs:
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
           path: VAMobile/artifacts
+
+      - name: Upload e2e-junit
+        uses: actions/upload-artifact@v3
+        with:
+          name: e2e-junit
+          path: VAMobile/e2e/test_reports/e2e-junit.xml
+      
+  send_test_results_to_testrail:
+    if: github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped'
+    needs: [e2e-android]
+    name: Update testRail Results
+    uses: ./.github/workflows/update_testrail_results.yml
+    secrets: inherit

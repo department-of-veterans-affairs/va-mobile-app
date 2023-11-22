@@ -12,7 +12,7 @@ import {
   AppointmentsList,
   AppointmentsMetaPagination,
 } from 'store/api'
-import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
+import { AppointmentStatus, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
 import { LabelTagTypeConstants } from '../components/LabelTag'
 import { VATheme } from 'styles/theme'
@@ -229,6 +229,18 @@ const getListItemsForAppointments = (
   return listItems
 }
 
+const getAppointmentStatus = (isPendingAppointment: boolean, status: AppointmentStatus, t: TFunction, condensedMarginBetween: number): TextLineWithIconProps | undefined => {
+  if (status === AppointmentStatusConstants.CANCELLED) {
+    return { text: t('appointments.canceled'), textTag: { labelType: LabelTagTypeConstants.tagInactive }, mb: condensedMarginBetween }
+  } else if (status === AppointmentStatusConstants.BOOKED) {
+    return { text: t('appointments.confirmed'), textTag: { labelType: LabelTagTypeConstants.tagGreen }, mb: condensedMarginBetween }
+  } else if (isPendingAppointment) {
+    return { text: t('appointments.pending'), textTag: { labelType: LabelTagTypeConstants.tagYellow }, mb: condensedMarginBetween }
+  } else {
+    return undefined
+  }
+}
+
 /**
  * Should return an array of TextLineWithIconProps that describes an appointment that is shown in upcoming and past appointment list
  *
@@ -243,12 +255,24 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
   const { condensedMarginBetween } = theme.dimensions
   const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
 
-  if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-    textLines.push({ text: t('appointments.canceled'), textTag: { labelType: LabelTagTypeConstants.tagInactive }, mb: condensedMarginBetween })
-  } else if (attributes.status === AppointmentStatusConstants.BOOKED) {
-    textLines.push({ text: t('appointments.confirmed'), textTag: { labelType: LabelTagTypeConstants.tagGreen }, mb: condensedMarginBetween })
-  } else if (isPendingAppointment) {
-    textLines.push({ text: t('appointments.pending'), textTag: { labelType: LabelTagTypeConstants.tagYellow }, mb: condensedMarginBetween })
+  const status = getAppointmentStatus(isPendingAppointment, attributes.status, t, condensedMarginBetween)
+  if (status) {
+    textLines.push(status)
+  }
+
+  if (phoneOnly) {
+    textLines.push(
+      { text: t('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
+      { text: t('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', mb: condensedMarginBetween },
+      { text: t('text.raw', { text: typeOfCare ? typeOfCare : t('appointments.noTypeOfCare') }), variant: 'HelperText', mb: 5 },
+      { text: t('text.raw', { text: healthcareProvider ? healthcareProvider : t('appointments.noProvider') }), variant: 'HelperText', mb: 5 },
+      {
+        text: t('text.raw', { text: getAppointmentTypeIconText(appointmentType, t, phoneOnly) }),
+        iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
+        variant: 'HelperText',
+      },
+    )
+    return textLines
   }
 
   // pending appointments
