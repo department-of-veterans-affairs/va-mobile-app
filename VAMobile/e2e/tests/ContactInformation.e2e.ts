@@ -33,7 +33,7 @@ export async function updateAddress() {
   await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('3101 N Fort Valley Rd')
   await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
   await waitFor(element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID))).toBeVisible().withTimeout(4000)
-  await element(by.id('EditAddressTestID')).scrollTo('bottom')
+  await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
   await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).typeText('Flagstaff')
   await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
   await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).typeText('86001')
@@ -50,7 +50,7 @@ export async function validateAddresses(addressID, addressType) {
 
   it(addressType + ': verify error handling', async() => {
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).clearText()
-    await element(by.id('EditAddressTestID')).scrollTo('bottom')
+    await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
     await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
     await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).clearText()
     await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
@@ -72,7 +72,7 @@ export async function validateAddresses(addressID, addressType) {
       await expect(element(by.text('United States'))).toExist()
       await element(by.text('United States')).tap()
       await element(by.text('Done')).tap()
-      await element(by.id('EditAddressTestID')).scrollTo('bottom')
+      await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
       await element(by.id('State picker required Error - State is required')).tap()
       await element(by.text('Arizona')).tap()
       await element(by.text('Done')).tap()
@@ -106,7 +106,7 @@ export async function validateAddresses(addressID, addressType) {
 
   it('should open and update the ' + addressType + ' address', async () => {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
-    await waitFor(element(by.id(addressID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
+    await waitFor(element(by.id(addressID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(100, 'down')
     await element(by.id(addressID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).typeText('2')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
@@ -116,7 +116,7 @@ export async function validateAddresses(addressID, addressType) {
       await expect(element(by.text('United States'))).toExist()
       await element(by.text('United States')).tap()
       await element(by.text('Done')).tap()
-      await element(by.id('EditAddressTestID')).scrollTo('bottom')
+      await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
       await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
       await element(by.text('Arizona')).tap()
       await element(by.text('Done')).tap()
@@ -162,7 +162,7 @@ export async function validateAddresses(addressID, addressType) {
 
 export async function validatePhoneNumbers(phoneID, phoneType) {
   it ('should open the ' + phoneType + ' phone number', async () => {
-    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
+    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(100, 'down')
     await element(by.id(phoneID)).tap()
   })
 
@@ -209,7 +209,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   })
 
   it('should update the ' + phoneType + ' with an extension', async () => {
-    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
+    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(100, 'down')
     await element(by.id(phoneID)).tap()
     if(phoneType === 'Work') { 
       await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
@@ -231,7 +231,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   })
   
   it(phoneType + ': verify user can remove the extension', async () => {
-    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
+    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(100, 'down')
     await element(by.id(phoneID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).clearText()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
@@ -246,7 +246,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
 export async function removeContactInfoFeature(contactInfoTypeText, type) {
   it ('should tap remove ' + type + ' and verify remove pop up appears', async () => {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
-    await waitFor(element(by.id(contactInfoTypeText))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
+    await waitFor(element(by.id(contactInfoTypeText))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(100, 'down')
     await element(by.id(contactInfoTypeText)).tap()
     await element(by.text('Remove ' + type)).tap()
     await expect(element(by.text('Remove your ' + type + '?'))).toExist()
@@ -289,7 +289,7 @@ export async function verifyNonUSorMilitaryAddresses(addressID, addressType) {
     await expect(element(by.text('International post code (Required)'))).toExist()
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('19-21 Carrer de na Maria Pla')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
-    await element(by.id('EditAddressTestID')).scrollTo('bottom')
+    await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
     await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).typeText('Andorra la Vella')
     await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
     await element(by.id('stateTestID')).typeText('Andorra la Vella')
@@ -307,7 +307,7 @@ export async function verifyNonUSorMilitaryAddresses(addressID, addressType) {
     await element(by.id('USMilitaryBaseCheckboxTestID')).tap()
     await expect(element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID))).not.toExist()
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('123 Main St')
-    await element(by.id('EditAddressTestID')).scrollTo('bottom')
+    await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
     await element(by.id(ContactInfoE2eIdConstants.MILITARY_POST_OFFICE_ID)).tap()
     await element(by.text('FPO')).tap()
     await element(by.text('Done')).tap()
