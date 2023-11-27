@@ -30,14 +30,7 @@ context('VAModalPicker', () => {
       testID: ''
     }
 
-    render(<VAModalPicker {...props} />, {
-      preloadedState: {
-        accessibility: {
-          ...InitialState.accessibility,
-          isVoiceOverTalkBackRunning: false,
-        },
-      },
-    })
+    render(<VAModalPicker {...props} />)
 
     fireEvent.press(screen.getByRole('spinbutton'))
   }
@@ -71,7 +64,7 @@ context('VAModalPicker', () => {
 
     it('should render a textview for the label if present', () => {
       expect(screen.getByRole('spinbutton', { name: 'Back picker Navigates to the previous page' })).toBeTruthy()
-      expect(screen.getAllByText('Back', { exact: false }).length).toBeGreaterThan(0)
+      expect(screen.getAllByText(/Back/).length).toBeGreaterThan(0)
     })
 
     it('should display helper text', () => {
