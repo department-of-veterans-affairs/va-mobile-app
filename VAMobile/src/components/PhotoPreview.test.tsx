@@ -4,10 +4,10 @@ import { context, render, screen } from 'testUtils'
 import PhotoPreview from 'components/PhotoPreview'
 import { Asset } from 'react-native-image-picker/src/types'
 import { bytesToFinalSizeDisplay } from 'utils/common'
+import { t } from 'i18next'
 
 context('PhotoPreview', () => {
   let onPressSpy: Mock
-  let t = jest.fn(() => { })
   let image: Asset = {
     uri: 'testing',
     fileSize: 1234,
