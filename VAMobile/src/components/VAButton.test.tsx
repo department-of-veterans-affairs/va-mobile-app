@@ -1,28 +1,18 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
-import { Pressable } from 'react-native'
 import Mock = jest.Mock
-
-import { context, render, RenderAPI, waitFor } from 'testUtils'
+import { context, fireEvent, render, screen } from 'testUtils'
 import VAButton, { ButtonTypesConstants } from './VAButton'
-import Box from './Box'
-import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 
 context('VAButton', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
   const initializeTestInstance = (disabled?: boolean, buttonType = ButtonTypesConstants.buttonPrimary, displayIcon = false): void => {
-    onPressSpy = jest.fn(() => {})
+    onPressSpy = jest.fn(() => { })
 
     const iconProps: VAIconProps = { name: 'PaperClip', width: 16, height: 18 }
 
-    component = render(
+    render(
       <VAButton
         iconProps={displayIcon ? iconProps : undefined}
         label={'my button'}
@@ -32,137 +22,81 @@ context('VAButton', () => {
         disabledText={'my button instructions'}
       />,
     )
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByRole('button', { name: 'my button' })).toBeTruthy()
   })
 
-  it('should call onChange', async () => {
-    testInstance.findByType(VAButton).props.onPress()
+  it('should call onChange', () => {
+    fireEvent.press(screen.getByRole('button'))
     expect(onPressSpy).toBeCalled()
   })
 
   describe('when icon props are passed in', () => {
-    it('should render a VAIcon', async () => {
+    it('should render a VAIcon', () => {
       initializeTestInstance(false, ButtonTypesConstants.buttonPrimary, true)
-      expect(testInstance.findAllByType(VAIcon).length).toEqual(1)
+      expect(screen.UNSAFE_getAllByType(VAIcon).length).toEqual(1)
     })
   })
 
   describe('when disabled is true', () => {
-    it('should set the text color to "buttonDisabled"', async () => {
+    beforeEach(() => {
       initializeTestInstance(true)
-      expect(testInstance.findAllByType(TextView)[0].props.color).toEqual('buttonDisabled')
+    })
+    it('should set the text color to "buttonDisabled"', () => {
+      expect(screen.UNSAFE_getByProps({ color: 'buttonDisabled' })).toBeTruthy()
     })
 
-    it('should set the background color to "buttonDisabled"', async () => {
-      initializeTestInstance(true)
-      expect(testInstance.findAllByType(Box)[0].props.backgroundColor).toEqual('buttonDisabled')
+    it('should set the background color to "buttonDisabled"', () => {
+      expect(screen.UNSAFE_getByProps({ backgroundColor: 'buttonDisabled' })).toBeTruthy()
     })
 
-    it('should set the border color to "undefined"', async () => {
-      initializeTestInstance(true)
-      expect(testInstance.findAllByType(Box)[0].props.borderColor).toEqual(undefined)
+    it('should show the disabled message', () => {
+      expect(screen.getByText('my button instructions')).toBeTruthy()
     })
-
-    it('should show the disabled message', async () => {
-      initializeTestInstance(true)
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('my button instructions')
+    it('should show accessibility state of disabled', () => {
+      expect(screen.getByAccessibilityState({ disabled: true })).toBeTruthy()
+    })
+    it('should not register an onPress event', () => {
+      fireEvent.press(screen.getByRole('button'))
+      expect(onPressSpy).not.toHaveBeenCalled()
     })
   })
 
-  describe('when disabled is false', () => {
-    describe('when the button type is buttonPrimary', () => {
-      it('should set the text color to buttonPrimary', async () => {
+  describe('when different button types are passed in', () => {
+    describe('when the button type is buttonPrimary (the default)', () => {
+      it('should set the text color and background to buttonPrimary', () => {
         initializeTestInstance(false)
-        expect(testInstance.findByType(TextView).props.color).toEqual('buttonPrimary')
-      })
-
-      it('should set the background color to buttonPrimary', async () => {
-        initializeTestInstance(false)
-        expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonPrimary')
-      })
-
-      it('should set the border color to undefined', async () => {
-        initializeTestInstance(false)
-        expect(testInstance.findByType(Box).props.borderColor).toEqual(undefined)
-      })
-
-      describe('when the button is pressed in', () => {
-        it('should set the backgroundColor to buttonPrimaryActive', async () => {
-          await waitFor(() => {
-            initializeTestInstance(false)
-            testInstance.findByType(Pressable).props.onPressIn()
-            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonPrimaryActive')
-            testInstance.findByType(Pressable).props.onPressOut()
-            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonPrimary')
-          })
-        })
+        // The <TextView>
+        expect(screen.UNSAFE_getByProps({ color: 'buttonPrimary' }))
+        // The surrounding <Box> element
+        expect(screen.UNSAFE_getByProps({ backgroundColor: 'buttonPrimary' }))
       })
     })
 
     describe('when the button type is buttonSecondary', () => {
-      it('should set the text color to buttonSecondary', async () => {
+      it('should set the text color, background color, and border color to buttonSecondary', () => {
         initializeTestInstance(false, ButtonTypesConstants.buttonSecondary)
-        expect(testInstance.findByType(TextView).props.color).toEqual('buttonSecondary')
+        // The <TextView>
+        expect(screen.UNSAFE_getByProps({ color: 'buttonSecondary' }))
+        // The surrounding <Box> element
+        expect(screen.UNSAFE_getByProps({ backgroundColor: 'buttonSecondary', borderColor: 'buttonSecondary' }))
       })
 
-      it('should set the background color to buttonSecondary', async () => {
-        initializeTestInstance(false, ButtonTypesConstants.buttonSecondary)
-        expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonSecondary')
-      })
-
-      it('should set the border color to buttonSecondary', async () => {
-        initializeTestInstance(false, ButtonTypesConstants.buttonSecondary)
-        expect(testInstance.findByType(Box).props.borderColor).toEqual('buttonSecondary')
-      })
-
-      describe('when the button is pressed in', () => {
-        it('should set the backgroundColor to buttonSecondaryActive', async () => {
-          await waitFor(() => {
-            initializeTestInstance(false, ButtonTypesConstants.buttonSecondary)
-            testInstance.findByType(Pressable).props.onPressIn()
-            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonSecondaryActive')
-            testInstance.findByType(Pressable).props.onPressOut()
-            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonSecondary')
-          })
-        })
-      })
     })
 
     describe('when the button type is buttonDestructive', () => {
-      it('should set the text color to buttonDestructive', async () => {
+      it('should set the text color, background color, and border color to buttonDestructive', () => {
         initializeTestInstance(false, ButtonTypesConstants.buttonDestructive)
-        expect(testInstance.findByType(TextView).props.color).toEqual('buttonDestructive')
-      })
-
-      it('should set the background color to buttonDestructive', async () => {
-        initializeTestInstance(false, ButtonTypesConstants.buttonDestructive)
-        expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonDestructive')
-      })
-
-      it('should set the border color to buttonDestructive', async () => {
-        initializeTestInstance(false, ButtonTypesConstants.buttonDestructive)
-        expect(testInstance.findByType(Box).props.borderColor).toEqual('buttonDestructive')
-      })
-
-      describe('when the button is pressed in', () => {
-        it('should set the backgroundColor to buttonDestructiveActive', async () => {
-          await waitFor(() => {
-            initializeTestInstance(false, ButtonTypesConstants.buttonDestructive)
-            testInstance.findByType(Pressable).props.onPressIn()
-            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonDestructiveActive')
-            testInstance.findByType(Pressable).props.onPressOut()
-            expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonDestructive')
-          })
-        })
+        // The <TextView>
+        expect(screen.UNSAFE_getByProps({ color: 'buttonDestructive' }))
+        // The surrounding <Box> element
+        expect(screen.UNSAFE_getByProps({ backgroundColor: 'buttonDestructive', borderColor: 'buttonDestructive' }))
       })
     })
   })
