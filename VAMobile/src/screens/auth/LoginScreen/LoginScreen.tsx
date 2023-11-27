@@ -34,8 +34,10 @@ const LoginScreen: FC = () => {
   const startAuth = useStartAuth()
   const theme = useTheme()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
-  const TAPS_FOR_DEMO = 20
+  const TAPS_FOR_DEMO = 7
+  const DEMO_TAPS_TIMEOUT_MS = 500
   let demoTaps = 0
+  let demoTapResetTimer: ReturnType<typeof setTimeout>
 
   useEffect(() => {
     if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.INIT) {
@@ -77,11 +79,20 @@ const LoginScreen: FC = () => {
   const handleUpdateDemoMode = () => {
     dispatch(updateDemoMode(true))
   }
+  const demoTapReset = () => {
+    demoTaps = 0
+    console.log('demotaps timeout. Reset to 0')
+  }
   const tapForDemo = () => {
+    clearTimeout(demoTapResetTimer)
+    demoTapResetTimer = setTimeout(() => {
+      demoTapReset()
+    }, DEMO_TAPS_TIMEOUT_MS)
     demoTaps++
     console.log(`demotaps: ${demoTaps}`)
-    if (demoTaps > TAPS_FOR_DEMO) {
+    if (demoTaps >= TAPS_FOR_DEMO) {
       demoTaps = 0
+      clearTimeout(demoTapResetTimer)
       setDemoPromptVisible(true)
     }
   }
