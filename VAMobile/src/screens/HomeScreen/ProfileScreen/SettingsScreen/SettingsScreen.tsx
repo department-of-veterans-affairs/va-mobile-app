@@ -8,12 +8,13 @@ import _ from 'underscore'
 import { AuthState, logout, setBiometricsPreference } from 'store/slices'
 import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, VAButton } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
+import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useAppDispatch, useDestructiveActionSheet, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
@@ -37,6 +38,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   const onShowConfirm = (): void => {
+    logAnalyticsEvent(Events.vama_click(t('logout.title'), t('settings.title')))
     signOutAlert({
       title: t('logout.confirm.text'),
       destructiveButtonIndex: 1,
@@ -83,6 +85,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const onDebug = navigateTo('Developer')
 
   const onShare = async (): Promise<void> => {
+    logAnalyticsEvent(Events.vama_click(t('shareApp.title'), t('settings.title')))
     try {
       await Share.share({
         message: t('shareApp.text', { appleStoreLink: APPLE_STORE_LINK, googlePlayLink: GOOGLE_PLAY_LINK }),

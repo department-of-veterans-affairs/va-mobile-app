@@ -1,64 +1,55 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, mockNavProps, render, RenderAPI, waitFor } from 'testUtils'
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { context, mockNavProps, render } from 'testUtils'
 import { HomeScreen } from './HomeScreen'
 
-const mockNavigateToSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
 
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigateToSpy
-        .mockReturnValueOnce(() => {})
-        .mockReturnValueOnce(() => {})
-        .mockReturnValueOnce(() => {})
-        .mockReturnValue(() => {})
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 jest.mock('utils/remoteConfig')
 
 context('HomeScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let props: any
-
   const initializeTestInstance = () => {
-    props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
-
-    component = render(<HomeScreen {...props} />)
-
-    testInstance = component.UNSAFE_root
+    const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
+    render(<HomeScreen {...props} />)
   }
 
   beforeEach(() => {
     initializeTestInstance()
   })
 
-  it('initializes correctly', async () => {
-    await waitFor(() => {
-      expect(component).toBeTruthy()
-    })
+  it('initializes correctly', () => {
+    expect(screen.getByRole('button', { name: 'Talk to the Veterans Crisis Line now' })).toBeTruthy()
+    expect(screen.getByText('About VA')).toBeTruthy()
+    expect(screen.getByText('Contact VA')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Find a VA location' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'COVID-19 updates' })).toBeTruthy()
   })
 
   describe('when VA COVID-19 updates is pressed', () => {
-    it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', async () => {
-      await waitFor(() => {
-        findByTestID(testInstance, 'COVID-19 updates').props.onPress()
-        const expectNavArgs = {
-          url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
-          displayTitle: 'va.gov',
-          loadingMessage: 'Loading VA COVID-19 updates...',
-        }
-        expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
-      })
+    it('should navigate to https://www.va.gov/coronavirus-veteran-frequently-asked-questions', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'COVID-19 updates' }))
+      const expectNavArgs = {
+        url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions',
+        displayTitle: 'va.gov',
+        loadingMessage: 'Loading VA COVID-19 updates...',
+      }
+      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
+    })
+  })
+
+  describe('when the find VA location link is clicked', () => {
+    it('should call useRouteNavigation', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Find a VA location' }))
+      expect(mockNavigationSpy).toBeCalledWith('Webview', { displayTitle: 'va.gov', url: 'https://www.va.gov/find-locations/', loadingMessage: 'Loading VA location finder...' })
     })
   })
 })

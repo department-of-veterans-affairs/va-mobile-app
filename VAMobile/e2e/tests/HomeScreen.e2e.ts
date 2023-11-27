@@ -33,7 +33,7 @@ describe('Home Screen', () => {
 		await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
 	})
 
-	it('should verify the nav bar at the bottom of the screen is correct', async () => {
+	it('should verify the nav bar at the bottom of the screen', async () => {
 		await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT)))
 		await expect(element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT))).toExist()
 		await expect(element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT))).toExist()
@@ -41,7 +41,7 @@ describe('Home Screen', () => {
 		await expect(element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT))).toExist()
 	})
 
-	it('should tap on profile and verify the profile screen tab items are displayed', async () => {
+	it('profile tab tap: verify the profile screen tab items', async () => {
 		await element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT)).tap()
 		await expect(element(by.text(CommonE2eIdConstants.PERSONAL_INFORMATION_ROW_TEXT))).toExist()
 		await expect(element(by.text(CommonE2eIdConstants.CONTACT_INFORMATION_TEXT))).toExist()
@@ -49,28 +49,21 @@ describe('Home Screen', () => {
 		await expect(element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT))).toExist()
 	})
 
-	it('should tap on home and verify the home screen tab items are displayed', async () => {
+	it('home tab tap: verify the home screen tab items', async () => {
 		await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).atIndex(1).tap()
 		await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
 		await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
 		await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
 	})
 
-	it('should tap on benefits and verify the benefits screen tab items are displayed', async () => {
+	it('benefits tab tap: verify the benefits screen tab items', async () => {
 		await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap()
 		await expect(element(by.text(CommonE2eIdConstants.DISABILITY_RATING_ROW_TEXT))).toExist()
 		await expect(element(by.text(CommonE2eIdConstants.CLAIMS_BUTTON_TEXT))).toExist()
 		await expect(element(by.text(CommonE2eIdConstants.LETTERS_ROW_TEXT))).toExist()
 	})
 
-	it('should tap on home and verify the home screen tab items are displayed', async () => {
-		await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
-		await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
-		await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
-		await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
-	})
-
-	it('should tap on health and verify the health screen tab items are displayed', async () => {
+	it('health tab tap: verify the health screen tab items', async () => {
 		await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
 		await expect(element(by.text(CommonE2eIdConstants.APPOINTMENTS_TAB_BUTTON_TEXT))).toExist()
 		await expect(element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT))).toExist()
@@ -79,14 +72,7 @@ describe('Home Screen', () => {
 		await expect(element(by.text('COVID-19 updates'))).toExist()
 	})
 
-	it('should tap on home and verify the home screen tab items are displayed', async () => {
-		await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
-		await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
-		await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
-		await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
-	})
-
-	it('should tap on payments and verify the payments screen tab items are displayed', async () => {
+	it('payments tab tap: verify the payments screen tab items', async () => {
 		await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
 		await expect(element(by.text(CommonE2eIdConstants.VA_PAYMENT_HISTORY_BUTTON_TEXT))).toExist()
 		await expect(element(by.text(CommonE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT))).toExist()
