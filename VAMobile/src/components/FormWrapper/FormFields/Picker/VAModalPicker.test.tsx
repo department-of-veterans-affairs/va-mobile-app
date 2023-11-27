@@ -7,10 +7,10 @@ context('VAModalPicker', () => {
   let selected: string
 
   const initializeTestInstance = (
-    labelKey: string = '',
-    helperTextKey: string = '',
-    isRequiredField: boolean = false,
-    error: string = ''
+    labelKey = '',
+    helperTextKey = '',
+    isRequiredField = false,
+    error = ''
   ) => {
     const props = {
       selectedValue: 'js',

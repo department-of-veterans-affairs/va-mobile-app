@@ -6,8 +6,8 @@ context('VATextInput', () => {
   let onChangeSpy = jest.fn()
 
   const initializeTestInstance = (
-    isRequiredField: boolean = false,
-    error: string = ''
+    isRequiredField = false,
+    error = ''
   ) => {
     render(<VATextInput
       inputType={'email'}
