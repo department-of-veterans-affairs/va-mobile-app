@@ -5,6 +5,7 @@ import { VAModalPicker } from 'components'
 import VATextInput from './FormFields/VATextInput'
 import VASelector, { VASelectorProps } from './FormFields/VASelector'
 import Mock = jest.Mock
+import { PickerListItemObj } from './FormFields/Picker/PickerList'
 
 context('FormWrapper', () => {
   let onSaveSpy: any
@@ -47,6 +48,10 @@ context('FormWrapper', () => {
     },
   ]
 
+  const selectorFieldList = formFieldsList.filter((field) => field.fieldType === FieldType.Selector)
+  const pickerFieldList = formFieldsList.filter(field => field.fieldType === FieldType.Picker)
+  const textInputFieldList = formFieldsList.filter(field => field.fieldType === FieldType.TextInput)
+
   const initializeTestInstance = (fieldsList = formFieldsList, resetErrors = false, onSaveClickedInitialVal = false) => {
     onSaveSpy = jest.fn()
     onSaveClicked = onSaveClickedInitialVal
@@ -73,8 +78,7 @@ context('FormWrapper', () => {
 
   describe('when the picker calls setError with an empty string', () => {
     it('should set the error to empty string', () => {
-      let shortenedFieldsList = formFieldsList[1]
-      initializeTestInstance([shortenedFieldsList])
+      initializeTestInstance(pickerFieldList)
       screen.UNSAFE_getByType(VAModalPicker).props.setError('')
       expect(screen.queryByText('second error message')).toBeFalsy()
     })
@@ -82,8 +86,7 @@ context('FormWrapper', () => {
 
   describe('when the textinput calls setError with an empty string', () => {
     it('should set the error to empty string', () => {
-      let shortenedFieldsList = formFieldsList[0]
-      initializeTestInstance([shortenedFieldsList])
+      initializeTestInstance(textInputFieldList)
       screen.UNSAFE_getByType(VATextInput).props.setError('')
       expect(screen.queryByText('first error message')).toBeFalsy()
     })
@@ -91,8 +94,7 @@ context('FormWrapper', () => {
 
   describe('when the checkbox calls setError with an empty string', () => {
     it('should set the error to empty string', () => {
-      let shortenedFieldsList = formFieldsList[2]
-      initializeTestInstance([shortenedFieldsList])
+      initializeTestInstance(selectorFieldList)
       screen.UNSAFE_getByType(VASelector).props.setError('')
       expect(screen.queryByText('third error message')).toBeFalsy()
     })
@@ -100,8 +102,7 @@ context('FormWrapper', () => {
 
   describe('when the picker calls setError with no parameter', () => {
     it('should set the error to the field error message', () => {
-      let shortenedFieldsList = formFieldsList[1]
-      initializeTestInstance([shortenedFieldsList])
+      initializeTestInstance(pickerFieldList)
       screen.UNSAFE_getByType(VAModalPicker).props.setError()
       expect(screen.getByText('second error message')).toBeTruthy()
     })
@@ -109,8 +110,7 @@ context('FormWrapper', () => {
 
   describe('when the textinput calls setError with no parameter', () => {
     it('should set the error to the field error message', () => {
-      let shortenedFieldsList = formFieldsList[0]
-      initializeTestInstance([shortenedFieldsList])
+      initializeTestInstance(textInputFieldList)
       screen.UNSAFE_getByType(VATextInput).props.setError()
       expect(screen.getByText('first error message')).toBeTruthy()
     })
@@ -118,8 +118,7 @@ context('FormWrapper', () => {
 
   describe('when the checkbox calls setError with no parameter', () => {
     it('should set the error to the field error message', () => {
-      let shortenedFieldsList = formFieldsList[2]
-      initializeTestInstance([shortenedFieldsList])
+      initializeTestInstance(selectorFieldList)
       screen.UNSAFE_getByType(VASelector).props.setError()
       expect(screen.getByText('third error message')).toBeTruthy()
     })
@@ -127,12 +126,11 @@ context('FormWrapper', () => {
 
   describe('when resetErrors is true', () => {
     it('should clear the errors object', () => {
-      let shortenedFieldsList = formFieldsList[2]
-      initializeTestInstance([shortenedFieldsList])
+      initializeTestInstance(selectorFieldList)
       screen.UNSAFE_getByType(VASelector).props.setError()
       expect(screen.getByText('third error message')).toBeTruthy()
 
-      initializeTestInstance([shortenedFieldsList], true)
+      initializeTestInstance(selectorFieldList, true)
       expect(screen.getByText('I confirm that this information is correct. (Required)')).toBeTruthy()
     })
   })
