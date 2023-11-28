@@ -38,6 +38,7 @@ export type DowntimeFeatureType =
   | 'claims'
   | 'direct_deposit_benefits'
   | 'disability_rating'
+  | 'immunizations'
   | 'letters_and_documents'
   | 'secure_messaging'
   | 'appointments'
@@ -55,6 +56,7 @@ export const DowntimeFeatureTypeConstants: {
   claims: DowntimeFeatureType
   directDepositBenefits: DowntimeFeatureType
   disabilityRating: DowntimeFeatureType
+  immunizations: DowntimeFeatureType
   letters: DowntimeFeatureType
   secureMessaging: DowntimeFeatureType
   appointments: DowntimeFeatureType
@@ -71,6 +73,7 @@ export const DowntimeFeatureTypeConstants: {
   claims: 'claims',
   directDepositBenefits: 'direct_deposit_benefits',
   disabilityRating: 'disability_rating',
+  immunizations: 'immunizations',
   letters: 'letters_and_documents',
   secureMessaging: 'secure_messaging',
   appointments: 'appointments',
@@ -88,6 +91,7 @@ export const ScreenIDToFeatureName = {
   [ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID]: 'Letters',
   [ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID]: 'Direct Deposit',
   [ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID]: 'Disability Rating',
+  [ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID]: 'VA Vaccines',
   [ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID]: 'Military Service History',
   [ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID]: 'Personal Information',
   [ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID]: 'Personal Information',
@@ -104,6 +108,7 @@ export const ScreenIDToDowntimeFeatures = {
   [ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID]: [DowntimeFeatureTypeConstants.letters],
   [ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID]: [DowntimeFeatureTypeConstants.directDepositBenefits],
   [ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID]: [DowntimeFeatureTypeConstants.disabilityRating],
+  [ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID]: [DowntimeFeatureTypeConstants.immunizations],
   [ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID]: [DowntimeFeatureTypeConstants.militaryServiceHistory],
   [ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID]: [DowntimeFeatureTypeConstants.userProfileUpdate],
   [ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID]: [DowntimeFeatureTypeConstants.userProfileUpdate],
