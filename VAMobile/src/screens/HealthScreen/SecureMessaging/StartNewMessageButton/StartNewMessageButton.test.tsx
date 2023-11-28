@@ -1,7 +1,4 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
@@ -19,14 +16,13 @@ jest.mock('@react-navigation/native', () => {
 })
 
 context('StartNewMessageFooter', () => {
-
   beforeEach(() => {
     render(<StartNewMessageButton />)
   })
 
   describe('on click of the footer button', () => {
-    it('should call useRouteNavigation', async () => {
-      fireEvent.press(screen.getByText('Start new message'))
+    it('should call useRouteNavigation', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Start new message' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
     })
   })

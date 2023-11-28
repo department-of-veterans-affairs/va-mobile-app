@@ -24,7 +24,7 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const NumAppealsAhead = (): ReactElement => {
+  const renderNumberOfAppealsAhead = (): ReactElement => {
     // if the number of appeals ahead does not exist or the appeal is closed
     if ((!numAppealsAhead && numAppealsAhead !== 0) || !isActiveAppeal) {
       return <></>
@@ -50,7 +50,7 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <AppealCurrentStatus status={status} aoj={aoj} appealType={appealType} docketName={docketName} programArea={programArea} />
       </Box>
-      <NumAppealsAhead />
+      {renderNumberOfAppealsAhead()}
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <NeedHelpData isAppeal={true} />
       </Box>
