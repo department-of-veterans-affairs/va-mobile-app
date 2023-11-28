@@ -25,7 +25,7 @@ context('Carousel', () => {
     render(<Carousel screenList={screenList} onCarouselEnd={() => { }} translation={t} />)
   })
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     expect(screen.getByText('Test Component')).toBeTruthy()
     expect(screen.getByAccessibilityHint('skip')).toBeTruthy()
     expect(screen.getByAccessibilityHint('done')).toBeTruthy()
