@@ -1,4 +1,3 @@
-import 'react-native'
 import React from 'react'
 
 import { context, fireEvent, render, screen } from 'testUtils'
@@ -72,15 +71,15 @@ context('CernerAlertSM', () => {
 
   describe('with multiple cerner facilities', () => {
     it('should show all facility names', () => {
-      fireEvent.press(screen.getByText("Make sure you're in the right health portal"))
+      fireEvent.press(screen.getByRole('tab', { name: "Make sure you're in the right health portal" }))
       expect(screen.getByText("FacilityOne")).toBeTruthy()
       expect(screen.getByText("FacilityTwo")).toBeTruthy()
     })
   })
 
   it('should only show cerner facilities, not other facilities and should call mockExternalLinkSpy when link is selected', () => {
-    expect(screen.getByText("Make sure you're in the right health portal")).toBeTruthy()
-    fireEvent.press(screen.getByText("Make sure you're in the right health portal"))
+    expect(screen.getByRole('tab', { name: "Make sure you're in the right health portal" })).toBeTruthy()
+    fireEvent.press(screen.getByRole('tab', { name: "Make sure you're in the right health portal" }))
     expect(screen.getByText("Sending a message to a care team at FacilityOne?")).toBeTruthy()
     expect(screen.queryByText("FacilityTwo")).toBeFalsy()
 

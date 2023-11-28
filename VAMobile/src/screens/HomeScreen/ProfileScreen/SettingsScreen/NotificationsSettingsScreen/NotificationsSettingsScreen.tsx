@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
 import { AlertBox, Box, ButtonDecoratorType, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton } from 'components'
+import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { Notifications } from 'react-native-notifications'
@@ -10,6 +11,7 @@ import { NotificationsState, loadPushPreferences, registerDevice, setPushPref } 
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
 
@@ -24,6 +26,7 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
     (state) => state.notifications,
   )
   const goToSettings = () => {
+    logAnalyticsEvent(Events.vama_click(t('notifications.settings.alert.openSettings'), t('notifications.title')))
     Linking.openSettings()
   }
   const dispatch = useAppDispatch()
@@ -90,6 +93,7 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
           on: pref.value,
         },
         onPress: () => {
+          logAnalyticsEvent(Events.vama_toggle(pref.preferenceName, !pref.value, t('notifications.title')))
           dispatch(setPushPref(pref))
         },
       }
