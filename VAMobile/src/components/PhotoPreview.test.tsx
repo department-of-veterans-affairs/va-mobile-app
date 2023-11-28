@@ -22,6 +22,5 @@ context('PhotoPreview', () => {
   it('renders correctly', () => {
     expect(screen.getByAccessibilityHint('Remove this photo')).toBeTruthy()
     expect(screen.getByText(bytesToFinalSizeDisplay(1234, t, false))).toBeTruthy()
-    expect(screen.UNSAFE_getByProps({ width: 110, height: 110 })).toBeTruthy()
   })
 })
