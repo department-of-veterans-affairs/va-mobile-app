@@ -3,10 +3,9 @@ import { context, screen, render } from 'testUtils'
 import AppVersionAndBuild from './AppVersionAndBuild'
 
 context('AppVersionAndBuild', () => {
-  let props: any
 
   beforeEach(() => {
-    render(<AppVersionAndBuild {...props} />)
+    render(<AppVersionAndBuild />)
   })
 
   it('should display the Version: text', async () => {
