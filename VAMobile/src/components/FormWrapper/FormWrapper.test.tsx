@@ -5,7 +5,6 @@ import { VAModalPicker } from 'components'
 import VATextInput from './FormFields/VATextInput'
 import VASelector, { VASelectorProps } from './FormFields/VASelector'
 import Mock = jest.Mock
-import { PickerListItemObj } from './FormFields/Picker/PickerList'
 
 context('FormWrapper', () => {
   let onSaveSpy: any
