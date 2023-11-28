@@ -24,6 +24,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
+  const hasError = useError(ScreenIDTypesConstants.PAYMENTS_SCREEN_ID)
   const { standardMarginBetween, gutter } = theme.dimensions
   const { currentPagePayments, currentPagePagination, loading, availableYears } = useSelector<RootState, PaymentState>((state) => state.payments)
   const newCurrentPagePayments = deepCopyObject<PaymentsByDate>(currentPagePayments)
@@ -122,8 +123,8 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   useEffect(() => {
     // if payments exists grab the latest year first page. Prevents from refetching the latest year first page if it does exists.
     const year = !noPayments ? availableYears[0] : undefined
-    fetchPayments(1, year)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    !hasError && fetchPayments(1, year)
+  }, [hasError]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setpickerOptions(getPickerOptions())
@@ -133,7 +134,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
     setYearPickerOption(pickerOptions[0])
   }, [pickerOptions])
 
-  if (useError(ScreenIDTypesConstants.PAYMENTS_SCREEN_ID)) {
+  if (hasError) {
     return (
       <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID} />
