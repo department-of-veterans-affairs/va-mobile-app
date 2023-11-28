@@ -6,9 +6,8 @@ import TypeOfCare from './TypeOfCare'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 
 context('TypeOfCare', () => {
-  let props: any
-  const initializeTestInstance = (phoneOnly:boolean = false, typeOfCare: string | undefined = undefined): void => {
-    props = {
+  const initializeTestInstance = (phoneOnly = false, typeOfCare?: string): void => {
+    let props = {
       ...defaultAppointmentAttributes,
       phoneOnly: phoneOnly,
       typeOfCare: typeOfCare,

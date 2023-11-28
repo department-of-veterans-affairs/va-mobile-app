@@ -47,7 +47,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   if (phoneOnly) {
     title = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')
     body =
-      (appointmentType === AppointmentTypeConstants.VA || phoneOnly) && !isCovidVaccine && cancelId
+      appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine && cancelId
         ? t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.inAppCancel.body')
         : t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')
   } else if (isCovidVaccine) {
@@ -151,7 +151,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       </TextView>
       {(appointmentType === AppointmentTypeConstants.VA || phoneOnly) && !isCovidVaccine && cancelId ? (
         <>
-          {phoneOnly ? linkOrPhone : undefined}
+          {phoneOnly && linkOrPhone}
           <Box mt={phoneOnly ? theme.dimensions.standardMarginBetween : undefined}>
             <VAButton
               onPress={onCancelAppointment}

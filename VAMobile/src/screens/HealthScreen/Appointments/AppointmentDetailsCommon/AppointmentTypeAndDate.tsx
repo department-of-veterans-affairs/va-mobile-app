@@ -32,7 +32,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes, i
   if (phoneOnly) {
     let who = t('appointments.canceled.whoCanceled.you')
     if (statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK) {
-      who = healthcareProvider ? healthcareProvider : location?.name || t('appointments.canceled.whoCanceled.facility')
+      who = healthcareProvider || location?.name || t('appointments.canceled.whoCanceled.facility')
     }
     const apptTitle = isAppointmentCanceled ? t('appointments.phone.canceledTitle') : isPastAppointment ? t('appointments.phone.pastTitle') : t('appointments.phone.upcomingTitle')
     const apptBody = isAppointmentCanceled
