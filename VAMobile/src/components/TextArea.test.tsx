@@ -12,14 +12,14 @@ context('TextArea', () => {
   })
 
   describe('when onPress exists', () => {
-    it('should call onPress on press', async () => {
+    it('should call onPress on press', () => {
       fireEvent.press(screen.getByText(/test text/))
       expect(onPressSpy).toBeCalled()
     })
   })
 
   describe('when onPress does not exist', () => {
-    it('should not render a TouchableWithoutFeedback', async () => {
+    it('should not render a TouchableWithoutFeedback', () => {
       render(<TextArea><TextView>test text</TextView></TextArea>)
       fireEvent.press(screen.getByText(/test text/))
       expect(onPressSpy).not.toBeCalled()
