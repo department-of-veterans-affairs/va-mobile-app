@@ -8,7 +8,7 @@ context('AppVersionAndBuild', () => {
     render(<AppVersionAndBuild />)
   })
 
-  it('should display the Version: text', async () => {
+  it('should display the Version: text', () => {
     expect(screen.getByText(/Version:/)).toBeTruthy()
   })
 })
