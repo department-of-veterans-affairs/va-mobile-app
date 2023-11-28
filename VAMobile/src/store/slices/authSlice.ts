@@ -521,6 +521,8 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     await clearStoredAuthCreds()
     api.setAccessToken(undefined)
     api.setRefreshToken(undefined)
+    // Remove SID to trigger device registration with push service on next login. This ensures
+    // future logins won't receive push notifications for the user that was previously logged-in.
     await AsyncStorage.removeItem(DEVICE_ENDPOINT_SID)
     // we're truly logging out here, so in order to log back in
     // the prompt type needs to be "login" instead of unlock
