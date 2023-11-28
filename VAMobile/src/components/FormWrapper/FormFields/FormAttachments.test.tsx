@@ -58,11 +58,12 @@ context('FormAttachments', () => {
   describe('when there are attachments', () => {
     it('should display a remove link', () => {
       expect(screen.getAllByText('Remove').length).toBeGreaterThan(0)
+      expect(screen.getAllByRole('link', { name: 'Remove' }).length).toBeGreaterThan(0)
     })
 
     describe('when the remove link is clicked for an attachment', () => {
       it('should call the removeOnPress', () => {
-        fireEvent.press(screen.getAllByText('Remove')[0])
+        fireEvent.press(screen.getAllByRole('link', { name: 'Remove' })[0])
         expect(removeOnPressSpy).toHaveBeenCalled()
       })
     })
@@ -71,8 +72,8 @@ context('FormAttachments', () => {
   describe('when there are no attachments', () => {
     it('should not display a remove link', () => {
       initializeTestInstance([])
-      expect(screen.queryByText('Remove')).toBeFalsy()
-      expect(screen.getByText('add files')).toBeTruthy()
+      expect(screen.queryByRole('link', { name: 'Remove' })).toBeFalsy()
+      expect(screen.getByRole('button', { name: 'add files' })).toBeTruthy()
       expect(screen.getByText('Attachments')).toBeTruthy()
     })
   })
