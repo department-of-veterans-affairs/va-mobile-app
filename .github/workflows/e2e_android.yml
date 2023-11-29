@@ -46,7 +46,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: 'E2E Android build process starting. Please see :thread: for results. This process may take a while.'
+      message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
 
   e2e-android:
     needs: start_slack_thread
