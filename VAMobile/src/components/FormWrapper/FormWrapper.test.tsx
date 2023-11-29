@@ -47,7 +47,7 @@ context('FormWrapper', () => {
     },
   ]
 
-  const selectorFieldList = formFieldsList.filter((field) => field.fieldType === FieldType.Selector)
+  const selectorFieldList = formFieldsList.filter(field => field.fieldType === FieldType.Selector)
   const pickerFieldList = formFieldsList.filter(field => field.fieldType === FieldType.Picker)
   const textInputFieldList = formFieldsList.filter(field => field.fieldType === FieldType.TextInput)
 
@@ -138,10 +138,10 @@ context('FormWrapper', () => {
     describe('when there are no required fields not filled', () => {
       describe('when validation functions pass', () => {
         it('should call onSave', () => {
-          let updatedList = formFieldsList
-          let props = updatedList[2].fieldProps as VASelectorProps
+          let updatedSelectorListItem = selectorFieldList[0]
+          let props = updatedSelectorListItem.fieldProps as VASelectorProps
           props.selected = true
-          updatedList[2].validationList = [
+          updatedSelectorListItem.validationList = [
             {
               validationFunctionErrorMessage: 'ERROR',
               validationFunction: () => {
@@ -149,12 +149,75 @@ context('FormWrapper', () => {
               },
             },
           ]
+          const updatedList = [...textInputFieldList, ...pickerFieldList, updatedSelectorListItem]
 
           initializeTestInstance(updatedList, false, true)
           expect(onSaveSpy).toHaveBeenCalled()
         })
       })
+      //   describe('when validation function fails', () => {
+      //     it('should not call onSave and update the error message', async () => {
+      //       let updatedList = formFieldsList
+      //       let props = updatedList[2].fieldProps as VASelectorProps
+      //       props.selected = true
+      //       updatedList[2].validationList = [
+      //         {
+      //           validationFunctionErrorMessage: 'ERROR',
+      //           validationFunction: () => {
+      //             return true
+      //           },
+      //         },
+      //       ]
+      //       initializeTestInstance(updatedList, false, true)
+      //       expect(onSaveSpy).not.toHaveBeenCalled()
+      //       expect(screen.getByText('ERROR')).toBeTruthy()
+      //     })
+      //   })
+      // })
     })
+    // describe('when there are required fields to be filled', () => {
+    //   it('should update the error messages for those fields', async () => {
+    //     let updatedList: Array<FormFieldType<unknown>> = [
+    //       {
+    //         fieldType: FieldType.TextInput,
+    //         fieldProps: {
+    //           labelKey: 'profile:editDirectDeposit.routingNumber',
+    //           inputType: 'phone',
+    //           onChange: () => { },
+    //           value: '',
+    //           isRequiredField: true,
+    //         },
+    //         fieldErrorMessage: 'first error message',
+    //       },
+    //       {
+    //         fieldType: FieldType.Picker,
+    //         fieldProps: {
+    //           labelKey: 'profile:editDirectDeposit.accountType',
+    //           selectedValue: '',
+    //           onSelectionChange: () => { },
+    //           pickerOptions: [],
+    //           isRequiredField: true,
+    //         },
+    //         fieldErrorMessage: 'second error message',
+    //       },
+    //       {
+    //         fieldType: FieldType.Selector,
+    //         fieldProps: {
+    //           labelKey: 'profile:editDirectDeposit.confirm',
+    //           selected: false,
+    //           onSelectionChange: () => { },
+    //           disabled: false,
+    //           isRequiredField: true,
+    //         },
+    //         fieldErrorMessage: 'third error message',
+    //       },
+    //     ]
+
+    //     initializeTestInstance(updatedList, false, true)
+    //     expect(onSaveSpy).not.toHaveBeenCalled()
+    //     expect(screen.getByText('third error message')).toBeTruthy()
+    //   })
+    // })
   })
 })
 
