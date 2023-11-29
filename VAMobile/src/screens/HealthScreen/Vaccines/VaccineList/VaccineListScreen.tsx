@@ -13,7 +13,7 @@ import { VaccineState, getVaccines } from 'store/slices/vaccineSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
-import { useAppDispatch, useDowntimeByScreenID, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
@@ -28,8 +28,6 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const vaccinesInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)
-
   const vaccineButtons: Array<DefaultListItemObj> = map(vaccines || [], (vaccine: Vaccine, index) => {
     const textLines: Array<TextLine> = [
       { text: t('vaccines.vaccineName', { name: vaccine.attributes?.groupName }), variant: 'MobileBodyBold' },
@@ -81,7 +79,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
     requestPage(1)
   }, [dispatch, requestPage])
 
-  if (useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID) || vaccinesInDowntime) {
+  if (useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)) {
     return (
       <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={a11yLabelVA(t('vaVaccines'))}>
         <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
