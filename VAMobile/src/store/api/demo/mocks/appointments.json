@@ -6,7 +6,7 @@
           "type": "appointment",
           "id": "33",
           "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
+            "appointmentType": "VA",
             "status": "BOOKED",
             "phoneOnly": true,
             "statusDetail": null,
@@ -47,7 +47,7 @@
           "type": "appointment",
           "id": "34",
           "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
+            "appointmentType": "VA",
             "status": "CANCELLED",
             "phoneOnly": true,
             "statusDetail": null,
@@ -1073,7 +1073,7 @@
           "type": "appointment",
           "attributes":
           {
-            "appointmentType": "COMMUNITY_CARE",
+            "appointmentType": "VA",
             "cancelId": "13",
             "comment": null,
             "healthcareProvider": null,
@@ -1133,7 +1133,7 @@
           "type": "appointment",
           "attributes":
           {
-            "appointmentType": "COMMUNITY_CARE",
+            "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
             "healthcareProvider": "John Smith",
@@ -1193,7 +1193,7 @@
           "type": "appointment",
           "attributes":
           {
-            "appointmentType": "COMMUNITY_CARE",
+            "appointmentType": "VA",
             "cancelId": "13",
             "comment": null,
             "healthcareProvider": "John Smith",
@@ -1253,7 +1253,7 @@
           "type": "appointment",
           "attributes":
           {
-            "appointmentType": "COMMUNITY_CARE",
+            "appointmentType": "VA",
             "cancelId": "13",
             "comment": null,
             "healthcareProvider": "John Smith",
