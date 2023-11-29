@@ -19,15 +19,15 @@ context('MessageAlert', () => {
 
   it('displays save draft validation', async () => {
     initializeTestInstance({ hasValidationError: true, saveDraftAttempted: true })
-    expect(screen.UNSAFE_getAllByType(AlertBox).length).toEqual(1)
     expect(screen.getByText('We need more information')).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'We need more information' })).toBeTruthy()
     expect(screen.getByText('To save this message, provide this information:')).toBeTruthy()
   })
 
   it('displays send validation', async () => {
     initializeTestInstance({ hasValidationError: true, saveDraftAttempted: false })
-    expect(screen.UNSAFE_getAllByType(AlertBox).length).toEqual(1)
     expect(screen.getByText('We need more information')).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'We need more information' })).toBeTruthy()
     expect(screen.getByText('To send this message, provide this information:')).toBeTruthy()
   })
 })
