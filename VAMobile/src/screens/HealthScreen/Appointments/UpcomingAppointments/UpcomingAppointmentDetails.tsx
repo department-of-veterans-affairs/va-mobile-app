@@ -74,6 +74,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     ? upcomingAppointmentsById?.[appointmentID]
     : Object.values(upcomingAppointmentsById || []).find((appointmentData) => appointmentData.attributes.vetextId === vetextID)
 
+  const appointmentNotFound = vetextID && !loading && !appointment
+
   if (!appointmentID) {
     appointmentID = appointment?.id
   }
@@ -297,7 +299,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     )
   }
 
-  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || appointmentNotFound) {
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
