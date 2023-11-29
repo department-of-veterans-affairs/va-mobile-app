@@ -47,7 +47,7 @@ beforeAll(async () => {
   await openLetters()
 })
 
-describe('VA Letters and Documents Screen', () => {
+describe('VA Letters', () => {
   it('should match design', async () => {
     await expect(element(by.text(LettersConstants.MAILING_ADDRESS))).toExist()
   })

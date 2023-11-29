@@ -8,7 +8,10 @@ module.exports = {
   testEnvironment: "./e2e/environment",
   setupFilesAfterEnv: ["./e2e/setup.ts"],
   verbose: true,
-  reporters: ['detox/runners/jest/reporter'],
+  reporters: ['detox/runners/jest/reporter', [ 'jest-junit', {
+    outputDirectory: '<rootDir>/e2e/test_reports',
+    outputName: 'e2e-junit.xml',
+  } ]],
   globalSetup: 'detox/runners/jest/globalSetup',
   globalTeardown: 'detox/runners/jest/globalTeardown',
   testTimeout: 120000,

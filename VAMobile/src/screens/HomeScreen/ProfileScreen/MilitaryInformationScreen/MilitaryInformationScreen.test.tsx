@@ -1,12 +1,10 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import MilitaryInformationScreen from './index'
 import {
   ErrorsState,
-  initialAuthState,
   initialErrorsState,
   initialMilitaryServiceState,
   MilitaryServiceState,
@@ -85,7 +83,6 @@ context('MilitaryInformationScreen', () => {
   const initializeTestInstance = ( errorsState: ErrorsState = initialErrorsState, serviceHistory = serviceHistoryMock) => {
     render(<MilitaryInformationScreen {...props} />, {
       preloadedState: {
-        auth: { ...initialAuthState },
         militaryService: {
           ...initialMilitaryServiceState,
           serviceHistory,

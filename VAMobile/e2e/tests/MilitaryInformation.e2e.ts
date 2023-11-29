@@ -19,7 +19,7 @@ beforeAll(async () => {
 })
 
 export async function verifyMilitaryInfo(militaryBranch) {
-	it('should tap through and verify that ' + militaryBranch + ' is shown on the home, profile, and military information page and that the seal is correct', async () => {
+	it('verify' + militaryBranch + ' is shown and seal is correct', async () => {
 		//changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
 		//await changeMockData('profile.json', ['/v0/military-service-history', 'data', 'attributes', {'serviceHistory': 0}, 'branchOfService'], militaryBranch)
 		//await device.launchApp({newInstance: true})
@@ -37,7 +37,7 @@ export async function verifyMilitaryInfo(militaryBranch) {
 	})
 }
 
-describe('Military Information Screen', () => { 
+describe('Military Info Screen', () => { 
 	verifyMilitaryInfo('United States Coast Guard')
 	//changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
 	/*verifyMilitaryInfo('United States Army')
@@ -53,10 +53,10 @@ describe('Military Information Screen', () => {
 		await expect(element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_BODY_LABEL_1))).toExist()
 		await expect(element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_BODY_LABEL_2))).toExist()
 		await expect(element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_BODY_LABEL_3))).toExist()
-		await expect(element(by.id('incorrectServiceDMDCNumberTestID'))).toExist()
+		await expect(element(by.id('CallVATestID'))).toExist()
 		await element(by.id('IncorrectServiceTestID')).swipe('up')
 		if (device.getPlatform() === 'android') {
-			await element(by.id('incorrectServiceDMDCNumberTestID')).tap()
+			await element(by.id('CallVATestID')).tap()
 			await setTimeout(5000)
 			var tempPath = await device.takeScreenshot('AndroidCallingScreen')
 			await device.launchApp({newInstance: false})

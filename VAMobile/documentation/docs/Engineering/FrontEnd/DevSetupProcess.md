@@ -236,6 +236,17 @@ sidebar_position: 5
 
     ![Select Simulator Xcode](/img/devSetupImage/select-emulator-xcode.png) 
 
+- Temporary Xcode 15 workaround
+
+If you are using XCode 15, a temporary workaround is required to avoid a build failure with RCT-Folly.
+
+```
+- Select Pods > Build Settings > Apple Clang - Preprocessing section > Preprocessor Macros section
+- Add to the "Debug" and "Release" sections: _LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION
+```
+
+ ![XCode 15 workaround](/img/devSetupImage/xcode-15-temporary-workaround.png)
+
 - Build project on Xcode.
 
      ![Build Project Xcode](/img/devSetupImage/build-project-xcode.png) 

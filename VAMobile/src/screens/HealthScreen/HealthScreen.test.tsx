@@ -4,7 +4,7 @@ import React from 'react'
 import { screen, fireEvent } from '@testing-library/react-native'
 import { context, mockNavProps, render } from 'testUtils'
 import { HealthScreen } from './HealthScreen'
-import { initialAuthState, initialErrorsState, initialSecureMessagingState, loadAllPrescriptions } from 'store/slices'
+import { initialSecureMessagingState, loadAllPrescriptions } from 'store/slices'
 import { when } from 'jest-when'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -100,7 +100,6 @@ context('HealthScreen', () => {
 
     render(<HealthScreen {...props} />, {
       preloadedState: {
-        auth: { ...initialAuthState },
         prescriptions: { prescriptionsNeedLoad },
         secureMessaging: {
           ...initialSecureMessagingState,
@@ -118,7 +117,6 @@ context('HealthScreen', () => {
             },
           },
         },
-        errors: initialErrorsState,
       },
     })
   }
