@@ -21,7 +21,7 @@ context('Carousel', () => {
     }
   ]
 
-  beforeEach(async () => {
+  beforeEach(() => {
     render(<Carousel screenList={screenList} onCarouselEnd={() => { }} translation={t} />)
   })
 
