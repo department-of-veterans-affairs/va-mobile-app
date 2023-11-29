@@ -33,7 +33,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: 'E2E iOS build process starting. Please see :thread: for results. This process may take a while.'
+      message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
   e2e-ios:
     needs: start_slack_thread
