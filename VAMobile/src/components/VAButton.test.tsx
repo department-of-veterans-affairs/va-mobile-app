@@ -2,7 +2,7 @@ import React from 'react'
 import Mock = jest.Mock
 import { context, fireEvent, render, screen } from 'testUtils'
 import VAButton, { ButtonTypesConstants } from './VAButton'
-import VAIcon, { VAIconProps } from './VAIcon'
+import { VAIconProps } from './VAIcon'
 
 context('VAButton', () => {
   let onPressSpy: Mock

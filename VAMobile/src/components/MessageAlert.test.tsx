@@ -1,6 +1,6 @@
 import React from 'react'
 import { context, render, screen } from 'testUtils'
-import { AlertBox, MessageAlert } from 'components'
+import { MessageAlert } from 'components'
 
 context('MessageAlert', () => {
 
