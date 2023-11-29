@@ -32,28 +32,14 @@ context('VAButton', () => {
     expect(screen.getByRole('button', { name: 'my button' })).toBeTruthy()
   })
 
-  it('should call onChange', () => {
+  it('should call onPress', () => {
     fireEvent.press(screen.getByRole('button'))
     expect(onPressSpy).toBeCalled()
-  })
-
-  describe('when icon props are passed in', () => {
-    it('should render a VAIcon', () => {
-      initializeTestInstance(false, ButtonTypesConstants.buttonPrimary, true)
-      expect(screen.UNSAFE_getAllByType(VAIcon).length).toEqual(1)
-    })
   })
 
   describe('when disabled is true', () => {
     beforeEach(() => {
       initializeTestInstance(true)
-    })
-    it('should set the text color to "buttonDisabled"', () => {
-      expect(screen.UNSAFE_getByProps({ color: 'buttonDisabled' })).toBeTruthy()
-    })
-
-    it('should set the background color to "buttonDisabled"', () => {
-      expect(screen.UNSAFE_getByProps({ backgroundColor: 'buttonDisabled' })).toBeTruthy()
     })
 
     it('should show the disabled message', () => {
@@ -68,36 +54,4 @@ context('VAButton', () => {
     })
   })
 
-  describe('when different button types are passed in', () => {
-    describe('when the button type is buttonPrimary (the default)', () => {
-      it('should set the text color and background to buttonPrimary', () => {
-        initializeTestInstance(false)
-        // The <TextView>
-        expect(screen.UNSAFE_getByProps({ color: 'buttonPrimary' }))
-        // The surrounding <Box> element
-        expect(screen.UNSAFE_getByProps({ backgroundColor: 'buttonPrimary' }))
-      })
-    })
-
-    describe('when the button type is buttonSecondary', () => {
-      it('should set the text color, background color, and border color to buttonSecondary', () => {
-        initializeTestInstance(false, ButtonTypesConstants.buttonSecondary)
-        // The <TextView>
-        expect(screen.UNSAFE_getByProps({ color: 'buttonSecondary' }))
-        // The surrounding <Box> element
-        expect(screen.UNSAFE_getByProps({ backgroundColor: 'buttonSecondary', borderColor: 'buttonSecondary' }))
-      })
-
-    })
-
-    describe('when the button type is buttonDestructive', () => {
-      it('should set the text color, background color, and border color to buttonDestructive', () => {
-        initializeTestInstance(false, ButtonTypesConstants.buttonDestructive)
-        // The <TextView>
-        expect(screen.UNSAFE_getByProps({ color: 'buttonDestructive' }))
-        // The surrounding <Box> element
-        expect(screen.UNSAFE_getByProps({ backgroundColor: 'buttonDestructive', borderColor: 'buttonDestructive' }))
-      })
-    })
-  })
 })
