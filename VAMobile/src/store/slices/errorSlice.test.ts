@@ -82,6 +82,15 @@ context('errors', () => {
             id: '3',
             type: 'maintenance_window',
           },
+          {
+            id: '23fe358d-6e82-4541-804c-ce7562ba28f4',
+            type: 'maintenance_window',
+            attributes: {
+              service: 'disability_rating',
+              startTime: '2019-04-20T14:15:00.000-04:00',
+              endTime: '2024-04-20T18:15:00.000Z',
+            },
+          }
         ],
       }
 
@@ -107,6 +116,7 @@ context('errors', () => {
 
       expect(store.getState().errors.downtimeWindowsByFeature).toHaveProperty(DowntimeFeatureTypeConstants.directDepositBenefits)
       expect(store.getState().errors.downtimeWindowsByFeature).toHaveProperty(DowntimeFeatureTypeConstants.militaryServiceHistory)
+      expect(store.getState().errors.downtimeWindowsByFeature).toHaveProperty(DowntimeFeatureTypeConstants.disabilityRating)
     })
 
     it('should not mark downtime for future maintenance windows', async () => {
