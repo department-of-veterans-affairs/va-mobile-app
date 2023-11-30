@@ -1,6 +1,5 @@
 import { AppState, AppStateStatus } from 'react-native'
 import { SvgProps } from 'react-native-svg'
-import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
 import { AccessibilityState } from 'store/slices'
@@ -168,6 +167,9 @@ export type VAIconProps = BoxProps & {
   /**  optional number use to set the height; otherwise defaults to svg's height */
   height?: number
 
+  /** optional maximum width when scaled */
+  maxWidth?: number
+
   /** optional boolean that prevents the icon from being scaled when set to true */
   preventScaling?: boolean
 
@@ -193,7 +195,7 @@ export type VAIconProps = BoxProps & {
  *
  * @returns VAIcon component
  */
-const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, fill2, stroke, preventScaling, testID, ...boxProps }) => {
+const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, fill2, stroke, maxWidth, preventScaling, testID, ...boxProps }) => {
   const theme = useTheme()
   const fs: (val: number) => number = useFontScale()
   const dispatch = useAppDispatch()
@@ -223,12 +225,32 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, fill2, stroke, pre
     return <></>
   }
 
-  if (width && isFinite(width)) {
-    iconProps = Object.assign({}, iconProps, { width: preventScaling ? width : fs(width) })
+  // Default to scaled dimensions
+  const scaledWidth = width && fs(width)
+  const scaledHeight = height && fs(height)
+  let finalWidth = scaledWidth
+  let finalHeight = scaledHeight
+
+  if (preventScaling) {
+    // Use un-scaled dimensions
+    finalWidth = width
+    finalHeight = height
+  } else if (scaledWidth && maxWidth) {
+    // If scaled width > max, use max
+    if (scaledWidth > maxWidth) {
+      finalWidth = maxWidth
+      if (height) {
+        // Scale height using same ratio as width
+        const scalingRatio = finalWidth / width
+        finalHeight = scalingRatio * height
+      }
+    }
   }
 
-  if (height && isFinite(height)) {
-    iconProps = Object.assign({}, iconProps, { height: preventScaling ? height : fs(height) })
+  iconProps = {
+    ...iconProps,
+    ...(finalWidth && { width: finalWidth }),
+    ...(finalHeight && { height: finalHeight }),
   }
 
   return (
