@@ -27,12 +27,12 @@ type AppointmentAddressAndNumberProps = {
 
 const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ attributes }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { appointmentType, healthcareService, location, isCovidVaccine, healthcareProvider } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, healthcareService, location, isCovidVaccine, healthcareProvider, phoneOnly } = attributes || ({} as AppointmentAttributes)
   const { address, phone } = location || ({} as AppointmentLocation)
 
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isValidAppointment = isVAOrCCOrVALocation(appointmentType) || appointmentIsAtlas
-  if (!isValidAppointment) {
+  if (!isValidAppointment || phoneOnly) {
     return <></>
   }
 
