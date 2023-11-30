@@ -61,6 +61,41 @@ describe('Settings Screen', () => {
     }
   })
 
+  it('should show Give feedback screen', async () => {
+    try {
+      await expect(element(by.text('Give feedback'))).toExist()
+    } catch (ex) {
+      await element(by.text('Developer Screen')).tap()
+      await element(by.text('Remote Config')).tap()
+      await waitFor(element(by.text('Override Toggles'))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(400, 'down')
+      await waitFor(element(by.text('inAppRecruitment'))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(100, 'down')
+      await element(by.text('inAppRecruitment')).tap()
+      await element(by.id('remoteConfigTestID')).scrollTo('bottom')
+      await element(by.text('Apply Overrides')).tap()
+      await loginToDemoMode()
+      await openProfile()
+      await openSettings()
+    }
+    await element(by.text('Give feedback')).tap()
+    await expect(element(by.text('Make this app better for all Veterans'))).toExist()
+    await expect(element(by.text('Go to questionnaire'))).toExist()
+    await expect(element(by.text('Learn more about the Veteran Usability Project'))).toExist()
+  })
+
+  /*it('should tap on "learn more about the veteran usability project" in in app recruitment', async () => {
+    await element(by.id('inAppRecruitmentLearnMoreTestID')).tap()
+    await element(by.text('OK')).tap()
+    await device.takeScreenshot('inAppRecruitmentVeteranUsabilityProject')
+    await device.launchApp({ newInstance: false })
+  })*/
+
+  it('should tap on "go to questionnaire" in in app recruitment', async () => {
+    await element(by.text('Go to questionnaire')).tap()
+    await device.takeScreenshot('inAppRecruitmentQuestionnaire')
+    await element(by.text('Done')).tap()
+    await element(by.text('Close')).tap()
+  })
+
   it('should show Privacy Policy page', async () => {
     await element(by.text(SettingsE2eIdConstants.PRIVACY_ROW_TEXT)).tap()
     await element(by.text('Ok')).tap()
