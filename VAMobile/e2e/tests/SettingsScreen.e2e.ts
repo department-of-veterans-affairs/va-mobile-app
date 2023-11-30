@@ -82,13 +82,6 @@ describe('Settings Screen', () => {
     await expect(element(by.text('Learn more about the Veteran Usability Project'))).toExist()
   })
 
-  /*it('should tap on "learn more about the veteran usability project" in in app recruitment', async () => {
-    await element(by.id('inAppRecruitmentLearnMoreTestID')).tap()
-    await element(by.text('OK')).tap()
-    await device.takeScreenshot('inAppRecruitmentVeteranUsabilityProject')
-    await device.launchApp({ newInstance: false })
-  })*/
-
   it('should tap on "go to questionnaire" in in app recruitment', async () => {
     await element(by.text('Go to questionnaire')).tap()
     await device.takeScreenshot('inAppRecruitmentQuestionnaire')
