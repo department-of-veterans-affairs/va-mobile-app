@@ -46,7 +46,7 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('debug.title')} backLabelOnPress={navigation.goBack} title={t('remoteConfig.title')} testID='remoteConfigTestID'>
+    <FeatureLandingTemplate backLabel={t('debug.title')} backLabelOnPress={navigation.goBack} title={t('remoteConfig.title')} testID="remoteConfigTestID">
       <Box mb={contentMarginBottom}>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>

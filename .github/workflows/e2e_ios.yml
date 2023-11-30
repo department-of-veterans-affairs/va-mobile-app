@@ -6,8 +6,8 @@ name: '[e2e] iOS Detox Test Run'
 
 on:
   push:
-    #branches:
-    #  - 'dependabot/**'
+    branches:
+      - 'dependabot/**'
   workflow_dispatch:
   workflow_run:
     workflows: ['[Release] New Release Issue']
@@ -83,7 +83,7 @@ jobs:
         run: yarn e2e:ios-build
 
       - name: Run e2e tests for iOS
-        run: yarn e2e:ios-test /e2e/tests/SettingsScreen.e2e --take-screenshots failing --updateSnapshot
+        run: yarn e2e:ios-test --take-screenshots failing --updateSnapshot
 
       - name: Upload artifacts on failure
         if: failure()
