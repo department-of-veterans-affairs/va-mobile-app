@@ -9,7 +9,7 @@ import _ from 'underscore'
 import { Box, InlineTextWithIconsProps, MessageListItemObj, PickerItem, TextView, VAIconProps } from 'components'
 import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
+import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, NUMBERS_ONLY_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
 import { EventParams, logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
 import { Events } from 'constants/analytics'
 import {
@@ -442,9 +442,9 @@ export const getLinkifiedText = (body: string, launchExternalLink: (url: string,
         previousText.length === 3 &&
         text.length === 3 &&
         nextText.length === 4 &&
-        PHONE_REGEX_EXP.test(previousText) &&
-        PHONE_REGEX_EXP.test(text) &&
-        PHONE_REGEX_EXP.test(nextText)
+        NUMBERS_ONLY_REGEX_EXP.test(previousText) &&
+        NUMBERS_ONLY_REGEX_EXP.test(text) &&
+        NUMBERS_ONLY_REGEX_EXP.test(nextText)
       ) {
         textReconstructedBody.pop()
         textReconstructedBody.pop()

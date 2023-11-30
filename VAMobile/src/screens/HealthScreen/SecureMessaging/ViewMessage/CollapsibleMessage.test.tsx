@@ -35,14 +35,14 @@ context('CollapsibleMessage', () => {
     },
   ]
 
-  const initializeTestInstance = (isInitialMessage: boolean = false) => {
+  const initializeTestInstance = (isInitialMessage = false, body = 'Test Message Body') => {
     onPressSpy = jest.fn(() => {})
 
     let messageAttributes: SecureMessagingMessageAttributes = {
       messageId: 1,
       category: CategoryTypeFields.education,
       subject: 'Test Message Subject',
-      body: 'Test Message Body',
+      body: body,
       hasAttachments: true,
       attachment: true,
       attachments: listOfAttachments,
@@ -73,6 +73,64 @@ context('CollapsibleMessage', () => {
   it('does not render CollapsibleMessage when it is the initialMessage', () => {
     initializeTestInstance(true)
     expect(screen.queryByText('John Smith')).toBeFalsy()
+  })
+
+  it('linkifies email addresses properly', () => {
+    initializeTestInstance(false, 'test@va.gov or mailto:test@va.gov')
+    fireEvent.press(screen.getByText('John Smith'))
+    expect(screen.getByRole('link', { name: 'test@va.gov' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'mailto:test@va.gov' })).toBeTruthy()
+  })
+
+  it('does not linkify improper email addresses', () => {
+    initializeTestInstance(false, 'test @va.gov or mail to:test@va.gov')
+    fireEvent.press(screen.getByText('John Smith'))
+    expect(screen.queryByRole('link', { name: 'test@va.gov' })).toBeFalsy()
+    expect(screen.queryByRole('link', { name: 'mailto:test@va.gov' })).toBeFalsy()
+  })
+
+  it('linkifies phone numbers properly', () => {
+    initializeTestInstance(false, '8006982411 or 800-698-2411 or (800)698-2411 or (800)-698-2411 or 800 698 2411 or +8006982411 or +18006982411 or 1-800-698-2411')
+    fireEvent.press(screen.getByText('John Smith'))
+    expect(screen.getByRole('link', { name: '8006982411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '(800)698-2411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '(800)-698-2411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '800 698 2411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '+8006982411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '+18006982411' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: '1-800-698-2411' })).toBeTruthy()
+  })
+
+  it('does not linkify improper phone numbers', () => {
+    initializeTestInstance(false, '800698241 or 800&698&2411 or 800 698 411')
+    fireEvent.press(screen.getByText('John Smith'))
+    expect(screen.queryByRole('link', { name: '800698241' })).toBeFalsy()
+    expect(screen.queryByRole('link', { name: '800&698&2411' })).toBeFalsy()
+    expect(screen.queryByRole('link', { name: '800 698 411' })).toBeFalsy()
+  })
+
+  it('linkifies web address and maps properly', () => {
+    initializeTestInstance(false, 'https://www.va.gov/ or https://rb.gy/riwea or https://va.gov or http://www.va.gov/ or https://www.va.gov/education/about-gi-bill-benefits/ or www.va.gov or www.google.com or google.com or http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s or http://maps.google.com/?q=50.894967,4.341626')
+    fireEvent.press(screen.getByText('John Smith'))
+    expect(screen.getByRole('link', { name: 'https://www.va.gov/' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'https://rb.gy/riwea' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'https://va.gov' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'http://www.va.gov/' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'https://www.va.gov/education/about-gi-bill-benefits/' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'www.va.gov' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'www.google.com' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'google.com' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'http://maps.google.com/?q=50.894967,4.341626' })).toBeTruthy()
+  })
+
+  it('does not linkify improper web address and maps', () => {
+    initializeTestInstance(false, 'ftp://www.va.gov/ or www. va .gov or htttps://va.gov')
+    fireEvent.press(screen.getByText('John Smith'))
+    expect(screen.queryByRole('link', { name: 'ftp://www.va.gov/' })).toBeFalsy()
+    expect(screen.queryByRole('link', { name: 'www. va .gov' })).toBeFalsy()
+    expect(screen.queryByRole('link', { name: 'htttps://va.gov' })).toBeFalsy()
   })
 
   it('should render AttachmentLink content correctly when collapsibleMessage is expanded and should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', () => {
