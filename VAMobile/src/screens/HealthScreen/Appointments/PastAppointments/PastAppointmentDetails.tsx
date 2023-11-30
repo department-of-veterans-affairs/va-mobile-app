@@ -11,10 +11,11 @@ import {
   PreferredAppointmentType,
   PreferredDateAndTime,
   ProviderName,
+  TypeOfCare,
 } from '../AppointmentDetailsCommon'
 import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
 import { AppointmentsState, trackAppointmentDetail } from 'store/slices/appointmentsSlice'
-import { Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
+import { Box, ClickForActionLink, ClickToCallPhoneNumber, FeatureLandingTemplate, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -22,8 +23,10 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from '../../../../utils/appointments'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import getEnv from 'utils/env'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
+const { LINK_URL_VA_SCHEDULING } = getEnv()
 
 const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
@@ -35,7 +38,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
 
   const appointment = pastAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, status } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, status, phoneOnly, location } = attributes || ({} as AppointmentAttributes)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
 
@@ -59,6 +62,28 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
       return <></>
     }
 
+    if (phoneOnly) {
+      return (
+        <Box mt={theme.dimensions.condensedMarginBetween}>
+          <TextArea>
+            <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
+              {appointmentIsCanceled ? t('appointments.reschedule.title') : t('appointments.schedule.title')}
+            </TextView>
+            <TextView variant="MobileBody" paragraphSpacing={true}>
+              {appointmentIsCanceled ? t('appointments.reschedule.body') : t('appointments.schedule.body')}
+            </TextView>
+            {location.phone ? <ClickToCallPhoneNumber phone={location.phone.areaCode + ' ' + location.phone.number} /> : undefined}
+            <ClickForActionLink
+              displayedText={t('appointments.vaSchedule')}
+              a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+              numberOrUrlLink={LINK_URL_VA_SCHEDULING}
+              linkType={LinkTypeOptionsConstants.externalLink}
+            />
+          </TextArea>
+        </Box>
+      )
+    }
+
     return (
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
@@ -78,7 +103,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
           <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
             <AppointmentTypeAndDate attributes={attributes} isPastAppointment={true} />
           </Box>
-
+          <TypeOfCare attributes={attributes} />
           <ProviderName attributes={attributes} />
 
           <AppointmentAddressAndNumber attributes={attributes} />
