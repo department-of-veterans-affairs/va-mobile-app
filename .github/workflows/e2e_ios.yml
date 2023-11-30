@@ -122,7 +122,7 @@ jobs:
             --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
             https://slack.com/api/chat.postMessage|
             jq -r '.ts')
-          echo SLACK_THREAD_TS=${ts} >> $GIT
+          echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
       - name: Upload artifacts on failure
         if: failure()
