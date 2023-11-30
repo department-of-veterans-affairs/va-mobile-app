@@ -47,6 +47,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
   const uri = image.uri
   const confirmAlert = useDestructiveActionSheet()
   const photoPreviewIconSize = 24
+  const photoPreviewMaxIconSize = 50
   const photoPreviewBorderRadius = 5
   const photoPreviewIconPadding = 5
 
@@ -114,8 +115,8 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
         <Box>{photo()}</Box>
         {selected && <Box {...blueOpacity} />}
         <Box pt={photoPreviewIconPadding} pr={photoPreviewIconPadding} position="absolute" alignSelf="flex-end">
-          {selected && <VAIcon name={'Minus'} width={photoPreviewIconSize} height={photoPreviewIconSize} fill={themeColor.icon.photoAdd} />}
-          {!selected && <VAIcon name={'Remove'} width={photoPreviewIconSize} height={photoPreviewIconSize} fill={themeColor.icon.deleteFill} />}
+          {selected && <VAIcon name={'Minus'} width={photoPreviewIconSize} height={photoPreviewIconSize} maxWidth={photoPreviewMaxIconSize} fill={themeColor.icon.photoAdd} />}
+          {!selected && <VAIcon name={'Remove'} width={photoPreviewIconSize} height={photoPreviewIconSize} maxWidth={photoPreviewMaxIconSize} fill={themeColor.icon.deleteFill} />}
         </Box>
       </Box>
       <Box width={width} flexDirection="row">
