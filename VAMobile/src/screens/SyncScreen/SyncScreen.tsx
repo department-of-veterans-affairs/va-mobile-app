@@ -32,8 +32,9 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({ enabled: loggedIn })
-  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
-  const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
+  // TODO: For some reason Unit Tests cannot pick up the constant
+  const drNotInDowntime = !useDowntime('disability_rating')
+  const mhNotInDowntime = !useDowntime('military_service_history')
 
   const [displayMessage, setDisplayMessage] = useState('')
 
