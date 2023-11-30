@@ -27,7 +27,7 @@ env:
   APP_CLIENT_SECRET: ${{ secrets.APP_CLIENT_SECRET }}
   # IAM production app client secret
   APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
-  # Slack API token used by fastlane
+  # Slack API token
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
