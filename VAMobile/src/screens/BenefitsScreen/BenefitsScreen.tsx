@@ -45,7 +45,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = () => {
   }
 
   const onClaims = () => {
-    if (featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters && waygateNativeAlert('WG_Claims')) {
+    if (featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters) {
       navigateTo('Claims')()
     } else if (waygateNativeAlert('WG_ClaimsHistory')) {
       navigateTo('ClaimsHistory')()
