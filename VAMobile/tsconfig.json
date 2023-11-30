@@ -21,8 +21,7 @@
 		"types": [
 			"node",
 			"webdriverio/async",
-			"jest",
-			"@wdio/mocha-framework"
+			"jest"
 		]
 	},
 	"exclude": [
