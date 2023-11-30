@@ -260,14 +260,19 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
     textLines.push(status)
   }
 
-  if (phoneOnly) {
+  if (phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) {
+    const facilityName = location.name
     textLines.push(
       { text: t('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       { text: t('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', mb: condensedMarginBetween },
-      { text: t('text.raw', { text: typeOfCare ? typeOfCare : t('appointments.noTypeOfCare') }), variant: 'HelperText', mb: 5 },
-      { text: t('text.raw', { text: healthcareProvider ? healthcareProvider : t('appointments.noProvider') }), variant: 'HelperText', mb: 5 },
       {
-        text: t('text.raw', { text: getAppointmentTypeIconText(appointmentType, t, phoneOnly) }),
+        text: t('text.raw', { text: isCovidVaccine ? t('upcomingAppointments.covidVaccine') : typeOfCare || t('appointments.noTypeOfCare') }),
+        variant: 'HelperText',
+        mb: 5,
+      },
+      { text: t('text.raw', { text: healthcareProvider || t('appointments.noProvider') }), variant: 'HelperText', mb: 5 },
+      {
+        text: t('text.raw', { text: phoneOnly ? t('appointmentList.phoneOnly') : t('appointments.atFacilityName', { facilityName }) }),
         iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
         variant: 'HelperText',
       },

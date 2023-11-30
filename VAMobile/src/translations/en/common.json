@@ -198,6 +198,7 @@
   "appointments": "Appointments",
   "appointments.appointment": "Appointment",
   "appointments.appointmentsStatusSomeUnavailable": " We can't load some of your VA appointments",
+  "appointments.atFacilityName": "At {{facilityName}}",
   "appointments.cancelAppointment": "Cancel appointment",
   "appointments.cancelRequest": "Cancel appointment request?",
   "appointments.cancelThisAppointment": "Cancel this appointment?",
