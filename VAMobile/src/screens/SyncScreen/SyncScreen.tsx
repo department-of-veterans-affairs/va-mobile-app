@@ -7,10 +7,11 @@ import { AuthState, completeSync, logInDemoMode } from 'store/slices'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { DisabilityRatingState, MilitaryServiceState, checkForDowntimeErrors, getDisabilityRating, getServiceHistory } from 'store/slices'
+import { DowntimeFeatureTypeConstants } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useOrientation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import colors from 'styles/themes/VAColors'
 
@@ -31,6 +32,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({ enabled: loggedIn })
+  const drNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
 
   const [displayMessage, setDisplayMessage] = useState('')
 
@@ -48,7 +50,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     if (loggedIn) {
       if (!loadingUserAuthorizedServices && userAuthorizedServices?.militaryServiceHistory && !militaryHistoryLoaded && !militaryHistoryLoading) {
         dispatch(getServiceHistory())
-      } else if (!disabilityRatingLoaded && !disabilityRatingLoading) {
+      } else if (!disabilityRatingLoaded && !disabilityRatingLoading && drNotInDowntime) {
         dispatch(getDisabilityRating())
       }
     }
@@ -59,6 +61,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     userAuthorizedServices?.militaryServiceHistory,
     disabilityRatingLoaded,
     disabilityRatingLoading,
+    drNotInDowntime,
     militaryHistoryLoaded,
     militaryHistoryLoading,
   ])
@@ -75,10 +78,22 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     }
 
     const finishSyncingMilitaryHistory = !loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded)
-    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded) {
+    const finishSyncingDisabilityRating = !drNotInDowntime || (drNotInDowntime && disabilityRatingLoaded)
+    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, loggingOut, loadingUserAuthorizedServices, militaryHistoryLoaded, userAuthorizedServices?.militaryServiceHistory, t, disabilityRatingLoaded, syncing])
+  }, [
+    dispatch,
+    loggedIn,
+    loggingOut,
+    loadingUserAuthorizedServices,
+    drNotInDowntime,
+    militaryHistoryLoaded,
+    userAuthorizedServices?.militaryServiceHistory,
+    t,
+    disabilityRatingLoaded,
+    syncing,
+  ])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
