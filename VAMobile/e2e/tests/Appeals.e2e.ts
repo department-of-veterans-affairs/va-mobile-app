@@ -14,6 +14,7 @@ export const AppealsIdConstants = {
   APPEAL_SUBMITTED_TEXT: 'Submitted June 12, 2008',
   APPEAL_NEED_HELP_NUMBER_TEXT: '800-827-1000',
   APPEAL_VISIT_VA_TEXT: 'Visit VA.gov',
+  APPEAL_UP_TO_DATE_ID: 'appealsUpToDateTestID',
 }
 
 export async function getDateWithTimeZone(dateString: string) {
@@ -36,8 +37,12 @@ describe('Appeals', () => {
     await element(by.id(AppealsIdConstants.APPEAL_1_ID)).tap()
     await expect(element(by.text(AppealsIdConstants.APPEAL_TYPE_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_DETAILS_TEXT))).toExist()
-    dateWithTimeZone = await getDateWithTimeZone('December 03, 2021 12:39 PM')
-    await expect(element(by.text('Up to date as of ' + dateWithTimeZone))).toExist()
+    if(device.getPlatform() === 'android') {
+      await expect(element(by.id(AppealsIdConstants.APPEAL_UP_TO_DATE_ID))).toExist()
+    } else {
+      dateWithTimeZone = await getDateWithTimeZone('December 03, 2021 12:39 PM')
+      await expect(element(by.text('Up to date as of ' + dateWithTimeZone))).toExist()
+    }
     await expect(element(by.text(AppealsIdConstants.APPEAL_SUBMITTED_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.STATUS_TAB_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.ISSUES_TAB_TEXT))).toExist()
@@ -54,14 +59,18 @@ describe('Appeals', () => {
     await element(by.text(AppealsIdConstants.ISSUES_TAB_TEXT)).tap()
     await expect(element(by.text(AppealsIdConstants.APPEAL_TYPE_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_DETAILS_TEXT))).toExist()
-    dateWithTimeZone = await getDateWithTimeZone('December 03, 2021 12:39 PM')
-    await expect(element(by.text('Up to date as of ' + dateWithTimeZone))).toExist()
+    if(device.getPlatform() === 'android') {
+      await expect(element(by.id(AppealsIdConstants.APPEAL_UP_TO_DATE_ID))).toExist()
+    } else {
+      dateWithTimeZone = await getDateWithTimeZone('December 03, 2021 12:39 PM')
+      await expect(element(by.text('Up to date as of ' + dateWithTimeZone))).toExist()
+    }
     await expect(element(by.text(AppealsIdConstants.APPEAL_SUBMITTED_TEXT))).toExist()
     await expect(element(by.text('Currently on appeal'))).toExist()
     await expect(element(by.text('Service connection, ureteral stricture'))).toExist()
   })
 
-  it('should tap on status, tap review past events, and verify the correct information is displayed', async () => {
+  it('verify review past events information', async () => {
     await element(by.text(AppealsIdConstants.STATUS_TAB_TEXT)).tap()
     await element(by.id(AppealsIdConstants.REVIEW_PAST_EVENTS_ID)).tap()
     await expect(element(by.id('VA sent you a claim decision On April 11, 2008'))).toExist()

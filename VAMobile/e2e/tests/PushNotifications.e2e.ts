@@ -18,32 +18,32 @@ const mockNotification = {
   },
 }
 
-describe('Push Notifications', () => {
-  it('should navigate to appropriate screen when launching the app from a dead state', async () => {
+describe(':ios: Push Notifications', () => {
+  it('dead state: should navigate to appropriate screen when launching', async () => {
     await device.launchApp({delete: true, permissions: {notifications: 'YES'}, newInstance: true, userNotification: mockNotification});
     await loginToDemoMode()
     await waitFor(element(by.text(PushNotificationsConstants.REVIEW_MESSAGE_SCREEN_TITLE))).toExist().withTimeout(8000)
-  });
+  })
 
   it('should navigate back to home screen after launch', async() => {
     await backButton()
     await waitFor(element(by.text(PushNotificationsConstants.MESSAGE_COMPOSE_BUTTON_TEXT))).toExist()
     await backButton()
     await expect(element(by.text('Home'))).toExist()
-  });
+  })
 
-  it('should navigate to appropriate screen when the app is in the background', async () => {
+  it('background: should navigate to appropriate screen', async () => {
     await device.launchApp({newInstance: true});
     await loginToDemoMode()
     await device.sendToHome();
     await device.launchApp({newInstance: false, userNotification: mockNotification});
     await waitFor(element(by.text(PushNotificationsConstants.REVIEW_MESSAGE_SCREEN_TITLE))).toExist().withTimeout(8000)
-  });
+  })
 
-  it('should navigate to appropriate screen when the app is in the foreground', async () => {
+  it('foreground: should navigate to appropriate screen', async () => {
     await device.launchApp({newInstance: true});
     await loginToDemoMode()
     await device.sendUserNotification(mockNotification);
     await waitFor(element(by.text(PushNotificationsConstants.REVIEW_MESSAGE_SCREEN_TITLE))).toExist().withTimeout(8000)
-  });
-});
+  })
+})

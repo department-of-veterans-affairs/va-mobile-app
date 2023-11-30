@@ -18,8 +18,7 @@
 /// more details and information about related settings.
 ///
 /// <pre>
-///     [FIRAnalytics setUserPropertyString:@"NO"
-///                                 forName:kFIRUserPropertyAllowAdPersonalizationSignals];
+///     Analytics.setUserProperty("NO", forName: AnalyticsUserPropertyAllowAdPersonalizationSignals)
 /// </pre>
 static NSString *const kFIRUserPropertyAllowAdPersonalizationSignals
     NS_SWIFT_NAME(AnalyticsUserPropertyAllowAdPersonalizationSignals) = @"allow_personalized_ads";

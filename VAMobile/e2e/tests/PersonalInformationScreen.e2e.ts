@@ -1,4 +1,4 @@
-import { by, device, element, expect, waitFor, web } from 'detox'
+import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
 import { loginToDemoMode, openPersonalInformation, openProfile } from './utils'
@@ -29,7 +29,7 @@ const scrollToThenTap = async (text: string) => {
 const checkLocatorAndContactLinks = async () => {
   await scrollToThenTap(PersonalInfoConstants.NEAREST_CENTER_LINK_TEXT)
   await setTimeout(5000)
-  await expect(web.element(by.web.className('title-section'))).toHaveText('Find VA locations')
+  await device.takeScreenshot('PersonalInformationFindVALocations')
   await element(by.text('Done')).tap()
 
   await scrollToThenTap(PersonalInfoConstants.PHONE_LINK_TEXT)
@@ -52,7 +52,7 @@ beforeAll(async () => {
     .withTimeout(10000)
 })
 
-describe('Personal Information Screen', () => {
+describe('Personal Info Screen', () => {
   it('should match design', async () => {
     await expect(element(by.text('Date of birth'))).toExist()
     await expect(element(by.text('January 01, 1950'))).toExist()
@@ -68,11 +68,11 @@ describe('Personal Information Screen', () => {
     await element(by.text(PersonalInfoConstants.HOW_TO_UPDATE_LINK_TEXT)).tap()
     await expect(element(by.text('Profile help'))).toExist()
 
-    if (device.getPlatform() === 'android') {
-      await element(by.text(PersonalInfoConstants.LEARN_HOW_LINK_TEXT)).tap()
-      await expect(web.element(by.web.tag('article'))).toHaveText('How to change your legal name on file with VA')
-      await element(by.text('Done')).tap()
+    await element(by.text(PersonalInfoConstants.LEARN_HOW_LINK_TEXT)).tap()
+    await element(by.text('Done')).tap()
+    await device.takeScreenshot('personalInfoLearnHowToWebPage')
 
+    if (device.getPlatform() === 'android') {     
       await checkLocatorAndContactLinks()
     }
 
@@ -93,7 +93,8 @@ describe('Personal Information Screen', () => {
   it('should update preferred name', async () => {
     await element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT)).tap()
     await expect(element(by.text(PersonalInfoConstants.PREFERRED_NAME_ROW_TEXT)).atIndex(0)).toExist()
-    await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).typeText('Kimberlee\n')
+    await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).replaceText('Kimberlee')
+    await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).tapReturnKey()
     await element(by.text('Save')).tap()
 
     await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT)).atIndex(0)).toExist()

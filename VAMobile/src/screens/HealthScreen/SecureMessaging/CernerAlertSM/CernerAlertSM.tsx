@@ -51,6 +51,7 @@ const CernerAlertSM: FC = () => {
       linkType: LinkTypeOptionsConstants.externalLink,
       numberOrUrlLink: LINK_URL_GO_TO_PATIENT_PORTAL,
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
+      testID: 'goToMyVAHealthTestID',
     }
 
     return (

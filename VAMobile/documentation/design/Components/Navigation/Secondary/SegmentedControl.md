@@ -5,18 +5,21 @@ title: Segmented control
 A segmented control is used to switch between related views of information within the same context.
 
 ## Examples
-### Default
-#### [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--two-segments)
-<iframe width="400" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/iframe.html?viewMode=story&id=segmented-control" allowfullscreen></iframe>
 
-#### [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU?type=design%27&node-id=7332:11330)
-<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7332-11330&mode=design&t=lRnzcV3CBx2yby7N-4" allowfullscreen></iframe>
+### Two segments
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--2-segments)	|	[Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7332-11330&mode=design&t=lRnzcV3CBx2yby7N-4)
+<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/segmented-control--2-segments&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
-### Variations
-#### [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--two-segments) (coming soon)
 
-#### [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU?type=design%27&node-id=7332:1133)
-<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7332-11331&mode=design&t=lRnzcV3CBx2yby7N-4" allowfullscreen></iframe>
+### Three segments
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--3-segments)	|	[Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7332-11330&mode=design&t=lRnzcV3CBx2yby7N-4)
+<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/segmented-control--3-segments&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+
+
+### Four segments
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--4-segments)	|	[Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=7332-11330&mode=design&t=lRnzcV3CBx2yby7N-4)
+<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/segmented-control--4-segments&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+
 
 ## Usage
 A segmented control consists of a horizontal set of 2-4 segments, each of which functions as a button. One option is always selected. The component does not scroll horizontally.
@@ -40,7 +43,7 @@ A segmented control consists of a horizontal set of 2-4 segments, each of which 
 - Claims also uses a segmented control to show the Status/Details of claims. This is not an appropriate use of this component since it groups content that is dissimilar. In this case, a Tabs component should be used instead.
 
 ## Code usage
-[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--two-segments)
+[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/segmented-control--2-segments)
 
 ## Content considerations
 - **Keep labels to 1 word**: If you need 2 (or more) words, you're likely trying to include extraneous words or group together items that are not similar enough. You may need to consider using a different component. The label text must be short enough that it doesn't wrap in the component.

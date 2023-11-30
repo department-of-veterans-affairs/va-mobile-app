@@ -15,7 +15,7 @@ beforeAll(async () => {
 	await openVAPaymentHistory()
 })
 
-describe('Home Screen', () => {
+describe('Payments Screen', () => {
 	it('should match the Payments history page design', async () => {
 		await expect(element(by.id(PaymentsE2eIDConstants.MISSING_PAYMENTS_LINK_ID))).toExist()
 		await expect(element(by.id(PaymentsE2eIDConstants.PAYMENTS_YEAR_PICKER_ID))).toExist()
@@ -23,7 +23,7 @@ describe('Home Screen', () => {
 		await expect(element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_2_ID))).toExist()
 	})
 	
-	it('should tap on what if I\'m missing a payment and display the correct information', async () => {
+	it('verify what if I\'m missing a payment information', async () => {
 		await element(by.id(PaymentsE2eIDConstants.MISSING_PAYMENTS_LINK_ID)).tap()
 		await expect(element(by.text('What if I\'m missing a payment?')).atIndex(1)).toExist()
 		if (device.getPlatform() === 'android') {
@@ -39,7 +39,7 @@ describe('Home Screen', () => {
 		await element(by.text('Close')).tap() 
 	})
 
-	it('should tap on a payment and verify the payment details for paper check', async () => {
+	it('payment details: verify the payment details for paper check', async () => {
 		await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_1_ID)).atIndex(0).tap()
 		await expect(element(by.text('June 1, 2017'))).toExist()
 		await expect(element(by.text('Regular Chapter 31'))).toExist()
@@ -48,7 +48,7 @@ describe('Home Screen', () => {
 		await expect(element(by.id(PaymentsE2eIDConstants.PAYMENT_INFO_INCORRECT_ID))).toExist()
 	})
 
-	it('should tap on what if my payment information doesn\'t look right and display the correct information', async () => {
+	it('verify what if my payment information doesn\'t look right info', async () => {
 		await element(by.id(PaymentsE2eIDConstants.PAYMENT_INFO_INCORRECT_ID)).tap()
 		await expect(element(by.text('What if my payment information doesn\'t look right?')).atIndex(1)).toExist()
 		if (device.getPlatform() === 'android') {
@@ -65,7 +65,7 @@ describe('Home Screen', () => {
 		await element(by.text('History')).tap()
 	})
 
-	it('should tap on a payment and verify the payment details for direct deposit', async () => {
+	it('verify the payment details for direct deposit', async () => {
 		await waitFor(element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_2_ID))).toBeVisible().whileElement(by.id('paymentHistoryTestID')).scroll(200, 'down')
 		await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_2_ID)).tap()
 		await expect(element(by.text('BANK OF AMERICA, N.A.'))).toExist()
