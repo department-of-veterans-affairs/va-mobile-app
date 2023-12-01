@@ -173,29 +173,27 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
-      <WaygateWrapper>
-        <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
-          {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
-          {title && (
-            <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
-              <TextView {...titleTextProps}>{title}</TextView>
-            </Box>
-          )}
-          {children}
-        </VAScrollView>
-        {primaryContentButtonText && onPrimaryContentButtonPress && (
-          <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
-            {secondaryContentButtonText && onSecondaryContentButtonPress && (
-              <Box ml={theme.dimensions.gutter} flex={1}>
-                <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
-              </Box>
-            )}
-            <Box ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter} mr={theme.dimensions.gutter} flex={1}>
-              <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} testID={primaryButtonTestID} />
-            </Box>
+      <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
+        {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
+        {title && (
+          <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
+            <TextView {...titleTextProps}>{title}</TextView>
           </Box>
         )}
-      </WaygateWrapper>
+        <WaygateWrapper>{children}</WaygateWrapper>
+      </VAScrollView>
+      {primaryContentButtonText && onPrimaryContentButtonPress && (
+        <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+          {secondaryContentButtonText && onSecondaryContentButtonPress && (
+            <Box ml={theme.dimensions.gutter} flex={1}>
+              <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
+            </Box>
+          )}
+          <Box ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter} mr={theme.dimensions.gutter} flex={1}>
+            <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} testID={primaryButtonTestID} />
+          </Box>
+        </Box>
+      )}
     </View>
   )
 }
