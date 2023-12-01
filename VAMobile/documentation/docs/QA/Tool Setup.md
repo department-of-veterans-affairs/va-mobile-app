@@ -33,3 +33,14 @@ If you are looking for a specific testing build, make sure that the comments des
 
 
 _As a general resource, here's [Google's documentation on troubleshooting/FAQs for testing with Firebase AppTester](https://firebase.google.com/docs/app-distribution/troubleshooting?platform=android)._
+
+## Charles Proxy (SSL proxying tool)
+
+1. Get approval for a Charles Proxy license from mobile Engineering lead, then work with internal IT team to get Charles Proxy on your work computer.
+2. [Configure Charles and your iOS devices](https://charlesdocsy.com/2020/05/05/view-ios-traffic-with-charles-proxy/) for plain text viewing of traffic.
+3. [Configure Charles and your Android devices](https://charlesdocsy.com/2020/05/07/android-devices-and-charles/) for plain text viewing of traffic.
+4. If you've never used a tool like this to intercept and mock data, you can use the articles on [map local](https://charlesdocsy.com/2020/05/14/map-local/) and [breakpoints](https://charlesdocsy.com/2020/05/11/breakpoints-modify-request-headers/) as a starting point.
+
+The Charles certificate installed on your devices will expire after a bit less than a year. When that happens, you'll need to [reset your certificate and reinstall it on your devices](https://charlesdocsy.com/2021/12/29/expired-charles-proxy-root-certificate/).
+
+_The Charles Docsy site is great, but not necessarily easily searched, so here are quick links to the [iOS troubleshooting](https://charlesdocsy.com/2020/05/14/common-problems-ios/) and [Android troubleshooting](https://charlesdocsy.com/2020/07/08/common-problems-android/) pages._
