@@ -30,20 +30,12 @@ export const ContactInfoE2eIdConstants = {
 
 export async function updateAddress() {
   await waitFor(element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID))).toBeVisible().withTimeout(4000)
-  await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
-  await expect(element(by.text('United States'))).toExist()
-  await element(by.text('United States')).tap()
-  await element(by.text('Done')).tap()
   await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('3101 N Fort Valley Rd')
   await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
   await waitFor(element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID))).toBeVisible().withTimeout(4000)
-  await element(by.id('EditAddressTestID')).scrollTo('bottom')
+  await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
   await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).typeText('Flagstaff')
   await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
-  await waitFor(element(by.id('stateTestID'))).toBeVisible().withTimeout(4000)
-  await element(by.id('stateTestID')).tap()
-  await element(by.text('Arizona')).atIndex(0).tap()
-  await element(by.text('Done')).tap()
   await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).typeText('86001')
   await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
   await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().withTimeout(4000)
@@ -54,12 +46,39 @@ export async function validateAddresses(addressID, addressType) {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
     await waitFor(element(by.id(addressID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
     await element(by.id(addressID)).tap()
+  })
+
+  it(addressType + ': verify error handling', async() => {
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).clearText()
+    await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
+    await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
+    await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).clearText()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    await expect(element(by.text('Please check your mailing address'))).toExist()
+    await expect(element(by.text('Street address is required'))).toExist()
+    await expect(element(by.text('City is required'))).toExist()
+    if(addressType == 'Home') {
+      await expect(element(by.text('Country is required'))).toExist()
+      await expect(element(by.text('State is required'))).toExist()
+    }
+  })
+
+  it('should update the ' + addressType + ' address', async () => {
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).typeText('2')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
-    await waitFor(element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID))).toBeVisible().withTimeout(4000)
+    //await waitFor(element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID))).toBeVisible().withTimeout(4000)
     if(addressType === 'Home') {
-      await updateAddress()
+      await element(by.id('countryPickerTestID picker required Error - Country is required')).tap()
+      await expect(element(by.text('United States'))).toExist()
+      await element(by.text('United States')).tap()
+      await element(by.text('Done')).tap()
+      await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
+      await element(by.id('stateTestID picker required Error - State is required')).tap()
+      await element(by.text('Arizona')).tap()
+      await element(by.text('Done')).tap()
+      await element(by.id('EditAddressTestID')).scrollTo('top')
     }
+    await updateAddress()
   })
 
   it(addressType + ': verify action sheet for cancel', async () => {
@@ -87,12 +106,21 @@ export async function validateAddresses(addressID, addressType) {
 
   it('should open and update the ' + addressType + ' address', async () => {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
-    await waitFor(element(by.id(addressID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
+    await waitFor(element(by.id(addressID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(100, 'down')
     await element(by.id(addressID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).typeText('2')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
     await waitFor(element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID))).toBeVisible().withTimeout(4000)
     if(addressType === 'Home') {
+      await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
+      await expect(element(by.text('United States'))).toExist()
+      await element(by.text('United States')).tap()
+      await element(by.text('Done')).tap()
+      await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
+      await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
+      await element(by.text('Arizona')).tap()
+      await element(by.text('Done')).tap()
+      await element(by.id('EditAddressTestID')).scrollTo('top')
       await updateAddress()
     }
   })
@@ -134,8 +162,14 @@ export async function validateAddresses(addressID, addressType) {
 
 export async function validatePhoneNumbers(phoneID, phoneType) {
   it ('should open the ' + phoneType + ' phone number', async () => {
-    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
+    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(100, 'down')
     await element(by.id(phoneID)).tap()
+  })
+
+  it(phoneType + ': verify error handling', async() => {
+    await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).clearText()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    await expect(element(by.text('Check your phone number'))).toExist()
   })
 
   it('should update the ' + phoneType + ' phone with an extension', async () => {
@@ -169,14 +203,13 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   })
 
   it(phoneType + ': verify contact info screen is displayed on delete', async () => {
-    //await waitFor(element(by.text('Cancel'))).toBeVisible().withTimeout(4000)
     await element(by.text('Cancel')).tap()
     await element(by.text(ContactInfoE2eIdConstants.CANCEL_DELETE_TEXT)).tap()
     await expect(element(by.id(phoneID))).toExist()
   })
 
   it('should update the ' + phoneType + ' with an extension', async () => {
-    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
+    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(100, 'down')
     await element(by.id(phoneID)).tap()
     if(phoneType === 'Work') { 
       await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_ID)).typeText('276-608-6180')
@@ -198,7 +231,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
   })
   
   it(phoneType + ': verify user can remove the extension', async () => {
-    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
+    await waitFor(element(by.id(phoneID))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(100, 'down')
     await element(by.id(phoneID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).clearText()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).tapReturnKey()
@@ -213,7 +246,7 @@ export async function validatePhoneNumbers(phoneID, phoneType) {
 export async function removeContactInfoFeature(contactInfoTypeText, type) {
   it ('should tap remove ' + type + ' and verify remove pop up appears', async () => {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
-    await waitFor(element(by.id(contactInfoTypeText))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(50, 'down')
+    await waitFor(element(by.id(contactInfoTypeText))).toBeVisible().whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scroll(100, 'down')
     await element(by.id(contactInfoTypeText)).tap()
     await element(by.text('Remove ' + type)).tap()
     await expect(element(by.text('Remove your ' + type + '?'))).toExist()
@@ -246,6 +279,51 @@ export async function removeContactInfoFeature(contactInfoTypeText, type) {
   })
 }
 
+export async function verifyNonUSorMilitaryAddresses(addressID, addressType) {
+  it(addressType + ': should verify non-US address', async() => {
+    await element(by.id(addressID)).tap()
+    await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
+    await element(by.text('Andorra')).tap()
+    await element(by.text('Done')).tap()
+    await expect(element(by.text('State (Required)'))).not.toExist()
+    await expect(element(by.text('International post code (Required)'))).toExist()
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('19-21 Carrer de na Maria Pla')
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
+    await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
+    await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).typeText('Andorra la Vella')
+    await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
+    await element(by.id('stateTestID')).typeText('Andorra la Vella')
+    await element(by.id('stateTestID')).tapReturnKey()
+    await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).typeText('AD500')
+    await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    await element(by.id('suggestedAddressTestID')).tap()
+    await element(by.id('Use this address')).tap()
+    await expect(element(by.id(addressType + ' address 19-21 Carrer de na Maria Pla Andorra la Vella, Andorra la Vella, AD500 Andorra'))).toExist()
+  })
+
+  it(addressType + ': should verify a military base address', async() => {
+    await element(by.id(addressType + ' address 19-21 Carrer de na Maria Pla Andorra la Vella, Andorra la Vella, AD500 Andorra')).tap()
+    await element(by.id('USMilitaryBaseCheckboxTestID')).tap()
+    await expect(element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID))).not.toExist()
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('123 Main St')
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
+    await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
+    await element(by.id(ContactInfoE2eIdConstants.MILITARY_POST_OFFICE_ID)).tap()
+    await element(by.text('FPO')).tap()
+    await element(by.text('Done')).tap()
+    await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
+    await element(by.text('Armed Forces Pacific (AP)')).tap()
+    await element(by.text('Done')).tap()
+    await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).typeText('12345')
+    await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    await element(by.id('suggestedAddressTestID')).tap()
+    await element(by.id('Use this address')).tap()
+    await expect(element(by.id(addressType + ' address 123 Main St FPO, Armed Forces Pacific (AP) 12345'))).toExist()
+  })
+  
+}
 beforeAll(async () => {
   await loginToDemoMode()
   await openProfile()
@@ -271,7 +349,7 @@ describe(':ios: Contact Info Screen', () => {
   })
 
   validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
-  validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home') 
+  validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
   validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
@@ -279,6 +357,12 @@ describe(':ios: Contact Info Screen', () => {
   it ('should open the email address', async () => {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
+  })
+
+  it('email address: verify error handling', async() => {
+    await element(by.id('emailAddressEditTestID')).clearText()
+    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+    await expect(element(by.text('Check your email address'))).toExist()
   })
 
   it('should update the email address with a +', async () => {
@@ -309,4 +393,7 @@ describe(':ios: Contact Info Screen', () => {
   removeContactInfoFeature(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'home phone')
   removeContactInfoFeature(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'mobile phone')
   removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')
+
+  verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
+  verifyNonUSorMilitaryAddresses('Mailing address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001', 'Mailing')
 })

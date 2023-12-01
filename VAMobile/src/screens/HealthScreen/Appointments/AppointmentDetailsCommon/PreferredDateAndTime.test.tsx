@@ -34,7 +34,7 @@ context('PreferredDateAndTime', () => {
 
   it('initializes correctly', () => {
     initializeTestInstance()
-    expect(screen.getByText('Preferred date and time')).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'Preferred date and time' })).toBeTruthy()
     expect(screen.getByText('10/01/2021 in the afternoon')).toBeTruthy()
     expect(screen.getByText('11/03/2021 in the morning')).toBeTruthy()
   })
