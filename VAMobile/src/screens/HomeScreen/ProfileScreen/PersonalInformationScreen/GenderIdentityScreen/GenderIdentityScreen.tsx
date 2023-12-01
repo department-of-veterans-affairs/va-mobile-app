@@ -15,6 +15,7 @@ import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, us
 import { useDemographics } from 'api/demographics/getDemographics'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { useUpdateGenderIdentity } from 'api/demographics/updateGenderIdentity'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIdentity'>
 
@@ -111,7 +112,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
 
   const goToHelp = (): void => {
     logAnalyticsEvent(Events.vama_gender_id_help)
-    navigateTo('WhatToKnow')()
+    waygateNativeAlert('WG_WhatToKnow') && navigateTo('WhatToKnow')()
   }
 
   const radioGroupProps: RadioGroupProps<string> = {
