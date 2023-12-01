@@ -7,7 +7,6 @@ import { AuthState, completeSync, logInDemoMode } from 'store/slices'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { DisabilityRatingState, MilitaryServiceState, checkForDowntimeErrors, getDisabilityRating, getServiceHistory } from 'store/slices'
-// import { DowntimeFeatureTypeConstants } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
@@ -32,7 +31,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({ enabled: loggedIn })
-  // TODO: For some reason Unit Tests cannot pick up the constant
+  // TODO: For some reason Unit Tests cannot pick up the DowntimeFeatureTypeConstants constant
   const drNotInDowntime = !useDowntime('disability_rating')
   const mhNotInDowntime = !useDowntime('military_service_history')
 
