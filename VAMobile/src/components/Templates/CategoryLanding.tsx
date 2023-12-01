@@ -99,15 +99,13 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <HeaderBanner {...headerProps} />
-      <WaygateWrapper>
-        <VAScrollView testID={testID} scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
-          <View onLayout={getTransitionHeaderHeight}>
-            <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
-            {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
-          </View>
-          {children}
-        </VAScrollView>
-      </WaygateWrapper>
+      <VAScrollView testID={testID} scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
+        <View onLayout={getTransitionHeaderHeight}>
+          <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
+          {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
+        </View>
+        <WaygateWrapper>{children}</WaygateWrapper>
+      </VAScrollView>
     </View>
   )
 }
