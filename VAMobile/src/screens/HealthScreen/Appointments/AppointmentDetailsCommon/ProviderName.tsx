@@ -17,7 +17,15 @@ const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
   const theme = useTheme()
   const isAppointmentPending = isAPendingAppointment(attributes)
 
-  const { appointmentType, practitioner, healthcareProvider, friendlyLocationName, location } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, practitioner, healthcareProvider, friendlyLocationName, location, phoneOnly } = attributes || ({} as AppointmentAttributes)
+
+  if (phoneOnly) {
+    return (
+      <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+        {healthcareProvider ? healthcareProvider : t('appointments.noProvider')}
+      </TextView>
+    )
+  }
 
   // pending appointments
   if (isAppointmentPending) {
