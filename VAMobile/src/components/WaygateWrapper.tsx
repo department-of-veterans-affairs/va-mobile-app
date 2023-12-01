@@ -24,7 +24,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName 
   const waygateAlertBox = (waygate: Waygate) => {
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
-        <AlertBox border={waygate.type === 'DenyContent' ? 'error' : 'warning'} title={waygate.errorMsgTitle} text={waygate.errorMsgBody}>
+        <AlertBox border={waygate.type === 'DenyContent' ? 'error' : 'warning'} title={waygate.errorMsgTitle} text={waygate.errorMsgBody} focusOnError={false}>
           <Box my={theme.dimensions.standardMarginBetween}>
             <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8006982411'))} phone={t('8006982411')} a11yLabel={a11yLabelID(t('8006982411'))} />
           </Box>

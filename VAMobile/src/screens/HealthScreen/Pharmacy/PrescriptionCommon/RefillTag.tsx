@@ -5,6 +5,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RefillStatus } from 'store/api/types'
 import { getTagTypeForStatus, getTextForRefillStatus } from 'utils/prescriptions'
 import { useRouteNavigation } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import Box, { BoxProps } from 'components/Box'
 import LabelTag, { LabelTagProps } from 'components/LabelTag'
 
@@ -26,7 +27,7 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
     text: statusText,
     a11yLabel: statusText,
     labelType: getTagTypeForStatus(status),
-    onPress: navigateTo('StatusDefinition', { display: statusText, value: status }),
+    onPress: () => waygateNativeAlert('WG_StatusDefinition') && navigateTo('StatusDefinition', { display: statusText, value: status }),
     a11yHint: t('prescription.history.a11yHint.status'),
   }
 
