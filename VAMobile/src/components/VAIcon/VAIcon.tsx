@@ -226,23 +226,13 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, fill2, stroke, max
   }
 
   if (width && height) {
-    // Default to scaled dimensions
-    const scaledWidth = fs(width)
-    let finalWidth = scaledWidth
-    let finalHeight = fs(height)
-
     if (preventScaling) {
-      // Use un-scaled dimensions
-      finalWidth = width
-      finalHeight = height
-    } else if (maxWidth && scaledWidth > maxWidth) {
-      // Use max width, and scale height with same ratio
-      finalWidth = maxWidth
-      const scalingRatio = finalWidth / width
-      finalHeight = scalingRatio * height
+      iconProps = { ...iconProps, width, height }
+    } else if (maxWidth && fs(width) > maxWidth) {
+      iconProps = { ...iconProps, width: maxWidth, height: (maxWidth / width) * height }
+    } else {
+      iconProps = { ...iconProps, width: fs(width), height: fs(height) }
     }
-
-    iconProps = { ...iconProps, width: finalWidth, height: finalHeight }
   }
 
   return (
