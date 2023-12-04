@@ -128,9 +128,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
         <View onLayout={getTransitionHeaderHeight}>{!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}</View>
         <WaygateWrapper>{children}</WaygateWrapper>
       </VAScrollView>
-      <WaygateWrapper bypassAlertBox={true}>
-      {footerContent}
-      </WaygateWrapper>
+      <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>
     </View>
   )
 }
