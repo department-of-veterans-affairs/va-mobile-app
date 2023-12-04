@@ -1,6 +1,7 @@
 import { expect, device, by, element, waitFor } from 'detox'
-import { loginToDemoMode} from './utils'
+import { loginToDemoMode, checkImages, resetInAppReview} from './utils'
 
+const { exec } = require('child_process')
 var appTabs = ['Home', 'Benefits', 'Health', 'Payments']
 
 var navigationDic = {
@@ -60,11 +61,91 @@ const checkHierachy = async (tabName, categoryName, featureHeaderName) => {
 			await expect(element(by.text(featureHeaderName)).atIndex(0)).toExist()
 		}
 	}
-	await element(by.id(tabName)).atIndex(0).tap()
+}
+
+const navigateToPage = async (key, navigationDicValue, accessibilityFeatureType: string | null, darkModeFirstTime = false) => {
+	if (accessibilityFeatureType === 'landscape') {
+		await device.setOrientation('landscape')
+		await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
+		var feature = await device.takeScreenshot(navigationDicValue[1])
+		checkImages(feature)
+		await device.setOrientation('portrait')
+	} else if(accessibilityFeatureType == 'darkMode') {
+		if(device.getPlatform() === 'android') {
+			exec('adb shell "cmd uimode night yes"', (error) => {
+				if (error) {
+					console.error(`exec error: ${error}`);
+					return;
+				}
+			})
+			await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
+			var feature = await device.takeScreenshot(navigationDicValue[1])
+			checkImages(feature)
+			exec('adb shell "cmd uimode night no"', (error) => {
+				if (error) {
+					console.error(`exec error: ${error}`);
+					return;
+				}
+			})
+		} else {
+			exec('xcrun simctl ui booted appearance dark', (error) => {
+				if (error) {
+					console.error(`exec error: ${error}`);
+					return;
+				}
+			})
+			await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
+			var feature = await device.takeScreenshot(navigationDicValue[1])
+			checkImages(feature)
+			exec('xcrun simctl ui booted appearance light', (error) => {
+				if (error) {
+					console.error(`exec error: ${error}`);
+					return;
+				}
+			})
+		}
+		await element(by.id(key)).atIndex(0).tap()	
+	} else {
+		var navigationArray = navigationDicValue
+		if(navigationArray[1] === 'Appeal details') {
+			await resetInAppReview()
+		}
+		await element(by.id(key)).atIndex(0).tap()
+		if (typeof navigationArray[0] === 'string') {
+			await checkHierachy(key, navigationArray[0], navigationArray[1])
+		} else {
+			var subNavigationArray = navigationArray[0]
+			for(let k = 0; k < subNavigationArray.length-1; k++) {
+				if (subNavigationArray[k] === 'Review file requests') {
+					await waitFor(element(by.text('Review file requests'))).toBeVisible().whileElement(by.id('ClaimDetailsScreen')).scroll(100, 'down')
+				}
+				await element(by.text(subNavigationArray[k])).tap()
+			}
+			await checkHierachy(key, subNavigationArray.slice(-1)[0], navigationArray[1])
+		}
+	}
 }
 
 beforeAll(async () => {
 	await loginToDemoMode()
+})
+
+afterAll(async () => {
+	if (device.getPlatform() === 'ios'){
+		exec('xcrun simctl ui booted appearance light', (error) => {
+			if (error) {
+				console.error(`exec error: ${error}`);
+				return;
+			}
+		})
+	} else {
+		exec('adb shell "cmd uimode night no"', (error) => {
+			if (error) {
+				console.error(`exec error: ${error}`);
+				return;
+			}
+		})
+	}
 })
 
 describe('Navigation', () => {
@@ -72,24 +153,15 @@ describe('Navigation', () => {
 		for (let j = 0; j < value.length; j++) {
 			var nameArray = value[j]
 			it('should check the navigation for: ' + nameArray[1], async () => {
-				var navigationArray = value[j]
-				if(navigationArray[1] === 'Currently on appeal') {
-					await device.launchApp({ newInstance: true })
-					await loginToDemoMode()
-				}
-				await element(by.id(key)).atIndex(0).tap()
-				if (typeof navigationArray[0] === 'string') {
-					await checkHierachy(key, navigationArray[0], navigationArray[1])
-				} else {
-					var subNavigationArray = navigationArray[0]
-					for(let k = 0; k < subNavigationArray.length-1; k++) {
-						if (subNavigationArray[k] === 'Review file requests') {
-							await waitFor(element(by.text('Review file requests'))).toBeVisible().whileElement(by.id('ClaimDetailsScreen')).scroll(100, 'down')
-						}
-						await element(by.text(subNavigationArray[k])).tap()
-					}
-					await checkHierachy(key, subNavigationArray.slice(-1)[0], navigationArray[1])
-				}
+				await navigateToPage(key, value[j], null)
+			})
+
+			it('verify navigation in landscape mode for: ' + nameArray[1], async () => {
+				await navigateToPage(key, value[j], 'landscape')
+			})
+
+			it('verify navigation in dark mode for: ' + nameArray[1], async () => {
+				await navigateToPage(key, value[j], 'darkMode')
 			})
 		}
 	}
