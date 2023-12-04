@@ -109,8 +109,10 @@ export const LargePanel: FC<LargePanelProps> = ({
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
         <VAScrollView testID={testID}>
-          <WaygateWrapper>{children}</WaygateWrapper>
-          {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
+          <WaygateWrapper>
+            {children}
+            {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
+          </WaygateWrapper>
         </VAScrollView>
       </View>
     </>

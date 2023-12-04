@@ -182,18 +182,20 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
         )}
         <WaygateWrapper>{children}</WaygateWrapper>
       </VAScrollView>
-      {primaryContentButtonText && onPrimaryContentButtonPress && (
-        <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
-          {secondaryContentButtonText && onSecondaryContentButtonPress && (
-            <Box ml={theme.dimensions.gutter} flex={1}>
-              <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
+      <WaygateWrapper bypassAlertBox={true}>
+        {primaryContentButtonText && onPrimaryContentButtonPress && (
+          <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+            {secondaryContentButtonText && onSecondaryContentButtonPress && (
+              <Box ml={theme.dimensions.gutter} flex={1}>
+                <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
+              </Box>
+            )}
+            <Box ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter} mr={theme.dimensions.gutter} flex={1}>
+              <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} testID={primaryButtonTestID} />
             </Box>
-          )}
-          <Box ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter} mr={theme.dimensions.gutter} flex={1}>
-            <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} testID={primaryButtonTestID} />
           </Box>
-        </Box>
-      )}
+        )}
+      </WaygateWrapper>
     </View>
   )
 }

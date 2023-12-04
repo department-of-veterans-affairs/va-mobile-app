@@ -6,6 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/waygateConfig'
 import { a11yLabelID } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { forModalPresentationIOS } from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/CardStyleInterpolators'
 import { openAppStore } from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
@@ -13,9 +14,11 @@ import { useTranslation } from 'react-i18next'
 export type WaygateWrapperProps = {
   /** the waygate name to check for */
   waygateName?: WaygateToggleType
+  /** flag for template footer buttons to not double up alertbox display */
+  bypassAlertBox?: boolean
 }
 
-export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName }) => {
+export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName, bypassAlertBox }) => {
   const theme = useTheme()
   const waygateStateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
   const waygateScreen = waygateName ? waygateName : waygateStateScreen
@@ -39,7 +42,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName 
     const showScreenContent = waygate.type === 'AllowFunction' || waygateName === 'WG_Login'
     return (
       <>
-        {waygateAlertBox(waygate)}
+        {!bypassAlertBox && waygateAlertBox(waygate)}
         {showScreenContent && children}
       </>
     )
