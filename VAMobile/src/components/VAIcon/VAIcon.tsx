@@ -1,5 +1,6 @@
 import { AppState, AppStateStatus } from 'react-native'
 import { SvgProps } from 'react-native-svg'
+import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
 import { AccessibilityState } from 'store/slices'
@@ -167,10 +168,10 @@ export type VAIconProps = BoxProps & {
   /**  optional number use to set the height; otherwise defaults to svg's height */
   height?: number
 
-  /** optional maximum width when scaled */
+  /** optional maximum width when scaled (requires width and height props) */
   maxWidth?: number
 
-  /** optional boolean that prevents the icon from being scaled when set to true */
+  /** if true, prevents icon from being scaled (requires width and height props) */
   preventScaling?: boolean
 
   /** Optional TestID */
@@ -225,32 +226,24 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, fill2, stroke, max
     return <></>
   }
 
-  // Default to scaled dimensions
-  const scaledWidth = width && fs(width)
-  const scaledHeight = height && fs(height)
-  let finalWidth = scaledWidth
-  let finalHeight = scaledHeight
+  if (width && isFinite(width) && height && isFinite(height)) {
+    // Default to scaled dimensions
+    const scaledWidth = fs(width)
+    let finalWidth = scaledWidth
+    let finalHeight = fs(height)
 
-  if (preventScaling) {
-    // Use un-scaled dimensions
-    finalWidth = width
-    finalHeight = height
-  } else if (scaledWidth && maxWidth) {
-    // If scaled width > max, use max
-    if (scaledWidth > maxWidth) {
+    if (preventScaling) {
+      // Use un-scaled dimensions
+      finalWidth = width
+      finalHeight = height
+    } else if (maxWidth && scaledWidth > maxWidth) {
+      // Use max width, and scale height with same ratio
       finalWidth = maxWidth
-      if (height) {
-        // Scale height using same ratio as width
-        const scalingRatio = finalWidth / width
-        finalHeight = scalingRatio * height
-      }
+      const scalingRatio = finalWidth / width
+      finalHeight = scalingRatio * height
     }
-  }
 
-  iconProps = {
-    ...iconProps,
-    ...(finalWidth && { width: finalWidth }),
-    ...(finalHeight && { height: finalHeight }),
+    iconProps = { ...iconProps, width: finalWidth, height: finalHeight }
   }
 
   return (
