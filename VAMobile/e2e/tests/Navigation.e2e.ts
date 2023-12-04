@@ -152,17 +152,31 @@ describe('Navigation', () => {
 	for(const [key, value] of Object.entries(navigationDic)) {
 		for (let j = 0; j < value.length; j++) {
 			var nameArray = value[j]
-			it('should check the navigation for: ' + nameArray[1], async () => {
-				await navigateToPage(key, value[j], null)
-			})
+			if (nameArray[1] === 'To confirm or update your sign-in email, go to the website where you manage your account information.') {
+				it('verify navigation for: Manage Account', async () => {
+					await navigateToPage(key, value[j], null)
+				})
 
-			it('verify navigation in landscape mode for: ' + nameArray[1], async () => {
-				await navigateToPage(key, value[j], 'landscape')
-			})
+				it('verify landscape mode for: Manage Account', async () => {
+					await navigateToPage(key, value[j], 'landscape')
+				})
 
-			it('verify navigation in dark mode for: ' + nameArray[1], async () => {
-				await navigateToPage(key, value[j], 'darkMode')
-			})
+				it('verify dark mode for: Manage Account', async () => {
+					await navigateToPage(key, value[j], 'darkMode')
+				})
+			} else {
+				it('verify navigation for: ' + nameArray[1], async () => {
+					await navigateToPage(key, value[j], null)
+				})
+
+				it('verify landscape mode for: ' + nameArray[1], async () => {
+					await navigateToPage(key, value[j], 'landscape')
+				})
+
+				it('verify dark mode for: ' + nameArray[1], async () => {
+					await navigateToPage(key, value[j], 'darkMode')
+				})
+			}
 		}
 	}
 })
