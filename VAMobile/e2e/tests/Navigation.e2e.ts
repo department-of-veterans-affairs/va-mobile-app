@@ -71,26 +71,49 @@ describe('Navigation', () => {
 	for(const [key, value] of Object.entries(navigationDic)) {
 		for (let j = 0; j < value.length; j++) {
 			var nameArray = value[j]
-			it('should check the navigation for: ' + nameArray[1], async () => {
-				var navigationArray = value[j]
-				if(navigationArray[1] === 'Currently on appeal') {
-					await device.launchApp({ newInstance: true })
-					await loginToDemoMode()
-				}
-				await element(by.id(key)).atIndex(0).tap()
-				if (typeof navigationArray[0] === 'string') {
-					await checkHierachy(key, navigationArray[0], navigationArray[1])
-				} else {
-					var subNavigationArray = navigationArray[0]
-					for(let k = 0; k < subNavigationArray.length-1; k++) {
-						if (subNavigationArray[k] === 'Review file requests') {
-							await waitFor(element(by.text('Review file requests'))).toBeVisible().whileElement(by.id('ClaimDetailsScreen')).scroll(100, 'down')
-						}
-						await element(by.text(subNavigationArray[k])).tap()
+			if (nameArray[1] === 'To confirm or update your sign-in email, go to the website where you manage your account information.') {
+				it('verify navigation for: Manage Account', async () => {
+					var navigationArray = value[j]
+					if(navigationArray[1] === 'Currently on appeal') {
+						await device.launchApp({ newInstance: true })
+						await loginToDemoMode()
 					}
-					await checkHierachy(key, subNavigationArray.slice(-1)[0], navigationArray[1])
-				}
-			})
+					await element(by.id(key)).atIndex(0).tap()
+					if (typeof navigationArray[0] === 'string') {
+						await checkHierachy(key, navigationArray[0], navigationArray[1])
+					} else {
+						var subNavigationArray = navigationArray[0]
+						for(let k = 0; k < subNavigationArray.length-1; k++) {
+							if (subNavigationArray[k] === 'Review file requests') {
+								await waitFor(element(by.text('Review file requests'))).toBeVisible().whileElement(by.id('ClaimDetailsScreen')).scroll(100, 'down')
+							}
+							await element(by.text(subNavigationArray[k])).tap()
+						}
+						await checkHierachy(key, subNavigationArray.slice(-1)[0], navigationArray[1])
+					}
+				})
+			} else {
+				it('verify navigation for: ' + nameArray[1], async () => {
+					var navigationArray = value[j]
+					if(navigationArray[1] === 'Currently on appeal') {
+						await device.launchApp({ newInstance: true })
+						await loginToDemoMode()
+					}
+					await element(by.id(key)).atIndex(0).tap()
+					if (typeof navigationArray[0] === 'string') {
+						await checkHierachy(key, navigationArray[0], navigationArray[1])
+					} else {
+						var subNavigationArray = navigationArray[0]
+						for(let k = 0; k < subNavigationArray.length-1; k++) {
+							if (subNavigationArray[k] === 'Review file requests') {
+								await waitFor(element(by.text('Review file requests'))).toBeVisible().whileElement(by.id('ClaimDetailsScreen')).scroll(100, 'down')
+							}
+							await element(by.text(subNavigationArray[k])).tap()
+						}
+						await checkHierachy(key, subNavigationArray.slice(-1)[0], navigationArray[1])
+					}
+				})
+			}
 		}
 	}
 })
