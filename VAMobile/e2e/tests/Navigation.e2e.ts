@@ -46,6 +46,10 @@ var navigationDic = {
 	['Direct deposit information', 'Direct deposit']]
 }
 
+export const NavigationE2eConstants = {
+	DARK_MODE_OPTIONS: device.getPlatform() === 'ios' ? 'xcrun simctl ui booted appearance dark' : 'adb shell "cmd uimode night yes"',
+	LIGHT_MODE_OPTIONS: device.getPlatform() === 'ios' ? 'xcrun simctl ui booted appearance light' : 'adb shell "cmd uimode night no"',
+}
 const checkHierachy = async (tabName, categoryName, featureHeaderName) => {
 	if (categoryName === 'Review file requests') {
 		await waitFor(element(by.text('Review file requests'))).toBeVisible().whileElement(by.id('ClaimDetailsScreen')).scroll(100, 'down')
@@ -71,39 +75,21 @@ const navigateToPage = async (key, navigationDicValue, accessibilityFeatureType:
 		checkImages(feature)
 		await device.setOrientation('portrait')
 	} else if(accessibilityFeatureType == 'darkMode') {
-		if(device.getPlatform() === 'android') {
-			exec('adb shell "cmd uimode night yes"', (error) => {
-				if (error) {
-					console.error(`exec error: ${error}`);
-					return;
-				}
-			})
-			await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
-			var feature = await device.takeScreenshot(navigationDicValue[1])
-			checkImages(feature)
-			exec('adb shell "cmd uimode night no"', (error) => {
-				if (error) {
-					console.error(`exec error: ${error}`);
-					return;
-				}
-			})
-		} else {
-			exec('xcrun simctl ui booted appearance dark', (error) => {
-				if (error) {
-					console.error(`exec error: ${error}`);
-					return;
-				}
-			})
-			await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
-			var feature = await device.takeScreenshot(navigationDicValue[1])
-			checkImages(feature)
-			exec('xcrun simctl ui booted appearance light', (error) => {
-				if (error) {
-					console.error(`exec error: ${error}`);
-					return;
-				}
-			})
-		}
+		exec(NavigationE2eConstants.DARK_MODE_OPTIONS, (error) => {
+			if (error) {
+				console.error(`exec error: ${error}`);
+				return;
+			}
+		})
+		await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
+		var feature = await device.takeScreenshot(navigationDicValue[1])
+		checkImages(feature)
+		exec(NavigationE2eConstants.LIGHT_MODE_OPTIONS, (error) => {
+			if (error) {
+				console.error(`exec error: ${error}`);
+				return;
+			}
+		})
 		await element(by.id(key)).atIndex(0).tap()	
 	} else {
 		var navigationArray = navigationDicValue
@@ -131,21 +117,12 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-	if (device.getPlatform() === 'ios'){
-		exec('xcrun simctl ui booted appearance light', (error) => {
-			if (error) {
-				console.error(`exec error: ${error}`);
-				return;
-			}
-		})
-	} else {
-		exec('adb shell "cmd uimode night no"', (error) => {
-			if (error) {
-				console.error(`exec error: ${error}`);
-				return;
-			}
-		})
-	}
+	exec(NavigationE2eConstants.LIGHT_MODE_OPTIONS, (error) => {
+		if (error) {
+			console.error(`exec error: ${error}`);
+			return;
+		}
+	})
 })
 
 describe('Navigation', () => {
