@@ -27,7 +27,7 @@ const RefillTag: FC<RefillTagProps> = ({ status }) => {
     text: statusText,
     a11yLabel: statusText,
     labelType: getTagTypeForStatus(status),
-    onPress: () => waygateNativeAlert('WG_StatusDefinition') && navigateTo('StatusDefinition', { display: statusText, value: status }),
+    onPress: () => waygateNativeAlert('WG_StatusDefinition') && navigateTo('StatusDefinition', { display: statusText, value: status })(),
     a11yHint: t('prescription.history.a11yHint.status'),
   }
 
