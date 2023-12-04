@@ -21,6 +21,14 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName 
   const waygateScreen = waygateName ? waygateName : waygateStateScreen
   const { t } = useTranslation(NAMESPACE.COMMON)
 
+  const waygateTypeCheck = (waygateType: string | undefined) => {
+    if (waygateType === 'DenyContent' || waygateType === 'AllowFunction') {
+      return true
+    } else {
+      return false
+    }
+  }
+
   const waygateAlertBox = (waygate: Waygate) => {
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
@@ -35,7 +43,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName 
   }
 
   const waygate = waygateEnabled(waygateScreen as WaygateToggleType)
-  if (waygate.enabled === false) {
+  if (waygate.enabled === false && waygateTypeCheck(waygate.type) && (waygate.errorMsgTitle || waygate.errorMsgBody)) {
     const showScreenContent = waygate.type === 'AllowFunction' || waygateName === 'WG_Login'
     return (
       <>
