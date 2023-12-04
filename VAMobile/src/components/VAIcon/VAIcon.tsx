@@ -1,6 +1,5 @@
 import { AppState, AppStateStatus } from 'react-native'
 import { SvgProps } from 'react-native-svg'
-import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
 import { AccessibilityState } from 'store/slices'
@@ -226,7 +225,7 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, fill2, stroke, max
     return <></>
   }
 
-  if (width && isFinite(width) && height && isFinite(height)) {
+  if (width && height) {
     // Default to scaled dimensions
     const scaledWidth = fs(width)
     let finalWidth = scaledWidth
