@@ -108,12 +108,12 @@ export const LargePanel: FC<LargePanelProps> = ({
     <>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
-        <WaygateWrapper>
-          <VAScrollView testID={testID}>
+        <VAScrollView testID={testID}>
+          <WaygateWrapper>
             {children}
             {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
-          </VAScrollView>
-        </WaygateWrapper>
+          </WaygateWrapper>
+        </VAScrollView>
       </View>
     </>
   )

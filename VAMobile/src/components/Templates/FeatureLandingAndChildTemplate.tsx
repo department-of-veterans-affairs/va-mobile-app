@@ -118,19 +118,17 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
     <View style={fillStyle}>
       <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <HeaderBanner {...headerProps} />
-      <WaygateWrapper>
-        <VAScrollView
-          testID={testID}
-          scrollEventThrottle={1}
-          onScroll={(event) => {
-            transitionHeader(event.nativeEvent.contentOffset.y)
-          }}
-          {...scrollViewProps}>
-          <View onLayout={getTransitionHeaderHeight}>{!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}</View>
-          {children}
-        </VAScrollView>
-        {footerContent}
-      </WaygateWrapper>
+      <VAScrollView
+        testID={testID}
+        scrollEventThrottle={1}
+        onScroll={(event) => {
+          transitionHeader(event.nativeEvent.contentOffset.y)
+        }}
+        {...scrollViewProps}>
+        <View onLayout={getTransitionHeaderHeight}>{!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}</View>
+        <WaygateWrapper>{children}</WaygateWrapper>
+      </VAScrollView>
+      <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>
     </View>
   )
 }

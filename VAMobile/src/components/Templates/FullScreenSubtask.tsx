@@ -173,16 +173,16 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
-      <WaygateWrapper>
-        <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
-          {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
-          {title && (
-            <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
-              <TextView {...titleTextProps}>{title}</TextView>
-            </Box>
-          )}
-          {children}
-        </VAScrollView>
+      <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
+        {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
+        {title && (
+          <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
+            <TextView {...titleTextProps}>{title}</TextView>
+          </Box>
+        )}
+        <WaygateWrapper>{children}</WaygateWrapper>
+      </VAScrollView>
+      <WaygateWrapper bypassAlertBox={true}>
         {primaryContentButtonText && onPrimaryContentButtonPress && (
           <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
             {secondaryContentButtonText && onSecondaryContentButtonPress && (
