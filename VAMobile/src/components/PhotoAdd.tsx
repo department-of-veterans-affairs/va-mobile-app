@@ -42,6 +42,7 @@ const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress }) => {
     color: 'footerButton',
     textAlign: 'center',
     width: width,
+    maxFontSizeMultiplier: 2.5,
   }
 
   return (
