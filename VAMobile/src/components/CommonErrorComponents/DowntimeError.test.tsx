@@ -10,6 +10,6 @@ context('DowntimeError', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByText(/Appointments on V-A mobile app is currently unavailable/)).toBeTruthy()
+    expect(screen.getByRole('header', { name: "Some online tools or services aren’t working right now" })).toBeTruthy()
   })
 })
