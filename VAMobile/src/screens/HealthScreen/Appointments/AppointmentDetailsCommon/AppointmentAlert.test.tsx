@@ -12,6 +12,7 @@ context('AppointmentAlert', () => {
   const initializeTestInstance = (
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
     statusDetail: AppointmentStatusDetailType = AppointmentStatusDetailTypeConsts.CLINIC_REBOOK,
+    phoneOnly: boolean = false,
     location?: AppointmentLocation,
   ): void => {
     props = {
@@ -19,6 +20,7 @@ context('AppointmentAlert', () => {
       status,
       statusDetail,
       location: location || defaultAppointmentAttributes.location,
+      phoneOnly: phoneOnly,
     }
     render(<AppointmentAlert attributes={props} />)
   }
@@ -33,6 +35,12 @@ context('AppointmentAlert', () => {
     expect(screen.queryByText('VA Long Beach Healthcare System canceled this appointment.')).toBeFalsy()
   })
 
+  it('should not show alert for canceled phone appointments', () => {
+    initializeTestInstance(AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK, true)
+    expect(screen.queryByText('VA Long Beach Healthcare System canceled this appointment.')).toBeFalsy()
+  })
+
+
   describe('when an appointment is CANCELLED', () => {
     describe('when a facility cancels an appointment', () => {
       it('should display facility name', () => {
@@ -41,7 +49,7 @@ context('AppointmentAlert', () => {
       })
 
       it('should display "facility"', () => {
-        initializeTestInstance(AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK, { name: '' })
+        initializeTestInstance(AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK, false, { name: '' })
         expect(screen.getByText('Facility canceled this appointment.')).toBeTruthy()
       })
     })
