@@ -19,12 +19,10 @@ context('FeatureLandingAndChildTemplate', () => {
     })
 
     it('should render the title as a header when passed in', () => {
-        initializeTestInstance()
         expect(screen.getByRole('header', { name: 'Title' })).toBeTruthy()
     })
 
     it('should render a back label and onPress', () => {
-        initializeTestInstance()
         expect(screen.getByRole('button', { name: 'Back' })).toBeTruthy()
         fireEvent.press(screen.getByRole('button', { name: 'Back' }))
         expect(onBackPressSpy).toHaveBeenCalled()
