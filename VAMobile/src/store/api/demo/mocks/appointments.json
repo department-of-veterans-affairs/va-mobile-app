@@ -971,7 +971,7 @@
             "minutesDuration": null,
             "phoneOnly": false,
             "startDateLocal": "{{now + 4 days}}",
-            "startDateUtc": "{{now + 4  days utc}}",
+            "startDateUtc": "{{now + 4 days utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",

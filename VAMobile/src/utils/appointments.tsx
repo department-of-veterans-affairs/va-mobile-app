@@ -261,7 +261,7 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
   }
 
   if (phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) {
-    const facilityName = location.name
+    const facilityName = location?.name || t('prescription.details.vaFacilityHeader')
     textLines.push(
       { text: t('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       { text: t('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', mb: condensedMarginBetween },
