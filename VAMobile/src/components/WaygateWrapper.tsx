@@ -63,7 +63,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
       const afStatus = waygate.type === 'DenyContent' ? 'open' : 'closed'
       logAnalyticsEvent(Events.vama_af_shown(afStatus, screenName))
     }
-  }, [])
+  }, [bypassAlertBox, screenName, showAlertBox, waygate.type])
 
   if (showAlertBox) {
     const showScreenContent = waygate.type === 'AllowFunction' || waygateName === 'WG_Login'
