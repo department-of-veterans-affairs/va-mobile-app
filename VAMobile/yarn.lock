@@ -1416,6 +1416,11 @@
   dependencies:
     "@cspotcode/source-map-consumer" "0.8.0"
 
+"@department-of-veterans-affairs/eslint-config-mobile@^0.0.1-alpha.0":
+  version "0.0.1-alpha.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/eslint-config-mobile/-/eslint-config-mobile-0.0.1-alpha.0.tgz#42e66edacd50986ede53cfd1a021b632a2db778c"
+  integrity sha512-za3G/fg5t6UFGqtozMG3F1QS/CvQZ7vRP7IWf2mPptiGx3LeAVenPsijUA/YHJp3Qni8ybdzep7LFZgM5NhugQ==
+
 "@department-of-veterans-affairs/mobile-component-library@0.0.22":
   version "0.0.22"
   resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.0.22.tgz#b050f28a76952a23ec47ea71579e258ad4344aea"
@@ -5202,6 +5207,11 @@ eslint-config-prettier@^8.5.0:
   version "8.10.0"
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-8.10.0.tgz#3a06a662130807e2502fc3ff8b4143d8a0658e11"
   integrity sha512-SM8AMJdeQqRYT9O9zguiruQZaN7+z+E4eAP9oiLNGKMtomwaB1E9dcgUD6ZAn/eQAb52USbvezbiljfZUhbJcg==
+
+eslint-plugin-deprecate@^0.8.4:
+  version "0.8.4"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-deprecate/-/eslint-plugin-deprecate-0.8.4.tgz#1bbedca80f763cadf228c66a4cf639eb16aeca68"
+  integrity sha512-bzpQTyXNWXbMWRH77XiuzfAthOhQhizEZrTf7krRiMYrq6ENUsWfbCe8A3SeRNa4eW8T2QrHsg/lXmxLq9xXXA==
 
 eslint-plugin-eslint-comments@^3.2.0:
   version "3.2.0"
