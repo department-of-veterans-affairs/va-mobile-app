@@ -11,6 +11,7 @@ context('LabelTag', () => {
 
   it("should render text as 'Read'", () => {
     expect(screen.getByText('Read')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Read' })).toBeTruthy()
   })
 
   it('should call the press action if it exists', () => {
