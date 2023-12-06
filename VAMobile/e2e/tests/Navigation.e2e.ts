@@ -71,7 +71,7 @@ const checkHierachy = async (tabName, categoryName, featureHeaderName) => {
 const navigateToPage = async (key, navigationDicValue, accessibilityFeatureType: string | null, darkModeFirstTime = false) => {
 	if (accessibilityFeatureType === 'landscape') {
 		//These currently have changing dates so leaving off the screenshot comparison
-		if(navigationArray != 'Community care' || navigationArray != 'Claim exam') {
+		if(navigationArray[1] != 'Community care' || navigationArray[1] != 'Claim exam') {
 			await device.setOrientation('landscape')
 			await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
 			var feature = await device.takeScreenshot(navigationDicValue[1])
@@ -79,7 +79,7 @@ const navigateToPage = async (key, navigationDicValue, accessibilityFeatureType:
 			await device.setOrientation('portrait')
 		}
 	} else if(accessibilityFeatureType == 'darkMode') {
-		if(navigationArray != 'Community care' || navigationArray != 'Claim exam') {
+		if(navigationArray[1] != 'Community care' || navigationArray[1] != 'Claim exam') {
 			exec(NavigationE2eConstants.DARK_MODE_OPTIONS, (error) => {
 				if (error) {
 					console.error(`exec error: ${error}`);
