@@ -4,7 +4,22 @@ import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { Box, BoxProps, ErrorComponent, FeatureLandingTemplate, LargeNavButton, LoadingComponent, TextView, TextViewProps } from 'components'
+import {
+  Box,
+  BoxProps,
+  DefaultList,
+  DefaultListItemObj,
+  ErrorComponent,
+  FeatureLandingTemplate,
+  LargeNavButton,
+  List,
+  ListItemObj,
+  LoadingComponent,
+  SimpleList,
+  SimpleListItemObj,
+  TextView,
+  TextViewProps,
+} from 'components'
 import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -80,6 +95,35 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     borderStyle: 'solid',
   }
 
+  const personalInformationItems = (): Array<DefaultListItemObj> => {
+    const items: Array<DefaultListItemObj> = [
+      {
+        textLines: [{ text: t('personalInformation.preferredName.title'), variant: 'MobileBodyBold' }, { text: getPreferredName(demographics, t) }],
+        onPress: navigateTo('PreferredName'),
+      },
+    ]
+
+    if (genderIdentityOptions) {
+      items.push({
+        textLines: [{ text: t('personalInformation.genderIdentity.title'), variant: 'MobileBodyBold' }, { text: getGenderIdentity(demographics, t, genderIdentityOptions) }],
+        onPress: navigateTo('GenderIdentity'),
+      })
+    }
+    return items
+  }
+
+  const birthdateItems = (): Array<DefaultListItemObj> => [
+    {
+      textLines: [
+        {
+          text: t('personalInformation.dateOfBirth'),
+          variant: 'MobileBodyBold',
+        },
+        { text: birthdate },
+      ],
+    },
+  ]
+
   const onTryAgain = () => {
     if (getDemographicsError) {
       refetchDemographics()
@@ -115,42 +159,14 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
       <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>
         <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
       </Pressable>
-      <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-        <Box {...boxProps}>
-          <Box flexDirection={'row'} flexWrap={'wrap'} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
-            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading">
-              {t('personalInformation.dateOfBirth')}
-            </TextView>
-          </Box>
-          <TextView variant={'MobileBody'}>{birthdate}</TextView>
+      <Box mx={theme.dimensions.gutter}>
+        <Box my={theme.dimensions.standardMarginBetween} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
+          <DefaultList items={birthdateItems()} />
         </Box>
         <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })} accessibilityRole="link" accessible={true}>
           <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
         </Pressable>
-        {featureEnabled('preferredNameGenderWaygate') && (
-          <>
-            <LargeNavButton
-              title={t('personalInformation.preferredName.title')}
-              borderWidth={theme.dimensions.buttonBorderWidth}
-              borderColor={'secondary'}
-              borderColorActive={'primaryDarkest'}
-              borderStyle={'solid'}
-              subText={getPreferredName(demographics, t)}
-              onPress={navigateTo('PreferredName')}
-            />
-            {genderIdentityOptions && (
-              <LargeNavButton
-                title={t('personalInformation.genderIdentity.title')}
-                borderWidth={theme.dimensions.buttonBorderWidth}
-                borderColor={'secondary'}
-                borderColorActive={'primaryDarkest'}
-                borderStyle={'solid'}
-                subText={getGenderIdentity(demographics, t, genderIdentityOptions)}
-                onPress={navigateTo('GenderIdentity')}
-              />
-            )}
-          </>
-        )}
+        {featureEnabled('preferredNameGenderWaygate') && <DefaultList items={personalInformationItems()} />}
       </Box>
     </FeatureLandingTemplate>
   )
