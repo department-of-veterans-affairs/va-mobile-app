@@ -4,22 +4,7 @@ import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import {
-  Box,
-  BoxProps,
-  DefaultList,
-  DefaultListItemObj,
-  ErrorComponent,
-  FeatureLandingTemplate,
-  LargeNavButton,
-  List,
-  ListItemObj,
-  LoadingComponent,
-  SimpleList,
-  SimpleListItemObj,
-  TextView,
-  TextViewProps,
-} from 'components'
+import { Box, BoxProps, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView, TextViewProps } from 'components'
 import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -159,15 +144,15 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
       <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>
         <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
       </Pressable>
+      <Box my={theme.dimensions.standardMarginBetween} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
+        <DefaultList items={birthdateItems()} />
+      </Box>
       <Box mx={theme.dimensions.gutter}>
-        <Box my={theme.dimensions.standardMarginBetween} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
-          <DefaultList items={birthdateItems()} />
-        </Box>
         <Pressable onPress={navigateTo('HowDoIUpdate', { screenType: 'DOB' })} accessibilityRole="link" accessible={true}>
           <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
         </Pressable>
-        {featureEnabled('preferredNameGenderWaygate') && <DefaultList items={personalInformationItems()} />}
       </Box>
+      {featureEnabled('preferredNameGenderWaygate') && <DefaultList items={personalInformationItems()} />}
     </FeatureLandingTemplate>
   )
 }
