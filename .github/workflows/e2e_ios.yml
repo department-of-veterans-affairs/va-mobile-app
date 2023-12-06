@@ -8,15 +8,10 @@ on:
   push:
     #branches:
     #  - 'dependabot/**'
-      
   workflow_dispatch:
-  
-  #schedule:
-  #  - cron: '0 4 * * 1,2,3,4,5'
-
-  #workflow_run:
-  #  workflows: ['[Release] New Release Issue']
-  #  types: [completed]
+  workflow_run:
+    workflows: ['[Release] New Release Issue']
+    types: [completed]
 
 defaults:
   run:
@@ -31,17 +26,17 @@ env:
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
-  start_slack_thread:
-    if: github.event_name == 'schedule'
-    name: Start Slack thread
-    uses: ./.github/workflows/start_slack_thread.yml
-    secrets: inherit
-    with:
-      channel_name: va-mobile-build-alerts
-      message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
+  #start_slack_thread:
+  #  if: github.event_name == 'schedule'
+  #  name: Start Slack thread
+  #  uses: ./.github/workflows/start_slack_thread.yml
+  #  secrets: inherit
+  #  with:
+  #    channel_name: va-mobile-build-alerts
+  #    message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
   e2e-ios:
-    needs: start_slack_thread
+    #needs: start_slack_thread
     runs-on: macos-latest-xl
     env:
       # Path to write secret key to. Also used by fastlane
@@ -138,7 +133,6 @@ jobs:
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
   send_test_results_to_testrail:
-    if: ${{ always() }}
     #if: github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped'
     needs: [e2e-ios]
     name: Update testRail Results
