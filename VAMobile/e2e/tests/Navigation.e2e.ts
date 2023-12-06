@@ -1,5 +1,6 @@
 import { expect, device, by, element, waitFor } from 'detox'
 import { loginToDemoMode, checkImages, resetInAppReview} from './utils'
+import { setTimeout } from "timers/promises"
 
 const { exec } = require('child_process')
 var appTabs = ['Home', 'Benefits', 'Health', 'Payments']
@@ -69,27 +70,37 @@ const checkHierachy = async (tabName, categoryName, featureHeaderName) => {
 
 const navigateToPage = async (key, navigationDicValue, accessibilityFeatureType: string | null, darkModeFirstTime = false) => {
 	if (accessibilityFeatureType === 'landscape') {
-		await device.setOrientation('landscape')
-		await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
-		var feature = await device.takeScreenshot(navigationDicValue[1])
-		checkImages(feature)
-		await device.setOrientation('portrait')
+		//These currently have changing dates so leaving off the screenshot comparison
+		if(navigationArray != 'Community care' || navigationArray != 'Claim exam') {
+			await device.setOrientation('landscape')
+			await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
+			var feature = await device.takeScreenshot(navigationDicValue[1])
+			checkImages(feature)
+			await device.setOrientation('portrait')
+		}
 	} else if(accessibilityFeatureType == 'darkMode') {
-		exec(NavigationE2eConstants.DARK_MODE_OPTIONS, (error) => {
-			if (error) {
-				console.error(`exec error: ${error}`);
-				return;
-			}
-		})
-		await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
-		var feature = await device.takeScreenshot(navigationDicValue[1])
-		checkImages(feature)
-		exec(NavigationE2eConstants.LIGHT_MODE_OPTIONS, (error) => {
-			if (error) {
-				console.error(`exec error: ${error}`);
-				return;
-			}
-		})
+		if(navigationArray != 'Community care' || navigationArray != 'Claim exam') {
+			exec(NavigationE2eConstants.DARK_MODE_OPTIONS, (error) => {
+				if (error) {
+					console.error(`exec error: ${error}`);
+					return;
+				}
+			})
+
+			await setTimeout(2000)
+			await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
+			var feature = await device.takeScreenshot(navigationDicValue[1])
+			checkImages(feature)
+			
+			exec(NavigationE2eConstants.LIGHT_MODE_OPTIONS, (error) => {
+				if (error) {
+					console.error(`exec error: ${error}`);
+					return;
+				}
+			})
+
+			await setTimeout(2000)
+		}
 		await element(by.id(key)).atIndex(0).tap()	
 	} else {
 		var navigationArray = navigationDicValue
@@ -130,29 +141,29 @@ describe('Navigation', () => {
 		for (let j = 0; j < value.length; j++) {
 			var nameArray = value[j]
 			if (nameArray[1] === 'To confirm or update your sign-in email, go to the website where you manage your account information.') {
-        it('verify navigation for: Manage Account', async () => {
-          await navigateToPage(key, value[j], null)
-        })
+				it('verify navigation for: Manage Account', async () => {
+				await navigateToPage(key, value[j], null)
+				})
 
-        it('verify landscape mode for: Manage Account', async () => {
-          await navigateToPage(key, value[j], 'landscape')
-        })
+				it('verify landscape mode for: Manage Account', async () => {
+				await navigateToPage(key, value[j], 'landscape')
+				})
 
-        it('verify dark mode for: Manage Account', async () => {
-          await navigateToPage(key, value[j], 'darkMode')
-        })
+				it('verify dark mode for: Manage Account', async () => {
+				await navigateToPage(key, value[j], 'darkMode')
+				})
 			} else {
-        it('verify navigation for: ' + nameArray[1], async () => {
-          await navigateToPage(key, value[j], null)
-        })
+				it('verify navigation for: ' + nameArray[1], async () => {
+				await navigateToPage(key, value[j], null)
+				})
 
-        it('verify landscape mode for: ' + nameArray[1], async () => {
-          await navigateToPage(key, value[j], 'landscape')
-        })
+				it('verify landscape mode for: ' + nameArray[1], async () => {
+				await navigateToPage(key, value[j], 'landscape')
+				})
 
-        it('verify dark mode for: ' + nameArray[1], async () => {
-          await navigateToPage(key, value[j], 'darkMode')
-        })
+				it('verify dark mode for: ' + nameArray[1], async () => {
+				await navigateToPage(key, value[j], 'darkMode')
+				})
 			}
 		}
 	}
