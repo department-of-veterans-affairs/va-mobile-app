@@ -69,6 +69,7 @@ const checkHierachy = async (tabName, categoryName, featureHeaderName) => {
 }
 
 const navigateToPage = async (key, navigationDicValue, accessibilityFeatureType: string | null, darkModeFirstTime = false) => {
+	var navigationArray = navigationDicValue
 	if (accessibilityFeatureType === 'landscape') {
 		//These currently have changing dates so leaving off the screenshot comparison
 		if(navigationArray[1] != 'Community care' || navigationArray[1] != 'Claim exam') {
@@ -103,7 +104,6 @@ const navigateToPage = async (key, navigationDicValue, accessibilityFeatureType:
 		}
 		await element(by.id(key)).atIndex(0).tap()	
 	} else {
-		var navigationArray = navigationDicValue
 		if(navigationArray[1] === 'Appeal details') {
 			await resetInAppReview()
 		}
