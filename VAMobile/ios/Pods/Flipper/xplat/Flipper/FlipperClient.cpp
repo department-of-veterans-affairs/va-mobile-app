@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -8,13 +8,13 @@
 #include "FlipperClient.h"
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <vector>
 #include "ConnectionContextStore.h"
 #include "FireAndForgetBasedFlipperResponder.h"
 #include "FlipperConnectionImpl.h"
 #include "FlipperConnectionManagerImpl.h"
-#include "FlipperResponderImpl.h"
 #include "FlipperState.h"
 #include "FlipperStep.h"
 #include "Log.h"

@@ -1,16 +1,16 @@
 {
   "name": "React-Core",
-  "version": "0.71.7",
+  "version": "0.72.7",
   "summary": "The core of React Native.",
   "homepage": "https://reactnative.dev/",
   "license": "MIT",
-  "authors": "Facebook, Inc. and its affiliates",
+  "authors": "Meta Platforms, Inc. and its affiliates",
   "platforms": {
     "ios": "12.4"
   },
   "source": {
     "git": "https://github.com/facebook/react-native.git",
-    "tag": "v0.71.7"
+    "tag": "v0.72.7"
   },
   "resource_bundles": {
     "AccessibilityResources": [
@@ -24,7 +24,8 @@
     "HEADER_SEARCH_PATHS": "\"$(PODS_TARGET_SRCROOT)/ReactCommon\" \"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/RCT-Folly\" \"${PODS_ROOT}/Headers/Public/FlipperKit\" \"$(PODS_ROOT)/Headers/Public/ReactCommon\" \"$(PODS_ROOT)/Headers/Public/React-RCTFabric\"",
     "DEFINES_MODULE": "YES",
     "GCC_PREPROCESSOR_DEFINITIONS": "RCT_METRO_PORT=${RCT_METRO_PORT}",
-    "CLANG_CXX_LANGUAGE_STANDARD": "c++17"
+    "CLANG_CXX_LANGUAGE_STANDARD": "c++17",
+    "FRAMEWORK_SEARCH_PATHS": ""
   },
   "user_target_xcconfig": {
     "HEADER_SEARCH_PATHS": "\"$(PODS_ROOT)/Headers/Private/React-Core\""
@@ -35,16 +36,25 @@
       "2021.07.22.00"
     ],
     "React-cxxreact": [
-      "0.71.7"
+
     ],
     "React-perflogger": [
-      "0.71.7"
+
     ],
     "React-jsi": [
-      "0.71.7"
+
     ],
     "React-jsiexecutor": [
-      "0.71.7"
+
+    ],
+    "React-utils": [
+
+    ],
+    "SocketRocket": [
+      "0.6.1"
+    ],
+    "React-runtimeexecutor": [
+
     ],
     "Yoga": [
 
@@ -78,13 +88,13 @@
       ],
       "dependencies": {
         "React-Core/Default": [
-          "0.71.7"
+          "0.72.7"
         ],
         "React-Core/RCTWebSocket": [
-          "0.71.7"
+          "0.72.7"
         ],
         "React-jsinspector": [
-          "0.71.7"
+          "0.72.7"
         ]
       }
     },
@@ -93,7 +103,7 @@
       "source_files": "Libraries/WebSocket/*.{h,m}",
       "dependencies": {
         "React-Core/Default": [
-          "0.71.7"
+          "0.72.7"
         ]
       }
     },

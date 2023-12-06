@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -8,6 +8,7 @@
 #pragma once
 
 #include <map>
+#include <sstream>
 #include <string>
 #include "FlipperConnection.h"
 #include "FlipperConnectionManager.h"
@@ -33,7 +34,15 @@ class FlipperConnectionImpl : public FlipperConnection {
       responder->error(folly::dynamic::object("message", errorMessage));
       return;
     }
-    receivers_.at(method)(params, responder);
+    try {
+      receivers_.at(method)(params, responder);
+    } catch (const std::exception& ex) {
+      std::string errorMessage = "Receiver " + method + " failed with error. ";
+      std::string reason = ex.what();
+      errorMessage += "Error: '" + reason + "'.";
+      log("Error: " + errorMessage);
+      responder->error(folly::dynamic::object("message", errorMessage));
+    }
   }
 
   void send(const std::string& method, const folly::dynamic& params) override {
@@ -42,6 +51,23 @@ class FlipperConnectionImpl : public FlipperConnection {
         folly::dynamic::object("api", name_)("method", method)(
             "params", params));
     socket_->sendMessage(message);
+  }
+
+  void sendRaw(const std::string& method, const std::string& params) override {
+    std::stringstream ss;
+    ss << "{"
+          "\"method\": \"execute\","
+          "\"params\": {"
+          "\"api\": \""
+       << name_
+       << "\","
+          "\"method\": \""
+       << method
+       << "\","
+          "\"params\":"
+       << params << "}}";
+    auto message = ss.str();
+    socket_->sendMessageRaw(message);
   }
 
   void error(const std::string& message, const std::string& stacktrace)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -81,6 +81,11 @@
   if (finish) {
     [touch finish];
   }
+}
+
+- (UIImage*)getSnapshot:(BOOL)includeChildren forNode:(UIScrollView*)node {
+  SKNodeDescriptor* descriptor = [self descriptorForClass:[UIView class]];
+  return [descriptor getSnapshot:includeChildren forNode:node];
 }
 
 @end

@@ -4,7 +4,7 @@ module.exports = {
     project: './tsconfig.json',
   },
   plugins: ['@typescript-eslint', 'sort-imports-es6-autofix', 'eslint-plugin-tsdoc'],
-  extends: ['@react-native-community', 'plugin:@typescript-eslint/recommended', 'plugin:react-hooks/recommended'],
+  extends: ['@react-native', 'plugin:@typescript-eslint/recommended', 'plugin:react-hooks/recommended'],
   env: {
     commonjs: true,
     es6: true,

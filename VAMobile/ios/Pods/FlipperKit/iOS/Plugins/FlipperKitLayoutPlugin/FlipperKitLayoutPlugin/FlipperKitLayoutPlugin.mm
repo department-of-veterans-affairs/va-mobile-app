@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -152,6 +152,16 @@ NSObject* flattenLayoutEditorMessage(NSObject* field);
                   ^{
                     [weakSelf onCallGetSearchResults:params[@"query"]
                                        withResponder:responder];
+                  },
+                  responder);
+            }];
+
+  [connection receive:@"getSnapshot"
+            withBlock:^(NSDictionary* params, id<FlipperResponder> responder) {
+              FlipperPerformBlockOnMainThread(
+                  ^{
+                    [weakSelf onCallGetSnapshot:params[@"id"]
+                                  withResponder:responder];
                   },
                   responder);
             }];
@@ -320,8 +330,52 @@ NSObject* flattenLayoutEditorMessage(NSObject* field) {
   return;
 }
 
+- (void)onCallGetSnapshot:(NSString*)objectId
+            withResponder:(id<FlipperResponder>)responder {
+  if (objectId == nil || [objectId isKindOfClass:[NSNull class]]) {
+    [responder error:@{@"error" : @"unable to get snapshot for object"}];
+    return;
+  }
+
+  id object = [_trackedObjects objectForKey:objectId];
+  if (object == nil) {
+    [responder error:@{@"error" : @"unable to get snapshot for object"}];
+    return;
+  }
+
+  id lastHighlightedObject = nil;
+  id lastHighlightedDescriptor = nil;
+  if (_lastHighlightedNode != nil) {
+    lastHighlightedObject = [_trackedObjects objectForKey:_lastHighlightedNode];
+    if (lastHighlightedObject != nil) {
+      lastHighlightedDescriptor = [self->_descriptorMapper
+          descriptorForClass:[lastHighlightedObject class]];
+      [lastHighlightedDescriptor setHighlighted:NO
+                                        forNode:lastHighlightedObject];
+    }
+  }
+
+  SKNodeDescriptor* descriptor =
+      [self->_descriptorMapper descriptorForClass:[object class]];
+  UIImage* snapshot = [descriptor getSnapshot:YES forNode:object];
+  NSData* snapshotData = UIImagePNGRepresentation(snapshot);
+  NSString* snapshotBase64 = [snapshotData
+      base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+
+  if (lastHighlightedDescriptor != nil) {
+    [lastHighlightedDescriptor setHighlighted:YES
+                                      forNode:lastHighlightedObject];
+  }
+
+  [responder success:@{@"snapshot" : snapshotBase64, @"id" : objectId}];
+}
+
 - (void)onCallSetHighlighted:(NSString*)objectId
                withResponder:(id<FlipperResponder>)responder {
+  if (objectId == nil || [objectId isKindOfClass:[NSNull class]]) {
+    [responder error:@{@"error" : @"parameter ObjectID was null"}];
+    return;
+  }
   if (_lastHighlightedNode != nil) {
     id lastHighlightedObject =
         [_trackedObjects objectForKey:_lastHighlightedNode];
@@ -337,10 +391,6 @@ NSObject* flattenLayoutEditorMessage(NSObject* field) {
     _lastHighlightedNode = nil;
   }
 
-  if (objectId == nil || [objectId isKindOfClass:[NSNull class]]) {
-    return;
-  }
-
   id object = [_trackedObjects objectForKey:objectId];
   if (object == nil) {
     SKLog(@"tried to setHighlighted for untracked id, objectId: %@", objectId);
@@ -352,6 +402,8 @@ NSObject* flattenLayoutEditorMessage(NSObject* field) {
   [descriptor setHighlighted:YES forNode:object];
 
   _lastHighlightedNode = objectId;
+
+  [responder success:@{}];
 }
 
 - (void)onCallSetSearchActive:(BOOL)active
