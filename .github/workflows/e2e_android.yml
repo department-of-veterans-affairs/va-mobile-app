@@ -6,11 +6,12 @@ name: '[e2e] Android Detox Test Run'
 
 on:
   push:
-    #branches:
-    #  - 'dependabot/**'
+    branches:
+      - 'dependabot/**'
   workflow_dispatch:
     inputs:
       run_testRail:
+        description: Run_TestRail
         type: boolean
         required: false
   schedule:
@@ -155,7 +156,6 @@ jobs:
       
   send_test_results_to_testrail:
     if: (github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped') || ${{ github.event.inputs.run_testRail == true}}
-    #if: ${{ always() }}
     needs: [e2e-android]
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml

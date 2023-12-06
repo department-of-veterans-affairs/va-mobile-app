@@ -6,12 +6,20 @@ name: '[e2e] iOS Detox Test Run'
 
 on:
   push:
-    #branches:
-    #  - 'dependabot/**'
+    branches:
+      - 'dependabot/**'
   workflow_dispatch:
+    inputs:
+      run_testRail:
+        description: Run_TestRail
+        type: boolean
+        required: false
+  schedule:
+    - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
     workflows: ['[Release] New Release Issue']
-    types: [completed]
+    types: 
+      - completed
 
 defaults:
   run:
@@ -26,17 +34,18 @@ env:
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
-  #start_slack_thread:
-  #  if: github.event_name == 'schedule'
-  #  name: Start Slack thread
-  #  uses: ./.github/workflows/start_slack_thread.yml
-  #  secrets: inherit
-  #  with:
-  #    channel_name: va-mobile-build-alerts
-  #    message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
+  start_slack_thread:
+    if: github.event_name == 'schedule'
+    name: Start Slack thread
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-build-alerts
+      message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
   e2e-ios:
-    #needs: start_slack_thread
+    if: ${{ always() }}
+    needs: start_slack_thread
     runs-on: macos-latest-xl
     env:
       # Path to write secret key to. Also used by fastlane
@@ -95,29 +104,29 @@ jobs:
         run: yarn e2e:ios-build
 
       - name: Run e2e tests for iOS
-        run: yarn e2e:ios-test /e2e/tests/Appeals.e2e --take-screenshots failing --updateSnapshot
+        run: yarn e2e:ios-test --take-screenshots failing --updateSnapshot
 
-      #- name: Inform Slack of Failure
-      #  id: post_failure
-      #  if: failure() && github.event_name == 'schedule'
-      #  run: |
-      #    ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-      #      -H 'Content-type: application/json' \
-      #      --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
-      #      https://slack.com/api/chat.postMessage|
-      #      jq -r '.ts')
-      #    echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+      - name: Inform Slack of Failure
+        id: post_failure
+        if: failure() && github.event_name == 'schedule'
+        run: |
+          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
+          echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
-      #- name: Inform Slack of success
-      #  id: post_success
-      #  if: ${{!failure()}} && github.event_name == 'schedule'
-      #  run: |
-      #    ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-      #      -H 'Content-type: application/json' \
-      #      --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
-      #      https://slack.com/api/chat.postMessage|
-      #      jq -r '.ts')
-      #    echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+      - name: Inform Slack of success
+        id: post_success
+        if: ${{!failure()}} && github.event_name == 'schedule'
+        run: |
+          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
+          echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
       - name: Upload artifacts on failure
         if: failure()
@@ -133,7 +142,7 @@ jobs:
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
   send_test_results_to_testrail:
-    #if: github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped'
+    if: (github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped') || ${{ github.event.inputs.run_testRail == true}}
     needs: [e2e-ios]
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
