@@ -1,21 +1,12 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
-import { Pressable } from 'react-native'
-
 import { NavigationHelpers, ParamListBase } from '@react-navigation/native'
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
-
-import { context, render, RenderAPI, waitFor } from 'testUtils'
+import { context, fireEvent, render, screen } from 'testUtils'
 import CarouselTabBar from './CarouselTabBar'
 import { CarouselScreen, TextView } from '../index'
 
 context('CarouselTabBar', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-  let t = jest.fn(() => {})
+  let t = jest.fn(() => { })
   let onCarouselEndSpy = jest.fn()
   let navigationSpy = jest.fn()
 
@@ -28,14 +19,41 @@ context('CarouselTabBar', () => {
   }
 
   const listOfScreens: Array<CarouselScreen> = [
-    { name: 'TestComponent', component: TestComponent },
-    { name: 'TestComponent2', component: TestComponent2 },
+    {
+      name: 'TestComponent',
+      component: TestComponent,
+      a11yHints: {
+        skipHint: 'skip',
+        continueHint: 'next',
+        doneHint: 'done',
+        backHint: 'back'
+      }
+    },
+    {
+      name: 'TestComponent2',
+      component: TestComponent2,
+      a11yHints: {
+        skipHint: 'skip',
+        continueHint: 'next',
+        doneHint: 'done',
+        backHint: 'back'
+      }
+    },
   ]
 
-  const singleScreen: Array<CarouselScreen> = [{ name: 'TestComponent', component: TestComponent }]
+  const singleScreen: Array<CarouselScreen> = [{
+    name: 'TestComponent',
+    component: TestComponent,
+    a11yHints: {
+      skipHint: 'skip',
+      continueHint: 'next',
+      doneHint: 'done',
+      backHint: 'back'
+    }
+  }]
 
   const initializeTestInstance = (screenList: Array<CarouselScreen>) => {
-    component = render(
+    render(
       <CarouselTabBar
         screenList={screenList}
         onCarouselEnd={onCarouselEndSpy}
@@ -43,50 +61,37 @@ context('CarouselTabBar', () => {
         navigation={{ navigate: navigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
       />,
     )
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance(listOfScreens)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
   describe('the user should be able to navigate forward and backward', () => {
-    it('should navigate to the next screen and back to the previous screen', async () => {
+    it('should navigate to the next screen and back to the previous screen', () => {
       // clicking the next button
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[1].props.onPress()
-      })
+      fireEvent.press(screen.getByAccessibilityHint('next'))
       expect(navigationSpy).toHaveBeenCalled()
       expect(navigationSpy).toHaveBeenCalledWith('TestComponent2')
 
       //clicking the back button
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
-      })
+      fireEvent.press(screen.getByAccessibilityHint('back'))
       expect(navigationSpy).toHaveBeenCalled()
       expect(navigationSpy).toHaveBeenCalledWith('TestComponent')
     })
 
     describe('on click of done', () => {
-      it('should call onCarouselEnd', async () => {
+      it('should call onCarouselEnd', () => {
         initializeTestInstance(singleScreen)
-        await waitFor(() => {
-          testInstance.findAllByType(Pressable)[0].props.onPress()
-        })
+        fireEvent.press(screen.getByAccessibilityHint('done'))
         expect(onCarouselEndSpy).toHaveBeenCalled()
       })
     })
   })
 
   describe('on click of skip', () => {
-    it('should call onCarouselEnd', async () => {
-      await waitFor(() => {
-        testInstance.findAllByType(Pressable)[0].props.onPress()
-      })
+    it('should call onCarouselEnd', () => {
+      fireEvent.press(screen.getByAccessibilityHint('skip'))
       expect(onCarouselEndSpy).toHaveBeenCalled()
     })
   })
