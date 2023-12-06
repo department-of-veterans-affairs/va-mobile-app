@@ -9,9 +9,12 @@ on:
     #branches:
     #  - 'dependabot/**'
   workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
     workflows: ['[Release] New Release Issue']
-    types: [completed]
+    types: 
+      - completed
   
 defaults:
   run:
@@ -36,17 +39,18 @@ env:
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
-  #start_slack_thread:
-  #  if: github.event_name == 'schedule'
-  #  name: Start Slack thread
-  #  uses: ./.github/workflows/start_slack_thread.yml
-  #  secrets: inherit
-  #  with:
-  #    channel_name: va-mobile-build-alerts
-  #    message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
+  start_slack_thread:
+    if: github.event_name == 'schedule'
+    name: Start Slack thread
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-build-alerts
+      message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
 
   e2e-android:
-    #needs: start_slack_thread
+    if: ${{ always() }}
+    needs: start_slack_thread
     runs-on: macos-latest-xl
     steps:
       - uses: actions/checkout@v3
@@ -145,10 +149,10 @@ jobs:
           name: e2e-junit
           path: VAMobile/e2e/test_reports/e2e-junit.xml
       
-  send_test_results_to_testrail:
+  #send_test_results_to_testrail:
     #if: github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped'
     #if: ${{ always() }}
-    needs: [e2e-android]
-    name: Update testRail Results
-    uses: ./.github/workflows/update_testrail_results.yml
-    secrets: inherit
+  #  needs: [e2e-android]
+  #  name: Update testRail Results
+  #  uses: ./.github/workflows/update_testrail_results.yml
+  #  secrets: inherit
