@@ -8,7 +8,7 @@ sidebar_position: 3
 - **Use [components](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/ComponentsSection/) already available** in the system.
 - Use [Balsamiq](https://balsamiq.cloud/s4uw4la/pnnwuqv) or another **lower fidelity tool to ideate**
 - If you are working on an existing feature, **take a look in the app using demo mode** to see how it’s currently working. Figma’s shipped screens are our best examples of how it should look, but there may be some inconsistencies.
-- Consider which [screen type](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/Templates/ScreenTypes) to use.
+- Consider which [screen type](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Templates/ScreenTypes) to use.
 - Lean on the [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian) for support if you aren’t sure where or how to work.
 
 
