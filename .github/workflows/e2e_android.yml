@@ -12,7 +12,7 @@ on:
     inputs:
       run_testRail:
         type: boolean
-      required: false
+        required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
