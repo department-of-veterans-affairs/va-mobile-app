@@ -4,7 +4,7 @@ import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { Box, BoxProps, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView, TextViewProps } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView, TextViewProps } from 'components'
 import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -67,17 +67,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const dobLinkProps: TextViewProps = {
     variant: 'MobileBodyLink',
     mb: formMarginBetween,
-  }
-
-  const boxProps: BoxProps = {
-    minHeight: 81,
-    borderRadius: 6,
-    p: theme.dimensions.cardPadding,
-    mb: theme.dimensions.condensedMarginBetween,
-    backgroundColor: 'textBox',
-    borderWidth: theme.dimensions.buttonBorderWidth,
-    borderColor: 'secondary',
-    borderStyle: 'solid',
   }
 
   const personalInformationItems = (): Array<DefaultListItemObj> => {
