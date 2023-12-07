@@ -1416,10 +1416,10 @@
   dependencies:
     "@cspotcode/source-map-consumer" "0.8.0"
 
-"@department-of-veterans-affairs/eslint-config-mobile@0.2.0-alpha.0":
-  version "0.2.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/eslint-config-mobile/-/eslint-config-mobile-0.2.0-alpha.0.tgz#d2e9b8c8419a6666ab50444dd63ca50b5e7fb863"
-  integrity sha512-xiJKDx1IsqbHtAKK76g9h/g6RcAjnUJGDCp95Y8oGNSXoCDnUJXA9St71WHcYcUY7ozpTPQzMx1Bf6CSKJDvlw==
+"@department-of-veterans-affairs/eslint-config-mobile@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/eslint-config-mobile/-/eslint-config-mobile-0.3.0.tgz#679e460e0aea60ca2bfaea31e96fd098d7c64453"
+  integrity sha512-jomCPhyd9tjjuJsWIG6LGic4lrFE+QZ6YHkoFUPwNbs+si/iKNmMCxmJ3J8fhe8zwwMkZaRmHnxa87xsVkvoAA==
   dependencies:
     eslint-plugin-deprecate "^0.8.4"
 
