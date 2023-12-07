@@ -118,7 +118,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (!screenError && appointmentNotFound) {
       logAnalyticsEvent(Events.vama_appt_deep_link_fail(vetextID))
     }
-  }, [appointmentNotFound, screenError])
+  }, [appointmentNotFound, screenError, vetextID])
 
   const goBack = (): void => {
     dispatch(clearAppointmentCancellation())
