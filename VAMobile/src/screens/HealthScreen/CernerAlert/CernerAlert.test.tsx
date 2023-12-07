@@ -1,4 +1,3 @@
-import 'react-native'
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 
@@ -19,47 +18,50 @@ jest.mock('../../../api/facilities/getFacilitiesInfo', () => {
   let original = jest.requireActual('../../../api/facilities/getFacilitiesInfo')
   return {
     ...original,
-    useFacilitiesInfo: jest.fn().mockReturnValueOnce({
-      status: "success",
-      data: [
-        {
-          id: "358",
-          name: "FacilityOne",
-          city: "Cheyenne",
-          state: "WY",
-          cerner: true,
-          miles: "3.17"
-        },
-        {
-          id: "359",
-          name: "FacilityTwo",
-          city: "Cheyenne",
-          state: "WY",
-          cerner: true,
-          miles: "3.17"
-        }
-      ]
-    }).mockReturnValueOnce({
-      status: "success",
-      data: [
-        {
-          id: "358",
-          name: "FacilityOne",
-          city: "Cheyenne",
-          state: "WY",
-          cerner: true,
-          miles: "3.17"
-        },
-        {
-          id: "359",
-          name: "FacilityTwo",
-          city: "Cheyenne",
-          state: "WY",
-          cerner: false,
-          miles: "3.17"
-        }
-      ]
-    }),
+    useFacilitiesInfo: jest
+      .fn()
+      .mockReturnValueOnce({
+        status: 'success',
+        data: [
+          {
+            id: '358',
+            name: 'FacilityOne',
+            city: 'Cheyenne',
+            state: 'WY',
+            cerner: true,
+            miles: '3.17',
+          },
+          {
+            id: '359',
+            name: 'FacilityTwo',
+            city: 'Cheyenne',
+            state: 'WY',
+            cerner: true,
+            miles: '3.17',
+          },
+        ],
+      })
+      .mockReturnValueOnce({
+        status: 'success',
+        data: [
+          {
+            id: '358',
+            name: 'FacilityOne',
+            city: 'Cheyenne',
+            state: 'WY',
+            cerner: true,
+            miles: '3.17',
+          },
+          {
+            id: '359',
+            name: 'FacilityTwo',
+            city: 'Cheyenne',
+            state: 'WY',
+            cerner: false,
+            miles: '3.17',
+          },
+        ],
+      }),
   }
 })
 

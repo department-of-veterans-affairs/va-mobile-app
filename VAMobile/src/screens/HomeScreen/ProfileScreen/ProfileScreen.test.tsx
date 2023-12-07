@@ -1,15 +1,8 @@
-import 'react-native'
 import React from 'react'
 
 import { context, mockNavProps, render, waitFor } from 'testUtils'
 import { screen } from '@testing-library/react-native'
-import {
-  ErrorsState,
-  initialAuthState,
-  initialErrorsState,
-  initializeErrorsByScreenID,
-  initialMilitaryServiceState,
-} from 'store/slices'
+import { ErrorsState, initialAuthState, initialErrorsState, initializeErrorsByScreenID, initialMilitaryServiceState } from 'store/slices'
 import ProfileScreen from './ProfileScreen'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types'
@@ -19,7 +12,7 @@ jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({
-      status: "success",
+      status: 'success',
       data: {
         appeals: true,
         appointments: true,
@@ -36,9 +29,9 @@ jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
         prescriptions: true,
         scheduleAppointments: true,
         secureMessaging: true,
-        userProfileUpdate: false
-      }
-    })
+        userProfileUpdate: false,
+      },
+    }),
   }
 })
 
@@ -56,15 +49,12 @@ jest.mock('utils/hooks', () => {
 context('ProfileScreen', () => {
   let props: any
 
-  const initializeTestInstance = ( militaryInformationLoading = false, errorState: ErrorsState = initialErrorsState ): void => {
-
-    props = mockNavProps(undefined,
-      {
-        setOptions: jest.fn(),
-        navigate: jest.fn(),
-        addListener: jest.fn(),
-      }
-    )
+  const initializeTestInstance = (militaryInformationLoading = false, errorState: ErrorsState = initialErrorsState): void => {
+    props = mockNavProps(undefined, {
+      setOptions: jest.fn(),
+      navigate: jest.fn(),
+      addListener: jest.fn(),
+    })
 
     render(<ProfileScreen {...props} />, {
       preloadedState: {
