@@ -113,6 +113,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     }
   }, [appointmentCancellationStatus, dispatch, navigation])
 
+  useEffect(() => {
+    if (appointmentNotFound) {
+      logAnalyticsEvent(Events.vama_appt_deep_link_fail)
+    }
+  }, [appointmentNotFound])
+
   const goBack = (): void => {
     dispatch(clearAppointmentCancellation())
     navigation.goBack()

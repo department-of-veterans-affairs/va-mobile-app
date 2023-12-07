@@ -33,6 +33,11 @@ export const Events = {
       },
     }
   },
+  vama_appt_deep_link_fail: (): Event => {
+    return {
+      name: 'vama_appt_deep_link_fail',
+    }
+  },
   vama_appt_view_details: (
     isPendingAppointment: boolean,
     apt_id: string | undefined,
