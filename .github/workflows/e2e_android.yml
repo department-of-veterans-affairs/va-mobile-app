@@ -13,8 +13,8 @@ on:
     workflows: ['[Release] New Release Issue']
     types: [completed]
   # Run on weekdays 4:00 AM UTC
-  # schedule:
-  #   - cron: '0 4 * * 1,2,3,4,5'
+  schedule:
+    - cron: '0 4 * * 1,2,3,4,5'
   
 defaults:
   run:
@@ -35,20 +35,21 @@ env:
   FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
   # Filepath for firebase distribution key. Also used by fastlane
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
-  # Slack API token used by fastlane
-  # SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  # Slack API token
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
-  # start_slack_thread:
-  #   name: Start Slack thread
-  #   uses: ./.github/workflows/start_slack_thread.yml
-  #   secrets: inherit
-  #   with:
-  #     channel_name: va-mobile-build-alerts
-  #     message: 'E2E Android build process starting. Please see :thread: for results. This process may take a while.'
+  start_slack_thread:
+    if: github.event_name == 'schedule'
+    name: Start Slack thread
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-build-alerts
+      message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
 
   e2e-android:
-    # needs: start_slack_thread
+    needs: start_slack_thread
     runs-on: macos-latest-xl
     steps:
       - uses: actions/checkout@v3
@@ -112,27 +113,27 @@ jobs:
           avd-name: Pixel_4_XL_API_28
           script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
-      # - name: Inform Slack of Failure
-      #   id: post_failure
-      #   if: failure()
-      #   run: |
-      #     ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-      #       -H 'Content-type: application/json' \
-      #       --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
-      #       https://slack.com/api/chat.postMessage|
-      #       jq -r '.ts')
-      #     echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+      - name: Inform Slack of Failure
+        id: post_failure
+        if: failure() && github.event_name == 'schedule'
+        run: |
+          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
+          echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
-      # - name: Inform Slack of success
-      #   id: post_failure
-      #   if: ${{!failure()}}
-      #   run: |
-      #     ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-      #       -H 'Content-type: application/json' \
-      #       --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
-      #       https://slack.com/api/chat.postMessage|
-      #       jq -r '.ts')
-      #     echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+      - name: Inform Slack of success
+        id: post_success
+        if: ${{!failure()}} && github.event_name == 'schedule'
+        run: |
+          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/json' \
+            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
+            https://slack.com/api/chat.postMessage|
+            jq -r '.ts')
+          echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
       - name: Upload artifacts on failure
         if: failure()

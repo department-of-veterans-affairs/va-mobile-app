@@ -17,7 +17,7 @@ const PreferredDateAndTime: FC<PreferredDateAndTimeProps> = ({ attributes }) => 
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const { proposedTimes } = attributes || ({} as AppointmentAttributes)
+  const { proposedTimes, phoneOnly } = attributes || ({} as AppointmentAttributes)
 
   if (isAppointmentPending && !!proposedTimes?.length) {
     const filteredTimes = proposedTimes?.filter(({ date }) => {
@@ -25,14 +25,14 @@ const PreferredDateAndTime: FC<PreferredDateAndTimeProps> = ({ attributes }) => 
     })
 
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={phoneOnly ? undefined : theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('appointments.pending.preferredDateAndTime')}
         </TextView>
         {filteredTimes?.map(({ date, time }, index) => {
           const timeSlot = time === AppointmentProposedTimesPeriodConstant.AM ? t('appointments.pending.inMorning') : t('appointments.pending.inAfternoon')
           return (
-            <TextView key={index} variant="MobileBody">
+            <TextView key={index} variant="MobileBody" paragraphSpacing={phoneOnly && index === filteredTimes.length - 1}>
               {t('appointments.pending.dateInSlotTime', { optionDate: date, optionTime: timeSlot })}
             </TextView>
           )
