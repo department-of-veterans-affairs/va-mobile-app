@@ -71,6 +71,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
+  const screenError = useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)
   const { upcomingAppointmentsById, loading, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>(
     (state) => state.appointments,
   )
@@ -114,8 +115,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }, [appointmentCancellationStatus, dispatch, navigation])
 
   useEffect(() => {
-    if (appointmentNotFound) {
-      logAnalyticsEvent(Events.vama_appt_deep_link_fail())
+    if (!screenError && appointmentNotFound) {
+      logAnalyticsEvent(Events.vama_appt_deep_link_fail(vetextID))
     }
   }, [appointmentNotFound])
 
@@ -328,7 +329,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     )
   }
 
-  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || appointmentNotFound) {
+  if (screenError || appointmentNotFound) {
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
