@@ -161,7 +161,7 @@ context('PastAppointments', () => {
   it('initializes correctly', () => {
     expect(screen.getByText('Select a date range')).toBeTruthy()
     expect(screen.getAllByText('Past 3 months')).toBeTruthy()
-    expect(screen.getByTestId('Confirmed Saturday, February 6, 2021 11:53 AM PST VA Long Beach Healthcare System In-person')).toBeTruthy()
+    expect(screen.getByTestId('Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System')).toBeTruthy()
     expect(screen.getByText('2 to 2 of 2')).toBeTruthy()
     expect(screen.getByTestId('previous-page')).toBeTruthy()
     expect(screen.getByTestId('next-page')).toBeTruthy()
@@ -176,7 +176,7 @@ context('PastAppointments', () => {
 
   describe('when a appointment is clicked', () => {
     it('should call useRouteNavigation', () => {
-      fireEvent.press(screen.getByTestId('Confirmed Saturday, February 6, 2021 11:53 AM PST VA Long Beach Healthcare System In-person'))
+      fireEvent.press(screen.getByTestId('Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('PastAppointmentDetails', { appointmentID: '1' })
       expect(mockNavigateToSpy).toHaveBeenCalled()
     })
