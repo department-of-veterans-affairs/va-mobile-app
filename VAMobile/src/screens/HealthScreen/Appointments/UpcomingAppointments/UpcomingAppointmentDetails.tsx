@@ -115,7 +115,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   useEffect(() => {
     if (appointmentNotFound) {
-      logAnalyticsEvent(Events.vama_appt_deep_link_fail)
+      logAnalyticsEvent(Events.vama_appt_deep_link_fail())
     }
   }, [appointmentNotFound])
 
