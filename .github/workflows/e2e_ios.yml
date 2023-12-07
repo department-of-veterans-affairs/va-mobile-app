@@ -8,15 +8,18 @@ on:
   push:
     branches:
       - 'dependabot/**'
-      
   workflow_dispatch:
-  
+    inputs:
+      run_testRail:
+        description: Run_TestRail
+        type: boolean
+        required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
-
   workflow_run:
     workflows: ['[Release] New Release Issue']
-    types: [completed]
+    types: 
+      - completed
 
 defaults:
   run:
@@ -41,6 +44,7 @@ jobs:
       message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
   e2e-ios:
+    if: ${{ always() }}
     needs: start_slack_thread
     runs-on: macos-latest-xl
     env:
@@ -138,7 +142,7 @@ jobs:
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
   send_test_results_to_testrail:
-    if: github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped'
+    if: (github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped') || ${{ github.event.inputs.run_testRail == true}}
     needs: [e2e-ios]
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
