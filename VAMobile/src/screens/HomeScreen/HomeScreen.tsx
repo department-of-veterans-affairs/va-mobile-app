@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AppointmentsState } from 'store/slices'
-import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
@@ -81,8 +81,13 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
         <EncourageUpdateAlert />
         <Nametag />
         {upcomingAppointmentsCount && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween} borderStyle={'solid'} borderWidth={1} borderRadius={5}>
-            <TextView mx={theme.dimensions.gutter}>{`${t('appointments')} (${upcomingAppointmentsCount} ${t('upcoming')})`}</TextView>
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <LargeNavButton
+              title={`${t('appointments')}`}
+              subText={`(${upcomingAppointmentsCount} ${t('upcoming')})`}
+              onPress={navigateTo('HealthTab', { screen: 'Appointments' })}
+              borderWidth={theme.dimensions.buttonBorderWidth}
+            />
           </Box>
         )}
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
