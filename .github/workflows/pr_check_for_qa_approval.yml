@@ -9,6 +9,7 @@ on:
     types: [opened, edited, converted_to_draft, ready_for_review, closed, reopened]
   pull_request_review:
     types: [submitted, dismissed]
+  push:
 
 jobs:
   check_for_qa_required:
@@ -43,11 +44,11 @@ jobs:
           --header 'Authorization: $base64AuthInfo' \
           --header 'Content-Type: application/json')
 
-          approvals = $response | jq '.[] | select(.state=="APPROVED")'
-          echo $approvals
+          echo approvals = $response | jq '.[] | select(.state=="APPROVED")'
+          echo "Approvals length: $approvals.length"
 
-          if $aprovals.length > 2
-            qa_approvals = $approvals | jq '.[] | select(.user.login | IN("rbontrager","DJUltraTom","TKDickson"))'
+          if $approvals.length > 2
+            echo qa_approvals = $approvals | jq '.[] | select(.user.login | IN("rbontrager","DJUltraTom","TKDickson"))'
               if $qa_approvals.length > 0
                 echo 'This PR has QA approval to merge'
                 echo ::set-output name=has_qa_approval::'true'
