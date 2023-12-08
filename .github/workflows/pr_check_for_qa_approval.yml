@@ -76,9 +76,9 @@ jobs:
       - name: 'Add or remove label'
         if: ${{ needs.check_for_qa_approval.outputs.has_qa_approval }} == 'true'
         run: gh pr edit ${{ github.event.pull_request.number }} --remove-label "$LABEL"
-        else:
-          run: |
-            gh pr edit ${{ github.event.pull_request.number }} --add-label "$LABEL"
-            exit 1
+        if: ${{ needs.check_for_qa_approval.outputs.has_qa_approval }} == 'false'
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} --add-label "$LABEL"
+          exit 1
 
 
