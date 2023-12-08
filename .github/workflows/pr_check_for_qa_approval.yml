@@ -9,6 +9,7 @@ on:
     types: [opened, edited]
   pull_request_review:
     types: [submitted, dismissed]
+  push:
 
 jobs:
   check_for_qa_required:
