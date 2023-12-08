@@ -36,7 +36,6 @@ jobs:
           echo $approvals
 
           if $aprovals.length > 2
-        # TODO: Figure out a way to target the team, but for now we only have access to the user object
             qa_approvals = $approvals | jq '.[] | select(.user.login | IN("rbontrager","DJUltraTom","TKDickson"))'
               if $qa_approvals.length > 0
                 echo 'This PR has QA approval to merge'
