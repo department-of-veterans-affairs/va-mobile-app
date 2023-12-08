@@ -12,18 +12,15 @@ on:
     paths:
       - include:
         - 'VAMobile/src'
-        - 'VAMobile/e2e'
         - 'VAMobile/package.json'
-        - 'VAMobile/detoxrc.json'
-        - '!VAMobile/src/*.test.tsx'
+        - '!VAMobile/src/*.test.*'
 
 jobs:
   check_for_qa_approval:
-    name: Check for QA Approvals
-    if: github.event.review.state == 'APPROVED'
+    runs-on: ubuntu-latest
     outputs:
       has_qa_approval: ${{ steps.check-qa-approval.outputs.has_qa_approval }}
-    runs-on: ubuntu-latest
+    if: github.event.review.state == 'APPROVED'
     steps:
       - name: Check QA approval
         id: check-qa-approval
@@ -55,6 +52,7 @@ jobs:
           fi
 
   add_or_remove_qa_required_label:
+    name: Add or Remove label
     needs: check_for_qa_approval
     runs-on: ubuntu-latest
     env:
