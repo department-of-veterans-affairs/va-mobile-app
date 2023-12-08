@@ -19,12 +19,13 @@ on:
 
 jobs:
   check_for_qa_approval:
+    name: Check for QA Approvals
     if: github.event.review.state == 'APPROVED'
     outputs:
       has_qa_approval: ${{ steps.check-qa-approval.outputs.has_qa_approval }}
     runs-on: ubuntu-latest
     steps:
-      - name: Check for QA approvals
+      - name: Check QA approval
         id: check-qa-approval
         shell: bash
         run: |
@@ -55,6 +56,7 @@ jobs:
 
   add_or_remove_qa_required_label:
     needs: check_for_qa_approval
+    runs-on: ubuntu-latest
     env:
       LABEL: qa-review-required
     steps:
