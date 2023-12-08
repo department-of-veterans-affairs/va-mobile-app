@@ -6,7 +6,7 @@ name: '[Utils] QA required approval'
 
 on:
   pull_request:
-    types: [opened, edited, converted_to_draft, ready_for_review]
+    types: [opened, edited, converted_to_draft, ready_for_review, closed, reopened]
   pull_request_review:
     types: [submitted, dismissed]
 
