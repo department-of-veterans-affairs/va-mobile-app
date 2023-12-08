@@ -9,7 +9,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import { DisabilityRatingState, MilitaryServiceState, checkForDowntimeErrors, getDisabilityRating, getServiceHistory } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { getPastAppointmentRange, getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
+import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -31,7 +31,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
-  const { preloadComplete: appointmentsLoaded, upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { preloadComplete: appointmentsLoaded } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({ enabled: loggedIn })
 
   const [displayMessage, setDisplayMessage] = useState('')
@@ -86,7 +86,18 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded && appointmentsLoaded) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, loggingOut, loadingUserAuthorizedServices, militaryHistoryLoaded, userAuthorizedServices?.militaryServiceHistory, t, disabilityRatingLoaded, syncing])
+  }, [
+    dispatch,
+    loggedIn,
+    loggingOut,
+    loadingUserAuthorizedServices,
+    militaryHistoryLoaded,
+    userAuthorizedServices?.militaryServiceHistory,
+    t,
+    disabilityRatingLoaded,
+    appointmentsLoaded,
+    syncing,
+  ])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
