@@ -6,10 +6,9 @@ name: '[Utils] QA required approval'
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, edited, converted_to_draft, ready_for_review]
   pull_request_review:
     types: [submitted, dismissed]
-  push:
 
 jobs:
   check_for_qa_required:
