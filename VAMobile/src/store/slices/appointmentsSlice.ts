@@ -41,6 +41,7 @@ const emptyAppointmentsInDateRange: AppointmentsGetData = {
       currentPage: 1,
       perPage: DEFAULT_PAGE_SIZE,
     },
+    upcomingAppointmentsCount: 0,
   },
 }
 
@@ -96,6 +97,8 @@ export type AppointmentsState = {
   loadedAppointmentsByTimeFrame: LoadedAppointments
   paginationByTimeFrame: AppointmentsPaginationByTimeFrame
   messagesLoading: boolean
+  upcomingAppointmentsCount?: number
+  preloadComplete: boolean
 }
 
 export const initialPaginationState = {
@@ -142,6 +145,7 @@ export const initialAppointmentsState: AppointmentsState = {
     pastAllLastYear: {},
   },
   messagesLoading: false,
+  preloadComplete: false,
 }
 
 // Issue#2273 Tracks and logs pagination warning if there are discrepancies in the total entries of appointments
@@ -229,7 +233,7 @@ const getLoadedAppointments = (appointments: Array<AppointmentData>, paginationD
  * Redux action to prefetch appointments for upcoming and past the given their date ranges
  */
 export const prefetchAppointments =
-  (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes): AppThunk =>
+  (upcoming: AppointmentsDateRange, past?: AppointmentsDateRange, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
@@ -241,19 +245,21 @@ export const prefetchAppointments =
       let upcomingAppointments
       let pastAppointments
 
-      // use loaded data if we have it
-      const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, pastPagination, 1, DEFAULT_PAGE_SIZE)
-      if (loadedPastAppointments && getState().appointments.pastCcServiceError === false && getState().appointments.pastVaServiceError === false) {
-        pastAppointments = loadedPastAppointments
-      } else {
-        pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
-          startDate: past.startDate,
-          endDate: past.endDate,
-          'page[size]': DEFAULT_PAGE_SIZE.toString(),
-          'page[number]': '1', // prefetch assume always first page
-          sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest,
-          'included[]': 'pending',
-        } as Params)
+      if (past) {
+        // use loaded data if we have it
+        const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, pastPagination, 1, DEFAULT_PAGE_SIZE)
+        if (loadedPastAppointments && getState().appointments.pastCcServiceError === false && getState().appointments.pastVaServiceError === false) {
+          pastAppointments = loadedPastAppointments
+        } else {
+          pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
+            startDate: past.startDate,
+            endDate: past.endDate,
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            'page[number]': '1', // prefetch assume always first page
+            sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest,
+            'included[]': 'pending',
+          } as Params)
+        }
       }
 
       // use loaded data if we have it
@@ -425,6 +431,7 @@ const appointmentsSlice = createSlice({
       const upcomingAppointmentsPagination = upcoming?.meta?.pagination || state.paginationByTimeFrame.upcoming
       const pastAppointmentsPagination = past?.meta?.pagination || state.paginationByTimeFrame.pastThreeMonths
 
+      state.upcomingAppointmentsCount = upcoming?.meta?.upcomingAppointmentsCount
       state.upcomingAppointmentsById = mapAppointmentsById(upcomingAppointments)
       state.pastAppointmentsById = mapAppointmentsById(pastAppointments)
       state.upcomingCcServiceError = upcomingCcServiceError
@@ -433,6 +440,7 @@ const appointmentsSlice = createSlice({
       state.pastVaServiceError = pastVaServiceError
       state.error = error
       state.loading = false
+      state.preloadComplete = true
 
       state.currentPageAppointmentsByYear.upcoming = groupAppointmentsByYear(upcomingAppointments)
       state.currentPageAppointmentsByYear.pastThreeMonths = groupAppointmentsByYear(pastAppointments)
