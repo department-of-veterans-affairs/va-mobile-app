@@ -12,7 +12,6 @@ on:
 
 jobs:
   check_for_qa_required:
-    if: github.event.review.state == 'APPROVED'
     runs-on: ubuntu-latest
     outputs:
       requires_qa: ${{ steps.qa_required.outputs.requires_qa}}
