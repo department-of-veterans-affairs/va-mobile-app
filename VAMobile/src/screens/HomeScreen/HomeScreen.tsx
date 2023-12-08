@@ -1,14 +1,17 @@
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
+import { AppointmentsState } from 'store/slices'
 import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
@@ -36,6 +39,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = () => {
@@ -76,6 +80,11 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       <Box flex={1} justifyContent="flex-start">
         <EncourageUpdateAlert />
         <Nametag />
+        {upcomingAppointmentsCount && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween} borderStyle={'solid'} borderWidth={1} borderRadius={5}>
+            <TextView mx={theme.dimensions.gutter}>{`${t('appointments')} (${upcomingAppointmentsCount} ${t('upcoming')})`}</TextView>
+          </Box>
+        )}
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
             {t('aboutVA')}
