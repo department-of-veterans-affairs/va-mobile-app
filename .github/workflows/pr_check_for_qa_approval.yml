@@ -5,25 +5,35 @@
 name: '[Utils] QA required approval'
 
 on:
-  pull_request_target:
-    paths:
-      - include:
-        - 'VAMobile/src'
-        - 'VAMobile/package.json'
-        - '!VAMobile/src/*.test.*'
   pull_request_review:
     types: [submitted, dismissed]
 
 jobs:
-  check_for_qa_approval:
+  check_for_qa_required:
     if: github.event.review.state == 'APPROVED'
+    runs-on: ubuntu-latest
+    outputs:
+      requires_qa: ${{ steps.qa_required.outputs.requires_qa}}
+    steps:
+      - uses: dorny/paths-filter@v2
+        id: qa_required
+        with:
+          filters: |
+            requires_qa:
+                - 'VAMobile/src'
+                - 'VAMobile/package.json'
+                - '!VAMobile/src/*.test.*'
+
+  check_for_qa_approval:
     runs-on: ubuntu-latest
     outputs:
       has_qa_approval: ${{ steps.check-qa-approval.outputs.has_qa_approval }}
     steps:
       - name: Check QA approval
+        needs: check_for_qa_required
         id: check-qa-approval
         shell: bash
+        if: ${{ needs.check_for_qa_required.outputs.requires_qa }} == 'true'
         run: |
           token=${{ secrets.GITHUB_TOKEN }}
           base64AuthInfo='$token | base64 -e'
@@ -48,6 +58,7 @@ jobs:
             echo 'This PR requires 3 approvals, including one QA approval, before merging.'
             echo ::set-output name=has_qa_approval::'false'
           fi
+        else: exit 0
 
   add_or_remove_qa_required_label:
     name: Add or Remove label
