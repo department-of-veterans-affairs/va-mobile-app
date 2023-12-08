@@ -48,6 +48,8 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
     }
   }
 
+  console.info('This is a test of the PR QA approval process.... Test...')
+
   const text = saveDraftAttempted ? t('secureMessaging.formMessage.saveDraft.validation.text') : t('secureMessaging.formMessage.sendMessage.validation.text')
 
   return hasValidationError ? (
