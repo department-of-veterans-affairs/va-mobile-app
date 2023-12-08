@@ -10,6 +10,8 @@ on:
   pull_request_review:
     types: [submitted, dismissed]
   push:
+    branches:
+      - "*"
 
 jobs:
   check_for_qa_required:
