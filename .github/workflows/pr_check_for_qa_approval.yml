@@ -61,8 +61,6 @@ jobs:
             echo 'This PR requires 3 approvals, including one QA approval, before merging.'
             echo ::set-output name=has_qa_approval::'false'
           fi
-        else: 
-          run: exit 0
 
   add_or_remove_qa_required_label:
     name: Add or Remove label
