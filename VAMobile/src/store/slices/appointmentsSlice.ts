@@ -210,7 +210,13 @@ export const findAppointmentErrors = (appointmentsMetaErrors?: Array<Appointment
 }
 
 // Return data that looks like AppointmentsGetData if data was loaded previously otherwise null
-const getLoadedAppointments = (appointments: Array<AppointmentData>, paginationData: AppointmentsMetaPagination, latestPage: number, pageSize: number) => {
+const getLoadedAppointments = (
+  appointments: Array<AppointmentData>,
+  paginationData: AppointmentsMetaPagination,
+  latestPage: number,
+  pageSize: number,
+  upcomingAppointmentsCount?: number,
+) => {
   const loadedAppointments = getItemsInRange(appointments, latestPage, pageSize)
   // do we have the appointments?
   if (loadedAppointments) {
@@ -223,6 +229,7 @@ const getLoadedAppointments = (appointments: Array<AppointmentData>, paginationD
           totalEntries: paginationData.totalEntries,
         },
         dataFromStore: true, // informs reducer not to save these appointments to the store
+        upcomingAppointmentsCount,
       },
     } as AppointmentsGetData
   }
@@ -263,7 +270,7 @@ export const prefetchAppointments =
       }
 
       // use loaded data if we have it
-      const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, upcomingPagination, 1, DEFAULT_PAGE_SIZE)
+      const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, upcomingPagination, 1, DEFAULT_PAGE_SIZE, getState().appointments.upcomingAppointmentsCount)
       if (loadedUpcomingAppointments && getState().appointments.upcomingCcServiceError === false && getState().appointments.upcomingVaServiceError === false) {
         upcomingAppointments = loadedUpcomingAppointments
       } else {
