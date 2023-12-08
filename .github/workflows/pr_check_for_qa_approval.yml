@@ -5,18 +5,18 @@
 name: '[Utils] QA required approval'
 
 on:
-  # pull_request:
-  #   paths:
-  #     - include:
-  #       - 'VAMobile/src'
-  #       - 'VAMobile/package.json'
-  #       - '!VAMobile/src/*.test.*'
-  pull_request_review:
-    types: [submitted, dismissed]
+  pull_request:
+    paths:
+      - include:
+        - 'VAMobile/src'
+        - 'VAMobile/package.json'
+        - '!VAMobile/src/*.test.*'
+  # pull_request_review:
+  #   types: [submitted, dismissed]
 
 jobs:
   check_for_qa_approval:
-    if: github.event.review.state == 'APPROVED'
+    # if: github.event.review.state == 'APPROVED'
     runs-on: ubuntu-latest
     outputs:
       has_qa_approval: ${{ steps.check-qa-approval.outputs.has_qa_approval }}
