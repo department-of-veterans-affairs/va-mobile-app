@@ -43,6 +43,8 @@ jobs:
           --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
           --header 'Content-Type: application/json')
 
+          echo $response
+          
           echo approvals = $response | jq '.[] | select(.state=="APPROVED")'
           
           if !$approvals
