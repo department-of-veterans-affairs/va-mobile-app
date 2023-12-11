@@ -19,6 +19,6 @@ Every epic should go through a round of visual and interaction QA, before releas
 
 ## Acceptance Criteria (for UX QA)
 
--  [ ] Happy path visuals and interactions have been reviewed for completeness ("word perfect")
+-  [ ] Happy path visuals and interactions have been reviewed for completeness ("pixel perfect")
 -  [ ] Any issues found have been documented (in a ticket, or other method agreed upon by the team)
 -  [ ] Any issues found have been prioritized with Product & UX, to determine if they need to be fixed before release of MVP
