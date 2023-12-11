@@ -20,23 +20,23 @@ const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation })
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const currentScreen = useNavigationState((state) => state.routes[state.routes.length - 1])
+  const currentScreenName = useNavigationState((state) => state.routes[state.routes.length - 1]).name
   const [isWebviewOpen, setIsWebviewOpen] = useState(false)
 
   useBeforeNavBackListener(navigation, () => {
-    logAnalyticsEvent(Events.vama_givefb_close())
+    logAnalyticsEvent(Events.vama_givefb_close(currentScreenName))
   })
 
   useEffect(() => {
     // Track when the user is leaving the Webview
-    if (isWebviewOpen && currentScreen.name !== 'Webview') {
-      logAnalyticsEvent(Events.vama_givefb_wv_close())
+    if (isWebviewOpen && currentScreenName !== 'Webview') {
+      logAnalyticsEvent(Events.vama_givefb_close('Webview'))
       setIsWebviewOpen(false)
     }
-  }, [isWebviewOpen, currentScreen])
+  }, [isWebviewOpen, currentScreenName])
 
   const onPress = () => {
-    logAnalyticsEvent(Events.vama_givefb_launch())
+    logAnalyticsEvent(Events.vama_givefb_open('launch'))
     navigateTo('Webview', {
       url: LINK_URL_IN_APP_RECRUITMENT,
       displayTitle: t('webview.vagov'),
@@ -77,7 +77,7 @@ const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation })
             numberOrUrlLink={LINK_URL_VETERAN_USABILITY_PROJECT}
             linkType={LinkTypeOptionsConstants.url}
             a11yLabel={t('inAppRecruitment.learnMore')}
-            fireAnalytic={() => logAnalyticsEvent(Events.vama_givefb_info())}
+            fireAnalytic={() => logAnalyticsEvent(Events.vama_givefb_open('info'))}
           />
         </Box>
         <TextView variant="HelperText" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('inAppRecruitment.contracts'))}>
