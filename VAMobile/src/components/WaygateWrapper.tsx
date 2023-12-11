@@ -1,5 +1,5 @@
 import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, VAButton } from 'components'
-import { useNavigationState } from '@react-navigation/native'
+import { useIsFocused, useNavigationState } from '@react-navigation/native'
 import React, { FC, useEffect } from 'react'
 
 import { Events } from 'constants/analytics'
@@ -24,6 +24,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
   const waygateStateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
   const waygateScreen = waygateName || waygateStateScreen
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isFocused = useIsFocused()
 
   const waygateTypeCheck = (waygateType: string | undefined) => {
     if (waygateType === 'DenyContent' || waygateType === 'AllowFunction') {
@@ -61,7 +62,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
     }
   }, [bypassAlertBox, waygateScreen, showAlertBox, waygate.appUpdateButton])
 
-  if (showAlertBox) {
+  if (isFocused && showAlertBox) {
     const showScreenContent = waygate.type === 'AllowFunction' || waygateName === 'WG_Login'
     return (
       <>
