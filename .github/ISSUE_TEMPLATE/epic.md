@@ -154,7 +154,7 @@ assignees:
 
 
 **Ad Hoc:** 
-- **Mobile Team Lead**: Global, Health and Benefits, Design System, QA, API 
+- **Mobile Team**: Global, Health and Benefits, Design System, QA, API 
 - **Mobile Team Lead:** 
 - **FE Engineering:**
 - **BE Engineering:** 
@@ -210,7 +210,7 @@ assignees:
 <details>
 <summary>Closed Questions</summary>
 
-| Question |  Answer | Onwer |
+| Question |  Answer | Owner |
 |--------|----------|------|
 | | | |
 | | | |
@@ -261,10 +261,11 @@ Product will need to create on in the Github folder and link it here.
 - [ ] Design work to update hi-res internal files
 - [ ] Engineering created successful unit tests 
 - [ ] UX has completed visual QA
+- [ ] Content has completed content QA
 - [ ] Accessibility testing has been completed
 - [ ] QA sign off 
 - [ ] Obtain Go/No Go decision from Mobile POs and / or Octo POs for launch
-- [ ] PM fillsout and completes Epic's checklists 
+- [ ] PM fills out and completes Epic's checklists 
 - [ ] Post launch monitoring plan / post production follow-up
 - [ ] Other: 
   
