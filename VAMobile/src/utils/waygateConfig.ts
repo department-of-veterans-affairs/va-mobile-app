@@ -60,7 +60,6 @@ export type WaygateToggleType =
   | 'WG_EditDraft'
   | 'WG_Attachments'
   | 'WG_ReplyHelp'
-  | 'WG_ConfirmContactInfo'
   | 'WG_RefillRequestSummary'
   | 'WG_RefillScreenModal'
   | 'WG_RefillTrackingModal'
@@ -136,7 +135,6 @@ type WaygateToggleValues = {
   WG_EditDraft: Waygate
   WG_Attachments: Waygate
   WG_ReplyHelp: Waygate
-  WG_ConfirmContactInfo: Waygate
   WG_RefillRequestSummary: Waygate
   WG_RefillScreenModal: Waygate
   WG_RefillTrackingModal: Waygate
@@ -221,7 +219,6 @@ export let waygateConfig: WaygateToggleValues = {
   WG_EditDraft: { ...waygateDefault },
   WG_Attachments: { ...waygateDefault },
   WG_ReplyHelp: { ...waygateDefault },
-  WG_ConfirmContactInfo: { ...waygateDefault },
   WG_RefillRequestSummary: { ...waygateDefault },
   WG_RefillScreenModal: { ...waygateDefault },
   WG_RefillTrackingModal: { ...waygateDefault },
