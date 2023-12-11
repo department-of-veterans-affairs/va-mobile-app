@@ -41,11 +41,12 @@ jobs:
           approvals=$(curl --request GET \
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews \
           --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'Content-Type: application/json') | jq '[map(select(.state == "APPROVED")) | .[] .user]'
+          --header 'Content-Type: application/json' |
+          jq '[map(select(.state == "APPROVED")) | .[] .user]')
 
           echo $approvals
           
-          if $approvals | jq '[.[]] | length' > 2
+          if ($approvals | jq '[.[]] | length') > 2
             then
             echo qa_approvals = $approvals | jq '[.[] | select(.login | IN("rbontrager","DJUltraTom","TKDickson"))] | length'
               if $qa_approvals > 0
