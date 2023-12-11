@@ -60,7 +60,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
 
   useEffect(() => {
     if (showAlertBox && !bypassAlertBox) {
-      const afStatus = waygate.type === 'DenyContent' ? 'open' : 'closed'
+      const afStatus = waygate.appUpdateButton ? 'closed' : 'open'
       logAnalyticsEvent(Events.vama_af_shown(afStatus, screenName))
     }
   }, [bypassAlertBox, screenName, showAlertBox, waygate.type])
