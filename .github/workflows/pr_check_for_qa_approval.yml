@@ -38,14 +38,11 @@ jobs:
         shell: bash
         if: ${{ needs.check_for_qa_required.outputs.requires_qa == 'true' }}
         run: |
-          response=$(curl --request GET \
+          approvals=$(curl --request GET \
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews \
           --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'Content-Type: application/json')
+          --header 'Content-Type: application/json') | jq '[map(select(.state == "APPROVED")) | .[] .user]'
 
-          echo $response | jq '[map(select(.state == "APPROVED")) | .[] .user]'
-
-          echo approvals = $response | jq '[map(select(.state == "APPROVED")) | .[] .user]'
           echo $approvals
           
           if $approvals | jq '[.[]] | length' > 2
