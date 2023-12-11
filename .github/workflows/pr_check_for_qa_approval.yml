@@ -45,8 +45,8 @@ jobs:
 
           echo $response | jq '[map(select(.state == "APPROVED")) | .[] .user]'
 
-          approvals = $response | jq '[map(select(.state == "APPROVED")) | .[] .user]'
-          echo "$approvals"
+          echo approvals = $response | jq '[map(select(.state == "APPROVED")) | .[] .user]'
+          echo $approvals
           
           if !$approvals
             then
