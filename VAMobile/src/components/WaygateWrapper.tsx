@@ -13,11 +13,13 @@ import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
 export type WaygateWrapperProps = {
+  /** the waygate name to check for */
+  waygateName?: WaygateToggleType
   /** flag for template footer buttons to not double up alertbox display */
   bypassAlertBox?: boolean
 }
 
-export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, bypassAlertBox }) => {
+export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName, bypassAlertBox }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const waygateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
@@ -48,7 +50,8 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, bypassAlertB
     )
   }
 
-  const waygate = waygateEnabled(waygateScreen as WaygateToggleType)
+  const waygateToggle = waygateName || waygateScreen
+  const waygate = waygateEnabled(waygateToggle as WaygateToggleType)
   const showAlertBox = waygate.enabled === false && waygateTypeCheck(waygate.type) && (waygate.errorMsgTitle || waygate.errorMsgBody)
 
   useEffect(() => {
@@ -59,7 +62,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, bypassAlertB
   }, [bypassAlertBox, waygateScreen, showAlertBox, waygate.appUpdateButton])
 
   if (showAlertBox) {
-    const showScreenContent = waygate.type === 'AllowFunction' || waygateScreen === 'WG_Login'
+    const showScreenContent = waygate.type === 'AllowFunction' || waygateName === 'WG_Login'
     return (
       <>
         {!bypassAlertBox && waygateAlertBox(waygate)}
