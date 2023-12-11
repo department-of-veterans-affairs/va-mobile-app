@@ -48,14 +48,11 @@ jobs:
           echo approvals = $response | jq '[map(select(.state == "APPROVED")) | .[] .user]'
           echo $approvals
           
-          if $approvals.length == 0
-            then
-            echo 'This PR requires 3 approvals, including one QA approval, before merging.'
-            exit 1
-          else if $approvals.length > 2
+          if $approvals.length > 2
             then
             echo qa_approvals = $approvals | jq '.[] | select(.login | IN("rbontrager","DJUltraTom","TKDickson"))'
               if $qa_approvals.length > 0
+                then
                 echo 'This PR has QA approval to merge'
               else 
                 echo 'This PR requires QA approval to merge'
