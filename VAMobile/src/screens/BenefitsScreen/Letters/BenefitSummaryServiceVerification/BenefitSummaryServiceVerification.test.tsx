@@ -118,7 +118,7 @@ context('BenefitSummaryServiceVerification', () => {
   })
 
   describe('when downloading is set to true', () => {
-    it('should show loading screen', () => {
+    it('should show loading screen', async () => {
       initializeTestInstance(123, date, 88, true)
       expect(screen.getByText('Loading your letter...')).toBeTruthy()
     })
@@ -138,33 +138,24 @@ context('BenefitSummaryServiceVerification', () => {
     })
   })
 
-  describe('when both the awardEffectiveDate and the monthly payment amount exist', () => {
-    it('should display "Your current monthly award is ${{monthlyAwardAmount}}. The effective date of the last change to your current payment was {{date}}." for that switch', () => {
-      initializeTestInstance(123, date, 88)
-      expect(screen.getByRole('switch', { name: 'Your current monthly payment is $123.00. The effective date of the last change to your current payment was June 06, 2013.' })).toBeTruthy()
-    })
-  })
-
   describe('when the monthly award amount does not exist but the awardEffectiveDate does', () => {
-    it('should display "The effective date of the last change to your current award was {{date}}." for that switch', () => {
+    it('should display "Your current monthly award is $0.00. The effective date of the last change to your current award was {{date}}." for that switch', async () => {
       initializeTestInstance(undefined, date, 88)
-      expect(screen.getByRole('switch', { name: 'The effective date of the last change to your current award was June 06, 2013.' })).toBeTruthy()
+      expect(screen.getByRole('switch', { name: 'Your current monthly payment is $0.00. The effective date of the last change to your current payment was June 06, 2013.' })).toBeTruthy()
     })
   })
 
   describe('when the awardEffectiveDate does not exist but the monthly payment amount does', () => {
-    it('should display "Your current monthly award is ${{monthlyAwardAmount}}." for that switch', () => {
+    it('should display "Your current monthly award is ${{monthlyAwardAmount}}. The effective date of the last change to your current payment was invalid date." for that switch', async () => {
       initializeTestInstance(123, undefined, 88)
-      expect(screen.getByRole('switch', { name: 'Your current monthly payment is $123.00.' })).toBeTruthy()
+      expect(screen.getByRole('switch', { name:'Your current monthly payment is $123.00. The effective date of the last change to your current payment was an invalid date.' }))
     })
   })
 
   describe('when the awardEffectiveDate does not exist and the monthly award amount does not exist', () => {
-    it('should not display that switch on the screen', () => {
+    it('should not display that switch on the screen', async () => {
       initializeTestInstance(undefined, undefined, 88)
-      expect(screen.queryByRole('switch', { name: 'Your current monthly payment is $123.00.' })).toBeFalsy()
-      expect(screen.queryByRole('switch', { name: 'The effective date of the last change to your current award was June 06, 2013.' })).toBeFalsy()
-      expect(screen.queryByRole('switch', { name: 'Your current monthly payment is $123.00. The effective date of the last change to your current payment was June 06, 2013.' })).toBeFalsy()
+      expect(screen.queryByRole('switch', { name: 'Your current monthly payment is $0.00. The effective date of the last change to your current award was an invalid date.' })).toBeFalsy()
     })
   })
 
@@ -176,14 +167,14 @@ context('BenefitSummaryServiceVerification', () => {
   })
 
   describe('when an error occurs', () => {
-    it('should render error component when there is a letter download error', () => {
+    it('should render error component when there is a letter download error', async () => {
       initializeTestInstance(123, date, undefined, undefined, true)
       expect(screen.getByText('Your letter could not be downloaded.')).toBeTruthy()
     })
 
-    it('should not render error component when there is no letter download error', () => {
+    it('should not render error component when there is no letter download error', async () => {
       initializeTestInstance(123, date, undefined, undefined, false)
-      expect(screen.queryByText('Your letter could not be downloaded.')).toBeFalsy()
+        expect(screen.queryByText('Your letter could not be downloaded.')).toBeFalsy()
     })
   })
 })

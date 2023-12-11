@@ -82,15 +82,6 @@ context('errors', () => {
             id: '3',
             type: 'maintenance_window',
           },
-          {
-            attributes: {
-              service: 'auth_idme',
-              startTime: '2021-06-01T12:00:00.000Z',
-              endTime: '2021-06-01T18:00:00.000Z',
-            },
-            id: '4',
-            type: 'maintenance_window',
-          },
         ],
       }
 

@@ -44,7 +44,7 @@ describe('Claims Screen', () => {
 		await expect(element(by.id(ClaimsE2eIdConstants.APPEAL_1_ID))).toExist()
 	})
 
-  it('should tap on a claim and verify the status detail page', async () => {
+  it('Verify the claim status detail page', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIM_1_ID)).tap()
     await expect(element(by.text('Status'))).toExist()
     await expect(element(by.text('Details'))).toExist()
@@ -55,24 +55,24 @@ describe('Claims Screen', () => {
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_1_STATUS_STEP_5_ID))).toExist()
   })
 
-  it('should tap to open claim recieved and give the correct details', async () => {
+  it('Open claim recieved and give the correct details', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIM_1_STATUS_STEP_1_ID)).atIndex(0).tap()
     await expect(element(by.text('Thank you. VA received your claim'))).toExist()
   })
 
-  it('should tap to close claim recived and verify that no details are still displayed', async () => {
+  it('Close claim recived and verify that no details are still displayed', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIM_1_STATUS_STEP_1_ID)).atIndex(0).tap()
     await expect(element(by.text('Thank you. VA received your claim'))).not.toExist()
   })
 
-  it('should tap on why does the VA sometimes combine claims and give the correct information', async () => {
+  it('Verify VA sometimes combine claims information', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
     await element(by.id('Why does  V-A  sometimes combine claims?')).tap()
     await expect(element(by.text('A note about consolidated claims'))).toExist()
     await element(by.text('Close')).tap()
   })
 
-  it('should tap on what should I do if disagreement and give the correct information', async () => {
+  it('Verify what should I do if disagreement information', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
     await element(by.id(`What should I do if I disagree with  V-A 's decision on my disability claim?`)).tap()
     await expect(element(by.label('What should I do if I disagree with your decision on my  V-A  disability claim?'))).toExist()
@@ -84,7 +84,7 @@ describe('Claims Screen', () => {
     await element(by.text('Close')).tap()
   })
 
-  it('should verify that the need help? section display the correct information', async () => {
+  it('open claim: verify that the need help? section information', async () => {
     await expect(element(by.text('Need help?'))).toExist()
     await expect(element(by.text('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'))).toExist()
     await expect(element(by.id('CallVATestID'))).toExist()
@@ -105,22 +105,22 @@ describe('Claims Screen', () => {
     await expect(element(by.text('Received January 01, 2021'))).toExist()
   })
   
-  it('should verify that the review file request button is visible in step 3(evidence gathering, review, and decision)', async () => {
+  it('should verify that the review file request button is visible in step 3', async () => {
 		await waitFor(element(by.text('Review file requests'))).toBeVisible().whileElement(by.id(ClaimsE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scroll(100, 'down')
   })
 
-  it('should tap to expand step 3 and verify that the review file request button is still visible', async () => {
+  it('expand step 3 and verify that the review file request button is visible', async () => {
     await element(by.id('Step 3 of 5. current. Evidence gathering, review, and decision June 4, 2021')).tap()
     await expect(element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_BUTTON_ID))).toExist()
     await element(by.id('Step 3 of 5. current. Evidence gathering, review, and decision June 4, 2021')).tap()
   })
 
-  it('should tap on review file requests and verify the number of requests matches the label in claim details', async () => {
+  it('verify number of requests in review file requests', async () => {
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_BUTTON_ID)).tap()
     await expect(element(by.label('You have 3 file requests from  V-A '))).toExist()
   })
 
-  it('should tap a file request and verify that the user is sent to the file upload page', async () => {
+  it('verify that the user is sent to the file upload page', async () => {
     await element(by.text('Request 2')).tap()
     await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
@@ -131,7 +131,7 @@ describe('Claims Screen', () => {
     await element(by.text('Request 3')).tap()
   })
 
-  it('should tap select a file and verify the select files screen displays the correct info', async () => {
+  it('verify the select files screen displays the correct info', async () => {
     await element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).tap()
     await expect(element(by.text('Select a file to upload for Request 3'))).toExist()
     await expect(element(by.label(ClaimsE2eIdConstants.MAXIMUM_FILE_SIZE_LABEL))).toExist()
@@ -139,7 +139,7 @@ describe('Claims Screen', () => {
     await expect(element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(1)).toExist()
   })
 
-  it('should tap select a file and verify the options given', async () => {
+  it('verify tap select a file options', async () => {
     if(device.getPlatform() === 'android') {
       await element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(0).tap()
     } else {
@@ -158,7 +158,7 @@ describe('Claims Screen', () => {
     await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap() 
   })
 
-  it('should select take or select photos and verify the correct infomation is displayed', async () => {
+  it('verify take or select photos panel', async () => {
     await element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT)).tap()
     await expect(element(by.text('This feature is not yet accessible to screen readers'))).toExist()
     await expect(element(by.label(ClaimsE2eIdConstants.MAXIMUM_FILE_SIZE_LABEL))).toExist()
@@ -188,7 +188,7 @@ describe('Claims Screen', () => {
     await element(by.text('Requests')).tap()
   })
 
-  it('should tap on Review evaluation details and verify the correct information is displayed', async () => {
+  it('verify Review evaluation details', async () => {
     await element(by.id('fileRequestPageTestID')).scrollTo('bottom')
     await element(by.id('Review evaluation details')).tap()
     await expect(element(by.text('Claim evaluation'))).toExist()
@@ -196,7 +196,7 @@ describe('Claims Screen', () => {
     await expect(element(by.id('Request claim evaluation'))).toExist()
   })
 
-  it('should tap on request claim evaluation without checking the checkbox and have an error message appear', async () => {
+  it('verify error is displayed when request claim evaluation isnt checked', async () => {
     await element(by.id('askForClaimDecisionPageTestID')).scrollTo('bottom')
     await element(by.id('Request claim evaluation')).tap()
     await expect(element(by.text('Check the box to confirm the information is correct.'))).toExist()
@@ -212,14 +212,14 @@ describe('Claims Screen', () => {
     await element(by.text('Closed')).tap()
   })
 
-  it('should tap on a closed claim with a decision letter and verify the status details page', async () => {
+  it('verify the status details page of closed claim with decision letter', async () => {
     await element(by.id(ClaimsE2eIdConstants.CLOSED_CLAIM_DECISION_LETTER_ID)).tap()
     await expect(element(by.text('We decided your claim on April 09, 2021'))).toExist()
     await expect(element(by.text('You can download your decision letter in the app. We also mailed you this letter.'))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.GET_CLAIMS_LETTER_BUTTON_ID))).toExist()
   })
 
-  it('should verify that the need help? section display the correct information for closed claims', async () => {
+  it('closed claim: verify that the need help? section display information', async () => {
     await expect(element(by.text('Need help?'))).toExist()
     await expect(element(by.text('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'))).toExist()
     await expect(element(by.id('CallVATestID'))).toExist()
@@ -232,7 +232,7 @@ describe('Claims Screen', () => {
 	  }
   })
 
-  it('should tap on get claims letters and verify that the claims letters sceen is displayed', async () => {
+  it('verify that the claims letters sceen is displayed', async () => {
     await element(by.id(ClaimsE2eIdConstants.GET_CLAIMS_LETTER_BUTTON_ID)).tap()
     await expect(element(by.text('Claim letters'))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.DECISION_CLAIM_LETTER_1_ID))).toExist()
@@ -243,7 +243,7 @@ describe('Claims Screen', () => {
     await element(by.text('Claim details')).tap()
   })
 
-  it('should open the details tab and verify the correct infomation is displayed', async () => {
+  it('verify details tab infomation', async () => {
     await element(by.text('Details')).tap()
     await expect(element(by.text('Claim type'))).toExist()
     await expect(element(by.text('Compensation'))).toExist()
@@ -253,7 +253,7 @@ describe('Claims Screen', () => {
     await expect(element(by.text('Your representative for VA claims'))).toExist()
   })
 
-  it('should navigate back to the claims landing page screen and tap on claims letters', async () => {
+  it('tap on claims letters', async () => {
     await element(by.text(ClaimsE2eIdConstants.CLAIMS_HISTORY_TEXT)).tap() 
     await element(by.text('Claims')).tap()
     await element(by.text('Claim letters')).tap()

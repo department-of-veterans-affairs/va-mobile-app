@@ -43,7 +43,7 @@ const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yL
   const fontScale = useWindowDimensions().fontScale
   const adjustSize = fontScale >= 2
   const textView = (
-    <TextView flexWrap={'wrap'} color={'labelTag'} variant={'LabelTag'} pl={adjustSize ? 30 : 12} pr={adjustSize ? 8 : 12} py={adjustSize ? 8 : 4}>
+    <TextView flexWrap={'wrap'} color={'labelTag'} variant={'LabelTag'} pl={adjustSize ? 30 : 12} pr={adjustSize ? 8 : 12} pt={adjustSize ? 8 : 4} pb={adjustSize ? 12 : 4}>
       {text}
     </TextView>
   )

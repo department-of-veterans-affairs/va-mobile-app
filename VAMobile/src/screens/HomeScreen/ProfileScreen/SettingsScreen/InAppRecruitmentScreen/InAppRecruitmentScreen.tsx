@@ -77,6 +77,7 @@ const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation })
             numberOrUrlLink={LINK_URL_VETERAN_USABILITY_PROJECT}
             linkType={LinkTypeOptionsConstants.url}
             a11yLabel={t('inAppRecruitment.learnMore')}
+            testID="inAppRecruitmentLearnMoreTestID"
             fireAnalytic={() => logAnalyticsEvent(Events.vama_givefb_open('info'))}
           />
         </Box>

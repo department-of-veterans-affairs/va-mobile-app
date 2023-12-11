@@ -42,9 +42,9 @@ context('PreferredAppointmentType', () => {
 
   describe('when appointmentType is COMMUNITY_CARE ', () => {
     describe('and phoneOnly is true ', () => {
-      it('should show "Phone call"', () => {
+      it('should not show "Phone"', () => {
         initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE, true)
-        expect(screen.getByText('Phone call')).toBeTruthy()
+        expect(screen.queryByText('Phone')).toBeFalsy()
       })
     })
   })

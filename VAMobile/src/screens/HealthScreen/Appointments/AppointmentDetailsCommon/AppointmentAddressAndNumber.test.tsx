@@ -43,6 +43,14 @@ describe('AppointmentAddressAndNumber', () => {
     })
   })
 
+  describe('when the appointment is phoneOnly', () => {
+    it('does not show name or address', () => {
+      renderWithProps({ phoneOnly: true })
+      expect(screen.queryByText(name)).toBeNull()
+      expect(screen.queryByText('5901 East 7th Street')).toBeNull()
+    })
+  })
+
   describe('when the appointmentType is VA', () => {
     it('displays the healthcareService', () => {
       expect(screen.getByText(healthcareService)).toBeTruthy()

@@ -178,7 +178,8 @@ Product will need to create on in the Github folder and link it here.
 - [ ] Coordinate with Release coordinator
 - [ ] App store Content changes required? Y/N
 - [ ] App store images needed? Y/N
-- [ ] QA Signed off 
+- [ ] QA Signed off
+- [ ] UX QA Complete 
 - [ ] UAT complete
 - [ ] Obtain Go/No Go decision
 
