@@ -29,8 +29,8 @@ jobs:
       - name: Check QA approval
         id: check-qa-approval
         shell: bash
-        needs: qa_required
-        if: ${{ needs.qa_required.outputs.requires_qa }} == 'true'
+        # needs: qa_required
+        if: ${{ steps.qa_required.outputs.requires_qa }} == 'true'
         run: |
           token=${{ secrets.GITHUB_TOKEN }}
           base64AuthInfo='$token | base64 -e'
