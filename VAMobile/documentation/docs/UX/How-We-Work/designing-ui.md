@@ -91,7 +91,10 @@ See: [Determining Navigation & Information Architecture Placement for New VA Mob
 - As designs are being implemented by the engineering team, team members should respond to questions (in Slack and Zenhub) in a timely manner and communicate with the front-end team (engineers and product manager) to collaborate on refinements.
 ### QA
 - QA will be QAing AC in tickets throughout the entire development process for a project/feature.
-- Before release, QA will let you know when you can do a visual, interaction, and content QA. Use the FE handoff pages in the working file to compare the work.
+- Each epic should have visual, interaction, and content QA (aka UX QA) completed before release.
+- The exact plan and timing for UX QA can vary across features - you will collaborate with Product and QA to ensure that everyone has the same understanding of what will work best for any given feature. That being said, here are some general guidelines:
+    - Do UX QA on the 'last needed bug fixes build' for a feature, at the same time that QA is doing their fix verification and regression testing.
+    - Use the FE handoff pages in the working file to compare the work.
     - For using real test users/data, see this [Slack thread on logging in as a test user](https://adhoc.slack.com/archives/C02F8TLNSGY/p1666966698246379).)
     - On your testing device, complete a QA of the feature’s happy path.
     - If you need a testing user to reach a particular screen or edge case, you can message a QA engineer in Slack for help.
