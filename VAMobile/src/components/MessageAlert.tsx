@@ -48,7 +48,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
     }
   }
 
-  console.info("testing gh workflow")
+  console.info(`testing gh workflow`)
 
   const text = saveDraftAttempted ? t('secureMessaging.formMessage.saveDraft.validation.text') : t('secureMessaging.formMessage.sendMessage.validation.text')
 
