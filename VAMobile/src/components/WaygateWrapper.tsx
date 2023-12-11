@@ -14,16 +14,14 @@ import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
 export type WaygateWrapperProps = {
-  /** the waygate name to check for */
-  waygateName?: WaygateToggleType
   /** flag for template footer buttons to not double up alertbox display */
   bypassAlertBox?: boolean
 }
 
-export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName, bypassAlertBox }) => {
+export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, bypassAlertBox }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const screenName = useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
+  const waygateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
 
   const waygateTypeCheck = (waygateType: string | undefined) => {
     if (waygateType === 'DenyContent' || waygateType === 'AllowFunction') {
@@ -37,9 +35,6 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
     const onUpdateButtonPress = async () => {
       logAnalyticsEvent(Events.vama_af_updated())
       openAppStore()
-
-      const isUpdated = await requestStorePopup()
-      isUpdated && logAnalyticsEvent(Events.vama_af_updated_success(screenName))
     }
 
     return (
@@ -54,19 +49,18 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
     )
   }
 
-  const waygateToggle = waygateName || `WG_${screenName}`
-  const waygate = waygateEnabled(waygateToggle as WaygateToggleType)
+  const waygate = waygateEnabled(waygateScreen as WaygateToggleType)
   const showAlertBox = waygate.enabled === false && waygateTypeCheck(waygate.type) && (waygate.errorMsgTitle || waygate.errorMsgBody)
 
   useEffect(() => {
     if (showAlertBox && !bypassAlertBox) {
       const afStatus = waygate.appUpdateButton ? 'closed' : 'open'
-      logAnalyticsEvent(Events.vama_af_shown(afStatus, screenName))
+      logAnalyticsEvent(Events.vama_af_shown(afStatus, waygateScreen))
     }
-  }, [bypassAlertBox, screenName, showAlertBox, waygate.appUpdateButton])
+  }, [bypassAlertBox, waygateScreen, showAlertBox, waygate.appUpdateButton])
 
   if (showAlertBox) {
-    const showScreenContent = waygate.type === 'AllowFunction' || waygateName === 'WG_Login'
+    const showScreenContent = waygate.type === 'AllowFunction' || waygateScreen === 'WG_Login'
     return (
       <>
         {!bypassAlertBox && waygateAlertBox(waygate)}
