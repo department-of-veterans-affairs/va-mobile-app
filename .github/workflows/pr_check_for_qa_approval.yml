@@ -7,34 +7,41 @@ name: '[Utils] QA required approval'
 on:
   pull_request:
     types: [opened, edited, converted_to_draft, ready_for_review, closed, reopened]
+    branches:
+      - 'develop'
+    paths:
+      - 'VAMobile/src'
+      - 'VAMobile/package.json'
+      - '!VAMobile/src/*.test.*'
+
   pull_request_review:
     types: [submitted, dismissed]
 
 jobs:
-  check_for_qa_required:
-    runs-on: ubuntu-latest
-    outputs:
-      requires_qa: ${{ steps.qa_required.outputs.requires_qa}}
-    steps:
-      - uses: dorny/paths-filter@v2
-        id: qa_required
-        with:
-          filters: |
-            requires_qa:
-                - 'VAMobile/src'
-                - 'VAMobile/package.json'
-                - '!VAMobile/src/*.test.*'
+  # check_for_qa_required:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     requires_qa: ${{ steps.qa_required.outputs.requires_qa}}
+  #   steps:
+  #     - uses: dorny/paths-filter@v2
+  #       id: qa_required
+  #       with:
+  #         filters: |
+  #           requires_qa:
+  #               - 'VAMobile/src'
+  #               - 'VAMobile/package.json'
+  #               - '!VAMobile/src/*.test.*'
 
   check_for_qa_approval:
     runs-on: ubuntu-latest
-    needs: check_for_qa_required
+    # needs: check_for_qa_required
     outputs:
       has_qa_approval: ${{ steps.check-qa-approval.outputs.has_qa_approval }}
     steps:
       - name: Check QA approval
         id: check-qa-approval
         shell: bash
-        if: ${{ needs.check_for_qa_required.outputs.requires_qa }} == 'true'
+        # if: ${{ needs.check_for_qa_required.outputs.requires_qa }} == 'true'
         run: |
           token=${{ secrets.GITHUB_TOKEN }}
           base64AuthInfo='$token | base64 -e'
