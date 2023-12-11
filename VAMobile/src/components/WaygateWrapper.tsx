@@ -9,7 +9,6 @@ import { a11yLabelID } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { openAppStore } from 'utils/homeScreenAlerts'
-import { requestStorePopup } from 'utils/rnInAppUpdate'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
