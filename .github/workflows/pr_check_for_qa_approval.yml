@@ -43,7 +43,7 @@ jobs:
           --header 'Authorization: $base64AuthInfo' \
           --header 'Content-Type: application/json')
 
-          approvals = $response | jq '.[] | select(.state=="APPROVED")'
+          echo approvals = $response | jq '.[] | select(.state=="APPROVED")'
           
           if !$approvals
             then
@@ -51,7 +51,7 @@ jobs:
             exit 1
           else if $approvals.length > 2
             then
-            qa_approvals = $approvals | jq '.[] | select(.user.login | IN("rbontrager","DJUltraTom","TKDickson"))'
+            echo qa_approvals = $approvals | jq '.[] | select(.user.login | IN("rbontrager","DJUltraTom","TKDickson"))'
               if $qa_approvals.length > 0
                 echo 'This PR has QA approval to merge'
                 echo ::set-output name=has_qa_approval::'true'
