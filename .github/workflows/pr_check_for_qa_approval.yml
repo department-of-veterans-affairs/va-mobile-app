@@ -49,7 +49,7 @@ jobs:
             then
             echo 'This PR requires 3 approvals, including one QA approval, before merging.'
             exit 1
-          if $approvals.length > 2
+          else if $approvals.length > 2
             then
             qa_approvals = $approvals | jq '.[] | select(.user.login | IN("rbontrager","DJUltraTom","TKDickson"))'
               if $qa_approvals.length > 0
