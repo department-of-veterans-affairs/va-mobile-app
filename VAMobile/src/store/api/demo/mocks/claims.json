@@ -25,6 +25,17 @@
           }
         },
         {
+          "id": "600236070",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Compensation",
+            "completed": false,
+            "dateFiled": "2021-01-01",
+            "updatedAt": "2021-05-04",
+            "displayTitle": "Compensation"
+          }
+        },
+        {
           "id": "600080331",
           "type": "claim",
           "attributes": {
@@ -33,6 +44,28 @@
             "dateFiled": "2016-01-01",
             "updatedAt": "2016-07-30",
             "displayTitle": "Dependency"
+          }
+        },
+        {
+          "id": "600461885",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Compensation",
+            "completed": false,
+            "dateFiled": "2021-12-04",
+            "updatedAt": "2021-12-04",
+            "displayTitle": "Compensation"
+          }
+        },
+        {
+          "id": "600461886",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Compensation",
+            "completed": false,
+            "dateFiled": "2021-12-05",
+            "updatedAt": "2021-12-05",
+            "displayTitle": "Compensation"
           }
         },
         {
@@ -108,6 +141,373 @@
         "phaseChangeDate": "2021-05-05",
         "open": true,
         "waiverSubmitted": false,
+        "documentsNeeded": true,
+        "developmentLetterSent": true,
+        "decisionLetterSent": false,
+        "phase": 3,
+        "everPhaseBack": false,
+        "currentPhaseBack": false,
+        "requestedDecision": false,
+        "claimType": "Compensation",
+        "contentionList": [
+          "Low back strain (New)"
+        ],
+        "vaRepresentative": null,
+        "eventsTimeline": [
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293440,
+            "description": "21-4142a",
+            "displayName": "Request 10",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": false,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [],
+            "uploadDate": null,
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293441,
+            "description": "21-4142/21-4142a",
+            "displayName": "Request 9",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293441,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "multifile.pdf",
+                "uploadDate": "2021-05-21"
+              },
+              {
+                "trackedItemId": 293441,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "multifile.pdf",
+                "uploadDate": "2021-05-21"
+              }
+            ],
+            "uploadDate": "2021-05-21",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293443,
+            "description": "Employment info needed",
+            "displayName": "Request 8",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293443,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "Screenshot_20210519-120209_VAMobile.pdf",
+                "uploadDate": "2021-05-21"
+              }
+            ],
+            "uploadDate": "2021-05-21",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293444,
+            "description": "Accidental injury - 21-4176 needed",
+            "displayName": "Request 7",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293444,
+                "fileType": "Correspondence",
+                "documentType": "L023",
+                "filename": "fs-V3800_QSG-IB_r2.pdf",
+                "uploadDate": "2021-05-21"
+              }
+            ],
+            "uploadDate": "2021-05-21",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293445,
+            "description": "21-4142",
+            "displayName": "Request 6",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293445,
+                "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+                "documentType": "L029",
+                "filename": "Get_Started_With_Smallpdf.pdf",
+                "uploadDate": "2021-05-18"
+              }
+            ],
+            "uploadDate": "2021-05-18",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "received_from_you_list",
+            "trackedItemId": 293446,
+            "description": "Buddy mentioned - No complete address",
+            "displayName": "Request 5",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293446,
+                "fileType": "VA 21-4142a General Release for Medical Provider Information",
+                "documentType": "L827",
+                "filename": "sample.pdf",
+                "uploadDate": "2021-05-13"
+              }
+            ],
+            "uploadDate": "2021-05-13",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293448,
+            "description": "Combat not verified",
+            "displayName": "Request 4",
+            "overdue": false,
+            "status": "SUBMITTED_AWAITING_REVIEW",
+            "uploaded": true,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293448,
+                "fileType": "Military Personnel Record",
+                "documentType": "L034",
+                "filename": "post-deployment-document.pdf",
+                "uploadDate": "2021-05-13"
+              },
+              {
+                "trackedItemId": 293448,
+                "fileType": "Military Personnel Record",
+                "documentType": "L034",
+                "filename": "DD214.pdf",
+                "uploadDate": "2021-05-13"
+              }
+            ],
+            "uploadDate": "2021-05-13",
+            "date": "2021-06-04"
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "5103 Notice Acknowledgement",
+            "documentType": "L705",
+            "filename": "ClaimDecisionRequest.pdf",
+            "uploadDate": "2021-06-02",
+            "type": "other_documents_list",
+            "date": "2021-06-02"
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293442,
+            "description": "Tell us the specific dental disability you are claiming and describe the circumstances of your dental injury.",
+            "displayName": "Request 2",
+            "overdue": false,
+            "status": "NEEDED",
+            "uploaded": false,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": "2021-07-05",
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": "2021-06-04",
+            "documents": []
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293439,
+            "description": "You may be able to furnish documents that can substitute for service treatment records.  Submit any  copies of the following documents you have that relate to your disability during service:\r*  Statements from military medical personnel (nurses, medics, corpsmen, doctors)\r\r*  \"Buddy\" certificates or affidavits - (A \"buddy\" certificate or affidavit is a statement by a person who knew you when you were in service and knows of any disability you had while on active duty.  The statement should state the dates and places they saw the condition(s) and should describe what they saw.  If the person making the statement was on active duty at the time, they should show their service number and unit of assignment.)\r\r*  State or local accident and police reports\r\r*  Employment physical examinations\r\r*  Medical evidence from hospitals, clinics and private physicians by which or by whom you may have been treated after separation\r\r*  Letters written during service\r\r*  Photographs taken during service\r\r*  Pharmacy prescription records\r\r*  Insurance examinations",
+            "displayName": "Request 1",
+            "overdue": false,
+            "status": "NEEDED",
+            "uploaded": false,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": "2021-06-05",
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": "2021-06-04",
+            "documents": []
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293447,
+            "description": "Accidental injury - 21-4176 needed",
+            "displayName": "Request 3",
+            "overdue": false,
+            "status": "NEEDED",
+            "uploaded": false,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": null,
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": null,
+            "documents": []
+          },
+          {
+            "type": "phase2",
+            "date": "2021-05-05"
+          },
+          {
+            "type": "phase1",
+            "date": "2021-05-05"
+          },
+          {
+            "type": "filed",
+            "date": "2021-01-01"
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          }
+        ],
+        "updatedAt": {
+          "type": "c",
+          "name": "mobile.claims_and_appeals.claim.type",
+          "value": 1,
+          "sampleRate": 1,
+          "tags": [
+            "type:Compensation"
+          ],
+          "metadata": null
+        }
+      }
+    }
+  },
+  "/v0/claim/600236070": {
+    "data": {
+      "id": "600236070",
+      "type": "claim",
+      "attributes": {
+        "dateFiled": "2021-01-01",
+        "minEstDate": "2021-09-04",
+        "maxEstDate": "2030-11-14",
+        "phaseChangeDate": "2021-05-04",
+        "open": true,
+        "waiverSubmitted": true,
         "documentsNeeded": true,
         "developmentLetterSent": true,
         "decisionLetterSent": false,
@@ -2934,6 +3334,86 @@
           }
         ],
         "updatedAt": {}
+      }
+    }
+  },
+  "/v0/claim/600461885" : {
+      "data": {
+        "id": "600461885",
+        "type": "claim",
+        "attributes": {
+          "dateFiled": "2023-12-04",
+          "minEstDate": null,
+          "maxEstDate": null,
+          "phaseChangeDate": "2023-12-04",
+          "open": true,
+          "waiverSubmitted": false,
+          "documentsNeeded": false,
+          "developmentLetterSent": false,
+          "decisionLetterSent": false,
+          "phase": 9,
+          "everPhaseBack": null,
+          "currentPhaseBack": false,
+          "requestedDecision": false,
+          "claimType": "Compensation",
+          "contentionList": ["Asthma, bronchial (Increase)", "hypertension (New)"],
+          "vaRepresentative": null,
+          "eventsTimeline": [{
+            "trackedItemId": null,
+            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+            "documentType": null,
+            "filename": "Jesse_Gray_600461885_526.pdf",
+            "uploadDate": "2023-12-04",
+            "type": "other_documents_list",
+            "date": "2023-12-04"
+          }, {
+            "type": "phase1",
+            "date": "2023-12-04"
+          }, {
+            "type": "filed",
+            "date": "2023-12-04"
+          }],
+          "updatedAt": null
+        }
+      }
+  },
+  "/v0/claim/600461886": {
+    "data": {
+      "id": "600461886",
+      "type": "claim",
+      "attributes": {
+        "dateFiled": "2023-12-05",
+        "minEstDate": null,
+        "maxEstDate": null,
+        "phaseChangeDate": "2023-12-05",
+        "open": true,
+        "waiverSubmitted": false,
+        "documentsNeeded": false,
+        "developmentLetterSent": false,
+        "decisionLetterSent": false,
+        "phase": 1,
+        "everPhaseBack": null,
+        "currentPhaseBack": false,
+        "requestedDecision": false,
+        "claimType": "Compensation",
+        "contentionList": ["Asthma, bronchial (Increase)", "hypertension (New)"],
+        "vaRepresentative": null,
+        "eventsTimeline": [{
+          "trackedItemId": null,
+          "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
+          "documentType": null,
+          "filename": "Jesse_Gray_600461886_526.pdf",
+          "uploadDate": "2023-12-04",
+          "type": "other_documents_list",
+          "date": "2023-12-04"
+        }, {
+          "type": "phase1",
+          "date": "2023-12-04"
+        }, {
+          "type": "filed",
+          "date": "2023-12-04"
+        }],
+        "updatedAt": null
       }
     }
   },
