@@ -1,6 +1,5 @@
 import { AppState, AppStateStatus } from 'react-native'
 import { SvgProps } from 'react-native-svg'
-import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
 
 import { AccessibilityState } from 'store/slices'
@@ -168,7 +167,10 @@ export type VAIconProps = BoxProps & {
   /**  optional number use to set the height; otherwise defaults to svg's height */
   height?: number
 
-  /** optional boolean that prevents the icon from being scaled when set to true */
+  /** optional maximum width when scaled (requires width and height props) */
+  maxWidth?: number
+
+  /** if true, prevents icon from being scaled (requires width and height props) */
   preventScaling?: boolean
 
   /** Optional TestID */
@@ -193,7 +195,7 @@ export type VAIconProps = BoxProps & {
  *
  * @returns VAIcon component
  */
-const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, fill2, stroke, preventScaling, testID, ...boxProps }) => {
+const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, fill2, stroke, maxWidth, preventScaling, testID, ...boxProps }) => {
   const theme = useTheme()
   const fs: (val: number) => number = useFontScale()
   const dispatch = useAppDispatch()
@@ -223,12 +225,14 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, fill2, stroke, pre
     return <></>
   }
 
-  if (width && isFinite(width)) {
-    iconProps = Object.assign({}, iconProps, { width: preventScaling ? width : fs(width) })
-  }
-
-  if (height && isFinite(height)) {
-    iconProps = Object.assign({}, iconProps, { height: preventScaling ? height : fs(height) })
+  if (width && height) {
+    if (preventScaling) {
+      iconProps = { ...iconProps, width, height }
+    } else if (maxWidth && fs(width) > maxWidth) {
+      iconProps = { ...iconProps, width: maxWidth, height: (maxWidth / width) * height }
+    } else {
+      iconProps = { ...iconProps, width: fs(width), height: fs(height) }
+    }
   }
 
   return (
