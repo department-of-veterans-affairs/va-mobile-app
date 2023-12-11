@@ -48,7 +48,7 @@ jobs:
           echo approvals = $response | jq '[map(select(.state == "APPROVED")) | .[] .user]'
           echo $approvals
           
-          if !$approvals
+          if $approvals.length == 0
             then
             echo 'This PR requires 3 approvals, including one QA approval, before merging.'
             exit 1
