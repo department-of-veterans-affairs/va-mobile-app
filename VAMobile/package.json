@@ -83,11 +83,11 @@
     "underscore": "^1.13.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.5",
-    "@babel/plugin-transform-runtime": "^7.23.4",
-    "@babel/preset-env": "^7.23.5",
+    "@babel/core": "^7.23.6",
+    "@babel/plugin-transform-runtime": "^7.23.6",
+    "@babel/preset-env": "^7.23.6",
     "@babel/preset-typescript": "^7.23.3",
-    "@babel/runtime": "^7.23.5",
+    "@babel/runtime": "^7.23.6",
     "@react-native-community/eslint-config": "^3.2.0",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react-native": "^12.3.2",
