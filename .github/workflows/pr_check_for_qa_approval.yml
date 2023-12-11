@@ -23,8 +23,9 @@ jobs:
         with:
           filters: |
             requires_qa:
-                - 'VAMobile/src && !(VAMobile/src/*.test.*)'
+                - 'VAMobile/src'
                 - 'VAMobile/package.json'
+                - 'VAMobile/src/!(*.test.*)'
 
   check_for_qa_approval:
     runs-on: ubuntu-latest
