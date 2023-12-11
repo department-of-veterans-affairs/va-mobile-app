@@ -22,7 +22,7 @@ export type WaygateWrapperProps = {
 export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName, bypassAlertBox }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const waygateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
+  const waygateScreen = waygateName || 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
 
   const waygateTypeCheck = (waygateType: string | undefined) => {
     if (waygateType === 'DenyContent' || waygateType === 'AllowFunction') {
@@ -50,8 +50,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
     )
   }
 
-  const waygateToggle = waygateName || waygateScreen
-  const waygate = waygateEnabled(waygateToggle as WaygateToggleType)
+  const waygate = waygateEnabled(waygateScreen as WaygateToggleType)
   const showAlertBox = waygate.enabled === false && waygateTypeCheck(waygate.type) && (waygate.errorMsgTitle || waygate.errorMsgBody)
 
   useEffect(() => {
