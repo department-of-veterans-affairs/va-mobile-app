@@ -498,7 +498,7 @@ export const Events = {
   },
   vama_givefb_open: (linkType: string): Event => {
     return {
-      name: 'vama_givefb_launch',
+      name: 'vama_givefb_open',
       params: {
         linkType,
       },
