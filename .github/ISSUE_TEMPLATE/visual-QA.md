@@ -15,6 +15,7 @@ Every epic should go through a round of visual and interaction QA, before releas
 
 - [ ] Labels added (team, feature)
 - [ ] Linked to feature epic
+- [ ] UX, QA and Product all agree upon what the source of truth for design is (where to go to know the visual/interaction for a given screen), add a link here if feasible
 
 
 ## Acceptance Criteria (for UX QA)
