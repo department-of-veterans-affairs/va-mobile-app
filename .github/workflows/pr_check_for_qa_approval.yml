@@ -34,10 +34,11 @@ jobs:
           jq '[map(select(.state == "APPROVED")) | .[] .user.login]')
 
           echo $approvals
+          qa_team=["rbontrager","DJUltraTom","TKDickson"]
           
-          if $approvals | jq '(. | length) > 1'
+          if ($approvals | jq '(. | length) > 0')
             then
-              if $approvals | jq '(. - (. - ("rbontrager","DJUltraTom","TKDickson")) | length)'
+              if ($approvals | jq '. - (. - $qa_team) | length > 0')
                 then
                 echo 'This PR has QA approval to merge'
               else 
