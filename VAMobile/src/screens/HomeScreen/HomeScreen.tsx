@@ -10,6 +10,7 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HomeStackParamList } from './HomeStackScreens'
+import { Linking } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -85,7 +86,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             <LargeNavButton
               title={`${t('appointments')}`}
               subText={`(${upcomingAppointmentsCount} ${t('upcoming')})`}
-              onPress={navigateTo('HealthTab', { screen: 'Appointments' })}
+              onPress={() => Linking.openURL('vamobile://appointments')}
               borderWidth={theme.dimensions.buttonBorderWidth}
             />
           </Box>
