@@ -86,7 +86,7 @@ export const useFontScale = (): ((val: number) => number) => {
 export const useTheme = styledComponentsUseTheme as () => VATheme
 
 export type OnPressHandler = () => void
-export type RouteNavigationFunction<T extends ParamListBase> = (routeName: keyof T, args?: RouteNavParams<T>) => OnPressHandler
+export type RouteNavigationFunction<T extends ParamListBase> = (routeName: keyof T, args?: RouteNavParams<T>) => void
 
 /**
  * Navigation hook to use in onPress events.
@@ -98,9 +98,7 @@ export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFu
   const navigation = useNavigation()
   type TT = keyof T
   return <X extends TT>(routeName: X, args?: T[X]) => {
-    return (): void => {
-      navigation.navigate(routeName as never, args as never)
-    }
+    navigation.navigate(routeName as never, args as never)
   }
 }
 type RouteNavParams<T extends ParamListBase> = {
