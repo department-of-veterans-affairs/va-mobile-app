@@ -45,7 +45,8 @@ export const linking: LinkingOptions<any> = {
           },
         ],
       }
-    } else if (pathParts[0] === 'appointments' && pathParts.length === 2) {
+    } else if (pathParts[0] === 'appointments') {
+      const hasAppointmentID = pathParts.length === 2
       return {
         routes: [
           {
@@ -56,7 +57,18 @@ export const linking: LinkingOptions<any> = {
                   name: 'HealthTab',
                   state: {
                     // The ID from the notification payload is sent encoded, so it needs to be decoded
-                    routes: [{ name: 'Health' }, { name: 'Appointments' }, { name: 'UpcomingAppointmentDetails', params: { vetextID: decodeURIComponent(pathParts[1]) } }],
+                    routes: [
+                      { name: 'Health' },
+                      { name: 'Appointments' },
+                      ...(hasAppointmentID
+                        ? [
+                            {
+                              name: 'UpcomingAppointmentDetails',
+                              params: { vetextID: decodeURIComponent(pathParts[1]) },
+                            },
+                          ]
+                        : []),
+                    ],
                   },
                 },
               ],
