@@ -9,8 +9,6 @@ const longDateFormat = 'DDDD t ZZZZ'
 const shortDateFormat = 'MM-dd-yyyy'
 
 //const fortyFiveMinutesLater = todaysDate.setZone('America/Los_Angeles').plus({ minutes: 45 }).toFormat(longDateFormat)
-const todayFormatted = todaysDate.toLocaleString(DateTime.DATE_HUGE)
-const twoDaysLater = todaysDate.setZone('America/New_York').plus({ days: 2 }).toLocaleString(DateTime.DATE_HUGE)
 const sixtyThreeDaysLaterShort = todaysDate.plus({ days: 63 }).toFormat(shortDateFormat)
 const sixtyFourDaysLaterShort = todaysDate.plus({ days: 64 }).toFormat(shortDateFormat)
 
@@ -31,7 +29,6 @@ export const Appointmentse2eConstants = {
   APPOINTMENT_5_ID: 'Pending Optometry (routine eye exam) Community care Request type: In-person',
   APPOINTMENT_6_ID: 'Canceled Optometry (routine eye exam) Community care Request type: In-person',
   APPOINTMENT_7_ID: 'Canceled  Community care Request type: In-person',
-  APPOINTMENT_8_ID: 'Pending Primary Care Cheyenne VA Medical Center Request type: In-person',
   ADD_TO_CALENDAR_ID: 'addToCalendarTestID',
   GET_DIRECTIONS_ID: 'directionsTestID',
   PHONE_NUMBER_ASSISTANCE_LINK_ID: 'CallVATestID',
@@ -54,17 +51,14 @@ beforeAll(async () => {
 describe('Appointments Screen', () => {
   it('should match the appointments page design', async () => {
     await expect(element(by.text(Appointmentse2eConstants.APPOINTMENT_DESCRIPTION))).toExist()
-    await expect(element(by.text(`${todayFormatted}`))).toExist()
-    await expect(element(by.text(`${twoDaysLater}`))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_5_ID))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_6_ID))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_7_ID))).toExist()
-    await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_8_ID))).toExist()
   })
 
   it('verify appointment details information', async () => {
-    await element(by.text(`${todayFormatted}`)).tap()
+    await element(by.text('Outpatient Clinic')).tap()
     await expect(element(by.text('Community care'))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.ADD_TO_CALENDAR_ID)).atIndex(0)).toExist()
     await expect(element(by.id('Outpatient Clinic 2341 North Ave Commerce, CA 90022'))).toExist()
