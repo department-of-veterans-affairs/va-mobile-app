@@ -35,9 +35,9 @@ jobs:
 
           echo $approvals
           
-          if ($approvals | jq '(. | length) > 1')
+          if $approvals | jq '(. | length) > 1'
             then
-              if ($approvals | jq '(. - (. - ("rbontrager","DJUltraTom","TKDickson")) | length)')
+              if $approvals | jq '(. - (. - ("rbontrager","DJUltraTom","TKDickson")) | length)'
                 then
                 echo 'This PR has QA approval to merge'
               else 
