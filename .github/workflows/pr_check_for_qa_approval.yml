@@ -57,7 +57,7 @@ jobs:
           
           if ($approvals | jq '[.[]] | length') > 2
             then
-            echo qa_approvals = $approvals | jq '[.[] | select(.login | IN($qa_team))] | length'
+            qa_approvals = $approvals | jq '[.[] | select(.login as $login | $qa_team | index($login))] | length'
               if $qa_approvals > 0
                 then
                 echo 'This PR has QA approval to merge'
