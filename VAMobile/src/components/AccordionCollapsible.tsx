@@ -61,6 +61,8 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
     setExpanded(!expanded)
   }
 
+  console.info('testing a nested component to test file filtering')
+
   const pressableProps: PressableProps = {
     onPress,
     accessibilityState: { expanded },
@@ -84,8 +86,8 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
 
     const labelProps = testID
       ? {
-          accessibilityLabel: testID,
-        }
+        accessibilityLabel: testID,
+      }
       : {}
 
     if (hideArrow) {
