@@ -14,7 +14,7 @@ var navigationDic = {
 	[['Profile', 'Settings', 'Manage account'], 'To confirm or update your sign-in email, go to the website where you manage your account information.'],
 	[['Profile', 'Settings', 'Notifications'], 'Notifications']],
 	'Benefits': [['Disability rating', 'Disability rating'],
-	['Claims', 'Claims',],
+	['Claims', 'Claims'],
 	[['Claims', 'Claims history'], 'Claims history'],
 	[['Claims', 'Claims history', 'Closed'], 'Your closed claims and appeals'],
 	[['Claims', 'Claims history', 'Active'], 'Your active claims and appeals'],
@@ -47,16 +47,48 @@ var navigationDic = {
 	['Direct deposit information', 'Direct deposit']]
 }
 
+var featureID = {
+	'Home': 'homeScreenID',
+	'Personal information': 'profileID',
+	'Contact information': 'profileID',
+	'Military information': 'profileID',
+	'Settings': 'profileID',
+	'Manage account': 'settingsID',
+	'Notifications': 'settingsID',
+	'Benefits': 'benefitsTestID',
+	'Submitted July 20, 2021': 'claimsHistoryID',
+	'Submitted January 01, 2021': 'claimsHistoryID',
+	'Submitted June 12, 2008': 'claimsHistoryID',
+	'Review file requests': 'claimStatusDetailsID',
+	'Request 2': 'fileRequestPageTestID',
+	'Review letters': 'lettersPageID',
+	'Health': 'healthCategoryTestID',
+	'Appointments': 'appointmentsTestID',
+	'Outpatient Clinic': 'appointmentsTestID',
+	'Claim exam': 'appointmentsTestID',
+	'Medication: Naproxen side effects': 'messagesTestID',
+	'Drafts (3)': 'messagesTestID',
+	'Payments': 'paymentsID',	
+}
+
+var scrollID
+
 export const NavigationE2eConstants = {
 	DARK_MODE_OPTIONS: device.getPlatform() === 'ios' ? 'xcrun simctl ui booted appearance dark' : 'adb shell "cmd uimode night yes"',
 	LIGHT_MODE_OPTIONS: device.getPlatform() === 'ios' ? 'xcrun simctl ui booted appearance light' : 'adb shell "cmd uimode night no"',
+	FONT_RESIZING_LARGEST: device.getPlatform() === 'ios' ? 'xcrun simctl ui booted content_size extra-extra-extra-large' : 'adb shell settings put system font_scale 1.30',
+	DISPLAY_RESIZING_LARGEST: device.getPlatform() === 'android' ? 'adb shell wm density 728': '',
+	FONT_RESIZING_RESET: device.getPlatform() === 'ios' ? 'xcrun simctl ui booted content_size medium' : 'adb shell settings put system font_scale 1.00',
+	DISPLAY_RESIZING_RESET: 'adb shell wm density reset'
 }
+
 const checkHierachy = async (tabName, categoryName, featureHeaderName) => {
 	if (categoryName === 'Review file requests') {
 		await waitFor(element(by.text('Review file requests'))).toBeVisible().whileElement(by.id('ClaimDetailsScreen')).scroll(100, 'down')
 	} else if (categoryName === 'Get prescription details') {
 		await waitFor(element(by.label('ADEFOVIR DIPIVOXIL 10MG TAB.'))).toBeVisible().whileElement(by.id('PrescriptionHistory')).scroll(50, 'down')
 	}
+
 	await element(by.text(categoryName)).atIndex(0).tap()
 	await expect(element(by.text(featureHeaderName)).atIndex(0)).toExist()
 	for (let i = 0; i < appTabs.length; i++) {
@@ -71,38 +103,114 @@ const checkHierachy = async (tabName, categoryName, featureHeaderName) => {
 const navigateToPage = async (key, navigationDicValue, accessibilityFeatureType: string | null, darkModeFirstTime = false) => {
 	var navigationArray = navigationDicValue
 	if (accessibilityFeatureType === 'landscape') {
-		//These currently have changing dates so leaving off the screenshot comparison
-		if(navigationArray[1] != 'Community care' || navigationArray[1] != 'Claim exam') {
-			await device.setOrientation('landscape')
-			await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
-			var feature = await device.takeScreenshot(navigationDicValue[1])
-			checkImages(feature)
-			await device.setOrientation('portrait')
-		}
+		await device.setOrientation('landscape')
+		await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
+		var feature = await device.takeScreenshot(navigationDicValue[1])
+		checkImages(feature)
+		await device.setOrientation('portrait')
 	} else if(accessibilityFeatureType == 'darkMode') {
-		if(navigationArray[1] != 'Community care' || navigationArray[1] != 'Claim exam') {
-			exec(NavigationE2eConstants.DARK_MODE_OPTIONS, (error) => {
+		exec(NavigationE2eConstants.DARK_MODE_OPTIONS, (error) => {
+			if (error) {
+				console.error(`exec error: ${error}`);
+				return;
+			}
+		})
+		await setTimeout(5000)
+		await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
+		var feature = await device.takeScreenshot(navigationDicValue[1])
+		checkImages(feature)
+		exec(NavigationE2eConstants.LIGHT_MODE_OPTIONS, (error) => {
+			if (error) {
+				console.error(`exec error: ${error}`);
+				return;
+			}
+		})	
+	} else if(accessibilityFeatureType === 'textResizing') {
+		if (device.getPlatform() === 'ios') {
+			exec(NavigationE2eConstants.FONT_RESIZING_LARGEST, (error) => {
 				if (error) {
 					console.error(`exec error: ${error}`);
 					return;
 				}
 			})
-
-			await setTimeout(2000)
-			await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
-			var feature = await device.takeScreenshot(navigationDicValue[1])
-			checkImages(feature)
-			
-			exec(NavigationE2eConstants.LIGHT_MODE_OPTIONS, (error) => {
-				if (error) {
-					console.error(`exec error: ${error}`);
-					return;
-				}
-			})
-
-			await setTimeout(2000)
 		}
-		await element(by.id(key)).atIndex(0).tap()	
+		if(device.getPlatform() === 'android') {
+			exec(NavigationE2eConstants.FONT_RESIZING_LARGEST, (error) => {
+				if (error) {
+					console.error(`exec error: ${error}`);
+					return;
+				}
+			})
+			exec(NavigationE2eConstants.DISPLAY_RESIZING_LARGEST, (error) => {
+				if (error) {
+					console.error(`exec error: ${error}`);
+					return;
+				}
+			})
+			await loginToDemoMode()
+			await element(by.id(key)).atIndex(0).tap()
+			if (typeof navigationArray[0] === 'string') {
+				if(navigationArray[0] in featureID) {
+					scrollID = featureID[navigationArray[0]]
+					await waitFor(element(by.text(navigationArray[0]))).toBeVisible().whileElement(by.id(scrollID)).scroll(50, 'down')
+				} else if (key in featureID) {
+					scrollID = featureID[key]
+					await waitFor(element(by.text(navigationArray[0]))).toBeVisible().whileElement(by.id(scrollID)).scroll(50, 'down')
+				}
+				await element(by.text(navigationArray[0])).atIndex(0).tap()
+			} else {
+				var subNavigationArray = navigationArray[0]
+				for(let k = 0; k < subNavigationArray.length-1; k++) {
+					if (subNavigationArray[k] === 'Review file requests') {
+						await waitFor(element(by.text('Review file requests'))).toBeVisible().whileElement(by.id('ClaimDetailsScreen')).scroll(100, 'down')
+					}
+					
+					if (k == 0 && key in featureID) {
+						scrollID = featureID[key]
+						await waitFor(element(by.text(subNavigationArray[k]))).toBeVisible().whileElement(by.id(scrollID)).scroll(50, 'down')
+					}
+
+					if (subNavigationArray[k] in featureID) {
+						scrollID = featureID[subNavigationArray[k]]
+						await waitFor(element(by.text(subNavigationArray[k]))).toBeVisible().whileElement(by.id(scrollID)).scroll(50, 'down')
+					}
+					await element(by.text(subNavigationArray[k])).tap()
+				}
+
+				if (subNavigationArray.slice(-1)[0] === 'Review file requests') {
+					await waitFor(element(by.text('Review file requests'))).toBeVisible().whileElement(by.id('ClaimDetailsScreen')).scroll(100, 'down')
+				} else if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
+					await waitFor(element(by.label('ADEFOVIR DIPIVOXIL 10MG TAB.'))).toBeVisible().whileElement(by.id('PrescriptionHistory')).scroll(50, 'down')
+				}
+
+				if (subNavigationArray.slice(-1)[0] in featureID) {
+					scrollID = featureID[subNavigationArray.slice(-1)[0]]
+					await waitFor(element(by.text(subNavigationArray.slice(-1)[0]))).toBeVisible().whileElement(by.id(scrollID)).scroll(50, 'down')
+				}
+				await element(by.text(subNavigationArray.slice(-1)[0])).atIndex(0).tap()
+			}
+		}
+		
+		await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
+		var feature = await device.takeScreenshot(navigationDicValue[1])
+		checkImages(feature)
+		
+		exec(NavigationE2eConstants.FONT_RESIZING_RESET, (error) => {
+			if (error) {
+				console.error(`exec error: ${error}`);
+				return;
+			}
+		})
+		if(device.getPlatform() === 'android') {
+			exec(NavigationE2eConstants.DISPLAY_RESIZING_RESET, (error) => {
+				if (error) {
+					console.error(`exec error: ${error}`);
+					return;
+				}
+			})
+		} else {
+			await element(by.id(key)).atIndex(0).tap()	
+		}
 	} else {
 		if(navigationArray[1] === 'Appeal details') {
 			await resetInAppReview()
@@ -134,6 +242,20 @@ afterAll(async () => {
 			return;
 		}
 	})
+	exec(NavigationE2eConstants.FONT_RESIZING_RESET, (error) => {
+		if (error) {
+			console.error(`exec error: ${error}`);
+			return;
+		}
+	})
+	if(device.getPlatform() === 'android') {
+		exec(NavigationE2eConstants.DISPLAY_RESIZING_RESET, (error) => {
+			if (error) {
+				console.error(`exec error: ${error}`);
+				return;
+			}
+		})
+	}
 })
 
 describe('Navigation', () => {
@@ -142,28 +264,42 @@ describe('Navigation', () => {
 			var nameArray = value[j]
 			if (nameArray[1] === 'To confirm or update your sign-in email, go to the website where you manage your account information.') {
 				it('verify navigation for: Manage Account', async () => {
-				await navigateToPage(key, value[j], null)
+					await navigateToPage(key, value[j], null)
 				})
-
+	
 				it('verify landscape mode for: Manage Account', async () => {
-				await navigateToPage(key, value[j], 'landscape')
+					await navigateToPage(key, value[j], 'landscape')
 				})
-
+	
 				it('verify dark mode for: Manage Account', async () => {
-				await navigateToPage(key, value[j], 'darkMode')
+					await navigateToPage(key, value[j], 'darkMode')
+				})
+				it('verify text resizing for: Manage Account', async () => {
+					await navigateToPage(key, value[j], 'textResizing')
+					if(device.getPlatform() === 'android') {
+						await loginToDemoMode()
+					}
 				})
 			} else {
 				it('verify navigation for: ' + nameArray[1], async () => {
-				await navigateToPage(key, value[j], null)
+					await navigateToPage(key, value[j], null)
 				})
 
-				it('verify landscape mode for: ' + nameArray[1], async () => {
-				await navigateToPage(key, value[j], 'landscape')
-				})
+				if(nameArray[1] !== 'Community care' && nameArray[1] !== 'Claim exam') {
+					it('verify landscape mode for: ' + nameArray[1], async () => {
+						await navigateToPage(key, value[j], 'landscape')
+					})
 
-				it('verify dark mode for: ' + nameArray[1], async () => {
-				await navigateToPage(key, value[j], 'darkMode')
-				})
+					it('verify dark mode for: ' + nameArray[1], async () => {
+						await navigateToPage(key, value[j], 'darkMode')
+					})
+					it('verify text resizing for: ' + nameArray[1], async () => {
+						await navigateToPage(key, value[j], 'textResizing')
+						if(device.getPlatform() === 'android') {
+							await loginToDemoMode()
+						}
+					})
+				}
 			}
 		}
 	}

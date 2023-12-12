@@ -104,7 +104,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack}>
+    <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack} testID='profileID'>
       <NameTag />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         {getProfileButtons()}

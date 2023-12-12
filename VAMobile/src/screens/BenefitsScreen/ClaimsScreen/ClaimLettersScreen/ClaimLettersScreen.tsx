@@ -96,7 +96,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   })
 
   return (
-    <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
+    <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')} testID='claimLettersID'>
       <TextView variant="MobileBody" mx={theme.dimensions.gutter} paragraphSpacing={true}>
         {t('claimLetters.overview')}
       </TextView>
