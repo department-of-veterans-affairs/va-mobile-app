@@ -21,6 +21,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { VATheme } from 'styles/theme'
+import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 import { WebProtocolTypesConstants } from 'constants/common'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
@@ -98,7 +99,9 @@ export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFu
   const navigation = useNavigation()
   type TT = keyof T
   return <X extends TT>(routeName: X, args?: T[X]) => {
-    navigation.navigate(routeName as never, args as never)
+    if (waygateNativeAlert(`WG_${String(routeName)}` as WaygateToggleType)) {
+      navigation.navigate(routeName as never, args as never)
+    }
   }
 }
 type RouteNavParams<T extends ParamListBase> = {
