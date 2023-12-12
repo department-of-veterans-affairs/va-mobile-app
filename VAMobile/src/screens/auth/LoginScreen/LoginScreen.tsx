@@ -63,9 +63,12 @@ const LoginScreen: FC = () => {
   }
 
   const onCrisisLine = () => {
-    if (waygateNativeAlert('WG_VeteransCrisisLine')) {
-      navigateTo('VeteransCrisisLine')()
-    }
+    navigateTo('VeteransCrisisLine')
+    // NEED TO REMOVE
+    // if (waygateNativeAlert('WG_VeteransCrisisLine')) {
+    //   console.log(waygateNativeAlert('WG_VeteransCrisisLine'))
+    //   navigateTo('VeteransCrisisLine')
+    // }
   }
 
   const findLocationProps: BoxProps = {
@@ -96,7 +99,7 @@ const LoginScreen: FC = () => {
         dispatch(loginStart(true))
       }
     : firstTimeLogin
-    ? navigateTo('LoaGate')
+    ? () => navigateTo('LoaGate')
     : startAuth
 
   return (
