@@ -86,8 +86,8 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
 
     const labelProps = testID
       ? {
-        accessibilityLabel: testID,
-      }
+          accessibilityLabel: testID,
+        }
       : {}
 
     if (hideArrow) {
