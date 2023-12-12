@@ -6,7 +6,7 @@ name: '[Utils] QA required approval'
 
 on:
   pull_request:
-    types: [opened, edited, converted_to_draft, ready_for_review, closed, reopened]
+    types: [opened, edited, converted_to_draft, ready_for_review, reopened]
     paths:
       - 'VAMobile/src/**'
       - 'VAMobile/package.json'
@@ -20,30 +20,12 @@ on:
       - 'develop'
 
 jobs:
-  # check_for_qa_required:
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     requires_qa: ${{ steps.qa_required.outputs.requires_qa}}
-  #   steps:
-  #     - name: Check QA required
-  #       uses: dorny/paths-filter@v2
-  #       id: qa_required
-  #       with:
-  #         filters: |
-  #           requires_qa:
-  #               - 'VAMobile/src/(*|!*.test.*)'
-  #               - 'VAMobile/package.json'
-
   check_for_qa_approval:
+    name: Requires QA approval
     runs-on: ubuntu-latest
-    # needs: check_for_qa_required
-    outputs:
-      has_qa_approval: ${{ steps.check-qa-approval.outputs.has_qa_approval }}
     steps:
       - name: Check QA approval
-        id: check-qa-approval
         shell: bash
-        # if: ${{ needs.check_for_qa_required.outputs.requires_qa == 'true' }}
         run: |
           approvals=$(curl --request GET \
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews \
@@ -67,25 +49,3 @@ jobs:
             echo 'This PR requires 3 approvals, including one QA approval, before merging.'
             exit 1
           fi
-
-  # add_or_remove_qa_required_label:
-  #   name: Add or Remove label
-  #   needs: check_for_qa_approval
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     LABEL: qa-review-required
-  #   steps:
-  #     - name: 'Set up GH CLI secret'
-  #       run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
-  #     - name: 'Log into GH CLI'
-  #       run: gh auth login --with-token < token.txt
-  #     - name: 'Add or remove label'
-  #       run: | 
-  #         if ${{ needs.check_for_qa_approval.outputs.has_qa_approval }} == 'true'
-  #           gh pr edit ${{ github.event.pull_request.number }} --remove-label "$LABEL"
-  #         else
-  #           gh pr edit ${{ github.event.pull_request.number }} --add-label "$LABEL"
-  #           exit 1
-  #         fi
-
-
