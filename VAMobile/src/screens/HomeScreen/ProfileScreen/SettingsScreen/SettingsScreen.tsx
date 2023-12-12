@@ -138,7 +138,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')} testID='settingsID'>
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')} testID="settingsID">
       <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <SimpleList items={items} />

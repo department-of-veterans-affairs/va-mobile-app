@@ -27,7 +27,7 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
   const onDirectDeposit = userAuthorizedServices?.directDepositBenefitsUpdate ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
 
   return (
-    <CategoryLanding title={t('payments.title')} testID='paymentsID'>
+    <CategoryLanding title={t('payments.title')} testID="paymentsID">
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('vaPaymentHistory')}

@@ -72,7 +72,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <CategoryLanding headerButton={headerButton} testID='homeScreenID'>
+    <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box flex={1} justifyContent="flex-start">
         <EncourageUpdateAlert />
         <Nametag />

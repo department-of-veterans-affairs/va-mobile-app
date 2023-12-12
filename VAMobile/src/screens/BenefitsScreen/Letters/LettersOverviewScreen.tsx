@@ -36,7 +36,12 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   ]
 
   return (
-    <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.title')} {...testIdProps('Letters-page')} testID='lettersPageID'>
+    <FeatureLandingTemplate
+      backLabel={t('benefits.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('letters.overview.title')}
+      {...testIdProps('Letters-page')}
+      testID="lettersPageID">
       <TextView variant="MobileBody" mx={theme.dimensions.gutter} paragraphSpacing={true}>
         {t('letters.overview.documents')}
       </TextView>
