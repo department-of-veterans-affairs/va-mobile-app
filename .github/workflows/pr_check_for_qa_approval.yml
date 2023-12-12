@@ -23,7 +23,7 @@ jobs:
         with:
           filters: |
             requires_qa:
-                - 'VAMobile/src|!(VAMobile/src/*.test.*)'
+                - 'VAMobile/src/(*|!*.test.*)'
                 - 'VAMobile/package.json'
 
   check_for_qa_approval:
