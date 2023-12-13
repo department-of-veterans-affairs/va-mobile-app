@@ -82,10 +82,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes, i
       ? t('appointments.pending.submitted.pendingRequestTypeOfCare', { typeOfCare })
       : t('appointments.inPersonVA.upcomingBody', { facilityName: location?.name || t('prescription.details.vaFacilityHeader') })
 
-    const apptBodyA11yLabel =
-      (isAppointmentCanceled || isPastAppointment || isAppointmentPending) && location?.name
-        ? undefined
-        : a11yLabelVA(t('appointments.inPersonVA.upcomingBody', { facilityName: t('prescription.details.vaFacilityHeader') }))
+    const apptBodyA11yLabel = a11yLabelVA(apptBody)
 
     return (
       <Box>

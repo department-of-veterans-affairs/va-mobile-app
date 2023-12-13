@@ -175,17 +175,13 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment type is va', () => {
     it('should display the appointment details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA)
-      expect(screen.getByText('VA appointment')).toBeTruthy()
-      expect(screen.getByText('Blind Rehabilitation Center')).toBeTruthy()
-      expect(screen.getByText('Special instructions')).toBeTruthy()
-      expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
+      expect(screen.getByRole('header', {name:'In-person appointment'})).toBeTruthy()
     })
   })
 
   describe('when the appointment type is covid vaccine', () => {
     it('should display the appointment details', () => {
       initializeTestInstance(undefined, undefined, undefined, true)
-      expect(screen.getAllByText('COVID-19 vaccine')).toBeTruthy()
       expect(screen.getByText('Special instructions')).toBeTruthy()
       expect(screen.getByText('Please arrive 20 minutes before the start of your appointment')).toBeTruthy()
     })
@@ -194,7 +190,7 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the status is CANCELLED', () => {
     it('should display the schedule another appointment text', () => {
       initializeTestInstance(AppointmentTypeConstants.VA, AppointmentStatusConstants.CANCELLED, undefined, false, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
-      expect(screen.getByText('To schedule another appointment, please visit VA.gov or call your VA medical center.')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
     })
   })
 

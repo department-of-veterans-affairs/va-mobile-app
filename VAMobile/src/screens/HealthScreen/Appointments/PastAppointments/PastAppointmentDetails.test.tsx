@@ -63,15 +63,17 @@ context('PastAppointmentDetails', () => {
 
   it('initializes correctly', () => {
     initializeTestInstance()
-    expect(screen.getByText('VA appointment')).toBeTruthy()
+    expect(screen.getByRole('header', {name:'Past in-person appointment'})).toBeTruthy()
+    expect(screen.getByText('This appointment happened in the past.')).toBeTruthy()
     expect(screen.getByText('Saturday, February 6, 2021\n11:53 AM PST')).toBeTruthy()
-    expect(screen.getByText('Blind Rehabilitation Center')).toBeTruthy()
-    expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
+    expect(screen.getByRole('header', {name:'Blind Rehabilitation Center'})).toBeTruthy()
+    expect(screen.getByRole('header', {name:'Provider not noted'})).toBeTruthy()
+    expect(screen.getByRole('header', {name:'VA Long Beach Healthcare System'})).toBeTruthy()
     expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
     expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
-    expect(screen.getByText('Get directions')).toBeTruthy()
-    expect(screen.getByText('123-456-7890')).toBeTruthy()
-    expect(screen.getByText('TTY: 711')).toBeTruthy()
+    expect(screen.queryByText('Get directions')).toBeFalsy()
+    expect(screen.getByRole('link', {name:'123-456-7890'})).toBeTruthy()
+    expect(screen.getAllByRole('link', {name:'TTY: 711'})).toBeTruthy()
   })
 
   describe('when the appointment type is VA_VIDEO_CONNECT_GFE or VA_VIDEO_CONNECT_HOME', () => {
@@ -112,13 +114,6 @@ context('PastAppointmentDetails', () => {
     it('should show if facility cancelled (rebook)', () => {
       initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
       expect(screen.getByText('VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
-    })
-  })
-
-  describe('when the appointment type is covid vaccine', () => {
-    it('should display the title name as covid', () => {
-      initializeTestInstance(undefined, undefined, undefined, true)
-      expect(screen.getAllByText('COVID-19 vaccine')).toBeTruthy()
     })
   })
 })

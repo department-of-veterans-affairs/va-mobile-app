@@ -80,15 +80,17 @@ context('AppointmentTypeAndDate', () => {
   describe('when isAppointmentCanceled is true', () => {
     it('should render a TextView with the cancellation text', () => {
       initializeTestInstance(AppointmentStatusConstants.CANCELLED)
-      expect(screen.getByText('VA appointment')).toBeTruthy()
-      expect(screen.getByText('Canceled appointment for Saturday, February 6, 2021 at 11:53 AM PST')).toBeTruthy()
+      expect(screen.getByText('Canceled in-person appointment')).toBeTruthy()
+      expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
+      expect(screen.getByText('Saturday, February 6, 2021 11:53 AM PST')).toBeTruthy()
     })
   })
 
   describe('when isAppointmentCanceled is false', () => {
-    it('should only render 2 TextViews', () => {
+    it('should only render correctly', () => {
       initializeTestInstance()
-      expect(screen.getByText('VA appointment')).toBeTruthy()
+      expect(screen.getByText('In-person appointment')).toBeTruthy()
+      expect(screen.getByText('Go to VA facility for this appointment.')).toBeTruthy()
       expect(screen.getByText('Saturday, February 6, 2021 11:53 AM PST')).toBeTruthy()
     })
   })
