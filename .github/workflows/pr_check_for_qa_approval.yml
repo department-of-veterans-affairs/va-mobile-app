@@ -34,8 +34,8 @@ jobs:
           jq '[map(select(.state == "APPROVED")) | .[] .user.login]')
 
           echo $approvals
-          
-          if [[ $(jq '.[] | length > 0' <<< "$approvals") ]]
+
+          if [[ $(jq '.[] | length > 1' <<< "$approvals") ]]
             then
               if [[ $(jq '.[] | select(. | IN("rbontrager", "DJUltraTom", "TKDickson")) | length > 0' <<< "$approvals") ]]
                 then
