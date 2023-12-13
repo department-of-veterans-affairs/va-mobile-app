@@ -15,6 +15,7 @@ import { VATypographyThemeVariants } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoClaimLettersScreen from './NoClaimLettersScreen/NoClaimLettersScreen'
@@ -38,7 +39,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   }
 
   useEffect(() => {
-    if (!claimsInDowntime) {
+    if (!claimsInDowntime && screenContentAllowed('WG_ClaimLettersScreen')) {
       dispatch(getDecisionLetters(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID))
     }
   }, [dispatch, claimsInDowntime])

@@ -27,6 +27,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { capitalizeFirstLetter, displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
@@ -49,7 +50,7 @@ const DisabilityRatingsScreen: FC = () => {
 
   useEffect(() => {
     // Get the disability rating data if not loaded already
-    if (needsDataLoad && drNotInDowntime) {
+    if (screenContentAllowed('WG_DisabilityRatings') && needsDataLoad && drNotInDowntime) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
   }, [dispatch, needsDataLoad, drNotInDowntime])

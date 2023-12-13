@@ -11,9 +11,9 @@ import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
@@ -32,7 +32,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Benefits') })
 
   const ratingPercent = ratingData?.combinedDisabilityRating
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
