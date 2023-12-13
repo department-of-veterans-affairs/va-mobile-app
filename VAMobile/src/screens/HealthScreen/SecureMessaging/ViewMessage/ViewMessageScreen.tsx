@@ -66,12 +66,13 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const smNotInDowntime = !useDowntimeByScreenID(screenID)
+  const isScreenContentAllowed = screenContentAllowed('WG_ViewMessage')
 
   // have to use uselayout due to the screen showing in white or showing the previouse data
   useLayoutEffect(() => {
     // Only get message and thread when inbox isn't being fetched
     // to avoid a race condition with writing to `messagesById`
-    if (screenContentAllowed('WG_ViewMessage') && !loadingInbox && smNotInDowntime) {
+    if (isScreenContentAllowed && !loadingInbox && smNotInDowntime) {
       dispatch(getMessage(messageID, screenID))
       dispatch(getThread(messageID, screenID))
     }
@@ -85,7 +86,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   }, [isUndo, currentFolderIdParam, moveMessageFailed])
 
   useEffect(() => {
-    if (!folders.length) {
+    if (isScreenContentAllowed && !folders.length) {
       dispatch(listFolders(screenID))
     }
   }, [dispatch, folders])
@@ -145,7 +146,11 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   if (!message || !messagesById || !thread) {
     // return empty /error  state
     // do not replace with error component otherwise user will always see a red error flash right before their message loads
-    return <></>
+    return (
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
+        <></>
+      </ChildTemplate>
+    )
   }
 
   const replyExpired = demoMode && message.messageId === 2092809 ? false : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
