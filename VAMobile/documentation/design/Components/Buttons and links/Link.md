@@ -1,20 +1,39 @@
 ---
 title: Link
+draft: true
 ---
-
-import CodeBlock from '@theme/CodeBlock'
-import ClickForActionLinkString from '!!raw-loader!@componentsDocs/ClickForActionLink'
-import ComponentTopInfo from '../../../../src/components/ComponentInfo'
 
 A link is a navigation element that can appear alone, inline (embedded), or in a group with other links. A link can trigger a download, but in general links go to internal or external pages when clicked.
 
 ## Examples
 
-### Master component
-<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/tLJKv0x0iacZzkZPoqZVaa/Components-for-future-releases?type=design&node-id=990-663&mode=design&t=zUc41avqNFS2ZNve-4" title="Image of master component in Figma showing light and dark mode" allowfullscreen></iframe>
+### Default
 
-### Examples
-<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/tLJKv0x0iacZzkZPoqZVaa/Components-for-future-releases?type=design&node-id=991-2309&mode=design&t=zUc41avqNFS2ZNve-4" allowfullscreen></iframe>
+#### Default
+Add Figma links and embed Storybook - standalone link in default (blue) color
+
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
+<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+
+#### Inline
+EAdd Figma links and embed Storybook - inline link in default (blue) color
+
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
+<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+
+### Base
+
+#### Default
+Add Figma links and embed Storybook - standalone link in base (gray) color
+
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
+<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+
+#### Inline
+Add Figma links and embed Storybook - inline link in base (gray) color
+
+**Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=10569-16679&mode=design&t=Os8aP9kEAvkcrH1D-4)
+<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ## Usage
 
@@ -50,24 +69,15 @@ A link is a navigation element that can appear alone, inline (embedded), or in a
 ## Code usage
 Add links to Storybook when available
 
+[Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--base)
 
 ## Content considerations
 * Reference the [VA Design System's content considerations for links](https://design.va.gov/components/link/#content-considerations)
 * When linking Veterans to VA.gov, be sure to include VA.gov in the link text. For example, instead of saying “Learn more about benefits,” it’s better to say “Learn more about benefits on VA.gov”.
 
-
 ## Accessibility considerations
 * Reference the [VA Design System's accessibility considerations for links](https://design.va.gov/components/link/#accessibility-considerations)
-
 
 ## Related
 * [Link - VA Design System](https://design.va.gov/components/link/)
 * [Link - USWDS](https://designsystem.digital.gov/components/link/)
-
-## Code usage
-Link is related to [ClickToCallPhoneNumber](/va-mobile-app/docs/Flagship%20design%20library/Components/Buttons%20and%20Links/ClickToCallPhoneNumber) and [AttachmentLink](/va-mobile-app/docs/Flagship%20design%20library/Components/Buttons%20and%20Links/AttachmentLink).
-
-import CrisisLineCtaString from '!!raw-loader!@componentsDocs/CrisisLineCta'
-export const exampleString = `<CrisisLineCta onPress={onCrisisLine} />`
-
-<ComponentTopInfo componentName="ClickForActionLink" example={exampleString} codeString={ClickForActionLinkString} />
