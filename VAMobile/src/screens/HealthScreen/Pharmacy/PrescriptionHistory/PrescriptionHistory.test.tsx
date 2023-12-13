@@ -256,15 +256,11 @@ const prescriptionData: PrescriptionsGetData = {
 }
 
 context('PrescriptionHistory', () => {
-  const initializeTestInstance = (includeTransferred = false, startingTab?: PrescriptionHistoryTabs) => {
-    const props = mockNavProps(
-      undefined,
-      {
-        setParams: jest.fn(),
-        setOptions: jest.fn(),
-      },
-      { params: { startingTab } },
-    )
+  const initializeTestInstance = (includeTransferred = false) => {
+    const props = mockNavProps(undefined, {
+      setParams: jest.fn(),
+      setOptions: jest.fn(),
+    })
 
     const data = prescriptionData.data
 
@@ -333,12 +329,6 @@ context('PrescriptionHistory', () => {
     it('should show the alert for transferred prescriptions', () => {
       initializeTestInstance(true)
       expect(screen.getByText("We can't refill some of your prescriptions in the app")).toBeTruthy()
-    })
-  })
-  describe('when currentTab is not PrescriptionHistoryTabConstants.ALL', () => {
-    it('should not show StartRefillRequest button', () => {
-      initializeTestInstance(false, PrescriptionHistoryTabConstants.TRACKING)
-      expect(screen.queryByRole('button', { name: 'Start refill request' })).toBeFalsy()
     })
   })
 })
