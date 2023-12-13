@@ -13,10 +13,10 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import Appointments from './Appointments'
 import CernerAlert from './CernerAlert'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
@@ -42,7 +42,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
 
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Health') })
 
   const onAppointments = () => {
     if (waygateNativeAlert('WG_Appointments')) {

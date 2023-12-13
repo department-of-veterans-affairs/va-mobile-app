@@ -18,6 +18,7 @@ import { SecureMessagingState, getMessage, getThread, listFolders, moveMessage }
 import { SnackbarMessages } from 'components/SnackBar'
 import { getfolderName } from 'utils/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntimeByScreenID, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
@@ -70,7 +71,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   useLayoutEffect(() => {
     // Only get message and thread when inbox isn't being fetched
     // to avoid a race condition with writing to `messagesById`
-    if (!loadingInbox && smNotInDowntime) {
+    if (screenContentAllowed('WG_ViewMessage') && !loadingInbox && smNotInDowntime) {
       dispatch(getMessage(messageID, screenID))
       dispatch(getThread(messageID, screenID))
     }

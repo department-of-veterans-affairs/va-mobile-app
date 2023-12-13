@@ -13,9 +13,9 @@ import { VaccineState, getVaccines } from 'store/slices/vaccineSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
 type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineList'>
@@ -81,7 +81,9 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
   }
 
   useEffect(() => {
-    requestPage(1)
+    if (screenContentAllowed('WG_VaccineList')) {
+      requestPage(1)
+    }
   }, [dispatch, requestPage])
 
   if (useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)) {
