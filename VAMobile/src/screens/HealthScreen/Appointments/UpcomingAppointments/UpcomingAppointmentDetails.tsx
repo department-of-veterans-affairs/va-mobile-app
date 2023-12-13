@@ -86,7 +86,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, startDateUtc, minutesDuration, comment, status, isCovidVaccine, phoneOnly } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, location, startDateUtc, minutesDuration, comment, status, isCovidVaccine, phoneOnly, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
   const { name, code, url, lat, long, address } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
@@ -293,7 +293,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       <Box mt={theme.dimensions.condensedMarginBetween}>
         {!isAppointmentCanceled ? (
           <AppointmentCancellationInfo appointment={appointment} goBack={goBack} />
-        ) : phoneOnly ? (
+        ) : phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION') ? (
           <Box mt={theme.dimensions.condensedMarginBetween}>
             <TextArea>
               <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
@@ -302,7 +302,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
               <TextView variant="MobileBody" paragraphSpacing={true}>
                 {t('appointments.reschedule.body')}
               </TextView>
-              {location.phone ? <ClickToCallPhoneNumber phone={location.phone.areaCode + ' ' + location.phone.number} /> : undefined}
+              {location?.phone ? <ClickToCallPhoneNumber phone={location.phone.areaCode + ' ' + location.phone.number} /> : undefined}
               <ClickForActionLink
                 displayedText={t('appointments.vaSchedule')}
                 a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
@@ -352,7 +352,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <TypeOfCare attributes={attributes} />
           <ProviderName attributes={attributes} />
 
-          <AppointmentAddressAndNumber attributes={attributes} />
+          <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={false} />
 
           {renderAtlasVideoConnectAppointmentData()}
           {renderSpecialInstructions()}

@@ -44,7 +44,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   let body
   let bodyA11yLabel
 
-  if (phoneOnly) {
+  if (phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION' && !isCovidVaccine)) {
     title = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')
     body =
       appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine && cancelId
@@ -151,8 +151,13 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       </TextView>
       {(appointmentType === AppointmentTypeConstants.VA || phoneOnly) && !isCovidVaccine && cancelId ? (
         <>
-          {phoneOnly && linkOrPhone}
-          <Box mt={phoneOnly ? theme.dimensions.standardMarginBetween : undefined}>
+          {(phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) && linkOrPhone}
+          <Box
+            mt={
+              phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+                ? theme.dimensions.standardMarginBetween
+                : undefined
+            }>
             <VAButton
               onPress={onCancelAppointment}
               label={t('upcomingAppointmentDetails.cancelAppointment')}

@@ -16,7 +16,7 @@
             "minutesDuration": 60,
             "comment": null,
             "timeZone": "America/Denver",
-            "healthcareService": "Phone consultation",
+            "healthcareService": null,
             "healthcareProvider": "John Smith",
             "reason": null,
             "location": {
@@ -64,7 +64,7 @@
             "vetextId": null,
             "reason": null,
             "isCovidVaccine": null,
-            "isPending": true,
+            "isPending": false,
             "proposedTimes": null,
             "typeOfCare": null,
             "patientPhoneNumber": "(666) 666-6666",
@@ -876,7 +876,7 @@
             "vetextId": null,
             "reason": null,
             "isCovidVaccine": null,
-            "isPending": true,
+            "isPending": false,
             "proposedTimes": null,
             "typeOfCare": null,
             "patientPhoneNumber": "(666) 666-6666",
@@ -891,7 +891,7 @@
           "attributes":
           {
             "appointmentType": "VA",
-            "cancelId": null,
+            "cancelId": "12",
             "comment": null,
             "healthcareProvider": "John Smith",
             "healthcareService": "Physical",

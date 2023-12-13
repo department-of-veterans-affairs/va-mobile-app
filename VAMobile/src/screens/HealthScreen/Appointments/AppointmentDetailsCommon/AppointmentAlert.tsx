@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { AlertBox, Box } from 'components'
 import { AppointmentAttributes } from 'store/api'
-import { AppointmentStatusConstants, AppointmentStatusDetailTypeConsts } from 'store/api/types/AppointmentData'
+import { AppointmentStatusConstants, AppointmentStatusDetailTypeConsts, AppointmentTypeConstants } from 'store/api/types/AppointmentData'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
@@ -15,13 +15,13 @@ const AppointmentAlert: FC<AppointmentAlertProps> = ({ attributes }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const { status, statusDetail, location, phoneOnly } = attributes || ({} as AppointmentAttributes)
+  const { status, statusDetail, location, phoneOnly, appointmentType, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
   const appointmentBooked = status === AppointmentStatusConstants.BOOKED
   const appointmentHidden = status === AppointmentStatusConstants.HIDDEN
   const appointmentCanceled = status === AppointmentStatusConstants.CANCELLED
 
   // dont show alerts for booked or hidden appointments or phone appointments
-  if (appointmentBooked || appointmentHidden || phoneOnly) {
+  if (appointmentBooked || appointmentHidden || phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) {
     return <></>
   }
 

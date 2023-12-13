@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
-import { AppointmentAttributes, AppointmentLocation, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
+import { AppointmentAttributes, AppointmentLocation, AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
 import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
@@ -25,15 +25,95 @@ type AppointmentAddressAndNumberProps = {
   attributes: AppointmentAttributes
 }
 
-const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ attributes }) => {
+const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ attributes, isPastAppointment = false }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { appointmentType, healthcareService, location, isCovidVaccine, healthcareProvider, phoneOnly } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, healthcareService, location, isCovidVaccine, healthcareProvider, phoneOnly, serviceCategoryName, status } = attributes || ({} as AppointmentAttributes)
   const { address, phone } = location || ({} as AppointmentLocation)
 
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isValidAppointment = isVAOrCCOrVALocation(appointmentType) || appointmentIsAtlas
   if (!isValidAppointment || phoneOnly) {
     return <></>
+  }
+
+  const getAddress = () => {
+    return (
+      <>
+        {!!address?.street && (
+          <TextView variant="MobileBody" selectable={true} accessible={false}>
+            {address.street}
+          </TextView>
+        )}
+        {!!address?.city && address?.state && address?.zipCode && (
+          <TextView variant="MobileBody" selectable={true} accessible={false}>
+            {`${address.city}, ${address.state} ${address.zipCode}`}
+          </TextView>
+        )}
+      </>
+    )
+  }
+
+  if (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION') {
+    const hasFullAddress = Boolean(address?.street && address?.city && address?.state && address?.zipCode)
+    const hasLatLong = Boolean(location?.lat && location?.long)
+    const hasDirectionLink = hasFullAddress || hasLatLong
+    const hasPhone = Boolean(!appointmentIsAtlas && phone?.number)
+    const locationName = location?.name
+    const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
+    let missingBodyText
+
+    if (locationName && hasDirectionLink && !hasPhone) {
+      missingBodyText = t('appointments.inPersonVA.missingAddress.hasDirections.noPhone')
+    } else if (locationName && hasDirectionLink && hasPhone) {
+      missingBodyText = t('appointments.inPersonVA.missingAddress.hasDirections.noAddressOnly')
+    } else if (!locationName && hasDirectionLink && !hasPhone) {
+      missingBodyText = t('appointments.inPersonVA.missingAddress.hasDirections.noAnything')
+    } else if (locationName && !hasDirectionLink && !hasPhone) {
+      missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noPhone')
+    } else if (locationName && !hasDirectionLink && hasPhone) {
+      missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noAddressOnly')
+    } else if (!locationName && !hasDirectionLink && !hasPhone) {
+      missingBodyText = t('appointments.inPersonVA.missingAddress.noDirections.noAnything')
+    }
+
+    const findYourVALocationProps: LinkButtonProps = {
+      displayedText: t('appointments.inPersonVA.missingAddress.goToVALink'),
+      linkType: LinkTypeOptionsConstants.externalLink,
+      numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
+      a11yLabel: a11yLabelVA(t('appointments.inPersonVA.missingAddress.goToVALink')),
+      accessibilityHint: t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'),
+    }
+
+    return (
+      <>
+        <TextView variant="MobileBodyBold" selectable={true} accessibilityRole="header">
+          {locationName}
+        </TextView>
+        {hasFullAddress ? (
+          getAddress()
+        ) : (
+          <TextView
+            variant={location?.name ? 'MobileBody' : 'MobileBodyBold'}
+            selectable={true}
+            accessibilityRole={location?.name ? undefined : 'header'}
+            accessibilityLabel={a11yLabelVA(missingBodyText || '')}>
+            {missingBodyText}
+          </TextView>
+        )}
+        {hasDirectionLink && (!isPastAppointment || isAppointmentCanceled) && (
+          <ClickForActionLink
+            displayedText={`${t('directions')}`}
+            a11yLabel={`${t('directions')}`}
+            linkType={'directions'}
+            numberOrUrlLink={getDirectionsUrl(location)}
+            testID="directionsTestID"
+            {...a11yHintProp(t('directions.a11yHint'))}
+          />
+        )}
+        {hasPhone && <ClickToCallPhoneNumber phone={phone} />}
+        {!hasFullAddress && !hasPhone && <ClickForActionLink {...findYourVALocationProps} />}
+      </>
+    )
   }
 
   const getHealthServiceHeaderSection = (): ReactElement => {
@@ -75,23 +155,6 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
       <TextView variant="MobileBody" selectable={true} accessible={false}>
         {location.name}
       </TextView>
-    )
-  }
-
-  const getAddress = () => {
-    return (
-      <>
-        {!!address?.street && (
-          <TextView variant="MobileBody" selectable={true} accessible={false}>
-            {address.street}
-          </TextView>
-        )}
-        {!!address?.city && address?.state && address?.zipCode && (
-          <TextView variant="MobileBody" selectable={true} accessible={false}>
-            {`${address.city}, ${address.state} ${address.zipCode}`}
-          </TextView>
-        )}
-      </>
     )
   }
 

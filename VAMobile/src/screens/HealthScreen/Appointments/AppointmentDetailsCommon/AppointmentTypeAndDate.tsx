@@ -2,9 +2,17 @@ import { FC, ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 
-import { AppointmentAttributes, AppointmentStatusConstants, AppointmentStatusDetailTypeConsts, AppointmentTypeToA11yLabel, AppointmentTypeToID } from 'store/api/types'
+import {
+  AppointmentAttributes,
+  AppointmentStatusConstants,
+  AppointmentStatusDetailTypeConsts,
+  AppointmentTypeConstants,
+  AppointmentTypeToA11yLabel,
+  AppointmentTypeToID,
+} from 'store/api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { isAPendingAppointment } from 'utils/appointments'
 import { testIdProps } from 'utils/accessibility'
@@ -35,6 +43,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes, i
       who = healthcareProvider || location?.name || t('appointments.canceled.whoCanceled.facility')
     }
     const apptTitle = isAppointmentCanceled ? t('appointments.phone.canceledTitle') : isPastAppointment ? t('appointments.phone.pastTitle') : t('appointments.phone.upcomingTitle')
+
     const apptBody = isAppointmentCanceled
       ? t('appointments.pending.cancelled.theTimeAndDate', { who })
       : isPastAppointment
@@ -42,12 +51,48 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes, i
       : isAppointmentPending
       ? t('appointments.pending.submitted.pendingRequestTypeOfCare', { typeOfCare })
       : t('appointments.phone.upcomingBody')
+
     return (
       <Box>
         <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
           {apptTitle}
         </TextView>
         <TextView variant={'MobileBody'} paragraphSpacing={true}>
+          {apptBody}
+        </TextView>
+        {isAppointmentPending ? undefined : <TextView variant={'MobileBodyBold'} mb={theme.dimensions.standardMarginBetween}>{`${date}\n${time}`}</TextView>}
+      </Box>
+    )
+  } else if (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION') {
+    let who = t('appointments.canceled.whoCanceled.you')
+    if (statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK) {
+      who = healthcareProvider || location?.name || t('appointments.canceled.whoCanceled.facility')
+    }
+    const apptTitle = isAppointmentCanceled
+      ? t('appointments.inPersonVA.canceledTitle')
+      : isPastAppointment
+      ? t('appointments.inPersonVA.pastTitle')
+      : t('appointments.inPersonVA.upcomingTitle')
+
+    const apptBody = isAppointmentCanceled
+      ? t('appointments.pending.cancelled.theTimeAndDate', { who })
+      : isPastAppointment
+      ? t('appointments.pastBody')
+      : isAppointmentPending
+      ? t('appointments.pending.submitted.pendingRequestTypeOfCare', { typeOfCare })
+      : t('appointments.inPersonVA.upcomingBody', { facilityName: location?.name || t('prescription.details.vaFacilityHeader') })
+
+    const apptBodyA11yLabel =
+      (isAppointmentCanceled || isPastAppointment || isAppointmentPending) && location?.name
+        ? undefined
+        : a11yLabelVA(t('appointments.inPersonVA.upcomingBody', { facilityName: t('prescription.details.vaFacilityHeader') }))
+
+    return (
+      <Box>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+          {apptTitle}
+        </TextView>
+        <TextView variant={'MobileBody'} paragraphSpacing={true} accessibilityLabel={apptBodyA11yLabel}>
           {apptBody}
         </TextView>
         {isAppointmentPending ? undefined : <TextView variant={'MobileBodyBold'} mb={theme.dimensions.standardMarginBetween}>{`${date}\n${time}`}</TextView>}

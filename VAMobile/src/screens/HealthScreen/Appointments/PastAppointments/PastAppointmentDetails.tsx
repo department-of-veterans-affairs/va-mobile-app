@@ -38,7 +38,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
 
   const appointment = pastAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, status, phoneOnly, location } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, status, phoneOnly, location, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
 
@@ -62,7 +62,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
       return <></>
     }
 
-    if (phoneOnly) {
+    if (phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) {
       return (
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
@@ -106,7 +106,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
           <TypeOfCare attributes={attributes} />
           <ProviderName attributes={attributes} />
 
-          <AppointmentAddressAndNumber attributes={attributes} />
+          <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={true} />
 
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
