@@ -488,6 +488,22 @@ export const Events = {
       name: 'vama_gender_id_success',
     }
   },
+  vama_givefb_close: (screenName: string): Event => {
+    return {
+      name: 'vama_givefb_close',
+      params: {
+        screenName,
+      },
+    }
+  },
+  vama_givefb_open: (linkType: string): Event => {
+    return {
+      name: 'vama_givefb_open',
+      params: {
+        linkType,
+      },
+    }
+  },
   vama_letter_download: (letterName: string): Event => {
     return {
       name: 'vama_letter_download',
