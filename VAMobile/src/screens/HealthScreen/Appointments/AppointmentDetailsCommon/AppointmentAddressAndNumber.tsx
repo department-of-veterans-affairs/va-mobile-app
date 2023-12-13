@@ -23,6 +23,7 @@ export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean 
 
 type AppointmentAddressAndNumberProps = {
   attributes: AppointmentAttributes
+  isPastAppointment: boolean
 }
 
 const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ attributes, isPastAppointment = false }) => {
