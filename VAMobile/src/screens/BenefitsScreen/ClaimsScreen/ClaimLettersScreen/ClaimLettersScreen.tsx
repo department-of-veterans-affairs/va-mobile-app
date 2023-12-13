@@ -39,7 +39,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   }
 
   useEffect(() => {
-    if (!claimsInDowntime && screenContentAllowed('WG_ClaimLettersScreen')) {
+    if (screenContentAllowed('WG_ClaimLettersScreen') && !claimsInDowntime) {
       dispatch(getDecisionLetters(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID))
     }
   }, [dispatch, claimsInDowntime])
