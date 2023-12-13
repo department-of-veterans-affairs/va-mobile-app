@@ -8,7 +8,7 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 import { waygateNativeAlert } from 'utils/waygateConfig'
@@ -28,6 +28,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const navigateTo = useRouteNavigation()
 
   /**
    * Function used on error to reload the data for this page. This combines all calls necessary to load the page rather
@@ -49,27 +50,19 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   }, [dispatch, militaryHistoryNeedsUpdate, userAuthorizedServices?.militaryServiceHistory, mhNotInDowntime])
 
   const onPersonalInformation = () => {
-    if (waygateNativeAlert('WG_PersonalInformation')) {
-      navigation.navigate('PersonalInformation')
-    }
+    navigateTo('PersonalInformation')
   }
 
   const onContactInformation = () => {
-    if (waygateNativeAlert('WG_ContactInformation')) {
-      navigation.navigate('ContactInformation')
-    }
+    navigateTo('ContactInformation')
   }
 
   const onMilitaryInformation = () => {
-    if (waygateNativeAlert('WG_MilitaryInformation')) {
-      navigation.navigate('MilitaryInformation')
-    }
+    navigateTo('MilitaryInformation')
   }
 
   const onSettings = () => {
-    if (waygateNativeAlert('WG_Settings')) {
-      navigation.navigate('Settings')
-    }
+    navigateTo('Settings')
   }
 
   const loadingCheck = militaryInformationLoading || loadingUserAuthorizedServices

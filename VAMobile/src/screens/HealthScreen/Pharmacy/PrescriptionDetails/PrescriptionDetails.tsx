@@ -13,7 +13,7 @@ import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../Pres
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { useAppDispatch, useDestructiveActionSheet, useDowntime, useExternalLink, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useDowntime, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import { waygateNativeAlert } from 'utils/waygateConfig'
 import DetailsTextSections from './DetailsTextSections'
@@ -31,6 +31,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const launchExternalLink = useExternalLink()
   const submitRefillAlert = useDestructiveActionSheet()
   const dispatch = useAppDispatch()
+  const navigateTo = useRouteNavigation()
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const noneNoted = t('noneNoted')
@@ -118,13 +119,11 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
               text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
               onPress: () => {
                 // Call refill request so its starts the loading screen and then go to the modal
-                if (waygateNativeAlert('WG_RefillScreenModal')) {
-                  if (!prescriptionInDowntime) {
-                    logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
-                    dispatch(requestRefills([prescription]))
-                  }
-                  navigation.navigate('RefillScreenModal')
+                if (waygateNativeAlert('WG_RefillScreenModal') && !prescriptionInDowntime) {
+                  logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
+                  dispatch(requestRefills([prescription]))
                 }
+                navigateTo('RefillScreenModal')
               },
             },
           ],

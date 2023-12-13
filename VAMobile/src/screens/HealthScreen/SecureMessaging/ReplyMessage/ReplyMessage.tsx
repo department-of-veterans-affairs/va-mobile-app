@@ -46,12 +46,12 @@ import {
   useBeforeNavBackListener,
   useDestructiveActionSheet,
   useMessageWithSignature,
+  useRouteNavigation,
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
@@ -60,6 +60,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const draftAttachmentAlert = useDestructiveActionSheet()
+  const navigateTo = useRouteNavigation()
 
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
@@ -140,13 +141,12 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   useEffect(() => {
     if (saveDraftComplete) {
       dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
-      waygateNativeAlert('WG_SecureMessaging') && navigation.navigate('SecureMessaging')
-      waygateNativeAlert('WG_FolderMessages') &&
-        navigation.navigate('FolderMessages', {
-          folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-          folderName: FolderNameTypeConstants.drafts,
-          draftSaved: true,
-        })
+      navigateTo('SecureMessaging')
+      navigateTo('FolderMessages', {
+        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+        folderName: FolderNameTypeConstants.drafts,
+        draftSaved: true,
+      })
     }
   }, [saveDraftComplete, navigation, dispatch])
 
@@ -155,7 +155,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
       dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-      waygateNativeAlert('WG_SecureMessaging') && navigation.navigate('SecureMessaging')
+      navigateTo('SecureMessaging')
     }
   }, [sendMessageComplete, dispatch, navigation])
 
@@ -182,9 +182,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
-    if (waygateNativeAlert('WG_Attachments')) {
-      navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
-    }
+    navigateTo('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
@@ -234,9 +232,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const navigateToReplyHelp = () => {
     logAnalyticsEvent(Events.vama_sm_nonurgent())
-    if (waygateNativeAlert('WG_ReplyHelp')) {
-      navigation.navigate('ReplyHelp')
-    }
+    navigateTo('ReplyHelp')
   }
 
   const renderForm = (): ReactNode => (

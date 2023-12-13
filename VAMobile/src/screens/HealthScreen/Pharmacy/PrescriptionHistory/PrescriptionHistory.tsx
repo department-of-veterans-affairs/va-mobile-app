@@ -289,9 +289,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const prescriptionDetailsClicked = (prescriptionID: string) => {
     logAnalyticsEvent(Events.vama_rx_details(prescriptionID))
-    if (waygateNativeAlert('WG_PrescriptionDetails')) {
-      return navigation.navigate('PrescriptionDetails', { prescriptionId: prescriptionID })
-    }
+    navigateTo('PrescriptionDetails', { prescriptionId: prescriptionID })
   }
 
   const prescriptionItems = () => {
@@ -354,9 +352,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           bottomContent,
           bottomOnPress() {
             logAnalyticsEvent(Events.vama_rx_trackdet(prescription.id))
-            if (waygateNativeAlert('WG_RefillTrackingModal')) {
-              navigation.navigate('RefillTrackingModal', { prescription: prescription })
-            }
+            navigateTo('RefillTrackingModal', { prescription: prescription })
           },
         }
       }
@@ -598,9 +594,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       label: t('prescription.history.startRefillRequest'),
       buttonType: ButtonTypesConstants.buttonPrimary,
       onPress: () => {
-        if (waygateNativeAlert('WG_RefillScreenModal')) {
-          navigateTo('RefillScreenModal')()
-        }
+        navigateTo('RefillScreenModal')
       },
     }
     return (
@@ -655,9 +649,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     icon: helpIconProps,
     onPress: () => {
       logAnalyticsEvent(Events.vama_rx_help())
-      if (waygateNativeAlert('WG_PrescriptionHelp')) {
-        navigation.navigate('PrescriptionHelp')
-      }
+      navigateTo('PrescriptionHelp')
     },
   }
 

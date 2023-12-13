@@ -88,63 +88,49 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
     setReviewEventRegistered(true)
   }
   const onMailingAddress = () => {
-    if (waygateNativeAlert('WG_EditAddress')) {
-      navigateTo('EditAddress', {
-        displayTitle: t('contactInformation.mailingAddress'),
-        addressType: profileAddressOptions.MAILING_ADDRESS,
-      })()
-    }
+    navigateTo('EditAddress', {
+      displayTitle: t('contactInformation.mailingAddress'),
+      addressType: profileAddressOptions.MAILING_ADDRESS,
+    })
   }
 
   const onResidentialAddress = () => {
-    if (waygateNativeAlert('WG_EditAddress')) {
-      navigateTo('EditAddress', {
-        displayTitle: t('contactInformation.residentialAddress'),
-        addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
-      })()
-    }
+    navigateTo('EditAddress', {
+      displayTitle: t('contactInformation.residentialAddress'),
+      addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
+    })
   }
 
   const onHomePhone = () => {
-    if (waygateNativeAlert('WG_EditPhoneNumber')) {
-      navigateTo('EditPhoneNumber', {
-        displayTitle: t('editPhoneNumber.homePhoneTitle'),
-        phoneType: PhoneTypeConstants.HOME,
-        phoneData: contactInformation?.homePhone || ({} as PhoneData),
-      })()
-    }
+    navigateTo('EditPhoneNumber', {
+      displayTitle: t('editPhoneNumber.homePhoneTitle'),
+      phoneType: PhoneTypeConstants.HOME,
+      phoneData: contactInformation?.homePhone || ({} as PhoneData),
+    })
   }
 
   const onWorkPhone = () => {
-    if (waygateNativeAlert('WG_EditPhoneNumber')) {
-      navigateTo('EditPhoneNumber', {
-        displayTitle: t('editPhoneNumber.workPhoneTitle'),
-        phoneType: PhoneTypeConstants.WORK,
-        phoneData: contactInformation?.workPhone || ({} as PhoneData),
-      })()
-    }
+    navigateTo('EditPhoneNumber', {
+      displayTitle: t('editPhoneNumber.workPhoneTitle'),
+      phoneType: PhoneTypeConstants.WORK,
+      phoneData: contactInformation?.workPhone || ({} as PhoneData),
+    })
   }
 
   const onCellPhone = () => {
-    if (waygateNativeAlert('WG_EditPhoneNumber')) {
-      navigateTo('EditPhoneNumber', {
-        displayTitle: t('editPhoneNumber.mobilePhoneTitle'),
-        phoneType: PhoneTypeConstants.MOBILE,
-        phoneData: contactInformation?.mobilePhone || ({} as PhoneData),
-      })()
-    }
+    navigateTo('EditPhoneNumber', {
+      displayTitle: t('editPhoneNumber.mobilePhoneTitle'),
+      phoneType: PhoneTypeConstants.MOBILE,
+      phoneData: contactInformation?.mobilePhone || ({} as PhoneData),
+    })
   }
 
   const onEmailAddress = () => {
-    if (waygateNativeAlert('WG_EditEmail')) {
-      navigation.navigate('EditEmail')
-    }
+    navigateTo('EditEmail')
   }
 
   const onHowWillYou = () => {
-    if (waygateNativeAlert('WG_HowWillYou')) {
-      navigation.navigate('HowWillYou')
-    }
+    navigateTo('HowWillYou')
   }
 
   const linkProps: TextViewProps = {

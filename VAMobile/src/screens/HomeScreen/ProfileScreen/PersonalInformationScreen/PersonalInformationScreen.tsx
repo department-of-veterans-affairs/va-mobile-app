@@ -14,7 +14,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDemographics } from 'api/demographics/getDemographics'
-import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
+import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { waygateNativeAlert } from 'utils/waygateConfig'
@@ -40,6 +40,7 @@ type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'Pers
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const personalInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
   const { data: personalInfo, isLoading: loadingPersonalInfo } = usePersonalInformation()
@@ -94,27 +95,19 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
 
   const onGenderIdentity = () => {
-    if (waygateNativeAlert('WG_GenderIdentity')) {
-      navigation.navigate('GenderIdentity')
-    }
+    navigateTo('GenderIdentity')
   }
 
   const onPreferredName = () => {
-    if (waygateNativeAlert('WG_PreferredName')) {
-      navigation.navigate('PreferredName')
-    }
+    navigateTo('PreferredName')
   }
 
   const onUpdateName = () => {
-    if (waygateNativeAlert('WG_HowDoIUpdate')) {
-      navigation.navigate('HowDoIUpdate', { screenType: 'name' })
-    }
+    navigateTo('HowDoIUpdate', { screenType: 'name' })
   }
 
   const onUpdateDOB = () => {
-    if (waygateNativeAlert('WG_HowDoIUpdate')) {
-      navigation.navigate('HowDoIUpdate', { screenType: 'DOB' })
-    }
+    navigateTo('HowDoIUpdate', { screenType: 'DOB' })
   }
 
   return (

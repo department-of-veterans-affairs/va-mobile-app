@@ -72,18 +72,16 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   const onManage = () => {
-    if (waygateNativeAlert('WG_ManageYourAccount')) {
-      navigation.navigate('ManageYourAccount')
-    }
+    navigateTo('ManageYourAccount')
   }
 
   const onNotifications = () => {
-    if (waygateNativeAlert('WG_NotificationsSettings')) {
-      navigation.navigate('NotificationsSettings')
-    }
+    navigateTo('NotificationsSettings')
   }
 
-  const onDebug = navigateTo('Developer')
+  const onDebug = () => {
+    navigateTo('Developer')
+  }
 
   const onShare = async (): Promise<void> => {
     try {

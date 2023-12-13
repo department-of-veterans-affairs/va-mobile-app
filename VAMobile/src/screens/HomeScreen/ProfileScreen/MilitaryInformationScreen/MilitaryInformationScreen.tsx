@@ -11,7 +11,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackScreenProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 import { waygateNativeAlert } from 'utils/waygateConfig'
@@ -26,6 +26,7 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
   const { serviceHistory, loading, needsDataLoad } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
+  const navigateTo = useRouteNavigation()
 
   useEffect(() => {
     if (needsDataLoad && userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime) {
@@ -55,9 +56,7 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
   })
 
   const onIncorrectService = () => {
-    if (waygateNativeAlert('WG_IncorrectServiceInfo')) {
-      navigation.navigate('IncorrectServiceInfo')
-    }
+    navigateTo('IncorrectServiceInfo')
   }
 
   const linkProps: TextViewProps = {

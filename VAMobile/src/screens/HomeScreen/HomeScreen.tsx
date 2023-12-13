@@ -11,7 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { waygateNativeAlert } from 'utils/waygateConfig'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
@@ -35,11 +35,10 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
 
   const onContactVA = () => {
-    if (waygateNativeAlert('WG_ContactVA')) {
-      navigation.navigate('ContactVA')
-    }
+    navigateTo('ContactVA')
   }
 
   const onFacilityLocator = () => {
@@ -71,9 +70,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   const onProfile = () => {
-    if (waygateNativeAlert('WG_Profile')) {
-      navigation.navigate('Profile')
-    }
+    navigateTo('Profile')
   }
 
   const headerButton = {

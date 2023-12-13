@@ -15,9 +15,8 @@ import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPresc
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useDowntime, usePrevious, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useDowntime, usePrevious, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import NoRefills from './NoRefills'
 import SelectionList from 'components/SelectionList'
@@ -27,6 +26,7 @@ type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenMod
 export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
+  const navigateTo = useRouteNavigation()
 
   const submitRefillAlert = useDestructiveActionSheet()
   const confirmAlert = useDestructiveActionSheet()
@@ -54,7 +54,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     if (prevLoadingRequestRefills && prevLoadingRequestRefills !== submittingRequestRefills) {
-      waygateNativeAlert('WG_RefillRequestSummary') && navigation.navigate('RefillRequestSummary')
+      navigateTo('RefillRequestSummary')
     }
   }, [navigation, submittingRequestRefills, prevLoadingRequestRefills])
 

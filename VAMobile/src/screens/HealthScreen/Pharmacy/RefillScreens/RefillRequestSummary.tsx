@@ -12,7 +12,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useBeforeNavBackListener, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { waygateNativeAlert } from 'utils/waygateConfig'
@@ -29,6 +29,7 @@ type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'Prescri
 const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
+  const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [status, setStatus] = useState<REQUEST_STATUS>()
   const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
@@ -38,8 +39,8 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
     if (waygateNativeAlert('WG_PrescriptionHistory')) {
       dispatch(dispatchSetPrescriptionsNeedLoad())
       dispatch(dispatchClearLoadingRequestRefills())
-      navigation.navigate('PrescriptionHistory', {})
     }
+    navigateTo('PrescriptionHistory', {})
   }
 
   useEffect(() => {
@@ -193,8 +194,8 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
             if (waygateNativeAlert('WG_PrescriptionHistory')) {
               dispatch(dispatchSetPrescriptionsNeedLoad())
               dispatch(dispatchClearLoadingRequestRefills())
-              navigation.navigate('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })
             }
+            navigateTo('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })
           }}
           label={t('prescriptions.refillRequestSummary.pendingRefills')}
           buttonType="buttonSecondary"

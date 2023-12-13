@@ -18,7 +18,7 @@ import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/comm
 import { formatSubject } from 'utils/secureMessaging'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useNavigation } from '@react-navigation/native'
 import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
 import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
@@ -37,6 +37,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
   const navigation = useNavigation<StackNavigationProp<HealthStackParamList, keyof HealthStackParamList>>()
   const dispatch = useAppDispatch()
   const { loadingAttachments } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const navigateTo = useRouteNavigation()
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const replyExpired = demoMode && message.messageId === 2092809 ? false : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
@@ -107,7 +108,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
 
   const navigateToReplyHelp = () => {
     logAnalyticsEvent(Events.vama_sm_nonurgent())
-    navigation.navigate('ReplyHelp')
+    navigateTo('ReplyHelp')
   }
 
   const getMessageHelp = (): ReactNode => {

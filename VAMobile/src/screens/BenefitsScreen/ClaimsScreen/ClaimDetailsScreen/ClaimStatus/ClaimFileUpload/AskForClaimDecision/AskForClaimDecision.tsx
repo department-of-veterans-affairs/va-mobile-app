@@ -27,7 +27,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { useAppDispatch, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
 
@@ -41,6 +41,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const { standardMarginBetween, contentMarginBottom, gutter } = theme.dimensions
   const requestEvalAlert = useDestructiveActionSheet()
+  const navigateTo = useRouteNavigation()
 
   const navigateToClaimsDetailsPage = submittedDecision && !error
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
@@ -49,7 +50,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
 
   useEffect(() => {
     if (navigateToClaimsDetailsPage) {
-      navigation.navigate('ClaimDetailsScreen', { claimID, claimType, focusOnSnackbar: true })
+      navigateTo('ClaimDetailsScreen', { claimID, claimType, focusOnSnackbar: true })
     }
   }, [navigateToClaimsDetailsPage, navigation, claimID, claimType])
 

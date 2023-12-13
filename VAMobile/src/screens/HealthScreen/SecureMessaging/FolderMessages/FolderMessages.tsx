@@ -9,9 +9,8 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { useAppDispatch, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 
@@ -23,6 +22,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
@@ -56,9 +56,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
       ? { messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} }
       : { messageID, folderID, currentPage: paginationMetaData?.currentPage || 1, messagesLeft: messages.length }
 
-    if (waygateNativeAlert(`WG_${screen}`)) {
-      navigation.navigate(screen, args)
-    }
+    navigateTo(screen, args)
   }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {

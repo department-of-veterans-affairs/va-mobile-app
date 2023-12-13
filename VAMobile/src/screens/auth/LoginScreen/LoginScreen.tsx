@@ -18,7 +18,6 @@ import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'ut
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useStartAuth } from 'utils/hooks/auth'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
@@ -64,11 +63,6 @@ const LoginScreen: FC = () => {
 
   const onCrisisLine = () => {
     navigateTo('VeteransCrisisLine')
-    // NEED TO REMOVE
-    // if (waygateNativeAlert('WG_VeteransCrisisLine')) {
-    //   console.log(waygateNativeAlert('WG_VeteransCrisisLine'))
-    //   navigateTo('VeteransCrisisLine')
-    // }
   }
 
   const findLocationProps: BoxProps = {
