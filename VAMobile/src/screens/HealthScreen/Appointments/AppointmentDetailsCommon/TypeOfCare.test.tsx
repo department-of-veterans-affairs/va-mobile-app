@@ -6,9 +6,10 @@ import TypeOfCare from './TypeOfCare'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 
 context('TypeOfCare', () => {
-  const initializeTestInstance = (phoneOnly = false, typeOfCare?: string): void => {
+  const initializeTestInstance = (phoneOnly = false, typeOfCare?: string, healthcareService?: string): void => {
     let props = {
       ...defaultAppointmentAttributes,
+      healthcareService: healthcareService,
       phoneOnly: phoneOnly,
       typeOfCare: typeOfCare,
     }
@@ -16,17 +17,17 @@ context('TypeOfCare', () => {
     render(<TypeOfCare attributes={props} />)
   }
 
-  it('When not a phone appointment it should render correctly', () => {
-    initializeTestInstance()
-    expect(screen.queryByRole('header', { name: 'Type of care not noted' })).toBeFalsy()
+  it('When a appointment with no type of care noted it should render correctly', () => {
+    initializeTestInstance(true, undefined, 'phone consult')
+    expect(screen.getByRole('header', { name: 'phone consult' })).toBeTruthy()
   })
 
-  it('When a phone appointment with no type of care noted it should render correctly', () => {
+  it('When a appointment with no type of care or healthcare service noted it should render correctly', () => {
     initializeTestInstance(true)
     expect(screen.getByRole('header', { name: 'Type of care not noted' })).toBeTruthy()
   })
 
-  it('When a phone appointment with a type of care noted it should render correctly', () => {
+  it('When a appointment with a type of care noted it should render correctly', () => {
     initializeTestInstance(true, 'phone consultation')
     expect(screen.getByRole('header', { name: 'phone consultation' })).toBeTruthy()
   })
