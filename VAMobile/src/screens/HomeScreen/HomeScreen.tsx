@@ -81,7 +81,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       <Box flex={1} justifyContent="flex-start">
         <EncourageUpdateAlert />
         <Nametag />
-        {upcomingAppointmentsCount && (
+        {Number(upcomingAppointmentsCount) > 0 && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
             <LargeNavButton
               title={`${t('appointments')}`}
