@@ -12,9 +12,9 @@ import { ScreenIDTypesConstants } from 'store/api/types'
 import { UserContactInformation } from 'api/types/ContactInformation'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { registerReviewEvent } from 'utils/inAppReviews'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 const getTextForPhoneData = (contactInformation: UserContactInformation | undefined, formattedPhoneType: FormattedPhoneType, phoneKey: PhoneKey, t: TFunction): Array<TextLine> => {
@@ -73,7 +73,12 @@ type ContactInformationScreenProps = StackScreenProps<HomeStackParamList, 'Conta
 const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { data: contactInformation, isLoading: loadingContactInformation, isError: contactInformationError, refetch: refetchContactInformation } = useContactInformation()
+  const {
+    data: contactInformation,
+    isLoading: loadingContactInformation,
+    isError: contactInformationError,
+    refetch: refetchContactInformation,
+  } = useContactInformation({ enabled: screenContentAllowed('WG_ContactInformation') })
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
 
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
