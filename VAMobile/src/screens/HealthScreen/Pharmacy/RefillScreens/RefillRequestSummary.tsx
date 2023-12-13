@@ -5,8 +5,8 @@ import { AlertBox, AlertBoxProps, Box, BoxProps, LoadingComponent, TextArea, Tex
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/types'
 import { PrescriptionState, requestRefills } from 'store/slices'
+import { PrescriptionsList } from 'store/api/types'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
@@ -36,7 +36,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const onNavToHistory = () => {
     dispatch(dispatchSetPrescriptionsNeedLoad())
     dispatch(dispatchClearLoadingRequestRefills())
-    navigation.navigate('PrescriptionHistory', {})
+    navigation.navigate('PrescriptionHistory')
   }
 
   useEffect(() => {
@@ -189,7 +189,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
           onPress={() => {
             dispatch(dispatchSetPrescriptionsNeedLoad())
             dispatch(dispatchClearLoadingRequestRefills())
-            navigation.navigate('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })
+            navigation.navigate('PrescriptionHistory')
           }}
           label={t('prescriptions.refillRequestSummary.pendingRefills')}
           buttonType="buttonSecondary"
