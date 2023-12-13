@@ -35,9 +35,9 @@ jobs:
 
           echo $approvals
 
-          if [[ $(jq '.[] | length > 1' <<< "$approvals") ]]
+          if [[ $(jq '.[] | length' <<< "$approvals") -gt 1 ]]
             then
-              if [[ $(jq '.[] | select(. | IN("rbontrager", "DJUltraTom", "TKDickson")) | length > 0' <<< "$approvals") ]]
+              if [[ $(jq '.[] | select(. | IN("rbontrager", "DJUltraTom", "TKDickson")) | length' <<< "$approvals") -gt 0 ]]
                 then
                 echo 'This PR has QA approval to merge'
               else 
