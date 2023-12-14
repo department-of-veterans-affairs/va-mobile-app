@@ -76,7 +76,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
       dispatch(getMessage(messageID, screenID))
       dispatch(getThread(messageID, screenID))
     }
-  }, [loadingInbox, messageID, smNotInDowntime, dispatch])
+  }, [loadingInbox, messageID, smNotInDowntime, dispatch, isScreenContentAllowed])
 
   useEffect(() => {
     if (isUndo || moveMessageFailed) {
@@ -89,7 +89,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
     if (isScreenContentAllowed && !folders.length) {
       dispatch(listFolders(screenID))
     }
-  }, [dispatch, folders])
+  }, [dispatch, folders, isScreenContentAllowed])
 
   const getFolders = (): PickerItem[] => {
     const filteredFolder = _.filter(folders, (folder) => {

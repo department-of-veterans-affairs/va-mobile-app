@@ -84,7 +84,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
       // fetch inbox metadata to display unread messages count tag
       dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
     }
-  }, [dispatch, smNotInDowntime])
+  }, [dispatch, smNotInDowntime, isScreenContentAllowed])
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
