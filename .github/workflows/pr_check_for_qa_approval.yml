@@ -41,18 +41,12 @@ jobs:
 
           echo "Approvers: $approvals"
           
+          echo $branch_protections
           required_approval_count=$(jq -c '.required_pull_request_reviews.required_approving_review_count' <<< "$branch_protections")
           qa_team_url=$(jq -c '.required_pull_request_reviews.dismissal_restrictions.teams | .[] | select(.name == "flagship-mobile-qa") | .url + "/members"' <<< "$branch_protections")
 
-          qa_team_members=(curl -L \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          $qa_team_url |
-          jq -c '[.[] .login]')
-
           echo "required approval count: $required_approval_count"
-          echo "QA team members: $qa_team_members"
+          echo "team url: $qa_team_url"
 
           if [[ $(jq '. | length' <<< "$approvals") -gt $(jq -c '.required_pull_request_reviews.required_approving_review_count -1' <<< "$branch_protections") ]]
             then
