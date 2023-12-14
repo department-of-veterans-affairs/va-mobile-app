@@ -107,6 +107,7 @@ export type PrescriptionsGetData = {
 
 export type PrescriptionsGetMeta = {
   pagination: PrescriptionsPaginationData
+  prescriptionStatusCount: PrescriptionStatusCountData
 }
 
 export type PrescriptionsPaginationData = {
@@ -114,6 +115,16 @@ export type PrescriptionsPaginationData = {
   perPage: number
   totalPages: number
   totalEntries: number
+}
+
+export type PrescriptionStatusCountData = {
+  active: number
+  discontinued: number
+  expired: number
+  historical: number
+  pending: number
+  submitted: number
+  total: number
 }
 
 export type PrescriptionsPaginationLinks = {
