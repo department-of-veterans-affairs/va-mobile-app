@@ -16,6 +16,7 @@ export const linking: LinkingOptions<any> = {
         screens: {
           HealthTab: {
             screens: {
+              PrescriptionHistory: 'prescriptions',
               UpcomingAppointmentDetails: 'appointments/:vetextID',
               ViewMessageScreen: 'messages/:messageID',
             },
@@ -57,6 +58,24 @@ export const linking: LinkingOptions<any> = {
                   state: {
                     // The ID from the notification payload is sent encoded, so it needs to be decoded
                     routes: [{ name: 'Health' }, { name: 'Appointments' }, { name: 'UpcomingAppointmentDetails', params: { vetextID: decodeURIComponent(pathParts[1]) } }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
+    } else if (pathParts[0] === 'prescriptions') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'HealthTab',
+                  state: {
+                    routes: [{ name: 'Health' }, { name: 'PrescriptionHistory' }],
                   },
                 },
               ],
