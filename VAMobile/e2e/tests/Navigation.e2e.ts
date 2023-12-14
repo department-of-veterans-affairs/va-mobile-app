@@ -1,7 +1,6 @@
 import { expect, device, by, element, waitFor } from 'detox'
 import { loginToDemoMode, checkImages, resetInAppReview} from './utils'
 import { setTimeout } from "timers/promises"
-import { AnySrvRecord } from 'dns'
 
 const { exec } = require('child_process')
 var appTabs = ['Home', 'Benefits', 'Health', 'Payments']
@@ -74,6 +73,7 @@ var featureID = {
 }
 
 var scrollID
+var textResized
 
 export const NavigationE2eConstants = {
 	DARK_MODE_OPTIONS: device.getPlatform() === 'ios' ? 'xcrun simctl ui booted appearance dark' : 'adb shell "cmd uimode night yes"',
@@ -86,18 +86,13 @@ export const NavigationE2eConstants = {
 
 const accessibilityOption = async (key, navigationDicValue, accessibilityFeatureType: string | null) => {
 	var navigationArray = navigationDicValue
-	await device.launchApp({newInstance: true})
 	if (accessibilityFeatureType === 'landscape') {
-		await loginToDemoMode()
-		await navigateToPage(key, navigationDicValue)
 		await device.setOrientation('landscape')
 		await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
 		var feature = await device.takeScreenshot(navigationDicValue[1])
 		checkImages(feature)
 		await device.setOrientation('portrait')
 	} else if(accessibilityFeatureType == 'darkMode') {
-		await loginToDemoMode()
-		await navigateToPage(key, navigationDicValue)
 		exec(NavigationE2eConstants.DARK_MODE_OPTIONS, (error) => {
 			if (error) {
 				console.error(`exec error: ${error}`);
@@ -116,22 +111,26 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
 			}
 		})
 		if(device.getPlatform() === 'android') {
+			textResized = true
 			exec(NavigationE2eConstants.DISPLAY_RESIZING_LARGEST, (error) => {
 				if (error) {
 					console.error(`exec error: ${error}`);
 					return;
 				}
 			})
+			await setTimeout(2000)
+			await loginToDemoMode()
+			await navigateToPage(key, navigationDicValue)
 		}
-		await setTimeout(2000)
-		await loginToDemoMode()
-		await navigateToPage(key, navigationDicValue)
 
 		await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
 		var feature = await device.takeScreenshot(navigationDicValue[1])
 		checkImages(feature)
+
+		if(device.getPlatform() === 'ios') {
+			await element(by.id(key)).atIndex(0).tap()
+		}
 	} else {
-		await loginToDemoMode()
 		await navigateToPage(key, navigationDicValue)
 		await expect(element(by.text(navigationArray[1])).atIndex(0)).toExist()
 		for (let i = 0; i < appTabs.length; i++) {
@@ -189,6 +188,10 @@ const navigateToPage = async (key, navigationDicValue) => {
 	}
 }
 
+beforeAll(async () => {
+	await loginToDemoMode()
+})
+
 afterEach(async () => {
 	exec(NavigationE2eConstants.LIGHT_MODE_OPTIONS, (error) => {
 		if (error) {
@@ -196,6 +199,7 @@ afterEach(async () => {
 			return;
 		}
 	})
+
 	exec(NavigationE2eConstants.FONT_RESIZING_RESET, (error) => {
 		if (error) {
 			console.error(`exec error: ${error}`);
@@ -209,13 +213,16 @@ afterEach(async () => {
 				return;
 			}
 		})
+		if(textResized) {
+			textResized = false
+			await loginToDemoMode()
+		}
 	}
 })
 
 describe('Navigation', () => {
 	for(const [key, value] of Object.entries(navigationDic)) {
 		for (let j = 0; j < value.length; j++) {
-			var dictKey = key
 			var nameArray = value[j]
 			if (nameArray[1] === 'To confirm or update your sign-in email, go to the website where you manage your account information.') {
 				it('verify navigation for: Manage Account', async () => {
