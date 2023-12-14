@@ -40,7 +40,7 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label,
         mt={theme.dimensions.buttonPadding}
         height={theme.dimensions.headerHeight} // Uniform height ensures proper screen reader order in header
         alignItems={'center'}>
-        <VAIcon mt={1} name={'ChevronLeft'} fill={theme.colors.icon.link} width={15} height={13} />
+        <VAIcon mt={1} name={'ChevronLeft'} fill={theme.colors.icon.link} width={15} height={13} maxWidth={25} />
         <TextView variant="DescriptiveBackButton" color="descriptiveBackButton" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {label}
         </TextView>
