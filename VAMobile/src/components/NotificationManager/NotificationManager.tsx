@@ -6,6 +6,7 @@ import { RootState } from 'store'
 import { dispatchSetInitialUrl, dispatchSetTappedForegroundNotification, registerDevice } from 'store/slices/notificationSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch } from 'utils/hooks'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
@@ -16,13 +17,14 @@ const foregroundNotifications: Array<string> = []
  */
 const NotificationManager: FC = ({ children }) => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { data: personalInformation } = usePersonalInformation()
   const dispatch = useAppDispatch()
   const [eventsRegistered, setEventsRegistered] = useState(false)
   useEffect(() => {
     const register = () => {
       Notifications.events().registerRemoteNotificationsRegistered((event) => {
         console.debug('Device Token Received', event.deviceToken)
-        dispatch(registerDevice(event.deviceToken))
+        dispatch(registerDevice(event.deviceToken, undefined, personalInformation?.id))
       })
       Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
         //TODO: Log this error in crashlytics?
