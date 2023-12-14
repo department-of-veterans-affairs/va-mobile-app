@@ -37,7 +37,7 @@ const NotificationManager: FC = ({ children }) => {
     if (loggedIn) {
       register()
     }
-  }, [dispatch, loggedIn])
+  }, [dispatch, loggedIn, personalInformation?.id])
 
   const registerNotificationEvents = () => {
     // Register callbacks for notifications that happen when the app is in the foreground
