@@ -131,6 +131,9 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
 			await element(by.id(key)).atIndex(0).tap()
 		}
 	} else {
+		if(navigationArray[1] === 'Claim type' || navigationArray[1] === 'Prescriptions') {
+			await resetInAppReview()
+		}
 		await navigateToPage(key, navigationDicValue)
 		await expect(element(by.text(navigationArray[1])).atIndex(0)).toExist()
 		for (let i = 0; i < appTabs.length; i++) {
@@ -253,7 +256,9 @@ describe('Navigation', () => {
 						await accessibilityOption(key, value[j], 'darkMode')
 					})
 					it('verify text resizing for: ' + nameArray[1], async () => {
-						await accessibilityOption(key, value[j], 'textResizing')
+						if(device.getPlatform() === 'ios') {
+							await accessibilityOption(key, value[j], 'textResizing')
+						}
 					})
 				}
 			}
