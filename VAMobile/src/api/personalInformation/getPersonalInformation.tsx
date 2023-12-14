@@ -21,6 +21,7 @@ export const getPersonalInformation = async (): Promise<PersonalInformationData 
         .join(' ')
         .trim(),
       birthDate: birthDay && formatDateMMMMDDYYYY(birthDay),
+      id: response.data.id,
     }
   }
 }
