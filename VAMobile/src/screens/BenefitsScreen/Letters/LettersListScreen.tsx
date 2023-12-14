@@ -6,14 +6,16 @@ import React, { FC, useEffect } from 'react'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { LettersState, getLetters } from 'store/slices/lettersSlice'
 import { NAMESPACE } from 'constants/namespaces'
-import { OnPressHandler, useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 import NoLettersScreen from './NoLettersScreen'
@@ -25,35 +27,35 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const { letters, loading } = useSelector<RootState, LettersState>((state) => state.letters)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
+  const navigateTo = useRouteNavigation()
 
-  const letterPressFn = (letterType: LetterTypes, letterName: string): OnPressHandler | undefined => {
+  const letterPressFn = (letterType: LetterTypes, letterName: string): void | undefined => {
     switch (letterType) {
       case LetterTypeConstants.benefitSummary:
-        return navigateTo('BenefitSummaryServiceVerificationLetter')
+        return navigateTo('BenefitSummaryServiceVerificationLetter')()
       case LetterTypeConstants.serviceVerification:
         return navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.serviceVerificationLetter.description'),
           letterType,
           screenID: ScreenIDTypesConstants.SERVICE_VERIFICATION_LETTER_SCREEN_ID,
-        })
+        })()
       case LetterTypeConstants.commissary:
         return navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.commissary.description'),
           letterType,
           screenID: ScreenIDTypesConstants.COMMISSARY_LETTER_SCREEN_ID,
-        })
+        })()
       case LetterTypeConstants.civilService:
         return navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.civilService.description'),
           letterType,
           screenID: ScreenIDTypesConstants.CIVIL_SERVICE_LETTER_SCREEN_ID,
-        })
+        })()
       case LetterTypeConstants.benefitVerification:
         return navigateTo('GenericLetter', {
           header: letterName,
@@ -61,21 +63,21 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
           letterType,
           screenID: ScreenIDTypesConstants.BENEFIT_VERIFICATION_LETTER_SCREEN_ID,
           descriptionA11yLabel: a11yLabelVA(t('letters.benefitVerification.description')),
-        })
+        })()
       case LetterTypeConstants.proofOfService:
         return navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.proofOfService.description'),
           letterType,
           screenID: ScreenIDTypesConstants.PROOF_OF_SERVICE_LETTER_SCREEN_ID,
-        })
+        })()
       case LetterTypeConstants.medicarePartd:
         return navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.proofOfCrediblePrescription.description'),
           letterType,
           screenID: ScreenIDTypesConstants.PROOF_OF_CREDIBLE_PRESCRIPTION_LETTER_SCREEN_ID,
-        })
+        })()
       case LetterTypeConstants.minimumEssentialCoverage:
         return navigateTo('GenericLetter', {
           header: letterName,
@@ -83,7 +85,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
           letterType,
           screenID: ScreenIDTypesConstants.PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN_ID,
           descriptionA11yLabel: t('letters.minimumEssentialCoverageA11yLabel.description'),
-        })
+        })()
       default:
         return undefined
     }
@@ -96,7 +98,10 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
     const letterButton: SimpleListItemObj = {
       text: t('text.raw', { text: letterName }),
       a11yHintText: t('letters.list.a11y', { letter: letterName }),
-      onPress: letterPressFn(letter.letterType, letterName),
+      onPress: () => {
+        logAnalyticsEvent(Events.vama_click(letterName, t('letters.overview.viewLetters')))
+        letterPressFn(letter.letterType, letterName)
+      },
     }
 
     return letterButton

@@ -4,7 +4,9 @@ import React, { FC } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ButtonTypesConstants, FeatureLandingTemplate, TextView, VAButton } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
@@ -18,14 +20,20 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-
   const onViewPressed = navigateTo('LettersList')
-  const onAddressPress = navigateTo('EditAddress', {
-    displayTitle: t('contactInformation.mailingAddress'),
-    addressType: profileAddressOptions.MAILING_ADDRESS,
-  })
 
-  const addressData: Array<addressDataField> = [{ addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onAddressPress }]
+  const addressData: Array<addressDataField> = [
+    {
+      addressType: profileAddressOptions.MAILING_ADDRESS,
+      onPress: () => {
+        logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('letters.overview.title')))
+        navigateTo('EditAddress', {
+          displayTitle: t('contactInformation.mailingAddress'),
+          addressType: profileAddressOptions.MAILING_ADDRESS,
+        })()
+      },
+    },
+  ]
 
   return (
     <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('letters.overview.title')} {...testIdProps('Letters-page')}>

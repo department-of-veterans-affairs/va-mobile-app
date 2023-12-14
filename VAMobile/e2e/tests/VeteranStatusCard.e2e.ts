@@ -82,7 +82,7 @@ describe('Veteran Status Card', () => {
 
   tapPhoneAndTTYLinks()
 
-  it('should verify the period of service matches the period of service in the app', async () => {
+  it('verify the period of service matches app', async () => {
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT))).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_1_TEXT))).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_MILITARY_BRANCH_TEXT)).atIndex(1)).toExist()
@@ -96,7 +96,7 @@ describe('Veteran Status Card', () => {
     await element(by.text('Profile')).tap()
   })
 
-  it('should verify the date of birth matches the dob in the app', async () => {
+  it('verify the date of birth matches the dob in the app', async () => {
     await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DATE_OF_BIRTH_TEXT))).toExist()
     await element(by.text('Close')).tap()
@@ -105,7 +105,7 @@ describe('Veteran Status Card', () => {
     await element(by.text('Profile')).tap()
   })
 
-  it('should verify the disability rating matches the disability rating in the app', async () => {
+  it('verify the disability rating matches the app', async () => {
     await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DISABILITY_RATING_TEXT))).toExist()
     await element(by.text('Close')).tap()
@@ -114,7 +114,7 @@ describe('Veteran Status Card', () => {
     await expect(element(by.text('100%')).atIndex(1)).toExist()
   })
 
-  it('should verify the name and branch matches the home/profile page', async () => {
+  it('verify the name and branch matches the home/profile page', async () => {
     await element(by.text('Home')).tap()
     await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_NAME_TEXT)).atIndex(1)).toExist()

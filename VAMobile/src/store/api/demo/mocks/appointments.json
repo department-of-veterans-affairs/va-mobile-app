@@ -6,7 +6,7 @@
           "type": "appointment",
           "id": "33",
           "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
+            "appointmentType": "VA",
             "status": "BOOKED",
             "phoneOnly": true,
             "statusDetail": null,
@@ -44,10 +44,91 @@
           }
         },
         {
+          "id": "8a48e8db6d70a38a016d72b3542400032",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": null,
+            "location": null,
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 2 days}}",
+            "startDateUtc": "{{now - 2 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": null,
+            "typeOfCare": null,
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "8a48e8db6d70a38a016d72b3542400031",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": null,
+            "location":
+            {
+              "id": "442",
+              "name": "Cheyenne VA Medical Center",
+              "address":
+              {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone":
+              {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 3 days}}",
+            "startDateUtc": "{{now - 3 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": null,
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
+          }
+        },
+        {
           "type": "appointment",
           "id": "34",
           "attributes": {
-            "appointmentType": "COMMUNITY_CARE",
+            "appointmentType": "VA",
             "status": "CANCELLED",
             "phoneOnly": true,
             "statusDetail": null,
@@ -775,6 +856,151 @@
           }
         },
         {
+          "id": "8a48e8db6d70a38a016d72b35424000321",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": null,
+            "location": null,
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 2 days}}",
+            "startDateUtc": "{{now + 2 days utc}}",
+            "status": "CANCELLED",
+            "statusDetail": "CANCELLED BY CLINIC",
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes": null,
+            "typeOfCare": null,
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "8a48e8db6d70a38a016d72b35424000311",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": "Physical",
+            "location":
+            {
+              "id": "442",
+              "name": "Cheyenne VA Medical Center",
+              "address":
+              {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone":
+              {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 3 days}}",
+            "startDateUtc": "{{now + 3 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": null,
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
+          }
+        },
+        {
+          "id": "8a48e8db6d70a38a016d72b354240003",
+          "type": "appointment",
+          "attributes":
+          {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": "John Smith",
+            "healthcareService": "Physical",
+            "location":
+            {
+              "id": "442",
+              "name": "Cheyenne VA Medical Center",
+              "address":
+              {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone":
+              {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 4 days}}",
+            "startDateUtc": "{{now + 4 days utc}}",
+            "status": "SUBMITTED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": true,
+            "proposedTimes":[
+              {
+                "date": "{{now + 4 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 5 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 6 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
+          }
+        },
+        {
           "id": "8a48e2fe7956f4d30179cddf3f3d00ab",
           "type": "appointment",
           "attributes": {
@@ -1073,7 +1299,7 @@
           "type": "appointment",
           "attributes":
           {
-            "appointmentType": "COMMUNITY_CARE",
+            "appointmentType": "VA",
             "cancelId": "13",
             "comment": null,
             "healthcareProvider": null,
@@ -1108,7 +1334,7 @@
             "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
-            "reason": "routine-follow-up",
+            "reason": null,
             "isCovidVaccine": null,
             "isPending": false,
             "proposedTimes":[
@@ -1133,7 +1359,7 @@
           "type": "appointment",
           "attributes":
           {
-            "appointmentType": "COMMUNITY_CARE",
+            "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
             "healthcareProvider": "John Smith",
@@ -1193,7 +1419,7 @@
           "type": "appointment",
           "attributes":
           {
-            "appointmentType": "COMMUNITY_CARE",
+            "appointmentType": "VA",
             "cancelId": "13",
             "comment": null,
             "healthcareProvider": "John Smith",
@@ -1249,11 +1475,11 @@
           }
         },
         {
-          "id": "7a48912a6d02b0fc016d20b4ccb9001a",
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a55",
           "type": "appointment",
           "attributes":
           {
-            "appointmentType": "COMMUNITY_CARE",
+            "appointmentType": "VA",
             "cancelId": "13",
             "comment": null,
             "healthcareProvider": "John Smith",

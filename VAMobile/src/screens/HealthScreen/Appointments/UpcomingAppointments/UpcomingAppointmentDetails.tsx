@@ -12,6 +12,7 @@ import {
   PreferredAppointmentType,
   PreferredDateAndTime,
   ProviderName,
+  TypeOfCare,
 } from '../AppointmentDetailsCommon'
 import {
   AppointmentAttributes,
@@ -28,6 +29,7 @@ import {
   Box,
   ButtonTypesConstants,
   ClickForActionLink,
+  ClickToCallPhoneNumber,
   ErrorComponent,
   FeatureLandingTemplate,
   LinkButtonProps,
@@ -53,8 +55,11 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useError, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
+import getEnv from 'utils/env'
+
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
 
+const { LINK_URL_VA_SCHEDULING } = getEnv()
 // export const JOIN_SESSION_WINDOW_MINUTES = 30
 
 const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route, navigation }) => {
@@ -74,12 +79,14 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     ? upcomingAppointmentsById?.[appointmentID]
     : Object.values(upcomingAppointmentsById || []).find((appointmentData) => appointmentData.attributes.vetextId === vetextID)
 
+  const appointmentNotFound = vetextID && !loading && !appointment
+
   if (!appointmentID) {
     appointmentID = appointment?.id
   }
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, startDateUtc, minutesDuration, comment, status, isCovidVaccine } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, location, startDateUtc, minutesDuration, comment, status, isCovidVaccine, phoneOnly } = attributes || ({} as AppointmentAttributes)
   const { name, code, url, lat, long, address } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
@@ -268,7 +275,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const renderAddToCalendarLink = (): ReactElement => {
     if (!isAppointmentCanceled && !pendingAppointment) {
       return (
-        <Box my={theme.dimensions.standardMarginBetween}>
+        <Box mt={phoneOnly ? undefined : theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
         </Box>
       )
@@ -286,6 +293,24 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       <Box mt={theme.dimensions.condensedMarginBetween}>
         {!isAppointmentCanceled ? (
           <AppointmentCancellationInfo appointment={appointment} goBack={goBack} />
+        ) : phoneOnly ? (
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            <TextArea>
+              <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
+                {t('appointments.reschedule.title')}
+              </TextView>
+              <TextView variant="MobileBody" paragraphSpacing={true}>
+                {t('appointments.reschedule.body')}
+              </TextView>
+              {location.phone ? <ClickToCallPhoneNumber phone={location.phone.areaCode + ' ' + location.phone.number} /> : undefined}
+              <ClickForActionLink
+                displayedText={t('appointments.vaSchedule')}
+                a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
+                numberOrUrlLink={LINK_URL_VA_SCHEDULING}
+                linkType={LinkTypeOptionsConstants.externalLink}
+              />
+            </TextArea>
+          </Box>
         ) : (
           <TextArea>
             <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('pastAppointmentDetails.toScheduleAnotherAppointment'))}>
@@ -297,7 +322,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     )
   }
 
-  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || appointmentNotFound) {
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
@@ -324,7 +349,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           {renderVideoAppointmentInstructions()}
 
           {renderAtHomeVideoConnectAppointmentData()}
-
+          <TypeOfCare attributes={attributes} />
           <ProviderName attributes={attributes} />
 
           <AppointmentAddressAndNumber attributes={attributes} />

@@ -61,7 +61,7 @@ describe('Onboarding Screen', () => {
     await expect(element(by.text('Welcome, Kimberly'))).toExist()
   })
 
-  it('should tap next and done and verify the home page is displayed', async () => {
+  it('verify the home page is displayed after tapping done', async () => {
     await element(by.text('Next')).tap()
     await element(by.text('Next')).tap()
     await element(by.text('Next')).tap()
@@ -70,7 +70,7 @@ describe('Onboarding Screen', () => {
     await expect(element(by.text('Find a VA location'))).toExist()
   })
 
-  it('should reinstall the app, tap skip for the onboarding steps, and verify the home page is displayed', async () => {
+  it('verify the home page is displayed after skipping', async () => {
     await device.uninstallApp()
     await device.installApp()
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })

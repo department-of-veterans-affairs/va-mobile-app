@@ -1,10 +1,7 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-import { ReactTestInstance } from 'react-test-renderer'
+import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render, RenderAPI, screen, waitFor } from 'testUtils'
-import { ErrorComponent, RadioGroup, VAButton } from 'components'
+import { context, mockNavProps, render, waitFor } from 'testUtils'
 import GenderIdentityScreen from './GenderIdentityScreen'
 import { GenderIdentityOptions } from 'api/types/DemographicsData'
 
@@ -30,8 +27,6 @@ jest.mock('../../../../../api/demographics/getGenderIdentityOptions', () => {
 })
 
 context('GenderIdentityScreen', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
   let props: any
 
   afterEach(() => {
@@ -48,26 +43,27 @@ context('GenderIdentityScreen', () => {
       },
       {})
 
-    component = render(<GenderIdentityScreen {...props} />)
-    testInstance = component.UNSAFE_root
+    render(<GenderIdentityScreen {...props} />)
   }
 
-  it('initializes correctly', async () => {
+  it('initializes correctly', () => {
     initializeTestInstance()
-    expect(component).toBeTruthy()
+    expect(screen.getByText('Gender identity')).toBeTruthy()
+    expect(screen.getByText('You can change your selection at any time. If you decide you no longer want to share your gender identity, select Prefer not to answer.')).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Man' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Non-binary' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Transgender man' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Transgender woman' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Woman' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'Prefer not to answer' })).toBeTruthy()
+    expect(screen.getByRole('radio', { name: 'A gender not listed here' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'What to know before you decide to share your gender identity' })).toBeTruthy()
   })
 
-  it('sets up radio group correctly', async () => {
+  it('shows an error message on save when a gender identity type has not been selected', () => {
     initializeTestInstance()
 
-    const radioGroup = testInstance.findAllByType(RadioGroup)[0]
-    expect(radioGroup.props.value).toEqual(undefined)
-  })
-
-  it('shows an error message on save when a gender identity type has not been selected', async () => {
-    initializeTestInstance()
-
-    testInstance.findAllByType(VAButton)[0].props.onPress()
+    fireEvent.press(screen.getByRole('button', { name: 'Save' }))
     expect(screen.queryByText('Select an option')).toBeTruthy()
   })
 
@@ -83,8 +79,8 @@ context('GenderIdentityScreen', () => {
     })
 
     initializeTestInstance()
-    await waitFor(async () => {
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    await waitFor(() => {
+      expect(screen.getByRole('header', { name: "The VA mobile app isn't working right now" })).toBeTruthy()
     })
   })
 })

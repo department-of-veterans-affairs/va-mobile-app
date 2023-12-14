@@ -4,12 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { AppThunk } from 'store'
 import { GetPushPrefsResponse, PUSH_APP_NAME, PushOsName, PushPreference, ScreenIDTypes, ScreenIDTypesConstants } from '../api'
+import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getDeviceName } from 'utils/deviceData'
 import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { notificationsEnabled } from 'utils/notifications'
 
 export const DEVICE_TOKEN_KEY = '@store_device_token'
@@ -49,6 +50,7 @@ export const registerDevice =
   (deviceToken?: string, refreshNotificationScreen?: boolean): AppThunk =>
   async (dispatch) => {
     dispatch(dispatchStartRegisterDevice())
+    setAnalyticsUserProperty(UserAnalytics.vama_uses_notifications(deviceToken ? true : false))
     try {
       if (deviceToken) {
         const savedToken = await AsyncStorage.getItem(DEVICE_TOKEN_KEY)

@@ -32,9 +32,6 @@ updates:
         patterns:
           - '*jest*'
           - '@testing-library*'
-      wdio:
-        patterns:
-          - '*wdio*'
     ignore:
       - dependency-name: '*'
         update-types: ['version-update:semver-major']

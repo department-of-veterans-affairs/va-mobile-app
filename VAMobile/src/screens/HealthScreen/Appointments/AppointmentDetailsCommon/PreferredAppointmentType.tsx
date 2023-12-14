@@ -19,6 +19,10 @@ const PreferredAppointmentType: FC<PreferredAppointmentTypeProps> = ({ attribute
 
   const { appointmentType, phoneOnly } = attributes || ({} as AppointmentAttributes)
 
+  if (phoneOnly) {
+    return <></>
+  }
+
   if (isAppointmentPending) {
     let preferredTypeofAppointment = ''
     // preferred type of appointment
@@ -32,7 +36,7 @@ const PreferredAppointmentType: FC<PreferredAppointmentTypeProps> = ({ attribute
       case AppointmentTypeConstants.COMMUNITY_CARE:
       case AppointmentTypeConstants.VA:
       default:
-        preferredTypeofAppointment = phoneOnly ? t('appointments.pending.phoneCall') : t('appointments.pending.officeVisit')
+        preferredTypeofAppointment = t('appointments.pending.officeVisit')
         break
     }
     return (
