@@ -28,8 +28,9 @@ export const getPersonalInformation = async (): Promise<PersonalInformationData 
 /**
  * Returns a query for user personal information
  */
-export const usePersonalInformation = () => {
+export const usePersonalInformation = (options?: { enabled?: boolean }) => {
   return useQuery({
+    ...options,
     queryKey: personalInformationKeys.personalInformation,
     queryFn: () => getPersonalInformation(),
     meta: {

@@ -13,10 +13,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { OnPressHandler, useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { testIdProps } from 'utils/accessibility'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = StackScreenProps<BenefitsStackParamList, 'LettersList'>
@@ -110,7 +110,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   })
 
   useEffect(() => {
-    if (userAuthorizedServices?.lettersAndDocuments && lettersNotInDowntime) {
+    if (screenContentAllowed('WG_LettersList') && userAuthorizedServices?.lettersAndDocuments && lettersNotInDowntime) {
       dispatch(getLetters(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
     }
   }, [dispatch, userAuthorizedServices?.lettersAndDocuments, lettersNotInDowntime])

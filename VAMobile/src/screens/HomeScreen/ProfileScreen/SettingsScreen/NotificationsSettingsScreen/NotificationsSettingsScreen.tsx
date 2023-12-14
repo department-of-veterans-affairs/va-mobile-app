@@ -10,6 +10,7 @@ import { NotificationsState, loadPushPreferences, registerDevice, setPushPref } 
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
 
@@ -43,7 +44,9 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
   })
 
   useEffect(() => {
-    dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
+    if (screenContentAllowed('WG_NotificationsSettings')) {
+      dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
+    }
   }, [dispatch])
 
   const preferenceList = (): ReactNode => {

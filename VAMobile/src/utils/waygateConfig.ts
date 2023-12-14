@@ -317,3 +317,11 @@ export const getWaygateToggles = (): WaygateToggleValues => {
   })
   return waygateConfig
 }
+
+export const screenContentAllowed = (waygateToggle: WaygateToggleType) => {
+  const waygate = waygateEnabled(waygateToggle)
+  if (!waygate.enabled && waygate.type === 'DenyContent' && (waygate.errorMsgTitle || waygate.errorMsgBody)) {
+    return false
+  }
+  return true
+}

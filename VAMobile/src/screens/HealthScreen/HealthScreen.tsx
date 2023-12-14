@@ -13,10 +13,10 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import Appointments from './Appointments'
 import CernerAlert from './CernerAlert'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
@@ -39,10 +39,11 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
+  const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
 
   const onAppointments = () => {
     if (waygateNativeAlert('WG_Appointments')) {
@@ -79,11 +80,11 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
-    if (smNotInDowntime) {
+    if (isScreenContentAllowed && smNotInDowntime) {
       // fetch inbox metadata to display unread messages count tag
       dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
     }
-  }, [dispatch, smNotInDowntime])
+  }, [dispatch, smNotInDowntime, isScreenContentAllowed])
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">

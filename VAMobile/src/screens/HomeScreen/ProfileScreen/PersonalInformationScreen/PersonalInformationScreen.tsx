@@ -12,12 +12,12 @@ import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled } from 'utils/remoteConfig'
 import { registerReviewEvent } from 'utils/inAppReviews'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDemographics } from 'api/demographics/getDemographics'
 import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 const getPreferredName = (demographics: UserDemographics | undefined, t: TFunction): string => {
   if (demographics?.preferredName) {
@@ -42,14 +42,15 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const theme = useTheme()
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const personalInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
-  const { data: personalInfo, isLoading: loadingPersonalInfo } = usePersonalInformation()
-  const { data: demographics, isFetching: loadingDemographics, isError: getDemographicsError, refetch: refetchDemographics } = useDemographics()
+  const isScreenContentAllowed = screenContentAllowed('WG_PersonalInformation')
+  const { data: personalInfo, isLoading: loadingPersonalInfo } = usePersonalInformation({ enabled: isScreenContentAllowed })
+  const { data: demographics, isFetching: loadingDemographics, isError: getDemographicsError, refetch: refetchDemographics } = useDemographics({ enabled: isScreenContentAllowed })
   const {
     data: genderIdentityOptions,
     isLoading: loadingGenderIdentityOptions,
     isError: getGenderIdentityOptionsError,
     refetch: refetchGenderIdentityOptions,
-  } = useGenderIdentityOptions()
+  } = useGenderIdentityOptions({ enabled: isScreenContentAllowed })
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
   const [reviewEventRegistered, setReviewEventRegistered] = useState(false)

@@ -16,6 +16,7 @@ import { RootState } from 'store'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
@@ -71,7 +72,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     }
 
     // fetch upcoming and default past appointments ranges
-    if (apptsNotInDowntime) {
+    if (screenContentAllowed('WG_Appointments') && apptsNotInDowntime) {
       dispatch(prefetchAppointments(upcomingRange, pastRange, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
     }
   }, [dispatch, apptsNotInDowntime])

@@ -12,6 +12,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
@@ -32,7 +33,7 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
     isLoading: loadingUserAuthorizedServices,
     isError: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
-  } = useAuthorizedServices()
+  } = useAuthorizedServices({ enabled: screenContentAllowed('WG_ClaimsHistory') })
   const claimsAndAppealsAccess = userAuthorizedServices?.claims || userAuthorizedServices?.appeals
   const controlLabels = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
