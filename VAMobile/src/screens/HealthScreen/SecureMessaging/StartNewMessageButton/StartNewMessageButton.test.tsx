@@ -15,13 +15,13 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-context('StartNewMessageFooter', () => {
-  beforeEach(() => {
-    render(<StartNewMessageButton />)
-  })
-
+context('StartNewMessageButton', () => {
   describe('on click of the footer button', () => {
     it('should call useRouteNavigation', () => {
+      const mockNavigateToSpy = jest.fn()
+      mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
+      render(<StartNewMessageButton />)
+
       fireEvent.press(screen.getByRole('button', { name: 'Start new message' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
     })
