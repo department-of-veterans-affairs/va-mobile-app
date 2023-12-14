@@ -19,16 +19,13 @@ export const PersonalInfoConstants = {
 }
 
 const scrollToThenTap = async (text: string) => {
-  await waitFor(element(by.text(text)))
-    .toBeVisible()
-    .whileElement(by.id('PersonalInformationTestID'))
-    .scroll(500, 'down')
+  await element(by.id('PersonalInformationTestID')).atIndex(0).scrollTo('bottom')
+  await waitFor(element(by.text(text))).toBeVisible()
   await element(by.text(text)).tap()
 }
 
 const checkLocatorAndContactLinks = async () => {
   await scrollToThenTap(PersonalInfoConstants.NEAREST_CENTER_LINK_TEXT)
-  await setTimeout(5000)
   await device.takeScreenshot('PersonalInformationFindVALocations')
   await element(by.text('Done')).tap()
 
@@ -69,8 +66,8 @@ describe('Personal Info Screen', () => {
     await expect(element(by.text('Profile help'))).toExist()
 
     await element(by.text(PersonalInfoConstants.LEARN_HOW_LINK_TEXT)).tap()
-    await element(by.text('Done')).tap()
     await device.takeScreenshot('personalInfoLearnHowToWebPage')
+    await element(by.text('Done')).tap()
 
     if (device.getPlatform() === 'android') {     
       await checkLocatorAndContactLinks()
