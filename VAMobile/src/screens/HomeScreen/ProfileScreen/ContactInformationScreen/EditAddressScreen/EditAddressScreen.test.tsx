@@ -77,7 +77,6 @@ describe('EditAddressScreen', () => {
         },
       },
     )
-
     let queriesData: QueriesData | undefined
 
     if (contactInformation) {
@@ -496,7 +495,6 @@ describe('EditAddressScreen', () => {
   describe('when content is invalid for domestic address', () => {
     it('displays an AlertBox and a field error for each required field', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Save' }))
-
       expect(screen.getByText('Please check your mailing address')).toBeTruthy()
       expect(screen.getByText('Country is required')).toBeTruthy()
       expect(screen.getByText('Street address is required')).toBeTruthy()
@@ -509,7 +507,6 @@ describe('EditAddressScreen', () => {
   describe('when content is invalid for military address', () => {
     it('displays an AlertBox and a field error for each required field', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Save' }))
-
       expect(screen.getByText('Please check your mailing address')).toBeTruthy()
       expect(screen.getByText('Street address is required')).toBeTruthy()
       expect(screen.getByText('Postal code is required')).toBeTruthy()
@@ -521,7 +518,6 @@ describe('EditAddressScreen', () => {
       fireEvent.press(screen.getByTestId('countryPickerTestID'))
       fireEvent.press(screen.getByText('Algeria'))
       fireEvent.press(screen.getByRole('button', { name: 'Save' }))
-
       expect(screen.getByText('Street address is required')).toBeTruthy()
       expect(screen.getByText('City is required')).toBeTruthy()
       expect(screen.getByText('Postal code is required')).toBeTruthy()
@@ -598,7 +594,6 @@ describe('EditAddressScreen', () => {
           zipCode: '94920',
           zipCodeSuffix: '1234',
         }
-
         renderWithData(false, { mailingAddress })
 
         fireEvent.press(screen.getByRole('button', { name: 'Save' }))
@@ -643,7 +638,6 @@ describe('EditAddressScreen', () => {
           stateCode: 'AP',
           zipCode: '96278',
         }
-
         renderWithData(false, { mailingAddress })
 
         fireEvent.press(screen.getByRole('button', { name: 'Save' }))

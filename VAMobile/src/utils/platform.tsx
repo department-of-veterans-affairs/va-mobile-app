@@ -1,4 +1,4 @@
-import { Platform } from 'react-native'
+import { Platform, PlatformIOSStatic } from 'react-native'
 
 export enum PlatformType {
   ANDROID,
@@ -15,6 +15,8 @@ export const getPlatform = (): PlatformType => {
 export const isIOS = (): boolean => {
   return getPlatform() === PlatformType.IOS
 }
+
+export const isIpad = () => isIOS() && (Platform as PlatformIOSStatic).isPad
 
 export const isAndroid = (): boolean => {
   return getPlatform() === PlatformType.ANDROID

@@ -24,9 +24,9 @@ sidebar_position: 3
 ### Product
 
 - Matt Hall - Product Leadership
-- Adam Bischoff - Product
+- Adam Kasmier - Product
 - Stacy Blackwood - Product
-- Meko Hong - Product
+- Ameet Sarkar - Product
 - Kelly Lein - Product
 - Greta Opzt - Data
 
@@ -35,7 +35,6 @@ sidebar_position: 3
 - Jen Ecker - UX Leadership
 - Brea Blackwelder - Accessibility Design
 - Holly Collier - Design
-- Melissa Lefevre - Design
 - Misty Milliron-Grant - Content Strategist
 - Lauren Russell - Design
 - Liz Straghalis - Research

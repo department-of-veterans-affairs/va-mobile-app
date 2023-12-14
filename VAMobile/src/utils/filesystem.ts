@@ -1,6 +1,5 @@
 import { Params, getAccessToken, getRefreshToken } from '../store/api'
 
-import { featureEnabled } from 'utils/remoteConfig'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { refreshAccessToken } from 'store/slices/authSlice'
 import RNFetchBlob, { FetchBlobResponse, RNFetchBlobConfig } from 'rn-fetch-blob'
@@ -22,7 +21,6 @@ const fileSystemFatalErrorString = 'File System Error'
  * @returns Returns a Promise with a string that represents the filePath or undefined for a failed download
  */
 export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fileName: string, params: Params = {}, retries = 0): Promise<string | undefined> => {
-  const SISEnabled = featureEnabled('SIS')
   const filePath = DocumentDirectoryPath + fileName
 
   try {
@@ -35,7 +33,7 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
     const headers = {
       authorization: `Bearer ${getAccessToken()}`,
       'X-Key-Inflection': 'camel',
-      ...(SISEnabled ? { 'Authentication-Method': 'SIS' } : {}),
+      'Authentication-Method': 'SIS',
     }
 
     // https://github.com/joltup/rn-fetch-blob/wiki/Fetch-API#bodystring--arrayobject-optional
@@ -44,14 +42,12 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
     const statusCode = results.respInfo.status
     let accessTokenExpired = false
 
-    // For SIS, a 403 alone doesn't indicated an expired access token. We need to check for the error message as well.
-    if (SISEnabled && statusCode === 403) {
+    // a 403 alone doesn't indicated an expired access token. We need to check for the error message as well.
+    if (statusCode === 403) {
       const responseBody = await results.json()
       if (responseBody?.errors === 'Access token has expired') {
         accessTokenExpired = true
       }
-    } else if (!SISEnabled && statusCode === 401) {
-      accessTokenExpired = true
     }
 
     // Unauthorized, access-token likely expired

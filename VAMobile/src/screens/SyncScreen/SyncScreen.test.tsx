@@ -1,8 +1,7 @@
-import 'react-native'
 import React from 'react'
+import { screen } from '@testing-library/react-native'
 
 import { context, render, waitFor } from 'testUtils'
-import { screen } from '@testing-library/react-native'
 import { initialAuthState, initialDisabilityRatingState, initialMilitaryServiceState } from 'store/slices'
 import { SyncScreen } from './index'
 import { completeSync, getDisabilityRating, getServiceHistory } from 'store/slices'
@@ -69,7 +68,6 @@ context('SyncScreen', () => {
       disabilityRating: { ...initialDisabilityRatingState, preloadComplete: !disabilityRatingLoading },
       militaryService: { ...initialMilitaryServiceState, preloadComplete: !militaryLoading },
     }
-
     render(<SyncScreen />, { preloadedState: store })
   }
 
@@ -82,32 +80,32 @@ context('SyncScreen', () => {
   })
 
   describe('loading text', () => {
-    it('should show the signing in text', async () => {
+    it('should show the signing in text', () => {
       initializeTestInstance()
       expect(screen.getByText('Signing you in...')).toBeTruthy()
     })
   })
 
   describe('sign out', () => {
-    it('should show sign out text', async () => {
+    it('should show sign out text', () => {
       initializeTestInstance(false, false, true, true)
       expect(screen.getByText('Signing you out...')).toBeTruthy()
     })
 
-    it('should show sign out text even if data is not loaded', async () => {
+    it('should show sign out text even if data is not loaded', () => {
       initializeTestInstance(true, true, true, true)
       expect(screen.getByText('Signing you out...')).toBeTruthy()
     })
   })
 
   describe('loading sequence', () => {
-    it('should load military history first', async () => {
+    it('should load military history first', () => {
       initializeTestInstance(true, true, true, false)
       expect(getServiceHistory).toHaveBeenCalled()
       expect(getDisabilityRating).not.toHaveBeenCalled()
     })
 
-    it('should load disability ratings after military history has loaded', async () => {
+    it('should load disability ratings after military history has loaded', () => {
       initializeTestInstance(false, true, true, false)
       expect(getServiceHistory).not.toHaveBeenCalled()
       expect(getDisabilityRating).toHaveBeenCalled()
@@ -117,7 +115,7 @@ context('SyncScreen', () => {
   describe('sync completion', () => {
     it('should complete the sync when all loading is finished', async () => {
       initializeTestInstance(false, false, true, false)
-      await waitFor(async () => {
+      await waitFor(() => {
         expect(completeSync).toHaveBeenCalled()
       })
     })

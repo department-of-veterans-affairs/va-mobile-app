@@ -299,6 +299,16 @@ export const Events = {
       },
     }
   },
+  vama_click: (text_clicked: string, screen_name: string, additional_details?: string): Event => {
+    return {
+      name: 'vama_click',
+      params: {
+        text_clicked,
+        screen_name,
+        additional_details,
+      },
+    }
+  },
   vama_covid_links: (referringScreen: string): Event => {
     return {
       name: 'vama_covid_links',
@@ -490,6 +500,22 @@ export const Events = {
   vama_gender_id_success: (): Event => {
     return {
       name: 'vama_gender_id_success',
+    }
+  },
+  vama_givefb_close: (screenName: string): Event => {
+    return {
+      name: 'vama_givefb_close',
+      params: {
+        screenName,
+      },
+    }
+  },
+  vama_givefb_open: (linkType: string): Event => {
+    return {
+      name: 'vama_givefb_open',
+      params: {
+        linkType,
+      },
     }
   },
   vama_letter_download: (letterName: string): Event => {
@@ -894,6 +920,16 @@ export const Events = {
       },
     }
   },
+  vama_toggle: (toggle_name: string, status: boolean, screen_name: string): Event => {
+    return {
+      name: 'vama_toggle',
+      params: {
+        toggle_name,
+        status,
+        screen_name,
+      },
+    }
+  },
   vama_ttv_appt_details: (totalTime: number): Event => {
     return {
       name: 'vama_ttv_appt_details',
@@ -962,18 +998,6 @@ export const UserAnalytics = {
       value: value,
     }
   },
-  vama_haptic_setting_off: (): UserAnalytic => {
-    return {
-      name: 'vama_haptic_setting_off',
-      value: 'true',
-    }
-  },
-  vama_haptic_setting_on: (): UserAnalytic => {
-    return {
-      name: 'vama_haptic_setting_on',
-      value: 'true',
-    }
-  },
   vama_uses_appointments: (): UserAnalytic => {
     return {
       name: 'vama_uses_appointments',
@@ -1002,6 +1026,12 @@ export const UserAnalytics = {
     return {
       name: 'vama_uses_letters',
       value: 'true',
+    }
+  },
+  vama_uses_notifications: (value: boolean): UserAnalytic => {
+    return {
+      name: 'vama_uses_notifications',
+      value: value.toString(),
     }
   },
   vama_uses_preferred_name: (): UserAnalytic => {

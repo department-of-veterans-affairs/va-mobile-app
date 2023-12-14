@@ -77,7 +77,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
     if (loadingAttachments && !attachments?.length) {
       return (
         <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-          <LoadingComponent justTheSpinnerIcon={true} />
+          <LoadingComponent text={t('secureMessaging.viewMessage.loadingAttachment')} inlineSpinner={true} />
         </Box>
       )
     } else if (attachments?.length) {

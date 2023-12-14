@@ -8,13 +8,11 @@ export enum AUTH_STORAGE_TYPE {
   NONE = 'NONE',
 }
 
-export type LoginServiceTypes = 'IAM' | 'SIS'
+export type LoginServiceTypes = 'SIS'
 
 export const LoginServiceTypeConstants: {
-  IAM: LoginServiceTypes
   SIS: LoginServiceTypes
 } = {
-  IAM: 'IAM',
   SIS: 'SIS',
 }
 

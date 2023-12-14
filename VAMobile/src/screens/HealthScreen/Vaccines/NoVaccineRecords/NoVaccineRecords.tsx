@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 
 import { AlertBox, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
@@ -12,7 +13,11 @@ const NoVaccineRecords: FC = () => {
 
   return (
     <VAScrollView>
-      <AlertBox title={t('noVaccineRecords.alert.title')} border="informational" text={t('noVaccineRecords.alert.text.1')}>
+      <AlertBox
+        title={t('noVaccineRecords.alert.title')}
+        border="informational"
+        text={t('noVaccineRecords.alert.text.1')}
+        titleA11yLabel={a11yLabelVA(t('noVaccineRecords.alert.title'))}>
         <TextView paragraphSpacing={true} mt={theme.paragraphSpacing.spacing20FontSize} variant="MobileBody">
           {t('noVaccineRecords.alert.text.2')}
         </TextView>

@@ -4,7 +4,9 @@ import React, { FC } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ButtonTypesConstants, FeatureLandingTemplate, TextView, VAButton } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { waygateNativeAlert } from 'utils/waygateConfig'
@@ -28,6 +30,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
 
   const onEditAddress = () => {
     if (waygateNativeAlert('WG_EditAddress')) {
+      logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('letters.overview.title')))
       navigateTo('EditAddress', {
         displayTitle: t('contactInformation.mailingAddress'),
         addressType: profileAddressOptions.MAILING_ADDRESS,

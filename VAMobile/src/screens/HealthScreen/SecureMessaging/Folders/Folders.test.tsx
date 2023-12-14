@@ -1,15 +1,10 @@
-import 'react-native'
 import React from 'react'
-import { Pressable } from 'react-native'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import { screen, fireEvent } from '@testing-library/react-native'
 
-import { context, mockNavProps, mockStore, render, RenderAPI, findByTypeWithText } from 'testUtils'
-import { ErrorsState, initialSecureMessagingState, initialAuthState, initialErrorsState } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+import { ErrorsState, initialSecureMessagingState, initialErrorsState } from 'store/slices'
 import Folder from './Folders'
 import { SecureMessagingFolderList } from 'store/api/types'
-import { LoadingComponent, TextView } from 'components'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -23,9 +18,7 @@ jest.mock('utils/hooks', () => {
 })
 
 context('Folder', () => {
-  let component: RenderAPI
   let props: any
-  let testInstance: ReactTestInstance
   let mockNavigateToSpy: jest.Mock
 
   let listOfFolders: SecureMessagingFolderList = [
@@ -91,46 +84,37 @@ context('Folder', () => {
     mockNavigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
 
-    component = render(<Folder {...props} />, {
+    render(<Folder {...props} />, {
       preloadedState: {
-        auth: { ...initialAuthState },
         secureMessaging: {
           ...initialSecureMessagingState,
           loadingFolders: loading,
           folders: foldersList,
         },
-
-        errors: initialErrorsState,
       },
     })
-
-    testInstance = component.UNSAFE_root
   }
 
   beforeEach(() => {
     initializeTestInstance(listOfFolders)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
-  })
-
   describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
+    it('should show loading screen', () => {
       initializeTestInstance([], true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      expect(screen.getByText('Loading your folders...')).toBeTruthy()
     })
   })
 
   describe('when system folders are visible', () => {
-    it('should show the Drafts folder', async () => {
-      expect(findByTypeWithText(testInstance, TextView, 'Drafts (2)')).toBeTruthy()
+    it('should show the Drafts folder', () => {
+      expect(screen.getByRole('button', { name: 'Drafts (2)' })).toBeTruthy()
     })
   })
 
   describe('when a folder is clicked', () => {
-    it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
+    it('should call useRouteNavigation', () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Drafts (2)' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { folderID: -2, folderName: 'Drafts' })
       expect(mockNavigateToSpy).toHaveBeenCalled()
     })

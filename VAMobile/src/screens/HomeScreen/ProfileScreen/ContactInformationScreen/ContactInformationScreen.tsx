@@ -5,12 +5,14 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
 import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
+import { Events } from 'constants/analytics'
 import { FormattedPhoneType, PhoneData, PhoneKey, PhoneTypeConstants } from 'api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { UserContactInformation } from 'api/types/ContactInformation'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
@@ -80,7 +82,6 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
     refetch: refetchContactInformation,
   } = useContactInformation({ enabled: screenContentAllowed('WG_ContactInformation') })
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
-
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
 
   const navigateTo = useRouteNavigation()
@@ -94,6 +95,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   }
   const onMailingAddress = () => {
     if (waygateNativeAlert('WG_EditAddress')) {
+      logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('contactInformation.title')))
       navigateTo('EditAddress', {
         displayTitle: t('contactInformation.mailingAddress'),
         addressType: profileAddressOptions.MAILING_ADDRESS,
@@ -103,6 +105,7 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
 
   const onResidentialAddress = () => {
     if (waygateNativeAlert('WG_EditAddress')) {
+      logAnalyticsEvent(Events.vama_click(t('contactInformation.residentialAddress'), t('contactInformation.title')))
       navigateTo('EditAddress', {
         displayTitle: t('contactInformation.residentialAddress'),
         addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,

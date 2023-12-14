@@ -1,1 +1,1 @@
-We fixed an issue that was stopping some Android users from signing in if they were using Firefox as their default browser.
+We added general improvements and fixed a few bugs.

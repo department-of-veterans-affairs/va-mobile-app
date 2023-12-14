@@ -9,6 +9,10 @@ export const FULLSCREEN_SUBTASK_OPTIONS: StackNavigationOptions = {
   headerShown: false,
 }
 
+export const FEATURE_LANDING_TEMPLATE_OPTIONS: StackNavigationOptions = {
+  headerShown: false,
+}
+
 export const LARGE_PANEL_OPTIONS: StackNavigationOptions = {
   headerShown: false,
   presentation: 'transparentModal',

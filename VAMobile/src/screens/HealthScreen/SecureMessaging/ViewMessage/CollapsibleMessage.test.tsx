@@ -1,15 +1,13 @@
-import 'react-native'
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
-// Note: test renderer must be required after react-native.
+import { DateTime } from 'luxon'
+
 import { context, render } from 'testUtils'
 import { downloadFileAttachment } from 'store/slices'
-import { ErrorsState, initialErrorsState, InitialState } from 'store/slices'
 import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import CollapsibleMessage from './CollapsibleMessage'
-import Mock = jest.Mock
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { DateTime } from 'luxon'
+import Mock = jest.Mock
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
@@ -37,7 +35,7 @@ context('CollapsibleMessage', () => {
     },
   ]
 
-  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, isInitialMessage: boolean = false) => {
+  const initializeTestInstance = (isInitialMessage: boolean = false) => {
     onPressSpy = jest.fn(() => {})
 
     let messageAttributes: SecureMessagingMessageAttributes = {
@@ -59,12 +57,7 @@ context('CollapsibleMessage', () => {
       isInitialMessage: isInitialMessage,
     }
 
-    render(<CollapsibleMessage {...mockProps} />, {
-      preloadedState: {
-        ...InitialState,
-        errors: errorsState,
-      },
-    })
+    render(<CollapsibleMessage {...mockProps} />)
   }
 
   beforeEach(() => {
@@ -78,11 +71,11 @@ context('CollapsibleMessage', () => {
   })
 
   it('does not render CollapsibleMessage when it is the initialMessage', () => {
-    initializeTestInstance(initialErrorsState, true)
+    initializeTestInstance(true)
     expect(screen.queryByText('John Smith')).toBeFalsy()
   })
 
-  it('should render AttachmentLink content correctly when collapsibleMessage is expanded and should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', async () => {
+  it('should render AttachmentLink content correctly when collapsibleMessage is expanded and should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', () => {
     fireEvent.press(screen.getByText('John Smith'))
     expect(screen.getByText('testAttachment (1 MB)')).toBeTruthy()
     fireEvent.press(screen.getByText('testAttachment (1 MB)'))
