@@ -61,7 +61,7 @@ export const registerDevice =
         // if there is no saved token, we have not registered
         // if there is a token and it is different, we need to register the change with VETEXT
         // if the endpoint sid is missing, we need to register again to retrieve it
-        // if a new user is logged in, we need to register to prevent push notifications for previously logged-in user 
+        // if a new user is logged in, we need to register to prevent push notifications for previously logged-in user
         if (!savedToken || savedToken !== deviceToken || !savedSid || isNewUser) {
           const params: api.PushRegistration = {
             deviceName,
