@@ -1,16 +1,15 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ButtonTypesConstants, FeatureLandingTemplate, TextView, VAButton } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
+import { testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOverview'>
 

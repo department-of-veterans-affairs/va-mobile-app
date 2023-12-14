@@ -1,17 +1,16 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { map } from 'underscore'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { map } from 'underscore'
 
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, BoxProps, ButtonTypesConstants, ChildTemplate, TextArea, TextView, VAButton } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { hasUploadedOrReceived } from 'utils/claims'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { hasUploadedOrReceived } from 'utils/claims'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
 

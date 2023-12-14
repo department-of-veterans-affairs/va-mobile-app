@@ -1,19 +1,19 @@
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PaymentsStackParamList } from './PaymentsStackScreens'
-import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentDetailsScreen from './PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
 import PaymentHistoryScreen from './PaymentHistory/PaymentHistoryScreen'
+import { PaymentsStackParamList } from './PaymentsStackScreens'
 
 type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
 

@@ -1,19 +1,18 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useTranslation } from 'react-i18next'
-import DocumentPicker from 'react-native-document-picker'
 import React, { FC, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
+import DocumentPicker from 'react-native-document-picker'
 
 import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
-import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Events } from 'constants/analytics'
-import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
-import { NAMESPACE } from 'constants/namespaces'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
-import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
+import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import getEnv from 'utils/env'
+import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 const { IS_TEST } = getEnv()
 

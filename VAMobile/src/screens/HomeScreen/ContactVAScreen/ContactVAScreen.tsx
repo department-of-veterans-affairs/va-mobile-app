@@ -1,15 +1,13 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea, TextView } from 'components'
-import { CrisisLineCta } from 'components'
-import { HomeStackParamList } from '../HomeStackScreens'
+import { Box, ClickToCallPhoneNumber, CrisisLineCta, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
+import { HomeStackParamList } from '../HomeStackScreens'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 

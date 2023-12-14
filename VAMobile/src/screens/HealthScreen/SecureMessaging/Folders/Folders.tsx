@@ -1,21 +1,20 @@
 import { TFunction } from 'i18next'
-import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import _ from 'underscore'
 
 import { Box, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants, HIDDEN_FOLDERS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
+import { FolderNameTypeConstants, HIDDEN_FOLDERS, TRASH_FOLDER_NAME } from 'constants/secureMessaging'
+import { useSelector } from 'react-redux'
 import { RootState } from 'store'
 import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { SecureMessagingState } from 'store/slices'
 import { VATheme } from 'styles/theme'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 const getListItemsForFolders = (
   listOfFolders: SecureMessagingFolderList,

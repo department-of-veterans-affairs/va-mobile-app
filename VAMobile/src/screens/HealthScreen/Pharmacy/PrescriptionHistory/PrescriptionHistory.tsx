@@ -1,12 +1,12 @@
-import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
-import { ReactNode, useEffect, useRef, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
-import { find } from 'underscore'
-import { useSelector } from 'react-redux'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
+import { useSelector } from 'react-redux'
+import { find } from 'underscore'
 
-import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
+import { useFocusEffect } from '@react-navigation/native'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   Box,
   BoxProps,
@@ -33,6 +33,11 @@ import {
   VAIcon,
   VAIconProps,
 } from 'components'
+import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
+import { Events } from 'constants/analytics'
+import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import {
   DowntimeFeatureTypeConstants,
   PrescriptionHistoryTabConstants,
@@ -43,26 +48,20 @@ import {
   RefillStatus,
   RefillStatusConstants,
 } from 'store/api/types'
-import { Events } from 'constants/analytics'
-import { HealthStackParamList } from '../../HealthStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionListItem } from '../PrescriptionCommon'
-import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
-import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
+import getEnv from 'utils/env'
+import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useFocusEffect } from '@react-navigation/native'
+import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
+import { screenContentAllowed } from 'utils/waygateConfig'
+import { HealthStackParamList } from '../../HealthStackScreens'
+import { PrescriptionListItem } from '../PrescriptionCommon'
 import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
-import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
-import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 

@@ -12,7 +12,7 @@ import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
-import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'

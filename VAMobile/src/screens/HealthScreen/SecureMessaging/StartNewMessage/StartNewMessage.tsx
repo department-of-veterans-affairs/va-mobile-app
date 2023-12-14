@@ -1,7 +1,7 @@
-import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
-import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import _ from 'underscore'
 
 import {
@@ -20,12 +20,14 @@ import {
   TextArea,
   VAButton,
 } from 'components'
-import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
+import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE, SegmentedControlIndexes } from 'constants/secureMessaging'
-import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE, SegmentedControlIndexes } from 'constants/secureMessaging'
+import { useSelector } from 'react-redux'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { RootState } from 'store'
+import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import {
   SecureMessagingState,
   getMessageRecipients,
@@ -38,11 +40,8 @@ import {
   sendMessage,
   updateSecureMessagingTab,
 } from 'store/slices'
-import { SnackbarMessages } from 'components/SnackBar'
-import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import {
   useAppDispatch,
   useAttachments,
@@ -50,12 +49,13 @@ import {
   useDestructiveActionSheet,
   useError,
   useMessageWithSignature,
-  useTheme,
   useRouteNavigation,
+  useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
+import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { useSelector } from 'react-redux'
 
 type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
 

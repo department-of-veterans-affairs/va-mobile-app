@@ -1,20 +1,19 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { Box, FeatureLandingTemplate, TextArea, TextView, TextViewProps } from 'components'
 import { DIRECT_DEPOSIT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { PaymentState, getPayment } from 'store/slices'
-import { PaymentsAttributeData } from 'store/api'
-import { PaymentsStackParamList } from '../../PaymentsStackScreens'
 import { Pressable } from 'react-native'
 import { RootState } from 'store'
-import { formatDateUtc } from 'utils/formattingUtils'
+import { PaymentsAttributeData } from 'store/api'
+import { PaymentState, getPayment } from 'store/slices'
 import { testIdProps } from 'utils/accessibility'
+import { formatDateUtc } from 'utils/formattingUtils'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
+import { PaymentsStackParamList } from '../../PaymentsStackScreens'
 
 type PaymentDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentDetails'>
 
