@@ -26,6 +26,7 @@ const scrollToThenTap = async (text: string) => {
 
 const checkLocatorAndContactLinks = async () => {
   await scrollToThenTap(PersonalInfoConstants.NEAREST_CENTER_LINK_TEXT)
+  await setTimeout(5000)
   await device.takeScreenshot('PersonalInformationFindVALocations')
   await element(by.text('Done')).tap()
 
