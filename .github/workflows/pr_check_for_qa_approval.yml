@@ -36,10 +36,11 @@ jobs:
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
 
-          branch_protections=$(gh api \
+          required_approval_count=$(gh api \
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection)
+          /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection |
+          jq -c '.required_pull_request_reviews.required_approving_review_count -1')
 
           echo "Approvers: $approvals"
           
@@ -48,13 +49,13 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members |
-            jq '[.[] | .login]'
+            jq -c '[.[] | .login]'
           )
 
           echo "required approval count: $required_approval_count"
           echo "QA team: $qa_team_members"
 
-          if [[ $(jq '. | length' <<< "$approvals") -gt $(jq -c '.required_pull_request_reviews.required_approving_review_count -1' <<< "$branch_protections") ]]
+          if [[ $(jq '. | length' <<< "$approvals") -gt $required_approval_count ]]
             then
               if [[ $(jq '[.[] | select(. | IN("rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals") -gt 0 ]]
                 then
