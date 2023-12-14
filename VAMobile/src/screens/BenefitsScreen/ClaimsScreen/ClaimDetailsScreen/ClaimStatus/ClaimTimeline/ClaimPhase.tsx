@@ -160,9 +160,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
 
   const fileRequestsPress = () => {
     logAnalyticsEvent(Events.vama_claim_review(claimID, attributes.claimType, count))
-    if (waygateNativeAlert('WG_FileRequest')) {
-      navigateTo('FileRequest', { claimID })()
-    }
+    navigateTo('FileRequest', { claimID })
   }
 
   return (

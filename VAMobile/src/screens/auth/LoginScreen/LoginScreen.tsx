@@ -93,7 +93,9 @@ const LoginScreen: FC = () => {
         dispatch(loginStart(true))
       }
     : firstTimeLogin
-    ? () => navigateTo('LoaGate')
+    ? () => { 
+        navigateTo('LoaGate')
+      }
     : startAuth
 
   return (

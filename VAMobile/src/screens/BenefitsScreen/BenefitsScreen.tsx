@@ -39,23 +39,19 @@ const BenefitsScreen: FC<BenefitsScreenProps> = () => {
   const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
 
   const onDisabilityRatings = () => {
-    if (waygateNativeAlert('WG_DisabilityRatings')) {
-      navigateTo('DisabilityRatings')()
-    }
+    navigateTo('DisabilityRatings')
   }
 
   const onClaims = () => {
     if (featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters) {
-      navigateTo('Claims')()
-    } else if (waygateNativeAlert('WG_ClaimsHistory')) {
-      navigateTo('ClaimsHistory')()
+      navigateTo('Claims')
+    } else {
+      navigateTo('ClaimsHistory')
     }
   }
 
   const onLetters = () => {
-    if (waygateNativeAlert('WG_LettersOverview')) {
-      navigateTo('LettersOverview')()
-    }
+    navigateTo('LettersOverview')
   }
 
   return (

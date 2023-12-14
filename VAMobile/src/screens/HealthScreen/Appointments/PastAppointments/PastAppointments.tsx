@@ -124,7 +124,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   // This ensures we have the data before we update the currentPage and the UI.
   const { currentPage, perPage, totalEntries } = paginationByTimeFrame[timeFrame]
   const onPastAppointmentPress = (appointmentID: string): void => {
-    waygateNativeAlert('WG_PastAppointmentDetails') && navigateTo('PastAppointmentDetails', { appointmentID })()
+    navigateTo('PastAppointmentDetails', { appointmentID })
   }
 
   const listWithAppointmentsAdded = (listItems: Array<DefaultListItemObj>, listOfAppointments: AppointmentsList): Array<DefaultListItemObj> => {

@@ -59,9 +59,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   }
 
   const onPaymentPress = (paymentID: string): void => {
-    if (waygateNativeAlert('WG_PaymentDetails')) {
-      navigateTo('PaymentDetails', { paymentID })()
-    }
+    navigateTo('PaymentDetails', { paymentID })
   }
 
   const textViewProps: TextViewProps = {
@@ -166,9 +164,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
         <Box mx={gutter} mb={standardMarginBetween}>
           <Pressable
             onPress={() => {
-              if (waygateNativeAlert('WG_PaymentMissing')) {
-                navigateTo('PaymentMissing')()
-              }
+              navigateTo('PaymentMissing')
             }}
             accessibilityRole="link"
             accessible={true}

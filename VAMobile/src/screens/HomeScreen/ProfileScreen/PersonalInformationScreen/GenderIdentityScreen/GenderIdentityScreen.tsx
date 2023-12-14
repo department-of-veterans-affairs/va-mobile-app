@@ -112,7 +112,7 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
 
   const goToHelp = (): void => {
     logAnalyticsEvent(Events.vama_gender_id_help)
-    waygateNativeAlert('WG_WhatToKnow') && navigateTo('WhatToKnow')()
+    navigateTo('WhatToKnow')
   }
 
   const radioGroupProps: RadioGroupProps<string> = {

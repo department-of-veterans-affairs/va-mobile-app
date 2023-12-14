@@ -31,9 +31,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   const lettersNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.letters)
 
   const onBenefitSummary = () => {
-    if (waygateNativeAlert('WG_BenefitSummaryServiceVerificationLetter')) {
-      navigateTo('BenefitSummaryServiceVerificationLetter')()
-    }
+    navigateTo('BenefitSummaryServiceVerificationLetter')
   }
 
   const letterPressFn = (letterType: LetterTypes, letterName: string): OnPressHandler | undefined => {
@@ -41,56 +39,56 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
       case LetterTypeConstants.benefitSummary:
         return onBenefitSummary
       case LetterTypeConstants.serviceVerification:
-        return navigateTo('GenericLetter', {
+        return () => { navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.serviceVerificationLetter.description'),
           letterType,
           screenID: ScreenIDTypesConstants.SERVICE_VERIFICATION_LETTER_SCREEN_ID,
-        })
+        })}
       case LetterTypeConstants.commissary:
-        return navigateTo('GenericLetter', {
+        return () => { navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.commissary.description'),
           letterType,
           screenID: ScreenIDTypesConstants.COMMISSARY_LETTER_SCREEN_ID,
-        })
+        })}
       case LetterTypeConstants.civilService:
-        return navigateTo('GenericLetter', {
+        return () => { navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.civilService.description'),
           letterType,
           screenID: ScreenIDTypesConstants.CIVIL_SERVICE_LETTER_SCREEN_ID,
-        })
+        })}
       case LetterTypeConstants.benefitVerification:
-        return navigateTo('GenericLetter', {
+        return () => { navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.benefitVerification.description'),
           letterType,
           screenID: ScreenIDTypesConstants.BENEFIT_VERIFICATION_LETTER_SCREEN_ID,
           descriptionA11yLabel: a11yLabelVA(t('letters.benefitVerification.description')),
-        })
+        })}
       case LetterTypeConstants.proofOfService:
-        return navigateTo('GenericLetter', {
+        return () => { navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.proofOfService.description'),
           letterType,
           screenID: ScreenIDTypesConstants.PROOF_OF_SERVICE_LETTER_SCREEN_ID,
-        })
+        })}
       case LetterTypeConstants.medicarePartd:
-        return navigateTo('GenericLetter', {
+        return () => { navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.proofOfCrediblePrescription.description'),
           letterType,
           screenID: ScreenIDTypesConstants.PROOF_OF_CREDIBLE_PRESCRIPTION_LETTER_SCREEN_ID,
-        })
+        })}
       case LetterTypeConstants.minimumEssentialCoverage:
-        return navigateTo('GenericLetter', {
+        return () => { navigateTo('GenericLetter', {
           header: letterName,
           description: t('letters.minimumEssentialCoverage.description'),
           letterType,
           screenID: ScreenIDTypesConstants.PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN_ID,
           descriptionA11yLabel: t('letters.minimumEssentialCoverageA11yLabel.description'),
-        })
+        })}
       default:
         return undefined
     }

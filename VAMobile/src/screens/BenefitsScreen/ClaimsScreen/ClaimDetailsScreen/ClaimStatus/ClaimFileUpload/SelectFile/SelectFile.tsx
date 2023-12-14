@@ -57,9 +57,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       }
 
       setError('')
-      if (waygateNativeAlert('WG_UploadFile')) {
-        navigateTo('UploadFile', { request, fileUploaded: document })()
-      }
+      navigateTo('UploadFile', { request, fileUploaded: document })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (docError: any) {
       if (DocumentPicker.isCancel(docError as Error)) {
@@ -73,7 +71,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const onSelectFile = (): void => {
     // For integration tests, bypass the file picking process
     if (IS_TEST) {
-      navigateTo('UploadFile', { request, fileUploaded: 'test file' })()
+      navigateTo('UploadFile', { request, fileUploaded: 'test file' })
       return
     }
 

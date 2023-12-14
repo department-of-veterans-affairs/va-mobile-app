@@ -21,18 +21,14 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
 
   const onViewLetters = () => {
-    if (waygateNativeAlert('WG_LettersList')) {
-      navigateTo('LettersList')()
-    }
+    navigateTo('LettersList')
   }
 
   const onEditAddress = () => {
-    if (waygateNativeAlert('WG_EditAddress')) {
-      navigateTo('EditAddress', {
-        displayTitle: t('contactInformation.mailingAddress'),
-        addressType: profileAddressOptions.MAILING_ADDRESS,
-      })()
-    }
+    navigateTo('EditAddress', {
+      displayTitle: t('contactInformation.mailingAddress'),
+      addressType: profileAddressOptions.MAILING_ADDRESS,
+    })
   }
 
   const addressData: Array<addressDataField> = [{ addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onEditAddress }]

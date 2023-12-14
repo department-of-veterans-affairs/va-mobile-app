@@ -185,9 +185,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       const onPrepareForVideoVisit = () => {
         dispatch(clearAppointmentCancellation())
 
-        if (waygateNativeAlert('WG_PrepareForVideoVisit')) {
-          navigateTo('PrepareForVideoVisit')()
-        }
+        navigateTo('PrepareForVideoVisit')
       }
       // TODO uncomment for #17916
       const hasSessionStarted = true // DateTime.fromISO(startDateUtc).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
@@ -198,9 +196,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         if (url) {
           launchExternalLink(url)
         } else {
-          if (waygateNativeAlert('WG_SessionNotStarted')) {
-            navigateTo('SessionNotStarted')()
-          }
+          navigateTo('SessionNotStarted')
         }
       }
 
@@ -317,7 +313,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <SpecialInstructions />
           {featureEnabled('patientCheckIn') && (
             <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
-              <VAButton onPress={navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
+              <VAButton onPress={() => navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
             </Box>
           )}
           <PreferredDateAndTime attributes={attributes} />

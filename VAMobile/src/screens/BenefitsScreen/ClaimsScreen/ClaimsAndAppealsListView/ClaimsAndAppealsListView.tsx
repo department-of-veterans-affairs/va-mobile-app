@@ -56,15 +56,11 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   }
 
   const onClaimDetails = (id: string) => {
-    if (waygateNativeAlert('WG_ClaimDetailsScreen')) {
-      navigateTo('ClaimDetailsScreen', { claimID: id, claimType })()
-    }
+    navigateTo('ClaimDetailsScreen', { claimID: id, claimType })
   }
 
   const onAppealDetails = (id: string) => {
-    if (waygateNativeAlert('WG_AppealDetailsScreen')) {
-      navigateTo('AppealDetailsScreen', { appealID: id })()
-    }
+    navigateTo('AppealDetailsScreen', { appealID: id })
   }
 
   const getListItemVals = (): Array<DefaultListItemObj> => {

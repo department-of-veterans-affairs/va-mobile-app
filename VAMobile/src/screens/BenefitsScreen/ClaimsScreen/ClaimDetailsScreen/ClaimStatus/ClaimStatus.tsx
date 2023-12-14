@@ -44,20 +44,16 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
 
     const whyWeCombineOnPress = () => {
       logAnalyticsEvent(Events.vama_claim_why_combine(claim.id, claim.attributes.claimType, claim.attributes.phase))
-      if (waygateNativeAlert('WG_ConsolidatedClaimsNote')) {
-        navigateTo('ConsolidatedClaimsNote')()
-      }
+      navigateTo('ConsolidatedClaimsNote')
     }
 
     const whatShouldOnPress = () => {
       logAnalyticsEvent(Events.vama_claim_disag(claim.id, claim.attributes.claimType, claim.attributes.phase))
-      if (waygateNativeAlert('WG_WhatDoIDoIfDisagreement')) {
-        navigateTo('WhatDoIDoIfDisagreement', {
-          claimID: claim.id,
-          claimType: claim.attributes.claimType,
-          claimStep: claim.attributes.phase,
-        })()
-      }
+      navigateTo('WhatDoIDoIfDisagreement', {
+        claimID: claim.id,
+        claimType: claim.attributes.claimType,
+        claimStep: claim.attributes.phase,
+      })
     }
 
     if (isActiveClaim) {
@@ -93,9 +89,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
 
       const onPress = () => {
         logAnalyticsEvent(Events.vama_ddl_status_click())
-        if (waygateNativeAlert('WG_ClaimLettersScreen')) {
-          navigateTo('ClaimLettersScreen')()
-        }
+        navigateTo('ClaimLettersScreen')
       }
 
       const claimDecidedOn = t('claimDetails.weDecidedYourClaimOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })

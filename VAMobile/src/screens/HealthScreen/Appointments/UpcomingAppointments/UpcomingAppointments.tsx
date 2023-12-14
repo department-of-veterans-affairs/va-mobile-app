@@ -29,7 +29,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const currentPageUpcomingAppointmentsByYear = deepCopyObject<AppointmentsGroupedByYear>(currentPageAppointmentsByYear?.upcoming)
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
-    waygateNativeAlert('WG_UpcomingAppointmentDetails') && navigateTo('UpcomingAppointmentDetails', { appointmentID })()
+    navigateTo('UpcomingAppointmentDetails', { appointmentID })
   }
 
   if (loading) {

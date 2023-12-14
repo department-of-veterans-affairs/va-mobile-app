@@ -18,16 +18,12 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   const navigateTo = useRouteNavigation()
 
   const onClaimsHistory = () => {
-    if (waygateNativeAlert('WG_ClaimsHistory')) {
-      navigateTo('ClaimsHistory')()
-    }
+    navigateTo('ClaimsHistory')
   }
 
   const onClaimLettersPress = () => {
-    if (waygateNativeAlert('WG_ClaimLettersScreen')) {
-      logAnalyticsEvent(Events.vama_ddl_landing_click())
-      navigateTo('ClaimLettersScreen')()
-    }
+    logAnalyticsEvent(Events.vama_ddl_landing_click())
+    navigateTo('ClaimLettersScreen')
   }
 
   return (

@@ -15,7 +15,7 @@ const StartNewMessageButton: FC = () => {
 
   const onPress = () => {
     logAnalyticsEvent(Events.vama_sm_start())
-    waygateNativeAlert('WG_StartNewMessage') && navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })()
+    navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
   }
 
   const startNewMessageButtonProps: VAButtonProps = {

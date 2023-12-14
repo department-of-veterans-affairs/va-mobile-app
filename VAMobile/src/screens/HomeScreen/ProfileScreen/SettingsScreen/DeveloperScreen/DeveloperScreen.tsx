@@ -120,12 +120,12 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
     <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('debug.title')}>
       <Box>
         <TextArea>
-          <VAButton onPress={navigateTo('Sandbox')} label={'Sandbox'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <VAButton onPress={() => navigateTo('Sandbox')} label={'Sandbox'} buttonType={ButtonTypesConstants.buttonPrimary} />
         </TextArea>
       </Box>
       <Box>
         <TextArea>
-          <VAButton onPress={navigateTo('HapticsDemoScreen')} label={'haptics demo'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <VAButton onPress={() => navigateTo('HapticsDemoScreen')} label={'haptics demo'} buttonType={ButtonTypesConstants.buttonPrimary} />
         </TextArea>
       </Box>
       <Box>
@@ -145,7 +145,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
       </Box>
       <Box>
         <TextArea>
-          <VAButton onPress={navigateTo('RemoteConfig')} label={'Remote Config'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <VAButton onPress={() => navigateTo('RemoteConfig')} label={'Remote Config'} buttonType={ButtonTypesConstants.buttonPrimary} />
         </TextArea>
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>

@@ -56,16 +56,12 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
 
   const onFilePress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'file'))
-    if (waygateNativeAlert('WG_SelectFile')) {
-      navigateTo('SelectFile', { claimID, request })()
-    }
+    navigateTo('SelectFile', { claimID, request })
   }
 
   const onPhotoPress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'photo'))
-    if (waygateNativeAlert('WG_TakePhotos')) {
-      navigateTo('TakePhotos', { claimID, request })()
-    }
+    navigateTo('TakePhotos', { claimID, request })
   }
 
   return (

@@ -24,15 +24,13 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
   const navigateTo = useRouteNavigation()
 
   const onPayments = () => {
-    if (waygateNativeAlert('WG_PaymentHistory')) {
-      navigateTo('PaymentHistory')()
-    }
+    navigateTo('PaymentHistory')
   }
   const onDirectDeposit = () => {
-    if (userAuthorizedServices?.directDepositBenefitsUpdate && waygateNativeAlert('WG_DirectDeposit')) {
-      navigateTo('DirectDeposit')()
-    } else if (waygateNativeAlert('WG_HowToUpdateDirectDeposit')) {
-      navigateTo('HowToUpdateDirectDeposit')()
+    if (userAuthorizedServices?.directDepositBenefitsUpdate) {
+      navigateTo('DirectDeposit')
+    } else {
+      navigateTo('HowToUpdateDirectDeposit')
     }
   }
 

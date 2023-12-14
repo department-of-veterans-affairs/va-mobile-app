@@ -97,9 +97,7 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ navigation, route
         <Box mx={gutter} mt={contentMarginTop}>
           <Pressable
             onPress={() => {
-              if (waygateNativeAlert('WG_PaymentIssue')) {
-                navigateTo('PaymentIssue')()
-              }
+              navigateTo('PaymentIssue')
             }}
             {...testIdProps(t('payments.ifMyPaymentDoesNotLookRight'))}
             testID="paymentInfoIncorrectTestID"

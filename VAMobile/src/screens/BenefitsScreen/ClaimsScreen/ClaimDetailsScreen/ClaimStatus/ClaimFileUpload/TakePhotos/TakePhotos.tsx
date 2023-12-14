@@ -44,9 +44,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
       setError(t('fileUpload.tooManyPhotosError'))
     } else {
-      if (waygateNativeAlert('WG_UploadOrAddPhotos')) {
-        navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })()
-      }
+      navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })
     }
   }
 
