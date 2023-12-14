@@ -39,10 +39,11 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
+  const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Health') })
+  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
 
   const onAppointments = () => {
     if (waygateNativeAlert('WG_Appointments')) {
@@ -79,7 +80,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
-    if (smNotInDowntime) {
+    if (isScreenContentAllowed && smNotInDowntime) {
       // fetch inbox metadata to display unread messages count tag
       dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
     }
