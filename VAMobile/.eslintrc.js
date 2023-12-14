@@ -4,7 +4,7 @@ module.exports = {
     project: './tsconfig.json',
   },
   plugins: ['@typescript-eslint', 'sort-imports-es6-autofix', 'eslint-plugin-tsdoc'],
-  extends: ['@react-native-community', 'plugin:@typescript-eslint/recommended', 'plugin:react-hooks/recommended'],
+  extends: ['@react-native-community', 'plugin:@typescript-eslint/recommended', 'plugin:react-hooks/recommended', '@department-of-veterans-affairs/mobile'],
   env: {
     commonjs: true,
     es6: true,
@@ -49,6 +49,12 @@ module.exports = {
         ignoreCase: false,
         ignoreMemberSort: false,
         memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
+      },
+    ],
+    'react/no-unstable-nested-components': [
+      'warn',
+      {
+        allowAsProps: true,
       },
     ],
   },

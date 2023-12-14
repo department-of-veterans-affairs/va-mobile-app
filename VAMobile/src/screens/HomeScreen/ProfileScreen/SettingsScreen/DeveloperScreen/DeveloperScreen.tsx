@@ -1,13 +1,11 @@
 import { pick } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import Clipboard from '@react-native-community/clipboard'
 import React, { FC, useEffect, useRef, useState } from 'react'
-
-import { Box, ButtonTypesConstants, FeatureLandingTemplate, TextArea, TextView, VAButton, VATextInput } from 'components'
 
 import { AnalyticsState } from 'store/slices'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
+import { Box, ButtonTypesConstants, FeatureLandingTemplate, TextArea, TextView, VAButton, VATextInput } from 'components'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import { FeatureConstants, getLocalVersion, getStoreVersion, getVersionSkipped, overrideLocalVersion, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -92,10 +90,6 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
 
-  const onCopy = (copy: string): void => {
-    Clipboard.setString(copy)
-  }
-
   Object.keys(tokenInfo).forEach((key) => {
     console.log(`${key}:`)
     console.log(tokenInfo[key])
@@ -157,12 +151,9 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
         const val = tokenInfo[key]
         return (
           <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
-            <TextArea
-              onPress={(): void => {
-                onCopy(val)
-              }}>
+            <TextArea>
               <TextView variant="MobileBodyBold">{key}</TextView>
-              <TextView>{val}</TextView>
+              <TextView selectable={true}>{val}</TextView>
             </TextArea>
           </Box>
         )
@@ -177,12 +168,9 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
           ? Object.entries(userAuthorizedServices).map((key) => {
               return (
                 <Box key={key[0]} mt={theme.dimensions.condensedMarginBetween}>
-                  <TextArea
-                    onPress={(): void => {
-                      onCopy(key[1].toString())
-                    }}>
+                  <TextArea>
                     <TextView variant="MobileBodyBold">{key}</TextView>
-                    <TextView>{key[1].toString()}</TextView>
+                    <TextView selectable={true}>{key[1].toString()}</TextView>
                   </TextArea>
                 </Box>
               )
@@ -199,12 +187,9 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
           const val = (envVars[key as keyof EnvVars] || '').toString()
           return (
             <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
-              <TextArea
-                onPress={(): void => {
-                  onCopy(val)
-                }}>
+              <TextArea>
                 <TextView variant="MobileBodyBold">{key}</TextView>
-                <TextView>{val}</TextView>
+                <TextView selectable={true}>{val}</TextView>
               </TextArea>
             </Box>
           )
@@ -274,23 +259,17 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          <TextArea
-            onPress={(): void => {
-              onCopy(deviceToken || '')
-            }}>
+          <TextArea>
             <TextView variant="MobileBodyBold">Device Token</TextView>
-            <TextView>{deviceToken}</TextView>
+            <TextView selectable={true}>{deviceToken}</TextView>
           </TextArea>
         </Box>
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          <TextArea
-            onPress={(): void => {
-              onCopy(deviceToken || '')
-            }}>
+          <TextArea>
             <TextView variant="MobileBodyBold">Endpoint SID</TextView>
-            <TextView>{deviceAppSid}</TextView>
+            <TextView selectable={true}>{deviceAppSid}</TextView>
           </TextArea>
         </Box>
       </Box>

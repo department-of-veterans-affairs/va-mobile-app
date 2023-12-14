@@ -2,13 +2,12 @@ import { I18nextProvider } from 'react-i18next'
 import { Provider } from 'react-redux'
 import { render as rtlRender } from '@testing-library/react-native'
 import { ThemeProvider } from 'styled-components'
-import React, { ElementType } from 'react'
+import React from 'react'
 import i18nReal from 'utils/i18n'
 import { RootState } from 'store'
 import path from 'path'
 import { AnyAction, configureStore, Store } from '@reduxjs/toolkit'
 import { NavigationContainer } from '@react-navigation/native'
-import { ReactTestInstance } from 'react-test-renderer'
 import { QueryClient, QueryClientProvider, QueryKey } from '@tanstack/react-query'
 
 import accessabilityReducer from 'store/slices/accessibilitySlice'
@@ -33,50 +32,6 @@ import settingsReducer from 'store/slices/settingsSlice'
 import { InitialState } from 'store/slices'
 import theme from 'styles/themes/standardTheme'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-
-export const findByTypeWithName = (testInstance: ReactTestInstance, type: ElementType, name: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && (el.props.name === name || el.props.label === name || el.props.children === name)
-    })
-  } catch {
-    return null
-  }
-}
-
-export const findByTypeWithSubstring = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && (el.props.title?.includes(text) || el.props.children?.includes(text))
-    })
-  } catch {
-    return null
-  }
-}
-
-export const findByTestID = (testInstance: ReactTestInstance, testID: string): ReactTestInstance => {
-  return testInstance.findByProps({ testID })
-}
-
-export const findByTypeWithText = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && (el.props.title === text || el.props.children === text)
-    })
-  } catch {
-    return null
-  }
-}
-
-export const findByOnPressFunction = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && el.props.onPress.name === text
-    })
-  } catch {
-    return null
-  }
-}
 
 type fn = () => any
 type ActionState = AnyAction & {

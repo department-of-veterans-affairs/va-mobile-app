@@ -8,11 +8,13 @@ import _ from 'underscore'
 import { AuthState, logout, setBiometricsPreference } from 'store/slices'
 import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, VAButton } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
+import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { featureEnabled } from 'utils/remoteConfig'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useAppDispatch, useDestructiveActionSheet, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { waygateNativeAlert } from 'utils/waygateConfig'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
@@ -37,6 +39,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   const onShowConfirm = (): void => {
+    logAnalyticsEvent(Events.vama_click(t('logout.title'), t('settings.title')))
     signOutAlert({
       title: t('logout.confirm.text'),
       destructiveButtonIndex: 1,
@@ -84,6 +87,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   const onShare = async (): Promise<void> => {
+    logAnalyticsEvent(Events.vama_click(t('shareApp.title'), t('settings.title')))
     try {
       await Share.share({
         message: t('shareApp.text', { appleStoreLink: APPLE_STORE_LINK, googlePlayLink: GOOGLE_PLAY_LINK }),
@@ -92,6 +96,10 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
       logNonFatalErrorToFirebase(e, 'onShare: Settings Error')
       console.error(e)
     }
+  }
+
+  const onFeedback = () => {
+    navigation.navigate('InAppRecruitment')
   }
 
   const onPrivacyPolicy = async (): Promise<void> => {
@@ -104,6 +112,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     canStoreWithBiometric ? biometricRow : [],
     { text: t('notifications.title'), onPress: onNotifications },
     { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
+    featureEnabled('inAppRecruitment') ? { text: t('inAppRecruitment.giveFeedback'), a11yHinText: t('inAppRecruitment.giveFeedback.a11yHint'), onPress: onFeedback } : [],
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 

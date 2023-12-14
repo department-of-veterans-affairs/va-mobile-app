@@ -42,6 +42,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import {
   useAppDispatch,
   useAttachments,
@@ -55,7 +56,6 @@ import {
 } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
 
@@ -99,15 +99,17 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
   useEffect(() => {
-    dispatch(resetSaveDraftComplete())
-    dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+    if (screenContentAllowed('WG_StartNewMessage')) {
+      dispatch(resetSaveDraftComplete())
+      dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
 
-    if (PREPOPULATE_SIGNATURE && !signature) {
-      dispatch(getMessageSignature())
+      if (PREPOPULATE_SIGNATURE && !signature) {
+        dispatch(getMessageSignature())
+      }
+      InteractionManager.runAfterInteractions(() => {
+        setIsTransitionComplete(true)
+      })
     }
-    InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
   }, [dispatch, signature])
 
   const noRecipientsReceived = !recipients || recipients.length === 0

@@ -1,7 +1,6 @@
-import 'react-native'
 import React from 'react'
-
 import { screen, fireEvent } from '@testing-library/react-native'
+
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import SecureMessaging from './SecureMessaging'
@@ -79,7 +78,7 @@ context('SecureMessaging', () => {
   })
 
   describe('when user is not authorized for secure messaging', () => {
-    it('should display NotEnrolledSM component', async () => {
+    it('should display NotEnrolledSM component', () => {
       expect(screen.getByText("You're not currently enrolled to use Secure Messaging")).toBeTruthy()
     })
   })
@@ -116,7 +115,7 @@ context('SecureMessaging', () => {
   })
 
   describe('on click of a segmented control tab', () => {
-    it('should call updateSecureMessagingTab', async () => {
+    it('should call updateSecureMessagingTab', () => {
       initializeTestInstance()
       fireEvent.press(screen.getByText('Folders'))
       expect(updateSecureMessagingTab).toHaveBeenCalled()

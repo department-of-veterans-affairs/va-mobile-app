@@ -31,6 +31,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yHintProp } from 'utils/accessibility'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -53,7 +54,9 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const [atLeastOneServiceDisabilityToggle, setAtLeastOneServiceDisabilityToggle] = useState(true)
 
   useEffect(() => {
-    dispatch(getLetterBeneficiaryData(ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
+    if (screenContentAllowed('WG_BenefitSummaryServiceVerificationLetter')) {
+      dispatch(getLetterBeneficiaryData(ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
+    }
   }, [dispatch])
 
   const getListOfMilitaryService = (): React.ReactNode => {
@@ -123,35 +126,22 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     const { monthlyAwardAmount, awardEffectiveDate, serviceConnectedPercentage, hasChapter35Eligibility, hasServiceConnectedDisabilities } =
       letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
 
-    if (!!monthlyAwardAmount || !!awardEffectiveDate) {
-      let text = ''
-      if (!!monthlyAwardAmount && !!awardEffectiveDate) {
-        text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
-          monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount),
-          date: formatDateMMMMDDYYYY(awardEffectiveDate),
-        })
-      } else if (monthlyAwardAmount) {
-        text = t('letters.benefitService.monthlyAward', {
-          monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount),
-        })
-      } else if (awardEffectiveDate) {
-        text = t('letters.benefitService.effectiveDate', {
-          date: formatDateMMMMDDYYYY(awardEffectiveDate),
-        })
-      }
+    const text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
+      monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount || 0),
+      date: awardEffectiveDate ? formatDateMMMMDDYYYY(awardEffectiveDate) : t('letters.benefitService.effectiveDateInvalid'),
+    })
 
-      toggleListItems.push({
-        text: text,
-        testId: text.replace(',', ''),
-        onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
-        decorator: ButtonDecoratorType.Switch,
-        decoratorProps: {
-          on: monthlyAwardToggle,
-          a11yHint: t('letters.benefitService.monthlyAwardA11yHint'),
-          testID: 'monthly-award',
-        },
-      })
-    }
+    toggleListItems.push({
+      text: text,
+      testId: text.replace(',', ''),
+      onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: monthlyAwardToggle,
+        a11yHint: t('letters.benefitService.monthlyAwardA11yHint'),
+        testID: 'monthly-award',
+      },
+    })
 
     if (serviceConnectedPercentage) {
       const percentText = t('letters.benefitService.combinedServiceConnectingRating', {

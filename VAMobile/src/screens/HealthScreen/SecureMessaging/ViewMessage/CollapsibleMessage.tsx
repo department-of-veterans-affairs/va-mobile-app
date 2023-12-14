@@ -61,7 +61,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
           </TextView>
           {loadingAttachments && !attachments?.length && attachmentBoolean && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-              <LoadingComponent justTheSpinnerIcon={true} />
+              <LoadingComponent text={t('secureMessaging.viewMessage.loadingAttachment')} inlineSpinner={true} />
             </Box>
           )}
         </Box>

@@ -1,13 +1,10 @@
-import 'react-native'
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
 
 import { context, mockNavProps, render } from 'testUtils'
 import ReplyMessage from './ReplyMessage'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
-import { initialAuthState, initialErrorsState, initialSecureMessagingState, saveDraft } from 'store/slices'
+import { initialSecureMessagingState, saveDraft } from 'store/slices'
 import { isIOS } from '../../../../utils/platform'
 
 let mockNavigationSpy = jest.fn()
@@ -146,7 +143,6 @@ context('ReplyMessage', () => {
 
     render(<ReplyMessage {...props} />, {
       preloadedState: {
-        auth: { ...initialAuthState },
         secureMessaging: {
           ...initialSecureMessagingState,
           loading: loading,
@@ -154,7 +150,6 @@ context('ReplyMessage', () => {
           threads: threadList,
           sendMessageFailed: sendMessageFailed,
         },
-        errors: initialErrorsState,
       },
     })
 

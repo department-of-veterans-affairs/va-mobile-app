@@ -14,6 +14,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import AppealIssues from './AppealIssues/AppealIssues'
@@ -46,7 +47,9 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ navigation, route }
   })
 
   useEffect(() => {
-    dispatch(getAppeal(appealID, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
+    if (screenContentAllowed('WG_AppealDetailsScreen')) {
+      dispatch(getAppeal(appealID, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
+    }
   }, [dispatch, appealID])
 
   const onTabChange = (tab: number) => {

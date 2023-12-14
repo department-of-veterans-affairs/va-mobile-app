@@ -104,7 +104,9 @@ sidebar_position: 5
 
    ![Google services file](/img/devSetupImage/google-service-android-file.png)
 
-- Open a terminal in the IDE and type `yarn` or `yarn install` and press enter to install the projects dependencies. This will create the `node_modules` folder.
+- Open a terminal and type `nvm use` and press enter to set the node version for the project (if the version isn't installed, it will prompt you with the install command). If you don't have nvm you can install it from the [nvm documentation site](https://github.com/nvm-sh/nvm). Note: if you natively have the correct Node version installed you won't need nvm, but it's still good to have.
+
+- In a terminal type `yarn` or `yarn install` and press enter to install the projects dependencies. This will create the `node_modules` folder.
 
 - After dependencies are installed type `cd ios && pod install && cd ..` and press enter to install pods on ios (This is done once unless you installed new dependencies that need pods created).
 
@@ -233,6 +235,17 @@ sidebar_position: 5
 - Select a simulator from the list in Xcode.
 
     ![Select Simulator Xcode](/img/devSetupImage/select-emulator-xcode.png) 
+
+- Temporary Xcode 15 workaround
+
+If you are using XCode 15, a temporary workaround is required to avoid a build failure with RCT-Folly.
+
+```
+- Select Pods > Build Settings > Apple Clang - Preprocessing section > Preprocessor Macros section
+- Add to the "Debug" and "Release" sections: _LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION
+```
+
+ ![XCode 15 workaround](/img/devSetupImage/xcode-15-temporary-workaround.png)
 
 - Build project on Xcode.
 

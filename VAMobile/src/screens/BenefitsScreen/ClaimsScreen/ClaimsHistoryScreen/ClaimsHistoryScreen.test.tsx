@@ -1,4 +1,3 @@
-import 'react-native'
 import React from 'react'
 
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
@@ -13,47 +12,50 @@ jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
   let original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
-    useAuthorizedServices: jest.fn().mockReturnValue({
-      status: "success",
-      data: {
-        appeals: true,
-        appointments: true,
-        claims: true,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: true,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: true,
-        secureMessaging: true,
-        userProfileUpdate: true
-      }
-    }).mockReturnValueOnce({
-      status: "success",
-      data: {
-        appeals: false,
-        appointments: true,
-        claims: false,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: true,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: true,
-        secureMessaging: true,
-        userProfileUpdate: true
-      }
-    })
+    useAuthorizedServices: jest
+      .fn()
+      .mockReturnValue({
+        status: 'success',
+        data: {
+          appeals: true,
+          appointments: true,
+          claims: true,
+          decisionLetters: true,
+          directDepositBenefits: true,
+          directDepositBenefitsUpdate: true,
+          disabilityRating: true,
+          genderIdentity: true,
+          lettersAndDocuments: true,
+          militaryServiceHistory: true,
+          paymentHistory: true,
+          preferredName: true,
+          prescriptions: true,
+          scheduleAppointments: true,
+          secureMessaging: true,
+          userProfileUpdate: true,
+        },
+      })
+      .mockReturnValueOnce({
+        status: 'success',
+        data: {
+          appeals: false,
+          appointments: true,
+          claims: false,
+          decisionLetters: true,
+          directDepositBenefits: true,
+          directDepositBenefitsUpdate: true,
+          disabilityRating: true,
+          genderIdentity: true,
+          lettersAndDocuments: true,
+          militaryServiceHistory: true,
+          paymentHistory: true,
+          preferredName: true,
+          prescriptions: true,
+          scheduleAppointments: true,
+          secureMessaging: true,
+          userProfileUpdate: true,
+        },
+      }),
   }
 })
 

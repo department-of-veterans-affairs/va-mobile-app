@@ -48,9 +48,9 @@ import { SubjectLengthValidationFn, formatSubject, getStartNewMessageCategoryPic
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
@@ -119,17 +119,19 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
   useEffect(() => {
-    dispatch(resetSaveDraftFailed())
-    dispatch(dispatchResetDeleteDraftFailed())
+    if (screenContentAllowed('WG_EditDraft')) {
+      dispatch(resetSaveDraftFailed())
+      dispatch(dispatchResetDeleteDraftFailed())
 
-    if (messageID) {
-      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID, true))
-      dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      if (messageID) {
+        dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID, true))
+        dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      }
+      dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      InteractionManager.runAfterInteractions(() => {
+        setIsTransitionComplete(true)
+      })
     }
-    dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-    InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
   }, [messageID, dispatch])
 
   useEffect(() => {
@@ -422,10 +424,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   ]
 
   const onGoToInbox = (): void => {
-    if (waygateNativeAlert('WG_SecureMessaging')) {
-      dispatch(resetSendMessageFailed())
-      dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-    }
+    dispatch(resetSendMessageFailed())
+    dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
     navigateTo('SecureMessaging')
   }
 

@@ -15,6 +15,8 @@ export const SettingsE2eIdConstants = {
   SHARE_APP_SCREEN_TEXT:
     'Download the VA: Health and Benefits on the App Store: https://apps.apple.com/us/app/va-health-and-benefits/id1559609596 or on Google Play: https://play.google.com/store/apps/details?id=gov.va.mobileapp',
   PRIVACY_ROW_TEXT: 'Privacy policy',
+  SIGN_OUT_BTN_ID: 'Sign out', 
+  SIGN_OUT_CONFIRM_TEXT: device.getPlatform() === 'ios' ? 'Sign Out' : 'Sign Out ',
 }
 
 beforeAll(async () => {
@@ -59,6 +61,34 @@ describe('Settings Screen', () => {
     }
   })
 
+  it('should show Give feedback screen', async () => {
+    try {
+      await expect(element(by.text('Give feedback'))).toExist()
+    } catch (ex) {
+      await element(by.text('Developer Screen')).tap()
+      await element(by.text('Remote Config')).tap()
+      await waitFor(element(by.text('Override Toggles'))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(400, 'down')
+      await waitFor(element(by.text('inAppRecruitment'))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(100, 'down')
+      await element(by.text('inAppRecruitment')).tap()
+      await element(by.id('remoteConfigTestID')).scrollTo('bottom')
+      await element(by.text('Apply Overrides')).tap()
+      await loginToDemoMode()
+      await openProfile()
+      await openSettings()
+    }
+    await element(by.text('Give feedback')).tap()
+    await expect(element(by.text('Make this app better for all Veterans'))).toExist()
+    await expect(element(by.text('Go to questionnaire'))).toExist()
+    await expect(element(by.text('Learn more about the Veteran Usability Project'))).toExist()
+  })
+
+  it('should tap on "go to questionnaire" in in app recruitment', async () => {
+    await element(by.text('Go to questionnaire')).tap()
+    await device.takeScreenshot('inAppRecruitmentQuestionnaire')
+    await element(by.text('Done')).tap()
+    await element(by.text('Close')).tap()
+  })
+
   it('should show Privacy Policy page', async () => {
     await element(by.text(SettingsE2eIdConstants.PRIVACY_ROW_TEXT)).tap()
     await element(by.text('Ok')).tap()
@@ -72,15 +102,14 @@ describe('Settings Screen', () => {
   })
 
   it('should show and dismiss signout popup', async () => {
-    await element(by.text(CommonE2eIdConstants.SIGN_OUT_BTN_ID)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.SIGN_OUT_CONFIRM_TEXT))).toExist()
-    await element(by.text(CommonE2eIdConstants.CANCEL_UNIVERSAL_TEXT)).tap()
+    await element(by.text(SettingsE2eIdConstants.SIGN_OUT_BTN_ID)).atIndex(0).tap()
+    await expect(element(by.text(SettingsE2eIdConstants.SIGN_OUT_CONFIRM_TEXT))).toExist()
+    await element(by.text(CommonE2eIdConstants.CANCEL_PLATFORM_SPECIFIC_TEXT)).tap()
   })
 
   it('should sign out', async () => {
-    await element(by.text(CommonE2eIdConstants.SIGN_OUT_BTN_ID)).tap()
-    await expect(element(by.text(CommonE2eIdConstants.SIGN_OUT_CONFIRM_TEXT))).toExist()
-    await element(by.text('Sign Out')).tap()
-    await expect(element(by.text('Sign in'))).toExist()
+    await element(by.text(SettingsE2eIdConstants.SIGN_OUT_BTN_ID)).atIndex(0).tap()
+    await element(by.text(SettingsE2eIdConstants.SIGN_OUT_CONFIRM_TEXT)).tap()
+    await expect(element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID))).toExist()
   })
 })

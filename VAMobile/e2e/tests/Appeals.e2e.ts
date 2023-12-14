@@ -70,7 +70,7 @@ describe('Appeals', () => {
     await expect(element(by.text('Service connection, ureteral stricture'))).toExist()
   })
 
-  it('should tap on status, tap review past events, and verify the correct information is displayed', async () => {
+  it('verify review past events information', async () => {
     await element(by.text(AppealsIdConstants.STATUS_TAB_TEXT)).tap()
     await element(by.id(AppealsIdConstants.REVIEW_PAST_EVENTS_ID)).tap()
     await expect(element(by.id('VA sent you a claim decision On April 11, 2008'))).toExist()

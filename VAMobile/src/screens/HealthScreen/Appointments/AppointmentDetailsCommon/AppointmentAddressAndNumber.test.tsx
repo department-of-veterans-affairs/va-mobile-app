@@ -1,9 +1,7 @@
-import 'react-native'
 import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { render } from 'testUtils'
-import { InitialState } from 'store/slices'
 import AppointmentAddressAndNumber from './AppointmentAddressAndNumber'
 import { AppointmentAttributes, AppointmentPhone, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
 
@@ -30,7 +28,7 @@ describe('AppointmentAddressAndNumber', () => {
       location: { name, address, phone },
       ...(attributes || {}),
     } as AppointmentAttributes
-    render(<AppointmentAddressAndNumber attributes={props} />, { preloadedState: { ...InitialState } })
+    render(<AppointmentAddressAndNumber attributes={props} />)
   }
 
   beforeEach(() => {
@@ -40,6 +38,14 @@ describe('AppointmentAddressAndNumber', () => {
   describe('when the appointment type is not VA/CC/at VA location/ATLAS', () => {
     it('does not show name or address', () => {
       renderWithProps({ appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME })
+      expect(screen.queryByText(name)).toBeNull()
+      expect(screen.queryByText('5901 East 7th Street')).toBeNull()
+    })
+  })
+
+  describe('when the appointment is phoneOnly', () => {
+    it('does not show name or address', () => {
+      renderWithProps({ phoneOnly: true })
       expect(screen.queryByText(name)).toBeNull()
       expect(screen.queryByText('5901 East 7th Street')).toBeNull()
     })

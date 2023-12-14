@@ -1,5 +1,4 @@
 import React from 'react'
-import 'jest-styled-components'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
@@ -16,16 +15,15 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-context('StartNewMessageFooter', () => {
+context('StartNewMessageButton', () => {
   describe('on click of the footer button', () => {
-    it('should call useRouteNavigation', async () => {
+    it('should call useRouteNavigation', () => {
       const mockNavigateToSpy = jest.fn()
       mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
       render(<StartNewMessageButton />)
 
-      fireEvent.press(screen.getByText('Start new message'))
+      fireEvent.press(screen.getByRole('button', { name: 'Start new message' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
-      expect(mockNavigateToSpy).toHaveBeenCalled()
     })
   })
 })

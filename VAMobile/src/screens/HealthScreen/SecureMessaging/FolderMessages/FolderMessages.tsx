@@ -9,6 +9,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
 import { getMessagesListItems } from 'utils/secureMessaging'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
@@ -31,10 +32,12 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const title = t('text.raw', { text: folderName })
 
   useEffect(() => {
-    // Load first page messages
-    dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
-    // If draft saved message showing, clear status so it doesn't show again
-    dispatch(resetSaveDraftComplete())
+    if (screenContentAllowed('WG_FolderMessages')) {
+      // Load first page messages
+      dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
+      // If draft saved message showing, clear status so it doesn't show again
+      dispatch(resetSaveDraftComplete())
+    }
   }, [dispatch, folderID])
 
   useEffect(() => {

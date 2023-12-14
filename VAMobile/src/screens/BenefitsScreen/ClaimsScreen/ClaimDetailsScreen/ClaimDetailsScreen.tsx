@@ -17,6 +17,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
@@ -50,7 +51,9 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   })
 
   useEffect(() => {
-    dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
+    if (screenContentAllowed('WG_ClaimDetailsScreen')) {
+      dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
+    }
   }, [dispatch, claimID])
 
   // Track how long user maintains focus on this screen

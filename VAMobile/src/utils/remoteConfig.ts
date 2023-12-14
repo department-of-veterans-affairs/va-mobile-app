@@ -16,8 +16,8 @@ export let overrideRemote = false
 export type FeatureToggleType =
   | 'appointmentRequests'
   | 'prescriptions'
-  | 'SIS'
   | 'testFeature'
+  | 'inAppRecruitment'
   | 'inAppUpdates'
   | 'preferredNameGenderWaygate'
   | 'haptics'
@@ -29,8 +29,8 @@ export type FeatureToggleType =
 type FeatureToggleValues = {
   appointmentRequests: boolean
   prescriptions: boolean
-  SIS: boolean
   testFeature: boolean
+  inAppRecruitment: boolean
   inAppUpdates: boolean
   preferredNameGenderWaygate: boolean
   haptics: boolean
@@ -43,8 +43,8 @@ type FeatureToggleValues = {
 export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
   prescriptions: true,
-  SIS: true,
   testFeature: false,
+  inAppRecruitment: false,
   inAppUpdates: true,
   preferredNameGenderWaygate: true,
   haptics: true,

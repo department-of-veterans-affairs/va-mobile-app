@@ -24,8 +24,9 @@ const getGenderIdentityOptions = async (): Promise<GenderIdentityOptions> => {
 /**
  * Returns a query for gender identity options
  */
-export const useGenderIdentityOptions = () => {
+export const useGenderIdentityOptions = (options?: { enabled?: boolean }) => {
   return useQuery({
+    ...options,
     queryKey: demographicsKeys.genderIdentityOptions,
     queryFn: () => getGenderIdentityOptions(),
     meta: {

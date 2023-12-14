@@ -12,8 +12,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useOrientation, useTheme } from 'utils/hooks'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { useTheme } from 'utils/hooks'
 // import PhotoUpload from 'components/PhotoUpload'
 
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
@@ -26,7 +26,7 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-
+  const isPortrait = useOrientation()
   const ratingPercent = ratingData?.combinedDisabilityRating
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
   const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
@@ -83,69 +83,67 @@ const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
   }
 
   return (
-    <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')} dividerMarginBypass={true} testID="veteranStatusTestID">
-      <Box backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant} flex={1}>
-        <Box mx={theme.dimensions.gutter} alignItems="center" mt={theme.dimensions.standardMarginBetween}>
-          <VAIcon testID="VeteranStatusCardVAIcon" name={'Logo'} />
-          {/* <Box my={theme.dimensions.standardMarginBetween}>
-          //TODO: Put back PhotoUpload later after concerns have been met
-            <PhotoUpload width={100} height={100} />
-          </Box> */}
-          <Box my={theme.dimensions.formMarginBetween}>
-            <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast" testID="veteranStatusFullNameTestID">
-              {personalInfo?.fullName}
-            </TextView>
-            {accessToMilitaryInfo && (
-              <Box display="flex" flexDirection="row">
-                {getBranchSeal()}
-                <TextView ml={10} variant="MobileBody" color="primaryContrast" testID="veteranStatusBranchTestID">
-                  {branch}
-                </TextView>
-              </Box>
-            )}
-          </Box>
-        </Box>
-        <Box mx={theme.dimensions.gutter}>
-          {ratingIsDefined && (
-            <Box {...boxProps}>
-              <TextView variant="MobileBodyBold" color="primaryContrast">
-                {t('disabilityRating.title')}
-              </TextView>
-              <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDisabilityRatingTestID">
-                {combinedPercentText}
+    <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')} dividerMarginBypass={true} removeInsets={true} testID="veteranStatusTestID">
+      <Box mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight} alignItems="center" mt={theme.dimensions.standardMarginBetween}>
+        <VAIcon testID="VeteranStatusCardVAIcon" name={'Logo'} />
+        {/* <Box my={theme.dimensions.standardMarginBetween}>
+        //TODO: Put back PhotoUpload later after concerns have been met
+          <PhotoUpload width={100} height={100} />
+        </Box> */}
+        <Box my={theme.dimensions.formMarginBetween}>
+          <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast" testID="veteranStatusFullNameTestID">
+            {personalInfo?.fullName}
+          </TextView>
+          {accessToMilitaryInfo && (
+            <Box display="flex" flexDirection="row">
+              {getBranchSeal()}
+              <TextView ml={10} variant="MobileBody" color="primaryContrast" testID="veteranStatusBranchTestID">
+                {branch}
               </TextView>
             </Box>
           )}
+        </Box>
+      </Box>
+      <Box mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
+        {ratingIsDefined && (
           <Box {...boxProps}>
             <TextView variant="MobileBodyBold" color="primaryContrast">
-              {t('veteranStatus.periodOfService')}
+              {t('disabilityRating.title')}
             </TextView>
-            {getPeriodOfService}
-          </Box>
-          <Box {...boxProps} borderBottomWidth={theme.dimensions.borderWidth} mb={theme.dimensions.formMarginBetween}>
-            <TextView variant="MobileBodyBold" color="primaryContrast">
-              {t('personalInformation.dateOfBirth')}
-            </TextView>
-            <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDOBTestID">
-              {personalInfo?.birthDate || t('personalInformation.informationNotAvailable')}
+            <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDisabilityRatingTestID">
+              {combinedPercentText}
             </TextView>
           </Box>
-          <Box mb={theme.dimensions.formMarginBetween}>
-            <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.formMarginBetween}>
-              {t('veteranStatus.uniformedServices')}
-            </TextView>
-            <TextView variant="MobileBodyBold" color="primaryContrast">
-              {t('veteranStatus.fixAnError')}
-            </TextView>
-            <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
-              {t('veteranStatus.fixAnError.2')}
-            </TextView>
-            <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={displayedTextPhoneNumber(t('8008271000'))} colorOverride={'veteranStatus'} />
-            <TextView variant="MobileBody" color="primaryContrast" my={theme.dimensions.condensedMarginBetween}>
-              {t('veteranStatus.fixAnError.3')}
-            </TextView>
-            <ClickToCallPhoneNumber phone={t('8005389552')} displayedText={displayedTextPhoneNumber(t('8005389552'))} colorOverride={'veteranStatus'} ttyBypass={true} />
-          </Box>
+        )}
+        <Box {...boxProps}>
+          <TextView variant="MobileBodyBold" color="primaryContrast">
+            {t('veteranStatus.periodOfService')}
+          </TextView>
+          {getPeriodOfService}
+        </Box>
+        <Box {...boxProps} borderBottomWidth={theme.dimensions.borderWidth} mb={theme.dimensions.formMarginBetween}>
+          <TextView variant="MobileBodyBold" color="primaryContrast">
+            {t('personalInformation.dateOfBirth')}
+          </TextView>
+          <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDOBTestID">
+            {personalInfo?.birthDate || t('personalInformation.informationNotAvailable')}
+          </TextView>
+        </Box>
+        <Box mb={theme.dimensions.formMarginBetween}>
+          <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.formMarginBetween}>
+            {t('veteranStatus.uniformedServices')}
+          </TextView>
+          <TextView variant="MobileBodyBold" color="primaryContrast">
+            {t('veteranStatus.fixAnError')}
+          </TextView>
+          <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
+            {t('veteranStatus.fixAnError.2')}
+          </TextView>
+          <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={displayedTextPhoneNumber(t('8008271000'))} colorOverride={'veteranStatus'} />
+          <TextView variant="MobileBody" color="primaryContrast" my={theme.dimensions.condensedMarginBetween}>
+            {t('veteranStatus.fixAnError.3')}
+          </TextView>
+          <ClickToCallPhoneNumber phone={t('8005389552')} displayedText={displayedTextPhoneNumber(t('8005389552'))} colorOverride={'veteranStatus'} ttyBypass={true} />
         </Box>
       </Box>
     </LargePanel>

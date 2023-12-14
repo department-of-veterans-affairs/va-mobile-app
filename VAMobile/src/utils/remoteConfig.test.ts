@@ -21,6 +21,7 @@ const mockOverrides = {
   prescriptions: true,
   SIS: true,
   testFeature: false,
+  inAppRecruitment: false,
   inAppUpdates: false,
   preferredNameGenderWaygate: false,
   haptics: false,
