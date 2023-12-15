@@ -98,6 +98,7 @@ export type WaygateToggleType =
     'WG_Webview'
     'WG_Sandbox'
     'WG_HapticsDemoScreen'
+    'WG_InAppRecruitment'
 
 type WaygateToggleValues = {
   WG_Home: Waygate
@@ -179,6 +180,7 @@ type WaygateToggleValues = {
   WG_Webview: Waygate
   WG_Sandbox: Waygate
   WG_HapticsDemoScreen: Waygate
+  WG_InAppRecruitment: Waygate
 }
 
 const waygateDefault: Waygate = {
@@ -269,6 +271,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_Webview: { ...waygateDefault },
   WG_Sandbox: { ...waygateDefault },
   WG_HapticsDemoScreen: { ...waygateDefault },
+  WG_InAppRecruitment: { ...waygateDefault },
 }
 
 export const waygateEnabled = (feature: WaygateToggleType): Waygate => {
