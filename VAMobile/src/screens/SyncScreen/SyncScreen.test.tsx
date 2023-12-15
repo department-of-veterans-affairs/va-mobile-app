@@ -96,7 +96,7 @@ context('SyncScreen', () => {
     expect(screen.getByText('Signing you out...')).toBeTruthy()
   })
 
-  it('shows "Signing you out" text when data is not loaded', () => {
+  it('shows "Signing you out" text when logging out and data is not loaded', () => {
     initializeTestInstance(true, true, true, true, true)
     expect(screen.getByText('Signing you out...')).toBeTruthy()
   })
