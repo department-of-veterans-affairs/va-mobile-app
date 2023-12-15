@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AuthState, completeSync, logInDemoMode } from 'store/slices'
+import { AuthState, ClaimsAndAppealsState, completeSync, logInDemoMode, prefetchClaimsAndAppeals } from 'store/slices'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { DisabilityRatingState, MilitaryServiceState, checkForDowntimeErrors, getDisabilityRating, getServiceHistory } from 'store/slices'
@@ -30,6 +30,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { preloadComplete: claimsAndAppealsLoaded } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({ enabled: loggedIn })
 
   const [displayMessage, setDisplayMessage] = useState('')
@@ -64,6 +65,12 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   ])
 
   useEffect(() => {
+    if (loggedIn && !claimsAndAppealsLoaded) {
+      dispatch(prefetchClaimsAndAppeals())
+    }
+  }, [dispatch, loggedIn, claimsAndAppealsLoaded])
+
+  useEffect(() => {
     if (syncing) {
       if (!loggingOut) {
         setDisplayMessage(t('sync.progress.signin'))
@@ -75,10 +82,21 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     }
 
     const finishSyncingMilitaryHistory = !loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded)
-    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded) {
+    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded && claimsAndAppealsLoaded) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, loggingOut, loadingUserAuthorizedServices, militaryHistoryLoaded, userAuthorizedServices?.militaryServiceHistory, t, disabilityRatingLoaded, syncing])
+  }, [
+    dispatch,
+    loggedIn,
+    loggingOut,
+    loadingUserAuthorizedServices,
+    militaryHistoryLoaded,
+    userAuthorizedServices?.militaryServiceHistory,
+    t,
+    disabilityRatingLoaded,
+    claimsAndAppealsLoaded,
+    syncing,
+  ])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
