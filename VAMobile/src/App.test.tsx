@@ -1,6 +1,8 @@
 import React from 'react'
 import { Linking } from 'react-native'
-import { context, render, screen } from 'testUtils'
+import { screen } from '@testing-library/react-native'
+
+import { context, render } from 'testUtils'
 import { AuthGuard } from './App'
 import { handleTokenCallbackUrl, initialAuthState } from 'store/slices'
 
@@ -19,9 +21,9 @@ jest.mock('./store/slices', () => {
 })
 
 jest.mock('react-native-keyboard-manager', () => ({
-  setEnable: jest.fn(() => { }),
-  setKeyboardDistanceFromTextField: jest.fn(() => { }),
-  setEnableAutoToolbar: jest.fn(() => { }),
+  setEnable: jest.fn(() => {}),
+  setKeyboardDistanceFromTextField: jest.fn(() => {}),
+  setEnableAutoToolbar: jest.fn(() => {}),
 }))
 
 jest.mock('react-native/Libraries/Linking/Linking', () => ({
