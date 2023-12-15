@@ -82,6 +82,8 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
       </Box>
     )
 
+    console.log("will this trigger the review I am looking for?");
+
     const labelProps = testID
       ? {
           accessibilityLabel: testID,
