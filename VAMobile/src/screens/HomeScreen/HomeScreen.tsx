@@ -43,7 +43,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
-    navigation.navigate('Webview', {
+    navigateTo('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
       displayTitle: t('webview.vagov'),
       loadingMessage: t('webview.valocation.loading'),
@@ -52,7 +52,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('home_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
+    navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
 
   const buttonDataList: Array<SimpleListItemObj> = [

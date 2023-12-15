@@ -67,7 +67,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   }
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('health_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
+    navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
 
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)

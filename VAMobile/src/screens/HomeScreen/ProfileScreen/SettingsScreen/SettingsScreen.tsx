@@ -98,7 +98,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   const onFeedback = () => {
-    navigation.navigate('InAppRecruitment')
+    navigateTo('InAppRecruitment')
   }
 
   const onPrivacyPolicy = async (): Promise<void> => {
