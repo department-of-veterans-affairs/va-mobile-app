@@ -161,7 +161,8 @@ const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => 
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={t('save')}
-      onPrimaryContentButtonPress={onSave}>
+      onPrimaryContentButtonPress={onSave}
+      testID="PersonalInformationTestID">
       <Box mx={theme.dimensions.gutter}>
         <TextView variant="MobileBody" mb={error ? theme.dimensions.condensedMarginBetween : undefined} paragraphSpacing={error ? false : true}>
           {t('personalInformation.genderIdentity.changeSelection')}
