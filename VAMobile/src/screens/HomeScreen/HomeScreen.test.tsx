@@ -1,7 +1,9 @@
 import React from 'react'
+import { Linking } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
+import { initialClaimsAndAppealsState } from 'store/slices'
 import { HomeScreen } from './HomeScreen'
 
 const mockNavigationSpy = jest.fn()
@@ -17,9 +19,16 @@ jest.mock('utils/hooks', () => {
 jest.mock('utils/remoteConfig')
 
 context('HomeScreen', () => {
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (activeClaimsCount?: number) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
-    render(<HomeScreen {...props} />)
+    render(<HomeScreen {...props} />, {
+      preloadedState: {
+        claimsAndAppeals: {
+          ...initialClaimsAndAppealsState,
+          activeClaimsCount: activeClaimsCount || 0,
+        }
+      }
+    })
   }
 
   beforeEach(() => {
@@ -51,5 +60,22 @@ context('HomeScreen', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Find a VA location' }))
       expect(mockNavigationSpy).toBeCalledWith('Webview', { displayTitle: 'va.gov', url: 'https://www.va.gov/find-locations/', loadingMessage: 'Loading VA location finder...' })
     })
+  })
+
+  it('displays claims module when there are active claims', () => {
+    initializeTestInstance(2)
+    expect(screen.getByText('Claims')).toBeTruthy()
+    expect(screen.getByText('(2 open)')).toBeTruthy()
+  })
+
+  it('navigates to claims history screen when claims module is tapped', () => {
+    initializeTestInstance(2)
+    fireEvent.press(screen.getByText('Claims'))
+    expect(Linking.openURL).toBeCalledWith('vamobile://claims')
+  })
+
+  it('does not display claims module when there are no active claims', () => {
+    initializeTestInstance(0)
+    expect(screen.queryByText('Claims')).toBeFalsy()
   })
 })
