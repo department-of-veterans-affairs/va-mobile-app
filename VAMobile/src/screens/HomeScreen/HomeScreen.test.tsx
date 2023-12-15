@@ -1,10 +1,10 @@
 import React from 'react'
+import { Linking } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
 import { initialPrescriptionState } from 'store/slices'
 import { HomeScreen } from './HomeScreen'
-import { Linking } from 'react-native'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
