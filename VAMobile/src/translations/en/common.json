@@ -883,6 +883,7 @@
   "onboarding.progressBarA11yHint.viewingPage": "Viewing page {{currPage}} of 4 of the onboarding tutorial",
   "onboarding.skipA11yHint": "Exit onboarding tutorial and navigate to the Home page",
   "onboarding.welcomeMessage": "Welcome, {{firstName}}",
+  "open": "open",
   "openInBrowser": "Open in browser",
   "openInBrowser.a11yHint": "Opens the page in your device's browser",
   "optionOutOfTotal": "option {{ count }} of {{ totalOptions }}",

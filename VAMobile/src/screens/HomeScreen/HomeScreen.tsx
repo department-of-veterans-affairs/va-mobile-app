@@ -3,16 +3,20 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { ClaimsAndAppealsState } from 'store/slices'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HomeStackParamList } from './HomeStackScreens'
+import { Linking } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -36,6 +40,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = () => {
@@ -76,6 +81,16 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       <Box flex={1} justifyContent="flex-start">
         <EncourageUpdateAlert />
         <Nametag />
+        {Number(activeClaimsCount) > 0 && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <LargeNavButton
+              title={`${t('claims.title')}`}
+              subText={`(${activeClaimsCount} ${t('open')})`}
+              onPress={() => Linking.openURL('vamobile://claims')}
+              borderWidth={theme.dimensions.buttonBorderWidth}
+            />
+          </Box>
+        )}
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
             {t('aboutVA')}
