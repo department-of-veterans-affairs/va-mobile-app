@@ -32,7 +32,7 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
   const onDirectDeposit = () => {
     if (userAuthorizedServices?.directDepositBenefitsUpdate && waygateNativeAlert('WG_DirectDeposit')) {
       navigateTo('DirectDeposit')()
-    } else if (waygateNativeAlert('WG_HowToUpdateDirectDeposit')) {
+    } else if (!userAuthorizedServices?.directDepositBenefitsUpdate && waygateNativeAlert('WG_HowToUpdateDirectDeposit')) {
       navigateTo('HowToUpdateDirectDeposit')()
     }
   }
