@@ -72,12 +72,12 @@ export const activateRemoteConfig = async (): Promise<void> => {
      * If in staging or production, fetch and activate remote settings.  Otherwise,
      * we'll use the devConfig for local development.
      */
-    if (fetchRemote) {
-      console.debug('Remote Config: Fetching and activating')
-      await remoteConfig().fetch(RC_CACHE_TIME)
-      await remoteConfig().activate()
-      console.debug('Remote Config: Activated config')
-    }
+    // if (fetchRemote) {
+    console.debug('Remote Config: Fetching and activating')
+    await remoteConfig().fetch(RC_CACHE_TIME)
+    await remoteConfig().activate()
+    console.debug('Remote Config: Activated config')
+    // }
 
     await loadOverrides()
   } catch (err) {
