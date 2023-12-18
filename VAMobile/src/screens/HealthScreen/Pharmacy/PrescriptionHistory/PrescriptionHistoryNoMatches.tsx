@@ -20,7 +20,7 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ i
     const contenta11y = { accessibilityLabel: a11yLabelVA(t('prescription.history.empty.filtered.all')) }
     return (
       <>
-        <TextView textAlign={'center'} variant="MobileBodyBold">
+        <TextView textAlign={'center'} variant="MobileBodyBold" accessibilityRole={'header'}>
           {t('prescription.history.empty.filtered.title')}
         </TextView>
         <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" {...contenta11y}>
@@ -37,7 +37,7 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ i
 
     return (
       <>
-        <TextView textAlign={'center'} variant="MobileBodyBold">
+        <TextView textAlign={'center'} variant="MobileBodyBold" accessibilityRole={'header'}>
           {t('prescription.history.empty.title')}
         </TextView>
         <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescription.history.empty.message'))}>

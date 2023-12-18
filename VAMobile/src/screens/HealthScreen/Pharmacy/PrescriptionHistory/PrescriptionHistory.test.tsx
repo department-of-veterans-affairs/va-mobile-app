@@ -257,14 +257,9 @@ const prescriptionData: PrescriptionsGetData = {
 
 context('PrescriptionHistory', () => {
   const initializeTestInstance = (includeTransferred = false) => {
-    const props = mockNavProps(undefined, {
-      setParams: jest.fn(),
-      setOptions: jest.fn(),
-    })
-
     const data = prescriptionData.data
 
-    render(<PrescriptionHistory {...props} />, {
+    render(<PrescriptionHistory {...mockNavProps()} />, {
       preloadedState: {
         prescriptions: {
           ...initialPrescriptionState,
