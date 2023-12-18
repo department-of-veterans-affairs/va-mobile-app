@@ -259,7 +259,7 @@ export const waygateEnabled = (feature: WaygateToggleType): Waygate => {
   } else {
     const waygate = remoteConfig().getValue(feature)?.asString()
     if (waygate) {
-      console.log('feature-' + feature + ' : ' + JSON.parse(waygate))
+      console.log('feature-' + feature + ' : ' + JSON.stringify(JSON.parse(waygate), undefined, 2))
       return JSON.parse(waygate) as Waygate
     } else {
       return { ...waygateDefault }
