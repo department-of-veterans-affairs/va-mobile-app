@@ -85,7 +85,7 @@ beforeAll(async () => {
 })
 
 describe('Messages Screen', () => { 
-	/*it('should match the messages page design', async () => {
+	it('should match the messages page design', async () => {
 		await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
 		await expect(element(by.text('Inbox (3)'))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
@@ -207,7 +207,7 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGE_7_ID)).tap()
     await expect(element(by.text('Education: Good morning to you'))).toExist()
     await element(by.text('Messages')).tap()
-  })*/
+  })
 
   it('should tap on and then cancel the move option', async () => {
     await resetInAppReview()
@@ -285,7 +285,7 @@ describe('Messages Screen', () => {
     await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT))).toExist()
   })
 
-  /*it('should tap keep editing and send the message', async () => {
+  it('should tap keep editing and send the message', async () => {
     await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
     await element(by.id(MessagesE2eIdConstants.REPLY_PAGE_TEST_ID)).scroll(300, 'down', NaN, 0.8)
     await element(by.id(MessagesE2eIdConstants.SEND_BUTTON_ID)).tap()
@@ -535,5 +535,5 @@ describe('Messages Screen', () => {
     await element(by.text('Sent')).tap()
     await element(by.text('Messages')).tap()
     await expect(element(by.text('Custom Folder 2'))).toExist()
-  })*/
+  })
 })
