@@ -2,9 +2,9 @@ name: '[Release] New Release Branch'
 
 on:
   workflow_dispatch:
-  schedule:
-    # 06:00 UTC, 2:00AM ET, 11:00PM (Tues) PT every Wednesday
-    - cron: '00 6 * * 3'
+  # schedule:
+  #   # 06:00 UTC, 2:00AM ET, 11:00PM (Tues) PT every Wednesday
+  #   - cron: '00 6 * * 3'
 
 jobs:
   get-workflow-environment:
@@ -40,5 +40,5 @@ jobs:
           git config --global user.email 'va-mobileapp@adhocteam.us'
       - name: Cut release branch
         env:
-          GITHUB_TOKEN:  ${{ secrets.GH_ACTIONS_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         run: ./release_branch.sh
