@@ -130,7 +130,7 @@ describe('Prescriptions Screen', () => {
 		await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0)).toBeVisible()
 	})
 	
-	it('should open the prescription refill warning label and display the correct information', async () => {
+	it('verify prescription refill warning label information', async () => {
 		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_WARNING_TEXT)).tap()
 		await expect(element(by.text('We can\'t refill some of your prescriptions in the app'))).toExist()
 		await expect(element(by.label('Some  V-A  health facilities use a new electronic health record system.'))).toExist()
@@ -144,14 +144,14 @@ describe('Prescriptions Screen', () => {
 		await element(by.text('We can\'t refill some of your prescriptions in the app')).tap()
 	})
 	
-	it('should open the status label and display the correct information', async () => {
+	it('verify status label information', async () => {
 		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0).tap()
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0)).toExist()
 		await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_BODY_LABEL))).toExist()
 		await element(by.text('Close')).tap()
 	})
 	
-	it('should open prescription details and give the correct information', async () => {
+	it('verify prescription details information', async () => {
 		await waitFor(element(by.label('ADEFOVIR DIPIVOXIL 10MG TAB.'))).toBeVisible().whileElement(by.id('PrescriptionHistory')).scroll(50, 'down')
 		await element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
 		await expect(element(by.text('ACETAMINOPHEN 325MG TAB'))).toExist()
@@ -172,7 +172,7 @@ describe('Prescriptions Screen', () => {
 		await expect(element(by.text('DAYT29'))).toExist()
 	})
 	
-	it('should open the status label from the prescription details and display the correct information', async () => {
+	it('prescription details: verify status label information', async () => {
 		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0).tap()
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0)).toExist()
 		await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_BODY_LABEL))).toExist()
@@ -190,7 +190,7 @@ describe('Prescriptions Screen', () => {
 	validateFilter('Transferred')
 	validateFilter('Unknown')
 	
-	it('should reset filters and match the original prescription page design', async () => {
+	it('verify prescriptions screen after filter reset', async () => {
 		await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_ID)).tap()
 		tempPath = await element(by.id('filterListTestID')).takeScreenshot('filterSortWrapperBox')
 		checkImages(tempPath)
@@ -206,7 +206,7 @@ describe('Prescriptions Screen', () => {
 		await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0)).toExist()
 	})
 	
-	it('should open filters, press cancel, and match the original prescription page design', async () => {
+	it('verify prescriptions screen after filters cancel', async () => {
 		await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_ID)).tap()
 		await element(by.text('Cancel')).tap()
 		await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
@@ -219,7 +219,7 @@ describe('Prescriptions Screen', () => {
 		await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0)).toExist()
 	})
 	
-	it('should open sort, press cancel, and match the original prescription page design', async () => {
+	it('verify prescriptions screen after sort cancel', async () => {
 		await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_SORT_ID)).tap()
 		await element(by.text('Cancel')).tap()
 		await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
@@ -238,7 +238,7 @@ describe('Prescriptions Screen', () => {
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_PENDING_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
 	})
 	
-	it('should open the filter and display the appropriate filters for pending', async () => {
+	it('pending: verify filters', async () => {
 		await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_ID)).tap()
 		await expect(element(by.text('All'))).toExist()
 		await expect(element(by.text('Active: Refill in process'))).toExist()
@@ -253,7 +253,7 @@ describe('Prescriptions Screen', () => {
 		await element(by.text('Cancel')).tap()
 	})
 	
-	it('should display the appropriate prescription status\'s for pending', async () => {
+	it('pending: verify prescriptions status\'s', async () => {
 		if(device.getPlatform() === 'android') {
 			await changeMockData('prescriptions.json', ['/v0/health/rx/prescriptions', {'data': 1}, 'attributes', 'refillStatus'], 'submitted')
 			await device.launchApp({newInstance: true})
@@ -286,7 +286,7 @@ describe('Prescriptions Screen', () => {
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_TEXT)).atIndex(0)).toExist()
 	})
 	
-	it('should open prescription tracking and display the correct information', async () => {
+	it('verify prescription tracking item specific info', async () => {
 		await waitFor(element(by.label('IODOQUINOL 650MG TAB.'))).toBeVisible().whileElement(by.id('PrescriptionHistory')).scroll(50, 'down')
 		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_TEXT)).atIndex(0).tap()
 		await expect(element(by.label('Prescription number 3 6 3 6 8 5 6'))).toExist()
@@ -303,7 +303,7 @@ describe('Prescriptions Screen', () => {
 		await expect(element(by.label('Prescription number None noted'))).toExist()		
 	})
 	
-	it('should open a webpage to the carriers site if you click on the tracking information', async () => {
+	it('verify tracking link workss', async () => {
 		await element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6')).tap()
 		await element(by.text('Ok')).tap()
 		await setTimeout(5000)
@@ -312,7 +312,7 @@ describe('Prescriptions Screen', () => {
 		await element(by.text('Close')).tap()
 	})
 	
-	it('should open the prescriptions help model and display the correct information', async () => {
+	it('verify prescriptions help model information', async () => {
 		await element(by.text('Help')).tap()
 		tempPath = await element(by.id('PrescriptionsHelpTestID')).takeScreenshot('PrescriptionHealth')
 		checkImages(tempPath)
@@ -327,7 +327,7 @@ describe('Prescriptions Screen', () => {
 		await element(by.text('Close')).tap()
 	})
 	
-	it('should open the refill request screen and display the correct information', async () => {
+	it('verify refill request screen information', async () => {
 		await element(by.id('PrescriptionHistory')).scrollTo('top')
 		await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TAB_ALL_ID)).tap()
 		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_TEXT)).atIndex(0).tap()
@@ -344,12 +344,12 @@ describe('Prescriptions Screen', () => {
 		await expect(element(by.label(' V-A  facility: SLC10 TEST LAB.')).atIndex(0)).toExist()
 	})
 
-	it('should display an error when you select request refills with nothing selected', async () => {
+	it('verify error when nothing is selected for request refills', async () => {
 		await element(by.text('Request refills')).tap()
 		await expect(element(by.text('Please select a prescription'))).toExist()		
 	})
 	
-	it('should display an action sheet when a refill is selected and request refill is tapped', async () => {
+	it('verify action sheet for request refill', async () => {
 		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0).tap()
 		await element(by.text('Request refill')).tap()
 		await expect(element(by.text('Request prescription refill?'))).toExist()
@@ -360,7 +360,7 @@ describe('Prescriptions Screen', () => {
 		}	
 	})
 	
-	it('should refill a prescription and display the correct information in the refill request summary screen', async () => {
+	it('verify refill request summary screen information', async () => {
 		await element(by.text('Request refill')).tap()
 		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT))).toExist()
@@ -371,13 +371,13 @@ describe('Prescriptions Screen', () => {
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT))).toExist()
 	})
 	
-	it('should go to pending refills when the pending refills button is tapped', async () => {
+	it('verfiy pending tab is displayed on pending refills button tap', async () => {
 		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT)).tap()
 		await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_PENDING_DESCRIPTION_LABEL))).toExist()
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_PENDING_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
 	})
 	
-	it('should allow the user to request a refill from the get prescriptions detail screen', async () => {
+	it('verify user can request refilll from get prescriptions details', async () => {
 		await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TAB_ALL_ID)).tap()
 		await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_ID)).tap()
 		await element(by.text('Active')).atIndex(0).tap()
@@ -394,7 +394,7 @@ describe('Prescriptions Screen', () => {
 		await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT))).toExist()
 	})
 	
-	it('verifies that tapping close brings you to the screen prior to the refill model', async () => {
+	it('verify tapping close from refill request summary', async () => {
 		await element(by.text('Close')).tap()
 		await expect(element(by.text('AMLODIPINE BESYLATE 10MG TAB'))).toExist()
 		await element(by.text('Prescriptions')).tap()

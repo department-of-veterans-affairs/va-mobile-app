@@ -30,9 +30,6 @@ export type ErrorMessage = {
 // exact service names received from maintenance windows api
 export type DowntimeFeatureType =
   | 'facility_locator'
-  | 'auth_dslogon'
-  | 'auth_idme'
-  | 'auth_mhv'
   | 'appeals'
   | 'military_service_history'
   | 'claims'
@@ -47,9 +44,6 @@ export type DowntimeFeatureType =
 
 export const DowntimeFeatureTypeConstants: {
   facilityLocator: DowntimeFeatureType
-  authDSLogon: DowntimeFeatureType
-  authIDMe: DowntimeFeatureType
-  authMHV: DowntimeFeatureType
   appeals: DowntimeFeatureType
   militaryServiceHistory: DowntimeFeatureType
   claims: DowntimeFeatureType
@@ -63,9 +57,6 @@ export const DowntimeFeatureTypeConstants: {
   rx: DowntimeFeatureType
 } = {
   facilityLocator: 'facility_locator',
-  authDSLogon: 'auth_dslogon',
-  authIDMe: 'auth_idme',
-  authMHV: 'auth_mhv',
   appeals: 'appeals',
   militaryServiceHistory: 'military_service_history',
   claims: 'claims',

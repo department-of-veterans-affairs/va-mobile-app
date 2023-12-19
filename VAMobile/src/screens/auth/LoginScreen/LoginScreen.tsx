@@ -34,7 +34,7 @@ const LoginScreen: FC = () => {
   const startAuth = useStartAuth()
   const theme = useTheme()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
-  const TAPS_FOR_DEMO = 20
+  const TAPS_FOR_DEMO = 7
   let demoTaps = 0
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const LoginScreen: FC = () => {
   const tapForDemo = () => {
     demoTaps++
     console.log(`demotaps: ${demoTaps}`)
-    if (demoTaps > TAPS_FOR_DEMO) {
+    if (demoTaps >= TAPS_FOR_DEMO) {
       demoTaps = 0
       setDemoPromptVisible(true)
     }

@@ -20,9 +20,12 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
   const navigateTo = useRouteNavigation()
   const { claimID, request } = route.params
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
-  const { displayName, description, uploadDate, documents } = request
+  const { displayName, type, status, description, uploadDate, documents } = request
 
   const hasUploaded = hasUploadedOrReceived(request)
+  const isClosed = type.startsWith('never_received') || status === 'NO_LONGER_REQUIRED'
+  const isReviewed = type.startsWith('received_from') && status !== 'SUBMITTED_AWAITING_REVIEW'
+  const isPending = !isClosed && !isReviewed
   const noneNoted = t('noneNoted')
 
   const boxProps: BoxProps = {
@@ -69,12 +72,21 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
         {hasUploaded && (
           <Box mb={standardMarginBetween}>
             <TextArea>
-              <TextView variant="MobileBodyBold" accessibilityRole="header">
-                {t('fileRequestDetails.submittedTitle')}
-              </TextView>
-              <TextView paragraphSpacing={true} variant="MobileBody">
-                {getUploadedDate()}
-              </TextView>
+              {isClosed ? (
+                <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
+                  {t('noLongerNeeded')}
+                </TextView>
+              ) : (
+                <>
+                  <TextView variant="MobileBodyBold" accessibilityRole="header">
+                    {t('fileRequestDetails.submittedTitle')}
+                  </TextView>
+                  <TextView paragraphSpacing={true} variant="MobileBody">
+                    {getUploadedDate()}
+                    {isPending && ` (${t('pending')})`}
+                  </TextView>
+                </>
+              )}
               <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {t('fileRequestDetails.fileTitle')}
               </TextView>

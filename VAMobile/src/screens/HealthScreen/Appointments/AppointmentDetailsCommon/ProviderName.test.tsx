@@ -37,6 +37,20 @@ context('ProviderName', () => {
     })
   })
 
+  describe('when phone Appointment with a healthcare provider', () => {
+    it('should render any with healthcare provider', () => {
+      initializeTestInstance({phoneOnly: true, healthcareProvider: 'John Adams'})
+      expect(screen.getByRole('header', { name: 'John Adams' })).toBeTruthy()
+    })
+  })
+
+  describe('when phone Appointment with no healthcare provider', () => {
+    it('should render with defaults', () => {
+      initializeTestInstance({phoneOnly: true})
+      expect(screen.getByRole('header', { name: 'Provider not noted' })).toBeTruthy()
+    })
+  })
+
   describe('Pending Appointments', () => {
     it('should display healthCareProvider', () => {
       initializeTestInstance({
