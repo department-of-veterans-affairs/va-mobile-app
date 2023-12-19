@@ -1,18 +1,23 @@
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, useCallback } from 'react'
 
 import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { CloseSnackbarOnNavigation } from 'constants/common'
+import { DowntimeFeatureTypeConstants } from 'store/api'
 import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { getClaimsAndAppeals, getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
+import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useFocusEffect } from '@react-navigation/native'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -36,6 +41,42 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
+  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!appointmentsInDowntime) {
+        dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
+      }
+    }, [dispatch, appointmentsInDowntime]),
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!claimsInDowntime) {
+        dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE))
+      }
+    }, [dispatch, claimsInDowntime]),
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!rxInDowntime) {
+        dispatch(loadAllPrescriptions())
+      }
+    }, [dispatch, rxInDowntime]),
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!smInDowntime) {
+        dispatch(getInbox())
+      }
+    }, [dispatch, smInDowntime]),
+  )
 
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = () => {
