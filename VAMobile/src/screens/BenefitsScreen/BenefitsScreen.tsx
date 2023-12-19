@@ -56,7 +56,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = () => {
   }
 
   return (
-    <CategoryLanding title={t('benefits.title')}>
+    <CategoryLanding title={t('benefits.title')} testID="benefitsTestID">
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('disabilityRating.title')}

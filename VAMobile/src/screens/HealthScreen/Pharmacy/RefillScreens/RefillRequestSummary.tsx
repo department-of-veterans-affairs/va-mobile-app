@@ -2,20 +2,25 @@ import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 
 import { AlertBox, AlertBoxProps, Box, BoxProps, LoadingComponent, TextArea, TextView, VAButton, VAIcon, VAIconProps } from 'components'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
+import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
-import { RootState } from 'store'
 import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/types'
 import { PrescriptionState, requestRefills } from 'store/slices'
-import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
+import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
-import { HealthStackParamList } from '../../HealthStackScreens'
+import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useAppDispatch, useBeforeNavBackListener, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 const enum REQUEST_STATUS {
   FAILED,
@@ -37,7 +42,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const onNavToHistory = () => {
     dispatch(dispatchSetPrescriptionsNeedLoad())
     dispatch(dispatchClearLoadingRequestRefills())
-    navigateTo('PrescriptionHistory', {})
+    navigation.navigate('PrescriptionHistory', {})
   }
 
   useEffect(() => {
@@ -190,7 +195,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
           onPress={() => {
             dispatch(dispatchSetPrescriptionsNeedLoad())
             dispatch(dispatchClearLoadingRequestRefills())
-            navigateTo('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })
+            navigation.navigate('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })
           }}
           label={t('prescriptions.refillRequestSummary.pendingRefills')}
           buttonType="buttonSecondary"

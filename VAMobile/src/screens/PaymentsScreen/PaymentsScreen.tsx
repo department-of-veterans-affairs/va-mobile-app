@@ -1,19 +1,15 @@
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { screenContentAllowed } from 'utils/waygateConfig'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from './DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentDetailsScreen from './PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
 import PaymentHistoryScreen from './PaymentHistory/PaymentHistoryScreen'
-import { PaymentsStackParamList } from './PaymentsStackScreens'
 
 type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
 
@@ -36,7 +32,7 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
   }
 
   return (
-    <CategoryLanding title={t('payments.title')}>
+    <CategoryLanding title={t('payments.title')} testID="paymentsID">
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('vaPaymentHistory')}

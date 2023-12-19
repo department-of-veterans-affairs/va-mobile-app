@@ -1,12 +1,11 @@
-import { StackScreenProps } from '@react-navigation/stack'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
-import { useSelector } from 'react-redux'
+import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
-import { useFocusEffect } from '@react-navigation/native'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
 import {
   Box,
   BoxProps,
@@ -33,11 +32,6 @@ import {
   VAIcon,
   VAIconProps,
 } from 'components'
-import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
-import { Events } from 'constants/analytics'
-import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import {
   DowntimeFeatureTypeConstants,
   PrescriptionHistoryTabConstants,
@@ -48,20 +42,27 @@ import {
   RefillStatus,
   RefillStatusConstants,
 } from 'store/api/types'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
-import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent } from 'utils/analytics'
-import getEnv from 'utils/env'
-import { getTranslation } from 'utils/formattingUtils'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
-import { screenContentAllowed } from 'utils/waygateConfig'
+import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
+import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionListItem } from '../PrescriptionCommon'
+import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
+import { RootState } from 'store'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
+import { getTranslation } from 'utils/formattingUtils'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useFocusEffect } from '@react-navigation/native'
 import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
+import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
+import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
@@ -288,7 +289,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const prescriptionDetailsClicked = (prescriptionID: string) => {
     logAnalyticsEvent(Events.vama_rx_details(prescriptionID))
-    navigateTo('PrescriptionDetails', { prescriptionId: prescriptionID })
+    return navigation.navigate('PrescriptionDetails', { prescriptionId: prescriptionID })
   }
 
   const prescriptionItems = () => {
@@ -351,7 +352,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           bottomContent,
           bottomOnPress() {
             logAnalyticsEvent(Events.vama_rx_trackdet(prescription.id))
-            navigateTo('RefillTrackingModal', { prescription: prescription })
+            navigation.navigate('RefillTrackingModal', { prescription: prescription })
           },
         }
       }
@@ -592,9 +593,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     const requestRefillButtonProps: VAButtonProps = {
       label: t('prescription.history.startRefillRequest'),
       buttonType: ButtonTypesConstants.buttonPrimary,
-      onPress: () => {
-        navigateTo('RefillScreenModal')
-      },
+      onPress: navigateTo('RefillScreenModal'),
     }
     return (
       <Box mx={theme.dimensions.buttonPadding}>

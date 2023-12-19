@@ -1,21 +1,22 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 import { map } from 'underscore'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
 
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ButtonTypesConstants, ChildTemplate, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
+import { ClaimEventData } from 'store/api'
+import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { RootState } from 'store'
-import { ClaimEventData } from 'store/api'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
 
@@ -77,7 +78,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
     if (claim) {
       logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, count))
     }
-    navigateTo('AskForClaimDecision', { claimID })
+    navigateTo('AskForClaimDecision', { claimID })()
   }
 
   return (

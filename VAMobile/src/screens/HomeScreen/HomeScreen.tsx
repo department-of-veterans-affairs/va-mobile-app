@@ -1,31 +1,30 @@
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
 
 import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
-import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { NAMESPACE } from 'constants/namespaces'
+import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
+import { HomeStackParamList } from './HomeStackScreens'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import getEnv from 'utils/env'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
-import { HomeStackParamList } from './HomeStackScreens'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
-import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
-import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
-import ProfileScreen from './ProfileScreen/ProfileScreen'
-import SettingsScreen from './ProfileScreen/SettingsScreen'
+import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
 import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/HapticsDemoScreen'
+import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
+import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
+import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
+import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
+import ProfileScreen from './ProfileScreen/ProfileScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
-import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
-import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
+import SettingsScreen from './ProfileScreen/SettingsScreen'
+import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -80,7 +79,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <CategoryLanding headerButton={headerButton}>
+    <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
         <Nametag />

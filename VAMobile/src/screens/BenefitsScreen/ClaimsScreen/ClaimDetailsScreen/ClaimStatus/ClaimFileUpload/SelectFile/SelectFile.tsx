@@ -1,18 +1,20 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useTranslation } from 'react-i18next'
 import DocumentPicker from 'react-native-document-picker'
+import React, { FC, useRef, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
-import { Events } from 'constants/analytics'
-import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { Events } from 'constants/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
-import getEnv from 'utils/env'
+import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import getEnv from 'utils/env'
+import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
 
@@ -56,7 +58,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       }
 
       setError('')
-      navigateTo('UploadFile', { request, fileUploaded: document })
+      navigateTo('UploadFile', { request, fileUploaded: document })()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (docError: any) {
       if (DocumentPicker.isCancel(docError as Error)) {

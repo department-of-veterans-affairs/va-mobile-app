@@ -1,35 +1,35 @@
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import React, { FC, useEffect } from 'react'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { NAMESPACE } from 'constants/namespaces'
-import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { useSelector } from 'react-redux'
-import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { PrescriptionState, loadAllPrescriptions } from 'store/slices'
-import { getInbox } from 'store/slices/secureMessagingSlice'
-import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import getEnv from 'utils/env'
-import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
-import { screenContentAllowed } from 'utils/waygateConfig'
-import Appointments from './Appointments'
-import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
-import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
-import CernerAlert from './CernerAlert'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HealthStackParamList } from './HealthStackScreens'
+import { NAMESPACE } from 'constants/namespaces'
+import { PrescriptionState, loadAllPrescriptions } from 'store/slices'
+import { RootState } from 'store'
+import { featureEnabled } from 'utils/remoteConfig'
+import { getInbox } from 'store/slices/secureMessagingSlice'
+import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
+import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
+import { screenContentAllowed } from 'utils/waygateConfig'
+import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useSelector } from 'react-redux'
+import Appointments from './Appointments'
+import CernerAlert from './CernerAlert'
+import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
+import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
 import SecureMessaging from './SecureMessaging'
-import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
-import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
-import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
+import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
+import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
+import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 
@@ -46,18 +46,10 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
 
-  const onAppointments = () => {
-    navigateTo('Appointments')
-  }
-  const onSecureMessaging = () => {
-    navigateTo('SecureMessaging')
-  }
-  const onVaVaccines = () => {
-    navigateTo('VaccineList')
-  }
-  const pharmacyNavHandler = () => {
-    navigateTo('PrescriptionHistory')
-  }
+  const onAppointments = navigateTo('Appointments')
+  const onSecureMessaging = navigateTo('SecureMessaging')
+  const onVaVaccines = navigateTo('VaccineList')
+  const pharmacyNavHandler = navigateTo('PrescriptionHistory')
   const onPharmacy = () => {
     // If rx list is already loaded, reload it to ensure freshness
     if (!prescriptionsNeedLoad) {

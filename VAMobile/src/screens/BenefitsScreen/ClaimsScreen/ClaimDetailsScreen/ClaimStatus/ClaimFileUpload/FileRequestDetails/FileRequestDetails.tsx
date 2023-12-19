@@ -11,6 +11,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { hasUploadedOrReceived } from 'utils/claims'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
 
@@ -67,7 +68,7 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
   }
 
   return (
-    <ChildTemplate backLabel={t('request.backLabel')} backLabelOnPress={navigation.goBack} title={displayName || ''}>
+    <ChildTemplate backLabel={t('request.backLabel')} backLabelOnPress={navigation.goBack} title={displayName || ''} testID="fileRequestDetailsID">
       <Box mb={contentMarginBottom} flex={1}>
         {hasUploaded && (
           <Box mb={standardMarginBetween}>

@@ -14,6 +14,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { sortByDate } from 'utils/common'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import PhaseIndicator from './PhaseIndicator'
 
 /** returns the heading string by phase */

@@ -27,7 +27,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
 
   /**
    * Function used on error to reload the data for this page. This combines all calls necessary to load the page rather
@@ -68,7 +67,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
 
   return (
-    <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack}>
+    <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack} testID="profileID">
       {errorCheck ? (
         <Box>
           <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />

@@ -1,7 +1,30 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, ReactElement, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import React, { FC, ReactElement, useEffect } from 'react'
 
+import {
+  AppointmentAddressAndNumber,
+  AppointmentAlert,
+  AppointmentReason,
+  AppointmentTypeAndDate,
+  ContactInformation,
+  PendingAppointmentCancelButton,
+  PreferredAppointmentType,
+  PreferredDateAndTime,
+  ProviderName,
+  TypeOfCare,
+} from '../AppointmentDetailsCommon'
+import {
+  AppointmentAttributes,
+  AppointmentCancellationStatusConstants,
+  AppointmentData,
+  AppointmentLocation,
+  AppointmentStatusConstants,
+  AppointmentTypeConstants,
+  AppointmentTypeToID,
+  ScreenIDTypesConstants,
+} from 'store/api/types'
+import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail } from 'store/slices'
 import {
   Box,
   ButtonTypesConstants,
@@ -19,43 +42,19 @@ import {
   VAButtonProps,
 } from 'components'
 import { Events } from 'constants/analytics'
-import { NAMESPACE } from 'constants/namespaces'
-import { useSelector } from 'react-redux'
-import { RootState } from 'store'
-import {
-  AppointmentAttributes,
-  AppointmentCancellationStatusConstants,
-  AppointmentData,
-  AppointmentLocation,
-  AppointmentStatusConstants,
-  AppointmentTypeConstants,
-  AppointmentTypeToID,
-  ScreenIDTypesConstants,
-} from 'store/api/types'
-import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail } from 'store/slices'
-import { a11yLabelVA } from 'utils/a11yLabel'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
-import getEnv from 'utils/env'
-import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
-import { useAppDispatch, useError, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
-import { isIOS } from 'utils/platform'
-import { featureEnabled } from 'utils/remoteConfig'
 import { HealthStackParamList } from '../../HealthStackScreens'
-import {
-  AppointmentAddressAndNumber,
-  AppointmentAlert,
-  AppointmentReason,
-  AppointmentTypeAndDate,
-  ContactInformation,
-  PendingAppointmentCancelButton,
-  PreferredAppointmentType,
-  PreferredDateAndTime,
-  ProviderName,
-  TypeOfCare,
-} from '../AppointmentDetailsCommon'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { featureEnabled } from 'utils/remoteConfig'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
+import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
+import { isIOS } from 'utils/platform'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useAppDispatch, useError, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
+import getEnv from 'utils/env'
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
 

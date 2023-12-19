@@ -18,6 +18,7 @@ import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'ut
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useStartAuth } from 'utils/hooks/auth'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
@@ -93,7 +94,7 @@ const LoginScreen: FC = () => {
         dispatch(loginStart(true))
       }
     : firstTimeLogin
-    ? () => { 
+    ? () => {
         navigateTo('LoaGate')
       }
     : startAuth

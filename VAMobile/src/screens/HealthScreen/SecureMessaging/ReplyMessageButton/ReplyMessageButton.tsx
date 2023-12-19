@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Box, ButtonTypesConstants, VAButton, VAButtonProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 export type ReplyMessageButtonProps = {
   messageID: number

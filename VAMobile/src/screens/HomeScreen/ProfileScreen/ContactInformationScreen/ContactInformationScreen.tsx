@@ -1,23 +1,23 @@
+import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
-import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
+import React, { FC, useState } from 'react'
 
-import { useContactInformation } from 'api/contactInformation/getContactInformation'
-import { FormattedPhoneType, PhoneData, PhoneKey, PhoneTypeConstants } from 'api/types'
-import { UserContactInformation } from 'api/types/ContactInformation'
 import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { Events } from 'constants/analytics'
-import { NAMESPACE } from 'constants/namespaces'
+import { FormattedPhoneType, PhoneData, PhoneKey, PhoneTypeConstants } from 'api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
+import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
+import { UserContactInformation } from 'api/types/ContactInformation'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { useContactInformation } from 'api/contactInformation/getContactInformation'
+import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
+import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 const getTextForPhoneData = (contactInformation: UserContactInformation | undefined, formattedPhoneType: FormattedPhoneType, phoneKey: PhoneKey, t: TFunction): Array<TextLine> => {
   const textIDs: Array<TextLine> = []
@@ -93,37 +93,18 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
     registerReviewEvent()
     setReviewEventRegistered(true)
   }
-  const onMailingAddress = () => {
-    logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('contactInformation.title')))
-    navigateTo('EditAddress', {
-      displayTitle: t('contactInformation.mailingAddress'),
-      addressType: profileAddressOptions.MAILING_ADDRESS,
-    })
-  }
 
-  const onResidentialAddress = () => {
-    logAnalyticsEvent(Events.vama_click(t('contactInformation.residentialAddress'), t('contactInformation.title')))
-    navigateTo('EditAddress', {
-      displayTitle: t('contactInformation.residentialAddress'),
-      addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
-    })
-  }
+  const onHomePhone = navigateTo('EditPhoneNumber', {
+    displayTitle: t('editPhoneNumber.homePhoneTitle'),
+    phoneType: PhoneTypeConstants.HOME,
+    phoneData: contactInformation?.homePhone || ({} as PhoneData),
+  })
 
-  const onHomePhone = () => {
-    navigateTo('EditPhoneNumber', {
-      displayTitle: t('editPhoneNumber.homePhoneTitle'),
-      phoneType: PhoneTypeConstants.HOME,
-      phoneData: contactInformation?.homePhone || ({} as PhoneData),
-    })
-  }
-
-  const onWorkPhone = () => {
-    navigateTo('EditPhoneNumber', {
-      displayTitle: t('editPhoneNumber.workPhoneTitle'),
-      phoneType: PhoneTypeConstants.WORK,
-      phoneData: contactInformation?.workPhone || ({} as PhoneData),
-    })
-  }
+  const onWorkPhone = navigateTo('EditPhoneNumber', {
+    displayTitle: t('editPhoneNumber.workPhoneTitle'),
+    phoneType: PhoneTypeConstants.WORK,
+    phoneData: contactInformation?.workPhone || ({} as PhoneData),
+  })
 
   const onCellPhone = () => {
     navigateTo('EditPhoneNumber', {

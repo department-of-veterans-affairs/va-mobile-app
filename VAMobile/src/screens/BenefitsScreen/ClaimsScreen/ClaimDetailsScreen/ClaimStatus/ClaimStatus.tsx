@@ -1,21 +1,27 @@
-import React, { FC, ReactElement, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import React, { FC, ReactElement, useRef } from 'react'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, ButtonTypesConstants, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
+import { ClaimData } from 'store/api/types'
+import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
-import { ClaimData } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { featureEnabled } from 'utils/remoteConfig'
+import { featureEnabled } from 'utils/remoteConfig'
+import { featureEnabled } from 'utils/remoteConfig'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { testIdProps } from 'utils/accessibility'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
+import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
 
 /** props for the ClaimStatus component */
 type ClaimStatusProps = {
@@ -125,7 +131,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   }
 
   return (
-    <Box {...testIdProps('Your-claim: Status-tab-claim-details-page')}>
+    <Box {...testIdProps('Your-claim: Status-tab-claim-details-page')} testID="claimStatusDetailsID">
       {renderActiveClaimStatusDetails()}
       {renderClosedClaimStatusDetails()}
       <NeedHelpData claimId={claim.id} claimType={claim.attributes.claimType} claimPhase={claim.attributes.phase} />

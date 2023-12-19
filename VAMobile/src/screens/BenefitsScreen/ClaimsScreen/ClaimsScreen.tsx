@@ -1,13 +1,13 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
+import { BenefitsStackParamList } from '../BenefitsStackScreens'
 import { Box, FeatureLandingTemplate, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { BenefitsStackParamList } from '../BenefitsStackScreens'
 
 type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
 

@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
 
 import { Box, ClickToCallPhoneNumber, CrisisLineCta, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'

@@ -1,23 +1,20 @@
+import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
-import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
+import React, { FC, useState } from 'react'
 
-import { useDemographics } from 'api/demographics/getDemographics'
-import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
-import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView, TextViewProps } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
+import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { featureEnabled } from 'utils/remoteConfig'
+import { registerReviewEvent } from 'utils/inAppReviews'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
-import { featureEnabled } from 'utils/remoteConfig'
-import { screenContentAllowed } from 'utils/waygateConfig'
 
 const getPreferredName = (demographics: UserDemographics | undefined, t: TFunction): string => {
   if (demographics?.preferredName) {
@@ -109,25 +106,23 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     }
   }
 
+  if (personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError) {
+    return (
+      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
+        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={onTryAgain} />
+      </FeatureLandingTemplate>
+    )
+  }
+
+  if (loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics) {
+    return (
+      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
+        <LoadingComponent text={t('personalInformation.loading')} />
+      </FeatureLandingTemplate>
+    )
+  }
+
   const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
-  const errorCheck = personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError
-  const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
-
-  const onGenderIdentity = () => {
-    navigateTo('GenderIdentity')
-  }
-
-  const onPreferredName = () => {
-    navigateTo('PreferredName')
-  }
-
-  const onUpdateName = () => {
-    navigateTo('HowDoIUpdate', { screenType: 'name' })
-  }
-
-  const onUpdateDOB = () => {
-    navigateTo('HowDoIUpdate', { screenType: 'DOB' })
-  }
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')} testID="PersonalInformationTestID">
