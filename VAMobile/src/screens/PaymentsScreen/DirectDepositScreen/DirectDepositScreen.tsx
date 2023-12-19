@@ -11,6 +11,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackScreenProps } from '@react-navigation/stack'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
@@ -33,7 +34,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      if (ddNotInDowntime) {
+      if (screenContentAllowed('WG_DirectDeposit') && ddNotInDowntime) {
         dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
       }
     }, [dispatch, ddNotInDowntime]),
@@ -65,7 +66,11 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
       {
         textLines: textLines,
         a11yHintText: t('directDeposit.addBankAccountInformationHint'),
-        onPress: navigateTo('EditDirectDeposit', { displayTitle: bankData ? t('directDeposit.edit.title') : t('directDeposit.add.title') }),
+        onPress: () => {
+          if (waygateNativeAlert('WG_EditDirectDeposit')) {
+            navigateTo('EditDirectDeposit', { displayTitle: bankData ? t('directDeposit.edit.title') : t('directDeposit.add.title') })()
+          }
+        },
         decoratorProps: { accessibilityRole: 'button' },
       },
     ]

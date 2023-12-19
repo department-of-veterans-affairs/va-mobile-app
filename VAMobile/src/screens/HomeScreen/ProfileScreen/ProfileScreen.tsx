@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -8,9 +8,10 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
@@ -27,7 +28,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
 
   /**
    * Function used on error to reload the data for this page. This combines all calls necessary to load the page rather
@@ -48,83 +48,97 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, militaryHistoryNeedsUpdate, userAuthorizedServices?.militaryServiceHistory, mhNotInDowntime])
 
-  const getProfileButtons = (): ReactElement => {
-    if (userAuthorizedServices?.userProfileUpdate) {
-      return (
-        <Box>
-          <LargeNavButton
-            title={t('personalInformation.title')}
-            onPress={navigateTo('PersonalInformation')}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-          <LargeNavButton
-            title={t('contactInformation.title')}
-            onPress={navigateTo('ContactInformation')}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-        </Box>
-      )
-    } else {
-      return <></>
+  const onPersonalInformation = () => {
+    if (waygateNativeAlert('WG_PersonalInformation')) {
+      navigation.navigate('PersonalInformation')
     }
   }
 
-  // pass in optional onTryAgain because this screen needs to dispatch two actions for its loading sequence
-  if (useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError) {
-    return (
-      <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack}>
-        <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
-        <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-          <LargeNavButton
-            title={t('settings.title')}
-            onPress={navigateTo('Settings')}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-        </Box>
-      </ChildTemplate>
-    )
+  const onContactInformation = () => {
+    if (waygateNativeAlert('WG_ContactInformation')) {
+      navigation.navigate('ContactInformation')
+    }
   }
 
-  if (militaryInformationLoading || loadingUserAuthorizedServices) {
-    return (
-      <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack}>
-        <NameTag />
-        <LoadingComponent text={t('profile.loading')} />
-      </ChildTemplate>
-    )
+  const onMilitaryInformation = () => {
+    if (waygateNativeAlert('WG_MilitaryInformation')) {
+      navigation.navigate('MilitaryInformation')
+    }
   }
+
+  const onSettings = () => {
+    if (waygateNativeAlert('WG_Settings')) {
+      navigation.navigate('Settings')
+    }
+  }
+
+  const loadingCheck = militaryInformationLoading || loadingUserAuthorizedServices
+  const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
 
   return (
     <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack}>
-      <NameTag />
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-        {getProfileButtons()}
-        <LargeNavButton
-          title={t('militaryInformation.title')}
-          onPress={navigateTo('MilitaryInformation')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
-        <LargeNavButton
-          title={t('settings.title')}
-          onPress={navigateTo('Settings')}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
-      </Box>
+      {errorCheck ? (
+        <Box>
+          <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
+          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+            <LargeNavButton
+              title={t('settings.title')}
+              onPress={onSettings}
+              borderWidth={theme.dimensions.buttonBorderWidth}
+              borderColor={'secondary'}
+              borderColorActive={'primaryDarkest'}
+              borderStyle={'solid'}
+            />
+          </Box>
+        </Box>
+      ) : loadingCheck ? (
+        <Box>
+          <NameTag />
+          <LoadingComponent text={t('profile.loading')} />
+        </Box>
+      ) : (
+        <>
+          <NameTag />
+          <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            {userAuthorizedServices?.userProfileUpdate && (
+              <>
+                <LargeNavButton
+                  title={t('personalInformation.title')}
+                  onPress={onPersonalInformation}
+                  borderWidth={theme.dimensions.buttonBorderWidth}
+                  borderColor={'secondary'}
+                  borderColorActive={'primaryDarkest'}
+                  borderStyle={'solid'}
+                />
+                <LargeNavButton
+                  title={t('contactInformation.title')}
+                  onPress={onContactInformation}
+                  borderWidth={theme.dimensions.buttonBorderWidth}
+                  borderColor={'secondary'}
+                  borderColorActive={'primaryDarkest'}
+                  borderStyle={'solid'}
+                />
+              </>
+            )}
+            <LargeNavButton
+              title={t('militaryInformation.title')}
+              onPress={onMilitaryInformation}
+              borderWidth={theme.dimensions.buttonBorderWidth}
+              borderColor={'secondary'}
+              borderColorActive={'primaryDarkest'}
+              borderStyle={'solid'}
+            />
+            <LargeNavButton
+              title={t('settings.title')}
+              onPress={onSettings}
+              borderWidth={theme.dimensions.buttonBorderWidth}
+              borderColor={'secondary'}
+              borderColorActive={'primaryDarkest'}
+              borderStyle={'solid'}
+            />
+          </Box>
+        </>
+      )}
     </ChildTemplate>
   )
 }

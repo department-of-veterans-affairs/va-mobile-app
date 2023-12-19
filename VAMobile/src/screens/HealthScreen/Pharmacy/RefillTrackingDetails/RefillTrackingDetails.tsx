@@ -14,6 +14,7 @@ import { RootState } from 'store'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useBeforeNavBackListener, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import getEnv from 'utils/env'
@@ -50,7 +51,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   const noneNoted = t('noneNoted')
 
   useEffect(() => {
-    if (!prescriptionInDowntime) {
+    if (screenContentAllowed('WG_RefillTrackingModal') && !prescriptionInDowntime) {
       dispatch(getTrackingInfo(prescription.id, ScreenIDTypesConstants.PRESCRIPTION_TRACKING_DETAILS_SCREEN_ID))
     }
   }, [dispatch, prescription, prescriptionInDowntime])
