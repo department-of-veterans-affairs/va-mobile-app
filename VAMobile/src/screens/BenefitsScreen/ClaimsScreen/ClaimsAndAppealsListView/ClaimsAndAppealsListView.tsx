@@ -12,6 +12,7 @@ import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
 export const ClaimTypeConstants: {
@@ -54,6 +55,18 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     return ''
   }
 
+  const onClaimDetails = (id: string) => {
+    if (waygateNativeAlert('WG_ClaimDetailsScreen')) {
+      navigateTo('ClaimDetailsScreen', { claimID: id, claimType })()
+    }
+  }
+
+  const onAppealDetails = (id: string) => {
+    if (waygateNativeAlert('WG_AppealDetailsScreen')) {
+      navigateTo('AppealDetailsScreen', { appealID: id })()
+    }
+  }
+
   const getListItemVals = (): Array<DefaultListItemObj> => {
     const listItems: Array<DefaultListItemObj> = []
     claimsAndAppeals.forEach((claimAndAppeal, index) => {
@@ -72,11 +85,10 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
       const position = (currentPage - 1) * perPage + index + 1
       const a11yValue = t('listPosition', { position, total: totalEntries })
-      const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetailsScreen', { claimID: id, claimType }) : navigateTo('AppealDetailsScreen', { appealID: id })
       listItems.push({
         textLines,
         a11yValue,
-        onPress,
+        onPress: () => (type === ClaimOrAppealConstants.claim ? onClaimDetails(id) : onAppealDetails(id)),
         testId: getTestIDFromTextLines(textLines),
       })
     })

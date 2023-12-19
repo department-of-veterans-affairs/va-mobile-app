@@ -8,7 +8,8 @@ import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 
@@ -20,9 +21,12 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
 
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
+  const onCrisisLine = () => {
+    if (waygateNativeAlert('WG_VeteransCrisisLine')) {
+      navigation.navigate('VeteransCrisisLine')
+    }
+  }
 
   const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
 
