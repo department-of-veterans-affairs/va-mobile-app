@@ -229,7 +229,7 @@ const getLoadedAppointments = (appointments: Array<AppointmentData>, paginationD
  * Redux action to prefetch appointments for upcoming and past the given their date ranges
  */
 export const prefetchAppointments =
-  (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes): AppThunk =>
+  (upcoming: AppointmentsDateRange, past?: AppointmentsDateRange, screenID?: ScreenIDTypes, forceRefetch = false): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
@@ -241,24 +241,26 @@ export const prefetchAppointments =
       let upcomingAppointments
       let pastAppointments
 
-      // use loaded data if we have it
-      const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, pastPagination, 1, DEFAULT_PAGE_SIZE)
-      if (loadedPastAppointments && getState().appointments.pastCcServiceError === false && getState().appointments.pastVaServiceError === false) {
-        pastAppointments = loadedPastAppointments
-      } else {
-        pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
-          startDate: past.startDate,
-          endDate: past.endDate,
-          'page[size]': DEFAULT_PAGE_SIZE.toString(),
-          'page[number]': '1', // prefetch assume always first page
-          sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest,
-          'included[]': 'pending',
-        } as Params)
+      if (past) {
+        // use loaded data if we have it and `forceRefetch` is false
+        const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, pastPagination, 1, DEFAULT_PAGE_SIZE)
+        if (!forceRefetch && loadedPastAppointments && getState().appointments.pastCcServiceError === false && getState().appointments.pastVaServiceError === false) {
+          pastAppointments = loadedPastAppointments
+        } else {
+          pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
+            startDate: past.startDate,
+            endDate: past.endDate,
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            'page[number]': '1', // prefetch assume always first page
+            sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest,
+            'included[]': 'pending',
+          } as Params)
+        }
       }
 
       // use loaded data if we have it
       const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, upcomingPagination, 1, DEFAULT_PAGE_SIZE)
-      if (loadedUpcomingAppointments && getState().appointments.upcomingCcServiceError === false && getState().appointments.upcomingVaServiceError === false) {
+      if (!forceRefetch && loadedUpcomingAppointments && getState().appointments.upcomingCcServiceError === false && getState().appointments.upcomingVaServiceError === false) {
         upcomingAppointments = loadedUpcomingAppointments
       } else {
         upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
