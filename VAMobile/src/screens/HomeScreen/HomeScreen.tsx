@@ -84,7 +84,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <CategoryLanding headerButton={headerButton}>
+    <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
         <Nametag />

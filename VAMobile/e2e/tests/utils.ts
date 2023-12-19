@@ -59,7 +59,8 @@ export async function loginToDemoMode(skipOnboarding = true) {
   if (DEMO_PASSWORD !== undefined) {
     await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).replaceText(DEMO_PASSWORD)
   }
-  
+
+  await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).tapReturnKey()
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
   await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
