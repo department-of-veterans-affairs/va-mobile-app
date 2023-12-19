@@ -1,5 +1,6 @@
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useCallback } from 'react'
 
@@ -17,7 +18,6 @@ import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointmen
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useFocusEffect } from '@react-navigation/native'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
