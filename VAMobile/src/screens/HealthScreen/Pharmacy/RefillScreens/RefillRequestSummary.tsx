@@ -12,14 +12,9 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useBeforeNavBackListener, useTheme } from 'utils/hooks'
 import { useAppDispatch, useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { useTranslation } from 'react-i18next'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 const enum REQUEST_STATUS {
@@ -42,7 +37,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const onNavToHistory = () => {
     dispatch(dispatchSetPrescriptionsNeedLoad())
     dispatch(dispatchClearLoadingRequestRefills())
-    navigation.navigate('PrescriptionHistory', {})
+    navigateTo('PrescriptionHistory', {})
   }
 
   useEffect(() => {

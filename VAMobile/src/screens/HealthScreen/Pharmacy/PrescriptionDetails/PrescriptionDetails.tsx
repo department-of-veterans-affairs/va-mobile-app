@@ -9,14 +9,15 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
+import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import getEnv from 'utils/env'
 import { useAppDispatch, useDestructiveActionSheet, useDowntime, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
-import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
+import { useFocusEffect } from '@react-navigation/native'
 import DetailsTextSections from './DetailsTextSections'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
+import getEnv from 'utils/env'
 
 type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'PrescriptionDetails'>
 

@@ -16,7 +16,6 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
 
@@ -78,7 +77,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
     if (claim) {
       logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, count))
     }
-    navigateTo('AskForClaimDecision', { claimID })()
+    navigateTo('AskForClaimDecision', { claimID })
   }
 
   return (

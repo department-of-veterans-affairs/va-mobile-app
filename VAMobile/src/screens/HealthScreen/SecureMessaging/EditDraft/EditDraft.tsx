@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import {
@@ -21,15 +21,14 @@ import {
   TextView,
   VAButton,
 } from 'components'
-import { MenuViewActionsType } from 'components/Menu'
-import { SnackbarMessages } from 'components/SnackBar'
-import { Events } from 'constants/analytics'
-import { NAMESPACE } from 'constants/namespaces'
-import { FolderNameTypeConstants, FormHeaderTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
-import { InteractionManager, Pressable, ScrollView } from 'react-native'
-import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { RootState } from 'store'
 import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
+import { Events } from 'constants/analytics'
+import { FolderNameTypeConstants, FormHeaderTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { InteractionManager, Pressable, ScrollView } from 'react-native'
+import { MenuViewActionsType } from 'components/Menu'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import {
   SecureMessagingState,
   deleteDraft,
@@ -44,13 +43,14 @@ import {
   sendMessage,
   updateSecureMessagingTab,
 } from 'store/slices'
+import { SnackbarMessages } from 'components/SnackBar'
+import { SubjectLengthValidationFn, formatSubject, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { SubjectLengthValidationFn, formatSubject, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
-import { screenContentAllowed } from 'utils/waygateConfig'
-import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
+import { screenContentAllowed } from 'utils/waygateConfig'
+import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 

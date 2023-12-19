@@ -1,12 +1,12 @@
-import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
 
-import Box, { BoxProps } from 'components/Box'
-import LabelTag, { LabelTagProps } from 'components/LabelTag'
 import { NAMESPACE } from 'constants/namespaces'
 import { RefillStatus } from 'store/api/types'
-import { useRouteNavigation } from 'utils/hooks'
 import { getTagTypeForStatus, getTextForRefillStatus } from 'utils/prescriptions'
+import { useRouteNavigation } from 'utils/hooks'
+import Box, { BoxProps } from 'components/Box'
+import LabelTag, { LabelTagProps } from 'components/LabelTag'
 
 export type RefillTagProps = {
   status: RefillStatus

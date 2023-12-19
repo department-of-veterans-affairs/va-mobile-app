@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
 
 import { Box, ButtonTypesConstants, VAButton, VAButtonProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'

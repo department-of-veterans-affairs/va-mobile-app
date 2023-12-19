@@ -1,16 +1,16 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import React, { FC, useEffect } from 'react'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
-import { useSelector } from 'react-redux'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useSelector } from 'react-redux'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
@@ -25,6 +25,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
   const dispatch = useAppDispatch()
+  const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 

@@ -12,8 +12,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
-import getEnv from 'utils/env'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -58,7 +56,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       }
 
       setError('')
-      navigateTo('UploadFile', { request, fileUploaded: document })()
+      navigateTo('UploadFile', { request, fileUploaded: document })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (docError: any) {
       if (DocumentPicker.isCancel(docError as Error)) {

@@ -92,13 +92,13 @@ export type WaygateToggleType =
   | 'WG_TakePhotos'
   | 'WG_UploadFile'
   | 'WG_UploadOrAddPhotos'
-    'WG_Claims'
-    'WG_LoaGate'
-    'WG_GenericLetter'
-    'WG_Webview'
-    'WG_Sandbox'
-    'WG_HapticsDemoScreen'
-    'WG_InAppRecruitment'
+  | 'WG_Claims'
+  | 'WG_LoaGate'
+  | 'WG_GenericLetter'
+  | 'WG_Webview'
+  | 'WG_Sandbox'
+  | 'WG_HapticsDemoScreen'
+  | 'WG_InAppRecruitment'
 
 type WaygateToggleValues = {
   WG_Home: Waygate
