@@ -94,7 +94,7 @@ context('Inbox', () => {
   describe('when a message is clicked', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByTestId('Unread: Mock Sender Invalid DateTime General: Default subject line'))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessageScreen', { currentPage: 2, folderID: 0, messageID: 1, messagesLeft: 1 })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessage', { currentPage: 2, folderID: 0, messageID: 1, messagesLeft: 1 })
       expect(mockNavigateToSpy).toHaveBeenCalled()
     })
   })

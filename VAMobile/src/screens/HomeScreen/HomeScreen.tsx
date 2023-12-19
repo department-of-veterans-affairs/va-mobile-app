@@ -12,7 +12,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -34,10 +35,14 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
   const theme = useTheme()
 
-  const onContactVA = navigateTo('ContactVA')
+  const onContactVA = () => {
+    if (waygateNativeAlert('WG_ContactVA')) {
+      navigation.navigate('ContactVA')
+    }
+  }
+
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
     navigation.navigate('Webview', {
@@ -46,6 +51,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       loadingMessage: t('webview.valocation.loading'),
     })
   }
+
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('home_screen'))
     navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
@@ -65,15 +71,21 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     name: 'ProfileSelected',
   }
 
+  const onProfile = () => {
+    if (waygateNativeAlert('WG_Profile')) {
+      navigation.navigate('Profile')
+    }
+  }
+
   const headerButton = {
     label: t('profile.title'),
     icon: profileIconProps,
-    onPress: navigateTo('Profile'),
+    onPress: onProfile,
   }
 
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
-      <Box flex={1} justifyContent="flex-start">
+      <Box>
         <EncourageUpdateAlert />
         <Nametag />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
@@ -129,7 +141,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
       <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen name="RemoteConfig" component={RemoteConfigScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen name="Sandbox" component={SandboxScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="HapticsDemo" component={HapticsDemoScreen} options={{ headerShown: false }} />
     </HomeScreenStack.Navigator>
   )
 }

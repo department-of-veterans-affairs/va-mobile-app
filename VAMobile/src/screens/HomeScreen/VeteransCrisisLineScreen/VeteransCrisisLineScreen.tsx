@@ -43,9 +43,7 @@ const VeteransCrisisLineScreen: FC = () => {
             {t('veteransCrisisLine.connectWithResponders')}
           </TextView>
         </Box>
-
         <VeteransCrisisLineNumbers />
-
         <Box mt={standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('veteransCrisisLine.getMoreResources')}

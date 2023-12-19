@@ -10,7 +10,7 @@ import { DisabilityRatingState, MilitaryServiceState, checkForDowntimeErrors, ge
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useOrientation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import colors from 'styles/themes/VAColors'
 
@@ -31,6 +31,9 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({ enabled: loggedIn })
+  // TODO: For some reason Unit Tests cannot pick up the DowntimeFeatureTypeConstants constant
+  const drNotInDowntime = !useDowntime('disability_rating')
+  const mhNotInDowntime = !useDowntime('military_service_history')
 
   const [displayMessage, setDisplayMessage] = useState('')
 
@@ -46,9 +49,9 @@ const SyncScreen: FC<SyncScreenProps> = () => {
 
   useEffect(() => {
     if (loggedIn) {
-      if (!loadingUserAuthorizedServices && userAuthorizedServices?.militaryServiceHistory && !militaryHistoryLoaded && !militaryHistoryLoading) {
+      if (!loadingUserAuthorizedServices && userAuthorizedServices?.militaryServiceHistory && !militaryHistoryLoaded && !militaryHistoryLoading && mhNotInDowntime) {
         dispatch(getServiceHistory())
-      } else if (!disabilityRatingLoaded && !disabilityRatingLoading) {
+      } else if (!disabilityRatingLoaded && !disabilityRatingLoading && drNotInDowntime) {
         dispatch(getDisabilityRating())
       }
     }
@@ -59,6 +62,8 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     userAuthorizedServices?.militaryServiceHistory,
     disabilityRatingLoaded,
     disabilityRatingLoading,
+    drNotInDowntime,
+    mhNotInDowntime,
     militaryHistoryLoaded,
     militaryHistoryLoading,
   ])
@@ -74,11 +79,24 @@ const SyncScreen: FC<SyncScreenProps> = () => {
       setDisplayMessage('')
     }
 
-    const finishSyncingMilitaryHistory = !loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded)
-    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded) {
+    const finishSyncingMilitaryHistory = !mhNotInDowntime || (!loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded))
+    const finishSyncingDisabilityRating = !drNotInDowntime || (drNotInDowntime && disabilityRatingLoaded)
+    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, loggingOut, loadingUserAuthorizedServices, militaryHistoryLoaded, userAuthorizedServices?.militaryServiceHistory, t, disabilityRatingLoaded, syncing])
+  }, [
+    dispatch,
+    loggedIn,
+    loggingOut,
+    loadingUserAuthorizedServices,
+    militaryHistoryLoaded,
+    userAuthorizedServices?.militaryServiceHistory,
+    t,
+    disabilityRatingLoaded,
+    drNotInDowntime,
+    mhNotInDowntime,
+    syncing,
+  ])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles} removeInsets={true}>
