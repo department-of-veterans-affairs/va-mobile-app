@@ -62,7 +62,7 @@ describe('VA Letters', () => {
     await element(by.text('Save')).tap()
     await element(by.id('suggestedAddressTestID')).tap()
     await element(by.id('Use this address')).tap()
-    //await element(by.text('Cancel')).tap()
+
     await expect(element(by.text(LettersConstants.DOWNLOAD_DOCUMENTS_TEXT))).toExist()
   
   })
@@ -74,8 +74,15 @@ describe('VA Letters', () => {
     await expect(element(by.text('3101 N Fort Valley Rd, 2'))).toExist()
   })
 
-  it('should navigate back to letters', async() => {
+  it('should navigate back to letters and reset mailing address', async() => {
     await openBenefits()
+    await element(by.text('3101 N Fort Valley Rd, 2')).tap()
+
+    await element(by.id('streetAddressLine2TestID')).clearText()
+    await element(by.text('Save')).tap()
+    await element(by.id('suggestedAddressTestID')).tap()
+    await element(by.id('Use this address')).tap()
+    await expect(element(by.text(LettersConstants.MAILING_ADDRESS))).toExist()
   })
 
   it('should view letter types', async () => {
