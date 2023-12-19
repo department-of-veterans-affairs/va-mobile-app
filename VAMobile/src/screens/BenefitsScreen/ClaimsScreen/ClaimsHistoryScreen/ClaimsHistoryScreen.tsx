@@ -102,7 +102,7 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   }
 
   return (
-    <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title}>
+    <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title} testID="claimsHistoryID">
       {useError(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID) || getUserAuthorizedServicesError ? (
         <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
       ) : loadingClaimsAndAppeals || loadingUserAuthorizedServices ? (

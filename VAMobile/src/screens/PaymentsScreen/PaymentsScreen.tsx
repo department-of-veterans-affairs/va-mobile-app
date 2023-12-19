@@ -30,7 +30,7 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
   const onDirectDeposit = () => {
     if (userAuthorizedServices?.directDepositBenefitsUpdate) {
       navigateTo('DirectDeposit')
-    } else {
+    } else if (!userAuthorizedServices?.directDepositBenefitsUpdate) {
       navigateTo('HowToUpdateDirectDeposit')
     }
   }
