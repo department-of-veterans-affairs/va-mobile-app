@@ -89,46 +89,6 @@ export const linking: LinkingOptions<any> = {
           },
         ],
       }
-    } else if (pathParts[0] === 'prescriptions') {
-      return {
-        routes: [
-          {
-            name: 'Tabs',
-            state: {
-              routes: [
-                {
-                  name: 'HealthTab',
-                  state: {
-                    routes: [{ name: 'Health' }, { name: 'PrescriptionHistory' }],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      }
-    } else if (pathParts[0] === 'claims') {
-      return {
-        routes: [
-          {
-            name: 'Tabs',
-            state: {
-              routes: [
-                {
-                  name: 'BenefitsTab',
-                  state: {
-                    routes: [
-                      { name: 'Benefits' },
-                      ...(authorizedServices?.decisionLetters ? [{ name: 'Claims' }] : []),
-                      { name: 'ClaimsHistory' },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      }
     }
   },
 }

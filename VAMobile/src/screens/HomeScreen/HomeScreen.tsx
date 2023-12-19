@@ -5,37 +5,19 @@ import { useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
 
-import { DateTime } from 'luxon'
-
-import { useAppointments } from 'api/appointments'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
-import { useServiceHistory } from 'api/militaryService'
-import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { usePrescriptions } from 'api/prescriptions'
-import { useFolders } from 'api/secureMessaging'
-import { ServiceHistoryData } from 'api/types'
-import {
-  Box,
-  CategoryLanding,
-  EncourageUpdateAlert,
-  Nametag,
-  SimpleList,
-  SimpleListItemObj,
-  TextView,
-  VAIconProps,
-} from 'components'
-import { Events } from 'constants/analytics'
-import { TimeFrameTypeConstants } from 'constants/appointments'
+import { AppointmentsState } from 'store/slices'
+import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { NAMESPACE } from 'constants/namespaces'
+import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { FolderNameTypeConstants } from 'constants/secureMessaging'
-import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
+import { HomeStackParamList } from './HomeStackScreens'
+import { Linking } from 'react-native'
+import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { AnalyticsState } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -61,122 +43,7 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 export function HomeScreen({}: HomeScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
-  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-
-  const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
-  const { data: userAuthorizedServices } = useAuthorizedServices()
-  const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
-  const { data: apptsData, isFetched: apptsPrefetch } = useAppointments(
-    upcomingAppointmentDateRange.startDate,
-    upcomingAppointmentDateRange.endDate,
-    TimeFrameTypeConstants.UPCOMING,
-    1,
-    {
-      enabled: featureEnabled('homeScreenPrefetch'),
-    },
-  )
-  const { data: claimsData, isFetched: claimsPrefetch } = useClaimsAndAppeals('ACTIVE', 1, {
-    enabled: featureEnabled('homeScreenPrefetch'),
-  })
-  const { data: foldersData, isFetched: smPrefetch } = useFolders({
-    enabled: userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch'),
-  })
-  const { data: prescriptionData, isFetched: rxPrefetch } = usePrescriptions({
-    enabled: featureEnabled('homeScreenPrefetch'),
-  })
-  const { data: militaryServiceHistoryAttributes } = useServiceHistory({
-    enabled: false,
-  })
-  const { data: personalInfoData } = usePersonalInformation({ enabled: false })
-
-  useEffect(() => {
-    if (apptsPrefetch && apptsData?.meta) {
-      logAnalyticsEvent(Events.vama_hs_appts_count(apptsData.meta.upcomingAppointmentsCount))
-    }
-  }, [apptsData, apptsPrefetch])
-
-  useEffect(() => {
-    if (smPrefetch && foldersData) {
-      const inboxFolder = foldersData.data.find((folder) => folder.attributes.name === FolderNameTypeConstants.inbox)
-      if (inboxFolder) {
-        logAnalyticsEvent(Events.vama_hs_sm_count(inboxFolder.attributes.unreadCount))
-      }
-    }
-  }, [smPrefetch, foldersData])
-
-  useEffect(() => {
-    if (rxPrefetch && prescriptionData?.meta.prescriptionStatusCount.isRefillable) {
-      logAnalyticsEvent(Events.vama_hs_rx_count(prescriptionData.meta.prescriptionStatusCount.isRefillable))
-    }
-  }, [rxPrefetch, prescriptionData])
-
-  useEffect(() => {
-    if (claimsPrefetch && claimsData?.meta.activeClaimsCount) {
-      logAnalyticsEvent(Events.vama_hs_claims_count(claimsData?.meta.activeClaimsCount))
-    }
-  }, [claimsPrefetch, claimsData])
-
-  useEffect(() => {
-    if (apptsPrefetch && claimsPrefetch && rxPrefetch && smPrefetch) {
-      logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
-    }
-  }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
-
-  useEffect(() => {
-    const SERVICE_INDICATOR_KEY = `@store_service_indicator${personalInfoData?.id}`
-    const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
-
-    const setServiceIndicators = async (serviceIndicators: string): Promise<void> => {
-      try {
-        serviceHistory.forEach((service) => {
-          if (service.honorableServiceIndicator === 'Y') {
-            logAnalyticsEvent(Events.vama_vet_status_yStatus())
-          } else if (service.honorableServiceIndicator === 'N') {
-            logAnalyticsEvent(Events.vama_vet_status_nStatus())
-          } else if (service.honorableServiceIndicator === 'Z') {
-            logAnalyticsEvent(Events.vama_vet_status_zStatus(service.characterOfDischarge))
-          }
-        })
-        await AsyncStorage.setItem(SERVICE_INDICATOR_KEY, serviceIndicators)
-        console.log('setStorage: ', SERVICE_INDICATOR_KEY, serviceIndicators)
-      } catch (err) {
-        logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
-      }
-    }
-
-    const checkServiceIndicators = async (serviceIndicators: string): Promise<void> => {
-      if (!serviceIndicators) {
-        return
-      }
-
-      try {
-        const asyncServiceIndicators = await AsyncStorage.getItem(SERVICE_INDICATOR_KEY)
-        if (!asyncServiceIndicators || asyncServiceIndicators !== serviceIndicators) {
-          console.log('asyncServiceIndicators: ', asyncServiceIndicators)
-          setServiceIndicators(serviceIndicators)
-        }
-      } catch (err) {
-        logNonFatalErrorToFirebase(err, 'loadOverrides: AsyncStorage error')
-      }
-    }
-
-    if (serviceHistory) {
-      let serviceIndicators = ''
-      serviceHistory.forEach((service) => {
-        console.log('service: ', JSON.stringify(service, undefined, 2))
-        serviceIndicators = serviceIndicators.concat(service.honorableServiceIndicator)
-      })
-      console.log('serviceIndicators: ', serviceIndicators)
-      checkServiceIndicators(serviceIndicators)
-    }
-  }, [militaryServiceHistoryAttributes?.serviceHistory, personalInfoData?.id])
-
-  const navigateTo = useRouteNavigation()
-
-  const onContactVA = () => {
-    navigateTo('ContactVA')
-  }
+  const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
 
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
@@ -225,6 +92,16 @@ export function HomeScreen({}: HomeScreenProps) {
       <Box>
         <EncourageUpdateAlert />
         <Nametag />
+        {Number(upcomingAppointmentsCount) > 0 && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <LargeNavButton
+              title={`${t('appointments')}`}
+              subText={`(${upcomingAppointmentsCount} ${t('upcoming')})`}
+              onPress={() => Linking.openURL('vamobile://appointments')}
+              borderWidth={theme.dimensions.buttonBorderWidth}
+            />
+          </Box>
+        )}
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
             {t('aboutVA')}

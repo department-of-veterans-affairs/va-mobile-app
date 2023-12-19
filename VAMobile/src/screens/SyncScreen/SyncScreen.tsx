@@ -3,15 +3,15 @@ import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useDisabilityRating } from 'api/disabilityRating'
-import { useServiceHistory } from 'api/militaryService'
+import { AppointmentsState, AuthState, completeSync, logInDemoMode, prefetchAppointments } from 'store/slices'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { AuthState, ErrorsState, checkForDowntimeErrors, completeSync, logInDemoMode } from 'store/slices'
-import { DemoState } from 'store/slices/demoSlice'
+import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
+import { testIdProps } from 'utils/accessibility'
+import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import colors from 'styles/themes/VAColors'
 import { testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
@@ -34,17 +34,10 @@ function SyncScreen({}: SyncScreenProps) {
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const { downtimeWindowsFetched } = useSelector<RootState, ErrorsState>((state) => state.errors)
-
-  const { isFetching: fetchingUserAuthorizedServices } = useAuthorizedServices({
-    enabled: loggedIn,
-  })
-  const { isFetching: fetchingServiceHistory } = useServiceHistory({
-    enabled: loggedIn && downtimeWindowsFetched,
-  })
-  const { isFetching: fetchingDisabilityRating } = useDisabilityRating({
-    enabled: loggedIn && downtimeWindowsFetched,
-  })
+  const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { preloadComplete: appointmentsLoaded } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({ enabled: loggedIn })
 
   const [displayMessage, setDisplayMessage] = useState('')
 
@@ -59,6 +52,31 @@ function SyncScreen({}: SyncScreenProps) {
   }, [dispatch, demoMode, loggedIn])
 
   useEffect(() => {
+    if (loggedIn) {
+      if (!loadingUserAuthorizedServices && userAuthorizedServices?.militaryServiceHistory && !militaryHistoryLoaded && !militaryHistoryLoading) {
+        dispatch(getServiceHistory())
+      } else if (!disabilityRatingLoaded && !disabilityRatingLoading) {
+        dispatch(getDisabilityRating())
+      }
+    }
+  }, [
+    dispatch,
+    loggedIn,
+    loadingUserAuthorizedServices,
+    userAuthorizedServices?.militaryServiceHistory,
+    disabilityRatingLoaded,
+    disabilityRatingLoading,
+    militaryHistoryLoaded,
+    militaryHistoryLoading,
+  ])
+
+  useEffect(() => {
+    if (loggedIn && !appointmentsLoaded) {
+      dispatch(prefetchAppointments(getUpcomingAppointmentDateRange()))
+    }
+  }, [dispatch, loggedIn, appointmentsLoaded])
+
+  useEffect(() => {
     if (syncing) {
       if (!loggingOut) {
         setDisplayMessage(t('sync.progress.signin'))
@@ -69,28 +87,21 @@ function SyncScreen({}: SyncScreenProps) {
       setDisplayMessage('')
     }
 
-    if (
-      !loggingOut &&
-      loggedIn &&
-      downtimeWindowsFetched &&
-      !fetchingUserAuthorizedServices &&
-      !fetchingServiceHistory &&
-      !fetchingDisabilityRating
-    ) {
-      setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
+    const finishSyncingMilitaryHistory = !loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded)
+    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded && appointmentsLoaded) {
       dispatch(completeSync())
     }
   }, [
     dispatch,
     loggedIn,
     loggingOut,
-    downtimeWindowsFetched,
-    fetchingUserAuthorizedServices,
-    fetchingServiceHistory,
-    fetchingDisabilityRating,
+    loadingUserAuthorizedServices,
+    militaryHistoryLoaded,
+    userAuthorizedServices?.militaryServiceHistory,
     t,
+    disabilityRatingLoaded,
+    appointmentsLoaded,
     syncing,
-    ENVIRONMENT,
   ])
 
   return (

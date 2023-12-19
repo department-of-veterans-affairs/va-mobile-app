@@ -1326,6 +1326,7 @@
   "textInput": "text input",
   "thisFacilityWillContactYou": "This facility will contact you if we need more information about your request.",
   "tryAgain": "Try again",
+  "upcoming": "upcoming",
   "upcomingAppointmentDetails.addToCalendarA11yHint": "Add this appointment to your device's calendar",
   "upcomingAppointmentDetails.appointmentCode": "Appointment code: {{code}}",
   "upcomingAppointmentDetails.cancelAppointment": "Cancel appointment",
