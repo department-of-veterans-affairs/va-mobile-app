@@ -1275,6 +1275,7 @@
   "text.raw": "{{text}}",
   "textInput": "text input",
   "tryAgain": "Try again",
+  "upcoming": "upcoming",
   "upcomingAppointmentDetails.addToCalendarA11yHint": "Add this appointment to your device's calendar",
   "upcomingAppointmentDetails.appointmentCode": "Appointment code: {{code}}",
   "upcomingAppointmentDetails.cancelAppointment": "Cancel appointment",
