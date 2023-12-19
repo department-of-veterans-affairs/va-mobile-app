@@ -25,8 +25,9 @@ const getContactInformation = async (): Promise<UserContactInformation | undefin
 /**
  * Returns a query for user contact information
  */
-export const useContactInformation = () => {
+export const useContactInformation = (options?: { enabled?: boolean }) => {
   return useQuery({
+    ...options,
     queryKey: contactInformationKeys.contactInformation,
     queryFn: () => getContactInformation(),
     meta: {

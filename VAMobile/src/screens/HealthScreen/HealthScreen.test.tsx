@@ -1,4 +1,3 @@
-import 'react-native'
 import React from 'react'
 
 import { screen, fireEvent } from '@testing-library/react-native'
@@ -16,7 +15,7 @@ jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({
-      status: "success",
+      status: 'success',
       data: {
         appeals: true,
         appointments: true,
@@ -33,9 +32,9 @@ jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
         prescriptions: true,
         scheduleAppointments: true,
         secureMessaging: true,
-        userProfileUpdate: true
-      }
-    })
+        userProfileUpdate: true,
+      },
+    }),
   }
 })
 

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { overrideRemote, devConfig, featureEnabled, activateRemoteConfig, setDebugConfig, getFeatureToggles } from 'utils/remoteConfig'
+import { overrideRemote, devConfig, featureEnabled, activateRemoteConfig, setDebugConfig } from 'utils/remoteConfig'
 
 const mockGetItem = AsyncStorage.getItem as jest.Mock
 const mockSetItem = AsyncStorage.setItem as jest.Mock

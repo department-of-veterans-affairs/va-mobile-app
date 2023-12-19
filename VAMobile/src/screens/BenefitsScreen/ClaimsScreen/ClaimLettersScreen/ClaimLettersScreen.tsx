@@ -15,6 +15,7 @@ import { VATypographyThemeVariants } from 'styles/theme'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoClaimLettersScreen from './NoClaimLettersScreen/NoClaimLettersScreen'
@@ -38,37 +39,13 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   }
 
   useEffect(() => {
-    if (!claimsInDowntime) {
+    if (screenContentAllowed('WG_ClaimLettersScreen') && !claimsInDowntime) {
       dispatch(getDecisionLetters(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID))
     }
   }, [dispatch, claimsInDowntime])
 
   const fetchInfoAgain = () => {
     dispatch(getDecisionLetters(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID))
-  }
-
-  if (useError(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID)) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID} onTryAgain={fetchInfoAgain} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loading || downloading) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-        <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (decisionLetters.length === 0) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-        <NoClaimLettersScreen />
-      </FeatureLandingTemplate>
-    )
   }
 
   const letterButtons = decisionLetters.map((letter, index) => {
@@ -97,12 +74,22 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
   return (
     <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} paragraphSpacing={true}>
-        {t('claimLetters.overview')}
-      </TextView>
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <DefaultList items={letterButtons} />
-      </Box>
+      {useError(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID) ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID} onTryAgain={fetchInfoAgain} />
+      ) : loading || downloading ? (
+        <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
+      ) : decisionLetters.length === 0 ? (
+        <NoClaimLettersScreen />
+      ) : (
+        <>
+          <TextView variant="MobileBody" mx={theme.dimensions.gutter} paragraphSpacing={true}>
+            {t('claimLetters.overview')}
+          </TextView>
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <DefaultList items={letterButtons} />
+          </Box>
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }
