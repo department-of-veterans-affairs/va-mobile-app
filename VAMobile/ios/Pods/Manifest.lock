@@ -461,13 +461,13 @@ PODS:
     - React-Core
   - react-native-document-picker (8.0.0):
     - React-Core
-  - react-native-image-picker (5.4.2):
+  - react-native-image-picker (5.7.0):
     - React-Core
   - react-native-notifications (5.0.0):
     - React-Core
   - react-native-safe-area-context (3.4.1):
     - React-Core
-  - react-native-webview (12.0.2):
+  - react-native-webview (12.4.0):
     - React-Core
   - React-NativeModulesApple (0.72.7):
     - React-callinvoker
@@ -927,10 +927,10 @@ SPEC CHECKSUMS:
   React-logger: 8edc785c47c8686c7962199a307015e2ce9a0e4f
   react-native-cookies: f54fcded06bb0cda05c11d86788020b43528a26c
   react-native-document-picker: 429972f7ece4463aa5bcdd789622b3a674a3c5d1
-  react-native-image-picker: 77f552291e993f3fdcdf48cc3c280ef7f11789c8
+  react-native-image-picker: 3269f75c251cdcd61ab51b911dd30d6fff8c6169
   react-native-notifications: d309f7080aad71206882dbb98d9ed788969f3b6d
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
-  react-native-webview: 203b6a1c7507737f777c91d7e10c30e7e67c1a17
+  react-native-webview: 65f1143983cfeaedf02fd25b2621d3f4a37075de
   React-NativeModulesApple: 6f63747fd6e237b646c61957a8f877a2713617af
   React-perflogger: 31ea61077185eb1428baf60c0db6e2886f141a5a
   React-RCTActionSheet: 392090a3abc8992eb269ef0eaa561750588fc39d
