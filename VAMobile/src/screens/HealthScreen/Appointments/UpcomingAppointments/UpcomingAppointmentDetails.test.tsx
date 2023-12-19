@@ -1,7 +1,6 @@
 import React from 'react'
 import { Alert } from 'react-native'
 import { screen, fireEvent } from '@testing-library/react-native'
-import { when } from 'jest-when'
 
 import { context, mockNavProps, render } from 'testUtils'
 import { initialAppointmentsState, InitialState } from 'store/slices'
@@ -23,9 +22,7 @@ jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -33,7 +30,6 @@ context('UpcomingAppointmentDetails', () => {
   let props: any
   let goBackSpy = jest.fn()
   let navigateSpy = jest.fn()
-  let navigateToSessionNotStartedSpy = jest.fn()
 
   let apptPhoneData = {
     areaCode: '123',
@@ -51,11 +47,6 @@ context('UpcomingAppointmentDetails', () => {
     hasUrl: boolean = false,
   ): void => {
     props = mockNavProps(undefined, { setOptions: jest.fn(), goBack: goBackSpy, navigate: navigateSpy }, { params: { appointmentID: '1' } })
-
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('SessionNotStarted')
-      .mockReturnValue(navigateToSessionNotStartedSpy)
 
     render(<UpcomingAppointmentDetails {...props} />, {
       preloadedState: {
@@ -138,7 +129,9 @@ context('UpcomingAppointmentDetails', () => {
     it('should navigate to the SessionNotStarted screen when the URL is empty', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
       fireEvent.press(screen.getByText('Join session'))
-      expect(navigateToSessionNotStartedSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('SessionNotStarted')
+
     })
   })
 

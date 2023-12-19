@@ -7,22 +7,18 @@ import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialSta
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { when } from 'jest-when'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 context('FileRequest', () => {
   let props: any
-  let mockNavigateToFileRequestdetailsSpy: jest.Mock
 
   let requests = [
     {
@@ -37,11 +33,6 @@ context('FileRequest', () => {
 
   const initializeTestInstance = (requests: ClaimEventData[], currentPhase?: number, errorsState: ErrorsState = initialErrorsState): void => {
     props = mockNavProps(undefined, undefined, { params: { requests, currentPhase } })
-    mockNavigateToFileRequestdetailsSpy = jest.fn()
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('FileRequestDetails', { request: requests[0] })
-      .mockReturnValue(mockNavigateToFileRequestdetailsSpy)
 
     render(<FileRequest {...props} />, {
       preloadedState: {
@@ -121,7 +112,8 @@ context('FileRequest', () => {
     describe('on click of a file request', () => {
       it('should navigate to file request details page', async () => {
         fireEvent.press(screen.getByRole('button', { name: 'Request 1' }))
-        expect(mockNavigateToFileRequestdetailsSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', { request: requests[0] })
       })
     })
   })

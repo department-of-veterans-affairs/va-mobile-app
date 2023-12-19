@@ -11,15 +11,12 @@ jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 context('Folder', () => {
   let props: any
-  let mockNavigateToSpy: jest.Mock
 
   let listOfFolders: SecureMessagingFolderList = [
     {
@@ -81,8 +78,6 @@ context('Folder', () => {
 
   const initializeTestInstance = (foldersList: SecureMessagingFolderList, loading = false, errorsState: ErrorsState = initialErrorsState) => {
     props = mockNavProps()
-    mockNavigateToSpy = jest.fn()
-    mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
 
     render(<Folder {...props} />, {
       preloadedState: {
@@ -116,7 +111,7 @@ context('Folder', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Drafts (2)' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { folderID: -2, folderName: 'Drafts' })
-      expect(mockNavigateToSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 })

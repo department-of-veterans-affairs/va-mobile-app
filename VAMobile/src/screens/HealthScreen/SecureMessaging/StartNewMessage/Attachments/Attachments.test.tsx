@@ -2,7 +2,6 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import DocumentPicker from 'react-native-document-picker'
 import { ImagePickerResponse } from 'react-native-image-picker'
-import { when } from 'jest-when'
 
 import { context, mockNavProps, render, waitFor } from 'testUtils'
 import Attachments from './Attachments'
@@ -24,25 +23,16 @@ jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
     useBeforeNavBackListener: jest.fn(),
   }
 })
 
 context('Attachments', () => {
   let goBack: jest.Mock
-  let mockNavigateToEditDraftSpy: jest.Mock
 
   const initializeTestInstance = (attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse> = []) => {
     goBack = jest.fn()
-    mockNavigateToEditDraftSpy = jest.fn()
-
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('EditDraft', { attachmentFileToAdd: { name: 'custom-file-name.docx', type: 'docx', uri: 'uri' }, attachmentFileToRemove: {}, messageID: undefined })
-      .mockReturnValue(mockNavigateToEditDraftSpy)
 
     const props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentsList } })
 
@@ -105,7 +95,8 @@ context('Attachments', () => {
           promise
         })
         fireEvent.press(screen.getByRole('button', { name: 'Attach' }))
-        expect(mockNavigateToEditDraftSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('EditDraft', { attachmentFileToAdd: { name: 'custom-file-name.docx', type: 'docx', uri: 'uri' }, attachmentFileToRemove: {}, messageID: undefined })
       })
     })
 

@@ -1,6 +1,5 @@
 import React from 'react'
 import { screen, fireEvent } from '@testing-library/react-native'
-import { when } from 'jest-when'
 
 import { context, render } from 'testUtils'
 import ClaimPhase from './ClaimPhase'
@@ -11,22 +10,14 @@ jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 context('ClaimPhase', () => {
   let props: any
-  let mockNavigateToClaimFileUploadSpy: jest.Mock
 
   const initializeTestInstance = (phase: number, current: number) => {
-    mockNavigateToClaimFileUploadSpy = jest.fn()
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('FileRequest', { claimID: undefined })
-      .mockReturnValue(mockNavigateToClaimFileUploadSpy)
     props = {
       phase,
       current,
@@ -87,7 +78,8 @@ context('ClaimPhase', () => {
         expect(screen.getByText('You have 2 file requests from VA')).toBeTruthy()
         expect(screen.getByRole('button', { name: 'Review file requests' })).toBeTruthy()
         fireEvent.press(screen.getByRole('button', { name: 'Review file requests' }))
-        expect(mockNavigateToClaimFileUploadSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequest', { claimID: undefined })
       })
 
       describe('when number of requests is equal to 1', () => {

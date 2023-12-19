@@ -12,9 +12,7 @@ jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -141,7 +139,6 @@ const mockMessages: SecureMessagingMessageMap = {
 context('EditDraft', () => {
   let props: any
   let goBack: jest.Mock
-  let navigateSpy: jest.Mock
 
   const initializeTestInstance = ({
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
@@ -153,7 +150,6 @@ context('EditDraft', () => {
     messageID = 2,
   }) => {
     goBack = jest.fn()
-    navigateSpy = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -161,7 +157,7 @@ context('EditDraft', () => {
       undefined,
       {
         addListener: mockUseComposeCancelConfirmationSpy,
-        navigate: navigateSpy,
+        navigate: mockNavigationSpy,
         goBack,
         setOptions: jest.fn(),
       },
@@ -231,7 +227,7 @@ context('EditDraft', () => {
     describe('on click of the go to inbox button', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', () => {
         fireEvent.press(screen.getByRole('button', { name: 'Go to inbox' }))
-        expect(navigateSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalled()
         expect(updateSecureMessagingTab).toHaveBeenCalled()
       })
     })

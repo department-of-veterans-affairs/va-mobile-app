@@ -5,16 +5,13 @@ import { context, mockNavProps, render } from 'testUtils'
 import ClaimsAndAppealsListView, { ClaimType } from './ClaimsAndAppealsListView'
 import { InitialState } from 'store/slices'
 import { ClaimsAndAppealsList } from 'store/api/types'
-import { when } from 'jest-when'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -33,19 +30,8 @@ jest.mock('store/slices', () => {
 
 context('ClaimsAndAppealsListView', () => {
   let props: any
-  let mockNavigateToClaimDetailsScreenSpy: jest.Mock
-  let mockNavigateToAppealDetailsScreenSpy: jest.Mock
 
   const initializeTestInstance = (claimType: ClaimType, isEmpty?: boolean): void => {
-    mockNavigateToClaimDetailsScreenSpy = jest.fn()
-    mockNavigateToAppealDetailsScreenSpy = jest.fn()
-
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('ClaimDetailsScreen', { claimID: '2', claimType: 'ACTIVE' })
-      .mockReturnValue(mockNavigateToClaimDetailsScreenSpy)
-      .calledWith('AppealDetailsScreen', { appealID: '0' })
-      .mockReturnValue(mockNavigateToAppealDetailsScreenSpy)
     props = mockNavProps({ claimType })
 
     const activeClaimsAndAppeals: ClaimsAndAppealsList = [
@@ -134,14 +120,16 @@ context('ClaimsAndAppealsListView', () => {
   describe('on click of a claim', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Claim for compensation updated on October 30, 2020 Submitted October 22, 2020' }))
-      expect(mockNavigateToClaimDetailsScreenSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toBeCalledWith('ClaimDetailsScreen', { claimID: '2', claimType: 'ACTIVE' })
     })
   })
 
   describe('on click of an appeal', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Supplemental claim for disability compensation updated on October 28, 2020 Submitted October 22, 2020' }))
-      expect(mockNavigateToAppealDetailsScreenSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toBeCalledWith('AppealDetailsScreen', { appealID: '0' })
     })
   })
 

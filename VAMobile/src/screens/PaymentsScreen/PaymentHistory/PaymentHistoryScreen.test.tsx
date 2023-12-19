@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render, when } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, initialPaymentsState } from 'store/slices'
 import PaymentHistoryScreen from './PaymentHistoryScreen'
 import { ScreenIDTypesConstants } from 'store/api/types'
@@ -12,9 +12,7 @@ jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -32,21 +30,8 @@ jest.mock('store/slices', () => {
 })
 
 context('PaymentHistoryScreen', () => {
-  let navigateToPaymentMissingSpy: jest.Mock
-  let navigatePaymentDetailsSpy: jest.Mock
 
   const initializeTestInstance = (loading = false, availableYears?: Array<string>, errorState: ErrorsState = initialErrorsState) => {
-    navigateToPaymentMissingSpy = jest.fn()
-    navigatePaymentDetailsSpy = jest.fn()
-
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('PaymentMissing')
-      .mockReturnValue(navigateToPaymentMissingSpy)
-      .calledWith('PaymentDetails', {
-        paymentID: '2',
-      })
-      .mockReturnValue(navigatePaymentDetailsSpy)
 
     render(<PaymentHistoryScreen {...mockNavProps()} />, {
       preloadedState: {
@@ -134,14 +119,16 @@ context('PaymentHistoryScreen', () => {
   describe('when user clicks the missing payment link', () => {
     it('should navigate to Payment Missing Screen', () => {
       fireEvent.press(screen.getByTestId("What if I'm missing a payment?"))
-      expect(navigateToPaymentMissingSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('PaymentMissing')
     })
   })
 
   describe('when user clicks on a payment button', () => {
     it('should navigate to Payment Missing Screen', () => {
       fireEvent.press(screen.getByLabelText('Post-9/11 GI Bill $1,172.60'))
-      expect(navigatePaymentDetailsSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('PaymentDetails', { paymentID: '2' })
     })
   })
 })
