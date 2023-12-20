@@ -125,7 +125,13 @@ bool FlipperWebSocket::connect(FlipperConnectionManager* manager) {
 
   [socket_ connect];
 
-  return connected.get();
+  auto state = connected.wait_for(std::chrono::seconds(10));
+  if (state == std::future_status::ready) {
+    return connected.get();
+  }
+
+  disconnect();
+  return false;
 }
 
 void FlipperWebSocket::disconnect() {

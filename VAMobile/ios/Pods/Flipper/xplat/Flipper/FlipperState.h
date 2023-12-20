@@ -10,7 +10,6 @@
 #include <map>
 #include <memory>
 #include <mutex>
-#include <sstream>
 #include <string>
 #include <vector>
 
@@ -54,11 +53,10 @@ class FlipperState {
   void success(std::string);
   void failed(std::string, std::string);
   void started(std::string);
-  void ensureLogsCapacity();
 
   std::mutex mutex; // Protects all our member variables.
   std::shared_ptr<FlipperStateUpdateListener> mListener = nullptr;
-  std::stringstream logs;
+  std::string logs;
   std::vector<std::string> insertOrder;
   std::map<std::string, facebook::flipper::State> stateMap;
 };

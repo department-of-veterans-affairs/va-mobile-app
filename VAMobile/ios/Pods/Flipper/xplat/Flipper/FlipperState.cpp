@@ -10,8 +10,6 @@
 #include "FlipperStateUpdateListener.h"
 #include "FlipperStep.h"
 
-#define FLIPPER_LOGS_CAPACITY 4096
-
 #if FLIPPER_DEBUG_LOG
 #include "Log.h"
 #endif
@@ -21,8 +19,7 @@ using namespace facebook::flipper;
 /* Class responsible for collecting state updates and combining them into a
  * view of the current state of the flipper client. */
 
-FlipperState::FlipperState() {}
-
+FlipperState::FlipperState() : logs("") {}
 void FlipperState::setUpdateListener(
     std::shared_ptr<FlipperStateUpdateListener> listener) {
   std::lock_guard<std::mutex> lock(mutex);
@@ -49,25 +46,14 @@ void FlipperState::started(std::string step) {
   }
 }
 
-void FlipperState::ensureLogsCapacity() {
-  if (logs.tellp() > FLIPPER_LOGS_CAPACITY) {
-    logs.str("");
-    logs.clear();
-    logs << "[Truncated]" << std::endl;
-  }
-}
-
 void FlipperState::success(std::string step) {
   std::shared_ptr<FlipperStateUpdateListener> localListener;
   {
     std::lock_guard<std::mutex> lock(mutex);
-    std::string message = "[Success] " + step;
 #if FLIPPER_DEBUG_LOG
-    log(message);
+    log("[finished] " + step);
 #endif
-    ensureLogsCapacity();
-    logs << message << std::endl;
-
+    logs = logs + "[Success] " + step + "\n";
     stateMap[step] = State::success;
     localListener = mListener;
   }
@@ -86,8 +72,7 @@ void FlipperState::failed(std::string step, std::string errorMessage) {
 #if FLIPPER_DEBUG_LOG
     log(message);
 #endif
-    ensureLogsCapacity();
-    logs << message << std::endl;
+    logs = logs + message + "\n";
     stateMap[step] = State::failed;
     localListener = mListener;
   }
@@ -103,7 +88,7 @@ void FlipperState::failed(std::string step, std::string errorMessage) {
 // way
 std::string FlipperState::getState() {
   std::lock_guard<std::mutex> lock(mutex);
-  return logs.str();
+  return logs;
 }
 
 std::vector<StateElement> FlipperState::getStateElements() {
