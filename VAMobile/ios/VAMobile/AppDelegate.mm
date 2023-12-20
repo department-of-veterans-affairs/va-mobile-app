@@ -1,12 +1,13 @@
 #import "AppDelegate.h"
 
-#import <React/RCTAppSetupUtils.h>
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
 #import <Firebase.h>
 #import "RNNotifications.h"
+
+#import <React/RCTAppSetupUtils.h>
 
 static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
