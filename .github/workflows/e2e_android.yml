@@ -118,6 +118,9 @@ jobs:
           arch: x86_64
           avd-name: Pixel_4_XL_API_28
           script: yarn e2e:android-test /e2e/tests/Letters.e2e --take-screenshots failing --updateSnapshot --headless
+      
+      - name: run_testrail output
+        run: echo ${{github.event.inputs.run_testRail}}
 
       - name: Inform Slack of Failure
         id: post_failure
@@ -155,7 +158,7 @@ jobs:
           path: VAMobile/e2e/test_reports/e2e-junit.xml
       
   send_test_results_to_testrail:
-    if: (github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped') || ${{ github.event.inputs.run_testRail == 'true'}}
+    if: (github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped') || ${{github.event.inputs.run_testRail}} == 'true'
     needs: [e2e-android]
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
