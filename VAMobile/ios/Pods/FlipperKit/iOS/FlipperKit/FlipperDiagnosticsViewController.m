@@ -1,17 +1,15 @@
 /*
- * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
-#import <Foundation/Foundation.h>
-
 #ifdef FB_SONARKIT_ENABLED
 #if !TARGET_OS_OSX
 
-#import "FlipperClient.h"
 #import "FlipperDiagnosticsViewController.h"
+#import "FlipperClient.h"
 
 #define STATE_VIEW_HEIGHT 300
 
@@ -65,7 +63,7 @@ static NSString* const kSKCellIdentifier =
                                          self.view.frame.size.width,
                                          self.scrollView.frame.size.height)];
   self.logLabel.numberOfLines = 0;
-  self.logLabel.font = [UIFont systemFontOfSize:10.0f];
+  self.logLabel.font = [UIFont fontWithName:@"Arial" size:10];
   [self.scrollView addSubview:self.logLabel];
 
   self.stateTable = [[UITableView alloc]
@@ -82,6 +80,7 @@ static NSString* const kSKCellIdentifier =
 
   [self.view addSubview:self.stateTable];
   [self.view addSubview:self.scrollView];
+  self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)onUpdate {

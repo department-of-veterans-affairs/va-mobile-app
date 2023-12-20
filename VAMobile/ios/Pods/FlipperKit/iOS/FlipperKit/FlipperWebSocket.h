@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -9,11 +9,11 @@
 
 #pragma once
 
-#import <Flipper/FlipperScheduler.h>
 #import <Flipper/FlipperSocket.h>
 #import <Flipper/FlipperSocketProvider.h>
 #import <Flipper/FlipperTransportTypes.h>
 #import <folly/dynamic.h>
+#import <folly/io/async/EventBase.h>
 #import <future>
 #import <memory>
 
@@ -67,14 +67,14 @@ class FlipperWebSocketProvider : public FlipperSocketProvider {
   virtual std::unique_ptr<FlipperSocket> create(
       FlipperConnectionEndpoint endpoint,
       std::unique_ptr<FlipperSocketBasePayload> payload,
-      Scheduler* scheduler) override {
+      folly::EventBase* eventBase) override {
     return std::make_unique<FlipperWebSocket>(
         std::move(endpoint), std::move(payload));
   }
   virtual std::unique_ptr<FlipperSocket> create(
       FlipperConnectionEndpoint endpoint,
       std::unique_ptr<FlipperSocketBasePayload> payload,
-      Scheduler* scheduler,
+      folly::EventBase* eventBase,
       ConnectionContextStore* connectionContextStore) override {
     return std::make_unique<FlipperWebSocket>(
         std::move(endpoint), std::move(payload), connectionContextStore);

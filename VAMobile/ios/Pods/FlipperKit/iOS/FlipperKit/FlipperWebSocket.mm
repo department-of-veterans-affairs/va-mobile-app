@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -9,12 +9,12 @@
 
 #import "FlipperWebSocket.h"
 #import <Flipper/ConnectionContextStore.h>
-#import <Flipper/FlipperExceptions.h>
 #import <Flipper/FlipperTransportTypes.h>
 #import <Flipper/FlipperURLSerializer.h>
 #import <Flipper/Log.h>
 #import <folly/String.h>
 #import <folly/futures/Future.h>
+#import <folly/io/async/AsyncSocketException.h>
 #import <folly/io/async/SSLContext.h>
 #import <folly/json.h>
 #import <cctype>
@@ -94,7 +94,9 @@ bool FlipperWebSocket::connect(FlipperConnectionManager* manager) {
       } else if (event == SocketEvent::SSL_ERROR) {
         try {
           promise.set_exception(
-              std::make_exception_ptr(SSLException("SSL handshake failed")));
+              std::make_exception_ptr(folly::AsyncSocketException(
+                  folly::AsyncSocketException::SSL_ERROR,
+                  "SSL handshake failed")));
         } catch (...) {
           // set_exception() may throw an exception
           // In that case, just set the value to false.
@@ -156,10 +158,8 @@ void FlipperWebSocket::send(
     return;
   }
   NSString* messageObjc = [NSString stringWithUTF8String:message.c_str()];
-  [socket_ send:messageObjc
-      withCompletionHandler:^(NSError*) {
-        completion();
-      }];
+  [socket_ send:messageObjc error:NULL];
+  completion();
 }
 
 /**
@@ -178,13 +178,12 @@ void FlipperWebSocket::sendExpectResponse(
   [socket_ setMessageHandler:^(const std::string& msg) {
     completion(msg, false);
   }];
+  NSError* error = NULL;
+  [socket_ send:messageObjc error:&error];
 
-  [socket_ send:messageObjc
-      withCompletionHandler:^(NSError* error) {
-        if (error != NULL) {
-          completion(error.description.UTF8String, true);
-        }
-      }];
+  if (error != NULL) {
+    completion(error.description.UTF8String, true);
+  }
 }
 
 } // namespace flipper

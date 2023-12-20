@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -8,7 +8,6 @@
 #ifdef FB_SONARKIT_ENABLED
 
 #import "FlipperPlatformWebSocket.h"
-#import <Flipper/FlipperConnectionEndpointVerifier.h>
 #import <Flipper/Log.h>
 #import <SocketRocket/SocketRocket.h>
 
@@ -60,9 +59,6 @@ static constexpr int connectionKeepaliveSeconds = 10;
   NSString* certificatePathObjC =
       [NSString stringWithUTF8String:certificatePath.c_str()];
   NSData* certificateData = [NSData dataWithContentsOfFile:certificatePathObjC];
-  if (!certificateData) {
-    return;
-  }
 
   NSString* password = [NSString stringWithUTF8String:PASSWORD];
   NSDictionary* optionsDictionary = [NSDictionary
@@ -113,8 +109,6 @@ static constexpr int connectionKeepaliveSeconds = 10;
 #pragma mark - FlipperPlatformWebSocket
 
 @interface FlipperPlatformWebSocket ()<SRWebSocketDelegate> {
-  NSOperationQueue* _dispatchQueue;
-
   NSURL* _url;
   NSTimer* _keepAlive;
 
@@ -132,11 +126,13 @@ static constexpr int connectionKeepaliveSeconds = 10;
   if (self) {
     _url = url;
     _policy = [FlipperClientCertificateSecurityPolicy new];
-    _dispatchQueue = [[NSOperationQueue alloc] init];
-    _dispatchQueue.maxConcurrentOperationCount = 1;
   }
 
   return self;
+}
+
+- (void)dealloc {
+  [self disconnect];
 }
 
 - (void)connect {
@@ -144,60 +140,35 @@ static constexpr int connectionKeepaliveSeconds = 10;
     return;
   }
 
-  __weak auto weakSelf = self;
-  [_dispatchQueue addOperationWithBlock:^{
-    __strong auto strongSelf = weakSelf;
-
-    // Before attempting to establish a connection, check if
-    // there is a process listening at the specified port.
-    // CFNetwork seems to be quite verbose when the host cannot be reached
-    // causing unnecessary and annoying logs to be printed to the console.
-    if (!facebook::flipper::ConnectionEndpointVerifier::verify(
-            strongSelf->_url.host.UTF8String, strongSelf->_url.port.intValue)) {
-      strongSelf->_eventHandler(facebook::flipper::SocketEvent::ERROR);
-      return;
-    }
-
-    strongSelf->_socket = [[SRWebSocket alloc] initWithURL:self->_url
-                                            securityPolicy:self->_policy];
-    strongSelf->_socket.delegate = self;
-    [strongSelf->_socket open];
-  }];
+  self.socket = [[SRWebSocket alloc] initWithURL:_url securityPolicy:_policy];
+  [_socket setDelegate:self];
+  [_socket open];
 }
 
 - (void)disconnect {
-  [_dispatchQueue cancelAllOperations];
-
   if ([_keepAlive isValid]) {
     [_keepAlive invalidate];
   }
   _keepAlive = nil;
 
-  // Manually trigger a 'close' event as SocketRocket close method will
-  // not notify the delegate. SocketRocket only triggers the close event
-  // when the connection is closed from the server.
-  _eventHandler(facebook::flipper::SocketEvent::CLOSE);
-
   if (_socket) {
+    // Manually trigger a 'close' event as SocketRocket close method will
+    // not notify the delegate. SocketRocket only triggers the close event
+    // when the connection is closed from the server.
+    _eventHandler(facebook::flipper::SocketEvent::CLOSE);
     // Clear the socket delegate before close. Ensures that we won't get
     // any messages after the disconnect takes place.
     _socket.delegate = nil;
     [_socket close];
     _socket = nil;
-  };
+  }
 }
 
-- (void)send:(NSString*)message
-    withCompletionHandler:(void (^_Nullable)(NSError*))completionHandler {
-  __weak auto weakSelf = self;
-  [_dispatchQueue addOperationWithBlock:^{
-    __strong auto strongSelf = weakSelf;
-    NSError* error = nil;
-    [strongSelf->_socket sendString:message error:&error];
-    if (completionHandler) {
-      completionHandler(error);
-    }
-  }];
+- (void)send:(NSString*)message error:(NSError**)error {
+  [_socket sendString:message error:error];
+  if (error != nil && *error) {
+    facebook::flipper::log("Unable to send message.");
+  }
 }
 
 - (void)setCertificateProvider:
@@ -207,15 +178,10 @@ static constexpr int connectionKeepaliveSeconds = 10;
 }
 
 - (void)sendScheduledKeepAlive:(NSTimer*)timer {
-  __weak auto weakSelf = self;
-  [_dispatchQueue addOperationWithBlock:^{
-    __strong auto strongSelf = weakSelf;
-    [strongSelf->_socket sendPing:nil error:nil];
-  }];
+  [_socket sendPing:nil error:nil];
 }
 
-#pragma mark - Web Socket internal handlers
-- (void)_webSocketDidOpen {
+- (void)webSocketDidOpen:(SRWebSocket*)webSocket {
   _eventHandler(facebook::flipper::SocketEvent::OPEN);
 
   if (!_keepAlive) {
@@ -230,7 +196,7 @@ static constexpr int connectionKeepaliveSeconds = 10;
   }
 }
 
-- (void)_webSocketDidFailWithError:(NSError*)error {
+- (void)webSocket:(SRWebSocket*)webSocket didFailWithError:(NSError*)error {
   /** Check for the error domain and code. Need to filter out SSL handshake
     errors and dispatch them accordingly. CFNetwork SSLHandshake failed:
     - Domain: NSOSStatusErrorDomain
@@ -244,57 +210,19 @@ static constexpr int connectionKeepaliveSeconds = 10;
   _socket = nil;
 }
 
-- (void)_webSocketDidClose {
-  if ([_keepAlive isValid]) {
-    [_keepAlive invalidate];
-  }
-  _keepAlive = nil;
-
-  _eventHandler(facebook::flipper::SocketEvent::CLOSE);
-  _socket = nil;
-}
-
-- (void)_webSocketDidReceiveMessage:(id)message {
-  if (message && _messageHandler) {
-    NSString* response = message;
-    _messageHandler([response UTF8String]);
-  }
-}
-
-#pragma mark - Web Socket
-- (void)webSocketDidOpen:(SRWebSocket*)webSocket {
-  __weak auto weakSelf = self;
-  [_dispatchQueue addOperationWithBlock:^{
-    __strong auto strongSelf = weakSelf;
-    [strongSelf _webSocketDidOpen];
-  }];
-}
-
-- (void)webSocket:(SRWebSocket*)webSocket didFailWithError:(NSError*)error {
-  __weak auto weakSelf = self;
-  [_dispatchQueue addOperationWithBlock:^{
-    __strong auto strongSelf = weakSelf;
-    [strongSelf _webSocketDidFailWithError:error];
-  }];
-}
-
 - (void)webSocket:(SRWebSocket*)webSocket
     didCloseWithCode:(NSInteger)code
               reason:(NSString*)reason
             wasClean:(BOOL)wasClean {
-  __weak auto weakSelf = self;
-  [_dispatchQueue addOperationWithBlock:^{
-    __strong auto strongSelf = weakSelf;
-    [strongSelf _webSocketDidClose];
-  }];
+  _eventHandler(facebook::flipper::SocketEvent::CLOSE);
+  _socket = nil;
 }
 
 - (void)webSocket:(SRWebSocket*)webSocket didReceiveMessage:(id)message {
-  __weak auto weakSelf = self;
-  [_dispatchQueue addOperationWithBlock:^{
-    __strong auto strongSelf = weakSelf;
-    [strongSelf _webSocketDidReceiveMessage:message];
-  }];
+  if (message && _messageHandler) {
+    NSString* response = message;
+    _messageHandler([response UTF8String]);
+  }
 }
 
 @end

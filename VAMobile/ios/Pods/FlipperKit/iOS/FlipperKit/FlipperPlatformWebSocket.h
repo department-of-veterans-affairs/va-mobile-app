@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -40,12 +40,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Send a message to the endpoint.
 /// @param message The message as text to be sent to the endpoint.
-/// @param completionHandler  A completion handler for the send operation.
-/// If an error occurs, the handler will be called with an `NSError` object
-/// containing information about the error. You may specify `nil` to ignore the
-/// error information.
-- (void)send:(NSString*)message
-    withCompletionHandler:(void (^_Nullable)(NSError*))completionHandler;
+/// @param error  A pointer to variable for an `NSError` object.
+/// If an error occurs, the pointer is set to an `NSError` object containing
+/// information about the error. You may specify `nil` to ignore the error
+/// information.
+- (void)send:(NSString*)message error:(NSError**)error;
 
 @end
 

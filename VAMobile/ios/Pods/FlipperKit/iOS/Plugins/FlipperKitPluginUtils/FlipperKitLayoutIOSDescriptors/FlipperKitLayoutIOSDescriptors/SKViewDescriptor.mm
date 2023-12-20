@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -495,21 +495,6 @@ return dataMutations;
   } else {
     [overlay unmount];
   }
-}
-
-- (UIImage*)getSnapshot:(BOOL)includeChildren forNode:(UIView*)node {
-  if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
-    UIGraphicsBeginImageContextWithOptions(
-        node.bounds.size, node.isOpaque, 0.0);
-  } else {
-    UIGraphicsBeginImageContext(node.bounds.size);
-  }
-
-  [node.layer renderInContext:UIGraphicsGetCurrentContext()];
-
-  UIImage* img = UIGraphicsGetImageFromCurrentImageContext();
-  UIGraphicsEndImageContext();
-  return img;
 }
 
 - (void)hitTest:(SKTouch*)touch forNode:(UIView*)node {
