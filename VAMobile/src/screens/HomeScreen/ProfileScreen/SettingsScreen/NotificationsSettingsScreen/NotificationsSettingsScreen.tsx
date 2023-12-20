@@ -1,8 +1,9 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
-import { AlertBox, Box, ButtonDecoratorType, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton } from 'components'
+import { AlertBox, Box, ButtonDecoratorType, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -97,7 +98,7 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
           ) : (
             <AlertBox border={'informational'} title={t('notifications.settings.alert.title')} text={t('notifications.settings.alert.text')}>
               <Box mt={standardMarginBetween}>
-                <VAButton onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} buttonType={'buttonPrimary'} />
+                <Button onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} />
               </Box>
             </AlertBox>
           )}
