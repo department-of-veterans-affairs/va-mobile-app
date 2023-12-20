@@ -16,8 +16,8 @@ export const linking: LinkingOptions<any> = {
         screens: {
           HealthTab: {
             screens: {
+              ViewMessage: 'messages/:messageID',
               UpcomingAppointmentDetails: 'appointments/:vetextID',
-              ViewMessageScreen: 'messages/:messageID',
             },
           },
         },
@@ -37,7 +37,7 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'HealthTab',
                   state: {
-                    routes: [{ name: 'Health' }, { name: 'SecureMessaging' }, { name: 'ViewMessageScreen', params: { messageID: pathParts[1] } }],
+                    routes: [{ name: 'Health' }, { name: 'SecureMessaging' }, { name: 'ViewMessage', params: { messageID: pathParts[1] } }],
                   },
                 },
               ],

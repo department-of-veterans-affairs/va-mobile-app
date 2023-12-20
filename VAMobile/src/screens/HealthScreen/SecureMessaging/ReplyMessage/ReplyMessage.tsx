@@ -51,6 +51,7 @@ import {
 } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
@@ -139,12 +140,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   useEffect(() => {
     if (saveDraftComplete) {
       dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
-      navigation.navigate('SecureMessaging')
-      navigation.navigate('FolderMessages', {
-        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-        folderName: FolderNameTypeConstants.drafts,
-        draftSaved: true,
-      })
+      waygateNativeAlert('WG_SecureMessaging') && navigation.navigate('SecureMessaging')
+      waygateNativeAlert('WG_FolderMessages') &&
+        navigation.navigate('FolderMessages', {
+          folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+          folderName: FolderNameTypeConstants.drafts,
+          draftSaved: true,
+        })
     }
   }, [saveDraftComplete, navigation, dispatch])
 
@@ -153,7 +155,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
       dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-      navigation.navigate('SecureMessaging')
+      waygateNativeAlert('WG_SecureMessaging') && navigation.navigate('SecureMessaging')
     }
   }, [sendMessageComplete, dispatch, navigation])
 
@@ -180,7 +182,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
-    navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
+    if (waygateNativeAlert('WG_Attachments')) {
+      navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
+    }
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
@@ -230,7 +234,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const navigateToReplyHelp = () => {
     logAnalyticsEvent(Events.vama_sm_nonurgent())
-    navigation.navigate('ReplyHelp')
+    if (waygateNativeAlert('WG_ReplyHelp')) {
+      navigation.navigate('ReplyHelp')
+    }
   }
 
   const renderForm = (): ReactNode => (
