@@ -63,7 +63,7 @@ jobs:
           ref: ${{ github.ref }}
     
       - name: run_testrail output
-        if: ${{github.event.inputs.run_testRail}}
+        if: if: (github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped') || ${{github.event.inputs.run_testRail}}
         run: echo ${{github.event.inputs.run_testRail}}
       
   send_test_results_to_testrail:
@@ -73,5 +73,5 @@ jobs:
       ${{github.event.inputs.run_testRail}}
     #if: (github.event_name == 'workflow_run' && '!cancelled()' && github.event.workflow_run.conclusion != 'skipped') || ${{github.event.inputs.run_testRail}} == true
     name: Update testRail Results
-    uses: ./.github/workflows/update_testrail_results.yml
-    secrets: inherit
+    #uses: ./.github/workflows/update_testrail_results.yml
+    #secrets: inherit
