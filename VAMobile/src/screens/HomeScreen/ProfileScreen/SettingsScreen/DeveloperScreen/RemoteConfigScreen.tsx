@@ -12,6 +12,7 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { getWaygateToggles, setWaygateDebugConfig } from 'utils/waygateConfig'
 import { logout } from 'store/slices/authSlice'
+import { showSnackBar } from 'utils/common'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type RemoteConfigScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'RemoteConfig'>
@@ -112,11 +113,14 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
           <TextArea>
             <Button
               onPress={() => {
+                if (JSON.stringify(currentConfig) === JSON.stringify(toggles)) {
+                  showSnackBar('No values changed', dispatch, undefined, true, true, true)
+                  return
+                }
                 dispatch(logout())
                 setDebugConfig(toggles)
               }}
               label={'Apply Overrides'}
-              // disabled={JSON.stringify(currentConfig) === JSON.stringify(toggles)}
             />
           </TextArea>
         </Box>
