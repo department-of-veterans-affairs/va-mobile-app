@@ -80,7 +80,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       setImagesList([])
       navigateTo('FileRequest', { claimID: claim?.id || '' })
     }
-  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, imagesList])
+  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigateTo, request, imagesList])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)

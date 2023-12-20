@@ -11,7 +11,6 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { hasUploadedOrReceived } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
 

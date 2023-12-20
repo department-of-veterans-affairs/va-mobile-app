@@ -70,7 +70,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
       setFilesList([])
       navigateTo('FileRequest', { claimID: claim?.id || '' })
     }
-  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, filesList])
+  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigateTo, request, filesList])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)

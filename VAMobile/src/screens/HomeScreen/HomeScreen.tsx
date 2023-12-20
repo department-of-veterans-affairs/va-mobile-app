@@ -31,7 +31,7 @@ const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
-export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
+export const HomeScreen: FC<HomeScreenProps> = () => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()

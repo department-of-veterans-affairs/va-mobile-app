@@ -162,7 +162,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
         draftSaved: true,
       })
     }
-  }, [saveDraftComplete, navigation, dispatch])
+  }, [saveDraftComplete, navigateTo, dispatch])
 
   useEffect(() => {
     // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
@@ -171,7 +171,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
       dispatch(resetHasLoadedRecipients())
       navigateTo('SecureMessaging')
     }
-  }, [sendMessageComplete, dispatch, navigation])
+  }, [sendMessageComplete, dispatch, navigateTo])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (

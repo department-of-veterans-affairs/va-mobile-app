@@ -57,7 +57,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
     if (prevLoadingRequestRefills && prevLoadingRequestRefills !== submittingRequestRefills) {
       navigateTo('RefillRequestSummary')
     }
-  }, [navigation, submittingRequestRefills, prevLoadingRequestRefills])
+  }, [navigateTo, submittingRequestRefills, prevLoadingRequestRefills])
 
   const scrollViewRef = useRef<ScrollView>(null)
 

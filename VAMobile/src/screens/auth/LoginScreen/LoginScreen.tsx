@@ -8,17 +8,13 @@ import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootNavStackParamList } from 'App'
 import { RootState } from 'store'
-import { StackNavigationProp } from '@react-navigation/stack'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useStartAuth } from 'utils/hooks/auth'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
@@ -29,7 +25,6 @@ const LoginScreen: FC = () => {
   const { authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
 
   const dispatch = useAppDispatch()
-  const navigation = useNavigation<StackNavigationProp<RootNavStackParamList, keyof RootNavStackParamList>>()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
   const startAuth = useStartAuth()

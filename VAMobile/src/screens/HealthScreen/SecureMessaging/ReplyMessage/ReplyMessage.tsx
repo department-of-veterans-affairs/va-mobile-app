@@ -52,7 +52,6 @@ import {
 } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
@@ -149,7 +148,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         draftSaved: true,
       })
     }
-  }, [saveDraftComplete, navigation, dispatch])
+  }, [saveDraftComplete, navigateTo, dispatch])
 
   useEffect(() => {
     // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
@@ -158,7 +157,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
       navigateTo('SecureMessaging')
     }
-  }, [sendMessageComplete, dispatch, navigation])
+  }, [sendMessageComplete, dispatch, navigateTo])
 
   if (loading || savingDraft || loadingSignature || !isTransitionComplete || isDiscarded) {
     const text = savingDraft

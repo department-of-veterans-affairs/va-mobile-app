@@ -148,7 +148,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         draftSaved,
       })
     },
-    [navigation],
+    [navigateTo],
   )
 
   useEffect(() => {
@@ -170,7 +170,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         draftSaved: false,
       })
     }
-  }, [sendMessageComplete, dispatch, navigation])
+  }, [sendMessageComplete, dispatch, navigateTo])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients

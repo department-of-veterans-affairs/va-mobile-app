@@ -52,7 +52,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
     if (navigateToClaimsDetailsPage) {
       navigateTo('ClaimDetailsScreen', { claimID, claimType, focusOnSnackbar: true })
     }
-  }, [navigateToClaimsDetailsPage, navigation, claimID, claimType])
+  }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType])
 
   if (useError(ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
     return (

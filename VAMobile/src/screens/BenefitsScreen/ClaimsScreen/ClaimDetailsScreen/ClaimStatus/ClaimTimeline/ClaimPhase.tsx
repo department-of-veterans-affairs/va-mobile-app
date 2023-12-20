@@ -14,7 +14,6 @@ import { sendClaimStep3FileRequestAnalytics } from 'store/slices/claimsAndAppeal
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import PhaseIndicator from './PhaseIndicator'
 
 /** returns the heading string by phase */
