@@ -63,7 +63,7 @@ jobs:
           ref: ${{ github.ref }}
       
   send_test_results_to_testrail:
-    needs: [e2e-android]
+    needs: e2e-android
     if: |
       (${{inputs.run_testRail}} ||
       (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped'))
