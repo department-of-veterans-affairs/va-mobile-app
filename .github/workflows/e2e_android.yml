@@ -65,8 +65,9 @@ jobs:
   send_test_results_to_testrail:
     needs: [e2e-android]
     if: |
-      ${{github.event.inputs.run_testRail}} ||
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped')
+      ${{ always() }} &&
+      (${{github.event.inputs.run_testRail}} &&
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped'))
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     secrets: inherit
