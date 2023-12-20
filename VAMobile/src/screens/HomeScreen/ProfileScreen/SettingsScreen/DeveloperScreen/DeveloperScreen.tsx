@@ -120,7 +120,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
       </Box>
       <Box>
         <TextArea>
-          <Button onPress={navigateTo('HapticsDemoScreen')} label={'haptics demo'} />
+          <Button onPress={navigateTo('HapticsDemo')} label={'Haptics demo'} />
         </TextArea>
       </Box>
       <Box>
