@@ -6,7 +6,6 @@
 #import <React/RCTLinkingManager.h>
 #import <Firebase.h>
 #import "RNNotifications.h"
-#import <RCTAppSetupUtils.h>
 
 static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
