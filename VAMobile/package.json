@@ -34,7 +34,7 @@
     "docs": "yarn && cd documentation && yarn && yarn start"
   },
   "dependencies": {
-    "@department-of-veterans-affairs/mobile-component-library": "0.0.22",
+    "@department-of-veterans-affairs/mobile-component-library": "0.3.4",
     "@expo/react-native-action-sheet": "^3.13.0",
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-native-cookies/cookies": "^6.2.1",
@@ -87,8 +87,8 @@
     "@babel/plugin-transform-runtime": "^7.23.6",
     "@babel/preset-env": "^7.23.6",
     "@babel/preset-typescript": "^7.23.3",
-    "@department-of-veterans-affairs/eslint-config-mobile": "0.3.0",
     "@babel/runtime": "^7.23.6",
+    "@department-of-veterans-affairs/eslint-config-mobile": "0.3.0",
     "@react-native-community/eslint-config": "^3.2.0",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react-native": "^12.3.2",
