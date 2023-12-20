@@ -16,6 +16,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
 
@@ -35,7 +36,9 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
 
     const onDetailsPress = (request: ClaimEventData) => {
       logAnalyticsEvent(Events.vama_request_details(claimID, request.trackedItemId || null, request.type))
-      navigateTo('FileRequestDetails', { claimID, request })()
+      if (waygateNativeAlert('WG_FileRequestDetails')) {
+        navigateTo('FileRequestDetails', { claimID, request })()
+      }
     }
 
     const getA11yLabel = (requestIndex: number, displayName?: string, uploaded?: boolean) => {
@@ -73,56 +76,54 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
     })
   }
 
-  if (useError(ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID)) {
-    return (
-      <ChildTemplate backLabel={t('claim.backLabel')} backLabelOnPress={navigation.goBack} title={t('fileRequest.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID} />
-      </ChildTemplate>
-    )
-  }
-
   const viewEvaluationDetailsPress = () => {
     if (claim) {
       logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, count))
     }
-    navigateTo('AskForClaimDecision', { claimID })()
+    if (waygateNativeAlert('WG_AskForClaimDecision')) {
+      navigateTo('AskForClaimDecision', { claimID })()
+    }
   }
 
   return (
     <ChildTemplate backLabel={t('claim.backLabel')} backLabelOnPress={navigation.goBack} title={t('fileRequest.title')} testID="fileRequestPageTestID">
-      <Box mb={contentMarginBottom}>
-        <TextView
-          variant="MobileBodyBold"
-          accessibilityRole="header"
-          accessibilityLabel={a11yLabelVA(t('claimPhase.youHaveFileRequest', { count }))}
-          mb={condensedMarginBetween}
-          mx={gutter}>
-          {t('claimPhase.youHaveFileRequest', { count })}
-        </TextView>
-        <Box>
-          <SimpleList items={getRequests()} />
+      {useError(ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID) ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID} />
+      ) : (
+        <Box mb={contentMarginBottom}>
+          <TextView
+            variant="MobileBodyBold"
+            accessibilityRole="header"
+            accessibilityLabel={a11yLabelVA(t('claimPhase.youHaveFileRequest', { count }))}
+            mb={condensedMarginBetween}
+            mx={gutter}>
+            {t('claimPhase.youHaveFileRequest', { count })}
+          </TextView>
+          <Box>
+            <SimpleList items={getRequests()} />
+          </Box>
+          <TextView mt={condensedMarginBetween} mx={gutter} mb={contentMarginBottom} variant="HelperText" accessibilityRole="header">
+            {t('fileRequest.weSentYouALaterText')}
+          </TextView>
+          <Box mt={standardMarginBetween}>
+            <TextArea>
+              <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+                {t('fileRequest.askForYourClaimEvaluationTitle')}
+              </TextView>
+              <TextView variant="MobileBody" paragraphSpacing={true}>
+                {t('fileRequest.askForYourClaimEvaluationBody')}
+              </TextView>
+              <VAButton
+                onPress={viewEvaluationDetailsPress}
+                label={t('fileRequest.viewEvaluationDetails')}
+                testID={t('fileRequest.viewEvaluationDetails')}
+                buttonType={ButtonTypesConstants.buttonPrimary}
+                a11yHint={t('fileRequest.viewEvaluationDetails')}
+              />
+            </TextArea>
+          </Box>
         </Box>
-        <TextView mt={condensedMarginBetween} mx={gutter} mb={contentMarginBottom} variant="HelperText" accessibilityRole="header">
-          {t('fileRequest.weSentYouALaterText')}
-        </TextView>
-        <Box mt={standardMarginBetween}>
-          <TextArea>
-            <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
-              {t('fileRequest.askForYourClaimEvaluationTitle')}
-            </TextView>
-            <TextView variant="MobileBody" paragraphSpacing={true}>
-              {t('fileRequest.askForYourClaimEvaluationBody')}
-            </TextView>
-            <VAButton
-              onPress={viewEvaluationDetailsPress}
-              label={t('fileRequest.viewEvaluationDetails')}
-              testID={t('fileRequest.viewEvaluationDetails')}
-              buttonType={ButtonTypesConstants.buttonPrimary}
-              a11yHint={t('fileRequest.viewEvaluationDetails')}
-            />
-          </TextArea>
-        </Box>
-      </Box>
+      )}
     </ChildTemplate>
   )
 }
