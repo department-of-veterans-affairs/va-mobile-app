@@ -69,5 +69,6 @@ jobs:
       (${{github.event.inputs.run_testRail}} ||
       (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped'))
     name: Update testRail Results
+    run: echo ${{github.event.inputs.run_testRail}}
     #uses: ./.github/workflows/update_testrail_results.yml
     secrets: inherit
