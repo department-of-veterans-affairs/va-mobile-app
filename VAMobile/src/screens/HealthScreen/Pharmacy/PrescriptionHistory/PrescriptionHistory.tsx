@@ -53,7 +53,6 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -593,7 +592,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     const requestRefillButtonProps: VAButtonProps = {
       label: t('prescription.history.startRefillRequest'),
       buttonType: ButtonTypesConstants.buttonPrimary,
-      onPress: navigateTo('RefillScreenModal'),
+      onPress: () => navigateTo('RefillScreenModal'),
     }
     return (
       <Box mx={theme.dimensions.buttonPadding}>

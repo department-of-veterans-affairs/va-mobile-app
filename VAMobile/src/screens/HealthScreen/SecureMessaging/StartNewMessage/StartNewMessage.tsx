@@ -43,7 +43,6 @@ import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions, sav
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
-import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import {
   useAppDispatch,
   useAttachments,

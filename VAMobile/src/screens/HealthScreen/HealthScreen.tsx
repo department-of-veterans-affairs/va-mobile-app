@@ -46,10 +46,10 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
 
-  const onAppointments = navigateTo('Appointments')
-  const onSecureMessaging = navigateTo('SecureMessaging')
-  const onVaVaccines = navigateTo('VaccineList')
-  const pharmacyNavHandler = navigateTo('PrescriptionHistory')
+  const onAppointments = () => navigateTo('Appointments')
+  const onSecureMessaging = () => navigateTo('SecureMessaging')
+  const onVaVaccines = () => navigateTo('VaccineList')
+  const pharmacyNavHandler = () => navigateTo('PrescriptionHistory')
   const onPharmacy = () => {
     // If rx list is already loaded, reload it to ensure freshness
     if (!prescriptionsNeedLoad) {

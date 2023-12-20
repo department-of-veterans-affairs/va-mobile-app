@@ -12,6 +12,9 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
 import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDemographics } from 'api/demographics/getDemographics'
+import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
+import { useUpdateGenderIdentity } from 'api/demographics/updateGenderIdentity'
 
 type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIdentity'>
 

@@ -59,7 +59,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
   }
 
   const onPaymentPress = (paymentID: string): void => {
-    navigateTo('PaymentDetails', { paymentID })()
+    navigateTo('PaymentDetails', { paymentID })
   }
 
   const textViewProps: TextViewProps = {
@@ -163,7 +163,7 @@ const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => 
       <Box {...testIdProps('', false, 'payments-page')}>
         <Box mx={gutter} mb={standardMarginBetween}>
           <Pressable
-            onPress={navigateTo('PaymentMissing')}
+            onPress={() => navigateTo('PaymentMissing')}
             accessibilityRole="link"
             accessible={true}
             {...testIdProps(t('payments.ifIAmMissingPayemt'))}

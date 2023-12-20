@@ -14,7 +14,10 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 import { stringToTitleCase } from 'utils/formattingUtils'
+import { useDemographics } from 'api/demographics/getDemographics'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 
 const getPreferredName = (demographics: UserDemographics | undefined, t: TFunction): string => {
   if (demographics?.preferredName) {
@@ -106,23 +109,25 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     }
   }
 
-  if (personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} onTryAgain={onTryAgain} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')}>
-        <LoadingComponent text={t('personalInformation.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
   const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
+  const errorCheck = personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError
+  const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
+
+  const onGenderIdentity = () => {
+    navigateTo('GenderIdentity')
+  }
+
+  const onPreferredName = () => {
+    navigateTo('PreferredName')
+  }
+
+  const onUpdateName = () => {
+    navigateTo('HowDoIUpdate', { screenType: 'name' })
+  }
+
+  const onUpdateDOB = () => {
+    navigateTo('HowDoIUpdate', { screenType: 'DOB' })
+  }
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')} testID="PersonalInformationTestID">

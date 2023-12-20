@@ -53,6 +53,7 @@ import { getEpochSecondsOfDate, getTranslation } from 'utils/formattingUtils'
 import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useError, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 import getEnv from 'utils/env'
 

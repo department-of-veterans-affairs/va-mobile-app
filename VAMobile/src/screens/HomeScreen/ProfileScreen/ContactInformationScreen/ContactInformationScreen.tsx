@@ -94,17 +94,37 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
     setReviewEventRegistered(true)
   }
 
-  const onHomePhone = navigateTo('EditPhoneNumber', {
-    displayTitle: t('editPhoneNumber.homePhoneTitle'),
-    phoneType: PhoneTypeConstants.HOME,
-    phoneData: contactInformation?.homePhone || ({} as PhoneData),
-  })
+  const onMailingAddress = () => {
+    logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('contactInformation.title')))
+    navigateTo('EditAddress', {
+      displayTitle: t('contactInformation.mailingAddress'),
+      addressType: profileAddressOptions.MAILING_ADDRESS,
+    })
+  }
 
-  const onWorkPhone = navigateTo('EditPhoneNumber', {
-    displayTitle: t('editPhoneNumber.workPhoneTitle'),
-    phoneType: PhoneTypeConstants.WORK,
-    phoneData: contactInformation?.workPhone || ({} as PhoneData),
-  })
+  const onResidentialAddress = () => {
+    logAnalyticsEvent(Events.vama_click(t('contactInformation.residentialAddress'), t('contactInformation.title')))
+    navigateTo('EditAddress', {
+      displayTitle: t('contactInformation.residentialAddress'),
+      addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
+    })
+  }
+
+  const onHomePhone = () => {
+    navigateTo('EditPhoneNumber', {
+      displayTitle: t('editPhoneNumber.homePhoneTitle'),
+      phoneType: PhoneTypeConstants.HOME,
+      phoneData: contactInformation?.homePhone || ({} as PhoneData),
+    })
+  }
+
+  const onWorkPhone = () => {
+    navigateTo('EditPhoneNumber', {
+      displayTitle: t('editPhoneNumber.workPhoneTitle'),
+      phoneType: PhoneTypeConstants.WORK,
+      phoneData: contactInformation?.workPhone || ({} as PhoneData),
+    })
+  }
 
   const onCellPhone = () => {
     navigateTo('EditPhoneNumber', {
