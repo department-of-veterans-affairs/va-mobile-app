@@ -57,7 +57,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
   const getBody = (): ReactNode => {
     /** this does preserve newline characters just not spaces, TODO:change the mobile body link text views to be clickable and launch the right things */
     if (body) {
-      return getLinkifiedText(body, launchLink)
+      return getLinkifiedText(body, t, launchLink)
     }
     return <></>
   }

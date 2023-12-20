@@ -423,7 +423,7 @@ export const saveDraftWithAttachmentAlert = (
   }
 }
 
-export const getLinkifiedText = (body: string, launchExternalLink: (url: string, eventParams?: EventParams | undefined) => void): ReactNode => {
+export const getLinkifiedText = (body: string, t: TFunction, launchExternalLink: (url: string, eventParams?: EventParams | undefined) => void): ReactNode => {
   const textReconstructedBody: Array<ReactNode> = []
   const bodySplit = body.split(' ')
   let dontAddNextString = false
@@ -455,8 +455,11 @@ export const getLinkifiedText = (body: string, launchExternalLink: (url: string,
             }}
             accessibilityRole="link"
             accessible={true}
-            accessibilityLabel={getNumberAccessibilityLabelFromString(previousText + text + nextText)}>
-            <TextView variant="MobileBodyLink">{previousText + ' ' + text + ' ' + nextText}</TextView>
+            accessibilityLabel={getNumberAccessibilityLabelFromString(previousText + text + nextText)}
+            accessibilityHint={t('openInPhoneMessaging.a11yHint')}>
+            <TextView selectable={true} variant="MobileBodyLink">
+              {previousText + ' ' + text + ' ' + nextText}
+            </TextView>
           </TouchableWithoutFeedback>,
         )
         textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
@@ -479,8 +482,11 @@ export const getLinkifiedText = (body: string, launchExternalLink: (url: string,
           }}
           accessibilityRole="link"
           accessible={true}
-          accessibilityLabel={text}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
+          accessibilityLabel={text}
+          accessibilityHint={t('openInEmailMessaging.a11yHint')}>
+          <TextView selectable={true} variant="MobileBodyLink">
+            {text}
+          </TextView>
         </TouchableWithoutFeedback>,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
@@ -493,8 +499,11 @@ export const getLinkifiedText = (body: string, launchExternalLink: (url: string,
           }}
           accessibilityRole="link"
           accessible={true}
-          accessibilityLabel={text}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
+          accessibilityLabel={text}
+          accessibilityHint={t('openInEmailMessaging.a11yHint')}>
+          <TextView selectable={true} variant="MobileBodyLink">
+            {text}
+          </TextView>
         </TouchableWithoutFeedback>,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
@@ -507,8 +516,11 @@ export const getLinkifiedText = (body: string, launchExternalLink: (url: string,
           }}
           accessibilityRole="link"
           accessible={true}
-          accessibilityLabel={getNumberAccessibilityLabelFromString(getNumbersFromString(text))}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
+          accessibilityLabel={getNumberAccessibilityLabelFromString(getNumbersFromString(text))}
+          accessibilityHint={t('openInPhoneMessaging.a11yHint')}>
+          <TextView selectable={true} variant="MobileBodyLink">
+            {text}
+          </TextView>
         </TouchableWithoutFeedback>,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
@@ -522,8 +534,11 @@ export const getLinkifiedText = (body: string, launchExternalLink: (url: string,
           }}
           accessibilityRole="link"
           accessible={true}
-          accessibilityLabel={text}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
+          accessibilityLabel={text}
+          accessibilityHint={t('openInBrowser.a11yHint')}>
+          <TextView selectable={true} variant="MobileBodyLink">
+            {text}
+          </TextView>
         </TouchableWithoutFeedback>,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
@@ -536,20 +551,25 @@ export const getLinkifiedText = (body: string, launchExternalLink: (url: string,
           }}
           accessibilityRole="link"
           accessible={true}
-          accessibilityLabel={text}>
-          <TextView variant="MobileBodyLink">{text}</TextView>
+          accessibilityLabel={text}
+          accessibilityHint={t('openInBrowser.a11yHint')}>
+          <TextView selectable={true} variant="MobileBodyLink">
+            {text}
+          </TextView>
         </TouchableWithoutFeedback>,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
     } else {
-      textReconstructedBody.push(<TextView variant="MobileBody">{text + ' '}</TextView>)
+      textReconstructedBody.push(
+        <TextView selectable={true} variant="MobileBody">
+          {text + ' '}
+        </TextView>,
+      )
     }
   })
   return (
     <Box>
-      <TextView selectable={true} paragraphSpacing={true}>
-        {textReconstructedBody}
-      </TextView>
+      <TextView paragraphSpacing={true}>{textReconstructedBody}</TextView>
     </Box>
   )
 }

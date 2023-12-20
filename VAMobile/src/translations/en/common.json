@@ -872,6 +872,8 @@
   "onboarding.welcomeMessage": "Welcome, {{firstName}}",
   "openInBrowser": "Open in browser",
   "openInBrowser.a11yHint": "Opens the page in your device's browser",
+  "openInPhoneMessaging.a11yHint": "Opens your device's phone app with the phone number entered",
+  "openInEmailMessaging.a11yHint": "Opens your device's email app with the email address entered",
   "optionOutOfTotal": "option {{ count }} of {{ totalOptions }}",
   "or": "or",
   "package": "Package",
