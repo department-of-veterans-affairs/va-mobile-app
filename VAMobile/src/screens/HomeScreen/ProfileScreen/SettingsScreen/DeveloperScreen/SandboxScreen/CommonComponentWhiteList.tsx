@@ -1,5 +1,5 @@
 import { BooleanOptions, ChildrenOptions, OnPressOptions, VABorderColorOptions, VAColorsOptions, VATextAndButtonColorOptions, objectToPickerOptions } from './PickerOptions'
-import { ButtonTypesConstants, LabelTagTypeConstants, LinkTypeOptionsConstants, LinkUrlIconType } from 'components'
+import { LabelTagTypeConstants, LinkTypeOptionsConstants, LinkUrlIconType } from 'components'
 import { getTheme } from 'styles/themes/standardTheme'
 
 const standardTheme = getTheme()
