@@ -31,6 +31,25 @@
 			);
 			name = "React-RCTActionSheet";
 		};
+		1BEE828C124E6416179B904A9F66D794 /* React */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 46EB2E0001B4A0 /* Build configuration list for PBXAggregateTarget "React" */;
+			buildPhases = (
+			);
+			dependencies = (
+				46EB2E00026800 /* PBXTargetDependency */,
+				46EB2E00026820 /* PBXTargetDependency */,
+				46EB2E00026840 /* PBXTargetDependency */,
+				46EB2E00026860 /* PBXTargetDependency */,
+				46EB2E00026880 /* PBXTargetDependency */,
+				46EB2E000268A0 /* PBXTargetDependency */,
+				46EB2E000268C0 /* PBXTargetDependency */,
+				46EB2E000268E0 /* PBXTargetDependency */,
+				46EB2E00026900 /* PBXTargetDependency */,
+				46EB2E00026920 /* PBXTargetDependency */,
+			);
+			name = React;
+		};
 		2681CB7EF647E61F4F9A43029C235607 /* React-callinvoker */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 46EB2E0001E7D0 /* Build configuration list for PBXAggregateTarget "React-callinvoker" */;
@@ -23980,6 +23999,7 @@
 				EC55D52694092A9D0E6A78EB01207EB5 /* RCT-Folly */,
 				E7E7CE52C8C68B17224FF8C262D80ABF /* RCTRequired */,
 				D20469A9A1E5CFB26045EAEBE3F88E5E /* RCTTypeSafety */,
+				1BEE828C124E6416179B904A9F66D794 /* React */,
 				2681CB7EF647E61F4F9A43029C235607 /* React-callinvoker */,
 				66B8F5758E6F90E16807A85C003CE61F /* React-Codegen */,
 				7ACAA9BE580DD31A5CB9D97C45D9492D /* React-Core */,
@@ -26771,6 +26791,7 @@
 		46EB2E00024A80 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = React;
+			target = 1BEE828C124E6416179B904A9F66D794 /* React */;
 			targetProxy = 46EB2E00024A70 /* PBXContainerItemProxy */;
 		};
 		46EB2E00024AA0 /* PBXTargetDependency */ = {
@@ -27334,6 +27355,7 @@
 		46EB2E00025640 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = React;
+			target = 1BEE828C124E6416179B904A9F66D794 /* React */;
 			targetProxy = 46EB2E00025630 /* PBXContainerItemProxy */;
 		};
 		46EB2E00025660 /* PBXTargetDependency */ = {
@@ -28167,6 +28189,7 @@
 		46EB2E000267A0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = React;
+			target = 1BEE828C124E6416179B904A9F66D794 /* React */;
 			targetProxy = 46EB2E00026790 /* PBXContainerItemProxy */;
 		};
 		46EB2E000267C0 /* PBXTargetDependency */ = {
@@ -28180,6 +28203,66 @@
 			name = "React-RCTImage";
 			target = 4F265533AAB7C8985856EC78A33164BB /* React-RCTImage */;
 			targetProxy = 46EB2E000267D0 /* PBXContainerItemProxy */;
+		};
+		46EB2E00026800 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "React-Core";
+			target = 7ACAA9BE580DD31A5CB9D97C45D9492D /* React-Core */;
+			targetProxy = 46EB2E000267F0 /* PBXContainerItemProxy */;
+		};
+		46EB2E00026820 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "React-RCTActionSheet";
+			target = 11989A5E568B3B69655EE0C13DCDA3F9 /* React-RCTActionSheet */;
+			targetProxy = 46EB2E00026810 /* PBXContainerItemProxy */;
+		};
+		46EB2E00026840 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "React-RCTAnimation";
+			target = 938CCE22F6C4094B3FB6CF1478579E4B /* React-RCTAnimation */;
+			targetProxy = 46EB2E00026830 /* PBXContainerItemProxy */;
+		};
+		46EB2E00026860 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "React-RCTBlob";
+			target = 95D98F901D07557EF7CA38D3F03832C5 /* React-RCTBlob */;
+			targetProxy = 46EB2E00026850 /* PBXContainerItemProxy */;
+		};
+		46EB2E00026880 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "React-RCTImage";
+			target = 4F265533AAB7C8985856EC78A33164BB /* React-RCTImage */;
+			targetProxy = 46EB2E00026870 /* PBXContainerItemProxy */;
+		};
+		46EB2E000268A0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "React-RCTLinking";
+			target = 6FE9147F8AAA4DE676C190F680F47AE2 /* React-RCTLinking */;
+			targetProxy = 46EB2E00026890 /* PBXContainerItemProxy */;
+		};
+		46EB2E000268C0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "React-RCTNetwork";
+			target = 651511D7DA7F07F9FC9AA40A2E86270D /* React-RCTNetwork */;
+			targetProxy = 46EB2E000268B0 /* PBXContainerItemProxy */;
+		};
+		46EB2E000268E0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "React-RCTSettings";
+			target = 680299219D3A48D42A648AF6706275A9 /* React-RCTSettings */;
+			targetProxy = 46EB2E000268D0 /* PBXContainerItemProxy */;
+		};
+		46EB2E00026900 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "React-RCTText";
+			target = DBD2D83E10F8B7D3F4E0E34E6A9FCFA6 /* React-RCTText */;
+			targetProxy = 46EB2E000268F0 /* PBXContainerItemProxy */;
+		};
+		46EB2E00026920 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "React-RCTVibration";
+			target = 53D121F9F9BB0F8AC1C94A12C5A8572F /* React-RCTVibration */;
+			targetProxy = 46EB2E00026910 /* PBXContainerItemProxy */;
 		};
 		46EB2E00026940 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -39162,6 +39245,17 @@
 				46EB2E0001B1F0 /* QA */,
 				46EB2E0001B1E0 /* RC */,
 				46EB2E0001B1C0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		46EB2E0001B4A0 /* Build configuration list for PBXAggregateTarget "React" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46EB2E0001B4C0 /* Debug */,
+				46EB2E0001B4E0 /* QA */,
+				46EB2E0001B4D0 /* RC */,
+				46EB2E0001B4B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
