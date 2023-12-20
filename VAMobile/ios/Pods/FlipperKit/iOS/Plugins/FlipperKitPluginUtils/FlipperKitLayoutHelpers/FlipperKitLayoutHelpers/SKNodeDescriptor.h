@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -104,6 +104,12 @@ typedef void (^SKNodeUpdateData)(id value);
  de-selecting the previously highlighted node.
  */
 - (void)setHighlighted:(BOOL)highlighted forNode:(T)node;
+
+/**
+ Used to grab a snapshot of the specified node which is currently selected in
+ the Flipper application.
+ */
+- (UIImage*)getSnapshot:(BOOL)includeChildren forNode:(T)node;
 
 /**
  Perform hit testing on the given node. Either continue the search in
