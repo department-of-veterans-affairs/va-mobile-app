@@ -1,4 +1,4 @@
-import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
+import { Pressable, PressableProps, ScrollView } from 'react-native'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
@@ -482,9 +482,24 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
     }
   }
 
+  const filterModal = () => {
+    return (
+      <Box {...filterContainerProps}>
+        <Box mr={8} mb={10}>
+          <RadioGroupModal {...modalProps} />
+        </Box>
+      </Box>
+    )
+  }
+
   const getContent = () => {
     if (hasNoItems) {
-      return <PrescriptionHistoryNoMatches isFiltered={!!filterToUse} />
+      return (
+        <>
+          {filterModal()}
+          <PrescriptionHistoryNoMatches isFiltered={!!filterToUse} />
+        </>
+      )
     } else {
       return (
         <>
@@ -497,11 +512,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
             </TextView>
           </Box>
 
-          <Box {...filterContainerProps}>
-            <Box mr={8} mb={10}>
-              <RadioGroupModal {...modalProps} />
-            </Box>
-          </Box>
+          {filterModal()}
 
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
             {prescriptionItems()}
