@@ -69,5 +69,4 @@ jobs:
             parse_junit \
             --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
             --section-id ${{steps.section-id-selection.outputs.SECTION_RUN_ID}} \
-            --title "Regression pass for release" \
             -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit.xml"
