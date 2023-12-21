@@ -8,12 +8,12 @@ on:
   push:
     branches:
       - 'dependabot/**'
-  #workflow_dispatch:
-  #  inputs:
-  #    run_testRail:
-  #      description: Run_TestRail
-  #      type: boolean
-  #      required: false
+  workflow_dispatch:
+    inputs:
+      run_testRail:
+        description: Run_TestRail
+        type: boolean
+        required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
