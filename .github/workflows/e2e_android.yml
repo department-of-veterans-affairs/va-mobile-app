@@ -8,12 +8,12 @@ on:
   push:
     branches:
       - 'dependabot/**'
-  workflow_dispatch:
-    inputs:
-      run_testRail:
-        description: Run_TestRail
-        type: boolean
-        required: false
+  #workflow_dispatch:
+  #  inputs:
+  #    run_testRail:
+  #      description: Run_TestRail
+  #      type: boolean
+  #      required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
@@ -61,12 +61,13 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-      
-  send_test_results_to_testrail:
-    needs: e2e-android
-    #if: |
-    #  ${{github.event.inputs.run_testRail}} ||
-    #  (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped')
-    name: Update testRail Results
-    uses: ./.github/workflows/update_testrail_results.yml
-    secrets: inherit
+
+  get_date_for_manual_testRail_results_run:
+    run: echo "today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+  
+  #send_test_results_to_testrail:
+  #  if: ${{ always() }}
+  #  needs: e2e-android    
+  #  name: Update testRail Results
+  #  uses: ./.github/workflows/update_testrail_results.yml
+  #  secrets: inherit
