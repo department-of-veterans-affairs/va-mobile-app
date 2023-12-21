@@ -58,12 +58,11 @@ jobs:
     needs: start_slack_thread
     runs-on: macos-latest-xl
     steps:
+      - name: Get date for manual testRail results
+        run: echo "today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-
-  get_date_for_manual_testRail_results_run:
-    run: echo "today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
   
   #send_test_results_to_testrail:
   #  if: ${{ always() }}
