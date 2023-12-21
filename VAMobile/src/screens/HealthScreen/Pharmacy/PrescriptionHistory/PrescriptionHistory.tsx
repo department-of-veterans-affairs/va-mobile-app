@@ -288,7 +288,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const prescriptionDetailsClicked = (prescriptionID: string) => {
     logAnalyticsEvent(Events.vama_rx_details(prescriptionID))
-    return navigation.navigate('PrescriptionDetails', { prescriptionId: prescriptionID })
+    return navigateTo('PrescriptionDetails', { prescriptionId: prescriptionID })
   }
 
   const prescriptionItems = () => {
@@ -351,7 +351,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           bottomContent,
           bottomOnPress() {
             logAnalyticsEvent(Events.vama_rx_trackdet(prescription.id))
-            navigation.navigate('RefillTrackingModal', { prescription: prescription })
+            navigateTo('RefillTrackingModal', { prescription: prescription })
           },
         }
       }
