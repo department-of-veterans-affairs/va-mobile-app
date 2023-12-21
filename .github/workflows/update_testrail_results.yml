@@ -32,7 +32,7 @@ jobs:
               "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&is_completed=0" | jq '.runs[] | select(.name =="Regression pass for release" or .name=="'"$(date +'%Y-%m-%d')"'") | .id')
           echo "$resp"
           echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
-          if [[ ${{steps.run-id-selection.outputs.TEST_RUN_ID}} == null ]]; then
+          if [ "${{steps.run-id-selection.outputs.TEST_RUN_ID}}" == null ]; then
             resp=$(curl -X POST -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                   -d '{"suite_id": 92, "include_all": false, "name": "'"$(date +'%Y-%m-%d')"'"}' \
