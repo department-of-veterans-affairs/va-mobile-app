@@ -24,7 +24,7 @@ jobs:
       #  uses: actions/download-artifact@v3
       #  with:
       #    name: e2e-junit
-      #- name: 'Find run ID in testRail'
+      - name: 'Find run ID in testRail'
         id: run-id-selection
         run: | 
           resp=$(curl -X GET -H 'Content-Type: application/json' \
