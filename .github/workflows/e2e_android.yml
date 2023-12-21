@@ -9,11 +9,6 @@ on:
     branches:
       - 'dependabot/**'
   workflow_dispatch:
-    inputs:
-      run_testRail:
-        description: Run_TestRail
-        type: boolean
-        required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
@@ -117,7 +112,7 @@ jobs:
           disable-animations: true
           arch: x86_64
           avd-name: Pixel_4_XL_API_28
-          script: yarn e2e:android-test /e2e/tests/Appeals.e2e --take-screenshots failing --updateSnapshot --headless
+          script: yarn e2e:android-test --take-screenshots failing --updateSnapshot --headless
 
       - name: Upload e2e-junit
         if: failure() || success()
