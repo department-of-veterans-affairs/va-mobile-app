@@ -129,7 +129,6 @@ context('HealthScreen', () => {
     it('should call useRouteNavigation', async () => {
       initializeTestInstance(0, true, true)
       fireEvent.press(screen.getByText('Prescriptions'))
-      expect(mockNavigationSpy).toHaveBeenCalled()
       expect(mockNavigationSpy).toHaveBeenCalledWith('PrescriptionHistory')
     })
 
@@ -149,7 +148,6 @@ context('HealthScreen', () => {
   describe('on click of the appointments button', () => {
     it('should call useRouteNavigation', async () => {
       fireEvent.press(screen.getByText('Appointments'))
-      expect(mockNavigationSpy).toHaveBeenCalled()
       expect(mockNavigationSpy).toHaveBeenCalledWith('Appointments')
     })
   })
@@ -157,7 +155,6 @@ context('HealthScreen', () => {
   describe('on click of the secure messaging button', () => {
     it('should call useRouteNavigation', async () => {
       fireEvent.press(screen.getByText('Messages'))
-      expect(mockNavigationSpy).toHaveBeenCalled()
       expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
     })
   })
@@ -165,7 +162,6 @@ context('HealthScreen', () => {
   describe('on click of the vaccines button', () => {
     it('should call useRouteNavigation', async () => {
       fireEvent.press(screen.getByText('V\ufeffA vaccine records'))
-      expect(mockNavigationSpy).toHaveBeenCalled()
       expect(mockNavigationSpy).toHaveBeenCalledWith('VaccineList')
     })
   })

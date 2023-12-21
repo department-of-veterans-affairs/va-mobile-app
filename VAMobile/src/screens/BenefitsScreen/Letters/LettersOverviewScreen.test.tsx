@@ -34,12 +34,10 @@ context('LettersOverviewScreen', () => {
 
   it('should go to edit address when the address is pressed', () => {
     fireEvent.press(screen.getByRole('button', { name: 'Mailing address Add your mailing address' }))
-    expect(mockNavigationSpy).toHaveBeenCalled()
     expect(mockNavigationSpy).toHaveBeenCalledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS, })
   })
   it('should go to letters list screen when Review letters is pressed', () => {
     fireEvent.press(screen.getByRole('button', { name: 'Review letters' }))
-    expect(mockNavigationSpy).toHaveBeenCalled()
     expect(mockNavigationSpy).toHaveBeenCalledWith('LettersList')
   })
 })

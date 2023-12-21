@@ -140,7 +140,6 @@ context('UpcomingAppointments', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByTestId('Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('UpcomingAppointmentDetails', { appointmentID: '1' })
-      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 

@@ -50,7 +50,6 @@ context('ClaimStatus', () => {
       it('should call useRouteNavigation', () => {
         fireEvent.press(screen.getByRole('button', { name: 'Why does VA sometimes combine claims?' }))
         expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote')
-        expect(mockNavigationSpy).toHaveBeenCalled()
       })
     })
 
@@ -58,7 +57,6 @@ context('ClaimStatus', () => {
       it('should call useRouteNavigation', () => {
         fireEvent.press(screen.getByRole('button', { name: "What should I do if I disagree with VA's decision on my disability claim?" }))
         expect(mockNavigationSpy).toHaveBeenCalledWith('WhatDoIDoIfDisagreement', { claimID: '600156928', claimStep: 3, claimType: 'Compensation' })
-        expect(mockNavigationSpy).toHaveBeenCalled()
       })
     })
   })

@@ -83,7 +83,6 @@ context('useComposeCancelConfirmation', () => {
     describe('on clicking discard', () => {
       it('should go back to the previous page', () => {
         discardButtonSpy()
-        expect(mockNavigationSpy).toHaveBeenCalled()
         expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
       })
     })
@@ -92,7 +91,6 @@ context('useComposeCancelConfirmation', () => {
       it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
         saveDraftButtonSpy()
-        expect(mockNavigationSpy).toHaveBeenCalled()
         expect(mockNavigationSpy).toHaveBeenCalledWith('StartNewMessage', expect.objectContaining({ saveDraftConfirmFailed: true }))
       })
     })
@@ -103,7 +101,6 @@ context('useComposeCancelConfirmation', () => {
       it('should go back to the message the user was viewing', () => {
         initializeTestInstance({ body: 'test reply', category: CategoryTypeFields.appointment }, undefined, true, FormHeaderTypeConstants.reply, 2)
         discardButtonSpy()
-        expect(mockNavigationSpy).toHaveBeenCalled()
         expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessage', { messageID: 2 })
       })
     })
@@ -112,7 +109,6 @@ context('useComposeCancelConfirmation', () => {
       it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
         saveDraftButtonSpy()
-        expect(mockNavigationSpy).toHaveBeenCalled()
         expect(mockNavigationSpy).toHaveBeenCalledWith('StartNewMessage', expect.objectContaining({ saveDraftConfirmFailed: true }))
       })
     })
@@ -123,7 +119,6 @@ context('useComposeCancelConfirmation', () => {
       it('should go back to drafts folder', () => {
         initializeTestInstance({ body: 'test reply', category: CategoryTypeFields.appointment }, 1, true, FormHeaderTypeConstants.draft, undefined)
         discardButtonSpy()
-        expect(mockNavigationSpy).toHaveBeenCalled()
         expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { draftSaved: false, folderID: -2, folderName: 'Drafts' })
       })
     })
@@ -132,7 +127,6 @@ context('useComposeCancelConfirmation', () => {
       it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
         saveDraftButtonSpy()
-        expect(mockNavigationSpy).toHaveBeenCalled()
         expect(mockNavigationSpy).toHaveBeenCalledWith('StartNewMessage', expect.objectContaining({ saveDraftConfirmFailed: true }))
       })
     })

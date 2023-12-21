@@ -76,7 +76,6 @@ context('DirectDepositScreen', () => {
     it('should call navigation navigate', () => {
       fireEvent.press(screen.getByTestId('account-boa-******1234-savings-account'))
       expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit', { displayTitle: 'Edit account' })
-      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 

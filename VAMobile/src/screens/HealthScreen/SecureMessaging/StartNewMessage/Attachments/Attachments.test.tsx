@@ -95,7 +95,6 @@ context('Attachments', () => {
           promise
         })
         fireEvent.press(screen.getByRole('button', { name: 'Attach' }))
-        expect(mockNavigationSpy).toHaveBeenCalled()
         expect(mockNavigationSpy).toHaveBeenCalledWith('EditDraft', { attachmentFileToAdd: { name: 'custom-file-name.docx', type: 'docx', uri: 'uri' }, attachmentFileToRemove: {}, messageID: undefined })
       })
     })

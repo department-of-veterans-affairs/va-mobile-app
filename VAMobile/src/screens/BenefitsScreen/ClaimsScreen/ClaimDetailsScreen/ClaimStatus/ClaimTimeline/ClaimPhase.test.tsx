@@ -78,7 +78,6 @@ context('ClaimPhase', () => {
         expect(screen.getByText('You have 2 file requests from VA')).toBeTruthy()
         expect(screen.getByRole('button', { name: 'Review file requests' })).toBeTruthy()
         fireEvent.press(screen.getByRole('button', { name: 'Review file requests' }))
-        expect(mockNavigationSpy).toHaveBeenCalled()
         expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequest', { claimID: undefined })
       })
 

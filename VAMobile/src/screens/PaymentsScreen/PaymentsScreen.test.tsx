@@ -72,7 +72,6 @@ context('PaymentsScreen', () => {
     it('should navigate to HowToUpdateDirectDeposit', () => {
       initializeTestInstance()
       fireEvent.press(screen.getByRole('menuitem', { name: 'Direct deposit information' }))
-      expect(mockNavigationSpy).toHaveBeenCalled()
       expect(mockNavigationSpy).toHaveBeenCalledWith('HowToUpdateDirectDeposit')
     })
   })
@@ -81,7 +80,6 @@ context('PaymentsScreen', () => {
     it('should navigate to DirectDeposit', () => {
       initializeTestInstance()
       fireEvent.press(screen.getByRole('menuitem', { name: 'Direct deposit information' }))
-      expect(mockNavigationSpy).toHaveBeenCalled()
       expect(mockNavigationSpy).toHaveBeenCalledWith('DirectDeposit')
     })
   })
@@ -90,7 +88,6 @@ context('PaymentsScreen', () => {
     it('should navigate to PaymentHistory', () => {
       initializeTestInstance()
       fireEvent.press(screen.getByRole('menuitem', { name: 'VA payment history' }))
-      expect(mockNavigationSpy).toHaveBeenCalled()
       expect(mockNavigationSpy).toHaveBeenCalledWith('DirectDeposit')
     })
   })

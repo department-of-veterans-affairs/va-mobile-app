@@ -111,7 +111,6 @@ context('Folder', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Drafts (2)' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { folderID: -2, folderName: 'Drafts' })
-      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 })

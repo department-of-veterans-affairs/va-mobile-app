@@ -129,7 +129,6 @@ context('UpcomingAppointmentDetails', () => {
     it('should navigate to the SessionNotStarted screen when the URL is empty', () => {
       initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
       fireEvent.press(screen.getByText('Join session'))
-      expect(mockNavigationSpy).toHaveBeenCalled()
       expect(mockNavigationSpy).toHaveBeenCalledWith('SessionNotStarted')
 
     })

@@ -23,7 +23,6 @@ context('ReplyMessageButton', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Reply' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('ReplyMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {}, messageID: 1 })
-      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 })

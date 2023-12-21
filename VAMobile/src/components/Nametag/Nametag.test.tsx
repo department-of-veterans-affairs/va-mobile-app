@@ -91,7 +91,6 @@ context('Nametag', () => {
   it('navigates on button press', () => {
     renderWithBranch('United States Air Force')
     fireEvent.press(screen.getByRole('button', { name: 'United States Air Force' }))
-    expect(mockNavigationSpy).toHaveBeenCalled()
     expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
   })
 

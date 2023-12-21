@@ -120,7 +120,6 @@ context('ClaimsAndAppealsListView', () => {
   describe('on click of a claim', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Claim for compensation updated on October 30, 2020 Submitted October 22, 2020' }))
-      expect(mockNavigationSpy).toHaveBeenCalled()
       expect(mockNavigationSpy).toBeCalledWith('ClaimDetailsScreen', { claimID: '2', claimType: 'ACTIVE' })
     })
   })
@@ -128,7 +127,6 @@ context('ClaimsAndAppealsListView', () => {
   describe('on click of an appeal', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Supplemental claim for disability compensation updated on October 28, 2020 Submitted October 22, 2020' }))
-      expect(mockNavigationSpy).toHaveBeenCalled()
       expect(mockNavigationSpy).toBeCalledWith('AppealDetailsScreen', { appealID: '0' })
     })
   })

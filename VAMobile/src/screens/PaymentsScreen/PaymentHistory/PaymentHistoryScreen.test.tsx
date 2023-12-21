@@ -119,7 +119,6 @@ context('PaymentHistoryScreen', () => {
   describe('when user clicks the missing payment link', () => {
     it('should navigate to Payment Missing Screen', () => {
       fireEvent.press(screen.getByTestId("What if I'm missing a payment?"))
-      expect(mockNavigationSpy).toHaveBeenCalled()
       expect(mockNavigationSpy).toHaveBeenCalledWith('PaymentMissing')
     })
   })
@@ -127,7 +126,6 @@ context('PaymentHistoryScreen', () => {
   describe('when user clicks on a payment button', () => {
     it('should navigate to Payment Missing Screen', () => {
       fireEvent.press(screen.getByLabelText('Post-9/11 GI Bill $1,172.60'))
-      expect(mockNavigationSpy).toHaveBeenCalled()
       expect(mockNavigationSpy).toHaveBeenCalledWith('PaymentDetails', { paymentID: '2' })
     })
   })
