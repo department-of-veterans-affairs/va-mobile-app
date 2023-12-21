@@ -1,17 +1,17 @@
 import { AppointmentPhone } from './AppointmentData'
 
-export type PrescriptionSortOptions = 'facilityName' | 'refillDate' | 'prescriptionName' | 'refillRemaining'
+export type PrescriptionSortOptions = 'refillDate' | 'prescriptionName' | 'refillRemaining' | 'refillStatus'
 
 export const PrescriptionSortOptionConstants: {
-  FACILITY_NAME: PrescriptionSortOptions
   REFILL_DATE: PrescriptionSortOptions
   PRESCRIPTION_NAME: PrescriptionSortOptions
   REFILL_REMAINING: PrescriptionSortOptions
+  REFILL_STATUS: PrescriptionSortOptions
 } = {
-  FACILITY_NAME: 'facilityName',
   REFILL_DATE: 'refillDate',
   PRESCRIPTION_NAME: 'prescriptionName',
   REFILL_REMAINING: 'refillRemaining',
+  REFILL_STATUS: 'refillStatus',
 }
 
 export type PrescriptionHistoryTabs = '0' | '1' | '2'
@@ -34,10 +34,12 @@ export const RefillStatusConstants: {
   DISCONTINUED_EDIT: RefillStatus
   EXPIRED: RefillStatus
   HOLD: RefillStatus
+  PENDING: RefillStatus
   PROVIDER_HOLD: RefillStatus
   REFILL_IN_PROCESS: RefillStatus
   UNKNOWN: RefillStatus
   ACTIVE_PARKED: RefillStatus
+  TRACKING: RefillStatus
   TRANSFERRED: RefillStatus
   SUBMITTED: RefillStatus
 } = {
@@ -48,10 +50,12 @@ export const RefillStatusConstants: {
   DISCONTINUED_EDIT: 'discontinuedEdit',
   EXPIRED: 'expired',
   HOLD: 'hold',
+  PENDING: 'pending',
   PROVIDER_HOLD: 'providerHold',
   REFILL_IN_PROCESS: 'refillinprocess',
   UNKNOWN: 'unknown',
   ACTIVE_PARKED: 'activeParked',
+  TRACKING: 'tracking',
   TRANSFERRED: 'transferred',
   SUBMITTED: 'submitted',
 }
@@ -64,10 +68,12 @@ export type RefillStatus =
   | 'discontinuedEdit'
   | 'expired'
   | 'hold'
+  | 'pending'
   | 'providerHold'
   | 'refillinprocess'
   | 'unknown'
   | 'activeParked'
+  | 'tracking'
   | 'transferred'
   | 'submitted'
   | 'dateOfDeathEntered'
@@ -107,6 +113,7 @@ export type PrescriptionsGetData = {
 
 export type PrescriptionsGetMeta = {
   pagination: PrescriptionsPaginationData
+  prescriptionStatusCount: StatusCounts
 }
 
 export type PrescriptionsPaginationData = {
@@ -126,6 +133,10 @@ export type PrescriptionsPaginationLinks = {
 
 export type PrescriptionsMap = {
   [key: string]: PrescriptionData
+}
+
+export type StatusCounts = {
+  [key: string]: number | undefined
 }
 
 export type TabCounts = {

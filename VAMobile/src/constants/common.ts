@@ -58,3 +58,4 @@ export const NUMBERS_ONLY_REGEX_EXP = new RegExp(/^[0-9]/)
 export const URL_REGEX_EXP = new RegExp(/^((https:|http:)\S*)/)
 export const URL2_REGEX_EXP = new RegExp(/^(www\.\S*)|^([a-zA-Z]*\.([a-z]){2,3})/)
 export const ASCENDING = 'ascending'
+export const DESCENDING = 'descending'

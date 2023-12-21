@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
+import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
 import {
   Box,
   BoxProps,
@@ -47,7 +47,7 @@ import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } f
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
+import { getFilterArgsForFilter } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
@@ -64,74 +64,12 @@ const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
 const pageSize = DEFAULT_PAGE_SIZE
 
-// Delay custom screen reader announcements so they don't cut off native announcements
-const announcementDelay = 1000
-
 const sortByOptions = [
-  { display: 'prescriptions.sort.facility', value: PrescriptionSortOptionConstants.FACILITY_NAME },
   { display: 'prescriptions.sort.fillDate', value: PrescriptionSortOptionConstants.REFILL_DATE },
   { display: 'prescriptions.sort.medication', value: PrescriptionSortOptionConstants.PRESCRIPTION_NAME },
   { display: 'prescriptions.sort.refills', value: PrescriptionSortOptionConstants.REFILL_REMAINING },
+  { display: 'prescriptions.sort.status', value: PrescriptionSortOptionConstants.REFILL_STATUS },
 ]
-
-const filterOptions = {
-  all: [
-    {
-      display: 'prescription.filter.all',
-      value: '',
-    },
-    {
-      display: 'prescription.history.tag.active',
-      value: RefillStatusConstants.ACTIVE,
-    },
-    {
-      display: 'prescription.history.tag.active.hold',
-      value: RefillStatusConstants.HOLD,
-    },
-    {
-      display: 'prescription.history.tag.active.parked',
-      value: RefillStatusConstants.ACTIVE_PARKED,
-    },
-    {
-      display: 'prescription.history.tag.active.inProgress',
-      value: RefillStatusConstants.REFILL_IN_PROCESS,
-    },
-    {
-      display: 'prescription.history.tag.active.submitted',
-      value: RefillStatusConstants.SUBMITTED,
-    },
-    {
-      display: 'prescription.history.tag.discontinued',
-      value: RefillStatusConstants.DISCONTINUED,
-    },
-    {
-      display: 'prescription.history.tag.expired',
-      value: RefillStatusConstants.EXPIRED,
-    },
-    {
-      display: 'prescription.history.tag.transferred',
-      value: RefillStatusConstants.TRANSFERRED,
-    },
-    {
-      display: 'prescription.history.tag.unknown',
-      value: RefillStatusConstants.UNKNOWN,
-    },
-  ],
-  pending: [
-    {
-      display: 'prescription.filter.all',
-      value: '',
-    },
-    {
-      display: 'prescription.history.tag.active.inProgress',
-      value: RefillStatusConstants.REFILL_IN_PROCESS,
-    },
-    {
-      display: 'prescription.history.tag.active.submitted',
-      value: RefillStatusConstants.SUBMITTED,
-    },
-  ],
-}
 
 type PrescriptionHistoryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
 
@@ -141,6 +79,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
     filteredPrescriptions: prescriptions,
     prescriptions: allPrescriptions,
     loadingHistory,
+    statusCounts,
     tabCounts,
     prescriptionsNeedLoad,
     transferredPrescriptions,
@@ -158,11 +97,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
   const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
 
   const [selectedFilter, setSelectedFilter] = useState<RefillStatus | ''>('')
-  const [selectedSortBy, setSelectedSortBy] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
-  const [selectedSortOn, setSelectedSortOn] = useState(ASCENDING)
+  const [selectedSortBy, setSelectedSortBy] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.REFILL_STATUS)
 
   const [filterToUse, setFilterToUse] = useState<RefillStatus | ''>('')
-  const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
+  const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.REFILL_STATUS)
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
 
   useEffect(() => {
@@ -177,8 +115,8 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
 
   useEffect(() => {
     const filters = getFilterArgsForFilter(filterToUse)
-    dispatch(filterAndSortPrescriptions(filters, sortByToUse, sortOnToUse === ASCENDING))
-  }, [dispatch, filterToUse, sortByToUse, sortOnToUse, allPrescriptions])
+    dispatch(filterAndSortPrescriptions(filters, sortByToUse, sortOnToUse === ASCENDING, t))
+  }, [dispatch, filterToUse, sortByToUse, sortOnToUse, allPrescriptions, t])
 
   useEffect(() => {
     const newPrescriptions = prescriptions?.slice((page - 1) * pageSize, page * pageSize)
@@ -193,6 +131,52 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
       }
     }, [dispatch, prescriptionsNeedLoad, userAuthorizedServices?.prescriptions, prescriptionInDowntime]),
   )
+
+  const filterOptions = [
+    {
+      display: 'prescription.filter.all',
+      value: '',
+      count: allPrescriptions?.length || 0,
+    },
+    {
+      display: 'prescription.history.tag.active',
+      value: RefillStatusConstants.ACTIVE,
+      count: statusCounts.active || 0,
+      additionalLabelText: ['Includes these statuses: On hold, Parked, Refill in process, and Submitted'],
+    },
+    {
+      display: 'prescription.history.tag.discontinued',
+      value: RefillStatusConstants.DISCONTINUED,
+      count: statusCounts.discontinued || 0,
+    },
+    {
+      display: 'prescription.history.tag.expired',
+      value: RefillStatusConstants.EXPIRED,
+      count: statusCounts.expired || 0,
+    },
+    {
+      display: 'prescription.history.tag.pending',
+      value: RefillStatusConstants.PENDING,
+      count: statusCounts.pending || 0,
+      additionalLabelText: ['Includes refill requests you submitted and refills the VA pharmacy is processing'],
+    },
+    {
+      display: 'prescription.history.tag.tracking',
+      value: RefillStatusConstants.TRACKING,
+      count: statusCounts.tracking || 0,
+      additionalLabelText: ['Includes refills with current tracking information available'],
+    },
+    {
+      display: 'prescription.history.tag.transferred',
+      value: RefillStatusConstants.TRANSFERRED,
+      count: statusCounts.transferred || 0,
+    },
+    {
+      display: 'prescription.history.tag.unknown',
+      value: RefillStatusConstants.UNKNOWN,
+      count: statusCounts.unknown || 0,
+    },
+  ]
 
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.
   // In this case, we need to support multiple screen IDs
@@ -346,106 +330,52 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
     return getTranslation(display?.display || '', t)
   }
 
-  const sortByRadioOptions = sortByOptions.map((option) => {
+  const modalSortByOptions = sortByOptions.map((option) => {
     return {
       value: option.value,
       labelKey: getTranslation(option.display, t),
     }
   })
 
-  const announceAfterDelay = (announcement: string) => {
-    setTimeout(() => AccessibilityInfo.announceForAccessibility(announcement), announcementDelay)
-  }
+  const modalFilterOptions = filterOptions.map((option) => {
+    return {
+      value: option.value,
+      labelKey: `${getTranslation(option.display, t)} (${option.count})`,
+      additionalLabelText: option.additionalLabelText,
+    }
+  })
 
-  const sortOrderRadioOptions = getSortOrderOptionsForSortBy(selectedSortBy, t)
-
-  const sortButtonText = `${t('prescriptions.sort.by')}: ${getDisplayForValue(sortByOptions, sortByToUse)}`
-
-  const sortProps: RadioGroupModalProps = {
+  const modalProps: RadioGroupModalProps = {
     groups: [
       {
-        items: sortByRadioOptions,
+        items: modalFilterOptions,
+        onSetOption: (newFilter: string) => {
+          setSelectedFilter(newFilter as RefillStatus | '')
+        },
+        selectedValue: selectedFilter,
+        title: t('prescription.filter.by'),
+      },
+      {
+        items: modalSortByOptions,
         onSetOption: (newSortBy: string) => {
           setSelectedSortBy(newSortBy as PrescriptionSortOptions | '')
         },
         selectedValue: selectedSortBy,
         title: t('prescriptions.sort.by'),
       },
-      {
-        items: sortOrderRadioOptions,
-        onSetOption: (newSortOn: string) => {
-          setSelectedSortOn(newSortOn)
-        },
-        selectedValue: selectedSortOn,
-        title: t('prescriptions.sort.order'),
-      },
     ],
-    buttonText: sortButtonText,
-    buttonA11yLabel: sortButtonText, // so Android reads button text
-    buttonA11yHint: t('prescription.filter.sort.a11y'),
-    buttonTestID: 'openSortTestID',
-    headerText: t('prescription.filter.sort'),
-    topRightButtonText: t('reset'),
-    topRightButtonA11yHint: t('prescription.filter.sort.reset.a11y'),
-    topRightButtonTestID: 'resetSortTestID',
-    testID: 'sortListTestID',
-    onConfirm: () => {
-      setSortOnToUse(selectedSortOn)
-      setSortByToUse(selectedSortBy)
-      logAnalyticsEvent(Events.vama_rx_sort_sel(selectedSortBy))
-    },
-    onUpperRightAction: () => {
-      setSelectedSortBy(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
-      setSelectedSortOn(ASCENDING)
-      const value = getDisplayForValue(sortByOptions, PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
-      const direction = t('prescriptions.sort.atoz.a11y')
-      announceAfterDelay(t('prescriptions.resetAnnouncementWithDirection', { value, direction }))
-    },
-    onCancel: () => {
-      setSelectedSortBy(sortByToUse)
-      setSelectedSortOn(sortOnToUse)
-    },
-    onShowAnalyticsFn: () => {
-      logAnalyticsEvent(Events.vama_rx_sort())
-    },
-  }
-
-  const filterRadioOptions = filterOptions.all.map((option) => {
-    return {
-      value: option.value,
-      labelKey: getTranslation(option.display, t),
-    }
-  })
-
-  const filterButtonText = `${t('prescription.filter.by')}: ${getDisplayForValue(filterOptions.all, filterToUse)}`
-
-  const filterProps: RadioGroupModalProps = {
-    groups: [
-      {
-        items: filterRadioOptions,
-        onSetOption: (newFilter: string) => {
-          setSelectedFilter(newFilter as RefillStatus | '')
-        },
-        selectedValue: selectedFilter,
-      },
-    ],
-    buttonText: filterButtonText,
-    buttonA11yLabel: filterButtonText, // so Android reads button text
-    buttonA11yHint: t('prescription.filter.by.a11y'),
-    buttonTestID: 'openFilterTestID',
-    headerText: t('prescription.filter.status'),
-    topRightButtonText: t('reset'),
-    topRightButtonA11yHint: t('prescription.filter.by.reset.a11y'),
-    topRightButtonTestID: 'resetFilterTestID',
-    testID: 'filterListTestID',
-    onConfirm: () => {
+    buttonText: t('filterAndSort'),
+    buttonA11yLabel: t('filterAndSort'), // so Android reads button text
+    buttonA11yHint: t('prescription.modal.a11yHint'),
+    buttonTestID: 'openModalTestID',
+    headerText: t('filterAndSort'),
+    testID: 'ModalTestID',
+    onApply: () => {
       setPage(1)
       setFilterToUse(selectedFilter)
+      setSortByToUse(selectedSortBy)
+      setSortOnToUse(selectedSortBy === PrescriptionSortOptionConstants.REFILL_DATE ? DESCENDING : ASCENDING)
       logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter))
-    },
-    onUpperRightAction: () => {
-      setSelectedFilter('')
-      announceAfterDelay(t('prescriptions.resetAnnouncement', { value: getDisplayForValue(filterOptions.all, '') }))
     },
     onCancel: () => {
       setSelectedFilter(filterToUse)
@@ -525,6 +455,33 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
     )
   }
 
+  const prescriptionListTitle = () => {
+    const sortUppercase = getDisplayForValue(sortByOptions, sortByToUse)
+    const keys = {
+      count: prescriptions?.length,
+      filter: getDisplayForValue(filterOptions, filterToUse),
+      sort: sortUppercase[0].toLowerCase() + sortUppercase.slice(1),
+    }
+
+    if (selectedFilter === RefillStatusConstants.PENDING) {
+      return t('prescription.history.list.title.pending', keys)
+    } else if (selectedFilter === RefillStatusConstants.TRACKING) {
+      return t('prescription.history.list.title.tracking', keys)
+    } else {
+      return t('prescription.history.list.title', keys)
+    }
+  }
+
+  const prescriptionListDescription = () => {
+    if (selectedFilter === RefillStatusConstants.PENDING) {
+      return t('prescription.history.list.header.pending')
+    } else if (selectedFilter === RefillStatusConstants.TRACKING) {
+      return t('prescription.history.list.header.tracking')
+    } else {
+      return t('prescription.history.list.header')
+    }
+  }
+
   const getContent = () => {
     if (hasNoItems) {
       return <PrescriptionHistoryNoMatches isFiltered={!!filterToUse} />
@@ -533,19 +490,16 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
         <>
           <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
             <TextView mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
-              {t('prescription.history.list.title.all', { count: prescriptions?.length })}
+              {prescriptionListTitle()}
             </TextView>
-            <TextView mb={theme.dimensions.standardMarginBetween} variant={'HelperText'} accessibilityLabel={a11yLabelVA(t('prescriptions.header.helper.all'))}>
-              {t('prescriptions.header.helper.all')}
+            <TextView mb={theme.dimensions.standardMarginBetween} variant={'HelperText'} accessibilityLabel={a11yLabelVA(prescriptionListDescription())}>
+              {prescriptionListDescription()}
             </TextView>
           </Box>
 
           <Box {...filterContainerProps}>
             <Box mr={8} mb={10}>
-              <RadioGroupModal {...filterProps} />
-            </Box>
-            <Box mb={10}>
-              <RadioGroupModal {...sortProps} />
+              <RadioGroupModal {...modalProps} />
             </Box>
           </Box>
 

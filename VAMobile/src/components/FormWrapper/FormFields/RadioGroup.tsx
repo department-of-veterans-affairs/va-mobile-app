@@ -128,9 +128,8 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isR
       const textLines: Array<TextLine> = [{ text: option.labelKey, variant: 'VASelector', color: disabled ? 'checkboxDisabled' : 'primary' }]
 
       if (option.additionalLabelText && option.additionalLabelText.length > 0) {
-        textLines[0].variant = 'MobileBodyBold'
         option.additionalLabelText.forEach((item) => {
-          textLines.push({ text: item, variant: 'MobileBody' })
+          textLines.push({ text: item, variant: 'HelperText' })
         })
       }
 

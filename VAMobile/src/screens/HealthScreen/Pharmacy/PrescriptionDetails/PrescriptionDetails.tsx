@@ -175,7 +175,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
           <DetailsTextSections
             leftSectionTitle={t('prescription.details.refillLeftHeader')}
             leftSectionValue={refillRemaining ?? noneNoted}
-            rightSectionTitle={t('prescription.details.lastFillDateHeader')}
+            rightSectionTitle={t('fillDate')}
             rightSectionValue={lastRefilledDateFormatted}
             rightSectionValueLabel={lastRefilledDateFormattedA11yLabel}
           />
