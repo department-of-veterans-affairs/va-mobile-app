@@ -34,7 +34,7 @@ jobs:
           echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
       - name: 'Make new run if not release'
         id: run-id-selection-not-release
-        echo "TEST_RUN_ID=${{steps.section-id-selection.outputs.SECTION_RUN_ID}}" >> "$GITHUB_OUTPUT"  
+        run: echo "TEST_RUN_ID=${{steps.section-id-selection.outputs.SECTION_RUN_ID}}" >> "$GITHUB_OUTPUT"  
         if: ${{steps.run-id-selection.outputs.TEST_RUN_ID}} == null
         run: |
           echo "$(date +'%Y-%m-%d')"
