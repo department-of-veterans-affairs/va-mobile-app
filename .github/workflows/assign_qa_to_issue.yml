@@ -16,7 +16,7 @@ jobs:
       issues: write
     steps:
       - name: if_health
-        if: github.event.label.name == 'health'
+        if: github.event.label.name == 'Health'
         uses: actions-ecosystem/action-add-assignees@v1
         with:
           github_token: ${{ secrets.github_token }}
