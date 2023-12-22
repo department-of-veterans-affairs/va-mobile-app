@@ -46,16 +46,12 @@ export const HealthScreen: FC<HealthScreenProps> = () => {
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
 
-  const onAppointments = () => navigateTo('Appointments')
-  const onSecureMessaging = () => navigateTo('SecureMessaging')
-  const onVaVaccines = () => navigateTo('VaccineList')
-  const pharmacyNavHandler = () => navigateTo('PrescriptionHistory')
   const onPharmacy = () => {
     // If rx list is already loaded, reload it to ensure freshness
     if (!prescriptionsNeedLoad) {
       dispatch(loadAllPrescriptions(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
     }
-    pharmacyNavHandler()
+    navigateTo('PrescriptionHistory')
   }
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('health_screen'))
@@ -76,7 +72,7 @@ export const HealthScreen: FC<HealthScreenProps> = () => {
       <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('appointments')}
-          onPress={onAppointments}
+          onPress={() => navigateTo('Appointments')}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
@@ -84,7 +80,7 @@ export const HealthScreen: FC<HealthScreenProps> = () => {
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
-          onPress={onSecureMessaging}
+          onPress={() => navigateTo('SecureMessaging')}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
@@ -105,7 +101,7 @@ export const HealthScreen: FC<HealthScreenProps> = () => {
         <LargeNavButton
           title={t('vaVaccines.buttonTitle')}
           a11yHint={t('vaVaccines.a11yHint')}
-          onPress={onVaVaccines}
+          onPress={() => navigateTo('VaccineList')}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}

@@ -75,14 +75,14 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     const items: Array<DefaultListItemObj> = [
       {
         textLines: [{ text: t('personalInformation.preferredName.title'), variant: 'MobileBodyBold' }, { text: getPreferredName(demographics, t) }],
-        onPress: onPreferredName,
+        onPress: () => navigateTo('PreferredName'),
       },
     ]
 
     if (genderIdentityOptions) {
       items.push({
         textLines: [{ text: t('personalInformation.genderIdentity.title'), variant: 'MobileBodyBold' }, { text: getGenderIdentity(demographics, t, genderIdentityOptions) }],
-        onPress: onGenderIdentity,
+        onPress: () => navigateTo('GenderIdentity'),
       })
     }
     return items
@@ -113,22 +113,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const errorCheck = personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError
   const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
 
-  const onGenderIdentity = () => {
-    navigateTo('GenderIdentity')
-  }
-
-  const onPreferredName = () => {
-    navigateTo('PreferredName')
-  }
-
-  const onUpdateName = () => {
-    navigateTo('HowDoIUpdate', { screenType: 'name' })
-  }
-
-  const onUpdateDOB = () => {
-    navigateTo('HowDoIUpdate', { screenType: 'DOB' })
-  }
-
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')} testID="PersonalInformationTestID">
       {errorCheck ? (
@@ -140,14 +124,14 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
             {t('contactInformation.editNote')}
           </TextView>
-          <Pressable onPress={onUpdateName} accessibilityRole="link" accessible={true}>
+          <Pressable onPress={() => navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>
             <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
           </Pressable>
           <Box my={theme.dimensions.standardMarginBetween} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
             <DefaultList items={birthdateItems()} />
           </Box>
           <Box mx={theme.dimensions.gutter}>
-            <Pressable onPress={onUpdateDOB} accessibilityRole="link" accessible={true}>
+            <Pressable onPress={() => navigateTo('HowDoIUpdate', { screenType: 'DOB' })} accessibilityRole="link" accessible={true}>
               <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
             </Pressable>
           </Box>
