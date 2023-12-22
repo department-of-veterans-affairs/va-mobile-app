@@ -15,7 +15,7 @@ export const PrescriptionsE2eIdConstants = {
 	PRESCRIPTION_ALL_DESCRIPTION_LABEL: 'This list only shows prescriptions filled by  V-A  pharmacies and may not include all your medications.',
 	PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All VA prescriptions (31)',
 	PRESCRIPTION_PENDING_NUMBER_OF_PRESCRIPTIONS_TEXT: 'Pending refills (8)',
-	PRESCRIPTION_TRACKING_NUMBER_OF_PRESCRIPTION_TEXT: 'Refills with tracking information (5)',
+	PRESCRIPTION_TRACKING_NUMBER_OF_PRESCRIPTION_TEXT: 'Refills with tracking information (3)',
 	PRESCRIPTION_STATUS_LABEL_HEADER_TEXT: 'Active: Refill in process',
 	PRESCRIPTION_STATUS_LABEL_BODY_LABEL: 'A refill request is being processed by the  V-A  pharmacy. When a prescription is in the Refill in Process status, the Fill Date will show when the prescription will be ready for delivery via mail by a  V-A  Mail Order Pharmacy.',
 	PRESCRIPTION_INSTRUCTIONS_TEXT: 'TAKE ONE TABLET BY MOUTH DAILY',
@@ -303,11 +303,50 @@ describe('Prescriptions Screen', () => {
 		await expect(element(by.label('Prescription number None noted'))).toExist()		
 	})
 	
-	it('verify tracking link workss', async () => {
+	it('verify tracking link for DHL works', async () => {
 		await element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6')).tap()
 		await element(by.text('Ok')).tap()
 		await setTimeout(5000)
-		await device.takeScreenshot('PrescriptionTrackingWebsite')
+		await device.takeScreenshot('PrescriptionTrackingWebsiteDHL')
+		await device.launchApp({newInstance: false})
+		await element(by.text('Close')).tap()
+	})
+
+	it('verify tracking link for FEDEX works', async () => {
+		await waitFor(element(by.label('LAMIVUDINE 100MG TAB.'))).toBeVisible().whileElement(by.id('PrescriptionHistory')).scroll(50, 'down')
+		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_TEXT)).atIndex(1).tap()
+		await expect(element(by.text('Delivery service: FEDEX'))).toExist()
+		await element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6')).tap()
+		await element(by.text('Ok')).tap()
+		await setTimeout(5000)
+		await device.takeScreenshot('PrescriptionTrackingWebsiteFedex')
+		await device.launchApp({newInstance: false})
+		await element(by.text('Close')).tap()
+	})
+
+	it('verify tracking info for multiple packages', async () => {
+		await element(by.id('PrescriptionHistory')).scrollTo('bottom')
+		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_TEXT)).atIndex(2).tap()
+		await expect(element(by.text('Package 1 of 2'))).toExist()
+		await expect(element(by.text('Delivery service: UPS'))).toExist()
+		await expect(element(by.text('Package 2 of 2'))).toExist()
+		await expect(element(by.text('Delivery service: USPS'))).toExist()
+	})
+	
+	it('verify tracking link for UPS works', async () => {
+		await element(by.label('7 7 2 9 8 0 2 7 2 0 3 9 8 0 0 0 0 0 0 0 3 9 8')).tap()
+		await element(by.text('Ok')).tap()
+		await setTimeout(5000)
+		await device.takeScreenshot('PrescriptionTrackingWebsiteUPS')
+		await device.launchApp({newInstance: false})
+	})
+
+	it('verify tracking link for DHL works', async () => {
+		await waitFor(element(by.label('9 2 0 5   5 0 0 0   0 0 0 0   0 0 0 0   0 0 0 0   0 0'))).toBeVisible().whileElement(by.id('refillTrackingDetailsTestID')).scroll(50, 'down')
+		await element(by.label('9 2 0 5   5 0 0 0   0 0 0 0   0 0 0 0   0 0 0 0   0 0')).tap()
+		await element(by.text('Ok')).tap()
+		await setTimeout(5000)
+		await device.takeScreenshot('PrescriptionTrackingWebsiteUSPS')
 		await device.launchApp({newInstance: false})
 		await element(by.text('Close')).tap()
 	})
