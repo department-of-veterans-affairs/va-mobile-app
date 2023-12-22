@@ -25,7 +25,7 @@ export const linking: LinkingOptions<any> = {
         screens: {
           HealthTab: {
             screens: {
-              ViewMessage: 'messages/:messageID',
+              PrescriptionHistory: 'prescriptions',
               UpcomingAppointmentDetails: 'appointments/:vetextID',
             },
           },
@@ -82,6 +82,24 @@ export const linking: LinkingOptions<any> = {
                           ]
                         : []),
                     ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
+    } else if (pathParts[0] === 'prescriptions') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'HealthTab',
+                  state: {
+                    routes: [{ name: 'Health' }, { name: 'PrescriptionHistory' }],
                   },
                 },
               ],

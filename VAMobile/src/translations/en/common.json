@@ -19,6 +19,7 @@
   "accountSecurity.description": "To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.",
   "accountType.checking": "Checking",
   "accountType.savings": "Savings",
+  "active": "active",
   "add.preference.btn.title": "Add preference",
   "and": "and",
   "appealDetails.agencyJurisdiction": "Agency of Original Jurisdiction",

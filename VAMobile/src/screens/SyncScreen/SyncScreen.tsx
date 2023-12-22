@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { AppointmentsState, AuthState, completeSync, logInDemoMode, prefetchAppointments } from 'store/slices'
+import { AppointmentsState, AuthState, PrescriptionState, completeSync, loadAllPrescriptions, logInDemoMode, prefetchAppointments } from 'store/slices'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -37,6 +37,7 @@ function SyncScreen({}: SyncScreenProps) {
   const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
   const { preloadComplete: appointmentsLoaded } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({ enabled: loggedIn })
 
   const [displayMessage, setDisplayMessage] = useState('')
@@ -77,6 +78,12 @@ function SyncScreen({}: SyncScreenProps) {
   }, [dispatch, loggedIn, appointmentsLoaded])
 
   useEffect(() => {
+    if (loggedIn && prescriptionsNeedLoad) {
+      dispatch(loadAllPrescriptions())
+    }
+  }, [dispatch, loggedIn, prescriptionsNeedLoad])
+
+  useEffect(() => {
     if (syncing) {
       if (!loggingOut) {
         setDisplayMessage(t('sync.progress.signin'))
@@ -88,7 +95,7 @@ function SyncScreen({}: SyncScreenProps) {
     }
 
     const finishSyncingMilitaryHistory = !loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded)
-    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded && appointmentsLoaded) {
+    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded && appointmentsLoaded && !prescriptionsNeedLoad) {
       dispatch(completeSync())
     }
   }, [
@@ -101,6 +108,7 @@ function SyncScreen({}: SyncScreenProps) {
     t,
     disabilityRatingLoaded,
     appointmentsLoaded,
+    prescriptionsNeedLoad,
     syncing,
   ])
 
