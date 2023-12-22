@@ -3,12 +3,13 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AuthState, PrescriptionState, completeSync, loadAllPrescriptions, logInDemoMode } from 'store/slices'
+import { AppointmentsState, AuthState, PrescriptionState, completeSync, loadAllPrescriptions, logInDemoMode, prefetchAppointments } from 'store/slices'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { DisabilityRatingState, MilitaryServiceState, checkForDowntimeErrors, getDisabilityRating, getServiceHistory } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -30,6 +31,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<RootState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { preloadComplete: appointmentsLoaded } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({ enabled: loggedIn })
 
@@ -65,6 +67,12 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   ])
 
   useEffect(() => {
+    if (loggedIn && !appointmentsLoaded) {
+      dispatch(prefetchAppointments(getUpcomingAppointmentDateRange()))
+    }
+  }, [dispatch, loggedIn, appointmentsLoaded])
+
+  useEffect(() => {
     if (loggedIn && prescriptionsNeedLoad) {
       dispatch(loadAllPrescriptions())
     }
@@ -82,7 +90,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     }
 
     const finishSyncingMilitaryHistory = !loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded)
-    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded && !prescriptionsNeedLoad) {
+    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded && appointmentsLoaded && !prescriptionsNeedLoad) {
       dispatch(completeSync())
     }
   }, [
@@ -94,6 +102,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     userAuthorizedServices?.militaryServiceHistory,
     t,
     disabilityRatingLoaded,
+    appointmentsLoaded,
     prescriptionsNeedLoad,
     syncing,
   ])

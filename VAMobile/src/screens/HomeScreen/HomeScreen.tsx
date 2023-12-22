@@ -1,22 +1,22 @@
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
+import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
+import { AppointmentsState, PrescriptionState } from 'store/slices'
 import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HomeStackParamList } from './HomeStackScreens'
-import { Linking } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionState } from 'store/slices'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -40,6 +40,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
 
   const onContactVA = navigateTo('ContactVA')
@@ -81,6 +82,16 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       <Box flex={1} justifyContent="flex-start">
         <EncourageUpdateAlert />
         <Nametag />
+        {Number(upcomingAppointmentsCount) > 0 && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <LargeNavButton
+              title={`${t('appointments')}`}
+              subText={`(${upcomingAppointmentsCount} ${t('upcoming')})`}
+              onPress={() => Linking.openURL('vamobile://appointments')}
+              borderWidth={theme.dimensions.buttonBorderWidth}
+            />
+          </Box>
+        )}
         {Number(prescriptionStatusCount.active) > 0 && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
             <LargeNavButton
