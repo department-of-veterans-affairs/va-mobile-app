@@ -338,7 +338,13 @@ describe('Prescriptions Screen', () => {
 		await element(by.text('Ok')).tap()
 		await setTimeout(5000)
 		await device.takeScreenshot('PrescriptionTrackingWebsiteUPS')
-		await device.launchApp({newInstance: false})
+		await device.launchApp({newInstance: true, permissions: {location: 'always'}})
+		await loginToDemoMode()
+		await openHealth()
+		await openPrescriptions()
+		await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TAB_TRACKING_ID)).tap()
+		await element(by.id('PrescriptionHistory')).scrollTo('bottom')
+		await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_TEXT)).atIndex(2).tap()
 	})
 
 	it('verify tracking link for DHL works', async () => {

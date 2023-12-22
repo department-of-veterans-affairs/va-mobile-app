@@ -189,7 +189,7 @@ const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigati
   }
 
   return (
-    <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')} testID='refillTrackingDetailsTestID'>
+    <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')} testID="refillTrackingDetailsTestID">
       <Box mx={gutter} mb={contentMarginBottom}>
         {renderHeader()}
         <Box mt={standardMarginBetween}>
