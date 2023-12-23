@@ -48,22 +48,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, militaryHistoryNeedsUpdate, userAuthorizedServices?.militaryServiceHistory, mhNotInDowntime])
 
-  const onPersonalInformation = () => {
-    navigateTo('PersonalInformation')
-  }
-
-  const onContactInformation = () => {
-    navigateTo('ContactInformation')
-  }
-
-  const onMilitaryInformation = () => {
-    navigateTo('MilitaryInformation')
-  }
-
-  const onSettings = () => {
-    navigateTo('Settings')
-  }
-
   const loadingCheck = militaryInformationLoading || loadingUserAuthorizedServices
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
 
@@ -75,7 +59,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
             <LargeNavButton
               title={t('settings.title')}
-              onPress={onSettings}
+              onPress={() => navigateTo('Settings')}
               borderWidth={theme.dimensions.buttonBorderWidth}
               borderColor={'secondary'}
               borderColorActive={'primaryDarkest'}
@@ -96,7 +80,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
               <>
                 <LargeNavButton
                   title={t('personalInformation.title')}
-                  onPress={onPersonalInformation}
+                  onPress={() => navigateTo('PersonalInformation')}
                   borderWidth={theme.dimensions.buttonBorderWidth}
                   borderColor={'secondary'}
                   borderColorActive={'primaryDarkest'}
@@ -104,7 +88,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
                 />
                 <LargeNavButton
                   title={t('contactInformation.title')}
-                  onPress={onContactInformation}
+                  onPress={() => navigateTo('ContactInformation')}
                   borderWidth={theme.dimensions.buttonBorderWidth}
                   borderColor={'secondary'}
                   borderColorActive={'primaryDarkest'}
@@ -114,7 +98,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
             )}
             <LargeNavButton
               title={t('militaryInformation.title')}
-              onPress={onMilitaryInformation}
+              onPress={() => navigateTo('MilitaryInformation')}
               borderWidth={theme.dimensions.buttonBorderWidth}
               borderColor={'secondary'}
               borderColorActive={'primaryDarkest'}
@@ -122,7 +106,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
             />
             <LargeNavButton
               title={t('settings.title')}
-              onPress={onSettings}
+              onPress={() => navigateTo('Settings')}
               borderWidth={theme.dimensions.buttonBorderWidth}
               borderColor={'secondary'}
               borderColorActive={'primaryDarkest'}
