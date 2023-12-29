@@ -9,7 +9,7 @@ export const AppealsIdConstants = {
   ISSUES_TAB_TEXT: 'Issues',
   STATUS_TAB_TEXT: 'Status',
   APPEALS_DETAILS_ID: 'appealsDetailsTestID',
-  APPEAL_DETAILS_TEXT: 'Appeal details',
+  APPEAL_DETAILS_TEXT: 'Appeal detail',
   APPEAL_TYPE_TEXT: 'Appeal for compensation',
   APPEAL_SUBMITTED_TEXT: 'Submitted June 12, 2008',
   APPEAL_NEED_HELP_NUMBER_TEXT: '800-827-1000',
