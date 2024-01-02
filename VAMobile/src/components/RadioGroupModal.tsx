@@ -58,19 +58,17 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const insets = useSafeAreaInsets()
 
-  const showModal = (): void => {
+  const showModal = () => {
     setModalVisible(true)
-    if (onShowAnalyticsFn) {
-      onShowAnalyticsFn()
-    }
+    onShowAnalyticsFn && onShowAnalyticsFn()
   }
 
-  const onCancelPressed = (): void => {
+  const onCancelPressed = () => {
     setModalVisible(false)
     onCancel()
   }
 
-  const onApplyPressed = (): void => {
+  const onApplyPressed = () => {
     setModalVisible(false)
     onApply()
   }
@@ -119,7 +117,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   const applyButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
-    accessibilityHint: t('Hint for apply button goes here'),
+    accessibilityHint: t('done.picker.a11yHint'),
   }
 
   return (
@@ -155,7 +153,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
         </Box>
       </Modal>
 
-      <VAButton onPress={showModal} label={buttonText} buttonType={ButtonTypesConstants.buttonSecondary} />
+      <VAButton onPress={showModal} label={buttonText} buttonType={ButtonTypesConstants.buttonSecondary} a11yHint={buttonA11yHint} testID={buttonTestID} />
     </View>
   )
 }

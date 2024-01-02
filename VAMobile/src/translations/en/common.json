@@ -1095,7 +1095,6 @@
   "prescriptions.sort.medication": "Medication name (A to Z)",
   "prescriptions.sort.refills": "Refills left (least to most)",
   "prescriptions.sort.status": "Status (A to Z)",
-  "prescriptions.tabs.all": "All ({{count}})",
   "prescriptionsHelp": "Prescriptions help",
   "privacyPolicy.a11yHint": "Takes you to the privacy policy page. This page will open in your device's browser",
   "privacyPolicy.title": "Privacy policy",
