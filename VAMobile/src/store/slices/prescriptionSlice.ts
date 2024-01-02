@@ -13,7 +13,6 @@ import {
   RefillRequestSummaryItems,
   ScreenIDTypes,
   StatusCounts,
-  TabCounts,
   get,
   put,
 } from '../api'
@@ -55,7 +54,6 @@ export type PrescriptionState = {
   showLoadingScreenRequestRefills: boolean
   showLoadingScreenRequestRefillsRetry: boolean
   refillRequestSummaryItems: RefillRequestSummaryItems
-  tabCounts: TabCounts
   prescriptionsNeedLoad: boolean
 }
 
@@ -73,7 +71,6 @@ export const initialPrescriptionState: PrescriptionState = {
   showLoadingScreenRequestRefills: false,
   showLoadingScreenRequestRefillsRetry: false,
   refillRequestSummaryItems: [],
-  tabCounts: {},
   prescriptionsNeedLoad: true,
 }
 
@@ -317,12 +314,6 @@ const prescriptionSlice = createSlice({
         ...meta.prescriptionStatusCount,
         pending: pendingPrescriptions.length,
         tracking: shippedPrescriptions.length,
-      }
-
-      state.tabCounts = {
-        '0': prescriptions?.length,
-        '1': pendingPrescriptions.length,
-        '2': shippedPrescriptions.length,
       }
     },
     dispatchStartFilterAndSortPrescriptions: (state) => {

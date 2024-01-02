@@ -14,18 +14,6 @@ export const PrescriptionSortOptionConstants: {
   REFILL_STATUS: 'refillStatus',
 }
 
-export type PrescriptionHistoryTabs = '0' | '1' | '2'
-
-export const PrescriptionHistoryTabConstants: {
-  ALL: PrescriptionHistoryTabs
-  PENDING: PrescriptionHistoryTabs
-  TRACKING: PrescriptionHistoryTabs
-} = {
-  ALL: '0',
-  PENDING: '1',
-  TRACKING: '2',
-}
-
 export const RefillStatusConstants: {
   ACTIVE: RefillStatus
   DELETED: RefillStatus
@@ -136,10 +124,6 @@ export type PrescriptionsMap = {
 }
 
 export type StatusCounts = {
-  [key: string]: number | undefined
-}
-
-export type TabCounts = {
   [key: string]: number | undefined
 }
 

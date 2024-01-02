@@ -30,15 +30,7 @@ import {
   VAIcon,
   VAIconProps,
 } from 'components'
-import {
-  DowntimeFeatureTypeConstants,
-  PrescriptionHistoryTabConstants,
-  PrescriptionSortOptionConstants,
-  PrescriptionSortOptions,
-  PrescriptionsList,
-  RefillStatus,
-  RefillStatusConstants,
-} from 'store/api/types'
+import { DowntimeFeatureTypeConstants, PrescriptionSortOptionConstants, PrescriptionSortOptions, PrescriptionsList, RefillStatus, RefillStatusConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -80,7 +72,6 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
     prescriptions: allPrescriptions,
     loadingHistory,
     statusCounts,
-    tabCounts,
     prescriptionsNeedLoad,
     transferredPrescriptions,
   } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
@@ -212,7 +203,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
     )
   }
 
-  if (!tabCounts[PrescriptionHistoryTabConstants.ALL]) {
+  if (!allPrescriptions?.length) {
     return (
       <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <PrescriptionHistoryNoPrescriptions />
