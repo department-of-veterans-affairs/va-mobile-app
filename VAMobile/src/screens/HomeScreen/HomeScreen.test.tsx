@@ -87,13 +87,13 @@ context('HomeScreen', () => {
   })
 
   it('displays claims module when there are active claims', () => {
-    initializeTestInstance(2)
+    initializeTestInstance(0, 2)
     expect(screen.getByText('Claims')).toBeTruthy()
     expect(screen.getByText('(2 open)')).toBeTruthy()
   })
 
   it('navigates to claims history screen when claims module is tapped', () => {
-    initializeTestInstance(2)
+    initializeTestInstance(0, 2)
     fireEvent.press(screen.getByText('Claims'))
     expect(Linking.openURL).toBeCalledWith('vamobile://claims')
   })
