@@ -17,14 +17,14 @@ const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ i
   const theme = useTheme()
 
   const getFilteredNoMatch = () => {
-    const contenta11y = { accessibilityLabel: a11yLabelVA(t('prescription.history.empty.filtered.all')) }
+    const contenta11y = { accessibilityLabel: a11yLabelVA(t('prescription.history.empty.filtered.message')) }
     return (
       <>
         <TextView textAlign={'center'} variant="MobileBodyBold" accessibilityRole={'header'}>
           {t('prescription.history.empty.filtered.title')}
         </TextView>
         <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" {...contenta11y}>
-          {t('prescription.history.empty.filtered.all')}
+          {t('prescription.history.empty.filtered.message')}
         </TextView>
       </>
     )
