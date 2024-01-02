@@ -17,6 +17,7 @@ export const linking: LinkingOptions<any> = {
           HealthTab: {
             screens: {
               ClaimsHistory: 'claims',
+              PrescriptionHistory: 'prescriptions',
               UpcomingAppointmentDetails: 'appointments/:vetextID',
               ViewMessageScreen: 'messages/:messageID',
             },
@@ -27,7 +28,7 @@ export const linking: LinkingOptions<any> = {
   },
   // Sets the navigation state for deeply nested screens to ensure navigating backwards works correctly
   getStateFromPath(path) {
-    const pathParts = path.split('/')
+    const pathParts = path.split('/').filter(Boolean)
     if (pathParts[0] === 'messages' && pathParts.length === 2) {
       return {
         routes: [
@@ -46,7 +47,8 @@ export const linking: LinkingOptions<any> = {
           },
         ],
       }
-    } else if (pathParts[0] === 'appointments' && pathParts.length === 2) {
+    } else if (pathParts[0] === 'appointments') {
+      const hasAppointmentID = pathParts.length === 2
       return {
         routes: [
           {
@@ -57,7 +59,36 @@ export const linking: LinkingOptions<any> = {
                   name: 'HealthTab',
                   state: {
                     // The ID from the notification payload is sent encoded, so it needs to be decoded
-                    routes: [{ name: 'Health' }, { name: 'Appointments' }, { name: 'UpcomingAppointmentDetails', params: { vetextID: decodeURIComponent(pathParts[1]) } }],
+                    routes: [
+                      { name: 'Health' },
+                      { name: 'Appointments' },
+                      ...(hasAppointmentID
+                        ? [
+                            {
+                              name: 'UpcomingAppointmentDetails',
+                              params: { vetextID: decodeURIComponent(pathParts[1]) },
+                            },
+                          ]
+                        : []),
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
+    } else if (pathParts[0] === 'prescriptions') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'HealthTab',
+                  state: {
+                    routes: [{ name: 'Health' }, { name: 'PrescriptionHistory' }],
                   },
                 },
               ],
