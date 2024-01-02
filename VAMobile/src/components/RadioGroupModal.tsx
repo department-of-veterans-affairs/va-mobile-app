@@ -1,9 +1,10 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { Modal, Pressable, PressableProps, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { Box, BoxProps, ButtonTypesConstants, RadioGroup, TextView, TextViewProps, VAButton, VAScrollView, radioOption } from 'components'
+import { Box, BoxProps, RadioGroup, TextView, TextViewProps, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
@@ -153,7 +154,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
         </Box>
       </Modal>
 
-      <VAButton onPress={showModal} label={buttonText} buttonType={ButtonTypesConstants.buttonSecondary} a11yHint={buttonA11yHint} testID={buttonTestID} />
+      <Button onPress={showModal} label={buttonText} buttonType={ButtonVariants.Secondary} a11yLabel={buttonA11yLabel} a11yHint={buttonA11yHint} testID={buttonTestID} />
     </View>
   )
 }
