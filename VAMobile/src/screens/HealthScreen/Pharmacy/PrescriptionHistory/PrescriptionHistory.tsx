@@ -133,7 +133,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
       display: 'prescription.history.tag.active',
       value: RefillStatusConstants.ACTIVE,
       count: statusCounts.active || 0,
-      additionalLabelText: ['Includes these statuses: On hold, Parked, Refill in process, and Submitted'],
+      additionalLabelText: [t('prescription.history.tag.active.helpText')],
     },
     {
       display: 'prescription.history.tag.discontinued',
@@ -149,13 +149,13 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
       display: 'prescription.history.tag.pending',
       value: RefillStatusConstants.PENDING,
       count: statusCounts.pending || 0,
-      additionalLabelText: ['Includes refill requests you submitted and refills the VA pharmacy is processing'],
+      additionalLabelText: [t('prescription.history.tag.pending.helpText')],
     },
     {
       display: 'prescription.history.tag.tracking',
       value: RefillStatusConstants.TRACKING,
       count: statusCounts.tracking || 0,
-      additionalLabelText: ['Includes refills with current tracking information available'],
+      additionalLabelText: [t('prescription.history.tag.tracking.helpText')],
     },
     {
       display: 'prescription.history.tag.transferred',
@@ -358,7 +358,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
     buttonText: t('filterAndSort'),
     buttonA11yLabel: t('filterAndSort'), // so Android reads button text
     buttonA11yHint: t('prescription.modal.a11yHint'),
-    buttonTestID: 'openModalTestID',
+    buttonTestID: 'openFilterAndSortTestID',
     headerText: t('filterAndSort'),
     testID: 'ModalTestID',
     onApply: () => {
