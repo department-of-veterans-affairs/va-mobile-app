@@ -5,7 +5,7 @@ import React from 'react'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { FormHeaderType } from 'constants/secureMessaging'
-import { PrescriptionData, PrescriptionHistoryTabs, RefillStatus, SecureMessagingFormData } from 'store/api/types'
+import { PrescriptionData, RefillStatus, SecureMessagingFormData } from 'store/api/types'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import Attachments from './SecureMessaging/StartNewMessage/Attachments/Attachments'
 import ConfirmContactInfo from './Appointments/UpcomingAppointments/CheckIn/ConfirmContactInfo'
@@ -101,9 +101,7 @@ export type HealthStackParamList = WebviewStackParams & {
     careTypeId: string
   }
   TypeOfCareNotListedHelpScreen: undefined
-  PrescriptionHistory: {
-    startingTab?: PrescriptionHistoryTabs | undefined
-  }
+  PrescriptionHistory: undefined
   PrescriptionDetails: {
     prescriptionId: string
   }
