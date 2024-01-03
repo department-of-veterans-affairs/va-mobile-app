@@ -24,6 +24,9 @@ import {
   MultiTouchCardProps,
   Pagination,
   PaginationProps,
+  TabBar,
+  TabBarProps,
+  TabsValuesType,
   TextView,
   VAButton,
   VAButtonProps,
@@ -33,6 +36,7 @@ import {
 import {
   DowntimeFeatureTypeConstants,
   PrescriptionHistoryTabConstants,
+  PrescriptionHistoryTabs,
   PrescriptionSortOptionConstants,
   PrescriptionSortOptions,
   PrescriptionsList,
@@ -135,7 +139,7 @@ const filterOptions = {
 
 type PrescriptionHistoryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
 
-const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
+const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
   const {
     filteredPrescriptions: prescriptions,
@@ -152,6 +156,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const startingTab = route?.params?.startingTab
   const hasTransferred = !!transferredPrescriptions?.length
 
   const [page, setPage] = useState(1)
@@ -165,11 +170,20 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
   const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
 
+  const [currentTab, setCurrentTab] = useState<string>(PrescriptionHistoryTabConstants.ALL)
+
   useEffect(() => {
     if (hasTransferred) {
       logAnalyticsEvent(Events.vama_rx_refill_cerner())
     }
   }, [hasTransferred])
+
+  useEffect(() => {
+    if (startingTab) {
+      onTabChange(startingTab)
+      navigation.setParams({ startingTab: undefined })
+    }
+  }, [startingTab, navigation])
 
   // scrollViewRef is leveraged by renderPagination to reset scroll position to the top on page change.
   // Must pass scrollViewRef to all uses of FeatureLandingTemplate, otherwise it will become undefined
@@ -177,8 +191,8 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
 
   useEffect(() => {
     const filters = getFilterArgsForFilter(filterToUse)
-    dispatch(filterAndSortPrescriptions(filters, sortByToUse, sortOnToUse === ASCENDING))
-  }, [dispatch, filterToUse, sortByToUse, sortOnToUse, allPrescriptions])
+    dispatch(filterAndSortPrescriptions(filters, currentTab, sortByToUse, sortOnToUse === ASCENDING))
+  }, [dispatch, filterToUse, currentTab, sortByToUse, sortOnToUse, allPrescriptions])
 
   useEffect(() => {
     const newPrescriptions = prescriptions?.slice((page - 1) * pageSize, page * pageSize)
@@ -234,6 +248,43 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
         <PrescriptionHistoryNoPrescriptions />
       </FeatureLandingTemplate>
     )
+  }
+
+  const tabs: TabsValuesType = [
+    {
+      value: PrescriptionHistoryTabConstants.ALL,
+      title: t('prescriptions.tabs.all', { count: tabCounts[PrescriptionHistoryTabConstants.ALL] }),
+      testID: 'prescriptionAllCountTestID',
+    },
+    {
+      value: PrescriptionHistoryTabConstants.PENDING,
+      title: t('prescriptions.tabs.pending', { count: tabCounts[PrescriptionHistoryTabConstants.PENDING] }),
+      testID: 'prescriptionPendingCountTestID',
+    },
+    {
+      value: PrescriptionHistoryTabConstants.TRACKING,
+      title: t('prescriptions.tabs.tracking', { count: tabCounts[PrescriptionHistoryTabConstants.TRACKING] }),
+      testID: 'prescriptionTrackingCountTestID',
+    },
+  ]
+
+  const onTabChange = (newTab: string) => {
+    setFilterToUse('')
+    setSelectedFilter('')
+    setCurrentTab(newTab)
+    setPage(1)
+
+    if (newTab === PrescriptionHistoryTabConstants.PENDING) {
+      logAnalyticsEvent(Events.vama_rx_pendingtab())
+    } else if (newTab === PrescriptionHistoryTabConstants.TRACKING) {
+      logAnalyticsEvent(Events.vama_rx_trackingtab())
+    }
+  }
+
+  const tabProps: TabBarProps = {
+    tabs,
+    onChange: onTabChange,
+    selected: currentTab,
   }
 
   const prescriptionDetailsClicked = (prescriptionID: string) => {
@@ -333,6 +384,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
       totalEntries: prescriptions?.length || 0,
       pageSize: pageSize,
       page,
+      tab: currentTab,
     }
 
     return <Pagination {...paginationProps} />
@@ -410,14 +462,16 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
     },
   }
 
-  const filterRadioOptions = filterOptions.all.map((option) => {
+  const filterOptionsForTab = currentTab === PrescriptionHistoryTabConstants.PENDING ? filterOptions.pending : filterOptions.all
+
+  const filterRadioOptions = filterOptionsForTab.map((option) => {
     return {
       value: option.value,
       labelKey: getTranslation(option.display, t),
     }
   })
 
-  const filterButtonText = `${t('prescription.filter.by')}: ${getDisplayForValue(filterOptions.all, filterToUse)}`
+  const filterButtonText = `${t('prescription.filter.by')}: ${getDisplayForValue(filterOptionsForTab, filterToUse)}`
 
   const filterProps: RadioGroupModalProps = {
     groups: [
@@ -445,7 +499,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
     },
     onUpperRightAction: () => {
       setSelectedFilter('')
-      announceAfterDelay(t('prescriptions.resetAnnouncement', { value: getDisplayForValue(filterOptions.all, '') }))
+      announceAfterDelay(t('prescriptions.resetAnnouncement', { value: getDisplayForValue(filterOptionsForTab, '') }))
     },
     onCancel: () => {
       setSelectedFilter(filterToUse)
@@ -466,7 +520,34 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
     testID: 'filterSortWrapperBoxTestID',
   }
 
+  const filterWrapperProps: BoxProps = {
+    borderBottomWidth: 1,
+    borderColor: 'primary',
+  }
+
   const hasNoItems = prescriptions?.length === 0
+
+  const getInstructions = () => {
+    switch (currentTab) {
+      case PrescriptionHistoryTabConstants.ALL:
+        return t('prescriptions.header.helper.all')
+      case PrescriptionHistoryTabConstants.PENDING:
+        return t('prescriptions.header.helper.pending')
+      case PrescriptionHistoryTabConstants.TRACKING:
+        return t('prescriptions.header.helper.tracking')
+    }
+  }
+
+  const getInstructionA11y = () => {
+    switch (currentTab) {
+      case PrescriptionHistoryTabConstants.ALL:
+        return a11yLabelVA(t('prescriptions.header.helper.all'))
+      case PrescriptionHistoryTabConstants.PENDING:
+        return a11yLabelVA(t('prescriptions.header.helper.pending'))
+      case PrescriptionHistoryTabConstants.TRACKING:
+        return t('prescriptions.header.helper.tracking')
+    }
+  }
 
   const getTransferAlert = () => {
     if (!hasTransferred) {
@@ -509,6 +590,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
   }
 
   const getRequestRefillButton = () => {
+    if (currentTab !== PrescriptionHistoryTabConstants.ALL) {
+      return <></>
+    }
+
     const requestRefillButtonProps: VAButtonProps = {
       label: t('prescription.history.startRefillRequest'),
       buttonType: ButtonTypesConstants.buttonPrimary,
@@ -525,30 +610,32 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
     )
   }
 
+  const getHistoryListHeader = () => {
+    switch (currentTab) {
+      case PrescriptionHistoryTabConstants.ALL:
+        return t('prescription.history.list.title.all', { count: prescriptions?.length })
+      case PrescriptionHistoryTabConstants.PENDING:
+        return t('prescription.history.list.title.pending', { count: prescriptions?.length })
+      case PrescriptionHistoryTabConstants.TRACKING:
+        return t('prescription.history.list.title.tracking', { count: prescriptions?.length })
+    }
+  }
+
   const getContent = () => {
     if (hasNoItems) {
-      return <PrescriptionHistoryNoMatches isFiltered={!!filterToUse} />
+      return <PrescriptionHistoryNoMatches currentTab={currentTab as PrescriptionHistoryTabs} isFiltered={!!filterToUse} />
     } else {
       return (
         <>
+          {getTransferAlert()}
           <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
+            <TextView mb={theme.dimensions.standardMarginBetween} variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
+              {getInstructions()}
+            </TextView>
             <TextView mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
-              {t('prescription.history.list.title.all', { count: prescriptions?.length })}
-            </TextView>
-            <TextView mb={theme.dimensions.standardMarginBetween} variant={'HelperText'} accessibilityLabel={a11yLabelVA(t('prescriptions.header.helper.all'))}>
-              {t('prescriptions.header.helper.all')}
+              {getHistoryListHeader()}
             </TextView>
           </Box>
-
-          <Box {...filterContainerProps}>
-            <Box mr={8} mb={10}>
-              <RadioGroupModal {...filterProps} />
-            </Box>
-            <Box mb={10}>
-              <RadioGroupModal {...sortProps} />
-            </Box>
-          </Box>
-
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
             {prescriptionItems()}
             <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
@@ -583,7 +670,17 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
       title={t('prescription.title')}
       testID="PrescriptionHistory">
       {getRequestRefillButton()}
-      {getTransferAlert()}
+      <TabBar {...tabProps} />
+      <Box {...filterWrapperProps}>
+        <Box {...filterContainerProps}>
+          <Box mr={8} mb={10}>
+            <RadioGroupModal {...filterProps} />
+          </Box>
+          <Box mb={10}>
+            <RadioGroupModal {...sortProps} />
+          </Box>
+        </Box>
+      </Box>
       {getContent()}
     </FeatureLandingTemplate>
   )
