@@ -18,7 +18,7 @@ import {
 } from '../api'
 import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
-import { PrescriptionHistoryTabConstants, PrescriptionRefillData, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
+import { PrescriptionRefillData, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
 import { contains, filter, indexBy, sortBy } from 'underscore'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
@@ -96,25 +96,12 @@ export const loadAllPrescriptions =
   }
 
 export const filterAndSortPrescriptions =
-  (filters: string[], tab: string, sort: string, ascending: boolean): AppThunk =>
+  (filters: string[], sort: string, ascending: boolean): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchStartFilterAndSortPrescriptions())
 
     const state = getState()
-    let prescriptionsToSort: PrescriptionsList = []
-
-    // Start with the prefiltered lists based on the current tab
-    switch (tab) {
-      case PrescriptionHistoryTabConstants.ALL:
-        prescriptionsToSort = state.prescriptions.prescriptions || []
-        break
-      case PrescriptionHistoryTabConstants.PENDING:
-        prescriptionsToSort = state.prescriptions.pendingPrescriptions || []
-        break
-      case PrescriptionHistoryTabConstants.TRACKING:
-        prescriptionsToSort = state.prescriptions.shippedPrescriptions || []
-        break
-    }
+    const prescriptionsToSort = state.prescriptions.prescriptions || []
 
     let filteredList: PrescriptionsList = []
 

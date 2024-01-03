@@ -711,11 +711,6 @@ export const Events = {
       name: 'vama_rx_noauth',
     }
   },
-  vama_rx_pendingtab: (): Event => {
-    return {
-      name: 'vama_rx_pendingtab',
-    }
-  },
   vama_rx_refill_cerner: (): Event => {
     return {
       name: 'vama_rx_refill_cerner',
@@ -805,11 +800,6 @@ export const Events = {
       params: {
         rx_id: rx_id,
       },
-    }
-  },
-  vama_rx_trackingtab: (): Event => {
-    return {
-      name: 'vama_rx_trackingtab',
     }
   },
   vama_segcontrol_click: (label: string): Event => {
