@@ -41,6 +41,7 @@ export const CommonE2eIdConstants = {
   CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
   DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
+  OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
 }
 
 
@@ -187,8 +188,9 @@ export async function checkImages(screenshotPath) {
  * @param cancelPopUp - boolean to either cancel the popUp or leave the app
  */
 export async function resetInAppReview() {
-  await device.launchApp({ newInstance: true })
-  await loginToDemoMode()
+  //await device.launchApp({ newInstance: true })
+  //await loginToDemoMode()
+  await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
