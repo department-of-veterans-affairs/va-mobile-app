@@ -134,7 +134,7 @@ jobs:
           path: VAMobile/artifacts
 
   send_test_results_to_testrail:
-    if: ${{ always() }}
+    if: always() && (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true'
     needs: e2e-ios
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
