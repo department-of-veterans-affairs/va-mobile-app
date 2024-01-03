@@ -368,9 +368,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
       setSortOnToUse(selectedSortBy === PrescriptionSortOptionConstants.REFILL_DATE ? DESCENDING : ASCENDING)
       logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter))
     },
-    onCancel: () => {
-      setSelectedFilter(filterToUse)
-    },
+    onCancel: () => {},
     onShowAnalyticsFn: () => {
       logAnalyticsEvent(Events.vama_rx_filter())
     },
