@@ -87,12 +87,6 @@ beforeAll(async () => {
 })
 
 describe('Appeals', () => {
-  it('should match the appeals page design', async () => {
-    for(const [key, value] of Object.entries(AppealsExpandedIdConstants)) {
-      await expect(element(by.id(value))).toExist()
-    }
-  })
-
   for(const [key, value] of Object.entries(AppealsExpandedIdConstants)) {
     it('verify ' + key + ' opens and the correct information is displayed', async() => {
       //Note: Most of the wording in the appeals current status is tested using unit tests so it isn't being tested here.
