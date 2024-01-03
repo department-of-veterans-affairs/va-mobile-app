@@ -70,7 +70,7 @@ describe('Settings Screen', () => {
       await waitFor(element(by.text('Override Toggles'))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(400, 'down')
       await waitFor(element(by.text('inAppRecruitment'))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(100, 'down')
       await element(by.text('inAppRecruitment')).tap()
-      await element(by.id('remoteConfigTestID')).scrollTo('bottom')
+      await waitFor(element(by.text('Apply Overrides'))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(100, 'down')
       await element(by.text('Apply Overrides')).tap()
       await loginToDemoMode()
       await openProfile()

@@ -411,8 +411,6 @@ PODS:
   - React-jsinspector (0.71.7)
   - React-logger (0.71.7):
     - glog
-  - react-native-cookies (6.2.1):
-    - React-Core
   - react-native-document-picker (8.0.0):
     - React-Core
   - react-native-image-picker (5.4.2):
@@ -515,8 +513,6 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.18.1):
     - React-Core
-  - RNCClipboard (1.5.1):
-    - React-Core
   - RNFBAnalytics (14.12.0):
     - Firebase/AnalyticsWithoutAdIdSupport (= 8.15.0)
     - React-Core
@@ -605,7 +601,6 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
-  - "react-native-cookies (from `../node_modules/@react-native-cookies/cookies`)"
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-notifications (from `../node_modules/react-native-notifications`)
@@ -628,7 +623,6 @@ DEPENDENCIES:
   - ReactNativeWebPFormat (from `../node_modules/react-native-webp-format`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
-  - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
@@ -721,8 +715,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
-  react-native-cookies:
-    :path: "../node_modules/@react-native-cookies/cookies"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
   react-native-image-picker:
@@ -767,8 +759,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/rn-fetch-blob"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
-  RNCClipboard:
-    :path: "../node_modules/@react-native-community/clipboard"
   RNFBAnalytics:
     :path: "../node_modules/@react-native-firebase/analytics"
   RNFBApp:
@@ -847,7 +837,6 @@ SPEC CHECKSUMS:
   React-jsiexecutor: e722e6f755992c2c33ff8a4eb6833e5a55cd8296
   React-jsinspector: 9885f6f94d231b95a739ef7bb50536fb87ce7539
   React-logger: 3f8ebad1be1bf3299d1ab6d7f971802d7395c7ef
-  react-native-cookies: f54fcded06bb0cda05c11d86788020b43528a26c
   react-native-document-picker: 429972f7ece4463aa5bcdd789622b3a674a3c5d1
   react-native-image-picker: 77f552291e993f3fdcdf48cc3c280ef7f11789c8
   react-native-notifications: d309f7080aad71206882dbb98d9ed788969f3b6d
@@ -870,7 +859,6 @@ SPEC CHECKSUMS:
   ReactNativeWebPFormat: f5f043cc9ded052e535c3869ec341f91ba5a67c5
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
-  RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNFBAnalytics: c5740a00a436398796639189f82b58b1ebe4c705
   RNFBApp: e4439717c23252458da2b41b81b4b475c86f90c4
   RNFBCrashlytics: 94e1f78e2a9aa9e02edbfb0d3f1f0921ce00094b
@@ -891,4 +879,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 2d5a2b2f950f01155298360c10cd191ca3d89a1f
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.11.3
