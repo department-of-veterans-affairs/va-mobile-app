@@ -103,19 +103,15 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   useEffect(() => {
     if (startingFilter) {
+      setPage(1)
       setSelectedFilter(startingFilter)
+      setFilterToUse(startingFilter)
       setSelectedSortBy(PrescriptionSortOptionConstants.REFILL_STATUS)
+      setSortByToUse(PrescriptionSortOptionConstants.REFILL_STATUS)
+      setSortOnToUse(ASCENDING)
       navigation.setParams({ startingFilter: undefined })
     }
-  }, [startingFilter, navigation])
-
-  useEffect(() => {
-    setPage(1)
-    setFilterToUse(selectedFilter)
-    setSortByToUse(selectedSortBy)
-    setSortOnToUse(selectedSortBy === PrescriptionSortOptionConstants.REFILL_DATE ? DESCENDING : ASCENDING)
-    logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter))
-  }, [selectedFilter, selectedSortBy])
+  }, [startingFilter, navigation, selectedFilter, selectedSortBy])
 
   // scrollViewRef is leveraged by renderPagination to reset scroll position to the top on page change.
   // Must pass scrollViewRef to all uses of FeatureLandingTemplate, otherwise it will become undefined
@@ -377,6 +373,13 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     buttonA11yHint: t('prescription.modal.a11yHint'),
     buttonTestID: 'openFilterAndSortTestID',
     headerText: t('filterAndSort'),
+    onApply: () => {
+      setPage(1)
+      setFilterToUse(selectedFilter)
+      setSortByToUse(selectedSortBy)
+      setSortOnToUse(selectedSortBy === PrescriptionSortOptionConstants.REFILL_DATE ? DESCENDING : ASCENDING)
+      logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter))
+    },
     testID: 'ModalTestID',
     onShowAnalyticsFn: () => {
       logAnalyticsEvent(Events.vama_rx_filter())
