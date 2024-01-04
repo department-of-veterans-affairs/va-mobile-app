@@ -114,7 +114,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     canStoreWithBiometric ? biometricRow : [],
     { text: t('notifications.title'), onPress: onNotifications },
     { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
-    featureEnabled('inAppRecruitment') ? { text: t('inAppRecruitment.giveFeedback'), a11yHinText: t('inAppRecruitment.giveFeedback.a11yHint'), onPress: onFeedback } : [],
+    { text: t('inAppRecruitment.giveFeedback'), a11yHinText: t('inAppRecruitment.giveFeedback.a11yHint'), onPress: onFeedback },
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
