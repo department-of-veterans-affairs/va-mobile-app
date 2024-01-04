@@ -15,7 +15,7 @@ Snackbars provide feedback regarding API interactions at the bottom of the scree
 ## Usage
 
 ### When to use Snackbar
-* If a user action that triggers an API call is successful or results in an error. The snackbar may allow users to take an action on the feedback such as trying again or undoing the action. 
+* **If a user action that triggers an API call is successful or results in an error.** The snackbar may allow users to take an action on the feedback such as trying again or undoing the action. 
 
 ### How this component works
 - The **icon** will be relevant to the state of the snackbar (success or error).
@@ -52,3 +52,6 @@ Snackbars provide feedback regarding API interactions at the bottom of the scree
 - If a screen has bottom navigation, the snackbar should open above the navigation.
 - Ensure buttons have a touchpoint of 44px
 - There should only ever be one snackbar on the screen. Opening a new snackbar will close the previous or old snackbar.
+
+### Related
+* [Snackbar - Material Design](https://m3.material.io/components/snackbar/overview)
