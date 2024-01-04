@@ -342,10 +342,17 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   })
 
   const modalFilterOptions = filterOptions.map((option) => {
+    const labelKey = `${getTranslation(option.display, t)} (${option.count})`
+    let a11yLabel = labelKey
+    if (option.additionalLabelText) {
+      a11yLabel += ` ${a11yLabelVA(option.additionalLabelText[0])}.`
+    }
+
     return {
       value: option.value,
-      labelKey: `${getTranslation(option.display, t)} (${option.count})`,
+      labelKey,
       additionalLabelText: option.additionalLabelText,
+      a11yLabel,
     }
   })
 
