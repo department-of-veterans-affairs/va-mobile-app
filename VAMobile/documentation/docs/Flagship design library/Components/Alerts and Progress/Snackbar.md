@@ -20,10 +20,10 @@ Snackbars provide feedback regarding API interactions at the bottom of the scree
 ### How this component works
 - The **icon** will be relevant to the state of the snackbar (success or error).
 - The **text content** is a short description of the success or error action. It is used to inform the status of an action.
-- The **right action button** is a dismiss button that allows a user to manually close the snackbar. The text for the dismiss button will be bolded.
-- The **left action button** is optional and should only be used when there is an additional action for the user to take on the snackbar. The left action button can be an undo or try again button. 
+- The **left action button** is optional and should only be used when there is an additional action for the user to take on the snackbar. The left action button can be an "Undo" or "Try again" button. 
      - The undo button allows a user to reverse a successful action. When the action is successfully reversed, another snackbar will open informing the successful undo. The new snackbar will only have the dismiss button.
      - The try again button allows a user to initiate a failed action. This will prompt the system to redo the action and either produce a successful or unsuccessful snackbar.
+- The **right action button** is a dismiss button that allows a user to manually close the snackbar.
 
 ### Behavior
 - The current iteration of the snackbar will only be dismissible by the user selecting the “Dismiss” button, another snackbar opening, or the user navigating to a different screen. Additional iterations may incorporate a user-defined timebox on the snackbar.
@@ -50,8 +50,7 @@ Snackbars provide feedback regarding API interactions at the bottom of the scree
 - To ensure that the snackbar and its content is accessible to all users, the snackbar should not close on its own or after a certain amount of time. The snackbar can only be closed by the user selecting the “dismiss” button, another snackbar opening, or the user navigating to a different screen. 
 - Screen readers should automatically focus/announce when a snackbar opens and begin reading its content. The screen reader will announce the component as an Alert as soon as the action is completed. Each action will be announced as a button.
 - If a screen has bottom navigation, the snackbar should open above the navigation.
-- Ensure buttons have a touchpoint of 44px
-- There should only ever be one snackbar on the screen. Opening a new snackbar will close the previous or old snackbar.
+- There should only ever be one snackbar on the screen. Opening a new snackbar will close the previous snackbar.
 
 ### Related
 * [Snackbar - Material Design](https://m3.material.io/components/snackbar/overview)
