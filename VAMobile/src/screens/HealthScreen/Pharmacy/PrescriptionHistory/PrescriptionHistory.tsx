@@ -65,7 +65,7 @@ const sortByOptions = [
 
 type PrescriptionHistoryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
 
-const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
+const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }) => {
   const dispatch = useAppDispatch()
   const {
     filteredPrescriptions: prescriptions,
@@ -82,6 +82,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const hasError = useError(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const startingFilter = route?.params?.startingFilter
   const hasTransferred = !!transferredPrescriptions?.length
 
   const [page, setPage] = useState(1)
@@ -99,6 +100,22 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
       logAnalyticsEvent(Events.vama_rx_refill_cerner())
     }
   }, [hasTransferred])
+
+  useEffect(() => {
+    if (startingFilter) {
+      setSelectedFilter(startingFilter)
+      setSelectedSortBy(PrescriptionSortOptionConstants.REFILL_STATUS)
+      navigation.setParams({ startingFilter: undefined })
+    }
+  }, [startingFilter, navigation])
+
+  useEffect(() => {
+    setPage(1)
+    setFilterToUse(selectedFilter)
+    setSortByToUse(selectedSortBy)
+    setSortOnToUse(selectedSortBy === PrescriptionSortOptionConstants.REFILL_DATE ? DESCENDING : ASCENDING)
+    logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter))
+  }, [selectedFilter, selectedSortBy])
 
   // scrollViewRef is leveraged by renderPagination to reset scroll position to the top on page change.
   // Must pass scrollViewRef to all uses of FeatureLandingTemplate, otherwise it will become undefined
@@ -361,14 +378,6 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation }) => {
     buttonTestID: 'openFilterAndSortTestID',
     headerText: t('filterAndSort'),
     testID: 'ModalTestID',
-    onApply: () => {
-      setPage(1)
-      setFilterToUse(selectedFilter)
-      setSortByToUse(selectedSortBy)
-      setSortOnToUse(selectedSortBy === PrescriptionSortOptionConstants.REFILL_DATE ? DESCENDING : ASCENDING)
-      logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter))
-    },
-    onCancel: () => {},
     onShowAnalyticsFn: () => {
       logAnalyticsEvent(Events.vama_rx_filter())
     },

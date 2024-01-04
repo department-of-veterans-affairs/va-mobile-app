@@ -6,7 +6,7 @@ import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, requestRefills } from 'store/slices'
-import { PrescriptionsList } from 'store/api/types'
+import { PrescriptionsList, RefillStatusConstants } from 'store/api/types'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
@@ -38,7 +38,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
     if (waygateNativeAlert('WG_PrescriptionHistory')) {
       dispatch(dispatchSetPrescriptionsNeedLoad())
       dispatch(dispatchClearLoadingRequestRefills())
-      navigation.navigate('PrescriptionHistory')
+      navigation.navigate('PrescriptionHistory', {})
     }
   }
 
@@ -193,7 +193,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
             if (waygateNativeAlert('WG_PrescriptionHistory')) {
               dispatch(dispatchSetPrescriptionsNeedLoad())
               dispatch(dispatchClearLoadingRequestRefills())
-              navigation.navigate('PrescriptionHistory')
+              navigation.navigate('PrescriptionHistory', { startingFilter: RefillStatusConstants.PENDING })
             }
           }}
           label={t('prescriptions.refillRequestSummary.pendingRefills')}

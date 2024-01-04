@@ -101,7 +101,9 @@ export type HealthStackParamList = WebviewStackParams & {
     careTypeId: string
   }
   TypeOfCareNotListedHelpScreen: undefined
-  PrescriptionHistory: undefined
+  PrescriptionHistory: {
+    startingFilter?: RefillStatus
+  }
   PrescriptionDetails: {
     prescriptionId: string
   }

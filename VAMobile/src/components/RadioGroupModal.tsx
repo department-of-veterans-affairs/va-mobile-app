@@ -22,10 +22,10 @@ export type RadioPickerGroup = {
 export type RadioGroupModalProps = {
   /** Array of groups to display in the modal */
   groups: Array<RadioPickerGroup>
-  /** Callback when the apply button is pressed */
-  onApply: () => void
-  /** Callback for cancelling the interaction */
-  onCancel: () => void
+  /** Optional callback when the apply button is pressed */
+  onApply?: () => void
+  /** Optional callback for cancelling the interaction */
+  onCancel?: () => void
   /** Header text within the modal */
   headerText: string
   /** Text to appear on the button that launches the modal */
@@ -66,12 +66,12 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
 
   const onCancelPressed = () => {
     setModalVisible(false)
-    onCancel()
+    onCancel && onCancel()
   }
 
   const onApplyPressed = () => {
     setModalVisible(false)
-    onApply()
+    onApply && onApply()
   }
 
   const getGroups = () =>
