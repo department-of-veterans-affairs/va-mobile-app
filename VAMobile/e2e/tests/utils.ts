@@ -54,7 +54,7 @@ export async function loginToDemoMode(skipOnboarding = true) {
 	await element(by.text('[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!')).tap()
 	await element(by.text('Dismiss')).tap()
   } catch (e) {} 
-  await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(21)
+  await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(7)
 
   if (DEMO_PASSWORD !== undefined) {
     await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).replaceText(DEMO_PASSWORD)
