@@ -2,7 +2,7 @@
 # Checks if health/global/design-system label is applied and then assigns the correct QA team member to that ticket
 #
 
-name: '[Utils] assign qa to issue'
+name: '[Utils] Assign QA to issue'
 
 on:
   issues:
@@ -10,28 +10,22 @@ on:
       - labeled
 
 jobs:
-  run_on_labeled:
+  assign_qa:
     runs-on: ubuntu-latest
     permissions:
       issues: write
     steps:
-      - name: if_health
+      - name: Assign Health team QA
         if: github.event.label.name == 'Health'
-        uses: actions-ecosystem/action-add-assignees@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-          assignees: "DJUltraTom"
+        run: |
+          gh issue edit ${{ github.event.issue.id }} --add-assignee "DJUltraTom"
 
-      - name: if_global
+      - name: Assign Global team QA
         if: github.event.label.name == 'global'
-        uses: actions-ecosystem/action-add-assignees@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-          assignees: "TKDickson"
+        run: |
+          gh issue edit ${{ github.event.issue.id }} --add-assignee "TKDickson"
 
-      - name: if_design-system
+      - name: Assign Design-System team QA
         if: github.event.label.name == 'design-system'
-        uses: actions-ecosystem/action-add-assignees@v1
-        with:
-          github_token: ${{ secrets.github_token }}
-          assignees: "rbontrager"
+        run: |
+          gh issue edit ${{ github.event.issue.id }} --add-assignee "rbontrager"
