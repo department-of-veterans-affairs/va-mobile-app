@@ -1,4 +1,4 @@
-import { expect, device, by, element} from 'detox'
+import { expect, device, by, element, waitFor} from 'detox'
 import {loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
 import { setTimeout } from 'timers/promises'
 import { DateTime } from 'luxon'
@@ -34,6 +34,7 @@ beforeAll(async () => {
 
 describe('Appeals', () => {
   it('should match the appeals page design', async () => {
+    await waitFor(element(by.id(AppealsIdConstants.APPEAL_1_ID))).toBeVisible().whileElement(by.id('claimsHistoryID')).scroll(300, 'down')
     await element(by.id(AppealsIdConstants.APPEAL_1_ID)).tap()
     await expect(element(by.text(AppealsIdConstants.APPEAL_TYPE_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_DETAILS_TEXT))).toExist()
