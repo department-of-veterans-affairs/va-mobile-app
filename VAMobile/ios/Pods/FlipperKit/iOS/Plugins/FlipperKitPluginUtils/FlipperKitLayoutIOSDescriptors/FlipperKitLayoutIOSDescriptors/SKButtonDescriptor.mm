@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -85,6 +85,11 @@ return mutations;
 - (void)setHighlighted:(BOOL)highlighted forNode:(UIButton*)node {
   SKNodeDescriptor* viewDescriptor = [self descriptorForClass:[UIView class]];
   [viewDescriptor setHighlighted:highlighted forNode:node];
+}
+
+- (UIImage*)getSnapshot:(BOOL)includeChildren forNode:(UIButton*)node {
+  SKNodeDescriptor* descriptor = [self descriptorForClass:[UIView class]];
+  return [descriptor getSnapshot:includeChildren forNode:node];
 }
 
 - (void)hitTest:(SKTouch*)touch forNode:(UIButton*)node {

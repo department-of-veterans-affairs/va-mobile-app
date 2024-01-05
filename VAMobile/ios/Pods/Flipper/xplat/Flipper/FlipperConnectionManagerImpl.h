@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -7,11 +7,10 @@
 
 #pragma once
 
-#include <folly/Executor.h>
-#include <folly/io/async/EventBase.h>
 #include <mutex>
 #include "FlipperConnectionManager.h"
 #include "FlipperInitConfig.h"
+#include "FlipperScheduler.h"
 #include "FlipperSocket.h"
 #include "FlipperState.h"
 
@@ -43,6 +42,8 @@ class FlipperConnectionManagerImpl : public FlipperConnectionManager {
 
   void sendMessage(const folly::dynamic& message) override;
 
+  void sendMessageRaw(const std::string& message) override;
+
   void onMessageReceived(
       const folly::dynamic& message,
       std::unique_ptr<FlipperResponder> responder) override;
@@ -64,8 +65,8 @@ class FlipperConnectionManagerImpl : public FlipperConnectionManager {
   int altInsecurePort;
   int altSecurePort;
 
-  folly::EventBase* flipperEventBase_;
-  folly::EventBase* connectionEventBase_;
+  Scheduler* flipperScheduler_;
+  Scheduler* connectionScheduler_;
 
   std::unique_ptr<FlipperSocket> client_;
 
@@ -75,8 +76,6 @@ class FlipperConnectionManagerImpl : public FlipperConnectionManager {
   int failedConnectionAttempts_ = 0;
   int failedSocketConnectionAttempts = 0;
 
-  bool useLegacySocketProvider = false;
-
   std::shared_ptr<ConnectionContextStore> contextStore_;
   std::shared_ptr<FlipperConnectionManagerWrapper> implWrapper_;
 
@@ -84,9 +83,12 @@ class FlipperConnectionManagerImpl : public FlipperConnectionManager {
   bool connectAndExchangeCertificate();
   bool connectSecurely();
   bool isCertificateExchangeNeeded();
-  void requestSignedCertFromFlipper();
+  void requestSignedCertificate();
+  void processSignedCertificateResponse(
+      std::shared_ptr<FlipperStep> gettingCertificateStep,
+      std::string response,
+      bool isError);
   bool isRunningInOwnThread();
-  void sendLegacyCertificateRequest(folly::dynamic message);
   void reevaluateSocketProvider();
   std::string getDeviceId();
 };

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -10,9 +10,8 @@
 #import "FlipperClient.h"
 #import <Flipper/FlipperCertificateProvider.h>
 #import <Flipper/FlipperClient.h>
+#import <Flipper/FlipperFollyScopedThreadScheduler.h>
 #import <Flipper/FlipperSocketProvider.h>
-#include <folly/io/async/EventBase.h>
-#include <folly/io/async/ScopedEventBaseThread.h>
 #include <memory>
 #import "FlipperClient+Testing.h"
 #import "FlipperCppWrapperPlugin.h"
@@ -23,7 +22,7 @@
 
 #if !TARGET_OS_OSX
 #import <UIKit/UIKit.h>
-#if !TARGET_OS_SIMULATOR
+#if !TARGET_OS_SIMULATOR && !TARGET_OS_MACCATALYST
 #import <FKPortForwarding/FKPortForwardingServer.h>
 #endif
 #endif
@@ -32,10 +31,11 @@ using WrapperPlugin = facebook::flipper::FlipperCppWrapperPlugin;
 
 @implementation FlipperClient {
   facebook::flipper::FlipperClient* _cppClient;
-  folly::ScopedEventBaseThread sonarThread;
-  folly::ScopedEventBaseThread connectionThread;
+  std::unique_ptr<facebook::flipper::Scheduler> sonarScheduler;
+  std::unique_ptr<facebook::flipper::Scheduler> connectionScheduler;
+
   id<FlipperKitCertificateProvider> _certProvider;
-#if !TARGET_OS_OSX && !TARGET_OS_SIMULATOR
+#if !TARGET_OS_OSX && !TARGET_OS_SIMULATOR && !TARGET_OS_MACCATALYST
   FKPortForwardingServer* _secureServer;
   FKPortForwardingServer* _insecureServer;
 #endif
@@ -74,7 +74,11 @@ using WrapperPlugin = facebook::flipper::FlipperCppWrapperPlugin;
     NSString* deviceOS;
     NSString* deviceName;
 #if !TARGET_OS_OSX
+#if !TARGET_OS_MACCATALYST
     deviceOS = @"iOS";
+#else
+    deviceOS = @"MacOS";
+#endif
     deviceName = [[UIDevice currentDevice] name];
 #if TARGET_OS_SIMULATOR
     deviceName = [NSString stringWithFormat:@"%@ %@",
@@ -86,6 +90,12 @@ using WrapperPlugin = facebook::flipper::FlipperCppWrapperPlugin;
     deviceName = [[NSHost currentHost] localizedName];
 #endif
 
+    sonarScheduler =
+        std::make_unique<facebook::flipper::FollyScopedThreadScheduler>(
+            "Flipper.sonar");
+    connectionScheduler =
+        std::make_unique<facebook::flipper::FollyScopedThreadScheduler>(
+            "Flipper.connection");
     static const std::string UNKNOWN = std::string("unknown");
     try {
       facebook::flipper::FlipperClient::init(
@@ -98,15 +108,14 @@ using WrapperPlugin = facebook::flipper::FlipperCppWrapperPlugin;
                [appId UTF8String] ?: UNKNOWN,
                [privateAppDirectory UTF8String],
            },
-           sonarThread.getEventBase(),
-           connectionThread.getEventBase(),
+           sonarScheduler.get(),
+           connectionScheduler.get(),
            [SKEnvironmentVariables getInsecurePort],
            [SKEnvironmentVariables getSecurePort],
            [SKEnvironmentVariables getAltInsecurePort],
            [SKEnvironmentVariables getAltSecurePort]});
       _cppClient = facebook::flipper::FlipperClient::instance();
 
-      // To switch to a websocket provider, uncomment the line below.
       facebook::flipper::FlipperSocketProvider::setDefaultProvider(
           std::make_unique<facebook::flipper::FlipperWebSocketProvider>());
 
@@ -152,20 +161,20 @@ using WrapperPlugin = facebook::flipper::FlipperCppWrapperPlugin;
 }
 
 - (void)start {
-#if !TARGET_OS_OSX && !TARGET_OS_SIMULATOR
+#if !TARGET_OS_OSX && !TARGET_OS_SIMULATOR && !TARGET_OS_MACCATALYST
   _secureServer = [FKPortForwardingServer new];
-  [_secureServer forwardConnectionsFromPort:8088];
-  [_secureServer listenForMultiplexingChannelOnPort:8078];
+  [_secureServer forwardConnectionsFromPort:9088];
+  [_secureServer listenForMultiplexingChannelOnPort:9078];
   _insecureServer = [FKPortForwardingServer new];
-  [_insecureServer forwardConnectionsFromPort:8089];
-  [_insecureServer listenForMultiplexingChannelOnPort:8079];
+  [_insecureServer forwardConnectionsFromPort:9089];
+  [_insecureServer listenForMultiplexingChannelOnPort:9079];
 #endif
   _cppClient->start();
 }
 
 - (void)stop {
   _cppClient->stop();
-#if !TARGET_OS_OSX && !TARGET_OS_SIMULATOR
+#if !TARGET_OS_OSX && !TARGET_OS_SIMULATOR && !TARGET_OS_MACCATALYST
   [_secureServer close];
   _secureServer = nil;
   [_insecureServer close];
