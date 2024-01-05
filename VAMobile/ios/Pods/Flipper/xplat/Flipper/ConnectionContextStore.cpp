@@ -1,11 +1,12 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
 #include "ConnectionContextStore.h"
+#include <folly/Optional.h>
 #include <folly/json.h>
 #include <folly/portability/SysStat.h>
 #include <openssl/err.h>
@@ -79,20 +80,6 @@ std::string ConnectionContextStore::getCertificateSigningRequest() {
   return csr;
 }
 
-std::shared_ptr<folly::SSLContext> ConnectionContextStore::getSSLContext() {
-  std::shared_ptr<folly::SSLContext> sslContext =
-      std::make_shared<folly::SSLContext>();
-  sslContext->loadTrustedCertificates(
-      absoluteFilePath(FLIPPER_CA_FILE_NAME).c_str());
-  sslContext->setVerificationOption(
-      folly::SSLContext::SSLVerifyPeerEnum::VERIFY);
-  sslContext->loadCertKeyPairFromFiles(
-      absoluteFilePath(CLIENT_CERT_FILE_NAME).c_str(),
-      absoluteFilePath(PRIVATE_KEY_FILE).c_str());
-  sslContext->authenticate(true, false);
-  return sslContext;
-}
-
 std::string ConnectionContextStore::getDeviceId() {
   /* On android we can't reliably get the serial of the current device
      So rely on our locally written config, which is provided by the
@@ -110,13 +97,39 @@ std::string ConnectionContextStore::getDeviceId() {
   }
 }
 
+folly::Optional<FlipperCertificateExchangeMedium>
+ConnectionContextStore::getLastKnownMedium() {
+  try {
+    auto configurationFilePath = absoluteFilePath(CONNECTION_CONFIG_FILE);
+    if (!fileExists(configurationFilePath)) {
+      return folly::none;
+    }
+    std::string data = loadStringFromFile(configurationFilePath);
+    auto config = folly::parseJson(data);
+    if (config.count("medium") == 0) {
+      return folly::none;
+    }
+    auto maybeMedium = config["medium"];
+    return maybeMedium.isInt()
+        ? folly::Optional<FlipperCertificateExchangeMedium>{static_cast<
+              FlipperCertificateExchangeMedium>(maybeMedium.getInt())}
+        : folly::none;
+  } catch (std::exception&) {
+    return folly::none;
+  }
+}
+
 void ConnectionContextStore::storeConnectionConfig(folly::dynamic& config) {
   std::string json = folly::toJson(config);
   writeStringToFile(json, absoluteFilePath(CONNECTION_CONFIG_FILE));
 }
 
 std::string ConnectionContextStore::absoluteFilePath(const char* filename) {
+#ifndef WIN32
   return std::string(deviceData_.privateAppDirectory + "/sonar/" + filename);
+#else
+  return std::string(deviceData_.privateAppDirectory + "\\sonar\\" + filename);
+#endif
 }
 
 std::string ConnectionContextStore::getCertificateDirectoryPath() {
@@ -125,6 +138,23 @@ std::string ConnectionContextStore::getCertificateDirectoryPath() {
 
 std::string ConnectionContextStore::getCACertificatePath() {
   return absoluteFilePath(FLIPPER_CA_FILE_NAME);
+}
+
+std::string ConnectionContextStore::getPath(StoreItem storeItem) {
+  switch (storeItem) {
+    case CSR:
+      return absoluteFilePath(CSR_FILE_NAME);
+    case FLIPPER_CA:
+      return absoluteFilePath(FLIPPER_CA_FILE_NAME);
+    case CLIENT_CERT:
+      return absoluteFilePath(CLIENT_CERT_FILE_NAME);
+    case PRIVATE_KEY:
+      return absoluteFilePath(PRIVATE_KEY_FILE);
+    case CERTIFICATE:
+      return absoluteFilePath(CERTIFICATE_FILE_NAME);
+    case CONNECTION_CONFIG:
+      return absoluteFilePath(CONNECTION_CONFIG_FILE);
+  }
 }
 
 bool ConnectionContextStore::resetState() {
