@@ -2347,10 +2347,10 @@
 		46EB2E0001A780 /* RNLocalize.m in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E00008D70 /* RNLocalize.m */; };
 		46EB2E0001A790 /* RNLocalize.h in Headers */ = {isa = PBXBuildFile; fileRef = 46EB2E00008D60 /* RNLocalize.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		46EB2E0001A7F0 /* RNLocalize-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E0001A7E0 /* RNLocalize-dummy.m */; };
-		46EB2E0001A8A0 /* DeviceUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E00008D90 /* DeviceUtils.m */; };
-		46EB2E0001A8B0 /* RNReactNativeHapticFeedback.m in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E00008DB0 /* RNReactNativeHapticFeedback.m */; };
+		46EB2E0001A8A0 /* DeviceUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E00008D90 /* DeviceUtils.mm */; };
+		46EB2E0001A8B0 /* RNHapticFeedback.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E00008DB0 /* RNHapticFeedback.mm */; };
 		46EB2E0001A8C0 /* DeviceUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 46EB2E00008D80 /* DeviceUtils.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		46EB2E0001A8D0 /* RNReactNativeHapticFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 46EB2E00008DA0 /* RNReactNativeHapticFeedback.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		46EB2E0001A8D0 /* RNHapticFeedback.h in Headers */ = {isa = PBXBuildFile; fileRef = 46EB2E00008DA0 /* RNHapticFeedback.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		46EB2E0001A930 /* RNReactNativeHapticFeedback-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E0001A920 /* RNReactNativeHapticFeedback-dummy.m */; };
 		46EB2E0001A9E0 /* RNSVGBrush.m in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E00008DE0 /* RNSVGBrush.m */; };
 		46EB2E0001A9F0 /* RNSVGContextBrush.m in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E00008E10 /* RNSVGContextBrush.m */; };
@@ -9249,10 +9249,10 @@
 		46EB2E00008D50 /* RNKeychainManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNKeychainManager.m; path = RNKeychainManager/RNKeychainManager.m; sourceTree = "<group>"; };
 		46EB2E00008D60 /* RNLocalize.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNLocalize.h; path = ios/RNLocalize.h; sourceTree = "<group>"; };
 		46EB2E00008D70 /* RNLocalize.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNLocalize.m; path = ios/RNLocalize.m; sourceTree = "<group>"; };
-		46EB2E00008D80 /* DeviceUtils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DeviceUtils.h; path = ios/DeviceUtils.h; sourceTree = "<group>"; };
-		46EB2E00008D90 /* DeviceUtils.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DeviceUtils.m; path = ios/DeviceUtils.m; sourceTree = "<group>"; };
-		46EB2E00008DA0 /* RNReactNativeHapticFeedback.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNReactNativeHapticFeedback.h; path = ios/RNReactNativeHapticFeedback.h; sourceTree = "<group>"; };
-		46EB2E00008DB0 /* RNReactNativeHapticFeedback.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNReactNativeHapticFeedback.m; path = ios/RNReactNativeHapticFeedback.m; sourceTree = "<group>"; };
+		46EB2E00008D80 /* DeviceUtils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DeviceUtils.h; path = ios/RNHapticFeedback/DeviceUtils.h; sourceTree = "<group>"; };
+		46EB2E00008D90 /* DeviceUtils.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = DeviceUtils.mm; path = ios/RNHapticFeedback/DeviceUtils.mm; sourceTree = "<group>"; };
+		46EB2E00008DA0 /* RNHapticFeedback.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNHapticFeedback.h; path = ios/RNHapticFeedback/RNHapticFeedback.h; sourceTree = "<group>"; };
+		46EB2E00008DB0 /* RNHapticFeedback.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNHapticFeedback.mm; path = ios/RNHapticFeedback/RNHapticFeedback.mm; sourceTree = "<group>"; };
 		46EB2E00008DD0 /* RNSVGBrush.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RNSVGBrush.h; sourceTree = "<group>"; };
 		46EB2E00008DE0 /* RNSVGBrush.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RNSVGBrush.m; sourceTree = "<group>"; };
 		46EB2E00008DF0 /* RNSVGBrushType.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RNSVGBrushType.h; sourceTree = "<group>"; };
@@ -14525,9 +14525,9 @@
 			isa = PBXGroup;
 			children = (
 				46EB2E00008D80 /* DeviceUtils.h */,
-				46EB2E00008D90 /* DeviceUtils.m */,
-				46EB2E00008DA0 /* RNReactNativeHapticFeedback.h */,
-				46EB2E00008DB0 /* RNReactNativeHapticFeedback.m */,
+				46EB2E00008D90 /* DeviceUtils.mm */,
+				46EB2E00008DA0 /* RNHapticFeedback.h */,
+				46EB2E00008DB0 /* RNHapticFeedback.mm */,
 				46EB2E0000F6E0 /* Pod */,
 				46EB2E0001A8E0 /* Support Files */,
 			);
@@ -20956,7 +20956,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				46EB2E0001A8C0 /* DeviceUtils.h in Headers */,
-				46EB2E0001A8D0 /* RNReactNativeHapticFeedback.h in Headers */,
+				46EB2E0001A8D0 /* RNHapticFeedback.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -25228,8 +25228,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				46EB2E0001A8A0 /* DeviceUtils.m in Sources */,
-				46EB2E0001A8B0 /* RNReactNativeHapticFeedback.m in Sources */,
+				46EB2E0001A8A0 /* DeviceUtils.mm in Sources */,
+				46EB2E0001A8B0 /* RNHapticFeedback.mm in Sources */,
 				46EB2E0001A930 /* RNReactNativeHapticFeedback-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -33125,11 +33125,12 @@
 			baseConfigurationReference = 46EB2E0001A900 /* RNReactNativeHapticFeedback.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				GCC_PREFIX_HEADER = "Target Support Files/RNReactNativeHapticFeedback/RNReactNativeHapticFeedback-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "";
@@ -33150,11 +33151,12 @@
 			baseConfigurationReference = 46EB2E0001A8F0 /* RNReactNativeHapticFeedback.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				GCC_PREFIX_HEADER = "Target Support Files/RNReactNativeHapticFeedback/RNReactNativeHapticFeedback-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "";
@@ -33174,11 +33176,12 @@
 			baseConfigurationReference = 46EB2E0001A900 /* RNReactNativeHapticFeedback.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				GCC_PREFIX_HEADER = "Target Support Files/RNReactNativeHapticFeedback/RNReactNativeHapticFeedback-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "";
@@ -33199,11 +33202,12 @@
 			baseConfigurationReference = 46EB2E0001A900 /* RNReactNativeHapticFeedback.release.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				GCC_PREFIX_HEADER = "Target Support Files/RNReactNativeHapticFeedback/RNReactNativeHapticFeedback-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "";
