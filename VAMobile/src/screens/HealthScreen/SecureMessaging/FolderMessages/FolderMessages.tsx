@@ -9,6 +9,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
 import { getMessagesListItems } from 'utils/secureMessaging'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { useAppDispatch, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
@@ -30,10 +31,12 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const title = t('text.raw', { text: folderName })
 
   useEffect(() => {
-    // Load first page messages
-    dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
-    // If draft saved message showing, clear status so it doesn't show again
-    dispatch(resetSaveDraftComplete())
+    if (screenContentAllowed('WG_FolderMessages')) {
+      // Load first page messages
+      dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
+      // If draft saved message showing, clear status so it doesn't show again
+      dispatch(resetSaveDraftComplete())
+    }
   }, [dispatch, folderID])
 
   useEffect(() => {
@@ -50,11 +53,14 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   }, [deleteDraftComplete, dispatch, t])
 
   const onMessagePress = (messageID: number, isDraft?: boolean): void => {
-    const screen = isDraft ? 'EditDraft' : 'ViewMessageScreen'
+    const screen = isDraft ? 'EditDraft' : 'ViewMessage'
     const args = isDraft
       ? { messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} }
       : { messageID, folderID, currentPage: paginationMetaData?.currentPage || 1, messagesLeft: messages.length }
-    navigation.navigate(screen, args)
+
+    if (waygateNativeAlert(`WG_${screen}`)) {
+      navigation.navigate(screen, args)
+    }
   }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {

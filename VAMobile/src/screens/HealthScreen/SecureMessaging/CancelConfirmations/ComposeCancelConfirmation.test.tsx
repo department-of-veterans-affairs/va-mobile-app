@@ -80,7 +80,7 @@ context('useComposeCancelConfirmation', () => {
       .mockReturnValue(navigateToStartNewMessageSpy)
       .calledWith('FolderMessages', expect.objectContaining({ draftSaved: true }))
       .mockReturnValue(navigateToDraftFolderSavedSpy)
-      .calledWith('ViewMessageScreen', { messageID: 2 })
+      .calledWith('ViewMessage', { messageID: 2 })
       .mockReturnValue(navigateToViewMessageScreenSpy)
       .calledWith('FolderMessages', { draftSaved: false, folderID: -2, folderName: 'Drafts' })
       .mockReturnValue(navigateToDraftFolderNotSavedSpy)

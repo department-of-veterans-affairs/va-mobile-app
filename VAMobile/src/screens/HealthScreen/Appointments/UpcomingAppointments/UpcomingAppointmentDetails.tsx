@@ -54,6 +54,7 @@ import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useError, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 import getEnv from 'utils/env'
 
@@ -71,6 +72,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
+  const screenError = useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)
   const { upcomingAppointmentsById, loading, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>(
     (state) => state.appointments,
   )
@@ -112,6 +114,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       navigation.goBack()
     }
   }, [appointmentCancellationStatus, dispatch, navigation])
+
+  useEffect(() => {
+    if (!screenError && appointmentNotFound) {
+      logAnalyticsEvent(Events.vama_appt_deep_link_fail(vetextID))
+    }
+  }, [appointmentNotFound, screenError, vetextID])
 
   const goBack = (): void => {
     dispatch(clearAppointmentCancellation())
@@ -204,7 +212,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
       const onPrepareForVideoVisit = () => {
         dispatch(clearAppointmentCancellation())
-        navigateTo('PrepareForVideoVisit')()
+
+        if (waygateNativeAlert('WG_PrepareForVideoVisit')) {
+          navigateTo('PrepareForVideoVisit')()
+        }
       }
       // TODO uncomment for #17916
       const hasSessionStarted = true // DateTime.fromISO(startDateUtc).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
@@ -215,7 +226,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         if (url) {
           launchExternalLink(url)
         } else {
-          navigateTo('SessionNotStarted')()
+          if (waygateNativeAlert('WG_SessionNotStarted')) {
+            navigateTo('SessionNotStarted')()
+          }
         }
       }
 
@@ -322,7 +335,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     )
   }
 
-  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || appointmentNotFound) {
+  if (screenError || appointmentNotFound) {
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
