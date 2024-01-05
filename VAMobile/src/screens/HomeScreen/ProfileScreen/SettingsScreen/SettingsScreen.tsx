@@ -101,7 +101,9 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   const onFeedback = () => {
-    navigation.navigate('InAppRecruitment')
+    if (waygateNativeAlert('WG_InAppRecruitment')) {
+      navigation.navigate('InAppRecruitment')
+    }
   }
 
   const onPrivacyPolicy = async (): Promise<void> => {
