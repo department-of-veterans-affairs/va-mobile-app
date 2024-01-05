@@ -6,6 +6,7 @@ import React, { FC } from 'react'
 
 import { Box, TextViewProps, VAScrollView } from 'components'
 import { BoxProps } from './Box'
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 import { NAMESPACE } from 'constants/namespaces'
 import { triggerHaptic } from 'utils/haptics'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
@@ -132,9 +133,9 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const vibrate = (): void => {
     if (!isUndo) {
-      triggerHaptic('notificationError')
+      triggerHaptic(HapticFeedbackTypes.notificationError)
     } else {
-      triggerHaptic('notificationSuccess')
+      triggerHaptic(HapticFeedbackTypes.notificationSuccess)
     }
   }
 

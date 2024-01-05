@@ -161,7 +161,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.12.0):
     - GoogleUtilities/Logger
-  - IQKeyboardManagerSwift (6.5.4)
+  - IQKeyboardManagerSwift (6.5.11)
   - libevent (2.1.12)
   - libwebp (1.3.2):
     - libwebp/demux (= 1.3.2)
@@ -459,7 +459,8 @@ PODS:
     - glog
   - react-native-document-picker (9.1.0):
     - React-Core
-  - react-native-image-picker (5.7.0):
+  - react-native-image-picker (7.1.0):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-notifications (5.0.0):
     - React-Core
@@ -572,8 +573,8 @@ PODS:
     - React-jsi (= 0.72.7)
     - React-logger (= 0.72.7)
     - React-perflogger (= 0.72.7)
-  - ReactNativeKeyboardManager (6.5.4-3):
-    - IQKeyboardManagerSwift (= 6.5.4)
+  - ReactNativeKeyboardManager (6.5.11-2):
+    - IQKeyboardManagerSwift (= 6.5.11)
     - React-Core
     - React-RCTText
   - ReactNativeWebPFormat (1.2.0):
@@ -898,7 +899,7 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 4c19f031220c72464d460c9daa1fb5d1acce958e
   GoogleDataTransport: 57c22343ab29bc686febbf7cbb13bad167c2d8fe
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
-  IQKeyboardManagerSwift: 2dde0fc70110e8eac7ccce2a46fdbec6a850b414
+  IQKeyboardManagerSwift: c7955c0bdbf7b2eb29bb7daaa44e3d90f55a9a85
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   lottie-ios: 8f97d3271e155c2d688875c29cd3c74908aef5f8
@@ -922,7 +923,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 8baadae51f01d867c3921213a25ab78ab4fbcd91
   React-logger: 8edc785c47c8686c7962199a307015e2ce9a0e4f
   react-native-document-picker: b4f4a23b73f864ce17965b284c0757648993805b
-  react-native-image-picker: 3269f75c251cdcd61ab51b911dd30d6fff8c6169
+  react-native-image-picker: 5e076db26cd81660cfb6db5bcf517cfa12054d45
   react-native-notifications: d309f7080aad71206882dbb98d9ed788969f3b6d
   react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
   react-native-webview: 65f1143983cfeaedf02fd25b2621d3f4a37075de
@@ -943,7 +944,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 14e0b0d971a4199af2aeb2ffa125429f02618229
   React-utils: 56838edeaaf651220d1e53cd0b8934fb8ce68415
   ReactCommon: 54a0af7fed8df83c4de245309f1627110ba1f8af
-  ReactNativeKeyboardManager: 4fb4d82d670ec6c00e9a2d2cc576f7cbb14975d6
+  ReactNativeKeyboardManager: 60292dbac467c49841a7d69588208ec4a4f7b2a2
   ReactNativeWebPFormat: f5f043cc9ded052e535c3869ec341f91ba5a67c5
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
