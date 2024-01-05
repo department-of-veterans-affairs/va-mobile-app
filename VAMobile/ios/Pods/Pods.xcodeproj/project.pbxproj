@@ -3934,7 +3934,7 @@
 		46EB2E00023690 /* nanopb-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E00023680 /* nanopb-dummy.m */; };
 		46EB2E00023740 /* RCTConvert+RNDocumentPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E0000EE30 /* RCTConvert+RNDocumentPicker.m */; };
 		46EB2E00023750 /* RNCPromiseWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E0000EE50 /* RNCPromiseWrapper.m */; };
-		46EB2E00023760 /* RNDocumentPicker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E0000EE70 /* RNDocumentPicker.mm */; };
+		46EB2E00023760 /* RNDocumentPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 46EB2E0000EE70 /* RNDocumentPicker.m */; };
 		46EB2E00023770 /* RCTConvert+RNDocumentPicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 46EB2E0000EE20 /* RCTConvert+RNDocumentPicker.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		46EB2E00023780 /* RNCPromiseWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 46EB2E0000EE40 /* RNCPromiseWrapper.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		46EB2E00023790 /* RNDocumentPicker.h in Headers */ = {isa = PBXBuildFile; fileRef = 46EB2E0000EE60 /* RNDocumentPicker.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -10746,7 +10746,7 @@
 		46EB2E0000EE40 /* RNCPromiseWrapper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNCPromiseWrapper.h; path = ios/RNCPromiseWrapper.h; sourceTree = "<group>"; };
 		46EB2E0000EE50 /* RNCPromiseWrapper.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNCPromiseWrapper.m; path = ios/RNCPromiseWrapper.m; sourceTree = "<group>"; };
 		46EB2E0000EE60 /* RNDocumentPicker.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNDocumentPicker.h; path = ios/RNDocumentPicker.h; sourceTree = "<group>"; };
-		46EB2E0000EE70 /* RNDocumentPicker.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNDocumentPicker.mm; path = ios/RNDocumentPicker.mm; sourceTree = "<group>"; };
+		46EB2E0000EE70 /* RNDocumentPicker.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNDocumentPicker.m; path = ios/RNDocumentPicker.m; sourceTree = "<group>"; };
 		46EB2E0000EE80 /* ImagePickerManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ImagePickerManager.h; path = ios/ImagePickerManager.h; sourceTree = "<group>"; };
 		46EB2E0000EE90 /* ImagePickerManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = ImagePickerManager.mm; path = ios/ImagePickerManager.mm; sourceTree = "<group>"; };
 		46EB2E0000EEA0 /* ImagePickerUtils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ImagePickerUtils.h; path = ios/ImagePickerUtils.h; sourceTree = "<group>"; };
@@ -15604,7 +15604,7 @@
 				46EB2E0000EE40 /* RNCPromiseWrapper.h */,
 				46EB2E0000EE50 /* RNCPromiseWrapper.m */,
 				46EB2E0000EE60 /* RNDocumentPicker.h */,
-				46EB2E0000EE70 /* RNDocumentPicker.mm */,
+				46EB2E0000EE70 /* RNDocumentPicker.m */,
 				46EB2E0000FC90 /* Pod */,
 				46EB2E000237A0 /* Support Files */,
 			);
@@ -26357,7 +26357,7 @@
 				46EB2E00023740 /* RCTConvert+RNDocumentPicker.m in Sources */,
 				46EB2E000237F0 /* react-native-document-picker-dummy.m in Sources */,
 				46EB2E00023750 /* RNCPromiseWrapper.m in Sources */,
-				46EB2E00023760 /* RNDocumentPicker.mm in Sources */,
+				46EB2E00023760 /* RNDocumentPicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
