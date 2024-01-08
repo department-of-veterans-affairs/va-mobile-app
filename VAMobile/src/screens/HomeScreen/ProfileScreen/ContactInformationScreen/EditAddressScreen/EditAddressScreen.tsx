@@ -1,23 +1,11 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { ScrollView, TextInput } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AddressData, addressTypeFields, addressTypes } from 'api/types'
-import {
-  AlertBox,
-  Box,
-  ButtonTypesConstants,
-  FieldType,
-  FormFieldType,
-  FormWrapper,
-  FullScreenSubtask,
-  LoadingComponent,
-  PickerItem,
-  VAButton,
-  VATextInputTypes,
-  ValidationFunctionItems,
-} from 'components'
+import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, PickerItem, VATextInputTypes, ValidationFunctionItems } from 'components'
 import { Countries } from 'constants/countries'
 import { GenerateAddressMessages } from 'translations/en/functions'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
@@ -566,10 +554,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
           {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
             <Box mb={theme.dimensions.standardMarginBetween}>
-              <VAButton
+              <Button
                 onPress={onDeletePressed}
                 label={t('contactInformation.removeData', { pageName: lowerCaseTitle })}
-                buttonType={ButtonTypesConstants.buttonDestructive}
+                buttonType={ButtonVariants.Destructive}
                 testID="EditAddressSaveTestID"
               />
             </Box>
