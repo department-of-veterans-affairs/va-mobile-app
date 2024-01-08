@@ -199,6 +199,7 @@ export type AppointmentsGetDataMeta = {
   pagination?: AppointmentsMetaPagination
   // This property does not exist in api, used to track if the data(AppointmentsGetData) return was from an api call
   dataFromStore: boolean
+  upcomingAppointmentsCount: number
 }
 
 export type AppointmentsGetData = {

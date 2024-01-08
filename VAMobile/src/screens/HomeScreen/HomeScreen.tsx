@@ -1,10 +1,13 @@
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
+import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useFocusEffect } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useCallback } from 'react'
 
-import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { AppointmentsState, PrescriptionState } from 'store/slices'
+import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -12,6 +15,7 @@ import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getClaimsAndAppeals, getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
@@ -41,6 +45,8 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
@@ -117,6 +123,26 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       <Box flex={1} justifyContent="flex-start">
         <EncourageUpdateAlert />
         <Nametag />
+        {Number(upcomingAppointmentsCount) > 0 && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <LargeNavButton
+              title={`${t('appointments')}`}
+              subText={`(${upcomingAppointmentsCount} ${t('upcoming')})`}
+              onPress={() => Linking.openURL('vamobile://appointments')}
+              borderWidth={theme.dimensions.buttonBorderWidth}
+            />
+          </Box>
+        )}
+        {Number(prescriptionStatusCount.active) > 0 && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <LargeNavButton
+              title={`${t('prescription.title')}`}
+              subText={`(${prescriptionStatusCount.active} ${t('active')})`}
+              onPress={() => Linking.openURL('vamobile://prescriptions')}
+              borderWidth={theme.dimensions.buttonBorderWidth}
+            />
+          </Box>
+        )}
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
             {t('aboutVA')}

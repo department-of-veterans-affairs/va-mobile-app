@@ -41,6 +41,7 @@ const emptyAppointmentsInDateRange: AppointmentsGetData = {
       currentPage: 1,
       perPage: DEFAULT_PAGE_SIZE,
     },
+    upcomingAppointmentsCount: 0,
   },
 }
 
@@ -96,6 +97,8 @@ export type AppointmentsState = {
   loadedAppointmentsByTimeFrame: LoadedAppointments
   paginationByTimeFrame: AppointmentsPaginationByTimeFrame
   messagesLoading: boolean
+  upcomingAppointmentsCount?: number
+  preloadComplete: boolean
 }
 
 export const initialPaginationState = {
@@ -142,6 +145,7 @@ export const initialAppointmentsState: AppointmentsState = {
     pastAllLastYear: {},
   },
   messagesLoading: false,
+  preloadComplete: false,
 }
 
 // Issue#2273 Tracks and logs pagination warning if there are discrepancies in the total entries of appointments
@@ -206,7 +210,13 @@ export const findAppointmentErrors = (appointmentsMetaErrors?: Array<Appointment
 }
 
 // Return data that looks like AppointmentsGetData if data was loaded previously otherwise null
-const getLoadedAppointments = (appointments: Array<AppointmentData>, paginationData: AppointmentsMetaPagination, latestPage: number, pageSize: number) => {
+const getLoadedAppointments = (
+  appointments: Array<AppointmentData>,
+  paginationData: AppointmentsMetaPagination,
+  latestPage: number,
+  pageSize: number,
+  upcomingAppointmentsCount?: number,
+) => {
   const loadedAppointments = getItemsInRange(appointments, latestPage, pageSize)
   // do we have the appointments?
   if (loadedAppointments) {
@@ -219,6 +229,7 @@ const getLoadedAppointments = (appointments: Array<AppointmentData>, paginationD
           totalEntries: paginationData.totalEntries,
         },
         dataFromStore: true, // informs reducer not to save these appointments to the store
+        upcomingAppointmentsCount,
       },
     } as AppointmentsGetData
   }
@@ -259,7 +270,7 @@ export const prefetchAppointments =
       }
 
       // use loaded data if we have it
-      const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, upcomingPagination, 1, DEFAULT_PAGE_SIZE)
+      const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, upcomingPagination, 1, DEFAULT_PAGE_SIZE, getState().appointments.upcomingAppointmentsCount)
       if (!forceRefetch && loadedUpcomingAppointments && getState().appointments.upcomingCcServiceError === false && getState().appointments.upcomingVaServiceError === false) {
         upcomingAppointments = loadedUpcomingAppointments
       } else {
@@ -427,6 +438,7 @@ const appointmentsSlice = createSlice({
       const upcomingAppointmentsPagination = upcoming?.meta?.pagination || state.paginationByTimeFrame.upcoming
       const pastAppointmentsPagination = past?.meta?.pagination || state.paginationByTimeFrame.pastThreeMonths
 
+      state.upcomingAppointmentsCount = upcoming?.meta?.upcomingAppointmentsCount
       state.upcomingAppointmentsById = mapAppointmentsById(upcomingAppointments)
       state.pastAppointmentsById = mapAppointmentsById(pastAppointments)
       state.upcomingCcServiceError = upcomingCcServiceError
@@ -435,6 +447,7 @@ const appointmentsSlice = createSlice({
       state.pastVaServiceError = pastVaServiceError
       state.error = error
       state.loading = false
+      state.preloadComplete = true
 
       state.currentPageAppointmentsByYear.upcoming = groupAppointmentsByYear(upcomingAppointments)
       state.currentPageAppointmentsByYear.pastThreeMonths = groupAppointmentsByYear(pastAppointments)

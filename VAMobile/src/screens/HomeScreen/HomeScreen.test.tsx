@@ -1,7 +1,9 @@
 import React from 'react'
+import { Linking } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
+import { initialPrescriptionState } from 'store/slices'
 import { HomeScreen } from './HomeScreen'
 
 const mockNavigationSpy = jest.fn()
@@ -17,9 +19,18 @@ jest.mock('utils/hooks', () => {
 jest.mock('utils/remoteConfig')
 
 context('HomeScreen', () => {
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (activePrescriptionsCount?: number) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
-    render(<HomeScreen {...props} />)
+    render(<HomeScreen {...props} />, {
+      preloadedState: {
+        prescriptions: {
+          ...initialPrescriptionState,
+          prescriptionStatusCount: {
+            active: activePrescriptionsCount || 0,
+          }
+        }
+      }
+    })
   }
 
   beforeEach(() => {
@@ -51,5 +62,22 @@ context('HomeScreen', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Find a VA location' }))
       expect(mockNavigationSpy).toBeCalledWith('Webview', { displayTitle: 'va.gov', url: 'https://www.va.gov/find-locations/', loadingMessage: 'Loading VA location finder...' })
     })
+  })
+
+  it('displays prescriptions module when there are active prescriptions', () => {
+    initializeTestInstance(2)
+    expect(screen.getByText('Prescriptions')).toBeTruthy()
+    expect(screen.getByText('(2 active)')).toBeTruthy()
+  })
+
+  it('navigates to prescriptions screen when prescriptions module is tapped', () => {
+    initializeTestInstance(2)
+    fireEvent.press(screen.getByText('Prescriptions'))
+    expect(Linking.openURL).toBeCalledWith('vamobile://prescriptions')
+  })
+
+  it('does not display prescriptions module when there are no active prescriptions', () => {
+    initializeTestInstance(0)
+    expect(screen.queryByText('Prescriptions')).toBeFalsy()
   })
 })
