@@ -49,7 +49,7 @@ A button draws attention to important actions with a large selectable surface.
 [Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--base)
 
 ## Content considerations
-* Reference the [VA Design System's content considerations for buttons](https://design.va.gov/components/alert#content-considerations)
+* Reference the [VA Design System's content considerations for buttons](https://design.va.gov/components/button#content-considerations)
 
 ## Accessibility considerations
 * Guidance on using disabled buttons
