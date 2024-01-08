@@ -15,10 +15,10 @@ import { RootState } from 'store'
 import { SecureMessagingState, downloadFileAttachment } from 'store/slices'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
-import { formatSubject } from 'utils/secureMessaging'
+import { formatSubject, getLinkifiedText } from 'utils/secureMessaging'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useAppDispatch, useExternalLink, useTheme } from 'utils/hooks'
 import { useNavigation } from '@react-navigation/native'
 import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
 import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
@@ -37,7 +37,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
   const navigation = useNavigation<StackNavigationProp<HealthStackParamList, keyof HealthStackParamList>>()
   const dispatch = useAppDispatch()
   const { loadingAttachments } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-
+  const launchLink = useExternalLink()
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const replyExpired = demoMode && message.messageId === 2092809 ? false : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
@@ -64,13 +64,11 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
   }
 
   const getContent = (): ReactNode => {
-    return (
-      <Box>
-        <TextView variant="MobileBody" selectable={true} paragraphSpacing={true}>
-          {body}
-        </TextView>
-      </Box>
-    )
+    /** this does preserve newline characters just not spaces, TODO:change the mobile body link text views to be clickable and launch the right things */
+    if (body) {
+      return getLinkifiedText(body, t, launchLink)
+    }
+    return <></>
   }
 
   const getAttachment = (): ReactNode => {
