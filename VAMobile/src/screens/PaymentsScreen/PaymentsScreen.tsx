@@ -38,7 +38,7 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
   }
 
   return (
-    <CategoryLanding title={t('payments.title')}>
+    <CategoryLanding title={t('payments.title')} testID="paymentsID">
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('vaPaymentHistory')}

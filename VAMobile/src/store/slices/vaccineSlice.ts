@@ -79,14 +79,6 @@ export const getVaccines =
           sort: 'date',
         })
       }
-      const hasRequiredFields = vaccinesData?.data.every((v) => {
-        return !!v.attributes?.date && !!v.attributes?.groupName && !!v.attributes?.shortDescription
-      })
-
-      // Ensure all required fields(date, groupName, and type and dosage) exist; otherwise throw API Error
-      if (!hasRequiredFields) {
-        throw { status: 500, json: { errors: [], text: '{vaccineSlice:{Missing required fields(date, groupName, and type)}}' } } as APIError
-      }
 
       dispatch(dispatchFinishGetVaccines({ page, vaccinesData }))
     } catch (error) {
