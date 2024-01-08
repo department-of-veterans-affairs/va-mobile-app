@@ -688,12 +688,18 @@ export const Events = {
       name: 'vama_rx_filter',
     }
   },
-  vama_rx_filter_sel: (filter: string): Event => {
+  vama_rx_filter_sel: (filter: string, sort: string): Event => {
     return {
       name: 'vama_rx_filter_sel',
       params: {
         filter,
+        sort,
       },
+    }
+  },
+  vama_rx_filter_cancel: (): Event => {
+    return {
+      name: 'vama_rx_filter_cancel',
     }
   },
   vama_rx_help: (): Event => {
