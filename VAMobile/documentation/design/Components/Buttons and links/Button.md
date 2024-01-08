@@ -49,7 +49,7 @@ A button draws attention to important actions with a large selectable surface.
 [Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--base)
 
 ## Content considerations
-* Reference the [VA Design System's content considerations for buttons](https://design.va.gov/components/button#content-considerations)
+* Refer to the [VA Design System's content considerations for buttons](https://design.va.gov/components/button#content-considerations)
 
 ## Accessibility considerations
 * Guidance on using disabled buttons
@@ -58,7 +58,7 @@ A button draws attention to important actions with a large selectable surface.
     * Instead of disabling a button in the mobile app, always attempt to find an alternative solution such as:
         * Providing additional context surrounding a button that tells a user what to expect when a button is tapped.
         * Allowing a user to attempt to submit a form even if an error exists in an input field (and then presenting the errors to the user to fix).
-* For additional guidance, reference the [VA Design System's accessibility considerations for buttons](https://design.va.gov/components/button/#accessibility-considerations).
+* For additional guidance, refer to the [VA Design System's accessibility considerations for buttons](https://design.va.gov/components/button/#accessibility-considerations).
 
 ## Related
 * [Button - VA Design System](https://design.va.gov/components/button/)
