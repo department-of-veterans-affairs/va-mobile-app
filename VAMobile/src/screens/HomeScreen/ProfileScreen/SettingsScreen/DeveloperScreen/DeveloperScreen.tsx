@@ -5,7 +5,8 @@ import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AnalyticsState } from 'store/slices'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
-import { Box, ButtonTypesConstants, FeatureLandingTemplate, TextArea, TextView, VAButton, VATextInput } from 'components'
+import { Box, FeatureLandingTemplate, TextArea, TextView, VATextInput } from 'components'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
 import { FeatureConstants, getLocalVersion, getStoreVersion, getVersionSkipped, overrideLocalVersion, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -114,32 +115,32 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
     <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('debug.title')}>
       <Box>
         <TextArea>
-          <VAButton onPress={navigateTo('Sandbox')} label={'Sandbox'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={navigateTo('Sandbox')} label={'Sandbox'} />
         </TextArea>
       </Box>
       <Box>
         <TextArea>
-          <VAButton onPress={navigateTo('HapticsDemoScreen')} label={'haptics demo'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={navigateTo('HapticsDemo')} label={'Haptics demo'} />
         </TextArea>
       </Box>
       <Box>
         <TextArea>
-          <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={onResetFirstTimeLogin} label={'Reset first time login'} />
         </TextArea>
       </Box>
       <Box>
         <TextArea>
-          <VAButton onPress={resetInAppReview} label={'Reset in-app review actions'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={resetInAppReview} label={'Reset in-app review actions'} />
         </TextArea>
       </Box>
       <Box>
         <TextArea>
-          <VAButton onPress={onClickFirebaseDebugMode} label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase debug mode`} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={onClickFirebaseDebugMode} label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase debug mode`} />
         </TextArea>
       </Box>
       <Box>
         <TextArea>
-          <VAButton onPress={navigateTo('RemoteConfig')} label={'Remote Config'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={navigateTo('RemoteConfig')} label={'Remote Config'} />
         </TextArea>
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
@@ -235,7 +236,7 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
             }}
           />
           <Box mt={theme.dimensions.condensedMarginBetween}>
-            <VAButton
+            <Button
               onPress={() => {
                 setSkippedVersionHomeScreen('0.0')
                 setWhatsNewSkippedVersionHomeScreen('0.0')
@@ -247,7 +248,6 @@ const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation })
                 checkWhatsNewLocalVersion()
               }}
               label={'Reset Versions'}
-              buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>
         </TextArea>

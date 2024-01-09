@@ -1,3 +1,4 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,7 +7,7 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, logout, setBiometricsPreference } from 'store/slices'
-import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, VAButton } from 'components'
+import { Box, ButtonDecoratorType, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -147,7 +148,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
               {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
             </Box>
             <Box px={theme.dimensions.gutter}>
-              <VAButton onPress={onShowConfirm} label={t('logout.title')} buttonType={ButtonTypesConstants.buttonDestructive} />
+              <Button onPress={onShowConfirm} label={t('logout.title')} buttonType={ButtonVariants.Destructive} />
             </Box>
           </Box>
           <AppVersionAndBuild />

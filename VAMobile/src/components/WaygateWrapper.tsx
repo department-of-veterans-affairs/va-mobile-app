@@ -1,4 +1,5 @@
-import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, VAButton } from 'components'
+import { AlertBox, Box, ClickToCallPhoneNumber } from 'components'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { useIsFocused, useNavigationState } from '@react-navigation/native'
 import React, { FC, useEffect } from 'react'
 
@@ -46,7 +47,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
           <Box my={theme.dimensions.standardMarginBetween}>
             <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8006982411'))} phone={t('8006982411')} a11yLabel={a11yLabelID(t('8006982411'))} />
           </Box>
-          {waygate.appUpdateButton === true && <VAButton onPress={onUpdateButtonPress} label={t('updateNow')} buttonType={ButtonTypesConstants.buttonPrimary} />}
+          {waygate.appUpdateButton === true && <Button onPress={onUpdateButtonPress} label={t('updateNow')} />}
         </AlertBox>
       </Box>
     )
