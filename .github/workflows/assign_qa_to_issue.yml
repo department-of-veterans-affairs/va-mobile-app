@@ -8,6 +8,8 @@ on:
   issues:
     types:
       - labeled
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   assign_qa:
