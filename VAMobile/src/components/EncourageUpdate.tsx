@@ -88,7 +88,7 @@ export const EncourageUpdateAlert = () => {
         <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="warning">
           <Box>
             <Box my={theme.dimensions.gutter} accessibilityRole="button" mr={theme.dimensions.buttonPadding}>
-              <VAButton onPress={onUpdatePressed} label={t('encourageUpdate.update')} buttonType={ButtonTypesConstants.buttonPrimary} />
+              <VAButton onPress={onUpdatePressed} label={t('updateNow')} buttonType={ButtonTypesConstants.buttonPrimary} />
             </Box>
             <Box mr={theme.dimensions.buttonPadding} accessibilityRole="button">
               <VAButton onPress={onSkipPressed} label={t('encourageUpdate.skip')} buttonType={ButtonTypesConstants.buttonSecondary} />

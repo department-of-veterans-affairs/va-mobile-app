@@ -14,6 +14,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
@@ -39,15 +40,32 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
+  const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
 
-  const onAppointments = navigateTo('Appointments')
-  const onSecureMessaging = navigateTo('SecureMessaging')
-  const onVaVaccines = navigateTo('VaccineList')
-  const pharmacyNavHandler = navigateTo('PrescriptionHistory')
+  const onAppointments = () => {
+    if (waygateNativeAlert('WG_Appointments')) {
+      navigateTo('Appointments')()
+    }
+  }
+  const onSecureMessaging = () => {
+    if (waygateNativeAlert('WG_SecureMessaging')) {
+      navigateTo('SecureMessaging')()
+    }
+  }
+  const onVaVaccines = () => {
+    if (waygateNativeAlert('WG_VaccineList')) {
+      navigateTo('VaccineList')()
+    }
+  }
+  const pharmacyNavHandler = () => {
+    if (waygateNativeAlert('WG_PrescriptionHistory')) {
+      navigateTo('PrescriptionHistory')()
+    }
+  }
   const onPharmacy = () => {
     // If rx list is already loaded, reload it to ensure freshness
     if (!prescriptionsNeedLoad) {
@@ -63,11 +81,11 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
-    if (smNotInDowntime) {
+    if (isScreenContentAllowed && smNotInDowntime) {
       // fetch inbox metadata to display unread messages count tag
       dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
     }
-  }, [dispatch, smNotInDowntime])
+  }, [dispatch, smNotInDowntime, isScreenContentAllowed])
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
@@ -164,7 +182,7 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
       <HealthScreenStack.Screen name="UpcomingAppointmentDetails" component={UpcomingAppointmentDetails} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HealthScreenStack.Screen name="VaccineDetails" component={VaccineDetailsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HealthScreenStack.Screen name="VaccineList" component={VaccineListScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HealthScreenStack.Screen name="ViewMessageScreen" component={ViewMessageScreen} options={{ headerShown: false }} />
+      <HealthScreenStack.Screen name="ViewMessage" component={ViewMessageScreen} options={{ headerShown: false }} />
     </HealthScreenStack.Navigator>
   )
 }

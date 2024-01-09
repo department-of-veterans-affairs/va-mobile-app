@@ -2,7 +2,7 @@ import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StatusBar, 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, useState } from 'react'
 
-import { CrisisLineCta, TextView, TextViewProps, VAIconProps } from 'components'
+import { CrisisLineCta, TextView, TextViewProps, VAIconProps, WaygateWrapper } from 'components'
 import { useIsScreenReaderEnabled, useRouteNavigation, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
@@ -104,7 +104,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
           <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
           {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
         </View>
-        {children}
+        <WaygateWrapper>{children}</WaygateWrapper>
       </VAScrollView>
     </View>
   )

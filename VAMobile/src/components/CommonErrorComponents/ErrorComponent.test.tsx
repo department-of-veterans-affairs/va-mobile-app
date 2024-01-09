@@ -1,29 +1,18 @@
-import 'react-native'
 import React from 'react'
-// Note: test renderer must be required after react-native.
-
-import 'jest-styled-components'
-import Mock = jest.Mock
-import { ReactTestInstance, act } from 'react-test-renderer'
-
-import { context, render, RenderAPI } from 'testUtils'
+import { context, fireEvent, render, screen } from 'testUtils'
 import ErrorComponent from './ErrorComponent'
 import { ScreenIDTypesConstants } from 'store/api/types'
-
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
 
 context('ErrorComponent', () => {
-  let store: any
-  let component: any
-  let testInstance: ReactTestInstance
-  let onTryAgainPressSpy: Mock
+  const onTryAgainPressSpy = jest.fn()
 
   beforeEach(() => {
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
-    component = render(<ErrorComponent onTryAgain={onTryAgainPressSpy} screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />, {
+    render(<ErrorComponent onTryAgain={onTryAgainPressSpy} screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />, {
       preloadedState: {
         errors: {
           ...initialErrorsState,
@@ -31,11 +20,14 @@ context('ErrorComponent', () => {
         },
       },
     })
-
-    testInstance = component.root
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('initializes correctly', () => {
+    expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
+    expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy()
+  })
+  it('should call onTryAgain', () => {
+    fireEvent.press(screen.getByRole('button', { name: 'Refresh screen' }))
+    expect(onTryAgainPressSpy).toHaveBeenCalled()
   })
 })

@@ -15,6 +15,7 @@ import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPresc
 import { RootState } from 'store'
 import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useDowntime, usePrevious, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
@@ -45,7 +46,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
   // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
   useFocusEffect(
     React.useCallback(() => {
-      if (!prescriptionInDowntime) {
+      if (screenContentAllowed('WG_RefillScreenModal') && !prescriptionInDowntime) {
         dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_REFILL_SCREEN_ID))
       }
     }, [dispatch, prescriptionInDowntime]),
@@ -53,7 +54,7 @@ export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     if (prevLoadingRequestRefills && prevLoadingRequestRefills !== submittingRequestRefills) {
-      navigation.navigate('RefillRequestSummary')
+      waygateNativeAlert('WG_RefillRequestSummary') && navigation.navigate('RefillRequestSummary')
     }
   }, [navigation, submittingRequestRefills, prevLoadingRequestRefills])
 

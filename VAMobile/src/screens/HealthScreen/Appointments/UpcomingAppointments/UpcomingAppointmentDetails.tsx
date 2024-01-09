@@ -54,6 +54,7 @@ import { isIOS } from 'utils/platform'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useError, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 import getEnv from 'utils/env'
 
@@ -211,7 +212,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
       const onPrepareForVideoVisit = () => {
         dispatch(clearAppointmentCancellation())
-        navigateTo('PrepareForVideoVisit')()
+
+        if (waygateNativeAlert('WG_PrepareForVideoVisit')) {
+          navigateTo('PrepareForVideoVisit')()
+        }
       }
       // TODO uncomment for #17916
       const hasSessionStarted = true // DateTime.fromISO(startDateUtc).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
@@ -222,7 +226,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         if (url) {
           launchExternalLink(url)
         } else {
-          navigateTo('SessionNotStarted')()
+          if (waygateNativeAlert('WG_SessionNotStarted')) {
+            navigateTo('SessionNotStarted')()
+          }
         }
       }
 

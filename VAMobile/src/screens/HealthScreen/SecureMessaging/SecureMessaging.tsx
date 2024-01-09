@@ -14,6 +14,7 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
@@ -47,7 +48,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
 
   useEffect(() => {
-    if (userAuthorizedServices?.secureMessaging && smNotInDowntime) {
+    if (screenContentAllowed('WG_SecureMessaging') && userAuthorizedServices?.secureMessaging && smNotInDowntime) {
       dispatch(resetSaveDraftComplete())
       dispatch(resetSaveDraftFailed())
       // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag

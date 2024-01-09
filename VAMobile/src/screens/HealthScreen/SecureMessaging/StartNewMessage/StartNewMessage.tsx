@@ -42,6 +42,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import {
   useAppDispatch,
   useAttachments,
@@ -96,15 +97,17 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
   useEffect(() => {
-    dispatch(resetSaveDraftComplete())
-    dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+    if (screenContentAllowed('WG_StartNewMessage')) {
+      dispatch(resetSaveDraftComplete())
+      dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
 
-    if (PREPOPULATE_SIGNATURE && !signature) {
-      dispatch(getMessageSignature())
+      if (PREPOPULATE_SIGNATURE && !signature) {
+        dispatch(getMessageSignature())
+      }
+      InteractionManager.runAfterInteractions(() => {
+        setIsTransitionComplete(true)
+      })
     }
-    InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
   }, [dispatch, signature])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
@@ -150,12 +153,13 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   useEffect(() => {
     if (saveDraftComplete) {
       dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
-      navigation.navigate('SecureMessaging')
-      navigation.navigate('FolderMessages', {
-        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-        folderName: FolderNameTypeConstants.drafts,
-        draftSaved: true,
-      })
+      waygateNativeAlert('WG_SecureMessaging') && navigation.navigate('SecureMessaging')
+      waygateNativeAlert('WG_FolderMessages') &&
+        navigation.navigate('FolderMessages', {
+          folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+          folderName: FolderNameTypeConstants.drafts,
+          draftSaved: true,
+        })
     }
   }, [saveDraftComplete, navigation, dispatch])
 
@@ -164,7 +168,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
       dispatch(resetHasLoadedRecipients())
-      navigation.navigate('SecureMessaging')
+      waygateNativeAlert('WG_SecureMessaging') && navigation.navigate('SecureMessaging')
     }
   }, [sendMessageComplete, dispatch, navigation])
 
@@ -225,7 +229,9 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
-    navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
+    if (waygateNativeAlert('WG_Attachments')) {
+      navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
+    }
   }
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -306,7 +312,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
     dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-    navigation.navigate('SecureMessaging')
+    waygateNativeAlert('WG_SecureMessaging') && navigation.navigate('SecureMessaging')
   }
 
   const onMessageSendOrSave = (): void => {
@@ -343,7 +349,9 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
     const navigateToReplyHelp = () => {
       logAnalyticsEvent(Events.vama_sm_nonurgent())
-      navigation.navigate('ReplyHelp')
+      if (waygateNativeAlert('WG_ReplyHelp')) {
+        navigation.navigate('ReplyHelp')
+      }
     }
 
     return (

@@ -7,6 +7,7 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from './PaymentsStackScreens'
+import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import DirectDepositScreen from './DirectDepositScreen'
@@ -17,17 +18,27 @@ import PaymentHistoryScreen from './PaymentHistory/PaymentHistoryScreen'
 type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
 
 const PaymentsScreen: FC<PaymentsScreenProps> = () => {
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Payments') })
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
-  const onPayments = navigateTo('PaymentHistory')
-  const onDirectDeposit = userAuthorizedServices?.directDepositBenefitsUpdate ? navigateTo('DirectDeposit') : navigateTo('HowToUpdateDirectDeposit')
+  const onPayments = () => {
+    if (waygateNativeAlert('WG_PaymentHistory')) {
+      navigateTo('PaymentHistory')()
+    }
+  }
+  const onDirectDeposit = () => {
+    if (userAuthorizedServices?.directDepositBenefitsUpdate && waygateNativeAlert('WG_DirectDeposit')) {
+      navigateTo('DirectDeposit')()
+    } else if (!userAuthorizedServices?.directDepositBenefitsUpdate && waygateNativeAlert('WG_HowToUpdateDirectDeposit')) {
+      navigateTo('HowToUpdateDirectDeposit')()
+    }
+  }
 
   return (
-    <CategoryLanding title={t('payments.title')}>
+    <CategoryLanding title={t('payments.title')} testID="paymentsID">
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('vaPaymentHistory')}
