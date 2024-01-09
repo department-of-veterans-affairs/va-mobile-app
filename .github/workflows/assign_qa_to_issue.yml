@@ -17,17 +17,20 @@ jobs:
     permissions:
       issues: write
     steps:
+      - name: 'Checkout repo'
+        uses: actions/checkout@v3
+
       - name: Assign Health team QA
         if: github.event.label.name == 'Health'
         run: |
-          gh issue edit ${{ github.event.issue.id }} --add-assignee "DJUltraTom"
+          gh issue edit ${{ github.event.issue.number }} --add-assignee "DJUltraTom"
 
       - name: Assign Global team QA
         if: github.event.label.name == 'global'
         run: |
-          gh issue edit ${{ github.event.issue.id }} --add-assignee "TKDickson"
+          gh issue edit ${{ github.event.issue.number }} --add-assignee "TKDickson"
 
       - name: Assign Design-System team QA
         if: github.event.label.name == 'design-system'
         run: |
-          gh issue edit ${{ github.event.issue.id }} --add-assignee "rbontrager"
+          gh issue edit ${{ github.event.issue.number }} --add-assignee "rbontrager"
