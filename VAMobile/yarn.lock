@@ -2600,9 +2600,11 @@
   integrity sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==
 
 "@types/node@^18.11.18":
-  version "18.16.17"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.16.17.tgz#d2512c03313db6329f7cb515fc8b508e658230c4"
-  integrity sha512-QAkjjRA1N7gPJeAP4WLXZtYv6+eMXFNviqktCDt4GLcmCugMr5BcRHfkOjCQzvCsnMp+L79a54zBkbw356xv9Q==
+  version "18.19.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.19.4.tgz#89672e84f11a2c19543d694dac00ab8d7bc20ddb"
+  integrity sha512-xNzlUhzoHotIsnFoXmJB+yWmBvFZgKCI9TtPIEdYIMM1KWfwuY8zh7wvc1u1OAXlC7dlf6mZVx/s+Y5KfFz19A==
+  dependencies:
+    undici-types "~5.26.4"
 
 "@types/prettier@^2.1.5":
   version "2.4.1"
@@ -4693,10 +4695,10 @@ electron-to-chromium@^1.4.601:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.609.tgz#5790a70aaa96de232501b56e14b64d17aff93988"
   integrity sha512-ihiCP7PJmjoGNuLpl7TjNA8pCQWu09vGyjlPYw1Rqww4gvNuCcmvl+44G+2QyJ6S2K4o+wbTS++Xz0YN8Q9ERw==
 
-electron@^11.1.0, electron@^25.0.1:
-  version "25.9.0"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-25.9.0.tgz#456fe61ebb86f81f648fd370fa0888e0cbfd0f99"
-  integrity sha512-wgscxf2ORHL/8mAQfy7l9rVDG//wrG9RUQndG508kCCMHRq9deFyZ4psOMzySheBRSfGMcFoRFYSlkAeZr8cFg==
+electron@^23.1.2, electron@^25.8.1:
+  version "25.9.8"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-25.9.8.tgz#7c125ccbddad02861736275b0d4a387c59a91469"
+  integrity sha512-PGgp6PH46QVENHuAHc2NT1Su8Q1qov7qIl2jI5tsDpTibwV2zD8539AeWBQySeBU4dhbj9onIl7+1bXQ0wefBg==
   dependencies:
     "@electron/get" "^2.0.0"
     "@types/node" "^18.11.18"
@@ -8860,10 +8862,10 @@ rc@^1.0.1, rc@^1.1.6:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-devtools-core@4.23.0:
-  version "4.23.0"
-  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-4.23.0.tgz#dff9d12202a472ef62632203d6de3877dc6e58be"
-  integrity sha512-KkzneT1LczFtebbTJlvRphIRvzuHLhI9ghfrseVv9ktBs+l2cXy8Svw5U16lzQnwU9okVEcURmGPgH79WWrlaw==
+react-devtools-core@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-5.0.0.tgz#50b04a4dbfa62badbe4d86529e9478c396988b31"
+  integrity sha512-SAAMLacNDfFjMJjmbXURNWtrTyARi9xTqGkY48Btw5cIWlr1wgxfWYZKxoUZav1qqmhbpgTzSmmF+cpMHGHY3A==
   dependencies:
     shell-quote "^1.6.1"
     ws "^7"
@@ -8876,16 +8878,16 @@ react-devtools-core@^4.27.2:
     shell-quote "^1.6.1"
     ws "^7"
 
-react-devtools@^4.23.0:
-  version "4.23.0"
-  resolved "https://registry.yarnpkg.com/react-devtools/-/react-devtools-4.23.0.tgz#7c037f4a330937da63d5e0f047c654d0a62d5fcb"
-  integrity sha512-3pvegA9tcO2b1QfS8fvxHEWzB7762kt8mUJNRyxQNaWz/+dPbJT3yGOF4eChkelolMbzqUSfZXE8pRyRgeAc/w==
+react-devtools@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-devtools/-/react-devtools-5.0.0.tgz#c30da7bc23262dfa6fb97153cfee774cc8075fcb"
+  integrity sha512-AN24OgEHaS06cbVYxTa/DH1B86TlKwIO483WIJ06jYfUL0QCv3oyX+FpP5mzAI4abcBNrtOORKsRsJ0JnhrEsg==
   dependencies:
     cross-spawn "^5.0.1"
-    electron "^11.1.0"
+    electron "^23.1.2"
     ip "^1.1.4"
     minimist "^1.2.3"
-    react-devtools-core "4.23.0"
+    react-devtools-core "5.0.0"
     update-notifier "^2.1.0"
 
 react-freeze@^1.0.0:
@@ -10596,6 +10598,11 @@ underscore@^1.13.6:
   version "1.13.6"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.13.6.tgz#04786a1f589dc6c09f761fc5f45b89e935136441"
   integrity sha512-+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A==
+
+undici-types@~5.26.4:
+  version "5.26.5"
+  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-5.26.5.tgz#bcd539893d00b56e964fd2657a4866b221a65617"
+  integrity sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
 
 unicode-canonical-property-names-ecmascript@^2.0.0:
   version "2.0.0"
