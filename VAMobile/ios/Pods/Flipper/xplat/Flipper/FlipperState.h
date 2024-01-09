@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -10,6 +10,7 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -53,10 +54,11 @@ class FlipperState {
   void success(std::string);
   void failed(std::string, std::string);
   void started(std::string);
+  void ensureLogsCapacity();
 
   std::mutex mutex; // Protects all our member variables.
   std::shared_ptr<FlipperStateUpdateListener> mListener = nullptr;
-  std::string logs;
+  std::stringstream logs;
   std::vector<std::string> insertOrder;
   std::map<std::string, facebook::flipper::State> stateMap;
 };
