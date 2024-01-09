@@ -299,7 +299,7 @@ export async function backButton() {
 
 export async function enableAF (AFFeature, AFUseCase, AFAppUpdate = false) {
   if(AFUseCase !== 'AllowFunction') {
-    if (AFFeature === 'WG_Profile' || AFFeature === 'WG_Home' || AFFeature === 'WG_Login' || AFFeature === 'WG_Settings' ) {
+    if (AFFeature === 'WG_Profile') {
       await device.uninstallApp()
       await device.installApp()
     } 
@@ -310,7 +310,7 @@ export async function enableAF (AFFeature, AFUseCase, AFAppUpdate = false) {
     await openDeveloperScreen()
     await element(by.text('Remote Config')).tap()
   }
-  await waitFor(element(by.text(AFFeature))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(600, 'down')
+  await waitFor(element(by.text(AFFeature))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(500, 'down')
   await element(by.text(AFFeature)).tap()
   if (AFAppUpdate) {
     await element(by.text('appUpdateButton')).tap()
@@ -318,7 +318,7 @@ export async function enableAF (AFFeature, AFUseCase, AFAppUpdate = false) {
     await element(by.text('Enabled')).tap()
   }
 
-  if (AFFeature === 'WG_Profile' || AFFeature === 'WG_Home' || AFFeature === 'WG_Login' || AFFeature === 'WG_Settings' )  {
+  if (AFFeature === 'WG_Profile')  {
     await element(by.text('Enabled')).tap()
   } else if (!AFAppUpdate) {
     if (AFUseCase === 'AllowFunction') {
@@ -336,15 +336,21 @@ export async function enableAF (AFFeature, AFUseCase, AFAppUpdate = false) {
   await element(by.id('AFErrorMsgBodyTestID')).tapReturnKey()
 
   await element(by.text('Save')).tap()
-  await device.launchApp({newInstance: true})
-  if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
-    await loginToDemoMode()
+  if(AFUseCase !== 'AllowFunction') {
+    await device.launchApp({newInstance: true})
+    if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
+      await loginToDemoMode()
+    }
   }
 }
 
-export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFFeatureIDs) {
-  await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-  await loginToDemoMode()
+export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFUseCaseName) {
+  if(AFUseCaseName === 'AllowFunction') {
+    await element(by.id('Home')).tap()
+  } else {
+    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    await loginToDemoMode()
+  }
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
@@ -356,42 +362,26 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await device.launchApp({newInstance: true})
   await loginToDemoMode()
   if (featureNavigationArray !== undefined) {
-    await navigateToFeature(featureNavigationArray, AFFeatureIDs)
+    await navigateToFeature(featureNavigationArray)
     await expect(element(by.text(AFFeatureName)).atIndex(0)).toExist()
     await expect(element(by.text('AF Heading Test'))).not.toExist()
     await expect(element(by.text('AF Body Test'))).not.toExist()
   }
 }
 
-const navigateToFeature = async (featureNavigationArray, featureID) => {
-  for(let j = 1; j < featureNavigationArray.length; j++) {
+const navigateToFeature = async (featureNavigationArray) => {
+  for(let j = 2; j < featureNavigationArray.length; j++) {
     if (featureNavigationArray[j] !== 'Close' && featureNavigationArray[j] !== 'Cancel' && featureNavigationArray[j] !== 'Done'){
-      if(featureNavigationArray[j] in featureID) {
-				var scrollID = featureID[featureNavigationArray[j]]
-				try {
-          await waitFor(element(by.text(featureNavigationArray[j]))).toBeVisible().whileElement(by.id(scrollID)).scroll(50, 'down')
-        } catch (ex) {
-          await waitFor(element(by.id(featureNavigationArray[j]))).toBeVisible().whileElement(by.id(scrollID)).scroll(50, 'down')
-        }
-      }
-      try {
-        await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
-      } catch (ex) {
-        await element(by.id(featureNavigationArray[j])).tap()
-      }
+      await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
     } 
   }
 }
 
-export async function verifyAF(featureNavigationArray, AFUseCase, AFFeatureIDs, AFUseCaseUpgrade = false) {
+export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgrade = false) {
   let featureName
   if(AFUseCase !== 'AllowFunction') {
-    if (featureNavigationArray[featureNavigationArray.length-1] !== 'Close' && featureNavigationArray[featureNavigationArray.length-1] !== 'Cancel' && featureNavigationArray[featureNavigationArray.length-1] !== 'Done'){
-      featureName = featureNavigationArray[featureNavigationArray.length-1]
-    } else {
-      featureName = featureNavigationArray[featureNavigationArray.length-2]
-    }
-    await navigateToFeature(featureNavigationArray, AFFeatureIDs)
+    featureName = featureNavigationArray[featureNavigationArray.length-1]
+    await navigateToFeature(featureNavigationArray)
   }
   await expect(element(by.text('AF Heading Test'))).toExist()
   await expect(element(by.text('AF Body Test'))).toExist()
@@ -421,8 +411,8 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFFeatureIDs, 
 
   if (AFUseCase !== 'AllowFunction') {
     if(AFUseCase === 'DenyContent' && AFUseCaseUpgrade) { 
-      if (featureName !== 'Home' && featureName !== 'Login' && featureName !== 'Profile' && featureName !== 'Settings') {
-          await disableAF(featureNavigationArray, featureNavigationArray[0], featureName, AFFeatureIDs)
+      if (featureName !== 'Profile') {
+        await disableAF(featureNavigationArray, featureNavigationArray[1], featureName, AFUseCase)
       } else {
         await device.uninstallApp()
         await device.installApp()

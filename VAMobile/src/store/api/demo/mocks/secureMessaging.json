@@ -1337,65 +1337,6 @@
   "/v1/messaging/health/messages/2095016/thread?excludeProvidedMessage=true": {
     "data": []
   },
-  "/v0/messaging/health/folders/1937904": {
-    "data": {
-      "id": "1937904",
-      "type": "folders",
-      "attributes": {
-        "folderId": -2,
-        "name": "Custom Folder 2",
-        "count": 5,
-        "unreadCount": 0,
-        "systemFolder": false
-      },
-      "links": {
-        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-1"
-      }
-    }
-  },
-  "/v0/messaging/health/folders/1937904/messages": {
-    "data": [
-      {
-        "id": "2113020",
-        "type": "messages",
-        "attributes": {
-          "messageId": 2113020,
-          "category": "MEDICATIONS",
-          "subject": "Naproxen side effects",
-          "body": null,
-          "hasAttachments": false,
-          "attachment": false,
-          "sentDate": "2021-11-16T17:19:04.000Z",
-          "senderId": 523757,
-          "senderName": "FREEMAN, MELVIN  V",
-          "recipientId": 1918816,
-          "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": "READ"
-        },
-        "links": {
-          "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113020"
-        }
-      }
-    ],
-    "links": {
-      "self": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-2/messages?page=1",
-      "first": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-2/messages?page=1&per_page=10",
-      "prev": null,
-      "next": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-2/messages?page=2&per_page=10",
-      "last": "https://staging-api.va.gov/mobile/v0/messaging/health/folders/-2/messages?page=5&per_page=10"
-    },
-    "meta": {
-      "sort": {
-        "sentDate": "DESC"
-      },
-      "pagination": {
-        "currentPage": 1,
-        "perPage": 10,
-        "totalPages": 1,
-        "totalEntries": 1
-      }
-    }
-  },
   "/v0/messaging/health/folders/-2": {
     "data": {
       "id": "-2",

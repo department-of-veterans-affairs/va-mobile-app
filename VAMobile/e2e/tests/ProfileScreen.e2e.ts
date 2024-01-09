@@ -1,6 +1,5 @@
 import { expect, device, by, element, waitFor } from 'detox'
-import { CommonE2eIdConstants, loginToDemoMode, openProfile } from './utils'
-import { disableAF, enableAF, verifyAF } from './AvailabilityFramework.e2e'
+import { disableAF, enableAF, verifyAF, openSettings, openDeveloperScreen, CommonE2eIdConstants, loginToDemoMode, openProfile } from './utils'
 
 export const ProfileE2eIdConstants = {
   PROFILE_TEXT: 'Profile',
@@ -22,9 +21,14 @@ beforeAll(async () => {
 describe('Profile Screen', () => {
 
   it('should verify AF use case 3 for profile', async() => {
-    await enableAF('WG_Profile', 'AllowFunction', false)
+    await openSettings()
+		await openDeveloperScreen()
+		await element(by.text('Remote Config')).tap()
+    await enableAF('WG_Profile', 'AllowFunction')
+    await device.launchApp({newInstance: true})
+    await loginToDemoMode()
     await openProfile()
-    await verifyAF(undefined, 'AllowFunction', false)
+    await verifyAF(undefined, 'AllowFunction', undefined)
   })
 
   it('should show profile list content', async () => {
@@ -44,7 +48,7 @@ describe('Profile Screen', () => {
   })
 
   it('should disable AF for profile', async () => {
-    await disableAF(undefined, 'WG_Profile', undefined)
+    await disableAF(undefined, 'WG_Profile', undefined, 'AllowFunction')
   })
   
 })

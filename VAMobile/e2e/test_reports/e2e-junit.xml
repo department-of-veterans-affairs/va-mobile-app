@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="6" failures="0" errors="0" time="347.877">
+  <testsuite name="Availability Framework" errors="0" failures="0" skipped="0" timestamp="2024-01-09T20:34:59" time="347.686" tests="6">
+    <testcase classname="Availability Framework [ios] should verify AF use case 1 for: ChildTemplate" name="Availability Framework [ios] should verify AF use case 1 for: ChildTemplate" time="50.161">
+    </testcase>
+    <testcase classname="Availability Framework [ios] should verify AF use case 2 for: ChildTemplate" name="Availability Framework [ios] should verify AF use case 2 for: ChildTemplate" time="47.56">
+    </testcase>
+    <testcase classname="Availability Framework [ios] should verify AF use case 2 Update available for: ChildTemplate" name="Availability Framework [ios] should verify AF use case 2 Update available for: ChildTemplate" time="51.969">
+    </testcase>
+    <testcase classname="Availability Framework [ios] should verify AF use case 1 for: FeatureLandingTemplate" name="Availability Framework [ios] should verify AF use case 1 for: FeatureLandingTemplate" time="50.227">
+    </testcase>
+    <testcase classname="Availability Framework [ios] should verify AF use case 2 for: FeatureLandingTemplate" name="Availability Framework [ios] should verify AF use case 2 for: FeatureLandingTemplate" time="43.484">
+    </testcase>
+    <testcase classname="Availability Framework [ios] should verify AF use case 2 Update available for: FeatureLandingTemplate" name="Availability Framework [ios] should verify AF use case 2 Update available for: FeatureLandingTemplate" time="85.393">
+    </testcase>
+  </testsuite>
+</testsuites>
