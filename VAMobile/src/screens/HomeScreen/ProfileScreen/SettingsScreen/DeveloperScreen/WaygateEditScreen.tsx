@@ -68,6 +68,7 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
         <VATextInput
           inputType="none"
           value={typeOverride}
+          testID="AFTypeTestID"
           onChange={(val) => {
             setTypeOverride(val)
           }}
@@ -76,6 +77,7 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
         <VATextInput
           inputType="none"
           value={errorMsgTitleOverride}
+          testID="AFErrorMsgTitleTestID"
           onChange={(val) => {
             setErrorMsgTitleOverride(val)
           }}
@@ -84,6 +86,7 @@ const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) =>
         <VATextInput
           inputType="none"
           value={errorMsgBodyOverride}
+          testID="AFErrorMsgBodyTestID"
           onChange={(val) => {
             setErrorMsgBodyOverride(val)
           }}

@@ -1,5 +1,6 @@
 import { expect, device, by, element, waitFor } from 'detox'
 import { CommonE2eIdConstants, loginToDemoMode, openProfile } from './utils'
+import { disableAF, enableAF, verifyAF } from './AvailabilityFramework.e2e'
 
 export const ProfileE2eIdConstants = {
   PROFILE_TEXT: 'Profile',
@@ -19,6 +20,13 @@ beforeAll(async () => {
 })
 
 describe('Profile Screen', () => {
+
+  it('should verify AF use case 3 for profile', async() => {
+    await enableAF('WG_Profile', 'AllowFunction', false)
+    await openProfile()
+    await verifyAF(undefined, 'AllowFunction', false)
+  })
+
   it('should show profile list content', async () => {
     await waitFor(element(by.text(ProfileE2eIdConstants.PROFILE_TEXT)))
       .toExist()
@@ -33,6 +41,10 @@ describe('Profile Screen', () => {
   it('should show profile banner elements', async () => {
     await expect(element(by.text(ProfileE2eIdConstants.BANNER_NAME_ID))).toExist()
     await expect(element(by.text(ProfileE2eIdConstants.BANNER_BRANCH_ID))).toExist()
+  })
+
+  it('should disable AF for profile', async () => {
+    await disableAF(undefined, 'WG_Profile', undefined)
   })
   
 })
