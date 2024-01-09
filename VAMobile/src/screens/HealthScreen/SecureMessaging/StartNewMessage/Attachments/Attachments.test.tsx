@@ -84,7 +84,7 @@ context('Attachments', () => {
         promise
       })
       
-      expect(screen.getByLabelText('Attach')).toBeTruthy()
+      expect(screen.getByRole('button', { name: 'Attach' })).toBeTruthy()
       expect(screen.getByLabelText('custom-file-name.docx (0.1 megabytes)')).toBeTruthy()
     })
     

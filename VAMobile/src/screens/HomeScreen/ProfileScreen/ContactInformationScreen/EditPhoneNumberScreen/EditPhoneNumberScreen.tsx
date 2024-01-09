@@ -1,9 +1,10 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
+import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -242,7 +243,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       <Box mb={theme.dimensions.contentMarginBottom}>
         {getFormattedPhoneNumber(phoneData) !== '' && (
           <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-            <VAButton onPress={onDeletePressed} label={t('contactInformation.removeData', { pageName: buttonTitle })} buttonType={ButtonTypesConstants.buttonDestructive} />
+            <Button onPress={onDeletePressed} label={t('contactInformation.removeData', { pageName: buttonTitle })} buttonType={ButtonVariants.Destructive} />
           </Box>
         )}
         <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} border="informational" />
