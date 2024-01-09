@@ -1,6 +1,6 @@
 {
   "name": "RNFBPerf",
-  "version": "14.12.0",
+  "version": "18.7.3",
   "description": "React Native Firebase - React Native Firebase provides native integration with Performance Monitoring to gain insight into key performance characteristics within your React Native application.",
   "summary": "A well tested feature rich Firebase implementation for React Native, supporting iOS & Android.",
   "homepage": "http://invertase.io/oss/react-native-firebase",
@@ -8,11 +8,12 @@
   "authors": "Invertase Limited",
   "source": {
     "git": "https://github.com/invertase/react-native-firebase.git",
-    "tag": "v14.12.0"
+    "tag": "v18.7.3"
   },
   "social_media_url": "http://twitter.com/invertaseio",
   "platforms": {
-    "ios": "10.0"
+    "ios": "11.0",
+    "osx": "10.13"
   },
   "source_files": "ios/**/*.{h,m}",
   "dependencies": {
@@ -23,7 +24,7 @@
 
     ],
     "Firebase/Performance": [
-      "8.15.0"
+      "10.19.0"
     ]
   },
   "static_framework": false

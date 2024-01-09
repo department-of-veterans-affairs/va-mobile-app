@@ -17,7 +17,10 @@ RSYNC_PROTECT_TMP_FILES=(--filter "P .*.??????")
 variant_for_slice()
 {
   case "$1" in
-  "GoogleAppMeasurement.xcframework/ios-arm64_armv7")
+  "GoogleAppMeasurement.xcframework/ios-arm64_x86_64-maccatalyst")
+    echo "maccatalyst"
+    ;;
+  "GoogleAppMeasurement.xcframework/tvos-arm64")
     echo ""
     ;;
   "GoogleAppMeasurement.xcframework/tvos-arm64_x86_64-simulator")
@@ -26,14 +29,11 @@ variant_for_slice()
   "GoogleAppMeasurement.xcframework/macos-arm64_x86_64")
     echo ""
     ;;
-  "GoogleAppMeasurement.xcframework/tvos-arm64")
-    echo ""
-    ;;
-  "GoogleAppMeasurement.xcframework/ios-arm64_x86_64-maccatalyst")
-    echo "maccatalyst"
-    ;;
-  "GoogleAppMeasurement.xcframework/ios-arm64_i386_x86_64-simulator")
+  "GoogleAppMeasurement.xcframework/ios-arm64_x86_64-simulator")
     echo "simulator"
+    ;;
+  "GoogleAppMeasurement.xcframework/ios-arm64")
+    echo ""
     ;;
   esac
 }
@@ -41,8 +41,11 @@ variant_for_slice()
 archs_for_slice()
 {
   case "$1" in
-  "GoogleAppMeasurement.xcframework/ios-arm64_armv7")
-    echo "arm64 armv7"
+  "GoogleAppMeasurement.xcframework/ios-arm64_x86_64-maccatalyst")
+    echo "arm64 x86_64"
+    ;;
+  "GoogleAppMeasurement.xcframework/tvos-arm64")
+    echo "arm64"
     ;;
   "GoogleAppMeasurement.xcframework/tvos-arm64_x86_64-simulator")
     echo "arm64 x86_64"
@@ -50,14 +53,11 @@ archs_for_slice()
   "GoogleAppMeasurement.xcframework/macos-arm64_x86_64")
     echo "arm64 x86_64"
     ;;
-  "GoogleAppMeasurement.xcframework/tvos-arm64")
-    echo "arm64"
-    ;;
-  "GoogleAppMeasurement.xcframework/ios-arm64_x86_64-maccatalyst")
+  "GoogleAppMeasurement.xcframework/ios-arm64_x86_64-simulator")
     echo "arm64 x86_64"
     ;;
-  "GoogleAppMeasurement.xcframework/ios-arm64_i386_x86_64-simulator")
-    echo "arm64 i386 x86_64"
+  "GoogleAppMeasurement.xcframework/ios-arm64")
+    echo "arm64"
     ;;
   esac
 }
@@ -141,5 +141,5 @@ install_xcframework() {
   echo "Copied $source to $destination"
 }
 
-install_xcframework "${PODS_ROOT}/GoogleAppMeasurement/Frameworks/GoogleAppMeasurement.xcframework" "GoogleAppMeasurement/WithoutAdIdSupport" "framework" "ios-arm64_armv7" "ios-arm64_x86_64-maccatalyst" "ios-arm64_i386_x86_64-simulator"
+install_xcframework "${PODS_ROOT}/GoogleAppMeasurement/Frameworks/GoogleAppMeasurement.xcframework" "GoogleAppMeasurement/WithoutAdIdSupport" "framework" "ios-arm64_x86_64-maccatalyst" "ios-arm64_x86_64-simulator" "ios-arm64"
 
