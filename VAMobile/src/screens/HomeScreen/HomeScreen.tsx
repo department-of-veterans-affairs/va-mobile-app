@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { AppointmentsState, PrescriptionState } from 'store/slices'
+import { AppointmentsState, ClaimsAndAppealsState, PrescriptionState } from 'store/slices'
 import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { Events } from 'constants/analytics'
@@ -42,6 +42,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
+  const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = () => {
@@ -98,6 +99,16 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
               title={`${t('prescription.title')}`}
               subText={`(${prescriptionStatusCount.active} ${t('active')})`}
               onPress={() => Linking.openURL('vamobile://prescriptions')}
+              borderWidth={theme.dimensions.buttonBorderWidth}
+            />
+          </Box>
+        )}
+        {Number(activeClaimsCount) > 0 && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <LargeNavButton
+              title={`${t('claims.title')}`}
+              subText={`(${activeClaimsCount} ${t('open')})`}
+              onPress={() => Linking.openURL('vamobile://claims')}
               borderWidth={theme.dimensions.buttonBorderWidth}
             />
           </Box>
