@@ -508,12 +508,8 @@ type ClaimsAndAppealsErrorServiceTypes = 'appeals' | 'claims'
 
 export type ClaimsAndAppealsGetDataMeta = {
   errors?: Array<ClaimsAndAppealsGetDataMetaError>
-  pagination: {
-    currentPage: number
-    perPage: number
-    totalEntries: number
-  }
-  activeClaimcCount: number
+  pagination: ClaimsAndAppealsGetDataMetaPagination
+  activeClaimsCount: number
   // This property does not exist in api, used to track if the data(ClaimsAndAppealsGetData) return was from an api call
   dataFromStore: boolean
 }

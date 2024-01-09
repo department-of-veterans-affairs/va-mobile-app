@@ -12,8 +12,58 @@ import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testU
 
 import ClaimsHistoryScreen from './ClaimsHistoryScreen'
 
-const mockPayload: ClaimsAndAppealsListPayload = {
-  data: [
+const activeClaimsAndAppealsList: api.ClaimsAndAppealsList = [
+  {
+    id: '1',
+    type: 'appeal',
+    attributes: {
+      subtype: 'supplementalClaim',
+      completed: false,
+      decisionLetterSent: false,
+      dateFiled: '2020-10-22',
+      updatedAt: '2020-10-28',
+      displayTitle: 'supplemental claim for disability compensation',
+    },
+  },
+  {
+    id: '0',
+    type: 'claim',
+    attributes: {
+      subtype: 'Disability',
+      completed: false,
+      decisionLetterSent: false,
+      dateFiled: '2020-11-13',
+      updatedAt: '2020-11-30',
+      displayTitle: 'Disability',
+    },
+  },
+  {
+    id: '4',
+    type: 'claim',
+    attributes: {
+      subtype: 'Compensation',
+      completed: false,
+      decisionLetterSent: false,
+      dateFiled: '2020-06-11',
+      updatedAt: '2020-12-07',
+      displayTitle: 'Compensation',
+    },
+  },
+]
+
+const mockPagination: ClaimsAndAppealsGetDataMeta = {
+  dataFromStore: false,
+  pagination: {
+    currentPage: 1,
+    perPage: 10,
+    totalEntries: 3,
+  },
+  activeClaimsCount: 0,
+}
+
+const mockPaginationClaimsServiceError: ClaimsAndAppealsGetDataMeta = {
+  ...mockPagination,
+  errors: [
     {
       id: '0',
       type: 'appeal',

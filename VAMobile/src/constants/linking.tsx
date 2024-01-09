@@ -1,16 +1,13 @@
+import { LinkingOptions } from '@react-navigation/native'
+import { NavigationState } from 'react-navigation'
 import React, { ReactElement } from 'react'
 
-import { LinkingOptions, NavigationState } from '@react-navigation/native'
-
+import { LoadingComponent } from '../components'
+import { UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import queryClient from 'api/queryClient'
-import { UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
 
-import { LoadingComponent } from '../components'
-
-const authorizedServices = queryClient.getQueryData(
-  authorizedServicesKeys.authorizedServices,
-) as UserAuthorizedServicesData
+const authorizedServices = queryClient.getQueryData(authorizedServicesKeys.authorizedServices) as UserAuthorizedServicesData
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const linking: LinkingOptions<any> = {
@@ -25,6 +22,7 @@ export const linking: LinkingOptions<any> = {
         screens: {
           HealthTab: {
             screens: {
+              ClaimsHistory: 'claims',
               PrescriptionHistory: 'prescriptions',
               UpcomingAppointmentDetails: 'appointments/:vetextID',
             },
@@ -100,6 +98,24 @@ export const linking: LinkingOptions<any> = {
                   name: 'HealthTab',
                   state: {
                     routes: [{ name: 'Health' }, { name: 'PrescriptionHistory' }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
+    } else if (pathParts[0] === 'claims') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'BenefitsTab',
+                  state: {
+                    routes: [{ name: 'Benefits' }, ...(authorizedServices?.decisionLetters ? [{ name: 'Claims' }] : []), { name: 'ClaimsHistory' }],
                   },
                 },
               ],
