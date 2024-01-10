@@ -28,7 +28,6 @@ NS_SWIFT_NAME(Analytics)
 ///     <li>ad_query</li>
 ///     <li>ad_reward</li>
 ///     <li>adunit_exposure</li>
-///     <li>app_background</li>
 ///     <li>app_clear_data</li>
 ///     <li>app_exception</li>
 ///     <li>app_remove</li>
@@ -110,6 +109,20 @@ NS_SWIFT_NAME(Analytics)
 ///     session terminates.
 + (void)setSessionTimeoutInterval:(NSTimeInterval)sessionTimeoutInterval;
 
+/// Asynchronously retrieves the identifier of the current app session.
+///
+/// The session ID retrieval could fail due to Analytics collection disabled, app session expired,
+/// etc.
+///
+/// @param completion The completion handler to call when the session ID retrieval is complete. This
+///     handler is executed on a system-defined global concurrent queue.
+///     This completion handler takes the following parameters:
+///     <b>sessionID</b> The identifier of the current app session. The value is undefined if the
+///         request failed.
+///     <b>error</b> An error object that indicates why the request failed, or `nil` if the request
+///         was successful.
++ (void)sessionIDWithCompletion:(void (^)(int64_t sessionID, NSError *_Nullable error))completion;
+
 /// Returns the unique ID for this instance of the application or `nil` if
 /// `ConsentType.analyticsStorage` has been set to `ConsentStatus.denied`.
 ///
@@ -129,7 +142,7 @@ NS_SWIFT_NAME(Analytics)
 /// @param parameters Parameters to be added to the dictionary of parameters added to every event.
 ///     They will be added to the dictionary of default event parameters, replacing any existing
 ///     parameter with the same name. Valid parameters are String, Int, and Double. Setting a key's
-///     value to NSNull() will clear that parameter. Passing in a `nil` dictionary will clear all
+///     value to `NSNull()` will clear that parameter. Passing in a `nil` dictionary will clear all
 ///     parameters.
 + (void)setDefaultEventParameters:(nullable NSDictionary<NSString *, id> *)parameters;
 
