@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { enableAF, disableAF, verifyAF, openSettings, openDeveloperScreen, loginToDemoMode, openPersonalInformation, openProfile } from './utils'
+import { enableAF, verifyAF, openSettings, openDeveloperScreen, loginToDemoMode, openPersonalInformation, openProfile } from './utils'
 
 export const PersonalInfoConstants = {
   PERSONAL_INFORMATION_TEXT: 'Personal information',

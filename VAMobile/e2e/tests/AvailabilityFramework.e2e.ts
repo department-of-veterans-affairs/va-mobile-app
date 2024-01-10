@@ -1,4 +1,4 @@
-import {enableAF, verifyAF, resetInAppReview } from './utils'
+import {enableAF, verifyAF } from './utils'
 
 var AFNavigation = [
   ['ChildTemplate', 'WG_Profile', 'Profile'],
@@ -18,7 +18,6 @@ describe('Availability Framework', () => {
     })
 
     it('should verify AF use case 2 for: ' + AFNavigation[x][0], async() => {
-      console.log(AFNavigation[x][1])
       await enableAF(AFNavigation[x][1], 'DenyContent')
       await verifyAF(AFNavigation[x], 'DenyContent')
     })

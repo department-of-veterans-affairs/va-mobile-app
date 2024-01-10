@@ -142,7 +142,7 @@ const PreferredNameScreen: FC<PreferredNameScreenProps> = ({ navigation }) => {
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}
       testID="preferredNamePageTestID">
       {preferredNameMutation.isLoading ? (
-        <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')}/>
+        <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
       ) : (
         <Box mx={theme.dimensions.gutter}>
           <FormWrapper

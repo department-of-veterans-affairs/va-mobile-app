@@ -99,7 +99,7 @@ describe('Home Screen', () => {
 			await element(by.text('Skip this update')).tap()
 		} catch (e) {} 
 		await element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID)).tap()
-		await verifyAF(undefined, 'AllowFunction', undefined, false)
+		await verifyAF(undefined, 'AllowFunction', undefined)
 		await expect(element(by.text('Call MyVA411'))).toExist()
 		await expect(element(by.text('MyVA411 is our main VA information line. We can help connect you to any of our VA contact centers.'))).toExist()
 		if (device.getPlatform() === 'android') {
@@ -139,6 +139,6 @@ describe('Home Screen', () => {
 	})
 
 	it('should disable AF use case 3', async() => {
-		await disableAF(undefined, 'WG_Home', undefined, undefined, 'AllowFunction')
+		await disableAF(undefined, 'WG_Home', undefined, 'AllowFunction')
 	})
 })
