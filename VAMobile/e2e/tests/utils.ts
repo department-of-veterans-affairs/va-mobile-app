@@ -371,9 +371,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
 
 const navigateToFeature = async (featureNavigationArray) => {
   for(let j = 2; j < featureNavigationArray.length; j++) {
-    if (featureNavigationArray[j] !== 'Close' && featureNavigationArray[j] !== 'Cancel' && featureNavigationArray[j] !== 'Done'){
-      await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
-    } 
+    await element(by.text(featureNavigationArray[j])).tap()
   }
 }
 
