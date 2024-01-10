@@ -15,6 +15,20 @@ export const Events = {
       },
     }
   },
+  vama_af_shown: (af_status: string, firebase_screen: string): Event => {
+    return {
+      name: 'vama_af_shown',
+      params: {
+        af_status,
+        firebase_screen,
+      },
+    }
+  },
+  vama_af_updated: (): Event => {
+    return {
+      name: 'vama_af_updated',
+    }
+  },
   vama_appt_cancel: (
     isPendingAppointment: boolean,
     apt_id: string | undefined,
@@ -30,6 +44,14 @@ export const Events = {
         apt_status: apt_status,
         apt_type: apt_type,
         days_to_apt: days_to_apt,
+      },
+    }
+  },
+  vama_appt_deep_link_fail: (vetext_id: string): Event => {
+    return {
+      name: 'vama_appt_deep_link_fail',
+      params: {
+        vetext_id,
       },
     }
   },

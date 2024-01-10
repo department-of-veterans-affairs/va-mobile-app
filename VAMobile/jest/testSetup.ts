@@ -70,6 +70,22 @@ jest.mock('../src/utils/hooks', () => {
   }
 })
 
+jest.mock('../src/utils/waygateConfig', () => {
+  let original = jest.requireActual('../src/utils/waygateConfig')
+  return {
+    ...original,
+    waygateEnabled: jest.fn().mockReturnValue({enabled: true,
+      errorMsgTitle: undefined,
+      errorMsgBody: undefined,
+      appUpdateButton: false,
+      allowFunction: false,
+      denyAccess: false,
+    }),
+    waygateNativeAlert: jest.fn().mockReturnValue(true),
+    screenContentAllowed: jest.fn().mockReturnValue(true),
+  }
+})
+
 jest.mock('../src/utils/platform', () => {
   let original = jest.requireActual('../src/utils/platform')
   return {
@@ -140,12 +156,6 @@ jest.mock('@react-native-async-storage/async-storage', () => {
     setItem: jest.fn(() => Promise.resolve()),
     getItem: jest.fn(() => Promise.resolve()),
     removeItem: jest.fn(() => Promise.resolve()),
-  }
-})
-
-jest.mock('@react-native-cookies/cookies', () => {
-  return {
-    clearAll: jest.fn(),
   }
 })
 

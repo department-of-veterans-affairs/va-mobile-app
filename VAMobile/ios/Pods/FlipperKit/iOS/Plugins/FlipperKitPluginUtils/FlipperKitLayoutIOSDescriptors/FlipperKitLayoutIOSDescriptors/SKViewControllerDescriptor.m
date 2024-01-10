@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -34,6 +34,11 @@
 - (void)setHighlighted:(BOOL)highlighted forNode:(UIViewController*)node {
   SKNodeDescriptor* descriptor = [self descriptorForClass:[UIView class]];
   [descriptor setHighlighted:highlighted forNode:node.view];
+}
+
+- (UIImage*)getSnapshot:(BOOL)includeChildren forNode:(UIViewController*)node {
+  SKNodeDescriptor* descriptor = [self descriptorForClass:[UIView class]];
+  return [descriptor getSnapshot:includeChildren forNode:node.view];
 }
 
 - (void)hitTest:(SKTouch*)touch forNode:(UIViewController*)node {

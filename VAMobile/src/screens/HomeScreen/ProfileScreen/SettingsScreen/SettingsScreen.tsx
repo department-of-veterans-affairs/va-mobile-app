@@ -1,3 +1,4 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,7 +7,7 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, logout, setBiometricsPreference } from 'store/slices'
-import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, VAButton } from 'components'
+import { Box, ButtonDecoratorType, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -16,6 +17,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useAppDispatch, useDestructiveActionSheet, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
@@ -74,12 +76,15 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   }
 
   const onManage = () => {
-    navigation.navigate('ManageYourAccount')
+    if (waygateNativeAlert('WG_ManageYourAccount')) {
+      navigation.navigate('ManageYourAccount')
+    }
   }
 
-  const notificationsRow: SimpleListItemObj = {
-    text: t('notifications.title'),
-    onPress: navigateTo('NotificationsSettings'),
+  const onNotifications = () => {
+    if (waygateNativeAlert('WG_NotificationsSettings')) {
+      navigation.navigate('NotificationsSettings')
+    }
   }
 
   const onDebug = navigateTo('Developer')
@@ -108,7 +113,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     { text: t('manageAccount.title'), onPress: onManage },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? biometricRow : [],
-    notificationsRow,
+    { text: t('notifications.title'), onPress: onNotifications },
     { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
     featureEnabled('inAppRecruitment') ? { text: t('inAppRecruitment.giveFeedback'), a11yHinText: t('inAppRecruitment.giveFeedback.a11yHint'), onPress: onFeedback } : [],
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
@@ -129,26 +134,26 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     )
   }
 
-  if (settingBiometricPreference) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')}>
-        <LoadingComponent text={t('biometricsPreference.saving')} />
-      </FeatureLandingTemplate>
-    )
-  }
+  const loadingCheck = settingBiometricPreference
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')}>
-      <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
-        <Box mb={theme.dimensions.standardMarginBetween}>
-          <SimpleList items={items} />
-          {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
-        </Box>
-        <Box px={theme.dimensions.gutter}>
-          <VAButton onPress={onShowConfirm} label={t('logout.title')} buttonType={ButtonTypesConstants.buttonDestructive} />
-        </Box>
-      </Box>
-      <AppVersionAndBuild />
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')} testID="settingsID">
+      {loadingCheck ? (
+        <LoadingComponent text={t('biometricsPreference.saving')} />
+      ) : (
+        <>
+          <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <SimpleList items={items} />
+              {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
+            </Box>
+            <Box px={theme.dimensions.gutter}>
+              <Button onPress={onShowConfirm} label={t('logout.title')} buttonType={ButtonVariants.Destructive} />
+            </Box>
+          </Box>
+          <AppVersionAndBuild />
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }

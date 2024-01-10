@@ -1,8 +1,9 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
+import { AlertBox, Box, BoxProps, CrisisLineCta, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
@@ -18,6 +19,7 @@ import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'ut
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useStartAuth } from 'utils/hooks/auth'
+import { waygateNativeAlert } from 'utils/waygateConfig'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
@@ -61,7 +63,11 @@ const LoginScreen: FC = () => {
     })
   }
 
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
+  const onCrisisLine = () => {
+    if (waygateNativeAlert('WG_VeteransCrisisLine')) {
+      navigateTo('VeteransCrisisLine')()
+    }
+  }
 
   const findLocationProps: BoxProps = {
     flexDirection: 'row',
@@ -99,12 +105,13 @@ const LoginScreen: FC = () => {
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
+      <WaygateWrapper waygateName="WG_Login" />
       <Box flex={1} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween} testID="va-icon">
           <VAIcon testID="VAIcon" name={'Logo'} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={80}>
-          <VAButton onPress={onLoginInit} label={t('signin')} buttonType={ButtonTypesConstants.buttonWhite} hideBorder={true} />
+          <Button onPress={onLoginInit} label={t('signin')} buttonType={ButtonVariants.White} />
           <Pressable onPress={onFacilityLocator} {...testIdProps(a11yLabelVA(t('findLocation.title')))} accessibilityRole="button">
             <Box {...findLocationProps}>
               <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>

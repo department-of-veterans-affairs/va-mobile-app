@@ -12,6 +12,7 @@ import { RootState } from 'store'
 import { VaccineState, getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/slices/vaccineSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'VaccineDetails'>
@@ -33,7 +34,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
   const placeHolder = t('noneNoted')
 
   useEffect(() => {
-    if (vaccine && !vaccineLocationsById[vaccineId]) {
+    if (screenContentAllowed('WG_VaccineDetails') && vaccine && !vaccineLocationsById[vaccineId]) {
       dispatch(getVaccineLocation(vaccineId, vaccine.relationships?.location?.data?.id || ''))
     }
   }, [dispatch, vaccineLocationsById, vaccineId, vaccine])

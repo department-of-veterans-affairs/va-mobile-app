@@ -290,6 +290,7 @@ Product will need to create on in the Github folder and link it here.
 - [ ] Where updates need to be communicated (Team of Teams, MHV Weekly Standup, other, etc) 
 - [ ] What approvals will we need (ex. Internal POs, External POs, CAIA, external, etc) 
 - [ ] How and when are we going to measure success / failure
+- [ ] Does In-App App Store Feedback need to be modified for this project
 - [ ] Other:
       
 </details>
@@ -381,7 +382,7 @@ Product will need to create on in the Github folder and link it here.
 - [ ] Determine if analytics can be tested by QA - if so coordinate with QA 
 - [ ] Modify or create dashboard to account for this feature 
 - [ ] Determine how long after production that analytics can be measured and reviewed 
-- [ ]  Other:
+- [ ] Other:
  
 </details>
 

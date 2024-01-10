@@ -1,23 +1,11 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { ScrollView, TextInput } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AddressData, addressTypeFields, addressTypes } from 'api/types'
-import {
-  AlertBox,
-  Box,
-  ButtonTypesConstants,
-  FieldType,
-  FormFieldType,
-  FormWrapper,
-  FullScreenSubtask,
-  LoadingComponent,
-  PickerItem,
-  VAButton,
-  VATextInputTypes,
-  ValidationFunctionItems,
-} from 'components'
+import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, PickerItem, VATextInputTypes, ValidationFunctionItems } from 'components'
 import { Countries } from 'constants/countries'
 import { GenerateAddressMessages } from 'translations/en/functions'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
@@ -304,33 +292,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     state !== initialState ||
     zipCode !== initialZipCode
 
-  if (deletingAddress || savingAddress || validatingAddress) {
-    const loadingText = deletingAddress ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')
-
-    return (
-      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={onCancel}>
-        <LoadingComponent text={loadingText} />
-      </FullScreenSubtask>
-    )
-  }
-
-  if (showAddressValidation && validationData) {
-    const addressValues = getAddressValues()
-    const addressValidationProps = {
-      addressEntered: getAddressDataPayload(addressValues, contactInformation),
-      addressId: contactInformation?.[addressType]?.id || 0,
-      snackbarMessages: snackbarMessages,
-      validationData,
-      saveAddress,
-      setShowAddressValidation,
-    }
-    return (
-      <FullScreenSubtask title={displayTitle} leftButtonText={t('cancel')} onLeftButtonPress={onCancel}>
-        <AddressValidation {...addressValidationProps} />
-      </FullScreenSubtask>
-    )
-  }
-
   const clearFieldsAndErrors = (): void => {
     setAddressLine1('')
     setAddressLine2('')
@@ -565,41 +526,58 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     })
   }
 
+  const loadingCheck = deletingAddress || savingAddress || validatingAddress
+  const addressValidation = showAddressValidation && validationData
+  const addressValues = getAddressValues()
+
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
       title={displayTitle}
       leftButtonText={t('cancel')}
       onLeftButtonPress={onCancel}
-      rightButtonText={t('save')}
-      onRightButtonPress={() => setOnSaveClicked(true)}
+      rightButtonText={!loadingCheck ? t('save') : undefined}
+      onRightButtonPress={!loadingCheck ? () => setOnSaveClicked(true) : undefined}
       testID="EditAddressTestID">
-      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
-            <VAButton
-              onPress={onDeletePressed}
-              label={t('contactInformation.removeData', { pageName: lowerCaseTitle })}
-              buttonType={ButtonTypesConstants.buttonDestructive}
-              testID="EditAddressSaveTestID"
-            />
-          </Box>
-        )}
-        {formContainsError && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editAddress.alertError')} border="error" scrollViewRef={scrollViewRef} focusOnError={onSaveClicked} />
-          </Box>
-        )}
-        <FormWrapper
-          fieldsList={formFieldsList}
-          onSave={onSave}
-          setFormContainsError={setFormContainsError}
-          resetErrors={resetErrors}
-          setResetErrors={setResetErrors}
-          onSaveClicked={onSaveClicked}
-          setOnSaveClicked={setOnSaveClicked}
+      {loadingCheck ? (
+        <LoadingComponent text={deletingAddress ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')} />
+      ) : addressValidation ? (
+        <AddressValidation
+          addressEntered={getAddressDataPayload(addressValues, contactInformation)}
+          addressId={contactInformation?.[addressType]?.id || 0}
+          snackbarMessages={snackbarMessages}
+          validationData={validationData}
+          saveAddress={saveAddress}
+          setShowAddressValidation={setShowAddressValidation}
         />
-      </Box>
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <Button
+                onPress={onDeletePressed}
+                label={t('contactInformation.removeData', { pageName: lowerCaseTitle })}
+                buttonType={ButtonVariants.Destructive}
+                testID="EditAddressSaveTestID"
+              />
+            </Box>
+          )}
+          {formContainsError && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AlertBox title={t('editAddress.alertError')} border="error" scrollViewRef={scrollViewRef} focusOnError={onSaveClicked} />
+            </Box>
+          )}
+          <FormWrapper
+            fieldsList={formFieldsList}
+            onSave={onSave}
+            setFormContainsError={setFormContainsError}
+            resetErrors={resetErrors}
+            setResetErrors={setResetErrors}
+            onSaveClicked={onSaveClicked}
+            setOnSaveClicked={setOnSaveClicked}
+          />
+        </Box>
+      )}
     </FullScreenSubtask>
   )
 }
