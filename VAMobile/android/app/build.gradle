@@ -117,7 +117,18 @@ android {
     flavorDimensions "default"
 
     compileSdkVersion rootProject.ext.compileSdkVersion
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlin {
+        jvmToolchain {
+            languageVersion.set(JavaLanguageVersion.of("17"))
+        }
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
     defaultConfig {
         applicationId "gov.va.mobileapp"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -232,8 +243,13 @@ dependencies {
     }
 
     implementation project(':react-native-notifications')
-    implementation 'com.google.firebase:firebase-core:19.0.0'
-    implementation "com.google.firebase:firebase-iid"
+    implementation platform('com.google.firebase:firebase-bom:32.7.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation("com.google.firebase:firebase-inappmessaging")
+    implementation("com.google.firebase:firebase-inappmessaging-display")
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-perf'
+    implementation("com.google.firebase:firebase-config")
 
     // playstore core for in-app reviews
     implementation 'com.google.android.play:core:1.10.0'
@@ -244,9 +260,6 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.3.1'
     androidTestImplementation('com.wix:detox:+') { exclude module: "protobuf-lite" }
-    androidTestImplementation('com.google.firebase:firebase-iid'){
-        exclude group: 'com.google.firebase:firebase-iid'
-    }
 
     implementation project(':lottie-react-native')
 }
