@@ -1109,7 +1109,7 @@
           "hearing loss (Increase)",
           " kidney removal of (New)"
         ],
-        "vaRepresentative": "Checking this is pronounced",
+        "vaRepresentative": null,
         "eventsTimeline": [
           {
             "trackedItemId": null,
