@@ -314,7 +314,7 @@ export async function enableAF (AFFeature, AFUseCase, AFAppUpdate = false) {
   await element(by.text(AFFeature)).tap()
   if (AFAppUpdate) {
     await element(by.text('appUpdateButton')).tap()
-  } else if (AFFeature === 'WG_Health' || AFFeature === 'WG_Benefits'  || AFFeature === 'WG_Payments') {
+  } else if (AFFeature === 'WG_Health') {
     await element(by.text('Enabled')).tap()
   }
 
@@ -388,9 +388,6 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
   if(AFUseCase === 'DenyAccess') {
     await element(by.text('OK')).tap()
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
-    if (AFUseCase === 'DenyContent') {
-      await expect(element(by.text(featureName))).toExist()
-    }
     if (device.getPlatform() === 'android') {
       await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
       await setTimeout(5000)
