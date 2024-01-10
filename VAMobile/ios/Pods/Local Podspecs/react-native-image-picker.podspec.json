@@ -1,6 +1,6 @@
 {
   "name": "react-native-image-picker",
-  "version": "5.7.0",
+  "version": "7.1.0",
   "summary": "A React Native module that allows you to use native UI to select media from the device library or directly from the camera",
   "license": "MIT",
   "authors": "Johan du Toit (Johan-dutoit)",
@@ -10,15 +10,21 @@
   },
   "source": {
     "git": "https://github.com/react-native-image-picker/react-native-image-picker.git",
-    "tag": "v5.7.0"
+    "tag": "v7.1.0"
   },
   "source_files": "ios/*.{h,m,mm}",
-  "pod_target_xcconfig": {
-    "OTHER_CPLUSPLUSFLAGS": "-fcxx-modules"
-  },
+  "frameworks": "MobileCoreServices",
+  "compiler_flags": "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32",
   "dependencies": {
     "React-Core": [
 
+    ],
+    "RCT-Folly": [
+      "2021.07.22.00"
     ]
+  },
+  "pod_target_xcconfig": {
+    "HEADER_SEARCH_PATHS": "\"$(PODS_ROOT)/boost\"",
+    "CLANG_CXX_LANGUAGE_STANDARD": "c++17"
   }
 }
