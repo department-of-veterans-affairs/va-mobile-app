@@ -27,5 +27,4 @@ describe(':android: Availability Framework', () => {
       await verifyAF(AFNavigation[x], 'DenyContent', true)
     })
   }
-
 })
