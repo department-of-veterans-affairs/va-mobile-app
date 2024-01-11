@@ -7,7 +7,6 @@ context('format utilities', () => {
   Settings.now = () => expectNow.toMillis()
   Settings.defaultZone = 'utc'
 
-  
   let exampleDateTimes = {
     new: '2022-01-20T06:13:27Z',
     old: '2022-01-19T06:13:27Z',
@@ -20,11 +19,11 @@ context('format utilities', () => {
     })
 
     it('should get the date if older than 24 hrs', async () => {
-      expect(getFormattedMessageTime(exampleDateTimes.old)).toBe('1/19/2022')
+      expect(getFormattedMessageTime(exampleDateTimes.old)).toEqual('1/19/2022')
     })
 
     it('should show invalid when ISO incorrect', async () => {
-      expect(getFormattedMessageTime(exampleDateTimes.invalid)).toBe('Invalid DateTime')
+      expect(getFormattedMessageTime(exampleDateTimes.invalid)).toEqual('Invalid DateTime')
     })
   })
 })
