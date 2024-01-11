@@ -6,8 +6,8 @@ buildscript {
         minSdkVersion = 26
         compileSdkVersion = 33
         targetSdkVersion = 33
-        KOTLIN_VERSION = "1.6.10"
-        kotlinVersion = "1.6.10"
+        KOTLIN_VERSION = "1.8.0"
+        kotlinVersion = "1.8.0"
 
         if (System.properties['os.arch'] == "aarch64") {
             // For M1 Users we need to use the NDK 24 which added support for aarch64
@@ -26,7 +26,7 @@ buildscript {
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("de.undercouch:gradle-download-task:5.0.1")
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
-        classpath 'com.google.gms:google-services:4.3.14'
+        classpath 'com.google.gms:google-services:4.4.0'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
         classpath 'com.google.firebase:perf-plugin:1.4.1'
         // NOTE: Do not place your application dependencies here; they belong
