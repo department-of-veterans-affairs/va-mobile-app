@@ -157,11 +157,11 @@ const getListItemsForPayments = (
  * @returns tuple of the first and last day of the year
  */
 export const getFirstAndLastDayOfYear = (year?: string): [string | undefined, string | undefined] => {
-  let firstDayOfyear: string | undefined = undefined
-  let lastDayOfyear: string | undefined = undefined
+  let firstDayOfyear: string | undefined
+  let lastDayOfyear: string | undefined
   if (year) {
-    let startDay = DateTime.fromISO(year).set({ month: 12, day: 31, hour: 23, minute: 59, millisecond: 999 }).endOf('day').toISO()
-    let endDay = DateTime.fromISO(year).set({ month: 12, day: 31, hour: 23, minute: 59, millisecond: 999 }).endOf('day').toISO()
+    const startDay = DateTime.fromISO(year).set({ month: 12, day: 31, hour: 23, minute: 59, millisecond: 999 }).endOf('day').toISO()
+    const endDay = DateTime.fromISO(year).set({ month: 12, day: 31, hour: 23, minute: 59, millisecond: 999 }).endOf('day').toISO()
     if (startDay && endDay) {
       firstDayOfyear = startDay
       lastDayOfyear = endDay
