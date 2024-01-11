@@ -15,7 +15,7 @@ context('format utilities', () => {
 
   describe('format date time and year', () => {
     it('should get the time if within 24 hrs', async () => {
-      expect(getFormattedMessageTime(exampleDateTimes.new)).toBe('6:13 AM')
+      expect(getFormattedMessageTime(exampleDateTimes.new)).toEqual('6:13 AM')
     })
 
     it('should get the date if older than 24 hrs', async () => {
