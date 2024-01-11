@@ -1,7 +1,7 @@
 import {enableAF, verifyAF } from './utils'
 
 var AFNavigation = [
-  ['ChildTemplate', 'WG_Profile', 'Profile'],
+  ['ChildTemplate', 'WG_DisabilityRatings', 'Benefits', 'Disability rating'],
   ['FeatureLandingTemplate', 'WG_PersonalInformation', 'Profile', 'Personal information'],
   ['LargePanel', 'WG_HowDoIUpdate', 'Profile', 'Personal information', 'How to update or fix an error in your legal name'],
   ['FullScreenSubtask', 'WG_PreferredName', 'Profile', 'Personal information', 'Preferred name'],

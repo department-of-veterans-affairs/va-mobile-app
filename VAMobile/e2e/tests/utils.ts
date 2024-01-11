@@ -299,10 +299,6 @@ export async function backButton() {
 
 export async function enableAF (AFFeature, AFUseCase, AFAppUpdate = false) {
   if(AFUseCase !== 'AllowFunction') {
-    if (AFFeature === 'WG_Profile') {
-      await device.uninstallApp()
-      await device.installApp()
-    } 
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
     await loginToDemoMode()
     await openProfile()
@@ -318,9 +314,7 @@ export async function enableAF (AFFeature, AFUseCase, AFAppUpdate = false) {
     await element(by.text('Enabled')).tap()
   }
 
-  if (AFFeature === 'WG_Profile')  {
-    await element(by.text('Enabled')).tap()
-  } else if (!AFAppUpdate) {
+  if(!AFAppUpdate) {
     if (AFUseCase === 'AllowFunction') {
       await element(by.text('appUpdateButton')).tap()
       await element(by.text('Enabled')).tap()
@@ -406,12 +400,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
 
   if (AFUseCase !== 'AllowFunction') {
     if(AFUseCase === 'DenyContent' && AFUseCaseUpgrade) { 
-      if (featureName !== 'Profile') {
-        await disableAF(featureNavigationArray, featureNavigationArray[1], featureName, AFUseCase)
-      } else {
-        await device.uninstallApp()
-        await device.installApp()
-      }
+      await disableAF(featureNavigationArray, featureNavigationArray[1], featureName, AFUseCase)
     }
   }
 }
