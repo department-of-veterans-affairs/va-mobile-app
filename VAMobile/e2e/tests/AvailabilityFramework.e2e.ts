@@ -8,7 +8,7 @@ var AFNavigation = [
   ['CategoryLanding', 'WG_Health', 'Health']
  ]
 
-describe('Availability Framework', () => {
+describe(':android: Availability Framework', () => {
   for (let x = 0; x < AFNavigation.length; x++) {
     it('should verify AF use case 1 for: ' + AFNavigation[x][0], async() => {
       if(AFNavigation[x][1] !== 'WG_Health') {
