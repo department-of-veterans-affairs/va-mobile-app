@@ -384,7 +384,6 @@ describe('Prescriptions Screen', () => {
   it('verify tapping close from refill request summary', async () => {
     await element(by.text('Close')).tap()
     await expect(element(by.text('AMLODIPINE BESYLATE 10MG TAB'))).toExist()
-    await element(by.text('Prescriptions')).tap()
   })
 
   validateSort('Fill date (newest to oldest)', 'LAMIVUDINE 100MG TAB', 'OLANZAPINE 10MG RAPID DISINTEGRATING TAB', true)
