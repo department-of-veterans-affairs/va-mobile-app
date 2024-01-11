@@ -316,7 +316,6 @@ export async function enableAF (AFFeature, AFUseCase, AFAppUpdate = false) {
 
   if(!AFAppUpdate) {
     if (AFUseCase === 'AllowFunction') {
-      await element(by.text('appUpdateButton')).tap()
       await element(by.text('Enabled')).tap()
     } else if (AFUseCase === 'DenyAccess') {
       await element(by.text('Enabled')).tap()
