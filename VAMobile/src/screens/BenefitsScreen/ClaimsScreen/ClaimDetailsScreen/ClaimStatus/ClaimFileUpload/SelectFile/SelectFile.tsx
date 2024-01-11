@@ -1,10 +1,11 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import DocumentPicker from 'react-native-document-picker'
 import React, { FC, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, TextArea, TextView } from 'components'
 import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Events } from 'constants/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
@@ -135,7 +136,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
         </TextArea>
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <VAButton onPress={onSelectFile} label={t('fileUpload.selectAFile')} testID={buttonTestId} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={onSelectFile} label={t('fileUpload.selectAFile')} testID={buttonTestId} />
         </Box>
       </Box>
     </FullScreenSubtask>
