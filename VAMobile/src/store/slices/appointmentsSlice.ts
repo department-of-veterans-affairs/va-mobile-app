@@ -211,11 +211,11 @@ export const findAppointmentErrors = (appointmentsMetaErrors?: Array<Appointment
 
 // Return data that looks like AppointmentsGetData if data was loaded previously otherwise null
 const getLoadedAppointments = (
-    appointments: Array<AppointmentData>,
-    paginationData: AppointmentsMetaPagination,
-    latestPage: number,
-    pageSize: number,
-    upcomingAppointmentsCount?: number,
+  appointments: Array<AppointmentData>,
+  paginationData: AppointmentsMetaPagination,
+  latestPage: number,
+  pageSize: number,
+  upcomingAppointmentsCount?: number,
   ) => {
   const loadedAppointments = getItemsInRange(appointments, latestPage, pageSize)
   // do we have the appointments?
