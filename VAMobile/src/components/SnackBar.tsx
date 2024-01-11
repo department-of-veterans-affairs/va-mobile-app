@@ -1,3 +1,4 @@
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { StyleProp, TouchableOpacity, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
@@ -132,9 +133,9 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const vibrate = (): void => {
     if (!isUndo) {
-      triggerHaptic('notificationError')
+      triggerHaptic(HapticFeedbackTypes.notificationError)
     } else {
-      triggerHaptic('notificationSuccess')
+      triggerHaptic(HapticFeedbackTypes.notificationSuccess)
     }
   }
 

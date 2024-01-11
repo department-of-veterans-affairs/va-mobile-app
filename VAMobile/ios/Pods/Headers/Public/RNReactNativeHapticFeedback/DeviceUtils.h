@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-haptic-feedback/ios/DeviceUtils.h
+../../../../../node_modules/react-native-haptic-feedback/ios/RNHapticFeedback/DeviceUtils.h
