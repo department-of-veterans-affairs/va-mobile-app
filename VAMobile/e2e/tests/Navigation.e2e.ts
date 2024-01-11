@@ -39,7 +39,7 @@ var navigationDic = {
 	['Prescriptions', 'Prescriptions'],
 	[['Prescriptions', 'Get prescription details'], 'ACETAMINOPHEN 325MG TAB'],
 	[['Prescriptions', 'Pending (8)'], 'Pending refills (8)'],
-	[['Prescriptions', 'Tracking (5)'], 'Refills with tracking information (5)'],
+	[['Prescriptions', 'Tracking (3)'], 'Refills with tracking information (3)'],
 	['V\ufeffA vaccine records', 'VA vaccines'],
 	[['V\ufeffA vaccine records', 'January 14, 2021'], 'COVID-19 vaccine']],
 	'Payments': [['VA payment history', 'History'],
