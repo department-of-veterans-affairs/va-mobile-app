@@ -1,7 +1,8 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, VAButton, WhatsNew } from 'components'
+import { AlertBox, Box, WhatsNew } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
 import { FeatureConstants, getLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/homeScreenAlerts'
@@ -88,10 +89,10 @@ export const EncourageUpdateAlert = () => {
         <AlertBox title={t('encourageUpdate.title')} text={t('encourageUpdate.body')} border="warning">
           <Box>
             <Box my={theme.dimensions.gutter} accessibilityRole="button" mr={theme.dimensions.buttonPadding}>
-              <VAButton onPress={onUpdatePressed} label={t('updateNow')} buttonType={ButtonTypesConstants.buttonPrimary} />
+              <Button onPress={onUpdatePressed} label={t('updateNow')} />
             </Box>
             <Box mr={theme.dimensions.buttonPadding} accessibilityRole="button">
-              <VAButton onPress={onSkipPressed} label={t('encourageUpdate.skip')} buttonType={ButtonTypesConstants.buttonSecondary} />
+              <Button onPress={onSkipPressed} label={t('encourageUpdate.skip')} buttonType={ButtonVariants.Secondary} />
             </Box>
           </Box>
         </AlertBox>

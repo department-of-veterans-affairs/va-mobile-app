@@ -1,28 +1,19 @@
-import {
-  AccordionCollapsible,
-  Box,
-  ButtonDecoratorType,
-  ButtonTypesConstants,
-  FeatureLandingTemplate,
-  SimpleList,
-  SimpleListItemObj,
-  TextArea,
-  TextView,
-  VAButton,
-} from 'components'
-import { logout } from 'store/slices/authSlice'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { StackScreenProps } from '@react-navigation/stack'
+import { forEach } from 'underscore'
+import { useIsFocused } from '@react-navigation/native'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 import remoteConfig from '@react-native-firebase/remote-config'
 
+import { AccordionCollapsible, Box, ButtonDecoratorType, FeatureLandingTemplate, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
 import { FeatureToggleType, getFeatureToggles, setDebugConfig } from 'utils/remoteConfig'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { StackScreenProps } from '@react-navigation/stack'
-import { forEach } from 'underscore'
 import { getWaygateToggles, setWaygateDebugConfig } from 'utils/waygateConfig'
-import { useIsFocused } from '@react-navigation/native'
-import { useTranslation } from 'react-i18next'
+import { logout } from 'store/slices/authSlice'
+import { showSnackBar } from 'utils/common'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type RemoteConfigScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'RemoteConfig'>
 
@@ -74,7 +65,7 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
         <AccordionCollapsible
           header={
             <Box justifyContent="space-between" flexDirection="row" flexWrap="wrap" mr={5}>
-              <VAButton onPress={navigateTo('WaygateEdit', { waygateName: index, waygate: wg })} label={index} buttonType={ButtonTypesConstants.buttonPrimary} />
+              <Button onPress={navigateTo('WaygateEdit', { waygateName: index, waygate: wg })} label={index} />
               <TextView variant="MobileBodyBold">{`${enabled}`}</TextView>
             </Box>
           }
@@ -120,14 +111,16 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
         {toggleList()}
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
-            <VAButton
+            <Button
               onPress={() => {
+                if (JSON.stringify(currentConfig) === JSON.stringify(toggles)) {
+                  showSnackBar('No values changed', dispatch, undefined, true, true, true)
+                  return
+                }
                 dispatch(logout())
                 setDebugConfig(toggles)
               }}
               label={'Apply Overrides'}
-              buttonType={ButtonTypesConstants.buttonPrimary}
-              disabled={JSON.stringify(currentConfig) === JSON.stringify(toggles)}
             />
           </TextArea>
         </Box>

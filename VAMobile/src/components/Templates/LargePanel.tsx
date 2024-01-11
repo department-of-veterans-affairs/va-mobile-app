@@ -1,9 +1,10 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { FooterButton, VAScrollView, WaygateWrapper } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VAScrollView, WaygateWrapper } from 'components'
 import { View, ViewStyle } from 'react-native'
 import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
@@ -120,7 +121,7 @@ export const LargePanel: FC<LargePanelProps> = ({
         <VAScrollView testID={testID} removeInsets={removeInsets} contentContainerStyle={removeInsets ? containerStyle : undefined}>
           <WaygateWrapper>
             {children}
-            {footerButtonText && onFooterButtonPress && <FooterButton text={footerButtonText} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onFooterButtonPress} />}
+            {footerButtonText && onFooterButtonPress && <Button label={footerButtonText} onPress={onFooterButtonPress} />}
           </WaygateWrapper>
         </VAScrollView>
       </View>
