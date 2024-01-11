@@ -4,6 +4,7 @@ import * as api from '../api'
 import {
   APIError,
   PrescriptionData,
+  PrescriptionStatusCountData,
   PrescriptionTrackingInfo,
   PrescriptionTrackingInfoGetData,
   PrescriptionsGetData,
@@ -53,6 +54,7 @@ export type PrescriptionState = {
   refillRequestSummaryItems: RefillRequestSummaryItems
   tabCounts: TabCounts
   prescriptionsNeedLoad: boolean
+  prescriptionStatusCount: PrescriptionStatusCountData
 }
 
 export const initialPrescriptionState: PrescriptionState = {
@@ -70,6 +72,7 @@ export const initialPrescriptionState: PrescriptionState = {
   refillRequestSummaryItems: [],
   tabCounts: {},
   prescriptionsNeedLoad: true,
+  prescriptionStatusCount: {} as PrescriptionStatusCountData,
 }
 
 export const loadAllPrescriptions =
@@ -222,6 +225,7 @@ const prescriptionSlice = createSlice({
       state.prescriptions = prescriptions
       state.loadingHistory = false
       state.prescriptionPagination = { ...meta?.pagination }
+      state.prescriptionStatusCount = { ...meta.prescriptionStatusCount }
       state.prescriptionsById = prescriptionsById
     },
     dispatchStartRequestRefills: (state) => {
