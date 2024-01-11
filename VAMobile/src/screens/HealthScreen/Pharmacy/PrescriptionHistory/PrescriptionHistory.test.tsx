@@ -245,6 +245,15 @@ const prescriptionData: PrescriptionsGetData = {
       totalPages: 7,
       totalEntries: 63,
     },
+    prescriptionStatusCount: {
+      active: 0,
+      discontinued: 0,
+      expired: 0,
+      historical: 0,
+      pending: 0,
+      submitted: 0,
+      total: 1,
+    },
   },
   links: {
     self: 'https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1',
