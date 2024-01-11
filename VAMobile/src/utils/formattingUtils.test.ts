@@ -7,6 +7,7 @@ context('format utilities', () => {
   Settings.now = () => expectNow.toMillis()
   Settings.defaultZone = 'utc'
 
+  
   let exampleDateTimes = {
     new: '2022-01-20T06:13:27Z',
     old: '2022-01-19T06:13:27Z',
