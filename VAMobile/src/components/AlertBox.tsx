@@ -1,4 +1,5 @@
 import { AccessibilityRole, ScrollView, View } from 'react-native'
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 import React, { FC, RefObject, useEffect, useState } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
@@ -53,9 +54,9 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, sc
 
   const vibrate = (): void => {
     if (border === 'error') {
-      triggerHaptic('notificationError')
+      triggerHaptic(HapticFeedbackTypes.notificationError)
     } else if (border === 'warning') {
-      triggerHaptic('notificationWarning')
+      triggerHaptic(HapticFeedbackTypes.notificationWarning)
     }
   }
 
