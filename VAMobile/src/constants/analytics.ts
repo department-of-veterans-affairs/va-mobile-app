@@ -117,13 +117,12 @@ export const Events = {
       },
     }
   },
-  vama_claim_count: (closed_claims: number, open_claims: number, claims_tab: string): Event => {
+  vama_claim_count: (closed_claims: number, open_claims: number): Event => {
     return {
       name: 'vama_claim_count',
       params: {
         closed_claims,
         open_claims,
-        claims_tab,
       },
     }
   },
