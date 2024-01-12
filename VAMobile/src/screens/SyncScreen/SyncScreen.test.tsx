@@ -2,9 +2,9 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { context, render, waitFor } from 'testUtils'
-import { initialAuthState, initialDisabilityRatingState, initialMilitaryServiceState } from 'store/slices'
+import { initialAuthState, initialClaimsAndAppealsState, initialDisabilityRatingState, initialMilitaryServiceState, initialPrescriptionState } from 'store/slices'
 import { SyncScreen } from './index'
-import { completeSync, getDisabilityRating, getServiceHistory } from 'store/slices'
+import { completeSync, getDisabilityRating, getServiceHistory, loadAllPrescriptions, prefetchClaimsAndAppeals } from 'store/slices'
 
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
@@ -23,6 +23,18 @@ jest.mock('store/slices', () => {
       }
     }),
     getDisabilityRating: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    loadAllPrescriptions: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    prefetchClaimsAndAppeals: jest.fn(() => {
       return {
         type: '',
         payload: '',
@@ -62,11 +74,13 @@ jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
 context('SyncScreen', () => {
   let store: any
 
-  const initializeTestInstance = (militaryLoading = true, disabilityRatingLoading = true, loggedIn = false, loggingOut = false, syncing = true): void => {
+  const initializeTestInstance = (militaryLoading = true, disabilityRatingLoading = true, prescriptionsLoading = true, claimsAndAppealsLoading = true, loggedIn = false, loggingOut = false, syncing = true): void => {
     store = {
       auth: { ...initialAuthState, loggedIn, loggingOut, syncing },
       disabilityRating: { ...initialDisabilityRatingState, preloadComplete: !disabilityRatingLoading },
       militaryService: { ...initialMilitaryServiceState, preloadComplete: !militaryLoading },
+      prescriptions: { ...initialPrescriptionState, prescriptionsNeedLoad: prescriptionsLoading },
+      claimsAndAppeals: { ...initialClaimsAndAppealsState, preloadComplete: !claimsAndAppealsLoading },
     }
     render(<SyncScreen />, { preloadedState: store })
   }
@@ -79,42 +93,46 @@ context('SyncScreen', () => {
     jest.clearAllMocks()
   })
 
-  describe('loading text', () => {
-    it('should show the signing in text', () => {
-      initializeTestInstance()
-      expect(screen.getByText('Signing you in...')).toBeTruthy()
-    })
+  it('shows "Signing you in" text', () => {
+    initializeTestInstance()
+    expect(screen.getByText('Signing you in...')).toBeTruthy()
   })
 
-  describe('sign out', () => {
-    it('should show sign out text', () => {
-      initializeTestInstance(false, false, true, true)
-      expect(screen.getByText('Signing you out...')).toBeTruthy()
-    })
-
-    it('should show sign out text even if data is not loaded', () => {
-      initializeTestInstance(true, true, true, true)
-      expect(screen.getByText('Signing you out...')).toBeTruthy()
-    })
+  it('shows "Signing you out" text when logging out', () => {
+    initializeTestInstance(false, false, false, false, true, true)
+    expect(screen.getByText('Signing you out...')).toBeTruthy()
   })
 
-  describe('loading sequence', () => {
-    it('should load military history first', () => {
-      initializeTestInstance(true, true, true, false)
-      expect(getServiceHistory).toHaveBeenCalled()
-      expect(getDisabilityRating).not.toHaveBeenCalled()
-    })
+  it('shows "Signing you out" text when logging out and data is not loaded', () => {
+    initializeTestInstance(true, true, true, true, true, true)
+    expect(screen.getByText('Signing you out...')).toBeTruthy()
+  })
 
-    it('should load disability ratings after military history has loaded', () => {
-      initializeTestInstance(false, true, true, false)
-      expect(getServiceHistory).not.toHaveBeenCalled()
-      expect(getDisabilityRating).toHaveBeenCalled()
-    })
+  it('loads military history before loading disability ratings', () => {
+    initializeTestInstance(true, true, true, true, true, false)
+    expect(getServiceHistory).toHaveBeenCalled()
+    expect(getDisabilityRating).not.toHaveBeenCalled()
+  })
+
+  it('loads disability ratings after military history has loaded', () => {
+    initializeTestInstance(false, true, true, true, true, false)
+    expect(getServiceHistory).not.toHaveBeenCalled()
+    expect(getDisabilityRating).toHaveBeenCalled()
+  })
+
+  it('loads prescriptions', () => {
+    initializeTestInstance(false, false, true, false, true, false)
+    expect(loadAllPrescriptions).toHaveBeenCalled()
+  })
+
+  it('loads claims and appeals', () => {
+    initializeTestInstance(false, false, false, true, true, false)
+    expect(prefetchClaimsAndAppeals).toHaveBeenCalled()
   })
 
   describe('sync completion', () => {
     it('should complete the sync when all loading is finished', async () => {
-      initializeTestInstance(false, false, true, false)
+      initializeTestInstance(false, false, false, false, true, false)
       await waitFor(() => {
         expect(completeSync).toHaveBeenCalled()
       })
