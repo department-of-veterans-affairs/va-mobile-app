@@ -133,7 +133,7 @@ const getLoadedClaimsAndAppeals = (
   claimType: ClaimType,
   latestPage: number,
   pageSize: number,
-  activeClaimsCount: number,  
+  activeClaimsCount: number,
 ) => {
   const loadedClaimsAndAppeals = getItemsInRange(claimsAndAppeals[claimType], latestPage, pageSize)
   // do we have the claimsAndAppeals?
