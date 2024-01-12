@@ -457,9 +457,7 @@ export const getLinkifiedText = (body: string, t: TFunction, launchExternalLink:
             accessible={true}
             accessibilityLabel={getNumberAccessibilityLabelFromString(previousText + text + nextText)}
             accessibilityHint={t('openInPhoneMessaging.a11yHint')}>
-            <TextView selectable={true} variant="MobileBodyLink">
-              {previousText + ' ' + text + ' ' + nextText}
-            </TextView>
+            <TextView variant="MobileBodyLink">{previousText + ' ' + text + ' ' + nextText}</TextView>
           </TouchableWithoutFeedback>,
         )
         textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
@@ -484,9 +482,7 @@ export const getLinkifiedText = (body: string, t: TFunction, launchExternalLink:
           accessible={true}
           accessibilityLabel={text}
           accessibilityHint={t('openInEmailMessaging.a11yHint')}>
-          <TextView selectable={true} variant="MobileBodyLink">
-            {text}
-          </TextView>
+          <TextView variant="MobileBodyLink">{text}</TextView>
         </TouchableWithoutFeedback>,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
@@ -501,9 +497,7 @@ export const getLinkifiedText = (body: string, t: TFunction, launchExternalLink:
           accessible={true}
           accessibilityLabel={text}
           accessibilityHint={t('openInEmailMessaging.a11yHint')}>
-          <TextView selectable={true} variant="MobileBodyLink">
-            {text}
-          </TextView>
+          <TextView variant="MobileBodyLink">{text}</TextView>
         </TouchableWithoutFeedback>,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
@@ -518,9 +512,7 @@ export const getLinkifiedText = (body: string, t: TFunction, launchExternalLink:
           accessible={true}
           accessibilityLabel={getNumberAccessibilityLabelFromString(getNumbersFromString(text))}
           accessibilityHint={t('openInPhoneMessaging.a11yHint')}>
-          <TextView selectable={true} variant="MobileBodyLink">
-            {text}
-          </TextView>
+          <TextView variant="MobileBodyLink">{text}</TextView>
         </TouchableWithoutFeedback>,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
@@ -536,9 +528,7 @@ export const getLinkifiedText = (body: string, t: TFunction, launchExternalLink:
           accessible={true}
           accessibilityLabel={text}
           accessibilityHint={t('openInBrowser.a11yHint')}>
-          <TextView selectable={true} variant="MobileBodyLink">
-            {text}
-          </TextView>
+          <TextView variant="MobileBodyLink">{text}</TextView>
         </TouchableWithoutFeedback>,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
@@ -553,23 +543,19 @@ export const getLinkifiedText = (body: string, t: TFunction, launchExternalLink:
           accessible={true}
           accessibilityLabel={text}
           accessibilityHint={t('openInBrowser.a11yHint')}>
-          <TextView selectable={true} variant="MobileBodyLink">
-            {text}
-          </TextView>
+          <TextView variant="MobileBodyLink">{text}</TextView>
         </TouchableWithoutFeedback>,
       )
       textReconstructedBody.push(<TextView variant="MobileBody"> </TextView>)
     } else {
-      textReconstructedBody.push(
-        <TextView selectable={true} variant="MobileBody">
-          {text + ' '}
-        </TextView>,
-      )
+      textReconstructedBody.push(<TextView variant="MobileBody">{text + ' '}</TextView>)
     }
   })
   return (
     <Box>
-      <TextView paragraphSpacing={true}>{textReconstructedBody}</TextView>
+      <TextView selectable={true} paragraphSpacing={true}>
+        {textReconstructedBody}
+      </TextView>
     </Box>
   )
 }

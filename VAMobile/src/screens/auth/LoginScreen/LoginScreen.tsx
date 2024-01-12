@@ -1,8 +1,9 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView, WaygateWrapper } from 'components'
+import { AlertBox, Box, BoxProps, CrisisLineCta, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
@@ -105,7 +106,7 @@ const LoginScreen: FC = () => {
           <VAIcon testID="VAIcon" name={'Logo'} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={80}>
-          <VAButton onPress={onLoginInit} label={t('signin')} buttonType={ButtonTypesConstants.buttonWhite} hideBorder={true} />
+          <Button onPress={onLoginInit} label={t('signin')} buttonType={ButtonVariants.White} />
           <Pressable onPress={onFacilityLocator} {...testIdProps(a11yLabelVA(t('findLocation.title')))} accessibilityRole="button">
             <Box {...findLocationProps}>
               <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>

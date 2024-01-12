@@ -7,7 +7,7 @@ import { initReactI18next } from 'react-i18next'
 import i18n from 'i18next'
 
 const fallbackLanguage = { languageTag: 'en', isRTL: false }
-const defaultLanguage = RNLocalize.findBestAvailableLanguage(['en']) || fallbackLanguage
+const defaultLanguage = RNLocalize.findBestLanguageTag(['en']) || fallbackLanguage
 
 export const resources = {
   en: {

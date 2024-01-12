@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-screens/ios/RNSScreenViewEvent.h
+../../../../../node_modules/react-native-screens/ios/events/RNSScreenViewEvent.h
