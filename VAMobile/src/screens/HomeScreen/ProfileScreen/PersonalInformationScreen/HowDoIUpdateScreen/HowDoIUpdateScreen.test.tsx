@@ -5,8 +5,8 @@ import { context, mockNavProps, render } from 'testUtils'
 import HowDoIUpdateScreen from './HowDoIUpdateScreen'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('../../../../../utils/hooks', () => {
-  let original = jest.requireActual('../../../../../utils/hooks')
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
@@ -22,7 +22,6 @@ jest.mock('@react-navigation/native', () => {
 })
 
 context('HowDoIUpdateScreen', () => {
-  let mockNavigationToSpy: jest.Mock
   const initializeTestInstance = ( screenType = 'DOB'): void => {
     const props = mockNavProps(
       {},
@@ -33,9 +32,6 @@ context('HowDoIUpdateScreen', () => {
         },
       },
     )
-
-    mockNavigationToSpy = jest.fn()
-    mockNavigationSpy.mockReturnValue(mockNavigationToSpy)
 
     render(<HowDoIUpdateScreen {...props} />)
   }
@@ -69,7 +65,7 @@ context('HowDoIUpdateScreen', () => {
       initializeTestInstance('DOB')
       fireEvent.press(screen.getByRole('link', { name: 'Find nearest VA medical center' }))
       expect(mockNavigationSpy).toBeCalledWith('Webview', { displayTitle: 'va.gov', url: 'https://www.va.gov/find-locations/', loadingMessage: 'Loading VA location finder...' })
-      expect(mockNavigationToSpy).toBeCalled()
+      expect(mockNavigationSpy).toBeCalled()
     })
   })
 })

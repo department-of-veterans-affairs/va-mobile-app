@@ -11,13 +11,9 @@ jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
-const navigateToSpy = jest.fn()
-mockNavigationSpy.mockReturnValue(navigateToSpy)
 
 jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
   let original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
@@ -96,7 +92,6 @@ context('Nametag', () => {
     renderWithBranch('United States Air Force')
     fireEvent.press(screen.getByRole('button', { name: 'United States Air Force' }))
     expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
-    expect(navigateToSpy).toHaveBeenCalledWith()
   })
 
   it('does not display branch when service history is empty', () => {

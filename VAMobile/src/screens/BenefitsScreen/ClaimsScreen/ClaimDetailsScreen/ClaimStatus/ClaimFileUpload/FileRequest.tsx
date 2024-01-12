@@ -16,7 +16,6 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
 
@@ -36,9 +35,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
 
     const onDetailsPress = (request: ClaimEventData) => {
       logAnalyticsEvent(Events.vama_request_details(claimID, request.trackedItemId || null, request.type))
-      if (waygateNativeAlert('WG_FileRequestDetails')) {
-        navigateTo('FileRequestDetails', { claimID, request })()
-      }
+      navigateTo('FileRequestDetails', { claimID, request })
     }
 
     const getA11yLabel = (requestIndex: number, displayName?: string, uploaded?: boolean) => {
@@ -80,9 +77,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
     if (claim) {
       logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, count))
     }
-    if (waygateNativeAlert('WG_AskForClaimDecision')) {
-      navigateTo('AskForClaimDecision', { claimID })()
-    }
+    navigateTo('AskForClaimDecision', { claimID })
   }
 
   return (

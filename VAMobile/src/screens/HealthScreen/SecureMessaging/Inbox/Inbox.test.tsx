@@ -29,11 +29,8 @@ jest.mock('store/slices', () => {
 })
 
 context('Inbox', () => {
-  let mockNavigateToSpy: jest.Mock
 
   const initializeTestInstance = (category: CategoryTypes = CategoryTypeFields.other, subjectLine: string = 'Default subject line', loading: boolean = false) => {
-    mockNavigateToSpy = jest.fn()
-    mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
 
     render(<Inbox />, {
       preloadedState: {
@@ -95,7 +92,6 @@ context('Inbox', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByTestId('Unread: Mock Sender Invalid DateTime General: Default subject line'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessage', { currentPage: 2, folderID: 0, messageID: 1, messagesLeft: 1 })
-      expect(mockNavigateToSpy).toHaveBeenCalled()
     })
   })
 

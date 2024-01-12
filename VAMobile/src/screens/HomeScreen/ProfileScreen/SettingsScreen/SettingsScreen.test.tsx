@@ -19,13 +19,14 @@ jest.mock('react-native/Libraries/Share/Share', () => {
   }
 })
 
+const mockNavigationSpy = jest.fn()
 const mockExternalLinkSpy = jest.fn()
 
-jest.mock('../../../../utils/hooks', () => {
-  let original = jest.requireActual('../../../../utils/hooks')
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => jest.fn(),
+    useRouteNavigation: () => mockNavigationSpy,
     useExternalLink: () => mockExternalLinkSpy,
   }
 })
@@ -39,12 +40,10 @@ const defaultEnvVars = {
 jest.mock('utils/env', () => jest.fn(() => defaultEnvVars))
 
 context('SettingsScreen', () => {
-  let navigateSpy: jest.Mock
 
   const initializeTestInstance = (canStoreWithBiometric = false, supportedBiometric?: BIOMETRY_TYPE, demoMode = false) => {
-    navigateSpy = jest.fn()
     const props = mockNavProps(undefined, {
-      navigate: navigateSpy,
+      navigate: mockNavigationSpy,
     })
 
     render(<SettingsScreen {...props} />, {
@@ -95,7 +94,7 @@ context('SettingsScreen', () => {
   describe('on manage your account click', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Manage account' }))
-      expect(navigateSpy).toHaveBeenCalledWith('ManageYourAccount')
+      expect(mockNavigationSpy).toHaveBeenCalledWith('ManageYourAccount')
     })
   })
 

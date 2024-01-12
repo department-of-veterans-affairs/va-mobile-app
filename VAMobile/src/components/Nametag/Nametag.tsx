@@ -11,7 +11,6 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 export const Nametag: FC = () => {
   const { mostRecentBranch, serviceHistory } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
@@ -54,7 +53,7 @@ export const Nametag: FC = () => {
   }
 
   const pressableProps: PressableProps = {
-    onPress: () => (accessToMilitaryInfo && showVeteranStatus ? waygateNativeAlert('WG_VeteranStatus') && navigateTo('VeteranStatus')() : undefined),
+    onPress: () => (accessToMilitaryInfo && showVeteranStatus ? navigateTo('VeteranStatus') : undefined),
     accessibilityRole: accessToMilitaryInfo ? 'button' : undefined,
     accessibilityLabel: accessToMilitaryInfo ? `${fullName} ${branch} ${t('veteranStatus.proofOf')}` : undefined,
   }
