@@ -185,6 +185,7 @@ context('claimsAndAppeals', () => {
         perPage: 10,
         totalEntries: 3,
       },
+      activeClaimsCount: 0,
     }
 
     it('should dispatch the correct actions', async () => {
@@ -282,6 +283,7 @@ context('claimsAndAppeals', () => {
         perPage: 10,
         totalEntries: 3,
       },
+      activeClaimsCount: 0,
     }
 
     it('should dispatch the correct actions', async () => {
