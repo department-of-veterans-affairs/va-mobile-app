@@ -20,8 +20,8 @@ import { DemoState } from 'store/slices/demoSlice'
 import { DisabilityRatingState, MilitaryServiceState, checkForDowntimeErrors, getDisabilityRating, getServiceHistory } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
+import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useOrientation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -122,7 +122,16 @@ const SyncScreen: FC<SyncScreenProps> = () => {
 
     const finishSyncingMilitaryHistory = !mhNotInDowntime || (!loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded))
     const finishSyncingDisabilityRating = !drNotInDowntime || (drNotInDowntime && disabilityRatingLoaded)
-    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating && appointmentsLoaded && !prescriptionsNeedLoad && claimsAndAppealsLoaded && unreadCount) {
+    if (
+      finishSyncingMilitaryHistory &&
+      loggedIn &&
+      !loggingOut &&
+      finishSyncingDisabilityRating &&
+      appointmentsLoaded &&
+      !prescriptionsNeedLoad &&
+      claimsAndAppealsLoaded &&
+      unreadCount
+    ) {
       dispatch(completeSync())
     }
   }, [
