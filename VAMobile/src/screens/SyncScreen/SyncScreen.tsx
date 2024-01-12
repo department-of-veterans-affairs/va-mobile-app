@@ -9,6 +9,7 @@ import {
   ClaimsAndAppealsState,
   PrescriptionState,
   completeSync,
+  getInbox,
   loadAllPrescriptions,
   logInDemoMode,
   prefetchAppointments,
@@ -20,6 +21,7 @@ import { DisabilityRatingState, MilitaryServiceState, checkForDowntimeErrors, ge
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
+import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useOrientation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -44,6 +46,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { preloadComplete: appointmentsLoaded } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const { preloadComplete: claimsAndAppealsLoaded } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({ enabled: loggedIn })
   // TODO: For some reason Unit Tests cannot pick up the DowntimeFeatureTypeConstants constant
   const drNotInDowntime = !useDowntime('disability_rating')
@@ -101,6 +104,12 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   }, [dispatch, loggedIn, claimsAndAppealsLoaded])
 
   useEffect(() => {
+    if (loggedIn && !unreadCount) {
+      dispatch(getInbox())
+    }
+  }, [dispatch, loggedIn, unreadCount])
+
+  useEffect(() => {
     if (syncing) {
       if (!loggingOut) {
         setDisplayMessage(t('sync.progress.signin'))
@@ -113,7 +122,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
 
     const finishSyncingMilitaryHistory = !mhNotInDowntime || (!loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded))
     const finishSyncingDisabilityRating = !drNotInDowntime || (drNotInDowntime && disabilityRatingLoaded)
-    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating && appointmentsLoaded && !prescriptionsNeedLoad && claimsAndAppealsLoaded) {
+    if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating && appointmentsLoaded && !prescriptionsNeedLoad && claimsAndAppealsLoaded && unreadCount) {
       dispatch(completeSync())
     }
   }, [
@@ -130,6 +139,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     appointmentsLoaded,
     prescriptionsNeedLoad,
     claimsAndAppealsLoaded,
+    unreadCount,
     syncing,
   ])
 
