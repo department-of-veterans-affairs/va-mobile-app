@@ -135,7 +135,6 @@
     "webdriverio": "^8.27.0"
   },
   "resolutions": {
-    "@react-navigation/native/**/nanoid": "^3.1.31",
     "prettier": "^2.8.8",
     "react-devtools/**/got": "^11.8.5",
     "react-devtools/electron": "^25.8.1",
