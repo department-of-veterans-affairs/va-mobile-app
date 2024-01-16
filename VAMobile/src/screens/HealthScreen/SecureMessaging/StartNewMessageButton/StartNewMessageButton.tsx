@@ -6,7 +6,6 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 const StartNewMessageButton: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -15,7 +14,7 @@ const StartNewMessageButton: FC = () => {
 
   const onPress = () => {
     logAnalyticsEvent(Events.vama_sm_start())
-    waygateNativeAlert('WG_StartNewMessage') && navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })()
+    navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
   }
 
   const startNewMessageButtonProps: VAButtonProps = {

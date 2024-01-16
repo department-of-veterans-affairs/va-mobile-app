@@ -8,10 +8,9 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
@@ -26,6 +25,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
   const dispatch = useAppDispatch()
+  const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -48,30 +48,6 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, militaryHistoryNeedsUpdate, userAuthorizedServices?.militaryServiceHistory, mhNotInDowntime])
 
-  const onPersonalInformation = () => {
-    if (waygateNativeAlert('WG_PersonalInformation')) {
-      navigation.navigate('PersonalInformation')
-    }
-  }
-
-  const onContactInformation = () => {
-    if (waygateNativeAlert('WG_ContactInformation')) {
-      navigation.navigate('ContactInformation')
-    }
-  }
-
-  const onMilitaryInformation = () => {
-    if (waygateNativeAlert('WG_MilitaryInformation')) {
-      navigation.navigate('MilitaryInformation')
-    }
-  }
-
-  const onSettings = () => {
-    if (waygateNativeAlert('WG_Settings')) {
-      navigation.navigate('Settings')
-    }
-  }
-
   const loadingCheck = militaryInformationLoading || loadingUserAuthorizedServices
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
 
@@ -83,7 +59,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
           <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
             <LargeNavButton
               title={t('settings.title')}
-              onPress={onSettings}
+              onPress={() => navigateTo('Settings')}
               borderWidth={theme.dimensions.buttonBorderWidth}
               borderColor={'secondary'}
               borderColorActive={'primaryDarkest'}
@@ -104,7 +80,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
               <>
                 <LargeNavButton
                   title={t('personalInformation.title')}
-                  onPress={onPersonalInformation}
+                  onPress={() => navigateTo('PersonalInformation')}
                   borderWidth={theme.dimensions.buttonBorderWidth}
                   borderColor={'secondary'}
                   borderColorActive={'primaryDarkest'}
@@ -112,7 +88,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
                 />
                 <LargeNavButton
                   title={t('contactInformation.title')}
-                  onPress={onContactInformation}
+                  onPress={() => navigateTo('ContactInformation')}
                   borderWidth={theme.dimensions.buttonBorderWidth}
                   borderColor={'secondary'}
                   borderColorActive={'primaryDarkest'}
@@ -122,7 +98,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
             )}
             <LargeNavButton
               title={t('militaryInformation.title')}
-              onPress={onMilitaryInformation}
+              onPress={() => navigateTo('MilitaryInformation')}
               borderWidth={theme.dimensions.buttonBorderWidth}
               borderColor={'secondary'}
               borderColorActive={'primaryDarkest'}
@@ -130,7 +106,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
             />
             <LargeNavButton
               title={t('settings.title')}
-              onPress={onSettings}
+              onPress={() => navigateTo('Settings')}
               borderWidth={theme.dimensions.buttonBorderWidth}
               borderColor={'secondary'}
               borderColorActive={'primaryDarkest'}

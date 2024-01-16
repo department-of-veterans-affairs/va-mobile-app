@@ -7,7 +7,7 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from './PaymentsStackScreens'
-import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import DirectDepositScreen from './DirectDepositScreen'
@@ -25,15 +25,13 @@ const PaymentsScreen: FC<PaymentsScreenProps> = () => {
   const navigateTo = useRouteNavigation()
 
   const onPayments = () => {
-    if (waygateNativeAlert('WG_PaymentHistory')) {
-      navigateTo('PaymentHistory')()
-    }
+    navigateTo('PaymentHistory')
   }
   const onDirectDeposit = () => {
-    if (userAuthorizedServices?.directDepositBenefitsUpdate && waygateNativeAlert('WG_DirectDeposit')) {
-      navigateTo('DirectDeposit')()
-    } else if (!userAuthorizedServices?.directDepositBenefitsUpdate && waygateNativeAlert('WG_HowToUpdateDirectDeposit')) {
-      navigateTo('HowToUpdateDirectDeposit')()
+    if (userAuthorizedServices?.directDepositBenefitsUpdate) {
+      navigateTo('DirectDeposit')
+    } else if (!userAuthorizedServices?.directDepositBenefitsUpdate) {
+      navigateTo('HowToUpdateDirectDeposit')
     }
   }
 

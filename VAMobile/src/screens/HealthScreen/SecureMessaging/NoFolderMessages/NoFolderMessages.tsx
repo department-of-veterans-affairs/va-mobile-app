@@ -18,7 +18,7 @@ const NoFolderMessages: FC = () => {
 
   const onGoToInbox = (): void => {
     dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-    navigateTo('SecureMessaging')()
+    navigateTo('SecureMessaging')
   }
 
   const scrollStyles: ViewStyle = {

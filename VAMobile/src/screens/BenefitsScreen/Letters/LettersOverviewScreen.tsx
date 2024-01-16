@@ -9,7 +9,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOverview'>
@@ -23,19 +22,15 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
 
   const onViewLetters = () => {
-    if (waygateNativeAlert('WG_LettersList')) {
-      navigateTo('LettersList')()
-    }
+    navigateTo('LettersList')
   }
 
   const onEditAddress = () => {
-    if (waygateNativeAlert('WG_EditAddress')) {
-      logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('letters.overview.title')))
-      navigateTo('EditAddress', {
-        displayTitle: t('contactInformation.mailingAddress'),
-        addressType: profileAddressOptions.MAILING_ADDRESS,
-      })()
-    }
+    logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('letters.overview.title')))
+    navigateTo('EditAddress', {
+      displayTitle: t('contactInformation.mailingAddress'),
+      addressType: profileAddressOptions.MAILING_ADDRESS,
+    })
   }
 
   const addressData: Array<addressDataField> = [{ addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onEditAddress }]

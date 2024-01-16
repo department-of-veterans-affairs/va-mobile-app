@@ -8,6 +8,15 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 
+let mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
   return {
@@ -80,7 +89,7 @@ context('AskForClaimDecision', () => {
       describe('if the claim is closed', () => {
         it('should call navigation navigate for the ClaimDetailsScreen with claimType set to CLOSED', () => {
           initializeTestInstance(true)
-          expect(navigateSpy).toHaveBeenCalledWith('ClaimDetailsScreen', { claimID: 'id', claimType: 'CLOSED', focusOnSnackbar: true })
+          expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetailsScreen', { claimID: 'id', claimType: 'CLOSED', focusOnSnackbar: true })
         })
       })
     })

@@ -92,6 +92,13 @@ export type WaygateToggleType =
   | 'WG_TakePhotos'
   | 'WG_UploadFile'
   | 'WG_UploadOrAddPhotos'
+  | 'WG_Claims'
+  | 'WG_LoaGate'
+  | 'WG_GenericLetter'
+  | 'WG_Webview'
+  | 'WG_Sandbox'
+  | 'WG_HapticsDemoScreen'
+  | 'WG_InAppRecruitment'
 
 type WaygateToggleValues = {
   WG_Home: Waygate
@@ -167,6 +174,13 @@ type WaygateToggleValues = {
   WG_TakePhotos: Waygate
   WG_UploadFile: Waygate
   WG_UploadOrAddPhotos: Waygate
+  WG_Claims: Waygate
+  WG_LoaGate: Waygate
+  WG_GenericLetter: Waygate
+  WG_Webview: Waygate
+  WG_Sandbox: Waygate
+  WG_HapticsDemoScreen: Waygate
+  WG_InAppRecruitment: Waygate
 }
 
 const waygateDefault: Waygate = {
@@ -251,6 +265,13 @@ export let waygateConfig: WaygateToggleValues = {
   WG_TakePhotos: { ...waygateDefault },
   WG_UploadFile: { ...waygateDefault },
   WG_UploadOrAddPhotos: { ...waygateDefault },
+  WG_Claims: { ...waygateDefault },
+  WG_LoaGate: { ...waygateDefault },
+  WG_GenericLetter: { ...waygateDefault },
+  WG_Webview: { ...waygateDefault },
+  WG_Sandbox: { ...waygateDefault },
+  WG_HapticsDemoScreen: { ...waygateDefault },
+  WG_InAppRecruitment: { ...waygateDefault },
 }
 
 export const waygateEnabled = (feature: WaygateToggleType): Waygate => {

@@ -11,7 +11,6 @@ import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import getEnv from 'utils/env'
 
@@ -57,9 +56,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       }
 
       setError('')
-      if (waygateNativeAlert('WG_UploadFile')) {
-        navigateTo('UploadFile', { request, fileUploaded: document })()
-      }
+      navigateTo('UploadFile', { request, fileUploaded: document })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (docError: any) {
       if (DocumentPicker.isCancel(docError as Error)) {
@@ -73,7 +70,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const onSelectFile = (): void => {
     // For integration tests, bypass the file picking process
     if (IS_TEST) {
-      navigateTo('UploadFile', { request, fileUploaded: 'test file' })()
+      navigateTo('UploadFile', { request, fileUploaded: 'test file' })
       return
     }
 

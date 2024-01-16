@@ -12,10 +12,10 @@ import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled } from 'utils/remoteConfig'
 import { registerReviewEvent } from 'utils/inAppReviews'
-import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDemographics } from 'api/demographics/getDemographics'
-import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
+import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 
@@ -40,6 +40,7 @@ type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'Pers
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const personalInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
   const isScreenContentAllowed = screenContentAllowed('WG_PersonalInformation')
@@ -74,14 +75,14 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     const items: Array<DefaultListItemObj> = [
       {
         textLines: [{ text: t('personalInformation.preferredName.title'), variant: 'MobileBodyBold' }, { text: getPreferredName(demographics, t) }],
-        onPress: onPreferredName,
+        onPress: () => navigateTo('PreferredName'),
       },
     ]
 
     if (genderIdentityOptions) {
       items.push({
         textLines: [{ text: t('personalInformation.genderIdentity.title'), variant: 'MobileBodyBold' }, { text: getGenderIdentity(demographics, t, genderIdentityOptions) }],
-        onPress: onGenderIdentity,
+        onPress: () => navigateTo('GenderIdentity'),
       })
     }
     return items
@@ -112,30 +113,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const errorCheck = personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError
   const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
 
-  const onGenderIdentity = () => {
-    if (waygateNativeAlert('WG_GenderIdentity')) {
-      navigation.navigate('GenderIdentity')
-    }
-  }
-
-  const onPreferredName = () => {
-    if (waygateNativeAlert('WG_PreferredName')) {
-      navigation.navigate('PreferredName')
-    }
-  }
-
-  const onUpdateName = () => {
-    if (waygateNativeAlert('WG_HowDoIUpdate')) {
-      navigation.navigate('HowDoIUpdate', { screenType: 'name' })
-    }
-  }
-
-  const onUpdateDOB = () => {
-    if (waygateNativeAlert('WG_HowDoIUpdate')) {
-      navigation.navigate('HowDoIUpdate', { screenType: 'DOB' })
-    }
-  }
-
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('personalInformation.title')} testID="PersonalInformationTestID">
       {errorCheck ? (
@@ -147,14 +124,14 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
             {t('contactInformation.editNote')}
           </TextView>
-          <Pressable onPress={onUpdateName} accessibilityRole="link" accessible={true}>
+          <Pressable onPress={() => navigateTo('HowDoIUpdate', { screenType: 'name' })} accessibilityRole="link" accessible={true}>
             <TextView {...linkProps}>{t('personalInformation.howToFixLegalName')}</TextView>
           </Pressable>
           <Box my={theme.dimensions.standardMarginBetween} mb={birthdate ? theme.dimensions.condensedMarginBetween : undefined}>
             <DefaultList items={birthdateItems()} />
           </Box>
           <Box mx={theme.dimensions.gutter}>
-            <Pressable onPress={onUpdateDOB} accessibilityRole="link" accessible={true}>
+            <Pressable onPress={() => navigateTo('HowDoIUpdate', { screenType: 'DOB' })} accessibilityRole="link" accessible={true}>
               <TextView {...dobLinkProps}>{t('personalInformation.howToFixDateOfBirth')}</TextView>
             </Pressable>
           </Box>

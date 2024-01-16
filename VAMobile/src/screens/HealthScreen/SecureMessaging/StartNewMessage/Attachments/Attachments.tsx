@@ -18,7 +18,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { themeFn } from 'utils/theme'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -129,11 +128,11 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const onAttach = (): void => {
     const attachmentFileToAdd = _.isEmpty(file) ? image : file
     if (origin === FormHeaderTypeConstants.compose) {
-      waygateNativeAlert('WG_StartNewMessage') && navigateTo('StartNewMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
+      navigateTo('StartNewMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })
     } else if (origin === FormHeaderTypeConstants.reply) {
-      waygateNativeAlert('WG_ReplyMessage') && navigateTo('ReplyMessage', { messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
+      navigateTo('ReplyMessage', { messageID, attachmentFileToAdd, attachmentFileToRemove: {} })
     } else {
-      waygateNativeAlert('WG_EditDraft') && navigateTo('EditDraft', { messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
+      navigateTo('EditDraft', { messageID, attachmentFileToAdd, attachmentFileToRemove: {} })
     }
   }
 

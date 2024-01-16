@@ -6,6 +6,13 @@ import OnboardingCarousel from './OnboardingCarousel'
 import { completeFirstTimeLogin } from 'store/slices'
 import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+  }
+})
+
 jest.mock('store/slices', () => {
   let actual = jest.requireActual('store/slices')
   return {

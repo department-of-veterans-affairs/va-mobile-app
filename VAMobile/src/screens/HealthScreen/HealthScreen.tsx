@@ -14,7 +14,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
@@ -35,7 +35,7 @@ const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
-export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
+export const HealthScreen: FC<HealthScreenProps> = () => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -46,36 +46,16 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
 
-  const onAppointments = () => {
-    if (waygateNativeAlert('WG_Appointments')) {
-      navigateTo('Appointments')()
-    }
-  }
-  const onSecureMessaging = () => {
-    if (waygateNativeAlert('WG_SecureMessaging')) {
-      navigateTo('SecureMessaging')()
-    }
-  }
-  const onVaVaccines = () => {
-    if (waygateNativeAlert('WG_VaccineList')) {
-      navigateTo('VaccineList')()
-    }
-  }
-  const pharmacyNavHandler = () => {
-    if (waygateNativeAlert('WG_PrescriptionHistory')) {
-      navigateTo('PrescriptionHistory')()
-    }
-  }
   const onPharmacy = () => {
     // If rx list is already loaded, reload it to ensure freshness
     if (!prescriptionsNeedLoad) {
       dispatch(loadAllPrescriptions(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
     }
-    pharmacyNavHandler()
+    navigateTo('PrescriptionHistory')
   }
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('health_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
+    navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
 
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
@@ -92,7 +72,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
       <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('appointments')}
-          onPress={onAppointments}
+          onPress={() => navigateTo('Appointments')}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
@@ -100,7 +80,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
-          onPress={onSecureMessaging}
+          onPress={() => navigateTo('SecureMessaging')}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
@@ -121,7 +101,7 @@ export const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
         <LargeNavButton
           title={t('vaVaccines.buttonTitle')}
           a11yHint={t('vaVaccines.a11yHint')}
-          onPress={onVaVaccines}
+          onPress={() => navigateTo('VaccineList')}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
