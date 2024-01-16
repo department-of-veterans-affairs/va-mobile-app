@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
-import { MilitaryServiceState } from 'store/slices'
+import { DisabilityRatingState, MilitaryServiceState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { Pressable, PressableProps } from 'react-native'
 import { RootState } from 'store'
@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 
 export const Nametag: FC = () => {
   const { mostRecentBranch, serviceHistory } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
@@ -95,6 +96,11 @@ export const Nametag: FC = () => {
             )}
           </Box>
         </Box>
+        {ratingData?.combinedDisabilityRating && (
+          <Box alignItems={'center'}>
+            <TextView>{`${t('disabilityRating.title')}: ${t('disabilityRating.combinePercent', { combinedPercent: ratingData.combinedDisabilityRating })}`}</TextView>
+          </Box>
+        )}
       </Box>
     </Pressable>
   )
