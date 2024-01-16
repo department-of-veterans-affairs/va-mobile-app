@@ -197,7 +197,7 @@ export const prefetchClaimsAndAppeals =
  * Redux action to get all claims and appeals
  */
 export const getClaimsAndAppeals =
-  (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1): AppThunk =>
+  (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1, forceRefetch = false): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaimsAndAppeals(claimType, screenID, page))))
@@ -208,7 +208,7 @@ export const getClaimsAndAppeals =
       const isActive = claimType === ClaimTypeConstants.ACTIVE
       const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
       const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, claimType, page, DEFAULT_PAGE_SIZE)
-      if (loadedClaimsAndAppeals) {
+      if (!forceRefetch && loadedClaimsAndAppeals) {
         claimsAndAppeals = loadedClaimsAndAppeals
       } else {
         claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
