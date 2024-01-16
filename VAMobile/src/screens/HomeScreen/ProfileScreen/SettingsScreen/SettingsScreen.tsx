@@ -1,7 +1,7 @@
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
@@ -31,7 +31,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const launchExternalLink = useExternalLink()
   const { canStoreWithBiometric, shouldStoreWithBiometric, settingBiometricPreference, supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const dispatchLogout = useDispatch()
+  const dispatchLogout = useAppDispatch()
   const signOutAlert = useDestructiveActionSheet()
   const _logout = () => {
     dispatchLogout(logout())

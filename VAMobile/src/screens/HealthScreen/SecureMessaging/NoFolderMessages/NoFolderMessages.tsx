@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
@@ -7,13 +6,13 @@ import { NAMESPACE } from 'constants/namespaces'
 import { SegmentedControlIndexes } from 'constants/secureMessaging'
 import { ViewStyle } from 'react-native'
 import { updateSecureMessagingTab } from 'store/slices'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 
 const NoFolderMessages: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 
   const onGoToInbox = (): void => {
