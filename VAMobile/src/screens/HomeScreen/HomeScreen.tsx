@@ -22,6 +22,7 @@ import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointmen
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -51,37 +52,38 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const { data: userAuthorizedServices } = useAuthorizedServices()
 
   useFocusEffect(
     useCallback(() => {
-      if (!appointmentsInDowntime) {
+      if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
         dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
       }
-    }, [dispatch, appointmentsInDowntime]),
+    }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments]),
   )
 
   useFocusEffect(
     useCallback(() => {
-      if (!claimsInDowntime) {
+      if (userAuthorizedServices?.claims && !claimsInDowntime) {
         dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE))
       }
-    }, [dispatch, claimsInDowntime]),
+    }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims]),
   )
 
   useFocusEffect(
     useCallback(() => {
-      if (!rxInDowntime) {
+      if (userAuthorizedServices?.prescriptions && !rxInDowntime) {
         dispatch(loadAllPrescriptions())
       }
-    }, [dispatch, rxInDowntime]),
+    }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions]),
   )
 
   useFocusEffect(
     useCallback(() => {
-      if (!smInDowntime) {
+      if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
         dispatch(getInbox())
       }
-    }, [dispatch, smInDowntime]),
+    }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
   )
 
   const onContactVA = navigateTo('ContactVA')
