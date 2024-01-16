@@ -1,6 +1,6 @@
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'ß
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AuthState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices'
