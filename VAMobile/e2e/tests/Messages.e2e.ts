@@ -446,7 +446,6 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     if(device.getPlatform() === 'ios') {
       dateWithTimeZone = await getDateWithTimeZone('October 1, 2021 5:23 PM')
-      //messageCollapsed = await element(by.id('RATANA, NARIN  October 1, 2021, 5:23 PM CDT ')).takeScreenshot('MessageCollapsed')
       messageCollapsed = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageCollapsed')
       checkImages(messageCollapsed)
       await element(by.text(dateWithTimeZone)).tap()
