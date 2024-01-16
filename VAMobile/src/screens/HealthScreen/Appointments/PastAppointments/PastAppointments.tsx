@@ -168,15 +168,11 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   const getAppointmentsInSelectedRange = (curSelectedRange: PastAppointmentsDatePickerOption, selectedPage: number): void => {
-    dispatch(
-      getAppointmentsInDateRange(
-        curSelectedRange.dates.startDate.startOf('day').toISO(),
-        curSelectedRange.dates.endDate.endOf('day').toISO(),
-        curSelectedRange.timeFrame,
-        selectedPage,
-        ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID,
-      ),
-    )
+    const startDate = curSelectedRange.dates.startDate.startOf('day').toISO()
+    const endDate = curSelectedRange.dates.endDate.endOf('day').toISO()
+    if (startDate && endDate) {
+      dispatch(getAppointmentsInDateRange(startDate, endDate, curSelectedRange.timeFrame, selectedPage, ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID))
+    }
   }
 
   const setValuesOnPickerSelect = (selectValue: string): void => {
