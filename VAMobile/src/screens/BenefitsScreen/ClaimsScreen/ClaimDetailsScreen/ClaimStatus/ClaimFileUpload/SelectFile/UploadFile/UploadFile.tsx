@@ -63,7 +63,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     if (fileUploadedFailure || filesUploadedSuccess) {
-      dispatch<any>(fileUploadSuccess())
+      dispatch(fileUploadSuccess())
     }
 
     if (filesUploadedSuccess) {
@@ -87,7 +87,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
   const onUploadConfirmed = () => {
     logAnalyticsEvent(Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'file'))
-    dispatch<any>(uploadFileToClaim(claim?.id || '', snackbarMessages, request, filesList, 'file'))
+    dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, filesList, 'file'))
   }
 
   const onUpload = (): void => {
