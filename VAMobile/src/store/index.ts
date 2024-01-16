@@ -1,4 +1,4 @@
-import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit'
+import { AnyAction, ThunkAction, configureStore } from '@reduxjs/toolkit'
 import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
 import appointmentsReducer from 'store/slices/appointmentsSlice'
@@ -55,6 +55,6 @@ export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
 
 // creates the types thunk action creator
-export type AppThunk<ReturnType = Promise<void>> = ThunkAction<ReturnType, RootState, undefined, Action>
+export type AppThunk<ReturnType = Promise<void>> = ThunkAction<ReturnType, RootState, undefined, AnyAction>
 
 export default store
