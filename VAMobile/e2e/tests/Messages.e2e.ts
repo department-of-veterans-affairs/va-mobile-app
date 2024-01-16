@@ -257,10 +257,22 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.SEND_BUTTON_ID))).toExist()
   })
 
-  it('should attach a mock file', async () => {
+  it('verify tap select a file action sheet options are correct', async () => {
     await element(by.text(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_TEXT)).tap()
     await element(by.text(MessagesE2eIdConstants.SELECT_A_FILE_ID)).tap()
-    await element(by.text('Attach')).tap()
+    await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_CAMERA_TEXT))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_PHOTO_GALLERY_TEXT))).toExist()
+    await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_FILE_FOLDER_TEXT))).toExist()
+  })
+
+  it('should close the action sheet and tap cancel', async () => {
+    if(device.getPlatform() === 'android') {
+      await element(by.text('Cancel ')).tap()
+      await element(by.text('Cancel')).atIndex(1).tap()
+    } else {
+      await element(by.text('Cancel')).atIndex(2).tap()
+      await element(by.text('Cancel')).atIndex(0).tap()
+    }
   })
 
   it('should input text into the message field', async () => {
