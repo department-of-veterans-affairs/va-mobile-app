@@ -251,7 +251,7 @@ export const AuthGuard: FC = () => {
         }, {} as { [key: string]: string | undefined })
 
         if (queryParams.utm_campaign || queryParams.utm_medium || queryParams.utm_source || queryParams.utm_term) {
-          analytics().logCampaignDetails({
+          await analytics().logCampaignDetails({
             campaign: queryParams.utm_campaign || '',
             medium: queryParams.utm_medium || '',
             source: queryParams.utm_source || '',
