@@ -227,8 +227,8 @@ export const getClaimsAndAppeals =
     try {
       let claimsAndAppeals
       const isActive = claimType === ClaimTypeConstants.ACTIVE
-      const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
-      const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, claimType, page, DEFAULT_PAGE_SIZE)
+      const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems, activeClaimsCount } = getState().claimsAndAppeals
+      const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, claimType, page, DEFAULT_PAGE_SIZE, activeClaimsCount)
       if (!forceRefetch && loadedClaimsAndAppeals) {
         claimsAndAppeals = loadedClaimsAndAppeals
       } else {
