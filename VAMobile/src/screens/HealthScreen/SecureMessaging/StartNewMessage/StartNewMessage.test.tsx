@@ -12,9 +12,7 @@ jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual('../../../../utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -76,7 +74,6 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
 context('StartNewMessage', () => {
   let props: any
   let goBack: jest.Mock
-  let navigateSpy: jest.Mock
 
   const initializeTestInstance = (
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
@@ -86,7 +83,6 @@ context('StartNewMessage', () => {
     params: Object = { attachmentFileToAdd: {} },
   ) => {
     goBack = jest.fn()
-    navigateSpy = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
@@ -94,7 +90,7 @@ context('StartNewMessage', () => {
       undefined,
       {
         addListener: mockUseComposeCancelConfirmationSpy,
-        navigate: navigateSpy,
+        navigate: mockNavigationSpy,
         goBack,
         setOptions: jest.fn(),
       },
@@ -164,7 +160,7 @@ context('StartNewMessage', () => {
     describe('on click of the go to inbox button', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', () => {
         fireEvent.press(screen.getByText('Go to inbox'))
-        expect(navigateSpy).toHaveBeenCalledWith('SecureMessaging')
+        expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
         expect(updateSecureMessagingTab).toHaveBeenCalled()
       })
     })

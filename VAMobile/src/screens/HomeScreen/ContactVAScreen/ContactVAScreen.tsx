@@ -2,14 +2,12 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea, TextView } from 'components'
-import { CrisisLineCta } from 'components'
+import { Box, ClickToCallPhoneNumber, CrisisLineCta, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 
@@ -21,11 +19,10 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const navigateTo = useRouteNavigation()
 
   const onCrisisLine = () => {
-    if (waygateNativeAlert('WG_VeteransCrisisLine')) {
-      navigation.navigate('VeteransCrisisLine')
-    }
+    navigateTo('VeteransCrisisLine')
   }
 
   const standardMarginBetween = theme.dimensions.standardMarginBetween / 2

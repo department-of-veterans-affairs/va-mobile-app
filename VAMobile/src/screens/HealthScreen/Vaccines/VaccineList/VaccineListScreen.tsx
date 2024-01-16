@@ -13,7 +13,7 @@ import { VaccineState, getVaccines } from 'store/slices/vaccineSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
-import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
@@ -38,9 +38,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
     const vaccineButton: DefaultListItemObj = {
       textLines,
       onPress: () => {
-        if (waygateNativeAlert('WG_VaccineDetails')) {
-          navigateTo('VaccineDetails', { vaccineId: vaccine.id })()
-        }
+        navigateTo('VaccineDetails', { vaccineId: vaccine.id })
       },
       a11yHintText: t('vaccines.list.a11yHint'),
       a11yValue: t('listPosition', { position: index + 1, total: vaccines.length }),

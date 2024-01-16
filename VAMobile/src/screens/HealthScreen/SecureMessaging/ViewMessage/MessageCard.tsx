@@ -8,18 +8,15 @@ import React, { FC, ReactNode } from 'react'
 import { AttachmentLink, Box, CollapsibleView, LoadingComponent, TextView } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
-import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { RootState } from 'store'
 import { SecureMessagingState, downloadFileAttachment } from 'store/slices'
-import { StackNavigationProp } from '@react-navigation/stack'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { formatSubject, getLinkifiedText } from 'utils/secureMessaging'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useExternalLink, useTheme } from 'utils/hooks'
-import { useNavigation } from '@react-navigation/native'
+import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
 import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 
@@ -34,9 +31,9 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
   const { t: tFunction } = useTranslation()
   const { hasAttachments, attachment, attachments, senderName, sentDate, body, messageId, subject, category } = message
   const dateTime = getFormattedDateAndTimeZone(sentDate)
-  const navigation = useNavigation<StackNavigationProp<HealthStackParamList, keyof HealthStackParamList>>()
   const dispatch = useAppDispatch()
   const { loadingAttachments } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const navigateTo = useRouteNavigation()
   const launchLink = useExternalLink()
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const replyExpired = demoMode && message.messageId === 2092809 ? false : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
@@ -105,7 +102,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
 
   const navigateToReplyHelp = () => {
     logAnalyticsEvent(Events.vama_sm_nonurgent())
-    navigation.navigate('ReplyHelp')
+    navigateTo('ReplyHelp')
   }
 
   const getMessageHelp = (): ReactNode => {

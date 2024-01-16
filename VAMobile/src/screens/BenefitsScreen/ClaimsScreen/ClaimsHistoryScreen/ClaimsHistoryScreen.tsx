@@ -25,9 +25,10 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { claimsAndAppealsByClaimType, loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>(
-    (state) => state.claimsAndAppeals,
-  )
+  const { claimsAndAppealsByClaimType, loadingClaimsAndAppeals, finishedLoadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<
+    RootState,
+    ClaimsAndAppealsState
+  >((state) => state.claimsAndAppeals)
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
@@ -54,6 +55,12 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
       dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
     }
   }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime, appealsNotInDowntime])
+
+  useEffect(() => {
+    if (finishedLoadingClaimsAndAppeals) {
+      logAnalyticsEvent(Events.vama_claim_count(claimsAndAppealsByClaimType.CLOSED.length, claimsAndAppealsByClaimType.ACTIVE.length))
+    }
+  }, [claimsAndAppealsByClaimType.ACTIVE.length, claimsAndAppealsByClaimType.CLOSED.length, finishedLoadingClaimsAndAppeals])
 
   const fetchInfoAgain = (): void => {
     refetchUserAuthorizedServices()
@@ -95,7 +102,6 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
 
   const onTabChange = (tab: number) => {
     if (tab !== selectedTab) {
-      logAnalyticsEvent(Events.vama_claim_count(claimsAndAppealsByClaimType.CLOSED.length, claimsAndAppealsByClaimType.ACTIVE.length, controlLabels[tab]))
       logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
     }
     setSelectedTab(tab)
