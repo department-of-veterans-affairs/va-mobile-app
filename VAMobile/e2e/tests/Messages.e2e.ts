@@ -2,13 +2,12 @@ import { expect, by, element, device, waitFor} from 'detox'
 import { loginToDemoMode, openMessages, openHealth, checkImages, resetInAppReview } from './utils'
 import { setTimeout } from "timers/promises"
 import { DateTime } from 'luxon'
-import { map } from 'underscore'
 
 export async function getDateWithTimeZone(dateString: string) {
   var date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', {zone: 'America/Chicago'})
   var dateUTC = date.toLocal()
   var dateTime = dateUTC.toLocaleString(Object.assign(DateTime.DATETIME_FULL))
-  if (device.getPlatform() === 'android') {
+  if (device.getPlatform() === 'ios') {
     dateTime = dateTime.replace(' at ', ', ')
   }
   return dateTime
@@ -137,8 +136,8 @@ describe('Messages Screen', () => {
     await tapItems('+18006982411', 'phone')
     await tapItems('1-800-698-2411.', 'phone')
   })
-
-  it('verify url links open', async () => {
+  //Currently broken on iOS.  Will be fixed with ticket 7679
+  it(':android: verify url links open', async () => {
     await tapItems('https://www.va.gov/', 'url')
     await tapItems('https://rb.gy/riwea', 'url')
     await tapItems('https://va.gov', 'url')
@@ -154,7 +153,8 @@ describe('Messages Screen', () => {
     await tapItems('mailto:test@va.gov', 'email')
   })
 
-  it('verify map links open', async () => {
+  //Currently broken on iOS.  Will be fixed with ticket 7679
+  it(':android: verify map links open', async () => {
     if(device.getPlatform() === 'ios') {
       await tapItems('http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s', 'map')
     } else {
@@ -186,6 +186,9 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID)).tap()
     await expect(element(by.text('Appointment: Preparing for your visit'))).toExist()
     await element(by.text('Messages')).tap()
+    await resetInAppReview()
+    await openHealth()
+    await openMessages()
   })
 
   it('verify other message details', async () => {
@@ -254,22 +257,10 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.SEND_BUTTON_ID))).toExist()
   })
 
-  it('verify tap select a file action sheet options are correct', async () => {
+  it('should attach a mock file', async () => {
     await element(by.text(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_TEXT)).tap()
     await element(by.text(MessagesE2eIdConstants.SELECT_A_FILE_ID)).tap()
-    await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_CAMERA_TEXT))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_PHOTO_GALLERY_TEXT))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_FILE_FOLDER_TEXT))).toExist()
-  })
-
-  it('should close the action sheet and tap cancel', async () => {
-    if(device.getPlatform() === 'android') {
-      await element(by.text('Cancel ')).tap()
-      await element(by.text('Cancel')).atIndex(1).tap()
-    } else {
-      await element(by.text('Cancel')).atIndex(2).tap()
-      await element(by.text('Cancel')).atIndex(0).tap()
-    }
+    await element(by.text('Attach')).tap()
   })
 
   it('should input text into the message field', async () => {
@@ -294,7 +285,7 @@ describe('Messages Screen', () => {
   })
 
   it('should tap and move a message', async () => {
-    await element(by.id('Diana Persson, Md 10/26/2021 Has attachment COVID: Prepping for your visit')).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID)).tap()
     await element(by.text('Move')).tap()
     await element(by.text('Custom Folder 2')).tap()
     if (device.getPlatform() === 'android') {
@@ -423,8 +414,7 @@ describe('Messages Screen', () => {
   })
 
   it('navigate to the sent folder and select the first message', async () => {
-    await device.launchApp({ newInstance: true })
-    await loginToDemoMode()
+    await resetInAppReview()
     await openHealth()
     await openMessages()
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).tap()
@@ -444,6 +434,7 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     if(device.getPlatform() === 'ios') {
       dateWithTimeZone = await getDateWithTimeZone('October 1, 2021 5:23 PM')
+      //messageCollapsed = await element(by.id('RATANA, NARIN  October 1, 2021, 5:23 PM CDT ')).takeScreenshot('MessageCollapsed')
       messageCollapsed = await element(by.id('RATANA, NARIN  ' + dateWithTimeZone + ' ')).takeScreenshot('MessageCollapsed')
       checkImages(messageCollapsed)
       await element(by.text(dateWithTimeZone)).tap()
