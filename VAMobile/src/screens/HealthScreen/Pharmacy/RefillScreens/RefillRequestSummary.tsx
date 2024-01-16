@@ -37,7 +37,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const onNavToHistory = () => {
     dispatch(dispatchSetPrescriptionsNeedLoad())
     dispatch(dispatchClearLoadingRequestRefills())
-    navigation.navigate('PrescriptionHistory', {})
+    navigateTo('PrescriptionHistory', {})
   }
 
   useEffect(() => {
@@ -190,7 +190,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
           onPress={() => {
             dispatch(dispatchSetPrescriptionsNeedLoad())
             dispatch(dispatchClearLoadingRequestRefills())
-            navigation.navigate('PrescriptionHistory', { startingFilter: RefillStatusConstants.PENDING })
+            navigateTo('PrescriptionHistory', { startingFilter: RefillStatusConstants.PENDING })
           }}
           label={t('prescriptions.refillRequestSummary.pendingRefills')}
           buttonType="buttonSecondary"
