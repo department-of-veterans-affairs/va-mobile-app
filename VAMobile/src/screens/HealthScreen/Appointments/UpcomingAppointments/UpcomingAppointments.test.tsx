@@ -12,9 +12,7 @@ jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual('../../../../utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -40,7 +38,6 @@ jest.mock('store/api', () => {
 })
 
 context('UpcomingAppointments', () => {
-  let navigateToSpy: jest.Mock
   let appointmentsByYearData: AppointmentsGroupedByYear = {
     '2020': {
       '3': [{ ...defaultAppoinment }],
@@ -49,8 +46,6 @@ context('UpcomingAppointments', () => {
 
   const initializeTestInstance = (currentPageUpcomingAppointmentsByYear?: AppointmentsGroupedByYear, loading: boolean = false) => {
     const props = mockNavProps()
-    navigateToSpy = jest.fn()
-    mockNavigationSpy.mockReturnValue(navigateToSpy)
 
     render(<UpcomingAppointments {...props} />, {
       preloadedState: {
@@ -145,7 +140,6 @@ context('UpcomingAppointments', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByTestId('Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('UpcomingAppointmentDetails', { appointmentID: '1' })
-      expect(navigateToSpy).toHaveBeenCalled()
     })
   })
 

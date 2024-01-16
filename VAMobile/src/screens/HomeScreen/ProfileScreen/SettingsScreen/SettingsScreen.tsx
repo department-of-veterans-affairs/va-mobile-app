@@ -16,7 +16,6 @@ import { RootState } from 'store'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useAppDispatch, useDestructiveActionSheet, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
@@ -74,20 +73,6 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     testId: t('biometric.title', { biometricType: supportedBiometricA11yLabel }),
   }
 
-  const onManage = () => {
-    if (waygateNativeAlert('WG_ManageYourAccount')) {
-      navigation.navigate('ManageYourAccount')
-    }
-  }
-
-  const onNotifications = () => {
-    if (waygateNativeAlert('WG_NotificationsSettings')) {
-      navigation.navigate('NotificationsSettings')
-    }
-  }
-
-  const onDebug = navigateTo('Developer')
-
   const onShare = async (): Promise<void> => {
     logAnalyticsEvent(Events.vama_click(t('shareApp.title'), t('settings.title')))
     try {
@@ -100,23 +85,17 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     }
   }
 
-  const onFeedback = () => {
-    if (waygateNativeAlert('WG_InAppRecruitment')) {
-      navigation.navigate('InAppRecruitment')
-    }
-  }
-
   const onPrivacyPolicy = async (): Promise<void> => {
     launchExternalLink(LINK_URL_PRIVACY_POLICY)
   }
 
   const items: Array<SimpleListItemObj> = _.flatten([
-    { text: t('manageAccount.title'), onPress: onManage },
+    { text: t('manageAccount.title'), onPress: () => navigateTo('ManageYourAccount') },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? biometricRow : [],
-    { text: t('notifications.title'), onPress: onNotifications },
+    { text: t('notifications.title'), onPress: () => navigateTo('NotificationsSettings') },
     { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
-    { text: t('inAppRecruitment.giveFeedback'), a11yHinText: t('inAppRecruitment.giveFeedback.a11yHint'), onPress: onFeedback },
+    { text: t('inAppRecruitment.giveFeedback'), a11yHintText: t('inAppRecruitment.giveFeedback.a11yHint'), onPress: () => navigateTo('InAppRecruitment') },
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
@@ -124,7 +103,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     const debugButton: Array<SimpleListItemObj> = [
       {
         text: t('debug.title'),
-        onPress: onDebug,
+        onPress: () => navigateTo('Developer'),
       },
     ]
 

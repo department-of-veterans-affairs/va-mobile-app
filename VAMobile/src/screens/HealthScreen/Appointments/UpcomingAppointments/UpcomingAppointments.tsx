@@ -15,7 +15,6 @@ import { getUpcomingAppointmentDateRange } from '../Appointments'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type UpcomingAppointmentsProps = Record<string, unknown>
@@ -29,7 +28,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const currentPageUpcomingAppointmentsByYear = deepCopyObject<AppointmentsGroupedByYear>(currentPageAppointmentsByYear?.upcoming)
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
-    waygateNativeAlert('WG_UpcomingAppointmentDetails') && navigateTo('UpcomingAppointmentDetails', { appointmentID })()
+    navigateTo('UpcomingAppointmentDetails', { appointmentID })
   }
 
   if (loading) {

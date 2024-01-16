@@ -22,7 +22,6 @@ jest.mock('utils/hooks', () => {
 })
 
 context('DirectDepositScreen', () => {
-  let mockNavigateToSpy: jest.Mock
 
   const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState) => {
     const directDeposit: DirectDepositState = {
@@ -37,8 +36,6 @@ context('DirectDepositScreen', () => {
       bankInfoUpdated: false,
       invalidRoutingNumberError: false,
     }
-    mockNavigateToSpy = jest.fn()
-    mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
 
     render(<DirectDepositScreen {...mockNavProps()} />, {
       preloadedState: {
@@ -79,7 +76,6 @@ context('DirectDepositScreen', () => {
     it('should call navigation navigate', () => {
       fireEvent.press(screen.getByTestId('account-boa-******1234-savings-account'))
       expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit', { displayTitle: 'Edit account' })
-      expect(mockNavigateToSpy).toHaveBeenCalled()
     })
   })
 

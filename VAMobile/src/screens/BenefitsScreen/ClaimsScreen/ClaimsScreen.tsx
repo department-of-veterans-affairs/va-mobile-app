@@ -8,7 +8,6 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
@@ -18,16 +17,12 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   const navigateTo = useRouteNavigation()
 
   const onClaimsHistory = () => {
-    if (waygateNativeAlert('WG_ClaimsHistory')) {
-      navigateTo('ClaimsHistory')()
-    }
+    navigateTo('ClaimsHistory')
   }
 
   const onClaimLettersPress = () => {
-    if (waygateNativeAlert('WG_ClaimLettersScreen')) {
-      logAnalyticsEvent(Events.vama_ddl_landing_click())
-      navigateTo('ClaimLettersScreen')()
-    }
+    logAnalyticsEvent(Events.vama_ddl_landing_click())
+    navigateTo('ClaimLettersScreen')
   }
 
   return (

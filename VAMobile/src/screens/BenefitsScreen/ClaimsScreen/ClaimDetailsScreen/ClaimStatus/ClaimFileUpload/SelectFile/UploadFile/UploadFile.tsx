@@ -16,7 +16,7 @@ import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
-import { useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
 import FileList from 'components/FileList'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
@@ -28,6 +28,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const { request: originalRequest, fileUploaded } = route.params
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const dispatch = useDispatch()
+  const navigateTo = useRouteNavigation()
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
   const confirmAlert = useDestructiveActionSheet()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
@@ -67,9 +68,9 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
     if (filesUploadedSuccess) {
       setFilesList([])
-      navigation.navigate('FileRequest', { claimID: claim?.id || '' })
+      navigateTo('FileRequest', { claimID: claim?.id || '' })
     }
-  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, filesList])
+  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigateTo, request, filesList])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
@@ -124,7 +125,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const onFileDelete = () => {
     setFilesList([])
     showSnackBar(t('fileRemoved'), dispatch, undefined, true, false, false)
-    navigation.navigate('SelectFile', { claimID: claim?.id || '', request, focusOnSnackbar: true })
+    navigateTo('SelectFile', { claimID: claim?.id || '', request, focusOnSnackbar: true })
   }
 
   const pickerField: Array<FormFieldType<unknown>> = [
