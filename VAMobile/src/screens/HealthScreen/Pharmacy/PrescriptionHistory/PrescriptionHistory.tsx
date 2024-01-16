@@ -385,7 +385,10 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
       setFilterToUse(selectedFilter)
       setSortByToUse(selectedSortBy)
       setSortOnToUse(selectedSortBy === PrescriptionSortOptionConstants.REFILL_DATE ? DESCENDING : ASCENDING)
-      logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter))
+      logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter, selectedSortBy))
+    },
+    onCancel: () => {
+      logAnalyticsEvent(Events.vama_rx_filter_cancel())
     },
     testID: 'ModalTestID',
     onShowAnalyticsFn: () => {
