@@ -235,8 +235,10 @@ export const AuthGuard: FC = () => {
   }, [dispatch])
 
   useEffect(() => {
-    Linking.getInitialURL().then((initialUrl) => {
-      // Log campaign analytics if the app is launched by a campaign link
+    // Log campaign analytics if the app is launched by a campaign link
+    const logCampaignAnalytics = async () => {
+      const initialUrl = await Linking.getInitialURL()
+
       if (initialUrl) {
         const urlParts = decodeURIComponent(initialUrl).split('?')
         const queryString = urlParts[1]
@@ -257,7 +259,9 @@ export const AuthGuard: FC = () => {
           })
         }
       }
-    })
+    }
+
+    logCampaignAnalytics()
   }, [])
 
   let content
