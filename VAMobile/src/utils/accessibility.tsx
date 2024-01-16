@@ -50,7 +50,7 @@ export const a11yValueProp = (a11yValue: AccessibilityValue): { accessibilityVal
  * @param fontScale - current font scale value
  * @param dispatch - used to call updateCurrentFontScale action
  */
-export const updateFontScale = (newState: AppStateStatus, fontScale: number, dispatch: ThunkDispatch<RootState, undefined, Action<unknown>>): void => {
+export const updateFontScale = (newState: AppStateStatus, fontScale: number, dispatch: ThunkDispatch<RootState, undefined, Action<string>>): void => {
   if (newState === 'active') {
     const fontScaleUpdated = PixelRatio.getFontScale()
     if (fontScale !== fontScaleUpdated) {
@@ -70,7 +70,7 @@ export const updateFontScale = (newState: AppStateStatus, fontScale: number, dis
 export const updateIsVoiceOverTalkBackRunning = async (
   newState: AppStateStatus,
   isVoiceOverTalkBackRunning: boolean | undefined,
-  dispatch: ThunkDispatch<RootState, undefined, Action<unknown>>,
+  dispatch: ThunkDispatch<RootState, undefined, Action<string>>,
 ): Promise<void> => {
   if (newState === 'active') {
     const isRunning = await RNCheckVoiceOver.isVoiceOverRunning()
