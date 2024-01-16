@@ -7,7 +7,7 @@ export async function getDateWithTimeZone(dateString: string) {
   var date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', {zone: 'America/Chicago'})
   var dateUTC = date.toLocal()
   var dateTime = dateUTC.toLocaleString(Object.assign(DateTime.DATETIME_FULL))
-  if (device.getPlatform() === 'ios') {
+  if (device.getPlatform() === 'android') {
     dateTime = dateTime.replace(' at ', ', ')
   }
   return dateTime
