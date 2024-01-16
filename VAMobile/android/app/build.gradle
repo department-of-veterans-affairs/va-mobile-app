@@ -129,6 +129,7 @@ android {
         versionName readVersionName()
         testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        multiDexEnabled true
     }
     signingConfigs {
         debug {
@@ -211,6 +212,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    implementation 'com.android.support:multidex:2.0.1'
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
