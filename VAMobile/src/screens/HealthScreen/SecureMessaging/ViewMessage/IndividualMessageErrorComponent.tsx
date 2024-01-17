@@ -1,8 +1,9 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, VAButton, VAScrollView } from 'components'
+import { AlertBox, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -31,7 +32,7 @@ const IndividualMessageErrorComponent: FC = () => {
             <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
             {tryAgain && (
               <Box mt={standardMarginBetween} accessibilityRole="button">
-                <VAButton onPress={tryAgain} label={t('refresh')} buttonType={ButtonTypesConstants.buttonPrimary} testID={t('refresh')} />
+                <Button onPress={tryAgain} label={t('refresh')} testID={t('refresh')} />
               </Box>
             )}
           </Box>
