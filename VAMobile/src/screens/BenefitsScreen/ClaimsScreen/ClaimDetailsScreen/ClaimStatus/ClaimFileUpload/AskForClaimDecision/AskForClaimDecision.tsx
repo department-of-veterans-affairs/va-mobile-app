@@ -1,23 +1,11 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import {
-  Box,
-  ButtonTypesConstants,
-  ErrorComponent,
-  FieldType,
-  FormFieldType,
-  FormWrapper,
-  FullScreenSubtask,
-  LoadingComponent,
-  TextArea,
-  TextView,
-  VABulletList,
-  VAButton,
-} from 'components'
+import { Box, ErrorComponent, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, TextArea, TextView, VABulletList } from 'components'
 import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices'
 import { Events } from 'constants/analytics'
@@ -150,12 +138,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
           <Box my={standardMarginBetween}>
             <FormWrapper fieldsList={formFieldsList} onSave={onRequestEvaluation} setOnSaveClicked={setOnSaveClicked} onSaveClicked={onSaveClicked} />
           </Box>
-          <VAButton
-            onPress={(): void => setOnSaveClicked(true)}
-            label={t('askForClaimDecision.submit')}
-            testID={t('askForClaimDecision.submit')}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-          />
+          <Button onPress={(): void => setOnSaveClicked(true)} label={t('askForClaimDecision.submit')} testID={t('askForClaimDecision.submit')} />
         </Box>
       </Box>
     </FullScreenSubtask>
