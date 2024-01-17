@@ -1,3 +1,4 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect } from 'react'
@@ -27,7 +28,6 @@ import {
 import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail } from 'store/slices'
 import {
   Box,
-  ButtonTypesConstants,
   ClickForActionLink,
   ClickToCallPhoneNumber,
   ErrorComponent,
@@ -38,8 +38,6 @@ import {
   TextArea,
   TextView,
   TextViewProps,
-  VAButton,
-  VAButtonProps,
 } from 'components'
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -214,8 +212,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
         navigateTo('PrepareForVideoVisit')
       }
-      // TODO uncomment for #17916
-      const hasSessionStarted = true // DateTime.fromISO(startDateUtc).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
 
       const joinSessionOnPress = (): void => {
         dispatch(clearAppointmentCancellation())
@@ -225,16 +221,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         } else {
           navigateTo('SessionNotStarted')
         }
-      }
-
-      const joinSessionButtonProps: VAButtonProps = {
-        label: t('upcomingAppointmentDetails.joinSession'),
-        testID: t('upcomingAppointmentDetails.joinSession'),
-        buttonType: ButtonTypesConstants.buttonPrimary,
-        a11yHint: t('upcomingAppointmentDetails.howToJoinVirtualSessionA11yHint'),
-        onPress: joinSessionOnPress,
-        disabled: !hasSessionStarted,
-        disabledText: t('upcomingAppointmentDetails.joinSession.disabledText'),
       }
 
       const prepareForVideoVisitLinkProps: TextViewProps = {
@@ -252,7 +238,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
 
           <Box my={theme.dimensions.standardMarginBetween}>
-            <VAButton {...joinSessionButtonProps} />
+            <Button
+              label={t('upcomingAppointmentDetails.joinSession')}
+              testID={t('upcomingAppointmentDetails.joinSession')}
+              a11yHint={t('upcomingAppointmentDetails.howToJoinVirtualSessionA11yHint')}
+              onPress={joinSessionOnPress}
+            />
           </Box>
 
           <TextView {...prepareForVideoVisitLinkProps} {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}>
@@ -366,7 +357,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           {renderSpecialInstructions()}
           {featureEnabled('patientCheckIn') && (
             <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
-              <VAButton onPress={() => navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
+              <Button onPress={() => navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} />
             </Box>
           )}
           <PreferredDateAndTime attributes={attributes} />

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, TextView, VAButton, VAScrollView } from 'components'
+import { Box, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { SegmentedControlIndexes } from 'constants/secureMessaging'
@@ -44,7 +44,7 @@ const NoFolderMessages: FC = () => {
             {t('secureMessaging.folders.noFolderMessages')}
           </TextView>
           <Box width={'100%'}>
-            <VAButton buttonType={'buttonPrimary'} label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+            <Button label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
           </Box>
         </Box>
       </VAScrollView>

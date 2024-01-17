@@ -128,7 +128,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
       <Box mb={theme.dimensions.standardMarginBetween}>
         {!replyExpired ? (
           <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
-            <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'}/>
+            <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
           </Box>
         ) : (
           <Box mx={theme.dimensions.buttonPadding}>

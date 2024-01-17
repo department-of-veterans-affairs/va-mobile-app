@@ -1,24 +1,13 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
-import {
-  Box,
-  ButtonTypesConstants,
-  CollapsibleView,
-  FieldType,
-  FormFieldType,
-  FormWrapper,
-  FullScreenSubtask,
-  LoadingComponent,
-  MessageAlert,
-  TextArea,
-  TextView,
-  VAButton,
-} from 'components'
+import { Box, CollapsibleView, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, MessageAlert, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE, SegmentedControlIndexes } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -51,7 +40,6 @@ import {
   useValidateMessageWithSignature,
 } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { useSelector } from 'react-redux'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
@@ -281,13 +269,12 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           </Pressable>
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <VAButton
+          <Button
             label={t('secureMessaging.formMessage.send')}
             onPress={() => {
               setOnSendClicked(true)
               setOnSaveDraftClicked(false)
             }}
-            buttonType={ButtonTypesConstants.buttonPrimary}
             testID="sendButtonTestID"
           />
         </Box>

@@ -1,8 +1,9 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToA11yLabel } from 'store/api/types'
-import { Box, ButtonTypesConstants, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextArea, TextView, VAButton } from 'components'
+import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -153,11 +154,11 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
         <>
           {phoneOnly && linkOrPhone}
           <Box mt={phoneOnly ? theme.dimensions.standardMarginBetween : undefined}>
-            <VAButton
+            <Button
               onPress={onCancelAppointment}
               label={t('upcomingAppointmentDetails.cancelAppointment')}
-              buttonType={ButtonTypesConstants.buttonDestructive}
-              {...testIdProps(t('upcomingAppointmentDetails.cancelAppointment'))}
+              buttonType={ButtonVariants.Destructive}
+              testID={t('upcomingAppointmentDetails.cancelAppointment')}
             />
           </Box>
         </>

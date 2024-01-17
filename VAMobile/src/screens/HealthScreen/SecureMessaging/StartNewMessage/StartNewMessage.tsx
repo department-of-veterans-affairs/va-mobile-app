@@ -1,5 +1,7 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
@@ -7,7 +9,6 @@ import _ from 'underscore'
 import {
   AlertBox,
   Box,
-  ButtonTypesConstants,
   CollapsibleView,
   ErrorComponent,
   FieldType,
@@ -18,7 +19,6 @@ import {
   MessageAlert,
   PickerItem,
   TextArea,
-  VAButton,
 } from 'components'
 import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
@@ -55,7 +55,6 @@ import {
   useValidateMessageWithSignature,
 } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { useSelector } from 'react-redux'
 
 type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
 
@@ -341,7 +340,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
           text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
           textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           border="error">
-          <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
         </AlertBox>
       )
     }
@@ -384,13 +383,12 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
             </Pressable>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
+            <Button
               label={t('secureMessaging.formMessage.send')}
               onPress={() => {
                 setOnSendClicked(true)
                 setOnSaveDraftClicked(false)
               }}
-              buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>
         </TextArea>
