@@ -63,7 +63,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
 
 type PaymentsStackScreenProps = Record<string, unknown>
 
-const PaymentsScreenStack = createStackNavigator()
+const PaymentsScreenStack = createStackNavigator<PaymentsStackParamList>()
 
 /**
  * Stack screen for the Payments tab. Screens placed within this stack will appear in the context of the app level tab navigator
