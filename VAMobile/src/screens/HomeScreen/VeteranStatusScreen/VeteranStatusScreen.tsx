@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { BackgroundVariant, BorderColorVariant, Box, BoxProps, ClickToCallPhoneNumber, LargePanel, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
@@ -18,7 +18,7 @@ import { usePersonalInformation } from 'api/personalInformation/getPersonalInfor
 
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
 
-const VeteranStatusScreen: FC<VeteranStatusScreenProps> = () => {
+function VeteranStatusScreen({}: VeteranStatusScreenProps) {
   const { serviceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((state) => state.militaryService)
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const { data: userAuthorizedServices } = useAuthorizedServices()

@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, BoxProps, ButtonTypesConstants, ChildTemplate, TextArea, TextView, VAButton } from 'components'
@@ -14,7 +14,7 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
 
-const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) => {
+function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()

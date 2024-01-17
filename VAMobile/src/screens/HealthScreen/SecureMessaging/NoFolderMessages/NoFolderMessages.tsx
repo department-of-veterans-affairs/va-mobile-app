@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -9,7 +9,7 @@ import { updateSecureMessagingTab } from 'store/slices'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 
-const NoFolderMessages: FC = () => {
+function NoFolderMessages() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()

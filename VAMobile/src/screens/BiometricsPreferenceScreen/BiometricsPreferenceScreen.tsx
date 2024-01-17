@@ -1,7 +1,7 @@
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { AuthState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices'
 import { Box, TextView, VAScrollView } from 'components'
@@ -13,7 +13,7 @@ import { useAppDispatch, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
 
-const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
+function BiometricsPreferenceScreen({}: SyncScreenProps) {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)

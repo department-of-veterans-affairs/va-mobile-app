@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 
 import _ from 'underscore'
 
@@ -10,7 +10,7 @@ type AppealTimelineProps = {
   events: Array<AppealEventData>
 }
 
-const AppealTimeline: FC<AppealTimelineProps> = ({ events }) => {
+function AppealTimeline({ events }: AppealTimelineProps) {
   return (
     <Box>
       {_.map(events, (event, index) => {

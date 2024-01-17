@@ -1,7 +1,7 @@
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
@@ -31,7 +31,7 @@ const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
-export const HomeScreen: FC<HomeScreenProps> = () => {
+export function HomeScreen({}: HomeScreenProps) {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -104,7 +104,7 @@ const HomeScreenStack = createStackNavigator()
 /**
  * Stack screen for the Home tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
-const HomeStackScreen: FC<HomeStackScreenProps> = () => {
+function HomeStackScreen({}: HomeStackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const screenOptions = {
     headerShown: false,
