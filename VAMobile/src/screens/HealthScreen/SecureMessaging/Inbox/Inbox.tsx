@@ -25,12 +25,12 @@ const Inbox: FC<InboxProps> = () => {
   const paginationMetaData = paginationMetaByFolderId?.[SecureMessagingSystemFolderIdConstants.INBOX]
 
   const onInboxMessagePress = (messageID: number): void => {
-    navigateTo('ViewMessageScreen', {
+    navigateTo('ViewMessage', {
       messageID,
       folderID: SecureMessagingSystemFolderIdConstants.INBOX,
       currentPage: paginationMetaData?.currentPage || 1,
       messagesLeft: inboxMessages.length,
-    })()
+    })
   }
 
   if (loadingInbox) {

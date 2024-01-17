@@ -71,6 +71,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
+  const screenError = useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)
   const { upcomingAppointmentsById, loading, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>(
     (state) => state.appointments,
   )
@@ -112,6 +113,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       navigation.goBack()
     }
   }, [appointmentCancellationStatus, dispatch, navigation])
+
+  useEffect(() => {
+    if (!screenError && appointmentNotFound) {
+      logAnalyticsEvent(Events.vama_appt_deep_link_fail(vetextID))
+    }
+  }, [appointmentNotFound, screenError, vetextID])
 
   const goBack = (): void => {
     dispatch(clearAppointmentCancellation())
@@ -204,7 +211,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
       const onPrepareForVideoVisit = () => {
         dispatch(clearAppointmentCancellation())
-        navigateTo('PrepareForVideoVisit')()
+
+        navigateTo('PrepareForVideoVisit')
       }
       // TODO uncomment for #17916
       const hasSessionStarted = true // DateTime.fromISO(startDateUtc).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
@@ -215,7 +223,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         if (url) {
           launchExternalLink(url)
         } else {
-          navigateTo('SessionNotStarted')()
+          navigateTo('SessionNotStarted')
         }
       }
 
@@ -322,7 +330,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     )
   }
 
-  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || appointmentNotFound) {
+  if (screenError || appointmentNotFound) {
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
@@ -358,7 +366,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           {renderSpecialInstructions()}
           {featureEnabled('patientCheckIn') && (
             <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
-              <VAButton onPress={navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
+              <VAButton onPress={() => navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
             </Box>
           )}
           <PreferredDateAndTime attributes={attributes} />

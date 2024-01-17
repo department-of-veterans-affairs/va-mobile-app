@@ -1,10 +1,9 @@
 import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
-import { ReactNode, useEffect, useRef, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
 import {
@@ -54,6 +53,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFocusEffect } from '@react-navigation/native'
@@ -201,7 +201,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
   useFocusEffect(
     React.useCallback(() => {
-      if (prescriptionsNeedLoad && userAuthorizedServices?.prescriptions && !prescriptionInDowntime) {
+      if (screenContentAllowed('WG_PrescriptionHistory') && prescriptionsNeedLoad && userAuthorizedServices?.prescriptions && !prescriptionInDowntime) {
         dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
       }
     }, [dispatch, prescriptionsNeedLoad, userAuthorizedServices?.prescriptions, prescriptionInDowntime]),
@@ -288,7 +288,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const prescriptionDetailsClicked = (prescriptionID: string) => {
     logAnalyticsEvent(Events.vama_rx_details(prescriptionID))
-    return navigation.navigate('PrescriptionDetails', { prescriptionId: prescriptionID })
+    return navigateTo('PrescriptionDetails', { prescriptionId: prescriptionID })
   }
 
   const prescriptionItems = () => {
@@ -351,7 +351,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           bottomContent,
           bottomOnPress() {
             logAnalyticsEvent(Events.vama_rx_trackdet(prescription.id))
-            navigation.navigate('RefillTrackingModal', { prescription: prescription })
+            navigateTo('RefillTrackingModal', { prescription: prescription })
           },
         }
       }
@@ -592,7 +592,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     const requestRefillButtonProps: VAButtonProps = {
       label: t('prescription.history.startRefillRequest'),
       buttonType: ButtonTypesConstants.buttonPrimary,
-      onPress: navigateTo('RefillScreenModal'),
+      onPress: () => navigateTo('RefillScreenModal'),
     }
     return (
       <Box mx={theme.dimensions.buttonPadding}>
@@ -646,7 +646,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     icon: helpIconProps,
     onPress: () => {
       logAnalyticsEvent(Events.vama_rx_help())
-      navigation.navigate('PrescriptionHelp')
+      navigateTo('PrescriptionHelp')
     },
   }
 

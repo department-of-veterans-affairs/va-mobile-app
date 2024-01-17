@@ -48,7 +48,8 @@ import { SubjectLengthValidationFn, formatSubject, getStartNewMessageCategoryPic
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
-import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
+import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
@@ -58,6 +59,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const goToDrafts = useGoToDrafts()
+  const navigateTo = useRouteNavigation()
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.deleteDraft.snackBarMessage'),
     errorMsg: t('secureMessaging.deleteDraft.snackBarErrorMessage'),
@@ -117,17 +119,19 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
   useEffect(() => {
-    dispatch(resetSaveDraftFailed())
-    dispatch(dispatchResetDeleteDraftFailed())
+    if (screenContentAllowed('WG_EditDraft')) {
+      dispatch(resetSaveDraftFailed())
+      dispatch(dispatchResetDeleteDraftFailed())
 
-    if (messageID) {
-      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID, true))
-      dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      if (messageID) {
+        dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID, true))
+        dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      }
+      dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      InteractionManager.runAfterInteractions(() => {
+        setIsTransitionComplete(true)
+      })
     }
-    dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-    InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
   }, [messageID, dispatch])
 
   useEffect(() => {
@@ -138,13 +142,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const goToDraftFolder = useCallback(
     (draftSaved: boolean): void => {
-      navigation.navigate('FolderMessages', {
+      navigateTo('FolderMessages', {
         folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
         folderName: FolderNameTypeConstants.drafts,
         draftSaved,
       })
     },
-    [navigation],
+    [navigateTo],
   )
 
   useEffect(() => {
@@ -159,14 +163,14 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
-      navigation.navigate('SecureMessaging')
-      navigation.navigate('FolderMessages', {
+      navigateTo('SecureMessaging')
+      navigateTo('FolderMessages', {
         folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
         folderName: FolderNameTypeConstants.drafts,
         draftSaved: false,
       })
     }
-  }, [sendMessageComplete, dispatch, navigation])
+  }, [sendMessageComplete, dispatch, navigateTo])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
@@ -333,7 +337,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
-    navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
+    navigateTo('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
   }
 
   let formFieldsList: Array<FormFieldType<unknown>> = []
@@ -422,7 +426,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
     dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-    navigation.navigate('SecureMessaging')
+    navigateTo('SecureMessaging')
   }
 
   const onMessageSendOrSave = (): void => {
@@ -455,7 +459,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
     const navigateToReplyHelp = () => {
       logAnalyticsEvent(Events.vama_sm_nonurgent())
-      navigation.navigate('ReplyHelp')
+      navigateTo('ReplyHelp')
     }
 
     return (

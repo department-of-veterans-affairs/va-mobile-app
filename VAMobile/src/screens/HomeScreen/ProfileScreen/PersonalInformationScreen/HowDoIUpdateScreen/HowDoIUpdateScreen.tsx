@@ -21,7 +21,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
   const { screenType } = route.params
 
   const linkProps: TextViewProps = {
-    onPress: navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('webview.vagov'), loadingMessage: t('webview.valocation.loading') }),
+    onPress: () => navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('webview.vagov'), loadingMessage: t('webview.valocation.loading') }),
     variant: 'MobileBody',
     color: 'link',
     textDecoration: 'underline',
@@ -33,7 +33,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
   }
 
   const linkNameProps: TextViewProps = {
-    onPress: navigateTo('Webview', { url: WEBVIEW_URL_CHANGE_LEGAL_NAME, displayTitle: t('webview.vagov'), loadingMessage: t('webview.changeLegalName.loading') }),
+    onPress: () => navigateTo('Webview', { url: WEBVIEW_URL_CHANGE_LEGAL_NAME, displayTitle: t('webview.vagov'), loadingMessage: t('webview.changeLegalName.loading') }),
     variant: 'MobileBody',
     color: 'link',
     textDecoration: 'underline',
@@ -101,7 +101,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
   }
 
   return (
-    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
+    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')} testID="PersonalInformationTestID">
       {renderUI()}
     </LargePanel>
   )

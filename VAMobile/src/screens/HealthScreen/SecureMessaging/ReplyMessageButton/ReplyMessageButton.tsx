@@ -13,7 +13,7 @@ const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const onPress = navigateTo('ReplyMessage', { messageID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  const onPress = () => navigateTo('ReplyMessage', { messageID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   const replyButtonProps: VAButtonProps = {
     label: t('reply'),

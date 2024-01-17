@@ -1,4 +1,5 @@
 import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, PressableProps } from 'react-native'
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 import React, { FC, ReactElement, useState } from 'react'
 
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
@@ -189,7 +190,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     // nooop for switch types, need to press on the switch specifically
     if (onPress) {
       if (isSwitchRow) {
-        triggerHaptic('impactHeavy')
+        triggerHaptic(HapticFeedbackTypes.impactHeavy)
       }
       onPress()
     }
@@ -198,7 +199,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   const onDecoratorPress = (): void => {
     // if we're a switch type, need to handle the press on the decorator specifically
     if (isSwitchRow && onPress) {
-      triggerHaptic('impactHeavy')
+      triggerHaptic(HapticFeedbackTypes.impactHeavy)
       onPress()
     }
   }

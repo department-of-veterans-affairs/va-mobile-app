@@ -2,8 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea, TextView } from 'components'
-import { CrisisLineCta } from 'components'
+import { Box, ClickToCallPhoneNumber, CrisisLineCta, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
@@ -22,7 +21,9 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
+  const onCrisisLine = () => {
+    navigateTo('VeteransCrisisLine')
+  }
 
   const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
 

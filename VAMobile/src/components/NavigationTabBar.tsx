@@ -11,7 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VA_ICON_MAP } from './VAIcon'
 import { a11yValueProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import Box from './Box'
 import VAIconWithText, { VAIconWithTextProps } from './VAIconWithText/VAIconWithText'
 
@@ -41,6 +41,7 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, translation }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const navigateTo = useRouteNavigation()
 
   const onPress = (route: TabBarRoute, isFocused: boolean): void => {
     const event = navigation.emit({
@@ -50,7 +51,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
     })
 
     if (!isFocused && !event.defaultPrevented) {
-      navigation.navigate(route.name)
+      navigateTo(route.name)
     }
   }
 

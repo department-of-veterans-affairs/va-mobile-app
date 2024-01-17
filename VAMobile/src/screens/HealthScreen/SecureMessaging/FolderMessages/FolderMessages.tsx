@@ -9,7 +9,8 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { useAppDispatch, useError, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
@@ -22,6 +23,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
@@ -30,10 +32,12 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const title = t('text.raw', { text: folderName })
 
   useEffect(() => {
-    // Load first page messages
-    dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
-    // If draft saved message showing, clear status so it doesn't show again
-    dispatch(resetSaveDraftComplete())
+    if (screenContentAllowed('WG_FolderMessages')) {
+      // Load first page messages
+      dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
+      // If draft saved message showing, clear status so it doesn't show again
+      dispatch(resetSaveDraftComplete())
+    }
   }, [dispatch, folderID])
 
   useEffect(() => {
@@ -50,11 +54,12 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   }, [deleteDraftComplete, dispatch, t])
 
   const onMessagePress = (messageID: number, isDraft?: boolean): void => {
-    const screen = isDraft ? 'EditDraft' : 'ViewMessageScreen'
+    const screen = isDraft ? 'EditDraft' : 'ViewMessage'
     const args = isDraft
       ? { messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} }
       : { messageID, folderID, currentPage: paginationMetaData?.currentPage || 1, messagesLeft: messages.length }
-    navigation.navigate(screen, args)
+
+    navigateTo(screen, args)
   }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {

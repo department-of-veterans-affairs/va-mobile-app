@@ -13,7 +13,7 @@ import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../Pres
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { useAppDispatch, useDestructiveActionSheet, useDowntime, useExternalLink, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useDowntime, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import DetailsTextSections from './DetailsTextSections'
 import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
@@ -30,6 +30,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
   const launchExternalLink = useExternalLink()
   const submitRefillAlert = useDestructiveActionSheet()
   const dispatch = useAppDispatch()
+  const navigateTo = useRouteNavigation()
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const noneNoted = t('noneNoted')
@@ -121,7 +122,7 @@ const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }
                   logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
                   dispatch(requestRefills([prescription]))
                 }
-                navigation.navigate('RefillScreenModal')
+                navigateTo('RefillScreenModal')
               },
             },
           ],

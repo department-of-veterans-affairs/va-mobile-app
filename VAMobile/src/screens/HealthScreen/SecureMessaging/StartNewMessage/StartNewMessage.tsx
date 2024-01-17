@@ -42,6 +42,7 @@ import { SnackbarMessages } from 'components/SnackBar'
 import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import {
   useAppDispatch,
   useAttachments,
@@ -49,6 +50,7 @@ import {
   useDestructiveActionSheet,
   useError,
   useMessageWithSignature,
+  useRouteNavigation,
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
@@ -62,6 +64,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const draftAttachmentAlert = useDestructiveActionSheet()
+  const navigateTo = useRouteNavigation()
 
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.draft.saved'),
@@ -96,15 +99,17 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
   useEffect(() => {
-    dispatch(resetSaveDraftComplete())
-    dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+    if (screenContentAllowed('WG_StartNewMessage')) {
+      dispatch(resetSaveDraftComplete())
+      dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
 
-    if (PREPOPULATE_SIGNATURE && !signature) {
-      dispatch(getMessageSignature())
+      if (PREPOPULATE_SIGNATURE && !signature) {
+        dispatch(getMessageSignature())
+      }
+      InteractionManager.runAfterInteractions(() => {
+        setIsTransitionComplete(true)
+      })
     }
-    InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
   }, [dispatch, signature])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
@@ -150,23 +155,23 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   useEffect(() => {
     if (saveDraftComplete) {
       dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
-      navigation.navigate('SecureMessaging')
-      navigation.navigate('FolderMessages', {
+      navigateTo('SecureMessaging')
+      navigateTo('FolderMessages', {
         folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
         folderName: FolderNameTypeConstants.drafts,
         draftSaved: true,
       })
     }
-  }, [saveDraftComplete, navigation, dispatch])
+  }, [saveDraftComplete, navigateTo, dispatch])
 
   useEffect(() => {
     // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
       dispatch(resetHasLoadedRecipients())
-      navigation.navigate('SecureMessaging')
+      navigateTo('SecureMessaging')
     }
-  }, [sendMessageComplete, dispatch, navigation])
+  }, [sendMessageComplete, dispatch, navigateTo])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
@@ -225,7 +230,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
-    navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
+    navigateTo('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
   }
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -306,7 +311,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
     dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-    navigation.navigate('SecureMessaging')
+    navigateTo('SecureMessaging')
   }
 
   const onMessageSendOrSave = (): void => {
@@ -343,7 +348,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
 
     const navigateToReplyHelp = () => {
       logAnalyticsEvent(Events.vama_sm_nonurgent())
-      navigation.navigate('ReplyHelp')
+      navigateTo('ReplyHelp')
     }
 
     return (

@@ -31,24 +31,28 @@ const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
-export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
+export const HomeScreen: FC<HomeScreenProps> = () => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
 
-  const onContactVA = navigateTo('ContactVA')
+  const onContactVA = () => {
+    navigateTo('ContactVA')
+  }
+
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
-    navigation.navigate('Webview', {
+    navigateTo('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
       displayTitle: t('webview.vagov'),
       loadingMessage: t('webview.valocation.loading'),
     })
   }
+
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('home_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
+    navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
 
   const buttonDataList: Array<SimpleListItemObj> = [
@@ -65,15 +69,19 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     name: 'ProfileSelected',
   }
 
+  const onProfile = () => {
+    navigateTo('Profile')
+  }
+
   const headerButton = {
     label: t('profile.title'),
     icon: profileIconProps,
-    onPress: navigateTo('Profile'),
+    onPress: onProfile,
   }
 
   return (
-    <CategoryLanding headerButton={headerButton}>
-      <Box flex={1} justifyContent="flex-start">
+    <CategoryLanding headerButton={headerButton} testID="homeScreenID">
+      <Box>
         <EncourageUpdateAlert />
         <Nametag />
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
@@ -129,7 +137,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
       <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen name="RemoteConfig" component={RemoteConfigScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen name="Sandbox" component={SandboxScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="HapticsDemo" component={HapticsDemoScreen} options={{ headerShown: false }} />
     </HomeScreenStack.Navigator>
   )
 }

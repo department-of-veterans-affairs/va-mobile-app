@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openPersonalInformation, openProfile } from './utils'
+import { enableAF, verifyAF, openSettings, openDeveloperScreen, loginToDemoMode, openPersonalInformation, openProfile } from './utils'
 
 export const PersonalInfoConstants = {
   PERSONAL_INFORMATION_TEXT: 'Personal information',
@@ -19,10 +19,8 @@ export const PersonalInfoConstants = {
 }
 
 const scrollToThenTap = async (text: string) => {
-  await waitFor(element(by.text(text)))
-    .toBeVisible()
-    .whileElement(by.id('PersonalInformationTestID'))
-    .scroll(500, 'down')
+  await element(by.id('PersonalInformationTestID')).atIndex(0).scrollTo('bottom')
+  await waitFor(element(by.text(text))).toBeVisible()
   await element(by.text(text)).tap()
 }
 
@@ -46,13 +44,28 @@ const checkLocatorAndContactLinks = async () => {
 beforeAll(async () => {
   await loginToDemoMode()
   await openProfile()
-  await openPersonalInformation()
-  await waitFor(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT)))
-    .toExist()
-    .withTimeout(10000)
 })
 
 describe('Personal Info Screen', () => {
+  it('should verify AF use case 3 for profile', async() => {
+    await openSettings()
+		await openDeveloperScreen()
+		await element(by.text('Remote Config')).tap()
+    await enableAF('WG_PersonalInformation', 'AllowFunction')
+    await enableAF('WG_HowDoIUpdate', 'AllowFunction')
+    await enableAF('WG_PreferredName', 'AllowFunction')
+    await enableAF('WG_GenderIdentity', 'AllowFunction')
+    await enableAF('WG_WhatToKnow', 'AllowFunction')
+    await device.launchApp({newInstance: true})
+    await loginToDemoMode()
+    await openProfile()
+    await openPersonalInformation()
+    await waitFor(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT)))
+      .toExist()
+      .withTimeout(10000)
+    await verifyAF(undefined, 'AllowFunction', undefined)
+  })
+  
   it('should match design', async () => {
     await expect(element(by.text('Date of birth'))).toExist()
     await expect(element(by.text('January 01, 1950'))).toExist()
@@ -66,11 +79,12 @@ describe('Personal Info Screen', () => {
 
   it('should tap links in "How to update" large panel', async () => {
     await element(by.text(PersonalInfoConstants.HOW_TO_UPDATE_LINK_TEXT)).tap()
+    await verifyAF(undefined, 'AllowFunction', undefined)
     await expect(element(by.text('Profile help'))).toExist()
 
     await element(by.text(PersonalInfoConstants.LEARN_HOW_LINK_TEXT)).tap()
-    await element(by.text('Done')).tap()
     await device.takeScreenshot('personalInfoLearnHowToWebPage')
+    await element(by.text('Done')).tap()
 
     if (device.getPlatform() === 'android') {     
       await checkLocatorAndContactLinks()
@@ -81,6 +95,7 @@ describe('Personal Info Screen', () => {
 
   it('should tap links in "How to fix an error" large panel', async () => {
     await element(by.text(PersonalInfoConstants.HOW_TO_FIX_LINK_TEXT)).tap()
+    await verifyAF(undefined, 'AllowFunction', undefined)
     await expect(element(by.text('Profile help'))).toExist()
 
     if (device.getPlatform() === 'android') {
@@ -108,8 +123,11 @@ describe('Personal Info Screen', () => {
   })
 
   it('should update gender identity', async () => {
+    await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
     await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
+    await verifyAF(undefined, 'AllowFunction', undefined)
     await expect(element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).atIndex(0)).toExist()
+    await scrollToThenTap(PersonalInfoConstants.PREFER_NOT_TEXT)
     await element(by.text(PersonalInfoConstants.PREFER_NOT_TEXT)).tap()
     await element(by.text('Save')).tap()
 
@@ -118,6 +136,7 @@ describe('Personal Info Screen', () => {
     await expect(element(by.text(PersonalInfoConstants.PREFER_NOT_TEXT))).toExist()
     await element(by.text('Dismiss')).tap()
 
+    await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
     await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
     await expect(element(by.text('Gender identity saved'))).not.toExist()
     await expect(element(by.label(PersonalInfoConstants.PREFER_NOT_TEXT + ' ').withDescendant(by.id('RadioFilled')))).toExist()
@@ -125,10 +144,18 @@ describe('Personal Info Screen', () => {
   })
 
   it('should show "What to know" large panel in gender identity section', async () => {
+    await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
     await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
+    await verifyAF(undefined, 'AllowFunction', undefined)
     await scrollToThenTap(PersonalInfoConstants.GENDER_IDENTITY_WHAT_TO_KNOW_TEXT)
     await expect(element(by.text('Profile help'))).toExist()
     await element(by.text('Close')).tap()
     await element(by.text('Cancel')).tap()
+  })
+
+  it('should disable AF', async () => {
+    await device.uninstallApp()
+    await device.installApp()
+    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
   })
 })

@@ -1,8 +1,9 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { AlertBox, BasicError, Box, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, BasicError, Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, downloadLetter } from 'store/slices'
@@ -63,12 +64,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ navigation, route }) => {
           <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
             {description}
           </TextView>
-          <VAButton
-            onPress={onViewLetter}
-            label={t('letters.benefitService.viewLetter')}
-            testID={t('letters.benefitService.viewLetter')}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-          />
+          <Button onPress={onViewLetter} label={t('letters.benefitService.viewLetter')} testID={t('letters.benefitService.viewLetter')} />
         </TextArea>
       </Box>
     </FeatureLandingTemplate>

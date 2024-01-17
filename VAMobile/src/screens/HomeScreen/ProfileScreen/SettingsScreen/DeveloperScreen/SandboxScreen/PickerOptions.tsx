@@ -1,6 +1,7 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import React from 'react'
 
-import { Box, ButtonTypesConstants, PickerItem, TextView, VAButton } from 'components'
+import { Box, PickerItem, TextView } from 'components'
 import { getTheme } from 'styles/themes/standardTheme'
 import VAColors from 'styles/themes/VAColors'
 
@@ -28,7 +29,7 @@ export const generateChildrenPickerOptions = () => {
       label: 'one button',
       value: (
         <Box my={standardTheme.dimensions.standardMarginBetween}>
-          <VAButton onPress={() => {}} label={'Button'} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={() => {}} label={'Button'} />
         </Box>
       ),
     },
@@ -52,7 +53,7 @@ export const generateChildrenPickerOptions = () => {
             fugiat eius qui expedita voluptatem et exercitationem reprehenderit quod quia 33 consequatur optio.
           </TextView>
           <Box my={standardTheme.dimensions.condensedMarginBetween}>
-            <VAButton onPress={() => {}} label={'Button'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <Button onPress={() => {}} label={'Button'} />
           </Box>
         </Box>
       ),

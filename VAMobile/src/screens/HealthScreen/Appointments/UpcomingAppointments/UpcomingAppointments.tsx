@@ -28,7 +28,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const currentPageUpcomingAppointmentsByYear = deepCopyObject<AppointmentsGroupedByYear>(currentPageAppointmentsByYear?.upcoming)
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
-    navigateTo('UpcomingAppointmentDetails', { appointmentID })()
+    navigateTo('UpcomingAppointmentDetails', { appointmentID })
   }
 
   if (loading) {

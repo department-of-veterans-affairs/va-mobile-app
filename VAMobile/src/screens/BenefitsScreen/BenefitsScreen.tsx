@@ -12,6 +12,7 @@ import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
@@ -32,20 +33,34 @@ const BenefitsScreen: FC<BenefitsScreenProps> = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Benefits') })
 
   const ratingPercent = ratingData?.combinedDisabilityRating
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
   const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
 
-  const claimsDestination = featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters ? 'Claims' : 'ClaimsHistory'
+  const onDisabilityRatings = () => {
+    navigateTo('DisabilityRatings')
+  }
+
+  const onClaims = () => {
+    if (featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters) {
+      navigateTo('Claims')
+    } else {
+      navigateTo('ClaimsHistory')
+    }
+  }
+
+  const onLetters = () => {
+    navigateTo('LettersOverview')
+  }
 
   return (
-    <CategoryLanding title={t('benefits.title')}>
+    <CategoryLanding title={t('benefits.title')} testID="benefitsTestID">
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('disabilityRating.title')}
-          onPress={navigateTo('DisabilityRatings')}
+          onPress={onDisabilityRatings}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
@@ -54,7 +69,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = () => {
         />
         <LargeNavButton
           title={t('claims.title')}
-          onPress={navigateTo(claimsDestination)}
+          onPress={onClaims}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
@@ -62,7 +77,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = () => {
         />
         <LargeNavButton
           title={t('lettersAndDocs.title')}
-          onPress={navigateTo('LettersOverview')}
+          onPress={onLetters}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}

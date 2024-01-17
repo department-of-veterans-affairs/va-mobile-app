@@ -46,6 +46,7 @@ import {
   useBeforeNavBackListener,
   useDestructiveActionSheet,
   useMessageWithSignature,
+  useRouteNavigation,
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
@@ -59,6 +60,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const draftAttachmentAlert = useDestructiveActionSheet()
+  const navigateTo = useRouteNavigation()
 
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
@@ -139,23 +141,23 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   useEffect(() => {
     if (saveDraftComplete) {
       dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
-      navigation.navigate('SecureMessaging')
-      navigation.navigate('FolderMessages', {
+      navigateTo('SecureMessaging')
+      navigateTo('FolderMessages', {
         folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
         folderName: FolderNameTypeConstants.drafts,
         draftSaved: true,
       })
     }
-  }, [saveDraftComplete, navigation, dispatch])
+  }, [saveDraftComplete, navigateTo, dispatch])
 
   useEffect(() => {
     // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
       dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-      navigation.navigate('SecureMessaging')
+      navigateTo('SecureMessaging')
     }
-  }, [sendMessageComplete, dispatch, navigation])
+  }, [sendMessageComplete, dispatch, navigateTo])
 
   if (loading || savingDraft || loadingSignature || !isTransitionComplete || isDiscarded) {
     const text = savingDraft
@@ -180,7 +182,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
-    navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
+    navigateTo('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
@@ -230,7 +232,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const navigateToReplyHelp = () => {
     logAnalyticsEvent(Events.vama_sm_nonurgent())
-    navigation.navigate('ReplyHelp')
+    navigateTo('ReplyHelp')
   }
 
   const renderForm = (): ReactNode => (

@@ -59,7 +59,7 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
 
       const onSaveDraft = (): void => {
         if (!isFormValid) {
-          navigateTo('StartNewMessage', { saveDraftConfirmFailed: true })()
+          navigateTo('StartNewMessage', { saveDraftConfirmFailed: true })
         } else {
           dispatch(saveDraft(messageData, snackbarMessages, draftMessageID, !!replyToID, replyToID, true))
           dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
@@ -71,11 +71,11 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
         resetAlerts()
         if (isReply && replyToID) {
           dispatch(resetReplyTriageError())
-          navigateTo('ViewMessageScreen', { messageID: replyToID })()
+          navigateTo('ViewMessage', { messageID: replyToID })
         } else if (isEditDraft) {
           goToDrafts(false)
         } else {
-          navigateTo('SecureMessaging')()
+          navigateTo('SecureMessaging')
         }
       }
 
@@ -114,6 +114,6 @@ export function useGoToDrafts(): (draftSaved: boolean) => void {
       folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
       folderName: FolderNameTypeConstants.drafts,
       draftSaved,
-    })()
+    })
   }
 }

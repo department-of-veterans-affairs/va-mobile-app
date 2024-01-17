@@ -263,6 +263,7 @@ Product will need to create on in the Github folder and link it here.
 - [ ] UX has completed visual QA
 - [ ] Content has completed content QA
 - [ ] Accessibility testing has been completed
+- [ ] Demo mode has been updated - MVP
 - [ ] QA sign off 
 - [ ] Obtain Go/No Go decision from Mobile POs and / or Octo POs for launch
 - [ ] PM fills out and completes Epic's checklists 
@@ -290,6 +291,7 @@ Product will need to create on in the Github folder and link it here.
 - [ ] Where updates need to be communicated (Team of Teams, MHV Weekly Standup, other, etc) 
 - [ ] What approvals will we need (ex. Internal POs, External POs, CAIA, external, etc) 
 - [ ] How and when are we going to measure success / failure
+- [ ] Does In-App App Store Feedback need to be modified for this project
 - [ ] Other:
       
 </details>
@@ -330,9 +332,9 @@ Product will need to create on in the Github folder and link it here.
 - [ ] Collaborate with Sitewide Content team for alignment, improvements, and sign-off
 - [ ] Participate in FE hand off
 - [ ] Complete content QA
-- [ ] Write copy for What's New In App
-- [ ] Write copy for app stores' What's New sections.
-- [ ] Write copy for updated screenshots in app stores
+- [ ] Write copy for What's New In App, if needed 
+- [ ] Write copy for app stores' What's New sections, if needed 
+- [ ] Write copy for updated screenshots in app stores, if needed 
 - [ ] Other:
       
 </details>
@@ -347,6 +349,7 @@ Product will need to create on in the Github folder and link it here.
 - [ ] Does this project require api integration? if yes, what api endpoint are we integrating with and what is the expected response body?
 - [ ] Do we want to capture analytics for this projects (i.e. update GA, add logs to grafana/datadog etc)?If yes, what metrics would we like to capture?
 - [ ] Do we need to update our in-app review code to include this new feature?
+- [ ] Ensure demo mode is updated and working properly with the latest change/feature
 - [ ] Determine what analytics are going into production with MVP 
 - [ ] Other: 
 
@@ -381,7 +384,7 @@ Product will need to create on in the Github folder and link it here.
 - [ ] Determine if analytics can be tested by QA - if so coordinate with QA 
 - [ ] Modify or create dashboard to account for this feature 
 - [ ] Determine how long after production that analytics can be measured and reviewed 
-- [ ]  Other:
+- [ ] Other:
  
 </details>
 

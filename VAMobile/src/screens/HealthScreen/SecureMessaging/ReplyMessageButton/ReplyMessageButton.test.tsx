@@ -9,18 +9,13 @@ jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 context('ReplyMessageButton', () => {
-  let navigateToSpy: jest.Mock
 
   beforeEach(() => {
-    navigateToSpy = jest.fn()
-    mockNavigationSpy.mockReturnValue(navigateToSpy)
     render(<ReplyMessageButton messageID={1} />)
   })
 
@@ -28,7 +23,6 @@ context('ReplyMessageButton', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Reply' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('ReplyMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {}, messageID: 1 })
-      expect(navigateToSpy).toHaveBeenCalled()
     })
   })
 })

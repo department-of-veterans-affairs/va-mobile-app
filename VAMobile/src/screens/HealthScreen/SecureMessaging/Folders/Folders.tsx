@@ -118,7 +118,7 @@ const Folders: FC<FoldersProps> = () => {
       }
     }
     logAnalyticsEvent(Events.vama_sm_folder_open(folder()))
-    navigateTo('FolderMessages', { folderID, folderName })()
+    navigateTo('FolderMessages', { folderID, folderName })
   }
 
   if (loadingFolders) {

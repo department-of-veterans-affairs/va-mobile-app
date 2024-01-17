@@ -3,6 +3,7 @@ import { loginToDemoMode, checkImages, openHealth, openVaccineRecords } from './
 
 export const VaccinesE2eIdConstants = {
   VACCINE_1_ID: 'COVID-19 vaccine January 14, 2021',
+  VACCINE_2_ID: 'COVID-19 vaccine December 18, 2020',
   VACCINE_3_ID: 'FLU vaccine May 10, 2018',
   VACCINE_5_ID: 'PneumoPPV vaccine April 28, 2016',
   VACCINE_6_ID: 'FLU vaccine April 28, 2016',
@@ -44,8 +45,15 @@ describe('Vaccine Records Screen', () => {
   it('should tap on VA vaccines and navigate back to the vaccines list', async () => {
     await element(by.text('VA vaccines')).tap()
   })
+
+  it('verify no disclaimer is displayed when all fields are populated', async () => {
+    await element(by.id(VaccinesE2eIdConstants.VACCINE_2_ID)).tap()
+    await expect(element(by.text('None noted'))).not.toExist()
+    await expect(element(by.label('We base this information on your current  V-A  health records. If you have any questions, contact your health care team.'))).not.toExist()
+    await element(by.text('VA vaccines')).tap()
+  })
   
-  it('verify no manugacturer for non COVID-19 record', async () => {
+  it('verify no manufacturer for non COVID-19 record', async () => {
     await element(by.id(VaccinesE2eIdConstants.VACCINE_3_ID)).tap()
     await expect(element(by.text('Manufacturer'))).not.toExist()
     await element(by.text('VA vaccines')).tap()

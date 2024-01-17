@@ -1,4 +1,5 @@
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { Dimensions, ScrollView } from 'react-native'
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -7,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
-import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, LoadingComponent, PhotoAdd, PhotoPreview, TextView, VAButton } from 'components'
+import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, PhotoAdd, PhotoPreview, TextView } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
@@ -21,7 +22,7 @@ import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/comm
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
-import { useBeforeNavBackListener, useDestructiveActionSheet, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveActionSheet, useOrientation, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOrAddPhotos'>
@@ -38,6 +39,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
   const confirmAlert = useDestructiveActionSheet()
+  const navigateTo = useRouteNavigation()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
   const scrollViewRef = useRef<ScrollView>(null)
   const snackbarMessages: SnackbarMessages = {
@@ -77,9 +79,9 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
     if (filesUploadedSuccess) {
       setImagesList([])
-      navigation.navigate('FileRequest', { claimID: claim?.id || '' })
+      navigateTo('FileRequest', { claimID: claim?.id || '' })
     }
-  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, imagesList])
+  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigateTo, request, imagesList])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
@@ -93,18 +95,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       }
     })
   }, [documentType])
-
-  if (loadingFileUpload) {
-    return (
-      <FullScreenSubtask
-        leftButtonText={t('cancel')}
-        onLeftButtonPress={() => {
-          navigation.dispatch(StackActions.pop(2))
-        }}>
-        <LoadingComponent text={t('fileUpload.loading')} />
-      </FullScreenSubtask>
-    )
-  }
 
   const onUploadConfirmed = () => {
     logAnalyticsEvent(Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
@@ -245,7 +235,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     if (response.length === 0) {
       setImagesList([])
       showSnackBar(t('photoRemoved'), dispatch, undefined, true, false, false)
-      navigation.navigate('TakePhotos', { claimID: claim?.id || '', request, focusOnSnackbar: true })
+      navigateTo('TakePhotos', { claimID: claim?.id || '', request, focusOnSnackbar: true })
     } else {
       setErrorMessage('')
       setImagesList(response)
@@ -269,56 +259,59 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         logAnalyticsEvent(Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
         navigation.dispatch(StackActions.pop(2))
       }}>
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        {!!errorMessage && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox scrollViewRef={scrollViewRef} title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" focusOnError={onSaveClicked} />
-          </Box>
-        )}
-        <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
-          {request.displayName}
-        </TextView>
-        <Box
-          backgroundColor={'contentBox'}
-          borderTopWidth={1}
-          borderTopColor="primary"
-          borderBottomWidth={1}
-          borderBottomColor="primary"
-          pt={theme.dimensions.standardMarginBetween}
-          pb={theme.dimensions.standardMarginBetween}
-          display="flex"
-          flexDirection="row"
-          flexWrap="wrap">
-          {displayImages()}
-        </Box>
-        <Box
-          justifyContent="space-between"
-          flexDirection="row"
-          flexWrap="wrap"
-          mx={theme.dimensions.gutter}
-          mt={theme.dimensions.condensedMarginBetween}
-          mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="HelperText">{t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}</TextView>
-          <TextView
-            variant="HelperText"
-            accessibilityLabel={t('fileUpload.ofFiftyMB.a11y', { sizeOfPhotos: bytesToFinalSizeDisplayA11y(totalBytesUsed ? totalBytesUsed : 0, t, false) })}>
-            {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
+      {loadingFileUpload ? (
+        <LoadingComponent text={t('fileUpload.loading')} />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          {!!errorMessage && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AlertBox scrollViewRef={scrollViewRef} title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" focusOnError={onSaveClicked} />
+            </Box>
+          )}
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
+            {request.displayName}
           </TextView>
-        </Box>
-        <Box mx={theme.dimensions.gutter}>
-          <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
-          <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-            <VAButton
-              onPress={() => {
-                setOnSaveClicked(true)
-              }}
-              label={t('fileUpload.submit')}
-              testID={t('fileUpload.submit')}
-              buttonType={ButtonTypesConstants.buttonPrimary}
-            />
+          <Box
+            backgroundColor={'contentBox'}
+            borderTopWidth={1}
+            borderTopColor="primary"
+            borderBottomWidth={1}
+            borderBottomColor="primary"
+            pt={theme.dimensions.standardMarginBetween}
+            pb={theme.dimensions.standardMarginBetween}
+            display="flex"
+            flexDirection="row"
+            flexWrap="wrap">
+            {displayImages()}
+          </Box>
+          <Box
+            justifyContent="space-between"
+            flexDirection="row"
+            flexWrap="wrap"
+            mx={theme.dimensions.gutter}
+            mt={theme.dimensions.condensedMarginBetween}
+            mb={theme.dimensions.standardMarginBetween}>
+            <TextView variant="HelperText">{t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}</TextView>
+            <TextView
+              variant="HelperText"
+              accessibilityLabel={t('fileUpload.ofFiftyMB.a11y', { sizeOfPhotos: bytesToFinalSizeDisplayA11y(totalBytesUsed ? totalBytesUsed : 0, t, false) })}>
+              {t('fileUpload.ofFiftyMB', { sizeOfPhotos: bytesToFinalSizeDisplay(totalBytesUsed ? totalBytesUsed : 0, t, false) })}
+            </TextView>
+          </Box>
+          <Box mx={theme.dimensions.gutter}>
+            <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+            <Box mt={theme.dimensions.textAndButtonLargeMargin}>
+              <Button
+                onPress={() => {
+                  setOnSaveClicked(true)
+                }}
+                label={t('fileUpload.submit')}
+                testID={t('fileUpload.submit')}
+              />
+            </Box>
           </Box>
         </Box>
-      </Box>
+      )}
     </FullScreenSubtask>
   )
 }

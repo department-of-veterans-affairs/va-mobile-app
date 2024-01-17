@@ -1,3 +1,4 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useSelector } from 'react-redux'
@@ -8,7 +9,6 @@ import {
   BasicError,
   Box,
   ButtonDecoratorType,
-  ButtonTypesConstants,
   ClickForActionLink,
   DefaultList,
   DefaultListItemObj,
@@ -20,7 +20,6 @@ import {
   SimpleListItemObj,
   TextArea,
   TextView,
-  VAButton,
 } from 'components'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -31,6 +30,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yHintProp } from 'utils/accessibility'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -53,7 +53,9 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const [atLeastOneServiceDisabilityToggle, setAtLeastOneServiceDisabilityToggle] = useState(true)
 
   useEffect(() => {
-    dispatch(getLetterBeneficiaryData(ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
+    if (screenContentAllowed('WG_BenefitSummaryServiceVerificationLetter')) {
+      dispatch(getLetterBeneficiaryData(ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
+    }
   }, [dispatch])
 
   const getListOfMilitaryService = (): React.ReactNode => {
@@ -195,21 +197,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
   }
 
-  if (letterDownloadError) {
-    return (
-      <FeatureLandingTemplate backLabel={t('letters.overview.viewLetters')} backLabelOnPress={navigation.goBack} title={t('letters.details.title')}>
-        <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('letters.download.tryAgain.a11y')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingLetterBeneficiaryData || downloading || !letterBeneficiaryData) {
-    return (
-      <FeatureLandingTemplate backLabel={t('letters.overview.viewLetters')} backLabelOnPress={navigation.goBack} title={t('letters.details.title')}>
-        <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
+  const loadingCheck = loadingLetterBeneficiaryData || downloading || !letterBeneficiaryData
 
   return (
     <FeatureLandingTemplate
@@ -217,55 +205,56 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
       testID="BenefitSummaryServiceVerificationTestID">
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('letters.benefitService.title')}
+      {letterDownloadError ? (
+        <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('letters.download.tryAgain.a11y')} />
+      ) : loadingCheck ? (
+        <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <TextArea>
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {t('letters.benefitService.title')}
+            </TextView>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+              {t('letters.benefitService.summary')}
+            </TextView>
+          </TextArea>
+
+          <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} accessibilityRole="header" paragraphSpacing={true}>
+            {t('letters.benefitService.chooseIncludedInformation')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('letters.benefitService.summary')}
+          {getListOfMilitaryService()}
+          <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            {t('letters.benefitService.ourRecordsShow')}
           </TextView>
-        </TextArea>
+          <SimpleList items={includeMilitaryServiceInfoList} />
 
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} accessibilityRole="header" paragraphSpacing={true}>
-          {t('letters.benefitService.chooseIncludedInformation')}
-        </TextView>
-        {getListOfMilitaryService()}
-        <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          {t('letters.benefitService.ourRecordsShow')}
-        </TextView>
-        <SimpleList items={includeMilitaryServiceInfoList} />
-
-        <SimpleList
-          items={getBenefitAndDisabilityToggleList()}
-          title={t('letters.benefitService.benefitAndDisabilityInfo')}
-          titleA11yLabel={a11yLabelVA(t('letters.benefitService.benefitAndDisabilityInfo'))}
-        />
-
-        <TextView accessibilityLabel={a11yLabelVA(t('letters.benefitService.sendMessageIfIncorrectInfo'))} variant="MobileBody" m={theme.dimensions.standardMarginBetween}>
-          {t('letters.benefitService.sendMessageIfIncorrectInfo')}
-        </TextView>
-
-        <Box ml={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          <ClickForActionLink
-            displayedText={t('letters.benefitService.sendMessage')}
-            linkType={LinkTypeOptionsConstants.url}
-            numberOrUrlLink={LINK_URL_ASK_VA_GOV}
-            linkUrlIconType={LinkUrlIconType.Arrow}
-            {...a11yHintProp(t('letters.benefitService.sendMessageA11yHint'))}
-            a11yLabel={a11yLabelVA(t('letters.benefitService.sendMessage'))}
+          <SimpleList
+            items={getBenefitAndDisabilityToggleList()}
+            title={t('letters.benefitService.benefitAndDisabilityInfo')}
+            titleA11yLabel={a11yLabelVA(t('letters.benefitService.benefitAndDisabilityInfo'))}
           />
-        </Box>
 
-        <Box mx={theme.dimensions.gutter}>
-          <VAButton
-            onPress={onViewLetter}
-            label={t('letters.benefitService.viewLetter')}
-            testID={t('letters.benefitService.viewLetter')}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-          />
+          <TextView accessibilityLabel={a11yLabelVA(t('letters.benefitService.sendMessageIfIncorrectInfo'))} variant="MobileBody" m={theme.dimensions.standardMarginBetween}>
+            {t('letters.benefitService.sendMessageIfIncorrectInfo')}
+          </TextView>
+
+          <Box ml={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            <ClickForActionLink
+              displayedText={t('letters.benefitService.sendMessage')}
+              linkType={LinkTypeOptionsConstants.url}
+              numberOrUrlLink={LINK_URL_ASK_VA_GOV}
+              linkUrlIconType={LinkUrlIconType.Arrow}
+              {...a11yHintProp(t('letters.benefitService.sendMessageA11yHint'))}
+              a11yLabel={a11yLabelVA(t('letters.benefitService.sendMessage'))}
+            />
+          </Box>
+
+          <Box mx={theme.dimensions.gutter}>
+            <Button onPress={onViewLetter} label={t('letters.benefitService.viewLetter')} testID={t('letters.benefitService.viewLetter')} />
+          </Box>
         </Box>
-      </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }
