@@ -116,7 +116,7 @@ function BenefitsStackScreen() {
       <BenefitsScreenStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <BenefitsScreenStack.Screen name="ClaimLettersScreen" component={ClaimLettersScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <BenefitsScreenStack.Screen name="ClaimsHistory" component={ClaimsHistoryScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <BenefitsScreenStack.Screen name="ClaimsHistoryScreen" component={ClaimsHistoryScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <BenefitsScreenStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <BenefitsScreenStack.Screen name="DisabilityRatings" component={DisabilityRatingsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="FileRequest" component={FileRequest} options={{ headerShown: false }} />

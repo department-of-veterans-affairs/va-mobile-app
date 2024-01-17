@@ -100,7 +100,7 @@ export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFu
   type TT = keyof T
   return <X extends TT>(routeName: X, args?: T[X]) => {
     if (waygateNativeAlert(`WG_${String(routeName)}` as WaygateToggleType)) {
-      navigation.navigate({routeName, args} as never)
+      navigation.navigate({ routeName, args } as never)
     }
   }
 }

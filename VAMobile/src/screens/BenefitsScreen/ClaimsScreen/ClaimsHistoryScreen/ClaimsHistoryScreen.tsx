@@ -19,7 +19,7 @@ import { useSelector } from 'react-redux'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from '../NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
-type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'Claims'>
+type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'ClaimsHistoryScreen'>
 
 function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
