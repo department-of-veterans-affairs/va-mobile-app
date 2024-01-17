@@ -9,7 +9,7 @@ import { useTheme } from 'utils/hooks'
 
 type WhatToKnowScreenProps = StackScreenProps<HomeStackParamList, 'WhatToKnow'>
 
-function WhatToKnowScreen({}: WhatToKNowScreenProps) {
+function WhatToKnowScreen({}: WhatToKnowScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 

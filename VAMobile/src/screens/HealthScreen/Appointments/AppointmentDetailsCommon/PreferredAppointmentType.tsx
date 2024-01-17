@@ -12,7 +12,7 @@ type PreferredAppointmentTypeProps = {
   attributes: AppointmentAttributes
 }
 
-function PreferredAppointmentType({ attributes }) {
+function PreferredAppointmentType({ attributes }: PreferredAppointmentTypeProps) {
   const isAppointmentPending = isAPendingAppointment(attributes)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()

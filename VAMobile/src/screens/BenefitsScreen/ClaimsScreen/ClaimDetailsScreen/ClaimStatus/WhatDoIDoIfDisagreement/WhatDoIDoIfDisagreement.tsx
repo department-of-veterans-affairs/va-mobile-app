@@ -14,7 +14,7 @@ const { LINK_URL_DECISION_REVIEWS } = getEnv()
 
 type WhatDoIDoIfDisagreementProps = StackScreenProps<BenefitsStackParamList, 'WhatDoIDoIfDisagreement'>
 
-function WhatDoIDoIfDisagreement({ navigation, route }: WhatDoIDoIfDisagreementProps) {
+function WhatDoIDoIfDisagreement({ route }: WhatDoIDoIfDisagreementProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()

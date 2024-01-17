@@ -1,6 +1,6 @@
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
@@ -17,7 +17,7 @@ import PaymentHistoryScreen from './PaymentHistory/PaymentHistoryScreen'
 
 type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
 
-const PaymentsScreen: FC<PaymentsScreenProps> = () => {
+function PaymentsScreen({}: PaymentsScreenProps) {
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: screenContentAllowed('WG_Payments') })
 
   const theme = useTheme()
@@ -68,7 +68,7 @@ const PaymentsScreenStack = createStackNavigator()
 /**
  * Stack screen for the Payments tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
-const PaymentsStackScreen: FC<PaymentsStackScreenProps> = () => {
+function PaymentsStackScreen({}: PaymentsStackScreenProps) {
   const screenOptions = {
     headerShown: false,
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
