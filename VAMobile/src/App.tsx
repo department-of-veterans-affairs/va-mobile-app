@@ -243,6 +243,36 @@ export function AuthGuard() {
     }
   }, [dispatch])
 
+  useEffect(() => {
+    // Log campaign analytics if the app is launched by a campaign link
+    const logCampaignAnalytics = async () => {
+      const initialUrl = await Linking.getInitialURL()
+
+      if (initialUrl) {
+        const urlParts = decodeURIComponent(initialUrl).split('?')
+        const queryString = urlParts[1]
+        const queryParts = queryString?.split('&') || []
+
+        const queryParams = queryParts.reduce((params, queryPart) => {
+          const [key, value] = queryPart.split('=')
+          params[key] = value
+          return params
+        }, {} as { [key: string]: string | undefined })
+
+        if (queryParams.utm_campaign || queryParams.utm_medium || queryParams.utm_source || queryParams.utm_term) {
+          await analytics().logCampaignDetails({
+            campaign: queryParams.utm_campaign || '',
+            medium: queryParams.utm_medium || '',
+            source: queryParams.utm_source || '',
+            term: queryParams.utm_term,
+          })
+        }
+      }
+    }
+
+    logCampaignAnalytics()
+  }, [])
+
   let content
   if (initializing || loadingRemoteConfig) {
     content = (
