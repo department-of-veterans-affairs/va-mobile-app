@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 
-import { Carousel, TextLine } from 'components'
+import { Carousel, CarouselScreen, TextLine } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord } from 'utils/formattingUtils'
 
@@ -98,7 +98,7 @@ function OnboardingCarousel() {
     dispatch(completeFirstTimeLogin())
   }
 
-  const screenList = [
+  const screenList: Array<CarouselScreen> = [
     {
       name: 'OnboardingAppOverview',
       component: OnboardingAppOverview,

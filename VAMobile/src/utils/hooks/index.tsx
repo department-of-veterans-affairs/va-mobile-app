@@ -1,5 +1,5 @@
 import { AccessibilityInfo, Alert, AlertButton, AppState, Dimensions, EmitterSubscription, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
-import { EventArg, useNavigation } from '@react-navigation/native'
+import { CommonActions, EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
@@ -100,7 +100,12 @@ export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFu
   type TT = keyof T
   return <X extends TT>(routeName: X, args?: T[X]) => {
     if (waygateNativeAlert(`WG_${String(routeName)}` as WaygateToggleType)) {
-      navigation.navigate({ routeName, args } as never)
+      navigation.dispatch(
+        CommonActions.navigate({
+          name: `${String(routeName)}`,
+          params: args,
+        }),
+      )
     }
   }
 }
