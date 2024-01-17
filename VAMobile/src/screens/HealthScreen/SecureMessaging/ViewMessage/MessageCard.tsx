@@ -18,7 +18,6 @@ import { formatSubject, getLinkifiedText } from 'utils/secureMessaging'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
-import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
 
 export type MessageCardProps = {
   /* message object */
@@ -117,13 +116,27 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
     )
   }
 
-  const onPress = () => {
+  const onStartMessagePress = () => {
     logAnalyticsEvent(Events.vama_sm_start())
     navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
   }
 
+  const onReplyPress = () => navigateTo('ReplyMessage', { messageID: messageId, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+
   const getReplyOrStartNewMessageButton = (): ReactNode => {
-    return <Box mb={theme.dimensions.standardMarginBetween}>{!replyExpired ? <ReplyMessageButton messageID={messageId} /> : <Box mx={theme.dimensions.buttonPadding}><Button label={t('secureMessaging.startNewMessage')} onPress = {onPress} testID={'startNewMessageButtonTestID'} /></Box>}</Box>
+    return (
+      <Box mb={theme.dimensions.standardMarginBetween}>
+        {!replyExpired ? (
+          <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+            <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'}/>
+          </Box>
+        ) : (
+          <Box mx={theme.dimensions.buttonPadding}>
+            <Button label={t('secureMessaging.startNewMessage')} onPress={onStartMessagePress} testID={'startNewMessageButtonTestID'} />
+          </Box>
+        )}
+      </Box>
+    )
   }
 
   return (
