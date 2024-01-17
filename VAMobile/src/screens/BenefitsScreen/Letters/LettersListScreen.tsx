@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
@@ -21,7 +21,7 @@ import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = StackScreenProps<BenefitsStackParamList, 'LettersList'>
 
-const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
+function LettersListScreen({ navigation }: LettersListScreenProps) {
   const dispatch = useAppDispatch()
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const { letters, loading } = useSelector<RootState, LettersState>((state) => state.letters)

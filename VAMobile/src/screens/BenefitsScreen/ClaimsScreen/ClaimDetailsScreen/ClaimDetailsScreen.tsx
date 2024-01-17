@@ -4,7 +4,7 @@ import { TFunction } from 'i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
@@ -29,7 +29,7 @@ export const getClaimType = (claim: ClaimData | undefined, translation: TFunctio
 
 type ClaimDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimDetailsScreen'>
 
-const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) => {
+function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)

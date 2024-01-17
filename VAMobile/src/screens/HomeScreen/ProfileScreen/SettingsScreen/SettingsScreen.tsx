@@ -3,7 +3,7 @@ import { Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, logout, setBiometricsPreference } from 'store/slices'
@@ -23,7 +23,7 @@ const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_
 
 type SettingsScreenProps = StackScreenProps<HomeStackParamList, 'Settings'>
 
-const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
+function SettingsScreen({ navigation }: SettingsScreenProps) {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()

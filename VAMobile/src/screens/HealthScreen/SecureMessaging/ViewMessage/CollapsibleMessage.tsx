@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, Ref } from 'react'
+import React, { Ref } from 'react'
 
 import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, LoadingComponent, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -24,7 +24,7 @@ export type ThreadMessageProps = {
   collapsibleMessageRef?: Ref<View>
 }
 
-const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage, collapsibleMessageRef }) => {
+function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }: ThreadMessageProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()

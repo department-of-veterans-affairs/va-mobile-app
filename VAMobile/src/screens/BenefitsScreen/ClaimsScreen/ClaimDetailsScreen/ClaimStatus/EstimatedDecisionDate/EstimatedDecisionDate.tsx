@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement } from 'react'
+import React from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -16,7 +16,7 @@ type EstimatedDecisionDateProps = {
   showCovidMessage: boolean
 }
 
-const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, showCovidMessage }): ReactElement => {
+function EstimatedDecisionDate({ maxEstDate, showCovidMessage }: EstimatedDecisionDateProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()

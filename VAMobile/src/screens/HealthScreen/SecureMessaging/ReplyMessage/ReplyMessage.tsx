@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import {
@@ -55,7 +55,7 @@ import { useSelector } from 'react-redux'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
-const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
+function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -235,7 +235,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     navigateTo('ReplyHelp')
   }
 
-  const renderForm = (): ReactNode => (
+  function renderForm() {
     <Box>
       <MessageAlert
         scrollViewRef={scrollViewRef}
@@ -293,9 +293,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         </Box>
       </TextArea>
     </Box>
-  )
+  }
 
-  const renderMessageThread = (): ReactNode => {
+  function renderMessageThread() {
     return (
       <Box>
         <Box accessible={true} accessibilityRole={'header'}>

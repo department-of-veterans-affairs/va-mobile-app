@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import {
@@ -31,7 +31,7 @@ import { useAppDispatch, useDestructiveActionSheet, useError, useRouteNavigation
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
 
-const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }) => {
+function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
