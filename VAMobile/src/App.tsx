@@ -63,7 +63,7 @@ const { ENVIRONMENT, IS_TEST } = getEnv()
 enableScreens(true)
 injectStore(store)
 
-const Stack = createStackNavigator<WebviewStackParams & undefined>()
+const Stack = createStackNavigator<StackNaveParamList>()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
 const RootNavStack = createStackNavigator<RootNavStackParamList>()
 
@@ -81,6 +81,15 @@ export type RootNavStackParamList = WebviewStackParams & {
     displayTitle: string
   }
   Tabs: undefined
+}
+
+type StackNaveParamList =  WebviewStackParams & {
+  Splash: undefined
+  BiometricsPreference: undefined
+  Sync: undefined
+  Login: undefined
+  LoaGate: undefined
+  VeteransCrisisLine: undefined
 }
 
 type RootTabNavParamList = {
