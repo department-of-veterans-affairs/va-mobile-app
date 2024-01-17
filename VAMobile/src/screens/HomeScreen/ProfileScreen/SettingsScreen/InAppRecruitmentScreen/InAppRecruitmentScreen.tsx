@@ -1,15 +1,16 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useNavigationState } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, ButtonTypesConstants, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView, VABulletList, VAButton } from 'components'
+import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView, VABulletList } from 'components'
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useNavigationState } from '@react-navigation/native'
 import getEnv from 'utils/env'
 
 type InAppRecruitmentScreenProps = StackScreenProps<HomeStackParamList, 'InAppRecruitment'>
@@ -41,7 +42,7 @@ const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation })
       url: LINK_URL_IN_APP_RECRUITMENT,
       displayTitle: t('webview.vagov'),
       loadingMessage: t('inAppRecruitment.goToQuestionnaire.loading'),
-    })()
+    })
     setIsWebviewOpen(true)
   }
 
@@ -70,7 +71,7 @@ const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation })
             },
           ]}
         />
-        <VAButton onPress={onPress} label={t('inAppRecruitment.goToQuestionnaire')} buttonType={ButtonTypesConstants.buttonPrimary} />
+        <Button onPress={onPress} label={t('inAppRecruitment.goToQuestionnaire')} />
         <Box mt={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink
             displayedText={t('inAppRecruitment.learnMore')}

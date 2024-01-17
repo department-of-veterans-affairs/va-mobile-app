@@ -16,7 +16,6 @@ import { getGroupedAppointments, getTextLinesForAppointmentListItem, getYearsToS
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = Record<string, unknown>
@@ -124,7 +123,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   // This ensures we have the data before we update the currentPage and the UI.
   const { currentPage, perPage, totalEntries } = paginationByTimeFrame[timeFrame]
   const onPastAppointmentPress = (appointmentID: string): void => {
-    waygateNativeAlert('WG_PastAppointmentDetails') && navigateTo('PastAppointmentDetails', { appointmentID })()
+    navigateTo('PastAppointmentDetails', { appointmentID })
   }
 
   const listWithAppointmentsAdded = (listItems: Array<DefaultListItemObj>, listOfAppointments: AppointmentsList): Array<DefaultListItemObj> => {
@@ -169,15 +168,11 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   const getAppointmentsInSelectedRange = (curSelectedRange: PastAppointmentsDatePickerOption, selectedPage: number): void => {
-    dispatch(
-      getAppointmentsInDateRange(
-        curSelectedRange.dates.startDate.startOf('day').toISO(),
-        curSelectedRange.dates.endDate.endOf('day').toISO(),
-        curSelectedRange.timeFrame,
-        selectedPage,
-        ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID,
-      ),
-    )
+    const startDate = curSelectedRange.dates.startDate.startOf('day').toISO()
+    const endDate = curSelectedRange.dates.endDate.endOf('day').toISO()
+    if (startDate && endDate) {
+      dispatch(getAppointmentsInDateRange(startDate, endDate, curSelectedRange.timeFrame, selectedPage, ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID))
+    }
   }
 
   const setValuesOnPickerSelect = (selectValue: string): void => {

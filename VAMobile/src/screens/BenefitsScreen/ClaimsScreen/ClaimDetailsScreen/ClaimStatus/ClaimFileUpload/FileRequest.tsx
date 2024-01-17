@@ -1,3 +1,4 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { map } from 'underscore'
 import { useSelector } from 'react-redux'
@@ -5,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, ButtonTypesConstants, ChildTemplate, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
+import { Box, ChildTemplate, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
 import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
 import { Events } from 'constants/analytics'
@@ -16,7 +17,6 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
 
@@ -36,9 +36,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
 
     const onDetailsPress = (request: ClaimEventData) => {
       logAnalyticsEvent(Events.vama_request_details(claimID, request.trackedItemId || null, request.type))
-      if (waygateNativeAlert('WG_FileRequestDetails')) {
-        navigateTo('FileRequestDetails', { claimID, request })()
-      }
+      navigateTo('FileRequestDetails', { claimID, request })
     }
 
     const getA11yLabel = (requestIndex: number, displayName?: string, uploaded?: boolean) => {
@@ -80,9 +78,7 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
     if (claim) {
       logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, count))
     }
-    if (waygateNativeAlert('WG_AskForClaimDecision')) {
-      navigateTo('AskForClaimDecision', { claimID })()
-    }
+    navigateTo('AskForClaimDecision', { claimID })
   }
 
   return (
@@ -113,11 +109,10 @@ const FileRequest: FC<FileRequestProps> = ({ navigation, route }) => {
               <TextView variant="MobileBody" paragraphSpacing={true}>
                 {t('fileRequest.askForYourClaimEvaluationBody')}
               </TextView>
-              <VAButton
+              <Button
                 onPress={viewEvaluationDetailsPress}
                 label={t('fileRequest.viewEvaluationDetails')}
                 testID={t('fileRequest.viewEvaluationDetails')}
-                buttonType={ButtonTypesConstants.buttonPrimary}
                 a11yHint={t('fileRequest.viewEvaluationDetails')}
               />
             </TextArea>

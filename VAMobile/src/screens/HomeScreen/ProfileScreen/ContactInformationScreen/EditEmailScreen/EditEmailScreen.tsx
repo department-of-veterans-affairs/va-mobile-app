@@ -1,9 +1,10 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, VAButton } from 'components'
+import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
 import { EMAIL_REGEX_EXP } from 'constants/common'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -191,7 +192,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
         <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
           {contactInformation?.contactEmail?.emailAddress && (
             <Box my={theme.dimensions.standardMarginBetween}>
-              <VAButton onPress={onDeletePressed} label={t('contactInformation.removeData', { pageName: emailTitle })} buttonType={ButtonTypesConstants.buttonDestructive} />
+              <Button onPress={onDeletePressed} label={t('contactInformation.removeData', { pageName: emailTitle })} buttonType={ButtonVariants.Destructive} />
             </Box>
           )}
           {formContainsError && (

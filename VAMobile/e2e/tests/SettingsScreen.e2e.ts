@@ -9,13 +9,13 @@ export const SettingsE2eIdConstants = {
   MANAGE_ACCT_SCREEN_TEXT: 'To confirm or update your sign-in email, go to the website where you manage your account information.',
   NOTIFICATIONS_ROW_TEXT: 'Notifications',
   NOTIFICATIONS_SCREEN_TEXT: 'Select what type of alerts you would like to receive.',
-  NOTIFICATIONS_APPOINTMENT_TEXT: 'Appointment Reminders',
-  NOTIFICATIONS_MESSAGING_TEXT: 'Secure Message Alerts',
+  NOTIFICATIONS_APPOINTMENT_TEXT: 'Upcoming appointments',
+  NOTIFICATIONS_MESSAGING_TEXT: 'New messages',
   SHARE_APP_ROW_TEXT: 'Share the app',
   SHARE_APP_SCREEN_TEXT:
     'Download the VA: Health and Benefits on the App Store: https://apps.apple.com/us/app/va-health-and-benefits/id1559609596 or on Google Play: https://play.google.com/store/apps/details?id=gov.va.mobileapp',
   PRIVACY_ROW_TEXT: 'Privacy policy',
-  SIGN_OUT_BTN_ID: 'Sign out', 
+  SIGN_OUT_BTN_ID: 'Sign out',
   SIGN_OUT_CONFIRM_TEXT: device.getPlatform() === 'ios' ? 'Sign Out' : 'Sign Out ',
 }
 

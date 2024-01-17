@@ -1,4 +1,5 @@
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { Dimensions, ScrollView } from 'react-native'
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -7,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
-import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, LoadingComponent, PhotoAdd, PhotoPreview, TextView, VAButton } from 'components'
+import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, PhotoAdd, PhotoPreview, TextView } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
@@ -21,7 +22,7 @@ import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/comm
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
-import { useBeforeNavBackListener, useDestructiveActionSheet, useOrientation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveActionSheet, useOrientation, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOrAddPhotos'>
@@ -38,6 +39,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
   const confirmAlert = useDestructiveActionSheet()
+  const navigateTo = useRouteNavigation()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
   const scrollViewRef = useRef<ScrollView>(null)
   const snackbarMessages: SnackbarMessages = {
@@ -77,9 +79,9 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
     if (filesUploadedSuccess) {
       setImagesList([])
-      navigation.navigate('FileRequest', { claimID: claim?.id || '' })
+      navigateTo('FileRequest', { claimID: claim?.id || '' })
     }
-  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, imagesList])
+  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigateTo, request, imagesList])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
@@ -233,7 +235,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     if (response.length === 0) {
       setImagesList([])
       showSnackBar(t('photoRemoved'), dispatch, undefined, true, false, false)
-      navigation.navigate('TakePhotos', { claimID: claim?.id || '', request, focusOnSnackbar: true })
+      navigateTo('TakePhotos', { claimID: claim?.id || '', request, focusOnSnackbar: true })
     } else {
       setErrorMessage('')
       setImagesList(response)
@@ -299,13 +301,12 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           <Box mx={theme.dimensions.gutter}>
             <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
             <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-              <VAButton
+              <Button
                 onPress={() => {
                   setOnSaveClicked(true)
                 }}
                 label={t('fileUpload.submit')}
                 testID={t('fileUpload.submit')}
-                buttonType={ButtonTypesConstants.buttonPrimary}
               />
             </Box>
           </Box>

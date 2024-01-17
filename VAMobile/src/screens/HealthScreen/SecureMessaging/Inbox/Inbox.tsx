@@ -30,7 +30,7 @@ const Inbox: FC<InboxProps> = () => {
       folderID: SecureMessagingSystemFolderIdConstants.INBOX,
       currentPage: paginationMetaData?.currentPage || 1,
       messagesLeft: inboxMessages.length,
-    })()
+    })
   }
 
   if (loadingInbox) {

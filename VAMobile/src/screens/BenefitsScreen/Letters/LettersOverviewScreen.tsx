@@ -1,15 +1,15 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, ButtonTypesConstants, FeatureLandingTemplate, TextView, VAButton } from 'components'
+import { Box, FeatureLandingTemplate, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
 type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOverview'>
@@ -23,19 +23,15 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
 
   const onViewLetters = () => {
-    if (waygateNativeAlert('WG_LettersList')) {
-      navigateTo('LettersList')()
-    }
+    navigateTo('LettersList')
   }
 
   const onEditAddress = () => {
-    if (waygateNativeAlert('WG_EditAddress')) {
-      logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('letters.overview.title')))
-      navigateTo('EditAddress', {
-        displayTitle: t('contactInformation.mailingAddress'),
-        addressType: profileAddressOptions.MAILING_ADDRESS,
-      })()
-    }
+    logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('letters.overview.title')))
+    navigateTo('EditAddress', {
+      displayTitle: t('contactInformation.mailingAddress'),
+      addressType: profileAddressOptions.MAILING_ADDRESS,
+    })
   }
 
   const addressData: Array<addressDataField> = [{ addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onEditAddress }]
@@ -55,12 +51,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
         {t('letters.overview.ifThisAddress')}
       </TextView>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
-        <VAButton
-          onPress={onViewLetters}
-          label={t('letters.overview.viewLetters')}
-          buttonType={ButtonTypesConstants.buttonPrimary}
-          a11yHint={t('letters.overview.viewLetters.hint')}
-        />
+        <Button onPress={onViewLetters} label={t('letters.overview.viewLetters')} a11yHint={t('letters.overview.viewLetters.hint')} />
       </Box>
     </FeatureLandingTemplate>
   )

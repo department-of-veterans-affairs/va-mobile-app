@@ -1,3 +1,4 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
@@ -5,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useState } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView, VAButton } from 'components'
+import { Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView } from 'components'
 import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -16,7 +17,7 @@ import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
-import { useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
 import FileList from 'components/FileList'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
@@ -28,6 +29,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const { request: originalRequest, fileUploaded } = route.params
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const dispatch = useDispatch()
+  const navigateTo = useRouteNavigation()
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
   const confirmAlert = useDestructiveActionSheet()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
@@ -67,9 +69,9 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
     if (filesUploadedSuccess) {
       setFilesList([])
-      navigation.navigate('FileRequest', { claimID: claim?.id || '' })
+      navigateTo('FileRequest', { claimID: claim?.id || '' })
     }
-  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigation, request, filesList])
+  }, [filesUploadedSuccess, fileUploadedFailure, dispatch, t, claim, navigateTo, request, filesList])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
@@ -124,7 +126,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const onFileDelete = () => {
     setFilesList([])
     showSnackBar(t('fileRemoved'), dispatch, undefined, true, false, false)
-    navigation.navigate('SelectFile', { claimID: claim?.id || '', request, focusOnSnackbar: true })
+    navigateTo('SelectFile', { claimID: claim?.id || '', request, focusOnSnackbar: true })
   }
 
   const pickerField: Array<FormFieldType<unknown>> = [
@@ -173,13 +175,12 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
           <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
             <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
             <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-              <VAButton
+              <Button
                 onPress={() => {
                   setOnSaveClicked(true)
                 }}
                 label={t('fileUpload.submit')}
                 testID={t('fileUpload.submit')}
-                buttonType={ButtonTypesConstants.buttonPrimary}
               />
             </Box>
           </Box>

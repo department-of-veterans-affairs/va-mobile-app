@@ -1,7 +1,8 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
 
-import { Box, ButtonTypesConstants, CollapsibleAlert, CollapsibleAlertProps, TextView, VABulletList, VABulletListText, VAButton } from 'components'
+import { Box, CollapsibleAlert, CollapsibleAlertProps, TextView, VABulletList, VABulletListText } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
 import { FeatureConstants, getLocalVersion, getVersionSkipped, setVersionSkipped } from 'utils/homeScreenAlerts'
@@ -105,7 +106,7 @@ export const WhatsNew = () => {
             </Box>
           ) : undefined}
         </Box>
-        <VAButton onPress={onPress} label={t('whatsNew.dismissMessage')} buttonType={ButtonTypesConstants.buttonSecondary} />
+        <Button onPress={onPress} label={t('whatsNew.dismissMessage')} buttonType={ButtonVariants.Secondary} />
       </>
     ),
     a11yLabel: t('whatsNew.title'),

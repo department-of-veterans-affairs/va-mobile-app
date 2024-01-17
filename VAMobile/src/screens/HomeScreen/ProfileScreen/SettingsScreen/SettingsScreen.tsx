@@ -1,3 +1,4 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,17 +7,15 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, logout, setBiometricsPreference } from 'store/slices'
-import { Box, ButtonDecoratorType, ButtonTypesConstants, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, VAButton } from 'components'
+import { Box, ButtonDecoratorType, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { featureEnabled } from 'utils/remoteConfig'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useAppDispatch, useDestructiveActionSheet, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import getEnv from 'utils/env'
 
@@ -74,20 +73,6 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     testId: t('biometric.title', { biometricType: supportedBiometricA11yLabel }),
   }
 
-  const onManage = () => {
-    if (waygateNativeAlert('WG_ManageYourAccount')) {
-      navigation.navigate('ManageYourAccount')
-    }
-  }
-
-  const onNotifications = () => {
-    if (waygateNativeAlert('WG_NotificationsSettings')) {
-      navigation.navigate('NotificationsSettings')
-    }
-  }
-
-  const onDebug = navigateTo('Developer')
-
   const onShare = async (): Promise<void> => {
     logAnalyticsEvent(Events.vama_click(t('shareApp.title'), t('settings.title')))
     try {
@@ -100,21 +85,17 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     }
   }
 
-  const onFeedback = () => {
-    navigation.navigate('InAppRecruitment')
-  }
-
   const onPrivacyPolicy = async (): Promise<void> => {
     launchExternalLink(LINK_URL_PRIVACY_POLICY)
   }
 
   const items: Array<SimpleListItemObj> = _.flatten([
-    { text: t('manageAccount.title'), onPress: onManage },
+    { text: t('manageAccount.title'), onPress: () => navigateTo('ManageYourAccount') },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? biometricRow : [],
-    { text: t('notifications.title'), onPress: onNotifications },
+    { text: t('notifications.title'), onPress: () => navigateTo('NotificationsSettings') },
     { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
-    featureEnabled('inAppRecruitment') ? { text: t('inAppRecruitment.giveFeedback'), a11yHinText: t('inAppRecruitment.giveFeedback.a11yHint'), onPress: onFeedback } : [],
+    { text: t('inAppRecruitment.giveFeedback'), a11yHintText: t('inAppRecruitment.giveFeedback.a11yHint'), onPress: () => navigateTo('InAppRecruitment') },
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
@@ -122,7 +103,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     const debugButton: Array<SimpleListItemObj> = [
       {
         text: t('debug.title'),
-        onPress: onDebug,
+        onPress: () => navigateTo('Developer'),
       },
     ]
 
@@ -147,7 +128,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
               {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
             </Box>
             <Box px={theme.dimensions.gutter}>
-              <VAButton onPress={onShowConfirm} label={t('logout.title')} buttonType={ButtonTypesConstants.buttonDestructive} />
+              <Button onPress={onShowConfirm} label={t('logout.title')} buttonType={ButtonVariants.Destructive} />
             </Box>
           </Box>
           <AppVersionAndBuild />

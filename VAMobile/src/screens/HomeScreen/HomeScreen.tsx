@@ -12,8 +12,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { useAppDispatch, useTheme } from 'utils/hooks'
-import { waygateNativeAlert } from 'utils/waygateConfig'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -32,20 +31,19 @@ const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
-export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
+export const HomeScreen: FC<HomeScreenProps> = () => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
 
   const onContactVA = () => {
-    if (waygateNativeAlert('WG_ContactVA')) {
-      navigation.navigate('ContactVA')
-    }
+    navigateTo('ContactVA')
   }
 
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
-    navigation.navigate('Webview', {
+    navigateTo('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
       displayTitle: t('webview.vagov'),
       loadingMessage: t('webview.valocation.loading'),
@@ -54,7 +52,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('home_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
+    navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
 
   const buttonDataList: Array<SimpleListItemObj> = [
@@ -72,9 +70,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   }
 
   const onProfile = () => {
-    if (waygateNativeAlert('WG_Profile')) {
-      navigation.navigate('Profile')
-    }
+    navigateTo('Profile')
   }
 
   const headerButton = {

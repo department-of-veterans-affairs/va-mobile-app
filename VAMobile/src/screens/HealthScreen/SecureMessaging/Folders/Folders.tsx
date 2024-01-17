@@ -15,7 +15,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
-import { waygateNativeAlert } from 'utils/waygateConfig'
 
 const getListItemsForFolders = (
   listOfFolders: SecureMessagingFolderList,
@@ -119,7 +118,7 @@ const Folders: FC<FoldersProps> = () => {
       }
     }
     logAnalyticsEvent(Events.vama_sm_folder_open(folder()))
-    waygateNativeAlert('WG_FolderMessages') && navigateTo('FolderMessages', { folderID, folderName })()
+    navigateTo('FolderMessages', { folderID, folderName })
   }
 
   if (loadingFolders) {
