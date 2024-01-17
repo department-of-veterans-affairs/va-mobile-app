@@ -397,10 +397,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         removeOnPress: removeAttachment,
-        buttonLabel: attachmentsList.length < theme.dimensions.maxNumMessageAttachments
-        ? t('secureMessaging.formMessage.addFiles') : undefined,
-        buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments
-        ? onAddFiles : undefined,
+        buttonLabel: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? t('secureMessaging.formMessage.addFiles') : undefined,
+        buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
       },
     },
