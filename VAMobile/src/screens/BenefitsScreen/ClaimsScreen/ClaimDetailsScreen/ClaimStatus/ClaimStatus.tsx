@@ -1,7 +1,8 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, useRef } from 'react'
 
-import { Box, ButtonTypesConstants, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
+import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
 import { ClaimData } from 'store/api/types'
 import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { Events } from 'constants/analytics'
@@ -115,7 +116,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
                 {letterAvailable}
               </TextView>
             </Box>
-            {showButton && <VAButton onPress={onPress} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} testID="getClaimLettersTestID" />}
+            {showButton && <Button onPress={onPress} label={t('claimDetails.getClaimLetters')} testID="getClaimLettersTestID" />}
           </TextArea>
         </Box>
       )
