@@ -231,6 +231,10 @@ describe('Claims Screen', () => {
   })
 
   it('should verify details of claim on step 3 w/ waiver', async() => {
+    await resetInAppReview()
+    await openBenefits()
+    await openClaims()
+    await openClaimsHistory()
     await element(by.id('claimsHistoryID')).scrollTo('bottom')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_5_ID)).tap()
     await expect(element(by.id('Step 3 of 5. current. Evidence gathering, review, and decision June 4, 2021'))).toExist()
