@@ -188,9 +188,8 @@ export async function checkImages(screenshotPath) {
  * @param cancelPopUp - boolean to either cancel the popUp or leave the app
  */
 export async function resetInAppReview() {
-  //await device.launchApp({ newInstance: true })
-  //await loginToDemoMode()
-  await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
+  await device.launchApp({ newInstance: true })
+  await loginToDemoMode()
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
