@@ -54,7 +54,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
     dispatch(downloadFileAttachment(file, key))
   }
 
-  const getBody = (): ReactNode => {
+  function getBody() {
     /** this does preserve newline characters just not spaces, TODO:change the mobile body link text views to be clickable and launch the right things */
     if (body) {
       return getLinkifiedText(body, t, launchLink)
@@ -62,7 +62,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
     return <></>
   }
 
-  const getExpandedContent = (): ReactNode => {
+  function getExpandedContent() {
     return (
       <Box>
         <Box mt={condensedMarginBetween} accessible={true}>
@@ -98,7 +98,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
     )
   }
 
-  const getHeader = (): ReactNode => {
+  function getHeader() {
     return (
       <Box flexDirection={'column'}>
         <TextView variant="MobileBodyBold" accessible={false}>
@@ -118,7 +118,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
     )
   }
 
-  const getCollapsedContent = (): ReactNode => {
+  function getCollapsedContent() {
     return (
       <Box>
         <TextView mt={condensedMarginBetween} variant="MobileBody" numberOfLines={2}>
