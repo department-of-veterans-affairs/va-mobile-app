@@ -1,4 +1,5 @@
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { Dimensions, ScrollView } from 'react-native'
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -7,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
-import { AlertBox, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, LoadingComponent, PhotoAdd, PhotoPreview, TextView, VAButton } from 'components'
+import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, PhotoAdd, PhotoPreview, TextView } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
@@ -300,13 +301,12 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
           <Box mx={theme.dimensions.gutter}>
             <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
             <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-              <VAButton
+              <Button
                 onPress={() => {
                   setOnSaveClicked(true)
                 }}
                 label={t('fileUpload.submit')}
                 testID={t('fileUpload.submit')}
-                buttonType={ButtonTypesConstants.buttonPrimary}
               />
             </Box>
           </Box>

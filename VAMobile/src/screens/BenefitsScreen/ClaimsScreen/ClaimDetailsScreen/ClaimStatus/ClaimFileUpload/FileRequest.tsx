@@ -1,3 +1,4 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useSelector } from 'react-redux'
@@ -5,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import React from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, ButtonTypesConstants, ChildTemplate, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
+import { Box, ChildTemplate, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
 import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
 import { Events } from 'constants/analytics'
@@ -108,11 +109,10 @@ function FileRequest({ navigation, route }: FileRequestProps) {
               <TextView variant="MobileBody" paragraphSpacing={true}>
                 {t('fileRequest.askForYourClaimEvaluationBody')}
               </TextView>
-              <VAButton
+              <Button
                 onPress={viewEvaluationDetailsPress}
                 label={t('fileRequest.viewEvaluationDetails')}
                 testID={t('fileRequest.viewEvaluationDetails')}
-                buttonType={ButtonTypesConstants.buttonPrimary}
                 a11yHint={t('fileRequest.viewEvaluationDetails')}
               />
             </TextArea>

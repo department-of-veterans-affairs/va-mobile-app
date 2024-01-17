@@ -1,3 +1,4 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useSelector } from 'react-redux'
@@ -5,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView, VAButton } from 'components'
+import { Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView } from 'components'
 import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -174,13 +175,12 @@ function UploadFile({ navigation, route }: UploadFileProps) {
           <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
             <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
             <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-              <VAButton
+              <Button
                 onPress={() => {
                   setOnSaveClicked(true)
                 }}
                 label={t('fileUpload.submit')}
                 testID={t('fileUpload.submit')}
-                buttonType={ButtonTypesConstants.buttonPrimary}
               />
             </Box>
           </Box>

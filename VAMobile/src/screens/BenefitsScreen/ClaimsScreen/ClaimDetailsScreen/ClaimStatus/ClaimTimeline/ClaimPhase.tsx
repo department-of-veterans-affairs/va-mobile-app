@@ -1,9 +1,10 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import React, { ReactNode, useEffect } from 'react'
 
-import { AccordionCollapsible, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
+import { AccordionCollapsible, Box, TextView } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -176,11 +177,10 @@ function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
             {youHaveFileRequestsText}
           </TextView>
           <Box mt={standardMarginBetween}>
-            <VAButton
+            <Button
               onPress={fileRequestsPress}
               testID={t('claimPhase.fileRequests.button.label')}
               label={t('claimPhase.fileRequests.button.label')}
-              buttonType={ButtonTypesConstants.buttonPrimary}
               a11yHint={t('claimPhase.fileRequests.button.a11yHint')}
             />
           </Box>
