@@ -14,7 +14,7 @@ import { enableScreens } from 'react-native-screens'
 import { useTranslation } from 'react-i18next'
 import { utils } from '@react-native-firebase/app'
 import KeyboardManager from 'react-native-keyboard-manager'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Toast from 'react-native-toast-notifications'
 import ToastContainer from 'react-native-toast-notifications'
 import analytics from '@react-native-firebase/analytics'
@@ -63,7 +63,7 @@ const { ENVIRONMENT, IS_TEST } = getEnv()
 enableScreens(true)
 injectStore(store)
 
-const Stack = createStackNavigator()
+const Stack = createStackNavigator<WebviewStackParams & undefined>()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
 const RootNavStack = createStackNavigator<RootNavStackParamList>()
 
@@ -94,7 +94,7 @@ type RootTabNavParamList = {
   background-color: ${theme.colors.icon.active};
 `
 
-const MainApp: FC = () => {
+function MainApp() {
   const navigationRef = useNavigationContainerRef()
   const routeNameRef = useRef('')
 
@@ -152,7 +152,7 @@ const MainApp: FC = () => {
   )
 }
 
-export const AuthGuard: FC = () => {
+export function AuthGuard() {
   const dispatch = useAppDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>((state) => state.auth)
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>((state) => state.settings)
@@ -276,7 +276,7 @@ export const AuthGuard: FC = () => {
   return content
 }
 
-export const AppTabs: FC = () => {
+export function AppTabs() {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (
@@ -291,7 +291,7 @@ export const AppTabs: FC = () => {
   )
 }
 
-export const AuthedApp: FC = () => {
+export function AuthedApp() {
   const headerStyles = useHeaderStyles()
   const { initialUrl } = useSelector<RootState, NotificationsState>((state) => state.notifications)
 
