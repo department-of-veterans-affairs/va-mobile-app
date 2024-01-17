@@ -15,12 +15,16 @@ import { useTheme } from 'utils/hooks'
 export type FormAttachmentsProps = {
   /** callback called on click of remove link for an attachment */
   removeOnPress?: (attachment: ImagePickerResponse | DocumentPickerResponse) => void
+  /**button label */
+  buttonLabel?: string
+  /**button onPress */
+  buttonPress?: () => void
   /** list of current attachments */
   attachmentsList?: Array<ImagePickerResponse | DocumentPickerResponse>
 }
 
 /**A common component for form attachments, displays Attachments heading with helper link, already attached items with remove option, and an optional large button. */
-const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, largeButtonProps, attachmentsList }) => {
+const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, buttonLabel, buttonPress, attachmentsList }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
@@ -76,10 +80,10 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, largeButtonP
   return (
     <Box>
       <TextView>{t('attachments')}</TextView>
-      <Box mt={theme.dimensions.standardMarginBetween} mb={attachmentsDoNotExist || !largeButtonProps ? 0 : theme.dimensions.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween} mb={attachmentsDoNotExist ? 0 : theme.dimensions.standardMarginBetween}>
         {renderFileNames()}
       </Box>
-      {!!largeButtonProps && <Button {...largeButtonProps} buttonType={ButtonVariants.Secondary} />}
+      {buttonLabel && buttonPress && <Button label={buttonLabel} onPress={buttonPress} />}
     </Box>
   )
 }

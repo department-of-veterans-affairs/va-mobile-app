@@ -2,7 +2,19 @@ import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 
 import _ from 'lodash'
 
-import { Box, FormAttachments, RadioGroup, RadioGroupProps, VAModalPicker, VAModalPickerProps, VASelector, VASelectorProps, VATextInput, VATextInputProps } from '../index'
+import {
+  Box,
+  FormAttachments,
+  FormAttachmentsProps,
+  RadioGroup,
+  RadioGroupProps,
+  VAModalPicker,
+  VAModalPickerProps,
+  VASelector,
+  VASelectorProps,
+  VATextInput,
+  VATextInputProps,
+} from '../index'
 import { useTheme } from 'utils/hooks'
 
 /** enum to determine field input type */
@@ -29,7 +41,7 @@ export type FormFieldType<T> = {
   /** enum to determine if the field is a picker, text input, or checkbox selector */
   fieldType: FieldType
   /** props to pass into form input component */
-  fieldProps: VASelectorProps | VATextInputProps | VAModalPickerProps | RadioGroupProps<T>
+  fieldProps: VASelectorProps | VATextInputProps | VAModalPickerProps | RadioGroupProps<T> | FormAttachmentsProps
   /** optional error message to display if the field is required and it hasn't been filled */
   fieldErrorMessage?: string
   /** optional boolean that prevents the field from being displayed when set to true */
@@ -221,7 +233,7 @@ const FormWrapper = <T,>({
       case FieldType.Radios:
         return <RadioGroup {...(fieldProps as RadioGroupProps<T>)} />
       case FieldType.FormAttachmentsList:
-        return <FormAttachments />
+        return <FormAttachments {...(fieldProps as FormAttachmentsProps)} />
     }
   }
 
