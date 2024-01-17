@@ -1,3 +1,4 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 import { Pressable } from 'react-native'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api'
@@ -18,7 +19,6 @@ import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
-import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 
 export type MessageCardProps = {
   /* message object */
@@ -117,8 +117,13 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
     )
   }
 
+  const onPress = () => {
+    logAnalyticsEvent(Events.vama_sm_start())
+    navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  }
+
   const getReplyOrStartNewMessageButton = (): ReactNode => {
-    return <Box mb={theme.dimensions.standardMarginBetween}>{!replyExpired ? <ReplyMessageButton messageID={messageId} /> : <StartNewMessageButton />}</Box>
+    return <Box mb={theme.dimensions.standardMarginBetween}>{!replyExpired ? <ReplyMessageButton messageID={messageId} /> : <Box mx={theme.dimensions.buttonPadding}><Button label={t('secureMessaging.startNewMessage')} onPress = {onPress} testID={'startNewMessageButtonTestID'} /></Box>}</Box>
   }
 
   return (
