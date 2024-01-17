@@ -35,7 +35,7 @@ const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
-export const HealthScreen: FC<HealthScreenProps> = () => {
+export function HealthScreen({}: HealthScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -129,12 +129,12 @@ export const HealthScreen: FC<HealthScreenProps> = () => {
 
 type HealthStackScreenProps = Record<string, unknown>
 
-const HealthScreenStack = createStackNavigator()
+const HealthScreenStack = createStackNavigator<HealthStackParamList>()
 
 /**
  * Stack screen for the Health tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
-const HealthStackScreen: FC<HealthStackScreenProps> = () => {
+function HealthStackScreen({}: HealthStackScreenProps) {
   const screenOptions = {
     headerShown: false,
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

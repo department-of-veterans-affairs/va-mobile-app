@@ -88,7 +88,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
   )
 }
 
-const BenefitsScreenStack = createStackNavigator()
+const BenefitsScreenStack = createStackNavigator<BenefitsStackParamList>()
 
 /**
  * Stack screen for the Benefits tab. Screens placed within this stack will appear in the context of the app level tab navigator

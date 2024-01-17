@@ -99,7 +99,7 @@ export function HomeScreen({}: HomeScreenProps) {
 
 type HomeStackScreenProps = Record<string, unknown>
 
-const HomeScreenStack = createStackNavigator()
+const HomeScreenStack = createStackNavigator<HomeStackParamList>()
 
 /**
  * Stack screen for the Home tab. Screens placed within this stack will appear in the context of the app level tab navigator
@@ -137,7 +137,7 @@ function HomeStackScreen({}: HomeStackScreenProps) {
       <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen name="RemoteConfig" component={RemoteConfigScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen name="Sandbox" component={SandboxScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="HapticsDemo" component={HapticsDemoScreen} options={{ headerShown: false }} />
+      <HomeScreenStack.Screen name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />
     </HomeScreenStack.Navigator>
   )
 }

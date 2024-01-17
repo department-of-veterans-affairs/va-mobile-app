@@ -1,7 +1,7 @@
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -21,7 +21,7 @@ import NoClaimsAndAppealsAccess from '../NoClaimsAndAppealsAccess/NoClaimsAndApp
 
 type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
-const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
+function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
