@@ -83,7 +83,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, buttonLabel,
       <Box mt={theme.dimensions.standardMarginBetween} mb={attachmentsDoNotExist ? 0 : theme.dimensions.standardMarginBetween}>
         {renderFileNames()}
       </Box>
-      {buttonLabel && buttonPress && <Button label={buttonLabel} onPress={buttonPress} buttonType={ButtonVariants.Secondary} />}
+      {buttonLabel && buttonPress && <Button label={buttonLabel} onPress={buttonPress} buttonType={ButtonVariants.Secondary} a11yLabel={buttonLabel}/>}
     </Box>
   )
 }
