@@ -32,28 +32,28 @@ The Design System Team also provides a complete Figma library of core components
 
 The Design System team provides a Figma library for use by teams.
 
-### Add the Design Library to your project
+### Add the Component Library to your project
 
-Use the design library to access all components. In Figma, the design library lives in the cloud. Thus you do not need to download the library. The Design System Team updates the design library in order to keep it in sync with the va-mobile-library code which contains our React Nativeweb components.
+Use the component library to access all components. In Figma, the component library lives in the cloud. Thus you do not need to download the library. The Design System Team updates the component library in order to keep it in sync with the va-mobile-library code which contains our React Native web components.
 
-To access and enable the [Design Library](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design), follow these steps:
+To access and enable the [Component Library](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&mode=design&t=QbNS25xKacxEZ9T1-1), follow these steps:
 
 1. In the Figma menu bar, navigate to Figma > Libraries to open the Libraries modal
-2. In the modal, find the DesignLibrary2.0 - VAMobile file
-3. Click the “Add to file” button to add the design library to your file
+2. In the modal, find the "Component Library" file
+3. Click the “Add to file” button to add the library to your file
 
-Once you’ve loaded the library, you should be able to access everything in it by navigating to Assets > DesignLibrary2.0 - VA Mobile or Resources > Components > DesignLibrary2.0 - VA Mobile. Note that you cannot edit the design library directly. The Design System Team manages this library.
+Once you’ve loaded the library, you should be able to access everything in it by navigating to Assets > Component Library or Resources > Components > Component Library. Note that you cannot edit the library directly. The Design System Team manages this library.
 
 ---
 
 ## Figma
 
-VA mobile design teams at Ad Hoc use Figma to view, share, and collaborate on our work. Only designers actively working on products at VA can be added to Figma. Once you have been added, you may access the [Design Library](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design) in the cloud.
+VA mobile design teams at Ad Hoc use Figma to view, share, and collaborate on our work. Only designers actively working on products at VA can be added to Figma. Once you have been added, you may access the [Component Library](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&mode=design&t=QbNS25xKacxEZ9T1-1) in the cloud.
 
 ### Get added to Figma
 
 1. Go to [figma.com](https://www.figma.com/) and [create a Figma account](https://help.figma.com/hc/en-us/articles/360039811114-Create-a-Figma-account)
-2. In the #va-mobile-app-platform channel in Slack, ping a Figma admin (currently Jen Ecker) requesting to be added.
+2. In the #va-mobile-design-system channel in Slack, ping a Figma admin (currently Jen Ecker and Jessica Woodin) requesting to be added.
 3. Receive the invite via email and accept the invitation.
 4. Boom, you’re in!
 
