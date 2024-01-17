@@ -78,7 +78,6 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
 /**
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
-interface WebviewScreen extends FC {}
 const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const webviewRef = useRef() as MutableRefObject<WebView>
