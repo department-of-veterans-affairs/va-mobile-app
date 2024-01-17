@@ -83,7 +83,7 @@ export type RootNavStackParamList = WebviewStackParams & {
   Tabs: undefined
 }
 
-type StackNaveParamList =  WebviewStackParams & {
+type StackNaveParamList = WebviewStackParams & {
   Splash: undefined
   BiometricsPreference: undefined
   Sync: undefined
