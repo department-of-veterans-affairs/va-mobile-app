@@ -83,6 +83,21 @@ context('SyncScreen', () => {
   const initializeTestInstance = (militaryLoading = true, disabilityRatingLoading = true, prescriptionsLoading = true, claimsAndAppealsLoading = true, unreadCount = 0, loggedIn = false, loggingOut = false, syncing = true): void => {
     store = {
       auth: { ...initialAuthState, loggedIn, loggingOut, syncing },
+      secureMessaging: {
+        ...initialSecureMessagingState,
+        hasLoadedInbox: true,
+        inbox: {
+          type: 'Inbox',
+          id: '123',
+          attributes: {
+            folderId: 123,
+            name: 'Inbox',
+            count: 45,
+            unreadCount: unreadCount,
+            systemFolder: true,
+          },
+        },
+      },
       disabilityRating: { ...initialDisabilityRatingState, preloadComplete: !disabilityRatingLoading },
       militaryService: { ...initialMilitaryServiceState, preloadComplete: !militaryLoading },
       prescriptions: { ...initialPrescriptionState, prescriptionsNeedLoad: prescriptionsLoading },
@@ -143,7 +158,7 @@ context('SyncScreen', () => {
 
   describe('sync completion', () => {
     it('should complete the sync when all loading is finished', async () => {
-      initializeTestInstance(false, false, false, false, 0, true, false)
+      initializeTestInstance(false, false, false, false, 5, true, false)
       await waitFor(() => {
         expect(completeSync).toHaveBeenCalled()
       })
