@@ -1,3 +1,4 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useSelector } from 'react-redux'
@@ -8,7 +9,6 @@ import {
   BasicError,
   Box,
   ButtonDecoratorType,
-  ButtonTypesConstants,
   ClickForActionLink,
   DefaultList,
   DefaultListItemObj,
@@ -20,7 +20,6 @@ import {
   SimpleListItemObj,
   TextArea,
   TextView,
-  VAButton,
 } from 'components'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -252,12 +251,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           </Box>
 
           <Box mx={theme.dimensions.gutter}>
-            <VAButton
-              onPress={onViewLetter}
-              label={t('letters.benefitService.viewLetter')}
-              testID={t('letters.benefitService.viewLetter')}
-              buttonType={ButtonTypesConstants.buttonPrimary}
-            />
+            <Button onPress={onViewLetter} label={t('letters.benefitService.viewLetter')} testID={t('letters.benefitService.viewLetter')} />
           </Box>
         </Box>
       )}
