@@ -47,7 +47,7 @@ beforeAll(async () => {
 })
 
 describe('Personal Info Screen', () => {
-  it('should verify AF use case 3 for profile', async() => {
+  it(':android: should verify AF use case 3 for profile', async() => {
     await openSettings()
 		await openDeveloperScreen()
 		await element(by.text('Remote Config')).tap()
@@ -153,7 +153,7 @@ describe('Personal Info Screen', () => {
     await element(by.text('Cancel')).tap()
   })
 
-  it('should disable AF', async () => {
+  it(':android: should disable AF', async () => {
     await device.uninstallApp()
     await device.installApp()
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })

@@ -223,6 +223,10 @@ describe('Claims Screen', () => {
   })
 
   it('should verify details of claim on step 2', async() => {
+    await resetInAppReview()
+    await openBenefits()
+    await openClaims()
+    await openClaimsHistory()
     await element(by.id(ClaimsE2eIdConstants.CLAIM_3_ID)).tap()
     await expect(element(by.id('Step 2 of 5. current. Initial review July 20, 2021'))).toExist()
     await element(by.id('Step 2 of 5. current. Initial review July 20, 2021')).tap()
@@ -231,11 +235,7 @@ describe('Claims Screen', () => {
   })
 
   it('should verify details of claim on step 3 w/ waiver', async() => {
-    await resetInAppReview()
-    await openBenefits()
-    await openClaims()
-    await openClaimsHistory()
-    await element(by.id('claimsHistoryID')).scrollTo('bottom')
+    await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_5_ID))).toBeVisible().whileElement(by.id('claimsHistoryID')).scroll(100, 'down')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_5_ID)).tap()
     await expect(element(by.id('Step 3 of 5. current. Evidence gathering, review, and decision June 4, 2021'))).toExist()
     await element(by.id('Step 3 of 5. current. Evidence gathering, review, and decision June 4, 2021')).tap()
@@ -244,7 +244,11 @@ describe('Claims Screen', () => {
   })
 
   it('should verify details of claim on step 4', async() => {
-    await element(by.id('claimsHistoryID')).scrollTo('bottom')
+    await resetInAppReview()
+    await openBenefits()
+    await openClaims()
+    await openClaimsHistory()
+    await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_6_ID))).toBeVisible().whileElement(by.id('claimsHistoryID')).scroll(100, 'down')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_6_ID)).tap()
     await expect(element(by.id('Step 4 of 5. current. Preparation for notification '))).toExist()
     await element(by.id('Step 4 of 5. current. Preparation for notification ')).tap()
