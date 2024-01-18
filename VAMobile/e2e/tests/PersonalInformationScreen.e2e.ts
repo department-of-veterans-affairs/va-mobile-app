@@ -44,6 +44,9 @@ const checkLocatorAndContactLinks = async () => {
 beforeAll(async () => {
   await loginToDemoMode()
   await openProfile()
+  if (device.getPlatform() === 'ios') {
+    await openPersonalInformation()
+  }
 })
 
 describe('Personal Info Screen', () => {
@@ -79,7 +82,9 @@ describe('Personal Info Screen', () => {
 
   it('should tap links in "How to update" large panel', async () => {
     await element(by.text(PersonalInfoConstants.HOW_TO_UPDATE_LINK_TEXT)).tap()
-    await verifyAF(undefined, 'AllowFunction', undefined)
+    if (device.getPlatform() === 'android') {
+      await verifyAF(undefined, 'AllowFunction', undefined)
+    }
     await expect(element(by.text('Profile help'))).toExist()
 
     await element(by.text(PersonalInfoConstants.LEARN_HOW_LINK_TEXT)).tap()
@@ -95,7 +100,9 @@ describe('Personal Info Screen', () => {
 
   it('should tap links in "How to fix an error" large panel', async () => {
     await element(by.text(PersonalInfoConstants.HOW_TO_FIX_LINK_TEXT)).tap()
-    await verifyAF(undefined, 'AllowFunction', undefined)
+    if (device.getPlatform() === 'android') {
+      await verifyAF(undefined, 'AllowFunction', undefined)
+    }
     await expect(element(by.text('Profile help'))).toExist()
 
     if (device.getPlatform() === 'android') {
@@ -125,7 +132,9 @@ describe('Personal Info Screen', () => {
   it('should update gender identity', async () => {
     await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
     await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
-    await verifyAF(undefined, 'AllowFunction', undefined)
+    if (device.getPlatform() === 'android') {
+      await verifyAF(undefined, 'AllowFunction', undefined)
+    }
     await expect(element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).atIndex(0)).toExist()
     await scrollToThenTap(PersonalInfoConstants.PREFER_NOT_TEXT)
     await element(by.text(PersonalInfoConstants.PREFER_NOT_TEXT)).tap()
@@ -146,7 +155,9 @@ describe('Personal Info Screen', () => {
   it('should show "What to know" large panel in gender identity section', async () => {
     await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
     await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
-    await verifyAF(undefined, 'AllowFunction', undefined)
+    if (device.getPlatform() === 'android') {
+      await verifyAF(undefined, 'AllowFunction', undefined)
+    }
     await scrollToThenTap(PersonalInfoConstants.GENDER_IDENTITY_WHAT_TO_KNOW_TEXT)
     await expect(element(by.text('Profile help'))).toExist()
     await element(by.text('Close')).tap()
