@@ -522,6 +522,7 @@ const claimsAndAppealsSlice = createSlice({
       state.claimsAndAppealsByClaimType[claimType] = claimsAndAppealsList
       state.claimsAndAppealsMetaPagination[claimType] = claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination[claimType]
       state.loadedClaimsAndAppeals[claimType] = claimsAndAppeals?.meta.dataFromStore ? curLoadedClaimsAndAppeals : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
+      state.activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount || 0
     },
 
     dispatchStartGetClaim: (state, action: PayloadAction<{ abortController: AbortController }>) => {
