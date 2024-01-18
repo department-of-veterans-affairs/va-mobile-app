@@ -41,6 +41,8 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       types: { images, plainText, pdf },
     } = DocumentPicker
 
+    logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'file'))
+
     try {
       const document = (await pickSingle({
         type: [images, plainText, pdf],
