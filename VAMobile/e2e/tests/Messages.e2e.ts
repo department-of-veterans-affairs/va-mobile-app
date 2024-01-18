@@ -182,13 +182,13 @@ describe('Messages Screen', () => {
   })
 
   it('verify appointment message details', async () => {
+    await resetInAppReview()
+    await openHealth()
+    await openMessages()
     await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID))).toBeVisible().whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scroll(100, 'down')  
     await element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID)).tap()
     await expect(element(by.text('Appointment: Preparing for your visit'))).toExist()
     await element(by.text('Messages')).tap()
-    await resetInAppReview()
-    await openHealth()
-    await openMessages()
   })
 
   it('verify other message details', async () => {
