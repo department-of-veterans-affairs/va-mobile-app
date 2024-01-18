@@ -737,6 +737,17 @@ const authSlice = createSlice({
     dispatchFinishAuthLogin: (state, action: PayloadAction<AuthFinishLoginPayload>) => {
       const successfulLogin = !action.payload.error
 
+      if (action.payload.error) {
+        return {
+          ...initialAuthState,
+          ...action.payload,
+          webLoginUrl: undefined,
+          initializing: false,
+          successfulLogin: successfulLogin,
+          loggedIn: successfulLogin,
+        }
+      }
+
       return {
         ...state,
         ...action.payload,
