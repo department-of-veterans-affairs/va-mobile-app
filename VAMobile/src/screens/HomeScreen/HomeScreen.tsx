@@ -65,10 +65,10 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      if (userAuthorizedServices?.claims && !claimsInDowntime) {
+      if ((userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime) {
         dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE, undefined, undefined, true))
       }
-    }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims]),
+    }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals]),
   )
 
   useFocusEffect(
