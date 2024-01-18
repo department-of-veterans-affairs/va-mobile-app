@@ -42,7 +42,7 @@ export const CommonE2eIdConstants = {
   CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
   DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
-  OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'OK' : 'Ok',
+  OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
 }
 
 
