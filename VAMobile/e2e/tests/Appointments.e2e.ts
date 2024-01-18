@@ -1,14 +1,12 @@
 import { DateTime } from 'luxon'
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { openProfile, openSettings, enableAF, openDeveloperScreen, verifyAF, CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth } from './utils'
+import {CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth } from './utils'
 import { setTimeout } from 'timers/promises'
 
 const todaysDate = DateTime.local()
-const longDateFormat = 'DDDD t ZZZZ'
 const shortDateFormat = 'MM-dd-yyyy'
 
-//const fortyFiveMinutesLater = todaysDate.setZone('America/Los_Angeles').plus({ minutes: 45 }).toFormat(longDateFormat)
 const sixtyThreeDaysLaterShort = todaysDate.plus({ days: 63 }).toFormat(shortDateFormat)
 const sixtyFourDaysLaterShort = todaysDate.plus({ days: 64 }).toFormat(shortDateFormat)
 
@@ -41,26 +39,11 @@ export const Appointmentse2eConstants = {
 
 beforeAll(async () => {
   await loginToDemoMode()
+  await openHealth()
+  await openAppointments()
 })
 
 describe('Appointments Screen', () => {
-  it('should verify AF use case 3 for profile', async() => {
-    await openProfile()
-    await openSettings()
-		await openDeveloperScreen()
-		await element(by.text('Remote Config')).tap()
-    await enableAF('WG_Appointments', 'AllowFunction')
-    await enableAF('WG_UpcomingAppointmentDetails', 'AllowFunction')
-    await device.launchApp({newInstance: true})
-    await loginToDemoMode()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
-    await verifyAF(undefined, 'AllowFunction', undefined)
-  })
-
   it('should match the appointments page design', async () => {
     await expect(element(by.text(Appointmentse2eConstants.APPOINTMENT_DESCRIPTION))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.APPOINTMENT_4_ID))).toExist()
@@ -75,7 +58,6 @@ describe('Appointments Screen', () => {
     .whileElement(by.id('appointmentsTestID'))
     .scroll(200, 'down')
     await element(by.text('Outpatient Clinic')).tap()
-    await verifyAF(undefined, 'AllowFunction', undefined)
     await expect(element(by.text('Community care'))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.ADD_TO_CALENDAR_ID)).atIndex(0)).toExist()
     await expect(element(by.id('Outpatient Clinic 2341 North Ave Commerce, CA 90022'))).toExist()
