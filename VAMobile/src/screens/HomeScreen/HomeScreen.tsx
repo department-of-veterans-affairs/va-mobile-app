@@ -6,24 +6,29 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, useCallback } from 'react'
 
 import { AppointmentsState, ClaimsAndAppealsState, PrescriptionState } from 'store/slices'
 import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { CloseSnackbarOnNavigation } from 'constants/common'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
-import getEnv from 'utils/env'
+import { getClaimsAndAppeals, getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
+import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
-
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
@@ -46,6 +51,43 @@ export function HomeScreen({}: HomeScreenProps) {
   const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
+  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+
+  useFocusEffect(
+    useCallback(() => {
+      if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
+        dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
+      }
+    }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments]),
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      if ((userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime) {
+        dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE, undefined, undefined, true))
+      }
+    }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals]),
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      if (userAuthorizedServices?.prescriptions && !rxInDowntime) {
+        dispatch(loadAllPrescriptions())
+      }
+    }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions]),
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
+        dispatch(getInbox())
+      }
+    }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
+  )
 
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
