@@ -1,13 +1,15 @@
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, useCallback } from 'react'
 
-import { AppointmentsState, ClaimsAndAppealsState, PrescriptionState } from 'store/slices'
+import { AppointmentsState, ClaimsAndAppealsState, LettersState, PrescriptionState, getLetterBeneficiaryData } from 'store/slices'
 import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
+import { DowntimeFeatureTypeConstants } from 'store/api'
 import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -16,7 +18,9 @@ import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { roundToHundredthsPlace } from 'utils/formattingUtils'
+import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -43,6 +47,17 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
+  const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+
+  useFocusEffect(
+    useCallback(() => {
+      if (userAuthorizedServices?.decisionLetters && !lettersInDowntime) {
+        dispatch(getLetterBeneficiaryData())
+      }
+    }, [dispatch, lettersInDowntime, userAuthorizedServices?.decisionLetters]),
+  )
 
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = () => {
@@ -111,6 +126,14 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
               onPress={() => Linking.openURL('vamobile://claims')}
               borderWidth={theme.dimensions.buttonBorderWidth}
             />
+          </Box>
+        )}
+        {letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <TextView variant={'MobileBodyBold'}>{t('payments.title')}</TextView>
+            <TextView accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
+              {`${t('monthlyBenefitPayment')}: $${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}
+            </TextView>
           </Box>
         )}
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
