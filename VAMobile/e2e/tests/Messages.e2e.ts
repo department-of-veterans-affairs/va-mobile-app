@@ -514,6 +514,13 @@ describe('Messages Screen', () => {
   })
 
   it('should open a draft message and verify it can be deleted', async () => {
+    await resetInAppReview()
+    await openHealth()
+    await openMessages()
+    await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
+    await expect(element(by.text('Drafts (3)'))).toExist()
+    await element(by.text('Drafts (3)')).tap()
+    await waitFor(element(by.text('Test: Test Inquiry'))).toBeVisible().whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scroll(300, 'down', NaN, 0.8)
     await element(by.text('Test: Test Inquiry')).tap()
     await element(by.text('More')).tap()
     await element(by.text('Delete')).tap()
