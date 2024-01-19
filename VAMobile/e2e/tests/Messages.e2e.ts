@@ -65,12 +65,10 @@ const tapItems = async (items: string, type: string) => {
   }
   await setTimeout(2000)
 	await device.takeScreenshot(items)
-  if (device.getPlatform() === 'android' && type === 'url') {
-    await device.pressBack()
-  } else {
+  if (device.getPlatform() === 'android') {
     await device.launchApp({newInstance: false})
   }
-  await setTimeout(1000)
+  await setTimeout(3000)
 }
 
 var dateWithTimeZone
