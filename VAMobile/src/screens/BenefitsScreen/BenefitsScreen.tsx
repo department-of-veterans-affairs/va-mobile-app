@@ -47,7 +47,7 @@ function BenefitsScreen({}: BenefitsScreenProps) {
     if (featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters) {
       navigateTo('Claims')
     } else {
-      navigateTo('ClaimsHistory')
+      navigateTo('ClaimsHistoryScreen')
     }
   }
 
