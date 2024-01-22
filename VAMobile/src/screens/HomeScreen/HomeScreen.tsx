@@ -169,16 +169,15 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           </Box>
         )}
         {ratingData?.combinedDisabilityRating && (
-          <Box alignItems={'center'}>
-            <TextView>{`${t('disabilityRating.title')}: ${t('disabilityRating.combinePercent', { combinedPercent: ratingData.combinedDisabilityRating })}`}</TextView>
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <TextView variant={'MobileBodyBold'}>{t('disabilityRating.title')}</TextView>
+            <TextView>{`${t('disabilityRating.combinePercent', { combinedPercent: ratingData.combinedDisabilityRating })}`}</TextView>
           </Box>
         )}
         {letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-            <TextView variant={'MobileBodyBold'}>{t('payments.title')}</TextView>
-            <TextView accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
-              {`${t('monthlyBenefitPayment')}: $${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}
-            </TextView>
+            <TextView variant={'MobileBodyBold'}>{t('monthlyPayment')}</TextView>
+            <TextView>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
           </Box>
         )}
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
