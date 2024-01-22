@@ -562,6 +562,14 @@ export const Events = {
       },
     }
   },
+  vama_login_readme: (isSIS = false): Event => {
+    return {
+      name: 'vama_login_readme',
+      params: {
+        sis: isSIS.toString(),
+      },
+    }
+  },
   vama_login_start: (isSIS = false, isBiometric = false): Event => {
     return {
       name: 'vama_login_start',
