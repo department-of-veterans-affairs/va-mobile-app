@@ -1,24 +1,18 @@
 import { TFunction } from 'i18next'
+import { camelCase } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AppealEventData, AppealEventTypes } from 'store/api/types'
 import { Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import PhaseIndicator from '../../../ClaimDetailsScreen/ClaimStatus/ClaimTimeline/PhaseIndicator'
 
-const snakeCaseToCamelCase = (snakeCase: string) => {
-  return snakeCase
-    .split('_')
-    .map((word, i) => (i === 0 ? word : capitalizeFirstLetter(word)))
-    .join('')
-}
-
-const getEventName = (type: AppealEventTypes, t: TFunction): string => {
-  const translated = t(`appealDetails.${snakeCaseToCamelCase(type)}`)
+const getEventName = (type: AppealEventTypes, t: TFunction) => {
+  const translated = t(`appealDetails.${camelCase(type)}`)
   return translated.startsWith('appealDetails') ? t('appealDetails.unknown') : translated
 }
 
