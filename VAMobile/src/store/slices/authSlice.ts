@@ -319,8 +319,9 @@ const retrieveRefreshToken = async (): Promise<string | undefined> => {
   try {
     console.debug('retrieveRefreshToken')
     const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
-    await logAnalyticsEvent(Events.vama_login_token_get(true))
     const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
+
+    await logAnalyticsEvent(Events.vama_login_token_get(true))
     return reconstructedToken
   } catch {
     await logAnalyticsEvent(Events.vama_login_token_get(false))
