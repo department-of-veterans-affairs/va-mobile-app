@@ -93,10 +93,10 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      if (userAuthorizedServices?.decisionLetters && !lettersInDowntime) {
+      if (userAuthorizedServices?.lettersAndDocuments && !lettersInDowntime) {
         dispatch(getLetterBeneficiaryData())
       }
-    }, [dispatch, lettersInDowntime, userAuthorizedServices?.decisionLetters]),
+    }, [dispatch, lettersInDowntime, userAuthorizedServices?.lettersAndDocuments]),
   )
 
   const onContactVA = navigateTo('ContactVA')
