@@ -100,6 +100,9 @@ const postLoggedIn = async () => {
   } catch (error) {
     if (isErrorObject(error)) {
       logNonFatalErrorToFirebase(error, 'logged-in Url: /v0/user/logged-in')
+      if (error.status) {
+        await logAnalyticsEvent(Events.vama_user_call(error.status))
+      }
     }
   }
 }
@@ -295,23 +298,33 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
  * and store just the nonce using biometric storage.  The rest of the token will be stored using AsyncStorage
  */
 const storeRefreshToken = async (refreshToken: string, options: Keychain.Options, storageType: AUTH_STORAGE_TYPE): Promise<void> => {
-  const splitToken = refreshToken.split('.')
-  await Promise.all([
-    Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
-    AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
-    AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
-    AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
-  ])
+  try {
+    const splitToken = refreshToken.split('.')
+    await Promise.all([
+      Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
+      AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
+      AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
+      AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
+    ])
+    await logAnalyticsEvent(Events.vama_login_token_store(true))
+  } catch {
+    await logAnalyticsEvent(Events.vama_login_token_store(false))
+  }
 }
 
 /**
  * Returns a reconstructed refresh token with the nonce from Keychain and the rest from AsyncStorage
  */
 const retrieveRefreshToken = async (): Promise<string | undefined> => {
-  console.debug('retrieveRefreshToken')
-  const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
-  const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
-  return reconstructedToken
+  try {
+    console.debug('retrieveRefreshToken')
+    const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
+    await logAnalyticsEvent(Events.vama_login_token_retrieve(true))
+    const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
+    return reconstructedToken
+  } catch {
+    await logAnalyticsEvent(Events.vama_login_token_retrieve(false))
+  }
 }
 
 type StringMap = { [key: string]: string | undefined }
@@ -452,9 +465,14 @@ export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch
     await dispatch(dispatchSetAnalyticsLogin())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
     postLoggedIn()
-  } catch (err) {
-    console.error(err)
-    logNonFatalErrorToFirebase(err, `attemptIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
+  } catch (error) {
+    if (isErrorObject(error)) {
+      console.error(error)
+      logNonFatalErrorToFirebase(error, `attemptIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
+      if (error.status) {
+        await logAnalyticsEvent(Events.vama_login_token_refresh(error.status))
+      }
+    }
     // if some error occurs, we need to force them to re-login
     // even if they had a refreshToken saved, since these tokens are one time use
     // if we fail, we just need to get a new one (re-login) and start over
@@ -646,6 +664,9 @@ export const handleTokenCallbackUrl =
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: ${authNonFatalErrorString}`)
         await logAnalyticsEvent(Events.vama_exchange_failed())
+        if (error.status) {
+          await logAnalyticsEvent(Events.vama_login_token_get(error.status))
+        }
         dispatch(dispatchFinishAuthLogin({ error }))
       }
     }
