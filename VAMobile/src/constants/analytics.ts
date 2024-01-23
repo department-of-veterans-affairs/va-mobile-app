@@ -578,6 +578,38 @@ export const Events = {
       },
     }
   },
+  vama_login_token_get: (status_code: number): Event => {
+    return {
+      name: 'vama_login_token_get',
+      params: {
+        status_code,
+      },
+    }
+  },
+  vama_login_token_refresh: (status_code: number): Event => {
+    return {
+      name: 'vama_login_token_refresh',
+      params: {
+        status_code,
+      },
+    }
+  },
+  vama_login_token_retrieve: (success: boolean): Event => {
+    return {
+      name: 'vama_login_token_retrieve',
+      params: {
+        success,
+      },
+    }
+  },
+  vama_login_token_store: (success: boolean): Event => {
+    return {
+      name: 'vama_login_token_store',
+      params: {
+        success,
+      },
+    }
+  },
   vama_modalpick_open: (modal: string): Event => {
     return {
       name: 'vama_modalpick_open',
@@ -959,6 +991,14 @@ export const Events = {
       params: {
         totalTime,
         actionTime,
+      },
+    }
+  },
+  vama_user_call: (status_code: number): Event => {
+    return {
+      name: 'vama_user_call',
+      params: {
+        status_code,
       },
     }
   },
