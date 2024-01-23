@@ -5,10 +5,19 @@ import { context, fireEvent, render, screen } from 'testUtils'
 import CarouselTabBar from './CarouselTabBar'
 import { CarouselScreen, TextView } from '../index'
 
+let mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+
+  return {
+    ...original,
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
 context('CarouselTabBar', () => {
   let t = jest.fn(() => { })
   let onCarouselEndSpy = jest.fn()
-  let navigationSpy = jest.fn()
 
   const TestComponent = () => {
     return <TextView>Test Component</TextView>
@@ -58,7 +67,7 @@ context('CarouselTabBar', () => {
         screenList={screenList}
         onCarouselEnd={onCarouselEndSpy}
         translation={t}
-        navigation={{ navigate: navigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
+        navigation={{ navigate: mockNavigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
       />,
     )
   }
@@ -71,13 +80,13 @@ context('CarouselTabBar', () => {
     it('should navigate to the next screen and back to the previous screen', () => {
       // clicking the next button
       fireEvent.press(screen.getByAccessibilityHint('next'))
-      expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('TestComponent2')
+      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('TestComponent2')
 
       //clicking the back button
       fireEvent.press(screen.getByAccessibilityHint('back'))
-      expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('TestComponent')
+      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('TestComponent')
     })
 
     describe('on click of done', () => {

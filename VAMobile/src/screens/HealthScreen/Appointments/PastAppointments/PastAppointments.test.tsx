@@ -11,14 +11,11 @@ import { getAppointmentsInDateRange, ErrorsState, initialErrorsState, initialize
 import { defaultAppoinment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 
 const mockNavigationSpy = jest.fn()
-const mockNavigateToSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual('../../../../utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy.mockReturnValue(mockNavigateToSpy)
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -178,7 +175,6 @@ context('PastAppointments', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByTestId('Confirmed Saturday, February 6, 2021 11:53 AM PST Type of care not noted Provider not noted At VA Long Beach Healthcare System'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('PastAppointmentDetails', { appointmentID: '1' })
-      expect(mockNavigateToSpy).toHaveBeenCalled()
     })
   })
 

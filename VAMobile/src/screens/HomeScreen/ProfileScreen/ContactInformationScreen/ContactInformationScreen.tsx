@@ -14,7 +14,7 @@ import { UserContactInformation } from 'api/types/ContactInformation'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { registerReviewEvent } from 'utils/inAppReviews'
-import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
@@ -93,66 +93,53 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
     registerReviewEvent()
     setReviewEventRegistered(true)
   }
+
   const onMailingAddress = () => {
-    if (waygateNativeAlert('WG_EditAddress')) {
-      logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('contactInformation.title')))
-      navigateTo('EditAddress', {
-        displayTitle: t('contactInformation.mailingAddress'),
-        addressType: profileAddressOptions.MAILING_ADDRESS,
-      })()
-    }
+    logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('contactInformation.title')))
+    navigateTo('EditAddress', {
+      displayTitle: t('contactInformation.mailingAddress'),
+      addressType: profileAddressOptions.MAILING_ADDRESS,
+    })
   }
 
   const onResidentialAddress = () => {
-    if (waygateNativeAlert('WG_EditAddress')) {
-      logAnalyticsEvent(Events.vama_click(t('contactInformation.residentialAddress'), t('contactInformation.title')))
-      navigateTo('EditAddress', {
-        displayTitle: t('contactInformation.residentialAddress'),
-        addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
-      })()
-    }
+    logAnalyticsEvent(Events.vama_click(t('contactInformation.residentialAddress'), t('contactInformation.title')))
+    navigateTo('EditAddress', {
+      displayTitle: t('contactInformation.residentialAddress'),
+      addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
+    })
   }
 
   const onHomePhone = () => {
-    if (waygateNativeAlert('WG_EditPhoneNumber')) {
-      navigateTo('EditPhoneNumber', {
-        displayTitle: t('editPhoneNumber.homePhoneTitle'),
-        phoneType: PhoneTypeConstants.HOME,
-        phoneData: contactInformation?.homePhone || ({} as PhoneData),
-      })()
-    }
+    navigateTo('EditPhoneNumber', {
+      displayTitle: t('editPhoneNumber.homePhoneTitle'),
+      phoneType: PhoneTypeConstants.HOME,
+      phoneData: contactInformation?.homePhone || ({} as PhoneData),
+    })
   }
 
   const onWorkPhone = () => {
-    if (waygateNativeAlert('WG_EditPhoneNumber')) {
-      navigateTo('EditPhoneNumber', {
-        displayTitle: t('editPhoneNumber.workPhoneTitle'),
-        phoneType: PhoneTypeConstants.WORK,
-        phoneData: contactInformation?.workPhone || ({} as PhoneData),
-      })()
-    }
+    navigateTo('EditPhoneNumber', {
+      displayTitle: t('editPhoneNumber.workPhoneTitle'),
+      phoneType: PhoneTypeConstants.WORK,
+      phoneData: contactInformation?.workPhone || ({} as PhoneData),
+    })
   }
 
   const onCellPhone = () => {
-    if (waygateNativeAlert('WG_EditPhoneNumber')) {
-      navigateTo('EditPhoneNumber', {
-        displayTitle: t('editPhoneNumber.mobilePhoneTitle'),
-        phoneType: PhoneTypeConstants.MOBILE,
-        phoneData: contactInformation?.mobilePhone || ({} as PhoneData),
-      })()
-    }
+    navigateTo('EditPhoneNumber', {
+      displayTitle: t('editPhoneNumber.mobilePhoneTitle'),
+      phoneType: PhoneTypeConstants.MOBILE,
+      phoneData: contactInformation?.mobilePhone || ({} as PhoneData),
+    })
   }
 
   const onEmailAddress = () => {
-    if (waygateNativeAlert('WG_EditEmail')) {
-      navigation.navigate('EditEmail')
-    }
+    navigateTo('EditEmail')
   }
 
   const onHowWillYou = () => {
-    if (waygateNativeAlert('WG_HowWillYou')) {
-      navigation.navigate('HowWillYou')
-    }
+    navigateTo('HowWillYou')
   }
 
   const linkProps: TextViewProps = {

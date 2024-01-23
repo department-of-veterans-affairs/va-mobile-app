@@ -36,7 +36,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
     dispatch(resetSendMessageFailed())
     dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
     dispatch(resetReplyTriageError())
-    navigateTo('SecureMessaging')()
+    navigateTo('SecureMessaging')
   }
 
   const bulletedListOfText = []

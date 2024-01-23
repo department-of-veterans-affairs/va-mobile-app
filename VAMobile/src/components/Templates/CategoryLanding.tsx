@@ -101,7 +101,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
       <HeaderBanner {...headerProps} />
       <VAScrollView testID={testID} scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
         <View onLayout={getTransitionHeaderHeight}>
-          <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />
+          <CrisisLineCta onPress={() => navigateTo('VeteransCrisisLine')} />
           {title && !screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
         </View>
         <WaygateWrapper>{children}</WaygateWrapper>

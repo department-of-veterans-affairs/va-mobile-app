@@ -1,10 +1,9 @@
 import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
-import { ReactNode, useEffect, useRef, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
 import {
@@ -54,7 +53,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
 import { getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { screenContentAllowed, waygateNativeAlert } from 'utils/waygateConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFocusEffect } from '@react-navigation/native'
@@ -289,9 +288,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
 
   const prescriptionDetailsClicked = (prescriptionID: string) => {
     logAnalyticsEvent(Events.vama_rx_details(prescriptionID))
-    if (waygateNativeAlert('WG_PrescriptionDetails')) {
-      return navigation.navigate('PrescriptionDetails', { prescriptionId: prescriptionID })
-    }
+    return navigateTo('PrescriptionDetails', { prescriptionId: prescriptionID })
   }
 
   const prescriptionItems = () => {
@@ -354,9 +351,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
           bottomContent,
           bottomOnPress() {
             logAnalyticsEvent(Events.vama_rx_trackdet(prescription.id))
-            if (waygateNativeAlert('WG_RefillTrackingModal')) {
-              navigation.navigate('RefillTrackingModal', { prescription: prescription })
-            }
+            navigateTo('RefillTrackingModal', { prescription: prescription })
           },
         }
       }
@@ -597,11 +592,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     const requestRefillButtonProps: VAButtonProps = {
       label: t('prescription.history.startRefillRequest'),
       buttonType: ButtonTypesConstants.buttonPrimary,
-      onPress: () => {
-        if (waygateNativeAlert('WG_RefillScreenModal')) {
-          navigateTo('RefillScreenModal')()
-        }
-      },
+      onPress: () => navigateTo('RefillScreenModal'),
     }
     return (
       <Box mx={theme.dimensions.buttonPadding}>
@@ -655,9 +646,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     icon: helpIconProps,
     onPress: () => {
       logAnalyticsEvent(Events.vama_rx_help())
-      if (waygateNativeAlert('WG_PrescriptionHelp')) {
-        navigation.navigate('PrescriptionHelp')
-      }
+      navigateTo('PrescriptionHelp')
     },
   }
 

@@ -127,7 +127,7 @@ export const getEpochSecondsOfDate = (date: string): number => {
  *
  * @returns date string formatted based on formatBy
  */
-export const getFormattedDate = (date: string, formatBy: string): string => {
+export const getFormattedDate = (date: string | null, formatBy: string): string => {
   if (date) {
     return DateTime.fromISO(date).toLocal().toFormat(formatBy)
   }
