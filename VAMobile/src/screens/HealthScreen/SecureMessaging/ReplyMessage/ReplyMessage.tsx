@@ -219,62 +219,64 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   }
 
   function renderForm() {
-    <Box>
-      <MessageAlert
-        scrollViewRef={scrollViewRef}
-        hasValidationError={formContainsError}
-        saveDraftAttempted={onSaveDraftClicked}
-        focusOnError={onSendClicked}
-        errorList={errorList}
-      />
-      <TextArea>
-        <TextView variant="MobileBody" accessible={true} testID={'To ' + receiverName}>
-          {t('secureMessaging.formMessage.to')}
-        </TextView>
-        <TextView variant="MobileBodyBold" accessible={true}>
-          {receiverName}
-        </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessible={true} testID={'Subject ' + subjectHeader}>
-          {t('secureMessaging.startNewMessage.subject')}
-        </TextView>
-        <TextView variant="MobileBodyBold" accessible={true}>
-          {subjectHeader}
-        </TextView>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <FormWrapper
-            fieldsList={formFieldsList}
-            onSave={sendReplyOrSaveDraft}
-            onSaveClicked={onSendClicked}
-            setOnSaveClicked={setOnSendClicked}
-            setFormContainsError={setFormContainsError}
-            resetErrors={resetErrors}
-            setResetErrors={setResetErrors}
-            setErrorList={setErrorList}
-          />
-        </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <Pressable
-            onPress={navigateToReplyHelp}
-            accessibilityRole={'button'}
-            accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
-            importantForAccessibility={'yes'}>
-            <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-              <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
-            </Box>
-          </Pressable>
-        </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <Button
-            label={t('secureMessaging.formMessage.send')}
-            onPress={() => {
-              setOnSendClicked(true)
-              setOnSaveDraftClicked(false)
-            }}
-            testID="sendButtonTestID"
-          />
-        </Box>
-      </TextArea>
-    </Box>
+    return (
+      <Box>
+        <MessageAlert
+          scrollViewRef={scrollViewRef}
+          hasValidationError={formContainsError}
+          saveDraftAttempted={onSaveDraftClicked}
+          focusOnError={onSendClicked}
+          errorList={errorList}
+        />
+        <TextArea>
+          <TextView variant="MobileBody" accessible={true} testID={'To ' + receiverName}>
+            {t('secureMessaging.formMessage.to')}
+          </TextView>
+          <TextView variant="MobileBodyBold" accessible={true}>
+            {receiverName}
+          </TextView>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessible={true} testID={'Subject ' + subjectHeader}>
+            {t('secureMessaging.startNewMessage.subject')}
+          </TextView>
+          <TextView variant="MobileBodyBold" accessible={true}>
+            {subjectHeader}
+          </TextView>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <FormWrapper
+              fieldsList={formFieldsList}
+              onSave={sendReplyOrSaveDraft}
+              onSaveClicked={onSendClicked}
+              setOnSaveClicked={setOnSendClicked}
+              setFormContainsError={setFormContainsError}
+              resetErrors={resetErrors}
+              setResetErrors={setResetErrors}
+              setErrorList={setErrorList}
+            />
+          </Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <Pressable
+              onPress={navigateToReplyHelp}
+              accessibilityRole={'button'}
+              accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
+              importantForAccessibility={'yes'}>
+              <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
+                <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
+              </Box>
+            </Pressable>
+          </Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <Button
+              label={t('secureMessaging.formMessage.send')}
+              onPress={() => {
+                setOnSendClicked(true)
+                setOnSaveDraftClicked(false)
+              }}
+              testID="sendButtonTestID"
+            />
+          </Box>
+        </TextArea>
+      </Box>
+    )
   }
 
   function renderMessageThread() {
