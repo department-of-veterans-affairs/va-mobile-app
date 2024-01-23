@@ -51,7 +51,7 @@
     "@tanstack/react-query": "^5.17.19",
     "eslint-plugin-tsdoc": "^0.2.17",
     "i18next": "^21.6.10",
-    "jsc-android": "^250230.2.1",
+    "jsc-android": "^250231.0.0",
     "lottie-react-native": "^5.1.6",
     "luxon": "^3.4.4",
     "patch-package": "^8.0.0",
