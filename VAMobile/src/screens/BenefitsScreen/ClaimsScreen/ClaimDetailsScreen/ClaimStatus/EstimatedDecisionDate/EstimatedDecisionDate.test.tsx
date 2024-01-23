@@ -29,7 +29,7 @@ context('EstimatedDecisionDate', () => {
   })
 
   describe('when showCovidMessage is true', () => {
-    it('should show an AlertBox and VAButton and should launch external link when button is pressed', () => {
+    it('should show an AlertBox and Button and should launch external link when button is pressed', () => {
       initializeTestCase('2020-12-20', true)
       expect(screen.getByText("We can’t provide an estimated date on when your claim will be complete due to the affect that COVID-19 has had on scheduling in-person claim exams. We’re starting to schedule in-person exams again in many locations. To see the status of claim exams in your area, you can review locations where we’re now offering in-person exams.")).toBeTruthy()
       expect(screen.getByText('Review locations')).toBeTruthy()

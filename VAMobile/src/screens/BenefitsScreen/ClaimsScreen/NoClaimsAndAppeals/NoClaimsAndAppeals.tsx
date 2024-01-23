@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, TextView } from 'components'
 import { ClaimType, ClaimTypeConstants } from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
@@ -14,7 +14,7 @@ type NoClaimsAndAppealsProps = {
   claimType: ClaimType
 }
 
-const NoClaimsAndAppeals: FC<NoClaimsAndAppealsProps> = ({ claimType }) => {
+function NoClaimsAndAppeals({ claimType }: NoClaimsAndAppealsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)

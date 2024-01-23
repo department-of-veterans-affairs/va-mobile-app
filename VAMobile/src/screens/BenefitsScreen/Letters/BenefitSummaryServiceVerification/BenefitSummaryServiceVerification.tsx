@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
   BasicError,
@@ -38,7 +38,7 @@ const { LINK_URL_ASK_VA_GOV } = getEnv()
 
 type BenefitSummaryServiceVerificationProps = StackScreenProps<BenefitsStackParamList, 'BenefitSummaryServiceVerificationLetter'>
 
-const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationProps> = ({ navigation }) => {
+function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryServiceVerificationProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()

@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { isEmpty, map } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useCallback, useEffect, useState } from 'react'
+import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, Pagination, PaginationProps, TextView, TextViewProps, VAModalPicker, VAModalPickerProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -19,7 +19,7 @@ import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>
 
-const PaymentHistoryScreen: FC<PaymentHistoryScreenProps> = ({ navigation }) => {
+function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 
 import { Alert, Modal, Pressable, PressableProps, TextInput, TextInputProps, View } from 'react-native'
 import { Box, TextView } from 'components'
@@ -19,7 +19,7 @@ export type AlertPromptProps = {
 /**
  * Prompt to unlock demo mode for App. Used for Android as IOS already has `Alert.prompt`
  */
-const DemoAlert: FC<AlertPromptProps> = ({ visible, setVisible, onConfirm }) => {
+function DemoAlert({ visible, setVisible, onConfirm }: AlertPromptProps) {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
   const [input, setInput] = useState('')

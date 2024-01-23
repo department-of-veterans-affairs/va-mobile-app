@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, LargePanel, TextView, VABulletList, VABulletListText } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -10,7 +10,7 @@ import { useTheme } from 'utils/hooks'
 
 type PrescriptionHelpProps = StackScreenProps<HealthStackParamList, 'PrescriptionHelp'>
 
-const PrescriptionHelp: FC<PrescriptionHelpProps> = () => {
+function PrescriptionHelp({}: PrescriptionHelpProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
