@@ -168,13 +168,13 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             />
           </Box>
         )}
-        {Number(ratingData?.combinedDisabilityRating) > 0 && (
+        {!!ratingData?.combinedDisabilityRating && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
             <TextView variant={'MobileBodyBold'}>{t('disabilityRating.title')}</TextView>
             <TextView>{`${t('disabilityRating.combinePercent', { combinedPercent: ratingData.combinedDisabilityRating })}`}</TextView>
           </Box>
         )}
-        {letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
+        {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
             <TextView variant={'MobileBodyBold'}>{t('monthlyPayment')}</TextView>
             <TextView>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
