@@ -1,7 +1,6 @@
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
@@ -10,12 +9,12 @@ import { SegmentedControlIndexes } from 'constants/secureMessaging'
 import { ViewStyle } from 'react-native'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { updateSecureMessagingTab } from 'store/slices'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
-const NoFolderMessages: FC = () => {
+function NoFolderMessages() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
 
   const onGoToInbox = (): void => {

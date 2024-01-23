@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode } from 'react'
+import React from 'react'
 
 import { Box, ClickForActionLink, CollapsibleAlert, LinkButtonProps, LinkTypeOptionsConstants, TextView, VABulletList, VABulletListText } from 'components'
 import { Facility } from 'api/types/FacilityData'
@@ -11,7 +11,7 @@ import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
-const CernerAlertSM: FC = () => {
+function CernerAlertSM() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { data: facilitiesInfo } = useFacilitiesInfo()
@@ -30,7 +30,7 @@ const CernerAlertSM: FC = () => {
   const hasMultipleFacilities = cernerFacilities.length > 1
   const headerText = t('cernerAlertSM.header')
 
-  const accordionContent = (): ReactNode => {
+  function accordionContent() {
     let intro = t('cernerAlertSM.sendingAMessage', { facility: cernerFacilities[0].name })
     let thisFacility = t('cernerAlertSM.thisFacilityUses')
     let thisFacilityA11y = a11yLabelVA(t('cernerAlertSM.thisFacilityUses'))

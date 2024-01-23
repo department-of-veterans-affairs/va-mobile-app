@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, LargePanel, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -9,7 +9,7 @@ import { useTheme } from 'utils/hooks'
 
 type SessionNotStartedProps = StackScreenProps<HealthStackParamList, 'SessionNotStarted'>
 
-const SessionNotStarted: FC<SessionNotStartedProps> = () => {
+function SessionNotStarted({}: SessionNotStartedProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

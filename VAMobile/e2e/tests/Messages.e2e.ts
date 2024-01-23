@@ -65,12 +65,10 @@ const tapItems = async (items: string, type: string) => {
   }
   await setTimeout(2000)
 	await device.takeScreenshot(items)
-  if (device.getPlatform() === 'android' && type === 'url') {
-    await device.pressBack()
-  } else {
+  if (device.getPlatform() === 'android') {
     await device.launchApp({newInstance: false})
   }
-  await setTimeout(1000)
+  await setTimeout(3000)
 }
 
 var dateWithTimeZone
@@ -182,13 +180,13 @@ describe('Messages Screen', () => {
   })
 
   it('verify appointment message details', async () => {
+    await resetInAppReview()
+    await openHealth()
+    await openMessages()
     await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID))).toBeVisible().whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scroll(100, 'down')  
     await element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID)).tap()
     await expect(element(by.text('Appointment: Preparing for your visit'))).toExist()
     await element(by.text('Messages')).tap()
-    await resetInAppReview()
-    await openHealth()
-    await openMessages()
   })
 
   it('verify other message details', async () => {
@@ -464,8 +462,7 @@ describe('Messages Screen', () => {
   })
 
   it('click the newest message in drafts folder', async () => {
-    await device.launchApp({ newInstance: true })
-    await loginToDemoMode()
+    await resetInAppReview()
     await openHealth()
     await openMessages()
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
@@ -515,6 +512,13 @@ describe('Messages Screen', () => {
   })
 
   it('should open a draft message and verify it can be deleted', async () => {
+    await resetInAppReview()
+    await openHealth()
+    await openMessages()
+    await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
+    await expect(element(by.text('Drafts (3)'))).toExist()
+    await element(by.text('Drafts (3)')).tap()
+    await waitFor(element(by.text('Test: Test Inquiry'))).toBeVisible().whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scroll(300, 'down', NaN, 0.8)
     await element(by.text('Test: Test Inquiry')).tap()
     await element(by.text('More')).tap()
     await element(by.text('Delete')).tap()

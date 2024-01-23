@@ -1,7 +1,7 @@
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { Box, ChildTemplate, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
 import { Events } from 'constants/analytics'
@@ -19,7 +19,7 @@ import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
-const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
+function FolderMessages({ navigation, route }: FolderMessagesProps) {
   const { folderID, folderName } = route.params
 
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -97,7 +97,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     dispatch(listFolderMessages(folderID, requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
   }
 
-  const renderPagination = (): ReactNode => {
+  function renderPagination() {
     const page = paginationMetaData?.currentPage || 1
     const paginationProps: PaginationProps = {
       onNext: () => {

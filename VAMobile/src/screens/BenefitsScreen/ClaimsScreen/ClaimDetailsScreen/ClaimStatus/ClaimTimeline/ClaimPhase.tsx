@@ -2,7 +2,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 
 import { AccordionCollapsible, Box, TextView } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
@@ -93,7 +93,7 @@ export type ClaimPhaseProps = {
 /**
  * Component for rendering each phase of a claim's lifetime.
  */
-const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }) => {
+function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()

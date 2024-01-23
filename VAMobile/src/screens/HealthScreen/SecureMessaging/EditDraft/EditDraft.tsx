@@ -2,7 +2,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import {
@@ -53,7 +53,7 @@ import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmati
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
-const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
+function EditDraft({ navigation, route }: EditDraftProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -435,7 +435,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     }
   }
 
-  const renderForm = (): ReactNode => {
+  function renderForm() {
     if (noProviderError) {
       return (
         <AlertBox
@@ -517,7 +517,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     )
   }
 
-  const renderMessageThread = (): ReactNode => {
+  function renderMessageThread() {
     let messageThread = thread || []
 
     // If we're editing a reply draft, don't display the draft message in the thread

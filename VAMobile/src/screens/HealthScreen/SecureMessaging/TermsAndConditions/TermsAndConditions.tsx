@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -8,7 +8,7 @@ import { useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_MY_HEALTHEVET } = getEnv()
-const TermsAndConditions: FC = () => {
+function TermsAndConditions() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions

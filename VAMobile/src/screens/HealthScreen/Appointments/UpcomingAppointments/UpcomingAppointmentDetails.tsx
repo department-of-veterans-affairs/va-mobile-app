@@ -1,7 +1,7 @@
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import {
   AppointmentAddressAndNumber,
@@ -60,7 +60,7 @@ type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'U
 const { LINK_URL_VA_SCHEDULING } = getEnv()
 // export const JOIN_SESSION_WINDOW_MINUTES = 30
 
-const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route, navigation }) => {
+function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDetailsProps) {
   let { appointmentID } = route.params
   const { vetextID } = route.params
 
@@ -159,7 +159,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   // TODO abstract some of these render functions into their own components - too many in one file
-  const renderSpecialInstructions = (): ReactElement => {
+  function renderSpecialInstructions() {
     if (comment) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
@@ -187,7 +187,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     }
   }
 
-  const renderVideoAppointmentInstructions = (): ReactElement => {
+  function renderVideoAppointmentInstructions() {
     const isGFE = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
     const isVideoAppt = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE || isGFE
 
@@ -205,7 +205,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const renderAtHomeVideoConnectAppointmentData = (): ReactElement => {
+  function renderAtHomeVideoConnectAppointmentData() {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
       const onPrepareForVideoVisit = () => {
         dispatch(clearAppointmentCancellation())
@@ -256,7 +256,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const renderAtlasVideoConnectAppointmentData = (): ReactElement => {
+  function renderAtlasVideoConnectAppointmentData() {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS && !isAppointmentCanceled && code) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
@@ -271,7 +271,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const renderAddToCalendarLink = (): ReactElement => {
+  function renderAddToCalendarLink() {
     if (!isAppointmentCanceled && !pendingAppointment) {
       return (
         <Box mt={phoneOnly ? undefined : theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
@@ -283,7 +283,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const readerCancelInformation = (): ReactElement => {
+  function readerCancelInformation() {
     if (pendingAppointment) {
       return <></>
     }

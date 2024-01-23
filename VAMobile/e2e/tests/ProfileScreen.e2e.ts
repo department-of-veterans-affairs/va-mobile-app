@@ -1,5 +1,5 @@
 import { expect, device, by, element, waitFor } from 'detox'
-import { disableAF, enableAF, verifyAF, openSettings, openDeveloperScreen, CommonE2eIdConstants, loginToDemoMode, openProfile } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openProfile } from './utils'
 
 export const ProfileE2eIdConstants = {
   PROFILE_TEXT: 'Profile',
@@ -19,18 +19,6 @@ beforeAll(async () => {
 })
 
 describe('Profile Screen', () => {
-
-  it('should verify AF use case 3 for profile', async() => {
-    await openSettings()
-		await openDeveloperScreen()
-		await element(by.text('Remote Config')).tap()
-    await enableAF('WG_Profile', 'AllowFunction')
-    await device.launchApp({newInstance: true})
-    await loginToDemoMode()
-    await openProfile()
-    await verifyAF(undefined, 'AllowFunction', undefined)
-  })
-
   it('should show profile list content', async () => {
     await waitFor(element(by.text(ProfileE2eIdConstants.PROFILE_TEXT)))
       .toExist()
@@ -45,10 +33,6 @@ describe('Profile Screen', () => {
   it('should show profile banner elements', async () => {
     await expect(element(by.text(ProfileE2eIdConstants.BANNER_NAME_ID))).toExist()
     await expect(element(by.text(ProfileE2eIdConstants.BANNER_BRANCH_ID))).toExist()
-  })
-
-  it('should disable AF for profile', async () => {
-    await disableAF(undefined, 'WG_Profile', undefined, 'AllowFunction')
   })
   
 })

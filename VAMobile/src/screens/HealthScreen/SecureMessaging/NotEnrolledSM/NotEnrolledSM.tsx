@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -10,7 +10,7 @@ import getEnv from 'utils/env'
 
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
 
-const NotEnrolledSM: FC = () => {
+function NotEnrolledSM() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
   const theme = useTheme()

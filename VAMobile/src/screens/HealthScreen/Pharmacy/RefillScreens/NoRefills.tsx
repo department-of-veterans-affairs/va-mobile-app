@@ -1,13 +1,13 @@
 import { ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
-const NoRefills: FC = () => {
+function NoRefills() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

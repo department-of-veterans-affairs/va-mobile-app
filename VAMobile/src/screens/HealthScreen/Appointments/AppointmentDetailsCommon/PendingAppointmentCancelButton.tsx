@@ -1,6 +1,6 @@
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { AppointmentAttributes } from 'store/api'
 import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
@@ -17,7 +17,7 @@ type PendingAppointmentCancelButtonProps = {
   appointmentID?: string
 }
 
-const PendingAppointmentCancelButton: FC<PendingAppointmentCancelButtonProps> = ({ attributes, appointmentID }) => {
+function PendingAppointmentCancelButton({ attributes, appointmentID }: PendingAppointmentCancelButtonProps) {
   const isAppointmentPending = isAPendingAppointment(attributes)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()

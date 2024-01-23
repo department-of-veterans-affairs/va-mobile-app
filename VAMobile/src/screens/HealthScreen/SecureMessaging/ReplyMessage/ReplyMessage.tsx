@@ -4,7 +4,7 @@ import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import { Box, CollapsibleView, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, MessageAlert, TextArea, TextView } from 'components'
@@ -43,7 +43,7 @@ import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCanc
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
-const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
+function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -218,7 +218,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     navigateTo('ReplyHelp')
   }
 
-  const renderForm = (): ReactNode => (
+  function renderForm() {
     <Box>
       <MessageAlert
         scrollViewRef={scrollViewRef}
@@ -275,9 +275,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         </Box>
       </TextArea>
     </Box>
-  )
+  }
 
-  const renderMessageThread = (): ReactNode => {
+  function renderMessageThread() {
     return (
       <Box>
         <Box accessible={true} accessibilityRole={'header'}>

@@ -4,7 +4,7 @@ import { Pressable } from 'react-native'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode } from 'react'
+import React from 'react'
 
 import { AttachmentLink, Box, CollapsibleView, LoadingComponent, TextView } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
@@ -24,7 +24,7 @@ export type MessageCardProps = {
   message: SecureMessagingMessageAttributes
 }
 
-const MessageCard: FC<MessageCardProps> = ({ message }) => {
+function MessageCard({ message }: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
@@ -41,7 +41,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
     dispatch(downloadFileAttachment(file, key))
   }
 
-  const getHeader = (): ReactNode => {
+  function getHeader() {
     return (
       <Box flexDirection={'column'}>
         <TextView variant="MobileBodyBold" accessibilityRole={'header'} mt={theme.dimensions.standardMarginBetween}>
@@ -59,7 +59,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
     )
   }
 
-  const getContent = (): ReactNode => {
+  function getContent() {
     /** this does preserve newline characters just not spaces, TODO:change the mobile body link text views to be clickable and launch the right things */
     if (body) {
       return getLinkifiedText(body, t, launchLink)
@@ -67,7 +67,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
     return <></>
   }
 
-  const getAttachment = (): ReactNode => {
+  function getAttachment() {
     if (loadingAttachments && !attachments?.length) {
       return (
         <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
@@ -104,7 +104,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
     navigateTo('ReplyHelp')
   }
 
-  const getMessageHelp = (): ReactNode => {
+  function getMessageHelp() {
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
         <Pressable onPress={navigateToReplyHelp} accessibilityRole={'button'} accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')} importantForAccessibility={'yes'}>
@@ -123,7 +123,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
 
   const onReplyPress = () => navigateTo('ReplyMessage', { messageID: messageId, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
-  const getReplyOrStartNewMessageButton = (): ReactNode => {
+  function getReplyOrStartNewMessageButton() {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         {!replyExpired ? (

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, ClickToCallPhoneNumber, TextArea, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -8,7 +8,7 @@ import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-const NoClaimsAndAppealsAccess: FC = () => {
+function NoClaimsAndAppealsAccess() {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { AppointmentAttributes } from 'store/api'
 import { AppointmentProposedTimesPeriodConstant } from 'store/api/types/AppointmentData'
@@ -12,7 +12,7 @@ type PreferredDateAndTimeProps = {
   attributes: AppointmentAttributes
 }
 
-const PreferredDateAndTime: FC<PreferredDateAndTimeProps> = ({ attributes }) => {
+function PreferredDateAndTime({ attributes }: PreferredDateAndTimeProps) {
   const isAppointmentPending = isAPendingAppointment(attributes)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()

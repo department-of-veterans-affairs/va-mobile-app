@@ -2,7 +2,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, ChildTemplate, ClickToCallPhoneNumber, LoadingComponent, TextArea, TextView } from 'components'
 import { DowntimeFeatureTypeConstants, RefillStatusConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -24,7 +24,7 @@ type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'Prescrip
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
-const PrescriptionDetails: FC<PrescriptionDetailsProps> = ({ route, navigation }) => {
+function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const { prescriptionId } = route.params
   const { loadingHistory, prescriptionsById, prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const theme = useTheme()

@@ -1,7 +1,7 @@
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { AlertBox, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { ErrorsState } from 'store/slices'
@@ -10,7 +10,7 @@ import { RootState } from 'store'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
-const IndividualMessageErrorComponent: FC = () => {
+function IndividualMessageErrorComponent() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { tryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)

@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
 import {
@@ -136,7 +136,7 @@ const filterOptions = {
 
 type PrescriptionHistoryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
 
-const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }) => {
+function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const dispatch = useAppDispatch()
   const {
     filteredPrescriptions: prescriptions,
@@ -292,7 +292,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const prescriptionItems = () => {
     const total = currentPrescriptions?.length
 
-    const listItems: Array<ReactNode> = (currentPrescriptions || []).map((prescription, idx) => {
+    const listItems: Array<React.ReactNode> = (currentPrescriptions || []).map((prescription, idx) => {
       const detailsPressableProps: PressableProps = {
         onPress: () => prescriptionDetailsClicked(prescription.id),
         accessible: true,
@@ -364,7 +364,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     return listItems
   }
 
-  const renderPagination = (): ReactNode => {
+  function renderPagination() {
     const paginationProps: PaginationProps = {
       onNext: () => {
         setPage(page + 1)

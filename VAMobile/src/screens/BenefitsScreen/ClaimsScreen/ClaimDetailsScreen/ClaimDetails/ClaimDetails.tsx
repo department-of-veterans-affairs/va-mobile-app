@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, TextArea, TextView, VABulletList } from 'components'
-import { ClaimData } from 'store/api/types'
+import { ClaimData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -11,13 +11,7 @@ type ClaimDetailsProps = {
   claim: ClaimData
 }
 
-/**
- * Content displayed in the details tab on the claim details screen
- *
- * @param claim - contains data to be displayed
- * @returns ClaimDetails component displaying claim data
- */
-const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
+function ClaimDetails({ claim }: ClaimDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { attributes } = claim
 

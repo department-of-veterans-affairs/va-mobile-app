@@ -1,7 +1,7 @@
 import { Button, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import _ from 'underscore'
 
 import { Box, ErrorComponent, FeatureLandingTemplate } from 'components'
@@ -31,7 +31,7 @@ export const getInboxUnreadCount = (state: RootState): number => {
   return inbox?.attributes?.unreadCount || 0
 }
 
-const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
+function SecureMessaging({ navigation }: SecureMessagingScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()

@@ -1,7 +1,7 @@
 import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Box, ErrorComponent, FullScreenSubtask, LoadingComponent, RadioGroup, RadioGroupProps, TextView, radioOption } from 'components'
 import { Events } from 'constants/analytics'
@@ -21,7 +21,7 @@ type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIde
 /**
  * Screen for editing gender identity
  */
-const GenderIdentityScreen: FC<GenderIdentityScreenProps> = ({ navigation }) => {
+function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
   const { data: demographics, isError: getDemographicsError, refetch: refetchDemographics } = useDemographics()
   const {
     data: genderIdentityOptions,
