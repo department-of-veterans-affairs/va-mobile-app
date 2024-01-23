@@ -319,11 +319,11 @@ const retrieveRefreshToken = async (): Promise<string | undefined> => {
   try {
     console.debug('retrieveRefreshToken')
     const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
-    await logAnalyticsEvent(Events.vama_login_token_retrieve(true))
+    await logAnalyticsEvent(Events.vama_login_token_get(true))
     const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
     return reconstructedToken
   } catch {
-    await logAnalyticsEvent(Events.vama_login_token_retrieve(false))
+    await logAnalyticsEvent(Events.vama_login_token_get(false))
   }
 }
 
@@ -665,7 +665,7 @@ export const handleTokenCallbackUrl =
         logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: ${authNonFatalErrorString}`)
         await logAnalyticsEvent(Events.vama_exchange_failed())
         if (error.status) {
-          await logAnalyticsEvent(Events.vama_login_token_get(error.status))
+          await logAnalyticsEvent(Events.vama_login_token_fetch(error.status))
         }
         dispatch(dispatchFinishAuthLogin({ error }))
       }

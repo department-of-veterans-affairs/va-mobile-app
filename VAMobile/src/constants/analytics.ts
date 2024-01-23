@@ -578,9 +578,9 @@ export const Events = {
       },
     }
   },
-  vama_login_token_get: (status_code: number): Event => {
+  vama_login_token_fetch: (status_code: number): Event => {
     return {
-      name: 'vama_login_token_get',
+      name: 'vama_login_token_fetch',
       params: {
         status_code,
       },
@@ -594,9 +594,9 @@ export const Events = {
       },
     }
   },
-  vama_login_token_retrieve: (success: boolean): Event => {
+  vama_login_token_get: (success: boolean): Event => {
     return {
-      name: 'vama_login_token_retrieve',
+      name: 'vama_login_token_get',
       params: {
         success,
       },
