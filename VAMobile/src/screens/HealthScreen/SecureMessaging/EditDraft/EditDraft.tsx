@@ -1,3 +1,4 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -7,7 +8,6 @@ import _ from 'underscore'
 import {
   AlertBox,
   Box,
-  ButtonTypesConstants,
   CollapsibleView,
   ErrorComponent,
   FieldType,
@@ -19,7 +19,6 @@ import {
   PickerItem,
   TextArea,
   TextView,
-  VAButton,
 } from 'components'
 import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
@@ -398,13 +397,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         removeOnPress: removeAttachment,
-        largeButtonProps:
-          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
-            ? {
-                label: t('secureMessaging.formMessage.addFiles'),
-                onPress: onAddFiles,
-              }
-            : undefined,
+        buttonLabel: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? t('secureMessaging.formMessage.addFiles') : undefined,
+        buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
       },
     },
@@ -451,7 +445,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           border="error"
           scrollViewRef={scrollViewRef}>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <Button label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
           </Box>
         </AlertBox>
       )
@@ -510,13 +504,12 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             </Pressable>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
+            <Button
               label={t('secureMessaging.formMessage.send')}
               onPress={() => {
                 setOnSendClicked(true)
                 setOnSaveDraftClicked(false)
               }}
-              buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>
         </TextArea>

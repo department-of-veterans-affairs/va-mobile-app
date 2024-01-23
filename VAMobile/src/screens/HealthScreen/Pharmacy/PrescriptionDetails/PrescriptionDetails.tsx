@@ -1,9 +1,10 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 
-import { Box, ButtonTypesConstants, ChildTemplate, ClickToCallPhoneNumber, LoadingComponent, TextArea, TextView, VAButton, VAButtonProps } from 'components'
+import { Box, ChildTemplate, ClickToCallPhoneNumber, LoadingComponent, TextArea, TextView } from 'components'
 import { DowntimeFeatureTypeConstants, RefillStatusConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -77,61 +78,44 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     return <></>
   }
   const getGoToMyVAHealthButton = () => {
-    const buttonProps: VAButtonProps = {
-      label: t('goToMyVAHealth'),
-      testID: a11yLabelVA(t('goToMyVAHealth')),
-      buttonType: ButtonTypesConstants.buttonPrimary,
-      onPress: redirectLink,
-      iconProps: {
-        name: 'ExternalLink',
-        height: 15,
-        width: 15,
-        fill: 'navBar',
-        preventScaling: true,
-      },
-    }
     return (
       <Box mb={theme.dimensions.buttonPadding} mx={theme.dimensions.buttonPadding}>
-        <VAButton {...buttonProps} />
+        <Button label={t('goToMyVAHealth')} onPress={redirectLink} testID={a11yLabelVA(t('goToMyVAHealth'))} />
       </Box>
     )
   }
 
   const getRequestRefillButton = () => {
-    const requestRefillButtonProps: VAButtonProps = {
-      label: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
-      buttonType: ButtonTypesConstants.buttonPrimary,
-      onPress: () => {
-        const prescriptionIds = [prescription].map((prescriptions) => prescriptions.id)
-        logAnalyticsEvent(Events.vama_rx_request_start(prescriptionIds))
-        submitRefillAlert({
-          title: t('prescriptions.refill.confirmationTitle', { count: 1 }),
-          cancelButtonIndex: 0,
-          buttons: [
-            {
-              text: t('cancel'),
-              onPress: () => {
-                logAnalyticsEvent(Events.vama_rx_request_cancel(prescriptionIds))
-              },
+    const requestRefillButtonPress = () => {
+      const prescriptionIds = [prescription].map((prescriptions) => prescriptions.id)
+      logAnalyticsEvent(Events.vama_rx_request_start(prescriptionIds))
+      submitRefillAlert({
+        title: t('prescriptions.refill.confirmationTitle', { count: 1 }),
+        cancelButtonIndex: 0,
+        buttons: [
+          {
+            text: t('cancel'),
+            onPress: () => {
+              logAnalyticsEvent(Events.vama_rx_request_cancel(prescriptionIds))
             },
-            {
-              text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
-              onPress: () => {
-                // Call refill request so its starts the loading screen and then go to the modal
-                if (!prescriptionInDowntime) {
-                  logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
-                  dispatch(requestRefills([prescription]))
-                }
-                navigateTo('RefillScreenModal')
-              },
+          },
+          {
+            text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
+            onPress: () => {
+              // Call refill request so its starts the loading screen and then go to the modal
+              if (!prescriptionInDowntime) {
+                logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
+                dispatch(requestRefills([prescription]))
+              }
+              navigateTo('RefillScreenModal')
             },
-          ],
-        })
-      },
+          },
+        ],
+      })
     }
     return (
       <Box mb={theme.dimensions.buttonPadding} mx={theme.dimensions.buttonPadding}>
-        <VAButton {...requestRefillButtonProps} />
+        <Button label={t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 })} onPress={requestRefillButtonPress} />
       </Box>
     )
   }

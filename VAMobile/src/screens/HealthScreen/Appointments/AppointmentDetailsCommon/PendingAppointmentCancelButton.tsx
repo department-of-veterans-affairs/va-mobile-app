@@ -1,15 +1,15 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 
 import { AppointmentAttributes } from 'store/api'
 import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
-import { Box, ButtonTypesConstants, VAButton } from 'components'
+import { Box } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { cancelAppointment } from 'store/slices'
 import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus, isAPendingAppointment } from 'utils/appointments'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 type PendingAppointmentCancelButtonProps = {
@@ -70,12 +70,12 @@ function PendingAppointmentCancelButton({ attributes, appointmentID }: PendingAp
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <VAButton
+        <Button
           onPress={onCancel}
           label={t('cancelRequest')}
           a11yHint={t('appointments.pending.cancelRequest.a11yHint')}
-          buttonType={ButtonTypesConstants.buttonDestructive}
-          {...testIdProps(t('cancelRequest'))}
+          buttonType={ButtonVariants.Destructive}
+          testID={t('cancelRequest')}
         />
       </Box>
     )

@@ -1,4 +1,5 @@
 import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'
@@ -9,7 +10,6 @@ import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
 import {
   Box,
   BoxProps,
-  ButtonTypesConstants,
   ClickForActionLink,
   CollapsibleAlert,
   CollapsibleAlertProps,
@@ -27,8 +27,6 @@ import {
   TabBarProps,
   TabsValuesType,
   TextView,
-  VAButton,
-  VAButtonProps,
   VAIcon,
   VAIconProps,
 } from 'components'
@@ -589,14 +587,9 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       return <></>
     }
 
-    const requestRefillButtonProps: VAButtonProps = {
-      label: t('prescription.history.startRefillRequest'),
-      buttonType: ButtonTypesConstants.buttonPrimary,
-      onPress: () => navigateTo('RefillScreenModal'),
-    }
     return (
       <Box mx={theme.dimensions.buttonPadding}>
-        <VAButton {...requestRefillButtonProps} />
+        <Button label={t('prescription.history.startRefillRequest')} onPress={() => navigateTo('RefillScreenModal')} />
       </Box>
     )
   }

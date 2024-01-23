@@ -1,7 +1,8 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 
-import { AlertBox, AlertBoxProps, Box, BoxProps, LoadingComponent, TextArea, TextView, VAButton, VAIcon, VAIconProps } from 'components'
+import { AlertBox, AlertBoxProps, Box, BoxProps, LoadingComponent, TextArea, TextView, VAIcon, VAIconProps } from 'components'
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -94,14 +95,13 @@ function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
         <AlertBox {...alertBoxProps}>
           {status !== REQUEST_STATUS.SUCCESS && (
             <Box mt={theme.dimensions.standardMarginBetween}>
-              <VAButton
+              <Button
                 onPress={() => {
                   dispatch(requestRefills(requestFailed))
                   const prescriptionIds = requestFailed.map((prescription) => prescription.id)
                   logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
                 }}
                 label={t('tryAgain')}
-                buttonType="buttonPrimary"
                 a11yHint={t('prescriptions.refillRequestSummary.tryAgain.a11yLabel')}
               />
             </Box>
@@ -186,14 +186,14 @@ function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
             {t('prescriptions.refillRequestSummary.yourRefills.success.2')}
           </TextView>
         </Box>
-        <VAButton
+        <Button
           onPress={() => {
             dispatch(dispatchSetPrescriptionsNeedLoad())
             dispatch(dispatchClearLoadingRequestRefills())
             navigateTo('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })
           }}
           label={t('prescriptions.refillRequestSummary.pendingRefills')}
-          buttonType="buttonSecondary"
+          buttonType={ButtonVariants.Secondary}
         />
       </Box>
     )
