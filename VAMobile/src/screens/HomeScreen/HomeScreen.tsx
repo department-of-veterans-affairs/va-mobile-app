@@ -168,7 +168,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
             />
           </Box>
         )}
-        {ratingData?.combinedDisabilityRating && (
+        {Number(ratingData?.combinedDisabilityRating) > 0 && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
             <TextView variant={'MobileBodyBold'}>{t('disabilityRating.title')}</TextView>
             <TextView>{`${t('disabilityRating.combinePercent', { combinedPercent: ratingData.combinedDisabilityRating })}`}</TextView>
