@@ -1,15 +1,15 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { Pressable, PressableProps, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { find } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
 import {
   Box,
   BoxProps,
-  ButtonTypesConstants,
   ClickForActionLink,
   CollapsibleAlert,
   CollapsibleAlertProps,
@@ -24,8 +24,6 @@ import {
   Pagination,
   PaginationProps,
   TextView,
-  VAButton,
-  VAButtonProps,
   VAIcon,
   VAIconProps,
 } from 'components'
@@ -64,7 +62,7 @@ const sortByOptions = [
 
 type PrescriptionHistoryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
 
-const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }) => {
+function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const dispatch = useAppDispatch()
   const {
     filteredPrescriptions: prescriptions,
@@ -231,7 +229,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   const prescriptionItems = () => {
     const total = currentPrescriptions?.length
 
-    const listItems: Array<ReactNode> = (currentPrescriptions || []).map((prescription, idx) => {
+    const listItems: Array<React.ReactNode> = (currentPrescriptions || []).map((prescription, idx) => {
       const detailsPressableProps: PressableProps = {
         onPress: () => prescriptionDetailsClicked(prescription.id),
         accessible: true,
@@ -303,7 +301,7 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
     return listItems
   }
 
-  const renderPagination = (): ReactNode => {
+  function renderPagination() {
     const paginationProps: PaginationProps = {
       onNext: () => {
         setPage(page + 1)
@@ -445,14 +443,9 @@ const PrescriptionHistory: FC<PrescriptionHistoryProps> = ({ navigation, route }
   }
 
   const getRequestRefillButton = () => {
-    const requestRefillButtonProps: VAButtonProps = {
-      label: t('prescription.history.startRefillRequest'),
-      buttonType: ButtonTypesConstants.buttonPrimary,
-      onPress: () => navigateTo('RefillScreenModal'),
-    }
     return (
       <Box mx={theme.dimensions.buttonPadding}>
-        <VAButton {...requestRefillButtonProps} />
+        <Button label={t('prescription.history.startRefillRequest')} onPress={() => navigateTo('RefillScreenModal')} />
       </Box>
     )
   }

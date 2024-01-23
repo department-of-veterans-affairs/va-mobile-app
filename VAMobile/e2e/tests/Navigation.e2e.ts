@@ -22,8 +22,8 @@ var navigationDic = {
 	[['Claims', 'Claims history', 'Claim for compensation updated on May 05, 2021', 'Review file requests'], 'File requests'],
 	[['Claims', 'Claims history', 'Claim for compensation updated on May 05, 2021', 'Review file requests', 'Request 2'], 'Request 2'],
 	[['Claims', 'Claims history', 'Submitted July 20, 2021', 'Details'], 'Claim type'],
-	[['Claims', 'Claims history', 'Submitted June 12, 2008'], 'Appeal details'],
-	[['Claims', 'Claims history', 'Submitted June 12, 2008', 'Issues'], 'Currently on appeal'],
+	[['Claims', 'Claims history', 'Submitted July 17, 2008'], 'Appeal details'],
+	[['Claims', 'Claims history', 'Submitted July 17, 2008', 'Issues'], 'Currently on appeal'],
 	[['Claims', 'Claim letters'], 'Claim letters'],
 	['VA letters and documents', 'Letters'],
 	[['VA letters and documents', 'Review letters'], 'Review letters'],
@@ -57,7 +57,7 @@ var featureID = {
 	'Benefits': 'benefitsTestID',
 	'Submitted July 20, 2021': 'claimsHistoryID',
 	'Submitted January 01, 2021': 'claimsHistoryID',
-	'Submitted June 12, 2008': 'claimsHistoryID',
+	'Submitted July 17, 2008': 'claimsHistoryID',
 	'Review file requests': 'claimStatusDetailsID',
 	'Request 2': 'fileRequestPageTestID',
 	'Review letters': 'lettersPageID',
@@ -161,8 +161,8 @@ const navigateToPage = async (key, navigationDicValue) => {
 		for(let k = 0; k < subNavigationArray.length-1; k++) {
 			if (subNavigationArray[k] === 'Review file requests') {
 				await waitFor(element(by.text('Review file requests'))).toBeVisible().whileElement(by.id('ClaimDetailsScreen')).scroll(100, 'down')
-			} else if (subNavigationArray[k] === 'Submitted June 12, 2008') {
-					await waitFor(element(by.text('Submitted June 12, 2008'))).toBeVisible(). whileElement(by.id('claimsHistoryID')).scroll(100, 'down')
+			} else if (subNavigationArray[k] === 'Submitted July 17, 2008') {
+					await waitFor(element(by.text('Submitted July 17, 2008'))).toBeVisible(). whileElement(by.id('claimsHistoryID')).scroll(100, 'down')
 			}
 			
 			if (k == 0 && key in featureID) {

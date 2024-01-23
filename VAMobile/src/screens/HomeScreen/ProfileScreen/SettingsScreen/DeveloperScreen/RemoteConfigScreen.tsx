@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { forEach } from 'underscore'
 import { useIsFocused } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import remoteConfig from '@react-native-firebase/remote-config'
 
 import { AccordionCollapsible, Box, ButtonDecoratorType, FeatureLandingTemplate, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
@@ -17,7 +17,7 @@ import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type RemoteConfigScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'RemoteConfig'>
 
-const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigation }) => {
+function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -33,7 +33,7 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
     isFocused && setWaygateDebugConfig(waygateToggles)
   }, [isFocused, waygateToggles])
 
-  const toggleList = (): ReactNode => {
+  function toggleList() {
     const toggleItems = Object.keys(toggles).map((key): SimpleListItemObj => {
       return {
         text: `${key}`,
@@ -57,8 +57,8 @@ const RemoteConfigScreen: FC<RemoteConfigScreenSettingsScreenProps> = ({ navigat
     )
   }
 
-  const toggleWaygateList = (): ReactNode => {
-    const toggleItems: Array<ReactNode> = []
+  function toggleWaygateList() {
+    const toggleItems: Array<React.ReactNode> = []
     forEach(waygateToggles, (wg, index) => {
       const { enabled, type, errorMsgTitle, errorMsgBody, appUpdateButton } = wg
       toggleItems.push(

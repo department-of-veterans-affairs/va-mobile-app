@@ -1,7 +1,7 @@
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { AlertBox, Box, BoxProps, CrisisLineCta, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
@@ -20,7 +20,7 @@ import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import DemoAlert from './DemoAlert'
 import getEnv from 'utils/env'
 
-const LoginScreen: FC = () => {
+function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { firstTimeLogin } = useSelector<RootState, AuthState>((state) => state.auth)
   const { authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)

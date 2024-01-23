@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -12,7 +12,7 @@ type PrescriptionHistoryNoMatchesProps = {
   isFiltered: boolean
 }
 
-const PrescriptionHistoryNoMatches: FC<PrescriptionHistoryNoMatchesProps> = ({ isFiltered }) => {
+function PrescriptionHistoryNoMatches({ isFiltered }: PrescriptionHistoryNoMatchesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

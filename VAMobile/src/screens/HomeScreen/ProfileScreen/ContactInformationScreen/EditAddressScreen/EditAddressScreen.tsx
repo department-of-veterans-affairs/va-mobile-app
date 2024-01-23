@@ -2,7 +2,7 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { ScrollView, TextInput } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { AddressData, addressTypeFields, addressTypes } from 'api/types'
 import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, PickerItem, VATextInputTypes, ValidationFunctionItems } from 'components'
@@ -64,7 +64,7 @@ export type AddressDataEditedFields =
 
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
-const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
+function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()

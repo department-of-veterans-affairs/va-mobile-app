@@ -1,7 +1,8 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
-import React, { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 
-import { AlertBox, AlertBoxProps, Box, BoxProps, LoadingComponent, TextArea, TextView, VAButton, VAIcon, VAIconProps } from 'components'
+import { AlertBox, AlertBoxProps, Box, BoxProps, LoadingComponent, TextArea, TextView, VAIcon, VAIconProps } from 'components'
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -23,9 +24,9 @@ const enum REQUEST_STATUS {
   MIX,
 }
 
-type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
+type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'RefillRequestSummary'>
 
-const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => {
+function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -94,14 +95,13 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         <AlertBox {...alertBoxProps}>
           {status !== REQUEST_STATUS.SUCCESS && (
             <Box mt={theme.dimensions.standardMarginBetween}>
-              <VAButton
+              <Button
                 onPress={() => {
                   dispatch(requestRefills(requestFailed))
                   const prescriptionIds = requestFailed.map((prescription) => prescription.id)
                   logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
                 }}
                 label={t('tryAgain')}
-                buttonType="buttonPrimary"
                 a11yHint={t('prescriptions.refillRequestSummary.tryAgain.a11yLabel')}
               />
             </Box>
@@ -186,14 +186,14 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
             {t('prescriptions.refillRequestSummary.yourRefills.success.2')}
           </TextView>
         </Box>
-        <VAButton
+        <Button
           onPress={() => {
             dispatch(dispatchSetPrescriptionsNeedLoad())
             dispatch(dispatchClearLoadingRequestRefills())
             navigateTo('PrescriptionHistory', { startingFilter: RefillStatusConstants.PENDING })
           }}
           label={t('prescriptions.refillRequestSummary.pendingRefills')}
-          buttonType="buttonSecondary"
+          buttonType={ButtonVariants.Secondary}
         />
       </Box>
     )

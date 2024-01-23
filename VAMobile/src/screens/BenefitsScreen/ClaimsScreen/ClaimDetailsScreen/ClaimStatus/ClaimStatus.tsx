@@ -1,7 +1,8 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useRef } from 'react'
+import React, { useRef } from 'react'
 
-import { Box, ButtonTypesConstants, SimpleList, SimpleListItemObj, TextArea, TextView, VAButton } from 'components'
+import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
 import { ClaimData } from 'store/api/types'
 import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { Events } from 'constants/analytics'
@@ -30,14 +31,14 @@ type ClaimStatusProps = {
 /**
  * Component for rendering the details area of a claim when selected on the ClaimDetailsScreen
  */
-const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
+function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const sentEvent = useRef(false)
 
-  const renderActiveClaimStatusDetails = (): ReactElement => {
+  function renderActiveClaimStatusDetails() {
     // alternative check if need to update: isClosedClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
     const isActiveClaim = claimType === ClaimTypeConstants.ACTIVE
 
@@ -77,7 +78,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
     return <></>
   }
 
-  const renderClosedClaimStatusDetails = (): ReactElement => {
+  function renderClosedClaimStatusDetails() {
     const isClosedClaim = claimType === ClaimTypeConstants.CLOSED
 
     if (isClosedClaim) {
@@ -115,7 +116,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
                 {letterAvailable}
               </TextView>
             </Box>
-            {showButton && <VAButton onPress={onPress} label={t('claimDetails.getClaimLetters')} buttonType={ButtonTypesConstants.buttonPrimary} testID="getClaimLettersTestID" />}
+            {showButton && <Button onPress={onPress} label={t('claimDetails.getClaimLetters')} testID="getClaimLettersTestID" />}
           </TextArea>
         </Box>
       )

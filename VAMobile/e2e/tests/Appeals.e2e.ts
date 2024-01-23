@@ -16,7 +16,6 @@ export const AppealsIdConstants = {
   APPEAL_VISIT_VA_TEXT: 'Visit VA.gov',
   APPEAL_UP_TO_DATE_ID: 'appealsUpToDateTestID',
 }
-
 export async function getDateWithTimeZone(dateString: string) {
   var date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', {zone: 'America/Chicago'})
   var dateUTC = date.toLocal()

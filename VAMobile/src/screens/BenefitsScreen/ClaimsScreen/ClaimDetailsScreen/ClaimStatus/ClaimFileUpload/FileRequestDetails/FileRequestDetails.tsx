@@ -1,10 +1,11 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, BoxProps, ButtonTypesConstants, ChildTemplate, TextArea, TextView, VAButton } from 'components'
+import { Box, BoxProps, ChildTemplate, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -14,7 +15,7 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
 
-const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) => {
+function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -108,9 +109,9 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
       {!hasUploaded && (
         <Box {...boxProps}>
           <Box mt={standardMarginBetween} mx={gutter} mb={contentMarginBottom}>
-            <VAButton onPress={onFilePress} label={t('fileUpload.selectAFile')} testID={t('fileUpload.selectAFile')} buttonType={ButtonTypesConstants.buttonSecondary} />
+            <Button onPress={onFilePress} label={t('fileUpload.selectAFile')} testID={t('fileUpload.selectAFile')} buttonType={ButtonVariants.Secondary} />
             <Box mt={theme.dimensions.condensedMarginBetween}>
-              <VAButton onPress={onPhotoPress} label={t('fileUpload.takePhotos')} testID={t('fileUpload.takePhotos')} buttonType={ButtonTypesConstants.buttonSecondary} />
+              <Button onPress={onPhotoPress} label={t('fileUpload.takePhotos')} testID={t('fileUpload.takePhotos')} buttonType={ButtonVariants.Secondary} />
             </Box>
           </Box>
         </Box>
