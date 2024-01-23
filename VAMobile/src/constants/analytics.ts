@@ -586,19 +586,19 @@ export const Events = {
       },
     }
   },
-  vama_login_token_refresh: (status_code: number): Event => {
-    return {
-      name: 'vama_login_token_refresh',
-      params: {
-        status_code,
-      },
-    }
-  },
   vama_login_token_get: (success: boolean): Event => {
     return {
       name: 'vama_login_token_get',
       params: {
         success,
+      },
+    }
+  },
+  vama_login_token_refresh: (status_code: number): Event => {
+    return {
+      name: 'vama_login_token_refresh',
+      params: {
+        status_code,
       },
     }
   },
