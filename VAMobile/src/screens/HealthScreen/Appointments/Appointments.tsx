@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native'
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
@@ -37,7 +37,7 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
   }
 }
 
-const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
+function Appointments({ navigation }: AppointmentsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -100,7 +100,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({ navigation }) => {
     setSelectedTab(tab)
   }
 
-  const serviceErrorAlert = (): ReactElement => {
+  function serviceErrorAlert() {
     const pastAppointmentError = selectedTab === 1 && (pastVaServiceError || pastCcServiceError)
     const upcomingAppointmentError = selectedTab === 0 && (upcomingVaServiceError || upcomingCcServiceError)
     if (pastAppointmentError || upcomingAppointmentError) {

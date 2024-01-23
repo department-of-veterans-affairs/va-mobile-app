@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextView, VABulletList, VABulletListText, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
@@ -9,7 +9,7 @@ import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
-const PrescriptionHistoryNoPrescriptions: FC = () => {
+function PrescriptionHistoryNoPrescriptions() {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 

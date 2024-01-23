@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 import _ from 'underscore'
 
 import { AddressData, UserContactInformation, addressTypeFields } from 'api/types'
@@ -115,7 +115,7 @@ export type AddressSummaryProps = {
   addressData: Array<addressDataField>
 } & Partial<ListProps>
 
-const AddressSummary: FC<AddressSummaryProps> = ({ addressData, title }) => {
+function AddressSummary({ addressData, title }: AddressSummaryProps) {
   const { data: contactInformation } = useContactInformation()
   const { t } = useTranslation(NAMESPACE.COMMON)
 

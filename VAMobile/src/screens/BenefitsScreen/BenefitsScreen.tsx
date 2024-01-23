@@ -1,7 +1,7 @@
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
@@ -28,7 +28,7 @@ import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericL
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
 
-const BenefitsScreen: FC<BenefitsScreenProps> = () => {
+function BenefitsScreen({}: BenefitsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -47,7 +47,7 @@ const BenefitsScreen: FC<BenefitsScreenProps> = () => {
     if (featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters) {
       navigateTo('Claims')
     } else {
-      navigateTo('ClaimsHistory')
+      navigateTo('ClaimsHistoryScreen')
     }
   }
 
@@ -88,14 +88,12 @@ const BenefitsScreen: FC<BenefitsScreenProps> = () => {
   )
 }
 
-type BenefitsStackScreenProps = Record<string, unknown>
-
-const BenefitsScreenStack = createStackNavigator()
+const BenefitsScreenStack = createStackNavigator<BenefitsStackParamList>()
 
 /**
  * Stack screen for the Benefits tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
-const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
+function BenefitsStackScreen() {
   const screenOptions = {
     headerShown: false,
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -118,7 +116,7 @@ const BenefitsStackScreen: FC<BenefitsStackScreenProps> = () => {
       <BenefitsScreenStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <BenefitsScreenStack.Screen name="ClaimLettersScreen" component={ClaimLettersScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <BenefitsScreenStack.Screen name="ClaimsHistory" component={ClaimsHistoryScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <BenefitsScreenStack.Screen name="ClaimsHistoryScreen" component={ClaimsHistoryScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <BenefitsScreenStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <BenefitsScreenStack.Screen name="DisabilityRatings" component={DisabilityRatingsScreen} options={{ headerShown: false }} />
       <BenefitsScreenStack.Screen name="FileRequest" component={FileRequest} options={{ headerShown: false }} />

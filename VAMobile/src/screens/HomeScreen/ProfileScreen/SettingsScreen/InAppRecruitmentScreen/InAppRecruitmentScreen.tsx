@@ -2,7 +2,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useNavigationState } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView, VABulletList } from 'components'
 import { Events } from 'constants/analytics'
@@ -17,7 +17,7 @@ type InAppRecruitmentScreenProps = StackScreenProps<HomeStackParamList, 'InAppRe
 
 const { LINK_URL_IN_APP_RECRUITMENT, LINK_URL_VETERAN_USABILITY_PROJECT } = getEnv()
 
-const InAppRecruitmentScreen: FC<InAppRecruitmentScreenProps> = ({ navigation }) => {
+function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()

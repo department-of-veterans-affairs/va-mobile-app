@@ -2,7 +2,7 @@ import { Linking, StatusBar, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
 import { useTranslation } from 'react-i18next'
-import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
@@ -20,7 +20,7 @@ type ReloadButtonProps = {
   reloadPressed: () => void
 }
 
-const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
+function ReloadButton({ reloadPressed }: ReloadButtonProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { dimensions, colors } = theme
@@ -44,7 +44,7 @@ type WebviewLoadingProps = {
   loadingMessage?: string
 }
 
-const WebviewLoading: FC<WebviewLoadingProps> = ({ loadingMessage }) => {
+function WebviewLoading({ loadingMessage }: WebviewLoadingProps) {
   const spinnerStyle: ViewStyle = {
     position: 'absolute',
     left: 0,
@@ -78,7 +78,7 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
 /**
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
-const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
+function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   const theme = useTheme()
   const webviewRef = useRef() as MutableRefObject<WebView>
 

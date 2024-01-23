@@ -5,7 +5,7 @@
         "config": "detoxconfig.js"
     },
     "jest": {
-        "setuupTimeout": 300000,
+        "setupTimeout": 300000,
         "reportSpecs": false,
         "reportWorkerAssign": false
     }

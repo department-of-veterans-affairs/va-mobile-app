@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { Box, ErrorComponent, FullScreenSubtask, LoadingComponent, MultiTouchCard, MultiTouchCardProps, TextView } from 'components'
 import { ClickForActionLink } from 'components'
@@ -39,7 +39,7 @@ const getTrackingLink = (deliveryService: string): string => {
   }
 }
 
-const RefillTrackingDetails: FC<RefillTrackingDetailsProps> = ({ route, navigation }) => {
+function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps) {
   const { prescription } = route.params
   const dispatch = useAppDispatch()
   const { loadingTrackingInfo, trackingInfo } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)

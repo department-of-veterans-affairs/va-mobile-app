@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, Pagination, PaginationProps, TextLine } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -23,7 +23,7 @@ type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineLis
 /**
  * Screen containing a list of vaccines on record and a link to their details view
  */
-const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
+function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   const dispatch = useAppDispatch()
   const { vaccines, loading, vaccinePagination } = useSelector<RootState, VaccineState>((state) => state.vaccine)
   const theme = useTheme()
@@ -57,7 +57,7 @@ const VaccineListScreen: FC<VaccineListScreenProps> = ({ navigation }) => {
   )
 
   // Render pagination for sent and drafts folderMessages only
-  const renderPagination = (): ReactNode => {
+  function renderPagination() {
     const page = vaccinePagination?.currentPage || 1
     const paginationProps: PaginationProps = {
       onNext: () => {

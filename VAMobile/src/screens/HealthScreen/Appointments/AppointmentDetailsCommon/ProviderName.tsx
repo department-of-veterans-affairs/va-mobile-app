@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types'
 import { Box, TextView } from 'components'
@@ -12,7 +12,7 @@ type ProviderNameProps = {
   attributes: AppointmentAttributes
 }
 
-const ProviderName: FC<ProviderNameProps> = ({ attributes }) => {
+function ProviderName({ attributes }: ProviderNameProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const isAppointmentPending = isAPendingAppointment(attributes)

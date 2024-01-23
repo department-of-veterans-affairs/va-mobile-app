@@ -1,6 +1,6 @@
 import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
@@ -18,7 +18,7 @@ import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
 type MilitaryInformationScreenProps = StackScreenProps<HomeStackParamList, 'MilitaryInformation'>
 
-const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigation }) => {
+function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProps) {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)

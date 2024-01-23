@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, BoxProps } from 'components'
 import { getIndicatorCommonProps, getIndicatorValue } from 'utils/claims'
@@ -14,7 +14,7 @@ export type FileRequestNumberIndicatorProps = {
 /**
  * component that renders a file request number or check for files requested for a claim
  * */
-const FileRequestNumberIndicator: FC<FileRequestNumberIndicatorProps> = ({ requestNumber, fileUploaded }) => {
+function FileRequestNumberIndicator({ requestNumber, fileUploaded }: FileRequestNumberIndicatorProps) {
   const fs = useFontScale()
 
   const boxProps: BoxProps = {

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types/AppointmentData'
 import { Box, TextView } from 'components'
@@ -11,7 +11,7 @@ type ContactInformationProps = {
   attributes: AppointmentAttributes
 }
 
-const ContactInformation: FC<ContactInformationProps> = ({ attributes }) => {
+function ContactInformation({ attributes }: ContactInformationProps) {
   const isAppointmentPending = isAPendingAppointment(attributes)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()

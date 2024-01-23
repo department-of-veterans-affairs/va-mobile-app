@@ -1,6 +1,6 @@
 import { ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -9,7 +9,7 @@ import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-const NoLettersScreen: FC = () => {
+function NoLettersScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
