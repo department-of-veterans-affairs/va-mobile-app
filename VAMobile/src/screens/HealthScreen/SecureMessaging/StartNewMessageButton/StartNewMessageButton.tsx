@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, ButtonTypesConstants, VAButton, VAButtonProps } from 'components'
 import { Events } from 'constants/analytics'
@@ -7,7 +7,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-const StartNewMessageButton: FC = () => {
+function StartNewMessageButton() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()

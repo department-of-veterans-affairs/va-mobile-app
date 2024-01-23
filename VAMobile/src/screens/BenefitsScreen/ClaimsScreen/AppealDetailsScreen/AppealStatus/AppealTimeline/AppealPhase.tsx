@@ -1,6 +1,6 @@
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { AppealEventData, AppealEventTypes, AppealEventTypesConstants } from 'store/api/types'
 import { Box, TextArea, TextView } from 'components'
@@ -99,7 +99,7 @@ type AppealPhaseProps = {
   event: AppealEventData
 }
 
-const AppealPhase: FC<AppealPhaseProps> = ({ event }) => {
+function AppealPhase({ event }: AppealPhaseProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

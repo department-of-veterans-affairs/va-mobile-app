@@ -1,7 +1,7 @@
 import { ScrollView, TextInput } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
@@ -37,7 +37,7 @@ type EditDirectDepositProps = StackScreenProps<RootNavStackParamList, 'EditDirec
 /**
  * Screen for displaying editing direct deposit information
  */
-const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation, route }) => {
+function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation()

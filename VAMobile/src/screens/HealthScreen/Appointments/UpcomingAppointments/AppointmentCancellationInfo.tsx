@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToA11yLabel } from 'store/api/types'
 import { Box, ButtonTypesConstants, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextArea, TextView, VAButton } from 'components'
@@ -21,7 +21,7 @@ type AppointmentCancellationInfoProps = {
   goBack?: () => void
 }
 
-const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ appointment }) => {
+function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInfoProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const confirmAlert = useDestructiveActionSheet()

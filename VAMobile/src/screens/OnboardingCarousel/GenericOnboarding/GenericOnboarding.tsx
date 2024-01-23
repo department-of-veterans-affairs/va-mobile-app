@@ -1,5 +1,5 @@
 import { View, ViewStyle } from 'react-native'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAScrollView } from 'components'
 import { testIdProps } from 'utils/accessibility'
@@ -17,7 +17,7 @@ export type GenericOnboardingProps = {
   centerHeader?: boolean
 }
 
-const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }) => {
+function GenericOnboarding({ header, text, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }: GenericOnboardingProps) {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
   const isPortrait = useOrientation()

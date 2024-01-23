@@ -1,5 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import React, { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 
 import { AlertBox, AlertBoxProps, Box, BoxProps, LoadingComponent, TextArea, TextView, VAButton, VAIcon, VAIconProps } from 'components'
 import { Events } from 'constants/analytics'
@@ -23,9 +23,9 @@ const enum REQUEST_STATUS {
   MIX,
 }
 
-type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
+type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'RefillRequestSummary'>
 
-const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => {
+function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()

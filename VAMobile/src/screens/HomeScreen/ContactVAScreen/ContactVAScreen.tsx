@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, ClickToCallPhoneNumber, CrisisLineCta, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../HomeStackScreens'
@@ -16,7 +16,7 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
  *
  * Returns ContactVAScreen component
  */
-const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
+function ContactVAScreen({ navigation }: ContactVAScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()

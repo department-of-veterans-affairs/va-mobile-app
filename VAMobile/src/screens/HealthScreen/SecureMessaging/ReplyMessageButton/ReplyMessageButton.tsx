@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, ButtonTypesConstants, VAButton, VAButtonProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -9,7 +9,7 @@ export type ReplyMessageButtonProps = {
   messageID: number
 }
 
-const ReplyMessageButton: FC<ReplyMessageButtonProps> = ({ messageID }) => {
+function ReplyMessageButton({ messageID }: ReplyMessageButtonProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()

@@ -1,7 +1,7 @@
 import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import {
@@ -59,7 +59,7 @@ import { useSelector } from 'react-redux'
 
 type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
 
-const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
+function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -333,7 +333,7 @@ const StartNewMessage: FC<StartNewMessageProps> = ({ navigation, route }) => {
     }
   }
 
-  const renderContent = (): ReactNode => {
+  function renderContent() {
     if (noProviderError) {
       return (
         <AlertBox

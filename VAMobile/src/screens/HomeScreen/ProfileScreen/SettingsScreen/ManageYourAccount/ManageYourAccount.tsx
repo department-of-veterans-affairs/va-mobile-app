@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -9,7 +9,7 @@ import { useTheme } from 'utils/hooks'
 
 type ManageYourAccountProps = StackScreenProps<HomeStackParamList, 'ManageYourAccount'>
 
-const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
+function ManageYourAccount({ navigation }: ManageYourAccountProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
