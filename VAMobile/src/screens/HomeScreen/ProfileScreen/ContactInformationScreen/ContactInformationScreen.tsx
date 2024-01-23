@@ -2,7 +2,7 @@ import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 
 import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { Events } from 'constants/analytics'
@@ -72,7 +72,7 @@ const getEmailAddressData = (contactInformation: UserContactInformation | undefi
 
 type ContactInformationScreenProps = StackScreenProps<HomeStackParamList, 'ContactInformation'>
 
-const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigation }) => {
+function ContactInformationScreen({ navigation }: ContactInformationScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const {

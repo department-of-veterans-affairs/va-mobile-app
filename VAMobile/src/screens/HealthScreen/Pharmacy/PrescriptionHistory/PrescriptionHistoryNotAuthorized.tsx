@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
@@ -12,7 +12,7 @@ import getEnv from 'utils/env'
 
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
 
-const PrescriptionHistoryNotAuthorized: FC = () => {
+function PrescriptionHistoryNotAuthorized() {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { standardMarginBetween } = theme.dimensions

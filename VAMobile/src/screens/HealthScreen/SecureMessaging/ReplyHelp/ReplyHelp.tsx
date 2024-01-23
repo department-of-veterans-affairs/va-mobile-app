@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -11,7 +11,7 @@ import VeteransCrisisLineNumbers from 'screens/HomeScreen/VeteransCrisisLineScre
  *
  * Returns ReplyHelp component
  */
-const ReplyHelp: FC = () => {
+function ReplyHelp() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const standardMarginBetween = theme.dimensions.standardMarginBetween

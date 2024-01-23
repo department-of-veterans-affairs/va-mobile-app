@@ -1,23 +1,25 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { Box, ChildTemplate, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
+import { Events } from 'constants/analytics'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
 import { getMessagesListItems } from 'utils/secureMessaging'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
-import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
-const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
+function FolderMessages({ navigation, route }: FolderMessagesProps) {
   const { folderID, folderName } = route.params
 
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -95,7 +97,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     dispatch(listFolderMessages(folderID, requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
   }
 
-  const renderPagination = (): ReactNode => {
+  function renderPagination() {
     const page = paginationMetaData?.currentPage || 1
     const paginationProps: PaginationProps = {
       onNext: () => {
@@ -117,9 +119,16 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     )
   }
 
+  const onPress = () => {
+    logAnalyticsEvent(Events.vama_sm_start())
+    navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  }
+
   return (
     <ChildTemplate backLabel={t('messages')} backLabelOnPress={navigation.goBack} title={title}>
-      <StartNewMessageButton />
+      <Box mx={theme.dimensions.buttonPadding}>
+        <Button label={t('secureMessaging.startNewMessage')} onPress={onPress} testID={'startNewMessageButtonTestID'} />
+      </Box>
       <Box mt={theme.dimensions.standardMarginBetween}>
         <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} />
       </Box>

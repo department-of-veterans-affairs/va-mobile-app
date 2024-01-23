@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView } from 'components'
 import { DirectDepositState, getBankData } from 'store/slices/directDepositSlice'
@@ -22,7 +22,7 @@ type DirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'Direct
 /**
  * Screen for displaying direct deposit information and help numbers
  */
-const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
+function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
   const { paymentAccount: bankData, loading } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)

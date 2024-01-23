@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
 import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
@@ -24,7 +24,7 @@ import SelectionList from 'components/SelectionList'
 
 type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
 
-export const RefillScreen: FC<RefillScreenProps> = ({ navigation }) => {
+export function RefillScreen({ navigation }: RefillScreenProps) {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()

@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import { AlertBox, Box, ChildTemplate, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker } from 'components'
@@ -30,7 +30,7 @@ type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessag
  * Accepts a message, map of all messages, and array of messageIds in the current thread.  Gets each messageId from the message map, sorts by
  * sentDate ascending, and returns an array of <CollapsibleMessages/>
  */
-export const renderMessages = (message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>, hideMessage = false): ReactNode => {
+export function renderMessages(message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>, hideMessage = false) {
   const threadMessages = thread.map((messageID) => messagesById[messageID]).sort((message1, message2) => (message1.sentDate > message2.sentDate ? -1 : 1))
 
   return threadMessages.map((m) => m && m.messageId && <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={hideMessage && m.messageId === message.messageId} />)
@@ -38,7 +38,7 @@ export const renderMessages = (message: SecureMessagingMessageAttributes, messag
 
 const screenID = ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID
 
-const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) => {
+function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const messageID = Number(route.params.messageID)
   const currentFolderIdParam = Number(route.params.folderID) || SecureMessagingSystemFolderIdConstants.INBOX
   const currentPage = Number(route.params.currentPage)

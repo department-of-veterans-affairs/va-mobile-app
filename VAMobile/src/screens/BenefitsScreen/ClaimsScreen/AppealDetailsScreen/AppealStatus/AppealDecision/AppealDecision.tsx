@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 
 import _ from 'underscore'
 
@@ -16,7 +16,7 @@ type AppealDecisionProps = {
   boardDecision: boolean
 }
 
-const AppealDecision: FC<AppealDecisionProps> = ({ issues, aoj, ama, boardDecision }) => {
+function AppealDecision({ issues, aoj, ama, boardDecision }: AppealDecisionProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

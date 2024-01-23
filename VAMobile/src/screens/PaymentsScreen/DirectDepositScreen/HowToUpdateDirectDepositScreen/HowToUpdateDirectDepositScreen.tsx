@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { AlertBox, Box, ClickToCallPhoneNumber, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -13,7 +13,7 @@ type HowToUpdateDirectDepositScreenProps = StackScreenProps<PaymentsStackParamLi
 /**
  * Screen for displaying information on updating direct deposit information for MHV/DS logon users
  */
-const HowToUpdateDirectDepositScreen: FC<HowToUpdateDirectDepositScreenProps> = ({ navigation }) => {
+function HowToUpdateDirectDepositScreen({ navigation }: HowToUpdateDirectDepositScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const standardMarginBetween = theme.dimensions.standardMarginBetween

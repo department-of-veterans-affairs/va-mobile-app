@@ -45,7 +45,8 @@ context('FormAttachments', () => {
     render(
       <FormAttachments
         removeOnPress={removeOnPressSpy}
-        largeButtonProps={{ label: 'add files', onPress: largeButtonSpy }}
+        buttonLabel='add files'
+        buttonPress={largeButtonSpy}
         attachmentsList={attachments}
       />,
     )

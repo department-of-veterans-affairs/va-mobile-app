@@ -1,5 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, LargePanel, TextView } from 'components'
 import { DateTime } from 'luxon'
@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 
 type StatusDefinitionProps = StackScreenProps<HealthStackParamList, 'StatusDefinition'>
 
-const StatusDefinition: FC<StatusDefinitionProps> = ({ navigation, route }) => {
+function StatusDefinition({ navigation, route }: StatusDefinitionProps) {
   const { display, value } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()

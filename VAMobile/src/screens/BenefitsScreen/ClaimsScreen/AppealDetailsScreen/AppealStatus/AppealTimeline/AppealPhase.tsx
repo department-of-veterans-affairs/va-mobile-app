@@ -1,7 +1,7 @@
 import { TFunction } from 'i18next'
 import { camelCase } from 'lodash'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { AppealEventData, AppealEventTypes } from 'store/api/types'
 import { Box, TextArea, TextView } from 'components'
@@ -27,7 +27,7 @@ type AppealPhaseProps = {
 //   AppealEventTypesConstants.dro_hearing_cancelled
 //   AppealEventTypesConstants.dro_hearing_no_show
 
-const AppealPhase: FC<AppealPhaseProps> = ({ event }) => {
+function AppealPhase({ event }: AppealPhaseProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

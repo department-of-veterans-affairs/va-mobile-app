@@ -45,10 +45,9 @@ This value can be used like any other string, either placed directly into a Text
 Or passed in as a prop to a component that will decide where and how to display it:
 
 ```
-<VAButton
+<Button
     label={t('fileUpload.submit')}
     testID={t('fileUpload.submit')}
-    buttonType={ButtonTypesConstants.buttonPrimary}
     a11yHint={t('fileUpload.uploadFileA11yHint')}
 />
 ```

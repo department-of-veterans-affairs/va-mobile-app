@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import {
   Box,
@@ -34,7 +34,7 @@ import { useSelector } from 'react-redux'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import getEnv from 'utils/env'
 
-const DisabilityRatingsScreen: FC = () => {
+function DisabilityRatingsScreen() {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
