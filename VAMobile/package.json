@@ -104,7 +104,6 @@
     "@types/react-test-renderer": "^18.0.7",
     "@types/redux-mock-store": "^1.0.6",
     "@types/rn-fetch-blob": "^1.2.7",
-    "@types/styled-components-react-native": "^5.2.5",
     "@types/underscore": "^1.11.15",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
