@@ -1,3 +1,4 @@
+import { $Dictionary } from 'i18next/typescript/helpers'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
 import { DateTime, DateTimeFormatOptions } from 'luxon'
 import { TFunction } from 'i18next'
@@ -351,6 +352,6 @@ export const getSupportedBiometricA11yLabel = (supportedBiometric: string, t: TF
  * @param t - translation function
  * @param options - optional param for variables in interpolated translations
  */
-export const getTranslation = (key: string, t: TFunction, options?: object): string => {
+export const getTranslation = (key: string, t: TFunction, options?: $Dictionary): string => {
   return options ? t(key, options) : t(key)
 }
