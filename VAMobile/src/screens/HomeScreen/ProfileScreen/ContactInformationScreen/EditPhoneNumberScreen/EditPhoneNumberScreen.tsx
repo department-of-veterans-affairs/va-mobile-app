@@ -33,8 +33,8 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const scrollViewRef = useRef<ScrollView>(null)
 
   const { data: contactInformation } = useContactInformation()
-  const { mutate: deletePhoneNumber, isLoading: deletingPhoneNumber, isSuccess: phoneNumberDeleted } = useDeletePhoneNumber()
-  const { mutate: savePhoneNumber, isLoading: savingPhoneNumber, isSuccess: phoneNumberSaved } = useSavePhoneNumber()
+  const { mutate: deletePhoneNumber, isPending: deletingPhoneNumber, isSuccess: phoneNumberDeleted } = useDeletePhoneNumber()
+  const { mutate: savePhoneNumber, isPending: savingPhoneNumber, isSuccess: phoneNumberSaved } = useSavePhoneNumber()
 
   useEffect(() => {
     if (phoneNumberDeleted || phoneNumberSaved) {
