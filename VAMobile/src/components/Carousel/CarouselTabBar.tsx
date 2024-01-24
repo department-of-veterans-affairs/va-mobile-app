@@ -78,7 +78,7 @@ function CarouselTabBar({ onCarouselEnd, screenList, translation }: CarouselTabB
   }
 
   const goBackOrSkipBtn = () => {
-    let onPressCallback: TFunction
+    let onPressCallback: () => void
     let buttonText: string
     let allyHint: string | undefined
 

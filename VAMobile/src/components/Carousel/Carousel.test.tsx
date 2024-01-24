@@ -22,7 +22,7 @@ context('Carousel', () => {
   ]
 
   beforeEach(() => {
-    render(<Carousel screenList={screenList} onCarouselEnd={() => { }} translation={t} />)
+    render(<Carousel screenList={screenList} onCarouselEnd={() => { }} translation={t as any} />)
   })
 
   it('initializes correctly', () => {

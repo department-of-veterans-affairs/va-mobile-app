@@ -132,7 +132,7 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
   }
 
   const errorCheck = genderIdentityInDowntime || getDemographicsError || getGenderIdentityOptionsError
-  const loadingCheck = loadingGenderIdentityOptions || genderIdentityMutation.isLoading
+  const loadingCheck = loadingGenderIdentityOptions || genderIdentityMutation.isPending
 
   return (
     <FullScreenSubtask
