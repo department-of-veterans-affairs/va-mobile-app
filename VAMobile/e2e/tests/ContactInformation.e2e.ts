@@ -65,25 +65,25 @@ export async function validateAddresses(addressID, addressType) {
   })
 
   it('should update the ' + addressType + ' address', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).typeText('2')
-    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
+    console.log('Test')
     await device.takeScreenshot('AfterStreetAddressTyping')
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
+    await device.takeScreenshot('AfterStreetAddressTyping2')
     console.log(1000)
     //await waitFor(element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID))).toBeVisible().withTimeout(4000)
     if(addressType === 'Home') {
-      console.log('Tap test')
       await element(by.id('countryPickerTestID picker required Error - Country is required')).tap()
       await expect(element(by.text('United States'))).toExist()
       await element(by.text('United States')).tap()
       await element(by.text('Done')).tap()
       await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
       await element(by.id('stateTestID picker required Error - State is required')).tap()
-      console.log('Tap test')
       await element(by.text('Arizona')).tap()
       await element(by.text('Done')).tap()
       await element(by.id('EditAddressTestID')).scrollTo('top')
     }
-    console.log('Test')
+    console.log('Test1')
     await updateAddress()
   })
 
