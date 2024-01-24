@@ -20,14 +20,14 @@ jest.mock('utils/hooks', () => {
 jest.mock('utils/remoteConfig')
 
 context('HomeScreen', () => {
-  const initializeTestInstance = (activePrescriptionsCount?: number, activeClaimsCount?: number) => {
+  const initializeTestInstance = (refillablePrescriptionsCount?: number, activeClaimsCount?: number) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
     render(<HomeScreen {...props} />, {
       preloadedState: {
         prescriptions: {
           ...initialPrescriptionState,
           prescriptionStatusCount: {
-            active: activePrescriptionsCount || 0,
+            isRefillable: refillablePrescriptionsCount || 0,
           }
         },
         claimsAndAppeals: {

@@ -247,11 +247,15 @@ const prescriptionData: PrescriptionsGetData = {
     },
     prescriptionStatusCount: {
       active: 0,
+      isRefillable: 1,
       discontinued: 0,
       expired: 0,
       historical: 0,
       pending: 0,
+      transferred: 0,
       submitted: 0,
+      hold: 0,
+      unknown: 0,
       total: 1,
     }
   },
