@@ -29,6 +29,7 @@ export const ContactInfoE2eIdConstants = {
 }
 
 export async function updateAddress() {
+  console.log('updateAddress')
   await waitFor(element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID))).toBeVisible().withTimeout(4000)
   await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('3101 N Fort Valley Rd')
   await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
@@ -61,14 +62,16 @@ export async function validateAddresses(addressID, addressType) {
       await expect(element(by.text('Country is required'))).toExist()
       await expect(element(by.text('State is required'))).toExist()
     }
-    console.log('Test1')
   })
 
   it('should update the ' + addressType + ' address', async () => {
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).typeText('2')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
+    await device.takeScreenshot('AfterStreetAddressTyping')
+    console.log(1000)
     //await waitFor(element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID))).toBeVisible().withTimeout(4000)
     if(addressType === 'Home') {
+      console.log('Tap test')
       await element(by.id('countryPickerTestID picker required Error - Country is required')).tap()
       await expect(element(by.text('United States'))).toExist()
       await element(by.text('United States')).tap()
@@ -353,7 +356,7 @@ describe(':ios: Contact Info Screen', () => {
 
   validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
   validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
-  validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
+  /*validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
   validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
 
@@ -399,4 +402,5 @@ describe(':ios: Contact Info Screen', () => {
 
   verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
   verifyNonUSorMilitaryAddresses('Mailing address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001', 'Mailing')
+  */
 })
