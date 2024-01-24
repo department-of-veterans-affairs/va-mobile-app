@@ -99,6 +99,7 @@ export type AppointmentsState = {
   messagesLoading: boolean
   upcomingAppointmentsCount?: number
   preloadComplete: boolean
+  firstTimeLoading: boolean
 }
 
 export const initialPaginationState = {
@@ -146,6 +147,7 @@ export const initialAppointmentsState: AppointmentsState = {
   },
   messagesLoading: false,
   preloadComplete: false,
+  firstTimeLoading: true
 }
 
 // Issue#2273 Tracks and logs pagination warning if there are discrepancies in the total entries of appointments
@@ -448,6 +450,11 @@ const appointmentsSlice = createSlice({
       state.error = error
       state.loading = false
       state.preloadComplete = true
+
+      if(state.firstTimeLoading === true && upcoming && upcoming.meta) {
+        logAnalyticsEvent(Events.vama_hs_appts_count(upcoming?.meta?.upcomingAppointmentsCount))
+        state.firstTimeLoading = false
+      }
 
       state.currentPageAppointmentsByYear.upcoming = groupAppointmentsByYear(upcomingAppointments)
       state.currentPageAppointmentsByYear.pastThreeMonths = groupAppointmentsByYear(pastAppointments)

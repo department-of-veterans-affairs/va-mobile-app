@@ -69,37 +69,37 @@ context('HomeScreen', () => {
     })
   })
 
-  it('displays prescriptions module when there are active prescriptions', () => {
-    initializeTestInstance(2)
-    expect(screen.getByText('Prescriptions')).toBeTruthy()
-    expect(screen.getByText('(2 active)')).toBeTruthy()
-  })
+  // it('displays prescriptions module when there are active prescriptions', () => {
+  //   initializeTestInstance(2)
+  //   expect(screen.getByText('Prescriptions')).toBeTruthy()
+  //   expect(screen.getByText('(2 active)')).toBeTruthy()
+  // })
 
-  it('navigates to prescriptions screen when prescriptions module is tapped', () => {
-    initializeTestInstance(2)
-    fireEvent.press(screen.getByText('Prescriptions'))
-    expect(Linking.openURL).toBeCalledWith('vamobile://prescriptions')
-  })
+  // it('navigates to prescriptions screen when prescriptions module is tapped', () => {
+  //   initializeTestInstance(2)
+  //   fireEvent.press(screen.getByText('Prescriptions'))
+  //   expect(Linking.openURL).toBeCalledWith('vamobile://prescriptions')
+  // })
 
-  it('does not display prescriptions module when there are no active prescriptions', () => {
-    initializeTestInstance(0)
-    expect(screen.queryByText('Prescriptions')).toBeFalsy()
-  })
+  // it('does not display prescriptions module when there are no active prescriptions', () => {
+  //   initializeTestInstance(0)
+  //   expect(screen.queryByText('Prescriptions')).toBeFalsy()
+  // })
 
-  it('displays claims module when there are active claims', () => {
-    initializeTestInstance(0, 2)
-    expect(screen.getByText('Claims')).toBeTruthy()
-    expect(screen.getByText('(2 open)')).toBeTruthy()
-  })
+  // it('displays claims module when there are active claims', () => {
+  //   initializeTestInstance(0, 2)
+  //   expect(screen.getByText('Claims')).toBeTruthy()
+  //   expect(screen.getByText('(2 open)')).toBeTruthy()
+  // })
 
-  it('navigates to claims history screen when claims module is tapped', () => {
-    initializeTestInstance(0, 2)
-    fireEvent.press(screen.getByText('Claims'))
-    expect(Linking.openURL).toBeCalledWith('vamobile://claims')
-  })
+  // it('navigates to claims history screen when claims module is tapped', () => {
+  //   initializeTestInstance(0, 2)
+  //   fireEvent.press(screen.getByText('Claims'))
+  //   expect(Linking.openURL).toBeCalledWith('vamobile://claims')
+  // })
 
-  it('does not display claims module when there are no active claims', () => {
-    initializeTestInstance(0)
-    expect(screen.queryByText('Claims')).toBeFalsy()
-  })
+  // it('does not display claims module when there are no active claims', () => {
+  //   initializeTestInstance(0)
+  //   expect(screen.queryByText('Claims')).toBeFalsy()
+  // })
 })

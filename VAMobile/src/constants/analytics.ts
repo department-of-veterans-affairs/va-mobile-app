@@ -525,6 +525,14 @@ export const Events = {
       },
     }
   },
+  vama_hs_appts_count: (apptCount: number): Event => {
+    return {
+      name: 'vama_hs_appts_count',
+      params: {
+        apptCount,
+      },
+    }
+  },
   vama_letter_download: (letterName: string): Event => {
     return {
       name: 'vama_letter_download',

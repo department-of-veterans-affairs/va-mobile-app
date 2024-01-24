@@ -1,13 +1,13 @@
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
-import { Linking } from 'react-native'
+// import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useFocusEffect } from '@react-navigation/native'
-import { useSelector } from 'react-redux'
+// import { useFocusEffect } from '@react-navigation/native'
+// import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 
-import { AppointmentsState, ClaimsAndAppealsState, PrescriptionState } from 'store/slices'
-import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
+// import { AppointmentsState, ClaimsAndAppealsState, PrescriptionState } from 'store/slices'
+import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -45,16 +45,16 @@ export function HomeScreen({}: HomeScreenProps) {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
-  const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
-  const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  // const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  // const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
+  // const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const { data: userAuthorizedServices } = useAuthorizedServices()
 
-  useFocusEffect(
+  useEffect(
     useCallback(() => {
       if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
         dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
@@ -62,7 +62,7 @@ export function HomeScreen({}: HomeScreenProps) {
     }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments]),
   )
 
-  useFocusEffect(
+  useEffect(
     useCallback(() => {
       if ((userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime) {
         dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE, undefined, undefined, true))
@@ -70,7 +70,7 @@ export function HomeScreen({}: HomeScreenProps) {
     }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals]),
   )
 
-  useFocusEffect(
+  useEffect(
     useCallback(() => {
       if (userAuthorizedServices?.prescriptions && !rxInDowntime) {
         dispatch(loadAllPrescriptions())
@@ -78,7 +78,7 @@ export function HomeScreen({}: HomeScreenProps) {
     }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions]),
   )
 
-  useFocusEffect(
+  useEffect(
     useCallback(() => {
       if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
         dispatch(getInbox())
@@ -134,7 +134,7 @@ export function HomeScreen({}: HomeScreenProps) {
       <Box>
         <EncourageUpdateAlert />
         <Nametag />
-        {Number(upcomingAppointmentsCount) > 0 && (
+        {/* {Number(upcomingAppointmentsCount) > 0 && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
             <LargeNavButton
               title={`${t('appointments')}`}
@@ -163,7 +163,7 @@ export function HomeScreen({}: HomeScreenProps) {
               borderWidth={theme.dimensions.buttonBorderWidth}
             />
           </Box>
-        )}
+        )} */}
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(t('aboutVA'))}>
             {t('aboutVA')}
