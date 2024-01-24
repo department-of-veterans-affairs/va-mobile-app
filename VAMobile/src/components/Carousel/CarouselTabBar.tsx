@@ -1,5 +1,5 @@
 import { Pressable } from 'react-native'
-import React, { FC, ReactElement, useState } from 'react'
+import React, { ReactElement, useState } from 'react'
 
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
 import { NavigationHelpers, ParamListBase } from '@react-navigation/native'
@@ -12,7 +12,7 @@ import { Box, BoxProps, TextView } from '../index'
 import { CarouselScreen } from './Carousel'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 const StyledSafeAreaView = styled(SafeAreaView)`
   background-color: ${themeFn((theme) => theme.colors.background.carousel)};
@@ -38,10 +38,11 @@ type CarouselTabBarProps = {
 }
 
 /**A common component with the carousel tab bar content. Displays skip button, continue button, and a progress bar*/
-const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, screenList, translation }) => {
+function CarouselTabBar({ onCarouselEnd, screenList, translation }: CarouselTabBarProps) {
   const theme = useTheme()
   const [currentScreenIndex, setCurrentScreenIndex] = useState(0)
   const a11yHints = screenList[currentScreenIndex].a11yHints
+  const navigateTo = useRouteNavigation()
 
   const onContinue = (): void => {
     const updatedIndex = currentScreenIndex + 1
@@ -52,13 +53,13 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
     }
 
     setCurrentScreenIndex(updatedIndex)
-    navigation.navigate(screenList[updatedIndex].name)
+    navigateTo(screenList[updatedIndex].name)
   }
 
   const goBack = (): void => {
     const updatedIndex = currentScreenIndex - 1
     setCurrentScreenIndex(updatedIndex)
-    navigation.navigate(screenList[updatedIndex].name)
+    navigateTo(screenList[updatedIndex].name)
   }
 
   const getProgressBar = (): ReactElement[] => {
@@ -77,7 +78,7 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
   }
 
   const goBackOrSkipBtn = () => {
-    let onPressCallback: TFunction
+    let onPressCallback: () => void
     let buttonText: string
     let allyHint: string | undefined
 

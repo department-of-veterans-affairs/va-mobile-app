@@ -1,6 +1,7 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import {
   AppointmentAddressAndNumber,
@@ -27,7 +28,6 @@ import {
 import { AppointmentsState, clearAppointmentCancellation, trackAppointmentDetail } from 'store/slices'
 import {
   Box,
-  ButtonTypesConstants,
   ClickForActionLink,
   ClickToCallPhoneNumber,
   ErrorComponent,
@@ -38,8 +38,6 @@ import {
   TextArea,
   TextView,
   TextViewProps,
-  VAButton,
-  VAButtonProps,
 } from 'components'
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -62,7 +60,7 @@ type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'U
 const { LINK_URL_VA_SCHEDULING } = getEnv()
 // export const JOIN_SESSION_WINDOW_MINUTES = 30
 
-const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route, navigation }) => {
+function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDetailsProps) {
   let { appointmentID } = route.params
   const { vetextID } = route.params
 
@@ -71,6 +69,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const launchExternalLink = useExternalLink()
+  const screenError = useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)
   const { upcomingAppointmentsById, loading, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<RootState, AppointmentsState>(
     (state) => state.appointments,
   )
@@ -113,6 +112,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     }
   }, [appointmentCancellationStatus, dispatch, navigation])
 
+  useEffect(() => {
+    if (!screenError && appointmentNotFound) {
+      logAnalyticsEvent(Events.vama_appt_deep_link_fail(vetextID))
+    }
+  }, [appointmentNotFound, screenError, vetextID])
+
   const goBack = (): void => {
     dispatch(clearAppointmentCancellation())
     navigation.goBack()
@@ -154,7 +159,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   // TODO abstract some of these render functions into their own components - too many in one file
-  const renderSpecialInstructions = (): ReactElement => {
+  function renderSpecialInstructions() {
     if (comment) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
@@ -182,7 +187,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     }
   }
 
-  const renderVideoAppointmentInstructions = (): ReactElement => {
+  function renderVideoAppointmentInstructions() {
     const isGFE = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
     const isVideoAppt = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE || isGFE
 
@@ -200,14 +205,13 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const renderAtHomeVideoConnectAppointmentData = (): ReactElement => {
+  function renderAtHomeVideoConnectAppointmentData() {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
       const onPrepareForVideoVisit = () => {
         dispatch(clearAppointmentCancellation())
-        navigateTo('PrepareForVideoVisit')()
+
+        navigateTo('PrepareForVideoVisit')
       }
-      // TODO uncomment for #17916
-      const hasSessionStarted = true // DateTime.fromISO(startDateUtc).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
 
       const joinSessionOnPress = (): void => {
         dispatch(clearAppointmentCancellation())
@@ -215,18 +219,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         if (url) {
           launchExternalLink(url)
         } else {
-          navigateTo('SessionNotStarted')()
+          navigateTo('SessionNotStarted')
         }
-      }
-
-      const joinSessionButtonProps: VAButtonProps = {
-        label: t('upcomingAppointmentDetails.joinSession'),
-        testID: t('upcomingAppointmentDetails.joinSession'),
-        buttonType: ButtonTypesConstants.buttonPrimary,
-        a11yHint: t('upcomingAppointmentDetails.howToJoinVirtualSessionA11yHint'),
-        onPress: joinSessionOnPress,
-        disabled: !hasSessionStarted,
-        disabledText: t('upcomingAppointmentDetails.joinSession.disabledText'),
       }
 
       const prepareForVideoVisitLinkProps: TextViewProps = {
@@ -244,7 +238,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
 
           <Box my={theme.dimensions.standardMarginBetween}>
-            <VAButton {...joinSessionButtonProps} />
+            <Button
+              label={t('upcomingAppointmentDetails.joinSession')}
+              testID={t('upcomingAppointmentDetails.joinSession')}
+              a11yHint={t('upcomingAppointmentDetails.howToJoinVirtualSessionA11yHint')}
+              onPress={joinSessionOnPress}
+            />
           </Box>
 
           <TextView {...prepareForVideoVisitLinkProps} {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}>
@@ -257,7 +256,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const renderAtlasVideoConnectAppointmentData = (): ReactElement => {
+  function renderAtlasVideoConnectAppointmentData() {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS && !isAppointmentCanceled && code) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
@@ -272,7 +271,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const renderAddToCalendarLink = (): ReactElement => {
+  function renderAddToCalendarLink() {
     if (!isAppointmentCanceled && !pendingAppointment) {
       return (
         <Box mt={phoneOnly ? undefined : theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
@@ -284,7 +283,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const readerCancelInformation = (): ReactElement => {
+  function readerCancelInformation() {
     if (pendingAppointment) {
       return <></>
     }
@@ -322,7 +321,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     )
   }
 
-  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || appointmentNotFound) {
+  if (screenError || appointmentNotFound) {
     return (
       <FeatureLandingTemplate backLabel={t('appointments')} backLabelOnPress={navigation.goBack} title={t('details')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
@@ -358,7 +357,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           {renderSpecialInstructions()}
           {featureEnabled('patientCheckIn') && (
             <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
-              <VAButton onPress={navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} buttonType={ButtonTypesConstants.buttonPrimary} />
+              <Button onPress={() => navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} />
             </Box>
           )}
           <PreferredDateAndTime attributes={attributes} />

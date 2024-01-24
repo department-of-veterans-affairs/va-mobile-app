@@ -1,21 +1,21 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
-
-import { Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
-import { getSupportedBiometricA11yLabel, getSupportedBiometricText, getSupportedBiometricTranslationTag, getTranslation } from 'utils/formattingUtils'
+import React from 'react'
 
 import { AuthState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices'
+import { Box, TextView, VAScrollView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { getSupportedBiometricA11yLabel, getSupportedBiometricText, getSupportedBiometricTranslationTag, getTranslation } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useAppDispatch, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
 
-const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
+function BiometricsPreferenceScreen({}: SyncScreenProps) {
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const { supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
@@ -42,19 +42,18 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
           {bodyText}
           {t('biometricsPreference.youCanAlwaysChangeThis')}
         </TextView>
-        <VAButton
+        <Button
           onPress={onUseBiometrics}
           label={t('biometricsPreference.useBiometric', { biometricsText })}
           testID={t('biometricsPreference.useBiometric', { biometricsText })}
-          buttonType={ButtonTypesConstants.buttonPrimary}
           a11yHint={t('biometricsPreference.useBiometricA11yHint')}
         />
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <VAButton
+          <Button
             onPress={onSkip}
             label={t('biometricsPreference.skip')}
             testID={t('biometricsPreference.skip')}
-            buttonType={ButtonTypesConstants.buttonSecondary}
+            buttonType={ButtonVariants.Secondary}
             a11yHint={t('biometricsPreference.skipA11yHint')}
           />
         </Box>

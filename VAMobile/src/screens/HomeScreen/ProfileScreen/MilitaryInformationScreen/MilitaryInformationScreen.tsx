@@ -1,6 +1,6 @@
 import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
@@ -18,13 +18,14 @@ import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
 type MilitaryInformationScreenProps = StackScreenProps<HomeStackParamList, 'MilitaryInformation'>
 
-const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigation }) => {
+function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProps) {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { serviceHistory, loading, needsDataLoad } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
+  const navigateTo = useRouteNavigation()
 
   useEffect(() => {
     if (needsDataLoad && userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime) {
@@ -53,7 +54,9 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
     }
   })
 
-  const navigateTo = useRouteNavigation()
+  const onIncorrectService = () => {
+    navigateTo('IncorrectServiceInfo')
+  }
 
   const linkProps: TextViewProps = {
     variant: 'MobileBody',
@@ -62,22 +65,19 @@ const MilitaryInformationScreen: FC<MilitaryInformationScreenProps> = ({ navigat
     mb: theme.dimensions.contentMarginBottom,
     accessibilityRole: 'link',
     ...testIdProps(t('militaryInformation.incorrectServiceInfo')),
-    onPress: navigateTo('IncorrectServiceInfo'),
+    onPress: onIncorrectService,
     textDecoration: 'underline',
     textDecorationColor: 'link',
   }
 
-  if (useError(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID) || getUserAuthorizedServicesError) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
+  const errorCheck = useError(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID) || getUserAuthorizedServicesError
+  const loadingCheck = loading || loadingUserAuthorizedServices
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')}>
-      {loading || loadingUserAuthorizedServices ? (
+      {errorCheck ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
+      ) : loadingCheck ? (
         <LoadingComponent text={t('militaryInformation.loading')} />
       ) : !userAuthorizedServices?.militaryServiceHistory || serviceHistory.length < 1 ? (
         <NoMilitaryInformationAccess />

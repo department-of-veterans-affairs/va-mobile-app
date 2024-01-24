@@ -3,13 +3,14 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint', 'sort-imports-es6-autofix', 'eslint-plugin-tsdoc'],
-  extends: ['@react-native-community', 'plugin:@typescript-eslint/recommended', 'plugin:react-hooks/recommended'],
+  plugins: ['@typescript-eslint', 'sort-imports-es6-autofix', 'eslint-plugin-tsdoc', 'jest'],
+  extends: ['@react-native', 'plugin:@typescript-eslint/recommended', 'plugin:react-hooks/recommended', '@department-of-veterans-affairs/mobile'],
   env: {
     commonjs: true,
     es6: true,
     node: true,
     browser: false,
+    jest: true,
   },
   globals: {
     strapi: true,
@@ -55,7 +56,7 @@ module.exports = {
       'warn',
       {
         allowAsProps: true,
-      }
-    ]
+      },
+    ],
   },
 }

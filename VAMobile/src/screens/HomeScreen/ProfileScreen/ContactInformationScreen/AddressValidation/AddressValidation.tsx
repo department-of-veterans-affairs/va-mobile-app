@@ -1,12 +1,13 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { UseMutateFunction } from '@tanstack/react-query'
 import { ViewStyle } from 'react-native'
 import { map, pick } from 'underscore'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { AddressData, SaveAddressParameters, SuggestedAddress, ValidateAddressData } from 'api/types'
-import { Box, ButtonTypesConstants, RadioGroup, TextArea, TextView, VAButton, VAScrollView, radioOption } from 'components'
+import { Box, RadioGroup, TextArea, TextView, VAScrollView, radioOption } from 'components'
 import { EditResponseData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { SnackbarMessages } from 'components/SnackBar'
@@ -28,7 +29,7 @@ export type AddressValidationProps = {
   setShowAddressValidation: (shouldShow: boolean) => void
 }
 
-const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, addressId, snackbarMessages, validationData, saveAddress, setShowAddressValidation }) => {
+function AddressValidation({ addressEntered, addressId, snackbarMessages, validationData, saveAddress, setShowAddressValidation }: AddressValidationProps) {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
@@ -120,7 +121,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
     return { addressLines: addressLines, city: suggestedAddress.city, state: suggestedAddress.stateCode || '', postCode: suggestedAddress.zipCode }
   }
 
-  const getAlert = (): ReactNode => {
+  function getAlert() {
     return (
       <Box>
         <TextView variant="MobileBody" mt={standardMarginBetween} paragraphSpacing={true} accessibilityLabel={t('editAddress.validation.verifyAddress.body.1.a11yLabel')}>
@@ -133,7 +134,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
     )
   }
 
-  const getSuggestedAddresses = (): ReactElement => {
+  function getSuggestedAddresses() {
     let suggestedAddressOptions: Array<radioOption<AddressData | SuggestedAddress>> = []
 
     suggestedAddressOptions.push({
@@ -166,7 +167,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
     )
   }
 
-  const getFooterButtons = (): ReactElement => {
+  function getFooterButtons() {
     const useThisAddressButtonProps = {
       testID: t('editAddress.validation.useThisAddress'),
       label: t('editAddress.validation.useThisAddress'),
@@ -174,6 +175,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
     }
 
     const editAddressButtonProps = {
+      buttonType: ButtonVariants.Secondary,
       label: t('editAddress.validation.editAddress'),
       testID: t('editAddress.validation.editAddress.a11yLabel'),
       onPress: onEditAddress,
@@ -182,10 +184,10 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressEntered, address
     return (
       <Box>
         <Box mb={condensedMarginBetween}>
-          <VAButton {...useThisAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button {...useThisAddressButtonProps} />
         </Box>
         <Box>
-          <VAButton {...editAddressButtonProps} buttonType={ButtonTypesConstants.buttonSecondary} />
+          <Button {...editAddressButtonProps} />
         </Box>
       </Box>
     )

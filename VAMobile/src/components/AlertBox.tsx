@@ -1,4 +1,5 @@
 import { AccessibilityRole, ScrollView, View } from 'react-native'
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 import React, { FC, RefObject, useEffect, useState } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
@@ -23,12 +24,14 @@ export type AlertBoxProps = {
   titleA11yLabel?: string
   /** optional accessibility role for the title */
   titleRole?: AccessibilityRole
+  /** optional testID */
+  testId?: string
 }
 
 /**
  * Displays content in a box styled as an alert
  */
-const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, scrollViewRef, title, text, textA11yLabel, titleA11yLabel, titleRole }) => {
+const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, scrollViewRef, title, text, textA11yLabel, titleA11yLabel, titleRole, testId }) => {
   const theme = useTheme()
   const [scrollRef, viewRef, scrollToAlert] = useAutoScrollToElement()
   const [shouldFocus, setShouldFocus] = useState(true)
@@ -49,13 +52,14 @@ const AlertBox: FC<AlertBoxProps> = ({ border, children, focusOnError = true, sc
     borderLeftColor: border,
     py: boxPadding,
     px: boxPadding,
+    testID: testId,
   }
 
   const vibrate = (): void => {
     if (border === 'error') {
-      triggerHaptic('notificationError')
+      triggerHaptic(HapticFeedbackTypes.notificationError)
     } else if (border === 'warning') {
-      triggerHaptic('notificationWarning')
+      triggerHaptic(HapticFeedbackTypes.notificationWarning)
     }
   }
 

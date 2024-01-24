@@ -2,7 +2,7 @@ import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 
 import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { Events } from 'constants/analytics'
@@ -14,6 +14,7 @@ import { UserContactInformation } from 'api/types/ContactInformation'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { registerReviewEvent } from 'utils/inAppReviews'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
@@ -71,10 +72,15 @@ const getEmailAddressData = (contactInformation: UserContactInformation | undefi
 
 type ContactInformationScreenProps = StackScreenProps<HomeStackParamList, 'ContactInformation'>
 
-const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigation }) => {
+function ContactInformationScreen({ navigation }: ContactInformationScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { data: contactInformation, isLoading: loadingContactInformation, isError: contactInformationError, refetch: refetchContactInformation } = useContactInformation()
+  const {
+    data: contactInformation,
+    isLoading: loadingContactInformation,
+    isError: contactInformationError,
+    refetch: refetchContactInformation,
+  } = useContactInformation({ enabled: screenContentAllowed('WG_ContactInformation') })
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
 
@@ -88,25 +94,53 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
     setReviewEventRegistered(true)
   }
 
-  const onHomePhone = navigateTo('EditPhoneNumber', {
-    displayTitle: t('editPhoneNumber.homePhoneTitle'),
-    phoneType: PhoneTypeConstants.HOME,
-    phoneData: contactInformation?.homePhone || ({} as PhoneData),
-  })
+  const onMailingAddress = () => {
+    logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('contactInformation.title')))
+    navigateTo('EditAddress', {
+      displayTitle: t('contactInformation.mailingAddress'),
+      addressType: profileAddressOptions.MAILING_ADDRESS,
+    })
+  }
 
-  const onWorkPhone = navigateTo('EditPhoneNumber', {
-    displayTitle: t('editPhoneNumber.workPhoneTitle'),
-    phoneType: PhoneTypeConstants.WORK,
-    phoneData: contactInformation?.workPhone || ({} as PhoneData),
-  })
+  const onResidentialAddress = () => {
+    logAnalyticsEvent(Events.vama_click(t('contactInformation.residentialAddress'), t('contactInformation.title')))
+    navigateTo('EditAddress', {
+      displayTitle: t('contactInformation.residentialAddress'),
+      addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
+    })
+  }
 
-  const onCellPhone = navigateTo('EditPhoneNumber', {
-    displayTitle: t('editPhoneNumber.mobilePhoneTitle'),
-    phoneType: PhoneTypeConstants.MOBILE,
-    phoneData: contactInformation?.mobilePhone || ({} as PhoneData),
-  })
+  const onHomePhone = () => {
+    navigateTo('EditPhoneNumber', {
+      displayTitle: t('editPhoneNumber.homePhoneTitle'),
+      phoneType: PhoneTypeConstants.HOME,
+      phoneData: contactInformation?.homePhone || ({} as PhoneData),
+    })
+  }
 
-  const onEmailAddress = navigateTo('EditEmail')
+  const onWorkPhone = () => {
+    navigateTo('EditPhoneNumber', {
+      displayTitle: t('editPhoneNumber.workPhoneTitle'),
+      phoneType: PhoneTypeConstants.WORK,
+      phoneData: contactInformation?.workPhone || ({} as PhoneData),
+    })
+  }
+
+  const onCellPhone = () => {
+    navigateTo('EditPhoneNumber', {
+      displayTitle: t('editPhoneNumber.mobilePhoneTitle'),
+      phoneType: PhoneTypeConstants.MOBILE,
+      phoneData: contactInformation?.mobilePhone || ({} as PhoneData),
+    })
+  }
+
+  const onEmailAddress = () => {
+    navigateTo('EditEmail')
+  }
+
+  const onHowWillYou = () => {
+    navigateTo('HowWillYou')
+  }
 
   const linkProps: TextViewProps = {
     variant: 'MobileBodyLink',
@@ -115,60 +149,34 @@ const ContactInformationScreen: FC<ContactInformationScreenProps> = ({ navigatio
   }
 
   const addressData: Array<addressDataField> = [
-    {
-      addressType: profileAddressOptions.MAILING_ADDRESS,
-      onPress: () => {
-        logAnalyticsEvent(Events.vama_click(t('contactInformation.mailingAddress'), t('contactInformation.title')))
-        navigateTo('EditAddress', {
-          displayTitle: t('contactInformation.mailingAddress'),
-          addressType: profileAddressOptions.MAILING_ADDRESS,
-        })()
-      },
-    },
-    {
-      addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
-      onPress: () => {
-        logAnalyticsEvent(Events.vama_click(t('contactInformation.residentialAddress'), t('contactInformation.title')))
-        navigateTo('EditAddress', {
-          displayTitle: t('contactInformation.residentialAddress'),
-          addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
-        })()
-      },
-    },
+    { addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onMailingAddress },
+    { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
   ]
-
-  if (contactInformationInDowntime || contactInformationError) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} onTryAgain={refetchContactInformation} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingContactInformation) {
-    return (
-      <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')}>
-        <LoadingComponent text={t('contactInformation.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
 
   return (
     <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')} testID="ContactInfoTestID">
-      <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
-        {t('contactInformation.editNote')}
-      </TextView>
-      <Pressable onPress={navigateTo('HowWillYou')} accessibilityRole="link" accessible={true}>
-        <TextView testID="howWeUseContactInfoLinkTestID" {...linkProps}>
-          {t('contactInformation.howWillYouUseContactInfo')}
-        </TextView>
-      </Pressable>
-      <AddressSummary addressData={addressData} title={t('contactInformation.addresses')} />
-      <DefaultList items={getPhoneNumberData(contactInformation, t, onHomePhone, onWorkPhone, onCellPhone)} title={t('contactInformation.phoneNumbers')} />
-      <DefaultList items={getEmailAddressData(contactInformation, t, onEmailAddress)} title={t('contactInformation.contactEmailAddress')} />
-      <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
-        {t('contactInformation.thisIsEmailWeUseToContactNote')}
-      </TextView>
+      {contactInformationInDowntime || contactInformationError ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} onTryAgain={refetchContactInformation} />
+      ) : loadingContactInformation ? (
+        <LoadingComponent text={t('contactInformation.loading')} />
+      ) : (
+        <>
+          <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
+            {t('contactInformation.editNote')}
+          </TextView>
+          <Pressable onPress={onHowWillYou} accessibilityRole="link" accessible={true}>
+            <TextView testID="howWeUseContactInfoLinkTestID" {...linkProps}>
+              {t('contactInformation.howWillYouUseContactInfo')}
+            </TextView>
+          </Pressable>
+          <AddressSummary addressData={addressData} title={t('contactInformation.addresses')} />
+          <DefaultList items={getPhoneNumberData(contactInformation, t, onHomePhone, onWorkPhone, onCellPhone)} title={t('contactInformation.phoneNumbers')} />
+          <DefaultList items={getEmailAddressData(contactInformation, t, onEmailAddress)} title={t('contactInformation.contactEmailAddress')} />
+          <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
+            {t('contactInformation.thisIsEmailWeUseToContactNote')}
+          </TextView>
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }

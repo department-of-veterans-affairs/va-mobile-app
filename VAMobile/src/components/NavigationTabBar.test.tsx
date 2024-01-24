@@ -6,9 +6,17 @@ import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-nav
 import { context, render } from 'testUtils'
 import NavigationTabBar from './NavigationTabBar'
 
+let mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
 context('NavigationTabBar', () => {
   const emitSpy = jest.fn()
-  const navigateSpy = jest.fn()
 
   let routes = [
     { name: 'Home', key: 'Home-1' },
@@ -22,8 +30,8 @@ context('NavigationTabBar', () => {
     render(
       <NavigationTabBar
         state={{ index, routes } as unknown as TabNavigationState<ParamListBase>}
-        navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-        translation={jest.fn()}
+        navigation={{ emit: emitSpy, navigate: mockNavigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
+        translation={jest.fn() as any}
       />,
     )
   }
@@ -46,7 +54,7 @@ context('NavigationTabBar', () => {
     emitSpy.mockReturnValue({ defaultPrevented: false })
     fireEvent.press(screen.getByRole('tab', { name: 'Benefits' }))
     expect(emitSpy).toBeCalled()
-    expect(navigateSpy).toBeCalled()
+    expect(mockNavigationSpy).toBeCalled()
   })
 
   it('selects correct tab for Home route', () => {

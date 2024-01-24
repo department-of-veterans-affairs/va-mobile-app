@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 import ReactNativeHapticFeedback, { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
 import { Box, ChildTemplate, TextArea, TextView } from 'components'
@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 
 type HapticsDemoScreenProps = StackScreenProps<HomeStackParamList, 'HapticsDemoScreen'>
 
-const HapticsDemoScreen: FC<HapticsDemoScreenProps> = () => {
+function HapticsDemoScreen({}: HapticsDemoScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()

@@ -1,10 +1,11 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import DocumentPicker from 'react-native-document-picker'
-import React, { FC, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, TextArea, TextView } from 'components'
 import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Events } from 'constants/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
@@ -18,7 +19,7 @@ const { IS_TEST } = getEnv()
 
 type SelectFilesProps = StackScreenProps<BenefitsStackParamList, 'SelectFile'>
 
-const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
+function SelectFile({ navigation, route }: SelectFilesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -40,6 +41,8 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       types: { images, plainText, pdf },
     } = DocumentPicker
 
+    logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'file'))
+
     try {
       const document = (await pickSingle({
         type: [images, plainText, pdf],
@@ -56,7 +59,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       }
 
       setError('')
-      navigateTo('UploadFile', { request, fileUploaded: document })()
+      navigateTo('UploadFile', { request, fileUploaded: document })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (docError: any) {
       if (DocumentPicker.isCancel(docError as Error)) {
@@ -70,7 +73,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const onSelectFile = (): void => {
     // For integration tests, bypass the file picking process
     if (IS_TEST) {
-      navigateTo('UploadFile', { request, fileUploaded: 'test file' })()
+      navigateTo('UploadFile', { request, fileUploaded: 'test file' })
       return
     }
 
@@ -132,7 +135,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
         </TextArea>
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <VAButton onPress={onSelectFile} label={t('fileUpload.selectAFile')} testID={buttonTestId} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <Button onPress={onSelectFile} label={t('fileUpload.selectAFile')} testID={buttonTestId} />
         </Box>
       </Box>
     </FullScreenSubtask>

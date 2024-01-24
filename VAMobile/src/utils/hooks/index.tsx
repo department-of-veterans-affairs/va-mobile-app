@@ -1,5 +1,5 @@
 import { AccessibilityInfo, Alert, AlertButton, AppState, Dimensions, EmitterSubscription, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
-import { EventArg, useNavigation } from '@react-navigation/native'
+import { CommonActions, EventArg, useNavigation } from '@react-navigation/native'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
@@ -21,6 +21,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { VATheme } from 'styles/theme'
+import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 import { WebProtocolTypesConstants } from 'constants/common'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
@@ -86,7 +87,7 @@ export const useFontScale = (): ((val: number) => number) => {
 export const useTheme = styledComponentsUseTheme as () => VATheme
 
 export type OnPressHandler = () => void
-export type RouteNavigationFunction<T extends ParamListBase> = (routeName: keyof T, args?: RouteNavParams<T>) => OnPressHandler
+export type RouteNavigationFunction<T extends ParamListBase> = (routeName: keyof T, args?: RouteNavParams<T>) => void
 
 /**
  * Navigation hook to use in onPress events.
@@ -98,8 +99,13 @@ export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFu
   const navigation = useNavigation()
   type TT = keyof T
   return <X extends TT>(routeName: X, args?: T[X]) => {
-    return (): void => {
-      navigation.navigate(routeName as never, args as never)
+    if (waygateNativeAlert(`WG_${String(routeName)}` as WaygateToggleType)) {
+      navigation.dispatch(
+        CommonActions.navigate({
+          name: `${String(routeName)}`,
+          params: args,
+        }),
+      )
     }
   }
 }

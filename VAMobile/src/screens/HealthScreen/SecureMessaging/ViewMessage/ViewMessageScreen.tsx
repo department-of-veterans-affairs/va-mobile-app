@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import { AlertBox, Box, ChildTemplate, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker } from 'components'
@@ -18,18 +18,19 @@ import { SecureMessagingState, getMessage, getThread, listFolders, moveMessage }
 import { SnackbarMessages } from 'components/SnackBar'
 import { getfolderName } from 'utils/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntimeByScreenID, useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CollapsibleMessage from './CollapsibleMessage'
 import MessageCard from './MessageCard'
 
-type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
+type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessage'>
 
 /**
  * Accepts a message, map of all messages, and array of messageIds in the current thread.  Gets each messageId from the message map, sorts by
  * sentDate ascending, and returns an array of <CollapsibleMessages/>
  */
-export const renderMessages = (message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>, hideMessage = false): ReactNode => {
+export function renderMessages(message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>, hideMessage = false) {
   const threadMessages = thread.map((messageID) => messagesById[messageID]).sort((message1, message2) => (message1.sentDate > message2.sentDate ? -1 : 1))
 
   return threadMessages.map((m) => m && m.messageId && <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={hideMessage && m.messageId === message.messageId} />)
@@ -37,7 +38,7 @@ export const renderMessages = (message: SecureMessagingMessageAttributes, messag
 
 const screenID = ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID
 
-const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) => {
+function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const messageID = Number(route.params.messageID)
   const currentFolderIdParam = Number(route.params.folderID) || SecureMessagingSystemFolderIdConstants.INBOX
   const currentPage = Number(route.params.currentPage)
@@ -65,16 +66,17 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const smNotInDowntime = !useDowntimeByScreenID(screenID)
+  const isScreenContentAllowed = screenContentAllowed('WG_ViewMessage')
 
   // have to use uselayout due to the screen showing in white or showing the previouse data
   useLayoutEffect(() => {
     // Only get message and thread when inbox isn't being fetched
     // to avoid a race condition with writing to `messagesById`
-    if (!loadingInbox && smNotInDowntime) {
+    if (isScreenContentAllowed && !loadingInbox && smNotInDowntime) {
       dispatch(getMessage(messageID, screenID))
       dispatch(getThread(messageID, screenID))
     }
-  }, [loadingInbox, messageID, smNotInDowntime, dispatch])
+  }, [loadingInbox, messageID, smNotInDowntime, dispatch, isScreenContentAllowed])
 
   useEffect(() => {
     if (isUndo || moveMessageFailed) {
@@ -84,10 +86,10 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   }, [isUndo, currentFolderIdParam, moveMessageFailed])
 
   useEffect(() => {
-    if (!folders.length) {
+    if (isScreenContentAllowed && !folders.length) {
       dispatch(listFolders(screenID))
     }
-  }, [dispatch, folders])
+  }, [dispatch, folders, isScreenContentAllowed])
 
   const getFolders = (): PickerItem[] => {
     const filteredFolder = _.filter(folders, (folder) => {
@@ -144,7 +146,11 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route, navigation }) =>
   if (!message || !messagesById || !thread) {
     // return empty /error  state
     // do not replace with error component otherwise user will always see a red error flash right before their message loads
-    return <></>
+    return (
+      <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
+        <></>
+      </ChildTemplate>
+    )
   }
 
   const replyExpired = demoMode && message.messageId === 2092809 ? false : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS

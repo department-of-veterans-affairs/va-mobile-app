@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView } from 'components'
 import { DirectDepositState, getBankData } from 'store/slices/directDepositSlice'
@@ -11,6 +11,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackScreenProps } from '@react-navigation/stack'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
@@ -21,7 +22,7 @@ type DirectDepositScreenProps = StackScreenProps<PaymentsStackParamList, 'Direct
 /**
  * Screen for displaying direct deposit information and help numbers
  */
-const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
+function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
   const { paymentAccount: bankData, loading } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -33,7 +34,7 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      if (ddNotInDowntime) {
+      if (screenContentAllowed('WG_DirectDeposit') && ddNotInDowntime) {
         dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
       }
     }, [dispatch, ddNotInDowntime]),
@@ -65,7 +66,9 @@ const DirectDepositScreen: FC<DirectDepositScreenProps> = ({ navigation }) => {
       {
         textLines: textLines,
         a11yHintText: t('directDeposit.addBankAccountInformationHint'),
-        onPress: navigateTo('EditDirectDeposit', { displayTitle: bankData ? t('directDeposit.edit.title') : t('directDeposit.add.title') }),
+        onPress: () => {
+          navigateTo('EditDirectDeposit', { displayTitle: bankData ? t('directDeposit.edit.title') : t('directDeposit.add.title') })
+        },
         decoratorProps: { accessibilityRole: 'button' },
       },
     ]

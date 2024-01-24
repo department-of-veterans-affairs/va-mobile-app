@@ -1,43 +1,39 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 import { Pressable } from 'react-native'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode } from 'react'
+import React from 'react'
 
 import { AttachmentLink, Box, CollapsibleView, LoadingComponent, TextView } from 'components'
 import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
-import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { RootState } from 'store'
 import { SecureMessagingState, downloadFileAttachment } from 'store/slices'
-import { StackNavigationProp } from '@react-navigation/stack'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
-import { formatSubject } from 'utils/secureMessaging'
+import { formatSubject, getLinkifiedText } from 'utils/secureMessaging'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useTheme } from 'utils/hooks'
-import { useNavigation } from '@react-navigation/native'
-import ReplyMessageButton from '../ReplyMessageButton/ReplyMessageButton'
-import StartNewMessageButton from '../StartNewMessageButton/StartNewMessageButton'
+import { useAppDispatch, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type MessageCardProps = {
   /* message object */
   message: SecureMessagingMessageAttributes
 }
 
-const MessageCard: FC<MessageCardProps> = ({ message }) => {
+function MessageCard({ message }: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
   const { hasAttachments, attachment, attachments, senderName, sentDate, body, messageId, subject, category } = message
   const dateTime = getFormattedDateAndTimeZone(sentDate)
-  const navigation = useNavigation<StackNavigationProp<HealthStackParamList, keyof HealthStackParamList>>()
   const dispatch = useAppDispatch()
   const { loadingAttachments } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
-
+  const navigateTo = useRouteNavigation()
+  const launchLink = useExternalLink()
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const replyExpired = demoMode && message.messageId === 2092809 ? false : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
@@ -45,7 +41,7 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
     dispatch(downloadFileAttachment(file, key))
   }
 
-  const getHeader = (): ReactNode => {
+  function getHeader() {
     return (
       <Box flexDirection={'column'}>
         <TextView variant="MobileBodyBold" accessibilityRole={'header'} mt={theme.dimensions.standardMarginBetween}>
@@ -63,17 +59,15 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
     )
   }
 
-  const getContent = (): ReactNode => {
-    return (
-      <Box>
-        <TextView variant="MobileBody" selectable={true} paragraphSpacing={true}>
-          {body}
-        </TextView>
-      </Box>
-    )
+  function getContent() {
+    /** this does preserve newline characters just not spaces, TODO:change the mobile body link text views to be clickable and launch the right things */
+    if (body) {
+      return getLinkifiedText(body, t, launchLink)
+    }
+    return <></>
   }
 
-  const getAttachment = (): ReactNode => {
+  function getAttachment() {
     if (loadingAttachments && !attachments?.length) {
       return (
         <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
@@ -107,10 +101,10 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
 
   const navigateToReplyHelp = () => {
     logAnalyticsEvent(Events.vama_sm_nonurgent())
-    navigation.navigate('ReplyHelp')
+    navigateTo('ReplyHelp')
   }
 
-  const getMessageHelp = (): ReactNode => {
+  function getMessageHelp() {
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
         <Pressable onPress={navigateToReplyHelp} accessibilityRole={'button'} accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')} importantForAccessibility={'yes'}>
@@ -122,8 +116,27 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
     )
   }
 
-  const getReplyOrStartNewMessageButton = (): ReactNode => {
-    return <Box mb={theme.dimensions.standardMarginBetween}>{!replyExpired ? <ReplyMessageButton messageID={messageId} /> : <StartNewMessageButton />}</Box>
+  const onStartMessagePress = () => {
+    logAnalyticsEvent(Events.vama_sm_start())
+    navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  }
+
+  const onReplyPress = () => navigateTo('ReplyMessage', { messageID: messageId, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+
+  function getReplyOrStartNewMessageButton() {
+    return (
+      <Box mb={theme.dimensions.standardMarginBetween}>
+        {!replyExpired ? (
+          <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+            <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
+          </Box>
+        ) : (
+          <Box mx={theme.dimensions.buttonPadding}>
+            <Button label={t('secureMessaging.startNewMessage')} onPress={onStartMessagePress} testID={'startNewMessageButtonTestID'} />
+          </Box>
+        )}
+      </Box>
+    )
   }
 
   return (

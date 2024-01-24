@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement } from 'react'
+import React from 'react'
 
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView, TextViewProps } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -14,14 +14,14 @@ const { WEBVIEW_URL_CHANGE_LEGAL_NAME, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type HowDoIUpdateScreenProps = StackScreenProps<HomeStackParamList, 'HowDoIUpdate'>
 
-const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
+function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { screenType } = route.params
 
   const linkProps: TextViewProps = {
-    onPress: navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('webview.vagov'), loadingMessage: t('webview.valocation.loading') }),
+    onPress: () => navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('webview.vagov'), loadingMessage: t('webview.valocation.loading') }),
     variant: 'MobileBody',
     color: 'link',
     textDecoration: 'underline',
@@ -33,7 +33,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
   }
 
   const linkNameProps: TextViewProps = {
-    onPress: navigateTo('Webview', { url: WEBVIEW_URL_CHANGE_LEGAL_NAME, displayTitle: t('webview.vagov'), loadingMessage: t('webview.changeLegalName.loading') }),
+    onPress: () => navigateTo('Webview', { url: WEBVIEW_URL_CHANGE_LEGAL_NAME, displayTitle: t('webview.vagov'), loadingMessage: t('webview.changeLegalName.loading') }),
     variant: 'MobileBody',
     color: 'link',
     textDecoration: 'underline',
@@ -43,7 +43,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
     paragraphSpacing: true,
   }
 
-  const renderUI = (): ReactElement => {
+  function renderUI() {
     if (screenType === 'name') {
       return nameUpdateScreen()
     } else if (screenType === 'DOB') {
@@ -53,7 +53,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
     }
   }
 
-  const renderVAMedicalCenterSection = (): ReactElement => {
+  function renderVAMedicalCenterSection() {
     return (
       <Box>
         <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('howDoIUpdate.ifEnrolledInVAHealth'))} paragraphSpacing={true}>
@@ -68,7 +68,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
     )
   }
 
-  const nameUpdateScreen = (): ReactElement => {
+  function nameUpdateScreen() {
     return (
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -86,7 +86,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
     )
   }
 
-  const dateOfBirthUpdateScreen = (): ReactElement => {
+  function dateOfBirthUpdateScreen() {
     return (
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -101,7 +101,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ route }) => {
   }
 
   return (
-    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
+    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')} testID="PersonalInformationTestID">
       {renderUI()}
     </LargePanel>
   )

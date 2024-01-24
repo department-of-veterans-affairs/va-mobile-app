@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -19,7 +19,7 @@ export type PrescriptionListItemProps = {
 }
 
 /** common component to show the prescription info on a list  */
-const PrescriptionListItem: FC<PrescriptionListItemProps> = ({ prescription, hideInstructions, includeRefillTag }) => {
+function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag }: PrescriptionListItemProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import {
   Box,
@@ -27,13 +27,14 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { capitalizeFirstLetter, displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 import getEnv from 'utils/env'
 
-const DisabilityRatingsScreen: FC = () => {
+function DisabilityRatingsScreen() {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -49,7 +50,7 @@ const DisabilityRatingsScreen: FC = () => {
 
   useEffect(() => {
     // Get the disability rating data if not loaded already
-    if (needsDataLoad && drNotInDowntime) {
+    if (screenContentAllowed('WG_DisabilityRatings') && needsDataLoad && drNotInDowntime) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
   }, [dispatch, needsDataLoad, drNotInDowntime])
@@ -167,30 +168,6 @@ const DisabilityRatingsScreen: FC = () => {
     )
   }
 
-  if (useError(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID)) {
-    return (
-      <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
-      </ChildTemplate>
-    )
-  }
-
-  if (loading) {
-    return (
-      <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
-        <LoadingComponent text={t('disabilityRating.loading')} />
-      </ChildTemplate>
-    )
-  }
-
-  if (individualRatingsList.length === 0) {
-    return (
-      <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')}>
-        <NoDisabilityRatings />
-      </ChildTemplate>
-    )
-  }
-
   const clickToCallProps: LinkButtonProps = {
     displayedText: t('disabilityRating.learnAboutLinkTitle'),
     linkType: LinkTypeOptionsConstants.url,
@@ -208,14 +185,26 @@ const DisabilityRatingsScreen: FC = () => {
     accessibilityRole: 'header',
   }
 
+  const errorCheck = useError(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID)
+
   return (
     <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')} testID="disabilityRatingTestID">
-      <Box>{getCombinedTotalSection()}</Box>
-      <Box mb={condensedMarginBetween}>
-        <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
-      </Box>
-      <Box mb={condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
-      <Box mb={contentMarginBottom}>{getNeedHelpSection()}</Box>
+      {errorCheck ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
+      ) : loading ? (
+        <LoadingComponent text={t('disabilityRating.loading')} />
+      ) : individualRatingsList.length === 0 ? (
+        <NoDisabilityRatings />
+      ) : (
+        <>
+          <Box>{getCombinedTotalSection()}</Box>
+          <Box mb={condensedMarginBetween}>
+            <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
+          </Box>
+          <Box mb={condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
+          <Box mb={contentMarginBottom}>{getNeedHelpSection()}</Box>
+        </>
+      )}
     </ChildTemplate>
   )
 }

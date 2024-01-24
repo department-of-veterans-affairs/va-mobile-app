@@ -1,13 +1,13 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import {
   AlertBox,
   Box,
-  ButtonTypesConstants,
   CollapsibleView,
   ErrorComponent,
   FieldType,
@@ -19,7 +19,6 @@ import {
   PickerItem,
   TextArea,
   TextView,
-  VAButton,
 } from 'components'
 import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
@@ -48,16 +47,18 @@ import { SubjectLengthValidationFn, formatSubject, getStartNewMessageCategoryPic
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
-import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
+import { useAppDispatch, useAttachments, useBeforeNavBackListener, useDestructiveActionSheet, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
-const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
+function EditDraft({ navigation, route }: EditDraftProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const goToDrafts = useGoToDrafts()
+  const navigateTo = useRouteNavigation()
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.deleteDraft.snackBarMessage'),
     errorMsg: t('secureMessaging.deleteDraft.snackBarErrorMessage'),
@@ -117,17 +118,19 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
   useEffect(() => {
-    dispatch(resetSaveDraftFailed())
-    dispatch(dispatchResetDeleteDraftFailed())
+    if (screenContentAllowed('WG_EditDraft')) {
+      dispatch(resetSaveDraftFailed())
+      dispatch(dispatchResetDeleteDraftFailed())
 
-    if (messageID) {
-      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID, true))
-      dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      if (messageID) {
+        dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID, true))
+        dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      }
+      dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      InteractionManager.runAfterInteractions(() => {
+        setIsTransitionComplete(true)
+      })
     }
-    dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-    InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(true)
-    })
   }, [messageID, dispatch])
 
   useEffect(() => {
@@ -138,13 +141,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const goToDraftFolder = useCallback(
     (draftSaved: boolean): void => {
-      navigation.navigate('FolderMessages', {
+      navigateTo('FolderMessages', {
         folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
         folderName: FolderNameTypeConstants.drafts,
         draftSaved,
       })
     },
-    [navigation],
+    [navigateTo],
   )
 
   useEffect(() => {
@@ -159,14 +162,14 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
-      navigation.navigate('SecureMessaging')
-      navigation.navigate('FolderMessages', {
+      navigateTo('SecureMessaging')
+      navigateTo('FolderMessages', {
         folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
         folderName: FolderNameTypeConstants.drafts,
         draftSaved: false,
       })
     }
-  }, [sendMessageComplete, dispatch, navigation])
+  }, [sendMessageComplete, dispatch, navigateTo])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
@@ -333,7 +336,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
-    navigation.navigate('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
+    navigateTo('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
   }
 
   let formFieldsList: Array<FormFieldType<unknown>> = []
@@ -394,13 +397,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         removeOnPress: removeAttachment,
-        largeButtonProps:
-          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
-            ? {
-                label: t('secureMessaging.formMessage.addFiles'),
-                onPress: onAddFiles,
-              }
-            : undefined,
+        buttonLabel: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? t('secureMessaging.formMessage.addFiles') : undefined,
+        buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
       },
     },
@@ -422,7 +420,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
     dispatch(updateSecureMessagingTab(SegmentedControlIndexes.INBOX))
-    navigation.navigate('SecureMessaging')
+    navigateTo('SecureMessaging')
   }
 
   const onMessageSendOrSave = (): void => {
@@ -437,7 +435,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     }
   }
 
-  const renderForm = (): ReactNode => {
+  function renderForm() {
     if (noProviderError) {
       return (
         <AlertBox
@@ -447,7 +445,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           border="error"
           scrollViewRef={scrollViewRef}>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <Button label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
           </Box>
         </AlertBox>
       )
@@ -455,7 +453,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
     const navigateToReplyHelp = () => {
       logAnalyticsEvent(Events.vama_sm_nonurgent())
-      navigation.navigate('ReplyHelp')
+      navigateTo('ReplyHelp')
     }
 
     return (
@@ -506,13 +504,12 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
             </Pressable>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
+            <Button
               label={t('secureMessaging.formMessage.send')}
               onPress={() => {
                 setOnSendClicked(true)
                 setOnSaveDraftClicked(false)
               }}
-              buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>
         </TextArea>
@@ -520,7 +517,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     )
   }
 
-  const renderMessageThread = (): ReactNode => {
+  function renderMessageThread() {
     let messageThread = thread || []
 
     // If we're editing a reply draft, don't display the draft message in the thread

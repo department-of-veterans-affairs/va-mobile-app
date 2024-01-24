@@ -1,5 +1,5 @@
 import { BooleanOptions, ChildrenOptions, OnPressOptions, VABorderColorOptions, VAColorsOptions, VATextAndButtonColorOptions, objectToPickerOptions } from './PickerOptions'
-import { ButtonTypesConstants, LabelTagTypeConstants, LinkTypeOptionsConstants, LinkUrlIconType } from 'components'
+import { LabelTagTypeConstants, LinkTypeOptionsConstants, LinkUrlIconType } from 'components'
 import { getTheme } from 'styles/themes/standardTheme'
 
 const standardTheme = getTheme()
@@ -20,14 +20,6 @@ export type CommonComponentWhiteListProps = {
 }
 
 const CommonComponentWhiteList: CommonComponentWhiteListProps = {
-  VAButton: {
-    defaultProps: {
-      onPress: OnPressOptions.DEFAULT,
-      label: 'Label',
-      buttonType: ButtonTypesConstants.buttonPrimary,
-    },
-    propOptions: ['label', { label: 'buttonType', options: objectToPickerOptions(ButtonTypesConstants) }],
-  },
   AlertBox: {
     defaultProps: {
       border: standardTheme.colors.border.primary,

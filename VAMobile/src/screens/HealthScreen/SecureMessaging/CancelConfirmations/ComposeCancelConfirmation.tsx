@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
 import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
@@ -14,7 +13,7 @@ import {
   saveDraft,
   updateSecureMessagingTab,
 } from 'store/slices'
-import { useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
 import { useState } from 'react'
 
 type ComposeCancelConfirmationProps = {
@@ -32,7 +31,7 @@ type ComposeCancelConfirmationProps = {
 
 export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCancelConfirmation: (props: ComposeCancelConfirmationProps) => void] {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const confirmationAlert = useDestructiveActionSheet()
   const goToDrafts = useGoToDrafts()
@@ -59,7 +58,7 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
 
       const onSaveDraft = (): void => {
         if (!isFormValid) {
-          navigateTo('StartNewMessage', { saveDraftConfirmFailed: true })()
+          navigateTo('StartNewMessage', { saveDraftConfirmFailed: true })
         } else {
           dispatch(saveDraft(messageData, snackbarMessages, draftMessageID, !!replyToID, replyToID, true))
           dispatch(updateSecureMessagingTab(SegmentedControlIndexes.FOLDERS))
@@ -71,11 +70,11 @@ export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCa
         resetAlerts()
         if (isReply && replyToID) {
           dispatch(resetReplyTriageError())
-          navigateTo('ViewMessageScreen', { messageID: replyToID })()
+          navigateTo('ViewMessage', { messageID: replyToID })
         } else if (isEditDraft) {
           goToDrafts(false)
         } else {
-          navigateTo('SecureMessaging')()
+          navigateTo('SecureMessaging')
         }
       }
 
@@ -114,6 +113,6 @@ export function useGoToDrafts(): (draftSaved: boolean) => void {
       folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
       folderName: FolderNameTypeConstants.drafts,
       draftSaved,
-    })()
+    })
   }
 }

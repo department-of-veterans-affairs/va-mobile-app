@@ -14,7 +14,7 @@ import { enableScreens } from 'react-native-screens'
 import { useTranslation } from 'react-i18next'
 import { utils } from '@react-native-firebase/app'
 import KeyboardManager from 'react-native-keyboard-manager'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Toast from 'react-native-toast-notifications'
 import ToastContainer from 'react-native-toast-notifications'
 import analytics from '@react-native-firebase/analytics'
@@ -63,7 +63,7 @@ const { ENVIRONMENT, IS_TEST } = getEnv()
 enableScreens(true)
 injectStore(store)
 
-const Stack = createStackNavigator()
+const Stack = createStackNavigator<StackNavParamList>()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
 const RootNavStack = createStackNavigator<RootNavStackParamList>()
 
@@ -83,6 +83,15 @@ export type RootNavStackParamList = WebviewStackParams & {
   Tabs: undefined
 }
 
+type StackNavParamList = WebviewStackParams & {
+  Splash: undefined
+  BiometricsPreference: undefined
+  Sync: undefined
+  Login: undefined
+  LoaGate: undefined
+  VeteransCrisisLine: undefined
+}
+
 type RootTabNavParamList = {
   HomeTab: undefined
   HealthTab: undefined
@@ -94,7 +103,7 @@ type RootTabNavParamList = {
   background-color: ${theme.colors.icon.active};
 `
 
-const MainApp: FC = () => {
+function MainApp() {
   const navigationRef = useNavigationContainerRef()
   const routeNameRef = useRef('')
 
@@ -152,7 +161,7 @@ const MainApp: FC = () => {
   )
 }
 
-export const AuthGuard: FC = () => {
+export function AuthGuard() {
   const dispatch = useAppDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>((state) => state.auth)
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>((state) => state.settings)
@@ -234,6 +243,36 @@ export const AuthGuard: FC = () => {
     }
   }, [dispatch])
 
+  useEffect(() => {
+    // Log campaign analytics if the app is launched by a campaign link
+    const logCampaignAnalytics = async () => {
+      const initialUrl = await Linking.getInitialURL()
+
+      if (initialUrl) {
+        const urlParts = decodeURIComponent(initialUrl).split('?')
+        const queryString = urlParts[1]
+        const queryParts = queryString?.split('&') || []
+
+        const queryParams = queryParts.reduce((params, queryPart) => {
+          const [key, value] = queryPart.split('=')
+          params[key] = value
+          return params
+        }, {} as { [key: string]: string | undefined })
+
+        if (queryParams.utm_campaign || queryParams.utm_medium || queryParams.utm_source || queryParams.utm_term) {
+          await analytics().logCampaignDetails({
+            campaign: queryParams.utm_campaign || '',
+            medium: queryParams.utm_medium || '',
+            source: queryParams.utm_source || '',
+            term: queryParams.utm_term,
+          })
+        }
+      }
+    }
+
+    logCampaignAnalytics()
+  }, [])
+
   let content
   if (initializing || loadingRemoteConfig) {
     content = (
@@ -276,7 +315,7 @@ export const AuthGuard: FC = () => {
   return content
 }
 
-export const AppTabs: FC = () => {
+export function AppTabs() {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (
@@ -291,7 +330,7 @@ export const AppTabs: FC = () => {
   )
 }
 
-export const AuthedApp: FC = () => {
+export function AuthedApp() {
   const headerStyles = useHeaderStyles()
   const { initialUrl } = useSelector<RootState, NotificationsState>((state) => state.notifications)
 

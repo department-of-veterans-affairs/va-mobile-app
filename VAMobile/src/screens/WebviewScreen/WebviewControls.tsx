@@ -1,6 +1,6 @@
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, BoxProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -33,7 +33,7 @@ export type WebviewControlsProps = {
 /**
  * Controls for back, forward, and open in browser used in the Webview screen
  */
-const WebviewControls: FC<WebviewControlsProps> = (props) => {
+function WebviewControls(props: WebviewControlsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

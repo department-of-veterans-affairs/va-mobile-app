@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -9,8 +9,8 @@
 
 #import "SKEnvironmentVariables.h"
 
-static int const DEFAULT_INSECURE_PORT = 8089;
-static int const DEFAULT_SECURE_PORT = 8088;
+static int const DEFAULT_INSECURE_PORT = 9089;
+static int const DEFAULT_SECURE_PORT = 9088;
 
 static int const DEFAULT_ALT_INSECURE_PORT = 9089;
 static int const DEFAULT_ALT_SECURE_PORT = 9088;

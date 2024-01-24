@@ -1,10 +1,11 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useRef, useState } from 'react'
+import React, { ReactNode, useRef, useState } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
@@ -22,7 +23,7 @@ const { LINK_URL_GO_TO_VA_GOV } = getEnv()
 
 type TakePhotosProps = StackScreenProps<BenefitsStackParamList, 'TakePhotos'>
 
-const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
+function TakePhotos({ navigation, route }: TakePhotosProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -43,7 +44,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
       setError(t('fileUpload.tooManyPhotosError'))
     } else {
-      navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })()
+      navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })
     }
   }
 
@@ -108,11 +109,10 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
       </TextArea>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <VAButton
+        <Button
           onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, 0, claimID, request, setIsActionSheetVisible)}
           label={t('fileUpload.takeOrSelectPhotos')}
           testID={t('fileUpload.takePhotos')}
-          buttonType={ButtonTypesConstants.buttonPrimary}
         />
       </Box>
     </FullScreenSubtask>

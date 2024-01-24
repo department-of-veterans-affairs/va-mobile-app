@@ -1,5 +1,6 @@
 import { by, device, element, expect } from 'detox'
-import { checkIfElementIsPresent, loginToDemoMode, openBenefits, openLetters, resetInAppReview } from './utils'
+import { checkIfElementIsPresent, loginToDemoMode, openBenefits, openContactInfo, openLetters, openProfile, resetInAppReview } from './utils'
+import { setTimeout } from "timers/promises"
 
 export const LettersConstants = {
   MAILING_ADDRESS: '3101 N Fort Valley Rd',
@@ -55,10 +56,33 @@ describe('VA Letters', () => {
   it('should tap address and open edit screen', async () => {
     await element(by.text(LettersConstants.MAILING_ADDRESS)).tap()
 
-    await expect(element(by.text('Save'))).toExist()
+    await element(by.id('streetAddressLine2TestID')).typeText('2')
+    await element(by.id('streetAddressLine2TestID')).tapReturnKey()
+    
+    await element(by.text('Save')).tap()
+    await element(by.id('suggestedAddressTestID')).tap()
+    await element(by.id('Use this address')).tap()
 
-    await element(by.text('Cancel')).tap()
     await expect(element(by.text(LettersConstants.DOWNLOAD_DOCUMENTS_TEXT))).toExist()
+  
+  })
+
+  it('should verify address change is reflected in contact info', async () => {
+    await element(by.text('Home')).tap()
+    await openProfile()
+    await openContactInfo()
+    await expect(element(by.text('3101 N Fort Valley Rd, 2'))).toExist()
+  })
+
+  it('should navigate back to letters and reset mailing address', async() => {
+    await openBenefits()
+    await element(by.text('3101 N Fort Valley Rd, 2')).tap()
+
+    await element(by.id('streetAddressLine2TestID')).clearText()
+    await element(by.text('Save')).tap()
+    await element(by.id('suggestedAddressTestID')).tap()
+    await element(by.id('Use this address')).tap()
+    await expect(element(by.text(LettersConstants.MAILING_ADDRESS))).toExist()
   })
 
   it('should view letter types', async () => {
@@ -73,7 +97,7 @@ describe('VA Letters', () => {
     it(`should view ${letterType.name}`, async () => {
 
       // need in-app reset in iOS before checking proof of service card to avoid false fail
-      if(device.getPlatform() === 'ios' && letterType.name == 'Proof of service card') {
+      if(device.getPlatform() === 'ios' && letterType.name == 'Proof of minimum essential coverage letter') {
         await resetInAppReview()
         await openBenefits()
         await openLetters()
@@ -89,6 +113,11 @@ describe('VA Letters', () => {
 
         if (isBenefitSummaryLetter) {
           await element(by.id('BenefitSummaryServiceVerificationTestID')).scrollTo('bottom');
+          await element(by.text('Go to Ask VA')).tap()
+          await element(by.text('Ok')).tap()
+          await setTimeout(2000)
+          await device.takeScreenshot('benefitSummaryLetterAskVAWebpage')
+          await device.launchApp({newInstance: false})
         }
   
         await element(by.text('Review letter')).tap()

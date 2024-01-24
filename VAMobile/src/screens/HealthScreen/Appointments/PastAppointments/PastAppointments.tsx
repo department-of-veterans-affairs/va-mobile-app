@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import _ from 'underscore'
 
 import { AppointmentsList } from 'store/api/types'
@@ -20,7 +20,7 @@ import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = Record<string, unknown>
 
-const PastAppointments: FC<PastAppointmentsProps> = () => {
+function PastAppointments({}: PastAppointmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -123,7 +123,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   // This ensures we have the data before we update the currentPage and the UI.
   const { currentPage, perPage, totalEntries } = paginationByTimeFrame[timeFrame]
   const onPastAppointmentPress = (appointmentID: string): void => {
-    navigateTo('PastAppointmentDetails', { appointmentID })()
+    navigateTo('PastAppointmentDetails', { appointmentID })
   }
 
   const listWithAppointmentsAdded = (listItems: Array<DefaultListItemObj>, listOfAppointments: AppointmentsList): Array<DefaultListItemObj> => {
@@ -147,7 +147,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     return listItems
   }
 
-  const getAppointmentsPastThreeMonths = (): ReactNode => {
+  function getAppointmentsPastThreeMonths() {
     if (!currentPagePastAppointmentsByYear) {
       return <></>
     }
@@ -168,15 +168,11 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   const getAppointmentsInSelectedRange = (curSelectedRange: PastAppointmentsDatePickerOption, selectedPage: number): void => {
-    dispatch(
-      getAppointmentsInDateRange(
-        curSelectedRange.dates.startDate.startOf('day').toISO(),
-        curSelectedRange.dates.endDate.endOf('day').toISO(),
-        curSelectedRange.timeFrame,
-        selectedPage,
-        ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID,
-      ),
-    )
+    const startDate = curSelectedRange.dates.startDate.startOf('day').toISO()
+    const endDate = curSelectedRange.dates.endDate.endOf('day').toISO()
+    if (startDate && endDate) {
+      dispatch(getAppointmentsInDateRange(startDate, endDate, curSelectedRange.timeFrame, selectedPage, ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID))
+    }
   }
 
   const setValuesOnPickerSelect = (selectValue: string): void => {
@@ -189,7 +185,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   const isPastThreeMonths = datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_THREE_MONTHS
 
-  const getAppointmentData = (): ReactNode => {
+  function getAppointmentData() {
     const appointmentsDoNotExist = !currentPagePastAppointmentsByYear || _.isEmpty(currentPagePastAppointmentsByYear)
 
     if (appointmentsDoNotExist) {

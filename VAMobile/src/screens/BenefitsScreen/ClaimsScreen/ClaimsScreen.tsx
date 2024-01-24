@@ -16,9 +16,13 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
+  const onClaimsHistory = () => {
+    navigateTo('ClaimsHistoryScreen')
+  }
+
   const onClaimLettersPress = () => {
     logAnalyticsEvent(Events.vama_ddl_landing_click())
-    navigateTo('ClaimLettersScreen')()
+    navigateTo('ClaimLettersScreen')
   }
 
   return (
@@ -26,7 +30,7 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('claimsHistory.title')}
-          onPress={navigateTo('ClaimsHistory')}
+          onPress={onClaimsHistory}
           borderWidth={theme.dimensions.buttonBorderWidth}
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}

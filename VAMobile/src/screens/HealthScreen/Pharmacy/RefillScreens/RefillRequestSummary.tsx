@@ -1,7 +1,8 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
-import React, { FC, ReactElement, useEffect, useLayoutEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 
-import { AlertBox, AlertBoxProps, Box, BoxProps, LoadingComponent, TextArea, TextView, VAButton, VAIcon, VAIconProps } from 'components'
+import { AlertBox, AlertBoxProps, Box, BoxProps, LoadingComponent, TextArea, TextView, VAIcon, VAIconProps } from 'components'
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -12,7 +13,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useBeforeNavBackListener, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
@@ -23,11 +24,12 @@ const enum REQUEST_STATUS {
   MIX,
 }
 
-type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
+type RefillRequestSummaryProps = StackScreenProps<HealthStackParamList, 'RefillRequestSummary'>
 
-const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => {
+function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
   const theme = useTheme()
   const dispatch = useAppDispatch()
+  const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [status, setStatus] = useState<REQUEST_STATUS>()
   const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
@@ -36,7 +38,7 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
   const onNavToHistory = () => {
     dispatch(dispatchSetPrescriptionsNeedLoad())
     dispatch(dispatchClearLoadingRequestRefills())
-    navigation.navigate('PrescriptionHistory', {})
+    navigateTo('PrescriptionHistory', {})
   }
 
   useEffect(() => {
@@ -93,14 +95,13 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
         <AlertBox {...alertBoxProps}>
           {status !== REQUEST_STATUS.SUCCESS && (
             <Box mt={theme.dimensions.standardMarginBetween}>
-              <VAButton
+              <Button
                 onPress={() => {
                   dispatch(requestRefills(requestFailed))
                   const prescriptionIds = requestFailed.map((prescription) => prescription.id)
                   logAnalyticsEvent(Events.vama_rx_refill_retry(prescriptionIds))
                 }}
                 label={t('tryAgain')}
-                buttonType="buttonPrimary"
                 a11yHint={t('prescriptions.refillRequestSummary.tryAgain.a11yLabel')}
               />
             </Box>
@@ -185,14 +186,14 @@ const RefillRequestSummary: FC<RefillRequestSummaryProps> = ({ navigation }) => 
             {t('prescriptions.refillRequestSummary.yourRefills.success.2')}
           </TextView>
         </Box>
-        <VAButton
+        <Button
           onPress={() => {
             dispatch(dispatchSetPrescriptionsNeedLoad())
             dispatch(dispatchClearLoadingRequestRefills())
-            navigation.navigate('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })
+            navigateTo('PrescriptionHistory', { startingTab: PrescriptionHistoryTabConstants.PENDING })
           }}
           label={t('prescriptions.refillRequestSummary.pendingRefills')}
-          buttonType="buttonSecondary"
+          buttonType={ButtonVariants.Secondary}
         />
       </Box>
     )

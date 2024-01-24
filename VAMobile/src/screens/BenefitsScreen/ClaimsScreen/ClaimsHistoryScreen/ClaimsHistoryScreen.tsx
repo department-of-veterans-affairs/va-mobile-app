@@ -1,7 +1,7 @@
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -12,27 +12,29 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from '../NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
-type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'Claims'>
+type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'ClaimsHistoryScreen'>
 
-const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
+function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { claimsAndAppealsByClaimType, loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>(
-    (state) => state.claimsAndAppeals,
-  )
+  const { claimsAndAppealsByClaimType, loadingClaimsAndAppeals, finishedLoadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<
+    RootState,
+    ClaimsAndAppealsState
+  >((state) => state.claimsAndAppeals)
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
     isError: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
-  } = useAuthorizedServices()
+  } = useAuthorizedServices({ enabled: screenContentAllowed('WG_ClaimsHistory') })
   const claimsAndAppealsAccess = userAuthorizedServices?.claims || userAuthorizedServices?.appeals
   const controlLabels = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
@@ -54,35 +56,17 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
     }
   }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime, appealsNotInDowntime])
 
+  useEffect(() => {
+    if (finishedLoadingClaimsAndAppeals) {
+      logAnalyticsEvent(Events.vama_claim_count(claimsAndAppealsByClaimType.CLOSED.length, claimsAndAppealsByClaimType.ACTIVE.length))
+    }
+  }, [claimsAndAppealsByClaimType.ACTIVE.length, claimsAndAppealsByClaimType.CLOSED.length, finishedLoadingClaimsAndAppeals])
+
   const fetchInfoAgain = (): void => {
     refetchUserAuthorizedServices()
     if (claimsAndAppealsAccess) {
       dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
     }
-  }
-
-  if (useError(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID) || getUserAuthorizedServicesError) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title}>
-        <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingClaimsAndAppeals || loadingUserAuthorizedServices) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title}>
-        <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (!claimsAndAppealsAccess) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title}>
-        <NoClaimsAndAppealsAccess />
-      </FeatureLandingTemplate>
-    )
   }
 
   const serviceErrorAlert = (): ReactElement => {
@@ -118,27 +102,34 @@ const ClaimsHistoryScreen: FC<IClaimsHistoryScreen> = ({ navigation }) => {
 
   const onTabChange = (tab: number) => {
     if (tab !== selectedTab) {
-      logAnalyticsEvent(Events.vama_claim_count(claimsAndAppealsByClaimType.CLOSED.length, claimsAndAppealsByClaimType.ACTIVE.length, controlLabels[tab]))
       logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
     }
     setSelectedTab(tab)
   }
 
   return (
-    <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title}>
-      <Box flex={1} justifyContent="flex-start" mb={theme.dimensions.contentMarginBottom}>
-        {!claimsAndAppealsServiceErrors && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={accessibilityHints} />
-          </Box>
-        )}
-        {serviceErrorAlert()}
-        {!claimsAndAppealsServiceErrors && (
-          <Box flex={1}>
-            <ClaimsAndAppealsListView claimType={claimType} />
-          </Box>
-        )}
-      </Box>
+    <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={title} testID="claimsHistoryID">
+      {useError(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID) || getUserAuthorizedServicesError ? (
+        <ErrorComponent onTryAgain={fetchInfoAgain} screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
+      ) : loadingClaimsAndAppeals || loadingUserAuthorizedServices ? (
+        <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
+      ) : !claimsAndAppealsAccess ? (
+        <NoClaimsAndAppealsAccess />
+      ) : (
+        <Box flex={1} justifyContent="flex-start" mb={theme.dimensions.contentMarginBottom}>
+          {!claimsAndAppealsServiceErrors && (
+            <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+              <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={accessibilityHints} />
+            </Box>
+          )}
+          {serviceErrorAlert()}
+          {!claimsAndAppealsServiceErrors && (
+            <Box flex={1}>
+              <ClaimsAndAppealsListView claimType={claimType} />
+            </Box>
+          )}
+        </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }

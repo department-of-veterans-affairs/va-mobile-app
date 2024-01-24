@@ -1,8 +1,9 @@
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackActions, useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, Ref } from 'react'
 
-import { Box, ButtonTypesConstants, CrisisLineCta, TextView, TextViewProps, VAButton, VAScrollView } from 'components'
+import { Box, CrisisLineCta, TextView, TextViewProps, VAScrollView, WaygateWrapper } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScrollView, View, ViewStyle } from 'react-native'
@@ -174,26 +175,28 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
       <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
-        {showCrisisLineCta && <CrisisLineCta onPress={navigateTo('VeteransCrisisLine')} />}
+        {showCrisisLineCta && <CrisisLineCta onPress={() => navigateTo('VeteransCrisisLine')} />}
         {title && (
           <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
             <TextView {...titleTextProps}>{title}</TextView>
           </Box>
         )}
-        {children}
+        <WaygateWrapper>{children}</WaygateWrapper>
       </VAScrollView>
-      {primaryContentButtonText && onPrimaryContentButtonPress && (
-        <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
-          {secondaryContentButtonText && onSecondaryContentButtonPress && (
-            <Box ml={theme.dimensions.gutter} flex={1}>
-              <VAButton onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonTypesConstants.buttonSecondary} />
+      <WaygateWrapper bypassAlertBox={true}>
+        {primaryContentButtonText && onPrimaryContentButtonPress && (
+          <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+            {secondaryContentButtonText && onSecondaryContentButtonPress && (
+              <Box ml={theme.dimensions.gutter} flex={1}>
+                <Button onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonVariants.Secondary} />
+              </Box>
+            )}
+            <Box ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter} mr={theme.dimensions.gutter} flex={1}>
+              <Button onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} testID={primaryButtonTestID} />
             </Box>
-          )}
-          <Box ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter} mr={theme.dimensions.gutter} flex={1}>
-            <VAButton onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} buttonType={ButtonTypesConstants.buttonPrimary} testID={primaryButtonTestID} />
           </Box>
-        </Box>
-      )}
+        )}
+      </WaygateWrapper>
     </View>
   )
 }

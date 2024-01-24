@@ -1,6 +1,7 @@
 import { device, element, by, expect, waitFor, web } from 'detox'
 import getEnv from '../../src/utils/env'
 import { expect as jestExpect } from '@jest/globals'
+import { setTimeout } from 'timers/promises'
 
 const { toMatchImageSnapshot } = require('jest-image-snapshot')
 const fs = require('fs')
@@ -41,6 +42,7 @@ export const CommonE2eIdConstants = {
   CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
   DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
+  OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
 }
 
 
@@ -59,7 +61,8 @@ export async function loginToDemoMode(skipOnboarding = true) {
   if (DEMO_PASSWORD !== undefined) {
     await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).replaceText(DEMO_PASSWORD)
   }
-  
+
+  await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).tapReturnKey()
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
   await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
@@ -211,6 +214,7 @@ export async function openProfile() {
 }
 
 export async function openSettings() {
+  await waitFor(element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT))).toBeVisible().whileElement(by.id('profileID')).scroll(50, 'down')
   await element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT)).tap() 
 }
 
@@ -292,3 +296,111 @@ export async function backButton() {
 	await element(by.traits(['button'])).atIndex(0).tap();
   }
 }
+
+export async function enableAF (AFFeature, AFUseCase, AFAppUpdate = false) {
+  if(AFUseCase !== 'AllowFunction') {
+    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    await loginToDemoMode()
+    await openProfile()
+    await openSettings()
+    await openDeveloperScreen()
+    await element(by.text('Remote Config')).tap()
+  }
+  await waitFor(element(by.text(AFFeature))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(500, 'down')
+  await element(by.text(AFFeature)).tap()
+  if (AFAppUpdate) {
+    await element(by.text('appUpdateButton')).tap()
+  } else if (AFFeature === 'WG_Health') {
+    await element(by.text('Enabled')).tap()
+  }
+
+  if(!AFAppUpdate) {
+    if (AFUseCase === 'AllowFunction') {
+      await element(by.text('Enabled')).tap()
+    } else if (AFUseCase === 'DenyAccess') {
+      await element(by.text('Enabled')).tap()
+    }
+  }
+  await element(by.id('AFTypeTestID')).replaceText(AFUseCase)
+  await element(by.id('AFTypeTestID')).tapReturnKey()
+  await element(by.id('AFErrorMsgTitleTestID')).replaceText('AF Heading Test')
+  await element(by.id('AFErrorMsgTitleTestID')).tapReturnKey()
+  await element(by.id('AFErrorMsgBodyTestID')).replaceText('AF Body Test')
+  await element(by.id('AFErrorMsgBodyTestID')).tapReturnKey()
+
+  await element(by.text('Save')).tap()
+  if(AFUseCase !== 'AllowFunction') {
+    await device.launchApp({newInstance: true})
+    if (AFFeature !== 'WG_Login' && AFFeature !== 'WG_VeteransCrisisLine') {
+      await loginToDemoMode()
+    }
+  }
+}
+
+export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFUseCaseName) {
+  if(AFUseCaseName === 'AllowFunction') {
+    await element(by.id('Home')).tap()
+  } else {
+    await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    await loginToDemoMode()
+  }
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await element(by.text('Remote Config')).tap()
+  await waitFor(element(by.text(AFFeature))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(600, 'down')
+  await element(by.text(AFFeature)).tap()
+  await element(by.text('Enabled')).tap()
+  await element(by.text('Save')).tap()
+  await device.launchApp({newInstance: true})
+  await loginToDemoMode()
+  if (featureNavigationArray !== undefined) {
+    await navigateToFeature(featureNavigationArray)
+    await expect(element(by.text(AFFeatureName)).atIndex(0)).toExist()
+    await expect(element(by.text('AF Heading Test'))).not.toExist()
+    await expect(element(by.text('AF Body Test'))).not.toExist()
+  }
+}
+
+const navigateToFeature = async (featureNavigationArray) => {
+  for(let j = 2; j < featureNavigationArray.length; j++) {
+    await element(by.text(featureNavigationArray[j])).tap()
+  }
+}
+
+export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgrade = false) {
+  let featureName
+  if(AFUseCase !== 'AllowFunction') {
+    featureName = featureNavigationArray[featureNavigationArray.length-1]
+    await navigateToFeature(featureNavigationArray)
+  }
+  await expect(element(by.text('AF Heading Test'))).toExist()
+  await expect(element(by.text('AF Body Test'))).toExist()
+  if(AFUseCase === 'DenyAccess') {
+    await element(by.text('OK')).tap()
+  } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
+    if (device.getPlatform() === 'android') {
+      await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
+      await setTimeout(5000)
+      await device.takeScreenshot(featureName + 'AFUseCase2PhoneNumber')
+      await device.launchApp({newInstance: false})
+      await element(by.text('TTY: 711').withAncestor(by.id('AFUseCase2TestID'))).tap()
+      await setTimeout(5000)
+      await device.takeScreenshot(featureName + 'AFUseCase2TTY')
+      await device.launchApp({newInstance: false})
+    }
+    await element(by.id('AFUseCase2TestID')).takeScreenshot('AFUseCase2Full')
+    if (AFUseCaseUpgrade) {
+      await expect(element(by.text('Update now'))).toExist()
+    } else {
+      await expect(element(by.text('Update now'))).not.toExist()
+    }
+  }
+
+  if (AFUseCase !== 'AllowFunction') {
+    if(AFUseCase === 'DenyContent' && AFUseCaseUpgrade) { 
+      await disableAF(featureNavigationArray, featureNavigationArray[1], featureName, AFUseCase)
+    }
+  }
+}
+

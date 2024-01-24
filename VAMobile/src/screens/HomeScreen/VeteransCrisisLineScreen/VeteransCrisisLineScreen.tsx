@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -17,7 +17,7 @@ const { LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
  *
  * Returns VeteransCrisisLineScreen component
  */
-const VeteransCrisisLineScreen: FC = () => {
+function VeteransCrisisLineScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
@@ -43,9 +43,7 @@ const VeteransCrisisLineScreen: FC = () => {
             {t('veteransCrisisLine.connectWithResponders')}
           </TextView>
         </Box>
-
         <VeteransCrisisLineNumbers />
-
         <Box mt={standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('veteransCrisisLine.getMoreResources')}

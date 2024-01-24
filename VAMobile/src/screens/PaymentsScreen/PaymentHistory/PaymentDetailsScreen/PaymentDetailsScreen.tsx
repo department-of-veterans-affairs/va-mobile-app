@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { Box, FeatureLandingTemplate, TextArea, TextView, TextViewProps } from 'components'
 import { DIRECT_DEPOSIT } from 'constants/common'
@@ -17,7 +17,7 @@ import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type PaymentDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentDetails'>
 
-const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ navigation, route }) => {
+function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) {
   const { paymentID } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -95,7 +95,9 @@ const PaymentDetailsScreen: FC<PaymentDetailsScreenProps> = ({ navigation, route
         </TextArea>
         <Box mx={gutter} mt={contentMarginTop}>
           <Pressable
-            onPress={navigateTo('PaymentIssue')}
+            onPress={() => {
+              navigateTo('PaymentIssue')
+            }}
             {...testIdProps(t('payments.ifMyPaymentDoesNotLookRight'))}
             testID="paymentInfoIncorrectTestID"
             accessibilityRole="link"

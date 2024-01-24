@@ -1,4 +1,4 @@
-import { expect, device, by, element} from 'detox'
+import { expect, device, by, element, waitFor} from 'detox'
 import {loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
 import { setTimeout } from 'timers/promises'
 import { DateTime } from 'luxon'
@@ -16,7 +16,6 @@ export const AppealsIdConstants = {
   APPEAL_VISIT_VA_TEXT: 'Visit VA.gov',
   APPEAL_UP_TO_DATE_ID: 'appealsUpToDateTestID',
 }
-
 export async function getDateWithTimeZone(dateString: string) {
   var date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', {zone: 'America/Chicago'})
   var dateUTC = date.toLocal()
@@ -34,6 +33,7 @@ beforeAll(async () => {
 
 describe('Appeals', () => {
   it('should match the appeals page design', async () => {
+    await waitFor(element(by.id(AppealsIdConstants.APPEAL_1_ID))).toBeVisible().whileElement(by.id('claimsHistoryID')).scroll(300, 'down')
     await element(by.id(AppealsIdConstants.APPEAL_1_ID)).tap()
     await expect(element(by.text(AppealsIdConstants.APPEAL_TYPE_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_DETAILS_TEXT))).toExist()

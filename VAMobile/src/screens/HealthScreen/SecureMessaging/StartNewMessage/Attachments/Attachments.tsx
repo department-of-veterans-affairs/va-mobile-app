@@ -1,7 +1,7 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components'
 
@@ -29,7 +29,7 @@ const StyledImage = styled(Image)<ImageMaxWidthAndHeight>`
 
 type AttachmentsProps = StackScreenProps<HealthStackParamList, 'Attachments'>
 
-const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
+function Attachments({ navigation, route }: AttachmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
   const theme = useTheme()
@@ -128,15 +128,15 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const onAttach = (): void => {
     const attachmentFileToAdd = _.isEmpty(file) ? image : file
     if (origin === FormHeaderTypeConstants.compose) {
-      navigateTo('StartNewMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
+      navigateTo('StartNewMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })
     } else if (origin === FormHeaderTypeConstants.reply) {
-      navigateTo('ReplyMessage', { messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
+      navigateTo('ReplyMessage', { messageID, attachmentFileToAdd, attachmentFileToRemove: {} })
     } else {
-      navigateTo('EditDraft', { messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
+      navigateTo('EditDraft', { messageID, attachmentFileToAdd, attachmentFileToRemove: {} })
     }
   }
 
-  const renderFileDisplay = (fileName: string, fileSize: number): ReactNode => {
+  function renderFileDisplay(fileName: string, fileSize: number) {
     const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, tFunction) : ''
     const formattedFileSizeA11y = fileSize ? bytesToFinalSizeDisplayA11y(fileSize, tFunction) : ''
     const text = [fileName, formattedFileSize].join(' ').trim()

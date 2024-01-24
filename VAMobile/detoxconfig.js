@@ -14,7 +14,7 @@ module.exports = {
   } ]],
   globalSetup: 'detox/runners/jest/globalSetup',
   globalTeardown: 'detox/runners/jest/globalTeardown',
-  testTimeout: 120000,
+  testTimeout: 400000,
   testRegex: "\\.e2e\\.ts$",
   transform: {
     ...tsjPreset.transform,

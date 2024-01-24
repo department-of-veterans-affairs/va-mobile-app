@@ -4,7 +4,7 @@ import { TFunction } from 'i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
@@ -17,6 +17,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
@@ -28,7 +29,7 @@ export const getClaimType = (claim: ClaimData | undefined, translation: TFunctio
 
 type ClaimDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimDetailsScreen'>
 
-const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) => {
+function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -50,7 +51,9 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
   })
 
   useEffect(() => {
-    dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
+    if (screenContentAllowed('WG_ClaimDetailsScreen')) {
+      dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
+    }
   }, [dispatch, claimID])
 
   // Track how long user maintains focus on this screen
@@ -68,22 +71,6 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
 
   const backLabel = featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters ? t('claimsHistory.title') : t('claims.title')
 
-  if (useError(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID)) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingClaim) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')}>
-        <LoadingComponent text={t('claimInformation.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
   const onTabChange = (tab: number) => {
     if (tab !== selectedTab && claim) {
       const analyticsEvent = tab === controlLabels.indexOf(t('claimDetails.status')) ? Events.vama_claim_status_tab : Events.vama_claim_details_tab
@@ -98,21 +85,27 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ navigation, route }) 
 
   return (
     <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')} testID="ClaimDetailsScreen">
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <Box mx={theme.dimensions.gutter}>
-          <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
-            {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
-          </TextView>
-          <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={a11yHints} />
+      {useError(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID) ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID} />
+      ) : loadingClaim ? (
+        <LoadingComponent text={t('claimInformation.loading')} />
+      ) : (
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <Box mx={theme.dimensions.gutter}>
+            <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
+              {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
+            </TextView>
+            <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={a11yHints} />
+            </Box>
+          </Box>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
+            {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
           </Box>
         </Box>
-        <Box mt={theme.dimensions.condensedMarginBetween}>
-          {claim && selectedTab === 0 && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
-          {claim && selectedTab === 1 && <ClaimDetails claim={claim} />}
-        </Box>
-      </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }

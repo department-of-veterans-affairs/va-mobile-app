@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { every } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
 import { COVID19 } from 'constants/common'
@@ -12,6 +12,7 @@ import { RootState } from 'store'
 import { VaccineState, getVaccineLocation, sendVaccineDetailsAnalytics } from 'store/slices/vaccineSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'VaccineDetails'>
@@ -19,7 +20,7 @@ type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Vaccine
 /**
  * Screen providing details on an vaccine
  */
-const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation }) => {
+function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) {
   const { vaccineId } = route.params
   const { vaccinesById, vaccineLocationsById, detailsLoading } = useSelector<RootState, VaccineState>((state) => state.vaccine)
   const theme = useTheme()
@@ -33,7 +34,7 @@ const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation
   const placeHolder = t('noneNoted')
 
   useEffect(() => {
-    if (vaccine && !vaccineLocationsById[vaccineId]) {
+    if (screenContentAllowed('WG_VaccineDetails') && vaccine && !vaccineLocationsById[vaccineId]) {
       dispatch(getVaccineLocation(vaccineId, vaccine.relationships?.location?.data?.id || ''))
     }
   }, [dispatch, vaccineLocationsById, vaccineId, vaccine])

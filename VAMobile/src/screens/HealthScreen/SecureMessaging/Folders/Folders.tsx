@@ -1,6 +1,6 @@
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode } from 'react'
+import React from 'react'
 import _ from 'underscore'
 
 import { Box, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
@@ -48,13 +48,13 @@ const getListItemsForFolders = (
   return listItems
 }
 
-export const getSystemFolders = (
+export function getSystemFolders(
   folders: SecureMessagingFolderList,
   theme: VATheme,
   t: TFunction,
   onFolderPress: (folderID: number, folderName: string) => void,
   // isReverseSort: boolean,
-): ReactNode => {
+) {
   if (!folders) {
     return <></>
   }
@@ -67,13 +67,13 @@ export const getSystemFolders = (
   return <SimpleList items={listItems} title={t('secureMessaging.folders')} />
 }
 
-export const getUserFolders = (
+export function getUserFolders(
   folders: SecureMessagingFolderList,
   theme: VATheme,
   t: TFunction,
   onFolderPress: (folderID: number, folderName: string) => void,
   // isReverseSort: boolean,
-): ReactNode => {
+) {
   if (!folders) {
     return <></>
   }
@@ -96,7 +96,7 @@ export const getUserFolders = (
 
 type FoldersProps = Record<string, unknown>
 
-const Folders: FC<FoldersProps> = () => {
+function Folders({}: FoldersProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -118,7 +118,7 @@ const Folders: FC<FoldersProps> = () => {
       }
     }
     logAnalyticsEvent(Events.vama_sm_folder_open(folder()))
-    navigateTo('FolderMessages', { folderID, folderName })()
+    navigateTo('FolderMessages', { folderID, folderName })
   }
 
   if (loadingFolders) {

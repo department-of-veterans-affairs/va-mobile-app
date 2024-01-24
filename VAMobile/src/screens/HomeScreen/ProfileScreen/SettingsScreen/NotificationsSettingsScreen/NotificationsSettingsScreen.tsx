@@ -1,8 +1,10 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import React, { ReactNode, useEffect } from 'react'
 
-import { AlertBox, Box, ButtonDecoratorType, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton } from 'components'
+import { AlertBox, Box, ButtonDecoratorType, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -12,12 +14,12 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { StackScreenProps } from '@react-navigation/stack'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
-import React, { FC, ReactNode, useEffect } from 'react'
 
 type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'NotificationsSettings'>
 
-const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ navigation }) => {
+function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()
@@ -46,42 +48,10 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
   })
 
   useEffect(() => {
-    dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
+    if (screenContentAllowed('WG_NotificationsSettings')) {
+      dispatch(loadPushPreferences(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN))
+    }
   }, [dispatch])
-
-  const alert = (): ReactNode => {
-    return (
-      <AlertBox border={'informational'} title={t('notifications.settings.alert.title')} text={t('notifications.settings.alert.text')}>
-        <Box mt={standardMarginBetween}>
-          <VAButton onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} buttonType={'buttonPrimary'} />
-        </Box>
-      </AlertBox>
-    )
-  }
-
-  if (hasError) {
-    return (
-      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loadingPreferences || registeringDevice) {
-    return (
-      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.title')}>
-        <LoadingComponent text={t('notifications.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (settingPreference) {
-    return (
-      <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.title')}>
-        <LoadingComponent text={t('notifications.saving')} />
-      </FeatureLandingTemplate>
-    )
-  }
 
   const preferenceList = (): ReactNode => {
     const prefsItems = preferences.map((pref): SimpleListItemObj => {
@@ -104,26 +74,39 @@ const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ nav
       </Box>
     )
   }
+
+  const loadingCheck = loadingPreferences || registeringDevice || settingPreference
+
   return (
     <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.title')}>
-      <Box mb={contentMarginBottom}>
-        {systemNotificationsOn ? (
-          <>
-            <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter}>
-              {t('notifications.settings.personalize.heading')}
-            </TextView>
-            <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={gutter} mt={condensedMarginBetween}>
-              {t('notifications.settings.personalize.text.systemNotificationsOn')}
-            </TextView>
-            {preferenceList()}
-          </>
-        ) : (
-          alert()
-        )}
-        <TextView variant={'TableFooterLabel'} mx={gutter} mt={condensedMarginBetween}>
-          {t('notifications.settings.privacy')}
-        </TextView>
-      </Box>
+      {hasError ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
+      ) : loadingCheck ? (
+        <LoadingComponent text={settingPreference ? t('notifications.saving') : t('notifications.loading')} />
+      ) : (
+        <Box mb={contentMarginBottom}>
+          {systemNotificationsOn ? (
+            <>
+              <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter}>
+                {t('notifications.settings.personalize.heading')}
+              </TextView>
+              <TextView variant={'MobileBody'} accessibilityRole={'header'} mx={gutter} mt={condensedMarginBetween}>
+                {t('notifications.settings.personalize.text.systemNotificationsOn')}
+              </TextView>
+              {preferenceList()}
+            </>
+          ) : (
+            <AlertBox border={'informational'} title={t('notifications.settings.alert.title')} text={t('notifications.settings.alert.text')}>
+              <Box mt={standardMarginBetween}>
+                <Button onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} />
+              </Box>
+            </AlertBox>
+          )}
+          <TextView variant={'TableFooterLabel'} mx={gutter} mt={condensedMarginBetween}>
+            {t('notifications.settings.privacy')}
+          </TextView>
+        </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }

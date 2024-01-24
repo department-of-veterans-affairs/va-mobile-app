@@ -1,5 +1,4 @@
-import { LinkingOptions } from '@react-navigation/native'
-import { NavigationState } from 'react-navigation'
+import { LinkingOptions, NavigationState } from '@react-navigation/native'
 import React, { ReactElement } from 'react'
 
 import { LoadingComponent } from '../components'
@@ -24,8 +23,8 @@ export const linking: LinkingOptions<any> = {
             screens: {
               ClaimsHistory: 'claims',
               PrescriptionHistory: 'prescriptions',
+              ViewMessage: 'messages/:messageID',
               UpcomingAppointmentDetails: 'appointments/:vetextID',
-              ViewMessageScreen: 'messages/:messageID',
             },
           },
         },
@@ -45,7 +44,7 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'HealthTab',
                   state: {
-                    routes: [{ name: 'Health' }, { name: 'SecureMessaging' }, { name: 'ViewMessageScreen', params: { messageID: pathParts[1] } }],
+                    routes: [{ name: 'Health' }, { name: 'SecureMessaging' }, { name: 'ViewMessage', params: { messageID: pathParts[1] } }],
                   },
                 },
               ],
@@ -126,9 +125,11 @@ export const linking: LinkingOptions<any> = {
 
 export const state: NavigationState = {
   index: 0,
-  isTransitioning: false,
   key: '',
   routes: [],
+  routeNames: [],
+  type: '',
+  stale: false,
 }
 
 export const fallback: ReactElement = <LoadingComponent />

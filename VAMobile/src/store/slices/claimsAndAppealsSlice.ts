@@ -48,6 +48,7 @@ export type ClaimsAndAppealsState = {
   loadingAppeal: boolean
   loadingSubmitClaimDecision: boolean
   loadingFileUpload: boolean
+  finishedLoadingClaimsAndAppeals: boolean
   error?: Error
   claimsServiceError: boolean
   appealsServiceError: boolean
@@ -78,6 +79,7 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   loadingAppeal: false,
   loadingSubmitClaimDecision: false,
   loadingFileUpload: false,
+  finishedLoadingClaimsAndAppeals: false,
   claimsServiceError: false,
   appealsServiceError: false,
   claim: undefined,
@@ -492,6 +494,7 @@ const claimsAndAppealsSlice = createSlice({
       state.appealsServiceError = appealsServiceError
       state.error = error
       state.loadingClaimsAndAppeals = false
+      state.finishedLoadingClaimsAndAppeals = true
       state.claimsAndAppealsByClaimType.ACTIVE = activeList
       state.claimsAndAppealsByClaimType.CLOSED = closedList
       state.claimsAndAppealsMetaPagination.ACTIVE = activeData?.meta?.pagination || state.claimsAndAppealsMetaPagination.ACTIVE

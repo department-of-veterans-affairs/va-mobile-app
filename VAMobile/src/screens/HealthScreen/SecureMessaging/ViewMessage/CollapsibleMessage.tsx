@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, Ref } from 'react'
+import React, { Ref } from 'react'
 
 import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, LoadingComponent, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -10,7 +10,8 @@ import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'sto
 import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useAppDispatch, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { getLinkifiedText } from 'utils/secureMessaging'
+import { useAppDispatch, useExternalLink, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
@@ -23,10 +24,11 @@ export type ThreadMessageProps = {
   collapsibleMessageRef?: Ref<View>
 }
 
-const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage, collapsibleMessageRef }) => {
+function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }: ThreadMessageProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
+  const launchLink = useExternalLink()
   const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, hasAttachments, attachments, senderName, sentDate, body } = message
@@ -52,13 +54,19 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     dispatch(downloadFileAttachment(file, key))
   }
 
-  const getExpandedContent = (): ReactNode => {
+  function getBody() {
+    /** this does preserve newline characters just not spaces, TODO:change the mobile body link text views to be clickable and launch the right things */
+    if (body) {
+      return getLinkifiedText(body, t, launchLink)
+    }
+    return <></>
+  }
+
+  function getExpandedContent() {
     return (
       <Box>
         <Box mt={condensedMarginBetween} accessible={true}>
-          <TextView variant="MobileBody" selectable={true}>
-            {body}
-          </TextView>
+          {getBody()}
           {loadingAttachments && !attachments?.length && attachmentBoolean && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
               <LoadingComponent text={t('secureMessaging.viewMessage.loadingAttachment')} inlineSpinner={true} />
@@ -90,7 +98,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     )
   }
 
-  const getHeader = (): ReactNode => {
+  function getHeader() {
     return (
       <Box flexDirection={'column'}>
         <TextView variant="MobileBodyBold" accessible={false}>
@@ -110,7 +118,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     )
   }
 
-  const getCollapsedContent = (): ReactNode => {
+  function getCollapsedContent() {
     return (
       <Box>
         <TextView mt={condensedMarginBetween} variant="MobileBody" numberOfLines={2}>

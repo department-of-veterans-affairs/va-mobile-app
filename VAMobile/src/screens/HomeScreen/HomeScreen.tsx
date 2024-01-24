@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useCallback } from 'react'
+import React, { useCallback } from 'react'
 
 import { AppointmentsState, ClaimsAndAppealsState, PrescriptionState } from 'store/slices'
 import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
@@ -41,10 +41,9 @@ const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
-export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
+export function HomeScreen({}: HomeScreenProps) {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
@@ -86,19 +85,24 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
       }
     }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
   )
+  const navigateTo = useRouteNavigation()
 
-  const onContactVA = navigateTo('ContactVA')
+  const onContactVA = () => {
+    navigateTo('ContactVA')
+  }
+
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
-    navigation.navigate('Webview', {
+    navigateTo('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
       displayTitle: t('webview.vagov'),
       loadingMessage: t('webview.valocation.loading'),
     })
   }
+
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('home_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
+    navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
 
   const buttonDataList: Array<SimpleListItemObj> = [
@@ -115,15 +119,19 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     name: 'ProfileSelected',
   }
 
+  const onProfile = () => {
+    navigateTo('Profile')
+  }
+
   const headerButton = {
     label: t('profile.title'),
     icon: profileIconProps,
-    onPress: navigateTo('Profile'),
+    onPress: onProfile,
   }
 
   return (
-    <CategoryLanding headerButton={headerButton}>
-      <Box flex={1} justifyContent="flex-start">
+    <CategoryLanding headerButton={headerButton} testID="homeScreenID">
+      <Box>
         <EncourageUpdateAlert />
         <Nametag />
         {Number(upcomingAppointmentsCount) > 0 && (
@@ -171,12 +179,12 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
 type HomeStackScreenProps = Record<string, unknown>
 
-const HomeScreenStack = createStackNavigator()
+const HomeScreenStack = createStackNavigator<HomeStackParamList>()
 
 /**
  * Stack screen for the Home tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
-const HomeStackScreen: FC<HomeStackScreenProps> = () => {
+function HomeStackScreen({}: HomeStackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const screenOptions = {
     headerShown: false,

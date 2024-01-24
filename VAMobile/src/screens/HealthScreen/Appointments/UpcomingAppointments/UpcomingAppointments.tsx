@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 import _ from 'underscore'
 
 import { AppointmentsDateRange, AppointmentsState, getAppointmentsInDateRange } from 'store/slices'
@@ -19,7 +19,7 @@ import NoAppointments from '../NoAppointments/NoAppointments'
 
 type UpcomingAppointmentsProps = Record<string, unknown>
 
-const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
+function UpcomingAppointments({}: UpcomingAppointmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const theme = useTheme()
@@ -28,7 +28,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const currentPageUpcomingAppointmentsByYear = deepCopyObject<AppointmentsGroupedByYear>(currentPageAppointmentsByYear?.upcoming)
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
-    navigateTo('UpcomingAppointmentDetails', { appointmentID })()
+    navigateTo('UpcomingAppointmentDetails', { appointmentID })
   }
 
   if (loading) {
