@@ -451,7 +451,7 @@ const appointmentsSlice = createSlice({
       state.loading = false
       state.preloadComplete = true
 
-      if(state.firstTimeLoading && upcoming?.meta) {
+      if(state.firstTimeLoading === true && upcoming && upcoming.meta) {
         logAnalyticsEvent(Events.vama_hs_appts_count(upcoming?.meta?.upcomingAppointmentsCount))
         state.firstTimeLoading = false
       }
