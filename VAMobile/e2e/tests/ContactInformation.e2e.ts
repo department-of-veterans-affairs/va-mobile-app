@@ -29,7 +29,6 @@ export const ContactInfoE2eIdConstants = {
 }
 
 export async function updateAddress() {
-  console.log('updateAddress')
   await waitFor(element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID))).toBeVisible().withTimeout(4000)
   await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('3101 N Fort Valley Rd')
   await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
@@ -61,17 +60,14 @@ export async function validateAddresses(addressID, addressType) {
       await expect(element(by.text('City is required'))).toExist()
       await expect(element(by.text('Country is required'))).toExist()
       await expect(element(by.text('State is required'))).toExist()
+      await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
     }
   })
 
   it('should update the ' + addressType + ' address', async () => {
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
-    console.log('Test')
-    await device.takeScreenshot('AfterStreetAddressTyping')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
-    await device.takeScreenshot('AfterStreetAddressTyping2')
-    //await waitFor(element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID))).toBeVisible().withTimeout(4000)
-    if(addressType === 'Home') {
+     if(addressType === 'Home') {
       await element(by.id('countryPickerTestID picker required Error - Country is required')).tap()
       await expect(element(by.text('United States'))).toExist()
       await element(by.text('United States')).tap()
@@ -82,7 +78,6 @@ export async function validateAddresses(addressID, addressType) {
       await element(by.text('Done')).tap()
       await element(by.id('EditAddressTestID')).scrollTo('top')
     }
-    console.log('Test1')
     await updateAddress()
   })
 
