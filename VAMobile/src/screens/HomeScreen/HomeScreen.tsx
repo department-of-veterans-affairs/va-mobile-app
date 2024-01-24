@@ -15,7 +15,7 @@ import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
+// import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getClaimsAndAppeals, getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
@@ -54,37 +54,30 @@ export function HomeScreen({}: HomeScreenProps) {
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const { data: userAuthorizedServices } = useAuthorizedServices()
 
-  useEffect(
-    useCallback(() => {
+  useEffect(() => {
       if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
         dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
       }
-    }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments]),
-  )
+    }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments])
 
-  useEffect(
-    useCallback(() => {
+  useEffect(() => {
       if ((userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime) {
         dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE, undefined, undefined, true))
       }
-    }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals]),
-  )
+    }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals])
 
-  useEffect(
-    useCallback(() => {
+  useEffect(() => {
       if (userAuthorizedServices?.prescriptions && !rxInDowntime) {
         dispatch(loadAllPrescriptions())
       }
-    }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions]),
-  )
+    }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions])
 
-  useEffect(
-    useCallback(() => {
+  useEffect(() => {
       if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
         dispatch(getInbox())
       }
-    }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
-  )
+    }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
+    
   const navigateTo = useRouteNavigation()
 
   const onContactVA = () => {
