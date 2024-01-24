@@ -203,7 +203,7 @@ export const setPKCEParams = (): AppThunk => async (dispatch) => {
 export const loginStart =
   (syncing: boolean): AppThunk =>
   async (dispatch) => {
-    dispatch(sendLoginStartAnalytics())
+    dispatch(sendLoginStartAnalytics(false))
     dispatch(dispatchStartAuthLogin(syncing))
   }
 
@@ -545,6 +545,7 @@ export const debugResetFirstTimeLogin = (): AppThunk => async (dispatch) => {
 
 export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) => {
   console.debug('startBiometricsLogin: starting')
+  dispatch(sendLoginStartAnalytics(true))
   let refreshToken: string | undefined
   try {
     refreshToken = await retrieveRefreshToken()
@@ -662,9 +663,11 @@ export const sendLoginFailedAnalytics =
     await logAnalyticsEvent(Events.vama_login_fail(error, true))
   }
 
-export const sendLoginStartAnalytics = (): AppThunk => async () => {
-  await logAnalyticsEvent(Events.vama_login_start(true))
-}
+export const sendLoginStartAnalytics =
+  (biometric: boolean): AppThunk =>
+  async () => {
+    await logAnalyticsEvent(Events.vama_login_start(true, biometric))
+  }
 
 export const startWebLogin = (): AppThunk => async (dispatch) => {
   await clearCookies()
