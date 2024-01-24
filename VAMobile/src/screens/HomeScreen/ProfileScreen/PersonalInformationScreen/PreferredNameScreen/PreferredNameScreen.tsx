@@ -140,7 +140,7 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
       title={t('personalInformation.preferredName.title')}
       primaryContentButtonText={t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
-      {preferredNameMutation.isLoading ? (
+      {preferredNameMutation.isPending ? (
         <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
       ) : (
         <Box mx={theme.dimensions.gutter}>
