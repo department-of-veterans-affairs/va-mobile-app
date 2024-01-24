@@ -4,14 +4,12 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github')
 const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 
-// export AUTH_DOC_SITE=<key from 1Pass>
-
 /**
  * Function to form up configuration for Design System Engineering Docs imported from va-mobile-library repo
  * @param {string} name - Lower case name that must be unique; used for filename (sets URL for page) for some files
  * @param {string} URLextension - Directory in the library repo; if base directory set to empty string ('')
  * @param {Array<string>} documentsList - List of document names to pull in from library repo
- * @returns 
+ * @returns Formatted structure to import the relevant files for the "plugins" list of the Docusaurus config
  */
 const engineeringDocForm = (name, URLextension, documentsList) => {
   return [
@@ -19,11 +17,11 @@ const engineeringDocForm = (name, URLextension, documentsList) => {
     {
       // https://github.com/rdilweb/docusaurus-plugin-remote-content?tab=readme-ov-file#alright-so-how-do-i-use-this
       name,
-      sourceBaseUrl: `https://raw.githubusercontent.com/department-of-veterans-affairs/va-mobile-library/CU/6920-roettger-DesignSystemEngineeringDoc/${URLextension}`,
+      sourceBaseUrl: `https://raw.githubusercontent.com/department-of-veterans-affairs/va-mobile-library/main/${URLextension}`,
       outDir: 'design/About/For engineers',
       documents: documentsList,
       requestConfig: {
-        // Doesn't work w/o proper auth token
+        // Doesn't work w/o proper auth token, see "Local Docusaurus Build Auth Token" in the VAMobile 1Pass vault
         headers: {
           Authorization: `Bearer ${process.env.AUTH_DOC_SITE}`,
         },
