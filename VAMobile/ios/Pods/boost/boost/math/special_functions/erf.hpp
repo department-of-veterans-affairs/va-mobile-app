@@ -130,7 +130,7 @@ T erf_series_near_zero_sum(const T& x, const Policy& pol)
    // This method is *much* faster than the alternatives even so.
    //
    erf_series_near_zero<T> sum(x);
-   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+   std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    T result = constants::two_div_root_pi<T>() * tools::kahan_sum_series(sum, tools::digits<T>(), max_iter);
    policies::check_series_iterations<T>("boost::math::erf<%1%>(%1%, %1%)", max_iter, pol);
    return result;
@@ -156,7 +156,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
    if(!invert && (z > detail::erf_asymptotic_limit<T, Policy>()))
    {
       detail::erf_asympt_series_t<T> s(z);
-      boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+      std::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
       result = boost::math::tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter, 1);
       policies::check_series_iterations<T>("boost::math::erf<%1%>(%1%, %1%)", max_iter, pol);
    }
@@ -204,7 +204,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
    {
       if(!invert)
          return -erf_imp(T(-z), invert, pol, t);
-      else if(z < -0.5)
+      else if(z < T(-0.5))
          return 2 - erf_imp(T(-z), invert, pol, t);
       else
          return 1 + erf_imp(T(-z), false, pol, t);
@@ -217,12 +217,12 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
    // which implementation to use,
    // try to put most likely options first:
    //
-   if(z < 0.5)
+   if(z < T(0.5))
    {
       //
       // We're going to calculate erf:
       //
-      if(z < 1e-10)
+      if(z < T(1e-10))
       {
          if(z == 0)
          {
@@ -260,7 +260,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          result = z * (Y + tools::evaluate_polynomial(P, zz) / tools::evaluate_polynomial(Q, zz));
       }
    }
-   else if(invert ? (z < 28) : (z < 5.8f))
+   else if(invert ? (z < 28) : (z < 5.93f))
    {
       //
       // We'll be calculating erfc:
@@ -294,7 +294,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          BOOST_MATH_INSTRUMENT_VARIABLE(P[0]);
          BOOST_MATH_INSTRUMENT_VARIABLE(Q[0]);
          BOOST_MATH_INSTRUMENT_VARIABLE(z);
-         result = Y + tools::evaluate_polynomial(P, T(z - 0.5)) / tools::evaluate_polynomial(Q, T(z - 0.5));
+         result = Y + tools::evaluate_polynomial(P, T(z - T(0.5))) / tools::evaluate_polynomial(Q, T(z - T(0.5)));
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
          result *= exp(-z * z) / z;
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
@@ -322,7 +322,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.0563921837420478160373),
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.00410369723978904575884),
          };
-         result = Y + tools::evaluate_polynomial(P, T(z - 1.5)) / tools::evaluate_polynomial(Q, T(z - 1.5));
+         result = Y + tools::evaluate_polynomial(P, T(z - T(1.5))) / tools::evaluate_polynomial(Q, z - T(1.5));
          T hi, lo;
          int expon;
          hi = floor(ldexp(frexp(z, &expon), 26));
@@ -355,7 +355,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.0105982906484876531489),
             BOOST_MATH_BIG_CONSTANT(T, 53, 0.000479411269521714493907),
          };
-         result = Y + tools::evaluate_polynomial(P, T(z - 3.5)) / tools::evaluate_polynomial(Q, T(z - 3.5));
+         result = Y + tools::evaluate_polynomial(P, T(z - T(3.5))) / tools::evaluate_polynomial(Q, z - T(3.5));
          T hi, lo;
          int expon;
          hi = floor(ldexp(frexp(z, &expon), 26));
@@ -483,7 +483,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const std::integral_constant<int,
          result = z * (Y + tools::evaluate_polynomial(P, T(z * z)) / tools::evaluate_polynomial(Q, T(z * z)));
       }
    }
-   else if(invert ? (z < 110) : (z < 6.4f))
+   else if(invert ? (z < 110) : (z < 6.6f))
    {
       //
       // We'll be calculating erfc:
@@ -1263,7 +1263,3 @@ inline typename tools::promote_args<T>::type erfc(T z)
 #include <boost/math/special_functions/detail/erf_inv.hpp>
 
 #endif // BOOST_MATH_SPECIAL_ERF_HPP
-
-
-
-

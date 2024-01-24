@@ -1,7 +1,8 @@
 // Boost.Geometry
 
-// Copyright (c) 2020, Oracle and/or its affiliates.
+// Copyright (c) 2020-2023, Oracle and/or its affiliates.
 
+// Contributed and/or modified by Vissarion Fysikopoulos, on behalf of Oracle
 // Contributed and/or modified by Adam Wulkiewicz, on behalf of Oracle
 
 // Licensed under the Boost Software License version 1.0.
@@ -13,6 +14,7 @@
 
 // TEMP - move to strategy
 #include <boost/geometry/strategies/agnostic/point_in_box_by_side.hpp>
+#include <boost/geometry/strategies/cartesian/box_in_box.hpp>
 #include <boost/geometry/strategies/geographic/intersection.hpp>
 #include <boost/geometry/strategies/geographic/point_in_poly_winding.hpp>
 #include <boost/geometry/strategies/spherical/point_in_point.hpp>
@@ -23,6 +25,7 @@
 #include <boost/geometry/strategies/detail.hpp>
 
 #include <boost/geometry/strategy/geographic/area.hpp>
+#include <boost/geometry/strategy/geographic/area_box.hpp>
 
 #include <boost/geometry/util/type_traits.hpp>
 
@@ -36,8 +39,6 @@ namespace strategies { namespace relate
 template
 <
     typename FormulaPolicy = strategy::andoyer,
-    // TODO: Is SeriesOrder argument needed here?
-    std::size_t SeriesOrder = strategy::default_order<FormulaPolicy>::value,
     typename Spheroid = srs::spheroid<double>,
     typename CalculationType = void
 >
@@ -47,9 +48,7 @@ class geographic
     using base_t = strategies::envelope::geographic<FormulaPolicy, Spheroid, CalculationType>;
 
 public:
-    geographic()
-        : base_t()
-    {}
+    geographic() = default;
 
     explicit geographic(Spheroid const& spheroid)
         : base_t(spheroid)
@@ -58,11 +57,24 @@ public:
     // area
 
     template <typename Geometry>
-    auto area(Geometry const&) const
+    auto area(Geometry const&,
+              std::enable_if_t<! util::is_box<Geometry>::value> * = nullptr) const
     {
         return strategy::area::geographic
             <
-                FormulaPolicy, SeriesOrder, Spheroid, CalculationType
+                FormulaPolicy,
+                strategy::default_order<FormulaPolicy>::value,
+                Spheroid, CalculationType
+            >(base_t::m_spheroid);
+    }
+
+    template <typename Geometry>
+    auto area(Geometry const&,
+              std::enable_if_t<util::is_box<Geometry>::value> * = nullptr) const
+    {
+        return strategy::area::geographic_box
+            <
+                Spheroid, CalculationType
             >(base_t::m_spheroid);
     }
 
@@ -159,7 +171,9 @@ public:
     {
         return strategy::intersection::geographic_segments
             <
-                FormulaPolicy, SeriesOrder, Spheroid, CalculationType
+                FormulaPolicy,
+                strategy::default_order<FormulaPolicy>::value,
+                Spheroid, CalculationType
             >(base_t::m_spheroid);
     }
 
@@ -196,6 +210,14 @@ public:
     {
         return strategy::within::spherical_box_box();
     }
+
+    template <typename ComparePolicy, typename EqualsPolicy>
+    using compare_type = typename strategy::compare::spherical
+        <
+            ComparePolicy,
+            EqualsPolicy,
+            -1
+        >;
 };
 
 
@@ -217,7 +239,6 @@ struct strategy_converter<strategy::disjoint::segment_box_geographic<FormulaPoli
         return strategies::relate::geographic
             <
                 FormulaPolicy,
-                strategy::default_order<FormulaPolicy>::value,
                 Spheroid,
                 CalculationType
             >(s.model());
@@ -232,7 +253,6 @@ struct strategy_converter<strategy::within::geographic_winding<P1, P2, FormulaPo
         return strategies::relate::geographic
             <
                 FormulaPolicy,
-                strategy::default_order<FormulaPolicy>::value,
                 Spheroid,
                 CalculationType
             >(s.model());
@@ -242,12 +262,46 @@ struct strategy_converter<strategy::within::geographic_winding<P1, P2, FormulaPo
 template <typename FormulaPolicy, std::size_t SeriesOrder, typename Spheroid, typename CalculationType>
 struct strategy_converter<strategy::intersection::geographic_segments<FormulaPolicy, SeriesOrder, Spheroid, CalculationType>>
 {
+    struct altered_strategy
+        : strategies::relate::geographic<FormulaPolicy, Spheroid, CalculationType>
+    {
+        typedef strategies::relate::geographic<FormulaPolicy, Spheroid, CalculationType> base_t;
+
+        explicit altered_strategy(Spheroid const& spheroid)
+            : base_t(spheroid)
+        {}
+
+        template <typename Geometry>
+        auto area(Geometry const&) const
+        {
+            return strategy::area::geographic
+                <
+                    FormulaPolicy, SeriesOrder, Spheroid, CalculationType
+                >(base_t::m_spheroid);
+        }
+
+        using base_t::relate;
+
+        auto relate(/*...*/) const
+        {
+            return strategy::intersection::geographic_segments
+                <
+                    FormulaPolicy, SeriesOrder, Spheroid, CalculationType
+                >(base_t::m_spheroid);
+        }
+
+        template <typename ComparePolicy, typename EqualsPolicy>
+        using compare_type = typename strategy::compare::spherical
+            <
+                ComparePolicy,
+                EqualsPolicy,
+               -1
+            >;
+    };
+
     static auto get(strategy::intersection::geographic_segments<FormulaPolicy, SeriesOrder, Spheroid, CalculationType> const& s)
     {
-        return strategies::relate::geographic
-            <
-                FormulaPolicy, SeriesOrder, Spheroid, CalculationType
-            >(s.model());
+        return altered_strategy(s.model());
     }
 };
 
@@ -255,22 +309,10 @@ template <typename FormulaPolicy, typename Spheroid, typename CalculationType>
 struct strategy_converter<strategy::within::geographic_point_box_by_side<FormulaPolicy, Spheroid, CalculationType>>
 {
     struct altered_strategy
-        : strategies::relate::geographic
-            <
-                FormulaPolicy,
-                strategy::default_order<FormulaPolicy>::value,
-                Spheroid,
-                CalculationType
-            >
+        : strategies::relate::geographic<FormulaPolicy, Spheroid, CalculationType>
     {
         altered_strategy(Spheroid const& spheroid)
-            : strategies::relate::geographic
-                <
-                    FormulaPolicy,
-                    strategy::default_order<FormulaPolicy>::value,
-                    Spheroid,
-                    CalculationType
-                >(spheroid)
+            : strategies::relate::geographic<FormulaPolicy, Spheroid, CalculationType>(spheroid)
         {}
 
         template <typename Geometry1, typename Geometry2>
@@ -317,22 +359,6 @@ template <typename CalculationType>
 struct strategy_converter<strategy::covered_by::geographic_point_box_by_side<CalculationType>>
     : strategy_converter<strategy::within::geographic_point_box_by_side<CalculationType>>
 {};
-
-// TEMP used in distance segment/box
-template <typename FormulaPolicy, typename Spheroid, typename CalculationType>
-struct strategy_converter<strategy::side::geographic<FormulaPolicy, Spheroid, CalculationType>>
-{
-    static auto get(strategy::side::geographic<FormulaPolicy, Spheroid, CalculationType> const& s)
-    {
-        return strategies::relate::geographic
-            <
-                FormulaPolicy,
-                strategy::default_order<FormulaPolicy>::value,
-                Spheroid,
-                CalculationType
-            >(s.model());
-    }
-};
 
 
 } // namespace services

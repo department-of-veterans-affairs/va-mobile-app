@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,8 @@
 namespace folly {
 namespace detail {
 
-int sysMembarrier();
-bool sysMembarrierAvailable();
+int sysMembarrierPrivateExpedited();
+bool sysMembarrierPrivateExpeditedAvailable();
+
 } // namespace detail
 } // namespace folly

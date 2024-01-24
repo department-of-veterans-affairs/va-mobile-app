@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Facebook, Inc. and its affiliates.
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ class StaticSingletonManagerSansRtti {
   static void* create_(Arg&) noexcept(Noexcept); // no defn; only for decltype
 
   template <bool Noexcept>
-  using Create = decltype(create_<Noexcept>);
+  using Create = decltype(&create_<Noexcept>);
 
  public:
   template <bool Noexcept>
@@ -62,7 +62,7 @@ class StaticSingletonManagerSansRtti {
     }
 
    private:
-    Create<Noexcept>* create;
+    Create<Noexcept> create;
   };
 
   template <typename T, typename Tag>
@@ -107,6 +107,8 @@ class StaticSingletonManagerWithRtti {
   using Key = std::type_info;
   using Make = void*();
   using Cache = std::atomic<void*>;
+  template <typename T, typename Tag>
+  struct FOLLY_EXPORT Src {};
   struct Arg {
     Cache cache{}; // should be first field
     Key const* key;
@@ -116,14 +118,14 @@ class StaticSingletonManagerWithRtti {
     // function, but typeid is not constexpr under msvc
     template <typename T, typename Tag>
     /* implicit */ constexpr Arg(tag_t<T, Tag>) noexcept
-        : key{FOLLY_TYPE_INFO_OF(tag_t<T, Tag>)}, make{thunk::make<T>} {}
+        : key{FOLLY_TYPE_INFO_OF(Src<T, Tag>)}, make{thunk::make<T>} {}
   };
 
   template <bool Noexcept>
   FOLLY_NOINLINE static void* create_(Arg&) noexcept(Noexcept);
 
   template <bool Noexcept>
-  using Create = decltype(create_<Noexcept>);
+  using Create = decltype(&create_<Noexcept>);
 
  public:
   template <bool Noexcept>
@@ -137,7 +139,7 @@ class StaticSingletonManagerWithRtti {
     }
 
    private:
-    Create<Noexcept>* create;
+    Create<Noexcept> create;
   };
 
   template <typename T, typename Tag>

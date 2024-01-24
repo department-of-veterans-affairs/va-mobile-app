@@ -58,9 +58,9 @@ function AppointmentAddressAndNumber({ attributes }: AppointmentAddressAndNumber
 
   const cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
 
-  const testIdFields = !appointmentIsAtlas ? [location.name, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
+  const testIdFields = !appointmentIsAtlas ? [location?.name || '', address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
   const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
-  const hasNoProvider = !healthcareProvider && !location.name
+  const hasNoProvider = !healthcareProvider && !location?.name
   const isPendingAppointment = isAPendingAppointment(attributes)
 
   const getLocationName = () => {
@@ -98,9 +98,9 @@ function AppointmentAddressAndNumber({ attributes }: AppointmentAddressAndNumber
   const getAddressInformation = () => {
     const hasFullAddress = Boolean(address?.street && address?.city && address?.state && address?.zipCode)
     const hasPartialAddress = Boolean(address?.street || (address?.city && address?.state && address?.zipCode))
-    const hasLatLong = Boolean(location.lat && location.long)
+    const hasLatLong = Boolean(location?.lat && location?.long)
     const hasMappableAddress = hasFullAddress || hasLatLong
-    const hasName = Boolean(location.name || healthcareProvider)
+    const hasName = Boolean(location?.name || healthcareProvider)
     const hasPhone = Boolean(!appointmentIsAtlas && phone?.number)
 
     if (isPendingAppointment && hasNoProvider) {

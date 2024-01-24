@@ -1,31 +1,41 @@
 {
   "name": "React-Core",
-  "version": "0.72.7",
+  "version": "0.73.2",
   "summary": "The core of React Native.",
   "homepage": "https://reactnative.dev/",
   "license": "MIT",
   "authors": "Meta Platforms, Inc. and its affiliates",
   "platforms": {
-    "ios": "12.4"
+    "ios": "13.4"
   },
   "source": {
     "git": "https://github.com/facebook/react-native.git",
-    "tag": "v0.72.7"
+    "tag": "v0.73.2"
   },
   "resource_bundles": {
-    "AccessibilityResources": [
-      "React/AccessibilityResources/*.lproj"
+    "RCTI18nStrings": [
+      "React/I18n/strings/*.lproj"
     ]
   },
-  "compiler_flags": "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32 -Wno-documentation",
+  "compiler_flags": "-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -DFOLLY_CFG_NO_COROUTINES=1 -Wno-comma -Wno-shorten-64-to-32 -Wno-documentation",
   "header_dir": "React",
   "frameworks": "JavaScriptCore",
   "pod_target_xcconfig": {
-    "HEADER_SEARCH_PATHS": "\"$(PODS_TARGET_SRCROOT)/ReactCommon\" \"$(PODS_ROOT)/boost\" \"$(PODS_ROOT)/DoubleConversion\" \"$(PODS_ROOT)/RCT-Folly\" \"${PODS_ROOT}/Headers/Public/FlipperKit\" \"$(PODS_ROOT)/Headers/Public/ReactCommon\" \"$(PODS_ROOT)/Headers/Public/React-RCTFabric\"",
+    "HEADER_SEARCH_PATHS": [
+      "$(PODS_TARGET_SRCROOT)/ReactCommon",
+      "$(PODS_ROOT)/boost",
+      "$(PODS_ROOT)/DoubleConversion",
+      "$(PODS_ROOT)/fmt/include",
+      "$(PODS_ROOT)/RCT-Folly",
+      "${PODS_ROOT}/Headers/Public/FlipperKit",
+      "$(PODS_ROOT)/Headers/Public/ReactCommon",
+      "$(PODS_ROOT)/Headers/Public/React-hermes",
+      "$(PODS_ROOT)/Headers/Public/hermes-engine"
+    ],
     "DEFINES_MODULE": "YES",
     "GCC_PREPROCESSOR_DEFINITIONS": "RCT_METRO_PORT=${RCT_METRO_PORT}",
-    "CLANG_CXX_LANGUAGE_STANDARD": "c++17",
-    "FRAMEWORK_SEARCH_PATHS": ""
+    "CLANG_CXX_LANGUAGE_STANDARD": "c++20",
+    "FRAMEWORK_SEARCH_PATHS": "\"$(PODS_CONFIGURATION_BUILD_DIR)/React-hermes\""
   },
   "user_target_xcconfig": {
     "HEADER_SEARCH_PATHS": "\"$(PODS_ROOT)/Headers/Private/React-Core\""
@@ -33,7 +43,7 @@
   "default_subspecs": "Default",
   "dependencies": {
     "RCT-Folly": [
-      "2021.07.22.00"
+      "2022.05.16.00"
     ],
     "React-cxxreact": [
 
@@ -53,7 +63,7 @@
     "SocketRocket": [
       "0.6.1"
     ],
-    "React-runtimeexecutor": [
+    "React-runtimescheduler": [
 
     ],
     "Yoga": [
@@ -62,7 +72,10 @@
     "glog": [
 
     ],
-    "React-jsc": [
+    "React-hermes": [
+
+    ],
+    "hermes-engine": [
 
     ]
   },
@@ -76,7 +89,8 @@
         "React/Fabric/**/*",
         "React/FBReactNativeSpec/**/*",
         "React/Tests/**/*",
-        "React/Inspector/**/*"
+        "React/Inspector/**/*",
+        "React/CxxBridge/JSCExecutorFactory.{h,mm}"
       ],
       "private_header_files": "React/Cxx*/*.h"
     },
@@ -88,13 +102,13 @@
       ],
       "dependencies": {
         "React-Core/Default": [
-          "0.72.7"
+          "0.73.2"
         ],
         "React-Core/RCTWebSocket": [
-          "0.72.7"
+          "0.73.2"
         ],
         "React-jsinspector": [
-          "0.72.7"
+          "0.73.2"
         ]
       }
     },
@@ -103,7 +117,7 @@
       "source_files": "Libraries/WebSocket/*.{h,m}",
       "dependencies": {
         "React-Core/Default": [
-          "0.72.7"
+          "0.73.2"
         ]
       }
     },
