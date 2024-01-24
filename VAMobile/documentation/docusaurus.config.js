@@ -4,50 +4,6 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github')
 const darkCodeTheme = require('prism-react-renderer/themes/dracula')
 
-/**
- * Function to form up configuration for Design System Engineering Docs imported from va-mobile-library repo
- * @param {string} name - Lower case name that must be unique; used for filename (sets URL for page) for some files
- * @param {string} URLextension - Directory in the library repo; if base directory set to empty string ('')
- * @param {Array<string>} documentsList - List of document names to pull in from library repo
- * @returns Formatted structure to import the relevant files for the "plugins" list of the Docusaurus config
- */
-const engineeringDocForm = (name, URLextension, documentsList) => {
-  return [
-    'docusaurus-plugin-remote-content',
-    {
-      // https://github.com/rdilweb/docusaurus-plugin-remote-content?tab=readme-ov-file#alright-so-how-do-i-use-this
-      name,
-      sourceBaseUrl: `https://raw.githubusercontent.com/department-of-veterans-affairs/va-mobile-library/main/${URLextension}`,
-      outDir: 'design/About/For engineers',
-      documents: documentsList,
-      requestConfig: {
-        // Doesn't work w/o proper auth token, see "Local Docusaurus Build Auth Token" in the VAMobile 1Pass vault
-        headers: {
-          Authorization: `Bearer ${process.env.AUTH_DOC_SITE}`,
-        },
-      },
-      modifyContent(filename, content) {
-        let header = ''
-        switch (filename) {
-          case 'overview.md':
-            header = `---\nsidebar_position: 1\n---\n\n`
-            break
-          case 'CHANGELOG.md':
-          case 'README.md':
-            const title = name.charAt(0).toUpperCase() + name.substring(1)
-            filename = `${name}.md`
-            header = `---\ntitle: ${title}\n---\n\n`
-            break
-        }
-        return {
-          filename,
-          content: `${header}${content}`,
-        }
-      },
-    },
-  ]
-}
-
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'VA: Health and Benefits app documentation',
@@ -61,12 +17,6 @@ const config = {
   projectName: 'va-mobile-app', // Usually your repo name.
   plugins: [
     './docusaurus-plugin-react-native-web',
-    engineeringDocForm('documentation', 'documentation', ['contributing.md', 'overview.md', 'testing.md', 'versioning.md']),
-    engineeringDocForm('changelog', '', ['CHANGELOG.md']),
-    engineeringDocForm('assets', 'packages/assets', ['README.md']),
-    engineeringDocForm('components', 'packages/components', ['README.md']),
-    engineeringDocForm('linting', 'packages/linting', ['README.md']),
-    engineeringDocForm('tokens', 'packages/tokens', ['README.md']),
     [
       '@docusaurus/plugin-content-docs',
       {
@@ -172,6 +122,7 @@ const config = {
                 label: 'Design System',
                 to: '/design/intro',
               },
+
             ],
           },
           {
