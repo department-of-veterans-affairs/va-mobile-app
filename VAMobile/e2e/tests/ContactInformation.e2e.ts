@@ -61,6 +61,7 @@ export async function validateAddresses(addressID, addressType) {
       await expect(element(by.text('Country is required'))).toExist()
       await expect(element(by.text('State is required'))).toExist()
     }
+    console.log('Test1')
   })
 
   it('should update the ' + addressType + ' address', async () => {
@@ -74,10 +75,12 @@ export async function validateAddresses(addressID, addressType) {
       await element(by.text('Done')).tap()
       await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
       await element(by.id('stateTestID picker required Error - State is required')).tap()
+      console.log('Tap test')
       await element(by.text('Arizona')).tap()
       await element(by.text('Done')).tap()
       await element(by.id('EditAddressTestID')).scrollTo('top')
     }
+    console.log('Test')
     await updateAddress()
   })
 
