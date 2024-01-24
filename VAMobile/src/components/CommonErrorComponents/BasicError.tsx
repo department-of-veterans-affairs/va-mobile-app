@@ -1,8 +1,9 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
+import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -52,7 +53,7 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
           {messageText}
         </TextView>
         <Box accessibilityRole="button">
-          <VAButton onPress={onTryAgain} label={buttonText} buttonType={ButtonTypesConstants.buttonPrimary} a11yHint={buttonA11yHint} testID={buttonText} />
+          <Button onPress={onTryAgain} label={buttonText} a11yHint={buttonA11yHint} testID={buttonText} />
         </Box>
       </Box>
     </VAScrollView>

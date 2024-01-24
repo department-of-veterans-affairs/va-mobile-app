@@ -1,9 +1,10 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { Modal, Pressable, PressableProps, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useState } from 'react'
 
-import { Box, BoxProps, FooterButton, RadioGroup, TextView, TextViewProps, VAScrollView, radioOption } from 'components'
+import { Box, BoxProps, RadioGroup, TextView, TextViewProps, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
@@ -188,7 +189,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
             <VAScrollView testID={testID} bounces={false}>
               {getGroups()}
             </VAScrollView>
-            <FooterButton text={t('apply')} backGroundColor="buttonPrimary" textColor={'navBar'} onPress={onApply} />
+            <Button label={t('apply')} onPress={onApply} />
           </Box>
         </Box>
       </Modal>

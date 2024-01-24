@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, BoxProps, TextView } from 'components'
 import { useTheme } from 'utils/hooks'
@@ -20,10 +20,11 @@ type DetailsTextSections = {
   rightSectionValue?: string | number
   /** set the value accessibility label for the text on the right */
   rightSectionValueLabel?: string
+  children?: React.ReactNode
 }
 
 /** Common component for the prescription details data sections */
-const DetailsTextSections: FC<DetailsTextSections> = ({
+function DetailsTextSections({
   leftSectionTitle,
   leftSectionValue,
   leftSectionValueLabel,
@@ -33,7 +34,7 @@ const DetailsTextSections: FC<DetailsTextSections> = ({
   rightSectionValue,
   rightSectionValueLabel,
   children,
-}) => {
+}: DetailsTextSections) {
   const theme = useTheme()
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
 

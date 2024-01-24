@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag } from 'components'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -14,7 +14,7 @@ import { useSelector } from 'react-redux'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
-const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
+function ProfileScreen({ navigation }: ProfileScreenProps) {
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,

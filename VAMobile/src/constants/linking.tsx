@@ -1,6 +1,5 @@
-import { LinkingOptions } from '@react-navigation/native'
+import { LinkingOptions, NavigationState } from '@react-navigation/native'
 import { LoadingComponent } from '../components'
-import { NavigationState } from 'react-navigation'
 import React, { ReactElement } from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -70,9 +69,11 @@ export const linking: LinkingOptions<any> = {
 
 export const state: NavigationState = {
   index: 0,
-  isTransitioning: false,
   key: '',
   routes: [],
+  routeNames: [],
+  type: '',
+  stale: false,
 }
 
 export const fallback: ReactElement = <LoadingComponent />

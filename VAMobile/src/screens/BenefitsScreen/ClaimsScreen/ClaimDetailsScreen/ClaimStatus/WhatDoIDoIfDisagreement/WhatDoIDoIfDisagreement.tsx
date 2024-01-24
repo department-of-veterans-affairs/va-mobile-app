@@ -1,6 +1,6 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, LargePanel, TextView } from 'components'
@@ -14,7 +14,7 @@ const { LINK_URL_DECISION_REVIEWS } = getEnv()
 
 type WhatDoIDoIfDisagreementProps = StackScreenProps<BenefitsStackParamList, 'WhatDoIDoIfDisagreement'>
 
-const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ route }) => {
+function WhatDoIDoIfDisagreement({ route }: WhatDoIDoIfDisagreementProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()

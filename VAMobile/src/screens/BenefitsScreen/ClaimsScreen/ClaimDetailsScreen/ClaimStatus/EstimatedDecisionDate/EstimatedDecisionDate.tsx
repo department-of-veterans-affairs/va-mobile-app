@@ -1,8 +1,9 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement } from 'react'
+import React from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
@@ -16,7 +17,7 @@ type EstimatedDecisionDateProps = {
   showCovidMessage: boolean
 }
 
-const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, showCovidMessage }): ReactElement => {
+function EstimatedDecisionDate({ maxEstDate, showCovidMessage }: EstimatedDecisionDateProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()
@@ -30,11 +31,10 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
     return (
       <AlertBox border="warning" text={t('claimDetails.covidMessage')}>
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <VAButton
+          <Button
             onPress={onAlertLinkPress}
             testID={t('claimDetails.reviewLocations')}
             label={t('claimDetails.reviewLocations')}
-            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('claimDetails.reviewLocationsA11yHint')}
           />
         </Box>
