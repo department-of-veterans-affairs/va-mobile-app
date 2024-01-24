@@ -70,9 +70,9 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
   const { data: contactInformation } = useContactInformation()
-  const { mutate: deleteAddress, isLoading: deletingAddress, isSuccess: addressDeleted } = useDeleteAddress()
-  const { mutate: saveAddress, isLoading: savingAddress, isSuccess: addressSaved } = useSaveAddress()
-  const { mutate: validateAddress, isLoading: validatingAddress, data: validationData } = useValidateAddress()
+  const { mutate: deleteAddress, isPending: deletingAddress, isSuccess: addressDeleted } = useDeleteAddress()
+  const { mutate: saveAddress, isPending: savingAddress, isSuccess: addressSaved } = useSaveAddress()
+  const { mutate: validateAddress, isPending: validatingAddress, data: validationData } = useValidateAddress()
   const [addressValidated, setAddressValidated] = useState(false)
   const deleteAddressAlert = useAlert()
   const destructiveActionSheet = useDestructiveActionSheet()

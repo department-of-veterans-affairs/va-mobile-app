@@ -66,7 +66,7 @@ context('CarouselTabBar', () => {
       <CarouselTabBar
         screenList={screenList}
         onCarouselEnd={onCarouselEndSpy}
-        translation={t}
+        translation={t as any}
         navigation={{ navigate: mockNavigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
       />,
     )
