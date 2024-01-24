@@ -51,15 +51,14 @@ export async function validateAddresses(addressID, addressType) {
 
   it(addressType + ': verify error handling', async() => {
     if(addressType == 'Home') {
-    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).clearText()
-    await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
-    await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
-    await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).clearText()
-    await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
-    await expect(element(by.text('Please check your mailing address'))).toExist()
-    await expect(element(by.text('Street address is required'))).toExist()
-    await expect(element(by.text('City is required'))).toExist()
-    //if(addressType == 'Home') {
+      await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).clearText()
+      await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
+      await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
+      await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).clearText()
+      await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
+      await expect(element(by.text('Please check your mailing address'))).toExist()
+      await expect(element(by.text('Street address is required'))).toExist()
+      await expect(element(by.text('City is required'))).toExist()
       await expect(element(by.text('Country is required'))).toExist()
       await expect(element(by.text('State is required'))).toExist()
     }
@@ -355,8 +354,8 @@ describe(':ios: Contact Info Screen', () => {
   })
 
   validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
- // validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
-  /*validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
+  validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
+  validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
   validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
 
@@ -402,5 +401,5 @@ describe(':ios: Contact Info Screen', () => {
 
   verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
   verifyNonUSorMilitaryAddresses('Mailing address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001', 'Mailing')
-  */
+
 })
