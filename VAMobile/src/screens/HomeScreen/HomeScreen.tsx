@@ -146,11 +146,11 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         )}
-        {Number(prescriptionStatusCount.active) > 0 && (
+        {Number(prescriptionStatusCount.isRefillable) > 0 && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
             <LargeNavButton
               title={`${t('prescription.title')}`}
-              subText={`(${prescriptionStatusCount.active} ${t('active')})`}
+              subText={`(${prescriptionStatusCount.isRefillable} ${t('active')})`}
               onPress={() => Linking.openURL('vamobile://prescriptions')}
               borderWidth={theme.dimensions.buttonBorderWidth}
             />
