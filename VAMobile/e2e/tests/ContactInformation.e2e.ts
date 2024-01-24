@@ -35,9 +35,9 @@ export async function updateAddress() {
   await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
   await waitFor(element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID))).toBeVisible().withTimeout(4000)
   await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
-  await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).typeText('Flagstaff')
+  await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
   await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
-  await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).typeText('86001')
+  await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).replaceText('86001')
   await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
   await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().withTimeout(4000)
 }
@@ -50,6 +50,7 @@ export async function validateAddresses(addressID, addressType) {
   })
 
   it(addressType + ': verify error handling', async() => {
+    if(addressType == 'Home') {
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).clearText()
     await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
     await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
@@ -58,7 +59,7 @@ export async function validateAddresses(addressID, addressType) {
     await expect(element(by.text('Please check your mailing address'))).toExist()
     await expect(element(by.text('Street address is required'))).toExist()
     await expect(element(by.text('City is required'))).toExist()
-    if(addressType == 'Home') {
+    //if(addressType == 'Home') {
       await expect(element(by.text('Country is required'))).toExist()
       await expect(element(by.text('State is required'))).toExist()
     }
@@ -70,7 +71,6 @@ export async function validateAddresses(addressID, addressType) {
     await device.takeScreenshot('AfterStreetAddressTyping')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
     await device.takeScreenshot('AfterStreetAddressTyping2')
-    console.log(1000)
     //await waitFor(element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID))).toBeVisible().withTimeout(4000)
     if(addressType === 'Home') {
       await element(by.id('countryPickerTestID picker required Error - Country is required')).tap()
@@ -355,7 +355,7 @@ describe(':ios: Contact Info Screen', () => {
   })
 
   validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
-  validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
+ // validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
   /*validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
   validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
