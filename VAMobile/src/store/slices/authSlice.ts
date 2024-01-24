@@ -738,10 +738,10 @@ const authSlice = createSlice({
       const successfulLogin = !action.payload.error
 
       return {
-        ...state,
+        ...(action.payload.error ? initialAuthState : state),
         ...action.payload,
         webLoginUrl: undefined,
-        loading: false,
+        ...(action.payload.error ? { initializing: false } : { loading: false }),
         successfulLogin: successfulLogin,
         loggedIn: successfulLogin,
       }
