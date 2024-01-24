@@ -8,7 +8,7 @@ export const SettingsE2eIdConstants = {
   MANAGE_ACCT_ROW_TEXT: 'Manage account',
   MANAGE_ACCT_SCREEN_TEXT: 'To confirm or update your sign-in email, go to the website where you manage your account information.',
   NOTIFICATIONS_ROW_TEXT: 'Notifications',
-  NOTIFICATIONS_SCREEN_TEXT: 'Select what type of alerts you would like to receive.',
+  NOTIFICATIONS_SCREEN_TEXT: 'Select which notifications you\'d like to receive.',
   NOTIFICATIONS_APPOINTMENT_TEXT: 'Upcoming appointments',
   NOTIFICATIONS_MESSAGING_TEXT: 'New messages',
   SHARE_APP_ROW_TEXT: 'Share the app',

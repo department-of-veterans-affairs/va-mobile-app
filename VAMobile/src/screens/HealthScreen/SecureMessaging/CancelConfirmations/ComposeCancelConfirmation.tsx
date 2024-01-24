@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
 import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
@@ -14,7 +13,7 @@ import {
   saveDraft,
   updateSecureMessagingTab,
 } from 'store/slices'
-import { useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
+import { useAppDispatch, useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
 import { useState } from 'react'
 
 type ComposeCancelConfirmationProps = {
@@ -32,7 +31,7 @@ type ComposeCancelConfirmationProps = {
 
 export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCancelConfirmation: (props: ComposeCancelConfirmationProps) => void] {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const confirmationAlert = useDestructiveActionSheet()
   const goToDrafts = useGoToDrafts()

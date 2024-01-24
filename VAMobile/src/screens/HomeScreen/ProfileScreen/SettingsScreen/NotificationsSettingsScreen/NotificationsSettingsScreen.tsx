@@ -2,6 +2,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import React, { ReactNode, useEffect } from 'react'
 
 import { AlertBox, Box, ButtonDecoratorType, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, TextView } from 'components'
 import { Events } from 'constants/analytics'
@@ -15,11 +16,10 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
-import React, { FC, ReactNode, useEffect } from 'react'
 
 type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'NotificationsSettings'>
 
-const NotificationsSettingsScreen: FC<NotificationsSettingsScreenProps> = ({ navigation }) => {
+function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()

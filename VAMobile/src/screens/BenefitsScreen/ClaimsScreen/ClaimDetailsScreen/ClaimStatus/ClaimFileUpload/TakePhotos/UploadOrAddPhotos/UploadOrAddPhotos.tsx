@@ -3,9 +3,9 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { Dimensions, ScrollView } from 'react-native'
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect, useRef, useState } from 'react'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, PhotoAdd, PhotoPreview, TextView } from 'components'
@@ -22,18 +22,18 @@ import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/comm
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
-import { useBeforeNavBackListener, useDestructiveActionSheet, useOrientation, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useOrientation, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOrAddPhotos'>
 
-const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) => {
+function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const showActionSheetWithOptions = useShowActionSheet()
   const { request: originalRequest, firstImageResponse } = route.params
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
   const [errorMessage, setErrorMessage] = useState('')

@@ -1,6 +1,6 @@
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 
 import _ from 'underscore'
 
@@ -298,7 +298,7 @@ type AppealCurrentStatusProps = {
   programArea: string
 }
 
-const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appealType, docketName, programArea }) => {
+function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea }: AppealCurrentStatusProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const launchExternalLink = useExternalLink()

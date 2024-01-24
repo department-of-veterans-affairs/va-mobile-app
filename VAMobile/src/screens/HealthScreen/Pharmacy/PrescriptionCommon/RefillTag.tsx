@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { RefillStatus } from 'store/api/types'
@@ -12,7 +12,7 @@ export type RefillTagProps = {
   status: RefillStatus
 }
 
-const RefillTag: FC<RefillTagProps> = ({ status }) => {
+function RefillTag({ status }: RefillTagProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 

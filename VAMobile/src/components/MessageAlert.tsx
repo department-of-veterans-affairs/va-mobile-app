@@ -1,8 +1,9 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { ScrollView } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC, RefObject } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, TextView, VABulletList, VAButton } from 'components'
+import { AlertBox, Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SecureMessagingState, resetReplyTriageError, resetSendMessageFailed } from 'store/slices'
@@ -65,7 +66,7 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
         <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
           {t('secureMessaging.reply.error.ifYouThink')}
         </TextView>
-        <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
+        <Button label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
       </AlertBox>
     </Box>
   ) : (

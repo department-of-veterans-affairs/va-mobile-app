@@ -17,7 +17,7 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   const navigateTo = useRouteNavigation()
 
   const onClaimsHistory = () => {
-    navigateTo('ClaimsHistory')
+    navigateTo('ClaimsHistoryScreen')
   }
 
   const onClaimLettersPress = () => {

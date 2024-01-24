@@ -1,7 +1,7 @@
 import { pick } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { AnalyticsState } from 'store/slices'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
@@ -22,7 +22,7 @@ import getEnv, { EnvVars } from 'utils/env'
 
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
 
-const DeveloperScreen: FC<DeveloperScreenSettingsScreenProps> = ({ navigation }) => {
+function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: userAuthorizedServices } = useAuthorizedServices()

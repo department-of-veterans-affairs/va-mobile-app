@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { loginToDemoMode, openPersonalInformation, openProfile } from './utils'
+import {loginToDemoMode, openPersonalInformation, openProfile } from './utils'
 
 export const PersonalInfoConstants = {
   PERSONAL_INFORMATION_TEXT: 'Personal information',
@@ -45,9 +45,6 @@ beforeAll(async () => {
   await loginToDemoMode()
   await openProfile()
   await openPersonalInformation()
-  await waitFor(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT)))
-    .toExist()
-    .withTimeout(10000)
 })
 
 describe('Personal Info Screen', () => {
@@ -106,8 +103,10 @@ describe('Personal Info Screen', () => {
   })
 
   it('should update gender identity', async () => {
+    await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
     await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
     await expect(element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).atIndex(0)).toExist()
+    await scrollToThenTap(PersonalInfoConstants.PREFER_NOT_TEXT)
     await element(by.text(PersonalInfoConstants.PREFER_NOT_TEXT)).tap()
     await element(by.text('Save')).tap()
 
@@ -116,6 +115,7 @@ describe('Personal Info Screen', () => {
     await expect(element(by.text(PersonalInfoConstants.PREFER_NOT_TEXT))).toExist()
     await element(by.text('Dismiss')).tap()
 
+    await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
     await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
     await expect(element(by.text('Gender identity saved'))).not.toExist()
     await expect(element(by.label(PersonalInfoConstants.PREFER_NOT_TEXT + ' ').withDescendant(by.id('RadioFilled')))).toExist()
@@ -123,10 +123,12 @@ describe('Personal Info Screen', () => {
   })
 
   it('should show "What to know" large panel in gender identity section', async () => {
+    await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
     await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
     await scrollToThenTap(PersonalInfoConstants.GENDER_IDENTITY_WHAT_TO_KNOW_TEXT)
     await expect(element(by.text('Profile help'))).toExist()
     await element(by.text('Close')).tap()
     await element(by.text('Cancel')).tap()
   })
+
 })

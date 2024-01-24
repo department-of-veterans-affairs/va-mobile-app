@@ -1,5 +1,5 @@
 import { expect, by, element, device, waitFor} from 'detox'
-import { loginToDemoMode, openMessages, openHealth, checkImages } from './utils'
+import { loginToDemoMode, openMessages, openHealth, checkImages, resetInAppReview } from './utils'
 import { setTimeout } from "timers/promises"
 import { DateTime } from 'luxon'
 
@@ -16,6 +16,11 @@ export async function getDateWithTimeZone(dateString: string) {
 export const MessagesE2eIdConstants = {
   MESSAGE_1_ID: 'Unread: Martha Kaplan, Md 10/26/2021 Medication: Naproxen side effects',
   MESSAGE_2_ID: 'Unread: Diana Persson, Md 10/26/2021 Has attachment COVID: Prepping for your visit',
+  MESSAGE_3_ID: 'Unread: Sarah Kotagal, Md 10/26/2021 General: Your requested info',
+  MESSAGE_4_ID: 'Cheryl Rodger, Md 10/26/2021 Appointment: Please read and prepare appropriately',
+  MESSAGE_5_ID: 'Vija A. Ravi, Md 10/21/2021 General: Summary of visit',
+  MESSAGE_6_ID: 'Ratana, Narin  10/21/2021 Test: Preparing for your visit',
+  MESSAGE_7_ID: 'Ratana, Narin  9/17/2021 Education: Good morning to you',
   MESSAGE_10_ID: 'Ratana, Narin  9/17/2021 COVID: Test',
   START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
   FOLDERS_TEXT: 'Folders',
@@ -47,6 +52,23 @@ export const MessagesE2eIdConstants = {
   EDIT_DRAFT_CANCEL_ID: 'editDraftCancelTestID',
   EDIT_DRAFT_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   EDIT_DRAFT_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save Changes' : 'Save Changes ',
+  OPEN_URL_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
+}
+
+const tapItems = async (items: string, type: string) => {
+  if (type === 'url' || type === 'map' || type === 'email') {
+    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+  }
+  await element(by.text(items)).tap()
+  if(type === 'url' || type === 'map') {
+    await element(by.text(MessagesE2eIdConstants.OPEN_URL_TEXT)).tap()
+  }
+  await setTimeout(2000)
+	await device.takeScreenshot(items)
+  if (device.getPlatform() === 'android') {
+    await device.launchApp({newInstance: false})
+  }
+  await setTimeout(3000)
 }
 
 var dateWithTimeZone
@@ -65,7 +87,12 @@ describe('Messages Screen', () => {
 		await expect(element(by.text('Inbox (3)'))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID))).toExist()
-		await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID))).toExist()	
+		await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID))).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID))).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID))).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_5_ID))).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_6_ID))).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_7_ID))).toExist()	
 	})
  
   it('should verify that the messages inbox is scrollable', async () => {
@@ -94,16 +121,106 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
     await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
     await expect(element(by.text('RATANA, NARIN '))).toExist()
-    await expect(element(by.text('Upset stomach is a common side effect of this medication.  Mild stomach pain is normal, but if you are having severe stomach pains, please let us know or seek in-person care.'))).toExist()
     await expect(element(by.text('Only use messages for non-urgent needs'))).toExist()
   })
 
+  it(':android: verify phone links open', async () => {
+    await tapItems('8006982411', 'phone')
+    await tapItems('800-698-2411', 'phone')
+    await tapItems('(800)698-2411,', 'phone')
+    await tapItems('(800)-698-2411', 'phone')
+    await tapItems('800 698 2411', 'phone')
+    await tapItems('+8006982411', 'phone')
+    await tapItems('+18006982411', 'phone')
+    await tapItems('1-800-698-2411.', 'phone')
+  })
+  //Currently broken on iOS.  Will be fixed with ticket 7679
+  it(':android: verify url links open', async () => {
+    await tapItems('https://www.va.gov/', 'url')
+    await tapItems('https://rb.gy/riwea', 'url')
+    await tapItems('https://va.gov', 'url')
+    await tapItems('http://www.va.gov/', 'url')
+    await tapItems('https://www.va.gov/education/about-gi-bill-benefits/', 'url')
+    await tapItems('www.va.gov', 'url')
+    await tapItems('www.google.com', 'url')
+    await tapItems('google.com', 'url')
+  })
+
+  it(':android: verify email links open', async () => {
+    await tapItems('test@va.gov', 'email')
+    await tapItems('mailto:test@va.gov', 'email')
+  })
+
+  //Currently broken on iOS.  Will be fixed with ticket 7679
+  it(':android: verify map links open', async () => {
+    if(device.getPlatform() === 'ios') {
+      await tapItems('http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s', 'map')
+    } else {
+      await tapItems('http://maps.google.com/?q=50.894967,4.341626', 'map')
+    }
+  })
+
+  it('verify medication message details', async () => {
+    await element(by.text('Messages')).tap()
+    await element(by.id('Martha Kaplan, Md 10/26/2021 Medication: Naproxen side effects')).tap()
+    await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
+    await element(by.text('Messages')).tap()
+  })
+
+  it('verify COVID message details', async () => {
+    await element(by.id('Diana Persson, Md 10/26/2021 Has attachment COVID: Prepping for your visit')).tap()
+    await expect(element(by.text('COVID: Your requested info'))).toExist()
+    await element(by.text('Messages')).tap()
+  })
+
+  it('verify general message details', async () => {
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID)).tap()
+    await expect(element(by.text('General: Vaccine Booster'))).toExist()
+    await element(by.text('Messages')).tap()
+  })
+
+  it('verify appointment message details', async () => {
+    await resetInAppReview()
+    await openHealth()
+    await openMessages()
+    await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID))).toBeVisible().whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scroll(100, 'down')  
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_4_ID)).tap()
+    await expect(element(by.text('Appointment: Preparing for your visit'))).toExist()
+    await element(by.text('Messages')).tap()
+  })
+
+  it('verify other message details', async () => {
+    await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_5_ID))).toBeVisible().whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scroll(100, 'down')  
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_5_ID)).tap()
+    await expect(element(by.text('General: COVID vaccine booster?'))).toExist()
+    await element(by.text('Messages')).tap()
+  })
+
+  it('verify test_results message details', async () => {
+    await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_6_ID))).toBeVisible().whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scroll(100, 'down')  
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_6_ID)).tap()
+    await expect(element(by.text('Test: Preparing for your visit'))).toExist()
+    await element(by.text('Messages')).tap()
+  })
+
+  it('verify education message details', async () => {
+    await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_7_ID))).toBeVisible().whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scroll(100, 'down')  
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_7_ID)).tap()
+    await expect(element(by.text('Education: Good morning to you'))).toExist()
+    await element(by.text('Messages')).tap()
+  })
+
   it('should tap on and then cancel the move option', async () => {
+    await resetInAppReview()
+    await openHealth()
+    await openMessages()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
     await element(by.text('Move')).tap()
     await element(by.text('Cancel')).tap()
   })
 
   it('should tap reply and verify the correct information is displayed', async () => {
+    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     await element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID)).tap()
     await expect(element(by.id('To RATANA, NARIN '))).toExist()
     await expect(element(by.id('Subject Medication: Naproxen side effects'))).toExist()
@@ -178,7 +295,7 @@ describe('Messages Screen', () => {
   })
 
   it('should tap and move a message', async () => {
-    await element(by.id('Diana Persson, Md 10/26/2021 Has attachment COVID: Prepping for your visit')).tap()
+    await element(by.id(MessagesE2eIdConstants.MESSAGE_2_ID)).tap()
     await element(by.text('Move')).tap()
     await element(by.text('Custom Folder 2')).tap()
     if (device.getPlatform() === 'android') {
@@ -307,8 +424,7 @@ describe('Messages Screen', () => {
   })
 
   it('navigate to the sent folder and select the first message', async () => {
-    await device.launchApp({ newInstance: true })
-    await loginToDemoMode()
+    await resetInAppReview()
     await openHealth()
     await openMessages()
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).tap()
@@ -346,8 +462,7 @@ describe('Messages Screen', () => {
   })
 
   it('click the newest message in drafts folder', async () => {
-    await device.launchApp({ newInstance: true })
-    await loginToDemoMode()
+    await resetInAppReview()
     await openHealth()
     await openMessages()
     await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
@@ -397,6 +512,13 @@ describe('Messages Screen', () => {
   })
 
   it('should open a draft message and verify it can be deleted', async () => {
+    await resetInAppReview()
+    await openHealth()
+    await openMessages()
+    await element(by.text(MessagesE2eIdConstants.FOLDERS_TEXT)).atIndex(0).tap()
+    await expect(element(by.text('Drafts (3)'))).toExist()
+    await element(by.text('Drafts (3)')).tap()
+    await waitFor(element(by.text('Test: Test Inquiry'))).toBeVisible().whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scroll(300, 'down', NaN, 0.8)
     await element(by.text('Test: Test Inquiry')).tap()
     await element(by.text('More')).tap()
     await element(by.text('Delete')).tap()

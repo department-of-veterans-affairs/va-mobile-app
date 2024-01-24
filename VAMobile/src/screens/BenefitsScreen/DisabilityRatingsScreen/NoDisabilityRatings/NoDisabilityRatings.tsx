@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -8,7 +8,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-const NoDisabilityRatings: FC = () => {
+function NoDisabilityRatings() {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const bodyText = t('disabilityRating.noDisabilityRatings.body')

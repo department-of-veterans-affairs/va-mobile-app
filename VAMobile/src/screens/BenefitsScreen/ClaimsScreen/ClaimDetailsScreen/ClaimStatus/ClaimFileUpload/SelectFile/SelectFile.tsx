@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
 import DocumentPicker from 'react-native-document-picker'
-import React, { FC, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { AlertBox, Box, TextArea, TextView } from 'components'
 import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -19,7 +19,7 @@ const { IS_TEST } = getEnv()
 
 type SelectFilesProps = StackScreenProps<BenefitsStackParamList, 'SelectFile'>
 
-const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
+function SelectFile({ navigation, route }: SelectFilesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -40,6 +40,8 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       pickSingle,
       types: { images, plainText, pdf },
     } = DocumentPicker
+
+    logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'file'))
 
     try {
       const document = (await pickSingle({

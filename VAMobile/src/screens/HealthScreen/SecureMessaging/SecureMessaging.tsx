@@ -1,7 +1,7 @@
-import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import _ from 'underscore'
 
 import { Box, ErrorComponent, FeatureLandingTemplate } from 'components'
@@ -15,14 +15,13 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 import CernerAlertSM from './CernerAlertSM/CernerAlertSM'
 import Folders from './Folders/Folders'
 import Inbox from './Inbox/Inbox'
 import NotEnrolledSM from './NotEnrolledSM/NotEnrolledSM'
-import StartNewMessageButton from './StartNewMessageButton/StartNewMessageButton'
 import TermsAndConditions from './TermsAndConditions/TermsAndConditions'
 
 type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessaging'>
@@ -32,14 +31,14 @@ export const getInboxUnreadCount = (state: RootState): number => {
   return inbox?.attributes?.unreadCount || 0
 }
 
-const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
+function SecureMessaging({ navigation }: SecureMessagingScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const inboxUnreadCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { folders, secureMessagingTab, termsAndConditionError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
-
+  const navigateTo = useRouteNavigation()
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), '']
 
   const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
@@ -99,10 +98,16 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation }) => {
       dispatch(updateSecureMessagingTab(index))
     }
   }
+  const onPress = () => {
+    logAnalyticsEvent(Events.vama_sm_start())
+    navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  }
 
   return (
     <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')} testID="messagesTestID">
-      <StartNewMessageButton />
+      <Box mx={theme.dimensions.buttonPadding}>
+        <Button label={t('secureMessaging.startNewMessage')} onPress={onPress} testID={'startNewMessageButtonTestID'} />
+      </Box>
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
           <SegmentedControl labels={controlLabels} onChange={onTabUpdate} selected={secureMessagingTab} a11yHints={a11yHints} a11yLabels={[t('secureMessaging.inbox')]} />

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, LabelTagTypeConstants, Pagination, PaginationProps, TextLine } from 'components'
 import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -28,7 +28,7 @@ type ClaimsAndAppealsListProps = {
   claimType: ClaimType
 }
 
-const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) => {
+function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()

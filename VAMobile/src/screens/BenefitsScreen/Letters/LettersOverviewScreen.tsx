@@ -1,7 +1,7 @@
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, FeatureLandingTemplate, TextView } from 'components'
@@ -16,10 +16,7 @@ import NoLettersScreen from './NoLettersScreen'
 
 type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOverview'>
 
-/**
- * Landing page for the letters flow. Shows the current address and the button to go to the letters list
- */
-const LettersOverviewScreen: FC<LettersOverviewProps> = ({ navigation }) => {
+function LettersOverviewScreen({ navigation }: LettersOverviewProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()

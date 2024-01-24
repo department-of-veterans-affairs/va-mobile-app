@@ -2,7 +2,7 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -18,7 +18,7 @@ import { useDeletePhoneNumber, useSavePhoneNumber } from 'api/contactInformation
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
 
-const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }) => {
+function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -33,8 +33,8 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const scrollViewRef = useRef<ScrollView>(null)
 
   const { data: contactInformation } = useContactInformation()
-  const { mutate: deletePhoneNumber, isLoading: deletingPhoneNumber, isSuccess: phoneNumberDeleted } = useDeletePhoneNumber()
-  const { mutate: savePhoneNumber, isLoading: savingPhoneNumber, isSuccess: phoneNumberSaved } = useSavePhoneNumber()
+  const { mutate: deletePhoneNumber, isPending: deletingPhoneNumber, isSuccess: phoneNumberDeleted } = useDeletePhoneNumber()
+  const { mutate: savePhoneNumber, isPending: savingPhoneNumber, isSuccess: phoneNumberSaved } = useSavePhoneNumber()
 
   useEffect(() => {
     if (phoneNumberDeleted || phoneNumberSaved) {

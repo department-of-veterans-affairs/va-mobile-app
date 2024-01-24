@@ -1,7 +1,8 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, VAButton, VAScrollView } from 'components'
+import { AlertBox, Box, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
@@ -33,7 +34,7 @@ const ErrorAlert: FC<ErrorAlertProps> = ({ onTryAgain, title, text }) => {
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox border="error" title={title || t('errorAlert.title')} text={text}>
           <Box mt={theme.dimensions.standardMarginBetween} accessibilityRole="button">
-            <VAButton onPress={onTryAgain} label={t('refresh')} buttonType={ButtonTypesConstants.buttonPrimary} testID={t('refresh')} />
+            <Button onPress={onTryAgain} label={t('refresh')} testID={t('refresh')} />
           </Box>
         </AlertBox>
       </Box>

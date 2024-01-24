@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 
 import { AppealAOJTypes, AppealEventData, AppealStatusData, AppealTypes } from 'store/api/types'
 import { Box, CollapsibleView, TextArea, TextView } from 'components'
@@ -20,7 +20,7 @@ type AppealStatusProps = {
   programArea: string
 }
 
-const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, numAppealsAhead, isActiveAppeal, docketName, programArea }) => {
+function AppealStatus({ events, status, aoj, appealType, numAppealsAhead, isActiveAppeal, docketName, programArea }: AppealStatusProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 

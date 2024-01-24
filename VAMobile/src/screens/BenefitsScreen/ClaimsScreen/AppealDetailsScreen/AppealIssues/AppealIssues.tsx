@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { TextArea, TextView, VABulletList } from 'components'
@@ -9,7 +9,7 @@ type AppealsIssuesProps = {
   issues: Array<string>
 }
 
-const AppealIssues: FC<AppealsIssuesProps> = ({ issues }) => {
+function AppealIssues({ issues }: AppealsIssuesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (
