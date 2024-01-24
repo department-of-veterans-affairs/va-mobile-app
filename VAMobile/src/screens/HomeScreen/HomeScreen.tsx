@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 // import { useFocusEffect } from '@react-navigation/native'
 // import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 // import { AppointmentsState, ClaimsAndAppealsState, PrescriptionState } from 'store/slices'
 import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
@@ -55,29 +55,29 @@ export function HomeScreen({}: HomeScreenProps) {
   const { data: userAuthorizedServices } = useAuthorizedServices()
 
   useEffect(() => {
-      if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
-        dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
-      }
-    }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments])
+    if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
+      dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
+    }
+  }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments])
 
   useEffect(() => {
-      if ((userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime) {
-        dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE, undefined, undefined, true))
-      }
-    }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals])
+    if ((userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime) {
+      dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE, undefined, undefined, true))
+    }
+  }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals])
 
   useEffect(() => {
-      if (userAuthorizedServices?.prescriptions && !rxInDowntime) {
-        dispatch(loadAllPrescriptions())
-      }
-    }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions])
+    if (userAuthorizedServices?.prescriptions && !rxInDowntime) {
+      dispatch(loadAllPrescriptions())
+    }
+  }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions])
 
   useEffect(() => {
-      if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
-        dispatch(getInbox())
-      }
-    }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
-    
+    if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
+      dispatch(getInbox())
+    }
+  }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
+
   const navigateTo = useRouteNavigation()
 
   const onContactVA = () => {

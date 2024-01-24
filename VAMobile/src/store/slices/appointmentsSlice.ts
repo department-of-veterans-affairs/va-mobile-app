@@ -286,7 +286,6 @@ export const prefetchAppointments =
         } as Params)
       }
 
-
       if (getState().appointments.firstTimeLoading && upcomingAppointments?.meta) {
         logAnalyticsEvent(Events.vama_hs_appts_count(upcomingAppointments.meta.upcomingAppointmentsCount))
       }
