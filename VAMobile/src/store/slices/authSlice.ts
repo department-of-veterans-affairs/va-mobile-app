@@ -298,34 +298,36 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
  * and store just the nonce using biometric storage.  The rest of the token will be stored using AsyncStorage
  */
 const storeRefreshToken = async (refreshToken: string, options: Keychain.Options, storageType: AUTH_STORAGE_TYPE): Promise<void> => {
-  try {
-    const splitToken = refreshToken.split('.')
-    await Promise.all([
-      Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
-      AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
-      AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
-      AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
-    ])
-    await logAnalyticsEvent(Events.vama_login_token_store(true))
-  } catch {
-    await logAnalyticsEvent(Events.vama_login_token_store(false))
-  }
+  const splitToken = refreshToken.split('.')
+  await Promise.all([
+    Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
+    AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
+    AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
+    AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
+  ])
+    .then(async () => {
+      await logAnalyticsEvent(Events.vama_login_token_store(true))
+    })
+    .catch(async () => {
+      await logAnalyticsEvent(Events.vama_login_token_store(false))
+    })
 }
 
 /**
  * Returns a reconstructed refresh token with the nonce from Keychain and the rest from AsyncStorage
  */
 const retrieveRefreshToken = async (): Promise<string | undefined> => {
-  try {
-    console.debug('retrieveRefreshToken')
-    const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
-    const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
+  console.debug('retrieveRefreshToken')
+  const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
+  const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
 
+  if (reconstructedToken) {
     await logAnalyticsEvent(Events.vama_login_token_get(true))
-    return reconstructedToken
-  } catch {
+  } else {
     await logAnalyticsEvent(Events.vama_login_token_get(false))
   }
+
+  return reconstructedToken
 }
 
 type StringMap = { [key: string]: string | undefined }
