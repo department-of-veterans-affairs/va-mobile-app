@@ -450,7 +450,7 @@ const appointmentsSlice = createSlice({
       state.pastVaServiceError = pastVaServiceError
       state.error = error
       state.loading = false
-      state.preloadComplete = true
+      state.preloadComplete = error ? false : true
 
       state.currentPageAppointmentsByYear.upcoming = groupAppointmentsByYear(upcomingAppointments)
       state.currentPageAppointmentsByYear.pastThreeMonths = groupAppointmentsByYear(pastAppointments)

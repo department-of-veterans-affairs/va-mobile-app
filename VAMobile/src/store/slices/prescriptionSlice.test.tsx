@@ -361,7 +361,10 @@ context('Prescription', () => {
       .calledWith('/v0/health/rx/prescriptions', expect.anything())
       .mockResolvedValue({
         data: loadAllPrescriptionMockData,
-        meta: {}
+        meta: {
+          prescriptionStatusCount: {
+            isRefillable: 0,
+        }}
       })
 
       const store = realStore()
