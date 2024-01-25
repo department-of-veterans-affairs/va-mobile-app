@@ -72,7 +72,7 @@ context('PastAppointmentDetails', () => {
     expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
     expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
     expect(screen.queryByText('Get directions')).toBeFalsy()
-    expect(screen.getByRole('link', {name:'123-456-7890'})).toBeTruthy()
+    expect(screen.getAllByRole('link', {name:'123-456-7890'})).toBeTruthy()
     expect(screen.getAllByRole('link', {name:'TTY: 711'})).toBeTruthy()
   })
 
