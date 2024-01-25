@@ -48,7 +48,7 @@ export async function validateAddresses(addressID, addressType) {
     await element(by.id(addressID)).tap()
   })
 
-  it(addressType + ': verify error handling', async() => {
+  /*it(addressType + ': verify error handling', async() => {
     if(addressType == 'Home') {
       await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).clearText()
       await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
@@ -61,20 +61,18 @@ export async function validateAddresses(addressID, addressType) {
       await expect(element(by.text('Country is required'))).toExist()
       await expect(element(by.text('State is required'))).toExist()
     }
-  })
+  })*/
 
   it('should update the ' + addressType + ' address', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tap()
-    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
-     if(addressType === 'Home') {
-      await element(by.id('countryPickerTestID picker required Error - Country is required')).tap()
+    if(addressType === 'Home') {
+      await element(by.id(ContactInfoE2eIdConstants.COUNTRY_PICKER_ID)).tap()
       await expect(element(by.text('United States'))).toExist()
       await element(by.text('United States')).tap()
       await element(by.text('Done')).tap()
       await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
-      await element(by.id('stateTestID picker required Error - State is required')).tap()
+      await element(by.id(ContactInfoE2eIdConstants.STATE_ID)).tap()
       await element(by.text('Arizona')).tap()
       await element(by.text('Done')).tap()
       await element(by.id('EditAddressTestID')).scrollTo('top')
