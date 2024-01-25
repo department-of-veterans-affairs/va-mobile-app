@@ -99,7 +99,6 @@ export type AppointmentsState = {
   messagesLoading: boolean
   upcomingAppointmentsCount?: number
   preloadComplete: boolean
-  firstTimeLoading: boolean
 }
 
 export const initialPaginationState = {
@@ -147,7 +146,6 @@ export const initialAppointmentsState: AppointmentsState = {
   },
   messagesLoading: false,
   preloadComplete: false,
-  firstTimeLoading: true,
 }
 
 // Issue#2273 Tracks and logs pagination warning if there are discrepancies in the total entries of appointments
@@ -286,8 +284,8 @@ export const prefetchAppointments =
         } as Params)
       }
 
-      if (getState().appointments.firstTimeLoading && upcomingAppointments?.meta) {
-        logAnalyticsEvent(Events.vama_hs_appts_count(upcomingAppointments.meta.upcomingAppointmentsCount))
+      if (getState().appointments.preloadComplete === false && upcomingAppointments?.meta) {
+        await logAnalyticsEvent(Events.vama_hs_appts_count(upcomingAppointments.meta.upcomingAppointmentsCount))
       }
       dispatch(dispatchFinishPrefetchAppointments({ upcoming: upcomingAppointments, past: pastAppointments }))
     } catch (error) {
@@ -453,7 +451,6 @@ const appointmentsSlice = createSlice({
       state.error = error
       state.loading = false
       state.preloadComplete = true
-      state.firstTimeLoading = false
 
       state.currentPageAppointmentsByYear.upcoming = groupAppointmentsByYear(upcomingAppointments)
       state.currentPageAppointmentsByYear.pastThreeMonths = groupAppointmentsByYear(pastAppointments)
