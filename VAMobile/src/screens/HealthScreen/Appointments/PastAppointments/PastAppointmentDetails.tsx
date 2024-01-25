@@ -72,7 +72,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
             <TextView variant="MobileBody" paragraphSpacing={true}>
               {appointmentIsCanceled ? t('appointments.reschedule.body') : t('appointments.schedule.body')}
             </TextView>
-            {location?.phone ? <ClickToCallPhoneNumber phone={location.phone.areaCode + ' ' + location.phone.number} /> : undefined}
+            {location?.phone && location.phone.areaCode && location.phone.number ? <ClickToCallPhoneNumber phone={location.phone.areaCode + ' ' + location.phone.number} /> : undefined}
             <ClickForActionLink
               displayedText={t('appointments.vaSchedule')}
               a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}

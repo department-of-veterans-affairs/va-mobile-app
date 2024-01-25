@@ -98,13 +98,14 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
     }
   }
 
-  const linkOrPhone = phone ? (
-    <ClickToCallPhoneNumber phone={phone} />
-  ) : (
-    <Box mt={theme.dimensions.standardMarginBetween}>
-      <ClickForActionLink {...findYourVALocationProps} />
-    </Box>
-  )
+  const linkOrPhone =
+    phone && phone.areaCode && phone.number ? (
+      <ClickToCallPhoneNumber phone={phone} />
+    ) : (
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <ClickForActionLink {...findYourVALocationProps} />
+      </Box>
+    )
 
   const onCancelAppointment = () => {
     logAnalyticsEvent(
