@@ -89,6 +89,7 @@ export type SecureMessagingState = {
   deleteDraftComplete: boolean
   deleteDraftFailed: boolean
   deletingDraft: boolean
+  inboxFirstRetrieval: boolean
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -131,6 +132,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   deleteDraftComplete: false,
   deleteDraftFailed: false,
   deletingDraft: false,
+  inboxFirstRetrieval: true,
 }
 
 /**
@@ -164,7 +166,7 @@ export const fetchInboxMessages =
  */
 export const getInbox =
   (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getInbox(screenID))))
     dispatch(dispatchStartGetInbox())
@@ -174,6 +176,10 @@ export const getInbox =
       const folderID = SecureMessagingSystemFolderIdConstants.INBOX
       const inbox = await api.get<SecureMessagingFolderGetData>(`/v0/messaging/health/folders/${folderID}`)
 
+      if (getState().secureMessaging.inboxFirstRetrieval && inbox?.data?.attributes?.unreadCount)
+      {
+        await logAnalyticsEvent(Events.vama_hs_sm_count(inbox.data.attributes.unreadCount))
+      }
       dispatch(dispatchFinishGetInbox({ inboxData: inbox }))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -703,6 +709,7 @@ const secureMessagingSlice = createSlice({
       state.inbox = inboxData ? inboxData.data : ({} as SecureMessagingFolderData)
       state.hasLoadedInbox = true
       state.error = error
+      state.inboxFirstRetrieval = false
     },
 
     dispatchStartListFolderMessages: (state) => {

@@ -541,6 +541,14 @@ export const Events = {
       },
     }
   },
+  vama_hs_sm_count: (smCount: number): Event => {
+    return {
+      name: 'vama_hs_sm_count',
+      params: {
+        smCount,
+      },
+    }
+  },
   vama_letter_download: (letterName: string): Event => {
     return {
       name: 'vama_letter_download',
