@@ -107,6 +107,16 @@ export const Events = {
       name: 'vama_auth_completed',
     }
   },
+  vama_cerner_alert: (): Event => {
+    return {
+      name: 'vama_cerner_alert',
+    }
+  },
+  vama_cerner_alert_exp: (): Event => {
+    return {
+      name: 'vama_cerner_alert_exp',
+    }
+  },
   vama_claim_call: (claim_id: string, claim_type: string, claim_step: number): Event => {
     return {
       name: 'vama_claim_call',
@@ -669,11 +679,6 @@ export const Events = {
       },
     }
   },
-  vama_rx_cerner_exp: (): Event => {
-    return {
-      name: 'vama_rx_cerner_exp ',
-    }
-  },
   vama_rx_details: (rx_id: string): Event => {
     return {
       name: 'vama_rx_details ',
@@ -713,11 +718,6 @@ export const Events = {
   vama_rx_pendingtab: (): Event => {
     return {
       name: 'vama_rx_pendingtab',
-    }
-  },
-  vama_rx_refill_cerner: (): Event => {
-    return {
-      name: 'vama_rx_refill_cerner',
     }
   },
   vama_rx_refill_fail: (rx_ids: string[]): Event => {
