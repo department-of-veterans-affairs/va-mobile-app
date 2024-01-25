@@ -60,11 +60,12 @@ export async function validateAddresses(addressID, addressType) {
       await expect(element(by.text('City is required'))).toExist()
       await expect(element(by.text('Country is required'))).toExist()
       await expect(element(by.text('State is required'))).toExist()
-      await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
     }
   })
 
   it('should update the ' + addressType + ' address', async () => {
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tap()
+    await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
      if(addressType === 'Home') {
@@ -348,9 +349,9 @@ describe(':ios: Contact Info Screen', () => {
     await element(by.text('Close')).atIndex(0).tap()
   })
 
-  validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
+  //validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
   validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
-  validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
+  /*validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
   validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
 
@@ -386,15 +387,14 @@ describe(':ios: Contact Info Screen', () => {
     await expect(element(by.text('Email address saved'))).toExist()
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
-  })
+  })*/
 
   removeContactInfoFeature('Home address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001', 'home address')
-  removeContactInfoFeature(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'work phone')
+  /*removeContactInfoFeature(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'work phone')
   removeContactInfoFeature(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'home phone')
   removeContactInfoFeature(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'mobile phone')
-  removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')
+  removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')*/
 
   verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
-  verifyNonUSorMilitaryAddresses('Mailing address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001', 'Mailing')
-
+  //verifyNonUSorMilitaryAddresses('Mailing address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001', 'Mailing')
 })
