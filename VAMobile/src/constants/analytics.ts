@@ -533,6 +533,14 @@ export const Events = {
       },
     }
   },
+  vama_hs_claims_count: (claimsCount: number): Event => {
+    return {
+      name: 'vama_hs_claims_count',
+      params: {
+        claimsCount,
+      }
+    }
+  },
   vama_hs_rx_count: (rxCount: number): Event => {
     return {
       name: 'vama_hs_rx_count',

@@ -280,7 +280,7 @@ const prescriptionSlice = createSlice({
       state.loadingHistory = true
     },
     dispatchFinishLoadAllPrescriptions: (state, action: PayloadAction<{ allPrescriptions?: PrescriptionsGetData; error?: APIError }>) => {
-      const { allPrescriptions } = action.payload
+      const { allPrescriptions, error } = action.payload
 
       const { data: prescriptions, meta } = allPrescriptions || ({} as PrescriptionsGetData)
 
@@ -321,7 +321,7 @@ const prescriptionSlice = createSlice({
       state.prescriptionStatusCount = { ...meta.prescriptionStatusCount }
       state.prescriptionsById = prescriptionsById
       state.prescriptionsNeedLoad = false
-      state.prescriptionFirstRetrieval = false
+      state.prescriptionFirstRetrieval = error ? true : false
 
       state.tabCounts = {
         '0': prescriptions?.length,

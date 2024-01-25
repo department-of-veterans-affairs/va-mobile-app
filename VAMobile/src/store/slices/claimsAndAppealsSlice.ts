@@ -63,6 +63,7 @@ export type ClaimsAndAppealsState = {
   cancelLoadingDetailScreen?: AbortController // abortController to canceling loading of claim(getClaim) and appeal(getAppeal) detail screens
   preloadComplete: boolean
   activeClaimsCount: number
+  claimsFirstRetrieval: boolean
 }
 
 const claimsAndAppealsNonFatalErrorString = 'Claims And Appeals Service Error'
@@ -102,6 +103,7 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   cancelLoadingDetailScreen: undefined,
   preloadComplete: false,
   activeClaimsCount: 0,
+  claimsFirstRetrieval: true,
 }
 
 const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
@@ -241,6 +243,9 @@ export const getClaimsAndAppeals =
         })
       }
 
+      if (getState().claimsAndAppeals.claimsFirstRetrieval && claimsAndAppeals?.meta.activeClaimsCount) {
+        await logAnalyticsEvent(Events.vama_hs_claims_count(claimsAndAppeals.meta.activeClaimsCount))
+      }
       dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals }))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -526,6 +531,7 @@ const claimsAndAppealsSlice = createSlice({
       state.claimsAndAppealsMetaPagination[claimType] = claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination[claimType]
       state.loadedClaimsAndAppeals[claimType] = claimsAndAppeals?.meta.dataFromStore ? curLoadedClaimsAndAppeals : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
       state.activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount || 0
+      state.claimsFirstRetrieval = error ? true : false
     },
 
     dispatchStartGetClaim: (state, action: PayloadAction<{ abortController: AbortController }>) => {
