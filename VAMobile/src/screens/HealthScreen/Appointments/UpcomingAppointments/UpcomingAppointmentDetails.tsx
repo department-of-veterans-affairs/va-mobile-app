@@ -354,7 +354,6 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={false} />
 
           {renderAtlasVideoConnectAppointmentData()}
-          {renderSpecialInstructions()}
           {featureEnabled('patientCheckIn') && (
             <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
               <Button onPress={() => navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} />
@@ -363,6 +362,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
           <AppointmentReason attributes={attributes} />
+          {renderSpecialInstructions()}
           <ContactInformation attributes={attributes} />
           <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointmentID} />
         </TextArea>
