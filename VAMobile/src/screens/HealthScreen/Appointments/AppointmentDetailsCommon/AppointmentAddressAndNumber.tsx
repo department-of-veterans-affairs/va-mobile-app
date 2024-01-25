@@ -101,7 +101,7 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
             {missingBodyText}
           </TextView>
         )}
-        {hasDirectionLink && (!isPastAppointment || isAppointmentCanceled) && (
+        {hasDirectionLink && !isPastAppointment && !isAppointmentCanceled && (
           <ClickForActionLink
             displayedText={`${t('directions')}`}
             a11yLabel={`${t('directions')}`}
