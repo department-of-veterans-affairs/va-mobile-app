@@ -538,7 +538,7 @@ export const Events = {
       name: 'vama_hs_claims_count',
       params: {
         claimsCount,
-      }
+      },
     }
   },
   vama_hs_rx_count: (rxCount: number): Event => {
