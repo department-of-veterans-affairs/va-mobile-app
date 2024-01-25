@@ -2,8 +2,8 @@ import { Linking } from 'react-native'
 import React from 'react'
 import { screen, fireEvent } from '@testing-library/react-native'
 
+import { ClaimType } from 'constants/claims'
 import { context, mockNavProps, render } from 'testUtils'
-import { ClaimType } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { claim } from '../../claimData'
 import ClaimStatus from './ClaimStatus'
 
