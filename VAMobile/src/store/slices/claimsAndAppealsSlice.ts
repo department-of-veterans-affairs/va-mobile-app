@@ -239,7 +239,7 @@ export const getClaimsAndAppeals =
         })
       }
 
-      dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals }))
+      dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals, skipSave: forceRefetch }))
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `getClaimsAndAppeals: ${claimsAndAppealsNonFatalErrorString}`)
@@ -506,8 +506,8 @@ const claimsAndAppealsSlice = createSlice({
       state.loadingClaimsAndAppeals = true
     },
 
-    dispatchFinishAllClaimsAndAppeals: (state, action: PayloadAction<{ claimType: ClaimType; claimsAndAppeals?: ClaimsAndAppealsGetData; error?: Error }>) => {
-      const { claimType, claimsAndAppeals, error } = action.payload
+    dispatchFinishAllClaimsAndAppeals: (state, action: PayloadAction<{ claimType: ClaimType; claimsAndAppeals?: ClaimsAndAppealsGetData; error?: Error; skipSave?: boolean }>) => {
+      const { claimType, claimsAndAppeals, error, skipSave } = action.payload
 
       const claimsAndAppealsMetaErrors = claimsAndAppeals?.meta?.errors || []
       const claimsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
@@ -519,9 +519,11 @@ const claimsAndAppealsSlice = createSlice({
       state.appealsServiceError = appealsServiceError
       state.error = error
       state.loadingClaimsAndAppeals = false
-      state.claimsAndAppealsByClaimType[claimType] = claimsAndAppealsList
-      state.claimsAndAppealsMetaPagination[claimType] = claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination[claimType]
-      state.loadedClaimsAndAppeals[claimType] = claimsAndAppeals?.meta.dataFromStore ? curLoadedClaimsAndAppeals : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
+      if (!skipSave) {
+        state.claimsAndAppealsByClaimType[claimType] = claimsAndAppealsList
+        state.claimsAndAppealsMetaPagination[claimType] = claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination[claimType]
+        state.loadedClaimsAndAppeals[claimType] = claimsAndAppeals?.meta.dataFromStore ? curLoadedClaimsAndAppeals : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
+      }
       state.activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount || 0
     },
 
