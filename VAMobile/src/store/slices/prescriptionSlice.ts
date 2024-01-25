@@ -55,6 +55,7 @@ export type PrescriptionState = {
   tabCounts: TabCounts
   prescriptionsNeedLoad: boolean
   prescriptionStatusCount: PrescriptionStatusCountData
+  prescriptionFirstRetrieval: boolean
 }
 
 export const initialPrescriptionState: PrescriptionState = {
@@ -73,11 +74,12 @@ export const initialPrescriptionState: PrescriptionState = {
   tabCounts: {},
   prescriptionsNeedLoad: true,
   prescriptionStatusCount: {} as PrescriptionStatusCountData,
+  prescriptionFirstRetrieval: true,
 }
 
 export const loadAllPrescriptions =
   (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     dispatch(dispatchStartLoadAllPrescriptions())
 
     const params = {
@@ -88,6 +90,9 @@ export const loadAllPrescriptions =
 
     try {
       const allData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
+      if (getState().prescriptions.prescriptionFirstRetrieval && allData?.meta) {
+        await logAnalyticsEvent(Events.vama_hs_rx_count(allData.meta.prescriptionStatusCount.isRefillable))
+      }
       dispatch(dispatchFinishLoadAllPrescriptions({ allPrescriptions: allData }))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -316,6 +321,7 @@ const prescriptionSlice = createSlice({
       state.prescriptionStatusCount = { ...meta.prescriptionStatusCount }
       state.prescriptionsById = prescriptionsById
       state.prescriptionsNeedLoad = false
+      state.prescriptionFirstRetrieval = false
 
       state.tabCounts = {
         '0': prescriptions?.length,
