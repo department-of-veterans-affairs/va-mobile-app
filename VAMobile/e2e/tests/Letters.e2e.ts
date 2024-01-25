@@ -97,7 +97,7 @@ describe('VA Letters', () => {
     it(`should view ${letterType.name}`, async () => {
 
       // need in-app reset in iOS before checking proof of service card to avoid false fail
-      if(device.getPlatform() === 'ios' && letterType.name == 'Proof of service card') {
+      if(device.getPlatform() === 'ios' && letterType.name == 'Proof of minimum essential coverage letter') {
         await resetInAppReview()
         await openBenefits()
         await openLetters()

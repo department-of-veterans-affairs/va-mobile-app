@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import {
   AppointmentAddressAndNumber,
@@ -28,7 +28,7 @@ import getEnv from 'utils/env'
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 const { LINK_URL_VA_SCHEDULING } = getEnv()
 
-const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, navigation }) => {
+function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsProps) {
   const { appointmentID } = route.params
 
   const theme = useTheme()
@@ -57,7 +57,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route, naviga
   const appointmentTypeAndDateIsLastItem =
     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME || appointmentIsCanceled
 
-  const renderScheduleAnotherAppointment = (): ReactElement => {
+  function renderScheduleAnotherAppointment() {
     if (pendingAppointment) {
       return <></>
     }

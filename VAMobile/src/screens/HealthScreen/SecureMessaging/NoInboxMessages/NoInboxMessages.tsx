@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-const NoInboxMessages: FC = () => {
+function NoInboxMessages() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

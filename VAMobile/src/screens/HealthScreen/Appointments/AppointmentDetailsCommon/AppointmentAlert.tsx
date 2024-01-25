@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { AlertBox, Box } from 'components'
 import { AppointmentAttributes } from 'store/api'
@@ -11,7 +11,7 @@ type AppointmentAlertProps = {
   attributes: AppointmentAttributes
 }
 
-const AppointmentAlert: FC<AppointmentAlertProps> = ({ attributes }) => {
+function AppointmentAlert({ attributes }: AppointmentAlertProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

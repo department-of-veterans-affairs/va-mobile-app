@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement } from 'react'
+import React from 'react'
 
 import { AppointmentAttributes, AppointmentLocation, AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
 import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextView } from 'components'
@@ -26,7 +26,7 @@ type AppointmentAddressAndNumberProps = {
   isPastAppointment: boolean
 }
 
-const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ attributes, isPastAppointment = false }) => {
+function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: AppointmentAddressAndNumberProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { appointmentType, healthcareService, location, isCovidVaccine, healthcareProvider, phoneOnly, serviceCategoryName, status } = attributes || ({} as AppointmentAttributes)
   const { address, phone } = location || ({} as AppointmentLocation)
@@ -117,7 +117,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ att
     )
   }
 
-  const getHealthServiceHeaderSection = (): ReactElement => {
+  function getHealthServiceHeaderSection() {
     let headerText: string | undefined
 
     if (isCovidVaccine) {

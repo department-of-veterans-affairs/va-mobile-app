@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, Ref } from 'react'
+import React, { Ref } from 'react'
 
 import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, LoadingComponent, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -24,7 +24,7 @@ export type ThreadMessageProps = {
   collapsibleMessageRef?: Ref<View>
 }
 
-const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage, collapsibleMessageRef }) => {
+function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }: ThreadMessageProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tFunction } = useTranslation()
@@ -54,7 +54,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     dispatch(downloadFileAttachment(file, key))
   }
 
-  const getBody = (): ReactNode => {
+  function getBody() {
     /** this does preserve newline characters just not spaces, TODO:change the mobile body link text views to be clickable and launch the right things */
     if (body) {
       return getLinkifiedText(body, t, launchLink)
@@ -62,7 +62,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     return <></>
   }
 
-  const getExpandedContent = (): ReactNode => {
+  function getExpandedContent() {
     return (
       <Box>
         <Box mt={condensedMarginBetween} accessible={true}>
@@ -98,7 +98,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     )
   }
 
-  const getHeader = (): ReactNode => {
+  function getHeader() {
     return (
       <Box flexDirection={'column'}>
         <TextView variant="MobileBodyBold" accessible={false}>
@@ -118,7 +118,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage,
     )
   }
 
-  const getCollapsedContent = (): ReactNode => {
+  function getCollapsedContent() {
     return (
       <Box>
         <TextView mt={condensedMarginBetween} variant="MobileBody" numberOfLines={2}>

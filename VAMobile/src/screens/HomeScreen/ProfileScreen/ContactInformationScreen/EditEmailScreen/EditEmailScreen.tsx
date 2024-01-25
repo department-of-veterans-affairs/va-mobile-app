@@ -2,7 +2,7 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
 import { EMAIL_REGEX_EXP } from 'constants/common'
@@ -19,13 +19,13 @@ type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 /**
  * Screen for editing a users email in the personal info section
  */
-const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
+function EditEmailScreen({ navigation }: EditEmailScreenProps) {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { data: contactInformation } = useContactInformation()
-  const { mutate: saveEmail, isLoading: savingEmail, isSuccess: emailSaved } = useSaveEmail()
-  const { mutate: deleteEmail, isLoading: deletingEmail, isSuccess: emailDeleted } = useDeleteEmail()
+  const { mutate: saveEmail, isPending: savingEmail, isSuccess: emailSaved } = useSaveEmail()
+  const { mutate: deleteEmail, isPending: deletingEmail, isSuccess: emailDeleted } = useDeleteEmail()
   const emailId = contactInformation?.contactEmail?.id
   const deleteEmailAlert = useAlert()
   const confirmAlert = useDestructiveActionSheet()

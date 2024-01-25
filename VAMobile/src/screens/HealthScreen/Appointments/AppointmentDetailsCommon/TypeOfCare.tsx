@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
@@ -10,7 +10,7 @@ type TypeOfCareProps = {
   attributes: AppointmentAttributes
 }
 
-const TypeOfCare: FC<TypeOfCareProps> = ({ attributes }) => {
+function TypeOfCare({ attributes }: TypeOfCareProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

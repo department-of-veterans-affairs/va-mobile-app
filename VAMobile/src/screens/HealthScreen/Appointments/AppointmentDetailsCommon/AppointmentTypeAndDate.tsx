@@ -1,4 +1,3 @@
-import { FC, ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 
@@ -23,7 +22,7 @@ type AppointmentTypeAndDateProps = {
   isPastAppointment: boolean
 }
 
-const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes, isPastAppointment = false }) => {
+function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: AppointmentTypeAndDateProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { appointmentType, startDateUtc, timeZone, isCovidVaccine, typeOfCare, status, serviceCategoryName, phoneOnly, statusDetail, healthcareProvider, location } =
@@ -158,7 +157,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ attributes, i
     )
   }
 
-  const appointmentTitle = (): ReactElement => {
+  function appointmentTitle() {
     if (serviceCategoryName === 'COMPENSATION & PENSION') {
       return <></>
     } else {

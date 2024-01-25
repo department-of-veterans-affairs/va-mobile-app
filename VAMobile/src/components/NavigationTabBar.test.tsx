@@ -31,7 +31,7 @@ context('NavigationTabBar', () => {
       <NavigationTabBar
         state={{ index, routes } as unknown as TabNavigationState<ParamListBase>}
         navigation={{ emit: emitSpy, navigate: mockNavigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-        translation={jest.fn()}
+        translation={jest.fn() as any}
       />,
     )
   }

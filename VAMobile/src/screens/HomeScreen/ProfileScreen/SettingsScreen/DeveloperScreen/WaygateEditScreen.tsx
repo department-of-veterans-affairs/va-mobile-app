@@ -1,7 +1,7 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { Box, ButtonDecoratorType, FullScreenSubtask, SimpleList, SimpleListItemObj, TextView, VATextInput } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -10,7 +10,7 @@ import { useTheme } from 'utils/hooks'
 
 type WaygateEditScreenProps = StackScreenProps<HomeStackParamList, 'WaygateEdit'>
 
-const WaygateEditScreen: FC<WaygateEditScreenProps> = ({ navigation, route }) => {
+function WaygateEditScreen({ navigation, route }: WaygateEditScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const scrollViewRef = useRef<ScrollView>(null)
