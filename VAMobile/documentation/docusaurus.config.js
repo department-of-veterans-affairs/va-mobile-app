@@ -122,7 +122,6 @@ const config = {
                 label: 'Design System',
                 to: '/design/intro',
               },
-
             ],
           },
           {
