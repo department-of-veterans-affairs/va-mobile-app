@@ -48,21 +48,6 @@ export async function validateAddresses(addressID, addressType) {
     await element(by.id(addressID)).tap()
   })
 
-  /*it(addressType + ': verify error handling', async() => {
-    if(addressType == 'Home') {
-      await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).clearText()
-      await waitFor(element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID))).toBeVisible().whileElement(by.id('EditAddressTestID')).scroll(100, 'down', NaN, 0.8)
-      await element(by.id(ContactInfoE2eIdConstants.CITY_TEST_ID)).clearText()
-      await element(by.id(ContactInfoE2eIdConstants.ZIP_CODE_ID)).clearText()
-      await element(by.text(ContactInfoE2eIdConstants.SAVE_TEXT)).tap()
-      await expect(element(by.text('Please check your mailing address'))).toExist()
-      await expect(element(by.text('Street address is required'))).toExist()
-      await expect(element(by.text('City is required'))).toExist()
-      await expect(element(by.text('Country is required'))).toExist()
-      await expect(element(by.text('State is required'))).toExist()
-    }
-  })*/
-
   it('should update the ' + addressType + ' address', async () => {
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).replaceText('2')
     await element(by.id(ContactInfoE2eIdConstants.STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
@@ -347,9 +332,9 @@ describe(':ios: Contact Info Screen', () => {
     await element(by.text('Close')).atIndex(0).tap()
   })
 
-  //validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
+  validateAddresses(ContactInfoE2eIdConstants.MAILING_ADDRESS_ID, 'Mailing')
   validateAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
-  /*validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
+  validatePhoneNumbers(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'Home')
   validatePhoneNumbers(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'Work')
   validatePhoneNumbers(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'Mobile')
 
@@ -385,14 +370,14 @@ describe(':ios: Contact Info Screen', () => {
     await expect(element(by.text('Email address saved'))).toExist()
     await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
-  })*/
+  })
 
   removeContactInfoFeature('Home address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001', 'home address')
-  /*removeContactInfoFeature(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'work phone')
+  removeContactInfoFeature(ContactInfoE2eIdConstants.WORK_PHONE_ID, 'work phone')
   removeContactInfoFeature(ContactInfoE2eIdConstants.HOME_PHONE_ID, 'home phone')
   removeContactInfoFeature(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'mobile phone')
-  removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')*/
+  removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')
 
   verifyNonUSorMilitaryAddresses(ContactInfoE2eIdConstants.HOME_ADDRESS_ID, 'Home')
-  //verifyNonUSorMilitaryAddresses('Mailing address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001', 'Mailing')
+  verifyNonUSorMilitaryAddresses('Mailing address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001', 'Mailing')
 })
