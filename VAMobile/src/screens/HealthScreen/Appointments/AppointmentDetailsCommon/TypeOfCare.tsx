@@ -19,7 +19,7 @@ function TypeOfCare({ attributes }: TypeOfCareProps) {
   if (phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) {
     return (
       <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
-        {typeOfCare || healthcareService || t('appointments.noTypeOfCare')}
+        {typeOfCare && typeOfCare.length > 1 ? typeOfCare : healthcareService && healthcareService.length > 1 ? healthcareService : t('appointments.noTypeOfCare')}
       </TextView>
     )
   }
