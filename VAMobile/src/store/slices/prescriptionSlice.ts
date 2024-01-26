@@ -90,8 +90,8 @@ export const loadAllPrescriptions =
 
     try {
       const allData = await get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
-      if (getState().prescriptions.prescriptionFirstRetrieval && allData?.meta) {
-        await logAnalyticsEvent(Events.vama_hs_rx_count(allData.meta.prescriptionStatusCount.isRefillable))
+      if (getState().prescriptions.prescriptionFirstRetrieval && allData?.meta?.prescriptionStatusCount) {
+        await logAnalyticsEvent(Events.vama_hs_rx_count(allData.meta.prescriptionStatusCount.isRefillable || 0))
       }
       dispatch(dispatchFinishLoadAllPrescriptions({ allPrescriptions: allData }))
     } catch (error) {

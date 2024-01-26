@@ -243,7 +243,7 @@ export const getClaimsAndAppeals =
         })
       }
 
-      if (getState().claimsAndAppeals.claimsFirstRetrieval && claimsAndAppeals?.meta.activeClaimsCount) {
+      if (getState().claimsAndAppeals.claimsFirstRetrieval && claimsAndAppeals?.meta) {
         await logAnalyticsEvent(Events.vama_hs_claims_count(claimsAndAppeals.meta.activeClaimsCount))
       }
       dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals }))
