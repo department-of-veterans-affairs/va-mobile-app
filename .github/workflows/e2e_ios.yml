@@ -46,7 +46,7 @@ jobs:
   e2e-ios:
     if: ${{ always() }}
     needs: start_slack_thread
-    runs-on: macos-latest-xl
+    runs-on: macos-13
     env:
       # Path to write secret key to. Also used by fastlane
       APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
@@ -56,6 +56,10 @@ jobs:
       IOS_SCHEME: 'VAMobileRelease'
 
     steps:
+      - name: List Xcode installations
+        run: sudo ls -1 /Applications | grep "Xcode"
+      - name: Select Xcode 15.1
+        run: sudo xcode-select -s /Applications/Xcode_15.1.app/Contents/Developer
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
