@@ -93,10 +93,7 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
         {hasFullAddress ? (
           getAddress()
         ) : (
-          <TextView
-            variant={'MobileBody'}
-            selectable={true}
-            accessibilityLabel={a11yLabelVA(missingBodyText || '')}>
+          <TextView variant={'MobileBody'} selectable={true} accessibilityLabel={a11yLabelVA(missingBodyText || '')}>
             {missingBodyText}
           </TextView>
         )}
