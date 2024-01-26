@@ -284,7 +284,7 @@ export const prefetchAppointments =
         } as Params)
       }
 
-      if (getState().appointments.preloadComplete === false && upcomingAppointments?.meta) {
+      if (!getState().appointments.preloadComplete && upcomingAppointments?.meta) {
         await logAnalyticsEvent(Events.vama_hs_appts_count(upcomingAppointments.meta.upcomingAppointmentsCount))
       }
       dispatch(dispatchFinishPrefetchAppointments({ upcoming: upcomingAppointments, past: pastAppointments }))
@@ -450,7 +450,7 @@ const appointmentsSlice = createSlice({
       state.pastVaServiceError = pastVaServiceError
       state.error = error
       state.loading = false
-      state.preloadComplete = error ? false : true
+      state.preloadComplete = !error
 
       state.currentPageAppointmentsByYear.upcoming = groupAppointmentsByYear(upcomingAppointments)
       state.currentPageAppointmentsByYear.pastThreeMonths = groupAppointmentsByYear(pastAppointments)
