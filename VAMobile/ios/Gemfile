@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem "fastlane"
-gem 'xcodes(version: "15.2")'
+gem 'xcodes(version:"15.2")'
 gem 'cocoapods', '~> 1.13'
 gem 'activesupport', '>= 6.1.7.3', '< 7.1.0'
 
