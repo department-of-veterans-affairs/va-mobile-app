@@ -9,8 +9,10 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
+import NoLettersScreen from './NoLettersScreen'
 
 type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOverview'>
 
@@ -18,6 +20,8 @@ function LettersOverviewScreen({ navigation }: LettersOverviewProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+
+  const { data: userAuthorizedServices } = useAuthorizedServices()
 
   const onViewLetters = () => {
     navigateTo('LettersList')
@@ -40,16 +44,22 @@ function LettersOverviewScreen({ navigation }: LettersOverviewProps) {
       title={t('letters.overview.title')}
       {...testIdProps('Letters-page')}
       testID="lettersPageID">
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} paragraphSpacing={true}>
-        {t('letters.overview.documents')}
-      </TextView>
-      <AddressSummary addressData={addressData} />
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
-        {t('letters.overview.ifThisAddress')}
-      </TextView>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
-        <Button onPress={onViewLetters} label={t('letters.overview.viewLetters')} a11yHint={t('letters.overview.viewLetters.hint')} />
-      </Box>
+      {!userAuthorizedServices?.lettersAndDocuments ? (
+        <NoLettersScreen />
+      ) : (
+        <>
+          <TextView variant="MobileBody" mx={theme.dimensions.gutter} paragraphSpacing={true}>
+            {t('letters.overview.documents')}
+          </TextView>
+          <AddressSummary addressData={addressData} />
+          <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+            {t('letters.overview.ifThisAddress')}
+          </TextView>
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
+            <Button onPress={onViewLetters} label={t('letters.overview.viewLetters')} a11yHint={t('letters.overview.viewLetters.hint')} />
+          </Box>
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }
