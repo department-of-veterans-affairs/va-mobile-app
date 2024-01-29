@@ -14,9 +14,39 @@ jest.mock('utils/hooks', () => {
   }
 })
 
+let authorizedServicesMockData = {
+  appeals: true,
+  appointments: true,
+  claims: true,
+  decisionLetters: true,
+  directDepositBenefits: true,
+  directDepositBenefitsUpdate: true,
+  disabilityRating: true,
+  genderIdentity: true,
+  lettersAndDocuments: true,
+  militaryServiceHistory: true,
+  paymentHistory: true,
+  preferredName: true,
+  prescriptions: true,
+  scheduleAppointments: true,
+  secureMessaging: true,
+  userProfileUpdate: true,
+}
+jest.mock('../../../api/authorizedServices/getAuthorizedServices', () => {
+  let original = jest.requireActual('../../../api/authorizedServices/getAuthorizedServices')
+  return {
+    ...original,
+    useAuthorizedServices: jest.fn().mockReturnValue({
+      status: 'success',
+      data: authorizedServicesMockData,
+    }),
+  }
+})
+
 context('LettersOverviewScreen', () => {
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (isAuthorized = true) => {
     const props = mockNavProps()
+    authorizedServicesMockData.lettersAndDocuments = isAuthorized
 
     render(<LettersOverviewScreen {...props} />)
   }
@@ -34,10 +64,16 @@ context('LettersOverviewScreen', () => {
 
   it('should go to edit address when the address is pressed', () => {
     fireEvent.press(screen.getByRole('button', { name: 'Mailing address Add your mailing address' }))
-    expect(mockNavigationSpy).toHaveBeenCalledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS, })
+    expect(mockNavigationSpy).toHaveBeenCalledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS })
   })
+
   it('should go to letters list screen when Review letters is pressed', () => {
     fireEvent.press(screen.getByRole('button', { name: 'Review letters' }))
     expect(mockNavigationSpy).toHaveBeenCalledWith('LettersList')
+  })
+
+  it('should show No Letters screen when service is not authorized', () => {
+    initializeTestInstance(false)
+    expect(screen.getByRole('header', { name: "We couldn't find information about your VA letters" })).toBeTruthy()
   })
 })
