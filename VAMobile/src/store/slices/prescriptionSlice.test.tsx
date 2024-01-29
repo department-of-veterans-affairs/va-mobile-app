@@ -4,12 +4,13 @@ import { context, realStore, when } from 'testUtils'
 import { defaultPrescriptionsList as mockData, defaultLoadAllPrescriptionsList as loadAllPrescriptionMockData } from 'utils/tests/prescription'
 import { RootState } from 'store'
 import {
-  dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad,
+  dispatchClearLoadingRequestRefills,
+  dispatchSetPrescriptionsNeedLoad,
   getTrackingInfo,
-  initialPrescriptionState, loadAllPrescriptions,
-  requestRefills
+  initialPrescriptionState,
+  loadAllPrescriptions,
+  requestRefills,
 } from './prescriptionSlice'
-import { RefillRequestSummaryItems } from '../api'
 
 export const ActionTypes: {
   PRESCRIPTION_START_REQUEST_REFILLS: string

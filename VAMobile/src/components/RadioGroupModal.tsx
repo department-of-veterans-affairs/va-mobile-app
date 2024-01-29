@@ -1,4 +1,4 @@
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { Modal, Pressable, PressableProps, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
@@ -22,12 +22,10 @@ export type RadioPickerGroup = {
 export type RadioGroupModalProps = {
   /** Array of groups to display in the modal */
   groups: Array<RadioPickerGroup>
-  /** Callback for when the input is confirmed */
-  onConfirm: () => void
-  /** Callback when the upper right button is pressed */
-  onUpperRightAction: () => void
-  /** Callback for cancelling the interaction */
-  onCancel: () => void
+  /** Callback when the apply button is pressed */
+  onApply: () => void
+  /** Optional callback for cancelling the interaction */
+  onCancel?: () => void
   /** Header text within the modal */
   headerText: string
   /** Text to appear on the button that launches the modal */
@@ -38,12 +36,6 @@ export type RadioGroupModalProps = {
   buttonA11yHint?: string
   /** Optional TestID for the button  */
   buttonTestID?: string
-  /** Text for the button in the upper right of the modal */
-  topRightButtonText: string
-  /** Accessibility hint for the button in the upper right */
-  topRightButtonA11yHint?: string
-  /** Optional TestID for the right button  */
-  topRightButtonTestID?: string
   /** Function called when the modal is opened to support analytics */
   onShowAnalyticsFn?: () => void
   /** Optional TestID for scrollView */
@@ -52,17 +44,13 @@ export type RadioGroupModalProps = {
 
 const RadioGroupModal: FC<RadioGroupModalProps> = ({
   groups,
-  buttonText,
-  headerText,
-  onConfirm,
-  onUpperRightAction,
+  onApply,
   onCancel,
+  headerText,
+  buttonText,
   buttonA11yLabel,
   buttonA11yHint,
   buttonTestID,
-  topRightButtonText,
-  topRightButtonA11yHint,
-  topRightButtonTestID,
   onShowAnalyticsFn,
   testID,
 }) => {
@@ -71,25 +59,19 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const insets = useSafeAreaInsets()
 
-  const showModal = (): void => {
+  const showModal = () => {
     setModalVisible(true)
-    if (onShowAnalyticsFn) {
-      onShowAnalyticsFn()
-    }
+    onShowAnalyticsFn && onShowAnalyticsFn()
   }
 
-  const onCancelPressed = (): void => {
+  const onCancelPressed = () => {
     setModalVisible(false)
-    onCancel()
+    onCancel && onCancel()
   }
 
-  const onApply = (): void => {
+  const onApplyPressed = () => {
     setModalVisible(false)
-    onConfirm()
-  }
-
-  const onUpperRightActionPressed = (): void => {
-    onUpperRightAction()
+    onApply()
   }
 
   const getGroups = () =>
@@ -122,10 +104,9 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   }
 
   const commonButtonProps: TextViewProps = {
-    variant: 'HelperText',
+    variant: 'MobileBody',
     color: 'showAll',
     allowFontScaling: false,
-    py: 3,
   }
 
   const cancelButtonProps: PressableProps = {
@@ -134,28 +115,10 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
     accessibilityHint: t('cancel.picker.a11yHint'),
   }
 
-  const resetButtonProps: PressableProps = {
+  const applyButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
-    accessibilityHint: topRightButtonA11yHint,
-  }
-
-  const pressableProps: PressableProps = {
-    onPress: showModal,
-    accessibilityRole: 'button',
-    accessible: true,
-    accessibilityLabel: buttonA11yLabel,
-    accessibilityHint: buttonA11yHint,
-  }
-
-  const buttonDisplayProps: BoxProps = {
-    backgroundColor: 'modalButton',
-    borderWidth: 1,
-    borderColor: 'modalButton',
-    borderRadius: 20,
-    py: 10,
-    px: 15,
-    alignSelf: 'flex-start',
+    accessibilityHint: t('done.picker.a11yHint'),
   }
 
   return (
@@ -169,7 +132,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
           setModalVisible(!modalVisible)
         }}>
         <Box flex={1} flexDirection="column" accessibilityViewIsModal={true}>
-          <Box pt={insets.top} />
+          <Box backgroundColor="modalOverlay" opacity={0.8} pt={insets.top} />
           <Box backgroundColor="list" pb={insets.bottom} flex={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancelPressed} {...cancelButtonProps}>
@@ -180,26 +143,18 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
                   {headerText}
                 </TextView>
               </Box>
-              <Pressable onPress={onUpperRightActionPressed} {...resetButtonProps}>
-                <TextView testID={topRightButtonTestID} {...commonButtonProps}>
-                  {topRightButtonText}
-                </TextView>
+              <Pressable onPress={onApplyPressed} {...applyButtonProps}>
+                <TextView {...commonButtonProps}>{t('apply')}</TextView>
               </Pressable>
             </Box>
             <VAScrollView testID={testID} bounces={false}>
               {getGroups()}
             </VAScrollView>
-            <Button label={t('apply')} onPress={onApply} />
           </Box>
         </Box>
       </Modal>
-      <Pressable testID={buttonTestID} {...pressableProps}>
-        <Box {...buttonDisplayProps}>
-          <TextView maxFontSizeMultiplier={1.5} variant={'HelperText'}>
-            {buttonText}
-          </TextView>
-        </Box>
-      </Pressable>
+
+      <Button onPress={showModal} label={buttonText} buttonType={ButtonVariants.Secondary} a11yLabel={buttonA11yLabel} a11yHint={buttonA11yHint} testID={buttonTestID} />
     </View>
   )
 }

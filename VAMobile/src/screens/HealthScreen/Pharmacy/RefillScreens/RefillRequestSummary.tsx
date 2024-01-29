@@ -7,7 +7,7 @@ import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, requestRefills } from 'store/slices'
-import { PrescriptionsList } from 'store/api/types'
+import { PrescriptionsList, RefillStatusConstants } from 'store/api/types'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
@@ -38,7 +38,7 @@ function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
   const onNavToHistory = () => {
     dispatch(dispatchSetPrescriptionsNeedLoad())
     dispatch(dispatchClearLoadingRequestRefills())
-    navigateTo('PrescriptionHistory')
+    navigateTo('PrescriptionHistory', {})
   }
 
   useEffect(() => {
@@ -190,7 +190,7 @@ function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
           onPress={() => {
             dispatch(dispatchSetPrescriptionsNeedLoad())
             dispatch(dispatchClearLoadingRequestRefills())
-            navigateTo('PrescriptionHistory')
+            navigateTo('PrescriptionHistory', { startingFilter: RefillStatusConstants.PENDING })
           }}
           label={t('prescriptions.refillRequestSummary.pendingRefills')}
           buttonType={ButtonVariants.Secondary}

@@ -12,16 +12,18 @@ import {
   PrescriptionsPaginationData,
   RefillRequestSummaryItems,
   ScreenIDTypes,
-  TabCounts,
+  StatusCounts,
   get,
   put,
 } from '../api'
 import { AppThunk } from 'store'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { PrescriptionRefillData, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
+import { TFunction } from 'i18next'
 import { contains, filter, indexBy, sortBy } from 'underscore'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { getTextForRefillStatus } from 'utils/prescriptions'
 import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 
@@ -45,13 +47,13 @@ export type PrescriptionState = {
   nonRefillableCount?: number
   refillablePrescriptions?: PrescriptionsList
   loadingTrackingInfo: boolean
+  statusCounts: StatusCounts
   trackingInfo?: Array<PrescriptionTrackingInfo>
   // Request refill (RefillScreen, RefillRequestSummary)
   submittingRequestRefills: boolean
   showLoadingScreenRequestRefills: boolean
   showLoadingScreenRequestRefillsRetry: boolean
   refillRequestSummaryItems: RefillRequestSummaryItems
-  tabCounts: TabCounts
   prescriptionsNeedLoad: boolean
 }
 
@@ -63,12 +65,12 @@ export const initialPrescriptionState: PrescriptionState = {
   refillableCount: 0,
   nonRefillableCount: 0,
   loadingTrackingInfo: false,
+  statusCounts: {},
   trackingInfo: [],
   submittingRequestRefills: false,
   showLoadingScreenRequestRefills: false,
   showLoadingScreenRequestRefillsRetry: false,
   refillRequestSummaryItems: [],
-  tabCounts: {},
   prescriptionsNeedLoad: true,
 }
 
@@ -80,7 +82,7 @@ export const loadAllPrescriptions =
     const params = {
       'page[number]': '1',
       'page[size]': ALL_RX_PAGE_SIZE.toString(),
-      sort: 'prescription_name', // Parameters are snake case for the back end
+      sort: 'refill_status', // Parameters are snake case for the back end
     }
 
     try {
@@ -96,7 +98,7 @@ export const loadAllPrescriptions =
   }
 
 export const filterAndSortPrescriptions =
-  (filters: string[], sort: string, ascending: boolean): AppThunk =>
+  (filters: string[], sort: string, ascending: boolean, t: TFunction): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchStartFilterAndSortPrescriptions())
 
@@ -106,8 +108,12 @@ export const filterAndSortPrescriptions =
     let filteredList: PrescriptionsList = []
 
     // If there are no filters, don't filter the list
-    if (filters && filters[0] === '') {
+    if (filters[0] === '') {
       filteredList = [...prescriptionsToSort]
+    } else if (filters[0] === RefillStatusConstants.PENDING) {
+      filteredList = state.prescriptions.pendingPrescriptions || []
+    } else if (filters[0] === RefillStatusConstants.TRACKING) {
+      filteredList = state.prescriptions.shippedPrescriptions || []
     } else {
       // Apply the custom filter by
       filteredList = filter(prescriptionsToSort, (prescription) => {
@@ -119,7 +125,6 @@ export const filterAndSortPrescriptions =
 
     // Sort the list
     switch (sort) {
-      case PrescriptionSortOptionConstants.FACILITY_NAME:
       case PrescriptionSortOptionConstants.PRESCRIPTION_NAME:
       case PrescriptionSortOptionConstants.REFILL_REMAINING:
         sortedList = sortBy(filteredList, (a) => {
@@ -129,6 +134,11 @@ export const filterAndSortPrescriptions =
       case PrescriptionSortOptionConstants.REFILL_DATE:
         sortedList = sortBy(filteredList, (a) => {
           return new Date(a.attributes.refillDate || 0)
+        })
+        break
+      case PrescriptionSortOptionConstants.REFILL_STATUS:
+        sortedList = sortBy(filteredList, (a) => {
+          return getTextForRefillStatus(a.attributes[sort] as api.RefillStatus, t)
         })
         break
     }
@@ -300,10 +310,10 @@ const prescriptionSlice = createSlice({
       state.prescriptionsById = prescriptionsById
       state.prescriptionsNeedLoad = false
 
-      state.tabCounts = {
-        '0': prescriptions?.length,
-        '1': pendingPrescriptions.length,
-        '2': shippedPrescriptions.length,
+      state.statusCounts = {
+        ...meta.prescriptionStatusCount,
+        pending: pendingPrescriptions.length,
+        tracking: shippedPrescriptions.length,
       }
     },
     dispatchStartFilterAndSortPrescriptions: (state) => {

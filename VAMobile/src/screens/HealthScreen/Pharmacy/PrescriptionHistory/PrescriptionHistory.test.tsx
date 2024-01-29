@@ -3,17 +3,15 @@ import { screen } from '@testing-library/react-native'
 
 import { render, context, mockNavProps } from 'testUtils'
 import PrescriptionHistory from './PrescriptionHistory'
-import { PrescriptionHistoryTabs, PrescriptionsGetData } from 'store/api'
+import { PrescriptionsGetData } from 'store/api'
 import { initialPrescriptionState } from 'store/slices'
-import { PrescriptionHistoryTabConstants } from 'store/api/types'
-
 
 jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
   let original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({
-      status: "success",
+      status: 'success',
       data: {
         appeals: true,
         appointments: true,
@@ -30,12 +28,11 @@ jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
         prescriptions: true,
         scheduleAppointments: true,
         secureMessaging: true,
-        userProfileUpdate: true
-      }
-    })
+        userProfileUpdate: true,
+      },
+    }),
   }
 })
-
 
 const prescriptionData: PrescriptionsGetData = {
   data: [
@@ -245,6 +242,12 @@ const prescriptionData: PrescriptionsGetData = {
       totalPages: 7,
       totalEntries: 63,
     },
+    prescriptionStatusCount: {
+      active: 4,
+      discontinued: 4,
+      transferred: 1,
+      total: 9,
+    },
   },
   links: {
     self: 'https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1',
@@ -295,11 +298,6 @@ context('PrescriptionHistory', () => {
           prescriptionPagination: prescriptionData.meta.pagination,
           prescriptionsNeedLoad: false,
           loadingHistory: false,
-          tabCounts: {
-            '0': 8,
-            '1': 4,
-            '2': 3,
-          },
         },
       },
     })
