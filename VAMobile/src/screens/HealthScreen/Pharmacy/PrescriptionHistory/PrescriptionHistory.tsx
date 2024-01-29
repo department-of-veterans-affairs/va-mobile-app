@@ -171,7 +171,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   useEffect(() => {
     if (hasTransferred) {
-      logAnalyticsEvent(Events.vama_rx_refill_cerner())
+      logAnalyticsEvent(Events.vama_cerner_alert())
     }
   }, [hasTransferred])
 
@@ -571,7 +571,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       ),
       a11yLabel: t('prescription.history.transferred.title'),
       onExpand() {
-        logAnalyticsEvent(Events.vama_rx_cerner_exp())
+        logAnalyticsEvent(Events.vama_cerner_alert_exp())
       },
     }
 

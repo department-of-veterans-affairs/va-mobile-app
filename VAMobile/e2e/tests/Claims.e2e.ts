@@ -127,19 +127,19 @@ describe('Claims Screen', () => {
   })
 
   it('verify that the user is sent to the file upload page', async () => {
-    await element(by.text('Request 2')).tap()
+    await element(by.text('Dental disability - More information needed')).tap()
     await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
   })
 
   it('should back out of the file request screen and reenter a new file request screen', async () => {
     await element(by.text('Requests')).tap()
-    await element(by.text('Request 3')).tap()
+    await element(by.text('Accidental injury - 21-4176 needed')).tap()
   })
 
   it('verify the select files screen displays the correct info', async () => {
     await element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).tap()
-    await expect(element(by.text('Select a file to upload for Request 3'))).toExist()
+    await expect(element(by.text('Select a file to upload for Accidental injury - 21-4176 needed'))).toExist()
     await expect(element(by.label(ClaimsE2eIdConstants.MAXIMUM_FILE_SIZE_LABEL))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.ACCEPTED_FILE_TYPES_TEXT))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT)).atIndex(1)).toExist()
