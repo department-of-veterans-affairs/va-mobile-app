@@ -1,9 +1,33 @@
+---
+title: Pagination
+---
+
 import CodeBlock from '@theme/CodeBlock'
 import PaginationString from '!!raw-loader!@componentsDocs/Pagination'
 
+Pagination is navigation for paginated content.
+
+## Examples
+
+### Master component
+<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/fHX24yGleQdlxXLujq2GRn/%5BNEW%5D-Link---%236869?type=design&node-id=235-732&mode=design&t=vrDLNn1qNqe6J3mm-4" title="Image of master component in Figma showing light and dark mode" allowfullscreen></iframe>
+
+### Examples
+<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/fHX24yGleQdlxXLujq2GRn/%5BNEW%5D-Link---%236869?type=design&node-id=235-674&mode=design&t=vrDLNn1qNqe6J3mm-4" allowfullscreen></iframe>
+
+## Usage
+* Refer to the [VA Design System for usage guidance](https://design.va.gov/components/pagination#usage)
+
+## Accessibility considerations
+* Refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/pagination#accessibility-considerations)
+
+## Related
+* [Pagination - VA Design System](https://design.va.gov/components/pagination)
+* [Pagination - USWDS](https://designsystem.digital.gov/components/pagination/)
+
+## Code usage
+
 import ComponentTopInfo from '../../../../../src/components/ComponentInfo'
-
 export const exampleString = `<Pagination page={1} onNext={() => {}} onPrev={() => {}} totalEntries={12} pageSize={10} />`
-
 
 <ComponentTopInfo componentName="Pagination" example={exampleString} codeString={PaginationString} />
