@@ -16,7 +16,7 @@ function PrescriptionsDetailsBanner() {
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
   useEffect(() => {
-    logAnalyticsEvent(Events.vama_rx_refill_cerner())
+    logAnalyticsEvent(Events.vama_cerner_alert())
   }, [])
 
   const getContent = () => {
@@ -59,10 +59,6 @@ function PrescriptionsDetailsBanner() {
     )
   }
 
-  const onExpand = () => {
-    logAnalyticsEvent(Events.vama_rx_cerner_exp())
-  }
-
   return (
     <VAScrollView>
       <Box mb={contentMarginBottom}>
@@ -71,7 +67,7 @@ function PrescriptionsDetailsBanner() {
           headerText={t('prescription.details.banner.title')}
           body={getContent()}
           a11yLabel={t('prescription.details.banner.title')}
-          onExpand={onExpand}
+          onExpand={() => logAnalyticsEvent(Events.vama_cerner_alert_exp())}
         />
       </Box>
     </VAScrollView>
