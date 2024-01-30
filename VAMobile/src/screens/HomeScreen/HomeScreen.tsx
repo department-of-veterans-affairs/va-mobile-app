@@ -6,9 +6,8 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useCallback } from 'react'
 
-import { AppointmentsState, ClaimsAndAppealsState, DisabilityRatingState, LettersState, PrescriptionState, getLetterBeneficiaryData } from 'store/slices'
+import { AppointmentsState, ClaimsAndAppealsState, DisabilityRatingState, LettersState, PrescriptionState, getLetterBeneficiaryData, prefetchClaimsAndAppeals } from 'store/slices'
 import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
-import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
@@ -17,7 +16,7 @@ import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { getClaimsAndAppeals, getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
+import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
@@ -70,7 +69,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       if ((userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime) {
-        dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE, undefined, undefined, true))
+        dispatch(prefetchClaimsAndAppeals(undefined, true))
       }
     }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals]),
   )

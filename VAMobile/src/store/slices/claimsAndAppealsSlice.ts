@@ -156,7 +156,7 @@ const getLoadedClaimsAndAppeals = (
  * Redux action to prefetch claims and appeals
  */
 export const prefetchClaimsAndAppeals =
-  (screenID?: ScreenIDTypes): AppThunk =>
+  (screenID?: ScreenIDTypes, forceRefetch = false): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchClaimsAndAppeals(screenID))))
@@ -184,7 +184,7 @@ export const prefetchClaimsAndAppeals =
         activeClaimsCount,
       )
 
-      if (activeLoadedClaimsAndAppeals) {
+      if (!forceRefetch && activeLoadedClaimsAndAppeals) {
         activeClaimsAndAppeals = activeLoadedClaimsAndAppeals
       } else {
         activeClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
@@ -194,7 +194,7 @@ export const prefetchClaimsAndAppeals =
         })
       }
 
-      if (closedLoadedClaimsAndAppeals) {
+      if (!forceRefetch && closedLoadedClaimsAndAppeals) {
         closedClaimsAndAppeals = closedLoadedClaimsAndAppeals
       } else {
         closedClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
@@ -204,7 +204,7 @@ export const prefetchClaimsAndAppeals =
         })
       }
 
-      dispatch(dispatchFinishPrefetchGetClaimsAndAppeals({ active: activeClaimsAndAppeals, closed: closedClaimsAndAppeals }))
+      dispatch(dispatchFinishPrefetchGetClaimsAndAppeals({ active: activeClaimsAndAppeals, closed: closedClaimsAndAppeals, resetLists: forceRefetch }))
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `prefetchClaimsAndAppeals: ${claimsAndAppealsNonFatalErrorString}`)
@@ -218,7 +218,7 @@ export const prefetchClaimsAndAppeals =
  * Redux action to get all claims and appeals
  */
 export const getClaimsAndAppeals =
-  (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1, forceRefetch = false): AppThunk =>
+  (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaimsAndAppeals(claimType, screenID, page))))
@@ -229,7 +229,7 @@ export const getClaimsAndAppeals =
       const isActive = claimType === ClaimTypeConstants.ACTIVE
       const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems, activeClaimsCount } = getState().claimsAndAppeals
       const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, claimType, page, DEFAULT_PAGE_SIZE, activeClaimsCount)
-      if (!forceRefetch && loadedClaimsAndAppeals) {
+      if (loadedClaimsAndAppeals) {
         claimsAndAppeals = loadedClaimsAndAppeals
       } else {
         claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
@@ -474,8 +474,11 @@ const claimsAndAppealsSlice = createSlice({
       state.loadingClaimsAndAppeals = true
     },
 
-    dispatchFinishPrefetchGetClaimsAndAppeals: (state, action: PayloadAction<{ active?: ClaimsAndAppealsGetData; closed?: ClaimsAndAppealsGetData; error?: Error }>) => {
-      const { active, closed, error } = action.payload
+    dispatchFinishPrefetchGetClaimsAndAppeals: (
+      state,
+      action: PayloadAction<{ active?: ClaimsAndAppealsGetData; closed?: ClaimsAndAppealsGetData; error?: Error; resetLists?: boolean }>,
+    ) => {
+      const { active, closed, error, resetLists } = action.payload
       const activeData = active || emptyClaimsAndAppealsGetData
       const closedData = closed || emptyClaimsAndAppealsGetData
       const activeMetaErrors = activeData?.meta?.errors || []
@@ -496,10 +499,15 @@ const claimsAndAppealsSlice = createSlice({
       state.claimsAndAppealsByClaimType.CLOSED = closedList
       state.claimsAndAppealsMetaPagination.ACTIVE = activeData?.meta?.pagination || state.claimsAndAppealsMetaPagination.ACTIVE
       state.claimsAndAppealsMetaPagination.CLOSED = closedData?.meta?.pagination || state.claimsAndAppealsMetaPagination.CLOSED
-      state.loadedClaimsAndAppeals.ACTIVE = activeData?.meta.dataFromStore ? curLoadedActive : curLoadedActive.concat(activeList)
-      state.loadedClaimsAndAppeals.CLOSED = closedData?.meta.dataFromStore ? curLoadedClosed : curLoadedClosed.concat(closedList)
+      if (resetLists) {
+        state.loadedClaimsAndAppeals.ACTIVE = activeList
+        state.loadedClaimsAndAppeals.CLOSED = closedList
+      } else {
+        state.loadedClaimsAndAppeals.ACTIVE = activeData?.meta.dataFromStore ? curLoadedActive : curLoadedActive.concat(activeList)
+        state.loadedClaimsAndAppeals.CLOSED = closedData?.meta.dataFromStore ? curLoadedClosed : curLoadedClosed.concat(closedList)
+      }
       state.activeClaimsCount = activeData?.meta.activeClaimsCount
-      state.preloadComplete = true
+      state.preloadComplete = !error
     },
 
     dispatchStartGetAllClaimsAndAppeals: (state) => {
