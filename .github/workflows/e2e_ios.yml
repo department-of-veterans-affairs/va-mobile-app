@@ -46,7 +46,7 @@ jobs:
   e2e-ios:
     if: ${{ always() }}
     needs: start_slack_thread
-    runs-on: macos-latest-xl
+    runs-on: macos-13
     env:
       # Path to write secret key to. Also used by fastlane
       APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
