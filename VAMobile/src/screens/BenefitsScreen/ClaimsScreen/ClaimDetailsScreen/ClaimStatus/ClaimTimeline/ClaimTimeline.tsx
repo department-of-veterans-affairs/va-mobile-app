@@ -33,7 +33,7 @@ function ClaimTimeline({ attributes, claimID }: ClaimTimelineProps) {
       )}
       <Box borderColor={'primary'} borderTopWidth={theme.dimensions.borderWidth} mt={mt} mb={theme.dimensions.condensedMarginBetween}>
         {[1, 2, 3, 4, 5].map((phase) => (
-          <ClaimPhase phase={phase} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
+          <ClaimPhase phase={phase} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} key={phase} />
         ))}
       </Box>
     </Box>
