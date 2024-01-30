@@ -96,6 +96,7 @@ Call postLoggedIn to finish login setup on the BE, Success is empty and we don't
 
 const postLoggedIn = async () => {
   try {
+    await logAnalyticsEvent(Events.vama_login_success(true))
     await api.post('/v0/user/logged-in')
   } catch (error) {
     if (isErrorObject(error)) {
@@ -639,7 +640,6 @@ export const handleTokenCallbackUrl =
         }).toString(),
       })
       const authCredentials = await processAuthResponse(response)
-      await logAnalyticsEvent(Events.vama_login_success(true))
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin({ authCredentials }))
       postLoggedIn()
