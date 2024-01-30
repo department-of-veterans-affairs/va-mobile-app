@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useCallback } from 'react'
 
-import { AppointmentsState, ClaimsAndAppealsState, PrescriptionState } from 'store/slices'
+import { AppointmentsState, ClaimsAndAppealsState, DisabilityRatingState, LettersState, PrescriptionState, getLetterBeneficiaryData } from 'store/slices'
 import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { CloseSnackbarOnNavigation } from 'constants/common'
@@ -26,6 +26,7 @@ import { getClaimsAndAppeals, getInbox, loadAllPrescriptions, prefetchAppointmen
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
+import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
@@ -51,10 +52,13 @@ export function HomeScreen({}: HomeScreenProps) {
   const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
+  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
   const { data: userAuthorizedServices } = useAuthorizedServices()
 
   useFocusEffect(
@@ -89,6 +93,15 @@ export function HomeScreen({}: HomeScreenProps) {
     }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
   )
 
+  useFocusEffect(
+    useCallback(() => {
+      if (userAuthorizedServices?.lettersAndDocuments && !lettersInDowntime) {
+        dispatch(getLetterBeneficiaryData())
+      }
+    }, [dispatch, lettersInDowntime, userAuthorizedServices?.lettersAndDocuments]),
+  )
+
+  const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
@@ -164,6 +177,18 @@ export function HomeScreen({}: HomeScreenProps) {
               onPress={() => Linking.openURL('vamobile://claims')}
               borderWidth={theme.dimensions.buttonBorderWidth}
             />
+          </Box>
+        )}
+        {!!ratingData?.combinedDisabilityRating && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <TextView variant={'MobileBodyBold'}>{t('disabilityRating.title')}</TextView>
+            <TextView>{`${t('disabilityRating.combinePercent', { combinedPercent: ratingData.combinedDisabilityRating })}`}</TextView>
+          </Box>
+        )}
+        {!!letterBeneficiaryData?.benefitInformation.monthlyAwardAmount && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <TextView variant={'MobileBodyBold'}>{t('monthlyPayment')}</TextView>
+            <TextView>{`$${roundToHundredthsPlace(letterBeneficiaryData.benefitInformation.monthlyAwardAmount)}`}</TextView>
           </Box>
         )}
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
