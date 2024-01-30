@@ -3,9 +3,7 @@ import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
 import { appeal as AppealPayload } from 'screens/BenefitsScreen/ClaimsScreen/appealData'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
-import { ClaimEventData, ClaimsAndAppealsGetDataMeta } from 'store/api/types'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { ClaimEventData } from 'store/api/types'
 import { DocumentPickerResponse } from '../../screens/BenefitsScreen/BenefitsStackScreens'
 import { contentTypes } from 'store/api/api'
 import { Asset } from 'react-native-image-picker'
@@ -13,21 +11,14 @@ import {
   fileUploadSuccess,
   getAppeal,
   getClaim,
-  getClaimsAndAppeals,
   initialClaimsAndAppealsState,
-  prefetchClaimsAndAppeals,
   submitClaimDecision,
   uploadFileToClaim,
 } from './claimsAndAppealsSlice'
-import { InitialState } from '.'
 import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 
 export const ActionTypes: {
-  CLAIMS_AND_APPEALS_START_PREFETCH_GET: string
-  CLAIMS_AND_APPEALS_FINISH_PREFETCH_GET: string
-  CLAIMS_AND_APPEALS_START_GET: string
-  CLAIMS_AND_APPEALS_FINISH_GET: string
   CLAIMS_AND_APPEALS_START_GET_ClAIM: string
   CLAIMS_AND_APPEALS_FINISH_GET_ClAIM: string
   CLAIMS_AND_APPEALS_START_GET_APPEAL: string
@@ -38,10 +29,6 @@ export const ActionTypes: {
   CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD: string
   CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS: string
 } = {
-  CLAIMS_AND_APPEALS_START_PREFETCH_GET: 'claimsAndAppeals/dispatchStartPrefetchGetClaimsAndAppeals',
-  CLAIMS_AND_APPEALS_FINISH_PREFETCH_GET: 'claimsAndAppeals/dispatchFinishPrefetchGetClaimsAndAppeals',
-  CLAIMS_AND_APPEALS_START_GET: 'claimsAndAppeals/dispatchStartGetAllClaimsAndAppeals',
-  CLAIMS_AND_APPEALS_FINISH_GET: 'claimsAndAppeals/dispatchFinishAllClaimsAndAppeals',
   CLAIMS_AND_APPEALS_START_GET_ClAIM: 'claimsAndAppeals/dispatchStartGetClaim',
   CLAIMS_AND_APPEALS_FINISH_GET_ClAIM: 'claimsAndAppeals/dispatchFinishGetClaim',
   CLAIMS_AND_APPEALS_START_GET_APPEAL: 'claimsAndAppeals/dispatchStartGetAppeal',
@@ -176,214 +163,6 @@ context('claimsAndAppeals', () => {
       },
     },
   ]
-
-  describe('prefetchClaimsAndAppeals', () => {
-    const mockPagination: ClaimsAndAppealsGetDataMeta = {
-      dataFromStore: false,
-      pagination: {
-        currentPage: 1,
-        perPage: 10,
-        totalEntries: 3,
-      },
-    }
-
-    it('should dispatch the correct actions', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
-        .mockResolvedValue({ data: activeClaimsAndAppealsList, meta: mockPagination })
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'true', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
-        .mockResolvedValue({ data: closedClaimsAndAppealsList, meta: mockPagination })
-      const store = realStore()
-      await store.dispatch(prefetchClaimsAndAppeals())
-
-      const actions = store.getActions()
-
-      const startAction = _.find(actions, { type: ActionTypes.CLAIMS_AND_APPEALS_START_PREFETCH_GET })
-      expect(startAction).toBeTruthy()
-
-      const endAction = _.find(actions, { type: ActionTypes.CLAIMS_AND_APPEALS_FINISH_PREFETCH_GET })
-      expect(endAction).toBeTruthy()
-      expect(endAction?.state.claimsAndAppeals.loadingClaimsAndAppeals).toBe(false)
-
-      const { claimsAndAppeals } = store.getState()
-      expect(claimsAndAppeals.error).toBeFalsy()
-      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: closedClaimsAndAppealsList })
-      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: closedClaimsAndAppealsList })
-      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({ ACTIVE: mockPagination.pagination, CLOSED: mockPagination.pagination })
-    })
-
-    it('should return error if it fails', async () => {
-      const error = new Error('backend error')
-
-      // Force one call to error out
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
-        .mockRejectedValue(error)
-      const store = realStore()
-      await store.dispatch(prefetchClaimsAndAppeals())
-
-      const actions = store.getActions()
-
-      const startAction = _.find(actions, { type: ActionTypes.CLAIMS_AND_APPEALS_START_PREFETCH_GET })
-      expect(startAction).toBeTruthy()
-
-      const endAction = _.find(actions, { type: ActionTypes.CLAIMS_AND_APPEALS_FINISH_PREFETCH_GET })
-      expect(endAction).toBeTruthy()
-      expect(endAction?.state.claimsAndAppeals.loadingClaimsAndAppeals).toBe(false)
-
-      const { claimsAndAppeals } = store.getState()
-      expect(claimsAndAppeals.error).toEqual(error)
-    })
-
-    it('should use loadedClaimsAndAppeals data when available', async () => {
-      const store = realStore({
-        ...InitialState,
-        claimsAndAppeals: {
-          ...initialClaimsAndAppealsState,
-          loadedClaimsAndAppeals: {
-            ACTIVE: activeClaimsAndAppealsList,
-            CLOSED: closedClaimsAndAppealsList,
-          },
-          claimsAndAppealsMetaPagination: {
-            ACTIVE: mockPagination.pagination,
-            CLOSED: mockPagination.pagination,
-          },
-        },
-      })
-
-      //prefetchClaimsAndAppeals
-      await store.dispatch(prefetchClaimsAndAppeals())
-
-      expect(api.get).not.toBeCalled()
-
-      const actions = store.getActions()
-
-      const startAction = _.find(actions, { type: ActionTypes.CLAIMS_AND_APPEALS_START_PREFETCH_GET })
-      expect(startAction).toBeTruthy()
-
-      const endAction = _.find(actions, { type: ActionTypes.CLAIMS_AND_APPEALS_FINISH_PREFETCH_GET })
-      expect(endAction).toBeTruthy()
-      expect(endAction?.state.claimsAndAppeals.loadingClaimsAndAppeals).toBe(false)
-
-      const { claimsAndAppeals } = store.getState()
-      expect(claimsAndAppeals.error).toBeFalsy()
-      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: closedClaimsAndAppealsList })
-      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: closedClaimsAndAppealsList })
-      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({ ACTIVE: mockPagination.pagination, CLOSED: mockPagination.pagination })
-    })
-  })
-
-  describe('getClaimsAndAppeals', () => {
-    const mockPagination: ClaimsAndAppealsGetDataMeta = {
-      dataFromStore: false,
-      pagination: {
-        currentPage: 2,
-        perPage: 10,
-        totalEntries: 3,
-      },
-    }
-
-    it('should dispatch the correct actions', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
-        .mockResolvedValue({ data: activeClaimsAndAppealsList, meta: mockPagination })
-      const store = realStore()
-      await store.dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE))
-
-      const actions = store.getActions()
-
-      const startAction = _.find(actions, { type: ActionTypes.CLAIMS_AND_APPEALS_START_GET })
-      expect(startAction).toBeTruthy()
-
-      const endAction = _.find(actions, { type: ActionTypes.CLAIMS_AND_APPEALS_FINISH_GET })
-      expect(endAction).toBeTruthy()
-      expect(endAction?.state.claimsAndAppeals.loadingClaimsAndAppeals).toBe(false)
-
-      const { claimsAndAppeals } = store.getState()
-      expect(claimsAndAppeals.error).toBeFalsy()
-      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: [] })
-      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: [] })
-      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({
-        ACTIVE: mockPagination.pagination,
-        CLOSED: {
-          currentPage: 1,
-          totalEntries: 0,
-          perPage: 0,
-        },
-      })
-    })
-
-    it('should return error if it fails', async () => {
-      const error = new Error('backend error')
-
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
-        .mockRejectedValue(error)
-      const store = realStore()
-      await store.dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE))
-
-      const actions = store.getActions()
-
-      const startAction = _.find(actions, { type: ActionTypes.CLAIMS_AND_APPEALS_START_GET })
-      expect(startAction).toBeTruthy()
-
-      const endAction = _.find(actions, { type: ActionTypes.CLAIMS_AND_APPEALS_FINISH_GET })
-      expect(endAction).toBeTruthy()
-      expect(endAction?.state.claimsAndAppeals.loadingClaimsAndAppeals).toBe(false)
-
-      const { claimsAndAppeals } = store.getState()
-      expect(claimsAndAppeals.error).toEqual(error)
-    })
-
-    it('should use loadedClaimsAndAppeals data when available', async () => {
-      const store = realStore({
-        ...InitialState,
-        claimsAndAppeals: {
-          ...initialClaimsAndAppealsState,
-          loadedClaimsAndAppeals: {
-            ACTIVE: activeClaimsAndAppealsList,
-            CLOSED: [],
-          },
-          claimsAndAppealsMetaPagination: {
-            ACTIVE: mockPagination.pagination,
-            CLOSED: mockPagination.pagination,
-          },
-        },
-      })
-
-      //loadedClaimsAndAppeals
-      await store.dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE))
-
-      expect(api.get).not.toBeCalled()
-
-      const actions = store.getActions()
-
-      const startAction = _.find(actions, { type: ActionTypes.CLAIMS_AND_APPEALS_START_GET })
-      expect(startAction).toBeTruthy()
-
-      const endAction = _.find(actions, { type: ActionTypes.CLAIMS_AND_APPEALS_FINISH_GET })
-      expect(endAction).toBeTruthy()
-      expect(endAction?.state.claimsAndAppeals.loadingClaimsAndAppeals).toBe(false)
-
-      const { claimsAndAppeals } = store.getState()
-      expect(claimsAndAppeals.error).toBeFalsy()
-      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: [] })
-      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: [] })
-      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({
-        ACTIVE: {
-          currentPage: 1,
-          perPage: 10,
-          totalEntries: 3,
-        },
-        CLOSED: {
-          currentPage: 2,
-          perPage: 10,
-          totalEntries: 3,
-        },
-      })
-    })
-  })
 
   describe('getClaim', () => {
     it('should dispatch the correct actions', async () => {

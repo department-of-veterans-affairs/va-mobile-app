@@ -148,89 +148,6 @@ const getLoadedClaimsAndAppeals = (
 }
 
 /**
- * Redux action to prefetch claims and appeals
- */
-export const prefetchClaimsAndAppeals =
-  (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchClaimsAndAppeals(screenID))))
-    dispatch(dispatchStartPrefetchGetClaimsAndAppeals())
-
-    try {
-      let activeClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined
-      let closedClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined
-
-      const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
-      const activeLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.ACTIVE, 1, DEFAULT_PAGE_SIZE)
-      const closedLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.CLOSED, 1, DEFAULT_PAGE_SIZE)
-
-      if (activeLoadedClaimsAndAppeals) {
-        activeClaimsAndAppeals = activeLoadedClaimsAndAppeals
-      } else {
-        activeClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
-          'page[number]': '1',
-          'page[size]': DEFAULT_PAGE_SIZE.toString(),
-          showCompleted: 'false',
-        })
-      }
-
-      if (closedLoadedClaimsAndAppeals) {
-        closedClaimsAndAppeals = closedLoadedClaimsAndAppeals
-      } else {
-        closedClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
-          'page[number]': '1',
-          'page[size]': DEFAULT_PAGE_SIZE.toString(),
-          showCompleted: 'true',
-        })
-      }
-
-      dispatch(dispatchFinishPrefetchGetClaimsAndAppeals({ active: activeClaimsAndAppeals, closed: closedClaimsAndAppeals }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `prefetchClaimsAndAppeals: ${claimsAndAppealsNonFatalErrorString}`)
-        dispatch(dispatchFinishPrefetchGetClaimsAndAppeals({ active: undefined, closed: undefined, error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
-      }
-    }
-  }
-
-/**
- * Redux action to get all claims and appeals
- */
-export const getClaimsAndAppeals =
-  (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1): AppThunk =>
-  async (dispatch, getState) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaimsAndAppeals(claimType, screenID, page))))
-    dispatch(dispatchStartGetAllClaimsAndAppeals())
-
-    try {
-      let claimsAndAppeals
-      const isActive = claimType === ClaimTypeConstants.ACTIVE
-      const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
-      const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, claimType, page, DEFAULT_PAGE_SIZE)
-      if (loadedClaimsAndAppeals) {
-        claimsAndAppeals = loadedClaimsAndAppeals
-      } else {
-        claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
-          'page[number]': page.toString(),
-          'page[size]': DEFAULT_PAGE_SIZE.toString(),
-          showCompleted: isActive ? 'false' : 'true',
-        })
-      }
-
-      dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `getClaimsAndAppeals: ${claimsAndAppealsNonFatalErrorString}`)
-        dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals: undefined, error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
-      }
-    }
-  }
-
-/**
  * Redux action to get single claim
  */
 export const getClaim =
@@ -451,59 +368,6 @@ const claimsAndAppealsSlice = createSlice({
   name: 'claimsAndAppeals',
   initialState: initialClaimsAndAppealsState,
   reducers: {
-    dispatchStartPrefetchGetClaimsAndAppeals: (state) => {
-      state.loadingClaimsAndAppeals = true
-    },
-
-    dispatchFinishPrefetchGetClaimsAndAppeals: (state, action: PayloadAction<{ active?: ClaimsAndAppealsGetData; closed?: ClaimsAndAppealsGetData; error?: Error }>) => {
-      const { active, closed, error } = action.payload
-      const activeData = active || emptyClaimsAndAppealsGetData
-      const closedData = closed || emptyClaimsAndAppealsGetData
-      const activeMetaErrors = activeData?.meta?.errors || []
-      const closedMetaErrors = closedData?.meta?.errors || []
-      const activeAndClosedMetaErrors = [...activeMetaErrors, ...closedMetaErrors]
-      const claimsServiceError = !!activeAndClosedMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
-      const appealsServiceError = !!activeAndClosedMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
-      const curLoadedActive = state.loadedClaimsAndAppeals.ACTIVE
-      const curLoadedClosed = state.loadedClaimsAndAppeals.CLOSED
-      const activeList = sortByLatestDate(activeData?.data || [])
-      const closedList = sortByLatestDate(closedData?.data || [])
-
-      state.claimsServiceError = claimsServiceError
-      state.appealsServiceError = appealsServiceError
-      state.error = error
-      state.loadingClaimsAndAppeals = false
-      state.finishedLoadingClaimsAndAppeals = true
-      state.claimsAndAppealsByClaimType.ACTIVE = activeList
-      state.claimsAndAppealsByClaimType.CLOSED = closedList
-      state.claimsAndAppealsMetaPagination.ACTIVE = activeData?.meta?.pagination || state.claimsAndAppealsMetaPagination.ACTIVE
-      state.claimsAndAppealsMetaPagination.CLOSED = closedData?.meta?.pagination || state.claimsAndAppealsMetaPagination.CLOSED
-      state.loadedClaimsAndAppeals.ACTIVE = activeData?.meta.dataFromStore ? curLoadedActive : curLoadedActive.concat(activeList)
-      state.loadedClaimsAndAppeals.CLOSED = closedData?.meta.dataFromStore ? curLoadedClosed : curLoadedClosed.concat(closedList)
-    },
-
-    dispatchStartGetAllClaimsAndAppeals: (state) => {
-      state.loadingClaimsAndAppeals = true
-    },
-
-    dispatchFinishAllClaimsAndAppeals: (state, action: PayloadAction<{ claimType: ClaimType; claimsAndAppeals?: ClaimsAndAppealsGetData; error?: Error }>) => {
-      const { claimType, claimsAndAppeals, error } = action.payload
-
-      const claimsAndAppealsMetaErrors = claimsAndAppeals?.meta?.errors || []
-      const claimsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
-      const appealsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
-      const curLoadedClaimsAndAppeals = state.loadedClaimsAndAppeals[claimType]
-      const claimsAndAppealsList = sortByLatestDate(claimsAndAppeals?.data || [])
-
-      state.claimsServiceError = claimsServiceError
-      state.appealsServiceError = appealsServiceError
-      state.error = error
-      state.loadingClaimsAndAppeals = false
-      state.claimsAndAppealsByClaimType[claimType] = claimsAndAppealsList
-      state.claimsAndAppealsMetaPagination[claimType] = claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination[claimType]
-      state.loadedClaimsAndAppeals[claimType] = claimsAndAppeals?.meta.dataFromStore ? curLoadedClaimsAndAppeals : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
-    },
-
     dispatchStartGetClaim: (state, action: PayloadAction<{ abortController: AbortController }>) => {
       state.loadingClaim = true
       state.cancelLoadingDetailScreen = action.payload.abortController
@@ -584,18 +448,10 @@ const claimsAndAppealsSlice = createSlice({
       state.fileUploadedFailure = false
       state.filesUploadedSuccess = false
     },
-
-    dispatchClearLoadedClaimsAndAppeals: () => {
-      return { ...initialClaimsAndAppealsState }
-    },
   },
 })
 
 export const {
-  dispatchFinishPrefetchGetClaimsAndAppeals,
-  dispatchStartPrefetchGetClaimsAndAppeals,
-  dispatchStartGetAllClaimsAndAppeals,
-  dispatchFinishAllClaimsAndAppeals,
   dispatchStartGetClaim,
   dispatchFinishGetClaim,
   dispatchFinishGetAppeal,
@@ -604,7 +460,6 @@ export const {
   dispatchStartSubmitClaimDecision,
   dispatchFinishFileUpload,
   dispatchStartFileUpload,
-  dispatchClearLoadedClaimsAndAppeals,
   dispatchFileUploadSuccess,
 } = claimsAndAppealsSlice.actions
 export default claimsAndAppealsSlice.reducer

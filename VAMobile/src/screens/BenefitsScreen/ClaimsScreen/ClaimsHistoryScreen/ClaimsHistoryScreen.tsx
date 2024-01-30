@@ -5,16 +5,16 @@ import React, { ReactElement, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { ClaimsAndAppealsState, prefetchClaimsAndAppeals } from 'store/slices'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { ClaimsAndAppealsState } from 'store/slices'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { featureEnabled } from 'utils/remoteConfig'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from '../NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
@@ -24,7 +24,6 @@ type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'ClaimsHist
 function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const { claimsAndAppealsByClaimType, loadingClaimsAndAppeals, finishedLoadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<
     RootState,
     ClaimsAndAppealsState
@@ -41,20 +40,9 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const [selectedTab, setSelectedTab] = useState(0)
   const claimType = selectedTab === controlLabels.indexOf(t('claimsTab.active')) ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
   const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
-  const claimsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.claims)
-  const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
 
   const title = featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters ? t('claimsHistory.title') : t('claims.title')
   const backLabel = featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters ? t('claims.title') : t('benefits.title')
-
-  // load claims and appeals and filter upon mount
-  // fetch the first page of Active and Closed
-  useEffect(() => {
-    // only block api call if claims and appeals are both down
-    if (claimsAndAppealsAccess && (claimsNotInDowntime || appealsNotInDowntime)) {
-      dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
-    }
-  }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime, appealsNotInDowntime])
 
   useEffect(() => {
     if (finishedLoadingClaimsAndAppeals) {
@@ -64,9 +52,6 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
 
   const fetchInfoAgain = (): void => {
     refetchUserAuthorizedServices()
-    if (claimsAndAppealsAccess) {
-      dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
-    }
   }
 
   const serviceErrorAlert = (): ReactElement => {
