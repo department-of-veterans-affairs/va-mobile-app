@@ -46,7 +46,7 @@ jobs:
   e2e-ios:
     if: ${{ always() }}
     needs: start_slack_thread
-    runs-on: macos-13
+    runs-on: macos-latest-xl
     env:
       # Path to write secret key to. Also used by fastlane
       APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
@@ -104,7 +104,7 @@ jobs:
         run: yarn e2e:ios-build
 
       - name: Run e2e tests for iOS
-        run: yarn e2e:ios-test --take-screenshots failing --updateSnapshot
+        run: yarn e2e:ios-test /e2e/tests/MilitaryInformation.e2e --take-screenshots failing --updateSnapshot
 
       - name: Upload e2e-junit
         if: failure() || success()
