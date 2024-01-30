@@ -138,7 +138,7 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={onConfirmCancel}
       title={t('personalInformation.preferredName.title')}
-      primaryContentButtonText={t('save')}
+      primaryContentButtonText={preferredNameMutation.isPending ? undefined : t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
       {preferredNameMutation.isPending ? (
         <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />
