@@ -25,7 +25,7 @@ export const Nametag: FC = () => {
 
   useEffect(() => {
     if (personalInfo) {
-      setAnalyticsUserProperty(UserAnalytics.vama_cerner_transition(personalInfo.hasFacilityTransitioningToCerner))
+      setAnalyticsUserProperty(UserAnalytics.vama_cerner_transition(personalInfo.hasFacilityTransitioningToCerner || false))
     }
   }, [personalInfo])
 
