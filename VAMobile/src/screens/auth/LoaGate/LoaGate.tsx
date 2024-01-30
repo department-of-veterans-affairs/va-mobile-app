@@ -1,7 +1,7 @@
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { useNavigation } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, CollapsibleView, FullScreenSubtask, TextView, TextViewProps, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -10,7 +10,7 @@ import { useTheme } from 'utils/hooks'
 
 type LoaGateProps = Record<string, unknown>
 
-const LoaGate: FC<LoaGateProps> = ({}) => {
+function LoaGate({}: LoaGateProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const startAuth = useStartAuth()

@@ -101,6 +101,9 @@ const postLoggedIn = async () => {
   } catch (error) {
     if (isErrorObject(error)) {
       logNonFatalErrorToFirebase(error, 'logged-in Url: /v0/user/logged-in')
+      if (error.status) {
+        await logAnalyticsEvent(Events.vama_user_call(error.status))
+      }
     }
   }
 }
@@ -303,6 +306,12 @@ const storeRefreshToken = async (refreshToken: string, options: Keychain.Options
     AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
     AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
   ])
+    .then(async () => {
+      await logAnalyticsEvent(Events.vama_login_token_store(true))
+    })
+    .catch(async () => {
+      await logAnalyticsEvent(Events.vama_login_token_store(false))
+    })
 }
 
 /**
@@ -312,6 +321,13 @@ const retrieveRefreshToken = async (): Promise<string | undefined> => {
   console.debug('retrieveRefreshToken')
   const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
   const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
+
+  if (reconstructedToken) {
+    await logAnalyticsEvent(Events.vama_login_token_get(true))
+  } else {
+    await logAnalyticsEvent(Events.vama_login_token_get(false))
+  }
+
   return reconstructedToken
 }
 
@@ -453,9 +469,14 @@ export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch
     await dispatch(dispatchSetAnalyticsLogin())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
     postLoggedIn()
-  } catch (err) {
-    console.error(err)
-    logNonFatalErrorToFirebase(err, `attemptIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
+  } catch (error) {
+    if (isErrorObject(error)) {
+      console.error(error)
+      logNonFatalErrorToFirebase(error, `attemptIntializeAuthWithRefreshToken: ${authNonFatalErrorString}`)
+      if (error.status) {
+        await logAnalyticsEvent(Events.vama_login_token_refresh(error.status))
+      }
+    }
     // if some error occurs, we need to force them to re-login
     // even if they had a refreshToken saved, since these tokens are one time use
     // if we fail, we just need to get a new one (re-login) and start over
@@ -647,6 +668,9 @@ export const handleTokenCallbackUrl =
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: ${authNonFatalErrorString}`)
         await logAnalyticsEvent(Events.vama_exchange_failed())
+        if (error.status) {
+          await logAnalyticsEvent(Events.vama_login_token_fetch(error.status))
+        }
         dispatch(dispatchFinishAuthLogin({ error }))
       }
     }
@@ -741,10 +765,10 @@ const authSlice = createSlice({
       const successfulLogin = !action.payload.error
 
       return {
-        ...state,
+        ...(action.payload.error ? initialAuthState : state),
         ...action.payload,
         webLoginUrl: undefined,
-        loading: false,
+        ...(action.payload.error ? { initializing: false } : { loading: false }),
         successfulLogin: successfulLogin,
         loggedIn: successfulLogin,
       }

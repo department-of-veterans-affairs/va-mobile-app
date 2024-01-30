@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import * as CommonComponents from 'components'
 import { Box, FeatureLandingTemplate, PickerItem, TextView, VAModalPicker, VATextInput } from 'components'
@@ -12,7 +12,7 @@ import CommonComponentWhiteList, { PropOptionType } from './CommonComponentWhite
 
 type SandboxScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Sandbox'>
 
-const SandboxScreen: FC<SandboxScreenSettingsScreenProps> = ({ navigation }) => {
+function SandboxScreen({ navigation }: SandboxScreenSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

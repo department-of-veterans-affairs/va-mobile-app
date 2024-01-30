@@ -2,7 +2,7 @@ import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useState } from 'react'
+import React, { useState } from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView, TextViewProps } from 'components'
 import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
@@ -37,7 +37,7 @@ const getGenderIdentity = (demographics: UserDemographics | undefined, t: TFunct
 
 type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'PersonalInformation'>
 
-const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
+function PersonalInformationScreen({ navigation }: PersonalInformationScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()

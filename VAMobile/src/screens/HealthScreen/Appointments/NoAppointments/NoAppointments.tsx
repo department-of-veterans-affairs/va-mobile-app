@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -16,7 +16,7 @@ type NoAppointmentsProps = {
   subTextA11yLabel?: string
 }
 
-export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLabel, showVAGovLink = true }) => {
+export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true }: NoAppointmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
+import React from 'react'
 
 import { Box, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
@@ -16,7 +16,7 @@ import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 
 type InboxProps = Record<string, unknown>
 
-const Inbox: FC<InboxProps> = () => {
+function Inbox({}: InboxProps) {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)

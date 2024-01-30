@@ -1,9 +1,9 @@
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, logout, setBiometricsPreference } from 'store/slices'
@@ -23,7 +23,7 @@ const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_
 
 type SettingsScreenProps = StackScreenProps<HomeStackParamList, 'Settings'>
 
-const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
+function SettingsScreen({ navigation }: SettingsScreenProps) {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -31,7 +31,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const launchExternalLink = useExternalLink()
   const { canStoreWithBiometric, shouldStoreWithBiometric, settingBiometricPreference, supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const dispatchLogout = useDispatch()
+  const dispatchLogout = useAppDispatch()
   const signOutAlert = useDestructiveActionSheet()
   const _logout = () => {
     dispatchLogout(logout())

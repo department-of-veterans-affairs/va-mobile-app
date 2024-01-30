@@ -204,12 +204,6 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
           retry: false,
         },
       },
-      logger: {
-        log: console.log,
-        warn: console.warn,
-        // Silence the error console
-        error: () => {},
-      },
     });
     if (queriesData?.length) {
       queriesData.forEach(({ queryKey, data }) => {
