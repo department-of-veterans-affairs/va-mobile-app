@@ -139,7 +139,7 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
       title={t('personalInformation.genderIdentity.title')}
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
-      primaryContentButtonText={t('save')}
+      primaryContentButtonText={errorCheck || loadingCheck ? undefined : t('save')}
       onPrimaryContentButtonPress={onSave}
       testID="PersonalInformationTestID">
       {errorCheck ? (
