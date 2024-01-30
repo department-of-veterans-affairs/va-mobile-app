@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, useCallback } from 'react'
 
-import { AppointmentsState, ClaimsAndAppealsState, PrescriptionState, prefetchClaimsAndAppeals } from 'store/slices'
 import { AppointmentsState, ClaimsAndAppealsState, DisabilityRatingState, LettersState, PrescriptionState, getLetterBeneficiaryData, prefetchClaimsAndAppeals } from 'store/slices'
 import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
