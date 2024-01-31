@@ -1022,6 +1022,12 @@ export const UserAnalytics = {
       value: value.toString(),
     }
   },
+  vama_cerner_transition: (value: boolean): UserAnalytic => {
+    return {
+      name: 'vama_cerner_transition',
+      value: value.toString(),
+    }
+  },
   vama_environment: (value: string): UserAnalytic => {
     return {
       name: 'vama_environment',
