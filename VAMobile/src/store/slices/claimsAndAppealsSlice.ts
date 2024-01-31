@@ -10,16 +10,13 @@ import {
   ClaimDocUploadData,
   ClaimEventData,
   ClaimEventDocumentData,
-  ClaimsAndAppealsErrorServiceTypesConstants,
-  ClaimsAndAppealsGetData,
   ClaimsAndAppealsGetDataMetaPagination,
   ClaimsAndAppealsList,
   FILE_REQUEST_STATUS,
   ScreenIDTypes,
 } from 'store/api/types'
 import { Asset } from 'react-native-image-picker'
-import { ClaimType, ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { ClaimType } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
@@ -30,7 +27,7 @@ import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { getItemsInRange, isErrorObject, showSnackBar } from 'utils/common'
+import { isErrorObject, showSnackBar } from 'utils/common'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 
@@ -100,51 +97,12 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   cancelLoadingDetailScreen: undefined,
 }
 
-const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
-  data: [],
-  meta: {
-    dataFromStore: false,
-    errors: [],
-    pagination: {
-      totalEntries: 0,
-      currentPage: 1,
-      perPage: DEFAULT_PAGE_SIZE,
-    },
-  },
-}
-
 export const sortByLatestDate = (claimsAndAppeals: ClaimsAndAppealsList): ClaimsAndAppealsList => {
   return chain(claimsAndAppeals)
     .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.dateFiled))
     .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.updatedAt))
     .reverse()
     .value()
-}
-
-// Return data that looks like ClaimsAndAppealsGetData if data was loaded previously otherwise null
-const getLoadedClaimsAndAppeals = (
-  claimsAndAppeals: ClaimsAndAppealsListType,
-  paginationMetaData: ClaimsAndAppealsMetaPaginationType,
-  claimType: ClaimType,
-  latestPage: number,
-  pageSize: number,
-) => {
-  const loadedClaimsAndAppeals = getItemsInRange(claimsAndAppeals[claimType], latestPage, pageSize)
-  // do we have the claimsAndAppeals?
-  if (loadedClaimsAndAppeals) {
-    return {
-      data: loadedClaimsAndAppeals,
-      meta: {
-        pagination: {
-          currentPage: latestPage,
-          perPage: pageSize,
-          totalEntries: paginationMetaData[claimType].totalEntries,
-        },
-        dataFromStore: true, // informs reducer not to save these claimsAndAppeals to the store
-      },
-    } as api.ClaimsAndAppealsGetData
-  }
-  return null
 }
 
 /**

@@ -1,4 +1,12 @@
-import { ClaimOrAppeal } from 'store/api'
+export type ClaimOrAppeal = 'claim' | 'appeal'
+
+export const ClaimsAndAppealsErrorServiceTypesConstants: {
+  APPEALS: string
+  CLAIMS: string
+} = {
+  APPEALS: 'appeals',
+  CLAIMS: 'claims',
+}
 
 export type ClaimsAndAppealsListPayload = {
   data: Array<ClaimsAndAppealsList>
