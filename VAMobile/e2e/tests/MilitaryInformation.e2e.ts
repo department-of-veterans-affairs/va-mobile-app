@@ -3,6 +3,8 @@ import { isTypedArray } from 'util/types'
 import { loginToDemoMode, openProfile, openMilitaryInformation, openDismissLeavingAppPopup, CommonE2eIdConstants, backButton, changeMockData, checkImages } from './utils'
 import { log } from 'console'
 import { setTimeout } from "timers/promises"
+const spawnSync = require("child_process").spawnSync
+const execSync = require("child_process").execSync
 
 export const MilitaryInformationE2eIdConstants = {
   MILITARY_DATE_TEXT: 'July 13, 1970 – August 31, 1998',
@@ -19,11 +21,9 @@ beforeAll(async () => {
 })
 
 export async function verifyMilitaryInfo(militaryBranch) {
-	it('verify' + militaryBranch + ' is shown and seal is correct', async () => {
+	it('verify ' + militaryBranch + ' is shown and seal is correct', async () => {
 		//changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
-		//await changeMockData('profile.json', ['/v0/military-service-history', 'data', 'attributes', {'serviceHistory': 0}, 'branchOfService'], militaryBranch)
-		//await device.launchApp({newInstance: true})
-		//await loginToDemoMode()
+		await changeMockData('profile.json', ['/v0/military-service-history', 'data', 'attributes', {'serviceHistory': 1}, 'branchOfService'], militaryBranch)
 		var tempPath = await element(by.id(militaryBranch)).takeScreenshot(militaryBranch + 'ImageTestHome')
 		checkImages(tempPath)
 		await expect(element(by.text(militaryBranch))).toExist()
@@ -32,18 +32,17 @@ export async function verifyMilitaryInfo(militaryBranch) {
 		checkImages(tempPath)
 		await expect(element(by.text(militaryBranch))).toExist()
 		await openMilitaryInformation()
-		await expect(element(by.text(militaryBranch))).toExist()
+		await expect(element(by.text(militaryBranch)).atIndex(0)).toExist()
 		await expect(element(by.text(MilitaryInformationE2eIdConstants.MILITARY_DATE_TEXT))).toExist()
 	})
 }
 
 describe('Military Info Screen', () => { 
 	verifyMilitaryInfo('United States Coast Guard')
-	//changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
-	/*verifyMilitaryInfo('United States Army')
+	verifyMilitaryInfo('United States Army')
 	verifyMilitaryInfo('United States Air Force')
 	verifyMilitaryInfo('United States Navy')
-	verifyMilitaryInfo('United States Marine Corps')*/
+	verifyMilitaryInfo('United States Marine Corps')
 
 	it('should open new screen if military service information is incorrect', async () => {
 		await openProfile()
@@ -64,7 +63,7 @@ describe('Military Info Screen', () => {
 	})
 
 	//changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
-	/*it('should show correct information if no military service is available', async () => {
+	it('should show correct information if no military service is available', async () => {
 		await changeMockData('profile.json', ['/v0/military-service-history', 'data', 'attributes', 'serviceHistory'], [])
 		await device.launchApp({newInstance: true})
 		await loginToDemoMode()
@@ -75,6 +74,6 @@ describe('Military Info Screen', () => {
 	})
 	
 	it('should reset mock data', async () => {
-		await changeMockData('profile.json', ['/v0/military-service-history', 'data', 'attributes', 'serviceHistory'], [{"branchOfService": "United States Coast Guard", "beginDate": "1970-07-13", "endDate": "1998-08-31", "formattedBeginDate": "July 13, 1970", "formattedEndDate": "August 31, 1998"}])
-	})*/
+		await changeMockData('profile.json', ['/v0/military-service-history', 'data', 'attributes', 'serviceHistory'], [{"branchOfService": "United States Army","beginDate": "1970-07-13", "endDate": "1998-08-31", "formattedBeginDate": "July 13, 1970", "formattedEndDate": "August 31, 1998", "characterOfDischarge": "Dishonorable", "honorableServiceIndicator": "N"}, {"branchOfService": "United States Coast Guard", "beginDate": "1998-09-01", "endDate": "2000-01-01", "formattedBeginDate": "September 01, 1998", "formattedEndDate": "January 01, 2000", "characterOfDischarge": "Honorable", "honorableServiceIndicator": "Y"}])
+	})
 })
