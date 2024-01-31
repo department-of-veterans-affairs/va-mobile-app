@@ -1,10 +1,6 @@
-import { expect, device, by, element, waitFor } from 'detox'
-import { isTypedArray } from 'util/types'
-import { loginToDemoMode, openProfile, openMilitaryInformation, openDismissLeavingAppPopup, CommonE2eIdConstants, backButton, changeMockData, checkImages } from './utils'
-import { log } from 'console'
+import { expect, device, by, element } from 'detox'
+import { loginToDemoMode, openProfile, openMilitaryInformation, changeMockData, checkImages } from './utils'
 import { setTimeout } from "timers/promises"
-const spawnSync = require("child_process").spawnSync
-const execSync = require("child_process").execSync
 
 export const MilitaryInformationE2eIdConstants = {
   MILITARY_DATE_TEXT: 'July 13, 1970 – August 31, 1998',
@@ -62,7 +58,6 @@ describe('Military Info Screen', () => {
 		} 
 	})
 
-	//changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
 	it('should show correct information if no military service is available', async () => {
 		await changeMockData('profile.json', ['/v0/military-service-history', 'data', 'attributes', 'serviceHistory'], [])
 		await device.launchApp({newInstance: true})
