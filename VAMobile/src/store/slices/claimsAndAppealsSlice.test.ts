@@ -10,7 +10,6 @@ import { Asset } from 'react-native-image-picker'
 import {
   fileUploadSuccess,
   getAppeal,
-  getClaim,
   initialClaimsAndAppealsState,
   submitClaimDecision,
   uploadFileToClaim,
