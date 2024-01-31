@@ -2,24 +2,24 @@ import { SegmentedControl } from '@department-of-veterans-affairs/mobile-compone
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useFocusEffect } from '@react-navigation/native'
-import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
-import { ClaimsAndAppealsState, getClaim } from 'store/slices/claimsAndAppealsSlice'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
-import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
+import { useClaim } from 'api/claimsAndAppeals/getClaimsAndAppeals'
+import { useQueryClient } from '@tanstack/react-query'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
@@ -30,7 +30,6 @@ export const getClaimType = (claim: ClaimData | undefined, translation: TFunctio
 type ClaimDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimDetailsScreen'>
 
 function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
-  const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -38,23 +37,18 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const [selectedTab, setSelectedTab] = useState(0)
 
   const { claimID, claimType } = route.params
+  const queryClient = useQueryClient()
+  const { data: claim, isLoading: loadingClaim } = useClaim(claimID, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const { claim, loadingClaim, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
 
   useBeforeNavBackListener(navigation, () => {
     // if claim is still loading cancel it
     if (loadingClaim) {
-      cancelLoadingDetailScreen?.abort()
+      queryClient.invalidateQueries({ queryKey: claimsAndAppealsKeys.claim })
     }
   })
-
-  useEffect(() => {
-    if (screenContentAllowed('WG_ClaimDetailsScreen')) {
-      dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
-    }
-  }, [dispatch, claimID])
 
   // Track how long user maintains focus on this screen
   useFocusEffect(

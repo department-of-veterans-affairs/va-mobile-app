@@ -25,11 +25,10 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { SnackbarMessages } from 'components/SnackBar'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { isErrorObject, showSnackBar } from 'utils/common'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { registerReviewEvent } from 'utils/inAppReviews'
-import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 
 export type ClaimsAndAppealsListType = {
   [key in ClaimType]: ClaimsAndAppealsList
@@ -106,50 +105,11 @@ export const sortByLatestDate = (claimsAndAppeals: ClaimsAndAppealsList): Claims
 }
 
 /**
- * Redux action to get single claim
- */
-export const getClaim =
-  (id: string, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaim(id, screenID))))
-
-    // // create a new signal for this api call so it can be aborted if a user leaves(goes back) to the previous screen
-    const newAbortController = new AbortController()
-    const signal = newAbortController.signal
-
-    dispatch(dispatchStartGetClaim({ abortController: newAbortController }))
-
-    try {
-      const singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`, {}, signal)
-
-      if (singleClaim?.data) {
-        const attributes = singleClaim.data.attributes
-        await logAnalyticsEvent(Events.vama_claim_details_open(id, attributes.claimType, attributes.phase, attributes.phaseChangeDate || '', attributes.dateFiled))
-      }
-
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
-      const [totalTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
-      await dispatch(resetAnalyticsActionStart())
-      await dispatch(setAnalyticsTotalTimeStart())
-      await registerReviewEvent()
-      dispatch(dispatchFinishGetClaim({ claim: singleClaim?.data }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `getClaim: ${claimsAndAppealsNonFatalErrorString}`)
-        dispatch(dispatchFinishGetClaim({ claim: undefined, error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
-      }
-    }
-  }
-
-/**
  * Redux action to get single appeal
  */
 export const getAppeal =
   (id: string, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
+  async (dispatch) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppeal(id, screenID))))
 
@@ -160,10 +120,6 @@ export const getAppeal =
     dispatch(dispatchStartGetAppeal({ abortController: newAbortController }))
     try {
       const appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`, {}, signal)
-      const [totalTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
-      await dispatch(resetAnalyticsActionStart())
-      await dispatch(setAnalyticsTotalTimeStart())
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
       await registerReviewEvent()
       dispatch(dispatchFinishGetAppeal({ appeal: appeal?.data }))
@@ -326,20 +282,6 @@ const claimsAndAppealsSlice = createSlice({
   name: 'claimsAndAppeals',
   initialState: initialClaimsAndAppealsState,
   reducers: {
-    dispatchStartGetClaim: (state, action: PayloadAction<{ abortController: AbortController }>) => {
-      state.loadingClaim = true
-      state.cancelLoadingDetailScreen = action.payload.abortController
-    },
-
-    dispatchFinishGetClaim: (state, action: PayloadAction<{ claim?: ClaimData; error?: Error }>) => {
-      const { claim, error } = action.payload
-
-      state.claim = claim
-      state.error = error
-      state.loadingClaim = false
-      state.cancelLoadingDetailScreen = undefined
-    },
-
     dispatchStartGetAppeal: (state, action: PayloadAction<{ abortController: AbortController }>) => {
       state.loadingAppeal = true
       state.cancelLoadingDetailScreen = action.payload.abortController
@@ -410,8 +352,6 @@ const claimsAndAppealsSlice = createSlice({
 })
 
 export const {
-  dispatchStartGetClaim,
-  dispatchFinishGetClaim,
   dispatchFinishGetAppeal,
   dispatchStartGetAppeal,
   dispatchFinishSubmitClaimDecision,

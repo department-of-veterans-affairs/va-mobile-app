@@ -127,15 +127,6 @@ export const Events = {
       },
     }
   },
-  vama_claim_count: (closed_claims: number, open_claims: number): Event => {
-    return {
-      name: 'vama_claim_count',
-      params: {
-        closed_claims,
-        open_claims,
-      },
-    }
-  },
   vama_claim_details_exp: (claim_id: string, claim_type: string, claim_step: number, step_expanded: boolean, claim_step_change: string, claim_submitted_date: string): Event => {
     return {
       name: 'vama_claim_details_exp',
@@ -972,14 +963,6 @@ export const Events = {
   vama_ttv_appt_details: (totalTime: number): Event => {
     return {
       name: 'vama_ttv_appt_details',
-      params: {
-        totalTime,
-      },
-    }
-  },
-  vama_ttv_cap_details: (totalTime: number): Event => {
-    return {
-      name: 'vama_ttv_cap_details',
       params: {
         totalTime,
       },
