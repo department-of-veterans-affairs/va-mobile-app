@@ -3,7 +3,7 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint', 'sort-imports-es6-autofix', 'eslint-plugin-tsdoc', 'jest'],
+  plugins: ['@typescript-eslint', 'eslint-plugin-tsdoc', 'jest'],
   extends: [
     '@react-native',
     'plugin:@typescript-eslint/recommended',
@@ -46,14 +46,6 @@ module.exports = {
           delimiter: 'semi',
           requireLast: false,
         },
-      },
-    ],
-    'sort-imports-es6-autofix/sort-imports-es6': [
-      2,
-      {
-        ignoreCase: false,
-        ignoreMemberSort: false,
-        memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
       },
     ],
     'react/no-unstable-nested-components': [
