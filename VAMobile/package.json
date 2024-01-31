@@ -94,6 +94,7 @@
     "@react-native/metro-config": "^0.72.11",
     "@testing-library/jest-dom": "^6.3.0",
     "@testing-library/react-native": "^12.4.3",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@tsconfig/react-native": "^3.0.0",
     "@types/detox": "^18.1.0",
     "@types/jest-when": "^3.5.5",
