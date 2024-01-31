@@ -4,7 +4,12 @@ module.exports = {
     project: './tsconfig.json',
   },
   plugins: ['@typescript-eslint', 'sort-imports-es6-autofix', 'eslint-plugin-tsdoc', 'jest'],
-  extends: ['@react-native', 'plugin:@typescript-eslint/recommended', 'plugin:react-hooks/recommended', '@department-of-veterans-affairs/mobile'],
+  extends: [
+    '@react-native',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended',
+    '@department-of-veterans-affairs/mobile',
+  ],
   env: {
     commonjs: true,
     es6: true,
@@ -15,7 +20,6 @@ module.exports = {
   globals: {
     strapi: true,
   },
-  ignorePatterns: ['testUtils.tsx', '**/*.test.ts', '**/*.test.tsx', '**/store/reducers/createReducer.ts'],
   rules: {
     'tsdoc/syntax': 'warn',
     'linebreak-style': ['error', 'unix'],
