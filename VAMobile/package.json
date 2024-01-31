@@ -124,6 +124,7 @@
     "jest-junit": "^16.0.0",
     "jest-when": "^3.6.0",
     "metro-react-native-babel-preset": "^0.77.0",
+    "prettier": "^3.2.4",
     "react-devtools": "^5.0.0",
     "react-test-renderer": "^18.2.0",
     "redux-mock-store": "^1.5.4",
@@ -134,7 +135,6 @@
     "webdriverio": "^8.27.0"
   },
   "resolutions": {
-    "prettier": "^2.8.8",
     "react-devtools/**/got": "^11.8.5",
     "react-devtools/electron": "^25.8.1",
     "react-native/@react-native-community/**/fast-xml-parser": "^4.2.4",
