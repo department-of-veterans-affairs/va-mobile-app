@@ -1,5 +1,4 @@
 module.exports = {
-  parser: 'typescript',
   bracketSameLine: true,
   bracketSpacing: true,
   importOrder: [
