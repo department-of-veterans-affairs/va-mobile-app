@@ -9,6 +9,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     '@department-of-veterans-affairs/mobile',
+    'prettier',
   ],
   env: {
     commonjs: true,
@@ -22,7 +23,6 @@ module.exports = {
   },
   rules: {
     'tsdoc/syntax': 'warn',
-    'linebreak-style': ['error', 'unix'],
     'no-console': 0,
     semi: 0,
     'no-multiple-empty-lines:': 0,
@@ -35,19 +35,6 @@ module.exports = {
     '@typescript-eslint/camelcase': 0,
     '@typescript-eslint/no-empty-interface': 0,
     '@typescript-eslint/ban-ts-comment': 0,
-    '@typescript-eslint/member-delimiter-style': [
-      2,
-      {
-        multiline: {
-          delimiter: 'none',
-          requireLast: true,
-        },
-        singleline: {
-          delimiter: 'semi',
-          requireLast: false,
-        },
-      },
-    ],
     'react/no-unstable-nested-components': [
       'warn',
       {
