@@ -85,8 +85,10 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
       logAnalyticsEvent(Events.vama_claim_eval_submit(claim.id, claim.attributes.claimType, numberOfRequests))
     }
     const mutateOptions = {
-      onMutate: () => setSubmittedDecision(true),
-      onSuccess: () => showSnackBar('Request sent', dispatch, undefined, true, false, true),
+      onSuccess: () => {
+        setSubmittedDecision(true)
+        showSnackBar('Request sent', dispatch, undefined, true, false, true)
+      },
       onError: () => showSnackBar('Request could not be sent', dispatch, () => onSubmit, false, true),
     }
     submitClaimDecision(claimID, mutateOptions)
