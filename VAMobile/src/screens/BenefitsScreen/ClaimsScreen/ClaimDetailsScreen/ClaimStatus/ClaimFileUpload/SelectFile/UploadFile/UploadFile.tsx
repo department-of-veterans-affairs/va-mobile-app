@@ -68,7 +68,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
       setFilesList([])
       navigateTo('FileRequest', { claimID: claim?.id || '' })
     }
-  }, [filesUploadedSuccess, dispatch, t, claim, navigateTo, request, filesList])
+  }, [filesUploadedSuccess, claim, navigateTo])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)

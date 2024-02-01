@@ -78,7 +78,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
       setImagesList([])
       navigateTo('FileRequest', { claimID: claim?.id || '' })
     }
-  }, [filesUploadedSuccess, dispatch, t, claim, navigateTo, request, imagesList])
+  }, [filesUploadedSuccess, claim, navigateTo])
 
   const [documentType, setDocumentType] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
