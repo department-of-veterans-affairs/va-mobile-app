@@ -111,21 +111,3 @@ export const createFileRequestDocumentsArray = (
     } as ClaimEventDocumentData
   })
 }
-/*
-const { mutate: uploadFileToClaim } = useUploadFileToClaim()
-const save = () => {
-
-      const mutateOptions = {
-        onMutate: () => {
-            logAnalyticsEvent(Events.vama_claim_upload_start(claimID, request.trackedItemId || null, request.type, evidenceMethod))
-        }
-        onSuccess: async () => {
-      logAnalyticsEvent(Events.vama_claim_upload_compl(claimID, request.trackedItemId || null, request.type, evidenceMethod))
-      showSnackBar(messages.successMsg, dispatch, undefined, true)
-    },
-        onError: () => showSnackBar(messages.errorMsg, dispatch, retryFunction, false, true),
-      }
-      uploadFileToClaim(claimID: string, request: ClaimEventData, files: Array<Asset> | Array<DocumentPickerResponse>, evidenceMethod: 'file' | 'photo', mutateOptions)
-    }
-
-*/

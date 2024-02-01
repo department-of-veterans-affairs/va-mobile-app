@@ -29,15 +29,3 @@ export const useSubmitClaimDecision = (claimID: string) => {
     },
   })
 }
-
-/*
-const { mutate: submitClaimDecision } = useSubmitClaimDecision()
-const save = () => {
-      const mutateOptions = {
-        onSuccess: () => showSnackBar('Request sent', dispatch, undefined, true, false, true),
-        onError: () => showSnackBar('Request could not be sent', dispatch, () => save, false, true),
-      }
-      submitClaimDecision(claimID, mutateOptions)
-    }
-
-*/
