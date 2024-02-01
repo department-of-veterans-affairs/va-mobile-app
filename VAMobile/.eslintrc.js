@@ -25,6 +25,15 @@ module.exports = {
     'tsdoc/syntax': 'warn',
     'no-console': 0,
     semi: 0,
+    'max-len': [
+      'error',
+      {
+        code: 150,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
+        ignoreRegExpLiterals: true,
+      },
+    ],
     'no-multiple-empty-lines:': 0,
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': ['error'],
