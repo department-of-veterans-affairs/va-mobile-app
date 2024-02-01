@@ -15,9 +15,10 @@ context('NoClaimsAndAppeals', () => {
     if (metaErrors) {
       queriesData = [{
         queryKey: claimsAndAppealsKeys.claimsAndAppeals,
-        data: [],
-        meta: {
-          errors: metaErrors,
+        data: {
+          meta: {
+            errors: metaErrors,
+          },
         },
       }]
     }
