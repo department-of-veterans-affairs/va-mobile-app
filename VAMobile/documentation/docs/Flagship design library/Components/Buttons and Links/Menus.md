@@ -7,10 +7,10 @@ Menus provide temporary access to functionality that's directly related to the o
 ## Examples
 
 ### Master component
-<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/fHX24yGleQdlxXLujq2GRn/%5BNEW%5D-Link---%236869?type=design&node-id=235-732&mode=design&t=vrDLNn1qNqe6J3mm-4" title="Image of master component in Figma showing light and dark mode" allowfullscreen></iframe>
+<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=16025-18269&mode=design&t=kmODZY3bkhNgpYY1-4" title="Image of master component in Figma showing light and dark mode" allowfullscreen></iframe>
 
 ### Examples
-<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/fHX24yGleQdlxXLujq2GRn/%5BNEW%5D-Link---%236869?type=design&node-id=235-674&mode=design&t=vrDLNn1qNqe6J3mm-4" allowfullscreen></iframe>
+<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=16025-18268&mode=design&t=kmODZY3bkhNgpYY1-4" allowfullscreen></iframe>
 
 ## Usage
 
@@ -30,7 +30,6 @@ Menus provide temporary access to functionality that's directly related to the o
 
 ## Content considerations
 * Refer to the [VA Design System's content considerations for buttons](https://design.va.gov/components/button/#content-considerations)
-* List items can include label text, leading icons, and trailing icons.
 
 ## Accessibility considerations
 * Users should be able to:
