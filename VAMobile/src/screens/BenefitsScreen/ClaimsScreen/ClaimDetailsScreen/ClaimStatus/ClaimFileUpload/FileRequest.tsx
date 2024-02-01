@@ -13,8 +13,8 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useClaim } from 'api/claimsAndAppeals/getClaimsAndAppeals'
-import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useClaim } from 'api/claimsAndAppeals'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
 
@@ -23,7 +23,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { claimID } = route.params
-  const { data: claim } = useClaim(claimID)
+  const { data: claim, isError: claimError } = useClaim(claimID)
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
   const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
 
@@ -81,7 +81,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
 
   return (
     <ChildTemplate backLabel={t('claim.backLabel')} backLabelOnPress={navigation.goBack} title={t('fileRequest.title')} testID="fileRequestPageTestID">
-      {useError(ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID) ? (
+      {claimError ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID} />
       ) : (
         <Box mb={contentMarginBottom}>

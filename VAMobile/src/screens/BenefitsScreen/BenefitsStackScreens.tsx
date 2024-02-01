@@ -76,10 +76,12 @@ export type BenefitsStackParamList = {
     focusOnSnackbar?: boolean
   }
   UploadOrAddPhotos: {
+    claimID: string
     request: ClaimEventData
     firstImageResponse: ImagePickerResponse
   }
   UploadFile: {
+    claimID: string
     request: ClaimEventData
     fileUploaded: DocumentPickerResponse
     imageUploaded: ImagePickerResponse

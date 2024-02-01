@@ -1,13 +1,11 @@
 import { useTranslation } from 'react-i18next'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Box, TextView } from 'components'
 import { ClaimType, ClaimTypeConstants } from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { ClaimsAndAppealsState } from 'store/slices'
+import { ClaimsAndAppealsErrorServiceTypesConstants, ClaimsAndAppealsGetDataMetaError } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { testIdProps } from 'utils/accessibility'
-import { useSelector } from 'react-redux'
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useTheme } from 'utils/hooks'
 
 type NoClaimsAndAppealsProps = {
@@ -17,7 +15,17 @@ type NoClaimsAndAppealsProps = {
 function NoClaimsAndAppeals({ claimType }: NoClaimsAndAppealsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { data: claimsAndAppeals } = useClaimsAndAppeals(claimType, 1)
+  const claimsServiceErrors = claimsAndAppeals?.meta.errors as Array<ClaimsAndAppealsGetDataMetaError>
+  const [claimsServiceError, setClaimsError] = useState(false)
+  const [appealsServiceError, setAppealsError] = useState(false)
+
+  useEffect(() => {
+    const claimsError = !!claimsServiceErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
+    const appealsError = !!claimsServiceErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
+    setClaimsError(claimsError)
+    setAppealsError(appealsError)
+  }, [setClaimsError, setAppealsError, claimsServiceErrors])
 
   let header = t('noClaims.youDontHaveAnyClaimsOrAppeals')
   let text = t('noClaims.appOnlyShowsCompletedClaimsAndAppeals')
@@ -34,13 +42,13 @@ function NoClaimsAndAppeals({ claimType }: NoClaimsAndAppealsProps) {
   }
 
   return (
-    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('Claims: No-claims-page')} alignItems="center">
-      <Box {...testIdProps(header)} accessible={true}>
+    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
+      <Box accessible={true}>
         <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
           {header}
         </TextView>
       </Box>
-      <Box {...testIdProps(text)} accessible={true}>
+      <Box accessible={true}>
         <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween}>
           {text}
         </TextView>

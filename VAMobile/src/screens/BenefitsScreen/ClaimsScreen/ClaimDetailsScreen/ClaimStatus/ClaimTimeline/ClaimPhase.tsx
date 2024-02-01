@@ -11,10 +11,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { sendClaimStep3FileRequestAnalytics } from 'store/slices/claimsAndAppealsSlice'
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import PhaseIndicator from './PhaseIndicator'
 
 /** returns the heading string by phase */
@@ -96,7 +95,6 @@ export type ClaimPhaseProps = {
 function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
   const { eventsTimeline } = attributes
@@ -108,9 +106,9 @@ function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
 
   useEffect(() => {
     if (phase === 3 && current === 3 && showClaimFileUploadBtn) {
-      dispatch(sendClaimStep3FileRequestAnalytics())
+      logAnalyticsEvent(Events.vama_claim_file_request())
     }
-  }, [dispatch, phase, current, showClaimFileUploadBtn])
+  }, [phase, current, showClaimFileUploadBtn])
 
   const getPhaseHeader = (): ReactNode => {
     return (

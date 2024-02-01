@@ -2,6 +2,7 @@ import { SegmentedControl } from '@department-of-veterans-affairs/mobile-compone
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useFocusEffect } from '@react-navigation/native'
+import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import React, { useCallback, useState } from 'react'
 
@@ -17,9 +18,8 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
-import { useClaim } from 'api/claimsAndAppeals/getClaimsAndAppeals'
-import { useQueryClient } from '@tanstack/react-query'
+import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
+import { useClaim } from 'api/claimsAndAppeals'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
@@ -38,7 +38,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   const { claimID, claimType } = route.params
   const queryClient = useQueryClient()
-  const { data: claim, isLoading: loadingClaim } = useClaim(claimID, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
+  const { data: claim, isLoading: loadingClaim, isError: claimError } = useClaim(claimID, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
@@ -79,7 +79,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   return (
     <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimDetails.title')} testID="ClaimDetailsScreen">
-      {useError(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID) ? (
+      {claimError ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID} />
       ) : loadingClaim ? (
         <LoadingComponent text={t('claimInformation.loading')} />

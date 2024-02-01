@@ -2,21 +2,20 @@ import { SegmentedControl } from '@department-of-veterans-affairs/mobile-compone
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { filter, pluck } from 'underscore'
 import { useTranslation } from 'react-i18next'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
-import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { claimsAndAppealsKeys, useAppeal } from 'api/claimsAndAppeals'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
-import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
+import { useQueryClient } from '@tanstack/react-query'
 import AppealIssues from './AppealIssues/AppealIssues'
 import AppealStatus from './AppealStatus/AppealStatus'
 
@@ -24,8 +23,8 @@ type AppealDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'Appeal
 
 function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const queryClient = useQueryClient()
 
   const controlLabels = [t('claimDetails.status'), t('appealDetails.issuesTab')]
   const [selectedTab, setSelectedTab] = useState(0)
@@ -35,22 +34,16 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
   ]
 
   const { appealID } = route.params
-  const { appeal, loadingAppeal, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { data: appeal, isLoading: loadingAppeal, isError: appealError } = useAppeal(appealID, { enabled: screenContentAllowed('WG_AppealDetailsScreen') })
   const { attributes, type } = appeal || ({} as AppealData)
   const { updated, programArea, events, status, aoj, docket, issues, active } = attributes || ({} as AppealAttributesData)
 
   useBeforeNavBackListener(navigation, () => {
     // if appeals is still loading cancel it
     if (loadingAppeal) {
-      cancelLoadingDetailScreen?.abort()
+      queryClient.invalidateQueries({ queryKey: claimsAndAppealsKeys.claim })
     }
   })
-
-  useEffect(() => {
-    if (screenContentAllowed('WG_AppealDetailsScreen')) {
-      dispatch(getAppeal(appealID, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
-    }
-  }, [dispatch, appealID])
 
   const onTabChange = (tab: number) => {
     setSelectedTab(tab)
@@ -99,7 +92,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
 
   return (
     <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')} testID="appealsDetailsTestID">
-      {useError(ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID) ? (
+      {appealError ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID} />
       ) : loadingAppeal ? (
         <LoadingComponent text={t('appealDetails.loading')} />

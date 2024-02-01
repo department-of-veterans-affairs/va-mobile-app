@@ -1,4 +1,5 @@
 export const claimsAndAppealsKeys = {
-  claimsAndAppeals: ['claimsAndAppeals'] as const,
+  appeal: ['appeal'] as const,
   claim: ['claim'] as const,
+  claimsAndAppeals: ['claimsAndAppeals'] as const,
 }
