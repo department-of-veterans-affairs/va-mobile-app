@@ -14,6 +14,10 @@ export type Waygate = {
   errorMsgTitle?: string
   // Body for Alertbox
   errorMsgBody?: string
+  // V2 Body for Alertbox
+  errorMsgBodyV2?: string
+  // Alternative Phone Number for Alertbox
+  errorPhoneNumber?: string
   // Whether to display the app update button
   appUpdateButton?: boolean
 }

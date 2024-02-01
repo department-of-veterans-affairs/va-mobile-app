@@ -8,6 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/waygateConfig'
 import { a11yLabelID } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { fixedWhiteSpaceString } from 'utils/common'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { openAppStore } from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
@@ -40,17 +41,14 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
       logAnalyticsEvent(Events.vama_af_updated())
       openAppStore()
     }
-
+    const errorMsgBodyV2 = fixedWhiteSpaceString(waygate.errorMsgBodyV2)
+    const text = errorMsgBodyV2.length > 0 ? errorMsgBodyV2 : waygate.errorMsgBody
+    const phoneNumber = waygate.errorPhoneNumber && waygate.errorPhoneNumber.length > 0 ? waygate.errorPhoneNumber : t('8006982411')
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
-        <AlertBox
-          border={waygate.type === 'DenyContent' ? 'error' : 'warning'}
-          title={waygate.errorMsgTitle}
-          text={waygate.errorMsgBody}
-          focusOnError={false}
-          testId="AFUseCase2TestID">
+        <AlertBox border={waygate.type === 'DenyContent' ? 'error' : 'warning'} title={waygate.errorMsgTitle} text={text} focusOnError={false} testId="AFUseCase2TestID">
           <Box my={theme.dimensions.standardMarginBetween}>
-            <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8006982411'))} phone={t('8006982411')} a11yLabel={a11yLabelID(t('8006982411'))} />
+            <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(phoneNumber)} phone={phoneNumber} a11yLabel={a11yLabelID(phoneNumber)} />
           </Box>
           {waygate.appUpdateButton === true && <Button onPress={onUpdateButtonPress} label={t('updateNow')} />}
         </AlertBox>
