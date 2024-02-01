@@ -65,7 +65,6 @@ function UploadFile({ navigation, route }: UploadFileProps) {
 
   useEffect(() => {
     if (filesUploadedSuccess) {
-      setFilesList([])
       navigateTo('FileRequest', { claimID: claim?.id || '' })
     }
   }, [filesUploadedSuccess, claim, navigateTo])
@@ -90,6 +89,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         logAnalyticsEvent(Events.vama_claim_upload_start(claimID, request.trackedItemId || null, request.type, 'file'))
       },
       onSuccess: async () => {
+        setFilesList([])
         setFilesUploadedSuccess(true)
         logAnalyticsEvent(Events.vama_claim_upload_compl(claimID, request.trackedItemId || null, request.type, 'file'))
         showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true)

@@ -75,7 +75,6 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
 
   useEffect(() => {
     if (filesUploadedSuccess) {
-      setImagesList([])
       navigateTo('FileRequest', { claimID: claim?.id || '' })
     }
   }, [filesUploadedSuccess, claim, navigateTo])
@@ -100,6 +99,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
         logAnalyticsEvent(Events.vama_claim_upload_start(claimID, request.trackedItemId || null, request.type, 'photo'))
       },
       onSuccess: async () => {
+        setImagesList([])
         setFilesUploadedSuccess(true)
         logAnalyticsEvent(Events.vama_claim_upload_compl(claimID, request.trackedItemId || null, request.type, 'photo'))
         showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true)
