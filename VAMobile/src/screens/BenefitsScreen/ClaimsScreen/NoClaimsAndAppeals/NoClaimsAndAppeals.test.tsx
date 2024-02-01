@@ -15,11 +15,9 @@ context('NoClaimsAndAppeals', () => {
     if (metaErrors) {
       queriesData = [{
         queryKey: claimsAndAppealsKeys.claimsAndAppeals,
-        data: {
-          data: [],
-          meta: {
-            errors: metaErrors,
-          },
+        data: [],
+        meta: {
+          errors: metaErrors,
         },
       }]
     }
@@ -33,19 +31,17 @@ context('NoClaimsAndAppeals', () => {
         'page[size]': '10',
         showCompleted: 'false',
       }, expect.anything())
-      .mockRejectedValue({
-        data: {
-          data: [],
-          meta: {
-            errors: [
-              {
-                service: 'appeals'
-              },
-              {
-                service: 'claims'
-              },
-            ],
-          }
+      .mockReturnValue({
+        data: [],
+        meta: {
+          errors: [
+            {
+              service: 'appeals'
+            },
+            {
+              service: 'claims'
+            },
+          ],
         }
       })
 
@@ -69,16 +65,14 @@ context('NoClaimsAndAppeals', () => {
         'page[size]': '10',
         showCompleted: 'false',
       }, expect.anything())
-      .mockRejectedValue({
-        data: {
-          data: [{...claim}],
-          meta: {
-            errors: [
-              {
-                service: 'appeals'
-              },
-            ],
-          }
+      .mockReturnValue({
+        data: [{...claim}],
+        meta: {
+          errors: [
+            {
+              service: 'appeals'
+            },
+          ],
         }
       })
     initializeTestInstance([
@@ -98,16 +92,14 @@ context('NoClaimsAndAppeals', () => {
         'page[size]': '10',
         showCompleted: 'false',
       }, expect.anything())
-      .mockRejectedValue({
-        data: {
-          data: [{...appeal}],
-          meta: {
-            errors: [
-              {
-                service: 'claims'
-              },
-            ],
-          }
+      .mockReturnValue({
+        data: [{...appeal}],
+        meta: {
+          errors: [
+            {
+              service: 'claims'
+            },
+          ],
         }
       })
     initializeTestInstance([
