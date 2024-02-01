@@ -546,7 +546,6 @@
   "editAddress.validation.cancelConfirm.home.title": "Delete changes to your home address?",
   "editAddress.validation.cancelConfirm.mailing.title": "Delete changes to your mailing address?",
   "editAddress.validation.editAddress": "Edit address",
-  "editAddress.validation.editAddress.a11yLabel": "Edit this address.",
   "editAddress.validation.suggestedAddresses": "Suggested addresses:",
   "editAddress.validation.useThisAddress": "Use this address",
   "editAddress.validation.verifyAddress.body.1": "We can't confirm the address you entered with the U.S. Postal Service.",
