@@ -1,9 +1,13 @@
 import React, { FC, useState } from 'react'
 
 import { ColorVariant, TextArea } from './index'
+import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
 import { Pressable, PressableProps, ViewStyle } from 'react-native'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
+import { useTranslation } from 'react-i18next'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -33,10 +37,14 @@ export type CollapsibleViewProps = {
  */
 const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = true, showInTextArea = true, a11yHint, textColor, children, testID }) => {
   const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
   const [expanded, setExpanded] = useState(false)
 
   const onPress = (): void => {
     setExpanded(!expanded)
+    if (!expanded && text === t('loaGate.expandMsg')) {
+      logAnalyticsEvent(Events.vama_login_readme(true))
+    }
   }
 
   const boxStyles: BoxProps = {
