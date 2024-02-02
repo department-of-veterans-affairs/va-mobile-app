@@ -250,7 +250,7 @@ const getAppointmentStatus = (isPendingAppointment: boolean, status: Appointment
  */
 export const getTextLinesForAppointmentListItem = (appointment: AppointmentData, t: TFunction, theme: VATheme): Array<TextLineWithIconProps> => {
   const { attributes } = appointment
-  const { startDateUtc, timeZone, appointmentType, location, phoneOnly, isCovidVaccine, typeOfCare, healthcareProvider, serviceCategoryName } = attributes
+  const { startDateUtc, timeZone, appointmentType, location, phoneOnly, isCovidVaccine, typeOfCare, healthcareProvider, serviceCategoryName, healthcareService } = attributes
   const textLines: Array<TextLineWithIconProps> = []
   const { condensedMarginBetween } = theme.dimensions
   const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
@@ -266,7 +266,7 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
       { text: t('text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       { text: t('text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold', mb: condensedMarginBetween },
       {
-        text: t('text.raw', { text: isCovidVaccine ? t('upcomingAppointments.covidVaccine') : typeOfCare || t('appointments.noTypeOfCare') }),
+        text: t('text.raw', { text: isCovidVaccine ? t('upcomingAppointments.covidVaccine') : typeOfCare || healthcareService || t('appointments.noTypeOfCare') }),
         variant: 'HelperText',
         mb: 5,
       },
