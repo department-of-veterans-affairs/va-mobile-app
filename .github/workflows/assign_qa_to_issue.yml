@@ -23,7 +23,7 @@ jobs:
       - name: Assign Health team QA
         if: github.event.label.name == 'Health'
         run: |
-          gh issue edit ${{ github.event.issue.number }} --add-assignee "DJUltraTom"
+          gh issue edit ${{ github.event.issue.number }} --add-assignee "rbontrager"
 
       - name: Assign Global team QA
         if: github.event.label.name == 'global'
@@ -33,4 +33,4 @@ jobs:
       - name: Assign Design-System team QA
         if: github.event.label.name == 'design-system'
         run: |
-          gh issue edit ${{ github.event.issue.number }} --add-assignee "rbontrager"
+          gh issue edit ${{ github.event.issue.number }} --add-assignee "DJUltraTom"

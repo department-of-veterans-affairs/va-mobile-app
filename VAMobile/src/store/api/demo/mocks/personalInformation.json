@@ -9,7 +9,8 @@
           "lastName": "WASHINGTON",
           "signinEmail": "vets.gov.user+228@gmail.com",
           "signinService": "IDME",
-          "birthDate": "1950-01-01"
+          "birthDate": "1950-01-01",
+          "hasFacilityTransitioningToCerner": false
         }
       }
     }
