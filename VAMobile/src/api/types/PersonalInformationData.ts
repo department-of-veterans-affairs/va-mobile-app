@@ -9,6 +9,7 @@ export type PersonalInformationPayload = {
       signinEmail: string
       signinService: string
       birthDate: string | null
+      hasFacilityTransitioningToCerner: boolean
     }
   }
 }

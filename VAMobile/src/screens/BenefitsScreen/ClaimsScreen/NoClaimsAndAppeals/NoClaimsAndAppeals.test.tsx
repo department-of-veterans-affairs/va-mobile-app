@@ -2,9 +2,9 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
-import NoClaimsAndAppeals from './NoClaimsAndAppeals'
+import { ClaimTypeConstants } from 'constants/claims'
 import { InitialState } from 'store/slices'
-import { ClaimTypeConstants } from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import NoClaimsAndAppeals from './NoClaimsAndAppeals'
 
 context('NoClaimsAndAppeals', () => {
   const initializeTestInstance = (claimsServiceError = false, appealsServiceError = false) => {

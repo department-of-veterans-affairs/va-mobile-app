@@ -588,6 +588,38 @@ export const Events = {
       },
     }
   },
+  vama_login_token_fetch: (status_code: number): Event => {
+    return {
+      name: 'vama_login_token_fetch',
+      params: {
+        status_code,
+      },
+    }
+  },
+  vama_login_token_get: (success: boolean): Event => {
+    return {
+      name: 'vama_login_token_get',
+      params: {
+        success,
+      },
+    }
+  },
+  vama_login_token_refresh: (status_code: number): Event => {
+    return {
+      name: 'vama_login_token_refresh',
+      params: {
+        status_code,
+      },
+    }
+  },
+  vama_login_token_store: (success: boolean): Event => {
+    return {
+      name: 'vama_login_token_store',
+      params: {
+        success,
+      },
+    }
+  },
   vama_modalpick_open: (modal: string): Event => {
     return {
       name: 'vama_modalpick_open',
@@ -962,6 +994,14 @@ export const Events = {
       },
     }
   },
+  vama_user_call: (status_code: number): Event => {
+    return {
+      name: 'vama_user_call',
+      params: {
+        status_code,
+      },
+    }
+  },
   vama_vaccine_details: (groupName: string): Event => {
     return {
       name: 'vama_vaccine_details',
@@ -996,6 +1036,12 @@ export const UserAnalytics = {
   vama_biometric_device: (value: boolean): UserAnalytic => {
     return {
       name: 'vama_biometric_device',
+      value: value.toString(),
+    }
+  },
+  vama_cerner_transition: (value: boolean): UserAnalytic => {
+    return {
+      name: 'vama_cerner_transition',
       value: value.toString(),
     }
   },
