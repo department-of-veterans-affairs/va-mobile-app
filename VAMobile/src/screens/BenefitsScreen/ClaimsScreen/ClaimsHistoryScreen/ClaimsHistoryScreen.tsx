@@ -26,10 +26,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { claimsAndAppealsByClaimType, loadingClaimsAndAppeals, finishedLoadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<
-    RootState,
-    ClaimsAndAppealsState
-  >((state) => state.claimsAndAppeals)
+  const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
@@ -56,12 +53,6 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID))
     }
   }, [dispatch, claimsAndAppealsAccess, claimsNotInDowntime, appealsNotInDowntime])
-
-  useEffect(() => {
-    if (finishedLoadingClaimsAndAppeals) {
-      logAnalyticsEvent(Events.vama_claim_count(claimsAndAppealsByClaimType.CLOSED.length, claimsAndAppealsByClaimType.ACTIVE.length))
-    }
-  }, [claimsAndAppealsByClaimType.ACTIVE.length, claimsAndAppealsByClaimType.CLOSED.length, finishedLoadingClaimsAndAppeals])
 
   const fetchInfoAgain = (): void => {
     refetchUserAuthorizedServices()
