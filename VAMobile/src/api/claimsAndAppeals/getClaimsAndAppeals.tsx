@@ -1,11 +1,11 @@
 import { chain } from 'underscore'
 import { useQuery } from '@tanstack/react-query'
 
-import { ClaimType, ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types/ClaimsAndAppealsData'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { claimsAndAppealsKeys } from './queryKeys'
 import { get } from 'store/api'
+import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 
 /**
  * Fetch user ClaimsAndAppeals
