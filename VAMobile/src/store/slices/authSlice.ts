@@ -23,6 +23,7 @@ import { EnvironmentTypesConstants } from 'constants/common'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { clearCookies } from 'utils/rnAuthSesson'
 import { dispatchClearLoadedAppointments } from './appointmentsSlice'
+import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
 import { dispatchClearLoadedMessages } from './secureMessagingSlice'
 import { dispatchClearPaymentsOnLogout } from './paymentsSlice'
 import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
@@ -546,6 +547,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
     dispatch(dispatchClearLoadedAppointments())
     dispatch(dispatchClearLoadedMessages())
+    dispatch(dispatchClearLoadedClaimsAndAppeals())
     dispatch(dispatchMilitaryHistoryLogout())
     dispatch(dispatchDisabilityRatingLogout())
     dispatch(dispatchClearPaymentsOnLogout())

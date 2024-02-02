@@ -28,10 +28,11 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { SnackbarMessages } from 'components/SnackBar'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
+import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange, isErrorObject, showSnackBar } from 'utils/common'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { registerReviewEvent } from 'utils/inAppReviews'
+import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
 
 export type ClaimsAndAppealsListType = {
   [key in ClaimType]: ClaimsAndAppealsList
@@ -234,7 +235,7 @@ export const getClaimsAndAppeals =
  */
 export const getClaim =
   (id: string, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaim(id, screenID))))
 
@@ -253,6 +254,10 @@ export const getClaim =
       }
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
+      const [totalTime] = getAnalyticsTimers(getState())
+      await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
       dispatch(dispatchFinishGetClaim({ claim: singleClaim?.data }))
     } catch (error) {
@@ -269,7 +274,7 @@ export const getClaim =
  */
 export const getAppeal =
   (id: string, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppeal(id, screenID))))
 
@@ -280,6 +285,10 @@ export const getAppeal =
     dispatch(dispatchStartGetAppeal({ abortController: newAbortController }))
     try {
       const appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`, {}, signal)
+      const [totalTime] = getAnalyticsTimers(getState())
+      await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
       await registerReviewEvent()
       dispatch(dispatchFinishGetAppeal({ appeal: appeal?.data }))
