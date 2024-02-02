@@ -1,21 +1,20 @@
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, TextArea, TextView, VABulletList } from 'components'
 import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { ClaimsAndAppealsState, submitClaimDecision } from 'store/slices'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { useAppDispatch, useDestructiveActionSheet, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { showSnackBar } from 'utils/common'
+import { useAppDispatch, useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useClaim, useSubmitClaimDecision } from 'api/claimsAndAppeals'
 
 type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
 
@@ -24,8 +23,10 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const { claimID } = route.params
-  const { submittedDecision, error, claim, loadingSubmitClaimDecision } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { data: claim, isError: loadingClaimError } = useClaim(claimID)
+  const { mutate: submitClaimDecision, error: error, isPending: loadingSubmitClaimDecision } = useSubmitClaimDecision(claimID)
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
+  const [submittedDecision, setSubmittedDecision] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const { standardMarginBetween, contentMarginBottom, gutter } = theme.dimensions
   const requestEvalAlert = useDestructiveActionSheet()
@@ -42,7 +43,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
     }
   }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType])
 
-  if (useError(ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
+  if (loadingClaimError) {
     return (
       <FullScreenSubtask leftButtonText={t('cancel')} title={t('askForClaimDecision.pageTitle')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />
@@ -83,7 +84,14 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
     if (claim) {
       logAnalyticsEvent(Events.vama_claim_eval_submit(claim.id, claim.attributes.claimType, numberOfRequests))
     }
-    dispatch(submitClaimDecision(claimID, ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID))
+    const mutateOptions = {
+      onSuccess: () => {
+        setSubmittedDecision(true)
+        showSnackBar('Request sent', dispatch, undefined, true, false, true)
+      },
+      onError: () => showSnackBar('Request could not be sent', dispatch, () => onSubmit, false, true),
+    }
+    submitClaimDecision(claimID, mutateOptions)
   }
 
   const onRequestEvaluation = (): void => {
