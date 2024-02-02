@@ -8,8 +8,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
+import { sortByLatestDate, useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
@@ -36,7 +36,7 @@ function ClaimsAndAppealsListView({ claimType, onErrorSet }: ClaimsAndAppealsLis
   const [previousClaimType, setClaimType] = useState(claimType)
   const { data: claimsAndAppealsListPayload, isError: claimsAndAppealsListError } = useClaimsAndAppeals(claimType, page)
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const claimsAndAppeals = claimsAndAppealsListPayload?.data
+  const claimsAndAppeals = sortByLatestDate(claimsAndAppealsListPayload?.data || [])
   const pageMetaData = claimsAndAppealsListPayload?.meta.pagination
   const { currentPage, perPage, totalEntries } = pageMetaData || { currentPage: 1, perPage: 10, totalEntries: 0 }
 

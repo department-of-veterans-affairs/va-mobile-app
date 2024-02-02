@@ -2,8 +2,7 @@ import { chain } from 'underscore'
 import { useQuery } from '@tanstack/react-query'
 
 import { ClaimType, ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { ClaimsAndAppealsList } from 'store/api/types'
-import { ClaimsAndAppealsListPayload } from 'api/types/ClaimsAndAppealsData'
+import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types/ClaimsAndAppealsData'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { claimsAndAppealsKeys } from './queryKeys'
 import { get } from 'store/api'
@@ -34,7 +33,7 @@ export const useClaimsAndAppeals = (claimType: ClaimType, page: number, options?
   })
 }
 
-export const sortByLatestDate = (claimsAndAppeals: ClaimsAndAppealsList): ClaimsAndAppealsList => {
+export const sortByLatestDate = (claimsAndAppeals: Array<ClaimsAndAppealsList>): Array<ClaimsAndAppealsList> => {
   return chain(claimsAndAppeals)
     .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.dateFiled))
     .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.updatedAt))
