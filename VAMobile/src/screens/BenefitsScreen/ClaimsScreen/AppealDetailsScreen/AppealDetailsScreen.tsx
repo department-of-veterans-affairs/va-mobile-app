@@ -2,7 +2,7 @@ import { SegmentedControl } from '@department-of-veterans-affairs/mobile-compone
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { filter, pluck } from 'underscore'
 import { useTranslation } from 'react-i18next'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -13,6 +13,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { claimsAndAppealsKeys, useAppeal } from 'api/claimsAndAppeals'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
 import { useQueryClient } from '@tanstack/react-query'
@@ -44,6 +45,12 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
       queryClient.invalidateQueries({ queryKey: claimsAndAppealsKeys.claim })
     }
   })
+
+  useEffect(() => {
+    if (appeal && !loadingAppeal && !appealError) {
+      registerReviewEvent()
+    }
+  }, [appeal, loadingAppeal, appealError])
 
   const onTabChange = (tab: number) => {
     setSelectedTab(tab)

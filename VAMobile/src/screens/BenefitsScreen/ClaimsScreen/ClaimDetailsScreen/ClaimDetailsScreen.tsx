@@ -4,7 +4,7 @@ import { TFunction } from 'i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
@@ -22,6 +22,7 @@ import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
 import { useClaim } from 'api/claimsAndAppeals'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 export const getClaimType = (claim: ClaimData | undefined, translation: TFunction): string => {
   return claim?.attributes?.claimType || translation('claims.defaultClaimType')
@@ -49,6 +50,12 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       queryClient.invalidateQueries({ queryKey: claimsAndAppealsKeys.claim })
     }
   })
+
+  useEffect(() => {
+    if (claim && !loadingClaim && !claimError) {
+      registerReviewEvent()
+    }
+  }, [claim, loadingClaim, claimError])
 
   // Track how long user maintains focus on this screen
   useFocusEffect(
