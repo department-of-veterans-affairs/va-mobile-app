@@ -1,7 +1,6 @@
 import React from 'react'
 import { context, render, screen, fireEvent } from 'testUtils'
 import VAModalPicker from './VAModalPicker'
-import { InitialState } from 'store/slices'
 
 context('VAModalPicker', () => {
   let selected: string
