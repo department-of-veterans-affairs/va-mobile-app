@@ -81,6 +81,7 @@ export type BenefitsStackParamList = {
     firstImageResponse: ImagePickerResponse
   }
   UploadFile: {
+    claimID: string
     request: ClaimEventData
     fileUploaded: DocumentPickerResponse
     imageUploaded: ImagePickerResponse
