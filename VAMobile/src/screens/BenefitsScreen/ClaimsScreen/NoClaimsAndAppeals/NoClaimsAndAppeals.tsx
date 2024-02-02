@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import React from 'react'
 
 import { Box, TextView } from 'components'
-import { ClaimType, ClaimTypeConstants } from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { ClaimsAndAppealsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'

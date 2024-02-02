@@ -1,10 +1,11 @@
 import React from 'react'
 import { screen, fireEvent } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import ClaimsAndAppealsListView, { ClaimType } from './ClaimsAndAppealsListView'
-import { InitialState } from 'store/slices'
+import { ClaimType } from 'constants/claims'
 import { ClaimsAndAppealsList } from 'store/api/types'
+import { InitialState } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+import ClaimsAndAppealsListView from './ClaimsAndAppealsListView'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

@@ -1,6 +1,5 @@
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
-import { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import React, { ReactNode, useEffect } from 'react'
 
@@ -15,50 +14,6 @@ import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import PhaseIndicator from './PhaseIndicator'
-
-/** returns the heading string by phase */
-const getHeading = (phase: number, translate: TFunction): string => {
-  switch (phase) {
-    case 1: {
-      return translate('claimPhase.heading.phaseOne')
-    }
-    case 2: {
-      return translate('claimPhase.heading.phaseTwo')
-    }
-    case 3: {
-      return translate('claimPhase.heading.phaseThree')
-    }
-    case 4: {
-      return translate('claimPhase.heading.phaseFour')
-    }
-    case 5: {
-      return translate('claimPhase.heading.phaseFive')
-    }
-  }
-  return ''
-}
-
-/** returns the details string to show by phase for the expand area */
-const getDetails = (phase: number, translate: TFunction): string => {
-  switch (phase) {
-    case 1: {
-      return translate('claimPhase.details.phaseOne')
-    }
-    case 2: {
-      return translate('claimPhase.details.phaseTwo')
-    }
-    case 3: {
-      return translate('claimPhase.details.phaseThree')
-    }
-    case 4: {
-      return translate('claimPhase.details.phaseFour')
-    }
-    case 5: {
-      return translate('claimPhase.details.phaseFive')
-    }
-  }
-  return ''
-}
 
 /**
  * takes the events array, sorts is and returns the latest updated date
@@ -100,7 +55,7 @@ function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
   const { eventsTimeline } = attributes
 
   const phaseLessThanEqualToCurrent = phase <= current
-  const heading = getHeading(phase, t)
+  const heading = t(`claimPhase.heading.phase${phase}`)
   const updatedLastDate = phaseLessThanEqualToCurrent ? updatedLast(eventsTimeline, phase) : ''
   const showClaimFileUploadBtn = needItemsFromVet(attributes) && !attributes.waiverSubmitted
 
@@ -148,8 +103,8 @@ function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
 
   const count = numberOfItemsNeedingAttentionFromVet(eventsTimeline)
 
-  const detailsText = getDetails(phase, t)
-  const detailsA11yLabel = phase === 1 ? a11yLabelVA(t('claimPhase.details.phaseOne')) : detailsText
+  const detailsText = t(`claimPhase.details.phase${phase}`)
+  const detailsA11yLabel = phase === 1 ? a11yLabelVA(t('claimPhase.details.phase1')) : detailsText
   const youHaveFileRequestsText = t('claimPhase.youHaveFileRequest', { count })
 
   const accordionPress = (isExpanded: boolean | undefined) => {

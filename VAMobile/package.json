@@ -130,8 +130,7 @@
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
-    "watch": "^1.0.2",
-    "webdriverio": "^8.27.0"
+    "watch": "^1.0.2"
   },
   "resolutions": {
     "prettier": "^2.8.8",
