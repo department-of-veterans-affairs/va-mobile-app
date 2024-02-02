@@ -32,6 +32,7 @@ Menus provide temporary access to functionality that's directly related to the o
 * Refer to the [VA Design System's content considerations for buttons](https://design.va.gov/components/button/#content-considerations)
 
 ## Accessibility considerations
+* All list items should be coded as buttons and not as links.
 * Users should be able to:
 	* Navigate to, open, and close a menu and with assistive technology
 	* Navigate between and select menu items with assistive technology
