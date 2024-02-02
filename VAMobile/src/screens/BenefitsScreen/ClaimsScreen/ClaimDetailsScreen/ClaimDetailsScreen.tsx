@@ -16,13 +16,13 @@ import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
 import { featureEnabled } from 'utils/remoteConfig'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
 import { useClaim } from 'api/claimsAndAppeals'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
-import { registerReviewEvent } from 'utils/inAppReviews'
 
 export const getClaimType = (claim: ClaimData | undefined, translation: TFunction): string => {
   return claim?.attributes?.claimType || translation('claims.defaultClaimType')
