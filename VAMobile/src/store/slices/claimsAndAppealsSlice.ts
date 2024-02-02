@@ -255,7 +255,6 @@ export const getClaim =
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
       const [totalTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       await registerReviewEvent()
@@ -286,7 +285,6 @@ export const getAppeal =
     try {
       const appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`, {}, signal)
       const [totalTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
