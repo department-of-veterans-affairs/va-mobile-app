@@ -63,6 +63,7 @@ context('PastAppointments', () => {
             ...defaultAppoinment,
             attributes: {
               ...defaultAppointmentAttributes,
+              healthcareService: undefined,
               status,
               isPending,
             },

@@ -40,7 +40,12 @@ jest.mock('store/api', () => {
 context('UpcomingAppointments', () => {
   let appointmentsByYearData: AppointmentsGroupedByYear = {
     '2020': {
-      '3': [{ ...defaultAppoinment }],
+      '3': [{ ...defaultAppoinment,
+            attributes: {
+              ...defaultAppoinment.attributes,
+              healthcareService: undefined,
+            }, 
+          }],
     },
   }
 
