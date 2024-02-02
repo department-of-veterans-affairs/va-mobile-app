@@ -15,7 +15,7 @@ module.exports = {
   globals: {
     strapi: true,
   },
-  ignorePatterns: ['testUtils.tsx', '**/*.test.ts', '**/*.test.tsx', '**/store/reducers/createReducer.ts, jsonFormatting.ts'],
+  ignorePatterns: ['testUtils.tsx', '**/*.test.ts', '**/*.test.tsx', '**/store/reducers/createReducer.ts', 'jsonFormatting.ts'],
   rules: {
     'tsdoc/syntax': 'warn',
     'linebreak-style': ['error', 'unix'],
