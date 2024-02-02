@@ -28,9 +28,9 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { SnackbarMessages } from 'components/SnackBar'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange, isErrorObject, showSnackBar } from 'utils/common'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { registerReviewEvent } from 'utils/inAppReviews'
 
 export type ClaimsAndAppealsListType = {
