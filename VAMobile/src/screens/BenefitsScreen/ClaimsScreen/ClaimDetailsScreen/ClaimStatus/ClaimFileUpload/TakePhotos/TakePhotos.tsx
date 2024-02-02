@@ -44,7 +44,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
     if (response.assets && response.assets.length > MAX_NUM_PHOTOS) {
       setError(t('fileUpload.tooManyPhotosError'))
     } else {
-      navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })
+      navigateTo('UploadOrAddPhotos', { claimID, request, firstImageResponse: response })
     }
   }
 
