@@ -6,9 +6,9 @@ import React, { FC, useEffect } from 'react'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/waygateConfig'
-import { a11yLabelID } from 'utils/a11yLabel'
+import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { fixedWhiteSpaceString } from 'utils/common'
+import { fixedWhiteSpaceString } from 'utils/jsonFormatting'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { openAppStore } from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
@@ -46,7 +46,13 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
     const phoneNumber = waygate.errorPhoneNumber && waygate.errorPhoneNumber.length > 0 ? waygate.errorPhoneNumber : t('8006982411')
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
-        <AlertBox border={waygate.type === 'DenyContent' ? 'error' : 'warning'} title={waygate.errorMsgTitle} text={text} focusOnError={false} testId="AFUseCase2TestID">
+        <AlertBox
+          border={waygate.type === 'DenyContent' ? 'error' : 'warning'}
+          title={waygate.errorMsgTitle}
+          text={text}
+          textA11yLabel={a11yLabelVA(text || '')}
+          focusOnError={false}
+          testId="AFUseCase2TestID">
           <Box my={theme.dimensions.standardMarginBetween}>
             <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(phoneNumber)} phone={phoneNumber} a11yLabel={a11yLabelID(phoneNumber)} />
           </Box>
