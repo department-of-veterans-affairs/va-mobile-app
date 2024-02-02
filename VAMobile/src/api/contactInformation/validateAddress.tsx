@@ -1,13 +1,20 @@
 import { useMutation } from '@tanstack/react-query'
 
-import { Params as APIParams, post } from 'store/api'
-import { AddressData, AddressValidationData, ValidateAddressData } from 'api/types'
-import { contactInformationKeys } from './queryKeys'
-import { getAddressDataFromSuggestedAddress, getConfirmedSuggestions, getSuggestedAddresses, getValidationKey, showValidationScreen } from 'utils/personalInformation'
-import { isErrorObject } from 'utils/common'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { saveAddress } from './saveAddress'
 import queryClient from 'api/queryClient'
+import { AddressData, AddressValidationData, ValidateAddressData } from 'api/types'
+import { Params as APIParams, post } from 'store/api'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { isErrorObject } from 'utils/common'
+import {
+  getAddressDataFromSuggestedAddress,
+  getConfirmedSuggestions,
+  getSuggestedAddresses,
+  getValidationKey,
+  showValidationScreen,
+} from 'utils/personalInformation'
+
+import { contactInformationKeys } from './queryKeys'
+import { saveAddress } from './saveAddress'
 
 type ValidateAddressParameters = {
   addressData: AddressData
@@ -17,8 +24,16 @@ type ValidateAddressParameters = {
 /**
  * Determines whether an address needs to be validated. If so, returns validation data; otherwise, saves the address
  */
-export const validateAddress = async ({ addressData, abortSignal }: ValidateAddressParameters): Promise<ValidateAddressData | undefined> => {
-  const response = await post<AddressValidationData>('/v0/user/addresses/validate', addressData as unknown as APIParams, undefined, abortSignal)
+export const validateAddress = async ({
+  addressData,
+  abortSignal,
+}: ValidateAddressParameters): Promise<ValidateAddressData | undefined> => {
+  const response = await post<AddressValidationData>(
+    '/v0/user/addresses/validate',
+    addressData as unknown as APIParams,
+    undefined,
+    abortSignal,
+  )
 
   const suggestedAddresses = getSuggestedAddresses(response)
   const confirmedSuggestedAddresses = getConfirmedSuggestions(suggestedAddresses)

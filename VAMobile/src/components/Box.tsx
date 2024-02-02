@@ -1,9 +1,17 @@
-import { FlexAlignType, View, ViewProps } from 'react-native'
-import { VABackgroundColors, VABorderColors, VAButtonBackgroundColors, VAButtonBorderColors, VAListTagColors, VATheme } from 'styles/theme'
 import React, { FC, ReactNode } from 'react'
-import _ from 'underscore'
-import styled from 'styled-components'
+import { FlexAlignType, View, ViewProps } from 'react-native'
 
+import styled from 'styled-components'
+import _ from 'underscore'
+
+import {
+  VABackgroundColors,
+  VABorderColors,
+  VAButtonBackgroundColors,
+  VAButtonBorderColors,
+  VAListTagColors,
+  VATheme,
+} from 'styles/theme'
 import { themeFn } from 'utils/theme'
 
 type VABackgroundColorsVariant = keyof VABackgroundColors
@@ -207,7 +215,9 @@ const generateBorderStyles = (
   }
 
   if (color) {
-    styles[`border${dir}-color`] = theme.colors.border[color as VABorderColorsVariant] || theme.colors.buttonBorder[color as VAButtonBorderColorsVariant]
+    styles[`border${dir}-color`] =
+      theme.colors.border[color as VABorderColorsVariant] ||
+      theme.colors.buttonBorder[color as VAButtonBorderColorsVariant]
   }
   return styles
 }
@@ -260,10 +270,14 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     ...blStyles,
     ...brStyles,
     'border-radius': typeof props.borderRadius === 'number' ? `${props.borderRadius}px` : props.borderRadius,
-    'border-top-left-radius': typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop,
-    'border-top-right-radius': typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop,
-    'border-bottom-left-radius': typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom,
-    'border-bottom-right-radius': typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom,
+    'border-top-left-radius':
+      typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop,
+    'border-top-right-radius':
+      typeof props.borderRadiusTop === 'number' ? `${props.borderRadiusTop}px` : props.borderRadiusTop,
+    'border-bottom-left-radius':
+      typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom,
+    'border-bottom-right-radius':
+      typeof props.borderRadiusBottom === 'number' ? `${props.borderRadiusBottom}px` : props.borderRadiusBottom,
   }
 
   return _.map(styles, (v, k) => {

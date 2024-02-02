@@ -1,14 +1,18 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
+
 import LargeNavButton from './LargeNavButton'
 
 context('LargeNavButton', () => {
   const onPressSpy = jest.fn()
 
   beforeEach(() => {
-    render(<LargeNavButton title={'My Title'} subText={'My Subtext'} tagCount={45} a11yHint={'a11y'} onPress={onPressSpy} />)
+    render(
+      <LargeNavButton title={'My Title'} subText={'My Subtext'} tagCount={45} a11yHint={'a11y'} onPress={onPressSpy} />,
+    )
   })
 
   it('renders title, tagcount, and subtext', () => {

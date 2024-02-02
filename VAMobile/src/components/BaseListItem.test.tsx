@@ -1,17 +1,27 @@
 import React from 'react'
-import Mock = jest.Mock
-import { BackgroundVariant } from './Box'
-import { context, render, screen, fireEvent } from 'testUtils'
+
+import { context, fireEvent, render, screen } from 'testUtils'
+
 import BaseListItem from './BaseListItem'
+import { BackgroundVariant } from './Box'
 import { TextLines } from './TextLines'
+
+import Mock = jest.Mock
 
 context('BaseListItem', () => {
   let onPressSpy: Mock
 
-  const initializeTestInstance = (backgroundColor?: BackgroundVariant, activeBackgroundColor?: BackgroundVariant): void => {
-    onPressSpy = jest.fn(() => { })
+  const initializeTestInstance = (
+    backgroundColor?: BackgroundVariant,
+    activeBackgroundColor?: BackgroundVariant,
+  ): void => {
+    onPressSpy = jest.fn(() => {})
     render(
-      <BaseListItem a11yHint={'a11y'} onPress={onPressSpy} backgroundColor={backgroundColor} activeBackgroundColor={activeBackgroundColor}>
+      <BaseListItem
+        a11yHint={'a11y'}
+        onPress={onPressSpy}
+        backgroundColor={backgroundColor}
+        activeBackgroundColor={activeBackgroundColor}>
         <TextLines listOfText={[{ text: 'My Title' }]} />
       </BaseListItem>,
     )
@@ -29,5 +39,4 @@ context('BaseListItem', () => {
     fireEvent.press(screen.getByText('My Title'))
     expect(onPressSpy).toBeCalled()
   })
-
 })
