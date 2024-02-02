@@ -26,10 +26,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<
-    RootState,
-    ClaimsAndAppealsState
-  >((state) => state.claimsAndAppeals)
+  const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const {
     data: userAuthorizedServices,
     isLoading: loadingUserAuthorizedServices,
