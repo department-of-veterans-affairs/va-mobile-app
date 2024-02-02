@@ -16,6 +16,9 @@ export const getClaimsAndAppeals = async (claimType: ClaimType, page: number): P
     'page[size]': DEFAULT_PAGE_SIZE.toString(),
     showCompleted: claimType === ClaimTypeConstants.ACTIVE ? 'false' : 'true',
   })
+  if (response) {
+    response.data = sortByLatestDate(response.data)
+  }
   return response
 }
 
