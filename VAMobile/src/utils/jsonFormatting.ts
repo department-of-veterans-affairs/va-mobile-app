@@ -10,17 +10,16 @@
   @param text - array of textline to concatenate
   */
 
-  export const fixedWhiteSpaceString = (text: string | undefined) => {
-    if (text) {
-      return text
-        .replace(/\\n/g, '\n')
-        .replace(/\\t/g, '\t')
-        .replace(/\\r/g, '\r')
-        .replace(/\\v/g, '\v')
-        .replace(/\\u2028/g, '\u2028')
-        .replace(/\\u2029/g, '\u2029')
-        .replace(/\\u2022/g, '\u2022')
-    }
-    return ''
+export const fixedWhiteSpaceString = (text: string | undefined) => {
+  if (text) {
+    return text
+      .replace(/\\n/g, '\n')
+      .replace(/\\t/g, '\t')
+      .replace(/\\r/g, '\r')
+      .replace(/\\v/g, '\v')
+      .replace(/\\u2028/g, '\u2028')
+      .replace(/\\u2029/g, '\u2029')
+      .replace(/\\u2022/g, '\u2022')
   }
-  
+  return ''
+}
