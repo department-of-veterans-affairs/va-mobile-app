@@ -1,12 +1,11 @@
 import React from 'react'
-import { context, fireEvent, mockNavProps, render, screen } from 'testUtils'
+import { context, fireEvent, mockNavProps, QueriesData, render, screen, waitFor, when } from 'testUtils'
 
+import * as api from 'store/api'
 import FileRequest from './FileRequest'
 import { ClaimEventData } from 'store/api/types'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -17,45 +16,51 @@ jest.mock('utils/hooks', () => {
   }
 })
 
+let request = [
+  {
+    type: 'still_need_from_you_list',
+    date: '2020-07-16',
+    status: 'NEEDED',
+    uploaded: false,
+    uploadsAllowed: true,
+    displayName: 'Request 1',
+  },
+]
+when(api.get as jest.Mock)
+  .calledWith(`/v0/claim/600156928`, {}, expect.anything())
+  .mockResolvedValue({
+    data: {
+      ...Claim,
+      id: '600156928',
+      attributes: {
+        ...Claim.attributes,
+        waiverSubmitted: false,
+        eventsTimeline: request,
+      },
+    },
+  })
+
 context('FileRequest', () => {
   let props: any
 
-  let requests = [
-    {
-      type: 'still_need_from_you_list',
-      date: '2020-07-16',
-      status: 'NEEDED',
-      uploaded: false,
-      uploadsAllowed: true,
-      displayName: 'Request 1',
-    },
-  ]
-
-  const initializeTestInstance = (requests: ClaimEventData[], currentPhase?: number, errorsState: ErrorsState = initialErrorsState): void => {
-    props = mockNavProps(undefined, undefined, { params: { requests, currentPhase } })
-
-    render(<FileRequest {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        claimsAndAppeals: {
-          ...InitialState.claimsAndAppeals,
-          claim: {
-            ...Claim,
-            attributes: {
-              ...Claim.attributes,
-              waiverSubmitted: false,
-              eventsTimeline: requests,
-            },
-          },
+  const renderWithData = (requests: ClaimEventData[]): void => {
+    let queriesData: QueriesData | undefined
+    queriesData = [{
+      queryKey: [claimsAndAppealsKeys.claim, '600156928'],
+      data: {
+        ...Claim,
+        attributes: {
+          ...Claim.attributes,
+          waiverSubmitted: false,
+          eventsTimeline: requests,
         },
-        errors: errorsState,
-      },
-    })
-  }
+      }
+    }]
 
-  beforeEach(() => {
-    initializeTestInstance(requests)
-  })
+    props = mockNavProps(undefined, undefined, { params: { claimID: "600156928" } })
+
+   render(<FileRequest {...props} />, {queriesData})
+  }
 
   describe('when number of requests is greater than 1', () => {
     it('should display the text "You have {{number}} file requests from VA"', async () => {
@@ -76,17 +81,19 @@ context('FileRequest', () => {
         },
       ]
 
-      initializeTestInstance(updatedRequests)
+      renderWithData(updatedRequests)
       expect(screen.getByText('You have 2 file requests from VA')).toBeTruthy()
     })
   })
 
   describe('when number of requests is equal to 1', () => {
     it('should display the text "You have 1 file request from VA"', async () => {
+      renderWithData(request)
       expect(screen.getByText('You have 1 file request from VA')).toBeTruthy()
     })
 
     it('should have we sent you a letter text section', async () => {
+      renderWithData(request)
       expect(
         screen.getByText(
           "We sent you a letter in the mail asking for more evidence to support your claim. We'll wait 30 days for your evidence before we begin evaluating your claim.",
@@ -97,22 +104,19 @@ context('FileRequest', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {}, expect.anything())
+        .mockRejectedValue('Error')
 
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      initializeTestInstance(requests, undefined, errorState)
-      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
+      renderWithData(request)
+      await waitFor(() =>expect(screen.getByRole('header', { name: "The VA mobile app isn't working right now" })).toBeTruthy())
     })
 
     describe('on click of a file request', () => {
       it('should navigate to file request details page', async () => {
+        renderWithData(request)
         fireEvent.press(screen.getByRole('button', { name: 'Request 1' }))
-        expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', { request: requests[0] })
+        expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', { claimID: "600156928", request: request[0] })
       })
     })
   })
@@ -120,7 +124,7 @@ context('FileRequest', () => {
   describe('when waiverSubmitted is false', () => {
     describe('when the currentPhase is 3', () => {
       it('should display evaluation section', async () => {
-        initializeTestInstance(requests, 3)
+        renderWithData(request)
         expect(screen.getByText('Ask for your claim evaluation')).toBeTruthy()
         expect(screen.getByText('Please review the evaluation details if you are ready for us to begin evaluating your claim')).toBeTruthy()
       })
@@ -148,8 +152,7 @@ context('FileRequest', () => {
             displayName: 'Request 2',
           },
         ]
-
-        initializeTestInstance(updatedRequests)
+        renderWithData(updatedRequests)
         expect(screen.getByText('You have 1 file request from VA')).toBeTruthy()
       })
     })

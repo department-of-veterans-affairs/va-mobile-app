@@ -1,22 +1,20 @@
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
-import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ChildTemplate, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
 import { ClaimEventData } from 'store/api'
-import { ClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useClaim } from 'api/claimsAndAppeals'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
 
@@ -25,7 +23,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { claimID } = route.params
-  const { claim } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { data: claim, isError: claimError } = useClaim(claimID)
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
   const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
 
@@ -83,7 +81,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
 
   return (
     <ChildTemplate backLabel={t('claim.backLabel')} backLabelOnPress={navigation.goBack} title={t('fileRequest.title')} testID="fileRequestPageTestID">
-      {useError(ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID) ? (
+      {claimError ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID} />
       ) : (
         <Box mb={contentMarginBottom}>
