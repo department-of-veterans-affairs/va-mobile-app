@@ -360,7 +360,7 @@ Product will need to create on in the Github folder and link it here.
  
 - [ ] Team PM creates test plan and assigns to Team QA agent-  Template: QA Test Plan
 - [ ] QA agent to monitor and speak up on QA needs for the project
-- [ ] Document decision in the descision log regarding QA 
+- [ ] Document decision in the decision log regarding QA 
 - [ ] Identify test data needs
    - [ ] Determine and document test accounts used 
 - [ ] Test plan creation and resolution 

@@ -20,7 +20,6 @@
 		"removeComments": true,
 		"types": [
 			"node",
-			"webdriverio",
 			"jest"
 		],
 		"paths": {

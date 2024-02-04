@@ -3,6 +3,7 @@ import React from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, LabelTagTypeConstants, Pagination, PaginationProps, TextLine } from 'components'
 import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { ClaimType } from 'constants/claims'
 import { ClaimsAndAppealsState, getClaimsAndAppeals } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -13,16 +14,6 @@ import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useSelector } from 'react-redux'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
-
-export const ClaimTypeConstants: {
-  ACTIVE: ClaimType
-  CLOSED: ClaimType
-} = {
-  ACTIVE: 'ACTIVE',
-  CLOSED: 'CLOSED',
-}
-
-export type ClaimType = 'ACTIVE' | 'CLOSED'
 
 type ClaimsAndAppealsListProps = {
   claimType: ClaimType

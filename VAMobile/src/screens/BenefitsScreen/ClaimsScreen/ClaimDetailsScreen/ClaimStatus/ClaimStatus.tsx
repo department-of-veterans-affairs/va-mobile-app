@@ -4,7 +4,7 @@ import React, { useRef } from 'react'
 
 import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
 import { ClaimData } from 'store/api/types'
-import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -25,8 +25,6 @@ type ClaimStatusProps = {
   /** indicates either open or closed claim */
   claimType: ClaimType
 }
-
-// TODO: ClaimType and ClaimTypeConstants need to be moved from ClaimsAndAppealsListView into a constants/claims file
 
 /**
  * Component for rendering the details area of a claim when selected on the ClaimDetailsScreen
