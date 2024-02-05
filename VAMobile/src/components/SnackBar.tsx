@@ -1,19 +1,21 @@
+import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { StyleProp, TouchableOpacity, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { StyleProp, TouchableOpacity, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
+
 import { useFocusEffect } from '@react-navigation/native'
-import React, { FC } from 'react'
 
 import { Box, TextViewProps, VAScrollView } from 'components'
-import { BoxProps } from './Box'
 import { NAMESPACE } from 'constants/namespaces'
 import { triggerHaptic } from 'utils/haptics'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
-import { useTranslation } from 'react-i18next'
+
+import colors from '../styles/themes/VAColors'
+import { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
-import colors from '../styles/themes/VAColors'
 
 export type SnackbarMessages = {
   successMsg: string
@@ -156,13 +158,21 @@ const SnackBar: FC<ToastProps> = (toast) => {
         </Box>
         <Box {...btnContainerProps}>
           {!isUndo && (
-            <TouchableOpacity onPress={onActionPress} style={confirmBtnStlye} accessible={true} accessibilityRole={'button'}>
+            <TouchableOpacity
+              onPress={onActionPress}
+              style={confirmBtnStlye}
+              accessible={true}
+              accessibilityRole={'button'}>
               <TextView variant={'SnackBarBtnText'} display={'flex'}>
                 {actionBtnText || isError ? t('tryAgain') : t('snackbar.undo')}
               </TextView>
             </TouchableOpacity>
           )}
-          <TouchableOpacity onPress={onDismissPress} style={dismissBtnStlye} accessible={true} accessibilityRole={'button'}>
+          <TouchableOpacity
+            onPress={onDismissPress}
+            style={dismissBtnStlye}
+            accessible={true}
+            accessibilityRole={'button'}>
             <TextView variant={'SnackBarBtnText'}>{t('snackbar.dismiss')}</TextView>
           </TouchableOpacity>
         </Box>

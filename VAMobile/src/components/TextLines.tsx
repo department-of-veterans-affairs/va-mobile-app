@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 
-import { TextLine } from './types'
 import Box from './Box'
 import LabelTag from './LabelTag'
 import TextLineWithIcon, { TextLineWithIconProps } from './TextLineWithIcon'
 import TextView from './TextView'
+import { TextLine } from './types'
 
 type TextLinesProps = {
   /** List of text for the button */
@@ -32,7 +32,15 @@ export const TextLines: FC<TextLinesProps> = ({ listOfText, selectable }) => {
             }
 
             return (
-              <TextView variant={variant} textAlign={textAlign} color={color} key={index} selectable={selectable} mt={mt} mb={mb} accessible={false}>
+              <TextView
+                variant={variant}
+                textAlign={textAlign}
+                color={color}
+                key={index}
+                selectable={selectable}
+                mt={mt}
+                mb={mb}
+                accessible={false}>
                 {text}
               </TextView>
             )

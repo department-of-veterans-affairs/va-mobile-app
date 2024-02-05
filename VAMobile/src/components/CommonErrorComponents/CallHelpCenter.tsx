@@ -1,15 +1,16 @@
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { ViewStyle } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ViewStyle } from 'react-native'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AlertBox, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
-import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useEffect } from 'react'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 export type CallHelpCenterProps = {
@@ -28,7 +29,14 @@ export type CallHelpCenterProps = {
 }
 
 /**A common component to show the help center contact info for when an error happens*/
-const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA11yHint, errorText, errorA11y, callPhone }) => {
+const CallHelpCenter: FC<CallHelpCenterProps> = ({
+  onTryAgain,
+  titleText,
+  titleA11yHint,
+  errorText,
+  errorA11y,
+  callPhone,
+}) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
