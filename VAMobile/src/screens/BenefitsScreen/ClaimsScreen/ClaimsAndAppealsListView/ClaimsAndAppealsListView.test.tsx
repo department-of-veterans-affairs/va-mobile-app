@@ -9,9 +9,9 @@ import { context, mockNavProps, render } from 'testUtils'
 
 import ClaimsAndAppealsListView from './ClaimsAndAppealsListView'
 
-let mockNavigationSpy = jest.fn()
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
@@ -19,7 +19,7 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     getClaimsAndAppeals: jest.fn(() => {
@@ -32,10 +32,8 @@ jest.mock('store/slices', () => {
 })
 
 context('ClaimsAndAppealsListView', () => {
-  let props: any
-
   const initializeTestInstance = (claimType: ClaimType, isEmpty?: boolean): void => {
-    props = mockNavProps({ claimType })
+    const props = mockNavProps({ claimType })
 
     const activeClaimsAndAppeals: ClaimsAndAppealsList = [
       {

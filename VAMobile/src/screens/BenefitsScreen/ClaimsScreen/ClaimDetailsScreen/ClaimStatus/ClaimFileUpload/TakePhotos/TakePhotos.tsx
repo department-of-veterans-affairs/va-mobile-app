@@ -1,23 +1,34 @@
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { ScrollView } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useTranslation } from 'react-i18next'
 import React, { ReactNode, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
-import { AlertBox, Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
+import {
+  AlertBox,
+  Box,
+  ClickForActionLink,
+  LinkButtonProps,
+  LinkTypeOptionsConstants,
+  LinkUrlIconType,
+  TextArea,
+  TextView,
+} from 'components'
+import CollapsibleAlert from 'components/CollapsibleAlert'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { onAddPhotos } from 'utils/claims'
-import { testIdProps } from 'utils/accessibility'
-import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
-import CollapsibleAlert from 'components/CollapsibleAlert'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import getEnv from 'utils/env'
+import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 const { LINK_URL_GO_TO_VA_GOV } = getEnv()
 
@@ -59,7 +70,10 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('fileUpload.accessibilityAlert.body'))}>
+        <TextView
+          variant="MobileBody"
+          paragraphSpacing={true}
+          accessibilityLabel={a11yLabelVA(t('fileUpload.accessibilityAlert.body'))}>
           {t('fileUpload.accessibilityAlert.body')}
         </TextView>
         <ClickForActionLink {...linkToCallProps} />
@@ -73,7 +87,12 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   }
 
   return (
-    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={onCancel} title={t('fileUpload.selectPhotos')} testID="takePhotosTestID">
+    <FullScreenSubtask
+      scrollViewRef={scrollViewRef}
+      leftButtonText={t('cancel')}
+      onLeftButtonPress={onCancel}
+      title={t('fileUpload.selectPhotos')}
+      testID="takePhotosTestID">
       {!!error && (
         <Box mb={theme.dimensions.standardMarginBetween}>
           <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />
@@ -108,9 +127,23 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
         <TextView variant="MobileBodyBold">{t('fileUpload.acceptedFileTypes')}</TextView>
         <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
       </TextArea>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box
+        mt={theme.dimensions.contentMarginTop}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
         <Button
-          onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, 0, claimID, request, setIsActionSheetVisible)}
+          onPress={(): void =>
+            onAddPhotos(
+              t,
+              showActionSheetWithOptions,
+              setError,
+              callbackIfUri,
+              0,
+              claimID,
+              request,
+              setIsActionSheetVisible,
+            )
+          }
           label={t('fileUpload.takeOrSelectPhotos')}
           testID={t('fileUpload.takePhotos')}
         />

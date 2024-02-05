@@ -1,9 +1,11 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
+
+import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
-import ClaimPhase from './ClaimPhase'
+
 import { claim } from '../../../claimData'
+import ClaimPhase from './ClaimPhase'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -45,7 +47,11 @@ context('ClaimPhase', () => {
     it('should render text details after pressing icon', () => {
       initializeTestInstance(2, 2)
       fireEvent.press(screen.getAllByRole('tab')[0])
-      expect(screen.getByText('Your claim has been assigned to a reviewer who is determining if additional information is needed.')).toBeTruthy()
+      expect(
+        screen.getByText(
+          'Your claim has been assigned to a reviewer who is determining if additional information is needed.',
+        ),
+      ).toBeTruthy()
     })
   })
 

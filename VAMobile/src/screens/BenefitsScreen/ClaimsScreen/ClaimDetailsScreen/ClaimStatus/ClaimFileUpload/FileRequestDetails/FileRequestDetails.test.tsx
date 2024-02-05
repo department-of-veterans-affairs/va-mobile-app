@@ -1,9 +1,11 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import FileRequestDetails from './FileRequestDetails'
 import { ClaimEventData } from 'store/api'
+import { context, mockNavProps, render } from 'testUtils'
+
+import FileRequestDetails from './FileRequestDetails'
 
 context('FileRequestDetails', () => {
   const requestWithoutFiles = {

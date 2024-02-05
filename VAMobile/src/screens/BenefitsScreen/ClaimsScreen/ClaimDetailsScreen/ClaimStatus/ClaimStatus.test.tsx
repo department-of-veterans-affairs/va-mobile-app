@@ -9,9 +9,9 @@ import { context, mockNavProps, render } from 'testUtils'
 import { claim } from '../../claimData'
 import ClaimStatus from './ClaimStatus'
 
-let mockNavigationSpy = jest.fn()
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
@@ -19,7 +19,7 @@ jest.mock('utils/hooks', () => {
 })
 
 context('ClaimStatus', () => {
-  const maxEstDate = '2019-12-11'
+  const defaultMaxEstDate = '2019-12-11'
   const initializeTestInstance = (maxEstDate: string, claimType: ClaimType): void => {
     const props = mockNavProps({
       claim: { ...claim, attributes: { ...claim.attributes, maxEstDate: maxEstDate } },
@@ -30,7 +30,7 @@ context('ClaimStatus', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    initializeTestInstance(maxEstDate, 'ACTIVE')
+    initializeTestInstance(defaultMaxEstDate, 'ACTIVE')
   })
 
   it('Renders ClaimStatus', () => {
