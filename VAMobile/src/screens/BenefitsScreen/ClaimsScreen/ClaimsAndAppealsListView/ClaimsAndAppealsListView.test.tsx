@@ -1,10 +1,13 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import ClaimsAndAppealsListView, { ClaimType } from './ClaimsAndAppealsListView'
-import { InitialState } from 'store/slices'
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { ClaimType } from 'constants/claims'
 import { ClaimsAndAppealsList } from 'store/api/types'
+import { InitialState } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+
+import ClaimsAndAppealsListView from './ClaimsAndAppealsListView'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -119,14 +122,22 @@ context('ClaimsAndAppealsListView', () => {
 
   describe('on click of a claim', () => {
     it('should call useRouteNavigation', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Claim for compensation updated on October 30, 2020 Submitted October 22, 2020' }))
+      fireEvent.press(
+        screen.getByRole('button', {
+          name: 'Claim for compensation updated on October 30, 2020 Submitted October 22, 2020',
+        }),
+      )
       expect(mockNavigationSpy).toBeCalledWith('ClaimDetailsScreen', { claimID: '2', claimType: 'ACTIVE' })
     })
   })
 
   describe('on click of an appeal', () => {
     it('should call useRouteNavigation', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Supplemental claim for disability compensation updated on October 28, 2020 Submitted October 22, 2020' }))
+      fireEvent.press(
+        screen.getByRole('button', {
+          name: 'Supplemental claim for disability compensation updated on October 28, 2020 Submitted October 22, 2020',
+        }),
+      )
       expect(mockNavigationSpy).toBeCalledWith('AppealDetailsScreen', { appealID: '0' })
     })
   })
@@ -135,7 +146,11 @@ context('ClaimsAndAppealsListView', () => {
     it('should display the NoClaimsAndAppeals components', () => {
       initializeTestInstance('ACTIVE', true)
       expect(screen.getByText("You don't have any submitted claims or appeals")).toBeTruthy()
-      expect(screen.getByText("This app shows only completed claim and appeal applications. If you started a claim or appeal but haven’t finished it yet, go to eBenefits to work on it.")).toBeTruthy()
+      expect(
+        screen.getByText(
+          'This app shows only completed claim and appeal applications. If you started a claim or appeal but haven’t finished it yet, go to eBenefits to work on it.',
+        ),
+      ).toBeTruthy()
     })
   })
 })
