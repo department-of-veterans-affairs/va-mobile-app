@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { context, render, screen } from 'testUtils'
+
 import VAImage from './VAImage'
 
 jest.mock('../../utils/platform', () => ({

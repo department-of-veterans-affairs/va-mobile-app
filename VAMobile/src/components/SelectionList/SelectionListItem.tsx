@@ -1,7 +1,8 @@
-import { Pressable } from 'react-native'
 import React, { FC } from 'react'
+import { Pressable } from 'react-native'
 
 import { useTheme } from 'utils/hooks'
+
 import Box, { BoxProps } from '../Box'
 import VAIcon, { VAIconProps, VA_ICON_MAP } from '../VAIcon'
 

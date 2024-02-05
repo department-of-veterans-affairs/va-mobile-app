@@ -1,6 +1,9 @@
 import React from 'react'
+
 import { context, fireEvent, render, screen } from 'testUtils'
+
 import RadioGroup from './RadioGroup'
+
 import Mock = jest.Mock
 
 const mockOptions = [
@@ -26,7 +29,6 @@ context('RadioGroup', () => {
     selected = selectedValue
     setSelected = jest.fn((updatedSelected) => (selected = updatedSelected))
     render(<RadioGroup<number> onChange={setSelected} value={selected} options={mockOptions} />)
-
   }
 
   beforeEach(() => {

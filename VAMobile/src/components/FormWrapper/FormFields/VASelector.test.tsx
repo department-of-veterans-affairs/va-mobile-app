@@ -1,6 +1,9 @@
 import React from 'react'
-import { context, fireEvent, render, screen, } from 'testUtils'
+
+import { context, fireEvent, render, screen } from 'testUtils'
+
 import VASelector, { SelectorType } from './VASelector'
+
 import Mock = jest.Mock
 
 context('VASelector', () => {
@@ -9,7 +12,12 @@ context('VASelector', () => {
   let errorMessage: string
   let setErrorMessage: Mock
 
-  const initializeTestInstance = (selectedValue: boolean, disabled?: boolean, error?: string, selectorType = SelectorType.Checkbox): void => {
+  const initializeTestInstance = (
+    selectedValue: boolean,
+    disabled?: boolean,
+    error?: string,
+    selectorType = SelectorType.Checkbox,
+  ): void => {
     selected = selectedValue
     setSelected = jest.fn((updatedSelected) => (selected = updatedSelected))
 
@@ -52,9 +60,11 @@ context('VASelector', () => {
       initializeTestInstance(true)
       expect(screen.getByTestId('CheckBoxFilled')).toBeTruthy()
       expect(screen.getByLabelText('CheckBoxFilled')).toBeTruthy()
-      expect(screen.getByAccessibilityState({
-        "checked": true,
-      })).toBeTruthy()
+      expect(
+        screen.getByAccessibilityState({
+          checked: true,
+        }),
+      ).toBeTruthy()
     })
   })
 
@@ -62,9 +72,11 @@ context('VASelector', () => {
     it('should display the empty checkbox', () => {
       expect(screen.getByTestId('CheckBoxEmpty')).toBeTruthy()
       expect(screen.getByLabelText('CheckBoxEmpty')).toBeTruthy()
-      expect(screen.getByAccessibilityState({
-        "checked": false,
-      })).toBeTruthy()
+      expect(
+        screen.getByAccessibilityState({
+          checked: false,
+        }),
+      ).toBeTruthy()
     })
   })
 
