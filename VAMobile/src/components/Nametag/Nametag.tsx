@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
@@ -7,6 +7,8 @@ import { MilitaryServiceState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { Pressable, PressableProps } from 'react-native'
 import { RootState } from 'store'
+import { UserAnalytics } from 'constants/analytics'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -20,6 +22,12 @@ export const Nametag: FC = () => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
+
+  useEffect(() => {
+    if (personalInfo) {
+      setAnalyticsUserProperty(UserAnalytics.vama_cerner_transition(personalInfo.hasFacilityTransitioningToCerner || false))
+    }
+  }, [personalInfo])
 
   const fullName = personalInfo?.fullName
 
