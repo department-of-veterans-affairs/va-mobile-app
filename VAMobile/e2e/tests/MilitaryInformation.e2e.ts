@@ -9,7 +9,7 @@ export const MilitaryInformationE2eIdConstants = {
   SERVICE_INFORMATION_INCORRECT_BODY_LABEL_2: 'If the military service information in your profile doesn’t look right, please call the Defense Manpower Data Center (D-M-D-C). They’ll work with you to update your information in D-E-E-R-S.',
   SERVICE_INFORMATION_INCORRECT_BODY_LABEL_3: 'To reach the D-M-D-C, call Monday through Friday (except federal holidays), 8:00 a.m. to 8:00 p.m. Eastern Time.',
   SERVICE_NOT_AVAILABLE_PAGE_TITLE_TEXT: 'We can\'t access your military information',
-  SERVICE_NOT_AVAILABLE_PAGE_BODY_LABEL: 'We\'re sorry. We can\'t access your military service records. If you think you should be able to review your service information here, please file a request to change or correct your D-D 2 1 4 or other military records.',
+  SERVICE_NOT_AVAILABLE_ID: 'noMilitaryAccessTestID',
 }
 
 beforeAll(async () => {
@@ -65,7 +65,7 @@ describe('Military Info Screen', () => {
 		await openProfile()
 		await openMilitaryInformation()
 		await expect(element(by.text(MilitaryInformationE2eIdConstants.SERVICE_NOT_AVAILABLE_PAGE_TITLE_TEXT))).toExist()
-		await expect(element(by.label(MilitaryInformationE2eIdConstants.SERVICE_NOT_AVAILABLE_PAGE_BODY_LABEL))).toExist()
+		await expect(element(by.id(MilitaryInformationE2eIdConstants.SERVICE_NOT_AVAILABLE_ID))).toExist()
 	})
 	
 	it('should reset mock data', async () => {
