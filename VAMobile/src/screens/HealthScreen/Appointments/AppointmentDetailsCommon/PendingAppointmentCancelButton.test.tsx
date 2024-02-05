@@ -1,10 +1,12 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
-import PendingAppointmentCancelButton from './PendingAppointmentCancelButton'
-import { defaultAppointmentAttributes } from 'utils/tests/appointments'
+import { fireEvent, screen } from '@testing-library/react-native'
+
 import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
+import { context, render } from 'testUtils'
+import { defaultAppointmentAttributes } from 'utils/tests/appointments'
+
+import PendingAppointmentCancelButton from './PendingAppointmentCancelButton'
 
 const mockAlertSpy = jest.fn()
 jest.mock('utils/hooks', () => {

@@ -1,14 +1,24 @@
-import { useTranslation } from 'react-i18next'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
+import {
+  AlertBox,
+  Box,
+  BoxProps,
+  ClickToCallPhoneNumber,
+  TextArea,
+  TextView,
+  TextViewProps,
+  VABulletList,
+  VAScrollView,
+} from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useExternalLink, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { useExternalLink, useTheme } from 'utils/hooks'
 
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
 
@@ -53,7 +63,11 @@ function PrescriptionHistoryNotAuthorized() {
   return (
     <VAScrollView>
       <Box {...alertWrapperProps}>
-        <AlertBox border={'warning'} title={t('prescriptions.notAuthorized.warning')} titleA11yLabel={a11yLabelVA(t('prescriptions.notAuthorized.warning'))} />
+        <AlertBox
+          border={'warning'}
+          title={t('prescriptions.notAuthorized.warning')}
+          titleA11yLabel={a11yLabelVA(t('prescriptions.notAuthorized.warning'))}
+        />
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
