@@ -1,7 +1,8 @@
 import _ from 'underscore'
 
-import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
+
+import * as api from '../api'
 import { getDisabilityRating } from './disabilityRatingSlice'
 
 const url: string = '/v0/disability-rating'

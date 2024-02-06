@@ -23,7 +23,7 @@
               "id": "983GC",
               "lat": 40.553875,
               "long": -105.08795,
-              "name":"Fort Collins VA Clinic",
+              "name": "Fort Collins VA Clinic",
               "address": {
                 "street": "2509 Research Boulevard",
                 "city": "Fort Collins",
@@ -46,8 +46,7 @@
         {
           "id": "8a48e8db6d70a38a016d72b3542400032",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "VA",
             "cancelId": null,
             "comment": null,
@@ -76,19 +75,16 @@
         {
           "id": "8a48e8db6d70a38a016d72b3542400031",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "VA",
             "cancelId": null,
             "comment": null,
             "healthcareProvider": "John Smith",
             "healthcareService": null,
-            "location":
-            {
+            "location": {
               "id": "442",
               "name": "Cheyenne VA Medical Center",
-              "address":
-              {
+              "address": {
                 "street": "2360 East Pershing Boulevard",
                 "city": "Cheyenne",
                 "state": "WY",
@@ -96,8 +92,7 @@
               },
               "lat": 41.148027,
               "long": -104.7862575,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "307",
                 "number": "778-7550",
                 "extension": null
@@ -145,7 +140,7 @@
               "id": "983GC",
               "lat": 40.553875,
               "long": -105.08795,
-              "name":"Fort Collins VA Clinic",
+              "name": "Fort Collins VA Clinic",
               "address": {
                 "street": "2509 Research Boulevard",
                 "city": "Fort Collins",
@@ -186,7 +181,7 @@
               "id": "983GC",
               "lat": 40.553875,
               "long": -105.08795,
-              "name":"Fort Collins VA Clinic",
+              "name": "Fort Collins VA Clinic",
               "address": {
                 "street": "2509 Research Boulevard",
                 "city": "Fort Collins",
@@ -305,8 +300,8 @@
                 "state": "CA",
                 "zipCode": "92357"
               },
-              "lat": 34.050250,
-              "long": -117.250720,
+              "lat": 34.05025,
+              "long": -117.25072,
               "phone": {
                 "areaCode": "323",
                 "number": "723-9322",
@@ -500,19 +495,16 @@
         {
           "id": "8a48912a6d02b0fc016d20b4ccb9001b",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "COMMUNITY_CARE",
             "cancelId": null,
             "comment": null,
             "healthcareProvider": "Vilasini Reddy",
             "healthcareService": "Test clinic 2",
-            "location":
-            {
+            "location": {
               "id": null,
               "name": "Test clinic 2",
-              "address":
-              {
+              "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
                 "state": "VA",
@@ -520,8 +512,7 @@
               },
               "lat": null,
               "long": null,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "703",
                 "number": "652-0000",
                 "extension": null
@@ -540,7 +531,7 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":[
+            "proposedTimes": [
               {
                 "date": "{{now - 33 days short}}",
                 "time": "PM"
@@ -566,19 +557,16 @@
         {
           "id": "8a48e8db6d70a38a016d72b354240004",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "COMMUNITY_CARE",
             "cancelId": null,
             "comment": null,
             "healthcareProvider": null,
             "healthcareService": null,
-            "location":
-            {
+            "location": {
               "id": "442",
               "name": "Cheyenne VA Medical Center",
-              "address":
-              {
+              "address": {
                 "street": "2360 East Pershing Boulevard",
                 "city": "Cheyenne",
                 "state": "WY",
@@ -586,8 +574,7 @@
               },
               "lat": 41.148027,
               "long": -104.7862575,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "307",
                 "number": "778-7550",
                 "extension": null
@@ -606,7 +593,7 @@
             "reason": "New Issue",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":[
+            "proposedTimes": [
               {
                 "date": "{{now - 44 days short}}",
                 "time": "PM"
@@ -623,26 +610,23 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning","Afternoon","Evening"],
+            "bestTimeToCall": ["Morning", "Afternoon", "Evening"],
             "friendlyLocationName": "DAYTSHR -Dayton VA Medical Center"
           }
         },
         {
           "id": "8a48e8db6d70a38a016d72b354240003",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "VA",
             "cancelId": null,
             "comment": null,
             "healthcareProvider": null,
             "healthcareService": null,
-            "location":
-            {
+            "location": {
               "id": "442",
               "name": "Cheyenne VA Medical Center",
-              "address":
-              {
+              "address": {
                 "street": "2360 East Pershing Boulevard",
                 "city": "Cheyenne",
                 "state": "WY",
@@ -650,8 +634,7 @@
               },
               "lat": 41.148027,
               "long": -104.7862575,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "307",
                 "number": "778-7550",
                 "extension": null
@@ -670,7 +653,7 @@
             "reason": "New Issue",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":[
+            "proposedTimes": [
               {
                 "date": "{{now - 89 days short}}",
                 "time": "PM"
@@ -694,19 +677,16 @@
         {
           "id": "6a48912a6d02b0fc016d20b4ccb9001d",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "COMMUNITY_CARE",
             "cancelId": null,
             "comment": null,
             "healthcareProvider": "",
             "healthcareService": "Test clinic 2",
-            "location":
-            {
+            "location": {
               "id": null,
               "name": "Test clinic 2",
-              "address":
-              {
+              "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
                 "state": "VA",
@@ -714,8 +694,7 @@
               },
               "lat": null,
               "long": null,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "703",
                 "number": "652-0000",
                 "extension": null
@@ -734,7 +713,7 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":[
+            "proposedTimes": [
               {
                 "date": "{{now - 101 days short}}",
                 "time": "PM"
@@ -858,8 +837,7 @@
         {
           "id": "8a48e8db6d70a38a016d72b35424000321",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "VA",
             "cancelId": null,
             "comment": null,
@@ -888,19 +866,16 @@
         {
           "id": "8a48e8db6d70a38a016d72b35424000311",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "VA",
             "cancelId": null,
             "comment": null,
             "healthcareProvider": "John Smith",
             "healthcareService": "Physical",
-            "location":
-            {
+            "location": {
               "id": "442",
               "name": "Cheyenne VA Medical Center",
-              "address":
-              {
+              "address": {
                 "street": "2360 East Pershing Boulevard",
                 "city": "Cheyenne",
                 "state": "WY",
@@ -908,8 +883,7 @@
               },
               "lat": 41.148027,
               "long": -104.7862575,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "307",
                 "number": "778-7550",
                 "extension": null
@@ -939,19 +913,16 @@
         {
           "id": "8a48e8db6d70a38a016d72b354240003",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "VA",
             "cancelId": null,
             "comment": null,
             "healthcareProvider": "John Smith",
             "healthcareService": "Physical",
-            "location":
-            {
+            "location": {
               "id": "442",
               "name": "Cheyenne VA Medical Center",
-              "address":
-              {
+              "address": {
                 "street": "2360 East Pershing Boulevard",
                 "city": "Cheyenne",
                 "state": "WY",
@@ -959,8 +930,7 @@
               },
               "lat": 41.148027,
               "long": -104.7862575,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "307",
                 "number": "778-7550",
                 "extension": null
@@ -979,7 +949,7 @@
             "reason": "New Issue",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":[
+            "proposedTimes": [
               {
                 "date": "{{now + 4 days short}}",
                 "time": "PM"
@@ -1100,8 +1070,8 @@
                 "state": "CA",
                 "zipCode": "92357"
               },
-              "lat": 34.050250,
-              "long": -117.250720,
+              "lat": 34.05025,
+              "long": -117.25072,
               "phone": {
                 "areaCode": "323",
                 "number": "458-9423",
@@ -1166,19 +1136,16 @@
         {
           "id": "9a48912a6d02b0fc016d20b4ccb9001a",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "COMMUNITY_CARE",
             "cancelId": "14",
             "comment": null,
             "healthcareProvider": "Vilasini Reddy",
             "healthcareService": "Test clinic 2",
-            "location":
-            {
+            "location": {
               "id": null,
               "name": "Test clinic 2",
-              "address":
-              {
+              "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
                 "state": "VA",
@@ -1186,8 +1153,7 @@
               },
               "lat": null,
               "long": null,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "703",
                 "number": "652-0000",
                 "extension": null
@@ -1207,7 +1173,7 @@
             "isCovidVaccine": null,
             "isPending": true,
 
-            "proposedTimes":[
+            "proposedTimes": [
               {
                 "date": "{{now + 63 days short}}",
                 "time": "PM"
@@ -1233,19 +1199,16 @@
         {
           "id": "9a48e8db6d70a38a016d72b354240002",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
             "healthcareProvider": null,
             "healthcareService": null,
-            "location":
-            {
+            "location": {
               "id": "442",
               "name": "Cheyenne VA Medical Center",
-              "address":
-              {
+              "address": {
                 "street": "2360 East Pershing Boulevard",
                 "city": "Cheyenne",
                 "state": "WY",
@@ -1253,8 +1216,7 @@
               },
               "lat": 41.148027,
               "long": -104.7862575,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "307",
                 "number": "778-7550",
                 "extension": null
@@ -1273,7 +1235,7 @@
             "reason": "New Issue",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":[
+            "proposedTimes": [
               {
                 "date": "{{now + 86 days short}}",
                 "time": "PM"
@@ -1297,19 +1259,16 @@
         {
           "id": "7a48912a6d02b0fc016d20b4ccb9001a1",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "VA",
             "cancelId": "13",
             "comment": null,
             "healthcareProvider": null,
             "healthcareService": null,
-            "location":
-            {
+            "location": {
               "id": null,
               "name": "Test clinic 2",
-              "address":
-              {
+              "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
                 "state": "VA",
@@ -1317,8 +1276,7 @@
               },
               "lat": null,
               "long": null,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "703",
                 "number": "652-0000",
                 "extension": null
@@ -1337,7 +1295,7 @@
             "reason": null,
             "isCovidVaccine": null,
             "isPending": false,
-            "proposedTimes":[
+            "proposedTimes": [
               {
                 "date": "{{now + 16 days short}}",
                 "time": "PM"
@@ -1357,19 +1315,16 @@
         {
           "id": "7a48912a6d02b0fc016d20b4ccb9001a2",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
             "healthcareProvider": "John Smith",
             "healthcareService": "Phone consultation",
-            "location":
-            {
+            "location": {
               "id": null,
               "name": "Test clinic 2",
-              "address":
-              {
+              "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
                 "state": "VA",
@@ -1377,8 +1332,7 @@
               },
               "lat": null,
               "long": null,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "703",
                 "number": "652-0000",
                 "extension": null
@@ -1397,7 +1351,7 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": false,
-            "proposedTimes":[
+            "proposedTimes": [
               {
                 "date": "{{now + 16 days short}}",
                 "time": "PM"
@@ -1417,19 +1371,16 @@
         {
           "id": "7a48912a6d02b0fc016d20b4ccb9001a3",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "VA",
             "cancelId": "13",
             "comment": null,
             "healthcareProvider": "John Smith",
             "healthcareService": "Phone consultation",
-            "location":
-            {
+            "location": {
               "id": null,
               "name": "Test clinic 2",
-              "address":
-              {
+              "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
                 "state": "VA",
@@ -1437,8 +1388,7 @@
               },
               "lat": null,
               "long": null,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "703",
                 "number": "652-0000",
                 "extension": null
@@ -1457,7 +1407,7 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": false,
-            "proposedTimes":[
+            "proposedTimes": [
               {
                 "date": "{{now + 16 days short}}",
                 "time": "PM"
@@ -1477,19 +1427,16 @@
         {
           "id": "7a48912a6d02b0fc016d20b4ccb9001a55",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "VA",
             "cancelId": "13",
             "comment": null,
             "healthcareProvider": "John Smith",
             "healthcareService": "Phone consultation",
-            "location":
-            {
+            "location": {
               "id": null,
               "name": "Test clinic 2",
-              "address":
-              {
+              "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
                 "state": "VA",
@@ -1497,8 +1444,7 @@
               },
               "lat": null,
               "long": null,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "703",
                 "number": "652-0000",
                 "extension": null
@@ -1517,7 +1463,7 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":[
+            "proposedTimes": [
               {
                 "date": "{{now + 16 days short}}",
                 "time": "PM"
@@ -1537,19 +1483,16 @@
         {
           "id": "7a48912a6d02b0fc016d20b4ccb9001a",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "COMMUNITY_CARE",
             "cancelId": "13",
             "comment": null,
             "healthcareProvider": "",
             "healthcareService": "Test clinic 2",
-            "location":
-            {
+            "location": {
               "id": null,
               "name": "Test clinic 2",
-              "address":
-              {
+              "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
                 "state": "VA",
@@ -1557,8 +1500,7 @@
               },
               "lat": null,
               "long": null,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "703",
                 "number": "652-0000",
                 "extension": null
@@ -1577,7 +1519,7 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":[
+            "proposedTimes": [
               {
                 "date": "{{now + 16 days short}}",
                 "time": "PM"
@@ -1597,19 +1539,16 @@
         {
           "id": "6a48912a6d02b0fc016d20b4ccb9001a",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "COMMUNITY_CARE",
             "cancelId": null,
             "comment": null,
             "healthcareProvider": "",
             "healthcareService": "Test clinic 2",
-            "location":
-            {
+            "location": {
               "id": null,
               "name": "Test clinic 2",
-              "address":
-              {
+              "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
                 "state": "VA",
@@ -1617,8 +1556,7 @@
               },
               "lat": null,
               "long": null,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "703",
                 "number": "652-0000",
                 "extension": null
@@ -1637,7 +1575,7 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":[
+            "proposedTimes": [
               {
                 "date": "{{now + 32 days short}}",
                 "time": "PM"
@@ -1657,19 +1595,16 @@
         {
           "id": "6a48912a6d02b0fc016d20b4ccb9001z",
           "type": "appointment",
-          "attributes":
-          {
+          "attributes": {
             "appointmentType": "COMMUNITY_CARE",
             "cancelId": null,
             "comment": null,
             "healthcareProvider": "",
             "healthcareService": "Test clinic 2",
-            "location":
-            {
+            "location": {
               "id": null,
               "name": "",
-              "address":
-              {
+              "address": {
                 "street": "",
                 "city": "",
                 "state": "",
@@ -1677,8 +1612,7 @@
               },
               "lat": null,
               "long": null,
-              "phone":
-              {
+              "phone": {
                 "areaCode": "703",
                 "number": "652-0000",
                 "extension": null
@@ -1697,7 +1631,7 @@
             "reason": "routine-follow-up",
             "isCovidVaccine": null,
             "isPending": true,
-            "proposedTimes":[],
+            "proposedTimes": [],
             "typeOfCare": "",
             "patientPhoneNumber": "",
             "patientEmail": "",
