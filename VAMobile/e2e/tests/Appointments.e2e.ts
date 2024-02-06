@@ -1,14 +1,12 @@
 import { DateTime } from 'luxon'
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth } from './utils'
+import {CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth } from './utils'
 import { setTimeout } from 'timers/promises'
 
 const todaysDate = DateTime.local()
-const longDateFormat = 'DDDD t ZZZZ'
 const shortDateFormat = 'MM-dd-yyyy'
 
-//const fortyFiveMinutesLater = todaysDate.setZone('America/Los_Angeles').plus({ minutes: 45 }).toFormat(longDateFormat)
 const sixtyThreeDaysLaterShort = todaysDate.plus({ days: 63 }).toFormat(shortDateFormat)
 const sixtyFourDaysLaterShort = todaysDate.plus({ days: 64 }).toFormat(shortDateFormat)
 
@@ -43,9 +41,6 @@ beforeAll(async () => {
   await loginToDemoMode()
   await openHealth()
   await openAppointments()
-  await waitFor(element(by.text('Upcoming')))
-    .toExist()
-    .withTimeout(10000)
 })
 
 describe('Appointments Screen', () => {
@@ -58,6 +53,10 @@ describe('Appointments Screen', () => {
   })
 
   it('verify appointment details information', async () => {
+    await waitFor(element(by.text('Outpatient Clinic')))
+    .toBeVisible()
+    .whileElement(by.id('appointmentsTestID'))
+    .scroll(200, 'down')
     await element(by.text('Outpatient Clinic')).tap()
     await expect(element(by.text('Community care'))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.ADD_TO_CALENDAR_ID)).atIndex(0)).toExist()

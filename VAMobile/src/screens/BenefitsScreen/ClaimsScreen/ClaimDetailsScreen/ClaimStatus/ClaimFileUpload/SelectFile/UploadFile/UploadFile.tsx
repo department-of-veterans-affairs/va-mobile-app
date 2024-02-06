@@ -1,11 +1,12 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView, VAButton } from 'components'
+import { Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView } from 'components'
 import { ClaimEventData } from 'store/api'
 import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -16,18 +17,18 @@ import { RootState } from 'store'
 import { SnackbarMessages } from 'components/SnackBar'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
-import { useBeforeNavBackListener, useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
 import FileList from 'components/FileList'
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 type UploadFileProps = StackScreenProps<BenefitsStackParamList, 'UploadFile'>
 
-const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
+function UploadFile({ navigation, route }: UploadFileProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { request: originalRequest, fileUploaded } = route.params
   const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
   const confirmAlert = useDestructiveActionSheet()
@@ -174,13 +175,12 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
           <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
             <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
             <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-              <VAButton
+              <Button
                 onPress={() => {
                   setOnSaveClicked(true)
                 }}
                 label={t('fileUpload.submit')}
                 testID={t('fileUpload.submit')}
-                buttonType={ButtonTypesConstants.buttonPrimary}
               />
             </Box>
           </Box>

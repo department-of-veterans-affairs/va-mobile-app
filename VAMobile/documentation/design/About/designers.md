@@ -24,36 +24,36 @@ The VA Mobile Design System is an extension of the VA.gov Design System. Additio
 
 The website displays examples of the various components and patterns in use in the VA Mobile App. You can use your browser’s web inspector to view the specs for each component.
 
-The Design System Team also provides a complete Figma library of core components.
+The Design System team also provides a complete Figma library of core components.
 
 ---
 
 ## Design libraries
 
-The Design System team provides a Figma library for use by teams.
+The Design System team provides Figma libraries for use by teams.
 
-### Add the Design Library to your project
+### Add a library to your project
 
-Use the design library to access all components. In Figma, the design library lives in the cloud. Thus you do not need to download the library. The Design System Team updates the design library in order to keep it in sync with the va-mobile-library code which contains our React Nativeweb components.
+Use libraries to access all design tokens, icons, and components. In Figma, libraries live in the cloud. Thus you do not need to download a library. The Design System team updates the libraries in order to keep it in sync with the va-mobile-library code which contains our React Native web components.
 
-To access and enable the [Design Library](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design), follow these steps:
+To access and enable the [Design Tokens](https://www.figma.com/file/rdLIEaC9rVwX70QbIGkMvG/%F0%9F%93%90-Design-Tokens?type=design&mode=design&t=QbNS25xKacxEZ9T1-1), [Icon Library](https://www.figma.com/file/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library?type=design&mode=design&t=QbNS25xKacxEZ9T1-1), or [Component Library](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&mode=design&t=QbNS25xKacxEZ9T1-1), follow these steps:
 
 1. In the Figma menu bar, navigate to Figma > Libraries to open the Libraries modal
-2. In the modal, find the DesignLibrary2.0 - VAMobile file
-3. Click the “Add to file” button to add the design library to your file
+2. In the modal, find the library file
+3. Click the “Add to file” button to add the library to your file
 
-Once you’ve loaded the library, you should be able to access everything in it by navigating to Assets > DesignLibrary2.0 - VA Mobile or Resources > Components > DesignLibrary2.0 - VA Mobile. Note that you cannot edit the design library directly. The Design System Team manages this library.
+Once you’ve loaded the library, you should be able to access everything in it by navigating to Assets > "library file" or Resources > Components > "library file". Note that you cannot edit a library directly. The Design System team manages libraries.
 
 ---
 
 ## Figma
 
-VA mobile design teams at Ad Hoc use Figma to view, share, and collaborate on our work. Only designers actively working on products at VA can be added to Figma. Once you have been added, you may access the [Design Library](https://www.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design) in the cloud.
+VA mobile design teams at Ad Hoc use Figma to view, share, and collaborate on our work. Only designers actively working on products at VA can be added to Figma. Once you have been added, you may access the libraries in the cloud.
 
 ### Get added to Figma
 
 1. Go to [figma.com](https://www.figma.com/) and [create a Figma account](https://help.figma.com/hc/en-us/articles/360039811114-Create-a-Figma-account)
-2. In the #va-mobile-app-platform channel in Slack, ping a Figma admin (currently Jen Ecker) requesting to be added.
+2. In the #va-mobile-design-system channel in Slack, ping a Figma admin (currently Jen Ecker and Jessica Woodin) requesting to be added.
 3. Receive the invite via email and accept the invitation.
 4. Boom, you’re in!
 

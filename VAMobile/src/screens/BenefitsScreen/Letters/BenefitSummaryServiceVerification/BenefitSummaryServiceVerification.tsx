@@ -1,14 +1,14 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
   BasicError,
   Box,
   ButtonDecoratorType,
-  ButtonTypesConstants,
   ClickForActionLink,
   DefaultList,
   DefaultListItemObj,
@@ -20,7 +20,6 @@ import {
   SimpleListItemObj,
   TextArea,
   TextView,
-  VAButton,
 } from 'components'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -39,7 +38,7 @@ const { LINK_URL_ASK_VA_GOV } = getEnv()
 
 type BenefitSummaryServiceVerificationProps = StackScreenProps<BenefitsStackParamList, 'BenefitSummaryServiceVerificationLetter'>
 
-const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationProps> = ({ navigation }) => {
+function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryServiceVerificationProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -252,12 +251,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           </Box>
 
           <Box mx={theme.dimensions.gutter}>
-            <VAButton
-              onPress={onViewLetter}
-              label={t('letters.benefitService.viewLetter')}
-              testID={t('letters.benefitService.viewLetter')}
-              buttonType={ButtonTypesConstants.buttonPrimary}
-            />
+            <Button onPress={onViewLetter} label={t('letters.benefitService.viewLetter')} testID={t('letters.benefitService.viewLetter')} />
           </Box>
         </Box>
       )}

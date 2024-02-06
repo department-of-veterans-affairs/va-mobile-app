@@ -168,7 +168,7 @@
           "type": "messages",
           "attributes": {
             "messageId": 2092789,
-            "category": "MEDICATIONS",
+            "category": "GENERAL",
             "subject": "Your requested info",
             "body": null,
             "hasAttachments": false,
@@ -210,7 +210,7 @@
           "type": "messages",
           "attributes": {
             "messageId": 2088259,
-            "category": "APPOINTMENTS",
+            "category": "OTHER",
             "subject": "Summary of visit",
             "body": null,
             "hasAttachments": false,
@@ -231,7 +231,7 @@
           "type": "messages",
           "attributes": {
             "messageId": 2088250,
-            "category": "APPOINTMENTS",
+            "category": "TEST_RESULTS",
             "subject": "Preparing for your visit",
             "body": null,
             "hasAttachments": false,
@@ -503,7 +503,7 @@
       "type": "messages",
       "attributes": {
         "messageId": 2092789,
-        "category": "COVID",
+        "category": "GENERAL",
         "subject": "Vaccine Booster",
         "body": "As discussed in your last visit, we recommend getting a vaccine booster to improve your immunity to COVID-19. Please let us know if you have any other questions.",
         "hasAttachments": false,
@@ -565,7 +565,7 @@
       "type": "messages",
       "attributes": {
         "messageId": 2088259,
-        "category": "COVID",
+        "category": "OTHER",
         "subject": "COVID vaccine booster?",
         "body": "Boosters are recommended and to improve your prevention.",
         "hasAttachments": false,
@@ -596,7 +596,7 @@
       "type": "messages",
       "attributes": {
         "messageId": 2088250,
-        "category": "APPOINTMENTS",
+        "category": "TEST_RESULTS",
         "subject": "Preparing for your visit",
         "body": "See you at your appointment.  Please do not forget to fast.",
         "hasAttachments": false,

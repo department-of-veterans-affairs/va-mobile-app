@@ -1,13 +1,13 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
 import {
   AlertBox,
   Box,
-  ButtonTypesConstants,
   CollapsibleView,
   ErrorComponent,
   FieldType,
@@ -19,7 +19,6 @@ import {
   PickerItem,
   TextArea,
   TextView,
-  VAButton,
 } from 'components'
 import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
@@ -54,7 +53,7 @@ import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmati
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
-const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
+function EditDraft({ navigation, route }: EditDraftProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -398,13 +397,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         removeOnPress: removeAttachment,
-        largeButtonProps:
-          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
-            ? {
-                label: t('secureMessaging.formMessage.addFiles'),
-                onPress: onAddFiles,
-              }
-            : undefined,
+        buttonLabel: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? t('secureMessaging.formMessage.addFiles') : undefined,
+        buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
       },
     },
@@ -441,7 +435,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     }
   }
 
-  const renderForm = (): ReactNode => {
+  function renderForm() {
     if (noProviderError) {
       return (
         <AlertBox
@@ -451,7 +445,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           border="error"
           scrollViewRef={scrollViewRef}>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <Button label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
           </Box>
         </AlertBox>
       )
@@ -510,13 +504,12 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
             </Pressable>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
+            <Button
               label={t('secureMessaging.formMessage.send')}
               onPress={() => {
                 setOnSendClicked(true)
                 setOnSaveDraftClicked(false)
               }}
-              buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>
         </TextArea>
@@ -524,7 +517,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     )
   }
 
-  const renderMessageThread = (): ReactNode => {
+  function renderMessageThread() {
     let messageThread = thread || []
 
     // If we're editing a reply draft, don't display the draft message in the thread

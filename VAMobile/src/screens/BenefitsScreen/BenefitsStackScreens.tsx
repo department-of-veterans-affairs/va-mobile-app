@@ -44,6 +44,7 @@ export type BenefitsStackParamList = {
     claimType: ClaimType
     focusOnSnackbar?: boolean
   }
+  ClaimsHistoryScreen: undefined
   ClaimLettersScreen: undefined
   ConsolidatedClaimsNote: undefined
   WhatDoIDoIfDisagreement: {

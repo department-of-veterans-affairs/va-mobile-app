@@ -1,7 +1,7 @@
 import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { AuthState, completeSync, logInDemoMode } from 'store/slices'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
@@ -15,7 +15,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import colors from 'styles/themes/VAColors'
 
 export type SyncScreenProps = Record<string, unknown>
-const SyncScreen: FC<SyncScreenProps> = () => {
+function SyncScreen({}: SyncScreenProps) {
   const theme = useTheme()
   const splashStyles: ViewStyle = {
     flexGrow: 1,

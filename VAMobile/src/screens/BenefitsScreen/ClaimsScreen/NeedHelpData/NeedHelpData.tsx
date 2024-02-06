@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactElement } from 'react'
+import React from 'react'
 
 import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
@@ -20,11 +20,11 @@ type NeedHelpDataProps = {
   claimPhase?: number
 }
 
-const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal, claimId, claimType, claimPhase }) => {
+function NeedHelpData({ isAppeal, claimId, claimType, claimPhase }: NeedHelpDataProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const renderAppealData = (): ReactElement => {
+  function renderAppealData() {
     if (!isAppeal) {
       return <></>
     }

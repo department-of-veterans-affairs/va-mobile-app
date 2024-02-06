@@ -1,24 +1,13 @@
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import _ from 'underscore'
 
-import {
-  Box,
-  ButtonTypesConstants,
-  CollapsibleView,
-  FieldType,
-  FormFieldType,
-  FormWrapper,
-  FullScreenSubtask,
-  LoadingComponent,
-  MessageAlert,
-  TextArea,
-  TextView,
-  VAButton,
-} from 'components'
+import { Box, CollapsibleView, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, MessageAlert, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE, SegmentedControlIndexes } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -51,11 +40,10 @@ import {
   useValidateMessageWithSignature,
 } from 'utils/hooks'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { useSelector } from 'react-redux'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
-const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
+function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -190,13 +178,8 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         removeOnPress: removeAttachment,
-        largeButtonProps:
-          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
-            ? {
-                label: t('secureMessaging.formMessage.addFiles'),
-                onPress: onAddFiles,
-              }
-            : undefined,
+        buttonLabel: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? t('secureMessaging.formMessage.addFiles') : undefined,
+        buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
       },
     },
@@ -235,67 +218,68 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     navigateTo('ReplyHelp')
   }
 
-  const renderForm = (): ReactNode => (
-    <Box>
-      <MessageAlert
-        scrollViewRef={scrollViewRef}
-        hasValidationError={formContainsError}
-        saveDraftAttempted={onSaveDraftClicked}
-        focusOnError={onSendClicked}
-        errorList={errorList}
-      />
-      <TextArea>
-        <TextView variant="MobileBody" accessible={true} testID={'To ' + receiverName}>
-          {t('secureMessaging.formMessage.to')}
-        </TextView>
-        <TextView variant="MobileBodyBold" accessible={true}>
-          {receiverName}
-        </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessible={true} testID={'Subject ' + subjectHeader}>
-          {t('secureMessaging.startNewMessage.subject')}
-        </TextView>
-        <TextView variant="MobileBodyBold" accessible={true}>
-          {subjectHeader}
-        </TextView>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <FormWrapper
-            fieldsList={formFieldsList}
-            onSave={sendReplyOrSaveDraft}
-            onSaveClicked={onSendClicked}
-            setOnSaveClicked={setOnSendClicked}
-            setFormContainsError={setFormContainsError}
-            resetErrors={resetErrors}
-            setResetErrors={setResetErrors}
-            setErrorList={setErrorList}
-          />
-        </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <Pressable
-            onPress={navigateToReplyHelp}
-            accessibilityRole={'button'}
-            accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
-            importantForAccessibility={'yes'}>
-            <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-              <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
-            </Box>
-          </Pressable>
-        </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <VAButton
-            label={t('secureMessaging.formMessage.send')}
-            onPress={() => {
-              setOnSendClicked(true)
-              setOnSaveDraftClicked(false)
-            }}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-            testID="sendButtonTestID"
-          />
-        </Box>
-      </TextArea>
-    </Box>
-  )
+  function renderForm() {
+    return (
+      <Box>
+        <MessageAlert
+          scrollViewRef={scrollViewRef}
+          hasValidationError={formContainsError}
+          saveDraftAttempted={onSaveDraftClicked}
+          focusOnError={onSendClicked}
+          errorList={errorList}
+        />
+        <TextArea>
+          <TextView variant="MobileBody" accessible={true} testID={'To ' + receiverName}>
+            {t('secureMessaging.formMessage.to')}
+          </TextView>
+          <TextView variant="MobileBodyBold" accessible={true}>
+            {receiverName}
+          </TextView>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessible={true} testID={'Subject ' + subjectHeader}>
+            {t('secureMessaging.startNewMessage.subject')}
+          </TextView>
+          <TextView variant="MobileBodyBold" accessible={true}>
+            {subjectHeader}
+          </TextView>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <FormWrapper
+              fieldsList={formFieldsList}
+              onSave={sendReplyOrSaveDraft}
+              onSaveClicked={onSendClicked}
+              setOnSaveClicked={setOnSendClicked}
+              setFormContainsError={setFormContainsError}
+              resetErrors={resetErrors}
+              setResetErrors={setResetErrors}
+              setErrorList={setErrorList}
+            />
+          </Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <Pressable
+              onPress={navigateToReplyHelp}
+              accessibilityRole={'button'}
+              accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
+              importantForAccessibility={'yes'}>
+              <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
+                <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
+              </Box>
+            </Pressable>
+          </Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <Button
+              label={t('secureMessaging.formMessage.send')}
+              onPress={() => {
+                setOnSendClicked(true)
+                setOnSaveDraftClicked(false)
+              }}
+              testID="sendButtonTestID"
+            />
+          </Box>
+        </TextArea>
+      </Box>
+    )
+  }
 
-  const renderMessageThread = (): ReactNode => {
+  function renderMessageThread() {
     return (
       <Box>
         <Box accessible={true} accessibilityRole={'header'}>

@@ -1,5 +1,5 @@
 import { Pressable } from 'react-native'
-import React, { FC, ReactElement, useState } from 'react'
+import React, { ReactElement, useState } from 'react'
 
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
 import { NavigationHelpers, ParamListBase } from '@react-navigation/native'
@@ -38,7 +38,7 @@ type CarouselTabBarProps = {
 }
 
 /**A common component with the carousel tab bar content. Displays skip button, continue button, and a progress bar*/
-const CarouselTabBar: FC<CarouselTabBarProps> = ({ onCarouselEnd, screenList, translation }) => {
+function CarouselTabBar({ onCarouselEnd, screenList, translation }: CarouselTabBarProps) {
   const theme = useTheme()
   const [currentScreenIndex, setCurrentScreenIndex] = useState(0)
   const a11yHints = screenList[currentScreenIndex].a11yHints
@@ -78,7 +78,7 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ onCarouselEnd, screenList, tr
   }
 
   const goBackOrSkipBtn = () => {
-    let onPressCallback: TFunction
+    let onPressCallback: () => void
     let buttonText: string
     let allyHint: string | undefined
 

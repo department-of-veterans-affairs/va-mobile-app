@@ -2,7 +2,7 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { ScrollView, TextInput } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { AddressData, addressTypeFields, addressTypes } from 'api/types'
 import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, PickerItem, VATextInputTypes, ValidationFunctionItems } from 'components'
@@ -64,15 +64,15 @@ export type AddressDataEditedFields =
 
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
-const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
+function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
   const { data: contactInformation } = useContactInformation()
-  const { mutate: deleteAddress, isLoading: deletingAddress, isSuccess: addressDeleted } = useDeleteAddress()
-  const { mutate: saveAddress, isLoading: savingAddress, isSuccess: addressSaved } = useSaveAddress()
-  const { mutate: validateAddress, isLoading: validatingAddress, data: validationData } = useValidateAddress()
+  const { mutate: deleteAddress, isPending: deletingAddress, isSuccess: addressDeleted } = useDeleteAddress()
+  const { mutate: saveAddress, isPending: savingAddress, isSuccess: addressSaved } = useSaveAddress()
+  const { mutate: validateAddress, isPending: validatingAddress, data: validationData } = useValidateAddress()
   const [addressValidated, setAddressValidated] = useState(false)
   const deleteAddressAlert = useAlert()
   const destructiveActionSheet = useDestructiveActionSheet()

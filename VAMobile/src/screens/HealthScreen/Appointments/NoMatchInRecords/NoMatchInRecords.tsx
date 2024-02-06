@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import React, { FC, ReactNode } from 'react'
+import React from 'react'
 
 import { AccordionCollapsible, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -8,11 +8,11 @@ import { getTranslation } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-const NoMatchInRecords: FC = () => {
+function NoMatchInRecords() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const accordionContent = (textID: string): ReactNode => {
+  function accordionContent(textID: string) {
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(getTranslation(`noMatch.${textID}`, t))}>
@@ -23,7 +23,7 @@ const NoMatchInRecords: FC = () => {
     )
   }
 
-  const accordionHeader = (textID: string): ReactNode => {
+  function accordionHeader(textID: string) {
     return (
       <TextView variant="MobileBodyBold" accessibilityLabel={a11yLabelVA(getTranslation(`noMatch.${textID}`, t))}>
         {getTranslation(`noMatch.${textID}`, t)}

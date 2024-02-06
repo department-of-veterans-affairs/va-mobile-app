@@ -1,5 +1,5 @@
 import { expect, device, by, element } from 'detox'
-import { CommonE2eIdConstants, loginToDemoMode, checkImages } from './utils'
+import { enableAF, disableAF, verifyAF, CommonE2eIdConstants, loginToDemoMode, checkImages, openProfile, openSettings, openDeveloperScreen } from './utils'
 import { setTimeout } from "timers/promises"
 
 export const HomeE2eIdConstants = {
@@ -20,6 +20,24 @@ beforeAll(async () => {
 })
 
 describe('Home Screen', () => {
+	it('should enable AF use case 3', async() => {
+		await openProfile()
+		await openSettings()
+		await openDeveloperScreen()
+		await element(by.text('Remote Config')).tap()
+		await enableAF('WG_Home', 'AllowFunction')
+		await device.launchApp({newInstance: true})
+		await loginToDemoMode()
+		try {
+			await element(by.text('Skip this update')).tap()
+		} catch (e) {} 
+		await verifyAF(undefined, 'AllowFunction', undefined)
+	})
+
+	it('should disable AF use case 3', async() => {
+		await disableAF(undefined, 'WG_Home', undefined, 'AllowFunction')
+	})
+
 	it('should show primary home page content', async () => {
 		await expect(element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID))).toExist()
 		await expect(element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT))).toExist()
@@ -80,6 +98,9 @@ describe('Home Screen', () => {
 
 	it('should tap on home then contact VA', async () => {
 		await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
+		try {
+			await element(by.text('Skip this update')).tap()
+		} catch (e) {} 
 		await element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID)).tap()
 		await expect(element(by.text('Call MyVA411'))).toExist()
 		await expect(element(by.text('MyVA411 is our main VA information line. We can help connect you to any of our VA contact centers.'))).toExist()
@@ -117,5 +138,9 @@ describe('Home Screen', () => {
 		await expect(element(by.id(HomeE2eIdConstants.LOCATION_FINDER_ROW_ID))).toExist()
 		await expect(element(by.id(HomeE2eIdConstants.CONTACT_VA_ROW_ID))).toExist()
 		await expect(element(by.id(HomeE2eIdConstants.COVID_ROW_ID))).toExist()
+	})
+
+	it('should disable AF use case 3', async() => {
+		await disableAF(undefined, 'WG_Home', undefined, 'AllowFunction')
 	})
 })

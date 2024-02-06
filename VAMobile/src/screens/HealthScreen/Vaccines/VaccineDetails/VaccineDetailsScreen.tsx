@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { every } from 'underscore'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
 import { COVID19 } from 'constants/common'
@@ -20,7 +20,7 @@ type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Vaccine
 /**
  * Screen providing details on an vaccine
  */
-const VaccineDetailsScreen: FC<VaccineDetailsScreenProps> = ({ route, navigation }) => {
+function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) {
   const { vaccineId } = route.params
   const { vaccinesById, vaccineLocationsById, detailsLoading } = useSelector<RootState, VaccineState>((state) => state.vaccine)
   const theme = useTheme()
