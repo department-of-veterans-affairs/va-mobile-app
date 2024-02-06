@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, LabelTagTypeConstants, Pagination, PaginationProps, TextLine } from 'components'
 import { ClaimOrAppeal, ClaimOrAppealConstants } from 'store/api/types'
-import { ClaimsAndAppealsGetDataMetaError } from 'api/types/ClaimsAndAppealsData'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -25,7 +24,6 @@ export type ClaimType = 'ACTIVE' | 'CLOSED'
 
 type ClaimsAndAppealsListProps = {
   claimType: ClaimType
-  // onErrorSet: (error: boolean, nonFatalErros?: Array<ClaimsAndAppealsGetDataMetaError>) => void
 }
 
 function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
@@ -34,7 +32,7 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
   const navigateTo = useRouteNavigation()
   const [page, setPage] = useState(1)
   const [previousClaimType, setClaimType] = useState(claimType)
-  const { data: claimsAndAppealsListPayload, isError: claimsAndAppealsListError } = useClaimsAndAppeals(claimType, page)
+  const { data: claimsAndAppealsListPayload } = useClaimsAndAppeals(claimType, page)
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const claimsAndAppeals = claimsAndAppealsListPayload?.data
   const pageMetaData = claimsAndAppealsListPayload?.meta.pagination
@@ -46,10 +44,6 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
       setPage(1)
     }
   }, [claimType, previousClaimType])
-
-  // useEffect(() => {
-  //   onErrorSet(claimsAndAppealsListError, claimsAndAppealsListPayload?.meta.errors)
-  // }, [claimsAndAppealsListError, claimsAndAppealsListPayload, onErrorSet])
 
   const getBoldTextDisplayed = (type: ClaimOrAppeal, displayTitle: string, updatedAtDate: string): string => {
     const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
