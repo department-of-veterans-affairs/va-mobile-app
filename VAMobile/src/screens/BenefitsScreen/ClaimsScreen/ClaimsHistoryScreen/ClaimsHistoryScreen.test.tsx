@@ -103,7 +103,7 @@ context('ClaimsHistoryScreen', () => {
     let queriesData: QueriesData | undefined
     queriesData = [{
       queryKey: [claimsAndAppealsKeys.claimsAndAppeals, 'ACTIVE', '1'],
-      data: mockPayload,
+      data: queryPayload,
     }]
     render(<ClaimsHistoryScreen {...mockNavProps()} />, {queriesData})
   }
