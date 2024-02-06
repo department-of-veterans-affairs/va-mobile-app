@@ -1,8 +1,8 @@
-import { DateTime } from 'luxon'
 import { by, device, element, expect, waitFor } from 'detox'
-
-import {CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth } from './utils'
+import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
+
+import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth } from './utils'
 
 const todaysDate = DateTime.local()
 const shortDateFormat = 'MM-dd-yyyy'
@@ -20,9 +20,9 @@ const currentYear = todaysDate.get('year')
 const lastYearDateTime = todaysDate.minus({ years: 1 })
 const lastYear = lastYearDateTime.get('year')
 
-
 export const Appointmentse2eConstants = {
-  APPOINTMENT_DESCRIPTION: "Here are your appointments. This list includes appointments you've requested but not yet confirmed.",
+  APPOINTMENT_DESCRIPTION:
+    "Here are your appointments. This list includes appointments you've requested but not yet confirmed.",
   APPOINTMENT_4_ID: 'Pending Optometry (routine eye exam) Vilasini Reddy Request type: In-person',
   APPOINTMENT_5_ID: 'Pending Optometry (routine eye exam) Community care Request type: In-person',
   APPOINTMENT_6_ID: 'Canceled Optometry (routine eye exam) Community care Request type: In-person',
@@ -54,9 +54,9 @@ describe('Appointments Screen', () => {
 
   it('verify appointment details information', async () => {
     await waitFor(element(by.text('Outpatient Clinic')))
-    .toBeVisible()
-    .whileElement(by.id('appointmentsTestID'))
-    .scroll(200, 'down')
+      .toBeVisible()
+      .whileElement(by.id('appointmentsTestID'))
+      .scroll(200, 'down')
     await element(by.text('Outpatient Clinic')).tap()
     await expect(element(by.text('Community care'))).toExist()
     await expect(element(by.id(Appointmentse2eConstants.ADD_TO_CALENDAR_ID)).atIndex(0)).toExist()
@@ -66,7 +66,9 @@ describe('Appointments Screen', () => {
     await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ASSISTANCE_LINK_ID)).atIndex(0)).toExist()
     await expect(element(by.text('instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123'))).toExist()
     await expect(element(by.text('Do you need to cancel?'))).toExist()
-    await expect(element(by.text("Call your community care provider. You can't cancel community care appointments online."))).toExist()
+    await expect(
+      element(by.text("Call your community care provider. You can't cancel community care appointments online.")),
+    ).toExist()
     await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(1)).toExist()
     await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ASSISTANCE_LINK_ID)).atIndex(1)).toExist()
   })
@@ -181,19 +183,49 @@ describe('Appointments Screen', () => {
 
   it('past appts: three months - five months earlier verification', async () => {
     await element(by.id('getDateRangeTestID')).tap()
-    await element(by.text(fiveMonthsEarlier.monthShort + ' ' + fiveMonthsEarlier.year + ' - ' + threeMonthsEarlier.monthShort + ' ' + threeMonthsEarlier.year)).tap()
+    await element(
+      by.text(
+        fiveMonthsEarlier.monthShort +
+          ' ' +
+          fiveMonthsEarlier.year +
+          ' - ' +
+          threeMonthsEarlier.monthShort +
+          ' ' +
+          threeMonthsEarlier.year,
+      ),
+    ).tap()
     await element(by.text('Done')).tap()
   })
 
   it('past appts: six months - eight months earlier verification', async () => {
     await element(by.id('getDateRangeTestID')).tap()
-    await element(by.text(eightMonthsEarlier.monthShort + ' ' + eightMonthsEarlier.year + ' - ' + sixMonthsEarlier.monthShort + ' ' + sixMonthsEarlier.year)).tap()
+    await element(
+      by.text(
+        eightMonthsEarlier.monthShort +
+          ' ' +
+          eightMonthsEarlier.year +
+          ' - ' +
+          sixMonthsEarlier.monthShort +
+          ' ' +
+          sixMonthsEarlier.year,
+      ),
+    ).tap()
     await element(by.text('Done')).tap()
   })
 
   it('past appts: eleven months - nine months earlier verification', async () => {
     await element(by.id('getDateRangeTestID')).tap()
-    await element(by.text(elevenMonthsEarlier.monthShort + ' ' + elevenMonthsEarlier.year + ' - ' + nineMonthsEarlier.monthShort + ' ' + nineMonthsEarlier.year)).tap()
+    await element(
+      by.text(
+        elevenMonthsEarlier.monthShort +
+          ' ' +
+          elevenMonthsEarlier.year +
+          ' - ' +
+          nineMonthsEarlier.monthShort +
+          ' ' +
+          nineMonthsEarlier.year,
+      ),
+    ).tap()
     await element(by.text('Done')).tap()
   })
 

@@ -20,7 +20,7 @@ beforeAll(async () => {
   await loginToDemoMode()
 })
 
-export async function verifyMilitaryInfo(militaryBranch) {
+export async function verifyMilitaryInfo(militaryBranch: string) {
   it('verify ' + militaryBranch + ' is shown and seal is correct', async () => {
     //changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
     await changeMockData(
@@ -28,7 +28,7 @@ export async function verifyMilitaryInfo(militaryBranch) {
       ['/v0/military-service-history', 'data', 'attributes', { serviceHistory: 1 }, 'branchOfService'],
       militaryBranch,
     )
-    var tempPath = await element(by.id(militaryBranch)).takeScreenshot(militaryBranch + 'ImageTestHome')
+    let tempPath = await element(by.id(militaryBranch)).takeScreenshot(militaryBranch + 'ImageTestHome')
     checkImages(tempPath)
     await expect(element(by.text(militaryBranch))).toExist()
     await openProfile()
@@ -69,7 +69,6 @@ describe('Military Info Screen', () => {
     if (device.getPlatform() === 'android') {
       await element(by.id('CallVATestID')).tap()
       await setTimeout(5000)
-      var tempPath = await device.takeScreenshot('AndroidCallingScreen')
       await device.launchApp({ newInstance: false })
     }
   })

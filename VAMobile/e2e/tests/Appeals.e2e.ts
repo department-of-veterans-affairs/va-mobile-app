@@ -1,7 +1,8 @@
-import { expect, device, by, element, waitFor} from 'detox'
-import {loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
-import { setTimeout } from 'timers/promises'
+import { by, device, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
+import { setTimeout } from 'timers/promises'
+
+import { loginToDemoMode, openBenefits, openClaims, openClaimsHistory } from './utils'
 
 export const AppealsIdConstants = {
   APPEAL_1_ID: 'Disability compensation appeal updated on November 22, 2011 Submitted June 12, 2008',
@@ -17,13 +18,13 @@ export const AppealsIdConstants = {
   APPEAL_UP_TO_DATE_ID: 'appealsUpToDateTestID',
 }
 export async function getDateWithTimeZone(dateString: string) {
-  var date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', {zone: 'America/Chicago'})
-  var dateUTC = date.toLocal()
-  var dateTime = dateUTC.toLocaleString(Object.assign(DateTime.DATETIME_FULL, {day: '2-digit'}))
+  const date = DateTime.fromFormat(dateString, 'LLLL d, yyyy h:m a', { zone: 'America/Chicago' })
+  const dateUTC = date.toLocal()
+  const dateTime = dateUTC.toLocaleString(Object.assign(DateTime.DATETIME_FULL, { day: '2-digit' }))
   return dateTime
 }
 
-var dateWithTimeZone
+let dateWithTimeZone
 beforeAll(async () => {
   await loginToDemoMode()
   await openBenefits()
@@ -33,11 +34,14 @@ beforeAll(async () => {
 
 describe('Appeals', () => {
   it('should match the appeals page design', async () => {
-    await waitFor(element(by.id(AppealsIdConstants.APPEAL_1_ID))).toBeVisible().whileElement(by.id('claimsHistoryID')).scroll(300, 'down')
+    await waitFor(element(by.id(AppealsIdConstants.APPEAL_1_ID)))
+      .toBeVisible()
+      .whileElement(by.id('claimsHistoryID'))
+      .scroll(300, 'down')
     await element(by.id(AppealsIdConstants.APPEAL_1_ID)).tap()
     await expect(element(by.text(AppealsIdConstants.APPEAL_TYPE_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_DETAILS_TEXT))).toExist()
-    if(device.getPlatform() === 'android') {
+    if (device.getPlatform() === 'android') {
       await expect(element(by.id(AppealsIdConstants.APPEAL_UP_TO_DATE_ID))).toExist()
     } else {
       dateWithTimeZone = await getDateWithTimeZone('December 03, 2021 12:39 PM')
@@ -59,7 +63,7 @@ describe('Appeals', () => {
     await element(by.text(AppealsIdConstants.ISSUES_TAB_TEXT)).tap()
     await expect(element(by.text(AppealsIdConstants.APPEAL_TYPE_TEXT))).toExist()
     await expect(element(by.text(AppealsIdConstants.APPEAL_DETAILS_TEXT))).toExist()
-    if(device.getPlatform() === 'android') {
+    if (device.getPlatform() === 'android') {
       await expect(element(by.id(AppealsIdConstants.APPEAL_UP_TO_DATE_ID))).toExist()
     } else {
       dateWithTimeZone = await getDateWithTimeZone('December 03, 2021 12:39 PM')
@@ -79,8 +83,12 @@ describe('Appeals', () => {
     await expect(element(by.label(' V-A  received your Form 9 On March 23, 2009'))).toExist()
     await expect(element(by.label(' V-A  sent you a Supplemental Statement of the Case On January 26, 2010'))).toExist()
     await expect(element(by.label(' V-A  sent you a Supplemental Statement of the Case On July 22, 2010'))).toExist()
-    await expect(element(by.label(' V-A  sent you a Supplemental Statement of the Case On September 26, 2011'))).toExist()
-    await expect(element(by.label("Your appeal was sent to the Board of Veterans' Appeals On November 22, 2011"))).toExist()
+    await expect(
+      element(by.label(' V-A  sent you a Supplemental Statement of the Case On September 26, 2011')),
+    ).toExist()
+    await expect(
+      element(by.label("Your appeal was sent to the Board of Veterans' Appeals On November 22, 2011")),
+    ).toExist()
   })
 
   it('should scroll to the bottom of the appeals screen', async () => {
@@ -89,12 +97,12 @@ describe('Appeals', () => {
 
   it('should tap on the links in the need help section', async () => {
     if (device.getPlatform() === 'android') {
-			await element(by.text(AppealsIdConstants.APPEAL_NEED_HELP_NUMBER_TEXT)).tap()
+      await element(by.text(AppealsIdConstants.APPEAL_NEED_HELP_NUMBER_TEXT)).tap()
       await setTimeout(5000)
-			await device.takeScreenshot('AppealsNeedHelpAndroidCallingScreen')
-		} 
+      await device.takeScreenshot('AppealsNeedHelpAndroidCallingScreen')
+    }
 
-    await device.launchApp({newInstance: false})
+    await device.launchApp({ newInstance: false })
     await element(by.text(AppealsIdConstants.APPEAL_VISIT_VA_TEXT)).tap()
     await element(by.text('Ok')).tap()
     await setTimeout(5000)

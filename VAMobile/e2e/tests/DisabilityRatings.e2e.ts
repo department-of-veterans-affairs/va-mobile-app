@@ -1,15 +1,18 @@
-import { expect, device, by, element} from 'detox'
-import {loginToDemoMode, openBenefits, openDisabilityRating } from './utils'
+import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
+import { loginToDemoMode, openBenefits, openDisabilityRating } from './utils'
+
 export const DisabilityRatingsIdConstants = {
-    COMBINED_DISABILITY_RATING_TEXT: 'Combined disability rating',
-    COMBINED_DISABILITY_RATING_BODY_TEXT: "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims or appeals with the Claim Status tool.",
-    INDIVIDUAL_RATING_TEXT: 'Individual ratings',
-    INDIVIDUAL_RATING_1_ID: '20% Dr Diagnosis (claimed as Heart disease Service-connected disability?  Yes Effective date:  06/06/2017',
-    DISABILITY_RATING_PAGE_ID: 'disabilityRatingTestID',
-    ABOUT_DISABILITY_RATINGS_LINK_ID: 'aboutDisabilityRatingsTestID',
-  }
+  COMBINED_DISABILITY_RATING_TEXT: 'Combined disability rating',
+  COMBINED_DISABILITY_RATING_BODY_TEXT:
+    "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims or appeals with the Claim Status tool.",
+  INDIVIDUAL_RATING_TEXT: 'Individual ratings',
+  INDIVIDUAL_RATING_1_ID:
+    '20% Dr Diagnosis (claimed as Heart disease Service-connected disability?  Yes Effective date:  06/06/2017',
+  DISABILITY_RATING_PAGE_ID: 'disabilityRatingTestID',
+  ABOUT_DISABILITY_RATINGS_LINK_ID: 'aboutDisabilityRatingsTestID',
+}
 
 beforeAll(async () => {
   await loginToDemoMode()
@@ -37,16 +40,16 @@ describe('Disability Ratings', () => {
     await device.launchApp({ newInstance: false })
   })
 
-  it('verify links in the get help section', async() => {
+  it('verify links in the get help section', async () => {
     if (device.getPlatform() === 'android') {
-			await element(by.text('800-827-1000')).tap()
-			await device.takeScreenshot('DisabilityRatingAndroidCallingScreen')
-			await device.launchApp({newInstance: false})
-		} 
+      await element(by.text('800-827-1000')).tap()
+      await device.takeScreenshot('DisabilityRatingAndroidCallingScreen')
+      await device.launchApp({ newInstance: false })
+    }
     if (device.getPlatform() === 'android') {
-			await element(by.text('TTY: 711')).tap()
-			await device.takeScreenshot('DisabilityRatingTTYAndroidCallingScreen')
-			await device.launchApp({newInstance: false})
-		} 
+      await element(by.text('TTY: 711')).tap()
+      await device.takeScreenshot('DisabilityRatingTTYAndroidCallingScreen')
+      await device.launchApp({ newInstance: false })
+    }
   })
 })
