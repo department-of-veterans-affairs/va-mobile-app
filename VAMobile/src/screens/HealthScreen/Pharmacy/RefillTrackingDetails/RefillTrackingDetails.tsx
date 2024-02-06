@@ -1,25 +1,36 @@
-import { StackScreenProps } from '@react-navigation/stack'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect } from 'react'
-
-import { Box, ErrorComponent, FullScreenSubtask, LoadingComponent, MultiTouchCard, MultiTouchCardProps, TextView } from 'components'
-import { ClickForActionLink } from 'components'
-import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { Events } from 'constants/analytics'
-import { HealthStackParamList } from '../../HealthStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionState, getTrackingInfo } from 'store/slices'
-import { PrescriptionTrackingInfoAttributeData, PrescriptionTrackingInfoOtherItem } from 'store/api'
-import { RootState } from 'store'
-import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
-import { getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { screenContentAllowed } from 'utils/waygateConfig'
-import { useAppDispatch, useBeforeNavBackListener, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import getEnv from 'utils/env'
 
-const { CARRIER_TRACKING_URL_USPS, CARRIER_TRACKING_URL_UPS, CARRIER_TRACKING_URL_FEDEX, CARRIER_TRACKING_URL_DHL } = getEnv()
+import { StackScreenProps } from '@react-navigation/stack'
+
+import {
+  Box,
+  ErrorComponent,
+  FullScreenSubtask,
+  LoadingComponent,
+  MultiTouchCard,
+  MultiTouchCardProps,
+  TextView,
+} from 'components'
+import { ClickForActionLink } from 'components'
+import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { PrescriptionTrackingInfoAttributeData, PrescriptionTrackingInfoOtherItem } from 'store/api'
+import { DELIVERY_SERVICE_TYPES, DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { PrescriptionState, getTrackingInfo } from 'store/slices'
+import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
+import { useAppDispatch, useBeforeNavBackListener, useDowntime, useError, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
+import { HealthStackParamList } from '../../HealthStackScreens'
+import { getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
+
+const { CARRIER_TRACKING_URL_USPS, CARRIER_TRACKING_URL_UPS, CARRIER_TRACKING_URL_FEDEX, CARRIER_TRACKING_URL_DHL } =
+  getEnv()
 
 type RefillTrackingDetailsProps = StackScreenProps<HealthStackParamList, 'RefillTrackingModal'>
 
@@ -42,7 +53,9 @@ const getTrackingLink = (deliveryService: string): string => {
 function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps) {
   const { prescription } = route.params
   const dispatch = useAppDispatch()
-  const { loadingTrackingInfo, trackingInfo } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
+  const { loadingTrackingInfo, trackingInfo } = useSelector<RootState, PrescriptionState>(
+    (state) => state.prescriptions,
+  )
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
@@ -127,7 +140,8 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
   const renderTrackingCards = () => {
     const totalTracking = trackingInfo?.length
     return trackingInfo?.map((prescriptionTrackingInfo, index) => {
-      const { trackingNumber, deliveryService, shippedDate, otherPrescriptions } = prescriptionTrackingInfo?.attributes || ({} as PrescriptionTrackingInfoAttributeData)
+      const { trackingNumber, deliveryService, shippedDate, otherPrescriptions } =
+        prescriptionTrackingInfo?.attributes || ({} as PrescriptionTrackingInfoAttributeData)
       const trackingLink = getTrackingLink(deliveryService)
 
       const [shippedDateMMddyyyy, shippedDateA11yLabel] = getDateTextAndLabel(t, shippedDate)
@@ -138,7 +152,12 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
         <>
           <TextView variant="MobileBodyBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
           {trackingLink && trackingNumber ? (
-            <ClickForActionLink displayedText={trackingNumber} linkType="externalLink" numberOrUrlLink={trackingLink + trackingNumber} a11yLabel={trackingNumberA11yLabel} />
+            <ClickForActionLink
+              displayedText={trackingNumber}
+              linkType="externalLink"
+              numberOrUrlLink={trackingLink + trackingNumber}
+              a11yLabel={trackingNumberA11yLabel}
+            />
           ) : (
             <TextView variant={'MobileBody'} accessibilityLabel={trackingNumberA11yLabel || noneNoted}>
               {trackingNumber || noneNoted}
@@ -147,7 +166,9 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
           <Box mt={standardMarginBetween} mb={condensedMarginBetween}>
             <TextView variant="HelperText">{`${t('prescriptions.refillTracking.deliveryService')}: ${deliveryService || noneNoted}`}</TextView>
           </Box>
-          <TextView variant="HelperText" accessibilityLabel={`${t('prescriptions.refillTracking.dateShipped')}: ${shippedDateA11yLabel}`}>{`${t(
+          <TextView
+            variant="HelperText"
+            accessibilityLabel={`${t('prescriptions.refillTracking.dateShipped')}: ${shippedDateA11yLabel}`}>{`${t(
             'prescriptions.refillTracking.dateShipped',
           )}: ${shippedDateMMddyyyy}`}</TextView>
           {renderOtherPrescription(otherPrescriptions)}
@@ -161,7 +182,10 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
         <Box key={index} mt={30}>
           {trackingInfo?.length > 1 ? (
             <Box mb={condensedMarginBetween}>
-              <TextView variant={'MobileBodyBold'}>{`${t('package')} ${t('listPosition', { position: index + 1, total: totalTracking })}`}</TextView>
+              <TextView
+                variant={
+                  'MobileBodyBold'
+                }>{`${t('package')} ${t('listPosition', { position: index + 1, total: totalTracking })}`}</TextView>
             </Box>
           ) : (
             <></>
@@ -189,7 +213,10 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
   }
 
   return (
-    <FullScreenSubtask title={t('prescriptionTracking')} rightButtonText={t('close')} testID="refillTrackingDetailsTestID">
+    <FullScreenSubtask
+      title={t('prescriptionTracking')}
+      rightButtonText={t('close')}
+      testID="refillTrackingDetailsTestID">
       <Box mx={gutter} mb={contentMarginBottom}>
         {renderHeader()}
         <Box mt={standardMarginBetween}>
@@ -197,7 +224,9 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
             {t('prescriptions.refillTracking.upTo15Days')}
           </TextView>
         </Box>
-        <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('prescriptions.refillTracking.deliveryChanges'))}>
+        <TextView
+          variant="HelperText"
+          accessibilityLabel={a11yLabelVA(t('prescriptions.refillTracking.deliveryChanges'))}>
           {t('prescriptions.refillTracking.deliveryChanges')}
         </TextView>
         {renderTrackingCards()}

@@ -1,21 +1,23 @@
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ViewStyle } from 'react-native'
+
+import { useNavigation } from '@react-navigation/native'
+
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { UseMutateFunction } from '@tanstack/react-query'
-import { ViewStyle } from 'react-native'
 import { map, pick } from 'underscore'
-import { useNavigation } from '@react-navigation/native'
-import { useTranslation } from 'react-i18next'
-import React, { useEffect, useState } from 'react'
 
+import { useContactInformation } from 'api/contactInformation'
 import { AddressData, SaveAddressParameters, SuggestedAddress, ValidateAddressData } from 'api/types'
 import { Box, RadioGroup, TextArea, TextView, VAScrollView, radioOption } from 'components'
-import { EditResponseData } from 'store/api'
-import { NAMESPACE } from 'constants/namespaces'
+import CollapsibleAlert from 'components/CollapsibleAlert'
 import { SnackbarMessages } from 'components/SnackBar'
-import { getAddressDataFromSuggestedAddress, getAddressDataPayload } from 'utils/personalInformation'
+import { NAMESPACE } from 'constants/namespaces'
+import { EditResponseData } from 'store/api'
 import { showSnackBar } from 'utils/common'
 import { useAppDispatch, useTheme } from 'utils/hooks'
-import { useContactInformation } from 'api/contactInformation'
-import CollapsibleAlert from 'components/CollapsibleAlert'
+import { getAddressDataFromSuggestedAddress, getAddressDataPayload } from 'utils/personalInformation'
 
 /**
  *  Signifies the props that need to be passed in to {@link AddressValidation}
@@ -29,7 +31,14 @@ export type AddressValidationProps = {
   setShowAddressValidation: (shouldShow: boolean) => void
 }
 
-function AddressValidation({ addressEntered, addressId, snackbarMessages, validationData, saveAddress, setShowAddressValidation }: AddressValidationProps) {
+function AddressValidation({
+  addressEntered,
+  addressId,
+  snackbarMessages,
+  validationData,
+  saveAddress,
+  setShowAddressValidation,
+}: AddressValidationProps) {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
@@ -112,19 +121,37 @@ function AddressValidation({ addressEntered, addressId, snackbarMessages, valida
 
   const getSuggestedAddressLabelArgs = (address: SuggestedAddress | AddressData): { [key: string]: string } => {
     const suggestedAddress = 'attributes' in address ? address.attributes : address
-    const addressLines = getFormattedAddressLines(suggestedAddress.addressLine1, suggestedAddress.addressLine2, suggestedAddress.addressLine3)
+    const addressLines = getFormattedAddressLines(
+      suggestedAddress.addressLine1,
+      suggestedAddress.addressLine2,
+      suggestedAddress.addressLine3,
+    )
 
     if (suggestedAddress.province && suggestedAddress.internationalPostalCode) {
-      return { addressLines: addressLines, city: suggestedAddress.city, state: suggestedAddress.province, postCode: suggestedAddress.internationalPostalCode }
+      return {
+        addressLines: addressLines,
+        city: suggestedAddress.city,
+        state: suggestedAddress.province,
+        postCode: suggestedAddress.internationalPostalCode,
+      }
     }
 
-    return { addressLines: addressLines, city: suggestedAddress.city, state: suggestedAddress.stateCode || '', postCode: suggestedAddress.zipCode }
+    return {
+      addressLines: addressLines,
+      city: suggestedAddress.city,
+      state: suggestedAddress.stateCode || '',
+      postCode: suggestedAddress.zipCode,
+    }
   }
 
   function getAlert() {
     return (
       <Box>
-        <TextView variant="MobileBody" mt={standardMarginBetween} paragraphSpacing={true} accessibilityLabel={t('editAddress.validation.verifyAddress.body.1.a11yLabel')}>
+        <TextView
+          variant="MobileBody"
+          mt={standardMarginBetween}
+          paragraphSpacing={true}
+          accessibilityLabel={t('editAddress.validation.verifyAddress.body.1.a11yLabel')}>
           {t('editAddress.validation.verifyAddress.body.1')}
         </TextView>
         <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -162,7 +189,12 @@ function AddressValidation({ addressEntered, addressId, snackbarMessages, valida
 
     return (
       <TextArea>
-        <RadioGroup<SuggestedAddress | AddressData> options={suggestedAddressOptions} value={selectedSuggestedAddress} onChange={onSetSuggestedAddress} error={error} />
+        <RadioGroup<SuggestedAddress | AddressData>
+          options={suggestedAddressOptions}
+          value={selectedSuggestedAddress}
+          onChange={onSetSuggestedAddress}
+          error={error}
+        />
       </TextArea>
     )
   }

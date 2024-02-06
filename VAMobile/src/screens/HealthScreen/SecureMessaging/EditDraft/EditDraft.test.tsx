@@ -1,15 +1,17 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import EditDraft from './EditDraft'
-import { initializeErrorsByScreenID, InitialState, updateSecureMessagingTab } from 'store/slices'
-import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
+import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap } from 'store/api/types'
+import { InitialState, initializeErrorsByScreenID, updateSecureMessagingTab } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
 
-let mockNavigationSpy = jest.fn()
+import EditDraft from './EditDraft'
+
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
@@ -17,7 +19,7 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     updateSecureMessagingTab: jest.fn(() => {
@@ -53,10 +55,10 @@ jest.mock('store/slices', () => {
   }
 })
 
-let mockUseComposeCancelConfirmationSpy = jest.fn()
-let mockUseGoToDraftSpy = jest.fn()
+const mockUseComposeCancelConfirmationSpy = jest.fn()
+const mockUseGoToDraftSpy = jest.fn()
 jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
@@ -236,7 +238,7 @@ context('EditDraft', () => {
   describe('when hasLoadedRecipients is false', () => {
     it('should display the LoadingComponent', () => {
       initializeTestInstance({ loading: true })
-      expect(screen.getByText("Loading your draft...")).toBeTruthy()
+      expect(screen.getByText('Loading your draft...')).toBeTruthy()
     })
   })
 

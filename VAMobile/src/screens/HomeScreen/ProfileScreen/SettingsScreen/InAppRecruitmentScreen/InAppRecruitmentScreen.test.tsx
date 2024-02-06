@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
+
 import InAppRecruitmentScreen from './InAppRecruitmentScreen'
 
 const mockNavigationSpy = jest.fn()
@@ -29,7 +31,7 @@ mockNavigationSpy.mockReturnValue(jest.fn())
 
 context('InAppRecruitmentScreen', () => {
   beforeEach(() => {
-    render(<InAppRecruitmentScreen {...mockNavProps(undefined, { setOptions: jest.fn(), navigate: jest.fn() })}/>)
+    render(<InAppRecruitmentScreen {...mockNavProps(undefined, { setOptions: jest.fn(), navigate: jest.fn() })} />)
   })
 
   it('renders screen correctly', () => {

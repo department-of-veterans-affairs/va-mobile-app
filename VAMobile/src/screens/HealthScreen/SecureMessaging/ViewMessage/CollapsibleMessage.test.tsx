@@ -1,16 +1,19 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
-import { context, render } from 'testUtils'
-import { downloadFileAttachment } from 'store/slices'
 import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
-import CollapsibleMessage from './CollapsibleMessage'
+import { downloadFileAttachment } from 'store/slices'
+import { context, render } from 'testUtils'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
+
+import CollapsibleMessage from './CollapsibleMessage'
+
 import Mock = jest.Mock
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     downloadFileAttachment: jest.fn(() => {
@@ -26,7 +29,7 @@ const mockDateISO = DateTime.local().toISO()
 
 context('CollapsibleMessage', () => {
   let onPressSpy: Mock
-  let listOfAttachments: Array<SecureMessagingAttachment> = [
+  const listOfAttachments: Array<SecureMessagingAttachment> = [
     {
       id: 1,
       filename: 'testAttachment',
@@ -38,7 +41,7 @@ context('CollapsibleMessage', () => {
   const initializeTestInstance = (isInitialMessage = false, body = 'Test Message Body') => {
     onPressSpy = jest.fn(() => {})
 
-    let messageAttributes: SecureMessagingMessageAttributes = {
+    const messageAttributes: SecureMessagingMessageAttributes = {
       messageId: 1,
       category: CategoryTypeFields.education,
       subject: 'Test Message Subject',
@@ -52,7 +55,7 @@ context('CollapsibleMessage', () => {
       recipientId: 2,
       recipientName: 'Jane Smith',
     }
-    let mockProps = {
+    const mockProps = {
       message: messageAttributes,
       isInitialMessage: isInitialMessage,
     }
@@ -90,7 +93,10 @@ context('CollapsibleMessage', () => {
   })
 
   it('linkifies phone numbers properly', () => {
-    initializeTestInstance(false, '8006982411 or 800-698-2411 or (800)698-2411 or (800)-698-2411 or 800 698 2411 or +8006982411 or +18006982411 or 1-800-698-2411')
+    initializeTestInstance(
+      false,
+      '8006982411 or 800-698-2411 or (800)698-2411 or (800)-698-2411 or 800 698 2411 or +8006982411 or +18006982411 or 1-800-698-2411',
+    )
     fireEvent.press(screen.getByText('John Smith'))
     expect(screen.getByRole('link', { name: '8006982411' })).toBeTruthy()
     expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy()
@@ -111,7 +117,10 @@ context('CollapsibleMessage', () => {
   })
 
   it('linkifies web address and maps properly', () => {
-    initializeTestInstance(false, 'https://www.va.gov/ or https://rb.gy/riwea or https://va.gov or http://www.va.gov/ or https://www.va.gov/education/about-gi-bill-benefits/ or www.va.gov or www.google.com or google.com or http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s or http://maps.google.com/?q=50.894967,4.341626')
+    initializeTestInstance(
+      false,
+      'https://www.va.gov/ or https://rb.gy/riwea or https://va.gov or http://www.va.gov/ or https://www.va.gov/education/about-gi-bill-benefits/ or www.va.gov or www.google.com or google.com or http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s or http://maps.google.com/?q=50.894967,4.341626',
+    )
     fireEvent.press(screen.getByText('John Smith'))
     expect(screen.getByRole('link', { name: 'https://www.va.gov/' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'https://rb.gy/riwea' })).toBeTruthy()
@@ -121,7 +130,9 @@ context('CollapsibleMessage', () => {
     expect(screen.getByRole('link', { name: 'www.va.gov' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'www.google.com' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'google.com' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s' })).toBeTruthy()
+    expect(
+      screen.getByRole('link', { name: 'http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s' }),
+    ).toBeTruthy()
     expect(screen.getByRole('link', { name: 'http://maps.google.com/?q=50.894967,4.341626' })).toBeTruthy()
   })
 
