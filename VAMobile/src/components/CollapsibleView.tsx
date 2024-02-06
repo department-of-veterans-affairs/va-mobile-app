@@ -42,9 +42,6 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
 
   const onPress = (): void => {
     setExpanded(!expanded)
-    if (!expanded && text === t('loaGate.expandMsg')) {
-      logAnalyticsEvent(Events.vama_login_readme())
-    }
   }
 
   const boxStyles: BoxProps = {
