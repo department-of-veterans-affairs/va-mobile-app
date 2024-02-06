@@ -2,13 +2,11 @@ import { QueryCache, QueryClient } from '@tanstack/react-query'
 
 import { UserAnalytic, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-import store from 'store'
 
 export default new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5000,
-      enabled: store.getState().auth.loggedIn
     },
   },
   queryCache: new QueryCache({

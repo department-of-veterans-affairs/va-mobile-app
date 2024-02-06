@@ -17,7 +17,7 @@ const foregroundNotifications: Array<string> = []
  */
 const NotificationManager: FC = ({ children }) => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
-  const { data: personalInformation } = usePersonalInformation()
+  const { data: personalInformation } = usePersonalInformation({ enabled: loggedIn })
   const dispatch = useAppDispatch()
   const [eventsRegistered, setEventsRegistered] = useState(false)
   useEffect(() => {
