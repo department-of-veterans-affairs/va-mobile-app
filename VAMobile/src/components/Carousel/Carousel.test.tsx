@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { TFunction } from 'i18next'
+
 import { context, render, screen } from 'testUtils'
 
 import { TextView } from '../index'
@@ -24,7 +26,7 @@ context('Carousel', () => {
   ]
 
   beforeEach(() => {
-    render(<Carousel screenList={screenList} onCarouselEnd={() => {}} translation={t as any} />)
+    render(<Carousel screenList={screenList} onCarouselEnd={() => {}} translation={t as unknown as TFunction} />)
   })
 
   it('initializes correctly', () => {

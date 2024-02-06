@@ -29,7 +29,6 @@ jest.mock('utils/hooks', () => {
 })
 
 context('UpcomingAppointmentDetails', () => {
-  let props: any
   const goBackSpy = jest.fn()
   const navigateSpy = jest.fn()
 
@@ -48,7 +47,7 @@ context('UpcomingAppointmentDetails', () => {
     statusDetail: AppointmentStatusDetailType | null = null,
     hasUrl: boolean = false,
   ): void => {
-    props = mockNavProps(
+    const props = mockNavProps(
       undefined,
       { setOptions: jest.fn(), goBack: goBackSpy, navigate: navigateSpy },
       { params: { appointmentID: '1' } },

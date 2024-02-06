@@ -10,8 +10,6 @@ import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 
 import CollapsibleMessage from './CollapsibleMessage'
 
-import Mock = jest.Mock
-
 jest.mock('store/slices', () => {
   const actual = jest.requireActual('store/slices')
   return {
@@ -28,7 +26,6 @@ jest.mock('store/slices', () => {
 const mockDateISO = DateTime.local().toISO()
 
 context('CollapsibleMessage', () => {
-  let onPressSpy: Mock
   const listOfAttachments: Array<SecureMessagingAttachment> = [
     {
       id: 1,
@@ -39,8 +36,6 @@ context('CollapsibleMessage', () => {
   ]
 
   const initializeTestInstance = (isInitialMessage = false, body = 'Test Message Body') => {
-    onPressSpy = jest.fn(() => {})
-
     const messageAttributes: SecureMessagingMessageAttributes = {
       messageId: 1,
       category: CategoryTypeFields.education,

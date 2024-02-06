@@ -237,50 +237,52 @@ context('secureMessaging', () => {
     })
   })
 
-  describe('getMessageRecipients', () => {
-    const store = realStore({
-      auth: { ...initialAuthState },
-      secureMessaging: {
-        ...initialSecureMessagingState,
-        inbox: {
-          type: 'Inbox',
-          id: '123',
-          attributes: {
-            folderId: 1,
-            name: 'Inbox',
-            count: 100,
-            unreadCount: 19,
-            systemFolder: true,
-          },
-        },
-        inboxMessages: [
-          {
-            type: '',
-            id: 987,
+  describe('clearLoadedMessages', () => {
+    it('should dispatch the correct action', async () => {
+      const store = realStore({
+        auth: { ...initialAuthState },
+        secureMessaging: {
+          ...initialSecureMessagingState,
+          inbox: {
+            type: 'Inbox',
+            id: '123',
             attributes: {
-              messageId: 1, // ID of the message you just read
-              category: 'COVID',
-              subject: '',
-              hasAttachments: false,
-              attachment: false,
-              sentDate: '1/1/2021',
-              senderId: 200,
-              senderName: 'Alana P.',
-              recipientId: 201,
-              recipientName: 'Melvin P.',
+              folderId: 1,
+              name: 'Inbox',
+              count: 100,
+              unreadCount: 19,
+              systemFolder: true,
             },
           },
-        ],
-      },
-      errors: initialErrorsState,
-    })
+          inboxMessages: [
+            {
+              type: '',
+              id: 987,
+              attributes: {
+                messageId: 1, // ID of the message you just read
+                category: 'COVID',
+                subject: '',
+                hasAttachments: false,
+                attachment: false,
+                sentDate: '1/1/2021',
+                senderId: 200,
+                senderName: 'Alana P.',
+                recipientId: 201,
+                recipientName: 'Melvin P.',
+              },
+            },
+          ],
+        },
+        errors: initialErrorsState,
+      })
 
-    store.dispatch(dispatchClearLoadedMessages())
-    const actions = store.getActions()
-    const clearAction = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_CLEAR_LOADED_MESSAGES })
-    expect(clearAction).toBeTruthy()
-    const { secureMessaging } = store.getState()
-    expect(secureMessaging).toEqual(initialSecureMessagingState)
+      store.dispatch(dispatchClearLoadedMessages())
+      const actions = store.getActions()
+      const clearAction = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_CLEAR_LOADED_MESSAGES })
+      expect(clearAction).toBeTruthy()
+      const { secureMessaging } = store.getState()
+      expect(secureMessaging).toEqual(initialSecureMessagingState)
+    })
   })
 
   describe('saveDraft', () => {

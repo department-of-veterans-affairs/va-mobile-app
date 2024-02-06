@@ -68,7 +68,8 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
   }
 
   function getBody() {
-    /** this does preserve newline characters just not spaces, TODO:change the mobile body link text views to be clickable and launch the right things */
+    /** this does preserve newline characters just not spaces
+     * TODO: change the mobile body link text views to be clickable and launch the right things */
     if (body) {
       return getLinkifiedText(body, t, launchLink)
     }

@@ -90,9 +90,7 @@ context('ClaimDetailsScreen', () => {
       })
       expect(screen.getByTestId('Step 1 of 5. completed. Claim received June 6, 2019')).toBeTruthy()
     })
-  })
 
-  describe('when the selected tab is status', () => {
     it('should display the ClaimDetails component', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)

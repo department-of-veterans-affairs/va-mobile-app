@@ -139,7 +139,6 @@ const mockMessages: SecureMessagingMessageMap = {
 }
 
 context('EditDraft', () => {
-  let props: any
   let goBack: jest.Mock
 
   const initializeTestInstance = ({
@@ -155,7 +154,7 @@ context('EditDraft', () => {
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
-    props = mockNavProps(
+    const props = mockNavProps(
       undefined,
       {
         addListener: mockUseComposeCancelConfirmationSpy,
