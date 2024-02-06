@@ -2,6 +2,7 @@ import { device, element, by, expect, waitFor, web } from 'detox'
 import getEnv from '../../src/utils/env'
 import { expect as jestExpect } from '@jest/globals'
 import { setTimeout } from 'timers/promises'
+const spawnSync = require("child_process").spawnSync
 
 const { toMatchImageSnapshot } = require('jest-image-snapshot')
 const fs = require('fs')
@@ -135,7 +136,7 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
  * @param newJsonValue - string or boolean: new value for the json object
  */
 
-export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue: string | boolean) {
+export async function changeMockData (mockFileName: string, jsonProperty, newJsonValue) {
 	
   const mockDirectory = './src/store/api/demo/mocks/'
   
@@ -169,6 +170,19 @@ export async function changeMockData (mockFileName: string, jsonProperty, newJso
 			if (err) { return console.log(err) }
 		})
 	})
+
+  await device.uninstallApp()
+  await setTimeout(1000)
+  if (device.getPlatform() === 'ios') {
+    await spawnSync('yarn', ['bundle:ios'], {maxBuffer: Infinity, timeout: 200000})
+    await spawnSync('detox', ['build', '-c ios'], {maxBuffer: Infinity, timeout: 200000})  
+  } else {
+    await spawnSync('yarn', ['bundle:android'], {maxBuffer: Infinity, timeout: 200000})
+    await spawnSync('detox', ['build', '-c android'], {maxBuffer: Infinity, timeout: 200000})
+  }
+  await device.installApp()
+  await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+  await loginToDemoMode()
 }
 
 /** This function will check and verify if the image provided matches the image in the _imagesnapshot_ folder
