@@ -19,7 +19,8 @@ function NoMilitaryInformationAccess() {
         variant="MobileBody"
         textAlign="center"
         my={theme.dimensions.standardMarginBetween}
-        {...testIdProps(t('militaryInformation.noMilitaryInfoAccess.body.a11yLabel'))}>
+        {...testIdProps(t('militaryInformation.noMilitaryInfoAccess.body.a11yLabel'))}
+        testID="noMilitaryAccessTestID">
         {t('militaryInformation.noMilitaryInfoAccess.body')}
       </TextView>
     </Box>
