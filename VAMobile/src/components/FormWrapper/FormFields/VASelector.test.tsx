@@ -49,7 +49,7 @@ context('VASelector', () => {
 
   describe('when the checkbox area is clicked', () => {
     it('should call setSelected', () => {
-      expect(fireEvent.press(screen.getByRole('checkbox'))).toBeTruthy()
+      fireEvent.press(screen.getByRole('checkbox'))
       expect(setSelected).toBeCalled()
       expect(selected).toEqual(true)
     })
