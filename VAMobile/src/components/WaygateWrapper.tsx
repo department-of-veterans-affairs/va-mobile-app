@@ -49,6 +49,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
         <AlertBox
           border={waygate.type === 'DenyContent' ? 'error' : 'warning'}
           title={waygate.errorMsgTitle}
+          titleA11yLabel={a11yLabelVA(waygate.errorMsgTitle || '')}
           text={text}
           textA11yLabel={a11yLabelVA(text || '')}
           focusOnError={false}
