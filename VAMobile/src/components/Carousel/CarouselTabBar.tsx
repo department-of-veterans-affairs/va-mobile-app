@@ -1,18 +1,20 @@
-import { Pressable } from 'react-native'
 import React, { ReactElement, useState } from 'react'
+import { Pressable } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
 import { NavigationHelpers, ParamListBase } from '@react-navigation/native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { TFunction } from 'i18next'
-import _ from 'underscore'
 import styled from 'styled-components'
+import _ from 'underscore'
+
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { themeFn } from 'utils/theme'
 
 import { Box, BoxProps, TextView } from '../index'
 import { CarouselScreen } from './Carousel'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { themeFn } from 'utils/theme'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 const StyledSafeAreaView = styled(SafeAreaView)`
   background-color: ${themeFn((theme) => theme.colors.background.carousel)};
@@ -93,7 +95,11 @@ function CarouselTabBar({ onCarouselEnd, screenList, translation }: CarouselTabB
     }
 
     return (
-      <StyledPressable onPress={onPressCallback} accessibilityRole="button" {...testIdProps(translation(buttonText))} {...a11yHintProp(allyHint || '')}>
+      <StyledPressable
+        onPress={onPressCallback}
+        accessibilityRole="button"
+        {...testIdProps(translation(buttonText))}
+        {...a11yHintProp(allyHint || '')}>
         <TextView variant="MobileBody" color="primaryContrast" allowFontScaling={false} mr="auto" selectable={false}>
           {translation(buttonText)}
         </TextView>
@@ -114,8 +120,17 @@ function CarouselTabBar({ onCarouselEnd, screenList, translation }: CarouselTabB
     }
 
     return (
-      <StyledPressable onPress={onContinue} accessibilityRole="button" {...testIdProps(translation(buttonText))} {...a11yHintProp(allyHint || '')}>
-        <TextView variant="MobileBodyBold" color="primaryContrast" allowFontScaling={false} ml="auto" selectable={false}>
+      <StyledPressable
+        onPress={onContinue}
+        accessibilityRole="button"
+        {...testIdProps(translation(buttonText))}
+        {...a11yHintProp(allyHint || '')}>
+        <TextView
+          variant="MobileBodyBold"
+          color="primaryContrast"
+          allowFontScaling={false}
+          ml="auto"
+          selectable={false}>
           {translation(buttonText)}
         </TextView>
       </StyledPressable>
@@ -135,11 +150,20 @@ function CarouselTabBar({ onCarouselEnd, screenList, translation }: CarouselTabB
 
   return (
     <StyledSafeAreaView edges={['bottom']}>
-      <Box display="flex" flexDirection="row" height={70} backgroundColor="carousel" alignItems="center" mx={theme.dimensions.gutter}>
+      <Box
+        display="flex"
+        flexDirection="row"
+        height={70}
+        backgroundColor="carousel"
+        alignItems="center"
+        mx={theme.dimensions.gutter}>
         <Box flex={1} display="flex" justifyContent="center">
           {goBackOrSkipBtn()}
         </Box>
-        <Box {...testIdProps(translation('carouselIndicators'))} {...a11yHintProp(a11yHints?.carouselIndicatorsHint || '')} {...progressBarContainerProps}>
+        <Box
+          {...testIdProps(translation('carouselIndicators'))}
+          {...a11yHintProp(a11yHints?.carouselIndicatorsHint || '')}
+          {...progressBarContainerProps}>
           {getProgressBar()}
         </Box>
         <Box flex={1} display="flex" justifyContent="center">

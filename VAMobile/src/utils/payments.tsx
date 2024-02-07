@@ -1,13 +1,23 @@
-import { DateTime } from 'luxon'
-import { TFunction } from 'i18next'
-import { each, forEach, groupBy, keys, map } from 'underscore'
 import React, { ReactNode } from 'react'
 
+import { TFunction } from 'i18next'
+import { DateTime } from 'luxon'
+import { each, forEach, groupBy, keys, map } from 'underscore'
+
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'components'
-import { LoadedPayments, PaymentsByDate, PaymentsGetData, PaymentsList, PaymentsMap, PaymentsMetaPagination, PaymentsPaginationByYearAndPage } from 'store/api'
+import {
+  LoadedPayments,
+  PaymentsByDate,
+  PaymentsGetData,
+  PaymentsList,
+  PaymentsMap,
+  PaymentsMetaPagination,
+  PaymentsPaginationByYearAndPage,
+} from 'store/api'
 import { VATheme } from 'styles/theme'
-import { formatDateUtc, getFormattedDate } from './formattingUtils'
+
 import { getTestIDFromTextLines } from './accessibility'
+import { formatDateUtc, getFormattedDate } from './formattingUtils'
 
 /**
  * @param paymentList - type PaymentsList, list of payments
@@ -45,7 +55,11 @@ export const mapPaymentsById = (paymentList?: PaymentsList): PaymentsMap => {
  *
  * @returns returns the cached data for the year and page
  */
-export const getLoadedPayments = (payments: LoadedPayments, paginationData: PaymentsPaginationByYearAndPage, pageAndYear: string): PaymentsGetData | null => {
+export const getLoadedPayments = (
+  payments: LoadedPayments,
+  paginationData: PaymentsPaginationByYearAndPage,
+  pageAndYear: string,
+): PaymentsGetData | null => {
   const loadedPayments = payments[pageAndYear]
   const loadedPagination = paginationData[pageAndYear]
   // do we have the Payments?
@@ -97,7 +111,13 @@ export const getGroupedPayments = (
   let groupIdx = 0
   return map(sortedDates, (date) => {
     const listOfPayments = paymentsGroupedByDate[date]
-    const listItems = getListItemsForPayments(listOfPayments, translations, onPaymentPress, paymentsPageMetaData, groupIdx)
+    const listItems = getListItemsForPayments(
+      listOfPayments,
+      translations,
+      onPaymentPress,
+      paymentsPageMetaData,
+      groupIdx,
+    )
 
     groupIdx = groupIdx + listItems.length
     const displayedDate = getFormattedDate(date, 'MMMM d, yyyy')
@@ -134,7 +154,10 @@ const getListItemsForPayments = (
     const { paymentType, amount } = payment.attributes
     const textLines: Array<TextLineWithIconProps> = []
 
-    textLines.push({ text: t('text.raw', { text: paymentType }), variant: 'MobileBodyBold' }, { text: t('text.raw', { text: amount }), variant: 'MobileBody' })
+    textLines.push(
+      { text: t('text.raw', { text: paymentType }), variant: 'MobileBodyBold' },
+      { text: t('text.raw', { text: amount }), variant: 'MobileBody' },
+    )
 
     const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
     const a11yValue = t('listPosition', { position, total: totalEntries })
@@ -160,8 +183,14 @@ export const getFirstAndLastDayOfYear = (year?: string): [string | undefined, st
   let firstDayOfyear: string | undefined
   let lastDayOfyear: string | undefined
   if (year) {
-    const startDay = DateTime.fromISO(year).set({ month: 12, day: 31, hour: 23, minute: 59, millisecond: 999 }).endOf('day').toISO()
-    const endDay = DateTime.fromISO(year).set({ month: 12, day: 31, hour: 23, minute: 59, millisecond: 999 }).endOf('day').toISO()
+    const startDay = DateTime.fromISO(year)
+      .set({ month: 12, day: 31, hour: 23, minute: 59, millisecond: 999 })
+      .endOf('day')
+      .toISO()
+    const endDay = DateTime.fromISO(year)
+      .set({ month: 12, day: 31, hour: 23, minute: 59, millisecond: 999 })
+      .endOf('day')
+      .toISO()
     if (startDay && endDay) {
       firstDayOfyear = startDay
       lastDayOfyear = endDay

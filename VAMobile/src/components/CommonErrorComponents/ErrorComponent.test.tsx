@@ -1,25 +1,34 @@
 import React from 'react'
-import { context, fireEvent, render, screen } from 'testUtils'
-import ErrorComponent from './ErrorComponent'
-import { ScreenIDTypesConstants } from 'store/api/types'
+
 import { CommonErrorTypesConstants } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
+import { context, fireEvent, render, screen } from 'testUtils'
+
+import ErrorComponent from './ErrorComponent'
 
 context('ErrorComponent', () => {
   const onTryAgainPressSpy = jest.fn()
 
   beforeEach(() => {
     const errorsByScreenID = initializeErrorsByScreenID()
-    errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+    errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] =
+      CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
-    render(<ErrorComponent onTryAgain={onTryAgainPressSpy} screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />, {
-      preloadedState: {
-        errors: {
-          ...initialErrorsState,
-          errorsByScreenID,
+    render(
+      <ErrorComponent
+        onTryAgain={onTryAgainPressSpy}
+        screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID}
+      />,
+      {
+        preloadedState: {
+          errors: {
+            ...initialErrorsState,
+            errorsByScreenID,
+          },
         },
       },
-    })
+    )
   })
 
   it('initializes correctly', () => {

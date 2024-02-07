@@ -1,6 +1,7 @@
-import { expect, device, by, element} from 'detox'
-import {loginToDemoMode, openHealth, openAppointments, openMessages } from './utils'
+import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
+
+import { loginToDemoMode, openAppointments, openHealth, openMessages } from './utils'
 
 export const CernerIdConstants = {
   GO_TO_VA_HEALTH_LINK_ID: 'goToMyVAHealthTestID',
@@ -9,12 +10,13 @@ export const CernerIdConstants = {
   CERNER_NOTE_RECORDS_SHOW_TEXT: 'Our records show you’re registered at:',
   CERNER_NOTE_FACILITY_TEXT: 'Cary VA Medical Center (Now using My VA Health)',
   CERNER_NOTE_FACILITY_2_TEXT: 'Cheyenne VA Medical Center (Now using My VA Health)',
-  CERNER_NOTE_MESSAGES_TEXT: 'This facility currently uses our My VA Health portal. You\'ll need to go there to send your message.',
-  CERNER_NOTE_MESSAGES_HEADER_TEXT: 'Make sure you\'re in the right health portal',
+  CERNER_NOTE_MESSAGES_TEXT:
+    "This facility currently uses our My VA Health portal. You'll need to go there to send your message.",
+  CERNER_NOTE_MESSAGES_HEADER_TEXT: "Make sure you're in the right health portal",
 }
 
 beforeAll(async () => {
-  if(device.getPlatform() === 'android') {
+  if (device.getPlatform() === 'android') {
     await loginToDemoMode()
     await openHealth()
   }
@@ -64,7 +66,13 @@ describe(':android: Cerner Notice', () => {
     await expect(element(by.text('Sending a message to a care team at one of these health facilities?'))).toExist()
     await expect(element(by.text('Cheyenne VA Medical Center'))).toExist()
     await expect(element(by.text('Cary VA Medical Center'))).toExist()
-    await expect(element(by.text('These facilities currently use our My VA Health portal. You\'ll need to go there to send your message.'))).toExist()
+    await expect(
+      element(
+        by.text(
+          "These facilities currently use our My VA Health portal. You'll need to go there to send your message.",
+        ),
+      ),
+    ).toExist()
     await expect(element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID))).toExist()
   })
 })

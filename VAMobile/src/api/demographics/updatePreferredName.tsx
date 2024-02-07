@@ -1,10 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Events, UserAnalytics } from 'constants/analytics'
-import { demographicsKeys } from './queryKeys'
-import { isErrorObject } from 'utils/common'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { put } from 'store/api'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { isErrorObject } from 'utils/common'
+
+import { demographicsKeys } from './queryKeys'
 
 /**
  * Updates a user's preferred name

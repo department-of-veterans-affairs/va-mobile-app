@@ -1,15 +1,18 @@
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
-import { StackActions, useNavigation } from '@react-navigation/native'
-import { useTranslation } from 'react-i18next'
 import React, { FC, Ref } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ScrollView, View, ViewStyle } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { StackActions, useNavigation } from '@react-navigation/native'
+
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, CrisisLineCta, TextView, TextViewProps, VAScrollView, WaygateWrapper } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
-import { NAMESPACE } from 'constants/namespaces'
-import { ScrollView, View, ViewStyle } from 'react-native'
 import { VAIconProps } from 'components/VAIcon'
+import { NAMESPACE } from 'constants/namespaces'
 import { useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
@@ -158,9 +161,22 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   }
 
   const headerProps: HeaderBannerProps = {
-    leftButton: leftButtonText ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, testID: leftButtonTestID, onPress: onLeftTitleButtonPress } : undefined,
+    leftButton: leftButtonText
+      ? {
+          text: leftButtonText,
+          a11yLabel: leftButtonA11yLabel,
+          testID: leftButtonTestID,
+          onPress: onLeftTitleButtonPress,
+        }
+      : undefined,
     rightButton: rightButtonText
-      ? { text: rightButtonText, a11yLabel: rightButtonA11yLabel, testID: rightButtonTestID, onPress: onRightTitleButtonPress, icon: rightVAIconProps }
+      ? {
+          text: rightButtonText,
+          a11yLabel: rightButtonA11yLabel,
+          testID: rightButtonTestID,
+          onPress: onRightTitleButtonPress,
+          icon: rightVAIconProps,
+        }
       : undefined,
     menuViewActions,
   }
@@ -185,14 +201,34 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
       </VAScrollView>
       <WaygateWrapper bypassAlertBox={true}>
         {primaryContentButtonText && onPrimaryContentButtonPress && (
-          <Box display="flex" flexDirection="row" mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+          <Box
+            display="flex"
+            flexDirection="row"
+            mt={theme.dimensions.condensedMarginBetween}
+            mb={theme.dimensions.contentMarginBottom}
+            alignItems={'center'}>
             {secondaryContentButtonText && onSecondaryContentButtonPress && (
               <Box ml={theme.dimensions.gutter} flex={1}>
-                <Button onPress={onSecondaryContentButtonPress} label={secondaryContentButtonText} buttonType={ButtonVariants.Secondary} />
+                <Button
+                  onPress={onSecondaryContentButtonPress}
+                  label={secondaryContentButtonText}
+                  buttonType={ButtonVariants.Secondary}
+                />
               </Box>
             )}
-            <Box ml={secondaryContentButtonText && onSecondaryContentButtonPress ? theme.dimensions.buttonPadding : theme.dimensions.gutter} mr={theme.dimensions.gutter} flex={1}>
-              <Button onPress={onPrimaryContentButtonPress} label={primaryContentButtonText} testID={primaryButtonTestID} />
+            <Box
+              ml={
+                secondaryContentButtonText && onSecondaryContentButtonPress
+                  ? theme.dimensions.buttonPadding
+                  : theme.dimensions.gutter
+              }
+              mr={theme.dimensions.gutter}
+              flex={1}>
+              <Button
+                onPress={onPrimaryContentButtonPress}
+                label={primaryContentButtonText}
+                testID={primaryButtonTestID}
+              />
             </Box>
           </Box>
         )}

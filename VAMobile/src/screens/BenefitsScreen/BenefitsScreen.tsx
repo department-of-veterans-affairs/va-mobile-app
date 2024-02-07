@@ -1,30 +1,32 @@
-import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
-import { BenefitsStackParamList } from './BenefitsStackScreens'
+import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { DisabilityRatingState } from 'store/slices'
-import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { featureEnabled } from 'utils/remoteConfig'
-import { screenContentAllowed } from 'utils/waygateConfig'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
-import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
-import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
-import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
-import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
-import ClaimsHistoryScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimsHistoryScreen/ClaimsHistoryScreen'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
-import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScreen'
+import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
+import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
 import FileRequest from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
 import FileRequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
+import ClaimsHistoryScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimsHistoryScreen/ClaimsHistoryScreen'
+import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScreen'
+import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
+import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericLetter'
+import { RootState } from 'store'
+import { DisabilityRatingState } from 'store/slices'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
+import { BenefitsStackParamList } from './BenefitsStackScreens'
+import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
 
@@ -37,7 +39,9 @@ function BenefitsScreen({}: BenefitsScreenProps) {
 
   const ratingPercent = ratingData?.combinedDisabilityRating
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
-  const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
+  const combinedPercentText = ratingIsDefined
+    ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent })
+    : undefined
 
   const onDisabilityRatings = () => {
     navigateTo('DisabilityRatings')
@@ -112,18 +116,58 @@ function BenefitsStackScreen() {
         },
       }}>
       <BenefitsScreenStack.Screen name="Benefits" component={BenefitsScreen} options={{ headerShown: false }} />
-      <BenefitsScreenStack.Screen name="BenefitSummaryServiceVerificationLetter" component={BenefitSummaryServiceVerification} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <BenefitsScreenStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <BenefitsScreenStack.Screen
+        name="BenefitSummaryServiceVerificationLetter"
+        component={BenefitSummaryServiceVerification}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <BenefitsScreenStack.Screen
+        name="AppealDetailsScreen"
+        component={AppealDetailsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <BenefitsScreenStack.Screen name="ClaimLettersScreen" component={ClaimLettersScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <BenefitsScreenStack.Screen name="ClaimsHistoryScreen" component={ClaimsHistoryScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <BenefitsScreenStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <BenefitsScreenStack.Screen name="DisabilityRatings" component={DisabilityRatingsScreen} options={{ headerShown: false }} />
+      <BenefitsScreenStack.Screen
+        name="ClaimLettersScreen"
+        component={ClaimLettersScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <BenefitsScreenStack.Screen
+        name="ClaimsHistoryScreen"
+        component={ClaimsHistoryScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <BenefitsScreenStack.Screen
+        name="ClaimDetailsScreen"
+        component={ClaimDetailsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <BenefitsScreenStack.Screen
+        name="DisabilityRatings"
+        component={DisabilityRatingsScreen}
+        options={{ headerShown: false }}
+      />
       <BenefitsScreenStack.Screen name="FileRequest" component={FileRequest} options={{ headerShown: false }} />
-      <BenefitsScreenStack.Screen name="FileRequestDetails" component={FileRequestDetails} options={{ headerShown: false }} />
-      <BenefitsScreenStack.Screen name="GenericLetter" component={GenericLetter} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <BenefitsScreenStack.Screen name="LettersList" component={LettersListScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <BenefitsScreenStack.Screen name="LettersOverview" component={LettersOverviewScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <BenefitsScreenStack.Screen
+        name="FileRequestDetails"
+        component={FileRequestDetails}
+        options={{ headerShown: false }}
+      />
+      <BenefitsScreenStack.Screen
+        name="GenericLetter"
+        component={GenericLetter}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <BenefitsScreenStack.Screen
+        name="LettersList"
+        component={LettersListScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <BenefitsScreenStack.Screen
+        name="LettersOverview"
+        component={LettersOverviewScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
     </BenefitsScreenStack.Navigator>
   )
 }

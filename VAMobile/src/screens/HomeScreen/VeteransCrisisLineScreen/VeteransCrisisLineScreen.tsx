@@ -1,14 +1,15 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Box, LargePanel, TextView } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import { UserAnalytics } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useExternalLink, useTheme } from 'utils/hooks'
-import VeteransCrisisLineNumbers from './VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 import getEnv from 'utils/env'
+import { useExternalLink, useTheme } from 'utils/hooks'
+
+import VeteransCrisisLineNumbers from './VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 
 const { LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
 
@@ -35,7 +36,10 @@ function VeteransCrisisLineScreen() {
   return (
     <LargePanel title={t('veteransCrisisLine.title')} rightButtonText={t('done')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
+        <TextView
+          variant="MobileBodyBold"
+          accessibilityRole="header"
+          accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
         <Box mt={standardMarginBetween}>

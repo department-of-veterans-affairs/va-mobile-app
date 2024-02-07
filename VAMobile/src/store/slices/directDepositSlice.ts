@@ -1,17 +1,23 @@
-import { AppThunk } from 'store'
-import { DirectDepositErrors } from 'constants/errors'
-import { Events, UserAnalytics } from 'constants/analytics'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
-import { getCommonErrorFromAPIError, getErrorKeys } from 'utils/errors'
 import { includes } from 'lodash'
+
+import { SnackbarMessages } from 'components/SnackBar'
+import { Events, UserAnalytics } from 'constants/analytics'
+import { DirectDepositErrors } from 'constants/errors'
+import { AppThunk } from 'store'
+import {
+  getAnalyticsTimers,
+  logAnalyticsEvent,
+  logNonFatalErrorToFirebase,
+  setAnalyticsUserProperty,
+} from 'utils/analytics'
 import { isErrorObject, showSnackBar } from 'utils/common'
+import { getCommonErrorFromAPIError, getErrorKeys } from 'utils/errors'
 
 import * as api from '../api'
 import { APIError, AccountTypes, ScreenIDTypes } from '../api'
-import { SnackbarMessages } from 'components/SnackBar'
-import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 
 export type DirectDepositState = {
   loading: boolean
@@ -63,9 +69,16 @@ export const getBankData =
  * @param screenID - string specifying the screen that a common error would display on
  */
 export const updateBankInfo =
-  (accountNumber: string, routingNumber: string, accountType: AccountTypes, snackbarMessages: SnackbarMessages, screenID?: ScreenIDTypes): AppThunk =>
+  (
+    accountNumber: string,
+    routingNumber: string,
+    accountType: AccountTypes,
+    snackbarMessages: SnackbarMessages,
+    screenID?: ScreenIDTypes,
+  ): AppThunk =>
   async (dispatch, getState) => {
-    const retryFunction = () => dispatch(updateBankInfo(accountNumber, routingNumber, accountType, snackbarMessages, screenID))
+    const retryFunction = () =>
+      dispatch(updateBankInfo(accountNumber, routingNumber, accountType, snackbarMessages, screenID))
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
 
@@ -118,7 +131,10 @@ const checkIfRoutingNumberIsInvalid = (error: APIError): boolean => {
   }
 
   const errorKeys = getErrorKeys(error)
-  return includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER) || includes(error?.text, DirectDepositErrors.INVALID_ROUTING_NUMBER_TEXT)
+  return (
+    includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER) ||
+    includes(error?.text, DirectDepositErrors.INVALID_ROUTING_NUMBER_TEXT)
+  )
 }
 
 /**
@@ -132,7 +148,10 @@ const directDepositSlice = createSlice({
       state.loading = true
     },
 
-    dispatchFinishGetBankInfo: (state, action: PayloadAction<{ paymentAccount?: api.PaymentAccountData; error?: APIError }>) => {
+    dispatchFinishGetBankInfo: (
+      state,
+      action: PayloadAction<{ paymentAccount?: api.PaymentAccountData; error?: APIError }>,
+    ) => {
       const { paymentAccount, error } = action.payload
 
       state.loading = false
@@ -144,7 +163,14 @@ const directDepositSlice = createSlice({
       state.saving = true
     },
 
-    dispatchFinishSaveBankInfo: (state, action: PayloadAction<{ paymentAccount?: api.PaymentAccountData; error?: APIError; invalidRoutingNumberError?: boolean }>) => {
+    dispatchFinishSaveBankInfo: (
+      state,
+      action: PayloadAction<{
+        paymentAccount?: api.PaymentAccountData
+        error?: APIError
+        invalidRoutingNumberError?: boolean
+      }>,
+    ) => {
       const { paymentAccount, error, invalidRoutingNumberError } = action.payload
       const newInvalidRoutingNumberError = invalidRoutingNumberError || false
 
@@ -162,5 +188,11 @@ const directDepositSlice = createSlice({
   },
 })
 
-export const { dispatchFinishGetBankInfo, dispatchStartGetBankInfo, dispatchFinishSaveBankInfo, dispatchStartSaveBankInfo, dispatchFinishEditBankInfo } = directDepositSlice.actions
+export const {
+  dispatchFinishGetBankInfo,
+  dispatchStartGetBankInfo,
+  dispatchFinishSaveBankInfo,
+  dispatchStartSaveBankInfo,
+  dispatchFinishEditBankInfo,
+} = directDepositSlice.actions
 export default directDepositSlice.reducer
