@@ -35,6 +35,7 @@ import {
   getMessage,
   getMessageRecipients,
   getThread,
+  resetSaveDraftComplete,
   resetSaveDraftFailed,
   resetSendMessageComplete,
   resetSendMessageFailed,
@@ -152,6 +153,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
 
   useEffect(() => {
     if (saveDraftComplete) {
+      dispatch(resetSaveDraftComplete())
       goToDraftFolder(true)
     } else if (deleteDraftComplete) {
       goToDraftFolder(false)
