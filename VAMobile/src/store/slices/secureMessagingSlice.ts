@@ -644,12 +644,11 @@ const secureMessagingSlice = createSlice({
         },
         { ...state.messagesById },
       )
-      state.inboxFirstRetrieval = !!error
-      state.inbox = inboxMessages ? inboxMessages.meta.messageCounts : ({} as SecureMessagingMessageCountMeta)
-      state.loadingInbox = false
 
       return {
         ...state,
+        inboxFirstRetrieval: !!error,
+        inbox: inboxMessages ? inboxMessages.meta.messageCounts : ({} as SecureMessagingMessageCountMeta),
         inboxMessages: messages,
         // TODO add to folderMessagesById(0)
         // TODO inject folderId?
