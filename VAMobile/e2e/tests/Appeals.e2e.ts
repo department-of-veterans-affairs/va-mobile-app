@@ -73,14 +73,14 @@ describe('Appeals', () => {
   it('verify review past events information', async () => {
     await element(by.text(AppealsIdConstants.STATUS_TAB_TEXT)).tap()
     await element(by.id(AppealsIdConstants.REVIEW_PAST_EVENTS_ID)).tap()
-    await expect(element(by.id('VA sent you a claim decision On April 11, 2008'))).toExist()
-    await expect(element(by.id('VA received your Notice of Disagreement On June 12, 2008'))).toExist()
-    await expect(element(by.id('VA sent you a Statement of the Case On March 11, 2009'))).toExist()
-    await expect(element(by.id('VA received your Form 9 On March 23, 2009'))).toExist()
-    await expect(element(by.id('VA sent you a Supplemental Statement of the Case On January 26, 2010'))).toExist()
-    await expect(element(by.id('VA sent you a Supplemental Statement of the Case On July 22, 2010'))).toExist()
-    await expect(element(by.id('VA sent you a Supplemental Statement of the Case On September 26, 2011'))).toExist()
-    await expect(element(by.id('Your appeal was sent to the Board of Veterans\' Appeals On November 22, 2011'))).toExist()
+    await expect(element(by.label(' V-A  sent you a claim decision On April 11, 2008'))).toExist()
+    await expect(element(by.label(' V-A  received your Notice of Disagreement On June 12, 2008'))).toExist()
+    await expect(element(by.label(' V-A  sent you a Statement of the Case On March 11, 2009'))).toExist()
+    await expect(element(by.label(' V-A  received your Form 9 On March 23, 2009'))).toExist()
+    await expect(element(by.label(' V-A  sent you a Supplemental Statement of the Case On January 26, 2010'))).toExist()
+    await expect(element(by.label(' V-A  sent you a Supplemental Statement of the Case On July 22, 2010'))).toExist()
+    await expect(element(by.label(' V-A  sent you a Supplemental Statement of the Case On September 26, 2011'))).toExist()
+    await expect(element(by.label("Your appeal was sent to the Board of Veterans' Appeals On November 22, 2011"))).toExist()
   })
 
   it('should scroll to the bottom of the appeals screen', async () => {

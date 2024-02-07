@@ -24,22 +24,22 @@ Our packages:
 - assets
   - Package containing static assets (e.g. fonts, SVG icons) for VA mobile apps
   - Peer dependency (required) to components for appropriate function
-  - [Documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/design/For%20engineers/assets)
+  - [Documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/design/About/For%20engineers/assets)
   - [NPM](https://www.npmjs.com/package/@department-of-veterans-affairs/mobile-assets)
   - [Code](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/main/packages/assets)
 - components
   - Package containing the components of the design system
-  - [Documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/design/For%20engineers/components)
+  - [Documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/design/About/For%20engineers/components)
   - [NPM](https://www.npmjs.com/package/@department-of-veterans-affairs/mobile-component-library)
   - [Code](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/main/packages/components)
 - linting
   - Package containing an eslint plugin to issue deprecation notices as part of linting
-  - [Documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/design/For%20engineers/linting)
+  - [Documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/design/About/For%20engineers/linting)
   - [NPM](https://www.npmjs.com/package/@department-of-veterans-affairs/eslint-config-mobile)
   - [Code](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/main/packages/linting)
 - tokens
   - Package containing atomic, tokenized building blocks used for components so any app can build screens or custom components adhering to the same underlying styling fundamentals
-  - [Documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/design/For%20engineers/tokens)
+  - [Documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/design/About/For%20engineers/tokens)
   - [NPM](https://www.npmjs.com/package/@department-of-veterans-affairs/mobile-tokens)
   - [Code](https://github.com/department-of-veterans-affairs/va-mobile-library/tree/main/packages/tokens)
 

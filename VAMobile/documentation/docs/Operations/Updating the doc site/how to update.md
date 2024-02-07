@@ -57,9 +57,7 @@ Back in Terminal/Command Line, type `cd` and then a space, then drag and drop th
 
 ![terminal - cd](../../../static/img/updating-docsite/terminal-docu-cd.png "terminal - cd")
 
-Hit enter. Then navigate to [the "Local Docusaurus Build Auth Token" item in VAMobile 1Pass vault](https://start.1password.com/open/i?a=J3DJ4QXY5RHQZNEP2AB2ZILDHU&v=itvmu57xfr5j5z23642hn4crse&i=r5ud7vasnljrqsx5c6lzemru2y&h=my.1password.com) and follow the instructions there to configure set up the Auth token on your local machine to be able to pull docs from the `va-mobile-library` repo until it is made public.
-
-Then type `yarn start` and hit enter again. It will then do this:  
+Hit enter. Then type `yarn start` and hit enter again. It will then do this:  
 
 
 ![terminal - yarn start](../../../static/img/updating-docsite/terminalyarnstart.png "terminal - yarn start")

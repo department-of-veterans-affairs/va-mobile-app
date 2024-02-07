@@ -32,11 +32,9 @@ function ClaimTimeline({ attributes, claimID }: ClaimTimelineProps) {
         </Box>
       )}
       <Box borderColor={'primary'} borderTopWidth={theme.dimensions.borderWidth} mt={mt} mb={theme.dimensions.condensedMarginBetween}>
-        <ClaimPhase phase={1} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
-        <ClaimPhase phase={2} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
-        <ClaimPhase phase={3} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
-        <ClaimPhase phase={4} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
-        <ClaimPhase phase={5} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} />
+        {[1, 2, 3, 4, 5].map((phase) => (
+          <ClaimPhase phase={phase} current={getUserPhase(attributes.phase)} attributes={attributes} claimID={claimID} key={phase} />
+        ))}
       </Box>
     </Box>
   )

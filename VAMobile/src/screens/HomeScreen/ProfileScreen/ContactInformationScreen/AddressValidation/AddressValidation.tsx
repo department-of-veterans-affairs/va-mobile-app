@@ -177,7 +177,7 @@ function AddressValidation({ addressEntered, addressId, snackbarMessages, valida
     const editAddressButtonProps = {
       buttonType: ButtonVariants.Secondary,
       label: t('editAddress.validation.editAddress'),
-      testID: t('editAddress.validation.editAddress.a11yLabel'),
+      testID: t('editAddress.validation.editAddress'),
       onPress: onEditAddress,
     }
 
