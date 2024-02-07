@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import React, { useEffect } from 'react'
 
 import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
-import { ClaimTypeConstants } from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
@@ -54,7 +53,7 @@ export function HomeScreen({}: HomeScreenProps) {
 
   useEffect(() => {
     if ((userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime) {
-      dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE, undefined, undefined, true))
+      dispatch(getClaimsAndAppeals('ACTIVE', undefined, undefined, true))
     }
   }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals])
 
