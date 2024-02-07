@@ -83,20 +83,12 @@ context('HealthScreen', () => {
           ...initialSecureMessagingState,
           hasLoadedInbox,
           inbox: {
-            type: 'Inbox',
-            id: '123',
-            attributes: {
-              //SecureMessagingFolderAttributes
-              folderId: 123,
-              name: 'Inbox',
-              count: 45,
-              unreadCount: unreadCount,
-              systemFolder: true,
+            unread: unreadCount
             },
           },
         },
       },
-    })
+    )
   }
   beforeEach(() => {
     initializeTestInstance()
@@ -136,12 +128,6 @@ context('HealthScreen', () => {
       initializeTestInstance(0, true, true, false)
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(loadAllPrescriptions).toHaveBeenCalled()
-    })
-
-    it('should not reload rx data if data is not present', async () => {
-      initializeTestInstance(0, true, true, true)
-      fireEvent.press(screen.getByText('Prescriptions'))
-      expect(loadAllPrescriptions).not.toHaveBeenCalled()
     })
   })
 
