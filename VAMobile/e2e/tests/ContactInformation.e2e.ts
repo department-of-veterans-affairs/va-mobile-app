@@ -118,7 +118,7 @@ export async function validateAddresses(addressID, addressType) {
   })
 
   it('should tap on edit address and return to the ' + addressType + ' address screen', async () => {
-    await element(by.id('Edit this address.')).tap()
+    await element(by.id('Edit address')).tap()
     await expect(element(by.text('United States'))).toExist()
     await expect(element(by.text('3101 N Fort Valley Rd')).atIndex(0)).toExist()
     await expect(element(by.text('2'))).toExist()
