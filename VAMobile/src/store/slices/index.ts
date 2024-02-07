@@ -4,7 +4,6 @@ import { initialAccessibilityState } from 'store/slices/accessibilitySlice'
 import { initialAnalyticsState } from 'store/slices/analyticsSlice'
 import { initialAppointmentsState } from 'store/slices/appointmentsSlice'
 import { initialAuthState } from 'store/slices/authSlice'
-import { initialClaimsAndAppealsState } from 'store/slices/claimsAndAppealsSlice'
 import { initialDecisionLettersState } from './decisionLettersSlice'
 import { initialDemoState } from 'store/slices/demoSlice'
 import { initialDirectDepositState } from 'store/slices/directDepositSlice'
@@ -24,7 +23,6 @@ export * from './accessibilitySlice'
 export * from './analyticsSlice'
 export * from './appointmentsSlice'
 export * from './authSlice'
-export * from './claimsAndAppealsSlice'
 export * from './directDepositSlice'
 export * from './disabilityRatingSlice'
 export * from './errorSlice'
@@ -45,7 +43,6 @@ export const InitialState: RootState = {
   decisionLetters: initialDecisionLettersState,
   letters: initialLettersState,
   appointments: initialAppointmentsState,
-  claimsAndAppeals: initialClaimsAndAppealsState,
   errors: initialErrorsState,
   accessibility: initialAccessibilityState,
   notifications: initialNotificationsState,

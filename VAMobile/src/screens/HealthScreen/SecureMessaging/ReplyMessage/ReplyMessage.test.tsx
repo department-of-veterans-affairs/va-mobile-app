@@ -28,6 +28,24 @@ jest.mock('store/slices', () => {
         payload: '',
       }
     }),
+    resetSaveDraftComplete: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    getMessageSignature: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    resetSendMessageFailed: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
   }
 })
 

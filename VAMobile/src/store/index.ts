@@ -3,7 +3,6 @@ import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
 import appointmentsReducer from 'store/slices/appointmentsSlice'
 import authReducer from 'store/slices/authSlice'
-import claimsAndAppealsReducer from 'store/slices/claimsAndAppealsSlice'
 import decisionLettersReducer from 'store/slices/decisionLettersSlice'
 import demoReducer from 'store/slices/demoSlice'
 import directDepositReducer from 'store/slices/directDepositSlice'
@@ -28,7 +27,6 @@ const store = configureStore({
     errors: errorReducer,
     analytics: analyticsReducer,
     appointments: appointmentsReducer,
-    claimsAndAppeals: claimsAndAppealsReducer,
     directDeposit: directDepositReducer,
     disabilityRating: disabilityRatingReducer,
     decisionLetters: decisionLettersReducer,

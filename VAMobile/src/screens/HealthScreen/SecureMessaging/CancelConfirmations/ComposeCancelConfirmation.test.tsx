@@ -48,6 +48,24 @@ jest.mock('store/slices', () => {
         payload: '',
       }
     }),
+    resetSendMessageFailed: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    resetSaveDraftFailed: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    resetReplyTriageError: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
   }
 })
 

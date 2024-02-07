@@ -50,6 +50,12 @@ jest.mock('store/slices', () => {
         payload: '',
       }
     }),
+    resetSaveDraftComplete: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
   }
 })
 
