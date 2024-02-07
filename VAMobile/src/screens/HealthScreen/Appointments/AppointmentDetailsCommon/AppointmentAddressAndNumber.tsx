@@ -41,12 +41,12 @@ function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: 
     return (
       <>
         {!!address?.street && (
-          <TextView variant="MobileBody" selectable={true} accessible={false}>
+          <TextView variant="MobileBody" selectable={true}>
             {address.street}
           </TextView>
         )}
         {!!address?.city && address?.state && address?.zipCode && (
-          <TextView variant="MobileBody" selectable={true} accessible={false}>
+          <TextView variant="MobileBody" selectable={true}>
             {`${address.city}, ${address.state} ${address.zipCode}`}
           </TextView>
         )}
