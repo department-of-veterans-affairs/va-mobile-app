@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
 import FileRequestDetails from './FileRequestDetails'
-import { ClaimEventData } from 'store/api'
+import { ClaimEventData } from 'api/types/ClaimsAndAppealsData'
 
 context('FileRequestDetails', () => {
   const requestWithoutFiles = {

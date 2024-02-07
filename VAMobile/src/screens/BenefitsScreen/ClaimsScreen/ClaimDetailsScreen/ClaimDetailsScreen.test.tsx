@@ -6,6 +6,7 @@ import * as api from 'store/api'
 import ClaimDetailsScreen from './ClaimDetailsScreen'
 import { claim  as claimData } from '../claimData'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import { ClaimData } from 'api/types/ClaimsAndAppealsData'
 
 when(api.get as jest.Mock)
   .calledWith(`/v0/claim/0`, {}, expect.anything())
@@ -18,7 +19,7 @@ when(api.get as jest.Mock)
 context('ClaimDetailsScreen', () => {
   let props: any
 
-  const renderWithData = (claim?: Partial<api.ClaimData>): void => {
+  const renderWithData = (claim?: Partial<ClaimData>): void => {
     let queriesData: QueriesData | undefined
     if (claim) {
       queriesData = [{

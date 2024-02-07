@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import React from 'react'
 
 import { Box, TextArea, TextView, VABulletList } from 'components'
-import { ClaimData } from 'store/api'
+import { ClaimData } from 'api/types/ClaimsAndAppealsData'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'

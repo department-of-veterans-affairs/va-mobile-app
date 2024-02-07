@@ -1,4 +1,4 @@
-import { AppealData } from 'store/api/types'
+import { AppealData } from 'api/types/ClaimsAndAppealsData'
 
 export const appeal: AppealData = {
   id: '0',

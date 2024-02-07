@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState } from 'react'
 
 import { Box, DefaultList, DefaultListItemObj, LabelTagTypeConstants, Pagination, PaginationProps, TextLine } from 'components'
-import { ClaimOrAppeal, ClaimOrAppealConstants } from 'store/api/types'
+import { ClaimOrAppeal, ClaimOrAppealConstants } from 'api/types/ClaimsAndAppealsData'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'

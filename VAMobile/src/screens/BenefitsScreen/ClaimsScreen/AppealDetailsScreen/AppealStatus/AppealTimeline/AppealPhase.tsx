@@ -3,7 +3,7 @@ import { camelCase } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 
-import { AppealEventData, AppealEventTypes } from 'store/api/types'
+import { AppealEventData, AppealEventTypes } from 'api/types/ClaimsAndAppealsData'
 import { Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -19,13 +19,6 @@ const getEventName = (type: AppealEventTypes, t: TFunction) => {
 type AppealPhaseProps = {
   event: AppealEventData
 }
-
-// TODO: Determine what should be displayed for the following types (currently "Unknown"):
-//   AppealEventTypesConstants.ftr
-//   AppealEventTypesConstants.record_designation
-//   AppealEventTypesConstants.dro_hearing_held
-//   AppealEventTypesConstants.dro_hearing_cancelled
-//   AppealEventTypesConstants.dro_hearing_no_show
 
 function AppealPhase({ event }: AppealPhaseProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)

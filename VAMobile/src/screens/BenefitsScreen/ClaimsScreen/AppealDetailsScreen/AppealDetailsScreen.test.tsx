@@ -6,6 +6,7 @@ import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 import AppealDetailsScreen from './AppealDetailsScreen'
 import { appeal as appealData } from '../appealData'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import { AppealData } from 'api/types/ClaimsAndAppealsData'
 
 
 when(api.get as jest.Mock)
@@ -21,7 +22,7 @@ context('AppealDetailsScreen', () => {
   let props: any
   let goBack: jest.Mock
 
-  const renderWithData = (appeal?: Partial<api.AppealData>): void => {
+  const renderWithData = (appeal?: Partial<AppealData>): void => {
     let queriesData: QueriesData | undefined
     if (appeal) {
       queriesData = [{

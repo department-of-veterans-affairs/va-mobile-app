@@ -12,7 +12,7 @@ import {
   AppealStatusTypesConstants,
   AppealTypes,
   AppealTypesConstants,
-} from 'store/api/types'
+} from 'api/types/ClaimsAndAppealsData'
 import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'

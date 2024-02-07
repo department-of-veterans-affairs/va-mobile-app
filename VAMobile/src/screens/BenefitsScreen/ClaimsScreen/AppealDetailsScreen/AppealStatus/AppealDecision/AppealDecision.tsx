@@ -3,7 +3,7 @@ import React, { ReactElement } from 'react'
 
 import _ from 'underscore'
 
-import { AppealAOJTypes, AppealStatusDetailsIssue } from 'store/api/types'
+import { AppealAOJTypes, AppealStatusDetailsIssue } from 'api/types/ClaimsAndAppealsData'
 import { Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAojDescription } from '../AppealCurrentStatus/AppealCurrentStatus'

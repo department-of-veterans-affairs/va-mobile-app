@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { ClaimData, ClaimGetData, get } from 'store/api'
+import { ClaimData, ClaimGetData } from 'api/types/ClaimsAndAppealsData'
 import { claimsAndAppealsKeys } from './queryKeys'
+import { get } from 'store/api'
 
 /**
  * Fetch user Claim

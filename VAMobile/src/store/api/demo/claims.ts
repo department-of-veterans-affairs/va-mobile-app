@@ -1,4 +1,4 @@
-import { ClaimGetData, ClaimsAndAppealsGetData } from '../types'
+import { ClaimGetData, ClaimsAndAppealsGetData } from 'api/types/ClaimsAndAppealsData'
 import { DemoStore } from './store'
 import { Params } from '../api'
 

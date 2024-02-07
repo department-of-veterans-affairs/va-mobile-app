@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import React, { ReactNode, useEffect } from 'react'
 
 import { AccordionCollapsible, Box, TextView } from 'components'
-import { ClaimAttributesData, ClaimEventData } from 'store/api'
+import { ClaimAttributesData, ClaimEventData } from 'api/types/ClaimsAndAppealsData'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'

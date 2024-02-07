@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import React, { useRef } from 'react'
 
 import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
-import { ClaimData } from 'store/api/types'
+import { ClaimData } from 'api/types/ClaimsAndAppealsData'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'

@@ -3,7 +3,7 @@ import { context, fireEvent, mockNavProps, QueriesData, render, screen, waitFor,
 
 import * as api from 'store/api'
 import FileRequest from './FileRequest'
-import { ClaimEventData } from 'store/api/types'
+import { ClaimEventData } from 'api/types/ClaimsAndAppealsData'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 

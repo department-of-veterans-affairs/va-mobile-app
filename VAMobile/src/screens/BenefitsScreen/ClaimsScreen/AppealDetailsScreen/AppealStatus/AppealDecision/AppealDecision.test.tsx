@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
 import AppealDecision from './AppealDecision'
-import { AppealAOJTypes, AppealStatusDetailsIssue } from 'store/api/types'
+import { AppealAOJTypes, AppealStatusDetailsIssue } from 'api/types/ClaimsAndAppealsData'
 
 context('AppealDecision', () => {
   const initializeTestInstance = (issues: Array<AppealStatusDetailsIssue>, aoj: AppealAOJTypes, ama: boolean, boardDecision: boolean): void => {

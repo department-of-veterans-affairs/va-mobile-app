@@ -4,7 +4,7 @@ import { filter, pluck } from 'underscore'
 import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState } from 'react'
 
-import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
+import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'api/types/ClaimsAndAppealsData'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { Events } from 'constants/analytics'

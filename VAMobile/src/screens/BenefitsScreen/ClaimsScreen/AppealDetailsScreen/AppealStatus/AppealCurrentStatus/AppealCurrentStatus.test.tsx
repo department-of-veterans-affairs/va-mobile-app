@@ -3,7 +3,7 @@ import { screen, fireEvent } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
 import AppealCurrentStatus from './AppealCurrentStatus'
-import { AppealAOJTypes, AppealStatusData, AppealTypes } from 'store/api/types'
+import { AppealAOJTypes, AppealStatusData, AppealTypes } from 'api/types/ClaimsAndAppealsData'
 
 const mockExternalLinkSpy = jest.fn()
 jest.mock('utils/hooks', () => {

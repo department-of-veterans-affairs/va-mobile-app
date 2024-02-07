@@ -1,7 +1,8 @@
-import { ClaimDecisionResponseData, post } from 'store/api'
+import { ClaimDecisionResponseData } from 'api/types/ClaimsAndAppealsData'
 import { claimsAndAppealsKeys } from './queryKeys'
 import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { post } from 'store/api'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 /**

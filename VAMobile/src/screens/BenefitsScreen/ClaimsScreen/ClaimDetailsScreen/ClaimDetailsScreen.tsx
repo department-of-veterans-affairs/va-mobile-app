@@ -8,7 +8,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
-import { ClaimAttributesData, ClaimData } from 'store/api/types'
+import { ClaimAttributesData, ClaimData } from 'api/types/ClaimsAndAppealsData'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'

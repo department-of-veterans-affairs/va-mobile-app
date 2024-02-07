@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import React from 'react'
 
 import { AlertBox, Box } from 'components'
-import { ClaimAttributesData } from 'store/api'
+import { ClaimAttributesData } from 'api/types/ClaimsAndAppealsData'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getUserPhase, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'

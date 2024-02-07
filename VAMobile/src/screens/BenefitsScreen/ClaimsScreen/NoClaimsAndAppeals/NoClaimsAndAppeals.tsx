@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 import { Box, TextView } from 'components'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
-import { ClaimsAndAppealsErrorServiceTypesConstants } from 'store/api/types'
+import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types/ClaimsAndAppealsData'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
