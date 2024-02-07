@@ -322,8 +322,8 @@ export function AppTabs() {
     <>
       <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="HomeTab" screenOptions={{ headerShown: false }}>
         <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home.title') }} />
-        <TabNav.Screen name="BenefitsTab" component={BenefitsScreen} options={{ title: t('benefits.title') }} />
         <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health.title') }} />
+        <TabNav.Screen name="BenefitsTab" component={BenefitsScreen} options={{ title: t('benefits.title') }} />
         <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('payments.title') }} />
       </TabNav.Navigator>
     </>
