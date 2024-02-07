@@ -7,8 +7,6 @@ import {
   ScreenIDTypes,
   ScreenIDTypesConstants,
   SecureMessagingAttachment,
-  SecureMessagingFolderData,
-  SecureMessagingFolderGetData,
   SecureMessagingFolderList,
   SecureMessagingFolderMap,
   SecureMessagingFolderMessagesGetData,
@@ -647,7 +645,7 @@ const secureMessagingSlice = createSlice({
         { ...state.messagesById },
       )
       state.inboxFirstRetrieval = !!error
-      state.inbox = inboxMessages ? inboxMessages.meta.messageCounts : {} as SecureMessagingMessageCountMeta
+      state.inbox = inboxMessages ? inboxMessages.meta.messageCounts : ({} as SecureMessagingMessageCountMeta)
 
       return {
         ...state,
