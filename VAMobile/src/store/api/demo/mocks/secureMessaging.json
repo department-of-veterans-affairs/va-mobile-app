@@ -348,6 +348,10 @@
           "perPage": 10,
           "totalPages": 2,
           "totalEntries": 12
+        },
+        "messageCounts": {
+          "read": 9,
+          "unread": 3
         }
       }
     },
