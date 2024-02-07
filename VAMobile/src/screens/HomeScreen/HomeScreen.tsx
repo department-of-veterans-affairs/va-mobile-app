@@ -12,7 +12,7 @@ import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { getClaimsAndAppeals, getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
+import { fetchInboxMessages, getClaimsAndAppeals, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
@@ -66,7 +66,7 @@ export function HomeScreen({}: HomeScreenProps) {
 
   useEffect(() => {
     if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
-      dispatch(getInbox())
+      dispatch(fetchInboxMessages(1, undefined))
     }
   }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
 

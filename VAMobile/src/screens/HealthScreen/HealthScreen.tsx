@@ -1,6 +1,6 @@
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
@@ -8,10 +8,9 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionState, loadAllPrescriptions } from 'store/slices'
+import { loadAllPrescriptions } from 'store/slices'
 import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -43,14 +42,11 @@ export function HealthScreen({}: HealthScreenProps) {
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
 
   const onPharmacy = () => {
-    // If rx list is already loaded, reload it to ensure freshness
-    if (!prescriptionsNeedLoad) {
-      dispatch(loadAllPrescriptions(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
-    }
+    // always reload to ensure freshness
+    dispatch(loadAllPrescriptions(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
     navigateTo('PrescriptionHistory')
   }
   const onCoronaVirusFAQ = () => {
@@ -59,13 +55,6 @@ export function HealthScreen({}: HealthScreenProps) {
   }
 
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-
-  useEffect(() => {
-    if (isScreenContentAllowed && smNotInDowntime) {
-      // fetch inbox metadata to display unread messages count tag
-      dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
-    }
-  }, [dispatch, smNotInDowntime, isScreenContentAllowed])
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">

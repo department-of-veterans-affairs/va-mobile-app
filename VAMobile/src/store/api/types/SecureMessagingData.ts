@@ -13,6 +13,11 @@ export type SecureMessagingMessagesSortMeta = {
   sentDate: string
 }
 
+export type SecureMessagingMessageCountMeta = {
+  read: number
+  unread: number
+}
+
 /**
  * MESSAGES
  */
@@ -163,6 +168,7 @@ export type SecureMessagingPaginationLinks = {
 export type SecureMessagingFolderMessagesMeta = {
   sort: SecureMessagingMessagesSortMeta
   pagination: SecureMessagingPaginationMeta
+  messageCounts: SecureMessagingMessageCountMeta
 }
 
 export type SecureMessagingFolderMessagesGetData = {

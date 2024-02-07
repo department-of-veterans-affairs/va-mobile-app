@@ -16,6 +16,7 @@ import {
   SecureMessagingFoldersGetData,
   SecureMessagingFormData,
   SecureMessagingMessageAttributes,
+  SecureMessagingMessageCountMeta,
   SecureMessagingMessageData,
   SecureMessagingMessageGetData,
   SecureMessagingMessageList,
@@ -60,7 +61,7 @@ export type SecureMessagingState = {
   fileDownloadError?: Error
   secureMessagingTab: number
   error?: APIError
-  inbox: SecureMessagingFolderData
+  inbox: SecureMessagingMessageCountMeta
   inboxMessages: SecureMessagingMessageList
   folders: SecureMessagingFolderList
   folderById: SecureMessagingFolderMap
@@ -101,7 +102,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   loadingAttachments: false,
   hasLoadedRecipients: false,
   hasLoadedInbox: false,
-  inbox: {} as SecureMessagingFolderData,
+  inbox: {} as SecureMessagingMessageCountMeta,
   inboxMessages: [] as SecureMessagingMessageList,
   folders: [] as SecureMessagingFolderList,
   folderById: {} as SecureMessagingFolderMap,
@@ -140,7 +141,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
  */
 export const fetchInboxMessages =
   (page: number, screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(fetchInboxMessages(page, screenID))))
     dispatch(dispatchStartFetchInboxMessages())
@@ -150,41 +151,15 @@ export const fetchInboxMessages =
       const inboxMessages = await api.get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
         page: page.toString(),
       } as Params)
+      if (getState().secureMessaging.inboxFirstRetrieval && inboxMessages?.meta?.messageCounts) {
+        await logAnalyticsEvent(Events.vama_hs_sm_count(inboxMessages.meta.messageCounts.unread))
+      }
       dispatch(dispatchFinishFetchInboxMessages({ inboxMessages }))
-      dispatch(getInbox())
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `fetchInboxMessages: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishFetchInboxMessages({ error }))
         dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error, screenID), screenID }))
-      }
-    }
-  }
-
-/**
- * Redux action to get inbox data
- */
-export const getInbox =
-  (screenID?: ScreenIDTypes): AppThunk =>
-  async (dispatch, getState) => {
-    dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getInbox(screenID))))
-    dispatch(dispatchStartGetInbox())
-
-    try {
-      //TODO what is the right refersh logic to ensure we don't invoke the API too frequently
-      const folderID = SecureMessagingSystemFolderIdConstants.INBOX
-      const inbox = await api.get<SecureMessagingFolderGetData>(`/v0/messaging/health/folders/${folderID}`)
-
-      if (getState().secureMessaging.inboxFirstRetrieval && inbox?.data?.attributes) {
-        await logAnalyticsEvent(Events.vama_hs_sm_count(inbox.data.attributes.unreadCount))
-      }
-      dispatch(dispatchFinishGetInbox({ inboxData: inbox }))
-    } catch (error) {
-      if (isErrorObject(error)) {
-        logNonFatalErrorToFirebase(error, `getInbox: ${secureMessagingNonFatalErrorString}`)
-        dispatch(dispatchFinishGetInbox({ error }))
-        dispatch(dispatchSetError({ errorType: getCommonErrorFromAPIError(error), screenID }))
       }
     }
   }
@@ -305,7 +280,7 @@ export const getMessage =
       // If message is unread, refresh inbox to get up to date unreadCount
       if (messagesById?.[messageID] && messagesById[messageID].readReceipt !== READ) {
         if (!demoMode) {
-          dispatch(getInbox(screenID))
+          dispatch(fetchInboxMessages(1, screenID))
         }
       }
       await registerReviewEvent()
@@ -671,6 +646,8 @@ const secureMessagingSlice = createSlice({
         },
         { ...state.messagesById },
       )
+      state.inboxFirstRetrieval = !!error
+      state.inbox = inboxMessages ? inboxMessages.meta.messageCounts : {} as SecureMessagingMessageCountMeta
 
       return {
         ...state,
@@ -697,18 +674,6 @@ const secureMessagingSlice = createSlice({
       state.folders = folderData?.data || state.folders
       state.loadingFolders = false
       state.error = error
-    },
-
-    dispatchStartGetInbox: (state) => {
-      state.hasLoadedInbox = false
-    },
-
-    dispatchFinishGetInbox: (state, action: PayloadAction<{ inboxData?: SecureMessagingFolderGetData; error?: api.APIError }>) => {
-      const { inboxData, error } = action.payload
-      state.inbox = inboxData ? inboxData.data : ({} as SecureMessagingFolderData)
-      state.hasLoadedInbox = true
-      state.error = error
-      state.inboxFirstRetrieval = error ? true : false
     },
 
     dispatchStartListFolderMessages: (state) => {
@@ -817,7 +782,7 @@ const secureMessagingSlice = createSlice({
         // Change message's readReceipt to read
         if (inboxMessage) {
           if (isDemoMode && inboxMessage.attributes.readReceipt === UNREAD) {
-            state.inbox.attributes.unreadCount -= 1
+            state.inbox.unread -= 1
           }
 
           inboxMessage.attributes.readReceipt = READ
@@ -989,8 +954,6 @@ export const {
   dispatchStartFetchInboxMessages,
   dispatchFinishListFolders,
   dispatchStartListFolders,
-  dispatchFinishGetInbox,
-  dispatchStartGetInbox,
   dispatchFinishListFolderMessages,
   dispatchStartListFolderMessages,
   dispatchFinishGetThread,

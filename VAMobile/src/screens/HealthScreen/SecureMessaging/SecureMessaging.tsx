@@ -28,7 +28,7 @@ type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessa
 
 export const getInboxUnreadCount = (state: RootState): number => {
   const inbox = state && state.secureMessaging && state.secureMessaging.inbox
-  return inbox?.attributes?.unreadCount || 0
+  return inbox?.unread || 0
 }
 
 function SecureMessaging({ navigation }: SecureMessagingScreen) {
