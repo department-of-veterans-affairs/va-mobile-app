@@ -646,6 +646,7 @@ const secureMessagingSlice = createSlice({
       )
       state.inboxFirstRetrieval = !!error
       state.inbox = inboxMessages ? inboxMessages.meta.messageCounts : ({} as SecureMessagingMessageCountMeta)
+      state.loadingInbox = false
 
       return {
         ...state,

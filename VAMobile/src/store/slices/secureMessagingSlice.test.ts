@@ -102,17 +102,10 @@ context('secureMessaging', () => {
       auth: { ...initialAuthState },
       secureMessaging: {
         ...initialSecureMessagingState,
-        inbox: {
-          type: 'Inbox',
-          id: '123',
-          attributes: {
-            folderId: 123,
-            name: 'Inbox',
-            count: 100,
-            unreadCount: 19,
-            systemFolder: true,
+        inbox: { 
+            read: 4,         
+            unread: 19,
           },
-        },
         inboxMessages: [
           {
             type: '',
@@ -240,16 +233,9 @@ context('secureMessaging', () => {
       secureMessaging: {
         ...initialSecureMessagingState,
         inbox: {
-          type: 'Inbox',
-          id: '123',
-          attributes: {
-            folderId: 1,
-            name: 'Inbox',
-            count: 100,
-            unreadCount: 19,
-            systemFolder: true,
+            read: 5,
+            unread: 19,
           },
-        },
         inboxMessages: [
           {
             type: '',
