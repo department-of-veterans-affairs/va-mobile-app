@@ -57,7 +57,8 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
 
   const appointment = pastAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, status, phoneOnly, location } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, status, phoneOnly, location, serviceCategoryName } =
+    attributes || ({} as AppointmentAttributes)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
 
@@ -83,7 +84,10 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
       return <></>
     }
 
-    if (phoneOnly) {
+    if (
+      phoneOnly ||
+      (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+    ) {
       return (
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
@@ -93,8 +97,8 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
             <TextView variant="MobileBody" paragraphSpacing={true}>
               {appointmentIsCanceled ? t('appointments.reschedule.body') : t('appointments.schedule.body')}
             </TextView>
-            {location.phone ? (
-              <ClickToCallPhoneNumber phone={location.phone.areaCode + ' ' + location.phone.number} />
+            {location?.phone && location.phone.areaCode && location.phone.number ? (
+              <ClickToCallPhoneNumber phone={location.phone} />
             ) : undefined}
             <ClickForActionLink
               displayedText={t('appointments.vaSchedule')}
@@ -131,7 +135,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
           <TypeOfCare attributes={attributes} />
           <ProviderName attributes={attributes} />
 
-          <AppointmentAddressAndNumber attributes={attributes} />
+          <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={true} />
 
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />

@@ -23,6 +23,7 @@ context('AppointmentAlert', () => {
   ): void => {
     const props = {
       ...defaultAppointmentAttributes,
+      serviceCategoryName: 'COMPENSATION & PENSION',
       status,
       statusDetail,
       location: location || defaultAppointmentAttributes.location,
