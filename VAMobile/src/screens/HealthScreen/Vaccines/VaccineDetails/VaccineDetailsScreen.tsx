@@ -24,7 +24,6 @@ type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Vaccine
  * Screen providing details on an vaccine
  */
 function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) {
-  AD
   const { vaccine } = route.params
   const { data: location, isLoading: detailsLoading } = useVaccinesLocation(
     vaccine.relationships?.location?.data?.id || '',
