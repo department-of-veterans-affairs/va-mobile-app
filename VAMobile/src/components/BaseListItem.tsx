@@ -1,12 +1,13 @@
+import React, { FC, ReactElement, useState } from 'react'
 import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, PressableProps } from 'react-native'
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
-import React, { FC, ReactElement, useState } from 'react'
 
+import FileRequestNumberIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
 import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { triggerHaptic } from 'utils/haptics'
 import { useTheme } from 'utils/hooks'
+
 import Box, { BackgroundVariant, BoxProps } from './Box'
-import FileRequestNumberIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
 import SwitchComponent, { SwitchProps } from './Switch'
 import VAIcon, { VAIconProps } from './VAIcon'
 
@@ -83,7 +84,11 @@ export type BaseListItemProps = {
   minHeight?: number
 }
 
-export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress?: () => void }> = ({ decorator, decoratorProps, onPress }) => {
+export const ButtonDecorator: FC<{
+  decorator?: ButtonDecoratorType
+  decoratorProps?: ListItemDecoratorProps
+  onPress?: () => void
+}> = ({ decorator, decoratorProps, onPress }) => {
   const theme = useTheme()
   const radioBtnWidth = 22
   const radioBtnHeight = 22
@@ -94,11 +99,21 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
     case ButtonDecoratorType.Switch:
       return <SwitchComponent onPress={switchOnPress} {...decoratorProps} />
     case ButtonDecoratorType.SelectedItem:
-      return <VAIcon name={'CheckMark'} height={13} width={16} fill={theme.colors.icon.pickerIcon} {...decoratorProps} />
+      return (
+        <VAIcon name={'CheckMark'} height={13} width={16} fill={theme.colors.icon.pickerIcon} {...decoratorProps} />
+      )
     case ButtonDecoratorType.Delete:
       return <VAIcon name={'Trash'} height={16} width={14} fill={theme.colors.icon.error} {...decoratorProps} />
     case ButtonDecoratorType.RadioFilled:
-      return <VAIcon name={'RadioFilled'} height={radioBtnHeight} width={radioBtnWidth} fill={theme.colors.icon.checkboxEnabledPrimary} {...decoratorProps} />
+      return (
+        <VAIcon
+          name={'RadioFilled'}
+          height={radioBtnHeight}
+          width={radioBtnWidth}
+          fill={theme.colors.icon.checkboxEnabledPrimary}
+          {...decoratorProps}
+        />
+      )
     case ButtonDecoratorType.RadioEmpty:
       return (
         <VAIcon
@@ -122,7 +137,15 @@ export const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorPro
         />
       )
     case ButtonDecoratorType.CheckBoxFilled:
-      return <VAIcon name={'CheckBoxFilled'} height={radioBtnHeight} width={radioBtnWidth} fill={theme.colors.icon.checkboxEnabledPrimary} {...decoratorProps} />
+      return (
+        <VAIcon
+          name={'CheckBoxFilled'}
+          height={radioBtnHeight}
+          width={radioBtnWidth}
+          fill={theme.colors.icon.checkboxEnabledPrimary}
+          {...decoratorProps}
+        />
+      )
     case ButtonDecoratorType.CheckBoxEmpty:
       return (
         <VAIcon
@@ -248,7 +271,11 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     // accessible property set to true when there is no onPress because it is already wrapped in the accessible Pressable
     return (
       <Box {...boxProps} {...accessibilityProps} accessible={!onPress}>
-        {claimsRequestNumber !== undefined ? <FileRequestNumberIndicator requestNumber={claimsRequestNumber} fileUploaded={fileUploaded} /> : <></>}
+        {claimsRequestNumber !== undefined ? (
+          <FileRequestNumberIndicator requestNumber={claimsRequestNumber} fileUploaded={fileUploaded} />
+        ) : (
+          <></>
+        )}
         {children}
         {showDecorator && (
           <Box ml={theme.dimensions.listItemDecoratorMarginLeft} importantForAccessibility={'no-hide-descendants'}>

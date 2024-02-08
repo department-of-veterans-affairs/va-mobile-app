@@ -1,10 +1,12 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
-import { VAIconProps } from './VAIcon'
-import InlineTextWithIcons from './InlineTextWithIcons'
 import { Box, InlineTextWithIconsProps } from 'components'
+import { context, render } from 'testUtils'
+
+import InlineTextWithIcons from './InlineTextWithIcons'
+import { VAIconProps } from './VAIcon'
 
 context('InlineTextWithIcons', () => {
   beforeEach(() => {
@@ -30,7 +32,13 @@ context('InlineTextWithIcons', () => {
         color: 'primary',
       },
       leftIconProps: { name: 'PaperClip', fill: 'spinner', width: 16, height: 16, testID: 'PaperClip' } as VAIconProps,
-      rightIconProps: { name: 'ChevronRight', width: 16, height: 16, fill: 'spinner', testID: 'ChevronRight' } as VAIconProps,
+      rightIconProps: {
+        name: 'ChevronRight',
+        width: 16,
+        height: 16,
+        fill: 'spinner',
+        testID: 'ChevronRight',
+      } as VAIconProps,
     } as InlineTextWithIconsProps
 
     render(

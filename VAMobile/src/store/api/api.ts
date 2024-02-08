@@ -1,8 +1,10 @@
+import _ from 'underscore'
+
 import { ReduxToolkitStore } from 'store'
 import { logout, refreshAccessToken } from 'store/slices'
-import { transform } from './demo/store'
-import _ from 'underscore'
 import getEnv from 'utils/env'
+
+import { transform } from './demo/store'
 
 const { API_ROOT } = getEnv()
 
@@ -194,11 +196,20 @@ const call = async function <T>(
   }
 }
 
-export const get = async function <T>(endpoint: string, params: Params = {}, abortSignal?: AbortSignal): Promise<T | undefined> {
+export const get = async function <T>(
+  endpoint: string,
+  params: Params = {},
+  abortSignal?: AbortSignal,
+): Promise<T | undefined> {
   return call<T>('GET', endpoint, params, undefined, abortSignal)
 }
 
-export const post = async function <T>(endpoint: string, params: Params = {}, contentType?: ContentTypes, abortSignal?: AbortSignal): Promise<T | undefined> {
+export const post = async function <T>(
+  endpoint: string,
+  params: Params = {},
+  contentType?: ContentTypes,
+  abortSignal?: AbortSignal,
+): Promise<T | undefined> {
   return call<T>('POST', endpoint, params, contentType, abortSignal)
 }
 

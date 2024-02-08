@@ -1,15 +1,16 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
+import { AppointmentAttributes, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { context, render } from 'testUtils'
-import PreferredDateAndTime from './PreferredDateAndTime'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
-import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
+
+import PreferredDateAndTime from './PreferredDateAndTime'
 
 context('PreferredDateAndTime', () => {
-  let props: any
   const initializeTestInstance = (): void => {
-    props = {
+    const props = {
       ...defaultAppointmentAttributes,
       isPending: true,
       status: AppointmentStatusConstants.SUBMITTED,
@@ -27,7 +28,7 @@ context('PreferredDateAndTime', () => {
           time: 'AM',
         },
       ],
-    }
+    } as AppointmentAttributes
 
     render(<PreferredDateAndTime attributes={props} />)
   }

@@ -1,23 +1,26 @@
 import React from 'react'
-import { context, render, screen } from 'testUtils'
-import FormWrapper, { FieldType, FormFieldType } from './FormWrapper'
+
 import { VAModalPicker } from 'components'
-import VATextInput from './FormFields/VATextInput'
+import { context, render, screen } from 'testUtils'
+
 import VASelector, { VASelectorProps } from './FormFields/VASelector'
+import VATextInput from './FormFields/VATextInput'
+import FormWrapper, { FieldType, FormFieldType } from './FormWrapper'
+
 import Mock = jest.Mock
 
 context('FormWrapper', () => {
-  let onSaveSpy: any
+  let onSaveSpy: () => void
   let setOnSaveClicked: Mock
   let onSaveClicked: boolean
 
-  let formFieldsList: Array<FormFieldType<unknown>> = [
+  const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
         labelKey: 'editDirectDeposit.routingNumber',
         inputType: 'phone',
-        onChange: () => { },
+        onChange: () => {},
         value: '12345',
         isRequiredField: true,
       },
@@ -28,7 +31,7 @@ context('FormWrapper', () => {
       fieldProps: {
         labelKey: 'editDirectDeposit.accountType',
         selectedValue: 'one',
-        onSelectionChange: () => { },
+        onSelectionChange: () => {},
         pickerOptions: [],
         isRequiredField: true,
       },
@@ -39,7 +42,7 @@ context('FormWrapper', () => {
       fieldProps: {
         labelKey: 'editDirectDeposit.confirm',
         selected: false,
-        onSelectionChange: () => { },
+        onSelectionChange: () => {},
         disabled: false,
         isRequiredField: true,
       },
@@ -47,11 +50,15 @@ context('FormWrapper', () => {
     },
   ]
 
-  const selectorFieldList = formFieldsList.filter(field => field.fieldType === FieldType.Selector)
-  const pickerFieldList = formFieldsList.filter(field => field.fieldType === FieldType.Picker)
-  const textInputFieldList = formFieldsList.filter(field => field.fieldType === FieldType.TextInput)
+  const selectorFieldList = formFieldsList.filter((field) => field.fieldType === FieldType.Selector)
+  const pickerFieldList = formFieldsList.filter((field) => field.fieldType === FieldType.Picker)
+  const textInputFieldList = formFieldsList.filter((field) => field.fieldType === FieldType.TextInput)
 
-  const initializeTestInstance = (fieldsList = formFieldsList, resetErrors = false, onSaveClickedInitialVal = false) => {
+  const initializeTestInstance = (
+    fieldsList = formFieldsList,
+    resetErrors = false,
+    onSaveClickedInitialVal = false,
+  ) => {
     onSaveSpy = jest.fn()
     onSaveClicked = onSaveClickedInitialVal
 
@@ -63,7 +70,7 @@ context('FormWrapper', () => {
       <FormWrapper
         fieldsList={fieldsList}
         onSave={onSaveSpy}
-        setFormContainsError={() => { }}
+        setFormContainsError={() => {}}
         resetErrors={resetErrors}
         setOnSaveClicked={setOnSaveClicked}
         onSaveClicked={onSaveClicked}
@@ -138,8 +145,8 @@ context('FormWrapper', () => {
     describe('when there are no required fields not filled', () => {
       describe('when validation functions pass', () => {
         it('should call onSave', () => {
-          let updatedSelectorListItem = selectorFieldList[0]
-          let props = updatedSelectorListItem.fieldProps as VASelectorProps
+          const updatedSelectorListItem = selectorFieldList[0]
+          const props = updatedSelectorListItem.fieldProps as VASelectorProps
           props.selected = true
           updatedSelectorListItem.validationList = [
             {
@@ -158,4 +165,3 @@ context('FormWrapper', () => {
     })
   })
 })
-

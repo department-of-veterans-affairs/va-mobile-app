@@ -1,10 +1,12 @@
-import { CommonE2eIdConstants } from './utils'
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
+import { CommonE2eIdConstants } from './utils'
+
 export const SignE2eIdConstants = {
   LOGIN_PAGE_ID: 'Login-page',
-  LOA_P1_TEXT: 'Before we give you access to your VA claim and health care information, we need to make sure you’re you. This helps us protect you from fraud and identity theft.',
+  LOA_P1_TEXT:
+    'Before we give you access to your VA claim and health care information, we need to make sure you’re you. This helps us protect you from fraud and identity theft.',
   LOA_P2_TEXT: 'If you haven’t yet verified your identity, we’ll help you complete the process when you sign in.',
   LOA_GATE_EXPAND_MSG_TEXT: "Read more if you haven't yet verified",
   LOA_GATE_READ_MORE_P1:

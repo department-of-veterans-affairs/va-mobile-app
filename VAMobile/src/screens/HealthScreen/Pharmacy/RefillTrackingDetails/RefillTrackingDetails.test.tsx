@@ -1,20 +1,22 @@
 import React from 'react'
-import { screen } from '@testing-library/react-native'
-import { DateTime } from 'luxon'
-import { when } from 'jest-when'
 
-import { render, context, waitFor, mockNavProps } from 'testUtils'
-import * as api from 'store/api'
-import RefillTrackingDetails from './RefillTrackingDetails'
-import { ErrorsState, initialErrorsState } from 'store/slices'
+import { screen } from '@testing-library/react-native'
+import { when } from 'jest-when'
+import { DateTime } from 'luxon'
+
 import { RootState } from 'store'
+import * as api from 'store/api'
+import { PrescriptionData } from 'store/api'
+import { ErrorsState, initialErrorsState } from 'store/slices'
+import { context, mockNavProps, render, waitFor } from 'testUtils'
 import {
-  defaultPrescriptionsList as mockData,
   emptyStatePrescriptionList as emptyMockData,
   emptyStateTrackingInfoList as emptyTrackingMockData,
+  defaultPrescriptionsList as mockData,
   multipleTrackingInfoList as multipleTrackingInfoData,
 } from 'utils/tests/prescription'
-import { PrescriptionData } from 'store/api'
+
+import RefillTrackingDetails from './RefillTrackingDetails'
 
 context('RefillTrackingDetails', () => {
   const initializeTestInstance = (errorState?: Partial<ErrorsState>, paramPrescription?: PrescriptionData) => {
@@ -48,7 +50,11 @@ context('RefillTrackingDetails', () => {
       })
       expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy()
       expect(screen.getByText('Rx #: None noted')).toBeTruthy()
-      expect(screen.getByText("We share tracking information here for up to 15 days, even if you've received your prescription.")).toBeTruthy()
+      expect(
+        screen.getByText(
+          "We share tracking information here for up to 15 days, even if you've received your prescription.",
+        ),
+      ).toBeTruthy()
       expect(screen.getByText('Tracking number')).toBeTruthy()
       expect(screen.getByText('None noted')).toBeTruthy()
       expect(screen.getByText('Delivery service: None noted')).toBeTruthy()
@@ -69,7 +75,11 @@ context('RefillTrackingDetails', () => {
       })
       expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy()
       expect(screen.getByText('Rx #: 3636691')).toBeTruthy()
-      expect(screen.getByText("We share tracking information here for up to 15 days, even if you've received your prescription.")).toBeTruthy()
+      expect(
+        screen.getByText(
+          "We share tracking information here for up to 15 days, even if you've received your prescription.",
+        ),
+      ).toBeTruthy()
       expect(screen.getByText('Tracking number')).toBeTruthy()
       expect(screen.getByText('7534533636856')).toBeTruthy()
       expect(screen.getByText('Delivery service: DHL')).toBeTruthy()
@@ -91,10 +101,14 @@ context('RefillTrackingDetails', () => {
       await waitFor(() => {
         initializeTestInstance(undefined, mockData[0] as PrescriptionData)
       })
-  
+
       expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy()
       expect(screen.getByText('Rx #: 3636691')).toBeTruthy()
-      expect(screen.getByText("We share tracking information here for up to 15 days, even if you've received your prescription.")).toBeTruthy()
+      expect(
+        screen.getByText(
+          "We share tracking information here for up to 15 days, even if you've received your prescription.",
+        ),
+      ).toBeTruthy()
       expect(screen.getByText('Package 1 of 2')).toBeTruthy()
       expect(screen.getAllByText('Tracking number')).toBeTruthy()
       expect(screen.getByText('7534533636856')).toBeTruthy()
@@ -135,7 +149,7 @@ context('RefillTrackingDetails', () => {
       when(api.get as jest.Mock)
         .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
         .mockRejectedValue({ networkError: 500 })
-        
+
       await waitFor(() => {
         initializeTestInstance()
       })

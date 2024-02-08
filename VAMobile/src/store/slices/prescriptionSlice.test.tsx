@@ -308,7 +308,7 @@ context('Prescription', () => {
   })
 
   describe('getTrackingInfo', () => {
-    const mockData = [
+    const trackingMockData = [
       {
         type: 'PrescriptionTracking',
         id: '13650544',
@@ -331,11 +331,11 @@ context('Prescription', () => {
 
     it('should get tracking info', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/health/rx/prescriptions/${mockData[0].id}/tracking`)
-        .mockResolvedValue({ data: mockData })
+        .calledWith(`/v0/health/rx/prescriptions/${trackingMockData[0].id}/tracking`)
+        .mockResolvedValue({ data: trackingMockData })
 
       const store = realStore()
-      await store.dispatch(getTrackingInfo(mockData[0].id))
+      await store.dispatch(getTrackingInfo(trackingMockData[0].id))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_START_GET_TRACKING_INFO })
@@ -344,18 +344,18 @@ context('Prescription', () => {
 
       const endAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_FINISH_GET_TRACKING_INFO })
       expect(endAction?.state.prescriptions.loadingTrackingInfo).toBeFalsy()
-      expect(endAction?.state.prescriptions.trackingInfo).toEqual(mockData)
+      expect(endAction?.state.prescriptions.trackingInfo).toEqual(trackingMockData)
     })
 
     it('should get error if it cant get data', async () => {
       const error = new Error('error from backend')
 
       when(api.get as jest.Mock)
-        .calledWith(`/v0/health/rx/prescriptions/${mockData[0].id}/tracking`)
+        .calledWith(`/v0/health/rx/prescriptions/${trackingMockData[0].id}/tracking`)
         .mockRejectedValue(error)
 
       const store = realStore()
-      await store.dispatch(getTrackingInfo(mockData[0].id))
+      await store.dispatch(getTrackingInfo(trackingMockData[0].id))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: ActionTypes.PRESCRIPTION_START_GET_TRACKING_INFO })

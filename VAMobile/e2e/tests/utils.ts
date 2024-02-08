@@ -1,8 +1,10 @@
 import { expect as jestExpect } from '@jest/globals'
-import { by, device, element, expect, waitFor, web } from 'detox'
+import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
 import getEnv from '../../src/utils/env'
+
+const spawnSync = require('child_process').spawnSync
 
 const { toMatchImageSnapshot } = require('jest-image-snapshot')
 const fs = require('fs')
@@ -139,11 +141,12 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
 /** This function will change the mock data for demo mode
  *
  * @param matchString - string: name of the json file ie appointments.json
- * @param jsonProperty - array of strings and dictionaries: should match the path to get to the json ob you want changed that matches the path to get to the object you want changed
+ * @param jsonProperty - array of strings and dictionaries: should match the path to get to the
+ * json obj you want changed that matches the path to get to the object you want changed
  * @param newJsonValue - string or boolean: new value for the json object
  */
 
-export async function changeMockData(mockFileName: string, jsonProperty, newJsonValue: string | boolean) {
+export async function changeMockData(mockFileName: string, jsonProperty, newJsonValue) {
   const mockDirectory = './src/store/api/demo/mocks/'
 
   fs.readFile(mockDirectory + mockFileName, 'utf8', (error, data) => {
@@ -153,17 +156,17 @@ export async function changeMockData(mockFileName: string, jsonProperty, newJson
     }
 
     const jsonParsed = JSON.parse(data)
-    var mockDataVariable
-    var mockDataKeyValue
-    for (var x = 0; x < jsonProperty.length; x++) {
+    let mockDataVariable
+    let mockDataKeyValue
+    for (let x = 0; x < jsonProperty.length; x++) {
       if (x === 0) {
         mockDataVariable = jsonParsed[jsonProperty[x]]
       } else if (x === jsonProperty.length - 1) {
         mockDataVariable[jsonProperty[x]] = newJsonValue
       } else {
         if (jsonProperty[x].constructor === Object) {
-          var key = String(Object.keys(jsonProperty[x]))
-          var value = jsonProperty[x][key]
+          const key = String(Object.keys(jsonProperty[x]))
+          const value = jsonProperty[x][key]
           mockDataKeyValue = mockDataVariable[key]
           mockDataVariable = mockDataKeyValue[value]
         } else {
@@ -178,13 +181,26 @@ export async function changeMockData(mockFileName: string, jsonProperty, newJson
       }
     })
   })
+
+  await device.uninstallApp()
+  await setTimeout(1000)
+  if (device.getPlatform() === 'ios') {
+    await spawnSync('yarn', ['bundle:ios'], { maxBuffer: Infinity, timeout: 200000 })
+    await spawnSync('detox', ['build', '-c ios'], { maxBuffer: Infinity, timeout: 200000 })
+  } else {
+    await spawnSync('yarn', ['bundle:android'], { maxBuffer: Infinity, timeout: 200000 })
+    await spawnSync('detox', ['build', '-c android'], { maxBuffer: Infinity, timeout: 200000 })
+  }
+  await device.installApp()
+  await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+  await loginToDemoMode()
 }
 
 /** This function will check and verify if the image provided matches the image in the _imagesnapshot_ folder
  * @param screenshotPath: png returned from detox getScreenshot function
  */
 export async function checkImages(screenshotPath) {
-  var image = fs.readFileSync(screenshotPath)
+  const image = fs.readFileSync(screenshotPath)
   await (jestExpect(image) as any).toMatchImageSnapshot({
     comparisonMethod: 'ssim',
     failureThreshold: 0.01,

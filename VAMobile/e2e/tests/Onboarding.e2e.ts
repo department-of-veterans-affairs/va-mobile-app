@@ -1,9 +1,9 @@
-import { by, device, element, expect} from 'detox'
-import { loginToDemoMode, checkImages } from './utils'
+import { by, device, element, expect } from 'detox'
 
+import { checkImages, loginToDemoMode } from './utils'
 
 export const OnboardingE2eIdConstants = {
-  VA_ICON_ID: 'VAIconOnboardingLogo'
+  VA_ICON_ID: 'VAIconOnboardingLogo',
 }
 
 beforeAll(async () => {
@@ -12,10 +12,18 @@ beforeAll(async () => {
 
 describe('Onboarding Screen', () => {
   it('should show the welcome onboarding content', async () => {
-    var onboardingIconCheck = await element(by.id(OnboardingE2eIdConstants.VA_ICON_ID)).takeScreenshot('VAIconOnboarding')
-		checkImages(onboardingIconCheck)
+    const onboardingIconCheck = await element(by.id(OnboardingE2eIdConstants.VA_ICON_ID)).takeScreenshot(
+      'VAIconOnboarding',
+    )
+    checkImages(onboardingIconCheck)
     await expect(element(by.text('Welcome, Kimberly'))).toExist()
-    await expect(element(by.label('With this app, you can manage your  V-A  health care, benefits, and payments from your phone or tablet.'))).toExist()
+    await expect(
+      element(
+        by.label(
+          'With this app, you can manage your  V-A  health care, benefits, and payments from your phone or tablet.',
+        ),
+      ),
+    ).toExist()
     await expect(element(by.text('Skip'))).toExist()
     await expect(element(by.text('Next'))).toExist()
   })

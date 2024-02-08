@@ -2,8 +2,9 @@ import React from 'react'
 
 import _ from 'underscore'
 
-import { AppealEventData } from 'store/api/types'
 import { Box } from 'components'
+import { AppealEventData } from 'store/api/types'
+
 import AppealPhase from './AppealPhase'
 
 type AppealTimelineProps = {

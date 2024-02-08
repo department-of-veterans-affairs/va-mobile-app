@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { AlertBox, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'

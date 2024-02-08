@@ -1,11 +1,13 @@
-import { DateTime } from 'luxon'
-import { RootState } from 'store'
-import { isErrorObject } from './common'
 import analytics from '@react-native-firebase/analytics'
 import crashlytics from '@react-native-firebase/crashlytics'
 
-import { ErrorObject } from 'store/api'
+import { DateTime } from 'luxon'
+
 import { Events } from 'constants/analytics'
+import { RootState } from 'store'
+import { ErrorObject } from 'store/api'
+
+import { isErrorObject } from './common'
 
 export type EventParams = { [key: string]: unknown }
 
@@ -73,7 +75,15 @@ export const logNonFatalErrorToFirebase = (error: any, errorName?: string) => {
       errorObject = error
     }
 
-    logAnalyticsEvent(Events.vama_error(errorObject.name, errorObject.message, errorObject.stack, apiErrorObject?.status, apiErrorObject?.endpoint))
+    logAnalyticsEvent(
+      Events.vama_error(
+        errorObject.name,
+        errorObject.message,
+        errorObject.stack,
+        apiErrorObject?.status,
+        apiErrorObject?.endpoint,
+      ),
+    )
     crashlytics().recordError(errorObject, errorName)
   }
 }

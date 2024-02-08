@@ -1,18 +1,19 @@
 import React from 'react'
 
-import { context, render } from 'testUtils'
-import { useComposeCancelConfirmation } from './ComposeCancelConfirmation'
-import { SecureMessagingFormData } from 'store/api'
 import { FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { SecureMessagingFormData } from 'store/api'
 import { CategoryTypeFields } from 'store/api/types'
+import { context, render } from 'testUtils'
 import { useDestructiveActionSheetProps } from 'utils/hooks'
 
-let mockNavigationSpy = jest.fn()
+import { useComposeCancelConfirmation } from './ComposeCancelConfirmation'
 
-let discardButtonSpy: any
-let saveDraftButtonSpy: any
+const mockNavigationSpy = jest.fn()
+
+let discardButtonSpy: (() => void) | undefined
+let saveDraftButtonSpy: (() => void) | undefined
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useDestructiveActionSheet: () => {
@@ -27,7 +28,7 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     updateSecureMessagingTab: jest.fn(() => {
@@ -52,7 +53,6 @@ jest.mock('store/slices', () => {
 })
 
 context('useComposeCancelConfirmation', () => {
-
   const initializeTestInstance = (
     messageData: SecureMessagingFormData = {} as SecureMessagingFormData,
     draftMessageID: number = 0,
@@ -60,7 +60,6 @@ context('useComposeCancelConfirmation', () => {
     origin: FormHeaderType = FormHeaderTypeConstants.compose,
     replyToID?: number,
   ) => {
-
     const TestComponent: React.FC = () => {
       const [_, alert] = useComposeCancelConfirmation()
       alert({
@@ -82,7 +81,7 @@ context('useComposeCancelConfirmation', () => {
   describe('New Message', () => {
     describe('on clicking discard', () => {
       it('should go back to the previous page', () => {
-        discardButtonSpy()
+        discardButtonSpy!()
         expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
       })
     })
@@ -90,8 +89,11 @@ context('useComposeCancelConfirmation', () => {
     describe('on clicking save draft', () => {
       it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
-        saveDraftButtonSpy()
-        expect(mockNavigationSpy).toHaveBeenCalledWith('StartNewMessage', expect.objectContaining({ saveDraftConfirmFailed: true }))
+        saveDraftButtonSpy!()
+        expect(mockNavigationSpy).toHaveBeenCalledWith(
+          'StartNewMessage',
+          expect.objectContaining({ saveDraftConfirmFailed: true }),
+        )
       })
     })
   })
@@ -99,8 +101,14 @@ context('useComposeCancelConfirmation', () => {
   describe('Reply', () => {
     describe('on clicking discard', () => {
       it('should go back to the message the user was viewing', () => {
-        initializeTestInstance({ body: 'test reply', category: CategoryTypeFields.appointment }, undefined, true, FormHeaderTypeConstants.reply, 2)
-        discardButtonSpy()
+        initializeTestInstance(
+          { body: 'test reply', category: CategoryTypeFields.appointment },
+          undefined,
+          true,
+          FormHeaderTypeConstants.reply,
+          2,
+        )
+        discardButtonSpy!()
         expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessage', { messageID: 2 })
       })
     })
@@ -108,8 +116,11 @@ context('useComposeCancelConfirmation', () => {
     describe('on clicking save draft', () => {
       it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
-        saveDraftButtonSpy()
-        expect(mockNavigationSpy).toHaveBeenCalledWith('StartNewMessage', expect.objectContaining({ saveDraftConfirmFailed: true }))
+        saveDraftButtonSpy!()
+        expect(mockNavigationSpy).toHaveBeenCalledWith(
+          'StartNewMessage',
+          expect.objectContaining({ saveDraftConfirmFailed: true }),
+        )
       })
     })
   })
@@ -117,17 +128,30 @@ context('useComposeCancelConfirmation', () => {
   describe('Draft', () => {
     describe('on clicking discard', () => {
       it('should go back to drafts folder', () => {
-        initializeTestInstance({ body: 'test reply', category: CategoryTypeFields.appointment }, 1, true, FormHeaderTypeConstants.draft, undefined)
-        discardButtonSpy()
-        expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { draftSaved: false, folderID: -2, folderName: 'Drafts' })
+        initializeTestInstance(
+          { body: 'test reply', category: CategoryTypeFields.appointment },
+          1,
+          true,
+          FormHeaderTypeConstants.draft,
+          undefined,
+        )
+        discardButtonSpy!()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', {
+          draftSaved: false,
+          folderID: -2,
+          folderName: 'Drafts',
+        })
       })
     })
 
     describe('on clicking save draft', () => {
       it('should go back to compose if form not valid', () => {
         initializeTestInstance(undefined, undefined, false)
-        saveDraftButtonSpy()
-        expect(mockNavigationSpy).toHaveBeenCalledWith('StartNewMessage', expect.objectContaining({ saveDraftConfirmFailed: true }))
+        saveDraftButtonSpy!()
+        expect(mockNavigationSpy).toHaveBeenCalledWith(
+          'StartNewMessage',
+          expect.objectContaining({ saveDraftConfirmFailed: true }),
+        )
       })
     })
   })

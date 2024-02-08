@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
+
 import ClaimDetails from './ClaimDetails'
 
 context('ClaimDetails', () => {

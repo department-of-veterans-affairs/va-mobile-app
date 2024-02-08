@@ -1,13 +1,13 @@
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { CallHelpCenter, DowntimeError, ErrorAlert, NetworkConnectionError } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
+import { ErrorsState } from 'store/slices'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { oneOfFeaturesInDowntime } from 'utils/hooks'
 
@@ -20,7 +20,11 @@ export type ErrorComponentProps = {
 
 /**Main error handling component. This component will show the proper screen according to the type of error.*/
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
-  const { errorsByScreenID, downtimeWindowsByFeature, tryAgain: storeTryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const {
+    errorsByScreenID,
+    downtimeWindowsByFeature,
+    tryAgain: storeTryAgain,
+  } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const features = ScreenIDToDowntimeFeatures[props.screenID]
   const isInDowntime = oneOfFeaturesInDowntime(features, downtimeWindowsByFeature)
@@ -50,11 +54,22 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
           />
         )
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING:
-        return <CallHelpCenter titleText={t('disabilityRating.errorTitle')} callPhone={displayedTextPhoneNumber(t('8008271000'))} />
+        return (
+          <CallHelpCenter
+            titleText={t('disabilityRating.errorTitle')}
+            callPhone={displayedTextPhoneNumber(t('8008271000'))}
+          />
+        )
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_APPOINTMENTS:
         return <ErrorAlert text={t('appointments.errorText')} onTryAgain={tryAgain} />
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE:
-        return <CallHelpCenter onTryAgain={tryAgain} titleText={t('errors.callHelpCenter.vaAppNotWorking')} callPhone={displayedTextPhoneNumber(t('8006982411'))} />
+        return (
+          <CallHelpCenter
+            onTryAgain={tryAgain}
+            titleText={t('errors.callHelpCenter.vaAppNotWorking')}
+            callPhone={displayedTextPhoneNumber(t('8006982411'))}
+          />
+        )
       default:
         return <CallHelpCenter onTryAgain={tryAgain} />
     }

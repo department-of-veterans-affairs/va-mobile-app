@@ -1,12 +1,14 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
+
+import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
+
 import SelectFile from './SelectFile'
 
-let mockShowActionSheetWithOptions = jest.fn()
+const mockShowActionSheetWithOptions = jest.fn()
 jest.mock('@expo/react-native-action-sheet', () => {
-  let original = jest.requireActual('@expo/react-native-action-sheet')
+  const original = jest.requireActual('@expo/react-native-action-sheet')
   return {
     ...original,
     useActionSheet: () => {
@@ -16,7 +18,7 @@ jest.mock('@expo/react-native-action-sheet', () => {
 })
 
 jest.mock('react-native-image-picker', () => {
-  let original = jest.requireActual('react-native-image-picker')
+  const original = jest.requireActual('react-native-image-picker')
   return {
     ...original,
     launchImageLibrary: jest.fn(),
@@ -24,7 +26,7 @@ jest.mock('react-native-image-picker', () => {
 })
 
 context('SelectFile', () => {
-  let request = {
+  const request = {
     type: 'still_need_from_you_list',
     date: '2020-07-16',
     status: 'NEEDED',
@@ -43,7 +45,11 @@ context('SelectFile', () => {
 
   it('initializes correctly', () => {
     expect(screen.getByRole('header', { name: 'Select a file to upload for the request' })).toBeTruthy()
-    expect(screen.getByText("To submit evidence that supports this claim, please select a file from your phone's files. You can only submit 1 file with this request.")).toBeTruthy()
+    expect(
+      screen.getByText(
+        "To submit evidence that supports this claim, please select a file from your phone's files. You can only submit 1 file with this request.",
+      ),
+    ).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Maximum file size:' })).toBeTruthy()
     expect(screen.getByText('50 MB')).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Accepted file types:' })).toBeTruthy()

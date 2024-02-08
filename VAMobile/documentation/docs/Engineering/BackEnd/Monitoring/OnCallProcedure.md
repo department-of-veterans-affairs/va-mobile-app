@@ -17,3 +17,8 @@ Each week a backend engineer will be on-call. Their on-call hours are the same a
 4. Finally if the error is not from the API, a forward proxy connection to an upstream service, or an upstream service itself but rather an issue with infrastructure that we (and VSP/VFS) control then a SNOW ticket should be opened. Only a DSVA team member can do this. Reach out to a stakeholder and have them open a SNOW ticket for you.
 
 
+## Other channels to monitor
+There are other slack channels that the on-call enginner should pay attention to in case there are updates to maintenance windows and/or other urgent changes. For these channels, the on-call engineer should only need to pay attention to @here and @channel messages.
+- [vfs-platform-support](https://dsva.slack.com/archives/CBU0KDSB1)
+- [vfs-change-announcements](https://dsva.slack.com/archives/C03R5SBELQM)
+- [vfs-all-teams](https://dsva.slack.com/archives/CE4304QPK)

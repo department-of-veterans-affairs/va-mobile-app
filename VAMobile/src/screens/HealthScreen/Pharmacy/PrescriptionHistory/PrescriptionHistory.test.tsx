@@ -9,7 +9,7 @@ import { context, mockNavProps, render } from 'testUtils'
 import PrescriptionHistory from './PrescriptionHistory'
 
 jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
-  let original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
+  const original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({

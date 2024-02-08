@@ -4,9 +4,9 @@ import { setTimeout } from 'timers/promises'
 import { checkImages, loginToDemoMode, resetInAppReview } from './utils'
 
 const { exec } = require('child_process')
-var appTabs = ['Home', 'Benefits', 'Health', 'Payments']
+const appTabs = ['Home', 'Benefits', 'Health', 'Payments']
 
-var navigationDic = {
+const navigationDic = {
   Home: [
     ['Contact VA', 'Contact VA'],
     [['Profile', 'Personal information'], 'Personal information'],
@@ -72,7 +72,7 @@ var navigationDic = {
   ],
 }
 
-var featureID = {
+const featureID = {
   Home: 'homeScreenID',
   'Contact VA': 'homeScreenID',
   'Personal information': 'profileID',
@@ -97,8 +97,8 @@ var featureID = {
   Payments: 'paymentsID',
 }
 
-var scrollID
-var textResized
+let scrollID
+let textResized
 
 export const NavigationE2eConstants = {
   DARK_MODE_OPTIONS:
@@ -118,7 +118,7 @@ export const NavigationE2eConstants = {
 }
 
 const accessibilityOption = async (key, navigationDicValue, accessibilityFeatureType: string | null) => {
-  var navigationArray = navigationDicValue
+  const navigationArray = navigationDicValue
   if (accessibilityFeatureType === 'landscape') {
     await device.setOrientation('landscape')
     await expect(element(by.text(navigationDicValue[1])).atIndex(0)).toExist()
@@ -181,7 +181,7 @@ const accessibilityOption = async (key, navigationDicValue, accessibilityFeature
 
 const navigateToPage = async (key, navigationDicValue) => {
   await element(by.id(key)).tap()
-  var navigationArray = navigationDicValue
+  const navigationArray = navigationDicValue
   if (typeof navigationArray[0] === 'string') {
     if (navigationArray[0] in featureID) {
       scrollID = featureID[navigationArray[0]]
@@ -198,7 +198,7 @@ const navigateToPage = async (key, navigationDicValue) => {
     }
     await element(by.text(navigationArray[0])).atIndex(0).tap()
   } else {
-    var subNavigationArray = navigationArray[0]
+    const subNavigationArray = navigationArray[0]
     for (let k = 0; k < subNavigationArray.length - 1; k++) {
       if (subNavigationArray[k] === 'Review file requests') {
         await waitFor(element(by.text('Review file requests')))
@@ -295,7 +295,7 @@ afterEach(async () => {
 describe('Navigation', () => {
   for (const [key, value] of Object.entries(navigationDic)) {
     for (let j = 0; j < value.length; j++) {
-      var nameArray = value[j]
+      const nameArray = value[j]
       if (
         nameArray[1] ===
         'To confirm or update your sign-in email, go to the website where you manage your account information.'

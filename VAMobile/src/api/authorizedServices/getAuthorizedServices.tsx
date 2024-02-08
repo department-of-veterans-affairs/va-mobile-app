@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { AuthorizedServicesPayload, UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
-import { authorizedServicesKeys } from './queryKeys'
 import { get } from 'store/api'
+
+import { authorizedServicesKeys } from './queryKeys'
 
 /**
  * Fetch user demographics

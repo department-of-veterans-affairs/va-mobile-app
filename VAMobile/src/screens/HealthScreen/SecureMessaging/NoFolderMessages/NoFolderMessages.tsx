@@ -1,14 +1,15 @@
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { ViewStyle } from 'react-native'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { SegmentedControlIndexes } from 'constants/secureMessaging'
-import { ViewStyle } from 'react-native'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { updateSecureMessagingTab } from 'store/slices'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 function NoFolderMessages() {
@@ -36,10 +37,18 @@ function NoFolderMessages() {
     <>
       <VAScrollView contentContainerStyle={scrollStyles}>
         <Box mx={theme.dimensions.buttonPadding}>
-          <Button label={t('secureMessaging.startNewMessage')} onPress={onPress} testID={'startNewMessageButtonTestID'} />
+          <Button
+            label={t('secureMessaging.startNewMessage')}
+            onPress={onPress}
+            testID={'startNewMessageButtonTestID'}
+          />
         </Box>
         <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
-          <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+          <TextView
+            variant="MobileBodyBold"
+            textAlign="center"
+            accessibilityRole="header"
+            mb={theme.dimensions.standardMarginBetween}>
             {t('secureMessaging.folders.noFolderMessages')}
           </TextView>
           <Box width={'100%'}>

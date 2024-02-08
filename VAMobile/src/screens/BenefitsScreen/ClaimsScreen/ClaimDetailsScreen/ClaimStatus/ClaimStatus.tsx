@@ -1,22 +1,24 @@
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { useTranslation } from 'react-i18next'
 import React, { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
-import { ClaimData } from 'store/api/types'
-import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { Events } from 'constants/analytics'
-import { NAMESPACE } from 'constants/namespaces'
-import { a11yLabelVA } from 'utils/a11yLabel'
-import { featureEnabled } from 'utils/remoteConfig'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { testIdProps } from 'utils/accessibility'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
+import { Events } from 'constants/analytics'
+import { ClaimType, ClaimTypeConstants } from 'constants/claims'
+import { NAMESPACE } from 'constants/namespaces'
+import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
+import { ClaimData } from 'store/api/types'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
+
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
-import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
 
 /** props for the ClaimStatus component */
 type ClaimStatusProps = {
@@ -25,8 +27,6 @@ type ClaimStatusProps = {
   /** indicates either open or closed claim */
   claimType: ClaimType
 }
-
-// TODO: ClaimType and ClaimTypeConstants need to be moved from ClaimsAndAppealsListView into a constants/claims file
 
 /**
  * Component for rendering the details area of a claim when selected on the ClaimDetailsScreen
@@ -58,8 +58,16 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
 
     if (isActiveClaim) {
       const detailsFAQListItems: Array<SimpleListItemObj> = [
-        { text: t('claimDetails.whyWeCombine'), onPress: whyWeCombineOnPress, testId: a11yLabelVA(t('claimDetails.whyWeCombine')) },
-        { text: t('claimDetails.whatShouldIDoIfDisagree'), onPress: whatShouldOnPress, testId: a11yLabelVA(t('claimDetails.whatShouldIDoIfDisagree')) },
+        {
+          text: t('claimDetails.whyWeCombine'),
+          onPress: whyWeCombineOnPress,
+          testId: a11yLabelVA(t('claimDetails.whyWeCombine')),
+        },
+        {
+          text: t('claimDetails.whatShouldIDoIfDisagree'),
+          onPress: whatShouldOnPress,
+          testId: a11yLabelVA(t('claimDetails.whatShouldIDoIfDisagree')),
+        },
       ]
 
       // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false
@@ -96,7 +104,11 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
       let letterAvailable = t('claimDetails.decisionLetterMailed')
       let showButton = false
 
-      if (featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters && claim.attributes.decisionLetterSent) {
+      if (
+        featureEnabled('decisionLettersWaygate') &&
+        userAuthorizedServices?.decisionLetters &&
+        claim.attributes.decisionLetterSent
+      ) {
         letterAvailable = t('claimDetails.youCanDownload')
         showButton = true
         if (!sentEvent.current) {
@@ -116,7 +128,9 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
                 {letterAvailable}
               </TextView>
             </Box>
-            {showButton && <Button onPress={onPress} label={t('claimDetails.getClaimLetters')} testID="getClaimLettersTestID" />}
+            {showButton && (
+              <Button onPress={onPress} label={t('claimDetails.getClaimLetters')} testID="getClaimLettersTestID" />
+            )}
           </TextArea>
         </Box>
       )

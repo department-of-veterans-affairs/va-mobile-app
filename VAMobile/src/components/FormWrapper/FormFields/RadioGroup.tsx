@@ -44,7 +44,8 @@ export type radioOption<T> = {
  * Signifies props for the component {@link RadioGroup}
  */
 export type RadioGroupProps<T> = {
-  /** Zero based array of options. An option is an object with both a value which is the relevant data, and a label which is displayed as a string to represent the value. */
+  /** Zero based array of options. An option is an object with both a value which is the relevant data,
+   * and a label which is displayed as a string to represent the value. */
   options: Array<radioOption<T>>
   /** Currently selected option. An initial value can be used or this can be left undefined which will have nothing initially selected.  */
   value?: T
