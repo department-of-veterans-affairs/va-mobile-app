@@ -247,7 +247,12 @@ const getLoadedAppointments = (
  * Redux action to prefetch appointments for upcoming and past the given their date ranges
  */
 export const prefetchAppointments =
-  (upcoming: AppointmentsDateRange, past?: AppointmentsDateRange, screenID?: ScreenIDTypes, forceRefetch = false): AppThunk =>
+  (
+    upcoming: AppointmentsDateRange,
+    past?: AppointmentsDateRange,
+    screenID?: ScreenIDTypes,
+    forceRefetch = false,
+  ): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
@@ -263,7 +268,12 @@ export const prefetchAppointments =
 
       if (past) {
         // use loaded data if we have it and `forceRefetch` is false
-        const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, pastPagination, 1, DEFAULT_PAGE_SIZE)
+        const loadedPastAppointments = getLoadedAppointments(
+          loadedPastThreeMonths,
+          pastPagination,
+          1,
+          DEFAULT_PAGE_SIZE,
+        )
         if (
           !forceRefetch &&
           loadedPastAppointments &&
@@ -284,8 +294,19 @@ export const prefetchAppointments =
       }
 
       // use loaded data if we have it
-      const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, upcomingPagination, 1, DEFAULT_PAGE_SIZE, getState().appointments.upcomingAppointmentsCount)
-      if (!forceRefetch && loadedUpcomingAppointments && getState().appointments.upcomingCcServiceError === false && getState().appointments.upcomingVaServiceError === false) {
+      const loadedUpcomingAppointments = getLoadedAppointments(
+        loadedUpcoming,
+        upcomingPagination,
+        1,
+        DEFAULT_PAGE_SIZE,
+        getState().appointments.upcomingAppointmentsCount,
+      )
+      if (
+        !forceRefetch &&
+        loadedUpcomingAppointments &&
+        getState().appointments.upcomingCcServiceError === false &&
+        getState().appointments.upcomingVaServiceError === false
+      ) {
         upcomingAppointments = loadedUpcomingAppointments
       } else {
         upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {

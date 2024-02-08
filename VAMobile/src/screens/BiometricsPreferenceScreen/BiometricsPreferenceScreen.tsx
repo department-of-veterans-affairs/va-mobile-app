@@ -1,15 +1,20 @@
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AuthState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices'
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { getSupportedBiometricA11yLabel, getSupportedBiometricText, getSupportedBiometricTranslationTag, getTranslation } from 'utils/formattingUtils'
+import { AuthState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices'
 import { testIdProps } from 'utils/accessibility'
+import {
+  getSupportedBiometricA11yLabel,
+  getSupportedBiometricText,
+  getSupportedBiometricTranslationTag,
+  getTranslation,
+} from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = Record<string, unknown>
@@ -22,7 +27,10 @@ function BiometricsPreferenceScreen({}: SyncScreenProps) {
   const { supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
   const biometricsText = getSupportedBiometricText(supportedBiometric || '', t)
   const biometricsA11yLabel = getSupportedBiometricA11yLabel(supportedBiometric || '', t)
-  const bodyText = getTranslation(`biometricsPreference.bodyText.${getSupportedBiometricTranslationTag(supportedBiometric || '')}`, t)
+  const bodyText = getTranslation(
+    `biometricsPreference.bodyText.${getSupportedBiometricTranslationTag(supportedBiometric || '')}`,
+    t,
+  )
 
   const onSkip = (): void => {
     dispatch(setDisplayBiometricsPreferenceScreen(false))
@@ -36,7 +44,10 @@ function BiometricsPreferenceScreen({}: SyncScreenProps) {
   return (
     <VAScrollView {...testIdProps('Biometrics-preference-page')}>
       <Box mt={60} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="BitterBoldHeading" accessibilityRole="header" {...testIdProps(t('biometricsPreference.doYouWantToAllow.a11yLabel', { biometricsA11yLabel }))}>
+        <TextView
+          variant="BitterBoldHeading"
+          accessibilityRole="header"
+          {...testIdProps(t('biometricsPreference.doYouWantToAllow.a11yLabel', { biometricsA11yLabel }))}>
           {t('biometricsPreference.doYouWantToAllow', { biometricsText })}
         </TextView>
         <TextView paragraphSpacing={true} variant="MobileBody" mt={theme.dimensions.textAndButtonLargeMargin}>

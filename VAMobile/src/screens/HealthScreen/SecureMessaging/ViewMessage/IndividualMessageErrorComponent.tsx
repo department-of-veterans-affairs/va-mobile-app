@@ -1,13 +1,13 @@
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AlertBox, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
-import { ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { ErrorsState } from 'store/slices'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
@@ -27,7 +27,10 @@ function IndividualMessageErrorComponent() {
           text={t('errors.callHelpCenter.sorryWithRefresh')}
           border="error">
           <Box>
-            <TextView variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
+            <TextView
+              variant="MobileBody"
+              my={standardMarginBetween}
+              accessibilityLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
               {t('secureMessaging.sendError.ifTheAppStill')}
             </TextView>
             <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />

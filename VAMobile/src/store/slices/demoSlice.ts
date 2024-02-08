@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import * as api from 'store/api'
 import { AppThunk } from 'store'
+import * as api from 'store/api'
 
 import { initDemoStore } from '../api/demo/store'
 

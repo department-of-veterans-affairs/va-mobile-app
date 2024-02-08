@@ -1,5 +1,5 @@
-import { Pressable, PressableProps, useWindowDimensions } from 'react-native'
 import React, { FC } from 'react'
+import { Pressable, PressableProps, useWindowDimensions } from 'react-native'
 
 import { useTheme } from 'utils/hooks'
 
@@ -44,7 +44,14 @@ const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yL
   const fontScale = useWindowDimensions().fontScale
   const adjustSize = fontScale >= 2
   const textView = (
-    <TextView flexWrap={'wrap'} color={'labelTag'} variant={'LabelTag'} pl={adjustSize ? 30 : 12} pr={adjustSize ? 8 : 12} pt={adjustSize ? 8 : 4} pb={adjustSize ? 12 : 4}>
+    <TextView
+      flexWrap={'wrap'}
+      color={'labelTag'}
+      variant={'LabelTag'}
+      pl={adjustSize ? 30 : 12}
+      pr={adjustSize ? 8 : 12}
+      pt={adjustSize ? 8 : 4}
+      pb={adjustSize ? 12 : 4}>
       {text}
     </TextView>
   )

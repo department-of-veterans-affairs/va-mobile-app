@@ -1,28 +1,48 @@
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
-import { AlertBox, Box, ChildTemplate, ErrorComponent, LoadingComponent, PickerItem, TextView, VAIconProps, VAModalPicker } from 'components'
-import { DemoState } from 'store/slices/demoSlice'
-import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
-import { GenerateFolderMessage } from 'translations/en/functions'
-import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingMessageAttributes, SecureMessagingMessageMap, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
-import { SecureMessagingState, getMessage, getThread, listFolders, moveMessage } from 'store/slices/secureMessagingSlice'
+import {
+  AlertBox,
+  Box,
+  ChildTemplate,
+  ErrorComponent,
+  LoadingComponent,
+  PickerItem,
+  TextView,
+  VAIconProps,
+  VAModalPicker,
+} from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
-import { getfolderName } from 'utils/secureMessaging'
+import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
+import { FolderNameTypeConstants, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { RootState } from 'store'
+import {
+  SecureMessagingMessageAttributes,
+  SecureMessagingMessageMap,
+  SecureMessagingSystemFolderIdConstants,
+} from 'store/api/types'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { DemoState } from 'store/slices/demoSlice'
+import {
+  SecureMessagingState,
+  getMessage,
+  getThread,
+  listFolders,
+  moveMessage,
+} from 'store/slices/secureMessagingSlice'
+import { GenerateFolderMessage } from 'translations/en/functions'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntimeByScreenID, useError, useTheme } from 'utils/hooks'
+import { getfolderName } from 'utils/secureMessaging'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
 import CollapsibleMessage from './CollapsibleMessage'
 import MessageCard from './MessageCard'
@@ -33,10 +53,27 @@ type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessag
  * Accepts a message, map of all messages, and array of messageIds in the current thread.  Gets each messageId from the message map, sorts by
  * sentDate ascending, and returns an array of <CollapsibleMessages/>
  */
-export function renderMessages(message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>, hideMessage = false) {
-  const threadMessages = thread.map((messageID) => messagesById[messageID]).sort((message1, message2) => (message1.sentDate > message2.sentDate ? -1 : 1))
+export function renderMessages(
+  message: SecureMessagingMessageAttributes,
+  messagesById: SecureMessagingMessageMap,
+  thread: Array<number>,
+  hideMessage = false,
+) {
+  const threadMessages = thread
+    .map((messageID) => messagesById[messageID])
+    .sort((message1, message2) => (message1.sentDate > message2.sentDate ? -1 : 1))
 
-  return threadMessages.map((m) => m && m.messageId && <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={hideMessage && m.messageId === message.messageId} />)
+  return threadMessages.map(
+    (m) =>
+      m &&
+      m.messageId && (
+        <CollapsibleMessage
+          key={m.messageId}
+          message={m}
+          isInitialMessage={hideMessage && m.messageId === message.messageId}
+        />
+      ),
+  )
 }
 
 const screenID = ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID
@@ -61,10 +98,18 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { messagesById, threads, loading, loadingFile, loadingInbox, messageIDsOfError, folders, movingMessage, isUndo, moveMessageFailed } = useSelector<
-    RootState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
+  const {
+    messagesById,
+    threads,
+    loading,
+    loadingFile,
+    loadingInbox,
+    messageIDsOfError,
+    folders,
+    movingMessage,
+    isUndo,
+    moveMessageFailed,
+  } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
@@ -99,7 +144,11 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const getFolders = (): PickerItem[] => {
     const filteredFolder = _.filter(folders, (folder) => {
       const folderName = folder.attributes.name
-      return folderName !== FolderNameTypeConstants.drafts && folderName !== FolderNameTypeConstants.sent && folderName !== FolderNameTypeConstants.deleted
+      return (
+        folderName !== FolderNameTypeConstants.drafts &&
+        folderName !== FolderNameTypeConstants.sent &&
+        folderName !== FolderNameTypeConstants.deleted
+      )
     }).map((folder) => {
       const label = folder.attributes.name
 
@@ -142,7 +191,13 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     return (
       <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')}>
         <LoadingComponent
-          text={loadingFile ? t('secureMessaging.viewMessage.loadingAttachment') : movingMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')}
+          text={
+            loadingFile
+              ? t('secureMessaging.viewMessage.loadingAttachment')
+              : movingMessage
+                ? t('secureMessaging.movingMessage')
+                : t('secureMessaging.viewMessage.loading')
+          }
         />
       </ChildTemplate>
     )
@@ -158,7 +213,10 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     )
   }
 
-  const replyExpired = demoMode && message.messageId === 2092809 ? false : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
+  const replyExpired =
+    demoMode && message.messageId === 2092809
+      ? false
+      : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
   const onMove = (value: string) => {
     setShowModalPicker(false)
@@ -174,7 +232,19 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     if (folderWhereMessageIs.current !== value) {
       setNewCurrentFolderID(value)
       folderWhereMessageIs.current = value
-      dispatch(moveMessage(snackbarMessages, messageID, newFolder, currentFolder, currentFolderIdParam, currentPage, messagesLeft, false, folders))
+      dispatch(
+        moveMessage(
+          snackbarMessages,
+          messageID,
+          newFolder,
+          currentFolder,
+          currentFolderIdParam,
+          currentPage,
+          messagesLeft,
+          false,
+          folders,
+        ),
+      )
       if (newFolder === SecureMessagingSystemFolderIdConstants.DELETED) {
         navigation.goBack()
       }
@@ -198,7 +268,12 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
         }
 
   return (
-    <ChildTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('reviewMessage')} headerButton={headerButton} testID="viewMessageTestID">
+    <ChildTemplate
+      backLabel={backLabel}
+      backLabelOnPress={navigation.goBack}
+      title={t('reviewMessage')}
+      headerButton={headerButton}
+      testID="viewMessageTestID">
       {headerButton && showModalPicker && (
         <VAModalPicker
           selectedValue={newCurrentFolderID}
@@ -225,7 +300,11 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       {thread.length > 1 && (
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <Box accessible={true} accessibilityRole={'header'}>
-            <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+            <TextView
+              ml={theme.dimensions.gutter}
+              mt={theme.dimensions.standardMarginBetween}
+              mb={theme.dimensions.condensedMarginBetween}
+              variant={'MobileBodyBold'}>
               {t('secureMessaging.reply.messageConversation')}
             </TextView>
           </Box>

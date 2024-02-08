@@ -1,24 +1,31 @@
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
-import { Box, ErrorComponent, FeatureLandingTemplate } from 'components'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingState, fetchInboxMessages, listFolders, resetSaveDraftComplete, resetSaveDraftFailed, updateSecureMessagingTab } from 'store/slices'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { screenContentAllowed } from 'utils/waygateConfig'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
+import { FolderNameTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
+import { RootState } from 'store'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import {
+  SecureMessagingState,
+  fetchInboxMessages,
+  listFolders,
+  resetSaveDraftComplete,
+  resetSaveDraftFailed,
+  updateSecureMessagingTab,
+} from 'store/slices'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../HealthStackScreens'
 import CernerAlertSM from './CernerAlertSM/CernerAlertSM'
@@ -39,7 +46,9 @@ function SecureMessaging({ navigation }: SecureMessagingScreen) {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const inboxUnreadCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { folders, secureMessagingTab, termsAndConditionError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const { folders, secureMessagingTab, termsAndConditionError } = useSelector<RootState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
   const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const navigateTo = useRouteNavigation()
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), '']
@@ -107,13 +116,26 @@ function SecureMessaging({ navigation }: SecureMessagingScreen) {
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('messages')} testID="messagesTestID">
+    <FeatureLandingTemplate
+      backLabel={t('health.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('messages')}
+      testID="messagesTestID">
       <Box mx={theme.dimensions.buttonPadding}>
         <Button label={t('secureMessaging.startNewMessage')} onPress={onPress} testID={'startNewMessageButtonTestID'} />
       </Box>
       <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-          <SegmentedControl labels={controlLabels} onChange={onTabUpdate} selected={secureMessagingTab} a11yHints={a11yHints} a11yLabels={[t('secureMessaging.inbox')]} />
+        <Box
+          mb={theme.dimensions.standardMarginBetween}
+          mt={theme.dimensions.contentMarginTop}
+          mx={theme.dimensions.gutter}>
+          <SegmentedControl
+            labels={controlLabels}
+            onChange={onTabUpdate}
+            selected={secureMessagingTab}
+            a11yHints={a11yHints}
+            a11yLabels={[t('secureMessaging.inbox')]}
+          />
         </Box>
         <CernerAlertSM />
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>

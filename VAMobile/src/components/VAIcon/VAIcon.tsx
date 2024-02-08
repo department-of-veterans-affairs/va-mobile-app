@@ -1,11 +1,11 @@
+import React, { FC, useEffect } from 'react'
 import { AppState, AppStateStatus } from 'react-native'
 import { SvgProps } from 'react-native-svg'
 import { useSelector } from 'react-redux'
-import React, { FC, useEffect } from 'react'
 
-import { AccessibilityState } from 'store/slices'
 import { Box, BoxProps } from 'components'
 import { RootState } from 'store'
+import { AccessibilityState } from 'store/slices'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { updateFontScale } from 'utils/accessibility'
 import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
@@ -60,8 +60,8 @@ import CircleExternalLink from './svgs/links/CircleExternalLink.svg'
 import CirclePhone from './svgs/links/CirclePhone.svg'
 import Directions from './svgs/links/Directions.svg'
 import PhoneTTY from './svgs/links/PhoneTTY.svg'
-import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
 import Text from './svgs/links/Text.svg'
+import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
 // Navigation
 import BenefitsSelected from './svgs/navIcon/BenefitsSelected.svg'
 import BenefitsUnselected from './svgs/navIcon/BenefitsUnselected.svg'
@@ -69,12 +69,12 @@ import HealthSelected from './svgs/navIcon/HealthSelected.svg'
 import HealthUnselected from './svgs/navIcon/HealthUnselected.svg'
 import HomeSelected from './svgs/navIcon/HomeSelected.svg'
 import HomeUnselected from './svgs/navIcon/HomeUnselected.svg'
-import Logo from './svgs/vaParentLogo/Logo.svg'
 import PaymentsSelected from './svgs/navIcon/PaymentsSelected.svg'
 import PaymentsUnselected from './svgs/navIcon/PaymentsUnselected.svg'
 import ProfileSelected from './svgs/navIcon/ProfileSelected.svg'
 import RadioEmpty from './svgs/radio/RadioEmpty.svg'
 import RadioFilled from './svgs/radio/RadioFilled.svg'
+import Logo from './svgs/vaParentLogo/Logo.svg'
 
 export const VA_ICON_MAP = {
   Add,
@@ -188,7 +188,18 @@ export type VAIconProps = BoxProps & {
  *
  * @returns VAIcon component
  */
-const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, fill2, stroke, maxWidth, preventScaling, testID, ...boxProps }) => {
+const VAIcon: FC<VAIconProps> = ({
+  name,
+  width,
+  height,
+  fill,
+  fill2,
+  stroke,
+  maxWidth,
+  preventScaling,
+  testID,
+  ...boxProps
+}) => {
   const theme = useTheme()
   const fs: (val: number) => number = useFontScale()
   const dispatch = useAppDispatch()
@@ -197,7 +208,9 @@ const VAIcon: FC<VAIconProps> = ({ name, width, height, fill, fill2, stroke, max
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
-    const sub = AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
+    const sub = AppState.addEventListener('change', (newState: AppStateStatus): void =>
+      updateFontScale(newState, fontScale, dispatch),
+    )
     return (): void => sub?.remove()
   }, [dispatch, fontScale])
 

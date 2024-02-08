@@ -1,12 +1,12 @@
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { Box, TextView } from 'components'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
-import { ClaimsAndAppealsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { ClaimsAndAppealsState } from 'store/slices'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
@@ -17,7 +17,9 @@ type NoClaimsAndAppealsProps = {
 function NoClaimsAndAppeals({ claimType }: NoClaimsAndAppealsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claimsServiceError, appealsServiceError } = useSelector<RootState, ClaimsAndAppealsState>(
+    (state) => state.claimsAndAppeals,
+  )
 
   let header = t('noClaims.youDontHaveAnyClaimsOrAppeals')
   let text = t('noClaims.appOnlyShowsCompletedClaimsAndAppeals')
@@ -34,7 +36,12 @@ function NoClaimsAndAppeals({ claimType }: NoClaimsAndAppealsProps) {
   }
 
   return (
-    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('Claims: No-claims-page')} alignItems="center">
+    <Box
+      flex={1}
+      justifyContent="center"
+      mx={theme.dimensions.gutter}
+      {...testIdProps('Claims: No-claims-page')}
+      alignItems="center">
       <Box {...testIdProps(header)} accessible={true}>
         <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
           {header}

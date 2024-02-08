@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import _ from 'underscore'
 
-import { AppealAOJTypes, AppealStatusDetailsIssue } from 'store/api/types'
 import { Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { AppealAOJTypes, AppealStatusDetailsIssue } from 'store/api/types'
 import { useTheme } from 'utils/hooks'
 
 import { getAojDescription } from '../AppealCurrentStatus/AppealCurrentStatus'
@@ -43,7 +43,11 @@ function AppealDecision({ issues, aoj, ama, boardDecision }: AppealDecisionProps
     })
   }
 
-  const getSpecificIssuesBlock = (header: string, subText: string, specificIssues: Array<AppealStatusDetailsIssue>): ReactElement => {
+  const getSpecificIssuesBlock = (
+    header: string,
+    subText: string,
+    specificIssues: Array<AppealStatusDetailsIssue>,
+  ): ReactElement => {
     if (specificIssues.length === 0) {
       return <></>
     }

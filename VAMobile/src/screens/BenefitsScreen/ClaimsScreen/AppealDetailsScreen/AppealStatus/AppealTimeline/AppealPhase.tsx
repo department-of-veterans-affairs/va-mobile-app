@@ -1,12 +1,12 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { TFunction } from 'i18next'
 import { camelCase } from 'lodash'
 
-import { AppealEventData, AppealEventTypes } from 'store/api/types'
 import { Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { AppealEventData, AppealEventTypes } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
@@ -42,7 +42,11 @@ function AppealPhase({ event }: AppealPhaseProps) {
       <TextArea noBorder={true}>
         <Box flexDirection={'row'}>
           <PhaseIndicator phase={-1} current={0} />
-          <Box accessibilityLabel={a11yLabelVA(`${heading} ${dateText}`)} flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
+          <Box
+            accessibilityLabel={a11yLabelVA(`${heading} ${dateText}`)}
+            flexDirection={'column'}
+            justifyContent={'flex-start'}
+            flex={1}>
             <TextView variant={'MobileBodyBold'}>{heading}</TextView>
             <TextView variant={'MobileBody'}>{dateText}</TextView>
           </Box>

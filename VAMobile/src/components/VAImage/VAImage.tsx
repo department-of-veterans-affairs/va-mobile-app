@@ -1,6 +1,6 @@
+import React, { FC } from 'react'
 import { Image, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import React, { FC } from 'react'
 
 import { testIdProps } from 'utils/accessibility'
 

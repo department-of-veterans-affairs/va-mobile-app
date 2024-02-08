@@ -1,24 +1,24 @@
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import React, { useEffect, useState } from 'react'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AlertBox, Box, BoxProps, CrisisLineCta, TextView, VAIcon, VAScrollView, WaygateWrapper } from 'components'
-import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
-import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
-import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
+import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
+import { AuthState, loginStart, setPKCEParams } from 'store/slices/authSlice'
+import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
-import AppVersionAndBuild from 'components/AppVersionAndBuild'
-import getEnv from 'utils/env'
 
 import DemoAlert from './DemoAlert'
 
@@ -92,10 +92,10 @@ function LoginScreen() {
         dispatch(loginStart(true))
       }
     : firstTimeLogin
-    ? () => {
-        navigateTo('LoaGate')
-      }
-    : startAuth
+      ? () => {
+          navigateTo('LoaGate')
+        }
+      : startAuth
 
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle} removeInsets={true}>
@@ -103,15 +103,33 @@ function LoginScreen() {
       <CrisisLineCta onPress={onCrisisLine} />
       {demoMode && <AlertBox border={'informational'} title={'DEMO MODE'} />}
       <WaygateWrapper waygateName="WG_Login" />
-      <Box flex={1} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween} testID="va-icon">
+      <Box
+        flex={1}
+        mt={theme.dimensions.contentMarginTop}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
+        <Box
+          alignItems={'center'}
+          flex={1}
+          justifyContent={'center'}
+          onTouchEnd={tapForDemo}
+          my={theme.dimensions.standardMarginBetween}
+          testID="va-icon">
           <VAIcon testID="VAIcon" name={'Logo'} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={80}>
           <Button onPress={onLoginInit} label={t('signin')} buttonType={ButtonVariants.White} />
-          <Pressable onPress={onFacilityLocator} {...testIdProps(a11yLabelVA(t('findLocation.title')))} accessibilityRole="button">
+          <Pressable
+            onPress={onFacilityLocator}
+            {...testIdProps(a11yLabelVA(t('findLocation.title')))}
+            accessibilityRole="button">
             <Box {...findLocationProps}>
-              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
+              <TextView
+                variant={'MobileBodyBold'}
+                display="flex"
+                flexDirection="row"
+                color="primaryContrast"
+                mr={theme.dimensions.textIconMargin}>
                 {t('findLocation.title')}
               </TextView>
               <VAIcon name="ChevronRight" fill="#FFF" width={10} height={15} />

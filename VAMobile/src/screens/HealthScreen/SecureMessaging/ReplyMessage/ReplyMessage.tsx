@@ -1,7 +1,7 @@
+import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import React, { useEffect, useRef, useState } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -9,11 +9,28 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
-import { Box, CollapsibleView, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, MessageAlert, TextArea, TextView } from 'components'
+import {
+  Box,
+  CollapsibleView,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
+  FullScreenSubtask,
+  LoadingComponent,
+  MessageAlert,
+  TextArea,
+  TextView,
+} from 'components'
+import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE, SegmentedControlIndexes } from 'constants/secureMessaging'
-import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import {
+  FolderNameTypeConstants,
+  FormHeaderTypeConstants,
+  PREPOPULATE_SIGNATURE,
+  SegmentedControlIndexes,
+} from 'constants/secureMessaging'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { RootState } from 'store'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import {
@@ -27,8 +44,6 @@ import {
   sendMessage,
   updateSecureMessagingTab,
 } from 'store/slices'
-import { SnackbarMessages } from 'components/SnackBar'
-import { formatSubject, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
   useAppDispatch,
@@ -40,9 +55,10 @@ import {
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
+import { formatSubject, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 
-import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
+import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
@@ -63,10 +79,18 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const scrollViewRef = useRef<ScrollView>(null)
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
   const { messageID, attachmentFileToAdd } = route.params
-  const { sendMessageComplete, sendingMessage, savedDraftID, messagesById, threads, loading, saveDraftComplete, savingDraft, loadingSignature, signature } = useSelector<
-    RootState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
+  const {
+    sendMessageComplete,
+    sendingMessage,
+    savedDraftID,
+    messagesById,
+    threads,
+    loading,
+    saveDraftComplete,
+    savingDraft,
+    loadingSignature,
+    signature,
+  } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
   const [isDiscarded, replyCancelConfirmation] = useComposeCancelConfirmation()
 
@@ -154,10 +178,13 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
       : isDiscarded
-      ? t('secureMessaging.deletingChanges.loading')
-      : t('secureMessaging.viewMessage.loading')
+        ? t('secureMessaging.deletingChanges.loading')
+        : t('secureMessaging.viewMessage.loading')
     return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} scrollViewRef={scrollViewRef}>
+      <FullScreenSubtask
+        leftButtonText={t('cancel')}
+        onLeftButtonPress={navigation.goBack}
+        scrollViewRef={scrollViewRef}>
         <LoadingComponent text={text} />
       </FullScreenSubtask>
     )
@@ -165,7 +192,10 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
 
   if (sendingMessage) {
     return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} scrollViewRef={scrollViewRef}>
+      <FullScreenSubtask
+        leftButtonText={t('cancel')}
+        onLeftButtonPress={navigation.goBack}
+        scrollViewRef={scrollViewRef}>
         <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
       </FullScreenSubtask>
     )
@@ -181,7 +211,10 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         removeOnPress: removeAttachment,
-        buttonLabel: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? t('secureMessaging.formMessage.addFiles') : undefined,
+        buttonLabel:
+          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
+            ? t('secureMessaging.formMessage.addFiles')
+            : undefined,
         buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
       },
@@ -210,7 +243,9 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
     }
 
     if (onSaveDraftClicked) {
-      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID)))
+      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () =>
+        dispatch(saveDraft(messageData, snackbarMessages, savedDraftID, true, messageID)),
+      )
     } else {
       receiverID && dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList, messageID))
     }
@@ -238,7 +273,11 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
           <TextView variant="MobileBodyBold" accessible={true}>
             {receiverName}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessible={true} testID={'Subject ' + subjectHeader}>
+          <TextView
+            variant="MobileBody"
+            mt={theme.dimensions.standardMarginBetween}
+            accessible={true}
+            testID={'Subject ' + subjectHeader}>
             {t('secureMessaging.startNewMessage.subject')}
           </TextView>
           <TextView variant="MobileBodyBold" accessible={true}>
@@ -292,7 +331,12 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
         </Box>
         {message && messagesById && thread && (
           <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-            <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
+            <Box
+              accessibilityRole={'header'}
+              accessible={true}
+              borderColor={'primary'}
+              borderBottomWidth={'default'}
+              p={theme.dimensions.cardPadding}>
               <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
             </Box>
             {renderMessages(message, messagesById, thread)}

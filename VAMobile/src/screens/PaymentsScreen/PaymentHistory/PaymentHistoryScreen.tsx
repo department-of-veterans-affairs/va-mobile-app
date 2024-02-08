@@ -1,21 +1,32 @@
+import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Pressable } from 'react-native'
 import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { isEmpty, map } from 'underscore'
 
-import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, Pagination, PaginationProps, TextView, TextViewProps, VAModalPicker, VAModalPickerProps } from 'components'
+import {
+  Box,
+  ErrorComponent,
+  FeatureLandingTemplate,
+  LoadingComponent,
+  Pagination,
+  PaginationProps,
+  TextView,
+  TextViewProps,
+  VAModalPicker,
+  VAModalPickerProps,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PaymentState, getPayments } from 'store/slices'
-import { PaymentsByDate, ScreenIDTypesConstants } from 'store/api/types'
 import { RootState } from 'store'
-import { deepCopyObject } from 'utils/common'
-import { getGroupedPayments } from 'utils/payments'
+import { PaymentsByDate, ScreenIDTypesConstants } from 'store/api/types'
+import { PaymentState, getPayments } from 'store/slices'
 import { testIdProps } from 'utils/accessibility'
+import { deepCopyObject } from 'utils/common'
 import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { getGroupedPayments } from 'utils/payments'
 
 import { PaymentsStackParamList } from '../PaymentsStackScreens'
 import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
@@ -29,7 +40,9 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
   const navigateTo = useRouteNavigation()
   const hasError = useError(ScreenIDTypesConstants.PAYMENTS_SCREEN_ID)
   const { standardMarginBetween, gutter } = theme.dimensions
-  const { currentPagePayments, currentPagePagination, loading, availableYears } = useSelector<RootState, PaymentState>((state) => state.payments)
+  const { currentPagePayments, currentPagePagination, loading, availableYears } = useSelector<RootState, PaymentState>(
+    (state) => state.payments,
+  )
   const newCurrentPagePayments = deepCopyObject<PaymentsByDate>(currentPagePayments)
   const noPayments = availableYears.length === 0
 
@@ -117,7 +130,11 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     }
 
     return (
-      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box
+        flex={1}
+        mt={theme.dimensions.paginationTopPadding}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     )
@@ -139,7 +156,10 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
 
   if (hasError) {
     return (
-      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+      <FeatureLandingTemplate
+        backLabel={t('payments.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('history.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -147,7 +167,10 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
 
   if (loading) {
     return (
-      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+      <FeatureLandingTemplate
+        backLabel={t('payments.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('history.title')}>
         <LoadingComponent text={t('payments.loading')} />
       </FeatureLandingTemplate>
     )
@@ -155,14 +178,21 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
 
   if (noPayments) {
     return (
-      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')}>
+      <FeatureLandingTemplate
+        backLabel={t('payments.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('history.title')}>
         <NoPaymentsScreen />
       </FeatureLandingTemplate>
     )
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('history.title')} testID="paymentHistoryTestID">
+    <FeatureLandingTemplate
+      backLabel={t('payments.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('history.title')}
+      testID="paymentHistoryTestID">
       <Box {...testIdProps('', false, 'payments-page')}>
         <Box mx={gutter} mb={standardMarginBetween}>
           <Pressable

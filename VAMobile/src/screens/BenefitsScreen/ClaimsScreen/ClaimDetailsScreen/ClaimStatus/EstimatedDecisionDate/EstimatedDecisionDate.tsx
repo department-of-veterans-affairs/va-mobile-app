@@ -1,15 +1,15 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 
 import { AlertBox, Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useExternalLink, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { useExternalLink, useTheme } from 'utils/hooks'
 
 const { LINK_URL_COMPENSATION_CLAIM_EXAM } = getEnv()
 

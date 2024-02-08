@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -8,9 +8,9 @@ import { DateTime } from 'luxon'
 import { Box, LargePanel, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { getStatusDefinitionTextForRefillStatus } from 'utils/prescriptions'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
+import { getStatusDefinitionTextForRefillStatus } from 'utils/prescriptions'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 

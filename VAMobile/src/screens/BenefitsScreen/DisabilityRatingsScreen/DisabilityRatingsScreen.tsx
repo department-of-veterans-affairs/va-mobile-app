@@ -1,6 +1,6 @@
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { useNavigation } from '@react-navigation/native'
 
@@ -24,16 +24,16 @@ import {
   TextView,
   TextViewProps,
 } from 'components'
-import { DisabilityRatingState, getDisabilityRating } from 'store/slices/disabilityRatingSlice'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { IndividualRatingData } from 'store/api'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { DisabilityRatingState, getDisabilityRating } from 'store/slices/disabilityRatingSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { capitalizeFirstLetter, displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { screenContentAllowed } from 'utils/waygateConfig'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
+import { capitalizeFirstLetter, displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 
@@ -44,7 +44,9 @@ function DisabilityRatingsScreen() {
   const navigation = useNavigation()
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
-  const { loading, needsDataLoad, ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
+  const { loading, needsDataLoad, ratingData } = useSelector<RootState, DisabilityRatingState>(
+    (state) => state.disabilityRating,
+  )
   const { condensedMarginBetween, contentMarginBottom, gutter } = theme.dimensions
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
@@ -65,7 +67,10 @@ function DisabilityRatingsScreen() {
       yesOrNo: decision === 'Service Connected' ? 'Yes' : 'No',
     })
     // must check only for null or undefined. 0 is a valid rating
-    const percentageText = ratingPercentage !== undefined && ratingPercentage !== null ? t('disabilityRatingDetails.percentage', { rate: ratingPercentage }) : ''
+    const percentageText =
+      ratingPercentage !== undefined && ratingPercentage !== null
+        ? t('disabilityRatingDetails.percentage', { rate: ratingPercentage })
+        : ''
     const formattedEffectiveDateText =
       effectiveDate !== undefined && effectiveDate !== null
         ? t('disabilityRatingDetails.effectiveDate', {
@@ -107,7 +112,9 @@ function DisabilityRatingsScreen() {
   const getCombinedTotalSection = () => {
     // must check only for null or undefined. 0 is a valid rating
     const combinedPercentText =
-      totalCombinedRating !== undefined && totalCombinedRating !== null ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating }) : undefined
+      totalCombinedRating !== undefined && totalCombinedRating !== null
+        ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating })
+        : undefined
     const combinedTotalSummaryText = t('disabilityRatingDetails.combinedTotalSummary')
 
     return (
@@ -138,7 +145,11 @@ function DisabilityRatingsScreen() {
     return (
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={a11yLabelVA(t('disabilityRating.learnAbout'))}>
+          <TextView
+            variant="MobileBodyBold"
+            accessibilityRole="header"
+            selectable={false}
+            accessibilityLabel={a11yLabelVA(t('disabilityRating.learnAbout'))}>
             {t('disabilityRating.learnAbout')}
           </TextView>
         </Box>
@@ -166,7 +177,11 @@ function DisabilityRatingsScreen() {
           </TextView>
         </Box>
         <Box accessible={true}>
-          <TextView variant="MobileBody" selectable={false} accessibilityLabel={t('claimDetails.callVA.a11yLabel')} paragraphSpacing={true}>
+          <TextView
+            variant="MobileBody"
+            selectable={false}
+            accessibilityLabel={t('claimDetails.callVA.a11yLabel')}
+            paragraphSpacing={true}>
             {t('claimDetails.callVA')}
           </TextView>
         </Box>
@@ -195,7 +210,11 @@ function DisabilityRatingsScreen() {
   const errorCheck = useError(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID)
 
   return (
-    <ChildTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('disabilityRatingDetails.title')} testID="disabilityRatingTestID">
+    <ChildTemplate
+      backLabel={t('benefits.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('disabilityRatingDetails.title')}
+      testID="disabilityRatingTestID">
       {errorCheck ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID} />
       ) : loading ? (
@@ -206,7 +225,11 @@ function DisabilityRatingsScreen() {
         <>
           <Box>{getCombinedTotalSection()}</Box>
           <Box mb={condensedMarginBetween}>
-            <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} selectable={true} />
+            <DefaultList
+              items={individualRatings}
+              title={t('disabilityRatingDetails.individualTitle')}
+              selectable={true}
+            />
           </Box>
           <Box mb={condensedMarginBetween}>{getLearnAboutVaRatingSection()}</Box>
           <Box mb={contentMarginBottom}>{getNeedHelpSection()}</Box>

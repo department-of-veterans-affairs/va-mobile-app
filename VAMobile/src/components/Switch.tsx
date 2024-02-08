@@ -1,5 +1,5 @@
-import { AccessibilityProps, Switch as RNSwitch } from 'react-native'
 import React, { FC } from 'react'
+import { AccessibilityProps, Switch as RNSwitch } from 'react-native'
 
 import styled from 'styled-components'
 

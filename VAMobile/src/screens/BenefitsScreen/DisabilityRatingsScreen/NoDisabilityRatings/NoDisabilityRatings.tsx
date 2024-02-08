@@ -1,6 +1,6 @@
-import { StyleProp, ViewStyle } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { StyleProp, ViewStyle } from 'react-native'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -20,10 +20,18 @@ function NoDisabilityRatings() {
   return (
     <VAScrollView contentContainerStyle={mainViewStyle}>
       <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
-        <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" accessibilityLabel={a11yLabelVA(t('disabilityRating.noDisabilityRatings.title'))}>
+        <TextView
+          variant="MobileBodyBold"
+          textAlign="center"
+          accessibilityRole="header"
+          accessibilityLabel={a11yLabelVA(t('disabilityRating.noDisabilityRatings.title'))}>
           {t('disabilityRating.noDisabilityRatings.title')}
         </TextView>
-        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween} {...testIdProps(bodyText)}>
+        <TextView
+          variant="MobileBody"
+          textAlign="center"
+          my={theme.dimensions.standardMarginBetween}
+          {...testIdProps(bodyText)}>
           {bodyText}
         </TextView>
       </Box>

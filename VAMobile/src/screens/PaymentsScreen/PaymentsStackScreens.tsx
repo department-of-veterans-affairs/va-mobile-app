@@ -26,7 +26,17 @@ const PaymentsStack = createStackNavigator<PaymentsStackParamList>()
 
 export const getPaymentsScreens = (): Array<ReactNode> => {
   return [
-    <PaymentsStack.Screen key={'PaymentIssue'} name="PaymentIssue" component={PaymentIssue} options={LARGE_PANEL_OPTIONS} />,
-    <PaymentsStack.Screen key={'PaymentMissing'} name="PaymentMissing" component={PaymentMissing} options={LARGE_PANEL_OPTIONS} />,
+    <PaymentsStack.Screen
+      key={'PaymentIssue'}
+      name="PaymentIssue"
+      component={PaymentIssue}
+      options={LARGE_PANEL_OPTIONS}
+    />,
+    <PaymentsStack.Screen
+      key={'PaymentMissing'}
+      name="PaymentMissing"
+      component={PaymentMissing}
+      options={LARGE_PANEL_OPTIONS}
+    />,
   ]
 }

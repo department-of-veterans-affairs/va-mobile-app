@@ -1,15 +1,15 @@
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonDecoratorType } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { generateTestIDForInlineTextIconList } from 'utils/common'
 
-import { InlineTextWithIcons } from './InlineTextWithIcons'
-import { InlineTextWithIconsProps, List, ListItemObj, ListProps } from './index'
 import { READ } from '../constants/secureMessaging'
 import Box from './Box'
+import { InlineTextWithIcons } from './InlineTextWithIcons'
 import LabelTag, { LabelTagTypeConstants } from './LabelTag'
+import { InlineTextWithIconsProps, List, ListItemObj, ListProps } from './index'
 
 /**
  * Signifies each item in the list of items in {@link MessageListProps}

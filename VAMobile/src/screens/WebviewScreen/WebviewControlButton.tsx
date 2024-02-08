@@ -1,5 +1,5 @@
-import { StyleProp, TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'react-native'
 import React from 'react'
+import { StyleProp, TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'react-native'
 
 import { Box, BoxProps, VA_ICON_MAP } from 'components'
 import { VAIcon } from 'components'

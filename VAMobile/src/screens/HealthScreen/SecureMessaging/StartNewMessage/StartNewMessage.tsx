@@ -1,7 +1,7 @@
+import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { InteractionManager, Pressable, ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import React, { useEffect, useRef, useState } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -22,12 +22,24 @@ import {
   PickerItem,
   TextArea,
 } from 'components'
-import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
+import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
-import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE, SegmentedControlIndexes } from 'constants/secureMessaging'
-import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import {
+  FolderNameTypeConstants,
+  FormHeaderTypeConstants,
+  PREPOPULATE_SIGNATURE,
+  SegmentedControlIndexes,
+} from 'constants/secureMessaging'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { RootState } from 'store'
+import {
+  CategoryTypeFields,
+  CategoryTypes,
+  ScreenIDTypesConstants,
+  SecureMessagingFormData,
+  SecureMessagingSystemFolderIdConstants,
+} from 'store/api/types'
 import {
   SecureMessagingState,
   getMessageRecipients,
@@ -40,11 +52,8 @@ import {
   sendMessage,
   updateSecureMessagingTab,
 } from 'store/slices'
-import { SnackbarMessages } from 'components/SnackBar'
-import { SubjectLengthValidationFn, getStartNewMessageCategoryPickerOptions, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { screenContentAllowed } from 'utils/waygateConfig'
 import {
   useAppDispatch,
   useAttachments,
@@ -56,6 +65,12 @@ import {
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
+import {
+  SubjectLengthValidationFn,
+  getStartNewMessageCategoryPickerOptions,
+  saveDraftWithAttachmentAlert,
+} from 'utils/secureMessaging'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 
@@ -78,10 +93,17 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     errorMsg: t('secureMessaging.startNewMessage.sent.error'),
   }
 
-  const { sendingMessage, sendMessageComplete, savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, savingDraft, loadingSignature, signature } = useSelector<
-    RootState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
+  const {
+    sendingMessage,
+    sendMessageComplete,
+    savedDraftID,
+    recipients,
+    hasLoadedRecipients,
+    saveDraftComplete,
+    savingDraft,
+    loadingSignature,
+    signature,
+  } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const { attachmentFileToAdd, saveDraftConfirmFailed } = route.params
 
   const [to, setTo] = useState('')
@@ -187,23 +209,34 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return (
-      <FullScreenSubtask title={t('secureMessaging.startNewMessage')} leftButtonText={t('cancel')} scrollViewRef={scrollViewRef}>
+      <FullScreenSubtask
+        title={t('secureMessaging.startNewMessage')}
+        leftButtonText={t('cancel')}
+        scrollViewRef={scrollViewRef}>
         <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
       </FullScreenSubtask>
     )
   }
 
   const isFormBlank = !(to || category || subject || attachmentsList.length || validateMessage(message))
-  const isFormValid = !!(to && category && validateMessage(message) && (category !== CategoryTypeFields.other || subject))
+  const isFormValid = !!(
+    to &&
+    category &&
+    validateMessage(message) &&
+    (category !== CategoryTypeFields.other || subject)
+  )
 
   if (!hasLoadedRecipients || !isTransitionComplete || savingDraft || loadingSignature || isDiscarded) {
     const text = savingDraft
       ? t('secureMessaging.formMessage.saveDraft.loading')
       : isDiscarded
-      ? t('secureMessaging.deleteDraft.loading')
-      : t('secureMessaging.formMessage.startNewMessage.loading')
+        ? t('secureMessaging.deleteDraft.loading')
+        : t('secureMessaging.formMessage.startNewMessage.loading')
     return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} scrollViewRef={scrollViewRef}>
+      <FullScreenSubtask
+        leftButtonText={t('cancel')}
+        onLeftButtonPress={navigation.goBack}
+        scrollViewRef={scrollViewRef}>
         <LoadingComponent text={text} />
       </FullScreenSubtask>
     )
@@ -211,7 +244,10 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
 
   if (sendingMessage) {
     return (
-      <FullScreenSubtask leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack} scrollViewRef={scrollViewRef}>
+      <FullScreenSubtask
+        leftButtonText={t('cancel')}
+        onLeftButtonPress={navigation.goBack}
+        scrollViewRef={scrollViewRef}>
         <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
       </FullScreenSubtask>
     )
@@ -294,7 +330,10 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         removeOnPress: removeAttachment,
-        buttonLabel: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? t('secureMessaging.formMessage.addFiles') : undefined,
+        buttonLabel:
+          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
+            ? t('secureMessaging.formMessage.addFiles')
+            : undefined,
         buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
       },
@@ -334,7 +373,9 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       messageData.draft_id = savedDraftID
     }
     if (onSaveDraftClicked) {
-      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => dispatch(saveDraft(messageData, snackbarMessages, savedDraftID)))
+      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () =>
+        dispatch(saveDraft(messageData, snackbarMessages, savedDraftID)),
+      )
     } else {
       dispatch(sendMessage(messageData, snackbarSentMessages, attachmentsList))
     }

@@ -1,20 +1,34 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToA11yLabel } from 'store/api/types'
-import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
+import {
+  Box,
+  ClickForActionLink,
+  ClickToCallPhoneNumber,
+  LinkButtonProps,
+  LinkTypeOptionsConstants,
+  TextArea,
+  TextView,
+} from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yLabelVA } from 'utils/a11yLabel'
+import {
+  AppointmentAttributes,
+  AppointmentData,
+  AppointmentLocation,
+  AppointmentTypeConstants,
+  AppointmentTypeToA11yLabel,
+} from 'store/api/types'
 import { cancelAppointment } from 'store/slices'
-import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus } from 'utils/appointments'
-import { getTranslation } from 'utils/formattingUtils'
-import { logAnalyticsEvent } from 'utils/analytics'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { getAppointmentAnalyticsDays, getAppointmentAnalyticsStatus } from 'utils/appointments'
 import getEnv from 'utils/env'
+import { getTranslation } from 'utils/formattingUtils'
+import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -30,7 +44,8 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
   const dispatch = useAppDispatch()
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, isCovidVaccine, cancelId, serviceCategoryName, phoneOnly } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, location, isCovidVaccine, cancelId, serviceCategoryName, phoneOnly } =
+    attributes || ({} as AppointmentAttributes)
   const { name, phone } = location || ({} as AppointmentLocation)
 
   const findYourVALocationProps: LinkButtonProps = {
@@ -46,7 +61,12 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
   let body
   let bodyA11yLabel
 
-  if (phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION' && !isCovidVaccine)) {
+  if (
+    phoneOnly ||
+    (appointmentType === AppointmentTypeConstants.VA &&
+      serviceCategoryName !== 'COMPENSATION & PENSION' &&
+      !isCovidVaccine)
+  ) {
     title = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')
     body =
       appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine && cancelId
@@ -114,7 +134,13 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
 
   const onCancelAppointment = () => {
     logAnalyticsEvent(
-      Events.vama_apt_cancel_clicks(appointment?.id || '', getAppointmentAnalyticsStatus(attributes), appointmentType.toString(), getAppointmentAnalyticsDays(attributes), 'start'),
+      Events.vama_apt_cancel_clicks(
+        appointment?.id || '',
+        getAppointmentAnalyticsStatus(attributes),
+        appointmentType.toString(),
+        getAppointmentAnalyticsDays(attributes),
+        'start',
+      ),
     )
 
     const onPress = () => {
@@ -128,7 +154,14 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
         ),
       )
       dispatch(
-        cancelAppointment(cancelId, appointment?.id, undefined, getAppointmentAnalyticsStatus(attributes), appointmentType.toString(), getAppointmentAnalyticsDays(attributes)),
+        cancelAppointment(
+          cancelId,
+          appointment?.id,
+          undefined,
+          getAppointmentAnalyticsStatus(attributes),
+          appointmentType.toString(),
+          getAppointmentAnalyticsDays(attributes),
+        ),
       )
     }
 
@@ -153,15 +186,22 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
       <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(titleA11yLabel || title)}>
         {title}
       </TextView>
-      <TextView variant="MobileBody" {...testIdProps(bodyA11yLabel || body)} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+      <TextView
+        variant="MobileBody"
+        {...testIdProps(bodyA11yLabel || body)}
+        mt={theme.dimensions.standardMarginBetween}
+        paragraphSpacing={true}>
         {body}
       </TextView>
       {(appointmentType === AppointmentTypeConstants.VA || phoneOnly) && !isCovidVaccine && cancelId ? (
         <>
-          {(phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) && linkOrPhone}
+          {(phoneOnly ||
+            (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) &&
+            linkOrPhone}
           <Box
             mt={
-              phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+              phoneOnly ||
+              (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
                 ? theme.dimensions.standardMarginBetween
                 : undefined
             }>

@@ -2,11 +2,11 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { initialPrescriptionState } from 'store/slices'
+import { initialClaimsAndAppealsState } from 'store/slices'
 import { context, mockNavProps, render } from 'testUtils'
 
 import { HomeScreen } from './HomeScreen'
-import { initialPrescriptionState } from 'store/slices'
-import { initialClaimsAndAppealsState } from 'store/slices'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -29,13 +29,13 @@ context('HomeScreen', () => {
           ...initialPrescriptionState,
           prescriptionStatusCount: {
             isRefillable: refillablePrescriptionsCount || 0,
-          }
+          },
         },
         claimsAndAppeals: {
           ...initialClaimsAndAppealsState,
           activeClaimsCount: activeClaimsCount || 0,
         },
-      }
+      },
     })
   }
 

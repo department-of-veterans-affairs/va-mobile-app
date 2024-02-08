@@ -1,12 +1,12 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Box, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import getEnv from 'utils/env'
+import { useExternalLink, useTheme } from 'utils/hooks'
 
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
 
@@ -49,7 +49,12 @@ function NotEnrolledSM() {
   return (
     <VAScrollView>
       <Box mb={contentMarginBottom}>
-        <Box {...testIdProps(t('notEnrolledSM.title'))} accessibilityRole="header" accessible={true} mx={theme.dimensions.gutter} mb={standardMarginBetween}>
+        <Box
+          {...testIdProps(t('notEnrolledSM.title'))}
+          accessibilityRole="header"
+          accessible={true}
+          mx={theme.dimensions.gutter}
+          mb={standardMarginBetween}>
           <TextView variant="BitterBoldHeading">{t('notEnrolledSM.title')}</TextView>
         </Box>
         <Box>
@@ -57,7 +62,10 @@ function NotEnrolledSM() {
             <TextView variant="MobileBody" paragraphSpacing={true}>
               {t('notEnrolledSM.youMust')}
             </TextView>
-            <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('notEnrolledSM.withSM'))}>
+            <TextView
+              variant="MobileBody"
+              paragraphSpacing={true}
+              accessibilityLabel={a11yLabelVA(t('notEnrolledSM.withSM'))}>
               {t('notEnrolledSM.withSM')}
             </TextView>
             <TextView variant="MobileBody" paragraphSpacing={true}>

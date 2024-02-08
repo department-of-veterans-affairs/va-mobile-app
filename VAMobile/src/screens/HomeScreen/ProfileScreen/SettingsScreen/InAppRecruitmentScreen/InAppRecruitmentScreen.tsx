@@ -1,19 +1,19 @@
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useNavigationState } from '@react-navigation/native'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, ClickForActionLink, LargePanel, LinkTypeOptionsConstants, TextView, VABulletList } from 'components'
 import { Events } from 'constants/analytics'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 import getEnv from 'utils/env'
+import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type InAppRecruitmentScreenProps = StackScreenProps<HomeStackParamList, 'InAppRecruitment'>
 
@@ -50,7 +50,10 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
 
   return (
     <LargePanel title={t('inAppRecruitment.giveFeedback')} rightButtonText={t('close')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box
+        mt={theme.dimensions.contentMarginTop}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('inAppRecruitment.makeAppBetter.header')}
         </TextView>
@@ -84,7 +87,11 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
             fireAnalytic={() => logAnalyticsEvent(Events.vama_givefb_open('info'))}
           />
         </Box>
-        <TextView variant="HelperText" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('inAppRecruitment.contracts'))}>
+        <TextView
+          variant="HelperText"
+          mt={theme.dimensions.standardMarginBetween}
+          paragraphSpacing={true}
+          accessibilityLabel={a11yLabelVA(t('inAppRecruitment.contracts'))}>
           {t('inAppRecruitment.contracts')}
         </TextView>
       </Box>

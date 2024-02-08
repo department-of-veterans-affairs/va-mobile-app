@@ -1,9 +1,10 @@
 import React, { ReactNode } from 'react'
 
-import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
+import { DateTime } from 'luxon'
 import _ from 'underscore'
 
+import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
 import {
   AppointmentAttributes,
   AppointmentData,
@@ -14,12 +15,15 @@ import {
   AppointmentsMetaPagination,
 } from 'store/api'
 import { AppointmentStatus, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
-import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
 import { VATheme } from 'styles/theme'
 
 import { LabelTagTypeConstants } from '../components/LabelTag'
-import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from './formattingUtils'
 import { getTestIDFromTextLines } from './accessibility'
+import {
+  getFormattedDate,
+  getFormattedDateWithWeekdayForTimeZone,
+  getFormattedTimeForTimeZone,
+} from './formattingUtils'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
@@ -32,7 +36,11 @@ export type YearsToSortedMonths = { [key: string]: Array<string> }
  *
  * @returns string of the appointment type icon
  */
-export const getAppointmentTypeIconText = (appointmentType: AppointmentType, translate: TFunction, phoneOnly: boolean): string => {
+export const getAppointmentTypeIconText = (
+  appointmentType: AppointmentType,
+  translate: TFunction,
+  phoneOnly: boolean,
+): string => {
   switch (appointmentType) {
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
       return translate('appointmentList.connectAtAtlas')
@@ -60,7 +68,10 @@ export const getAppointmentTypeIconText = (appointmentType: AppointmentType, tra
 export const getAppointmentAnalyticsStatus = (attributes: AppointmentAttributes): string => {
   let apiStatus = ''
 
-  const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
+  const isPendingAppointment =
+    attributes.isPending &&
+    (attributes.status === AppointmentStatusConstants.SUBMITTED ||
+      attributes.status === AppointmentStatusConstants.CANCELLED)
 
   if (attributes.status === AppointmentStatusConstants.CANCELLED) {
     apiStatus = 'Canceled'
@@ -97,7 +108,11 @@ export const getAppointmentAnalyticsDays = (attributes: AppointmentAttributes): 
  *
  * @returns string of the appointment type icon
  */
-export const getPendingAppointmentRequestTypeText = (appointmentType: AppointmentType, translate: TFunction, phoneOnly: boolean): string => {
+export const getPendingAppointmentRequestTypeText = (
+  appointmentType: AppointmentType,
+  translate: TFunction,
+  phoneOnly: boolean,
+): string => {
   switch (appointmentType) {
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
       return translate('appointmentList.connectAtAtlas')
@@ -123,7 +138,11 @@ export const getPendingAppointmentRequestTypeText = (appointmentType: Appointmen
  *
  * @returns VAIconProps or undefined
  */
-export const getAppointmentTypeIcon = (appointmentType: AppointmentType, phoneOnly: boolean, theme: VATheme): VAIconProps | undefined => {
+export const getAppointmentTypeIcon = (
+  appointmentType: AppointmentType,
+  phoneOnly: boolean,
+  theme: VATheme,
+): VAIconProps | undefined => {
   const iconProp = {
     fill: theme.colors.icon.defaultMenuItem,
     height: theme.fontSizes.HelperText.fontSize,
@@ -180,7 +199,14 @@ export const getGroupedAppointments = (
   return _.map(sortedYears, (year) => {
     return _.map(yearsToSortedMonths[year], (month) => {
       const listOfAppointments = appointmentsByYear[year][month]
-      const listItems = getListItemsForAppointments(listOfAppointments, translations, onAppointmentPress, upcomingPageMetaData, groupIdx, theme)
+      const listItems = getListItemsForAppointments(
+        listOfAppointments,
+        translations,
+        onAppointmentPress,
+        upcomingPageMetaData,
+        groupIdx,
+        theme,
+      )
       groupIdx = groupIdx + listItems.length
       const displayedMonth = getFormattedDate(new Date(parseInt(year, 10), parseInt(month, 10)).toISOString(), 'MMMM')
 
@@ -235,7 +261,12 @@ const getListItemsForAppointments = (
   return listItems
 }
 
-const getAppointmentStatus = (isPendingAppointment: boolean, status: AppointmentStatus, t: TFunction, condensedMarginBetween: number): TextLineWithIconProps | undefined => {
+const getAppointmentStatus = (
+  isPendingAppointment: boolean,
+  status: AppointmentStatus,
+  t: TFunction,
+  condensedMarginBetween: number,
+): TextLineWithIconProps | undefined => {
   if (status === AppointmentStatusConstants.CANCELLED) {
     return {
       text: t('appointments.canceled'),
@@ -266,19 +297,40 @@ const getAppointmentStatus = (isPendingAppointment: boolean, status: Appointment
  * @param t - function, the translate function
  * @param theme - type VATheme, the theme object to set some properties
  */
-export const getTextLinesForAppointmentListItem = (appointment: AppointmentData, t: TFunction, theme: VATheme): Array<TextLineWithIconProps> => {
+export const getTextLinesForAppointmentListItem = (
+  appointment: AppointmentData,
+  t: TFunction,
+  theme: VATheme,
+): Array<TextLineWithIconProps> => {
   const { attributes } = appointment
-  const { startDateUtc, timeZone, appointmentType, location, phoneOnly, isCovidVaccine, typeOfCare, healthcareProvider, serviceCategoryName, healthcareService } = attributes
+  const {
+    startDateUtc,
+    timeZone,
+    appointmentType,
+    location,
+    phoneOnly,
+    isCovidVaccine,
+    typeOfCare,
+    healthcareProvider,
+    serviceCategoryName,
+    healthcareService,
+  } = attributes
   const textLines: Array<TextLineWithIconProps> = []
   const { condensedMarginBetween } = theme.dimensions
-  const isPendingAppointment = attributes.isPending && (attributes.status === AppointmentStatusConstants.SUBMITTED || attributes.status === AppointmentStatusConstants.CANCELLED)
+  const isPendingAppointment =
+    attributes.isPending &&
+    (attributes.status === AppointmentStatusConstants.SUBMITTED ||
+      attributes.status === AppointmentStatusConstants.CANCELLED)
 
   const status = getAppointmentStatus(isPendingAppointment, attributes.status, t, condensedMarginBetween)
   if (status) {
     textLines.push(status)
   }
 
-  if (phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) {
+  if (
+    phoneOnly ||
+    (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+  ) {
     const facilityName = location?.name || t('prescription.details.vaFacilityHeader')
     textLines.push(
       {
@@ -292,7 +344,9 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
       },
       {
         text: t('text.raw', {
-          text: isCovidVaccine ? t('upcomingAppointments.covidVaccine') : typeOfCare || healthcareService || t('appointments.noTypeOfCare'),
+          text: isCovidVaccine
+            ? t('upcomingAppointments.covidVaccine')
+            : typeOfCare || healthcareService || t('appointments.noTypeOfCare'),
         }),
         variant: 'HelperText',
         mb: 5,
@@ -426,7 +480,10 @@ export const getTextLinesForAppointmentListItem = (appointment: AppointmentData,
  *
  * @returns type YearsToSortedMonths sorted appointments
  */
-export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedByYear, isReverseSort: boolean): YearsToSortedMonths => {
+export const getYearsToSortedMonths = (
+  appointmentsByYear: AppointmentsGroupedByYear,
+  isReverseSort: boolean,
+): YearsToSortedMonths => {
   const yearToSortedMonths: YearsToSortedMonths = {}
 
   _.forEach(appointmentsByYear || {}, (appointmentsByMonth, year) => {
@@ -459,7 +516,8 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
  */
 export const isAPendingAppointment = (attributes: AppointmentAttributes): boolean => {
   const { status, isPending } = attributes || ({} as AppointmentAttributes)
-  const validPendingStatus = status === AppointmentStatusConstants.SUBMITTED || status === AppointmentStatusConstants.CANCELLED
+  const validPendingStatus =
+    status === AppointmentStatusConstants.SUBMITTED || status === AppointmentStatusConstants.CANCELLED
 
   return !!(isPending && validPendingStatus)
 }

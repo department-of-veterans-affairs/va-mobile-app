@@ -1,15 +1,19 @@
+import React, { FC, useEffect, useState } from 'react'
 import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { useSelector } from 'react-redux'
-import React, { FC, useEffect, useState } from 'react'
 
-import { AuthState } from 'store/slices'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { Events } from 'constants/analytics'
 import { RootState } from 'store'
-import { dispatchSetInitialUrl, dispatchSetTappedForegroundNotification, registerDevice } from 'store/slices/notificationSlice'
+import { AuthState } from 'store/slices'
+import {
+  dispatchSetInitialUrl,
+  dispatchSetTappedForegroundNotification,
+  registerDevice,
+} from 'store/slices/notificationSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch } from 'utils/hooks'
-import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 
 const foregroundNotifications: Array<string> = []
 

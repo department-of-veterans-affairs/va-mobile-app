@@ -1,21 +1,30 @@
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { StackScreenProps } from '@react-navigation/stack'
-import { useIsFocused } from '@react-navigation/native'
 import remoteConfig from '@react-native-firebase/remote-config'
+import { useIsFocused } from '@react-navigation/native'
+import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { forEach } from 'underscore'
 
-import { AccordionCollapsible, Box, ButtonDecoratorType, FeatureLandingTemplate, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
-import { FeatureToggleType, getFeatureToggles, setDebugConfig } from 'utils/remoteConfig'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import {
+  AccordionCollapsible,
+  Box,
+  ButtonDecoratorType,
+  FeatureLandingTemplate,
+  SimpleList,
+  SimpleListItemObj,
+  TextArea,
+  TextView,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { getWaygateToggles, setWaygateDebugConfig } from 'utils/waygateConfig'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { logout } from 'store/slices/authSlice'
 import { showSnackBar } from 'utils/common'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { FeatureToggleType, getFeatureToggles, setDebugConfig } from 'utils/remoteConfig'
+import { getWaygateToggles, setWaygateDebugConfig } from 'utils/waygateConfig'
 
 type RemoteConfigScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'RemoteConfig'>
 
@@ -99,7 +108,11 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('debug.title')} backLabelOnPress={navigation.goBack} title={t('remoteConfig.title')} testID="remoteConfigTestID">
+    <FeatureLandingTemplate
+      backLabel={t('debug.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('remoteConfig.title')}
+      testID="remoteConfigTestID">
       <Box mb={contentMarginBottom}>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>

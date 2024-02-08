@@ -1,11 +1,11 @@
-import { Pressable, PressableProps } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Pressable, PressableProps } from 'react-native'
 
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
 import Box, { BoxProps } from './Box'

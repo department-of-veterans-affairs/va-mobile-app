@@ -105,13 +105,30 @@ export type AppointmentLocation = {
   code?: string
 }
 
-export type AppointmentTimeZone = 'Pacific/Honolulu' | 'America/Anchorage' | 'America/Los_Angeles' | 'America/Phoenix' | 'America/Denver' | 'America/Chicago' | 'America/New_York'
+export type AppointmentTimeZone =
+  | 'Pacific/Honolulu'
+  | 'America/Anchorage'
+  | 'America/Los_Angeles'
+  | 'America/Phoenix'
+  | 'America/Denver'
+  | 'America/Chicago'
+  | 'America/New_York'
 
 export type AppointmentStatus = 'BOOKED' | 'CANCELLED' | 'SUBMITTED' | 'HIDDEN'
 
-export type AppointmentStatusDetailType = 'CANCELLED BY CLINIC & AUTO RE-BOOK' | 'CANCELLED BY CLINIC' | 'CANCELLED BY PATIENT & AUTO-REBOOK' | 'CANCELLED BY PATIENT'
+export type AppointmentStatusDetailType =
+  | 'CANCELLED BY CLINIC & AUTO RE-BOOK'
+  | 'CANCELLED BY CLINIC'
+  | 'CANCELLED BY PATIENT & AUTO-REBOOK'
+  | 'CANCELLED BY PATIENT'
 
-export type AppointmentType = 'COMMUNITY_CARE' | 'VA' | 'VA_VIDEO_CONNECT_ATLAS' | 'VA_VIDEO_CONNECT_HOME' | 'VA_VIDEO_CONNECT_ONSITE' | 'VA_VIDEO_CONNECT_GFE'
+export type AppointmentType =
+  | 'COMMUNITY_CARE'
+  | 'VA'
+  | 'VA_VIDEO_CONNECT_ATLAS'
+  | 'VA_VIDEO_CONNECT_HOME'
+  | 'VA_VIDEO_CONNECT_ONSITE'
+  | 'VA_VIDEO_CONNECT_GFE'
 
 export type AppointmentProposedTimesPeriodType = 'AM' | 'PM'
 

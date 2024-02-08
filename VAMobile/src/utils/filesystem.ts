@@ -1,7 +1,7 @@
 import RNFetchBlob, { FetchBlobResponse, RNFetchBlobConfig } from 'rn-fetch-blob'
 
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { refreshAccessToken } from 'store/slices/authSlice'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
 import { Params, getAccessToken, getRefreshToken } from '../store/api'
 
@@ -21,7 +21,13 @@ const fileSystemFatalErrorString = 'File System Error'
  * @param retries - number of times to attempt the request again until it fails
  * @returns Returns a Promise with a string that represents the filePath or undefined for a failed download
  */
-export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fileName: string, params: Params = {}, retries = 0): Promise<string | undefined> => {
+export const downloadFile = async (
+  method: 'GET' | 'POST',
+  endpoint: string,
+  fileName: string,
+  params: Params = {},
+  retries = 0,
+): Promise<string | undefined> => {
   const filePath = DocumentDirectoryPath + fileName
 
   try {
@@ -88,7 +94,11 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
  * @param params - body for the call
  * @returns Returns the filePath
  */
-export const downloadDemoFile = async (endpoint: string, fileName: string, params: Params = {}): Promise<string | undefined> => {
+export const downloadDemoFile = async (
+  endpoint: string,
+  fileName: string,
+  params: Params = {},
+): Promise<string | undefined> => {
   const filePath = DocumentDirectoryPath + fileName
 
   const options: RNFetchBlobConfig = {

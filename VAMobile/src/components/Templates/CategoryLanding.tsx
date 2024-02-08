@@ -1,10 +1,18 @@
-import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, useState } from 'react'
+import {
+  LayoutChangeEvent,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StatusBar,
+  View,
+  ViewStyle,
+  useWindowDimensions,
+} from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { CrisisLineCta, HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
-import { useIsScreenReaderEnabled, useRouteNavigation, useTheme } from 'utils/hooks'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
+import { useIsScreenReaderEnabled, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
@@ -25,7 +33,13 @@ export type CategoryLandingProps = {
   testID?: string
 }
 
-export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton, children, scrollViewProps, testID }) => {
+export const CategoryLanding: FC<CategoryLandingProps> = ({
+  title,
+  headerButton,
+  children,
+  scrollViewProps,
+  testID,
+}) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
@@ -98,7 +112,11 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({ title, headerButton,
 
   return (
     <View style={fillStyle}>
-      <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
+      <StatusBar
+        translucent
+        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        backgroundColor={theme.colors.background.main}
+      />
       <HeaderBanner {...headerProps} />
       <VAScrollView testID={testID} scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
         <View onLayout={getTransitionHeaderHeight}>

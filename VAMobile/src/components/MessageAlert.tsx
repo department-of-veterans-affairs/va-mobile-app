@@ -1,15 +1,15 @@
+import React, { FC, RefObject } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import React, { FC, RefObject } from 'react'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AlertBox, Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { SegmentedControlIndexes } from 'constants/secureMessaging'
 import { RootState } from 'store'
 import { SecureMessagingState, resetReplyTriageError, resetSendMessageFailed } from 'store/slices'
-import { SegmentedControlIndexes } from 'constants/secureMessaging'
 import { updateSecureMessagingTab } from 'store/slices'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -27,7 +27,13 @@ export type MessageAlertProps = {
 }
 
 /**Common component to show a message alert when saving or sending a secure message */
-const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, scrollViewRef, focusOnError, errorList }) => {
+const MessageAlert: FC<MessageAlertProps> = ({
+  hasValidationError,
+  saveDraftAttempted,
+  scrollViewRef,
+  focusOnError,
+  errorList,
+}) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { replyTriageError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
@@ -50,21 +56,37 @@ const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAtte
     }
   }
 
-  const text = saveDraftAttempted ? t('secureMessaging.formMessage.saveDraft.validation.text') : t('secureMessaging.formMessage.sendMessage.validation.text')
+  const text = saveDraftAttempted
+    ? t('secureMessaging.formMessage.saveDraft.validation.text')
+    : t('secureMessaging.formMessage.sendMessage.validation.text')
 
   return hasValidationError ? (
     <Box mb={theme.dimensions.standardMarginBetween}>
-      <AlertBox border={'error'} title={t('secureMessaging.formMessage.weNeedMoreInfo')} text={text} titleRole={'header'} scrollViewRef={scrollViewRef} focusOnError={focusOnError}>
+      <AlertBox
+        border={'error'}
+        title={t('secureMessaging.formMessage.weNeedMoreInfo')}
+        text={text}
+        titleRole={'header'}
+        scrollViewRef={scrollViewRef}
+        focusOnError={focusOnError}>
         <VABulletList listOfText={bulletedListOfText} />
       </AlertBox>
     </Box>
   ) : replyTriageError ? (
     <Box mb={theme.dimensions.standardMarginBetween}>
-      <AlertBox border={'error'} title={t('secureMessaging.sendError.title')} titleRole={'header'} scrollViewRef={scrollViewRef} focusOnError={focusOnError}>
+      <AlertBox
+        border={'error'}
+        title={t('secureMessaging.sendError.title')}
+        titleRole={'header'}
+        scrollViewRef={scrollViewRef}
+        focusOnError={focusOnError}>
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('secureMessaging.reply.error.youCantSend')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
+        <TextView
+          variant="MobileBody"
+          paragraphSpacing={true}
+          accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
           {t('secureMessaging.reply.error.ifYouThink')}
         </TextView>
         <Button label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />

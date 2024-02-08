@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import * as api from 'store/api'
-import { AppThunk } from 'store'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { AppThunk } from 'store'
+import * as api from 'store/api'
 import {
   LoadedPayments,
   Params,
@@ -14,10 +14,16 @@ import {
   PaymentsPaginationByYearAndPage,
   ScreenIDTypes,
 } from 'store/api'
-import { createYearAndPageString, getFirstAndLastDayOfYear, getLoadedPayments, groupPaymentsByDate, mapPaymentsById } from 'utils/payments'
-import { getCommonErrorFromAPIError } from 'utils/errors'
-import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { isErrorObject } from 'utils/common'
+import { getCommonErrorFromAPIError } from 'utils/errors'
+import {
+  createYearAndPageString,
+  getFirstAndLastDayOfYear,
+  getLoadedPayments,
+  groupPaymentsByDate,
+  mapPaymentsById,
+} from 'utils/payments'
 
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 
@@ -121,7 +127,10 @@ const paymentstSlice = createSlice({
       state.loading = true
     },
 
-    dispatchFinishGetPayments: (state, action: PayloadAction<{ yearAndPage?: string; payments?: PaymentsGetData; error?: Error }>) => {
+    dispatchFinishGetPayments: (
+      state,
+      action: PayloadAction<{ yearAndPage?: string; payments?: PaymentsGetData; error?: Error }>,
+    ) => {
       const { payments, yearAndPage, error } = action.payload
       const paymentsData = payments?.data || []
       const paymentsByDate: PaymentsByDate = groupPaymentsByDate(paymentsData)
@@ -161,5 +170,10 @@ const paymentstSlice = createSlice({
   },
 })
 
-export const { dispatchFinishGetPayments, dispatchStartGetPayments, dispatchGetPayment, dispatchClearPaymentsOnLogout } = paymentstSlice.actions
+export const {
+  dispatchFinishGetPayments,
+  dispatchStartGetPayments,
+  dispatchGetPayment,
+  dispatchClearPaymentsOnLogout,
+} = paymentstSlice.actions
 export default paymentstSlice.reducer

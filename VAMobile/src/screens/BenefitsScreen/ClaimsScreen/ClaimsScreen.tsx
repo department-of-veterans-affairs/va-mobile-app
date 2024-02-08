@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -28,7 +28,10 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
+    <FeatureLandingTemplate
+      backLabel={t('benefits.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('claims.title')}>
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('claimsHistory.title')}

@@ -105,10 +105,10 @@ context('secureMessaging', () => {
       auth: { ...initialAuthState },
       secureMessaging: {
         ...initialSecureMessagingState,
-        inbox: { 
-            read: 4,         
-            unread: 19,
-          },
+        inbox: {
+          read: 4,
+          unread: 19,
+        },
         inboxMessages: [
           {
             type: '',

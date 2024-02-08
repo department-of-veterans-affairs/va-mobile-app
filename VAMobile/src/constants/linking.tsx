@@ -2,12 +2,15 @@ import React, { ReactElement } from 'react'
 
 import { LinkingOptions, NavigationState } from '@react-navigation/native'
 
-import { LoadingComponent } from '../components'
-import { UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import queryClient from 'api/queryClient'
+import { UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
 
-const authorizedServices = queryClient.getQueryData(authorizedServicesKeys.authorizedServices) as UserAuthorizedServicesData
+import { LoadingComponent } from '../components'
+
+const authorizedServices = queryClient.getQueryData(
+  authorizedServicesKeys.authorizedServices,
+) as UserAuthorizedServicesData
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const linking: LinkingOptions<any> = {
@@ -114,7 +117,11 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'BenefitsTab',
                   state: {
-                    routes: [{ name: 'Benefits' }, ...(authorizedServices?.decisionLetters ? [{ name: 'Claims' }] : []), { name: 'ClaimsHistory' }],
+                    routes: [
+                      { name: 'Benefits' },
+                      ...(authorizedServices?.decisionLetters ? [{ name: 'Claims' }] : []),
+                      { name: 'ClaimsHistory' },
+                    ],
                   },
                 },
               ],

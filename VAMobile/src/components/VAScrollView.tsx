@@ -1,6 +1,6 @@
+import React, { FC, Ref } from 'react'
 import { ScrollView, ScrollViewProps, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import React, { FC, Ref } from 'react'
 
 import { VABackgroundColors } from 'styles/theme'
 
@@ -24,7 +24,9 @@ const VAScrollView: FC<VAScrollViewProps> = (props) => {
   const style = {
     paddingRight: props.removeInsets ? undefined : insets.right,
     paddingLeft: props.removeInsets ? undefined : insets.left,
-    backgroundColor: props.backgroundColor ? theme.colors.background[props.backgroundColor as keyof VABackgroundColors] : theme.colors.background.main,
+    backgroundColor: props.backgroundColor
+      ? theme.colors.background[props.backgroundColor as keyof VABackgroundColors]
+      : theme.colors.background.main,
   }
 
   // Grow container so short children like loading indicators are vertically centered
@@ -35,7 +37,13 @@ const VAScrollView: FC<VAScrollViewProps> = (props) => {
      * force scroll position by default to avoid visual bug where scrollbar appears in the center of a screen
      * scrollIndicatorInsets is an iOS only prop, this bug only appears on iOS
      */
-    <ScrollView ref={props.scrollViewRef} scrollIndicatorInsets={{ right: 1 }} contentContainerStyle={contentContainerStyle} {...props} style={style} />
+    <ScrollView
+      ref={props.scrollViewRef}
+      scrollIndicatorInsets={{ right: 1 }}
+      contentContainerStyle={contentContainerStyle}
+      {...props}
+      style={style}
+    />
   )
 }
 

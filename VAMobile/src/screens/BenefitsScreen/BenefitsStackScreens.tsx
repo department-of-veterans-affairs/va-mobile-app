@@ -1,19 +1,19 @@
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import React, { ReactNode } from 'react'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { ClaimEventData } from 'store/api/types'
 import { ClaimType } from 'constants/claims'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
-import { LetterTypes, ScreenIDTypes } from 'store/api/types'
 import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
-import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import SelectFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
-import TakePhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
 import UploadFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
+import TakePhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
 import UploadOrAddPhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
+import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import WhatDoIDoIfDisagreement from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
+import { ClaimEventData } from 'store/api/types'
+import { LetterTypes, ScreenIDTypes } from 'store/api/types'
 
 export type DocumentPickerResponse = {
   uri: string
@@ -90,12 +90,47 @@ const BenefitsStack = createStackNavigator<BenefitsStackParamList>()
 
 export const getBenefitsScreens = (): Array<ReactNode> => {
   return [
-    <BenefitsStack.Screen key={'ConsolidatedClaimsNote'} name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} options={LARGE_PANEL_OPTIONS} />,
-    <BenefitsStack.Screen key={'WhatDoIDoIfDisagreement'} name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} options={LARGE_PANEL_OPTIONS} />,
-    <BenefitsStack.Screen key={'AskForClaimDecision'} name="AskForClaimDecision" component={AskForClaimDecision} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <BenefitsStack.Screen key={'TakePhotos'} name="TakePhotos" component={TakePhotos} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <BenefitsStack.Screen key={'SelectFile'} name="SelectFile" component={SelectFile} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <BenefitsStack.Screen key={'UploadOrAddPhotos'} name="UploadOrAddPhotos" component={UploadOrAddPhotos} options={FULLSCREEN_SUBTASK_OPTIONS} />,
-    <BenefitsStack.Screen key={'UploadFile'} name="UploadFile" component={UploadFile} options={FULLSCREEN_SUBTASK_OPTIONS} />,
+    <BenefitsStack.Screen
+      key={'ConsolidatedClaimsNote'}
+      name="ConsolidatedClaimsNote"
+      component={ConsolidatedClaimsNote}
+      options={LARGE_PANEL_OPTIONS}
+    />,
+    <BenefitsStack.Screen
+      key={'WhatDoIDoIfDisagreement'}
+      name="WhatDoIDoIfDisagreement"
+      component={WhatDoIDoIfDisagreement}
+      options={LARGE_PANEL_OPTIONS}
+    />,
+    <BenefitsStack.Screen
+      key={'AskForClaimDecision'}
+      name="AskForClaimDecision"
+      component={AskForClaimDecision}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <BenefitsStack.Screen
+      key={'TakePhotos'}
+      name="TakePhotos"
+      component={TakePhotos}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <BenefitsStack.Screen
+      key={'SelectFile'}
+      name="SelectFile"
+      component={SelectFile}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <BenefitsStack.Screen
+      key={'UploadOrAddPhotos'}
+      name="UploadOrAddPhotos"
+      component={UploadOrAddPhotos}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <BenefitsStack.Screen
+      key={'UploadFile'}
+      name="UploadFile"
+      component={UploadFile}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
   ]
 }

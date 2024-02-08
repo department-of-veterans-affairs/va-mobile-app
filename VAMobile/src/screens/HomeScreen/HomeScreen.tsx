@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   Box,
   CategoryLanding,
@@ -16,17 +17,16 @@ import {
 } from 'components'
 import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { fetchInboxMessages, getClaimsAndAppeals, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { fetchInboxMessages, getClaimsAndAppeals, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
-import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'

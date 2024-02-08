@@ -1,9 +1,9 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import ReactNativeHapticFeedback, { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
-import { StackScreenProps } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/native'
+import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, ChildTemplate, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'

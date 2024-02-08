@@ -372,14 +372,15 @@ context('Prescription', () => {
   describe('loadAllPrescriptions', () => {
     it('should filter shipped, processing, transferred, and refillable prescriptions into their own lists', async () => {
       when(api.get as jest.Mock)
-      .calledWith('/v0/health/rx/prescriptions', expect.anything())
-      .mockResolvedValue({
-        data: loadAllPrescriptionMockData,
-        meta: {
-          prescriptionStatusCount: {
-            isRefillable: 0,
-        }}
-      })
+        .calledWith('/v0/health/rx/prescriptions', expect.anything())
+        .mockResolvedValue({
+          data: loadAllPrescriptionMockData,
+          meta: {
+            prescriptionStatusCount: {
+              isRefillable: 0,
+            },
+          },
+        })
 
       const store = realStore()
       await store.dispatch(loadAllPrescriptions())

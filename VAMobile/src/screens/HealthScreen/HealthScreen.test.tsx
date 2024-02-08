@@ -88,12 +88,11 @@ context('HealthScreen', () => {
           ...initialSecureMessagingState,
           hasLoadedInbox,
           inbox: {
-            unread: unreadCount
-            },
+            unread: unreadCount,
           },
         },
       },
-    )
+    })
   }
   beforeEach(() => {
     initializeTestInstance()

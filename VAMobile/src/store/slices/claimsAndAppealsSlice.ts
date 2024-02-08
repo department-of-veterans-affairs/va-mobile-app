@@ -176,7 +176,11 @@ export const prefetchClaimsAndAppeals =
       let activeClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined
       let closedClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined
 
-      const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems, activeClaimsCount } = getState().claimsAndAppeals
+      const {
+        claimsAndAppealsMetaPagination,
+        loadedClaimsAndAppeals: loadedItems,
+        activeClaimsCount,
+      } = getState().claimsAndAppeals
       const activeLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(
         loadedItems,
         claimsAndAppealsMetaPagination,
@@ -242,7 +246,7 @@ export const getClaimsAndAppeals =
       const {
         claimsAndAppealsMetaPagination,
         loadedClaimsAndAppeals: loadedItems,
-        activeClaimsCount
+        activeClaimsCount,
       } = getState().claimsAndAppeals
       const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(
         loadedItems,

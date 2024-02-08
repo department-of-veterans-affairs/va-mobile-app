@@ -1,13 +1,13 @@
-import { View, ViewStyle } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { View, ViewStyle } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { NAMESPACE } from 'constants/namespaces'
 import { VAScrollView, WaygateWrapper } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
@@ -99,7 +99,9 @@ export const LargePanel: FC<LargePanelProps> = ({
   }
 
   const headerProps: HeaderBannerProps = {
-    leftButton: leftButtonText ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, onPress: leftTitleButtonPress } : undefined,
+    leftButton: leftButtonText
+      ? { text: leftButtonText, a11yLabel: leftButtonA11yLabel, onPress: leftTitleButtonPress }
+      : undefined,
     title: title ? { type: 'Static', title, a11yLabel: titleA11yLabel } : undefined,
     rightButton: rightButtonText
       ? {
@@ -128,10 +130,15 @@ export const LargePanel: FC<LargePanelProps> = ({
     <>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
-        <VAScrollView testID={testID} removeInsets={removeInsets} contentContainerStyle={removeInsets ? containerStyle : undefined}>
+        <VAScrollView
+          testID={testID}
+          removeInsets={removeInsets}
+          contentContainerStyle={removeInsets ? containerStyle : undefined}>
           <WaygateWrapper>
             {children}
-            {footerButtonText && onFooterButtonPress && <Button label={footerButtonText} onPress={onFooterButtonPress} />}
+            {footerButtonText && onFooterButtonPress && (
+              <Button label={footerButtonText} onPress={onFooterButtonPress} />
+            )}
           </WaygateWrapper>
         </VAScrollView>
       </View>

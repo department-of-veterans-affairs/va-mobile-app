@@ -1,7 +1,15 @@
 import { LabelTagTypeConstants, LinkTypeOptionsConstants, LinkUrlIconType } from 'components'
 import { getTheme } from 'styles/themes/standardTheme'
 
-import { BooleanOptions, ChildrenOptions, OnPressOptions, VABorderColorOptions, VAColorsOptions, VATextAndButtonColorOptions, objectToPickerOptions } from './PickerOptions'
+import {
+  BooleanOptions,
+  ChildrenOptions,
+  OnPressOptions,
+  VABorderColorOptions,
+  VAColorsOptions,
+  VATextAndButtonColorOptions,
+  objectToPickerOptions,
+} from './PickerOptions'
 
 const standardTheme = getTheme()
 
@@ -28,7 +36,12 @@ const CommonComponentWhiteList: CommonComponentWhiteListProps = {
       text: 'text',
       children: undefined,
     },
-    propOptions: [{ label: 'border', options: VABorderColorOptions }, 'title', 'text', { label: 'children', options: ChildrenOptions }],
+    propOptions: [
+      { label: 'border', options: VABorderColorOptions },
+      'title',
+      'text',
+      { label: 'children', options: ChildrenOptions },
+    ],
   },
   CollapsibleAlert: {
     defaultProps: {
@@ -37,7 +50,11 @@ const CommonComponentWhiteList: CommonComponentWhiteListProps = {
       body: undefined,
       a11yLabel: '',
     },
-    propOptions: [{ label: 'border', options: VABorderColorOptions }, 'headerText', { label: 'body', options: ChildrenOptions }],
+    propOptions: [
+      { label: 'border', options: VABorderColorOptions },
+      'headerText',
+      { label: 'body', options: ChildrenOptions },
+    ],
   },
   CollapsibleView: {
     defaultProps: {
@@ -60,7 +77,11 @@ const CommonComponentWhiteList: CommonComponentWhiteListProps = {
       justTheSpinnerIcon: false,
       spinnerColor: undefined, // only used in sync screen
     },
-    propOptions: ['text', { label: 'justTheSpinnerIcon', options: BooleanOptions }, { label: 'spinnerColor', options: VAColorsOptions }],
+    propOptions: [
+      'text',
+      { label: 'justTheSpinnerIcon', options: BooleanOptions },
+      { label: 'spinnerColor', options: VAColorsOptions },
+    ],
   },
   ClickForActionLink: {
     defaultProps: {

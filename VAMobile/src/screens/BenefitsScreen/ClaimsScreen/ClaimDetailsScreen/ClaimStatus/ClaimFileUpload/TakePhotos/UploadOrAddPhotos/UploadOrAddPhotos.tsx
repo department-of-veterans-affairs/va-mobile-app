@@ -1,8 +1,8 @@
-import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { Dimensions, ScrollView } from 'react-native'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React, { ReactElement, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Dimensions, ScrollView } from 'react-native'
+import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { useSelector } from 'react-redux'
 
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -10,36 +10,59 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
-import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, PhotoAdd, PhotoPreview, TextView } from 'components'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { ClaimEventData } from 'store/api'
-import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
-import { DocumentTypes526 } from 'constants/documentTypes'
+import {
+  AlertBox,
+  Box,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
+  LoadingComponent,
+  PhotoAdd,
+  PhotoPreview,
+  TextView,
+} from 'components'
+import { SnackbarMessages } from 'components/SnackBar'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { MAX_NUM_PHOTOS } from 'constants/claims'
+import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { RootState } from 'store'
-import { SnackbarMessages } from 'components/SnackBar'
-import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
-import { deletePhoto, onAddPhotos } from 'utils/claims'
+import { ClaimEventData } from 'store/api'
+import { ClaimsAndAppealsState, fileUploadSuccess, uploadFileToClaim } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { deletePhoto, onAddPhotos } from 'utils/claims'
+import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { showSnackBar } from 'utils/common'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useOrientation, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import {
+  useAppDispatch,
+  useBeforeNavBackListener,
+  useDestructiveActionSheet,
+  useOrientation,
+  useRouteNavigation,
+  useShowActionSheet,
+  useTheme,
+} from 'utils/hooks'
 
 type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOrAddPhotos'>
 
 function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<
+    RootState,
+    ClaimsAndAppealsState
+  >((state) => state.claimsAndAppeals)
   const showActionSheetWithOptions = useShowActionSheet()
   const { request: originalRequest, firstImageResponse } = route.params
   const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
   const [imagesList, setImagesList] = useState(firstImageResponse.assets)
   const [errorMessage, setErrorMessage] = useState('')
-  const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0))
+  const [totalBytesUsed, setTotalBytesUsed] = useState(
+    firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0),
+  )
   const confirmAlert = useDestructiveActionSheet()
   const navigateTo = useRouteNavigation()
   const [request, setRequest] = useState<ClaimEventData>(originalRequest)
@@ -99,13 +122,24 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   }, [documentType])
 
   const onUploadConfirmed = () => {
-    logAnalyticsEvent(Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
+    logAnalyticsEvent(
+      Events.vama_evidence_cont_3(claim?.id || '', request.trackedItemId || null, request.type, 'photo'),
+    )
     dispatch(uploadFileToClaim(claim?.id || '', snackbarMessages, request, imagesList || [], 'photo'))
   }
 
   const onUpload = (): void => {
     const totalSize = imagesList?.reduce((sum, image) => sum + (image.fileSize || 0), 0)
-    logAnalyticsEvent(Events.vama_evidence_cont_2(claim?.id || '', request.trackedItemId || null, request.type, 'photo', totalSize || 0, imagesList?.length || 0))
+    logAnalyticsEvent(
+      Events.vama_evidence_cont_2(
+        claim?.id || '',
+        request.trackedItemId || null,
+        request.type,
+        'photo',
+        totalSize || 0,
+        imagesList?.length || 0,
+      ),
+    )
 
     confirmAlert({
       title: t('fileUpload.submit.confirm.title'),
@@ -125,13 +159,17 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
 
   const onDocumentTypeChange = (selectedType: string) => {
     const typeLabel = DocumentTypes526.filter((type) => type.value === selectedType)[0]?.label || selectedType
-    logAnalyticsEvent(Events.vama_evidence_type(claim?.id || '', request.trackedItemId || null, request.type, 'photo', typeLabel))
+    logAnalyticsEvent(
+      Events.vama_evidence_type(claim?.id || '', request.trackedItemId || null, request.type, 'photo', typeLabel),
+    )
     setDocumentType(selectedType)
   }
 
   const onCheckboxChange = (isChecked: boolean) => {
     if (isChecked) {
-      logAnalyticsEvent(Events.vama_evidence_conf(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
+      logAnalyticsEvent(
+        Events.vama_evidence_conf(claim?.id || '', request.trackedItemId || null, request.type, 'photo'),
+      )
     }
     setConfirmed(isChecked)
   }
@@ -164,7 +202,11 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const displayImages = (): ReactElement => {
     const { condensedMarginBetween, gutter } = theme.dimensions
     /** Need to subtract gutter margins and margins between pics before dividing screen width by 3 to get the width of each image*/
-    const calculatedWidth = ((isPortrait ? Dimensions.get('window').width : Dimensions.get('window').height) - 2 * gutter - 2 * condensedMarginBetween) / 3
+    const calculatedWidth =
+      ((isPortrait ? Dimensions.get('window').width : Dimensions.get('window').height) -
+        2 * gutter -
+        2 * condensedMarginBetween) /
+      3
 
     const uploadedImages = (): ReactElement[] => {
       return _.map(imagesList || [], (asset, index) => {
@@ -180,10 +222,13 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
               onDeleteCallback={(): void => {
                 deletePhoto(deleteCallbackIfUri, index, imagesList || [])
               }}
-              photoPosition={t(imagesList && imagesList?.length > 1 ? 'fileUpload.ofTotalPhotos' : 'fileUpload.ofTotalPhoto', {
-                photoNum: index + 1,
-                totalPhotos: imagesList?.length,
-              })}
+              photoPosition={t(
+                imagesList && imagesList?.length > 1 ? 'fileUpload.ofTotalPhotos' : 'fileUpload.ofTotalPhoto',
+                {
+                  photoNum: index + 1,
+                  totalPhotos: imagesList?.length,
+                },
+              )}
             />
           </Box>
         )
@@ -199,7 +244,15 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
               width={calculatedWidth}
               height={calculatedWidth}
               onPress={(): void => {
-                onAddPhotos(t, showActionSheetWithOptions, setErrorMessage, callbackIfUri, totalBytesUsed || 0, claim?.id || '', request)
+                onAddPhotos(
+                  t,
+                  showActionSheetWithOptions,
+                  setErrorMessage,
+                  callbackIfUri,
+                  totalBytesUsed || 0,
+                  claim?.id || '',
+                  request,
+                )
               }}
             />
           </Box>
@@ -258,7 +311,9 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
       leftButtonText={t('cancel')}
       title={t('fileUpload.uploadPhotos')}
       onLeftButtonPress={() => {
-        logAnalyticsEvent(Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'photo'))
+        logAnalyticsEvent(
+          Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'photo'),
+        )
         navigation.dispatch(StackActions.pop(2))
       }}>
       {loadingFileUpload ? (
@@ -267,7 +322,13 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
         <Box mb={theme.dimensions.contentMarginBottom}>
           {!!errorMessage && (
             <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertBox scrollViewRef={scrollViewRef} title={t('fileUpload.PhotosNotUploaded')} text={errorMessage} border="error" focusOnError={onSaveClicked} />
+              <AlertBox
+                scrollViewRef={scrollViewRef}
+                title={t('fileUpload.PhotosNotUploaded')}
+                text={errorMessage}
+                border="error"
+                focusOnError={onSaveClicked}
+              />
             </Box>
           )}
           <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
@@ -305,7 +366,12 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
             </TextView>
           </Box>
           <Box mx={theme.dimensions.gutter}>
-            <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+            <FormWrapper
+              fieldsList={pickerField}
+              onSave={onUpload}
+              onSaveClicked={onSaveClicked}
+              setOnSaveClicked={setOnSaveClicked}
+            />
             <Box mt={theme.dimensions.textAndButtonLargeMargin}>
               <Button
                 onPress={() => {

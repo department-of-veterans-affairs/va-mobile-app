@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { AppealAOJTypes, AppealEventData, AppealStatusData, AppealTypes } from 'store/api/types'
 import { Box, CollapsibleView, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
 import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
+import { AppealAOJTypes, AppealEventData, AppealStatusData, AppealTypes } from 'store/api/types'
+import { useTheme } from 'utils/hooks'
 
 import AppealCurrentStatus from './AppealCurrentStatus/AppealCurrentStatus'
 import AppealTimeline from './AppealTimeline/AppealTimeline'
@@ -21,7 +21,16 @@ type AppealStatusProps = {
   programArea: string
 }
 
-function AppealStatus({ events, status, aoj, appealType, numAppealsAhead, isActiveAppeal, docketName, programArea }: AppealStatusProps) {
+function AppealStatus({
+  events,
+  status,
+  aoj,
+  appealType,
+  numAppealsAhead,
+  isActiveAppeal,
+  docketName,
+  programArea,
+}: AppealStatusProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -45,11 +54,20 @@ function AppealStatus({ events, status, aoj, appealType, numAppealsAhead, isActi
 
   return (
     <Box>
-      <CollapsibleView text={t('appealDetails.viewPastEvents')} contentInTextArea={false} testID="reviewPastEventsTestID">
+      <CollapsibleView
+        text={t('appealDetails.viewPastEvents')}
+        contentInTextArea={false}
+        testID="reviewPastEventsTestID">
         <AppealTimeline events={events} />
       </CollapsibleView>
       <Box mt={theme.dimensions.condensedMarginBetween}>
-        <AppealCurrentStatus status={status} aoj={aoj} appealType={appealType} docketName={docketName} programArea={programArea} />
+        <AppealCurrentStatus
+          status={status}
+          aoj={aoj}
+          appealType={appealType}
+          docketName={docketName}
+          programArea={programArea}
+        />
       </Box>
       {renderNumberOfAppealsAhead()}
       <Box mt={theme.dimensions.condensedMarginBetween}>
