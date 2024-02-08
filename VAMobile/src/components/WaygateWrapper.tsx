@@ -8,15 +8,12 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { AlertBox, Box, ClickToCallPhoneNumber } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/waygateConfig'
-import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
-import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { fixedWhiteSpaceString } from 'utils/jsonFormatting'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { openAppStore } from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
+import { fixedWhiteSpaceString } from 'utils/jsonFormatting'
 import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/waygateConfig'
 
 export type WaygateWrapperProps = {
@@ -48,7 +45,8 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
     }
     const errorMsgBodyV2 = fixedWhiteSpaceString(waygate.errorMsgBodyV2)
     const text = errorMsgBodyV2.length > 0 ? errorMsgBodyV2 : waygate.errorMsgBody
-    const phoneNumber = waygate.errorPhoneNumber && waygate.errorPhoneNumber.length > 0 ? waygate.errorPhoneNumber : t('8006982411')
+    const phoneNumber =
+      waygate.errorPhoneNumber && waygate.errorPhoneNumber.length > 0 ? waygate.errorPhoneNumber : t('8006982411')
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
         <AlertBox
