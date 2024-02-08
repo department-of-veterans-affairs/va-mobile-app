@@ -2,24 +2,23 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { AppointmentAttributes, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
+import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { context, render } from 'testUtils'
+import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 
 import AppointmentReason from './AppointmentReason'
 
 context('AppointmentReason', () => {
-  let props: any
   const reasonText = 'New Issue: 22.4.55'
   const initializeTestInstance = (reason?: string): void => {
-    props = {
-      attributes: {
-        status: AppointmentStatusConstants.BOOKED,
-        isPending: false,
-        reason: reason || null,
-        phoneOnly: true,
-      },
+    const props = {
+      ...defaultAppointmentAttributes,
+      status: AppointmentStatusConstants.BOOKED,
+      isPending: false,
+      reason: reason || null,
+      phoneOnly: true,
     }
-    render(<AppointmentReason {...props} />)
+    render(<AppointmentReason attributes={props} />)
   }
 
   describe('Confirmed/Canceled Confirm Appointments', () => {
