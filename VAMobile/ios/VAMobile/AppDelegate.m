@@ -83,6 +83,23 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
 }
 
+// Enables Firebase DebugView for test builds
+{
+#if DEBUG || STAGING
+if UserDefaults.standard.bool(forKey: "firebaseDebug") == true {
+    var args = ProcessInfo.processInfo.arguments
+    args.append("-FIRAnalyticsDebugEnabled")
+    args.append("-FIRDebugEnabled")
+    ProcessInfo.processInfo.setValue(args, forKey: "arguments")
+} else {
+    var args = ProcessInfo.processInfo.arguments
+    args.append("-FIRAnalyticsDebugDisabled")
+    args.append("-FIRDebugDisabled")
+    ProcessInfo.processInfo.setValue(args, forKey: "arguments")
+}
+#endif
+}
+
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
   [RNNotifications didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
 }
