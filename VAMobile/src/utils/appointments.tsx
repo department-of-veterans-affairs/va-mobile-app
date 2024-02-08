@@ -313,7 +313,7 @@ export const getTextLinesForAppointmentListItem = (
     typeOfCare,
     healthcareProvider,
     serviceCategoryName,
-    healthcareService
+    healthcareService,
   } = attributes
   const textLines: Array<TextLineWithIconProps> = []
   const { condensedMarginBetween } = theme.dimensions
@@ -344,7 +344,9 @@ export const getTextLinesForAppointmentListItem = (
       },
       {
         text: t('text.raw', {
-          text: isCovidVaccine ? t('upcomingAppointments.covidVaccine') : typeOfCare || healthcareService || t('appointments.noTypeOfCare')
+          text: isCovidVaccine
+            ? t('upcomingAppointments.covidVaccine')
+            : typeOfCare || healthcareService || t('appointments.noTypeOfCare'),
         }),
         variant: 'HelperText',
         mb: 5,

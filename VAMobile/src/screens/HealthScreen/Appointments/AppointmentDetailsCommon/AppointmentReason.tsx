@@ -24,12 +24,14 @@ function AppointmentReason({ attributes }: AppointmentReasonProps) {
     return (
       <Box mt={phoneOnly ? undefined : theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
-          {phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+          {phoneOnly ||
+          (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
             ? t('upcomingAppointmentDetails.sharedProvider')
             : t('upcomingAppointmentDetails.reason')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={phoneOnly && isPendingAppointment}>
-          {phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+          {phoneOnly ||
+          (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
             ? t('upcomingAppointmentDetails.reasonDetails', { reason: apptReason })
             : reason}
         </TextView>

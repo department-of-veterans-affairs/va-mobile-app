@@ -35,7 +35,7 @@ describe('AppointmentAddressAndNumber', () => {
       location: { name, address, phone },
       ...(attributes || {}),
     } as AppointmentAttributes
-    render(<AppointmentAddressAndNumber attributes={props} isPastAppointment={false}/>)
+    render(<AppointmentAddressAndNumber attributes={props} isPastAppointment={false} />)
   }
 
   beforeEach(() => {
@@ -82,9 +82,13 @@ describe('AppointmentAddressAndNumber', () => {
   describe('when the address does not exist', () => {
     it('displays the correct message', () => {
       renderWithProps({ location: { name, address: undefined, phone } })
-      expect(screen.getByText(/We can't show your health care facility's address right now. Try again later. Or call your facility to get the address./)).toBeTruthy()
-      expect(screen.getByRole('link', {name: '123-456-7890' })).toBeTruthy()
-      expect(screen.getByRole('link', {name: 'TTY: 711' })).toBeTruthy()
+      expect(
+        screen.getByText(
+          /We can't show your health care facility's address right now. Try again later. Or call your facility to get the address./,
+        ),
+      ).toBeTruthy()
+      expect(screen.getByRole('link', { name: '123-456-7890' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
     })
   })
 
@@ -104,8 +108,12 @@ describe('AppointmentAddressAndNumber', () => {
   describe('when phone and address do not exist', () => {
     it('displays the correct message and the facility locator link', () => {
       renderWithProps({ location: { name, address: undefined, phone: {} as AppointmentPhone } })
-      expect(screen.getByText(/We can't show your health care facility's address or phone number right now. Try again later. Or go to VA.gov to find your facility's information./)).toBeTruthy()
-      expect(screen.getByRole('link', {name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
+      expect(
+        screen.getByText(
+          /We can't show your health care facility's address or phone number right now. Try again later. Or go to VA.gov to find your facility's information./,
+        ),
+      ).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
     })
   })
 

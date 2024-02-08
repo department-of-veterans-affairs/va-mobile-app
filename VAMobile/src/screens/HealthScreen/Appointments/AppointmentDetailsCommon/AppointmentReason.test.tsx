@@ -9,7 +9,7 @@ import AppointmentReason from './AppointmentReason'
 
 context('AppointmentReason', () => {
   let props: any
-  let reasonText = 'New Issue: 22.4.55'
+  const reasonText = 'New Issue: 22.4.55'
   const initializeTestInstance = (reason?: string): void => {
     props = {
       attributes: {

@@ -61,7 +61,12 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
   let body
   let bodyA11yLabel
 
-  if (phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION' && !isCovidVaccine)) {
+  if (
+    phoneOnly ||
+    (appointmentType === AppointmentTypeConstants.VA &&
+      serviceCategoryName !== 'COMPENSATION & PENSION' &&
+      !isCovidVaccine)
+  ) {
     title = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')
     body =
       appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine && cancelId
@@ -190,10 +195,13 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
       </TextView>
       {(appointmentType === AppointmentTypeConstants.VA || phoneOnly) && !isCovidVaccine && cancelId ? (
         <>
-          {(phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) && linkOrPhone}
+          {(phoneOnly ||
+            (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) &&
+            linkOrPhone}
           <Box
             mt={
-              phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+              phoneOnly ||
+              (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
                 ? theme.dimensions.standardMarginBetween
                 : undefined
             }>

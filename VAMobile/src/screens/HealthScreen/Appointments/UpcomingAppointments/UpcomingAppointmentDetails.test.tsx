@@ -184,7 +184,7 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment type is va', () => {
     it('should display the appointment details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA)
-      expect(screen.getByRole('header', {name:'In-person appointment'})).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'In-person appointment' })).toBeTruthy()
     })
   })
 

@@ -57,7 +57,8 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
 
   const appointment = pastAppointmentsById?.[appointmentID]
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, status, phoneOnly, location, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, status, phoneOnly, location, serviceCategoryName } =
+    attributes || ({} as AppointmentAttributes)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
 
@@ -83,7 +84,10 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
       return <></>
     }
 
-    if (phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) {
+    if (
+      phoneOnly ||
+      (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+    ) {
       return (
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>

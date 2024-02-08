@@ -10,7 +10,13 @@ import {
   TextView,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { AppointmentAttributes, AppointmentLocation, AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
+import {
+  AppointmentAttributes,
+  AppointmentLocation,
+  AppointmentStatusConstants,
+  AppointmentType,
+  AppointmentTypeConstants,
+} from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { a11yHintProp } from 'utils/accessibility'
 import { isAPendingAppointment } from 'utils/appointments'
@@ -35,7 +41,16 @@ type AppointmentAddressAndNumberProps = {
 
 function AppointmentAddressAndNumber({ attributes, isPastAppointment = false }: AppointmentAddressAndNumberProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { appointmentType, healthcareService, location, isCovidVaccine, healthcareProvider, phoneOnly, serviceCategoryName, status } = attributes || ({} as AppointmentAttributes)
+  const {
+    appointmentType,
+    healthcareService,
+    location,
+    isCovidVaccine,
+    healthcareProvider,
+    phoneOnly,
+    serviceCategoryName,
+    status,
+  } = attributes || ({} as AppointmentAttributes)
   const { address, phone } = location || ({} as AppointmentLocation)
 
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS

@@ -16,9 +16,20 @@ function ProviderName({ attributes }: ProviderNameProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const isAppointmentPending = isAPendingAppointment(attributes)
-  const { appointmentType, practitioner, healthcareProvider, friendlyLocationName, location, phoneOnly, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
+  const {
+    appointmentType,
+    practitioner,
+    healthcareProvider,
+    friendlyLocationName,
+    location,
+    phoneOnly,
+    serviceCategoryName,
+  } = attributes || ({} as AppointmentAttributes)
 
-  if (phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) {
+  if (
+    phoneOnly ||
+    (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+  ) {
     return (
       <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
         {healthcareProvider ? healthcareProvider : t('appointments.noProvider')}

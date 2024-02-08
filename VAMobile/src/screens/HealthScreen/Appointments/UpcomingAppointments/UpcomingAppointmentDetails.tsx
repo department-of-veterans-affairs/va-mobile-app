@@ -89,8 +89,17 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   }
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, startDateUtc, minutesDuration, comment, status, isCovidVaccine, phoneOnly, serviceCategoryName } =
-    attributes || ({} as AppointmentAttributes)
+  const {
+    appointmentType,
+    location,
+    startDateUtc,
+    minutesDuration,
+    comment,
+    status,
+    isCovidVaccine,
+    phoneOnly,
+    serviceCategoryName,
+  } = attributes || ({} as AppointmentAttributes)
   const { name, code, url, lat, long, address } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
@@ -317,7 +326,8 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       <Box mt={theme.dimensions.condensedMarginBetween}>
         {!isAppointmentCanceled ? (
           <AppointmentCancellationInfo appointment={appointment} goBack={goBack} />
-        ) : phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION') ? (
+        ) : phoneOnly ||
+          (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION') ? (
           <Box mt={theme.dimensions.condensedMarginBetween}>
             <TextArea>
               <TextView
