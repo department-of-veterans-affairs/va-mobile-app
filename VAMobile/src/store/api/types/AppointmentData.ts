@@ -155,7 +155,7 @@ export type AppointmentAttributes = {
   minutesDuration: number
   comment: string
   timeZone: AppointmentTimeZone
-  healthcareService: string
+  healthcareService: string | undefined
   healthcareProvider: string | null
   location: AppointmentLocation
   practitioner?: AppointmentPractitioner

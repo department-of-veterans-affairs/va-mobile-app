@@ -7,9 +7,11 @@ import {
   AppointmentAttributes,
   AppointmentStatusConstants,
   AppointmentStatusDetailTypeConsts,
+  AppointmentTypeConstants,
   AppointmentTypeToA11yLabel,
   AppointmentTypeToID,
 } from 'store/api/types'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { isAPendingAppointment } from 'utils/appointments'
 import {
@@ -75,6 +77,47 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
           {apptTitle}
         </TextView>
         <TextView variant={'MobileBody'} paragraphSpacing={true}>
+          {apptBody}
+        </TextView>
+        {isAppointmentPending ? undefined : (
+          <TextView
+            variant={'MobileBodyBold'}
+            mb={theme.dimensions.standardMarginBetween}>{`${date}\n${time}`}</TextView>
+        )}
+      </Box>
+    )
+  } else if (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION') {
+    let who = t('appointments.canceled.whoCanceled.you')
+    if (
+      statusDetail === AppointmentStatusDetailTypeConsts.CLINIC ||
+      statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
+    ) {
+      who = healthcareProvider || location?.name || t('appointments.canceled.whoCanceled.facility')
+    }
+    const apptTitle = isAppointmentCanceled
+      ? t('appointments.inPersonVA.canceledTitle')
+      : isPastAppointment
+        ? t('appointments.inPersonVA.pastTitle')
+        : t('appointments.inPersonVA.upcomingTitle')
+
+    const apptBody = isAppointmentCanceled
+      ? t('appointments.pending.cancelled.theTimeAndDate', { who })
+      : isPastAppointment
+        ? t('appointments.pastBody')
+        : isAppointmentPending
+          ? t('appointments.pending.submitted.pendingRequestTypeOfCare', { typeOfCare })
+          : t('appointments.inPersonVA.upcomingBody', {
+              facilityName: location?.name || t('prescription.details.vaFacilityHeader'),
+            })
+
+    const apptBodyA11yLabel = a11yLabelVA(apptBody)
+
+    return (
+      <Box>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+          {apptTitle}
+        </TextView>
+        <TextView variant={'MobileBody'} paragraphSpacing={true} accessibilityLabel={apptBodyA11yLabel}>
           {apptBody}
         </TextView>
         {isAppointmentPending ? undefined : (
