@@ -20,6 +20,14 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  // Enables Firebase DebugView for test builds
+  #if DEBUG || STAGING
+    var args = ProcessInfo.processInfo.arguments
+    args.append("-FIRAnalyticsDebugEnabled")
+    args.append("-FIRDebugEnabled")
+    ProcessInfo.processInfo.setValue(args, forKey: "arguments")
+  #endif
+
   // firebase configuration
   if ([FIRApp defaultApp] == nil) {
       [FIRApp configure];

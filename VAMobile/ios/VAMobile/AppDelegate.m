@@ -42,6 +42,14 @@ static void InitializeFlipper(UIApplication *application) {
   InitializeFlipper(application);
 #endif
 
+  // Enables Firebase DebugView for test builds
+  #if DEBUG || STAGING
+    var args = ProcessInfo.processInfo.arguments
+    args.append("-FIRAnalyticsDebugEnabled")
+    args.append("-FIRDebugEnabled")
+    ProcessInfo.processInfo.setValue(args, forKey: "arguments")
+  #endif
+
   // firebase configuration
   if ([FIRApp defaultApp] == nil) {
       [FIRApp configure];
@@ -72,16 +80,6 @@ static void InitializeFlipper(UIApplication *application) {
   rootView.loadingView = vc.view;
   
   return YES;
-}
-
-// Enables Firebase DebugView for test builds
-{
-#if DEBUG || STAGING
-  var args = ProcessInfo.processInfo.arguments
-  args.append("-FIRAnalyticsDebugEnabled")
-  args.append("-FIRDebugEnabled")
-  ProcessInfo.processInfo.setValue(args, forKey: "arguments")
-#endif
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
