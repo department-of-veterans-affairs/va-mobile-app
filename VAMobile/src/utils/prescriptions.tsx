@@ -1,6 +1,8 @@
+import { TFunction } from 'i18next'
+
 import { LabelTagTypeConstants } from 'components/LabelTag'
 import { RefillStatus, RefillStatusConstants } from 'store/api/types'
-import { TFunction } from 'i18next'
+
 import { a11yLabelVA } from './a11yLabel'
 
 export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
@@ -75,7 +77,10 @@ export const getTagTypeForStatus = (status: string) => {
  * @param status - RefillStatus to key to pull in the correct text
  * @param t - translation function
  */
-export const getStatusDefinitionTextForRefillStatus = (status: RefillStatus, t: TFunction): { text: string; a11yLabel: string } => {
+export const getStatusDefinitionTextForRefillStatus = (
+  status: RefillStatus,
+  t: TFunction,
+): { text: string; a11yLabel: string } => {
   switch (status) {
     case RefillStatusConstants.ACTIVE:
       return {

@@ -1,9 +1,9 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { ViewStyle } from 'react-native'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { ViewStyle } from 'react-native'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
@@ -23,7 +23,11 @@ function PrescriptionHistoryNoMatches({ isFiltered }: PrescriptionHistoryNoMatch
         <TextView textAlign={'center'} variant="MobileBodyBold" accessibilityRole={'header'}>
           {t('prescription.history.empty.filtered.title')}
         </TextView>
-        <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" {...contenta11y}>
+        <TextView
+          pt={theme.dimensions.condensedMarginBetween}
+          textAlign={'center'}
+          variant="MobileBody"
+          {...contenta11y}>
           {t('prescription.history.empty.filtered.message')}
         </TextView>
       </>
@@ -40,7 +44,11 @@ function PrescriptionHistoryNoMatches({ isFiltered }: PrescriptionHistoryNoMatch
         <TextView textAlign={'center'} variant="MobileBodyBold" accessibilityRole={'header'}>
           {t('prescription.history.empty.title')}
         </TextView>
-        <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescription.history.empty.message'))}>
+        <TextView
+          pt={theme.dimensions.condensedMarginBetween}
+          textAlign={'center'}
+          variant="MobileBody"
+          accessibilityLabel={a11yLabelVA(t('prescription.history.empty.message'))}>
           {t('prescription.history.empty.message')}
         </TextView>
       </>
@@ -54,7 +62,11 @@ function PrescriptionHistoryNoMatches({ isFiltered }: PrescriptionHistoryNoMatch
 
   return (
     <VAScrollView contentContainerStyle={noMatchScrollStyles}>
-      <Box justifyContent="center" mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+      <Box
+        justifyContent="center"
+        mx={theme.dimensions.gutter}
+        mb={theme.dimensions.contentMarginBottom}
+        alignItems={'center'}>
         <Box mt={theme.dimensions.condensedMarginBetween}>{getContent()}</Box>
       </Box>
     </VAScrollView>
