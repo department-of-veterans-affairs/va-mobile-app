@@ -1,10 +1,11 @@
 import React from 'react'
 import { Linking } from 'react-native'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
-import { AppointmentPhone } from 'store/api/types'
 import { ClickToCallPhoneNumber } from 'components'
+import { AppointmentPhone } from 'store/api/types'
+import { context, render } from 'testUtils'
 
 context('ClickToCallPhoneNumber', () => {
   const renderWithProps = (phone?: AppointmentPhone) => {

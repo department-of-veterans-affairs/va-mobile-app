@@ -1,10 +1,11 @@
-import { View, ViewStyle } from 'react-native'
 import React from 'react'
+import { View, ViewStyle } from 'react-native'
+
+import { useFocusEffect } from '@react-navigation/native'
 
 import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAScrollView } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useAccessibilityFocus, useOrientation, useTheme } from 'utils/hooks'
-import { useFocusEffect } from '@react-navigation/native'
 
 export type GenericOnboardingProps = {
   header: string
@@ -17,7 +18,15 @@ export type GenericOnboardingProps = {
   centerHeader?: boolean
 }
 
-function GenericOnboarding({ header, text, displayLogo, headerA11yLabel, textA11yLabel, listOfText, centerHeader }: GenericOnboardingProps) {
+function GenericOnboarding({
+  header,
+  text,
+  displayLogo,
+  headerA11yLabel,
+  textA11yLabel,
+  listOfText,
+  centerHeader,
+}: GenericOnboardingProps) {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
   const isPortrait = useOrientation()
@@ -39,7 +48,10 @@ function GenericOnboarding({ header, text, displayLogo, headerA11yLabel, textA11
 
   return (
     <VAScrollView contentContainerStyle={containerStyle} alwaysBounceVertical={false} removeInsets={true}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
+      <Box
+        mt={theme.dimensions.contentMarginTop}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         {displayLogo && (
           <Box my={theme.dimensions.standardMarginBetween} alignItems={'center'}>
             <VAIcon name="Logo" testID="VAIconOnboardingLogo" />
@@ -53,7 +65,11 @@ function GenericOnboarding({ header, text, displayLogo, headerA11yLabel, textA11
           </View>
         </Box>
         {text && (
-          <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody" color="primaryContrast" mt={theme.dimensions.standardMarginBetween}>
+          <TextView
+            {...testIdProps(textA11yLabel || text)}
+            variant="MobileBody"
+            color="primaryContrast"
+            mt={theme.dimensions.standardMarginBetween}>
             {text}
           </TextView>
         )}

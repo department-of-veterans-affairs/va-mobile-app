@@ -1,10 +1,12 @@
 import React from 'react'
+
 import { context, fireEvent, render, screen } from 'testUtils'
+
 import FormAttachments from './FormAttachments'
 
-let mockNavigationSpy = jest.fn()
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => {
@@ -45,7 +47,7 @@ context('FormAttachments', () => {
     render(
       <FormAttachments
         removeOnPress={removeOnPressSpy}
-        buttonLabel='add files'
+        buttonLabel="add files"
         buttonPress={largeButtonSpy}
         attachmentsList={attachments}
       />,

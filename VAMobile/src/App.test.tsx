@@ -1,10 +1,12 @@
 import React from 'react'
 import { Linking } from 'react-native'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
-import { AuthGuard } from './App'
 import { handleTokenCallbackUrl, initialAuthState } from 'store/slices'
+import { context, render } from 'testUtils'
+
+import { AuthGuard } from './App'
 
 jest.mock('./utils/remoteConfig', () => ({
   activateRemoteConfig: jest.fn(() => Promise.resolve()),
@@ -12,7 +14,7 @@ jest.mock('./utils/remoteConfig', () => ({
 }))
 
 jest.mock('./store/slices', () => {
-  let original = jest.requireActual('./store/slices')
+  const original = jest.requireActual('./store/slices')
   return {
     ...original,
     handleTokenCallbackUrl: jest.fn(() => ({ type: 'FOO' })),
@@ -30,7 +32,7 @@ jest.mock('react-native/Libraries/Linking/Linking', () => ({
   getInitialURL: jest.fn(),
   addEventListener: jest.fn(),
   removeEventListener: jest.fn(),
-}));
+}))
 
 context('App', () => {
   afterEach(() => {

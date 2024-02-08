@@ -1,12 +1,12 @@
 import React from 'react'
-import Mock = jest.Mock
-import { context, fireEvent, render, screen } from 'testUtils'
+
 import { VAIconProps } from 'components/VAIcon'
+import { context, fireEvent, render, screen } from 'testUtils'
+
 import HeaderBanner, { HeaderLeftButtonProps, HeaderRightButtonProps, HeaderStaticTitleProps } from './HeaderBanner'
 
 context('HeaderBanner', () => {
-  let onPressSpy: Mock
-  onPressSpy = jest.fn(() => { })
+  const onPressSpy = jest.fn(() => {})
 
   const initializeTestInstance = (
     titleText?: string,
@@ -16,12 +16,12 @@ context('HeaderBanner', () => {
     onRightTitleButtonPress?: () => void,
     rightVAIconProps?: VAIconProps,
   ): void => {
-    let leftButton: HeaderLeftButtonProps | undefined = undefined
+    let leftButton: HeaderLeftButtonProps | undefined
     if (leftButtonText && onLeftTitleButtonPress) {
       leftButton = { text: leftButtonText, onPress: onLeftTitleButtonPress }
     }
     const title: HeaderStaticTitleProps | undefined = titleText ? { type: 'Static', title: titleText } : undefined
-    let rightButton: HeaderRightButtonProps | undefined = undefined
+    let rightButton: HeaderRightButtonProps | undefined
     if (rightButtonText && onRightTitleButtonPress) {
       if (rightVAIconProps) {
         rightButton = { text: rightButtonText, onPress: onRightTitleButtonPress, icon: rightVAIconProps }
@@ -40,7 +40,7 @@ context('HeaderBanner', () => {
   describe('title', () => {
     it('should be there when title added', () => {
       initializeTestInstance('test')
-      // TODO: why does getByText fail? 
+      // TODO: why does getByText fail?
       // expect(screen.getByText(/test/)).toBeTruthy()
       expect(screen.getByRole('header', { name: 'test' })).toBeTruthy()
     })

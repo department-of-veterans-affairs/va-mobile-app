@@ -1,4 +1,17 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { contains, filter, indexBy, sortBy } from 'underscore'
+
+import { Events, UserAnalytics } from 'constants/analytics'
+import { AppThunk } from 'store'
+import {
+  PrescriptionHistoryTabConstants,
+  PrescriptionRefillData,
+  PrescriptionSortOptionConstants,
+  RefillStatusConstants,
+} from 'store/api/types'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { isErrorObject } from 'utils/common'
+import { getCommonErrorFromAPIError } from 'utils/errors'
 
 import * as api from '../api'
 import {
@@ -16,14 +29,7 @@ import {
   get,
   put,
 } from '../api'
-import { AppThunk } from 'store'
-import { Events, UserAnalytics } from 'constants/analytics'
-import { PrescriptionHistoryTabConstants, PrescriptionRefillData, PrescriptionSortOptionConstants, RefillStatusConstants } from 'store/api/types'
-import { contains, filter, indexBy, sortBy } from 'underscore'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { getCommonErrorFromAPIError } from 'utils/errors'
-import { isErrorObject } from 'utils/common'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 
 const prescriptionNonFatalErrorString = 'Prescription Service Error'
 
@@ -214,7 +220,10 @@ const prescriptionSlice = createSlice({
     dispatchStartGetPrescriptions: (state) => {
       state.loadingHistory = true
     },
-    dispatchFinishGetPrescriptions: (state, action: PayloadAction<{ prescriptionData?: PrescriptionsGetData; error?: APIError }>) => {
+    dispatchFinishGetPrescriptions: (
+      state,
+      action: PayloadAction<{ prescriptionData?: PrescriptionsGetData; error?: APIError }>,
+    ) => {
       const { prescriptionData } = action.payload
       const { data: prescriptions, meta } = prescriptionData || ({} as PrescriptionsGetData)
       const prescriptionsById = indexBy(prescriptions || [], 'id')
@@ -232,7 +241,10 @@ const prescriptionSlice = createSlice({
       // RefillRequestSummary
       state.showLoadingScreenRequestRefillsRetry = true
     },
-    dispatchFinishRequestRefills: (state, action: PayloadAction<{ refillRequestSummaryItems: RefillRequestSummaryItems }>) => {
+    dispatchFinishRequestRefills: (
+      state,
+      action: PayloadAction<{ refillRequestSummaryItems: RefillRequestSummaryItems }>,
+    ) => {
       const { refillRequestSummaryItems } = action.payload
       // RefillScreen
       state.submittingRequestRefills = false
@@ -262,7 +274,10 @@ const prescriptionSlice = createSlice({
     dispatchStartGetTrackingInfo: (state) => {
       state.loadingTrackingInfo = true
     },
-    dispatchFinishGetTrackingInfo: (state, action: PayloadAction<{ trackingInfo?: Array<PrescriptionTrackingInfo>; error?: APIError }>) => {
+    dispatchFinishGetTrackingInfo: (
+      state,
+      action: PayloadAction<{ trackingInfo?: Array<PrescriptionTrackingInfo>; error?: APIError }>,
+    ) => {
       const { trackingInfo, error } = action.payload
       state.trackingInfo = trackingInfo
       state.error = error
@@ -271,7 +286,10 @@ const prescriptionSlice = createSlice({
     dispatchStartLoadAllPrescriptions: (state) => {
       state.loadingHistory = true
     },
-    dispatchFinishLoadAllPrescriptions: (state, action: PayloadAction<{ allPrescriptions?: PrescriptionsGetData; error?: APIError }>) => {
+    dispatchFinishLoadAllPrescriptions: (
+      state,
+      action: PayloadAction<{ allPrescriptions?: PrescriptionsGetData; error?: APIError }>,
+    ) => {
       const { allPrescriptions } = action.payload
 
       const { data: prescriptions, meta } = allPrescriptions || ({} as PrescriptionsGetData)
@@ -289,7 +307,10 @@ const prescriptionSlice = createSlice({
           shippedPrescriptions.push(prescription)
         }
 
-        if (prescription.attributes.refillStatus === RefillStatusConstants.REFILL_IN_PROCESS || prescription.attributes.refillStatus === RefillStatusConstants.SUBMITTED) {
+        if (
+          prescription.attributes.refillStatus === RefillStatusConstants.REFILL_IN_PROCESS ||
+          prescription.attributes.refillStatus === RefillStatusConstants.SUBMITTED
+        ) {
           pendingPrescriptions.push(prescription)
         }
 

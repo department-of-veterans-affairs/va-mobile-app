@@ -1,17 +1,16 @@
 import React from 'react'
-import { StackNavigationOptions } from '@react-navigation/stack'
-import { screen, fireEvent, waitFor } from '@testing-library/react-native'
+
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
 import * as api from 'store/api'
-import { context, mockNavProps, render, when } from 'testUtils'
-import AppealDetailsScreen from './AppealDetailsScreen'
-import { InitialState } from 'store/slices'
-import { appeal as appealData } from '../appealData'
 import { AppealEventData, AppealTypes } from 'store/api/types'
+import { InitialState } from 'store/slices'
+import { context, mockNavProps, render, when } from 'testUtils'
+
+import { appeal as appealData } from '../appealData'
+import AppealDetailsScreen from './AppealDetailsScreen'
 
 context('AppealDetailsScreen', () => {
-  let props: any
-  let navHeaderSpy: any
   let goBack: jest.Mock
   let abortLoadSpy: jest.Mock
 
@@ -35,22 +34,18 @@ context('AppealDetailsScreen', () => {
   const initializeTestInstance = (loadingAppeal: boolean = false): void => {
     goBack = jest.fn()
     abortLoadSpy = jest.fn()
-    props = mockNavProps(
+    const props = mockNavProps(
       undefined,
       {
         navigate: jest.fn(),
         addListener: jest.fn(),
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-          }
-        },
+        setOptions: jest.fn(),
         goBack,
       },
       { params: { appealID: '0' } },
     )
 
-   render(<AppealDetailsScreen {...props} />, {
+    render(<AppealDetailsScreen {...props} />, {
       preloadedState: {
         ...InitialState,
         claimsAndAppeals: {
@@ -83,17 +78,31 @@ context('AppealDetailsScreen', () => {
       expect(screen.getByText('Review past events')).toBeTruthy()
       expect(screen.getByRole('header', { name: 'Current status' })).toBeTruthy()
       expect(screen.getByRole('header', { name: 'A reviewer is examining your new evidence' })).toBeTruthy()
-      expect(screen.getByText('A Supplemental Claim allows you to add new and relevant evidence to your case. When you filed a Supplemental Claim, you included new evidence or identified evidence that the Veterans Benefits Administration should obtain.')).toBeTruthy()
-      expect(screen.getByText('If you have more evidence to submit, you should do so as soon as possible. You can send new evidence to the Veterans Benefits Administration at:')).toBeTruthy()
+      expect(
+        screen.getByText(
+          'A Supplemental Claim allows you to add new and relevant evidence to your case. When you filed a Supplemental Claim, you included new evidence or identified evidence that the Veterans Benefits Administration should obtain.',
+        ),
+      ).toBeTruthy()
+      expect(
+        screen.getByText(
+          'If you have more evidence to submit, you should do so as soon as possible. You can send new evidence to the Veterans Benefits Administration at:',
+        ),
+      ).toBeTruthy()
       expect(screen.getByText('Department of Veterans Affairs')).toBeTruthy()
       expect(screen.getByText('Evidence Intake Center')).toBeTruthy()
       expect(screen.getByText('PO Box 4444')).toBeTruthy()
       expect(screen.getByText('Janesville, WI 53547-4444')).toBeTruthy()
       expect(screen.getByText('Fax 844-531-7818')).toBeTruthy()
-      expect(screen.getByText('A reviewer will look at this new evidence, as well as evidence VA already had, and determine whether it changes the decision. If needed, they may contact you to ask for more evidence or to schedule a new medical exam.')).toBeTruthy()
+      expect(
+        screen.getByText(
+          'A reviewer will look at this new evidence, as well as evidence VA already had, and determine whether it changes the decision. If needed, they may contact you to ask for more evidence or to schedule a new medical exam.',
+        ),
+      ).toBeTruthy()
       expect(screen.getByRole('header', { name: 'Appeals ahead of you' })).toBeTruthy()
       expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy()
-      expect(screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.')).toBeTruthy()
+      expect(
+        screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'),
+      ).toBeTruthy()
       expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
       expect(screen.getByText('To review more details about your appeal, visit VA.gov: ')).toBeTruthy()
       expect(screen.getByRole('link', { name: 'Visit VA.gov' })).toBeTruthy()

@@ -1,11 +1,13 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Box, LargePanel, TextView } from 'components'
-import { HealthStackParamList } from '../../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
+
+import { HealthStackParamList } from '../../../HealthStackScreens'
 
 type PrepareForVideoVisitProps = StackScreenProps<HealthStackParamList, 'PrepareForVideoVisit'>
 

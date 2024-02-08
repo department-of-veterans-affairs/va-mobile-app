@@ -1,14 +1,15 @@
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonDecoratorType } from 'components'
-import { InlineTextWithIcons } from './InlineTextWithIcons'
-import { InlineTextWithIconsProps, List, ListItemObj, ListProps } from './index'
 import { NAMESPACE } from 'constants/namespaces'
-import { READ } from '../constants/secureMessaging'
 import { generateTestIDForInlineTextIconList } from 'utils/common'
+
+import { READ } from '../constants/secureMessaging'
 import Box from './Box'
+import { InlineTextWithIcons } from './InlineTextWithIcons'
 import LabelTag, { LabelTagTypeConstants } from './LabelTag'
+import { InlineTextWithIconsProps, List, ListItemObj, ListProps } from './index'
 
 /**
  * Signifies each item in the list of items in {@link MessageListProps}
@@ -18,7 +19,8 @@ export type MessageListItemObj = {
   inlineTextWithIcons: Array<InlineTextWithIconsProps>
   /** Tells if one is displaying sent folder messages list - needed for READ tag display conditional */
   isSentFolder: boolean
-  /** Attribute for whether recipient has read user's sent message (Sent folder) OR whether user has read received message (Inbox || Folders other than 'Sent')
+  /** Attribute for whether recipient has read user's sent message (Sent folder)
+   * OR whether user has read received message (Inbox || Folders other than 'Sent')
    * Usage depends on which folder you're in */
   readReceipt?: string
 } & Partial<ListItemObj>

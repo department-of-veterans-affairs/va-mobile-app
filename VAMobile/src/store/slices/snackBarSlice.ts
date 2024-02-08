@@ -1,6 +1,6 @@
-import { AppThunk } from 'store'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
+import { AppThunk } from 'store'
 import theme from 'styles/themes/standardTheme'
 
 export type SnackBarState = {

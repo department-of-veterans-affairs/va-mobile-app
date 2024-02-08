@@ -1,18 +1,23 @@
-import { AlertBox, Box, ClickToCallPhoneNumber } from 'components'
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { useIsFocused, useNavigationState } from '@react-navigation/native'
 import React, { FC, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
+import { useIsFocused, useNavigationState } from '@react-navigation/native'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { AlertBox, Box, ClickToCallPhoneNumber } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/waygateConfig'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { fixedWhiteSpaceString } from 'utils/jsonFormatting'
+import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { openAppStore } from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
-import { useTranslation } from 'react-i18next'
+import { Waygate, WaygateToggleType, waygateEnabled } from 'utils/waygateConfig'
 
 export type WaygateWrapperProps = {
   /** the waygate name to check for */
@@ -55,7 +60,11 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
           focusOnError={false}
           testId="AFUseCase2TestID">
           <Box my={theme.dimensions.standardMarginBetween}>
-            <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(phoneNumber)} phone={phoneNumber} a11yLabel={a11yLabelID(phoneNumber)} />
+            <ClickToCallPhoneNumber
+              displayedText={displayedTextPhoneNumber(phoneNumber)}
+              phone={phoneNumber}
+              a11yLabel={a11yLabelID(phoneNumber)}
+            />
           </Box>
           {waygate.appUpdateButton === true && <Button onPress={onUpdateButtonPress} label={t('updateNow')} />}
         </AlertBox>
@@ -64,7 +73,8 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
   }
 
   const waygate = waygateEnabled(waygateScreen as WaygateToggleType)
-  const showAlertBox = waygate.enabled === false && waygateTypeCheck(waygate.type) && (waygate.errorMsgTitle || waygate.errorMsgBody)
+  const showAlertBox =
+    waygate.enabled === false && waygateTypeCheck(waygate.type) && (waygate.errorMsgTitle || waygate.errorMsgBody)
 
   useEffect(() => {
     if (showAlertBox && !bypassAlertBox) {

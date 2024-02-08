@@ -1,13 +1,15 @@
-import { StackScreenProps } from '@react-navigation/stack'
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { BenefitsStackParamList } from '../BenefitsStackScreens'
+import { StackScreenProps } from '@react-navigation/stack'
+
 import { Box, FeatureLandingTemplate, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+
+import { BenefitsStackParamList } from '../BenefitsStackScreens'
 
 type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
@@ -26,7 +28,10 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('benefits.title')} backLabelOnPress={navigation.goBack} title={t('claims.title')}>
+    <FeatureLandingTemplate
+      backLabel={t('benefits.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('claims.title')}>
       <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('claimsHistory.title')}

@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
+
 import CernerAlert from './CernerAlert'
 
 const mockExternalLinkSpy = jest.fn()
@@ -15,7 +17,7 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('../../../api/facilities/getFacilitiesInfo', () => {
-  let original = jest.requireActual('../../../api/facilities/getFacilitiesInfo')
+  const original = jest.requireActual('../../../api/facilities/getFacilitiesInfo')
   return {
     ...original,
     useFacilitiesInfo: jest

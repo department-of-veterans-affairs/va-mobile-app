@@ -1,18 +1,21 @@
+import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import { AccessibilityRole, AccessibilityState, TouchableWithoutFeedback } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+
 import { TFunction } from 'i18next'
-import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { VA_ICON_MAP } from './VAIcon'
 import { a11yValueProp, testIdProps } from 'utils/accessibility'
-import { themeFn } from 'utils/theme'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { themeFn } from 'utils/theme'
+
 import Box from './Box'
+import { VA_ICON_MAP } from './VAIcon'
 import VAIconWithText, { VAIconWithTextProps } from './VAIconWithText/VAIconWithText'
 
 type TabBarRoute = {

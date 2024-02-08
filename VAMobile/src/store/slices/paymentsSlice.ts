@@ -1,8 +1,8 @@
-import * as api from 'store/api'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { AppThunk } from 'store'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { AppThunk } from 'store'
+import * as api from 'store/api'
 import {
   LoadedPayments,
   Params,
@@ -14,11 +14,18 @@ import {
   PaymentsPaginationByYearAndPage,
   ScreenIDTypes,
 } from 'store/api'
-import { createYearAndPageString, getFirstAndLastDayOfYear, getLoadedPayments, groupPaymentsByDate, mapPaymentsById } from 'utils/payments'
-import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { getCommonErrorFromAPIError } from 'utils/errors'
-import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { isErrorObject } from 'utils/common'
+import { getCommonErrorFromAPIError } from 'utils/errors'
+import {
+  createYearAndPageString,
+  getFirstAndLastDayOfYear,
+  getLoadedPayments,
+  groupPaymentsByDate,
+  mapPaymentsById,
+} from 'utils/payments'
+
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 
 export type PaymentState = {
   payment?: PaymentsData
@@ -78,7 +85,15 @@ export const getPayments =
     try {
       const [startDate, endDate] = getFirstAndLastDayOfYear(year)
 
-      const params: Params = startDate && endDate ? { startDate: startDate, endDate: endDate, 'page[number]': page.toString(), 'page[size]': DEFAULT_PAGE_SIZE.toString() } : {}
+      const params: Params =
+        startDate && endDate
+          ? {
+              startDate: startDate,
+              endDate: endDate,
+              'page[number]': page.toString(),
+              'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            }
+          : {}
 
       const paymentsList = await api.get<PaymentsGetData>('/v0/payment-history', params)
 
@@ -112,7 +127,10 @@ const paymentstSlice = createSlice({
       state.loading = true
     },
 
-    dispatchFinishGetPayments: (state, action: PayloadAction<{ yearAndPage?: string; payments?: PaymentsGetData; error?: Error }>) => {
+    dispatchFinishGetPayments: (
+      state,
+      action: PayloadAction<{ yearAndPage?: string; payments?: PaymentsGetData; error?: Error }>,
+    ) => {
       const { payments, yearAndPage, error } = action.payload
       const paymentsData = payments?.data || []
       const paymentsByDate: PaymentsByDate = groupPaymentsByDate(paymentsData)
@@ -132,7 +150,8 @@ const paymentstSlice = createSlice({
       state.currentPagePagination = payments?.meta.pagination || initialPaginationState
       state.error = error
 
-      // if we already have the years for the picker from the first call we do not need it again. This will also prevent the picker from re-rendering and the selection changing to the latest.
+      // If we already have the years for the picker from the first call we do not need it again.
+      // This will also prevent the picker from re-rendering and the selection changing to the latest.
       state.availableYears = state.availableYears.length !== 0 ? state.availableYears : availableYears
       state.loading = false
     },
@@ -151,5 +170,10 @@ const paymentstSlice = createSlice({
   },
 })
 
-export const { dispatchFinishGetPayments, dispatchStartGetPayments, dispatchGetPayment, dispatchClearPaymentsOnLogout } = paymentstSlice.actions
+export const {
+  dispatchFinishGetPayments,
+  dispatchStartGetPayments,
+  dispatchGetPayment,
+  dispatchClearPaymentsOnLogout,
+} = paymentstSlice.actions
 export default paymentstSlice.reducer

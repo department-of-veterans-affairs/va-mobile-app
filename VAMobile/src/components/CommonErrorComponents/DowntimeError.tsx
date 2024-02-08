@@ -1,14 +1,14 @@
-import { ViewStyle } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ViewStyle } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import { AlertBox, Box, VAScrollView } from 'components'
-import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDToFeatureName, ScreenIDTypes } from 'store/api/types'
-import { DowntimeWindow, ErrorsState } from 'store/slices'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
+import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDToFeatureName, ScreenIDTypes } from 'store/api/types'
+import { DowntimeWindow, ErrorsState } from 'store/slices'
 import { featureInDowntime, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 
 export type DowntimeErrorProps = {
   /**The screen id for the screen that has the errors*/

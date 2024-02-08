@@ -1,9 +1,11 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import AppealPhase from './AppealPhase'
 import { AppealEventTypes } from 'store/api/types'
+import { context, mockNavProps, render } from 'testUtils'
+
+import AppealPhase from './AppealPhase'
 
 context('AppealPhase', () => {
   const initializeTestInstance = (type: AppealEventTypes): void => {

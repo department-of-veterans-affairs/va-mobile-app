@@ -1,10 +1,8 @@
 import { find } from 'underscore'
 
 import { context, realStore } from 'testUtils'
+
 import * as api from '../api'
-import { when } from 'jest-when'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getVaccineLocation, getVaccines } from './vaccineSlice'
 
 export const ActionTypes: {
@@ -32,7 +30,11 @@ context('vaccine', () => {
       expect(startAction).toBeTruthy()
       expect(startAction?.state.vaccine.loading).toBeTruthy()
 
-      expect(api.get as jest.Mock).toBeCalledWith('/v1/health/immunizations', { 'page[number]': '1', 'page[size]': '10', sort: 'date' })
+      expect(api.get as jest.Mock).toBeCalledWith('/v1/health/immunizations', {
+        'page[number]': '1',
+        'page[size]': '10',
+        sort: 'date',
+      })
 
       const finishAction = find(actions, { type: ActionTypes.VACCINE_FINISH_GET_VACCINES })
       expect(finishAction).toBeTruthy()

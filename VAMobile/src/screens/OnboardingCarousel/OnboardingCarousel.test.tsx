@@ -1,20 +1,22 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { QueriesData, context, render } from 'testUtils'
-import OnboardingCarousel from './OnboardingCarousel'
-import { completeFirstTimeLogin } from 'store/slices'
 import { personalInformationKeys } from 'api/personalInformation/queryKeys'
+import { completeFirstTimeLogin } from 'store/slices'
+import { QueriesData, context, render } from 'testUtils'
+
+import OnboardingCarousel from './OnboardingCarousel'
 
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
   }
 })
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     completeFirstTimeLogin: jest.fn(() => {
@@ -32,23 +34,29 @@ context('OnboardingCarousel', () => {
   }
 
   beforeEach(() => {
-    renderWithData([{
-      queryKey: personalInformationKeys.personalInformation,
-      data: {
-        firstName: 'Gary',
-        middleName: null,
-        lastName: 'Washington',
-        signinEmail: 'Gary.Washington@idme.com',
-        signinService: 'IDME',
-        fullName: 'Gary Washington',
-        birthDate: null
-      }
-    }])
+    renderWithData([
+      {
+        queryKey: personalInformationKeys.personalInformation,
+        data: {
+          firstName: 'Gary',
+          middleName: null,
+          lastName: 'Washington',
+          signinEmail: 'Gary.Washington@idme.com',
+          signinService: 'IDME',
+          fullName: 'Gary Washington',
+          birthDate: null,
+        },
+      },
+    ])
   })
 
   it('renders correctly through out each screen and calls completeFirstTimeLogin once you get to the end', () => {
     expect(screen.getByRole('header', { name: 'Welcome, Gary' })).toBeTruthy()
-    expect(screen.getByText('With this app, you can manage your VA health care, benefits, and payments from your phone or tablet.')).toBeTruthy()
+    expect(
+      screen.getByText(
+        'With this app, you can manage your VA health care, benefits, and payments from your phone or tablet.',
+      ),
+    ).toBeTruthy()
     fireEvent.press(screen.getByRole('button', { name: 'Next' }))
     expect(screen.getByRole('header', { name: 'Manage your health care' })).toBeTruthy()
     expect(screen.getByText('Use our health care tools to manage tasks like these:')).toBeTruthy()
