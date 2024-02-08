@@ -2,8 +2,8 @@ import { NativeModules, PixelRatio } from 'react-native'
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { UserAnalytics } from 'constants/analytics'
 import { AppThunk } from 'store'
+import { UserAnalytics } from 'constants/analytics'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 
 const { RNCheckVoiceOver } = NativeModules
@@ -86,7 +86,6 @@ const accessibilitySlice = createSlice({
 })
 
 // Actions creators created by the slice
-export const { dispatchUpdateFontScale, dispatchUpdateIsVoiceOverTalkBackRunning, dispatchUpdateAccessibilityFocus } =
-  accessibilitySlice.actions
+export const { dispatchUpdateFontScale, dispatchUpdateIsVoiceOverTalkBackRunning, dispatchUpdateAccessibilityFocus } = accessibilitySlice.actions
 
 export default accessibilitySlice.reducer

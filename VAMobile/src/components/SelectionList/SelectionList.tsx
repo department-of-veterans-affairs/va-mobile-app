@@ -1,6 +1,6 @@
-import React, { FC, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { Pressable, PressableProps } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import React, { FC, useEffect, useState } from 'react'
 
 import { mapObject, values } from 'underscore'
 
@@ -10,9 +10,9 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
 import Box, { BoxProps } from '../Box'
+import SelectionListItem, { SelectionListItemObj } from './SelectionListItem'
 import TextView from '../TextView'
 import VAIcon, { VAIconProps, VA_ICON_MAP } from '../VAIcon'
-import SelectionListItem, { SelectionListItemObj } from './SelectionListItem'
 
 export type SelectionListProps = {
   /** list of items to show */

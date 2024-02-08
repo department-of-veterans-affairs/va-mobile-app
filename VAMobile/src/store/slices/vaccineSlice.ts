@@ -1,26 +1,16 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { indexBy } from 'underscore'
 
-import { Events } from 'constants/analytics'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { AppThunk } from 'store'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { Events } from 'constants/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 
-import { isErrorObject } from '../../utils/common'
 import * as api from '../api'
-import {
-  APIError,
-  ScreenIDTypes,
-  VaccineList,
-  VaccineListData,
-  VaccineLocation,
-  VaccineLocationData,
-  VaccineLocationsMap,
-  VaccinePaginationMeta,
-  VaccinesMap,
-} from '../api'
+import { APIError, ScreenIDTypes, VaccineList, VaccineListData, VaccineLocation, VaccineLocationData, VaccineLocationsMap, VaccinePaginationMeta, VaccinesMap } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
+import { isErrorObject } from '../../utils/common'
 
 export type VaccineListType = {
   [key in string]: VaccineListData
@@ -160,10 +150,7 @@ const vaccineSlice = createSlice({
       state.loading = true
     },
 
-    dispatchFinishGetVaccines: (
-      state,
-      action: PayloadAction<{ page: number; vaccinesData?: VaccineListData; error?: APIError }>,
-    ) => {
+    dispatchFinishGetVaccines: (state, action: PayloadAction<{ page: number; vaccinesData?: VaccineListData; error?: APIError }>) => {
       const { page, vaccinesData, error } = action.payload
       const { data: vaccines, meta } = vaccinesData || ({} as VaccineListData)
       const vaccinesById = indexBy(vaccines || [], 'id')
@@ -176,21 +163,14 @@ const vaccineSlice = createSlice({
       state.vaccines = vaccineList
       state.vaccinesById = vaccinesById
       state.vaccinePagination = { ...meta?.pagination }
-      state.loadedVaccines[page] = meta?.dataFromStore
-        ? curLoadedVaccines
-        : vaccinesData
-          ? vaccinesData
-          : ({} as VaccineListData)
+      state.loadedVaccines[page] = meta?.dataFromStore ? curLoadedVaccines : vaccinesData ? vaccinesData : ({} as VaccineListData)
     },
 
     dispatchStartGetLocation: (state) => {
       state.detailsLoading = true
     },
 
-    dispatchFinishGetLocation: (
-      state,
-      action: PayloadAction<{ vaccineId?: string; location?: VaccineLocation; error?: APIError }>,
-    ) => {
+    dispatchFinishGetLocation: (state, action: PayloadAction<{ vaccineId?: string; location?: VaccineLocation; error?: APIError }>) => {
       const { vaccineId, location, error } = action.payload
 
       if (!error && vaccineId && location) {
@@ -206,11 +186,5 @@ const vaccineSlice = createSlice({
   },
 })
 
-export const {
-  dispatchFinishGetLocation,
-  dispatchFinishGetVaccines,
-  dispatchStartGetLocation,
-  dispatchStartGetVaccines,
-  dispatchVaccineLogout,
-} = vaccineSlice.actions
+export const { dispatchFinishGetLocation, dispatchFinishGetVaccines, dispatchStartGetLocation, dispatchStartGetVaccines, dispatchVaccineLogout } = vaccineSlice.actions
 export default vaccineSlice.reducer

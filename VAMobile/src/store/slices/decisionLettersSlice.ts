@@ -2,18 +2,18 @@ import FileViewer from 'react-native-file-viewer'
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { SnackbarMessages } from 'components/SnackBar'
 import { AppThunk } from 'store'
 import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo/letters'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { isErrorObject, showSnackBar } from 'utils/common'
-import getEnv from 'utils/env'
+import { SnackbarMessages } from 'components/SnackBar'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { isErrorObject, showSnackBar } from 'utils/common'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import getEnv from 'utils/env'
 
-import { downloadDemoFile, downloadFile } from '../../utils/filesystem'
 import * as api from '../api'
 import { APIError, DecisionLettersList, ScreenIDTypes } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
+import { downloadDemoFile, downloadFile } from '../../utils/filesystem'
 
 const { API_ROOT } = getEnv()
 
@@ -75,13 +75,7 @@ export const downloadDecisionLetter =
 
       const filePath = demoMode
         ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME)
-        : await downloadFile(
-            'GET',
-            decisionLettersEndpoint,
-            'decision_letter.pdf',
-            undefined,
-            downloadDecisionLetterRetries,
-          )
+        : await downloadFile('GET', decisionLettersEndpoint, 'decision_letter.pdf', undefined, downloadDecisionLetterRetries)
 
       dispatch(dispatchFinishDownloadDecisionLetter())
 
@@ -109,10 +103,7 @@ const decisionLettersSlice = createSlice({
       state.loading = true
     },
 
-    dispatchFinishGetDecisionLetters: (
-      state,
-      action: PayloadAction<{ decisionLetters?: DecisionLettersList; error?: APIError }>,
-    ) => {
+    dispatchFinishGetDecisionLetters: (state, action: PayloadAction<{ decisionLetters?: DecisionLettersList; error?: APIError }>) => {
       const { decisionLetters, error } = action.payload
 
       state.loading = false
@@ -130,10 +121,6 @@ const decisionLettersSlice = createSlice({
   },
 })
 
-export const {
-  dispatchFinishGetDecisionLetters,
-  dispatchStartGetDecisionLetters,
-  dispatchStartDownloadDecisionLetter,
-  dispatchFinishDownloadDecisionLetter,
-} = decisionLettersSlice.actions
+export const { dispatchFinishGetDecisionLetters, dispatchStartGetDecisionLetters, dispatchStartDownloadDecisionLetter, dispatchFinishDownloadDecisionLetter } =
+  decisionLettersSlice.actions
 export default decisionLettersSlice.reducer

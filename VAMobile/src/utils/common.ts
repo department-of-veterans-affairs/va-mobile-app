@@ -1,27 +1,27 @@
-import { RefObject } from 'react'
 import { Animated, Dimensions, TextInput } from 'react-native'
 import { Asset } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { RefObject } from 'react'
 
 import { StackCardInterpolatedStyle, StackCardInterpolationProps } from '@react-navigation/stack'
 
-import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
+import { TFunction } from 'i18next'
 import { contains, isEmpty, map } from 'underscore'
 
-import { PhoneData } from 'api/types/PhoneData'
-import { TextLineWithIconProps } from 'components'
-import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
-import { TextLine } from 'components/types'
-import { Events } from 'constants/analytics'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch } from 'store'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ErrorObject } from 'store/api'
+import { Events } from 'constants/analytics'
+import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
+import { PhoneData } from 'api/types/PhoneData'
+import { TextLine } from 'components/types'
+import { TextLineWithIconProps } from 'components'
 import { updatBottomOffset } from 'store/slices/snackBarSlice'
 import theme from 'styles/themes/standardTheme'
 
-import { logAnalyticsEvent } from './analytics'
 import { formatPhoneNumber } from './formattingUtils'
+import { logAnalyticsEvent } from './analytics'
 
 /**
  * Generates testID string for reusable components
@@ -57,10 +57,7 @@ export const generateTestIDForTextList = (listOfText?: Array<TextLine>): string 
 /**
  * Generate a testID string for the array of text lines passed into TextLineWithIcon for list item - includes accessibility labels for icons
  */
-export const generateTestIDForInlineTextIconList = (
-  listOfText: Array<InlineTextWithIconsProps>,
-  t: TFunction,
-): string => {
+export const generateTestIDForInlineTextIconList = (listOfText: Array<InlineTextWithIconsProps>, t: TFunction): string => {
   const listOfTextID: Array<string> = []
 
   listOfText.forEach((listOfTextItem: InlineTextWithIconsProps) => {
@@ -137,11 +134,7 @@ export const focusTextInputRef = (inputRef: RefObject<TextInput>): void => {
  * @param dateField - field name of the date
  * @param isDescending - optional param that if true sorts the list by date from most recent to least recent
  */
-export const sortByDate = (
-  dataList: Array<{ [key: string]: string }>,
-  dateField: string,
-  isDescending?: boolean,
-): void => {
+export const sortByDate = (dataList: Array<{ [key: string]: string }>, dateField: string, isDescending?: boolean): void => {
   dataList.sort((a, b) => {
     const aDateField = a[dateField]
     const bDateField = b[dateField]
@@ -258,10 +251,7 @@ export type ImageMaxWidthAndHeight = {
  * @param image - object with image data
  * @param messagePhotoAttachmentMaxHeight - max height for an image
  */
-export const getMaxWidthAndHeightOfImage = (
-  image: ImagePickerResponse,
-  messagePhotoAttachmentMaxHeight: number,
-): ImageMaxWidthAndHeight => {
+export const getMaxWidthAndHeightOfImage = (image: ImagePickerResponse, messagePhotoAttachmentMaxHeight: number): ImageMaxWidthAndHeight => {
   const result: ImageMaxWidthAndHeight = { maxWidth: '100%', height: messagePhotoAttachmentMaxHeight }
   const { width, height } = image.assets ? image.assets[0] : ({} as Asset)
   if (image && !isEmpty(image)) {
@@ -323,23 +313,12 @@ export const deepCopyObject = <T>(item: Record<string, unknown>): T => {
  * @param withNavBar - offset snackbar to be over the bottom nav
  * @returns snackbar
  */
-export function showSnackBar(
-  message: string,
-  dispatch: AppDispatch,
-  actionPressed?: () => void,
-  isUndo?: boolean,
-  isError?: boolean,
-  withNavBar = false,
-): void {
+export function showSnackBar(message: string, dispatch: AppDispatch, actionPressed?: () => void, isUndo?: boolean, isError?: boolean, withNavBar = false): void {
   if (!snackBar) {
     logAnalyticsEvent(Events.vama_snackbar_null('showSnackBar'))
   }
   snackBar?.hideAll()
-  dispatch(
-    updatBottomOffset(
-      withNavBar ? theme.dimensions.snackBarBottomOffsetWithNav : theme.dimensions.snackBarBottomOffset,
-    ),
-  )
+  dispatch(updatBottomOffset(withNavBar ? theme.dimensions.snackBarBottomOffsetWithNav : theme.dimensions.snackBarBottomOffset))
   snackBar?.show(message, {
     type: 'custom_snackbar',
     data: {
@@ -397,10 +376,7 @@ export const getFileDisplay = (
 
 // TODO #3959 ticket to remove HalfPanel
 // function to animate a full screen panel into half the size
-export function halfPanelCardStyleInterpolator({
-  current,
-  inverted,
-}: StackCardInterpolationProps): StackCardInterpolatedStyle {
+export function halfPanelCardStyleInterpolator({ current, inverted }: StackCardInterpolationProps): StackCardInterpolatedStyle {
   // height of the visible application window
   const windowHeight = Dimensions.get('window').height
 
@@ -425,11 +401,7 @@ export function halfPanelCardStyleInterpolator({
   }
 }
 
-export function fullPanelCardStyleInterpolator({
-  current,
-  inverted,
-  layouts,
-}: StackCardInterpolationProps): StackCardInterpolatedStyle {
+export function fullPanelCardStyleInterpolator({ current, inverted, layouts }: StackCardInterpolationProps): StackCardInterpolatedStyle {
   const screenHeight = layouts.screen.height
 
   const translateY = Animated.multiply(

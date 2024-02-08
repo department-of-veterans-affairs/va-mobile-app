@@ -1,11 +1,11 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
 import { AccordionCollapsible, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 function NoMatchInRecords() {
@@ -35,18 +35,10 @@ function NoMatchInRecords() {
     <VAScrollView {...testIdProps('Health care: No match in records')}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
-          <TextView
-            variant="BitterBoldHeading"
-            accessibilityLabel={a11yLabelVA(t('noMatch.title'))}
-            accessibilityRole="header"
-            accessible={true}>
+          <TextView variant="BitterBoldHeading" accessibilityLabel={a11yLabelVA(t('noMatch.title'))} accessibilityRole="header" accessible={true}>
             {t('noMatch.title')}
           </TextView>
-          <TextView
-            variant="MobileBody"
-            accessibilityLabel={a11yLabelVA(t('noMatch.noMatch'))}
-            mt={theme.dimensions.standardMarginBetween}
-            paragraphSpacing={true}>
+          <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('noMatch.noMatch'))} mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
             {t('noMatch.noMatch')}
           </TextView>
           <TextView variant="MobileBodyBold" accessibilityRole="header" accessible={true}>
@@ -68,11 +60,7 @@ function NoMatchInRecords() {
           />
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          <AccordionCollapsible
-            header={accordionHeader('notEnrolled')}
-            expandedContent={accordionContent('notEnrolledContent')}
-            testID={a11yLabelVA(t('noMatch.notEnrolled'))}
-          />
+          <AccordionCollapsible header={accordionHeader('notEnrolled')} expandedContent={accordionContent('notEnrolledContent')} testID={a11yLabelVA(t('noMatch.notEnrolled'))} />
         </Box>
       </Box>
     </VAScrollView>

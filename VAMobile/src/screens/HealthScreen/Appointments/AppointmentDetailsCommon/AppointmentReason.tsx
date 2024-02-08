@@ -1,9 +1,9 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
+import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api'
 import { isAPendingAppointment } from 'utils/appointments'
 import { useTheme } from 'utils/hooks'
 
@@ -24,14 +24,12 @@ function AppointmentReason({ attributes }: AppointmentReasonProps) {
     return (
       <Box mt={phoneOnly ? undefined : theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
-          {phoneOnly ||
-          (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+          {phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
             ? t('upcomingAppointmentDetails.sharedProvider')
             : t('upcomingAppointmentDetails.reason')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={phoneOnly && isPendingAppointment}>
-          {phoneOnly ||
-          (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+          {phoneOnly || (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
             ? t('upcomingAppointmentDetails.reasonDetails', { reason: apptReason })
             : reason}
         </TextView>

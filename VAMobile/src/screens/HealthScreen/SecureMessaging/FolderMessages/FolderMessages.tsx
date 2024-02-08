@@ -1,35 +1,22 @@
-import React, { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { useEffect } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import {
-  Box,
-  ChildTemplate,
-  ErrorComponent,
-  LoadingComponent,
-  MessageList,
-  Pagination,
-  PaginationProps,
-} from 'components'
+import { Box, ChildTemplate, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
 import { Events } from 'constants/analytics'
-import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import {
-  SecureMessagingState,
-  dispatchResetDeleteDraftComplete,
-  listFolderMessages,
-  resetSaveDraftComplete,
-} from 'store/slices'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { SecureMessagingState, dispatchResetDeleteDraftComplete, listFolderMessages, resetSaveDraftComplete } from 'store/slices'
 import { getMessagesListItems } from 'utils/secureMessaging'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { useAppDispatch, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
@@ -42,10 +29,9 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<
-    RootState,
-    SecureMessagingState
-  >((state) => state.secureMessaging)
+  const { messagesByFolderId, loading, paginationMetaByFolderId, saveDraftComplete, deleteDraftComplete } = useSelector<RootState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
 
   const paginationMetaData = paginationMetaByFolderId?.[folderID]
   const title = t('text.raw', { text: folderName })
@@ -111,9 +97,7 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
 
   const requestPage = (requestedPage: number) => {
     // request the next page
-    dispatch(
-      listFolderMessages(folderID, requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID),
-    )
+    dispatch(listFolderMessages(folderID, requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
   }
 
   function renderPagination() {
@@ -132,11 +116,7 @@ function FolderMessages({ navigation, route }: FolderMessagesProps) {
     }
 
     return (
-      <Box
-        flex={1}
-        mt={theme.dimensions.paginationTopPadding}
-        mb={theme.dimensions.contentMarginBottom}
-        mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     )

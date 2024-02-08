@@ -1,12 +1,12 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yLabelVA } from 'utils/a11yLabel'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import getEnv from 'utils/env'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
+import getEnv from 'utils/env'
 
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
 
@@ -21,12 +21,7 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
   const theme = useTheme()
 
   return (
-    <Box
-      flex={1}
-      justifyContent="center"
-      mx={theme.dimensions.gutter}
-      {...testIdProps('Appointments: No-appointments-page')}
-      alignItems="center">
+    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('Appointments: No-appointments-page')} alignItems="center">
       <Box {...testIdProps(t('noAppointments.youDontHave'))} accessibilityRole="header" accessible={true}>
         <TextView variant="MobileBodyBold" textAlign="center">
           {t('noAppointments.youDontHave')}

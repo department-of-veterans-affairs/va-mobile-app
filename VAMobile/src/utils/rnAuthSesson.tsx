@@ -1,7 +1,7 @@
 import { NativeModules } from 'react-native'
 
-import getEnv from 'utils/env'
 import { isIOS } from 'utils/platform'
+import getEnv from 'utils/env'
 
 const RnAuthSession = NativeModules.RNAuthSession
 const CustomTabs = NativeModules.CustomTabsIntentModule

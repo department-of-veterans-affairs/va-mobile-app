@@ -1,17 +1,17 @@
-import React, { FC, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
 import { Pressable, PressableProps } from 'react-native'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { FC, useEffect } from 'react'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
-import { UserAnalytics } from 'constants/analytics'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import { BranchesOfServiceConstants } from 'store/api/types'
 import { MilitaryServiceState } from 'store/slices'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { UserAnalytics } from 'constants/analytics'
 import { setAnalyticsUserProperty } from 'utils/analytics'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export const Nametag: FC = () => {
@@ -25,9 +25,7 @@ export const Nametag: FC = () => {
 
   useEffect(() => {
     if (personalInfo) {
-      setAnalyticsUserProperty(
-        UserAnalytics.vama_cerner_transition(personalInfo.hasFacilityTransitioningToCerner || false),
-      )
+      setAnalyticsUserProperty(UserAnalytics.vama_cerner_transition(personalInfo.hasFacilityTransitioningToCerner || false))
     }
   }, [personalInfo])
 
@@ -81,11 +79,7 @@ export const Nametag: FC = () => {
         <Box py={theme.dimensions.cardPadding} display="flex" flexDirection="row">
           {accessToMilitaryInfo && <Box pl={theme.dimensions.cardPadding}>{getBranchSeal()}</Box>}
           <Box ml={theme.dimensions.cardPadding} flex={1}>
-            <TextView
-              textTransform="capitalize"
-              mb={accessToMilitaryInfo ? theme.dimensions.textIconMargin : 0}
-              variant="BitterBoldHeading"
-              color="primaryContrast">
+            <TextView textTransform="capitalize" mb={accessToMilitaryInfo ? theme.dimensions.textIconMargin : 0} variant="BitterBoldHeading" color="primaryContrast">
               {fullName}
             </TextView>
             {accessToMilitaryInfo && (

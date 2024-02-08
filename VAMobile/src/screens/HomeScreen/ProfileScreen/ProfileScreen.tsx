@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { useEffect } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, ChildTemplate, ErrorComponent, LargeNavButton, LoadingComponent, NameTag } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 
 type ProfileScreenProps = StackScreenProps<HomeStackParamList, 'Profile'>
 
@@ -22,10 +22,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
     isError: getUserAuthorizedServicesError,
     refetch: refetchUserAuthorizedServices,
   } = useAuthorizedServices()
-  const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<
-    RootState,
-    MilitaryServiceState
-  >((s) => s.militaryService)
+  const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
 
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
   const dispatch = useAppDispatch()
@@ -56,11 +53,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   const errorCheck = useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID) || getUserAuthorizedServicesError
 
   return (
-    <ChildTemplate
-      title={t('profile.title')}
-      backLabel={t('home.title')}
-      backLabelOnPress={navigation.goBack}
-      testID="profileID">
+    <ChildTemplate title={t('profile.title')} backLabel={t('home.title')} backLabelOnPress={navigation.goBack} testID="profileID">
       {errorCheck ? (
         <Box>
           <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
@@ -83,10 +76,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
       ) : (
         <>
           <NameTag />
-          <Box
-            mt={theme.dimensions.contentMarginTop}
-            mb={theme.dimensions.standardMarginBetween}
-            mx={theme.dimensions.gutter}>
+          <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             {userAuthorizedServices?.userProfileUpdate && (
               <>
                 <LargeNavButton

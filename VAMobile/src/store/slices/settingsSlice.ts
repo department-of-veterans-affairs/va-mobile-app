@@ -72,6 +72,5 @@ const settingsSlice = createSlice({
   },
 })
 
-const { dispatchUpdateHaptics, dispatchUpdateLoadingRemoteConfig, dispatchFinishLoadingRemoteConfig } =
-  settingsSlice.actions
+const { dispatchUpdateHaptics, dispatchUpdateLoadingRemoteConfig, dispatchFinishLoadingRemoteConfig } = settingsSlice.actions
 export default settingsSlice.reducer

@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { Box, BoxProps, TextView, VAIcon } from 'components'
+import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
-import { isIOS } from 'utils/platform'
 
 type WebviewTitleProps = {
   title: string

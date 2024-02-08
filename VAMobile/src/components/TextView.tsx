@@ -1,14 +1,14 @@
-import React, { FC } from 'react'
 import { AccessibilityProps, Pressable, Text } from 'react-native'
 import { useSelector } from 'react-redux'
+import React, { FC } from 'react'
 
 import styled from 'styled-components'
 
-import { RootState } from 'store'
 import { AccessibilityState } from 'store/slices/accessibilitySlice'
+import { RootState } from 'store'
 import { VAButtonTextColors, VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
-import { useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
+import { useTheme } from 'utils/hooks'
 
 import { BoxProps, createBoxStyles } from './Box'
 
@@ -59,11 +59,7 @@ export type TextViewProps = AccessibilityProps &
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
-  return (
-    theme.colors.text[props.color as keyof VATextColors] ||
-    theme.colors.buttonText[props.color as keyof VAButtonTextColors] ||
-    ''
-  )
+  return theme.colors.text[props.color as keyof VATextColors] || theme.colors.buttonText[props.color as keyof VAButtonTextColors] || ''
 }
 
 const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
@@ -85,11 +81,7 @@ const getFontSize = (variant: string) => {
 }
 
 const getTextDecorationColor = (theme: VATheme, props: TextViewProps): string => {
-  return (
-    theme.colors.text[props.textDecorationColor as keyof VATextColors] ||
-    theme.colors.buttonText[props.textDecorationColor as keyof VAButtonTextColors] ||
-    ''
-  )
+  return theme.colors.text[props.textDecorationColor as keyof VATextColors] || theme.colors.buttonText[props.textDecorationColor as keyof VAButtonTextColors] || ''
 }
 
 const StyledText = styled(Text)`
@@ -98,9 +90,7 @@ const StyledText = styled(Text)`
   ${themeFn<TextViewProps>((theme, props) => createBoxStyles(theme, props))};
   ${themeFn<TextViewProps>((_theme, props) => (props.textTransform ? `text-transform:${props.textTransform};` : ''))}
   ${themeFn<TextViewProps>((_theme, props) => (props.textDecoration ? `text-decoration:${props.textDecoration}` : ''))};
-  ${themeFn<TextViewProps>((theme, props) =>
-    props.textDecorationColor ? `text-decoration-color:${getTextDecorationColor(theme, props)}` : '',
-  )};
+  ${themeFn<TextViewProps>((theme, props) => (props.textDecorationColor ? `text-decoration-color:${getTextDecorationColor(theme, props)}` : ''))};
 `
 
 /**
@@ -129,9 +119,7 @@ const TextView: FC<TextViewProps> = ({ selectable = false, paragraphSpacing = fa
     )
   }
 
-  const selectToCopyProps = isVoiceOverTalkBackRunning
-    ? {}
-    : { selectable, selectionColor: theme.colors.selectCopyText }
+  const selectToCopyProps = isVoiceOverTalkBackRunning ? {} : { selectable, selectionColor: theme.colors.selectCopyText }
 
   return <StyledText testID={testID} {...selectToCopyProps} {...wrapperProps} />
 }

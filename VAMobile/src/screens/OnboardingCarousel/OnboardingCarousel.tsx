@@ -1,13 +1,13 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
-import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { Carousel, CarouselScreen, TextLine } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { completeFirstTimeLogin } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { capitalizeWord } from 'utils/formattingUtils'
+import { completeFirstTimeLogin } from 'store/slices'
 import { useAppDispatch } from 'utils/hooks'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 
 import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
 
@@ -25,13 +25,7 @@ function OnboardingPayments() {
       color: 'primaryContrast',
     },
   ]
-  return (
-    <GenericOnboarding
-      header={t('onboarding.payments.header')}
-      text={t('onboarding.payments.details')}
-      listOfText={paymentsTextLines}
-    />
-  )
+  return <GenericOnboarding header={t('onboarding.payments.header')} text={t('onboarding.payments.details')} listOfText={paymentsTextLines} />
 }
 
 function OnboardingBenefits() {
@@ -54,13 +48,7 @@ function OnboardingBenefits() {
       a11yLabel: a11yLabelVA(t('onboarding.benefits.commonLetters.bullet')),
     },
   ]
-  return (
-    <GenericOnboarding
-      header={t('onboarding.benefits.header')}
-      text={t('onboarding.benefits.details')}
-      listOfText={benefitsTextLines}
-    />
-  )
+  return <GenericOnboarding header={t('onboarding.benefits.header')} text={t('onboarding.benefits.details')} listOfText={benefitsTextLines} />
 }
 
 function OnboardingHealth() {
@@ -83,13 +71,7 @@ function OnboardingHealth() {
     },
   ]
 
-  return (
-    <GenericOnboarding
-      header={t('onboarding.health.header')}
-      text={t('onboarding.health.details')}
-      listOfText={healthTextLines}
-    />
-  )
+  return <GenericOnboarding header={t('onboarding.health.header')} text={t('onboarding.health.details')} listOfText={healthTextLines} />
 }
 
 function OnboardingAppOverview() {

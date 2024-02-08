@@ -3,21 +3,16 @@ import { DateTime } from 'luxon'
 import { AddressData } from 'api/types'
 import { GenderIdentityUpdatePayload, PreferredNameUpdatePayload } from 'api/types/DemographicsData'
 
-import { Params } from '../api'
-import { PaymentAccountData, SecureMessagingSystemFolderIdConstants } from '../types'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
 import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from './decisionLetters'
-import {
-  DemographicsDemoApiReturnTypes,
-  DemographicsDemoStore,
-  updateGenderIdentity,
-  updatePreferredName,
-} from './demographics'
+import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updateGenderIdentity, updatePreferredName } from './demographics'
 import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
 import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
+import { Params } from '../api'
 import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from './payments'
+import { PaymentAccountData, SecureMessagingSystemFolderIdConstants } from '../types'
 import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from './prescriptions'
 import {
   ProfileDemoReturnTypes,
@@ -156,11 +151,7 @@ export const initDemoStore = async (): Promise<void> => {
  * @param endpoint- api endpoint being mocked
  * @param params- API params for the call
  */
-export const transform = (
-  callType: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE',
-  endpoint: string,
-  params: Params,
-): DemoApiReturns => {
+export const transform = (callType: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params): DemoApiReturns => {
   switch (callType) {
     case 'GET': {
       return transformGetCall(endpoint, params)

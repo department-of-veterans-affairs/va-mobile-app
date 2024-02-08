@@ -1,12 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { max } from 'underscore'
 
-import { AppThunk } from 'store'
 import * as api from 'store/api'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { isErrorObject } from 'utils/common'
+import { AppThunk } from 'store'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getDateFromString } from 'utils/formattingUtils'
+import { isErrorObject } from 'utils/common'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
 import { ScreenIDTypes, ServiceData } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
@@ -67,10 +67,7 @@ const militaryServiceSlice = createSlice({
       }
     },
 
-    dispatchFinishGetHistory: (
-      state,
-      action: PayloadAction<{ serviceHistory?: api.ServiceHistoryData; error?: Error }>,
-    ) => {
+    dispatchFinishGetHistory: (state, action: PayloadAction<{ serviceHistory?: api.ServiceHistoryData; error?: Error }>) => {
       const { serviceHistory, error } = action.payload
       const history = serviceHistory || state.serviceHistory
 
@@ -91,6 +88,5 @@ const militaryServiceSlice = createSlice({
   },
 })
 
-export const { dispatchFinishGetHistory, dispatchMilitaryHistoryLogout, dispatchStartGetHistory } =
-  militaryServiceSlice.actions
+export const { dispatchFinishGetHistory, dispatchMilitaryHistoryLogout, dispatchStartGetHistory } = militaryServiceSlice.actions
 export default militaryServiceSlice.reducer

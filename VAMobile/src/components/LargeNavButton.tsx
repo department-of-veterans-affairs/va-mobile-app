@@ -1,16 +1,7 @@
-import React, { FC, useState } from 'react'
 import { Pressable, ViewStyle } from 'react-native'
+import React, { FC, useState } from 'react'
 
-import {
-  BackgroundVariant,
-  BorderColorVariant,
-  BorderStyles,
-  BorderWidths,
-  Box,
-  BoxProps,
-  TextView,
-  VAIcon,
-} from 'components'
+import { BackgroundVariant, BorderColorVariant, BorderStyles, BorderWidths, Box, BoxProps, TextView, VAIcon } from 'components'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -120,8 +111,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
   }
-  const accessibilityLabel =
-    tagCount !== undefined ? `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText || ''}`.trim() : undefined
+  const accessibilityLabel = tagCount !== undefined ? `${title} ${tagCountA11y || ''} ${subTextA11yLabel || subText || ''}`.trim() : undefined
 
   return (
     <Box {...boxProps}>
@@ -136,10 +126,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         accessibilityLabel={accessibilityLabel}
         {...a11yHintProp(a11yHint || '')}>
         <Box flex={1}>
-          <Box
-            flexDirection={'row'}
-            flexWrap={'wrap'}
-            mb={subText ? theme.dimensions.condensedMarginBetween : undefined}>
+          <Box flexDirection={'row'} flexWrap={'wrap'} mb={subText ? theme.dimensions.condensedMarginBetween : undefined}>
             <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
               {title}
             </TextView>
@@ -151,13 +138,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
             </TextView>
           )}
         </Box>
-        <VAIcon
-          name="ChevronRight"
-          fill={`${iconColor ? iconColor : 'largeNav'}`}
-          width={10}
-          height={15}
-          ml={theme.dimensions.listItemDecoratorMarginLeft}
-        />
+        <VAIcon name="ChevronRight" fill={`${iconColor ? iconColor : 'largeNav'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
       </Pressable>
     </Box>
   )

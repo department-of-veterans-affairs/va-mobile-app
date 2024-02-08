@@ -1,23 +1,18 @@
-import React, { ReactNode } from 'react'
-import DocumentPicker from 'react-native-document-picker'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import DocumentPicker from 'react-native-document-picker'
+import React, { ReactNode } from 'react'
 
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
 
 import { Box, InlineTextWithIconsProps, MessageListItemObj, PickerItem, TextView, VAIconProps } from 'components'
+import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'store/api/types'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, NUMBERS_ONLY_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
 import { Events } from 'constants/analytics'
-import {
-  EMAIL_REGEX_EXP,
-  MAIL_TO_REGEX_EXP,
-  NUMBERS_ONLY_REGEX_EXP,
-  PHONE_REGEX_EXP,
-  URL2_REGEX_EXP,
-  URL_REGEX_EXP,
-} from 'constants/common'
 import {
   FolderNameTypeConstants,
   MAX_IMAGE_DIMENSION,
@@ -26,20 +21,8 @@ import {
   READ,
   TRASH_FOLDER_NAME,
 } from 'constants/secureMessaging'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import {
-  CategoryTypeFields,
-  CategoryTypes,
-  SecureMessagingFolderList,
-  SecureMessagingMessageList,
-} from 'store/api/types'
+import { getFormattedMessageTime, getNumberAccessibilityLabelFromString, getNumbersFromString, stringToTitleCase } from 'utils/formattingUtils'
 import theme from 'styles/themes/standardTheme'
-import {
-  getFormattedMessageTime,
-  getNumberAccessibilityLabelFromString,
-  getNumbersFromString,
-  stringToTitleCase,
-} from 'utils/formattingUtils'
 
 import { EventParams, logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
@@ -55,20 +38,13 @@ export const getMessagesListItems = (
 ): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
     const { attributes } = message
-    const { attachment, recipientName, senderName, subject, sentDate, readReceipt, hasAttachments, category } =
-      attributes
+    const { attachment, recipientName, senderName, subject, sentDate, readReceipt, hasAttachments, category } = attributes
     const isSentFolder = folderName === FolderNameTypeConstants.sent
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
 
-    const unreadIconProps =
-      readReceipt !== READ && !isOutbound
-        ? ({ name: 'Unread', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps)
-        : undefined
-    const paperClipProps =
-      hasAttachments || attachment
-        ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps)
-        : undefined
+    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'Unread', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps) : undefined
+    const paperClipProps = hasAttachments || attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
 
     const textLines: Array<InlineTextWithIconsProps> = [
       {
@@ -122,14 +98,10 @@ export const getMessagesListItems = (
       isSentFolder: isSentFolder,
       readReceipt: readReceipt,
       onPress: () => {
-        logAnalyticsEvent(
-          Events.vama_sm_open(message.id, folder(), readReceipt !== READ && !isOutbound ? 'unread' : 'read'),
-        )
+        logAnalyticsEvent(Events.vama_sm_open(message.id, folder(), readReceipt !== READ && !isOutbound ? 'unread' : 'read'))
         onMessagePress(message.id, isDraftsFolder)
       },
-      a11yHintText: isDraftsFolder
-        ? t('secureMessaging.viewMessage.draft.a11yHint')
-        : t('secureMessaging.viewMessage.a11yHint'),
+      a11yHintText: isDraftsFolder ? t('secureMessaging.viewMessage.draft.a11yHint') : t('secureMessaging.viewMessage.a11yHint'),
       testId: generateTestIDForInlineTextIconList(textLines, t),
       a11yValue: t('listPosition', { position: index + 1, total: messages.length }),
     }
@@ -399,15 +371,7 @@ export const onAddFileAttachments = (
               includeBase64: true,
             },
             (response: ImagePickerResponse): void => {
-              postCameraOrImageLaunchOnFileAttachments(
-                response,
-                setError,
-                setErrorA11y,
-                callbackIfUri,
-                totalBytesUsed,
-                imageBase64s,
-                t,
-              )
+              postCameraOrImageLaunchOnFileAttachments(response, setError, setErrorA11y, callbackIfUri, totalBytesUsed, imageBase64s, t)
             },
           )
           break
@@ -421,15 +385,7 @@ export const onAddFileAttachments = (
               includeBase64: true,
             },
             (response: ImagePickerResponse): void => {
-              postCameraOrImageLaunchOnFileAttachments(
-                response,
-                setError,
-                setErrorA11y,
-                callbackIfUri,
-                totalBytesUsed,
-                imageBase64s,
-                t,
-              )
+              postCameraOrImageLaunchOnFileAttachments(response, setError, setErrorA11y, callbackIfUri, totalBytesUsed, imageBase64s, t)
             },
           )
           break
@@ -482,11 +438,7 @@ export const saveDraftWithAttachmentAlert = (
   }
 }
 
-export const getLinkifiedText = (
-  body: string,
-  t: TFunction,
-  launchExternalLink: (url: string, eventParams?: EventParams | undefined) => void,
-): ReactNode => {
+export const getLinkifiedText = (body: string, t: TFunction, launchExternalLink: (url: string, eventParams?: EventParams | undefined) => void): ReactNode => {
   const textReconstructedBody: Array<ReactNode> = []
   const bodySplit = body.split(' ')
   let dontAddNextString = false

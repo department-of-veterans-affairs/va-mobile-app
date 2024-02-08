@@ -1,21 +1,21 @@
-import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import React, { useRef } from 'react'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
-import { Events } from 'constants/analytics'
-import { ClaimType, ClaimTypeConstants } from 'constants/claims'
-import { NAMESPACE } from 'constants/namespaces'
-import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
 import { ClaimData } from 'store/api/types'
+import { ClaimType, ClaimTypeConstants } from 'constants/claims'
+import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { testIdProps } from 'utils/accessibility'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
+import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
 
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
@@ -104,11 +104,7 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
       let letterAvailable = t('claimDetails.decisionLetterMailed')
       let showButton = false
 
-      if (
-        featureEnabled('decisionLettersWaygate') &&
-        userAuthorizedServices?.decisionLetters &&
-        claim.attributes.decisionLetterSent
-      ) {
+      if (featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters && claim.attributes.decisionLetterSent) {
         letterAvailable = t('claimDetails.youCanDownload')
         showButton = true
         if (!sentEvent.current) {
@@ -128,9 +124,7 @@ function ClaimStatus({ claim, claimType }: ClaimStatusProps) {
                 {letterAvailable}
               </TextView>
             </Box>
-            {showButton && (
-              <Button onPress={onPress} label={t('claimDetails.getClaimLetters')} testID="getClaimLettersTestID" />
-            )}
+            {showButton && <Button onPress={onPress} label={t('claimDetails.getClaimLetters')} testID="getClaimLettersTestID" />}
           </TextArea>
         </Box>
       )

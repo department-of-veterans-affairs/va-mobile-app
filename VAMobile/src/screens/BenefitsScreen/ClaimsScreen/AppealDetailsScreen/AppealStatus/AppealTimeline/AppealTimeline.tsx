@@ -2,8 +2,8 @@ import React from 'react'
 
 import _ from 'underscore'
 
-import { Box } from 'components'
 import { AppealEventData } from 'store/api/types'
+import { Box } from 'components'
 
 import AppealPhase from './AppealPhase'
 

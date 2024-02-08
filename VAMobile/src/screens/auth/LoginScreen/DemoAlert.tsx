@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
 import { Alert, Modal, Pressable, PressableProps, TextInput, TextInputProps, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import React, { useState } from 'react'
 
 import { Box, TextView } from 'components'
-import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
+import getEnv from 'utils/env'
 
 const { DEMO_PASSWORD } = getEnv()
 
@@ -65,22 +65,10 @@ function DemoAlert({ visible, setVisible, onConfirm }: AlertPromptProps) {
 
   return (
     <View>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        statusBarTranslucent={true}
-        visible={visible}
-        supportedOrientations={['portrait', 'landscape']}
-        onRequestClose={onCancel}>
+      <Modal animationType="fade" transparent={true} statusBarTranslucent={true} visible={visible} supportedOrientations={['portrait', 'landscape']} onRequestClose={onCancel}>
         <Box flex={1} width={'100%'} flexDirection="column" accessibilityViewIsModal={true} justifyContent={'center'}>
           <Box width={'100%'} height={'100%'} backgroundColor="modalOverlay" opacity={0.8} position={'absolute'} />
-          <Box
-            backgroundColor={'alertBox'}
-            borderRadius={3}
-            p={20}
-            ml={insets.left}
-            mr={insets.right}
-            mx={theme.dimensions.gutter}>
+          <Box backgroundColor={'alertBox'} borderRadius={3} p={20} ml={insets.left} mr={insets.right} mx={theme.dimensions.gutter}>
             <Box alignItems={'flex-start'}>
               <TextView variant="MobileBodyBold" textAlign={'center'} allowFontScaling={false}>
                 {'Enter Password'}
@@ -95,21 +83,13 @@ function DemoAlert({ visible, setVisible, onConfirm }: AlertPromptProps) {
             <Box flexDirection={'row'} justifyContent={'flex-end'}>
               <Box mr={theme.dimensions.standardMarginBetween}>
                 <Pressable {...cancelButtonProps}>
-                  <TextView
-                    allowFontScaling={false}
-                    variant="MobileBody"
-                    textTransform="uppercase"
-                    color="buttonSecondary">
+                  <TextView allowFontScaling={false} variant="MobileBody" textTransform="uppercase" color="buttonSecondary">
                     {'Cancel'}
                   </TextView>
                 </Pressable>
               </Box>
               <Pressable {...demoButtonProps}>
-                <TextView
-                  allowFontScaling={false}
-                  variant="MobileBody"
-                  textTransform="uppercase"
-                  color="buttonSecondary">
+                <TextView allowFontScaling={false} variant="MobileBody" textTransform="uppercase" color="buttonSecondary">
                   {'Demo'}
                 </TextView>
               </Pressable>

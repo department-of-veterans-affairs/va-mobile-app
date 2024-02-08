@@ -2,24 +2,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { UserAnalytics } from 'constants/analytics'
 import { AppThunk } from 'store'
-import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
-import { isErrorObject } from 'utils/common'
-import { getDeviceName } from 'utils/deviceData'
+import { UserAnalytics } from 'constants/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { notificationsEnabled } from 'utils/notifications'
+import { getDeviceName } from 'utils/deviceData'
+import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
+import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { notificationsEnabled } from 'utils/notifications'
 
 import * as api from '../api'
-import {
-  GetPushPrefsResponse,
-  PUSH_APP_NAME,
-  PushOsName,
-  PushPreference,
-  ScreenIDTypes,
-  ScreenIDTypesConstants,
-} from '../api'
+import { GetPushPrefsResponse, PUSH_APP_NAME, PushOsName, PushPreference, ScreenIDTypes, ScreenIDTypesConstants } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 
 export const DEVICE_TOKEN_KEY = '@store_device_token'
@@ -143,9 +136,7 @@ export const loadPushPreferences =
     try {
       const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
       const response = await api.get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
-      dispatch(
-        dispatchEndLoadPreferences({ systemNotificationsOn, preferences: response?.data.attributes.preferences }),
-      )
+      dispatch(dispatchEndLoadPreferences({ systemNotificationsOn, preferences: response?.data.attributes.preferences }))
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `loadPushPreferences: ${notificationsNonFatalErrorString}`)
@@ -190,10 +181,7 @@ const notificationSlice = createSlice({
       state.settingPreference = false
     },
 
-    dispatchEndLoadPreferences: (
-      state,
-      action: PayloadAction<{ systemNotificationsOn: boolean; preferences?: PushPreference[] }>,
-    ) => {
+    dispatchEndLoadPreferences: (state, action: PayloadAction<{ systemNotificationsOn: boolean; preferences?: PushPreference[] }>) => {
       const { systemNotificationsOn, preferences } = action.payload
       state.preferences = preferences || []
       state.systemNotificationsOn = systemNotificationsOn

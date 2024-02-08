@@ -1,32 +1,22 @@
-import React, { ReactElement, useEffect, useLayoutEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { ReactElement, useEffect, useLayoutEffect, useState } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import {
-  AlertBox,
-  AlertBoxProps,
-  Box,
-  BoxProps,
-  LoadingComponent,
-  TextArea,
-  TextView,
-  VAIcon,
-  VAIconProps,
-} from 'components'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import { AlertBox, AlertBoxProps, Box, BoxProps, LoadingComponent, TextArea, TextView, VAIcon, VAIconProps } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import { PrescriptionHistoryTabConstants, PrescriptionsList } from 'store/api/types'
 import { PrescriptionState, requestRefills } from 'store/slices'
-import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
+import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad } from 'store/slices/prescriptionSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useAppDispatch, useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
@@ -46,9 +36,7 @@ function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [status, setStatus] = useState<REQUEST_STATUS>()
   const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
-  const { refillRequestSummaryItems, showLoadingScreenRequestRefillsRetry } = useSelector<RootState, PrescriptionState>(
-    (s) => s.prescriptions,
-  )
+  const { refillRequestSummaryItems, showLoadingScreenRequestRefillsRetry } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
 
   const onNavToHistory = () => {
     dispatch(dispatchSetPrescriptionsNeedLoad())
@@ -153,9 +141,7 @@ function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
       const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
       const a11yProps = {
         accessibilityLabel: `${prescriptionName}. ${rxNumberA11yLabel}. ${
-          request.submitted
-            ? t('prescriptions.refillRequestSummary.pendingRefills.requestSubmitted')
-            : t('prescriptions.refillRequestSummary.pendingRefills.requestFailed')
+          request.submitted ? t('prescriptions.refillRequestSummary.pendingRefills.requestSubmitted') : t('prescriptions.refillRequestSummary.pendingRefills.requestFailed')
         }`,
         accessibilityValue: {
           text: t('listPosition', { position: index + 1, total: refillRequestSummaryItems.length }),
@@ -198,15 +184,10 @@ function RefillRequestSummary({ navigation }: RefillRequestSummaryProps) {
       <Box {...borderProps}>
         <TextView variant="HelperTextBold">{t('prescriptions.refillRequestSummary.whatsNext')}</TextView>
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <TextView
-            variant="MobileBody"
-            accessibilityLabel={a11yLabelVA(t('prescriptions.refillRequestSummary.yourRefills.success.1'))}
-            paragraphSpacing={true}>
+          <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescriptions.refillRequestSummary.yourRefills.success.1'))} paragraphSpacing={true}>
             {t('prescriptions.refillRequestSummary.yourRefills.success.1')}
           </TextView>
-          <TextView
-            variant="MobileBody"
-            accessibilityLabel={a11yLabelVA(t('prescriptions.refillRequestSummary.yourRefills.success.2'))}>
+          <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescriptions.refillRequestSummary.yourRefills.success.2'))}>
             {t('prescriptions.refillRequestSummary.yourRefills.success.2')}
           </TextView>
         </Box>

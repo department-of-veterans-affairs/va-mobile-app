@@ -1,16 +1,10 @@
 import { useSelector } from 'react-redux'
 
+import { AuthState, cancelWebLogin, handleTokenCallbackUrl, sendLoginFailedAnalytics, sendLoginStartAnalytics } from 'store/slices/authSlice'
 import { RootState } from 'store'
-import {
-  AuthState,
-  cancelWebLogin,
-  handleTokenCallbackUrl,
-  sendLoginFailedAnalytics,
-  sendLoginStartAnalytics,
-} from 'store/slices/authSlice'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { isIOS } from 'utils/platform'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { startAuthSession } from 'utils/rnAuthSesson'
 
 import { useAppDispatch } from '.'

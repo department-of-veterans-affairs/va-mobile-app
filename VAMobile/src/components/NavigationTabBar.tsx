@@ -1,7 +1,7 @@
-import React, { FC } from 'react'
-import { useTranslation } from 'react-i18next'
 import { AccessibilityRole, AccessibilityState, TouchableWithoutFeedback } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
 
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
@@ -11,11 +11,11 @@ import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yValueProp, testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-import Box from './Box'
 import { VA_ICON_MAP } from './VAIcon'
+import Box from './Box'
 import VAIconWithText, { VAIconWithTextProps } from './VAIconWithText/VAIconWithText'
 
 type TabBarRoute = {

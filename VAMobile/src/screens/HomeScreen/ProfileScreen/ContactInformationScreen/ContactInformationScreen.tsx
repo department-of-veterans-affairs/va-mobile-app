@@ -1,44 +1,27 @@
-import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { Pressable } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import React, { useState } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { TFunction } from 'i18next'
 
-import { useContactInformation } from 'api/contactInformation/getContactInformation'
-import { FormattedPhoneType, PhoneData, PhoneKey, PhoneTypeConstants } from 'api/types'
-import { UserContactInformation } from 'api/types/ContactInformation'
-import {
-  DefaultList,
-  DefaultListItemObj,
-  ErrorComponent,
-  FeatureLandingTemplate,
-  LoadingComponent,
-  TextLine,
-  TextView,
-  TextViewProps,
-} from 'components'
+import { DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { Events } from 'constants/analytics'
-import { NAMESPACE } from 'constants/namespaces'
+import { FormattedPhoneType, PhoneData, PhoneKey, PhoneTypeConstants } from 'api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import AddressSummary, {
-  addressDataField,
-  profileAddressOptions,
-} from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
+import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
+import { UserContactInformation } from 'api/types/ContactInformation'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { useContactInformation } from 'api/contactInformation/getContactInformation'
+import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
+import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
-const getTextForPhoneData = (
-  contactInformation: UserContactInformation | undefined,
-  formattedPhoneType: FormattedPhoneType,
-  phoneKey: PhoneKey,
-  t: TFunction,
-): Array<TextLine> => {
+const getTextForPhoneData = (contactInformation: UserContactInformation | undefined, formattedPhoneType: FormattedPhoneType, phoneKey: PhoneKey, t: TFunction): Array<TextLine> => {
   const textIDs: Array<TextLine> = []
 
   if (contactInformation && contactInformation[formattedPhoneType]) {
@@ -97,11 +80,7 @@ const getPhoneNumberData = (
   ]
 }
 
-const getEmailAddressData = (
-  contactInformation: UserContactInformation | undefined,
-  t: TFunction,
-  onEmailAddress: () => void,
-): Array<DefaultListItemObj> => {
+const getEmailAddressData = (contactInformation: UserContactInformation | undefined, t: TFunction, onEmailAddress: () => void): Array<DefaultListItemObj> => {
   const textLines: Array<TextLine> = [{ text: t('contactInformation.emailAddress'), variant: 'MobileBodyBold' }]
 
   if (contactInformation?.contactEmail?.emailAddress) {
@@ -206,16 +185,9 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
   ]
 
   return (
-    <FeatureLandingTemplate
-      backLabel={t('profile.title')}
-      backLabelOnPress={navigation.goBack}
-      title={t('contactInformation.title')}
-      testID="ContactInfoTestID">
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('contactInformation.title')} testID="ContactInfoTestID">
       {contactInformationInDowntime || contactInformationError ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}
-          onTryAgain={refetchContactInformation}
-        />
+        <ErrorComponent screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID} onTryAgain={refetchContactInformation} />
       ) : loadingContactInformation ? (
         <LoadingComponent text={t('contactInformation.loading')} />
       ) : (
@@ -229,14 +201,8 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
             </TextView>
           </Pressable>
           <AddressSummary addressData={addressData} title={t('contactInformation.addresses')} />
-          <DefaultList
-            items={getPhoneNumberData(contactInformation, t, onHomePhone, onWorkPhone, onCellPhone)}
-            title={t('contactInformation.phoneNumbers')}
-          />
-          <DefaultList
-            items={getEmailAddressData(contactInformation, t, onEmailAddress)}
-            title={t('contactInformation.contactEmailAddress')}
-          />
+          <DefaultList items={getPhoneNumberData(contactInformation, t, onHomePhone, onWorkPhone, onCellPhone)} title={t('contactInformation.phoneNumbers')} />
+          <DefaultList items={getEmailAddressData(contactInformation, t, onEmailAddress)} title={t('contactInformation.contactEmailAddress')} />
           <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
             {t('contactInformation.thisIsEmailWeUseToContactNote')}
           </TextView>

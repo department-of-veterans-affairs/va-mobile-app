@@ -19,12 +19,7 @@ export const claim: ClaimData = {
     requestedDecision: false,
     claimType: 'Compensation',
     updatedAt: '2020-12-07T20:37:12.041Z',
-    contentionList: [
-      'Hearing Loss (Increase)',
-      ' ankle strain (related to: PTSD - Combat',
-      'POW) (New)',
-      ' Diabetes mellitus2 (Secondary)',
-    ],
+    contentionList: ['Hearing Loss (Increase)', ' ankle strain (related to: PTSD - Combat', 'POW) (New)', ' Diabetes mellitus2 (Secondary)'],
     vaRepresentative: 'AMERICAN LEGION',
     eventsTimeline: [
       {
@@ -907,8 +902,7 @@ export const claim: ClaimData = {
       },
       {
         trackedItemId: null,
-        fileType:
-          'VA 21-4502 Application for Automobile or Other Conveyance and Adaptive Equipment Under 38 U.S.C. 3901-3904',
+        fileType: 'VA 21-4502 Application for Automobile or Other Conveyance and Adaptive Equipment Under 38 U.S.C. 3901-3904',
         documentType: 'L117',
         filename: null,
         uploadDate: null,
@@ -1268,8 +1262,7 @@ export const claim: ClaimData = {
       },
       {
         trackedItemId: null,
-        fileType:
-          'VA 26-4555 Veterans Application in Acquiring Specially Adapted Housing or Special Home Adaptation Grant Under Title 38 U.S.C. 2101(a) or (b)',
+        fileType: 'VA 26-4555 Veterans Application in Acquiring Specially Adapted Housing or Special Home Adaptation Grant Under Title 38 U.S.C. 2101(a) or (b)',
         documentType: 'L159',
         filename: null,
         uploadDate: null,
@@ -1386,8 +1379,7 @@ export const claim: ClaimData = {
       },
       {
         trackedItemId: null,
-        fileType:
-          'VA 26-4555 Veterans Application in Acquiring Specially Adapted Housing or Special Home Adaptation Grant Under Title 38 U.S.C. 2101(a) or (b)',
+        fileType: 'VA 26-4555 Veterans Application in Acquiring Specially Adapted Housing or Special Home Adaptation Grant Under Title 38 U.S.C. 2101(a) or (b)',
         documentType: 'L159',
         filename: null,
         uploadDate: null,
@@ -1396,8 +1388,7 @@ export const claim: ClaimData = {
       },
       {
         trackedItemId: null,
-        fileType:
-          'VA 26-4555 Veterans Application in Acquiring Specially Adapted Housing or Special Home Adaptation Grant Under Title 38 U.S.C. 2101(a) or (b)',
+        fileType: 'VA 26-4555 Veterans Application in Acquiring Specially Adapted Housing or Special Home Adaptation Grant Under Title 38 U.S.C. 2101(a) or (b)',
         documentType: 'L159',
         filename: null,
         uploadDate: null,
@@ -1892,8 +1883,7 @@ export const claim: ClaimData = {
       },
       {
         trackedItemId: null,
-        fileType:
-          'VA 21-4502 Application for Automobile or Other Conveyance and Adaptive Equipment Under 38 U.S.C. 3901-3904',
+        fileType: 'VA 21-4502 Application for Automobile or Other Conveyance and Adaptive Equipment Under 38 U.S.C. 3901-3904',
         documentType: 'L117',
         filename: null,
         uploadDate: null,
@@ -2766,8 +2756,7 @@ export const claim: ClaimData = {
       },
       {
         trackedItemId: null,
-        fileType:
-          'VA 26-4555 Veterans Application in Acquiring Specially Adapted Housing or Special Home Adaptation Grant Under Title 38 U.S.C. 2101(a) or (b)',
+        fileType: 'VA 26-4555 Veterans Application in Acquiring Specially Adapted Housing or Special Home Adaptation Grant Under Title 38 U.S.C. 2101(a) or (b)',
         documentType: 'L159',
         filename: null,
         uploadDate: null,
@@ -3037,8 +3026,7 @@ export const claim: ClaimData = {
       },
       {
         trackedItemId: null,
-        fileType:
-          'VA 26-4555 Veterans Application in Acquiring Specially Adapted Housing or Special Home Adaptation Grant Under Title 38 U.S.C. 2101(a) or (b)',
+        fileType: 'VA 26-4555 Veterans Application in Acquiring Specially Adapted Housing or Special Home Adaptation Grant Under Title 38 U.S.C. 2101(a) or (b)',
         documentType: 'L159',
         filename: null,
         uploadDate: null,
@@ -3308,8 +3296,7 @@ export const claim: ClaimData = {
       },
       {
         trackedItemId: null,
-        fileType:
-          'VA 26-4555 Veterans Application in Acquiring Specially Adapted Housing or Special Home Adaptation Grant Under Title 38 U.S.C. 2101(a) or (b)',
+        fileType: 'VA 26-4555 Veterans Application in Acquiring Specially Adapted Housing or Special Home Adaptation Grant Under Title 38 U.S.C. 2101(a) or (b)',
         documentType: 'L159',
         filename: null,
         uploadDate: null,
@@ -3804,8 +3791,7 @@ export const claim: ClaimData = {
       },
       {
         trackedItemId: null,
-        fileType:
-          'VA 21-4502 Application for Automobile or Other Conveyance and Adaptive Equipment Under 38 U.S.C. 3901-3904',
+        fileType: 'VA 21-4502 Application for Automobile or Other Conveyance and Adaptive Equipment Under 38 U.S.C. 3901-3904',
         documentType: 'L117',
         filename: null,
         uploadDate: null,

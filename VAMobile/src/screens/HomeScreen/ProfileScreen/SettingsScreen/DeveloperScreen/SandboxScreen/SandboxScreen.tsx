@@ -1,16 +1,16 @@
-import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import React, { useMemo, useState } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import * as CommonComponents from 'components'
 import { Box, FeatureLandingTemplate, PickerItem, TextView, VAModalPicker, VATextInput } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
-import CommonComponentWhiteList, { PropOptionType } from './CommonComponentWhiteList'
 import { OnPressOptions } from './PickerOptions'
+import CommonComponentWhiteList, { PropOptionType } from './CommonComponentWhiteList'
 
 type SandboxScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Sandbox'>
 
@@ -48,14 +48,7 @@ function SandboxScreen({ navigation }: SandboxScreenSettingsScreenProps) {
   }
 
   const componentPicker = () => {
-    return (
-      <VAModalPicker
-        selectedValue={selectedOption}
-        onSelectionChange={onSelectComponentOption}
-        pickerOptions={pickerOptions}
-        labelKey={'Components'}
-      />
-    )
+    return <VAModalPicker selectedValue={selectedOption} onSelectionChange={onSelectComponentOption} pickerOptions={pickerOptions} labelKey={'Components'} />
   }
   const renderSandboxComponent = () => {
     const whiteListed = CommonComponentWhiteList[selectedOption]
@@ -134,10 +127,7 @@ function SandboxScreen({ navigation }: SandboxScreenSettingsScreenProps) {
   }
 
   return (
-    <FeatureLandingTemplate
-      backLabel={t('debug.title')}
-      backLabelOnPress={navigation.goBack}
-      title={t('sandbox.title')}>
+    <FeatureLandingTemplate backLabel={t('debug.title')} backLabelOnPress={navigation.goBack} title={t('sandbox.title')}>
       <Box mx={theme.dimensions.gutter}>
         {componentPicker()}
         <Box my={theme.dimensions.standardMarginBetween}>{renderOptions()}</Box>

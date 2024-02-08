@@ -11,16 +11,10 @@ import {
   addressPouTypes,
 } from 'api/types'
 
-import { Params } from '../api'
-import {
-  DirectDepositData,
-  EditResponseData,
-  LettersData,
-  MilitaryServiceHistoryData,
-  PaymentAccountData,
-} from '../types'
 import { DemoStore } from './store'
+import { DirectDepositData, EditResponseData, LettersData, MilitaryServiceHistoryData, PaymentAccountData } from '../types'
 import { MOCK_EDIT_RESPONSE } from './utils'
+import { Params } from '../api'
 
 /**
  * Type denoting the demo data store
@@ -35,13 +29,7 @@ export type ProfileDemoStore = {
 /**
  * Type to define the mock returns to keep type safety
  */
-export type ProfileDemoReturnTypes =
-  | AddressValidationData
-  | DirectDepositData
-  | DirectDepositData
-  | EditResponseData
-  | LettersData
-  | MilitaryServiceHistoryData
+export type ProfileDemoReturnTypes = AddressValidationData | DirectDepositData | DirectDepositData | EditResponseData | LettersData | MilitaryServiceHistoryData
 
 /**
  * Function used to update the user's phone numbers. This avoids reuse for the PUT/POST calls required for phones
@@ -113,21 +101,8 @@ export const deleteEmail = (store: DemoStore): EditResponseData => {
  * @returns AddressValidationData- object needed to run the validation to complete address updates
  */
 export const validateAddress = (addressData: AddressData): AddressValidationData => {
-  const {
-    id,
-    addressLine1,
-    addressLine2,
-    addressLine3,
-    addressPou,
-    addressType,
-    city,
-    countryCodeIso3,
-    internationalPostalCode,
-    province,
-    stateCode,
-    zipCode,
-    zipCodeSuffix,
-  } = addressData
+  const { id, addressLine1, addressLine2, addressLine3, addressPou, addressType, city, countryCodeIso3, internationalPostalCode, province, stateCode, zipCode, zipCodeSuffix } =
+    addressData
   return {
     data: [
       {

@@ -1,10 +1,10 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import VeteransCrisisLineNumbers from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 import { useTheme } from 'utils/hooks'
+import VeteransCrisisLineNumbers from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 
 /**
  * View for Reply Help screen
@@ -17,11 +17,7 @@ function ReplyHelp() {
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   return (
-    <LargePanel
-      testID="messageHelpTestID"
-      title={t('secureMessaging.replyHelp.title')}
-      rightButtonText={t('close')}
-      rightButtonTestID="messagesHelpCloseTestID">
+    <LargePanel testID="messageHelpTestID" title={t('secureMessaging.replyHelp.title')} rightButtonText={t('close')} rightButtonTestID="messagesHelpCloseTestID">
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('secureMessaging.replyHelp.onlyUseMessages')}
@@ -60,12 +56,7 @@ function ReplyHelp() {
             ]}
           />
         </Box>
-        <ClickToCallPhoneNumber
-          ttyBypass={true}
-          phone={t('911')}
-          a11yLabel={t('secureMessaging.replyHelp.call911.a11y')}
-          displayedText={t('secureMessaging.replyHelp.call911')}
-        />
+        <ClickToCallPhoneNumber ttyBypass={true} phone={t('911')} a11yLabel={t('secureMessaging.replyHelp.call911.a11y')} displayedText={t('secureMessaging.replyHelp.call911')} />
       </Box>
     </LargePanel>
   )

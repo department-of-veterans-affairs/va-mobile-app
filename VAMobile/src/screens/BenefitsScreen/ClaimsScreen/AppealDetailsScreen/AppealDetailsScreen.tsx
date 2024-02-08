@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { useEffect, useState } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { filter, pluck } from 'underscore'
 
+import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
+import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { RootState } from 'store'
-import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { ClaimsAndAppealsState, getAppeal } from 'store/slices'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
-import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { useAppDispatch, useBeforeNavBackListener, useError, useTheme } from 'utils/hooks'
 
 import AppealIssues from './AppealIssues/AppealIssues'
 import AppealStatus from './AppealStatus/AppealStatus'
@@ -38,12 +38,9 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
   ]
 
   const { appealID } = route.params
-  const { appeal, loadingAppeal, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>(
-    (state) => state.claimsAndAppeals,
-  )
+  const { appeal, loadingAppeal, cancelLoadingDetailScreen } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes, type } = appeal || ({} as AppealData)
-  const { updated, programArea, events, status, aoj, docket, issues, active } =
-    attributes || ({} as AppealAttributesData)
+  const { updated, programArea, events, status, aoj, docket, issues, active } = attributes || ({} as AppealAttributesData)
 
   useBeforeNavBackListener(navigation, () => {
     // if appeals is still loading cancel it
@@ -104,11 +101,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
   const formattedSubmittedDate = formatDateMMMMDDYYYY(getSubmittedDate())
 
   return (
-    <FeatureLandingTemplate
-      backLabel={t('claims.title')}
-      backLabelOnPress={navigation.goBack}
-      title={t('appealDetails.title')}
-      testID="appealsDetailsTestID">
+    <FeatureLandingTemplate backLabel={t('claims.title')} backLabelOnPress={navigation.goBack} title={t('appealDetails.title')} testID="appealsDetailsTestID">
       {useError(ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID) ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID} />
       ) : loadingAppeal ? (
@@ -116,10 +109,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <Box mx={theme.dimensions.gutter}>
-            <TextView
-              variant="BitterBoldHeading"
-              mb={theme.dimensions.condensedMarginBetween}
-              accessibilityRole="header">
+            <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
               {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
             </TextView>
             <TextView variant="MobileBody" testID="appealsUpToDateTestID">
@@ -127,12 +117,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
             </TextView>
             <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
             <Box mt={theme.dimensions.standardMarginBetween}>
-              <SegmentedControl
-                labels={controlLabels}
-                onChange={onTabChange}
-                selected={selectedTab}
-                a11yHints={segmentedControlA11yHints}
-              />
+              <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={segmentedControlA11yHints} />
             </Box>
           </Box>
           <Box mt={theme.dimensions.condensedMarginBetween}>

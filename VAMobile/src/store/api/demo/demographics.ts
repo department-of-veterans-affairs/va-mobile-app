@@ -1,8 +1,4 @@
-import {
-  DemographicsPayload,
-  GenderIdentityUpdatePayload,
-  PreferredNameUpdatePayload,
-} from 'api/types/DemographicsData'
+import { DemographicsPayload, GenderIdentityUpdatePayload, PreferredNameUpdatePayload } from 'api/types/DemographicsData'
 
 import { DemoStore } from './store'
 

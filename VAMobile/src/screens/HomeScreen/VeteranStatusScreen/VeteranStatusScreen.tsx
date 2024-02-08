@@ -1,29 +1,20 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { map } from 'underscore'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import {
-  BackgroundVariant,
-  BorderColorVariant,
-  Box,
-  BoxProps,
-  ClickToCallPhoneNumber,
-  LargePanel,
-  TextView,
-  VAIcon,
-} from 'components'
-import { NAMESPACE } from 'constants/namespaces'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { RootState } from 'store'
+import { BackgroundVariant, BorderColorVariant, Box, BoxProps, ClickToCallPhoneNumber, LargePanel, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
 import { DisabilityRatingState, MilitaryServiceState } from 'store/slices'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useOrientation, useTheme } from 'utils/hooks'
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 
@@ -32,9 +23,7 @@ import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
 
 function VeteranStatusScreen({}: VeteranStatusScreenProps) {
-  const { serviceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>(
-    (state) => state.militaryService,
-  )
+  const { serviceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>((state) => state.militaryService)
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
@@ -44,9 +33,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
   const isPortrait = useOrientation()
   const ratingPercent = ratingData?.combinedDisabilityRating
   const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
-  const combinedPercentText = ratingIsDefined
-    ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent })
-    : undefined
+  const combinedPercentText = ratingIsDefined ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent }) : undefined
 
   const getPeriodOfService: React.ReactNode = map(serviceHistory, (service: ServiceData) => {
     const branch = t('militaryInformation.branch', { branch: service.branchOfService })
@@ -58,11 +45,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
           </TextView>
         </Box>
         <Box>
-          <TextView
-            variant="HelperText"
-            color="primaryContrast"
-            mb={theme.dimensions.condensedMarginBetween}
-            testID="veteranStatusMilitaryServiceTestID">
+          <TextView variant="HelperText" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween} testID="veteranStatusMilitaryServiceTestID">
             {t('militaryInformation.history', { begin: service.formattedBeginDate, end: service.formattedEndDate })}
           </TextView>
         </Box>
@@ -104,28 +87,15 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
   }
 
   return (
-    <LargePanel
-      title={t('veteranStatus.title')}
-      rightButtonText={t('close')}
-      dividerMarginBypass={true}
-      removeInsets={true}
-      testID="veteranStatusTestID">
-      <Box
-        mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
-        alignItems="center"
-        mt={theme.dimensions.standardMarginBetween}>
+    <LargePanel title={t('veteranStatus.title')} rightButtonText={t('close')} dividerMarginBypass={true} removeInsets={true} testID="veteranStatusTestID">
+      <Box mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight} alignItems="center" mt={theme.dimensions.standardMarginBetween}>
         <VAIcon testID="VeteranStatusCardVAIcon" name={'Logo'} />
         {/* <Box my={theme.dimensions.standardMarginBetween}>
         //TODO: Put back PhotoUpload later after concerns have been met
           <PhotoUpload width={100} height={100} />
         </Box> */}
         <Box my={theme.dimensions.formMarginBetween}>
-          <TextView
-            textTransform="capitalize"
-            mb={theme.dimensions.textIconMargin}
-            variant="BitterBoldHeading"
-            color="primaryContrast"
-            testID="veteranStatusFullNameTestID">
+          <TextView textTransform="capitalize" mb={theme.dimensions.textIconMargin} variant="BitterBoldHeading" color="primaryContrast" testID="veteranStatusFullNameTestID">
             {personalInfo?.fullName}
           </TextView>
           {accessToMilitaryInfo && (
@@ -173,20 +143,11 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
           <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
             {t('veteranStatus.fixAnError.2')}
           </TextView>
-          <ClickToCallPhoneNumber
-            phone={t('8008271000')}
-            displayedText={displayedTextPhoneNumber(t('8008271000'))}
-            colorOverride={'veteranStatus'}
-          />
+          <ClickToCallPhoneNumber phone={t('8008271000')} displayedText={displayedTextPhoneNumber(t('8008271000'))} colorOverride={'veteranStatus'} />
           <TextView variant="MobileBody" color="primaryContrast" my={theme.dimensions.condensedMarginBetween}>
             {t('veteranStatus.fixAnError.3')}
           </TextView>
-          <ClickToCallPhoneNumber
-            phone={t('8005389552')}
-            displayedText={displayedTextPhoneNumber(t('8005389552'))}
-            colorOverride={'veteranStatus'}
-            ttyBypass={true}
-          />
+          <ClickToCallPhoneNumber phone={t('8005389552')} displayedText={displayedTextPhoneNumber(t('8005389552'))} colorOverride={'veteranStatus'} ttyBypass={true} />
         </Box>
       </Box>
     </LargePanel>

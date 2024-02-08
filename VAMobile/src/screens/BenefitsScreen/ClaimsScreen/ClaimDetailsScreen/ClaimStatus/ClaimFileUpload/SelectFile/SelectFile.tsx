@@ -1,21 +1,21 @@
-import React, { useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import DocumentPicker from 'react-native-document-picker'
+import React, { useRef, useState } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AlertBox, Box, TextArea, TextView } from 'components'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
-import { Events } from 'constants/analytics'
-import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { Events } from 'constants/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
-import getEnv from 'utils/env'
+import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
 
@@ -107,11 +107,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   }
 
   return (
-    <FullScreenSubtask
-      scrollViewRef={scrollViewRef}
-      leftButtonText={t('cancel')}
-      onLeftButtonPress={onCancel}
-      title={t('fileUpload.selectFiles')}>
+    <FullScreenSubtask scrollViewRef={scrollViewRef} leftButtonText={t('cancel')} onLeftButtonPress={onCancel} title={t('fileUpload.selectFiles')}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>

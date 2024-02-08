@@ -1,6 +1,6 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import React from 'react'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -40,11 +40,7 @@ function PrescriptionHistoryNoMatches({ currentTab, isFiltered }: PrescriptionHi
         <TextView textAlign={'center'} variant="MobileBodyBold">
           {t('prescription.history.empty.filtered.title')}
         </TextView>
-        <TextView
-          pt={theme.dimensions.condensedMarginBetween}
-          textAlign={'center'}
-          variant="MobileBody"
-          {...contenta11y}>
+        <TextView pt={theme.dimensions.condensedMarginBetween} textAlign={'center'} variant="MobileBody" {...contenta11y}>
           {getFilteredTabString()}
         </TextView>
       </>
@@ -115,11 +111,7 @@ function PrescriptionHistoryNoMatches({ currentTab, isFiltered }: PrescriptionHi
 
   return (
     <VAScrollView contentContainerStyle={noMatchScrollStyles}>
-      <Box
-        justifyContent="center"
-        mx={theme.dimensions.gutter}
-        mb={theme.dimensions.contentMarginBottom}
-        alignItems={'center'}>
+      <Box justifyContent="center" mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
         <Box mt={theme.dimensions.condensedMarginBetween}>{getContent()}</Box>
       </Box>
     </VAScrollView>

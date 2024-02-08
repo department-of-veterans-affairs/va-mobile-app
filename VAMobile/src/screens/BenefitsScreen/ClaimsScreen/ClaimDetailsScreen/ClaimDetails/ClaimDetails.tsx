@@ -1,9 +1,9 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
 import { Box, TextArea, TextView, VABulletList } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import { ClaimData } from 'store/api'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 
@@ -39,9 +39,7 @@ function ClaimDetails({ claim }: ClaimDetailsProps) {
         <TextView accessibilityLabel={a11yLabelVA(t('claimDetails.yourRepresentative'))} variant="MobileBodyBold">
           {t('claimDetails.yourRepresentative')}
         </TextView>
-        <TextView
-          variant="MobileBody"
-          accessibilityLabel={attributes?.vaRepresentative ? undefined : a11yLabelVA(t('contactYourVA'))}>
+        <TextView variant="MobileBody" accessibilityLabel={attributes?.vaRepresentative ? undefined : a11yLabelVA(t('contactYourVA'))}>
           {attributes?.vaRepresentative || t('contactYourVA')}
         </TextView>
       </TextArea>

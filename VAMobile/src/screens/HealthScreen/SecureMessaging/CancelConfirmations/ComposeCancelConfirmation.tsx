@@ -1,15 +1,10 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SnackbarMessages } from 'components/SnackBar'
+import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
-import {
-  FolderNameTypeConstants,
-  FormHeaderType,
-  FormHeaderTypeConstants,
-  SegmentedControlIndexes,
-} from 'constants/secureMessaging'
 import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
+import { SnackbarMessages } from 'components/SnackBar'
 import {
   resetHasLoadedRecipients,
   resetReplyTriageError,
@@ -34,10 +29,7 @@ type ComposeCancelConfirmationProps = {
   draftMessageID?: number
 }
 
-export function useComposeCancelConfirmation(): [
-  isDiscarded: boolean,
-  composeCancelConfirmation: (props: ComposeCancelConfirmationProps) => void,
-] {
+export function useComposeCancelConfirmation(): [isDiscarded: boolean, composeCancelConfirmation: (props: ComposeCancelConfirmationProps) => void] {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
@@ -91,8 +83,8 @@ export function useComposeCancelConfirmation(): [
           origin === 'Compose'
             ? t('composeCancelConfirmation.compose.title')
             : origin === 'Draft'
-              ? t('composeCancelConfirmation.draft.title')
-              : t('composeCancelConfirmation.reply.title'),
+            ? t('composeCancelConfirmation.draft.title')
+            : t('composeCancelConfirmation.reply.title'),
         message: origin === 'Draft' ? t('composeCancelConfirmation.draft.body') : t('composeCancelConfirmation.body'),
         cancelButtonIndex: 0,
         destructiveButtonIndex: 1,

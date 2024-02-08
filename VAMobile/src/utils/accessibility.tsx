@@ -4,8 +4,8 @@ import { Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 import _ from 'underscore'
 
-import { TextLine } from 'components/types'
 import { RootState } from 'store'
+import { TextLine } from 'components/types'
 import { updateCurrentFontScale, updateCurrentIsVoiceOverTalkBackRunning } from 'store/slices/accessibilitySlice'
 import getEnv from 'utils/env'
 
@@ -18,11 +18,7 @@ interface AccessabilityProps {
   testID?: string
   accessibilityLabel?: string
 }
-export const testIdProps = (
-  id: string,
-  disableAccessible?: boolean,
-  integrationTestOnlyTestId?: string,
-): AccessabilityProps => {
+export const testIdProps = (id: string, disableAccessible?: boolean, integrationTestOnlyTestId?: string): AccessabilityProps => {
   const disableAccessibility = disableAccessible ? { accessible: false } : { accessible: undefined }
 
   const idToUse = IS_TEST && integrationTestOnlyTestId ? integrationTestOnlyTestId : id
@@ -53,11 +49,7 @@ export const a11yValueProp = (a11yValue: AccessibilityValue): { accessibilityVal
  * @param fontScale - current font scale value
  * @param dispatch - used to call updateCurrentFontScale action
  */
-export const updateFontScale = (
-  newState: AppStateStatus,
-  fontScale: number,
-  dispatch: ThunkDispatch<RootState, undefined, Action<string>>,
-): void => {
+export const updateFontScale = (newState: AppStateStatus, fontScale: number, dispatch: ThunkDispatch<RootState, undefined, Action<string>>): void => {
   if (newState === 'active') {
     const fontScaleUpdated = PixelRatio.getFontScale()
     if (fontScale !== fontScaleUpdated) {

@@ -12,9 +12,7 @@ import {
   addressTypeFields,
 } from 'api/types'
 
-export const getAddressValidationScenarioFromAddressValidationData = (
-  suggestedAddresses: Array<SuggestedAddress>,
-): AddressValidationScenarioTypes | undefined => {
+export const getAddressValidationScenarioFromAddressValidationData = (suggestedAddresses: Array<SuggestedAddress>): AddressValidationScenarioTypes | undefined => {
   if (!suggestedAddresses) {
     return
   }
@@ -28,9 +26,7 @@ export const getValidationKey = (suggestedAddresses?: Array<SuggestedAddress>): 
   return suggestedAddresses[0]?.meta?.validationKey
 }
 
-export const getSuggestedAddresses = (
-  addressValidationData?: AddressValidationData,
-): Array<SuggestedAddress> | undefined => {
+export const getSuggestedAddresses = (addressValidationData?: AddressValidationData): Array<SuggestedAddress> | undefined => {
   if (!addressValidationData) {
     return
   }
@@ -53,10 +49,7 @@ export const getSuggestedAddresses = (
  function will return `false` unless the user made an error entering their
  address or their address is not know to the validation API
  */
-export const showValidationScreen = (
-  addressData: AddressData,
-  suggestedAddresses?: Array<SuggestedAddress>,
-): boolean => {
+export const showValidationScreen = (addressData: AddressData, suggestedAddresses?: Array<SuggestedAddress>): boolean => {
   if (!suggestedAddresses) {
     return false
   }
@@ -80,9 +73,7 @@ export const showValidationScreen = (
   return true
 }
 
-export const getConfirmedSuggestions = (
-  suggestedAddresses?: Array<SuggestedAddress>,
-): Array<SuggestedAddress> | undefined => {
+export const getConfirmedSuggestions = (suggestedAddresses?: Array<SuggestedAddress>): Array<SuggestedAddress> | undefined => {
   if (!suggestedAddresses) {
     return
   }
@@ -99,10 +90,7 @@ export const getConfirmedSuggestions = (
 }
 
 // formats a suggested address into an AddressData object
-export const getAddressDataFromSuggestedAddress = (
-  suggestedAddress: SuggestedAddress,
-  addressId?: number,
-): AddressData => {
+export const getAddressDataFromSuggestedAddress = (suggestedAddress: SuggestedAddress, addressId?: number): AddressData => {
   return {
     ...suggestedAddress.attributes,
     id: addressId,
@@ -113,10 +101,7 @@ export const getAddressDataFromSuggestedAddress = (
 /**
  * Returns address data with the `id` field present or omitted based on whether the user already has the address field saved
  */
-export const getAddressDataPayload = (
-  addressData: AddressData,
-  contactInformation?: UserContactInformation,
-): AddressData => {
+export const getAddressDataPayload = (addressData: AddressData, contactInformation?: UserContactInformation): AddressData => {
   const addressPou = addressData.addressPou
   const addressFieldType = AddressPouToProfileAddressFieldType[addressPou]
   const newAddress = !(contactInformation || {})[addressFieldType as keyof UserContactInformation]

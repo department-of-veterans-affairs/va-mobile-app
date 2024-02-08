@@ -1,17 +1,17 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React from 'react'
 
 import { Box, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
+import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingSystemFolderIdConstants } from 'store/api/types/SecureMessagingData'
 import { SecureMessagingState, fetchInboxMessages } from 'store/slices'
+import { SecureMessagingSystemFolderIdConstants } from 'store/api/types/SecureMessagingData'
+import { getMessagesListItems } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import { getMessagesListItems } from 'utils/secureMessaging'
 
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 
@@ -22,9 +22,7 @@ function Inbox({}: InboxProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { inboxMessages, loadingInbox, paginationMetaByFolderId } = useSelector<RootState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
+  const { inboxMessages, loadingInbox, paginationMetaByFolderId } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
   const paginationMetaData = paginationMetaByFolderId?.[SecureMessagingSystemFolderIdConstants.INBOX]
 
   const onInboxMessagePress = (messageID: number): void => {
@@ -64,10 +62,7 @@ function Inbox({}: InboxProps) {
 
   return (
     <Box {...testIdProps('', false, 'Inbox-page')}>
-      <MessageList
-        items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress, FolderNameTypeConstants.inbox)}
-        title={t('secureMessaging.inbox')}
-      />
+      <MessageList items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress, FolderNameTypeConstants.inbox)} title={t('secureMessaging.inbox')} />
       <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>

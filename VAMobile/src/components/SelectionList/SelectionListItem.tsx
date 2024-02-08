@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
 import { Pressable } from 'react-native'
+import React, { FC } from 'react'
 
 import { useTheme } from 'utils/hooks'
 

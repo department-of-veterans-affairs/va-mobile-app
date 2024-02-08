@@ -1,10 +1,10 @@
-import React, { FC, ReactNode, useState } from 'react'
 import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import React, { FC, ReactNode, useState } from 'react'
 
 import { HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
-import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
@@ -122,11 +122,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
 
   return (
     <View style={fillStyle}>
-      <StatusBar
-        translucent
-        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
-        backgroundColor={theme.colors.background.main}
-      />
+      <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
       <HeaderBanner {...headerProps} />
       <VAScrollView
         testID={testID}
@@ -135,9 +131,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
           transitionHeader(event.nativeEvent.contentOffset.y)
         }}
         {...scrollViewProps}>
-        <View onLayout={getTransitionHeaderHeight}>
-          {!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
-        </View>
+        <View onLayout={getTransitionHeaderHeight}>{!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}</View>
         <WaygateWrapper>{children}</WaygateWrapper>
       </VAScrollView>
       <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>

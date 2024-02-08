@@ -336,9 +336,7 @@ export const getWaygateToggles = (): WaygateToggleValues => {
 
   Object.keys(remoteConfig().getAll()).forEach((key) => {
     if (key.startsWith('WG')) {
-      waygateConfig[key as WaygateToggleType] = JSON.parse(
-        remoteConfig().getValue(key).asString(),
-      ) as unknown as Waygate
+      waygateConfig[key as WaygateToggleType] = JSON.parse(remoteConfig().getValue(key).asString()) as unknown as Waygate
     }
   })
   return waygateConfig

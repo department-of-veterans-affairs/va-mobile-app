@@ -1,44 +1,26 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { ScrollView, TextInput } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { RootNavStackParamList } from 'App'
 
-import { useContactInformation } from 'api/contactInformation'
-import { useDeleteAddress, useSaveAddress, useValidateAddress } from 'api/contactInformation'
 import { AddressData, addressTypeFields, addressTypes } from 'api/types'
-import {
-  AlertBox,
-  Box,
-  FieldType,
-  FormFieldType,
-  FormWrapper,
-  FullScreenSubtask,
-  LoadingComponent,
-  PickerItem,
-  VATextInputTypes,
-  ValidationFunctionItems,
-} from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
+import { AlertBox, Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent, PickerItem, VATextInputTypes, ValidationFunctionItems } from 'components'
 import { Countries } from 'constants/countries'
+import { GenerateAddressMessages } from 'translations/en/functions'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
+import { SnackbarMessages } from 'components/SnackBar'
 import { States } from 'constants/states'
-import { GenerateAddressMessages } from 'translations/en/functions'
-import { showSnackBar } from 'utils/common'
-import {
-  useAlert,
-  useAppDispatch,
-  useBeforeNavBackListener,
-  useDestructiveActionSheet,
-  useIsScreenReaderEnabled,
-  useTheme,
-} from 'utils/hooks'
 import { getAddressDataPayload } from 'utils/personalInformation'
+import { showSnackBar } from 'utils/common'
+import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { useContactInformation } from 'api/contactInformation'
+import { useDeleteAddress, useSaveAddress, useValidateAddress } from 'api/contactInformation'
 
 import { profileAddressOptions } from '../AddressSummary'
 import AddressValidation from '../AddressValidation'
@@ -142,11 +124,8 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   const initialState =
     contactInformation?.[addressType]?.countryCodeIso3 === USA_VALUE
       ? getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States)
-      : getInitialState(AddressDataEditedFieldValues.stateCode) ||
-        getInitialState(AddressDataEditedFieldValues.province)
-  const initialZipCode =
-    getInitialState(AddressDataEditedFieldValues.zipCode) ||
-    getInitialState(AddressDataEditedFieldValues.internationalPostalCode)
+      : getInitialState(AddressDataEditedFieldValues.stateCode) || getInitialState(AddressDataEditedFieldValues.province)
+  const initialZipCode = getInitialState(AddressDataEditedFieldValues.zipCode) || getInitialState(AddressDataEditedFieldValues.internationalPostalCode)
 
   const [checkboxSelected, setCheckboxSelected] = useState(initialCheckbox)
   const [country, setCountry] = useState(initialCountry)
@@ -181,9 +160,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
 
     e.preventDefault()
     const title =
-      addressType === profileAddressOptions.RESIDENTIAL_ADDRESS
-        ? t('editAddress.validation.cancelConfirm.home.title')
-        : t('editAddress.validation.cancelConfirm.mailing.title')
+      addressType === profileAddressOptions.RESIDENTIAL_ADDRESS ? t('editAddress.validation.cancelConfirm.home.title') : t('editAddress.validation.cancelConfirm.mailing.title')
 
     destructiveActionSheet({
       title,
@@ -229,14 +206,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
 
     const mutateOptions = {
       onSuccess: () => showSnackBar(removalSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
-      onError: () =>
-        showSnackBar(
-          removalSnackbarMessages.errorMsg,
-          dispatch,
-          () => deleteAddress(currentAddressData, mutateOptions),
-          false,
-          true,
-        ),
+      onError: () => showSnackBar(removalSnackbarMessages.errorMsg, dispatch, () => deleteAddress(currentAddressData, mutateOptions), false, true),
     }
     deleteAddress(currentAddressData, mutateOptions)
   }
@@ -453,8 +423,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
     }
   }
 
-  const { zipCodeLabelKey, zipCodeInputType, zipCodeFieldError, zipCodeValidationList } =
-    getZipCodeOrInternationalCodeFields()
+  const { zipCodeLabelKey, zipCodeInputType, zipCodeFieldError, zipCodeValidationList } = getZipCodeOrInternationalCodeFields()
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -574,9 +543,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
       onRightButtonPress={!loadingCheck ? () => setOnSaveClicked(true) : undefined}
       testID="EditAddressTestID">
       {loadingCheck ? (
-        <LoadingComponent
-          text={deletingAddress ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')}
-        />
+        <LoadingComponent text={deletingAddress ? t('contactInformation.delete.address') : t('contactInformation.savingAddress')} />
       ) : addressValidation ? (
         <AddressValidation
           addressEntered={getAddressDataPayload(addressValues, contactInformation)}
@@ -600,12 +567,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
           )}
           {formContainsError && (
             <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertBox
-                title={t('editAddress.alertError')}
-                border="error"
-                scrollViewRef={scrollViewRef}
-                focusOnError={onSaveClicked}
-              />
+              <AlertBox title={t('editAddress.alertError')} border="error" scrollViewRef={scrollViewRef} focusOnError={onSaveClicked} />
             </Box>
           )}
           <FormWrapper

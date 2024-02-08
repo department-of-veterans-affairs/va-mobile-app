@@ -1,11 +1,11 @@
 import { Appearance } from 'react-native'
 
 import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
-import { isIOS } from 'utils/platform'
 import { changeNavigationBarColor } from 'utils/rnNativeUIUtilities'
+import { isIOS } from 'utils/platform'
 
-import colors from './VAColors'
 import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
+import colors from './VAColors'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
 export type ColorSchemeTypes = null | 'light' | 'dark' | undefined
@@ -113,12 +113,7 @@ const fontSizes = {
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
   const { fontSize, letterSpacing, lineHeight } = fontSizing
-  const styles = [
-    `color:${primaryTextColor}`,
-    `font-family:"${family}"`,
-    `font-size:${fontSize}px`,
-    `line-height: ${lineHeight}px`,
-  ]
+  const styles = [`color:${primaryTextColor}`, `font-family:"${family}"`, `font-size:${fontSize}px`, `line-height: ${lineHeight}px`]
 
   if (color) {
     styles.push(`color: ${color}`)
@@ -137,11 +132,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar, scheme.text.actionBar),
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
-    DescriptiveBackButton: buildFont(
-      'SourceSansPro-Regular',
-      fontSizes.DescriptiveBackButton,
-      scheme.text.descriptiveBackButton,
-    ),
+    DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.descriptiveBackButton),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperText, scheme.text.primary),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
@@ -153,11 +144,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold, scheme.text.primary),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel, scheme.text.bodyText),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel, scheme.text.bodyText),
-    textWithIconButton: buildFont(
-      'SourceSansPro-Regular',
-      fontSizes.textWithIconButton,
-      scheme.text.textWithIconButton,
-    ),
+    textWithIconButton: buildFont('SourceSansPro-Regular', fontSizes.textWithIconButton, scheme.text.textWithIconButton),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
     VAHeader: buildFont('SourceSansPro-Bold', fontSizes.VAHeader, scheme.text.primary),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector, scheme.text.bodyText),

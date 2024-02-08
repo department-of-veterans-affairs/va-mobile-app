@@ -1,6 +1,6 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import React from 'react'
 
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -22,11 +22,7 @@ function NoRefills() {
         <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
           {t('prescriptions.noRefill.header')}
         </TextView>
-        <TextView
-          variant="MobileBody"
-          textAlign="center"
-          my={theme.dimensions.standardMarginBetween}
-          accessibilityLabel={a11yLabelVA(t('prescriptions.noRefill.text'))}>
+        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween} accessibilityLabel={a11yLabelVA(t('prescriptions.noRefill.text'))}>
           {t('prescriptions.noRefill.text')}
         </TextView>
       </Box>

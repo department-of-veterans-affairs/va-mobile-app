@@ -1,10 +1,10 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
-import { Box, TextView } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import { AppointmentAttributes } from 'store/api'
 import { AppointmentProposedTimesPeriodConstant } from 'store/api/types/AppointmentData'
+import { Box, TextView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { isAPendingAppointment } from 'utils/appointments'
 import { useTheme } from 'utils/hooks'
 
@@ -30,15 +30,9 @@ function PreferredDateAndTime({ attributes }: PreferredDateAndTimeProps) {
           {t('appointments.pending.preferredDateAndTime')}
         </TextView>
         {filteredTimes?.map(({ date, time }, index) => {
-          const timeSlot =
-            time === AppointmentProposedTimesPeriodConstant.AM
-              ? t('appointments.pending.inMorning')
-              : t('appointments.pending.inAfternoon')
+          const timeSlot = time === AppointmentProposedTimesPeriodConstant.AM ? t('appointments.pending.inMorning') : t('appointments.pending.inAfternoon')
           return (
-            <TextView
-              key={index}
-              variant="MobileBody"
-              paragraphSpacing={phoneOnly && index === filteredTimes.length - 1}>
+            <TextView key={index} variant="MobileBody" paragraphSpacing={phoneOnly && index === filteredTimes.length - 1}>
               {t('appointments.pending.dateInSlotTime', { optionDate: date, optionTime: timeSlot })}
             </TextView>
           )

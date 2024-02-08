@@ -157,18 +157,7 @@ export const AppealProgramAreaTypesConstants: {
   multiple: 'multiple',
 }
 
-export type AppealProgramAreaTypes =
-  | 'compensation'
-  | 'pension'
-  | 'insurance'
-  | 'loan_guaranty'
-  | 'education'
-  | 'vre'
-  | 'medical'
-  | 'burial'
-  | 'bva'
-  | 'other'
-  | 'multiple'
+export type AppealProgramAreaTypes = 'compensation' | 'pension' | 'insurance' | 'loan_guaranty' | 'education' | 'vre' | 'medical' | 'burial' | 'bva' | 'other' | 'multiple'
 
 export type AppealLocationTypes = 'aoj' | 'bva'
 

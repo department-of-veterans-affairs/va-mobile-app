@@ -1,9 +1,9 @@
 import { StackNavigationOptions, TransitionPresets } from '@react-navigation/stack'
 
-import store from 'store'
-import theme from 'styles/themes/standardTheme'
 import { fullPanelCardStyleInterpolator } from 'utils/common'
 import { isIOS } from 'utils/platform'
+import store from 'store'
+import theme from 'styles/themes/standardTheme'
 
 export const FULLSCREEN_SUBTASK_OPTIONS: StackNavigationOptions = {
   ...(isIOS() ? TransitionPresets.ModalSlideFromBottomIOS : TransitionPresets.BottomSheetAndroid),

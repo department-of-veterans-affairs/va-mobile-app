@@ -91,10 +91,7 @@ export const ScreenIDToFeatureName = {
 }
 
 export const ScreenIDToDowntimeFeatures = {
-  [ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID]: [
-    DowntimeFeatureTypeConstants.claims,
-    DowntimeFeatureTypeConstants.appeals,
-  ],
+  [ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID]: [DowntimeFeatureTypeConstants.claims, DowntimeFeatureTypeConstants.appeals],
   [ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID]: [DowntimeFeatureTypeConstants.claims],
   [ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID]: [DowntimeFeatureTypeConstants.appointments],
   [ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID]: [DowntimeFeatureTypeConstants.secureMessaging],

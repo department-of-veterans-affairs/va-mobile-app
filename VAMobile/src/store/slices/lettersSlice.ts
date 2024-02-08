@@ -3,9 +3,8 @@ import FileViewer from 'react-native-file-viewer'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import _ from 'underscore'
 
-import { Events, UserAnalytics } from 'constants/analytics'
-import { AppThunk } from 'store'
 import * as api from 'store/api'
+import { AppThunk } from 'store'
 import {
   BenefitSummaryAndServiceVerificationLetterOptions,
   LetterBeneficiaryData,
@@ -17,15 +16,16 @@ import {
   ScreenIDTypes,
 } from 'store/api'
 import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo/letters'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
-import { isErrorObject, sortByDate } from 'utils/common'
-import getEnv from 'utils/env'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getSubstringBeforeChar } from 'utils/formattingUtils'
+import { isErrorObject, sortByDate } from 'utils/common'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { registerReviewEvent } from 'utils/inAppReviews'
+import getEnv from 'utils/env'
 
-import { downloadDemoFile, downloadFile } from '../../utils/filesystem'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
+import { downloadDemoFile, downloadFile } from '../../utils/filesystem'
 
 const { API_ROOT } = getEnv()
 
@@ -87,9 +87,7 @@ export const getLetterBeneficiaryData =
 
     try {
       const letterBeneficiaryData = await api.get<api.LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
-      dispatch(
-        dispatchFinishGetLetterBeneficiaryData({ letterBeneficiaryData: letterBeneficiaryData?.data.attributes }),
-      )
+      dispatch(dispatchFinishGetLetterBeneficiaryData({ letterBeneficiaryData: letterBeneficiaryData?.data.attributes }))
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `getLetterBeneficiaryData: ${lettersNonFatalErrorString}`)
@@ -122,21 +120,13 @@ export const downloadLetter =
         specialMonthlyCompensation: !!benefitInformation?.hasSpecialMonthlyCompensation,
         adaptedHousing: !!benefitInformation?.hasAdaptedHousing,
         deathResultOfDisability: !!benefitInformation?.hasDeathResultOfDisability,
-        survivorsAward:
-          !!benefitInformation?.hasSurvivorsIndemnityCompensationAward ||
-          !!benefitInformation?.hasSurvivorsPensionAward,
+        survivorsAward: !!benefitInformation?.hasSurvivorsIndemnityCompensationAward || !!benefitInformation?.hasSurvivorsPensionAward,
         ...lettersOption,
       }
 
       const filePath = demoMode
         ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME, body as unknown as Params)
-        : await downloadFile(
-            'POST',
-            lettersAPI,
-            `${letterType}.pdf`,
-            body as unknown as Params,
-            DOWNLOAD_LETTER_RETRIES,
-          )
+        : await downloadFile('POST', lettersAPI, `${letterType}.pdf`, body as unknown as Params, DOWNLOAD_LETTER_RETRIES)
 
       await registerReviewEvent()
       dispatch(dispatchFinishDownloadLetter())
@@ -182,10 +172,7 @@ const lettersSlice = createSlice({
       state.loadingLetterBeneficiaryData = true
     },
 
-    dispatchFinishGetLetterBeneficiaryData: (
-      state,
-      action: PayloadAction<{ letterBeneficiaryData?: LetterBeneficiaryData; error?: Error }>,
-    ) => {
+    dispatchFinishGetLetterBeneficiaryData: (state, action: PayloadAction<{ letterBeneficiaryData?: LetterBeneficiaryData; error?: Error }>) => {
       const { letterBeneficiaryData, error } = action.payload
       let mostRecentServices: Array<LetterMilitaryService> = [...(letterBeneficiaryData?.militaryService || [])]
 
@@ -193,10 +180,7 @@ const lettersSlice = createSlice({
         sortByDate(mostRecentServices, 'enteredDate')
 
         // Strip off timezone info so dates won't be incorrectly time shifted in certain timezones
-        letterBeneficiaryData.benefitInformation.awardEffectiveDate = getSubstringBeforeChar(
-          letterBeneficiaryData?.benefitInformation?.awardEffectiveDate || '',
-          'T',
-        )
+        letterBeneficiaryData.benefitInformation.awardEffectiveDate = getSubstringBeforeChar(letterBeneficiaryData?.benefitInformation?.awardEffectiveDate || '', 'T')
         mostRecentServices = mostRecentServices.map((periodOfService) => {
           periodOfService.enteredDate = getSubstringBeforeChar(periodOfService.enteredDate, 'T')
           periodOfService.releasedDate = getSubstringBeforeChar(periodOfService.releasedDate, 'T')

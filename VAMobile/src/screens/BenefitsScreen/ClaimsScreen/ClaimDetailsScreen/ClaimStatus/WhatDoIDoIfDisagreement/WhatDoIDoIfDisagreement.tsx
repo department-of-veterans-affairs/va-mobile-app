@@ -1,15 +1,15 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Box, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { a11yLabelVA } from 'utils/a11yLabel'
 import { a11yHintProp } from 'utils/accessibility'
-import getEnv from 'utils/env'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useExternalLink, useTheme } from 'utils/hooks'
+import getEnv from 'utils/env'
 
 const { LINK_URL_DECISION_REVIEWS } = getEnv()
 
@@ -30,10 +30,7 @@ function WhatDoIDoIfDisagreement({ route }: WhatDoIDoIfDisagreementProps) {
   return (
     <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView
-          variant="MobileBodyBold"
-          accessibilityRole="header"
-          accessibilityLabel={a11yLabelVA(t('claimsDetails.whatDoIDoIfDisagreement.header'))}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={a11yLabelVA(t('claimsDetails.whatDoIDoIfDisagreement.header'))}>
           {t('claimsDetails.whatDoIDoIfDisagreement.header')}
         </TextView>
         <TextView variant="MobileBody" paragraphSpacing={true}>

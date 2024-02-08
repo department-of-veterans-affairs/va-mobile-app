@@ -1,18 +1,18 @@
-import React, { FC, ReactNode, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Image, Pressable, PressableProps } from 'react-native'
 import { Asset } from 'react-native-image-picker/src/types'
+import { Image, Pressable, PressableProps } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import React, { FC, ReactNode, useState } from 'react'
 
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
-import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
+import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
+import { VAIcon } from './index'
 import Box, { BoxProps } from './Box'
 import TextView, { TextViewProps } from './TextView'
-import { VAIcon } from './index'
 
 type PhotoPreviewProps = {
   /** width of the photo */
@@ -118,24 +118,8 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
         <Box>{photo()}</Box>
         {selected && <Box {...blueOpacity} />}
         <Box pt={photoPreviewIconPadding} pr={photoPreviewIconPadding} position="absolute" alignSelf="flex-end">
-          {selected && (
-            <VAIcon
-              name={'Minus'}
-              width={photoPreviewIconSize}
-              height={photoPreviewIconSize}
-              maxWidth={photoPreviewMaxIconSize}
-              fill={themeColor.icon.photoAdd}
-            />
-          )}
-          {!selected && (
-            <VAIcon
-              name={'Remove'}
-              width={photoPreviewIconSize}
-              height={photoPreviewIconSize}
-              maxWidth={photoPreviewMaxIconSize}
-              fill={themeColor.icon.deleteFill}
-            />
-          )}
+          {selected && <VAIcon name={'Minus'} width={photoPreviewIconSize} height={photoPreviewIconSize} maxWidth={photoPreviewMaxIconSize} fill={themeColor.icon.photoAdd} />}
+          {!selected && <VAIcon name={'Remove'} width={photoPreviewIconSize} height={photoPreviewIconSize} maxWidth={photoPreviewMaxIconSize} fill={themeColor.icon.deleteFill} />}
         </Box>
       </Box>
       <Box width={width} flexDirection="row">

@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { AccessibilityInfo, Pressable, PressableProps, ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { useEffect, useRef, useState } from 'react'
 
-import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
+import { useFocusEffect } from '@react-navigation/native'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { find } from 'underscore'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
 import {
   Box,
   BoxProps,
@@ -33,11 +33,6 @@ import {
   VAIcon,
   VAIconProps,
 } from 'components'
-import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
-import { Events } from 'constants/analytics'
-import { ASCENDING, DEFAULT_PAGE_SIZE } from 'constants/common'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
 import {
   DowntimeFeatureTypeConstants,
   PrescriptionHistoryTabConstants,
@@ -48,15 +43,20 @@ import {
   RefillStatus,
   RefillStatusConstants,
 } from 'store/api/types'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
 import { PrescriptionState, filterAndSortPrescriptions, loadAllPrescriptions } from 'store/slices/prescriptionSlice'
+import { RootState } from 'store'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent } from 'utils/analytics'
-import getEnv from 'utils/env'
-import { getTranslation } from 'utils/formattingUtils'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { getFilterArgsForFilter, getSortOrderOptionsForSortBy } from 'utils/prescriptions'
+import { getTranslation } from 'utils/formattingUtils'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
+import getEnv from 'utils/env'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { PrescriptionListItem } from '../PrescriptionCommon'
@@ -149,11 +149,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     prescriptionsNeedLoad,
     transferredPrescriptions,
   } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
-  const {
-    data: userAuthorizedServices,
-    isLoading: loadingUserAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
-  } = useAuthorizedServices()
+  const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -167,15 +163,11 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
 
   const [selectedFilter, setSelectedFilter] = useState<RefillStatus | ''>('')
-  const [selectedSortBy, setSelectedSortBy] = useState<PrescriptionSortOptions | ''>(
-    PrescriptionSortOptionConstants.PRESCRIPTION_NAME,
-  )
+  const [selectedSortBy, setSelectedSortBy] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
   const [selectedSortOn, setSelectedSortOn] = useState(ASCENDING)
 
   const [filterToUse, setFilterToUse] = useState<RefillStatus | ''>('')
-  const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(
-    PrescriptionSortOptionConstants.PRESCRIPTION_NAME,
-  )
+  const [sortByToUse, setSortByToUse] = useState<PrescriptionSortOptions | ''>(PrescriptionSortOptionConstants.PRESCRIPTION_NAME)
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
 
   const [currentTab, setCurrentTab] = useState<string>(PrescriptionHistoryTabConstants.ALL)
@@ -210,12 +202,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   // useFocusEffect, ensures we only call loadAllPrescriptions if needed when this component is being shown
   useFocusEffect(
     React.useCallback(() => {
-      if (
-        screenContentAllowed('WG_PrescriptionHistory') &&
-        prescriptionsNeedLoad &&
-        userAuthorizedServices?.prescriptions &&
-        !prescriptionInDowntime
-      ) {
+      if (screenContentAllowed('WG_PrescriptionHistory') && prescriptionsNeedLoad && userAuthorizedServices?.prescriptions && !prescriptionInDowntime) {
         dispatch(loadAllPrescriptions(ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID))
       }
     }, [dispatch, prescriptionsNeedLoad, userAuthorizedServices?.prescriptions, prescriptionInDowntime]),
@@ -225,11 +212,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   // In this case, we need to support multiple screen IDs
   if (prescriptionInDowntime) {
     return (
-      <FeatureLandingTemplate
-        scrollViewProps={{ scrollViewRef }}
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('prescription.title')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -237,11 +220,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   if (hasError || getUserAuthorizedServicesError) {
     return (
-      <FeatureLandingTemplate
-        scrollViewProps={{ scrollViewRef }}
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('prescription.title')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -249,11 +228,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   if (!userAuthorizedServices?.prescriptions) {
     return (
-      <FeatureLandingTemplate
-        scrollViewProps={{ scrollViewRef }}
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('prescription.title')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <PrescriptionHistoryNotAuthorized />
       </FeatureLandingTemplate>
     )
@@ -261,11 +236,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   if (loadingHistory || loadingUserAuthorizedServices) {
     return (
-      <FeatureLandingTemplate
-        scrollViewProps={{ scrollViewRef }}
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('prescription.title')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
       </FeatureLandingTemplate>
     )
@@ -273,11 +244,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   if (!tabCounts[PrescriptionHistoryTabConstants.ALL]) {
     return (
-      <FeatureLandingTemplate
-        scrollViewProps={{ scrollViewRef }}
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('prescription.title')}>
+      <FeatureLandingTemplate scrollViewProps={{ scrollViewRef }} backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('prescription.title')}>
         <PrescriptionHistoryNoPrescriptions />
       </FeatureLandingTemplate>
     )
@@ -340,13 +307,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         <>
           <PrescriptionListItem prescription={prescription.attributes} includeRefillTag={true} />
           <Pressable {...detailsPressableProps}>
-            <Box
-              display={'flex'}
-              flexDirection={'row'}
-              justifyContent={'space-between'}
-              alignItems={'center'}
-              minHeight={theme.dimensions.touchableMinHeight}
-              pt={5}>
+            <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} minHeight={theme.dimensions.touchableMinHeight} pt={5}>
               <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
@@ -497,8 +458,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     },
   }
 
-  const filterOptionsForTab =
-    currentTab === PrescriptionHistoryTabConstants.PENDING ? filterOptions.pending : filterOptions.all
+  const filterOptionsForTab = currentTab === PrescriptionHistoryTabConstants.PENDING ? filterOptions.pending : filterOptions.all
 
   const filterRadioOptions = filterOptionsForTab.map((option) => {
     return {
@@ -603,15 +563,10 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       headerText: t('prescription.history.transferred.title'),
       body: (
         <>
-          <TextView
-            mt={theme.dimensions.standardMarginBetween}
-            accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))}
-            paragraphSpacing={true}>
+          <TextView mt={theme.dimensions.standardMarginBetween} accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))} paragraphSpacing={true}>
             {t('prescription.history.transferred.instructions')}
           </TextView>
-          <TextView
-            paragraphSpacing={true}
-            accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.youCan'))}>
+          <TextView paragraphSpacing={true} accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.youCan'))}>
             {t('prescription.history.transferred.youCan')}
           </TextView>
           <ClickForActionLink {...linkProps} />
@@ -655,24 +610,16 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   const getContent = () => {
     if (hasNoItems) {
-      return (
-        <PrescriptionHistoryNoMatches currentTab={currentTab as PrescriptionHistoryTabs} isFiltered={!!filterToUse} />
-      )
+      return <PrescriptionHistoryNoMatches currentTab={currentTab as PrescriptionHistoryTabs} isFiltered={!!filterToUse} />
     } else {
       return (
         <>
           {getTransferAlert()}
           <Box mx={theme.dimensions.gutter} pt={theme.dimensions.contentMarginTop}>
-            <TextView
-              mb={theme.dimensions.standardMarginBetween}
-              variant={'HelperText'}
-              accessibilityLabel={getInstructionA11y()}>
+            <TextView mb={theme.dimensions.standardMarginBetween} variant={'HelperText'} accessibilityLabel={getInstructionA11y()}>
               {getInstructions()}
             </TextView>
-            <TextView
-              mt={theme.dimensions.condensedMarginBetween}
-              mb={theme.dimensions.condensedMarginBetween}
-              variant={'MobileBodyBold'}>
+            <TextView mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
               {getHistoryListHeader()}
             </TextView>
           </Box>

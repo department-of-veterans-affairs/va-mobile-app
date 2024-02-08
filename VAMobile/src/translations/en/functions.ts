@@ -1,20 +1,11 @@
 import { TFunction } from 'i18next'
 
-import { SnackbarMessages } from 'components/SnackBar'
-import {
-  profileAddressOptions,
-  profileAddressType,
-} from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { SecureMessagingFolderList } from 'store/api/types'
+import { SnackbarMessages } from 'components/SnackBar'
 import { getfolderName } from 'utils/secureMessaging'
+import { profileAddressOptions, profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 
-export const GenerateFolderMessage = (
-  t: TFunction,
-  folderID: number,
-  folders: SecureMessagingFolderList,
-  isUndo: boolean,
-  isError: boolean,
-): string => {
+export const GenerateFolderMessage = (t: TFunction, folderID: number, folders: SecureMessagingFolderList, isUndo: boolean, isError: boolean): string => {
   let folderName = getfolderName(folderID.toString(), folders)
   if (folderName === 'Inbox' || folderName === 'Trash' || folderName === 'Drafts') {
     folderName = folderName.toLowerCase()

@@ -1,5 +1,5 @@
-import React from 'react'
 import { ViewStyle } from 'react-native'
+import React from 'react'
 
 import { Box, VAIcon, VAScrollView } from 'components'
 import { testIdProps } from 'utils/accessibility'

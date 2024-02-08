@@ -1,24 +1,15 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
-import {
-  Box,
-  ClickForActionLink,
-  ClickToCallPhoneNumber,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  LinkUrlIconType,
-  TextArea,
-  TextView,
-} from 'components'
+import { Box, ClickForActionLink, ClickToCallPhoneNumber, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yLabelVA } from 'utils/a11yLabel'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { logAnalyticsEvent } from 'utils/analytics'
-import getEnv from 'utils/env'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
+import getEnv from 'utils/env'
 
 const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
 

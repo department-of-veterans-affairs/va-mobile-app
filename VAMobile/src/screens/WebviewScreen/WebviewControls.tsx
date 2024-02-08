@@ -1,14 +1,14 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useTranslation } from 'react-i18next'
+import React from 'react'
 
 import styled from 'styled-components'
 
 import { Box, BoxProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
+import { useTheme } from 'utils/hooks'
 
 import WebviewControlButton from './WebviewControlButton'
 
@@ -51,13 +51,7 @@ function WebviewControls(props: WebviewControlsProps) {
   return (
     <StyledSafeAreaView edges={['bottom']}>
       <Box {...controlsViewProps}>
-        <WebviewControlButton
-          icon={'ChevronLeft'}
-          onPress={props.onBackPressed}
-          disabled={!props.canGoBack}
-          a11yHint={t('back.a11yHint')}
-          {...testIdProps(t('back'))}
-        />
+        <WebviewControlButton icon={'ChevronLeft'} onPress={props.onBackPressed} disabled={!props.canGoBack} a11yHint={t('back.a11yHint')} {...testIdProps(t('back'))} />
         <WebviewControlButton
           icon={'ChevronRight'}
           onPress={props.onForwardPressed}
@@ -65,12 +59,7 @@ function WebviewControls(props: WebviewControlsProps) {
           a11yHint={t('forward.a11yHint')}
           {...testIdProps(t('forward'))}
         />
-        <WebviewControlButton
-          icon={'ExternalLink'}
-          onPress={props.onOpenPressed}
-          a11yHint={t('openInBrowser.a11yHint')}
-          {...testIdProps(t('openInBrowser'))}
-        />
+        <WebviewControlButton icon={'ExternalLink'} onPress={props.onOpenPressed} a11yHint={t('openInBrowser.a11yHint')} {...testIdProps(t('openInBrowser'))} />
       </Box>
     </StyledSafeAreaView>
   )

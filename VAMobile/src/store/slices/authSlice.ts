@@ -1,16 +1,13 @@
 import * as Keychain from 'react-native-keychain'
 
+import { utils } from '@react-native-firebase/app'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import analytics from '@react-native-firebase/analytics'
-import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
 import performance from '@react-native-firebase/perf'
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import { Events, UserAnalytics } from 'constants/analytics'
-import { EnvironmentTypesConstants } from 'constants/common'
-import { AppDispatch, AppThunk } from 'store'
 import * as api from 'store/api'
 import {
   AUTH_STORAGE_TYPE,
@@ -23,33 +20,29 @@ import {
   LOGIN_PROMPT_TYPE,
   LoginServiceTypeConstants,
 } from 'store/api/types'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
-import { isErrorObject } from 'utils/common'
-import getEnv from 'utils/env'
-import { pkceAuthorizeParams } from 'utils/oauth'
-import { isAndroid } from 'utils/platform'
+import { AppDispatch, AppThunk } from 'store'
+import { EnvironmentTypesConstants } from 'constants/common'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { clearCookies } from 'utils/rnAuthSesson'
+import { isAndroid } from 'utils/platform'
+import { isErrorObject } from 'utils/common'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { pkceAuthorizeParams } from 'utils/oauth'
+import getEnv from 'utils/env'
 
-import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { dispatchClearLoadedAppointments } from './appointmentsSlice'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppealsSlice'
-import { updateDemoMode } from './demoSlice'
+import { dispatchClearLoadedMessages } from './secureMessagingSlice'
+import { dispatchClearPaymentsOnLogout } from './paymentsSlice'
+import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
 import { dispatchDisabilityRatingLogout } from './disabilityRatingSlice'
 import { dispatchMilitaryHistoryLogout } from './militaryServiceSlice'
 import { dispatchResetTappedForegroundNotification } from './notificationSlice'
-import { dispatchClearPaymentsOnLogout } from './paymentsSlice'
-import { dispatchClearPrescriptionLogout } from './prescriptionSlice'
-import { dispatchClearLoadedMessages } from './secureMessagingSlice'
+import { dispatchSetAnalyticsLogin } from './analyticsSlice'
 import { dispatchVaccineLogout } from './vaccineSlice'
+import { updateDemoMode } from './demoSlice'
 
-const {
-  AUTH_SIS_ENDPOINT,
-  AUTH_SIS_REVOKE_URL,
-  AUTH_SIS_TOKEN_EXCHANGE_URL,
-  AUTH_SIS_TOKEN_REFRESH_URL,
-  ENVIRONMENT,
-  IS_TEST,
-} = getEnv()
+const { AUTH_SIS_ENDPOINT, AUTH_SIS_REVOKE_URL, AUTH_SIS_TOKEN_EXCHANGE_URL, AUTH_SIS_TOKEN_REFRESH_URL, ENVIRONMENT, IS_TEST } = getEnv()
 
 let inMemoryRefreshToken: string | undefined
 
@@ -220,12 +213,7 @@ export const loginStart =
     dispatch(dispatchStartAuthLogin(syncing))
   }
 
-const finishInitialize = async (
-  dispatch: AppDispatch,
-  loginPromptType: LOGIN_PROMPT_TYPE,
-  loggedIn: boolean,
-  authCredentials?: AuthCredentialData,
-): Promise<void> => {
+const finishInitialize = async (dispatch: AppDispatch, loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean, authCredentials?: AuthCredentialData): Promise<void> => {
   const supportedBiometric = await deviceSupportedBiometrics()
 
   // if undefined we assume save with biometrics (first time through)
@@ -312,11 +300,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
  * Biometric storage has a max storage size of 384 bytes.  Because our tokens are so long, we will split the token into 3 pieces,
  * and store just the nonce using biometric storage.  The rest of the token will be stored using AsyncStorage
  */
-const storeRefreshToken = async (
-  refreshToken: string,
-  options: Keychain.Options,
-  storageType: AUTH_STORAGE_TYPE,
-): Promise<void> => {
+const storeRefreshToken = async (refreshToken: string, options: Keychain.Options, storageType: AUTH_STORAGE_TYPE): Promise<void> => {
   const splitToken = refreshToken.split('.')
   await Promise.all([
     Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
@@ -337,10 +321,7 @@ const storeRefreshToken = async (
  */
 const retrieveRefreshToken = async (): Promise<string | undefined> => {
   console.debug('retrieveRefreshToken')
-  const result = await Promise.all([
-    AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY),
-    Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY),
-  ])
+  const result = await Promise.all([AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY), Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)])
   const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
 
   if (reconstructedToken) {
@@ -468,10 +449,7 @@ export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | unde
   }
 }
 
-export const attemptIntializeAuthWithRefreshToken = async (
-  dispatch: AppDispatch,
-  refreshToken: string,
-): Promise<void> => {
+export const attemptIntializeAuthWithRefreshToken = async (dispatch: AppDispatch, refreshToken: string): Promise<void> => {
   try {
     await clearCookies()
     const refreshTokenMatchesLoginType = await refreshTokenMatchesLoginService()

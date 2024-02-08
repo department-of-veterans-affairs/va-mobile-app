@@ -1,5 +1,5 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
 import { useNavigation } from '@react-navigation/native'
 
@@ -7,8 +7,8 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 
 import { Box, CollapsibleView, FullScreenSubtask, TextView, TextViewProps, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
+import { useTheme } from 'utils/hooks'
 
 type LoaGateProps = Record<string, unknown>
 
@@ -33,15 +33,8 @@ function LoaGate({}: LoaGateProps) {
   }
 
   return (
-    <FullScreenSubtask
-      leftButtonText={t('close')}
-      title={t('signin')}
-      onLeftButtonPress={navigation.goBack}
-      showCrisisLineCta={true}>
-      <Box
-        mt={theme.dimensions.contentMarginTop}
-        mb={theme.dimensions.contentMarginBottom}
-        mx={theme.dimensions.gutter}>
+    <FullScreenSubtask leftButtonText={t('close')} title={t('signin')} onLeftButtonPress={navigation.goBack} showCrisisLineCta={true}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView paragraphSpacing={true} {...bodyTextProps}>
           {t('loaGate.p1')}
         </TextView>

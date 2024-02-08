@@ -1,24 +1,15 @@
-import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import React, { useEffect } from 'react'
 
-import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
-import { Facility } from 'api/types/FacilityData'
-import {
-  Box,
-  ClickForActionLink,
-  CollapsibleAlert,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  TextView,
-  VABulletList,
-  VABulletListText,
-} from 'components'
+import { Box, ClickForActionLink, CollapsibleAlert, LinkButtonProps, LinkTypeOptionsConstants, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
+import { Facility } from 'api/types/FacilityData'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import getEnv from 'utils/env'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { useTheme } from 'utils/hooks'
+import getEnv from 'utils/env'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 

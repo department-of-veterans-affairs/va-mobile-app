@@ -3,9 +3,9 @@ import { Linking } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { getBuildNumber, getVersionName } from 'utils/deviceData'
-import getEnv from 'utils/env'
 import { isIOS } from 'utils/platform'
 import { requestStoreVersion } from 'utils/rnInAppUpdate'
+import getEnv from 'utils/env'
 
 const APP_VERSION_SKIPPED_UPDATE_VAL = '@store_app_version_skipped'
 const APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL = '@store_app_whats_new_version_skipped'

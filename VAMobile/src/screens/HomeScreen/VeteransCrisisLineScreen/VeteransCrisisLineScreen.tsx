@@ -1,13 +1,13 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
 import { Box, LargePanel, TextView } from 'components'
-import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { UserAnalytics } from 'constants/analytics'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import getEnv from 'utils/env'
 import { useExternalLink, useTheme } from 'utils/hooks'
+import getEnv from 'utils/env'
 
 import VeteransCrisisLineNumbers from './VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 
@@ -36,10 +36,7 @@ function VeteransCrisisLineScreen() {
   return (
     <LargePanel title={t('veteransCrisisLine.title')} rightButtonText={t('done')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView
-          variant="MobileBodyBold"
-          accessibilityRole="header"
-          accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
         <Box mt={standardMarginBetween}>

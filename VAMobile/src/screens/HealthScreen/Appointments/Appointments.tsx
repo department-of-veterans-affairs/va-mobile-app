@@ -1,29 +1,29 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
+import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
-import { VAScrollViewProps } from 'components/VAScrollView'
+import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
+import { AppointmentsState } from 'store/slices'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { AppointmentsState } from 'store/slices'
-import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
+import { VAScrollViewProps } from 'components/VAScrollView'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 
-import CernerAlert from '../CernerAlert'
 import { HealthStackParamList } from '../HealthStackScreens'
+import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from './PastAppointments/PastAppointments'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
@@ -47,13 +47,9 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
   const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const [selectedTab, setSelectedTab] = useState(0)
-  const {
-    upcomingVaServiceError,
-    upcomingCcServiceError,
-    pastVaServiceError,
-    pastCcServiceError,
-    currentPageAppointmentsByYear,
-  } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError, currentPageAppointmentsByYear } = useSelector<RootState, AppointmentsState>(
+    (state) => state.appointments,
+  )
 
   const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
@@ -86,10 +82,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
 
   if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || getUserAuthorizedServicesError) {
     return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('appointments')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -97,10 +90,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
 
   if (!userAuthorizedServices?.appointments) {
     return (
-      <FeatureLandingTemplate
-        backLabel={t('health.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('appointments')}>
+      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('appointments')}>
         <NoMatchInRecords />
       </FeatureLandingTemplate>
     )
@@ -147,12 +137,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       testID="appointmentsTestID">
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <SegmentedControl
-            labels={controlLabels}
-            onChange={onTabChange}
-            selected={selectedTab}
-            a11yHints={a11yHints}
-          />
+          <SegmentedControl labels={controlLabels} onChange={onTabChange} selected={selectedTab} a11yHints={a11yHints} />
         </Box>
         {serviceErrorAlert()}
         {CernerAlert ? (

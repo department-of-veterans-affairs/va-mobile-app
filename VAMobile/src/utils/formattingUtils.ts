@@ -1,8 +1,8 @@
 import { BIOMETRY_TYPE } from 'react-native-keychain'
 
-import { TFunction } from 'i18next'
 import { $Dictionary } from 'i18next/typescript/helpers'
 import { DateTime, DateTimeFormatOptions } from 'luxon'
+import { TFunction } from 'i18next'
 
 /**
  * Returns the formatted phone number

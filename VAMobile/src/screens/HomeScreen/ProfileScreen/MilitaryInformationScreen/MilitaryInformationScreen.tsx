@@ -1,31 +1,21 @@
-import React, { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { useEffect } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { map } from 'underscore'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import {
-  Box,
-  DefaultList,
-  DefaultListItemObj,
-  ErrorComponent,
-  FeatureLandingTemplate,
-  LoadingComponent,
-  TextLine,
-  TextView,
-  TextViewProps,
-} from 'components'
-import { NAMESPACE } from 'constants/namespaces'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { RootState } from 'store'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { DowntimeFeatureTypeConstants, ServiceData } from 'store/api/types'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { MilitaryServiceState, getServiceHistory } from 'store/slices/militaryServiceSlice'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { testIdProps } from 'utils/accessibility'
 import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 
 import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
@@ -35,14 +25,8 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
   const dispatch = useAppDispatch()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { serviceHistory, loading, needsDataLoad } = useSelector<RootState, MilitaryServiceState>(
-    (s) => s.militaryService,
-  )
-  const {
-    data: userAuthorizedServices,
-    isLoading: loadingUserAuthorizedServices,
-    isError: getUserAuthorizedServicesError,
-  } = useAuthorizedServices()
+  const { serviceHistory, loading, needsDataLoad } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
+  const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
   const mhNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
   const navigateTo = useRouteNavigation()
 
@@ -93,10 +77,7 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
   const loadingCheck = loading || loadingUserAuthorizedServices
 
   return (
-    <FeatureLandingTemplate
-      backLabel={t('profile.title')}
-      backLabelOnPress={navigation.goBack}
-      title={t('militaryInformation.title')}>
+    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('militaryInformation.title')}>
       {errorCheck ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
       ) : loadingCheck ? (

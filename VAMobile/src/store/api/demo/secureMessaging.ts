@@ -1,3 +1,4 @@
+import { DemoStore } from './store'
 import { Params } from '../api'
 import {
   SecureMessagingFolderGetData,
@@ -7,7 +8,6 @@ import {
   SecureMessagingRecipientData,
   SecureMessagingThreadGetData,
 } from '../types'
-import { DemoStore } from './store'
 
 type MessagePageNumber = '1' | '2'
 
@@ -111,11 +111,7 @@ export type SecureMessagingDemoApiReturnTypes =
   | SecureMessagingThreadGetData
   | SecureMessagingRecipientData
 
-export const getFolderMessages = (
-  store: DemoStore,
-  params: Params,
-  endpoint: string,
-): SecureMessagingFolderMessagesGetData => {
+export const getFolderMessages = (store: DemoStore, params: Params, endpoint: string): SecureMessagingFolderMessagesGetData => {
   const { page } = params
   return store[endpoint as keyof folderMessages][page as MessagePageNumber] as SecureMessagingFolderMessagesGetData
 }

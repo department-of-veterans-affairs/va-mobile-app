@@ -1,32 +1,24 @@
-import React, { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
+import React, { useEffect } from 'react'
 
-import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
+import { useNavigationState } from '@react-navigation/native'
 
-import {
-  Box,
-  DefaultList,
-  ErrorComponent,
-  FeatureLandingTemplate,
-  LoadingComponent,
-  TextLine,
-  TextView,
-} from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { Box, DefaultList, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView } from 'components'
+import { DecisionLettersState, downloadDecisionLetter, getDecisionLetters } from 'store/slices/decisionLettersSlice'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { DecisionLettersState, downloadDecisionLetter, getDecisionLetters } from 'store/slices/decisionLettersSlice'
+import { SnackbarMessages } from 'components/SnackBar'
 import { VATypographyThemeVariants } from 'styles/theme'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { getA11yLabelText } from 'utils/common'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
+import { getA11yLabelText } from 'utils/common'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 
 import NoClaimLettersScreen from './NoClaimLettersScreen/NoClaimLettersScreen'
 
@@ -36,9 +28,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { loading, decisionLetters, downloading } = useSelector<RootState, DecisionLettersState>(
-    (state) => state.decisionLetters,
-  )
+  const { loading, decisionLetters, downloading } = useSelector<RootState, DecisionLettersState>((state) => state.decisionLetters)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
 

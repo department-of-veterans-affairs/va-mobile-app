@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import React, { useEffect, useState } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { useDemographics } from 'api/demographics/getDemographics'
-import { useUpdatePreferredName } from 'api/demographics/updatePreferredName'
 import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
-import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { NAMESPACE } from 'constants/namespaces'
+import { SnackbarMessages } from 'components/SnackBar'
 import { showSnackBar } from 'utils/common'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useDemographics } from 'api/demographics/getDemographics'
+import { useUpdatePreferredName } from 'api/demographics/updatePreferredName'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 

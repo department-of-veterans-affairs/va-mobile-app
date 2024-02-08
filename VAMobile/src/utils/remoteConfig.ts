@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import remoteConfig from '@react-native-firebase/remote-config'
 
-import getEnv from 'utils/env'
 import { loadWaygateOverrides } from 'utils/waygateConfig'
+import getEnv from 'utils/env'
 
 import { logNonFatalErrorToFirebase } from './analytics'
 

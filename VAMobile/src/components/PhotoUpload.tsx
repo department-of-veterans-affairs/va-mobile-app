@@ -1,20 +1,20 @@
-import React, { FC, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { Image, Pressable, PressableProps } from 'react-native'
 import { ImagePickerResponse, launchCamera, launchImageLibrary } from 'react-native-image-picker'
+import { useTranslation } from 'react-i18next'
+import React, { FC, useEffect, useState } from 'react'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
-import theme from 'styles/themes/standardTheme'
-import { useDestructiveActionSheet, useShowActionSheet } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
+import { useDestructiveActionSheet, useShowActionSheet } from 'utils/hooks'
+import theme from 'styles/themes/standardTheme'
 
+import { VAIcon } from './index'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
-import { VAIcon } from './index'
 
 type PhotoUploadProps = {
   /** width of the photo */
@@ -69,14 +69,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
   }, [uri])
 
   const photo = (
-    <StyledImage
-      source={{ uri }}
-      width={width}
-      height={height}
-      borderRadius={photoUploadBorderRadius}
-      borderWidth={photoUploadBorderWidth}
-      borderColor={uploadBorderColor}
-    />
+    <StyledImage source={{ uri }} width={width} height={height} borderRadius={photoUploadBorderRadius} borderWidth={photoUploadBorderWidth} borderColor={uploadBorderColor} />
   )
 
   const uploadCallback = (response: ImagePickerResponse): void => {
@@ -124,20 +117,14 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
         (buttonIndex) => {
           switch (buttonIndex) {
             case 0:
-              launchCamera(
-                { mediaType: 'photo', quality: 0.9, includeBase64: true },
-                (response: ImagePickerResponse): void => {
-                  uploadCallback(response)
-                },
-              )
+              launchCamera({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
+                uploadCallback(response)
+              })
               break
             case 1:
-              launchImageLibrary(
-                { selectionLimit: 1, mediaType: 'photo', quality: 0.9, includeBase64: true },
-                (response: ImagePickerResponse): void => {
-                  uploadCallback(response)
-                },
-              )
+              launchImageLibrary({ selectionLimit: 1, mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
+                uploadCallback(response)
+              })
               break
           }
         },

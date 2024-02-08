@@ -1,5 +1,5 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
+import React from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -21,10 +21,7 @@ function HowToUpdateDirectDepositScreen({ navigation }: HowToUpdateDirectDeposit
 
   return (
     <>
-      <FeatureLandingTemplate
-        backLabel={t('payments.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('directDeposit.title')}>
+      <FeatureLandingTemplate backLabel={t('payments.title')} backLabelOnPress={navigation.goBack} title={t('directDeposit.title')}>
         <AlertBox border="warning">
           <TextView variant="MobileBodyBold" accessibilityRole="header" paragraphSpacing={true}>
             {t('howToUpdateDirectDeposit.alert.title')}
@@ -36,10 +33,7 @@ function HowToUpdateDirectDepositScreen({ navigation }: HowToUpdateDirectDeposit
         </AlertBox>
         <Box mt={standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>
           <TextArea>
-            <TextView
-              variant="MobileBodyBold"
-              accessibilityRole="header"
-              accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
+            <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
               {t('howToUpdateDirectDeposit.card.title')}
             </TextView>
             <TextView mt={standardMarginBetween} variant="MobileBody" paragraphSpacing={true}>

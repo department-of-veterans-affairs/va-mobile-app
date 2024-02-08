@@ -1,20 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import {
-  Box,
-  ButtonDecoratorType,
-  FullScreenSubtask,
-  SimpleList,
-  SimpleListItemObj,
-  TextView,
-  VATextInput,
-} from 'components'
-import { NAMESPACE } from 'constants/namespaces'
+import { Box, ButtonDecoratorType, FullScreenSubtask, SimpleList, SimpleListItemObj, TextView, VATextInput } from 'components'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
 type WaygateEditScreenProps = StackScreenProps<HomeStackParamList, 'WaygateEdit'>
@@ -42,16 +34,7 @@ function WaygateEditScreen({ navigation, route }: WaygateEditScreenProps) {
       wg.errorMsgBody = errorMsgBodyOverride
       navigation.goBack()
     }
-  }, [
-    onSaveClicked,
-    navigation,
-    wg,
-    enabledOverride,
-    appUpdateButtonOverride,
-    typeOverride,
-    errorMsgTitleOverride,
-    errorMsgBodyOverride,
-  ])
+  }, [onSaveClicked, navigation, wg, enabledOverride, appUpdateButtonOverride, typeOverride, errorMsgTitleOverride, errorMsgBodyOverride])
 
   const toggleItems: SimpleListItemObj[] = [
     {
