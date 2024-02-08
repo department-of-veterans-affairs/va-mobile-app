@@ -66,7 +66,7 @@ context('AppointmentsScreen', () => {
       await waitFor(() => {
         initializeTestInstance()
       })
-      expect(screen.getByText("You don’t have any appointments")).toBeTruthy()
+      expect(screen.getByRole('header', { name: "We couldn't match your information to our VA patient records" })).toBeTruthy()
     })
   })
 
@@ -74,7 +74,7 @@ context('AppointmentsScreen', () => {
     it('should display an alertbox specifying some appointments are not available', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/appointments`, expect.anything())
+          .calledWith(`/v0/appointments`)
           .mockResolvedValue({
             data: [],
             meta: {
@@ -91,11 +91,11 @@ context('AppointmentsScreen', () => {
     it('should display an alertbox specifying some appointments are not available', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/appointments`, expect.anything())
+          .calledWith(`/v0/appointments`)
           .mockResolvedValue({
             data: [],
             meta: {
-              errors: [{ source: AppointmentsErrorServiceTypesConstants.VA }],
+              errors: [{ source: AppointmentsErrorServiceTypesConstants.COMMUNITY_CARE }],
             },
           })
         initializeTestInstance()
@@ -108,7 +108,7 @@ context('AppointmentsScreen', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)
-          .calledWith(`/v0/appointments`, expect.anything())
+          .calledWith(`/v0/appointments`)
           .mockRejectedValue({ networkError: true } as api.APIError)
         initializeTestInstance()
       })

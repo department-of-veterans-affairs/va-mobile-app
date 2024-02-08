@@ -6,18 +6,19 @@ import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
-import { AppointmentsDateRange } from 'store/slices/appointmentsSlice'
+import { AppointmentsDateRange, prefetchAppointments } from 'store/slices/appointmentsSlice'
 import { AppointmentsState } from 'store/slices'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { Events } from 'constants/analytics'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { screenContentAllowed } from 'utils/waygateConfig'
+import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useError, useTheme } from 'utils/hooks'
 import { useSelector } from 'react-redux'
 import CernerAlert from '../CernerAlert'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
@@ -39,6 +40,7 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
 function Appointments({ navigation }: AppointmentsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const dispatch = useAppDispatch()
   const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const [selectedTab, setSelectedTab] = useState(0)
@@ -47,6 +49,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
   )
 
   const { data: userAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
+  const apptsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appointments)
 
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
@@ -57,6 +60,22 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
   useEffect(() => {
     scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
   }, [currentPageAppointmentsByYear])
+
+  useEffect(() => {
+    const todaysDate = DateTime.local()
+    const threeMonthsEarlier = todaysDate.minus({ months: 3 })
+
+    const upcomingRange: AppointmentsDateRange = getUpcomingAppointmentDateRange()
+    const pastRange: AppointmentsDateRange = {
+      startDate: threeMonthsEarlier.startOf('day').toISO(),
+      endDate: todaysDate.minus({ days: 1 }).endOf('day').toISO(),
+    }
+
+    // fetch upcoming and default past appointments ranges
+    if (screenContentAllowed('WG_Appointments') && apptsNotInDowntime) {
+      dispatch(prefetchAppointments(upcomingRange, pastRange, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
+    }
+  }, [dispatch, apptsNotInDowntime])
 
   if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID) || getUserAuthorizedServicesError) {
     return (
