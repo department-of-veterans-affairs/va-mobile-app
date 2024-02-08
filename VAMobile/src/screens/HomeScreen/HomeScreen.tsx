@@ -1,30 +1,41 @@
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useTranslation } from 'react-i18next'
-import React from 'react'
 
-import { Box, CategoryLanding, EncourageUpdateAlert, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
-import { CloseSnackbarOnNavigation } from 'constants/common'
+import {
+  Box,
+  CategoryLanding,
+  EncourageUpdateAlert,
+  Nametag,
+  SimpleList,
+  SimpleListItemObj,
+  TextView,
+  VAIconProps,
+} from 'components'
 import { Events } from 'constants/analytics'
-import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { HomeStackParamList } from './HomeStackScreens'
+import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
+
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
-import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
-import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/HapticsDemoScreen'
-import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
+import { HomeStackParamList } from './HomeStackScreens'
+import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
-import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
 import ProfileScreen from './ProfileScreen/ProfileScreen'
+import SettingsScreen from './ProfileScreen/SettingsScreen'
+import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
+import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/HapticsDemoScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
-import SettingsScreen from './ProfileScreen/SettingsScreen'
-import getEnv from 'utils/env'
+import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
+import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -50,7 +61,11 @@ export function HomeScreen({}: HomeScreenProps) {
 
   const onCoronaVirusFAQ = () => {
     logAnalyticsEvent(Events.vama_covid_links('home_screen'))
-    navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
+    navigateTo('Webview', {
+      url: WEBVIEW_URL_CORONA_FAQ,
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('webview.covidUpdates.loading'),
+    })
   }
 
   const buttonDataList: Array<SimpleListItemObj> = [
@@ -126,14 +141,38 @@ function HomeStackScreen({}: HomeStackScreenProps) {
       <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
       <HomeScreenStack.Screen name="ContactVA" component={ContactVAScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
-      <HomeScreenStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="ContactInformation" component={ContactInformationScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="PersonalInformation"
+        component={PersonalInformationScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="ContactInformation"
+        component={ContactInformationScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="MilitaryInformation"
+        component={MilitaryInformationScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen name="Settings" component={SettingsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="ManageYourAccount" component={ManageYourAccount} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="NotificationsSettings" component={NotificationsSettingsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="ManageYourAccount"
+        component={ManageYourAccount}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="NotificationsSettings"
+        component={NotificationsSettingsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="RemoteConfig" component={RemoteConfigScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="RemoteConfig"
+        component={RemoteConfigScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen name="Sandbox" component={SandboxScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />
     </HomeScreenStack.Navigator>

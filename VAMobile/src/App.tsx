@@ -1,62 +1,79 @@
-import 'react-native-gesture-handler'
-import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
-import { I18nextProvider } from 'react-i18next'
-import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
-import { Provider, useSelector } from 'react-redux'
-import { QueryClientProvider } from '@tanstack/react-query'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { ThemeProvider } from 'styled-components'
-import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createStackNavigator } from '@react-navigation/stack'
-import { enableScreens } from 'react-native-screens'
-import { useTranslation } from 'react-i18next'
-import { utils } from '@react-native-firebase/app'
-import KeyboardManager from 'react-native-keyboard-manager'
 import React, { useEffect, useRef, useState } from 'react'
+import { I18nextProvider } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
+import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
+import 'react-native-gesture-handler'
+import KeyboardManager from 'react-native-keyboard-manager'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { enableScreens } from 'react-native-screens'
 import Toast from 'react-native-toast-notifications'
 import ToastContainer from 'react-native-toast-notifications'
-import analytics from '@react-native-firebase/analytics'
-import crashlytics from '@react-native-firebase/crashlytics'
-import i18n from 'utils/i18n'
-import performance from '@react-native-firebase/perf'
+import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toast'
+import { Provider, useSelector } from 'react-redux'
 
-import { AccessibilityState, sendUsesLargeTextAnalytics, sendUsesScreenReaderAnalytics } from 'store/slices/accessibilitySlice'
-import { AnalyticsState, AuthState, NotificationsState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
-import { BenefitsScreen, HealthScreen, HomeScreen, LoginScreen, PaymentsScreen, getBenefitsScreens, getHealthScreens, getHomeScreens, getPaymentsScreens } from 'screens'
-import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
-import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
-import { NAMESPACE } from 'constants/namespaces'
-import { NavigationTabBar } from 'components'
-import { SettingsState } from 'store/slices'
-import { SnackBarConstants } from 'constants/common'
-import { SnackBarState } from 'store/slices/snackBarSlice'
-import { SyncScreen } from './screens/SyncScreen'
-import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
-import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
-import { injectStore } from 'store/api/api'
-import { isIOS } from 'utils/platform'
-import { linking } from 'constants/linking'
-import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
-import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
-import { useAppDispatch, useFontScale, useIsScreenReaderEnabled } from 'utils/hooks'
-import { useColorScheme } from 'styles/themes/colorScheme'
-import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
-import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
-import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
-import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
-import LoaGate from './screens/auth/LoaGate'
-import NotificationManager from './components/NotificationManager'
-import OnboardingCarousel from './screens/OnboardingCarousel'
-import SnackBar from 'components/SnackBar'
-import SplashScreen from './screens/SplashScreen/SplashScreen'
-import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
-import WebviewScreen from './screens/WebviewScreen'
-import getEnv from 'utils/env'
+import analytics from '@react-native-firebase/analytics'
+import { utils } from '@react-native-firebase/app'
+import crashlytics from '@react-native-firebase/crashlytics'
+import performance from '@react-native-firebase/perf'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+
+import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { ThemeProvider } from 'styled-components'
+
 import queryClient from 'api/queryClient'
+import { NavigationTabBar } from 'components'
+import SnackBar from 'components/SnackBar'
+import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
+import { SnackBarConstants } from 'constants/common'
+import { linking } from 'constants/linking'
+import { NAMESPACE } from 'constants/namespaces'
+import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
+import {
+  BenefitsScreen,
+  HealthScreen,
+  HomeScreen,
+  LoginScreen,
+  PaymentsScreen,
+  getBenefitsScreens,
+  getHealthScreens,
+  getHomeScreens,
+  getPaymentsScreens,
+} from 'screens'
+import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
+import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
+import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
 import store, { RootState } from 'store'
+import { injectStore } from 'store/api/api'
+import { AnalyticsState, AuthState, NotificationsState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import { SettingsState } from 'store/slices'
+import {
+  AccessibilityState,
+  sendUsesLargeTextAnalytics,
+  sendUsesScreenReaderAnalytics,
+} from 'store/slices/accessibilitySlice'
+import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
+import { SnackBarState } from 'store/slices/snackBarSlice'
+import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
+import getEnv from 'utils/env'
+import { useAppDispatch, useFontScale, useIsScreenReaderEnabled } from 'utils/hooks'
+import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
+import i18n from 'utils/i18n'
+import { isIOS } from 'utils/platform'
+
+import NotificationManager from './components/NotificationManager'
+import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
+import OnboardingCarousel from './screens/OnboardingCarousel'
+import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
+import SplashScreen from './screens/SplashScreen/SplashScreen'
+import { SyncScreen } from './screens/SyncScreen'
+import WebviewScreen from './screens/WebviewScreen'
+import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
+import LoaGate from './screens/auth/LoaGate'
+import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
 
 const { ENVIRONMENT, IS_TEST } = getEnv()
 
@@ -144,10 +161,17 @@ function MainApp() {
           <ThemeProvider theme={currentTheme}>
             <Provider store={store}>
               <I18nextProvider i18n={i18n}>
-                <NavigationContainer ref={navigationRef} linking={linking} onReady={navOnReady} onStateChange={onNavStateChange}>
+                <NavigationContainer
+                  ref={navigationRef}
+                  linking={linking}
+                  onReady={navOnReady}
+                  onStateChange={onNavStateChange}>
                   <NotificationManager>
                     <SafeAreaProvider>
-                      <StatusBar barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={currentTheme.colors.background.main} />
+                      <StatusBar
+                        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+                        backgroundColor={currentTheme.colors.background.main}
+                      />
                       <AuthGuard />
                     </SafeAreaProvider>
                   </NotificationManager>
@@ -163,9 +187,14 @@ function MainApp() {
 
 export function AuthGuard() {
   const dispatch = useAppDispatch()
-  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>((state) => state.auth)
-  const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>((state) => state.settings)
-  const { fontScale, isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
+  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } =
+    useSelector<RootState, AuthState>((state) => state.auth)
+  const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
+    (state) => state.settings,
+  )
+  const { fontScale, isVoiceOverTalkBackRunning } = useSelector<RootState, AccessibilityState>(
+    (state) => state.accessibility,
+  )
   const { bottomOffset } = useSelector<RootState, SnackBarState>((state) => state.snackBar)
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -187,7 +216,9 @@ export function AuthGuard() {
   }
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
-    const sub = AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
+    const sub = AppState.addEventListener('change', (newState: AppStateStatus): void =>
+      updateFontScale(newState, fontScale, dispatch),
+    )
     return (): void => sub?.remove()
   }, [dispatch, fontScale])
 
@@ -210,13 +241,20 @@ export function AuthGuard() {
   useEffect(() => {
     // Listener for the current app state, updates isVoiceOverTalkBackRunning when app state is active and voice over/talk back
     // was turned on or off
-    const sub = AppState.addEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
+    const sub = AppState.addEventListener(
+      'change',
+      (newState: AppStateStatus): Promise<void> =>
+        updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch),
+    )
     return (): void => sub?.remove()
   }, [dispatch, isVoiceOverTalkBackRunning])
 
   useEffect(() => {
-    // check if analytics for staging enabled, or check if staging or Google Pre-Launch test, staging or test and turn off analytics if that is the case
-    const toggle = firebaseDebugMode || !(utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST)
+    // check if analytics for staging enabled, or check if staging or Google Pre-Launch test,
+    // staging or test and turn off analytics if that is the case
+    const toggle =
+      firebaseDebugMode ||
+      !(utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST)
     crashlytics().setCrashlyticsCollectionEnabled(toggle)
     analytics().setAnalyticsCollectionEnabled(toggle)
     performance().setPerformanceCollectionEnabled(toggle)
@@ -253,11 +291,14 @@ export function AuthGuard() {
         const queryString = urlParts[1]
         const queryParts = queryString?.split('&') || []
 
-        const queryParams = queryParts.reduce((params, queryPart) => {
-          const [key, value] = queryPart.split('=')
-          params[key] = value
-          return params
-        }, {} as { [key: string]: string | undefined })
+        const queryParams = queryParts.reduce(
+          (params, queryPart) => {
+            const [key, value] = queryPart.split('=')
+            params[key] = value
+            return params
+          },
+          {} as { [key: string]: string | undefined },
+        )
 
         if (queryParams.utm_campaign || queryParams.utm_medium || queryParams.utm_source || queryParams.utm_term) {
           await analytics().logCampaignDetails({
@@ -277,13 +318,21 @@ export function AuthGuard() {
   if (initializing || loadingRemoteConfig) {
     content = (
       <Stack.Navigator>
-        <Stack.Screen name="Splash" component={SplashScreen} options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }} />
+        <Stack.Screen
+          name="Splash"
+          component={SplashScreen}
+          options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }}
+        />
       </Stack.Navigator>
     )
   } else if (syncing && firstTimeLogin && canStoreWithBiometric && displayBiometricsPreferenceScreen) {
     content = (
       <Stack.Navigator initialRouteName="BiometricsPreference">
-        <Stack.Screen name="BiometricsPreference" component={BiometricsPreferenceScreen} options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }} />
+        <Stack.Screen
+          name="BiometricsPreference"
+          component={BiometricsPreferenceScreen}
+          options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }}
+        />
       </Stack.Navigator>
     )
   } else if (syncing) {
@@ -298,13 +347,21 @@ export function AuthGuard() {
     content = (
       <>
         <AuthedApp />
-        <Toast {...snackBarProps} ref={(ref) => ((global.snackBar as ToastContainer | null) = ref)} offsetBottom={bottomOffset} />
+        <Toast
+          {...snackBarProps}
+          ref={(ref) => ((global.snackBar as ToastContainer | null) = ref)}
+          offsetBottom={bottomOffset}
+        />
       </>
     )
   } else {
     content = (
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} options={{ ...topPaddingAsHeaderStyles, title: t('login') }} />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ ...topPaddingAsHeaderStyles, title: t('login') }}
+        />
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
         <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
@@ -320,7 +377,10 @@ export function AppTabs() {
 
   return (
     <>
-      <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="HomeTab" screenOptions={{ headerShown: false }}>
+      <TabNav.Navigator
+        tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />}
+        initialRouteName="HomeTab"
+        screenOptions={{ headerShown: false }}>
         <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home.title') }} />
         <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health.title') }} />
         <TabNav.Screen name="BenefitsTab" component={BenefitsScreen} options={{ title: t('benefits.title') }} />
@@ -362,10 +422,18 @@ export function AuthedApp() {
             CloseSnackbarOnNavigation(e.target)
           },
         }}>
-        <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
+        <RootNavStack.Screen
+          name="Tabs"
+          component={AppTabs}
+          options={{ headerShown: false, animationEnabled: false }}
+        />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />
-        <RootNavStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={FULLSCREEN_SUBTASK_OPTIONS} />
+        <RootNavStack.Screen
+          name="EditDirectDeposit"
+          component={EditDirectDepositScreen}
+          options={FULLSCREEN_SUBTASK_OPTIONS}
+        />
         {homeScreens}
         {paymentsScreens}
         {benefitsScreens}

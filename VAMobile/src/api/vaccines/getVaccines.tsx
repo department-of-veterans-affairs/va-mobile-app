@@ -1,7 +1,9 @@
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import { VaccineListPayload } from 'api/types'
-import { get } from 'store/api'
 import { useQuery } from '@tanstack/react-query'
+
+import { VaccineListPayload } from 'api/types'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { get } from 'store/api'
+
 import { vaccineKeys } from './queryKeys'
 
 /**

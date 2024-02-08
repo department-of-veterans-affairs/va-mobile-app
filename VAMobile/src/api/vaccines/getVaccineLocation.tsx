@@ -1,6 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
+
 import { VaccineLocationPayload } from 'api/types'
 import { get } from 'store/api'
-import { useQuery } from '@tanstack/react-query'
+
 import { vaccineKeys } from './queryKeys'
 
 /**

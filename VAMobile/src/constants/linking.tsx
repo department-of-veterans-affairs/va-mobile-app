@@ -1,6 +1,8 @@
-import { LinkingOptions, NavigationState } from '@react-navigation/native'
-import { LoadingComponent } from '../components'
 import React, { ReactElement } from 'react'
+
+import { LinkingOptions, NavigationState } from '@react-navigation/native'
+
+import { LoadingComponent } from '../components'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const linking: LinkingOptions<any> = {
@@ -36,7 +38,11 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'HealthTab',
                   state: {
-                    routes: [{ name: 'Health' }, { name: 'SecureMessaging' }, { name: 'ViewMessage', params: { messageID: pathParts[1] } }],
+                    routes: [
+                      { name: 'Health' },
+                      { name: 'SecureMessaging' },
+                      { name: 'ViewMessage', params: { messageID: pathParts[1] } },
+                    ],
                   },
                 },
               ],
@@ -55,7 +61,11 @@ export const linking: LinkingOptions<any> = {
                   name: 'HealthTab',
                   state: {
                     // The ID from the notification payload is sent encoded, so it needs to be decoded
-                    routes: [{ name: 'Health' }, { name: 'Appointments' }, { name: 'UpcomingAppointmentDetails', params: { vetextID: decodeURIComponent(pathParts[1]) } }],
+                    routes: [
+                      { name: 'Health' },
+                      { name: 'Appointments' },
+                      { name: 'UpcomingAppointmentDetails', params: { vetextID: decodeURIComponent(pathParts[1]) } },
+                    ],
                   },
                 },
               ],

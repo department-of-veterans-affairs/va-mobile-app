@@ -1,19 +1,22 @@
-import { StackScreenProps } from '@react-navigation/stack'
-import { every, isString } from 'underscore'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { every, isString } from 'underscore'
+
+import { useVaccinesLocation } from 'api/vaccines/getVaccineLocation'
 import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
-import { COVID19 } from 'constants/common'
 import { Events } from 'constants/analytics'
-import { HealthStackParamList } from '../../HealthStackScreens'
+import { COVID19 } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { screenContentAllowed } from 'utils/waygateConfig'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
-import { useVaccinesLocation } from 'api/vaccines/getVaccineLocation'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
+import { HealthStackParamList } from '../../HealthStackScreens'
 
 type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'VaccineDetails'>
 
@@ -21,10 +24,15 @@ type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Vaccine
  * Screen providing details on an vaccine
  */
 function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) {
+  AD
   const { vaccine } = route.params
-  const { data: location, isLoading: detailsLoading } = useVaccinesLocation(vaccine.relationships?.location?.data?.id || '', {
-    enabled: isString(vaccine.relationships?.location?.data?.id) && screenContentAllowed('WG_VaccineDetails'),
-  })
+  const { data: location, isLoading: detailsLoading } = useVaccinesLocation(
+    vaccine.relationships?.location?.data?.id || '',
+    {
+      enabled: isString(vaccine.relationships?.location?.data?.id) && screenContentAllowed('WG_VaccineDetails'),
+    },
+  )
+
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
@@ -42,7 +50,11 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
 
   if (detailsLoading) {
     return (
-      <FeatureLandingTemplate backLabel={t('vaVaccines')} backLabelA11y={a11yLabelVA(t('vaVaccines'))} backLabelOnPress={navigation.goBack} title={t('details')}>
+      <FeatureLandingTemplate
+        backLabel={t('vaVaccines')}
+        backLabelA11y={a11yLabelVA(t('vaVaccines'))}
+        backLabelOnPress={navigation.goBack}
+        title={t('details')}>
         <LoadingComponent text={t('vaccines.details.loading')} />
       </FeatureLandingTemplate>
     )
@@ -50,10 +62,17 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
 
   const displayDate = vaccine.attributes?.date ? formatDateMMMMDDYYYY(vaccine.attributes.date) : placeHolder
 
-  const displayName = vaccine.attributes?.groupName ? t('vaccines.vaccineName', { name: vaccine.attributes.groupName }) : placeHolder
+  const displayName = vaccine.attributes?.groupName
+    ? t('vaccines.vaccineName', { name: vaccine.attributes.groupName })
+    : placeHolder
 
   const hasSeries = vaccine.attributes?.doseNumber && vaccine.attributes?.doseSeries
-  const displaySeries = hasSeries ? t('vaccines.details.series.display', { doseNumber: vaccine.attributes?.doseNumber, seriesDoses: vaccine.attributes?.doseSeries }) : placeHolder
+  const displaySeries = hasSeries
+    ? t('vaccines.details.series.display', {
+        doseNumber: vaccine.attributes?.doseNumber,
+        seriesDoses: vaccine.attributes?.doseSeries,
+      })
+    : placeHolder
 
   const optionalFields = [hasSeries, vaccine.attributes?.note, location?.data, vaccine.attributes?.reaction]
   const isPartialData = !every(optionalFields)
@@ -62,7 +81,11 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
   const isCovidVaccine = vaccine.attributes?.groupName?.toUpperCase()?.includes(COVID19)
 
   return (
-    <FeatureLandingTemplate backLabel={t('vaVaccines')} backLabelA11y={a11yLabelVA(t('vaVaccines'))} backLabelOnPress={navigation.goBack} title={t('details')}>
+    <FeatureLandingTemplate
+      backLabel={t('vaVaccines')}
+      backLabelA11y={a11yLabelVA(t('vaVaccines'))}
+      backLabelOnPress={navigation.goBack}
+      title={t('details')}>
       <Box mb={contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -74,13 +97,21 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
           <TextView variant="MobileBodyBold" selectable={true}>
             {t('vaccines.details.typeAndDosage')}
           </TextView>
-          <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween} testID={'Type And Dosage ' + vaccine.attributes?.shortDescription || placeHolder}>
+          <TextView
+            variant="MobileBody"
+            selectable={true}
+            mb={standardMarginBetween}
+            testID={'Type And Dosage ' + vaccine.attributes?.shortDescription || placeHolder}>
             {vaccine.attributes?.shortDescription || placeHolder}
           </TextView>
           {isCovidVaccine && (
             <>
               <TextView variant="MobileBodyBold">{t('vaccines.details.manufacturer')}</TextView>
-              <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween} testID={'Manufacturer ' + vaccine.attributes?.manufacturer || placeHolder}>
+              <TextView
+                variant="MobileBody"
+                selectable={true}
+                mb={standardMarginBetween}
+                testID={'Manufacturer ' + vaccine.attributes?.manufacturer || placeHolder}>
                 {vaccine.attributes?.manufacturer || placeHolder}
               </TextView>
             </>
@@ -122,7 +153,10 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
               </TextView>
             </Box>
             <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
-            <TextView variant="MobileBody" selectable={true} testID={'Notes ' + vaccine.attributes?.note || 'None noted'}>
+            <TextView
+              variant="MobileBody"
+              selectable={true}
+              testID={'Notes ' + vaccine.attributes?.note || 'None noted'}>
               {vaccine.attributes?.note || placeHolder}
             </TextView>
           </Box>

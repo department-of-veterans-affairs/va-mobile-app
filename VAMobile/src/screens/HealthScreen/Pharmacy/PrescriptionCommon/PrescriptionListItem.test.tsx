@@ -1,10 +1,15 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { render, context } from 'testUtils'
-import PrescriptionListItem, { PrescriptionListItemProps } from './PrescriptionListItem'
 import { PrescriptionAttributeData } from 'store/api'
-import { defaultPrescriptionsList as mockData, emptyStatePrescriptionList as emptyMockData } from 'utils/tests/prescription'
+import { context, render } from 'testUtils'
+import {
+  emptyStatePrescriptionList as emptyMockData,
+  defaultPrescriptionsList as mockData,
+} from 'utils/tests/prescription'
+
+import PrescriptionListItem, { PrescriptionListItemProps } from './PrescriptionListItem'
 
 context('PrescriptionListItem', () => {
   const initializeTestInstance = (prescription: Partial<PrescriptionAttributeData> = {}, hideInstructions = false) => {

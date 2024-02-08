@@ -1,10 +1,12 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
-import { context, mockNavProps, render } from 'testUtils'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
 import { initialSecureMessagingState } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+
 import ViewMessageScreen from './ViewMessageScreen'
 
 // Contains message Ids grouped together by thread
@@ -72,31 +74,36 @@ const mockMessagesById: SecureMessagingMessageMap = {
 
 context('ViewMessageScreen', () => {
   const initializeTestInstance = (
-    mockMessagesById: SecureMessagingMessageMap,
+    providedMockMessagesById: SecureMessagingMessageMap,
     threadList: SecureMessagingThreads,
     loading: boolean = false,
     messageID: number = 3,
     messageIDsOfError?: Array<number>,
   ) => {
-    render(<ViewMessageScreen {...mockNavProps(
-      undefined,
+    render(
+      <ViewMessageScreen
+        {...mockNavProps(
+          undefined,
+          {
+            navigate: jest.fn(),
+            setOptions: jest.fn(),
+            goBack: jest.fn(),
+          },
+          { params: { messageID: messageID } },
+        )}
+      />,
       {
-        navigate: jest.fn(),
-        setOptions: jest.fn(),
-        goBack: jest.fn(),
-      },
-      { params: { messageID: messageID } },
-    )} />, {
-      preloadedState: {
-        secureMessaging: {
-          ...initialSecureMessagingState,
-          loading: loading,
-          messagesById: mockMessagesById,
-          threads: threadList,
-          messageIDsOfError: messageIDsOfError,
+        preloadedState: {
+          secureMessaging: {
+            ...initialSecureMessagingState,
+            loading: loading,
+            messagesById: providedMockMessagesById,
+            threads: threadList,
+            messageIDsOfError: messageIDsOfError,
+          },
         },
       },
-    })
+    )
   }
 
   describe('when latest message is older than 45 days', () => {
@@ -132,7 +139,7 @@ context('ViewMessageScreen', () => {
       expect(screen.getByText('mock sender 2')).toBeTruthy()
       expect(screen.queryByText('mock sender 45')).toBeFalsy()
     })
-    
+
     it('should have the reply button since the latest message is within 45 days', () => {
       expect(screen.getByText('Reply')).toBeTruthy()
     })
@@ -146,7 +153,11 @@ context('ViewMessageScreen', () => {
       it('should show AlertBox with "Message could not be found" title', () => {
         expect(screen.getByRole('tab', { name: 'mock sender 1' })).toBeTruthy()
         fireEvent.press(screen.getByRole('tab', { name: 'mock sender 1' }))
-        expect(screen.getByText("If the app still doesn't work, call the My HealtheVet Help Desk. We're here Monday-Friday, 8:00 a.m.-8:00 p.m. ET.")).toBeTruthy()
+        expect(
+          screen.getByText(
+            "If the app still doesn't work, call the My HealtheVet Help Desk. We're here Monday-Friday, 8:00 a.m.-8:00 p.m. ET.",
+          ),
+        ).toBeTruthy()
         expect(screen.getByText('Message could not be found')).toBeTruthy()
       })
     })

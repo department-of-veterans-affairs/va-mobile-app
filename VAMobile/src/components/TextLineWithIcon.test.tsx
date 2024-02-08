@@ -1,15 +1,23 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
-import { VAIconProps } from './VAIcon'
-import TextLineWithIcon from './TextLineWithIcon'
 import { Box } from 'components'
+import { context, render } from 'testUtils'
+
+import TextLineWithIcon from './TextLineWithIcon'
+import { VAIconProps } from './VAIcon'
 
 context('TextLineWithIcon', () => {
   beforeEach(() => {
-    const testLine1 = { text: 'line1', iconProps: { name: 'PaperClip', width: 16, height: 16, testID: 'PaperClip' } as VAIconProps }
-    const testLine2 = { text: 'another line2', iconProps: { name: 'Unread', width: 16, height: 16, testID: 'Unread', isOwnLine: true } as VAIconProps }
+    const testLine1 = {
+      text: 'line1',
+      iconProps: { name: 'PaperClip', width: 16, height: 16, testID: 'PaperClip' } as VAIconProps,
+    }
+    const testLine2 = {
+      text: 'another line2',
+      iconProps: { name: 'Unread', width: 16, height: 16, testID: 'Unread', isOwnLine: true } as VAIconProps,
+    }
     const testLine3 = { text: 'line3 no iconProps' }
 
     render(

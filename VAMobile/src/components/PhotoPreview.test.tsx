@@ -1,20 +1,23 @@
 import React from 'react'
-import Mock = jest.Mock
-import { context, render, screen } from 'testUtils'
-import PhotoPreview from 'components/PhotoPreview'
 import { Asset } from 'react-native-image-picker/src/types'
-import { bytesToFinalSizeDisplay } from 'utils/common'
+
 import { t } from 'i18next'
+
+import PhotoPreview from 'components/PhotoPreview'
+import { context, render, screen } from 'testUtils'
+import { bytesToFinalSizeDisplay } from 'utils/common'
+
+import Mock = jest.Mock
 
 context('PhotoPreview', () => {
   let onPressSpy: Mock
-  let image: Asset = {
+  const image: Asset = {
     uri: 'testing',
     fileSize: 1234,
   }
 
   beforeEach(() => {
-    onPressSpy = jest.fn(() => { })
+    onPressSpy = jest.fn(() => {})
 
     render(<PhotoPreview width={110} height={110} image={image} onDeleteCallback={onPressSpy} />)
   })

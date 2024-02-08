@@ -1,17 +1,18 @@
-import { Dimensions, Pressable, StyleProp, View, ViewStyle } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Dimensions, Pressable, StyleProp, View, ViewStyle } from 'react-native'
+
+import TextView from 'components/TextView'
+import VAIcon, { VA_ICON_MAP } from 'components/VAIcon'
+import VAIconWithText from 'components/VAIconWithText'
+import { NAMESPACE } from 'constants/namespaces'
+import { VAIconColors, VATextColors } from 'styles/theme'
+import { useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
 
 import { Menu, Position } from './Menu'
 import { MenuDivider } from './MenuDivider'
 import { MenuItem } from './MenuItem'
-import { NAMESPACE } from 'constants/namespaces'
-import { VAIconColors, VATextColors } from 'styles/theme'
-import { isIOS } from 'utils/platform'
-import { useTheme } from 'utils/hooks'
-import TextView from 'components/TextView'
-import VAIcon, { VA_ICON_MAP } from 'components/VAIcon'
-import VAIconWithText from 'components/VAIconWithText'
 
 interface ElementToStickProps {
   /** styles the element which the popup anchor to */
@@ -60,7 +61,8 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   const hideMenu = () => menuRef?.hide()
 
   const showMenu = () => {
-    // negative values are to position the menu from the right edge and move the it up a little. The two different values for platform is that android shows higher than IOS
+    // negative values are to position the menu from the right edge and move the it up a little.
+    // The two different values for platform is that android shows higher than IOS
     menuRef?.show(elementRef.current, Position.BOTTOM_LEFT, { left: -55, top: isIOS() ? -10 : -5 })
   }
 
@@ -114,8 +116,14 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
       return (
         <View key={index}>
           <View>
-            <MenuItem onPress={onPressMenu} viewStyle={menuStyle} underlayColor={currentTheme.colors.buttonBackground.overFlowMenuButton} accessibilityLabel={accessibilityLabel}>
-              {iconName && <VAIcon name={iconName} fill={iconColor ? iconColor : 'defaultMenuItem'} height={24} width={24} />}
+            <MenuItem
+              onPress={onPressMenu}
+              viewStyle={menuStyle}
+              underlayColor={currentTheme.colors.buttonBackground.overFlowMenuButton}
+              accessibilityLabel={accessibilityLabel}>
+              {iconName && (
+                <VAIcon name={iconName} fill={iconColor ? iconColor : 'defaultMenuItem'} height={24} width={24} />
+              )}
               <TextView variant={'MobileBody'} ml={10} color={textColor ? textColor : undefined} accessible={false}>
                 {actionText}
               </TextView>

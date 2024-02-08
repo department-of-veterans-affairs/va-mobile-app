@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
+
 import CollapsibleView from './CollapsibleView'
 import TextView from './TextView'
 

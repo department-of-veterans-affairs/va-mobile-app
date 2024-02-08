@@ -1,4 +1,5 @@
 import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit'
+
 import accessabilityReducer from 'store/slices/accessibilitySlice'
 import analyticsReducer from 'store/slices/analyticsSlice'
 import appointmentsReducer from 'store/slices/appointmentsSlice'

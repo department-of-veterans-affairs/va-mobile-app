@@ -1,8 +1,10 @@
-import { TouchableWithoutFeedback } from 'react-native'
-import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
+import { TouchableWithoutFeedback } from 'react-native'
+
+import { useFocusEffect } from '@react-navigation/native'
 
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -32,7 +34,11 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label,
   useFocusEffect(focusOnButton ? setFocus : () => {})
 
   return (
-    <TouchableWithoutFeedback ref={focusRef} onPress={onPress} accessibilityRole="button" accessibilityLabel={labelA11y ? labelA11y : label}>
+    <TouchableWithoutFeedback
+      ref={focusRef}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={labelA11y ? labelA11y : label}>
       <Box
         display="flex"
         flexDirection="row"
@@ -41,7 +47,12 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({ onPress, label,
         height={theme.dimensions.headerHeight} // Uniform height ensures proper screen reader order in header
         alignItems={'center'}>
         <VAIcon mt={1} name={'ChevronLeft'} fill={theme.colors.icon.link} width={15} height={13} maxWidth={25} />
-        <TextView variant="DescriptiveBackButton" color="descriptiveBackButton" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
+        <TextView
+          variant="DescriptiveBackButton"
+          color="descriptiveBackButton"
+          ml={theme.dimensions.textIconMargin}
+          allowFontScaling={false}
+          accessible={false}>
           {label}
         </TextView>
       </Box>

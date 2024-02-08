@@ -1,10 +1,12 @@
+import { find } from 'underscore'
+
+import { SnackbarMessages } from 'components/SnackBar'
+import { DirectDepositErrors } from 'constants/errors'
 import { context, realStore, when } from 'testUtils'
+
 import * as api from '../api'
 import { APIError, DirectDepositData } from '../api'
 import { finishEditBankInfo, getBankData, updateBankInfo } from './directDepositSlice'
-import { find } from 'underscore'
-import { DirectDepositErrors } from 'constants/errors'
-import { SnackbarMessages } from 'components/SnackBar'
 
 export const ActionTypes: {
   DIRECT_DEPOSIT_START_SAVE_BANK_INFO: string
@@ -22,7 +24,10 @@ export const ActionTypes: {
   ERRORS_SET_ERROR: 'error/dispatchSetError',
 }
 
-const snackbarMessages: SnackbarMessages = { errorMsg: 'Direct deposit information could not be saved', successMsg: 'Direct deposit information saved' }
+const snackbarMessages: SnackbarMessages = {
+  errorMsg: 'Direct deposit information could not be saved',
+  successMsg: 'Direct deposit information saved',
+}
 
 context('directDeposit', () => {
   describe('getBankData', () => {
@@ -120,7 +125,14 @@ context('directDeposit', () => {
         .mockResolvedValue(mockBankInfoPayload)
 
       const store = realStore()
-      await store.dispatch(updateBankInfo(updateBankInfoData.accountNumber, updateBankInfoData.financialInstitutionRoutingNumber, updateBankInfoData.accountType, snackbarMessages))
+      await store.dispatch(
+        updateBankInfo(
+          updateBankInfoData.accountNumber,
+          updateBankInfoData.financialInstitutionRoutingNumber,
+          updateBankInfoData.accountType,
+          snackbarMessages,
+        ),
+      )
 
       const actions = store.getActions()
 
@@ -152,7 +164,14 @@ context('directDeposit', () => {
         .mockRejectedValue(error)
 
       const store = realStore()
-      await store.dispatch(updateBankInfo(updateBankInfoData.accountNumber, updateBankInfoData.financialInstitutionRoutingNumber, updateBankInfoData.accountType, snackbarMessages))
+      await store.dispatch(
+        updateBankInfo(
+          updateBankInfoData.accountNumber,
+          updateBankInfoData.financialInstitutionRoutingNumber,
+          updateBankInfoData.accountType,
+          snackbarMessages,
+        ),
+      )
 
       const actions = store.getActions()
 
@@ -204,7 +223,14 @@ context('directDeposit', () => {
         .mockRejectedValue(invalidRoutingNumberError)
 
       const store = realStore()
-      await store.dispatch(updateBankInfo(updateBankInfoData.accountNumber, updateBankInfoData.financialInstitutionRoutingNumber, updateBankInfoData.accountType, snackbarMessages))
+      await store.dispatch(
+        updateBankInfo(
+          updateBankInfoData.accountNumber,
+          updateBankInfoData.financialInstitutionRoutingNumber,
+          updateBankInfoData.accountType,
+          snackbarMessages,
+        ),
+      )
 
       const actions = store.getActions()
 

@@ -1,14 +1,16 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, render} from 'testUtils'
-import Inbox from './Inbox'
 import { CategoryTypeFields, CategoryTypes } from 'store/api/types'
 import { initialSecureMessagingState } from 'store/slices'
+import { context, render } from 'testUtils'
 
-let mockNavigationSpy = jest.fn()
+import Inbox from './Inbox'
+
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
@@ -16,7 +18,7 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     fetchInboxMessages: jest.fn(() => {
@@ -29,9 +31,11 @@ jest.mock('store/slices', () => {
 })
 
 context('Inbox', () => {
-
-  const initializeTestInstance = (category: CategoryTypes = CategoryTypeFields.other, subjectLine: string = 'Default subject line', loading: boolean = false) => {
-
+  const initializeTestInstance = (
+    category: CategoryTypes = CategoryTypeFields.other,
+    subjectLine: string = 'Default subject line',
+    loading: boolean = false,
+  ) => {
     render(<Inbox />, {
       preloadedState: {
         secureMessaging: {
@@ -91,7 +95,12 @@ context('Inbox', () => {
   describe('when a message is clicked', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByTestId('Unread: Mock Sender Invalid DateTime General: Default subject line'))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessage', { currentPage: 2, folderID: 0, messageID: 1, messagesLeft: 1 })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessage', {
+        currentPage: 2,
+        folderID: 0,
+        messageID: 1,
+        messagesLeft: 1,
+      })
     })
   })
 

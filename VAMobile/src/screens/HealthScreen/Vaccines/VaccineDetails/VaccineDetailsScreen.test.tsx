@@ -1,10 +1,11 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+
 import VaccineDetailsScreen from './VaccineDetailsScreen'
-import { Vaccine } from 'store/api'
 
 context('VaccineDetailsScreen', () => {
   const defaultVaccine = {
@@ -38,7 +39,7 @@ context('VaccineDetailsScreen', () => {
       },
     },
   }
-  
+
   const hasLocationVaccine = {
     id: 'HASLOCATION',
     type: 'immunization',
@@ -75,8 +76,14 @@ context('VaccineDetailsScreen', () => {
     expect(screen.getByText('None noted')).toBeTruthy()
     expect(screen.getByText('Reaction')).toBeTruthy()
     expect(screen.getByText('Notes')).toBeTruthy()
-    expect(screen.getByText('Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.')).toBeTruthy()
-    expect(screen.getByText('We base this information on your current VA health records. If you have any questions, contact your health care team.')).toBeTruthy()
+    expect(
+      screen.getByText('Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.'),
+    ).toBeTruthy()
+    expect(
+      screen.getByText(
+        'We base this information on your current VA health records. If you have any questions, contact your health care team.',
+      ),
+    ).toBeTruthy()
     expect(screen.queryByText('facility 1')).toBeFalsy()
     expect(screen.queryByText('123 abc street')).toBeFalsy()
     expect(screen.queryByText('Tiburon, CA 94920')).toBeFalsy()
@@ -84,11 +91,11 @@ context('VaccineDetailsScreen', () => {
 
   it('initializes correctly for has location vaccine', async () => {
     when(api.get as jest.Mock)
-        .calledWith(`/v0/health/locations/location1`, expect.anything())
-        .mockResolvedValue({ data: location })
+      .calledWith(`/v0/health/locations/location1`, expect.anything())
+      .mockResolvedValue({ data: location })
     initializeTestInstance(hasLocationVaccine)
-    await waitFor(() =>expect(screen.getByText('facility 1')).toBeTruthy())
-    await waitFor(() =>expect(screen.getByText('123 abc street')).toBeTruthy())
-    await waitFor(() =>expect(screen.getByText('Tiburon, CA 94920')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('facility 1')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('123 abc street')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Tiburon, CA 94920')).toBeTruthy())
   })
 })

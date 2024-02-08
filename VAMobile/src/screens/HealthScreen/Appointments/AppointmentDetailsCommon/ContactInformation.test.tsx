@@ -1,21 +1,26 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
+import {
+  AppointmentAttributes,
+  AppointmentStatusConstants,
+  AppointmentTypeConstants,
+} from 'store/api/types/AppointmentData'
 import { context, render } from 'testUtils'
+
 import ContactInformation from './ContactInformation'
-import { AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types/AppointmentData'
 
 context('ContactInformation', () => {
-  let props: any
   const initializeTestInstance = (): void => {
-    props = {
+    const props = {
       patientEmail: 'test@test.com',
       patientPhoneNumber: '145-141-2523',
       bestTimeToCall: ['Noon'],
       isPending: true,
       status: AppointmentStatusConstants.SUBMITTED,
       appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
-    }
+    } as AppointmentAttributes
 
     render(<ContactInformation attributes={props} />)
   }

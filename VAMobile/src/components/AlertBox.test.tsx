@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { context, render, screen } from 'testUtils'
+
 import AlertBox from './AlertBox'
 
 context('AlertBox', () => {

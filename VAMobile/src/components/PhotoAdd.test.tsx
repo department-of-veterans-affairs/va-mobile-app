@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
+
 import PhotoAdd from './PhotoAdd'
 
 context('PhotoAdd', () => {

@@ -1,19 +1,27 @@
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AlertBox, Box, WhatsNew } from 'components'
-import { DemoState } from 'store/slices/demoSlice'
 import { Events } from 'constants/analytics'
-import { FeatureConstants, getLocalVersion, getStoreVersion, getVersionSkipped, openAppStore, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { featureEnabled } from 'utils/remoteConfig'
-import { isIOS } from 'utils/platform'
+import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { requestStorePopup } from 'utils/rnInAppUpdate'
-import { useSelector } from 'react-redux'
+import {
+  FeatureConstants,
+  getLocalVersion,
+  getStoreVersion,
+  getVersionSkipped,
+  openAppStore,
+  setVersionSkipped,
+} from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
+import { featureEnabled } from 'utils/remoteConfig'
+import { requestStorePopup } from 'utils/rnInAppUpdate'
 
 export const EncourageUpdateAlert = () => {
   const theme = useTheme()

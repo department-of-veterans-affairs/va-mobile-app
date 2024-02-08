@@ -1,8 +1,8 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { NAMESPACE } from 'constants/namespaces'
 import { TextArea, TextView, VABulletList } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 
 type AppealsIssuesProps = {

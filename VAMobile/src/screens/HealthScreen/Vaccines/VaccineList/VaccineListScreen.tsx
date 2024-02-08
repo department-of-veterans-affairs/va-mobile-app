@@ -1,18 +1,31 @@
-import { StackScreenProps } from '@react-navigation/stack'
-import { map } from 'underscore'
-import { useTranslation } from 'react-i18next'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, FeatureLandingTemplate, LoadingComponent, Pagination, PaginationProps, TextLine } from 'components'
-import { HealthStackParamList } from '../../HealthStackScreens'
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { map } from 'underscore'
+
+import { useVaccines } from 'api/vaccines/getVaccines'
+import {
+  Box,
+  DefaultList,
+  DefaultListItemObj,
+  ErrorComponent,
+  FeatureLandingTemplate,
+  LoadingComponent,
+  Pagination,
+  PaginationProps,
+  TextLine,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getA11yLabelText } from 'utils/common'
-import { screenContentAllowed } from 'utils/waygateConfig'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { useVaccines } from 'api/vaccines/getVaccines'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
+import { HealthStackParamList } from '../../HealthStackScreens'
 import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
 type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineList'>
@@ -22,7 +35,11 @@ type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineLis
  */
 function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   const [page, setPage] = useState(1)
-  const { data: vaccines, isLoading: loading, isError: vaccineError } = useVaccines(page, { enabled: screenContentAllowed('WG_VaccineList') })
+  const {
+    data: vaccines,
+    isLoading: loading,
+    isError: vaccineError,
+  } = useVaccines(page, { enabled: screenContentAllowed('WG_VaccineList') })
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -60,7 +77,11 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     }
 
     return (
-      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box
+        flex={1}
+        mt={theme.dimensions.paginationTopPadding}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     )
@@ -68,7 +89,11 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
 
   if (vaccineError) {
     return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={a11yLabelVA(t('vaVaccines'))}>
+      <FeatureLandingTemplate
+        backLabel={t('health.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('vaVaccines')}
+        titleA11y={a11yLabelVA(t('vaVaccines'))}>
         <ErrorComponent screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID} />
       </FeatureLandingTemplate>
     )
@@ -76,7 +101,11 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
 
   if (loading) {
     return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={a11yLabelVA(t('vaVaccines'))}>
+      <FeatureLandingTemplate
+        backLabel={t('health.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('vaVaccines')}
+        titleA11y={a11yLabelVA(t('vaVaccines'))}>
         <LoadingComponent text={t('vaccines.loading')} />
       </FeatureLandingTemplate>
     )
@@ -84,14 +113,22 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
 
   if (vaccines?.data?.length === 0) {
     return (
-      <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={a11yLabelVA(t('vaVaccines'))}>
+      <FeatureLandingTemplate
+        backLabel={t('health.title')}
+        backLabelOnPress={navigation.goBack}
+        title={t('vaVaccines')}
+        titleA11y={a11yLabelVA(t('vaVaccines'))}>
         <NoVaccineRecords />
       </FeatureLandingTemplate>
     )
   }
 
   return (
-    <FeatureLandingTemplate backLabel={t('health.title')} backLabelOnPress={navigation.goBack} title={t('vaVaccines')} titleA11y={a11yLabelVA(t('vaVaccines'))}>
+    <FeatureLandingTemplate
+      backLabel={t('health.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('vaVaccines')}
+      titleA11y={a11yLabelVA(t('vaVaccines'))}>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <DefaultList items={vaccineButtons} />
       </Box>

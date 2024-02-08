@@ -1,10 +1,12 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
+import { waitFor } from '@testing-library/react-native'
 
 import * as api from 'store/api'
 import { context, mockNavProps, render, when } from 'testUtils'
+
 import VaccineListScreen from './VaccineListScreen'
-import { waitFor } from '@testing-library/react-native'
 
 context('VaccineListScreen', () => {
   const vaccineData = [
@@ -44,11 +46,11 @@ context('VaccineListScreen', () => {
 
   it('initializes correctly', async () => {
     when(api.get as jest.Mock)
-        .calledWith('/v1/health/immunizations', expect.anything())
-        .mockResolvedValue({ data: vaccineData })
+      .calledWith('/v1/health/immunizations', expect.anything())
+      .mockResolvedValue({ data: vaccineData })
     initializeTestInstance()
-    await waitFor(() =>expect(screen.getByText('FLU vaccine')).toBeTruthy())
-    await waitFor(() =>expect(screen.getByText('COVID-19 vaccine')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('FLU vaccine')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('COVID-19 vaccine')).toBeTruthy())
   })
 
   describe('when loading is set to true', () => {
@@ -68,11 +70,27 @@ context('VaccineListScreen', () => {
         .mockResolvedValue({ data: [] })
 
       initializeTestInstance()
-      await waitFor(() =>expect(screen.getByRole('header', { name: "We couldn't find information about your VA vaccines" })).toBeTruthy())
-      await waitFor(() =>expect(screen.getByText("We're sorry. We update your vaccine records every 24 hours, but new records can take up to 36 hours to appear.")).toBeTruthy())
-      await waitFor(() =>expect(screen.getByText("If you think your vaccine records should be here, call our MyVA411 main information line. We're here 24/7.")).toBeTruthy())
-      await waitFor(() =>expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy())
-      await waitFor(() =>expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByRole('header', { name: "We couldn't find information about your VA vaccines" }),
+        ).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            "We're sorry. We update your vaccine records every 24 hours, but new records can take up to 36 hours to appear.",
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            "If you think your vaccine records should be here, call our MyVA411 main information line. We're here 24/7.",
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy())
     })
   })
 })

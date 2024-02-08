@@ -1,23 +1,32 @@
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
-import { Share } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React, { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Share } from 'react-native'
+import { useSelector } from 'react-redux'
+
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
-import { AuthState, logout, setBiometricsPreference } from 'store/slices'
-import { Box, ButtonDecoratorType, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
-import { DemoState } from 'store/slices/demoSlice'
-import { Events } from 'constants/analytics'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
-import { useAppDispatch, useDestructiveActionSheet, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import {
+  Box,
+  ButtonDecoratorType,
+  FeatureLandingTemplate,
+  LoadingComponent,
+  SimpleList,
+  SimpleListItemObj,
+} from 'components'
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
+import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { RootState } from 'store'
+import { AuthState, logout, setBiometricsPreference } from 'store/slices'
+import { DemoState } from 'store/slices/demoSlice'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
+import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
+import { useAppDispatch, useDestructiveActionSheet, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 
 const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
@@ -29,7 +38,8 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
-  const { canStoreWithBiometric, shouldStoreWithBiometric, settingBiometricPreference, supportedBiometric } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { canStoreWithBiometric, shouldStoreWithBiometric, settingBiometricPreference, supportedBiometric } =
+    useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const dispatchLogout = useAppDispatch()
   const signOutAlert = useDestructiveActionSheet()
@@ -69,7 +79,10 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     a11yHintText: t('biometric.a11yHint', { biometricType: supportedBiometricText }),
     onPress: onToggleTouchId,
     decorator: ButtonDecoratorType.Switch,
-    decoratorProps: { on: shouldStoreWithBiometric, a11yHint: t('biometric.a11yHint', { biometricType: supportedBiometricText }) },
+    decoratorProps: {
+      on: shouldStoreWithBiometric,
+      a11yHint: t('biometric.a11yHint', { biometricType: supportedBiometricText }),
+    },
     testId: t('biometric.title', { biometricType: supportedBiometricA11yLabel }),
   }
 
@@ -95,7 +108,11 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     canStoreWithBiometric ? biometricRow : [],
     { text: t('notifications.title'), onPress: () => navigateTo('NotificationsSettings') },
     { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
-    { text: t('inAppRecruitment.giveFeedback'), a11yHintText: t('inAppRecruitment.giveFeedback.a11yHint'), onPress: () => navigateTo('InAppRecruitment') },
+    {
+      text: t('inAppRecruitment.giveFeedback'),
+      a11yHintText: t('inAppRecruitment.giveFeedback.a11yHint'),
+      onPress: () => navigateTo('InAppRecruitment'),
+    },
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
@@ -117,7 +134,11 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
   const loadingCheck = settingBiometricPreference
 
   return (
-    <FeatureLandingTemplate backLabel={t('profile.title')} backLabelOnPress={navigation.goBack} title={t('settings.title')} testID="settingsID">
+    <FeatureLandingTemplate
+      backLabel={t('profile.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('settings.title')}
+      testID="settingsID">
       {loadingCheck ? (
         <LoadingComponent text={t('biometricsPreference.saving')} />
       ) : (
