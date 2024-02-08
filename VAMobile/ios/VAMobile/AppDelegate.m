@@ -74,29 +74,22 @@ static void InitializeFlipper(UIApplication *application) {
   return YES;
 }
 
+// Enables Firebase DebugView for test builds
+{
+#if DEBUG || STAGING
+  var args = ProcessInfo.processInfo.arguments
+  args.append("-FIRAnalyticsDebugEnabled")
+  args.append("-FIRDebugEnabled")
+  ProcessInfo.processInfo.setValue(args, forKey: "arguments")
+#endif
+}
+
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-#endif
-}
-
-// Enables Firebase DebugView for test builds
-{
-#if DEBUG || STAGING
-if UserDefaults.standard.bool(forKey: "firebaseDebug") == true {
-    var args = ProcessInfo.processInfo.arguments
-    args.append("-FIRAnalyticsDebugEnabled")
-    args.append("-FIRDebugEnabled")
-    ProcessInfo.processInfo.setValue(args, forKey: "arguments")
-} else {
-    var args = ProcessInfo.processInfo.arguments
-    args.append("-FIRAnalyticsDebugDisabled")
-    args.append("-FIRDebugDisabled")
-    ProcessInfo.processInfo.setValue(args, forKey: "arguments")
-}
 #endif
 }
 
