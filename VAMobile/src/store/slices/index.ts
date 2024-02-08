@@ -18,7 +18,6 @@ import { initialPrescriptionState } from './prescriptionSlice'
 import { initialSecureMessagingState } from 'store/slices/secureMessagingSlice'
 import { initialSettingsState } from 'store/slices/settingsSlice'
 import { initialSnackBarState } from 'store/slices/snackBarSlice'
-import { initialVaccineState } from 'store/slices/vaccineSlice'
 
 export * from './accessibilitySlice'
 export * from './analyticsSlice'
@@ -33,7 +32,6 @@ export * from './militaryServiceSlice'
 export * from './notificationSlice'
 export * from './secureMessagingSlice'
 export * from './snackBarSlice'
-export * from './vaccineSlice'
 export * from './paymentsSlice'
 export * from './prescriptionSlice'
 export * from './settingsSlice'
@@ -53,7 +51,6 @@ export const InitialState: RootState = {
   demo: initialDemoState,
   analytics: initialAnalyticsState,
   disabilityRating: initialDisabilityRatingState,
-  vaccine: initialVaccineState,
   snackBar: initialSnackBarState,
   payments: initialPaymentsState,
   prescriptions: initialPrescriptionState,

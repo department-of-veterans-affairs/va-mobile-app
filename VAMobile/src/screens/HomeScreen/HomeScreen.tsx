@@ -11,8 +11,7 @@ import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
@@ -32,7 +31,6 @@ const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 export function HomeScreen({}: HomeScreenProps) {
-  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -51,7 +49,7 @@ export function HomeScreen({}: HomeScreenProps) {
   }
 
   const onCoronaVirusFAQ = () => {
-    dispatch(logCOVIDClickAnalytics('home_screen'))
+    logAnalyticsEvent(Events.vama_covid_links('home_screen'))
     navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
 

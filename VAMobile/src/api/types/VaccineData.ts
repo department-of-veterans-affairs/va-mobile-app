@@ -1,27 +1,5 @@
 export type VaccineListPayload = {
-  data: Array<{
-    id?: string | null
-    type?: string | null
-    attributes?: {
-      cvxCode?: number | null
-      date?: string | null
-      doseNumber?: number | string | null
-      doseSeries?: number | string | null
-      groupName?: string | null
-      manufacturer?: string | null
-      note?: string | null
-      shortDescription?: string | null
-      reaction?: string | null
-    }
-    relationships?: {
-      location?: {
-        data?: {
-          id?: string | null
-          type?: string | null
-        } | null
-      }
-    }
-  }>
+  data: Array<Vaccine>
   links: {
     self: string
     first: string
@@ -37,6 +15,30 @@ export type VaccineListPayload = {
       totalEntries: number
     }
     dataFromStore: boolean
+  }
+}
+
+export type Vaccine = {
+  id?: string | null
+  type?: string | null
+  attributes?: {
+    cvxCode?: number | null
+    date?: string | null
+    doseNumber?: number | string | null
+    doseSeries?: number | string | null
+    groupName?: string | null
+    manufacturer?: string | null
+    note?: string | null
+    shortDescription?: string | null
+    reaction?: string | null
+  }
+  relationships?: {
+    location?: {
+      data?: {
+        id?: string | null
+        type?: string | null
+      } | null
+    }
   }
 }
 

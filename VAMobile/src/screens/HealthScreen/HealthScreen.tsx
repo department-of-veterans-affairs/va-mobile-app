@@ -5,6 +5,7 @@ import React, { useEffect } from 'react'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { Events } from 'constants/analytics'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -13,7 +14,7 @@ import { RootState } from 'store'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getInbox } from 'store/slices/secureMessagingSlice'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
-import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -54,7 +55,7 @@ export function HealthScreen({}: HealthScreenProps) {
     navigateTo('PrescriptionHistory')
   }
   const onCoronaVirusFAQ = () => {
-    dispatch(logCOVIDClickAnalytics('health_screen'))
+    logAnalyticsEvent(Events.vama_covid_links('health_screen'))
     navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
   }
 

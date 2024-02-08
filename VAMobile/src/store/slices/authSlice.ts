@@ -31,7 +31,6 @@ import { dispatchDisabilityRatingLogout } from './disabilityRatingSlice'
 import { dispatchMilitaryHistoryLogout } from './militaryServiceSlice'
 import { dispatchResetTappedForegroundNotification } from './notificationSlice'
 import { dispatchSetAnalyticsLogin } from './analyticsSlice'
-import { dispatchVaccineLogout } from './vaccineSlice'
 import { isAndroid } from 'utils/platform'
 import { isErrorObject } from 'utils/common'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
@@ -553,7 +552,6 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
     dispatch(dispatchClearPaymentsOnLogout())
     dispatch(dispatchClearPrescriptionLogout())
     dispatch(dispatchFinishLogout())
-    dispatch(dispatchVaccineLogout())
   }
 }
 
