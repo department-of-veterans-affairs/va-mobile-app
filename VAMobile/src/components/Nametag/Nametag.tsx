@@ -1,16 +1,18 @@
-import { useSelector } from 'react-redux'
-import React, { FC } from 'react'
-
-import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
-import { BranchesOfServiceConstants } from 'store/api/types'
-import { MilitaryServiceState } from 'store/slices'
-import { NAMESPACE } from 'constants/namespaces'
+import React, { FC, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Pressable, PressableProps } from 'react-native'
-import { RootState } from 'store'
+import { useSelector } from 'react-redux'
+
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
+import { UserAnalytics } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { BranchesOfServiceConstants } from 'store/api/types'
+import { MilitaryServiceState } from 'store/slices'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { useTranslation } from 'react-i18next'
 
 export const Nametag: FC = () => {
   const { mostRecentBranch, serviceHistory } = useSelector<RootState, MilitaryServiceState>((s) => s.militaryService)
@@ -20,6 +22,14 @@ export const Nametag: FC = () => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
+
+  useEffect(() => {
+    if (personalInfo) {
+      setAnalyticsUserProperty(
+        UserAnalytics.vama_cerner_transition(personalInfo.hasFacilityTransitioningToCerner || false),
+      )
+    }
+  }, [personalInfo])
 
   const fullName = personalInfo?.fullName
 
@@ -71,7 +81,11 @@ export const Nametag: FC = () => {
         <Box py={theme.dimensions.cardPadding} display="flex" flexDirection="row">
           {accessToMilitaryInfo && <Box pl={theme.dimensions.cardPadding}>{getBranchSeal()}</Box>}
           <Box ml={theme.dimensions.cardPadding} flex={1}>
-            <TextView textTransform="capitalize" mb={accessToMilitaryInfo ? theme.dimensions.textIconMargin : 0} variant="BitterBoldHeading" color="primaryContrast">
+            <TextView
+              textTransform="capitalize"
+              mb={accessToMilitaryInfo ? theme.dimensions.textIconMargin : 0}
+              variant="BitterBoldHeading"
+              color="primaryContrast">
               {fullName}
             </TextView>
             {accessToMilitaryInfo && (

@@ -1,12 +1,14 @@
-import { when } from 'jest-when'
-import _ from 'underscore'
 import FileViewer from 'react-native-file-viewer'
 
-import * as api from '../api'
-import { context, realStore } from 'testUtils'
-import { downloadDecisionLetter, getDecisionLetters } from './decisionLettersSlice'
-import { DecisionLettersGetData } from 'store/api'
+import { when } from 'jest-when'
+import _ from 'underscore'
+
 import { SnackbarMessages } from 'components/SnackBar'
+import { DecisionLettersGetData } from 'store/api'
+import { context, realStore } from 'testUtils'
+
+import * as api from '../api'
+import { downloadDecisionLetter, getDecisionLetters } from './decisionLettersSlice'
 
 const snackbarMessages: SnackbarMessages = {
   successMsg: '',

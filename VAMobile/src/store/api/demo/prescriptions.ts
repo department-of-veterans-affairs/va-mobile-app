@@ -1,5 +1,5 @@
-import { DemoStore } from './store'
 import { Params, PrescriptionTrackingInfoGetData, PrescriptionsGetData } from '..'
+import { DemoStore } from './store'
 
 /**
  * Types for prescription tracking information

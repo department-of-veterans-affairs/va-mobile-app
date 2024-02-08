@@ -1,20 +1,37 @@
-import { Pressable } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Pressable } from 'react-native'
 
-import { Box, ErrorComponent, FullScreenSubtask, LoadingComponent, RadioGroup, RadioGroupProps, TextView, radioOption } from 'components'
-import { Events } from 'constants/analytics'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SnackbarMessages } from 'components/SnackBar'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { showSnackBar } from 'utils/common'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
 import { useDemographics } from 'api/demographics/getDemographics'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { useUpdateGenderIdentity } from 'api/demographics/updateGenderIdentity'
+import {
+  Box,
+  ErrorComponent,
+  FullScreenSubtask,
+  LoadingComponent,
+  RadioGroup,
+  RadioGroupProps,
+  TextView,
+  radioOption,
+} from 'components'
+import { SnackbarMessages } from 'components/SnackBar'
+import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { showSnackBar } from 'utils/common'
+import {
+  useAppDispatch,
+  useBeforeNavBackListener,
+  useDestructiveActionSheet,
+  useDowntimeByScreenID,
+  useRouteNavigation,
+  useTheme,
+} from 'utils/hooks'
 
 type GenderIdentityScreenProps = StackScreenProps<HomeStackParamList, 'GenderIdentity'>
 
@@ -139,16 +156,25 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
       title={t('personalInformation.genderIdentity.title')}
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
-      primaryContentButtonText={t('save')}
+      primaryContentButtonText={errorCheck || loadingCheck ? undefined : t('save')}
       onPrimaryContentButtonPress={onSave}
       testID="PersonalInformationTestID">
       {errorCheck ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID} onTryAgain={onTryAgain} />
       ) : loadingCheck ? (
-        <LoadingComponent text={loadingGenderIdentityOptions ? t('personalInformation.genderIdentity.loading') : t('personalInformation.genderIdentity.saving')} />
+        <LoadingComponent
+          text={
+            loadingGenderIdentityOptions
+              ? t('personalInformation.genderIdentity.loading')
+              : t('personalInformation.genderIdentity.saving')
+          }
+        />
       ) : (
         <Box mx={theme.dimensions.gutter}>
-          <TextView variant="MobileBody" mb={error ? theme.dimensions.condensedMarginBetween : undefined} paragraphSpacing={error ? false : true}>
+          <TextView
+            variant="MobileBody"
+            mb={error ? theme.dimensions.condensedMarginBetween : undefined}
+            paragraphSpacing={error ? false : true}>
             {t('personalInformation.genderIdentity.changeSelection')}
             <TextView variant="MobileBodyBold">{t('personalInformation.genderIdentity.preferNotToAnswer')}</TextView>
             <TextView variant="MobileBody">.</TextView>

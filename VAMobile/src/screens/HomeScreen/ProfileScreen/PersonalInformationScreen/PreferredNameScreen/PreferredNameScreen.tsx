@@ -1,16 +1,17 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { useDemographics } from 'api/demographics/getDemographics'
+import { useUpdatePreferredName } from 'api/demographics/updatePreferredName'
 import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
 import { SnackbarMessages } from 'components/SnackBar'
+import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { showSnackBar } from 'utils/common'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
-import { useDemographics } from 'api/demographics/getDemographics'
-import { useUpdatePreferredName } from 'api/demographics/updatePreferredName'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 
@@ -138,7 +139,7 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={onConfirmCancel}
       title={t('personalInformation.preferredName.title')}
-      primaryContentButtonText={t('save')}
+      primaryContentButtonText={preferredNameMutation.isPending ? undefined : t('save')}
       onPrimaryContentButtonPress={() => setOnSaveClicked(true)}>
       {preferredNameMutation.isPending ? (
         <LoadingComponent text={t('personalInformation.preferredName.saveLoadingText')} />

@@ -1,8 +1,11 @@
 import { Alert } from 'react-native'
-import { logNonFatalErrorToFirebase } from './analytics'
-import { overrideRemote, setOverrideRemote } from './remoteConfig'
+
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import remoteConfig from '@react-native-firebase/remote-config'
+
+import { logNonFatalErrorToFirebase } from './analytics'
+import { overrideRemote, setOverrideRemote } from './remoteConfig'
+
 const WAYGATE_OVERRIDES_KEY = '@store_waygate_overrides'
 
 export type Waygate = {
@@ -333,7 +336,9 @@ export const getWaygateToggles = (): WaygateToggleValues => {
 
   Object.keys(remoteConfig().getAll()).forEach((key) => {
     if (key.startsWith('WG')) {
-      waygateConfig[key as WaygateToggleType] = JSON.parse(remoteConfig().getValue(key).asString()) as unknown as Waygate
+      waygateConfig[key as WaygateToggleType] = JSON.parse(
+        remoteConfig().getValue(key).asString(),
+      ) as unknown as Waygate
     }
   })
   return waygateConfig

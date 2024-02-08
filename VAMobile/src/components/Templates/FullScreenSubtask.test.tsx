@@ -1,10 +1,12 @@
 import React from 'react'
-import { context, fireEvent, render, screen } from 'testUtils'
-import FullScreenSubtask from './FullScreenSubtask'
+
 import { VAIconProps } from 'components/VAIcon'
+import { context, fireEvent, render, screen } from 'testUtils'
+
+import FullScreenSubtask from './FullScreenSubtask'
 
 context('FullScreenSubtask', () => {
-  const onPressSpy = jest.fn(() => { })
+  const onPressSpy = jest.fn(() => {})
 
   const initializeTestInstance = (
     titleText?: string,
@@ -16,7 +18,6 @@ context('FullScreenSubtask', () => {
     secondaryContentButtonText?: string,
     onSecondaryButtonPress?: () => void,
   ): void => {
-
     render(
       <FullScreenSubtask
         title={titleText}

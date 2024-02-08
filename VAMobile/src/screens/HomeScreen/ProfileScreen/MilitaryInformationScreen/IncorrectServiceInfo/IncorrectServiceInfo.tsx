@@ -1,10 +1,11 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView } from 'components'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
@@ -32,10 +33,16 @@ function IncorrectServiceInfo({}: IncorrectServiceInfoScreenProps) {
           paragraphSpacing={true}>
           {t('militaryInformation.incorrectServiceInfo.body.1')}
         </TextView>
-        <TextView accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.2')} variant="MobileBody" paragraphSpacing={true}>
+        <TextView
+          accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.2')}
+          variant="MobileBody"
+          paragraphSpacing={true}>
           {t('militaryInformation.incorrectServiceInfo.body.2')}
         </TextView>
-        <TextView accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.3')} variant="MobileBody" paragraphSpacing={true}>
+        <TextView
+          accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.3')}
+          variant="MobileBody"
+          paragraphSpacing={true}>
           {t('militaryInformation.incorrectServiceInfo.body.3')}
         </TextView>
         <ClickToCallPhoneNumber phone={t('8005389552')} displayedText={displayedTextPhoneNumber(t('8005389552'))} />

@@ -1,12 +1,15 @@
 import React from 'react'
+
 import { context, fireEvent, render, screen } from 'testUtils'
+
 import BasicError from './BasicError'
+
 import Mock = jest.Mock
 
 context('BasicError', () => {
   let onTryAgainSpy: Mock
   beforeEach(() => {
-    onTryAgainSpy = jest.fn(() => { })
+    onTryAgainSpy = jest.fn(() => {})
     render(<BasicError onTryAgain={onTryAgainSpy} messageText={'message body'} />)
   })
 

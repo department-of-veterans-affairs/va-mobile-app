@@ -1,11 +1,13 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
+
 import Switch from './Switch'
 
 context('Switch', () => {
-  let onPressSpy = jest.fn(() => {})
+  const onPressSpy = jest.fn(() => {})
 
   beforeEach(() => {
     render(<Switch onPress={onPressSpy} a11yHint="Test switch" />)

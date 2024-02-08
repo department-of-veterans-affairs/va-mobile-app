@@ -1,13 +1,14 @@
-import { Pressable, PressableProps, View } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC, ReactNode, Ref, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Pressable, PressableProps, View } from 'react-native'
 
-import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
+
+import { Box, BoxProps, TextArea, VAIcon, VA_ICON_MAP } from './index'
 
 export type AccordionCollapsibleProps = {
   /** component to display as header of accordion */

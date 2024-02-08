@@ -1,9 +1,10 @@
 import React from 'react'
+
 import { context, render, screen } from 'testUtils'
+
 import MessagesCountTag from './MessagesCountTag'
 
 context('MessagesCountTag', () => {
-
   beforeEach(() => {
     render(<MessagesCountTag unread={2} />)
   })

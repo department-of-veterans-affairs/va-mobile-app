@@ -1,30 +1,38 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
+import { AppointmentAttributes, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { context, render } from 'testUtils'
+
 import AppointmentReason from './AppointmentReason'
-import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 
 context('AppointmentReason', () => {
-  let props: any
-  let reasonText = 'New Issue: 22.4.55'
-  const initializeTestInstance = (phoneOnly: boolean = false, isPendingAppointment?: boolean, reason?: string): void => {
-    props = {
-      attributes: {
-        status: !!isPendingAppointment ? AppointmentStatusConstants.SUBMITTED : AppointmentStatusConstants.BOOKED,
-        isPending: !!isPendingAppointment,
-        reason: reason || null,
-        phoneOnly: phoneOnly,
-      },
-    }
-    render(<AppointmentReason {...props} />)
+  const reasonText = 'New Issue: 22.4.55'
+  const initializeTestInstance = (
+    phoneOnly: boolean = false,
+    isPendingAppointment?: boolean,
+    reason?: string,
+  ): void => {
+    render(
+      <AppointmentReason
+        attributes={
+          {
+            status: isPendingAppointment ? AppointmentStatusConstants.SUBMITTED : AppointmentStatusConstants.BOOKED,
+            isPending: !!isPendingAppointment,
+            reason: reason || null,
+            phoneOnly: phoneOnly,
+          } as AppointmentAttributes
+        }
+      />,
+    )
   }
 
   describe('Confirmed/Canceled Confirm Appointments', () => {
     describe('when no reason is provided', () => {
       it('should not display any text', () => {
         initializeTestInstance(false, false)
-        expect(screen.queryByRole('header', { name:'You shared these details about your concern' })).toBeFalsy()
+        expect(screen.queryByRole('header', { name: 'You shared these details about your concern' })).toBeFalsy()
       })
     })
 

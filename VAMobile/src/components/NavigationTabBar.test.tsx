@@ -1,14 +1,18 @@
 import React from 'react'
-import { fireEvent, screen, userEvent } from '@testing-library/react-native'
+
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 
+import { fireEvent, screen, userEvent } from '@testing-library/react-native'
+import { TFunction } from 'i18next'
+
 import { context, render } from 'testUtils'
+
 import NavigationTabBar from './NavigationTabBar'
 
-let mockNavigationSpy = jest.fn()
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
@@ -18,7 +22,7 @@ jest.mock('utils/hooks', () => {
 context('NavigationTabBar', () => {
   const emitSpy = jest.fn()
 
-  let routes = [
+  const routes = [
     { name: 'Home', key: 'Home-1' },
     { name: 'Benefits', key: 'Benefits-1' },
     { name: 'Health', key: 'Health-1' },
@@ -30,8 +34,13 @@ context('NavigationTabBar', () => {
     render(
       <NavigationTabBar
         state={{ index, routes } as unknown as TabNavigationState<ParamListBase>}
-        navigation={{ emit: emitSpy, navigate: mockNavigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-        translation={jest.fn() as any}
+        navigation={
+          { emit: emitSpy, navigate: mockNavigationSpy } as unknown as NavigationHelpers<
+            ParamListBase,
+            BottomTabNavigationEventMap
+          >
+        }
+        translation={jest.fn() as unknown as TFunction}
       />,
     )
   }
