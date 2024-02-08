@@ -92,8 +92,8 @@ context('VaccineDetailsScreen', () => {
 
   it('initializes correctly for has location vaccine', async () => {
     when(api.get as jest.Mock)
-      .calledWith(`/v0/health/locations/location1`, expect.anything())
-      .mockResolvedValue({ data: location })
+      .calledWith(`/v0/health/locations/location1`)
+      .mockResolvedValue({ ...location })
     initializeTestInstance(hasLocationVaccine)
     await waitFor(() => expect(screen.getByText('facility 1')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('123 abc street')).toBeTruthy())
