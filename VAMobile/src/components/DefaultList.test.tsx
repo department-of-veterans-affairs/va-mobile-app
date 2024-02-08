@@ -1,13 +1,19 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
+
 import DefaultList from './DefaultList'
 
 context('DefaultList', () => {
   const onPressSpy = jest.fn()
   const items = [
-    { textLines: [{ text: 'line 1 on the first button' }, { text: 'line 2 on the first button' }], testId: 'testid', a11yHintText: 'hinttext' },
+    {
+      textLines: [{ text: 'line 1 on the first button' }, { text: 'line 2 on the first button' }],
+      testId: 'testid',
+      a11yHintText: 'hinttext',
+    },
     { textLines: [{ text: 'another line' }], a11yHintText: 'hint2', onPress: onPressSpy },
   ]
 

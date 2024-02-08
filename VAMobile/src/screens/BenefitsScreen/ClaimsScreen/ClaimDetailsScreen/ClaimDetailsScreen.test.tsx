@@ -1,15 +1,16 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import * as api from 'store/api'
 import { InitialState, initialClaimsAndAppealsState, initialErrorsState } from 'store/slices'
-import ClaimDetailsScreen from './ClaimDetailsScreen'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+
 import { claim } from '../claimData'
-import { StackNavigationOptions } from '@react-navigation/stack'
+import ClaimDetailsScreen from './ClaimDetailsScreen'
 
 jest.mock('@react-navigation/native', () => {
-  let actual = jest.requireActual('@react-navigation/native')
+  const actual = jest.requireActual('@react-navigation/native')
   return {
     ...actual,
     useNavigation: () => ({
@@ -20,7 +21,7 @@ jest.mock('@react-navigation/native', () => {
 })
 
 jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
-  let original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
+  const original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({
@@ -48,20 +49,13 @@ jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
 })
 
 context('ClaimDetailsScreen', () => {
-  let props: any
-  let navHeaderSpy: any
-
   const initializeTestInstance = () => {
-    props = mockNavProps(
+    const props = mockNavProps(
       undefined,
       {
         navigate: jest.fn(),
         addListener: jest.fn(),
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-          }
-        },
+        setOptions: jest.fn(),
         goBack: jest.fn(),
       },
       { params: { claimID: '0', claimType: 'ACTIVE' } },
@@ -96,9 +90,7 @@ context('ClaimDetailsScreen', () => {
       })
       expect(screen.getByTestId('Step 1 of 5. completed. Claim received June 6, 2019')).toBeTruthy()
     })
-  })
 
-  describe('when the selected tab is status', () => {
     it('should display the ClaimDetails component', async () => {
       await waitFor(() => {
         when(api.get as jest.Mock)

@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { context, fireEvent, render, screen } from 'testUtils'
+
 import NetworkConnectionError from './NetworkConnectionError'
 
 context('NetworkConnectionError', () => {
@@ -11,7 +13,9 @@ context('NetworkConnectionError', () => {
 
   it('initializes correctly', () => {
     expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
-    expect(screen.getByText("You aren't connected to the internet. Check your internet connection and try again.")).toBeTruthy()
+    expect(
+      screen.getByText("You aren't connected to the internet. Check your internet connection and try again."),
+    ).toBeTruthy()
     expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy()
   })
 

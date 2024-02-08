@@ -1,10 +1,12 @@
-import { ScrollView, TextInput } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useTranslation } from 'react-i18next'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ScrollView, TextInput } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import { AccountOptions } from 'constants/accounts'
-import { AccountTypes } from 'store/api/types'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { RootNavStackParamList } from 'App'
+
 import {
   AlertBox,
   Box,
@@ -19,15 +21,15 @@ import {
   TextView,
   VAImage,
 } from 'components'
-import { DirectDepositState, finishEditBankInfo, updateBankInfo } from 'store/slices'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootNavStackParamList } from 'App'
-import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SnackbarMessages } from 'components/SnackBar'
+import { AccountOptions } from 'constants/accounts'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { AccountTypes } from 'store/api/types'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { DirectDepositState, finishEditBankInfo, updateBankInfo } from 'store/slices'
 import { getTranslation } from 'utils/formattingUtils'
 import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useError, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 
 const MAX_ROUTING_DIGITS = 9
 const MAX_ACCOUNT_DIGITS = 17
@@ -46,7 +48,9 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
   const confirmAlert = useDestructiveActionSheet()
   const accountNumRef = useRef<TextInput>(null)
   const scrollViewRef = useRef<ScrollView>(null)
-  const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>((state) => state.directDeposit)
+  const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<RootState, DirectDepositState>(
+    (state) => state.directDeposit,
+  )
   const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
 
   const [routingNumber, setRoutingNumber] = useState('')
@@ -129,7 +133,15 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
   }
 
   const onSave = (): void => {
-    dispatch(updateBankInfo(accountNumber, routingNumber, accountType as AccountTypes, snackbarMessages, ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID))
+    dispatch(
+      updateBankInfo(
+        accountNumber,
+        routingNumber,
+        accountType as AccountTypes,
+        snackbarMessages,
+        ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID,
+      ),
+    )
   }
 
   const containsNonNumbersValidation = (input: string): boolean => {
@@ -236,7 +248,12 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
         <Box mb={contentMarginBottom}>
           {formContainsError && (
             <Box mb={standardMarginBetween}>
-              <AlertBox scrollViewRef={scrollViewRef} title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" focusOnError={onSaveClicked} />
+              <AlertBox
+                scrollViewRef={scrollViewRef}
+                title={t('editDirectDeposit.pleaseCheckDDInfo')}
+                border="error"
+                focusOnError={onSaveClicked}
+              />
             </Box>
           )}
           {invalidRoutingNumberError && (

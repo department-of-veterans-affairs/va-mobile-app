@@ -1,17 +1,19 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
-import DisabilityRatingsScreen from './DisabilityRatingsScreen'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { RatingData, ScreenIDTypesConstants } from 'store/api/types'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
+import { context, render } from 'testUtils'
 
-let mockNavigationSpy = jest.fn()
+import DisabilityRatingsScreen from './DisabilityRatingsScreen'
+
+const mockNavigationSpy = jest.fn()
 const mockExternalLinkSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
 
   return {
     ...original,
@@ -45,7 +47,11 @@ context('DisabilityRatingsScreen', () => {
     ],
   }
 
-  const initializeTestInstance = (ratingInfo = ratingDataMock, loading = false, errorState: ErrorsState = initialErrorsState) => {
+  const initializeTestInstance = (
+    ratingInfo = ratingDataMock,
+    loading = false,
+    errorState: ErrorsState = initialErrorsState,
+  ) => {
     render(<DisabilityRatingsScreen />, {
       preloadedState: {
         disabilityRating: {
@@ -66,7 +72,11 @@ context('DisabilityRatingsScreen', () => {
   it('Renders Disability Ratings correctly and not render no disability ratings', () => {
     expect(screen.getAllByRole('header', { name: 'Combined disability rating' })).toBeTruthy()
     expect(screen.getByText('70%')).toBeTruthy()
-    expect(screen.getByText("This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims or appeals with the Claim Status tool.")).toBeTruthy()
+    expect(
+      screen.getByText(
+        "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims or appeals with the Claim Status tool.",
+      ),
+    ).toBeTruthy()
     expect(screen.getAllByRole('header', { name: 'Individual ratings' })).toBeTruthy()
     expect(screen.getByText('50%')).toBeTruthy()
     expect(screen.getByText('PTSD')).toBeTruthy()
@@ -76,13 +86,21 @@ context('DisabilityRatingsScreen', () => {
     expect(screen.getAllByText('Service-connected disability?  Yes')).toBeTruthy()
     expect(screen.getByText('Effective date:  08/09/2013')).toBeTruthy()
     expect(screen.getAllByRole('header', { name: 'Learn about VA disability ratings' })).toBeTruthy()
-    expect(screen.getByText('To learn how we determined your VA combined disability rating, use our disability rating calculator and ratings table.')).toBeTruthy()
+    expect(
+      screen.getByText(
+        'To learn how we determined your VA combined disability rating, use our disability rating calculator and ratings table.',
+      ),
+    ).toBeTruthy()
     expect(screen.getByRole('link', { name: 'About VA disability ratings' })).toBeTruthy()
     expect(screen.getAllByRole('header', { name: 'Need Help?' })).toBeTruthy()
-    expect(screen.getByText("Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.")).toBeTruthy()
+    expect(
+      screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'),
+    ).toBeTruthy()
     expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
-    expect(screen.queryByRole('header', { name: 'You do not have a VA combined disability rating on record.' })).toBeFalsy()
+    expect(
+      screen.queryByRole('header', { name: 'You do not have a VA combined disability rating on record.' }),
+    ).toBeFalsy()
   })
 
   describe('when loading is set to true', () => {
@@ -95,14 +113,17 @@ context('DisabilityRatingsScreen', () => {
   describe('when there is no disability ratings', () => {
     it('should render no disability ratings', () => {
       initializeTestInstance({} as RatingData)
-      expect(screen.getByRole('header', { name: 'You do not have a VA combined disability rating on record.' })).toBeTruthy()
+      expect(
+        screen.getByRole('header', { name: 'You do not have a VA combined disability rating on record.' }),
+      ).toBeTruthy()
     })
   })
 
   describe('when there is an error', () => {
     it('should show an error screen', () => {
       const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      errorsByScreenID[ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID] =
+        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
         ...initialErrorsState,
