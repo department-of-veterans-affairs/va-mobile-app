@@ -1,12 +1,19 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import AppealDecision from './AppealDecision'
 import { AppealAOJTypes, AppealStatusDetailsIssue } from 'api/types/ClaimsAndAppealsData'
+import { context, mockNavProps, render } from 'testUtils'
+
+import AppealDecision from './AppealDecision'
 
 context('AppealDecision', () => {
-  const initializeTestInstance = (issues: Array<AppealStatusDetailsIssue>, aoj: AppealAOJTypes, ama: boolean, boardDecision: boolean): void => {
+  const initializeTestInstance = (
+    issues: Array<AppealStatusDetailsIssue>,
+    aoj: AppealAOJTypes,
+    ama: boolean,
+    boardDecision: boolean,
+  ): void => {
     const props = mockNavProps({
       issues,
       aoj,
@@ -24,7 +31,11 @@ context('AppealDecision', () => {
   it('should initialize', () => {
     expect(screen.getByText('Granted')).toBeTruthy()
     expect(screen.getByText('The judge granted the following issue:')).toBeTruthy()
-    expect(screen.getByText('If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.')).toBeTruthy()
+    expect(
+      screen.getByText(
+        'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
+      ),
+    ).toBeTruthy()
     expect(screen.getByText('Please see your decision for more details.')).toBeTruthy()
   })
 
@@ -32,8 +43,16 @@ context('AppealDecision', () => {
     describe('when ama is true', () => {
       it('should display the text "After the {{aojDesc}} has completed the judge’s instructions to correct the error, they will make a new decision."', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'remand' }], 'vba', true, true)
-        expect(screen.getByText('The judge is sending this issue back to the Veterans Benefits Administration to correct an error')).toBeTruthy()
-        expect(screen.getByText('After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.')).toBeTruthy()
+        expect(
+          screen.getByText(
+            'The judge is sending this issue back to the Veterans Benefits Administration to correct an error',
+          ),
+        ).toBeTruthy()
+        expect(
+          screen.getByText(
+            'After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.',
+          ),
+        ).toBeTruthy()
       })
     })
   })
@@ -43,7 +62,11 @@ context('AppealDecision', () => {
       it('should display the text "If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months."', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'allowed' }], 'vba', true, true)
         expect(screen.getByText('The judge granted the following issue:')).toBeTruthy()
-        expect(screen.getByText('If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.')).toBeTruthy()
+        expect(
+          screen.getByText(
+            'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
+          ),
+        ).toBeTruthy()
       })
     })
   })
@@ -61,7 +84,11 @@ context('AppealDecision', () => {
           true,
         )
         expect(screen.getByText('The judge granted the following issues:')).toBeTruthy()
-        expect(screen.getByText('If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.')).toBeTruthy()
+        expect(
+          screen.getByText(
+            'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
+          ),
+        ).toBeTruthy()
       })
     })
 
@@ -86,7 +113,11 @@ context('AppealDecision', () => {
       it('should display "The judge granted the following issue:"', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'allowed' }], 'vba', true, true)
         expect(screen.getByText('The judge granted the following issue:')).toBeTruthy()
-        expect(screen.getByText('If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.')).toBeTruthy()
+        expect(
+          screen.getByText(
+            'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
+          ),
+        ).toBeTruthy()
       })
     })
 
@@ -158,8 +189,16 @@ context('AppealDecision', () => {
           true,
           true,
         )
-        expect(screen.getByText('The judge is sending these issues back to the Veterans Benefits Administration to correct an error')).toBeTruthy()
-        expect(screen.getByText("After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.")).toBeTruthy()
+        expect(
+          screen.getByText(
+            'The judge is sending these issues back to the Veterans Benefits Administration to correct an error',
+          ),
+        ).toBeTruthy()
+        expect(
+          screen.getByText(
+            'After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.',
+          ),
+        ).toBeTruthy()
       })
     })
 
@@ -174,7 +213,11 @@ context('AppealDecision', () => {
           false,
           false,
         )
-        expect(screen.getByText('The judge is sending these issues back to the Veterans Benefits Administration to gather more evidence or to fix a mistake before deciding whether to grant or deny')).toBeTruthy()
+        expect(
+          screen.getByText(
+            'The judge is sending these issues back to the Veterans Benefits Administration to gather more evidence or to fix a mistake before deciding whether to grant or deny',
+          ),
+        ).toBeTruthy()
       })
     })
   })
@@ -183,15 +226,27 @@ context('AppealDecision', () => {
     describe('when ama is true', () => {
       it('should display "The judge is sending this issue back to the {{aojDesc}} to correct an error"', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'remand' }], 'vba', true, true)
-        expect(screen.getByText('The judge is sending this issue back to the Veterans Benefits Administration to correct an error')).toBeTruthy()
-        expect(screen.getByText("After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.")).toBeTruthy()
+        expect(
+          screen.getByText(
+            'The judge is sending this issue back to the Veterans Benefits Administration to correct an error',
+          ),
+        ).toBeTruthy()
+        expect(
+          screen.getByText(
+            'After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.',
+          ),
+        ).toBeTruthy()
       })
     })
 
     describe('when ama is false', () => {
       it('should display "The judge is sending this issue back to the {{aojDesc}} to gather more evidence or to fix a mistake before deciding whether to grant or deny"', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'remand' }], 'vba', false, false)
-        expect(screen.getByText('The judge is sending this issue back to the Veterans Benefits Administration to gather more evidence or to fix a mistake before deciding whether to grant or deny')).toBeTruthy()
+        expect(
+          screen.getByText(
+            'The judge is sending this issue back to the Veterans Benefits Administration to gather more evidence or to fix a mistake before deciding whether to grant or deny',
+          ),
+        ).toBeTruthy()
       })
     })
   })

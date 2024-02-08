@@ -1,16 +1,18 @@
 import React from 'react'
 
-import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { screen } from '@testing-library/react-native'
-import ClaimsHistoryScreen from './ClaimsHistoryScreen'
-import * as api from 'store/api'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import { ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsListPayload } from 'api/types/ClaimsAndAppealsData'
+
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import { ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsListPayload } from 'api/types/ClaimsAndAppealsData'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { CommonErrorTypesConstants } from 'constants/errors'
+import * as api from 'store/api'
+import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
+
+import ClaimsHistoryScreen from './ClaimsHistoryScreen'
 
 jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
-  let original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
+  const original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
     useAuthorizedServices: jest
@@ -97,15 +99,16 @@ const mockPayload: ClaimsAndAppealsListPayload = {
 }
 
 context('ClaimsHistoryScreen', () => {
-  const initializeTestInstance = (errors:Array<ClaimsAndAppealsGetDataMetaError>) => {
-    let queryPayload = mockPayload
+  const initializeTestInstance = (errors: Array<ClaimsAndAppealsGetDataMetaError>) => {
+    const queryPayload = mockPayload
     queryPayload.meta.errors = errors
-    let queriesData: QueriesData | undefined
-    queriesData = [{
-      queryKey: [claimsAndAppealsKeys.claimsAndAppeals, 'ACTIVE', '1'],
-      data: queryPayload,
-    }]
-    render(<ClaimsHistoryScreen {...mockNavProps()} />, {queriesData})
+    const queriesData: QueriesData = [
+      {
+        queryKey: [claimsAndAppealsKeys.claimsAndAppeals, 'ACTIVE', '1'],
+        data: queryPayload,
+      },
+    ]
+    render(<ClaimsHistoryScreen {...mockNavProps()} />, { queriesData })
   }
 
   describe('when claims service and appeals service are both not authorized', () => {
@@ -127,10 +130,14 @@ context('ClaimsHistoryScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': DEFAULT_PAGE_SIZE.toString(),
+          'page[number]': '1',
+        })
         .mockRejectedValue({ error: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR })
       initializeTestInstance([])
-      await waitFor(() =>expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
     })
   })
 
@@ -141,13 +148,17 @@ context('ClaimsHistoryScreen', () => {
           service: 'claims',
         },
       ]
-      let payload = mockPayload
+      const payload = mockPayload
       payload.meta.errors = error
       when(api.get as jest.Mock)
-      .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': '10', 'page[number]': '1' })
-      .mockResolvedValue(payload)
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': '10',
+          'page[number]': '1',
+        })
+        .mockResolvedValue(payload)
       initializeTestInstance(error)
-      await waitFor(() =>expect(screen.getByText('Claims status is unavailable')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Claims status is unavailable')).toBeTruthy())
     })
   })
 
@@ -158,13 +169,17 @@ context('ClaimsHistoryScreen', () => {
           service: 'appeals',
         },
       ]
-      let payload = mockPayload
+      const payload = mockPayload
       payload.meta.errors = error
       when(api.get as jest.Mock)
-      .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': '10', 'page[number]': '1' })
-      .mockResolvedValue(payload)
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': '10',
+          'page[number]': '1',
+        })
+        .mockResolvedValue(payload)
       initializeTestInstance(error)
-      await waitFor(() =>expect(expect(screen.getByText('Appeal status is unavailable')).toBeTruthy()))
+      await waitFor(() => expect(screen.getByText('Appeal status is unavailable')).toBeTruthy())
     })
   })
 
@@ -178,15 +193,19 @@ context('ClaimsHistoryScreen', () => {
           service: 'appeals',
         },
       ]
-      let payload = mockPayload
+      const payload = mockPayload
       payload.meta.errors = error
       when(api.get as jest.Mock)
-      .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': '10', 'page[number]': '1' })
-      .mockResolvedValue(payload)
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': '10',
+          'page[number]': '1',
+        })
+        .mockResolvedValue(payload)
       initializeTestInstance(error)
-      await waitFor(() =>expect(screen.getByText('Claims and appeal status are unavailable')).toBeTruthy())
-      await waitFor(() =>expect(screen.queryByText('Active')).toBeFalsy())
-      await waitFor(() =>expect(screen.queryByText('Closed')).toBeFalsy())
+      await waitFor(() => expect(screen.getByText('Claims and appeal status are unavailable')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('Active')).toBeFalsy())
+      await waitFor(() => expect(screen.queryByText('Closed')).toBeFalsy())
     })
   })
 })

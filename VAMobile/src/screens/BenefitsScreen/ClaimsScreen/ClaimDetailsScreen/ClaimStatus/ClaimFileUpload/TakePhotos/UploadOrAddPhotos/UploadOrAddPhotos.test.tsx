@@ -1,10 +1,12 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { QueriesData, context, mockNavProps, render } from 'testUtils'
-import UploadOrAddPhotos from './UploadOrAddPhotos'
-import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
+import { QueriesData, context, mockNavProps, render } from 'testUtils'
+
+import UploadOrAddPhotos from './UploadOrAddPhotos'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -18,7 +20,7 @@ jest.mock('utils/hooks', () => {
 })
 
 context('UploadOrAddPhotos', () => {
-  let request = {
+  const request = {
     type: 'still_need_from_you_list',
     date: '2020-07-16',
     status: 'NEEDED',
@@ -26,22 +28,27 @@ context('UploadOrAddPhotos', () => {
     uploadsAllowed: true,
   }
 
-  let firstImageResponse = {
+  const firstImageResponse = {
     uri: 'uri',
   }
 
   const renderWithData = (): void => {
-    let queriesData: QueriesData | undefined
-    queriesData = [{
-      queryKey: [claimsAndAppealsKeys.claim, '0'],
-      data: {
-        ...Claim
-      }
-    }]
+    const queriesData: QueriesData = [
+      {
+        queryKey: [claimsAndAppealsKeys.claim, '0'],
+        data: {
+          ...Claim,
+        },
+      },
+    ]
 
-    const props = mockNavProps(undefined, { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() }, { params: { claimID: '0', request, firstImageResponse } })
+    const props = mockNavProps(
+      undefined,
+      { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() },
+      { params: { claimID: '0', request, firstImageResponse } },
+    )
 
-    render(<UploadOrAddPhotos {...props} />, {queriesData})
+    render(<UploadOrAddPhotos {...props} />, { queriesData })
   }
 
   it('initializes correctly', () => {

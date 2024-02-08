@@ -1,11 +1,12 @@
 import React from 'react'
-import { context, fireEvent, mockNavProps, QueriesData, render, screen, waitFor, when } from 'testUtils'
 
-import * as api from 'store/api'
-import FileRequest from './FileRequest'
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimEventData } from 'api/types/ClaimsAndAppealsData'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
-import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import * as api from 'store/api'
+import { QueriesData, context, fireEvent, mockNavProps, render, screen, waitFor, when } from 'testUtils'
+
+import FileRequest from './FileRequest'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -16,7 +17,7 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-let request = [
+const request = [
   {
     type: 'still_need_from_you_list',
     date: '2020-07-16',
@@ -41,30 +42,29 @@ when(api.get as jest.Mock)
   })
 
 context('FileRequest', () => {
-  let props: any
-
   const renderWithData = (requests: ClaimEventData[]): void => {
-    let queriesData: QueriesData | undefined
-    queriesData = [{
-      queryKey: [claimsAndAppealsKeys.claim, '600156928'],
-      data: {
-        ...Claim,
-        attributes: {
-          ...Claim.attributes,
-          waiverSubmitted: false,
-          eventsTimeline: requests,
+    const queriesData: QueriesData = [
+      {
+        queryKey: [claimsAndAppealsKeys.claim, '600156928'],
+        data: {
+          ...Claim,
+          attributes: {
+            ...Claim.attributes,
+            waiverSubmitted: false,
+            eventsTimeline: requests,
+          },
         },
-      }
-    }]
+      },
+    ]
 
-    props = mockNavProps(undefined, undefined, { params: { claimID: "600156928" } })
+    const props = mockNavProps(undefined, undefined, { params: { claimID: '600156928' } })
 
-   render(<FileRequest {...props} />, {queriesData})
+    render(<FileRequest {...props} />, { queriesData })
   }
 
   describe('when number of requests is greater than 1', () => {
     it('should display the text "You have {{number}} file requests from VA"', async () => {
-      let updatedRequests = [
+      const updatedRequests = [
         {
           type: 'still_need_from_you_list',
           date: '2020-07-16',
@@ -109,14 +109,19 @@ context('FileRequest', () => {
         .mockRejectedValue('Error')
 
       renderWithData(request)
-      await waitFor(() =>expect(screen.getByRole('header', { name: "The VA mobile app isn't working right now" })).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: "The VA mobile app isn't working right now" })).toBeTruthy(),
+      )
     })
 
     describe('on click of a file request', () => {
       it('should navigate to file request details page', async () => {
         renderWithData(request)
         fireEvent.press(screen.getByRole('button', { name: 'Request 1' }))
-        expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', { claimID: "600156928", request: request[0] })
+        expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', {
+          claimID: '600156928',
+          request: request[0],
+        })
       })
     })
   })
@@ -126,7 +131,11 @@ context('FileRequest', () => {
       it('should display evaluation section', async () => {
         renderWithData(request)
         expect(screen.getByText('Ask for your claim evaluation')).toBeTruthy()
-        expect(screen.getByText('Please review the evaluation details if you are ready for us to begin evaluating your claim')).toBeTruthy()
+        expect(
+          screen.getByText(
+            'Please review the evaluation details if you are ready for us to begin evaluating your claim',
+          ),
+        ).toBeTruthy()
       })
     })
   })
@@ -134,7 +143,7 @@ context('FileRequest', () => {
   describe('request timeline', () => {
     describe('when a request type is received_from_you_list', () => {
       it('should set fileUploaded to true for FileRequestNumberIndicator', async () => {
-        let updatedRequests = [
+        const updatedRequests = [
           {
             type: 'still_need_from_you_list',
             date: '2020-07-16',

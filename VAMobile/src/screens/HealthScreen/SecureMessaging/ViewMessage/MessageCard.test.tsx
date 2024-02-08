@@ -1,17 +1,18 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
-import { context, render } from 'testUtils'
-import { downloadFileAttachment } from 'store/slices'
 import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
-import MessageCard from './MessageCard'
+import { downloadFileAttachment } from 'store/slices'
+import { context, render } from 'testUtils'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import Mock = jest.Mock
 
-let mockNavigationSpy = jest.fn()
+import MessageCard from './MessageCard'
+
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
@@ -19,7 +20,7 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     downloadFileAttachment: jest.fn(() => {
@@ -33,8 +34,7 @@ jest.mock('store/slices', () => {
 
 const mockDateISO = DateTime.fromMillis(1643402338567).toISO()
 context('MessageCard', () => {
-  let onPressSpy: Mock
-  let listOfAttachments: Array<SecureMessagingAttachment> = [
+  const listOfAttachments: Array<SecureMessagingAttachment> = [
     {
       id: 1,
       filename: 'testAttachment',
@@ -44,9 +44,7 @@ context('MessageCard', () => {
   ]
 
   const initializeTestInstance = () => {
-    onPressSpy = jest.fn(() => {})
-
-    let messageAttributes: SecureMessagingMessageAttributes = {
+    const messageAttributes: SecureMessagingMessageAttributes = {
       messageId: 1,
       category: CategoryTypeFields.education,
       subject: 'Test Message Subject',
@@ -54,13 +52,13 @@ context('MessageCard', () => {
       hasAttachments: true,
       attachment: true,
       attachments: listOfAttachments,
-      sentDate: mockDateISO,
+      sentDate: mockDateISO!,
       senderId: 11,
       senderName: 'John Smith',
       recipientId: 2,
       recipientName: 'Jane Smith',
     }
-    let mockProps = {
+    const mockProps = {
       message: messageAttributes,
       isInitialMessage: false,
     }
@@ -75,15 +73,15 @@ context('MessageCard', () => {
   it('renders MessageCard correctly', () => {
     expect(screen.getByText('Education: Test Message Subject')).toBeTruthy()
     expect(screen.getByText('John Smith')).toBeTruthy()
-    expect(screen.getByText(getFormattedDateAndTimeZone(mockDateISO))).toBeTruthy()
+    expect(screen.getByText(getFormattedDateAndTimeZone(mockDateISO!))).toBeTruthy()
     expect(screen.getByText('Test Message Body')).toBeTruthy()
     expect(screen.getByLabelText('Only use messages for non-urgent needs')).toBeTruthy()
   })
 
   it('clicking on Only use messages for non-urgent needs should open largePanel', () => {
-      fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs'))
-      expect(mockNavigationSpy).toHaveBeenCalled()
-    })
+    fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs'))
+    expect(mockNavigationSpy).toHaveBeenCalled()
+  })
 
   it('clicking on attachment should call onPressAttachment(), which calls downloadFileAttachment() from store/actions', () => {
     fireEvent.press(screen.getByRole('button', { name: 'testAttachment (1 MB)' }))

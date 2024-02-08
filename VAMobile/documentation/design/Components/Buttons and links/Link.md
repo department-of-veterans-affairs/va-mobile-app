@@ -38,7 +38,7 @@ Add Figma links and embed Storybook - inline link in base (gray) color
 ## Usage
 
 ### When to use Links
-* Reference the [VA Design System's usage guidelines for links](https://design.va.gov/components/link/#usage)
+* Refer to the [VA Design System for usage guidance](https://design.va.gov/components/link/#usage)
 
 ### When to consider something else
 * **Use buttons for actions**. Use a [Button](https://design.va.gov/components/button) when you want to make a state change or submit a form. Example actions include, but are not limited to, “Add”, “Close”, “Cancel”, or “Save”. Buttons **do things**, links **go places**. Refer to guidance on [Links vs. buttons](https://design.va.gov/components/link/action#links-vs-buttons)
@@ -72,11 +72,11 @@ Add links to Storybook when available
 [Open Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--base)
 
 ## Content considerations
-* Reference the [VA Design System's content considerations for links](https://design.va.gov/components/link/#content-considerations)
+* Refer to the [VA Design System for content considerations](https://design.va.gov/components/link/#content-considerations)
 * When linking Veterans to VA.gov, be sure to include VA.gov in the link text. For example, instead of saying “Learn more about benefits,” it’s better to say “Learn more about benefits on VA.gov”.
 
 ## Accessibility considerations
-* Reference the [VA Design System's accessibility considerations for links](https://design.va.gov/components/link/#accessibility-considerations)
+* Refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/link/#accessibility-considerations)
 
 ## Related
 * [Link - VA Design System](https://design.va.gov/components/link/)

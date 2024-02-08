@@ -1,16 +1,20 @@
-import { chain } from 'underscore'
 import { useQuery } from '@tanstack/react-query'
+import { chain } from 'underscore'
 
-import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types/ClaimsAndAppealsData'
+import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import { claimsAndAppealsKeys } from './queryKeys'
 import { get } from 'store/api'
+
+import { claimsAndAppealsKeys } from './queryKeys'
 
 /**
  * Fetch user ClaimsAndAppeals
  */
-export const getClaimsAndAppeals = async (claimType: ClaimType, page: number): Promise<ClaimsAndAppealsListPayload | undefined> => {
+export const getClaimsAndAppeals = async (
+  claimType: ClaimType,
+  page: number,
+): Promise<ClaimsAndAppealsListPayload | undefined> => {
   const response = await get<ClaimsAndAppealsListPayload>('/v0/claims-and-appeals-overview', {
     'page[number]': page.toString(),
     'page[size]': DEFAULT_PAGE_SIZE.toString(),

@@ -1,9 +1,10 @@
-import { TFunction } from 'i18next'
-import { useTranslation } from 'react-i18next'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 
+import { TFunction } from 'i18next'
 import _ from 'underscore'
 
+import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import {
   AppealAOJTypes,
   AppealAOJTypesConstants,
@@ -15,11 +16,11 @@ import {
 } from 'api/types/ClaimsAndAppealsData'
 import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import getEnv from 'utils/env'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useExternalLink, useTheme } from 'utils/hooks'
-import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+
 import AppealDecision from '../AppealDecision/AppealDecision'
-import getEnv from 'utils/env'
 
 const { LINK_URL_DECISION_REVIEWS, LINK_URL_YOUR_CLAIMS } = getEnv()
 
@@ -78,7 +79,9 @@ const getStatusHeadingAndTitle = (
       break
     case AppealStatusTypesConstants.pending_hearing_scheduling:
       appealStatusDisplayedData.title = t('appealDetails.pendingHearingSchedulingTitle')
-      appealStatusDisplayedData.details = [t('appealDetails.pendingHearingSchedulingDescription1', { hearingType: getHearingType(details.type || '', t) })]
+      appealStatusDisplayedData.details = [
+        t('appealDetails.pendingHearingSchedulingDescription1', { hearingType: getHearingType(details.type || '', t) }),
+      ]
 
       if (appealType === AppealTypesConstants.appeal) {
         appealStatusDisplayedData.details.push(t('appealDetails.note'))
@@ -113,7 +116,10 @@ const getStatusHeadingAndTitle = (
     case AppealStatusTypesConstants.pending_form9:
       appealStatusDisplayedData.title = t('appealDetails.pendingForm9Title')
       appealStatusDisplayedData.details = [
-        t('appealDetails.pendingForm9Description1', { aojDesc, date: details.lastSocDate ? formatDateMMMMDDYYYY(details.lastSocDate) : '' }),
+        t('appealDetails.pendingForm9Description1', {
+          aojDesc,
+          date: details.lastSocDate ? formatDateMMMMDDYYYY(details.lastSocDate) : '',
+        }),
         t('appealDetails.pendingForm9Description2'),
         t('appealDetails.pendingForm9Description3'),
         t('appealDetails.or'),
@@ -180,7 +186,12 @@ const getStatusHeadingAndTitle = (
       break
     case AppealStatusTypesConstants.remand_ssoc:
       appealStatusDisplayedData.title = t('appealDetails.remandSsocTitle')
-      appealStatusDisplayedData.details = [t('appealDetails.remandSsocDescription', { aojDesc, date: details.lastSocDate ? formatDateMMMMDDYYYY(details.lastSocDate) : '' })]
+      appealStatusDisplayedData.details = [
+        t('appealDetails.remandSsocDescription', {
+          aojDesc,
+          date: details.lastSocDate ? formatDateMMMMDDYYYY(details.lastSocDate) : '',
+        }),
+      ]
       break
     case AppealStatusTypesConstants.merged:
       appealStatusDisplayedData.title = t('appealDetails.mergedTitle')
@@ -204,7 +215,9 @@ const getStatusHeadingAndTitle = (
     case AppealStatusTypesConstants.evidentiary_period:
       appealStatusDisplayedData.title = t('appealDetails.evidentiaryPeriodTitle')
       appealStatusDisplayedData.details = [
-        t('appealDetails.evidentiaryPeriodDescription1', { docketName: capitalizeFirstLetter(camelToIndividualWords(docketName)) }),
+        t('appealDetails.evidentiaryPeriodDescription1', {
+          docketName: capitalizeFirstLetter(camelToIndividualWords(docketName)),
+        }),
         t('appealDetails.evidentiaryPeriodDescription2'),
         t('appealDetails.evidentiaryPeriodDescription3'),
         t('appealDetails.evidentiaryPeriodDescription4'),
@@ -303,7 +316,14 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
   const { data: personalInfo } = usePersonalInformation()
   const fullName = personalInfo?.fullName || ''
   const marginTop = theme.dimensions.condensedMarginBetween
-  const statusHeadingAndTitle = getStatusHeadingAndTitle(status, aoj, appealType, fullName, t, docketName || 'UNDF DOCKET')
+  const statusHeadingAndTitle = getStatusHeadingAndTitle(
+    status,
+    aoj,
+    appealType,
+    fullName,
+    t,
+    docketName || 'UNDF DOCKET',
+  )
 
   const renderStatusDetails = (): ReactElement => {
     const { details } = statusHeadingAndTitle
@@ -400,7 +420,12 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <AppealDecision aoj={aoj} boardDecision={true} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
+            <AppealDecision
+              aoj={aoj}
+              boardDecision={true}
+              ama={appealType === AppealTypesConstants.appeal}
+              issues={status.details?.issues || []}
+            />
           </Box>
         )
       case AppealStatusTypesConstants.evidentiary_period:
@@ -423,7 +448,12 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <AppealDecision aoj={aoj} boardDecision={true} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
+            <AppealDecision
+              aoj={aoj}
+              boardDecision={true}
+              ama={appealType === AppealTypesConstants.appeal}
+              issues={status.details?.issues || []}
+            />
             <TextView variant="MobileBody" mt={marginTop}>
               {details[1]}
             </TextView>
@@ -483,7 +513,12 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <AppealDecision aoj={aoj} boardDecision={false} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
+            <AppealDecision
+              aoj={aoj}
+              boardDecision={false}
+              ama={appealType === AppealTypesConstants.appeal}
+              issues={status.details?.issues || []}
+            />
           </Box>
         )
       case AppealStatusTypesConstants.sc_closed:
@@ -528,7 +563,12 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <AppealDecision aoj={aoj} boardDecision={false} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
+            <AppealDecision
+              aoj={aoj}
+              boardDecision={false}
+              ama={appealType === AppealTypesConstants.appeal}
+              issues={status.details?.issues || []}
+            />
           </Box>
         )
       case AppealStatusTypesConstants.hlr_dta_error:

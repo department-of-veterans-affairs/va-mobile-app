@@ -1,17 +1,17 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import FolderMessages from './FolderMessages'
-import { InitialState, listFolderMessages } from 'store/slices'
-import { CategoryTypeFields, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
-import { StackNavigationOptions } from '@react-navigation/stack'
+import { CategoryTypeFields, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
+import { InitialState, listFolderMessages } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+
+import FolderMessages from './FolderMessages'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('/utils/hooks', () => {
   const original = jest.requireActual('/utils/hooks')
-  const theme = jest.requireActual('/styles/themes/standardTheme').default
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
@@ -19,7 +19,7 @@ jest.mock('/utils/hooks', () => {
 })
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     listFolderMessages: jest.fn(() => {
@@ -38,23 +38,20 @@ jest.mock('store/slices', () => {
 })
 
 context('FolderMessages', () => {
-  let props: any
-  let navHeaderSpy: any
-
-  const initializeTestInstance = (loading = false, noMessages = false, folderID = SecureMessagingSystemFolderIdConstants.SENT, draftSaved = false) => {
+  const initializeTestInstance = (
+    loading = false,
+    noMessages = false,
+    folderID = SecureMessagingSystemFolderIdConstants.SENT,
+    draftSaved = false,
+  ) => {
     let folderName
     if (folderID > 0) folderName = 'Custom'
     else if (folderID === -1) folderName = FolderNameTypeConstants.sent
     else if (folderID === -2) folderName = FolderNameTypeConstants.drafts
-    props = mockNavProps(
+    const props = mockNavProps(
       undefined,
       {
         navigate: mockNavigationSpy,
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-          }
-        },
       },
       { params: { folderID: folderID, folderName: folderName, draftSaved: draftSaved } },
     )

@@ -1,4 +1,5 @@
 import colors from './VAColors'
+
 export const primaryTextColor = colors.grayDark
 
 export const lightTheme = {

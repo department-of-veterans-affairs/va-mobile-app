@@ -1,7 +1,8 @@
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+
 import { TFunction } from 'i18next'
 import { camelCase } from 'lodash'
-import { useTranslation } from 'react-i18next'
-import React from 'react'
 
 import { AppealEventData, AppealEventTypes } from 'api/types/ClaimsAndAppealsData'
 import { Box, TextArea, TextView } from 'components'
@@ -9,6 +10,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
+
 import PhaseIndicator from '../../../ClaimDetailsScreen/ClaimStatus/ClaimTimeline/PhaseIndicator'
 
 const getEventName = (type: AppealEventTypes, t: TFunction) => {
@@ -33,7 +35,11 @@ function AppealPhase({ event }: AppealPhaseProps) {
       <TextArea noBorder={true}>
         <Box flexDirection={'row'}>
           <PhaseIndicator phase={-1} current={0} />
-          <Box accessibilityLabel={a11yLabelVA(`${heading} ${dateText}`)} flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
+          <Box
+            accessibilityLabel={a11yLabelVA(`${heading} ${dateText}`)}
+            flexDirection={'column'}
+            justifyContent={'flex-start'}
+            flex={1}>
             <TextView variant={'MobileBodyBold'}>{heading}</TextView>
             <TextView variant={'MobileBody'}>{dateText}</TextView>
           </Box>

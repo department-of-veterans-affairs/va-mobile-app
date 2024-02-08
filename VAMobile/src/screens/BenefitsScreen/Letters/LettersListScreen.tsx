@@ -1,29 +1,49 @@
-import { StackScreenProps } from '@react-navigation/stack'
-import { map } from 'underscore'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect } from 'react'
-
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
-import { DowntimeFeatureTypeConstants, LetterData, LetterTypeConstants, LetterTypes, ScreenIDTypesConstants } from 'store/api/types'
-import { Events } from 'constants/analytics'
-import { LettersState, getLetters } from 'store/slices/lettersSlice'
-import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { screenContentAllowed } from 'utils/waygateConfig'
-import { testIdProps } from 'utils/accessibility'
-import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { map } from 'underscore'
+
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import {
+  Box,
+  ErrorComponent,
+  FeatureLandingTemplate,
+  LoadingComponent,
+  SimpleList,
+  SimpleListItemObj,
+} from 'components'
+import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { RootState } from 'store'
+import {
+  DowntimeFeatureTypeConstants,
+  LetterData,
+  LetterTypeConstants,
+  LetterTypes,
+  ScreenIDTypesConstants,
+} from 'store/api/types'
+import { LettersState, getLetters } from 'store/slices/lettersSlice'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useAppDispatch, useDowntime, useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
 import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = StackScreenProps<BenefitsStackParamList, 'LettersList'>
 
 function LettersListScreen({ navigation }: LettersListScreenProps) {
   const dispatch = useAppDispatch()
-  const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices, isError: getUserAuthorizedServicesError } = useAuthorizedServices()
+  const {
+    data: userAuthorizedServices,
+    isLoading: loadingUserAuthorizedServices,
+    isError: getUserAuthorizedServicesError,
+  } = useAuthorizedServices()
   const { letters, loading } = useSelector<RootState, LettersState>((state) => state.letters)
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -95,7 +115,8 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
   }
 
   const letterButtons: Array<SimpleListItemObj> = map(letters || [], (letter: LetterData) => {
-    let letterName = letter.letterType === LetterTypeConstants.proofOfService ? t('letters.proofOfServiceCard') : letter.name
+    let letterName =
+      letter.letterType === LetterTypeConstants.proofOfService ? t('letters.proofOfServiceCard') : letter.name
     letterName = letterName.charAt(0).toUpperCase() + letterName.slice(1).toLowerCase()
 
     const letterButton: SimpleListItemObj = {

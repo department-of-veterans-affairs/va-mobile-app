@@ -1,12 +1,14 @@
 import React from 'react'
 import { ImagePickerResponse } from 'react-native-image-picker'
-import { screen, fireEvent } from '@testing-library/react-native'
 
-import { QueriesData, context, mockNavProps, render } from 'testUtils'
-import UploadFile from './UploadFile'
-import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { fireEvent, screen } from '@testing-library/react-native'
+
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
+import { QueriesData, context, mockNavProps, render } from 'testUtils'
+
+import UploadFile from './UploadFile'
 
 const mockAlertSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -24,7 +26,7 @@ jest.mock('utils/hooks', () => {
 
 context('UploadFile', () => {
   let navigateToSpy: jest.Mock
-  let request = {
+  const request = {
     type: 'still_need_from_you_list',
     date: '2020-07-16',
     status: 'NEEDED',
@@ -35,22 +37,27 @@ context('UploadFile', () => {
     navigateToSpy = jest.fn()
     mockNavigationSpy.mockReturnValue(navigateToSpy)
 
-    let queriesData: QueriesData | undefined
-    queriesData = [{
-      queryKey: [claimsAndAppealsKeys.claim, '0'],
-      data: {
-        ...Claim
-      }
-    }]
+    const queriesData: QueriesData = [
+      {
+        queryKey: [claimsAndAppealsKeys.claim, '0'],
+        data: {
+          ...Claim,
+        },
+      },
+    ]
 
     const file = {
       name: 'File 1',
       size: 100,
     } as DocumentPickerResponse
 
-    const props = mockNavProps(undefined, { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() }, { params: { claimID: "0", request, fileUploaded: file, imageUploaded } })
+    const props = mockNavProps(
+      undefined,
+      { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() },
+      { params: { claimID: '0', request, fileUploaded: file, imageUploaded } },
+    )
 
-    render(<UploadFile {...props} />, {queriesData})
+    render(<UploadFile {...props} />, { queriesData })
   }
 
   beforeEach(() => {

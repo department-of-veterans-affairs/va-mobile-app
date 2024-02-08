@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { ContactInformationPayload, UserContactInformation } from 'api/types/ContactInformation'
-import { contactInformationKeys } from './queryKeys'
 import { get } from 'store/api'
 import { getFormattedPhoneNumber } from 'utils/common'
+
+import { contactInformationKeys } from './queryKeys'
 
 /**
  * Fetch user contact information

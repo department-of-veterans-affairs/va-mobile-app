@@ -1,14 +1,16 @@
 import { Asset } from 'react-native-image-picker'
-import { find, map } from 'underscore'
+
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { find, map } from 'underscore'
 
 import { ClaimDocUploadData, ClaimEventDocumentData, UploadFileToClaimParamaters } from 'api/types/ClaimsAndAppealsData'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DocumentTypes526 } from 'constants/documentTypes'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Params, contentTypes, post } from 'store/api'
-import { claimsAndAppealsKeys } from './queryKeys'
-import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { isErrorObject } from 'utils/common'
+
+import { claimsAndAppealsKeys } from './queryKeys'
 
 /**
  * Uploads a File to Claim
@@ -59,7 +61,11 @@ export const uploadFileToClaim = async ({ claimID, request, files }: UploadFileT
 
     formData.append('trackedItemId', JSON.parse(JSON.stringify(request.trackedItemId)))
     formData.append('documentType', JSON.parse(JSON.stringify(request.documentType)))
-    await post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, formData as unknown as Params, contentTypes.multipart)
+    await post<ClaimDocUploadData>(
+      `/v0/claim/${claimID}/documents`,
+      formData as unknown as Params,
+      contentTypes.multipart,
+    )
   }
 }
 

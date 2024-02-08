@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { AppealData, AppealGetData } from 'api/types/ClaimsAndAppealsData'
-import { claimsAndAppealsKeys } from './queryKeys'
 import { get } from 'store/api'
+
+import { claimsAndAppealsKeys } from './queryKeys'
 
 /**
  * Fetch user Appeal

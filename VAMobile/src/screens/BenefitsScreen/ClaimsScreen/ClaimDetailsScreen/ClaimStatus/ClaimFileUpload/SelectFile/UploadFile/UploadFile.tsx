@@ -1,23 +1,30 @@
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useTranslation } from 'react-i18next'
-import React, { useEffect, useState } from 'react'
 
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView } from 'components'
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { useClaim, useUploadFileToClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types/ClaimsAndAppealsData'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { DocumentTypes526 } from 'constants/documentTypes'
-import { Events } from 'constants/analytics'
-import { NAMESPACE } from 'constants/namespaces'
+import { Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView } from 'components'
+import FileList from 'components/FileList'
 import { SnackbarMessages } from 'components/SnackBar'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import { Events } from 'constants/analytics'
+import { DocumentTypes526 } from 'constants/documentTypes'
+import { NAMESPACE } from 'constants/namespaces'
+import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useClaim, useUploadFileToClaim } from 'api/claimsAndAppeals'
-import FileList from 'components/FileList'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import {
+  useAppDispatch,
+  useBeforeNavBackListener,
+  useDestructiveActionSheet,
+  useRouteNavigation,
+  useTheme,
+} from 'utils/hooks'
 
 type UploadFileProps = StackScreenProps<BenefitsStackParamList, 'UploadFile'>
 
@@ -101,7 +108,16 @@ function UploadFile({ navigation, route }: UploadFileProps) {
 
   const onUpload = (): void => {
     const totalSize = filesList.reduce((sum, file) => sum + file.size, 0)
-    logAnalyticsEvent(Events.vama_evidence_cont_2(claim?.id || '', request.trackedItemId || null, request.type, 'file', totalSize, filesList.length))
+    logAnalyticsEvent(
+      Events.vama_evidence_cont_2(
+        claim?.id || '',
+        request.trackedItemId || null,
+        request.type,
+        'file',
+        totalSize,
+        filesList.length,
+      ),
+    )
     confirmAlert({
       title: t('fileUpload.submit.confirm.title'),
       message: t('fileUpload.submit.confirm.message'),
@@ -120,7 +136,9 @@ function UploadFile({ navigation, route }: UploadFileProps) {
 
   const onDocumentTypeChange = (selectedType: string) => {
     const typeLabel = DocumentTypes526.filter((type) => type.value === selectedType)[0]?.label || selectedType
-    logAnalyticsEvent(Events.vama_evidence_type(claim?.id || '', request.trackedItemId || null, request.type, 'file', typeLabel))
+    logAnalyticsEvent(
+      Events.vama_evidence_type(claim?.id || '', request.trackedItemId || null, request.type, 'file', typeLabel),
+    )
     setDocumentType(selectedType)
   }
 
@@ -167,7 +185,9 @@ function UploadFile({ navigation, route }: UploadFileProps) {
       leftButtonText={t('cancel')}
       title={t('fileUpload.uploadFiles')}
       onLeftButtonPress={() => {
-        logAnalyticsEvent(Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'file'))
+        logAnalyticsEvent(
+          Events.vama_evidence_cancel_2(claim?.id || '', request.trackedItemId || null, request.type, 'file'),
+        )
         navigation.dispatch(StackActions.pop(2))
       }}>
       {loadingFileUpload ? (
@@ -181,7 +201,12 @@ function UploadFile({ navigation, route }: UploadFileProps) {
           </Box>
           <FileList files={[fileUploaded]} onDelete={onFileDelete} />
           <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
-            <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+            <FormWrapper
+              fieldsList={pickerField}
+              onSave={onUpload}
+              onSaveClicked={onSaveClicked}
+              setOnSaveClicked={setOnSaveClicked}
+            />
             <Box mt={theme.dimensions.textAndButtonLargeMargin}>
               <Button
                 onPress={() => {

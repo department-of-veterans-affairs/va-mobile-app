@@ -1,11 +1,12 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
+
 import PreferredNameScreen from './PreferredNameScreen'
 
 context('PreferredNameScreen', () => {
-
   beforeEach(() => {
     const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
     render(<PreferredNameScreen {...props} />)

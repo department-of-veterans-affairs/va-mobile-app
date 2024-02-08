@@ -4,6 +4,7 @@ import _ from 'underscore'
 
 import { AppealEventData } from 'api/types/ClaimsAndAppealsData'
 import { Box } from 'components'
+
 import AppealPhase from './AppealPhase'
 
 type AppealTimelineProps = {

@@ -1,26 +1,26 @@
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Box, DefaultList, DefaultListItemObj, LabelTagTypeConstants, Pagination, PaginationProps, TextLine } from 'components'
-import { ClaimOrAppeal, ClaimOrAppealConstants } from 'api/types/ClaimsAndAppealsData'
-import { NAMESPACE } from 'constants/namespaces'
-import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { featureEnabled } from 'utils/remoteConfig'
-import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { ClaimOrAppeal, ClaimOrAppealConstants } from 'api/types/ClaimsAndAppealsData'
+import {
+  Box,
+  DefaultList,
+  DefaultListItemObj,
+  LabelTagTypeConstants,
+  Pagination,
+  PaginationProps,
+  TextLine,
+} from 'components'
+import { ClaimType } from 'constants/claims'
+import { NAMESPACE } from 'constants/namespaces'
+import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
+import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
+
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
-
-export const ClaimTypeConstants: {
-  ACTIVE: ClaimType
-  CLOSED: ClaimType
-} = {
-  ACTIVE: 'ACTIVE',
-  CLOSED: 'CLOSED',
-}
-
-export type ClaimType = 'ACTIVE' | 'CLOSED'
 
 type ClaimsAndAppealsListProps = {
   claimType: ClaimType
@@ -77,9 +77,18 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
         { text: `Submitted ${formattedDateFiled}` },
       ]
 
-      if (featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters && attributes.decisionLetterSent) {
+      if (
+        featureEnabled('decisionLettersWaygate') &&
+        userAuthorizedServices?.decisionLetters &&
+        attributes.decisionLetterSent
+      ) {
         const margin = theme.dimensions.condensedMarginBetween
-        textLines.push({ text: t('claims.decisionLetterAvailable'), textTag: { labelType: LabelTagTypeConstants.tagBlue }, mt: margin, mb: margin })
+        textLines.push({
+          text: t('claims.decisionLetterAvailable'),
+          textTag: { labelType: LabelTagTypeConstants.tagBlue },
+          mt: margin,
+          mb: margin,
+        })
       }
 
       const position = (currentPage - 1) * perPage + index + 1

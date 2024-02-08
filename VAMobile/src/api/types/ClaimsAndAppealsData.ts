@@ -1,4 +1,5 @@
 import { Asset } from 'react-native-image-picker'
+
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 
 export const AppealStatusTypesConstants: {
@@ -160,7 +161,18 @@ export const AppealProgramAreaTypesConstants: {
   multiple: 'multiple',
 }
 
-type AppealProgramAreaTypes = 'compensation' | 'pension' | 'insurance' | 'loan_guaranty' | 'education' | 'vre' | 'medical' | 'burial' | 'bva' | 'other' | 'multiple'
+type AppealProgramAreaTypes =
+  | 'compensation'
+  | 'pension'
+  | 'insurance'
+  | 'loan_guaranty'
+  | 'education'
+  | 'vre'
+  | 'medical'
+  | 'burial'
+  | 'bva'
+  | 'other'
+  | 'multiple'
 
 export const AppealEventTypesConstants: {
   claim_decision: AppealEventTypes

@@ -1,12 +1,12 @@
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types/ClaimsAndAppealsData'
 import { Box, TextView } from 'components'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
-import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types/ClaimsAndAppealsData'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useTheme } from 'utils/hooks'
 
 type NoClaimsAndAppealsProps = {
@@ -23,7 +23,9 @@ function NoClaimsAndAppeals({ claimType }: NoClaimsAndAppealsProps) {
   useEffect(() => {
     const nonFatalErros = claimsAndAppealsListPayload?.meta.errors
     const claimsError = !!nonFatalErros?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
-    const appealsError = !!nonFatalErros?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
+    const appealsError = !!nonFatalErros?.find(
+      (el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
+    )
     setClaimsServiceErrors(claimsError)
     setAppealsServiceErrors(appealsError)
   }, [claimsAndAppealsListPayload, setClaimsServiceErrors, setAppealsServiceErrors])
@@ -43,7 +45,12 @@ function NoClaimsAndAppeals({ claimType }: NoClaimsAndAppealsProps) {
   }
 
   return (
-    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('Claims: No-claims-page')} alignItems="center">
+    <Box
+      flex={1}
+      justifyContent="center"
+      mx={theme.dimensions.gutter}
+      {...testIdProps('Claims: No-claims-page')}
+      alignItems="center">
       <Box {...testIdProps(header)} accessible={true}>
         <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
           {header}

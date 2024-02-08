@@ -1,12 +1,14 @@
-import { context, realStore } from 'testUtils'
 import { find } from 'underscore'
+
+import { context, realStore } from 'testUtils'
+
 import { toggleFirebaseDebugMode } from './analyticsSlice'
 
 context('analytics', () => {
   describe('toggle firebase debug mode', () => {
     it('should toggle the debug mode when called', async () => {
       const store = realStore()
-      let currentState = store.getStateField('analytics', 'firebaseDebugMode')
+      const currentState = store.getStateField('analytics', 'firebaseDebugMode')
       await store.dispatch(toggleFirebaseDebugMode())
 
       const actions = store.getActions()

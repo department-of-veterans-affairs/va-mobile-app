@@ -1,18 +1,27 @@
-import { View } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { Ref } from 'react'
+import { useTranslation } from 'react-i18next'
+import { View } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, LoadingComponent, TextView, VAIcon } from 'components'
+import {
+  AccordionCollapsible,
+  AccordionCollapsibleProps,
+  AttachmentLink,
+  Box,
+  LoadingComponent,
+  TextView,
+  VAIcon,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, downloadFileAttachment, getMessage } from 'store/slices'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { getLinkifiedText } from 'utils/secureMessaging'
 import { useAppDispatch, useExternalLink, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { getLinkifiedText } from 'utils/secureMessaging'
+
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
 export type ThreadMessageProps = {
@@ -32,7 +41,9 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
   const dispatch = useAppDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, hasAttachments, attachments, senderName, sentDate, body } = message
-  const { loadingAttachments, messageIDsOfError } = useSelector<RootState, SecureMessagingState>((state) => state.secureMessaging)
+  const { loadingAttachments, messageIDsOfError } = useSelector<RootState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const attachmentBoolean = hasAttachments || attachment
@@ -46,7 +57,9 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
     // Fetching a message thread only includes a summary of the message, and no attachments.
     // If the message has an attachment but we only have the summary, fetch the message details
     if (expandedValue && attachmentBoolean && !attachments?.length) {
-      dispatch(getMessage(message.messageId, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, true, true))
+      dispatch(
+        getMessage(message.messageId, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, true, true),
+      )
     }
   }
 
@@ -55,7 +68,8 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
   }
 
   function getBody() {
-    /** this does preserve newline characters just not spaces, TODO:change the mobile body link text views to be clickable and launch the right things */
+    /** this does preserve newline characters just not spaces
+     * TODO: change the mobile body link text views to be clickable and launch the right things */
     if (body) {
       return getLinkifiedText(body, t, launchLink)
     }
@@ -68,7 +82,10 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
         <Box mt={condensedMarginBetween} accessible={true}>
           {getBody()}
           {loadingAttachments && !attachments?.length && attachmentBoolean && (
-            <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+            <Box
+              mx={theme.dimensions.gutter}
+              mt={theme.dimensions.contentMarginTop}
+              mb={theme.dimensions.contentMarginBottom}>
               <LoadingComponent text={t('secureMessaging.viewMessage.loadingAttachment')} inlineSpinner={true} />
             </Box>
           )}

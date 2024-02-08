@@ -2,8 +2,8 @@ import React, { ReactElement } from 'react'
 
 import { TFunction } from 'i18next'
 
-import { BorderColorVariant, Box, BoxProps, TextView } from '../../index'
 import { VATheme } from '../../../styles/theme'
+import { BorderColorVariant, Box, BoxProps, TextView } from '../../index'
 
 /**
  * Renders the label section consisting of the label, potential required text, and potential helper text

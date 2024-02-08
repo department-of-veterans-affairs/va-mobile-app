@@ -1,13 +1,14 @@
-import { useTranslation } from 'react-i18next'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import _ from 'underscore'
 
 import { AppealAOJTypes, AppealStatusDetailsIssue } from 'api/types/ClaimsAndAppealsData'
 import { Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { getAojDescription } from '../AppealCurrentStatus/AppealCurrentStatus'
 import { useTheme } from 'utils/hooks'
+
+import { getAojDescription } from '../AppealCurrentStatus/AppealCurrentStatus'
 
 type AppealDecisionProps = {
   issues: Array<AppealStatusDetailsIssue>
@@ -42,7 +43,11 @@ function AppealDecision({ issues, aoj, ama, boardDecision }: AppealDecisionProps
     })
   }
 
-  const getSpecificIssuesBlock = (header: string, subText: string, specificIssues: Array<AppealStatusDetailsIssue>): ReactElement => {
+  const getSpecificIssuesBlock = (
+    header: string,
+    subText: string,
+    specificIssues: Array<AppealStatusDetailsIssue>,
+  ): ReactElement => {
     if (specificIssues.length === 0) {
       return <></>
     }
@@ -60,19 +65,31 @@ function AppealDecision({ issues, aoj, ama, boardDecision }: AppealDecisionProps
 
   const allowedBlock = getSpecificIssuesBlock(
     t('appealDetails.granted'),
-    t('appealDetails.personGrantedOrDenied', { person: judgeOrReviewer, action: t('appealDetails.granted').toLowerCase(), pluralizedIssue: pluralize.allowed }),
+    t('appealDetails.personGrantedOrDenied', {
+      person: judgeOrReviewer,
+      action: t('appealDetails.granted').toLowerCase(),
+      pluralizedIssue: pluralize.allowed,
+    }),
     allowedIssues,
   )
 
   const deniedBlock = getSpecificIssuesBlock(
     t('appealDetails.denied'),
-    t('appealDetails.personGrantedOrDenied', { person: judgeOrReviewer, action: t('appealDetails.denied').toLowerCase(), pluralizedIssue: pluralize.denied }),
+    t('appealDetails.personGrantedOrDenied', {
+      person: judgeOrReviewer,
+      action: t('appealDetails.denied').toLowerCase(),
+      pluralizedIssue: pluralize.denied,
+    }),
     deniedIssues,
   )
 
   const remandBlock = getSpecificIssuesBlock(
     t('appealDetails.remand'),
-    t('appealDetails.judgeSendingBack', { pluralizedIssue: pluralize.remand, aojDesc, action: ama ? t('appealDetails.correctAnError') : t('appealDetails.gatherMoreEvidence') }),
+    t('appealDetails.judgeSendingBack', {
+      pluralizedIssue: pluralize.remand,
+      aojDesc,
+      action: ama ? t('appealDetails.correctAnError') : t('appealDetails.gatherMoreEvidence'),
+    }),
     remandIssues,
   )
 

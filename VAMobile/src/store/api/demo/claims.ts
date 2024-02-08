@@ -1,6 +1,7 @@
 import { ClaimGetData, ClaimsAndAppealsGetData } from 'api/types/ClaimsAndAppealsData'
-import { DemoStore } from './store'
+
 import { Params } from '../api'
+import { DemoStore } from './store'
 
 /**
  * Type denoting the demo data store

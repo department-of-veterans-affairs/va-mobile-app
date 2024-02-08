@@ -1,16 +1,18 @@
 import React from 'react'
-import { screen, fireEvent, waitFor } from '@testing-library/react-native'
 
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import { ClaimsAndAppealsListPayload } from 'api/types/ClaimsAndAppealsData'
 import { ClaimType } from 'constants/claims'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
-import ClaimsAndAppealsListView from './ClaimsAndAppealsListView'
-import { ClaimsAndAppealsListPayload } from 'api/types/ClaimsAndAppealsData'
-import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 
-let mockNavigationSpy = jest.fn()
+import ClaimsAndAppealsListView from './ClaimsAndAppealsListView'
+
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
@@ -65,16 +67,15 @@ const emptyPayload: ClaimsAndAppealsListPayload = {
 }
 
 context('ClaimsAndAppealsListView', () => {
-  let props: any
-
   const initializeTestInstance = (claimType: ClaimType, isEmpty?: boolean): void => {
-    props = mockNavProps({ claimType })
-    let queriesData: QueriesData | undefined
-    queriesData = [{
-      queryKey: [claimsAndAppealsKeys.claimsAndAppeals, claimType, '1'],
-      data: isEmpty ? emptyPayload : mockPayload,
-    }]
-    render(<ClaimsAndAppealsListView {...props} />, {queriesData})
+    const props = mockNavProps({ claimType })
+    const queriesData: QueriesData = [
+      {
+        queryKey: [claimsAndAppealsKeys.claimsAndAppeals, claimType, '1'],
+        data: isEmpty ? emptyPayload : mockPayload,
+      },
+    ]
+    render(<ClaimsAndAppealsListView {...props} />, { queriesData })
   }
 
   beforeEach(() => {
@@ -84,48 +85,88 @@ context('ClaimsAndAppealsListView', () => {
   describe('Renders', () => {
     it('ClaimsAndAppealsListView', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': '10', 'page[number]': '1' })
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': '10',
+          'page[number]': '1',
+        })
         .mockResolvedValue(mockPayload)
       initializeTestInstance('ACTIVE')
-      await waitFor(() =>expect(screen.getByText('Your active claims and appeals')).toBeTruthy())
-      await waitFor(() =>expect(screen.queryByText('Your closed claims and appeals')).toBeFalsy())
-      await waitFor(() =>expect(screen.getByText('Supplemental claim for disability compensation updated on October 28, 2020')).toBeTruthy())
-      await waitFor(() =>expect(screen.getAllByText('Submitted October 22, 2020')).toBeTruthy())
-      await waitFor(() =>expect(screen.getByText('Claim for compensation updated on October 30, 2020')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Your active claims and appeals')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('Your closed claims and appeals')).toBeFalsy())
+      await waitFor(() =>
+        expect(
+          screen.getByText('Supplemental claim for disability compensation updated on October 28, 2020'),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getAllByText('Submitted October 22, 2020')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Claim for compensation updated on October 30, 2020')).toBeTruthy())
       initializeTestInstance('CLOSED')
-      await waitFor(() =>expect(screen.getByText('Your closed claims and appeals')).toBeTruthy())
-      await waitFor(() =>expect(screen.queryByText('Your active claims and appeals')).toBeFalsy())
+      await waitFor(() => expect(screen.getByText('Your closed claims and appeals')).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText('Your active claims and appeals')).toBeFalsy())
     })
   })
 
   describe('on click of a claim', () => {
     it('should call useRouteNavigation', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': '10', 'page[number]': '1' })
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': '10',
+          'page[number]': '1',
+        })
         .mockResolvedValue(mockPayload)
-      await waitFor(() =>fireEvent.press(screen.getByRole('button', { name: 'Claim for compensation updated on October 30, 2020 Submitted October 22, 2020' })))
-      await waitFor(() =>expect(mockNavigationSpy).toBeCalledWith('ClaimDetailsScreen', { claimID: '2', claimType: 'ACTIVE' }))
+      await waitFor(() =>
+        fireEvent.press(
+          screen.getByRole('button', {
+            name: 'Claim for compensation updated on October 30, 2020 Submitted October 22, 2020',
+          }),
+        ),
+      )
+      await waitFor(() =>
+        expect(mockNavigationSpy).toBeCalledWith('ClaimDetailsScreen', { claimID: '2', claimType: 'ACTIVE' }),
+      )
     })
   })
 
   describe('on click of an appeal', () => {
     it('should call useRouteNavigation', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': '10', 'page[number]': '1' })
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': '10',
+          'page[number]': '1',
+        })
         .mockResolvedValue(mockPayload)
-      await waitFor(() =>fireEvent.press(screen.getByRole('button', { name: 'Supplemental claim for disability compensation updated on October 28, 2020 Submitted October 22, 2020' })))
-      await waitFor(() =>expect(mockNavigationSpy).toBeCalledWith('AppealDetailsScreen', { appealID: '0' }))
+      await waitFor(() =>
+        fireEvent.press(
+          screen.getByRole('button', {
+            name: 'Supplemental claim for disability compensation updated on October 28, 2020 Submitted October 22, 2020',
+          }),
+        ),
+      )
+      await waitFor(() => expect(mockNavigationSpy).toBeCalledWith('AppealDetailsScreen', { appealID: '0' }))
     })
   })
 
   describe('where there are no claims or appeals', () => {
     it('should display the NoClaimsAndAppeals components', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false', 'page[size]': '10', 'page[number]': '1' })
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': '10',
+          'page[number]': '1',
+        })
         .mockResolvedValue(emptyPayload)
       initializeTestInstance('ACTIVE', true)
-      await waitFor(() =>expect(screen.getByText("You don't have any submitted claims or appeals")).toBeTruthy())
-      await waitFor(() =>expect(screen.getByText("This app shows only completed claim and appeal applications. If you started a claim or appeal but haven’t finished it yet, go to eBenefits to work on it.")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText("You don't have any submitted claims or appeals")).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(
+            'This app shows only completed claim and appeal applications. If you started a claim or appeal but haven’t finished it yet, go to eBenefits to work on it.',
+          ),
+        ).toBeTruthy(),
+      )
     })
   })
 })

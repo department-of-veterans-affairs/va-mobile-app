@@ -1,18 +1,20 @@
+import React, { ReactNode, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
-import { useTranslation } from 'react-i18next'
-import React, { ReactNode, useEffect } from 'react'
 
-import { AccordionCollapsible, Box, TextView } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'api/types/ClaimsAndAppealsData'
+import { AccordionCollapsible, Box, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { sortByDate } from 'utils/common'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+
 import PhaseIndicator from './PhaseIndicator'
 
 /**
@@ -27,7 +29,9 @@ const updatedLast = (events: ClaimEventData[], phase: number): string => {
   sortByDate(currentPhase, 'date', true)
 
   const lastUpdate = currentPhase.length > 0 && currentPhase[0]?.date
-  return lastUpdate ? DateTime.fromISO(lastUpdate).toLocaleString({ year: 'numeric', month: 'long', day: 'numeric' }) : ''
+  return lastUpdate
+    ? DateTime.fromISO(lastUpdate).toLocaleString({ year: 'numeric', month: 'long', day: 'numeric' })
+    : ''
 }
 
 /**
@@ -108,7 +112,16 @@ function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
   const youHaveFileRequestsText = t('claimPhase.youHaveFileRequest', { count })
 
   const accordionPress = (isExpanded: boolean | undefined) => {
-    logAnalyticsEvent(Events.vama_claim_details_exp(claimID, attributes.claimType, phase, isExpanded || false, attributes.phaseChangeDate || '', attributes.dateFiled))
+    logAnalyticsEvent(
+      Events.vama_claim_details_exp(
+        claimID,
+        attributes.claimType,
+        phase,
+        isExpanded || false,
+        attributes.phaseChangeDate || '',
+        attributes.dateFiled,
+      ),
+    )
   }
 
   const fileRequestsPress = () => {
@@ -126,7 +139,11 @@ function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
       testID={testID}>
       {phase === 3 && showClaimFileUploadBtn && (
         <Box mt={standardMarginBetween}>
-          <TextView variant={'MobileBodyBold'} accessibilityLabel={a11yLabelVA(youHaveFileRequestsText)} accessibilityRole="header" accessible={true}>
+          <TextView
+            variant={'MobileBodyBold'}
+            accessibilityLabel={a11yLabelVA(youHaveFileRequestsText)}
+            accessibilityRole="header"
+            accessible={true}>
             {youHaveFileRequestsText}
           </TextView>
           <Box mt={standardMarginBetween}>

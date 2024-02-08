@@ -1,10 +1,12 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
-import PreferredAppointmentType from './PreferredAppointmentType'
-import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 import { AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants } from 'store/api/types/AppointmentData'
+import { context, render } from 'testUtils'
+import { defaultAppointmentAttributes } from 'utils/tests/appointments'
+
+import PreferredAppointmentType from './PreferredAppointmentType'
 
 context('PreferredAppointmentType', () => {
   const initializeTestInstance = (appointmentType: AppointmentType, phoneOnly: boolean = false): void => {
