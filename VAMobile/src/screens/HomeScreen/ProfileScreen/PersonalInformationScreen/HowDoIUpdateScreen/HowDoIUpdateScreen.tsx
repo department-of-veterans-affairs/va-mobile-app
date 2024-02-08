@@ -1,14 +1,15 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Box, ClickToCallPhoneNumber, LargePanel, TextView, TextViewProps } from 'components'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
+import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CHANGE_LEGAL_NAME, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -21,7 +22,12 @@ function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
   const { screenType } = route.params
 
   const linkProps: TextViewProps = {
-    onPress: () => navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('webview.vagov'), loadingMessage: t('webview.valocation.loading') }),
+    onPress: () =>
+      navigateTo('Webview', {
+        url: WEBVIEW_URL_FACILITY_LOCATOR,
+        displayTitle: t('webview.vagov'),
+        loadingMessage: t('webview.valocation.loading'),
+      }),
     variant: 'MobileBody',
     color: 'link',
     textDecoration: 'underline',
@@ -33,7 +39,12 @@ function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
   }
 
   const linkNameProps: TextViewProps = {
-    onPress: () => navigateTo('Webview', { url: WEBVIEW_URL_CHANGE_LEGAL_NAME, displayTitle: t('webview.vagov'), loadingMessage: t('webview.changeLegalName.loading') }),
+    onPress: () =>
+      navigateTo('Webview', {
+        url: WEBVIEW_URL_CHANGE_LEGAL_NAME,
+        displayTitle: t('webview.vagov'),
+        loadingMessage: t('webview.changeLegalName.loading'),
+      }),
     variant: 'MobileBody',
     color: 'link',
     textDecoration: 'underline',
@@ -56,14 +67,24 @@ function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
   function renderVAMedicalCenterSection() {
     return (
       <Box>
-        <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('howDoIUpdate.ifEnrolledInVAHealth'))} paragraphSpacing={true}>
+        <TextView
+          variant="MobileBody"
+          accessibilityLabel={a11yLabelVA(t('howDoIUpdate.ifEnrolledInVAHealth'))}
+          paragraphSpacing={true}>
           {t('howDoIUpdate.ifEnrolledInVAHealth')}
         </TextView>
         <TextView {...linkProps}>{t('howDoIUpdate.findYourNearestVAMedicalCenter')}</TextView>
-        <TextView variant="MobileBody" accessibilityLabel={t('howDoIUpdate.ifNotEnrolledInVAHealth.a11yLabel')} paragraphSpacing={true}>
+        <TextView
+          variant="MobileBody"
+          accessibilityLabel={t('howDoIUpdate.ifNotEnrolledInVAHealth.a11yLabel')}
+          paragraphSpacing={true}>
           {t('howDoIUpdate.ifNotEnrolledInVAHealth')}
         </TextView>
-        <ClickToCallPhoneNumber phone={t('8008271000')} a11yLabel={a11yLabelID(t('8008271000'))} displayedText={displayedTextPhoneNumber(t('8008271000'))} />
+        <ClickToCallPhoneNumber
+          phone={t('8008271000')}
+          a11yLabel={a11yLabelID(t('8008271000'))}
+          displayedText={displayedTextPhoneNumber(t('8008271000'))}
+        />
       </Box>
     )
   }

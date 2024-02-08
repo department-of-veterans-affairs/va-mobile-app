@@ -1,7 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { context, realStore } from 'testUtils'
-import _ from 'underscore'
+
 import { when } from 'jest-when'
+import _ from 'underscore'
+
+import { context, realStore } from 'testUtils'
+
 import { loadHapticsSetting, updateHapticsSetting } from './settingsSlice'
 
 const STORAGE_HAPTICS_KEY = '@store_settings_haptics'

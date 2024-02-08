@@ -1,29 +1,29 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import { initialAppointmentsState } from 'store/slices'
-import PastAppointmentDetails from './PastAppointmentDetails'
 import {
-  AppointmentType,
   AppointmentStatus,
-  AppointmentTypeConstants,
   AppointmentStatusConstants,
   AppointmentStatusDetailType,
   AppointmentStatusDetailTypeConsts,
+  AppointmentType,
+  AppointmentTypeConstants,
 } from 'store/api/types'
+import { initialAppointmentsState } from 'store/slices'
 import { bookedAppointmentsList, canceledAppointmentList } from 'store/slices/appointmentsSlice.test'
+import { context, mockNavProps, render } from 'testUtils'
+
+import PastAppointmentDetails from './PastAppointmentDetails'
 
 context('PastAppointmentDetails', () => {
-  let props: any
-
   const initializeTestInstance = (
     appointmentType: AppointmentType = AppointmentTypeConstants.VA,
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
     statusDetail: AppointmentStatusDetailType | null = null,
     isCovid: boolean = false,
   ) => {
-    props = mockNavProps(undefined, undefined, { params: { appointmentID: '1' } })
+    const props = mockNavProps(undefined, undefined, { params: { appointmentID: '1' } })
 
     render(<PastAppointmentDetails {...props} />, {
       preloadedState: {
@@ -39,12 +39,17 @@ context('PastAppointmentDetails', () => {
             status === 'BOOKED'
               ? {
                   '1': bookedAppointmentsList.filter((obj) => {
-                    return obj.attributes.appointmentType === appointmentType && obj.attributes.isCovidVaccine === isCovid ? true : false
+                    return obj.attributes.appointmentType === appointmentType &&
+                      obj.attributes.isCovidVaccine === isCovid
+                      ? true
+                      : false
                   })[0],
                 }
               : {
                   '1': canceledAppointmentList.filter((obj) => {
-                    return obj.attributes.appointmentType === appointmentType && obj.attributes.statusDetail === statusDetail
+                    return (
+                      obj.attributes.appointmentType === appointmentType && obj.attributes.statusDetail === statusDetail
+                    )
                   })[0],
                 },
           loadedAppointmentsByTimeFrame: {
@@ -102,7 +107,11 @@ context('PastAppointmentDetails', () => {
     })
 
     it('should show if you cancelled (rebook)', () => {
-      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
+      initializeTestInstance(
+        undefined,
+        AppointmentStatusConstants.CANCELLED,
+        AppointmentStatusDetailTypeConsts.PATIENT_REBOOK,
+      )
       expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
     })
 
@@ -112,7 +121,11 @@ context('PastAppointmentDetails', () => {
     })
 
     it('should show if facility cancelled (rebook)', () => {
-      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
+      initializeTestInstance(
+        undefined,
+        AppointmentStatusConstants.CANCELLED,
+        AppointmentStatusDetailTypeConsts.CLINIC_REBOOK,
+      )
       expect(screen.getByText('VA Long Beach Healthcare System canceled this appointment.')).toBeTruthy()
     })
   })

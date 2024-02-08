@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import {loginToDemoMode, openPersonalInformation, openProfile } from './utils'
+import { loginToDemoMode, openPersonalInformation, openProfile } from './utils'
 
 export const PersonalInfoConstants = {
   PERSONAL_INFORMATION_TEXT: 'Personal information',
@@ -67,7 +67,7 @@ describe('Personal Info Screen', () => {
     await device.takeScreenshot('personalInfoLearnHowToWebPage')
     await element(by.text('Done')).tap()
 
-    if (device.getPlatform() === 'android') {     
+    if (device.getPlatform() === 'android') {
       await checkLocatorAndContactLinks()
     }
 
@@ -118,7 +118,9 @@ describe('Personal Info Screen', () => {
     await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
     await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
     await expect(element(by.text('Gender identity saved'))).not.toExist()
-    await expect(element(by.label(PersonalInfoConstants.PREFER_NOT_TEXT + ' ').withDescendant(by.id('RadioFilled')))).toExist()
+    await expect(
+      element(by.label(PersonalInfoConstants.PREFER_NOT_TEXT + ' ').withDescendant(by.id('RadioFilled'))),
+    ).toExist()
     await element(by.text('Cancel')).tap()
   })
 
@@ -130,5 +132,4 @@ describe('Personal Info Screen', () => {
     await element(by.text('Close')).tap()
     await element(by.text('Cancel')).tap()
   })
-
 })

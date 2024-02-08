@@ -1,13 +1,15 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
-import TypeOfCare from './TypeOfCare'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
+
+import TypeOfCare from './TypeOfCare'
 
 context('TypeOfCare', () => {
   const initializeTestInstance = (phoneOnly = false, typeOfCare?: string, healthcareService?: string): void => {
-    let props = {
+    const props = {
       ...defaultAppointmentAttributes,
       healthcareService: healthcareService,
       phoneOnly: phoneOnly,

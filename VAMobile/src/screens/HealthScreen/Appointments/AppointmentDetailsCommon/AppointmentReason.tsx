@@ -1,9 +1,9 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api'
 import { isAPendingAppointment } from 'utils/appointments'
 import { useTheme } from 'utils/hooks'
 

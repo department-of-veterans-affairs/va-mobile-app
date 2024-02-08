@@ -1,13 +1,24 @@
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import React from 'react'
 
-import { Box, ClickForActionLink, CollapsibleAlert, LinkButtonProps, LinkTypeOptionsConstants, TextView, VABulletList, VABulletListText } from 'components'
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { Facility } from 'api/types/FacilityData'
+import {
+  Box,
+  ClickForActionLink,
+  CollapsibleAlert,
+  LinkButtonProps,
+  LinkTypeOptionsConstants,
+  TextView,
+  VABulletList,
+  VABulletListText,
+} from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
-import { useTheme } from 'utils/hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
+import { useTheme } from 'utils/hooks'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 
@@ -16,11 +27,15 @@ function CernerAlertSM() {
   const theme = useTheme()
   const { data: facilitiesInfo } = useFacilitiesInfo()
 
+  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
+
+  useEffect(() => {
+    cernerFacilities.length && logAnalyticsEvent(Events.vama_cerner_alert())
+  }, [cernerFacilities.length])
+
   if (!facilitiesInfo) {
     return <></>
   }
-
-  const cernerFacilities = facilitiesInfo.filter((f) => f.cerner)
 
   // if no cerner facilities then do not show the alert
   if (!cernerFacilities.length) {
@@ -68,7 +83,15 @@ function CernerAlertSM() {
     )
   }
 
-  return <CollapsibleAlert border="warning" headerText={headerText} body={accordionContent()} a11yLabel={headerText} />
+  return (
+    <CollapsibleAlert
+      border="warning"
+      headerText={headerText}
+      body={accordionContent()}
+      a11yLabel={headerText}
+      onExpand={() => logAnalyticsEvent(Events.vama_cerner_alert_exp())}
+    />
+  )
 }
 
 export default CernerAlertSM

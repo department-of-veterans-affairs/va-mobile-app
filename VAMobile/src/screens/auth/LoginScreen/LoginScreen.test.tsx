@@ -1,11 +1,12 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { render, context } from 'testUtils'
+import { context, render } from 'testUtils'
+
 import LoginScreen from './LoginScreen'
 
 context('LoginScreen', () => {
-
   beforeEach(() => {
     render(<LoginScreen />)
   })

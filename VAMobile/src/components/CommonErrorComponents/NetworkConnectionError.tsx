@@ -1,7 +1,8 @@
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { NAMESPACE } from 'constants/namespaces'
+
 import BasicError from './BasicError'
 
 export type NetworkConnectionErrorProps = {

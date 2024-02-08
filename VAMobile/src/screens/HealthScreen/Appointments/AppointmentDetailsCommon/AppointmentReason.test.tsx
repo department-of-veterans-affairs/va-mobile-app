@@ -1,9 +1,11 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
+import { AppointmentAttributes, AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 import { context, render } from 'testUtils'
+
 import AppointmentReason from './AppointmentReason'
-import { AppointmentStatusConstants } from 'store/api/types/AppointmentData'
 
 context('AppointmentReason', () => {
   let props: any

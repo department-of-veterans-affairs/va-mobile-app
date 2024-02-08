@@ -1,12 +1,14 @@
-import { BackButton } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ReactNode } from 'react'
-import { StackNavigationOptions } from '@react-navigation/stack'
-import { getHeaderStyles } from 'styles/common'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTheme } from 'utils/hooks'
-import HeaderTitle from 'components/HeaderTitle'
 import React from 'react'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { StackNavigationOptions } from '@react-navigation/stack'
+
+import { BackButton } from 'components'
+import HeaderTitle from 'components/HeaderTitle'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { getHeaderStyles } from 'styles/common'
+import { useTheme } from 'utils/hooks'
 
 /**
  * Hook to get the current header styles in a component
@@ -18,7 +20,14 @@ export const useHeaderStyles = (): StackNavigationOptions => {
 
   headerStyles = {
     ...headerStyles,
-    headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />,
+    headerLeft: (props): ReactNode => (
+      <BackButton
+        onPress={props.onPress}
+        canGoBack={props.canGoBack}
+        label={BackButtonLabelConstants.back}
+        showCarat={true}
+      />
+    ),
     headerTitle: (header) => <HeaderTitle headerTitle={header.children} />,
   }
   return headerStyles

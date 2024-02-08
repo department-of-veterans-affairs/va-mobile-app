@@ -1,26 +1,42 @@
-import { ScrollView } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
+import { useSelector } from 'react-redux'
+
+import { useFocusEffect } from '@react-navigation/native'
+import { StackScreenProps } from '@react-navigation/stack'
 
 import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView } from 'components'
-import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
-import { Events } from 'constants/analytics'
-import { HealthStackParamList } from '../../HealthStackScreens'
-import { HiddenA11yElement } from 'styles/common'
-import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionListItem } from '../PrescriptionCommon'
-import { PrescriptionState, dispatchClearLoadingRequestRefills, dispatchSetPrescriptionsNeedLoad, loadAllPrescriptions, requestRefills } from 'store/slices/prescriptionSlice'
-import { RootState } from 'store'
-import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
-import { logAnalyticsEvent } from 'utils/analytics'
-import { screenContentAllowed } from 'utils/waygateConfig'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useDowntime, usePrevious, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useFocusEffect } from '@react-navigation/native'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
-import NoRefills from './NoRefills'
 import SelectionList from 'components/SelectionList'
+import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { DowntimeFeatureTypeConstants, PrescriptionsList, ScreenIDTypesConstants } from 'store/api/types'
+import {
+  PrescriptionState,
+  dispatchClearLoadingRequestRefills,
+  dispatchSetPrescriptionsNeedLoad,
+  loadAllPrescriptions,
+  requestRefills,
+} from 'store/slices/prescriptionSlice'
+import { HiddenA11yElement } from 'styles/common'
+import { logAnalyticsEvent } from 'utils/analytics'
+import {
+  useAppDispatch,
+  useBeforeNavBackListener,
+  useDestructiveActionSheet,
+  useDowntime,
+  usePrevious,
+  useRouteNavigation,
+  useTheme,
+} from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
+import { HealthStackParamList } from '../../HealthStackScreens'
+import { PrescriptionListItem } from '../PrescriptionCommon'
+import NoRefills from './NoRefills'
 
 type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
 
@@ -40,7 +56,8 @@ export function RefillScreen({ navigation }: RefillScreenProps) {
 
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
-  const { loadingHistory, refillablePrescriptions, showLoadingScreenRequestRefills, submittingRequestRefills } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
+  const { loadingHistory, refillablePrescriptions, showLoadingScreenRequestRefills, submittingRequestRefills } =
+    useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const refillable = refillablePrescriptions || []
   const prevLoadingRequestRefills = usePrevious<boolean>(submittingRequestRefills)
 
@@ -208,7 +225,10 @@ export function RefillScreen({ navigation }: RefillScreenProps) {
           <TextView variant={'HelperText'} mb={theme.dimensions.standardMarginBetween}>
             {t('prescriptions.refill.weWillMailText')}
           </TextView>
-          <TextView mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.condensedMarginBetween} variant={'MobileBodyBold'}>
+          <TextView
+            mt={theme.dimensions.condensedMarginBetween}
+            mb={theme.dimensions.condensedMarginBetween}
+            variant={'MobileBodyBold'}>
             {t('prescriptions.refill.prescriptionsCount', { count: refillablePrescriptions?.length })}
           </TextView>
         </Box>

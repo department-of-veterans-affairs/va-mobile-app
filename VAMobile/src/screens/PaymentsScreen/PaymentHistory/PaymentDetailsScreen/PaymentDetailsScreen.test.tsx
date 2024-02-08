@@ -1,18 +1,19 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
 import { initialPaymentsState } from 'store/slices'
-import PaymentDetailsScreen from './PaymentDetailsScreen'
+import { context, mockNavProps, render } from 'testUtils'
 import { formatDateUtc } from 'utils/formattingUtils'
 
+import PaymentDetailsScreen from './PaymentDetailsScreen'
+
 context('PaymentDetailsScreen', () => {
-  let props: any
   let paymentDate: string
   let formattedDate: string
 
   const initializeTestInstance = (pId: string = '1') => {
-    props = mockNavProps(
+    const props = mockNavProps(
       {},
       {
         goBack: jest.fn(),

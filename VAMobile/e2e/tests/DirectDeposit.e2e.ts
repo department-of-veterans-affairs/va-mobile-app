@@ -12,7 +12,8 @@ export const DirectDepositConstants = {
   TTY_LINK_TEXT: 'TTY: 711',
   EDIT_ACCOUNT_TEXT: 'Edit account',
   CONFIRM_CHECKBOX_TEXT: 'I confirm that this information is correct. (Required)',
-  CHECKING_EXAMPLE_LABEL: 'You can find your 9-digit routing number on the bottom left side of a check. You can find your account number in the bottom center of a check.',
+  CHECKING_EXAMPLE_LABEL:
+    'You can find your 9-digit routing number on the bottom left side of a check. You can find your account number in the bottom center of a check.',
   WHERE_CAN_I_FIND_TEXT: 'Where can I find these numbers?',
   CANCEL_CONFIRM_TEXT: 'Delete changes to your direct deposit information?',
   CANCEL_CONFIRM_BUTTON_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',

@@ -1,10 +1,10 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { AlertBox, Box } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { AppointmentAttributes } from 'store/api'
 import { AppointmentStatusConstants, AppointmentStatusDetailTypeConsts, AppointmentTypeConstants } from 'store/api/types/AppointmentData'
-import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
 type AppointmentAlertProps = {
@@ -32,7 +32,10 @@ function AppointmentAlert({ attributes }: AppointmentAlertProps) {
     // Default to you
     let who = t('appointments.canceled.whoCanceled.you')
     // if clinic then set to name of facility or default to Facility
-    if (statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK) {
+    if (
+      statusDetail === AppointmentStatusDetailTypeConsts.CLINIC ||
+      statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
+    ) {
       who = location?.name || t('appointments.canceled.whoCanceled.facility')
     }
 

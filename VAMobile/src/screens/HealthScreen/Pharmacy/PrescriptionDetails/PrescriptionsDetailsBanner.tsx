@@ -1,12 +1,12 @@
-import { useTranslation } from 'react-i18next'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Box, ClickToCallPhoneNumber, CollapsibleAlert, TextView, VABulletList, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { displayedTextPhoneNumber, getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { displayedTextPhoneNumber, getNumberAccessibilityLabelFromString } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 function PrescriptionsDetailsBanner() {
@@ -16,7 +16,7 @@ function PrescriptionsDetailsBanner() {
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
   useEffect(() => {
-    logAnalyticsEvent(Events.vama_rx_refill_cerner())
+    logAnalyticsEvent(Events.vama_cerner_alert())
   }, [])
 
   const getContent = () => {
@@ -41,7 +41,10 @@ function PrescriptionsDetailsBanner() {
 
     return (
       <>
-        <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescription.details.banner.body1'))} mb={standardMarginBetween}>
+        <TextView
+          variant="MobileBody"
+          accessibilityLabel={a11yLabelVA(t('prescription.details.banner.body1'))}
+          mb={standardMarginBetween}>
           {t('prescription.details.banner.body1')}
         </TextView>
         <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -59,10 +62,6 @@ function PrescriptionsDetailsBanner() {
     )
   }
 
-  const onExpand = () => {
-    logAnalyticsEvent(Events.vama_rx_cerner_exp())
-  }
-
   return (
     <VAScrollView>
       <Box mb={contentMarginBottom}>
@@ -71,7 +70,7 @@ function PrescriptionsDetailsBanner() {
           headerText={t('prescription.details.banner.title')}
           body={getContent()}
           a11yLabel={t('prescription.details.banner.title')}
-          onExpand={onExpand}
+          onExpand={() => logAnalyticsEvent(Events.vama_cerner_alert_exp())}
         />
       </Box>
     </VAScrollView>

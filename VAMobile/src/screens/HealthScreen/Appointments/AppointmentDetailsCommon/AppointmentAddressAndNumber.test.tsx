@@ -1,9 +1,16 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
+import {
+  AppointmentAttributes,
+  AppointmentPhone,
+  AppointmentStatusConstants,
+  AppointmentTypeConstants,
+} from 'store/api/types'
 import { render } from 'testUtils'
+
 import AppointmentAddressAndNumber from './AppointmentAddressAndNumber'
-import { AppointmentAttributes, AppointmentPhone, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
 
 const appointmentType = AppointmentTypeConstants.VA
 const healthcareService = 'Rehabilitation Clinic'

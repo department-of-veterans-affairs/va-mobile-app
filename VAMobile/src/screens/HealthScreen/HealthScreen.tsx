@@ -1,35 +1,37 @@
-import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
+import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { PrescriptionState, loadAllPrescriptions } from 'store/slices'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { RootState } from 'store'
-import { featureEnabled } from 'utils/remoteConfig'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { PrescriptionState, loadAllPrescriptions } from 'store/slices'
 import { getInbox } from 'store/slices/secureMessagingSlice'
-import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
-import { screenContentAllowed } from 'utils/waygateConfig'
+import getEnv from 'utils/env'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useSelector } from 'react-redux'
+import { featureEnabled } from 'utils/remoteConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
 import Appointments from './Appointments'
-import CernerAlert from './CernerAlert'
-import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
+import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
+import CernerAlert from './CernerAlert'
+import { HealthStackParamList } from './HealthStackScreens'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
 import SecureMessaging from './SecureMessaging'
-import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
+import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
+import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
+import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
-import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
-import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 
@@ -55,7 +57,11 @@ export function HealthScreen({}: HealthScreenProps) {
   }
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('health_screen'))
-    navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
+    navigateTo('Webview', {
+      url: WEBVIEW_URL_CORONA_FAQ,
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('webview.covidUpdates.loading'),
+    })
   }
 
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
@@ -69,7 +75,9 @@ export function HealthScreen({}: HealthScreenProps) {
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
-      <Box mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box
+        mb={!CernerAlert ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}
+        mx={theme.dimensions.gutter}>
         <LargeNavButton
           title={t('appointments')}
           onPress={() => navigateTo('Appointments')}
@@ -153,15 +161,47 @@ function HealthStackScreen({}: HealthStackScreenProps) {
         },
       }}>
       <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="Appointments" component={Appointments} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HealthScreenStack.Screen
+        name="Appointments"
+        component={Appointments}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="PastAppointmentDetails" component={PastAppointmentDetails} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HealthScreenStack.Screen name="PrescriptionDetails" component={PrescriptionDetails} options={{ headerShown: false }} />
-      <HealthScreenStack.Screen name="PrescriptionHistory" component={PrescriptionHistory} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HealthScreenStack.Screen name="SecureMessaging" component={SecureMessaging} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HealthScreenStack.Screen name="UpcomingAppointmentDetails" component={UpcomingAppointmentDetails} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HealthScreenStack.Screen name="VaccineDetails" component={VaccineDetailsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HealthScreenStack.Screen name="VaccineList" component={VaccineListScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HealthScreenStack.Screen
+        name="PastAppointmentDetails"
+        component={PastAppointmentDetails}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="PrescriptionDetails"
+        component={PrescriptionDetails}
+        options={{ headerShown: false }}
+      />
+      <HealthScreenStack.Screen
+        name="PrescriptionHistory"
+        component={PrescriptionHistory}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="SecureMessaging"
+        component={SecureMessaging}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="UpcomingAppointmentDetails"
+        component={UpcomingAppointmentDetails}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="VaccineDetails"
+        component={VaccineDetailsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="VaccineList"
+        component={VaccineListScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HealthScreenStack.Screen name="ViewMessage" component={ViewMessageScreen} options={{ headerShown: false }} />
     </HealthScreenStack.Navigator>
   )

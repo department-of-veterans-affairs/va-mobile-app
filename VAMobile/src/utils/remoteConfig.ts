@@ -1,8 +1,10 @@
-import { loadWaygateOverrides } from 'utils/waygateConfig'
-import { logNonFatalErrorToFirebase } from './analytics'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import getEnv from 'utils/env'
 import remoteConfig from '@react-native-firebase/remote-config'
+
+import getEnv from 'utils/env'
+import { loadWaygateOverrides } from 'utils/waygateConfig'
+
+import { logNonFatalErrorToFirebase } from './analytics'
 
 const { IS_TEST } = getEnv()
 

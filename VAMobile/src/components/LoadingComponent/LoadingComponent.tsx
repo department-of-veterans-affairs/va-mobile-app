@@ -1,10 +1,11 @@
-import { ViewStyle } from 'react-native'
-import LottieView from 'lottie-react-native'
 import React, { FC } from 'react'
+import { ViewStyle } from 'react-native'
+
+import LottieView from 'lottie-react-native'
 
 import { Box, TextView, VAScrollView } from 'components'
-import { useTheme } from 'utils/hooks'
 import colors from 'styles/themes/VAColors'
+import { useTheme } from 'utils/hooks'
 
 export type LoadingComponentProps = {
   /** Text to be shown under the spinner */
@@ -24,7 +25,15 @@ export type LoadingComponentProps = {
 }
 
 /**A common component to show a loading spinner */
-const LoadingComponent: FC<LoadingComponentProps> = ({ text, a11yLabel, justTheSpinnerIcon, spinnerHeight, spinnerWidth, spinnerColor, inlineSpinner }) => {
+const LoadingComponent: FC<LoadingComponentProps> = ({
+  text,
+  a11yLabel,
+  justTheSpinnerIcon,
+  spinnerHeight,
+  spinnerWidth,
+  spinnerColor,
+  inlineSpinner,
+}) => {
   const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
@@ -67,7 +76,12 @@ const LoadingComponent: FC<LoadingComponentProps> = ({ text, a11yLabel, justTheS
           {getSpinner()}
         </Box>
       ) : inlineSpinner ? (
-        <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+        <Box
+          justifyContent="center"
+          mx={theme.dimensions.gutter}
+          mt={theme.dimensions.contentMarginTop}
+          mb={theme.dimensions.contentMarginBottom}
+          alignItems={'center'}>
           {getSpinner()}
           <Box mt={theme.dimensions.condensedMarginBetween}>
             <TextView textAlign={'center'} variant="MobileBody" accessibilityLabel={a11yLabel}>
@@ -77,7 +91,12 @@ const LoadingComponent: FC<LoadingComponentProps> = ({ text, a11yLabel, justTheS
         </Box>
       ) : (
         <VAScrollView contentContainerStyle={scrollStyles}>
-          <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
+          <Box
+            justifyContent="center"
+            mx={theme.dimensions.gutter}
+            mt={theme.dimensions.contentMarginTop}
+            mb={theme.dimensions.contentMarginBottom}
+            alignItems={'center'}>
             {getSpinner()}
             <Box mt={theme.dimensions.condensedMarginBetween}>
               <TextView textAlign={'center'} variant="MobileBody" accessibilityLabel={a11yLabel}>

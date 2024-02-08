@@ -1,15 +1,17 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import StartNewMessage from './StartNewMessage'
-import { initializeErrorsByScreenID, InitialState, saveDraft, updateSecureMessagingTab } from 'store/slices'
-import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { InitialState, initializeErrorsByScreenID, saveDraft, updateSecureMessagingTab } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
 
-let mockNavigationSpy = jest.fn()
+import StartNewMessage from './StartNewMessage'
+
+const mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
-  let original = jest.requireActual('../../../../utils/hooks')
+  const original = jest.requireActual('../../../../utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
@@ -17,7 +19,7 @@ jest.mock('../../../../utils/hooks', () => {
 })
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     updateSecureMessagingTab: jest.fn(() => {
@@ -62,9 +64,9 @@ jest.mock('react-native', () => {
   return RN
 })
 
-let mockUseComposeCancelConfirmationSpy = jest.fn()
+const mockUseComposeCancelConfirmationSpy = jest.fn()
 jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
@@ -72,7 +74,6 @@ jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
 })
 
 context('StartNewMessage', () => {
-  let props: any
   let goBack: jest.Mock
 
   const initializeTestInstance = (
@@ -80,13 +81,13 @@ context('StartNewMessage', () => {
     noRecipientsReturned = false,
     sendMessageFailed: boolean = false,
     hasLoadedRecipients: boolean = true,
-    params: Object = { attachmentFileToAdd: {} },
+    params: object = { attachmentFileToAdd: {} },
   ) => {
     goBack = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
-    props = mockNavProps(
+    const props = mockNavProps(
       undefined,
       {
         addListener: mockUseComposeCancelConfirmationSpy,
@@ -154,7 +155,11 @@ context('StartNewMessage', () => {
 
     it('should display an AlertBox', () => {
       expect(screen.getByText("We can't match you with a provider")).toBeTruthy()
-      expect(screen.getByText("We're sorry. To send a Secure Message, both you and your VA primary care provider must be enrolled in the Secure Messaging program. Please contact your primary care provider to see if they are enrolled and can enroll you in the program.")).toBeTruthy()
+      expect(
+        screen.getByText(
+          "We're sorry. To send a Secure Message, both you and your VA primary care provider must be enrolled in the Secure Messaging program. Please contact your primary care provider to see if they are enrolled and can enroll you in the program.",
+        ),
+      ).toBeTruthy()
     })
 
     describe('on click of the go to inbox button', () => {
@@ -169,7 +174,7 @@ context('StartNewMessage', () => {
   describe('when hasLoadedRecipients is false', () => {
     it('should display the LoadingComponent', () => {
       initializeTestInstance(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, false)
-      expect(screen.getByText("Loading a new message...")).toBeTruthy()
+      expect(screen.getByText('Loading a new message...')).toBeTruthy()
     })
   })
 
@@ -191,7 +196,7 @@ context('StartNewMessage', () => {
     it('should show Recheck Info if validation had failed', () => {
       initializeTestInstance(undefined, undefined, undefined, undefined, { saveDraftConfirmFailed: true })
       fireEvent.press(screen.getByText('Save'))
-      expect(screen.getByText("We need more information")).toBeTruthy()
+      expect(screen.getByText('We need more information')).toBeTruthy()
     })
   })
 

@@ -1,5 +1,6 @@
-import { Events } from './analytics'
 import { logAnalyticsEvent } from 'utils/analytics'
+
+import { Events } from './analytics'
 
 export const DEFAULT_PAGE_SIZE = 10
 

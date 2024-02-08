@@ -1,13 +1,16 @@
 import React from 'react'
-import Mock = jest.Mock
-import { context, fireEvent, render, screen, } from 'testUtils'
+
+import { context, fireEvent, render, screen } from 'testUtils'
+
 import SimpleList from './SimpleList'
+
+import Mock = jest.Mock
 
 context('SimpleList', () => {
   let onPressSpy: Mock
 
   beforeEach(() => {
-    onPressSpy = jest.fn(() => { })
+    onPressSpy = jest.fn(() => {})
 
     const items = [
       { text: 'one line', testId: 'testid', a11yHintText: 'hinttext' },
