@@ -1,15 +1,25 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
-import BackButton from './BackButton'
 import { BackButtonLabel, BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { context, render } from 'testUtils'
+
+import BackButton from './BackButton'
 
 context('BackButton', () => {
   const onPressSpy = jest.fn()
 
   const renderWithProps = (canGoBack: boolean, showCarat?: boolean, a11yHint?: string, label?: BackButtonLabel) => {
-    render(<BackButton onPress={onPressSpy} label={label || BackButtonLabelConstants.back} canGoBack={canGoBack} showCarat={showCarat} a11yHint={a11yHint} />)
+    render(
+      <BackButton
+        onPress={onPressSpy}
+        label={label || BackButtonLabelConstants.back}
+        canGoBack={canGoBack}
+        showCarat={showCarat}
+        a11yHint={a11yHint}
+      />,
+    )
   }
 
   it('renders button label and hint', () => {

@@ -1,13 +1,15 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
-import { TextLine } from './types'
+
 import MultiTouchCard, { MultiTouchCardProps } from './MultiTouchCard'
 import { TextLines } from './TextLines'
+import { TextLine } from './types'
 
 context('MultiTouchCard', () => {
-  let onPressSpy = jest.fn(() => {})
+  const onPressSpy = jest.fn(() => {})
 
   beforeEach(() => {
     const middleTextLines: Array<TextLine> = [

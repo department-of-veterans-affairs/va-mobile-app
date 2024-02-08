@@ -1,12 +1,14 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { render, context, mockNavProps } from 'testUtils'
-import RefillRequestSummary from './RefillRequestSummary'
-import { initialPrescriptionState, PrescriptionState } from 'store/slices'
 import { RootState } from 'store'
 import { RefillRequestSummaryItems } from 'store/api'
+import { PrescriptionState, initialPrescriptionState } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
+
+import RefillRequestSummary from './RefillRequestSummary'
 
 context('RefillRequestSummary', () => {
   const initializeTestInstance = (prescriptionState?: Partial<PrescriptionState>) => {
@@ -30,15 +32,22 @@ context('RefillRequestSummary', () => {
           },
         ] as RefillRequestSummaryItems,
       })
-      
 
       expect(screen.getByText('We got your refill requests')).toBeTruthy()
       expect(screen.getByText('Refill request summary')).toBeTruthy()
       expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy()
       expect(screen.getByText('Rx #: 3636691')).toBeTruthy()
       expect(screen.getByText('What’s next')).toBeTruthy()
-      expect(screen.getByText("We're reviewing your refill request. Once approved, the VA pharmacy will process your refill.")).toBeTruthy()
-      expect(screen.getByText('If you have questions about the status of your refill, contact your provider or local VA pharmacy.')).toBeTruthy()
+      expect(
+        screen.getByText(
+          "We're reviewing your refill request. Once approved, the VA pharmacy will process your refill.",
+        ),
+      ).toBeTruthy()
+      expect(
+        screen.getByText(
+          'If you have questions about the status of your refill, contact your provider or local VA pharmacy.',
+        ),
+      ).toBeTruthy()
       expect(screen.getByRole('button', { name: 'Go to all pending refills' })).toBeTruthy()
     })
   })
@@ -55,7 +64,9 @@ context('RefillRequestSummary', () => {
       })
 
       expect(screen.getByText("We didn't get 1 refill requests")).toBeTruthy()
-      expect(screen.getByText("We're sorry. Something went wrong on our end. Try again or contact your local VA pharmacy.")).toBeTruthy()
+      expect(
+        screen.getByText("We're sorry. Something went wrong on our end. Try again or contact your local VA pharmacy."),
+      ).toBeTruthy()
       expect(screen.getByRole('button', { name: 'Try again' })).toBeTruthy()
       expect(screen.getByText('Refill request summary')).toBeTruthy()
       expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy()
@@ -81,15 +92,25 @@ context('RefillRequestSummary', () => {
       expect(screen.getByRole('button', { name: 'Try again' })).toBeTruthy()
       expect(screen.getByRole('button', { name: 'Go to all pending refills' })).toBeTruthy()
       expect(screen.getByText("We didn't get 1 refill requests")).toBeTruthy()
-      expect(screen.getByText("We're sorry. Something went wrong on our end. Try again or contact your local VA pharmacy.")).toBeTruthy()
+      expect(
+        screen.getByText("We're sorry. Something went wrong on our end. Try again or contact your local VA pharmacy."),
+      ).toBeTruthy()
       expect(screen.getByText('Refill request summary')).toBeTruthy()
       expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy()
       expect(screen.getByText('Rx #: 3636691')).toBeTruthy()
       expect(screen.getByText('AMLODIPINE BESYLATE 10MG TAB')).toBeTruthy()
       expect(screen.getByText('Rx #: 3636711A')).toBeTruthy()
       expect(screen.getByText('What’s next')).toBeTruthy()
-      expect(screen.getByText("We're reviewing your refill request. Once approved, the VA pharmacy will process your refill.")).toBeTruthy()
-      expect(screen.getByText('If you have questions about the status of your refill, contact your provider or local VA pharmacy.')).toBeTruthy()
+      expect(
+        screen.getByText(
+          "We're reviewing your refill request. Once approved, the VA pharmacy will process your refill.",
+        ),
+      ).toBeTruthy()
+      expect(
+        screen.getByText(
+          'If you have questions about the status of your refill, contact your provider or local VA pharmacy.',
+        ),
+      ).toBeTruthy()
     })
   })
 })

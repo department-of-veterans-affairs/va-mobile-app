@@ -1,12 +1,18 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
+
 import AppealIssues from './AppealIssues'
 
 context('AppealIssues', () => {
   beforeEach(() => {
-    const issues = ['Service connection, Post-traumatic stress disorder', 'Eligibility for loan guaranty benefits', 'Service connected']
+    const issues = [
+      'Service connection, Post-traumatic stress disorder',
+      'Eligibility for loan guaranty benefits',
+      'Service connected',
+    ]
     render(<AppealIssues issues={issues} {...mockNavProps()} />)
   })
 

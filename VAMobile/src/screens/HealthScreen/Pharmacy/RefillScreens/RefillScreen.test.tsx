@@ -1,15 +1,20 @@
 import React from 'react'
-import { screen, fireEvent } from '@testing-library/react-native'
+
+import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
-import { render, context, mockNavProps } from 'testUtils'
-import { RefillScreen } from './RefillScreen'
 import { RootState } from 'store'
-import { ErrorsState, initialErrorsState, initialPrescriptionState, PrescriptionState } from 'store/slices'
+import { ErrorsState, PrescriptionState, initialErrorsState, initialPrescriptionState } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
 
+import { RefillScreen } from './RefillScreen'
+
 context('RefillScreen', () => {
-  const initializeTestInstance = (prescriptionState?: Partial<PrescriptionState>, errorState?: Partial<ErrorsState>) => {
+  const initializeTestInstance = (
+    prescriptionState?: Partial<PrescriptionState>,
+    errorState?: Partial<ErrorsState>,
+  ) => {
     const props = mockNavProps(
       {},
       {
@@ -46,7 +51,7 @@ context('RefillScreen', () => {
         prescriptionsNeedLoad: false,
         refillablePrescriptions: mockData,
       })
-      fireEvent.press(screen.getByRole('button', { name: 'Request refills'}))
+      fireEvent.press(screen.getByRole('button', { name: 'Request refills' }))
       expect(screen.getByText('Please select a prescription')).toBeTruthy()
     })
   })

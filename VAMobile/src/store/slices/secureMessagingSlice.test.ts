@@ -1,13 +1,19 @@
-import { context, realStore } from 'testUtils'
-import _ from 'underscore'
-import * as api from '../api'
-import { SecureMessagingFormData } from 'store/api/types'
-import { SegmentedControlIndexes } from 'constants/secureMessaging'
 import FileViewer from 'react-native-file-viewer'
-import { when } from 'jest-when'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+
+import { when } from 'jest-when'
+import _ from 'underscore'
+
+import { SnackbarMessages } from 'components/SnackBar'
+import { SegmentedControlIndexes } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { contentTypes } from 'store/api/api'
+import { SecureMessagingFormData } from 'store/api/types'
+import { context, realStore } from 'testUtils'
+
+import * as api from '../api'
+import { initialAuthState } from './authSlice'
+import { initialErrorsState } from './errorSlice'
 import {
   dispatchClearLoadedMessages,
   downloadFileAttachment,
@@ -20,9 +26,6 @@ import {
   sendMessage,
   updateSecureMessagingTab,
 } from './secureMessagingSlice'
-import { initialAuthState } from './authSlice'
-import { initialErrorsState } from './errorSlice'
-import { SnackbarMessages } from 'components/SnackBar'
 
 export const ActionTypes: {
   SECURE_MESSAGING_UPDATE_TAB: string
@@ -147,10 +150,10 @@ context('secureMessaging', () => {
         .calledWith(`/v0/messaging/health/messages/${messageID}`)
         .mockResolvedValue(Promise.reject(error))
 
-      const store = realStore()
-      await store.dispatch(getMessage(1))
+      const newStore = realStore()
+      await newStore.dispatch(getMessage(1))
 
-      const actions = store.getActions()
+      const actions = newStore.getActions()
       const startAction = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_START_GET_MESSAGE })
       expect(startAction).toBeTruthy()
 
@@ -158,7 +161,7 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.error).toBeTruthy()
 
-      const { secureMessaging } = store.getState()
+      const { secureMessaging } = newStore.getState()
       expect(secureMessaging.error).toEqual(error)
       expect(secureMessaging.messageIDsOfError).toEqual([messageID])
     })
@@ -227,47 +230,54 @@ context('secureMessaging', () => {
     })
   })
 
-  describe('getMessageRecipients', () => {
-    const store = realStore({
-      auth: { ...initialAuthState },
-      secureMessaging: {
-        ...initialSecureMessagingState,
-        inbox: {
+  describe('clearLoadedMessages', () => {
+    it('should dispatch the correct action', async () => {
+      const store = realStore({
+        auth: { ...initialAuthState },
+        secureMessaging: {
+          ...initialSecureMessagingState,
+          inbox: {
             read: 5,
             unread: 19,
           },
-        inboxMessages: [
-          {
-            type: '',
-            id: 987,
-            attributes: {
-              messageId: 1, // ID of the message you just read
-              category: 'COVID',
-              subject: '',
-              hasAttachments: false,
-              attachment: false,
-              sentDate: '1/1/2021',
-              senderId: 200,
-              senderName: 'Alana P.',
-              recipientId: 201,
-              recipientName: 'Melvin P.',
+          inboxMessages: [
+            {
+              type: '',
+              id: 987,
+              attributes: {
+                messageId: 1, // ID of the message you just read
+                category: 'COVID',
+                subject: '',
+                hasAttachments: false,
+                attachment: false,
+                sentDate: '1/1/2021',
+                senderId: 200,
+                senderName: 'Alana P.',
+                recipientId: 201,
+                recipientName: 'Melvin P.',
+              },
             },
-          },
-        ],
-      },
-      errors: initialErrorsState,
-    })
+          ],
+        },
+        errors: initialErrorsState,
+      })
 
-    store.dispatch(dispatchClearLoadedMessages())
-    const actions = store.getActions()
-    const clearAction = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_CLEAR_LOADED_MESSAGES })
-    expect(clearAction).toBeTruthy()
-    const { secureMessaging } = store.getState()
-    expect(secureMessaging).toEqual(initialSecureMessagingState)
+      store.dispatch(dispatchClearLoadedMessages())
+      const actions = store.getActions()
+      const clearAction = _.find(actions, { type: ActionTypes.SECURE_MESSAGING_CLEAR_LOADED_MESSAGES })
+      expect(clearAction).toBeTruthy()
+      const { secureMessaging } = store.getState()
+      expect(secureMessaging).toEqual(initialSecureMessagingState)
+    })
   })
 
   describe('saveDraft', () => {
-    const messageData = { recipient_id: 123456, category: 'APPOINTMENTS', subject: 'Draft subject', body: 'Draft text' } as SecureMessagingFormData
+    const messageData = {
+      recipient_id: 123456,
+      category: 'APPOINTMENTS',
+      subject: 'Draft subject',
+      body: 'Draft text',
+    } as SecureMessagingFormData
 
     it('should dispatch the correct action for saving a new draft', async () => {
       const store = realStore()
@@ -356,7 +366,10 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.savingDraft).toBeFalsy()
 
-      expect(api.put as jest.Mock).toBeCalledWith('/v0/messaging/health/message_drafts/1234/replydraft/5678', messageData)
+      expect(api.put as jest.Mock).toBeCalledWith(
+        '/v0/messaging/health/message_drafts/1234/replydraft/5678',
+        messageData,
+      )
 
       const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toBeFalsy()
@@ -371,7 +384,12 @@ context('secureMessaging', () => {
   })
 
   describe('sendMessage', () => {
-    const messageData = { recipient_id: 123456, category: 'APPOINTMENTS', subject: 'Subject', body: 'Message text' } as SecureMessagingFormData
+    const messageData = {
+      recipient_id: 123456,
+      category: 'APPOINTMENTS',
+      subject: 'Subject',
+      body: 'Message text',
+    } as SecureMessagingFormData
     const file1: ImagePickerResponse = {
       assets: [
         {
@@ -455,7 +473,11 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.sendingMessage).toBeFalsy()
 
-      expect(api.post as jest.Mock).toBeCalledWith('/v0/messaging/health/messages', expect.anything(), contentTypes.multipart)
+      expect(api.post as jest.Mock).toBeCalledWith(
+        '/v0/messaging/health/messages',
+        expect.anything(),
+        contentTypes.multipart,
+      )
       // TODO: figure out how to test values of FormData getting passed in
 
       const { secureMessaging } = store.getState()
@@ -550,7 +572,11 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.sendingMessage).toBeFalsy()
 
-      expect(api.post as jest.Mock).toBeCalledWith('/v0/messaging/health/messages/1/reply', expect.anything(), contentTypes.multipart)
+      expect(api.post as jest.Mock).toBeCalledWith(
+        '/v0/messaging/health/messages/1/reply',
+        expect.anything(),
+        contentTypes.multipart,
+      )
       // TODO: figure out how to test values of FormData getting passed in
 
       const { secureMessaging } = store.getState()

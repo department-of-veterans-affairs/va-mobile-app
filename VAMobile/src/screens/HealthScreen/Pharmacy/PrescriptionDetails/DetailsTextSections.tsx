@@ -38,7 +38,12 @@ function DetailsTextSections({
   const theme = useTheme()
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
-  const getTextElements = (headerText: string, valueText?: string | number, headerLabel?: string, valueLabel?: string) => {
+  const getTextElements = (
+    headerText: string,
+    valueText?: string | number,
+    headerLabel?: string,
+    valueLabel?: string,
+  ) => {
     return (
       <>
         <TextView accessibilityLabel={headerLabel} variant="MobileBodyBold">
@@ -62,9 +67,15 @@ function DetailsTextSections({
     : {}
 
   return (
-    <Box mt={standardMarginBetween} borderTopWidth={1} borderTopColor={'prescriptionDivider'} pt={standardMarginBetween}>
+    <Box
+      mt={standardMarginBetween}
+      borderTopWidth={1}
+      borderTopColor={'prescriptionDivider'}
+      pt={standardMarginBetween}>
       <Box {...containerProps}>
-        <Box accessible={hasRightText ? true : false}>{getTextElements(leftSectionTitle, leftSectionValue, leftSectionTitleLabel, leftSectionValueLabel)}</Box>
+        <Box accessible={hasRightText ? true : false}>
+          {getTextElements(leftSectionTitle, leftSectionValue, leftSectionTitleLabel, leftSectionValueLabel)}
+        </Box>
         {hasRightText && (
           <Box alignItems="flex-end" accessible={true}>
             {getTextElements(rightSectionTitle, rightSectionValue, rightSectionTitleLabel, rightSectionValueLabel)}

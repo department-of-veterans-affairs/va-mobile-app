@@ -1,12 +1,14 @@
 import React from 'react'
 import { ImagePickerResponse } from 'react-native-image-picker'
-import { screen, fireEvent } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import UploadFile from './UploadFile'
+import { fireEvent, screen } from '@testing-library/react-native'
+
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { InitialState } from 'store/slices'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { context, mockNavProps, render } from 'testUtils'
+
+import UploadFile from './UploadFile'
 
 const mockAlertSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -24,7 +26,7 @@ jest.mock('utils/hooks', () => {
 
 context('UploadFile', () => {
   let navigateToSpy: jest.Mock
-  let request = {
+  const request = {
     type: 'still_need_from_you_list',
     date: '2020-07-16',
     status: 'NEEDED',
@@ -41,7 +43,11 @@ context('UploadFile', () => {
       size: 100,
     } as DocumentPickerResponse
 
-    const props = mockNavProps(undefined, { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, fileUploaded: file, imageUploaded } })
+    const props = mockNavProps(
+      undefined,
+      { addListener: jest.fn(), setOptions: jest.fn(), navigate: jest.fn() },
+      { params: { request, fileUploaded: file, imageUploaded } },
+    )
 
     render(<UploadFile {...props} />, {
       preloadedState: {

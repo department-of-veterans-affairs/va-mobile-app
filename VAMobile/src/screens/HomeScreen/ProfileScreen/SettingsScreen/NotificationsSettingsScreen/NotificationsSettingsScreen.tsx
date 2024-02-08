@@ -1,21 +1,33 @@
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { Linking } from 'react-native'
-import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React, { ReactNode, useEffect } from 'react'
-
-import { AlertBox, Box, ButtonDecoratorType, ErrorComponent, FeatureLandingTemplate, LoadingComponent, SimpleList, SimpleListItemObj, TextView } from 'components'
-import { Events } from 'constants/analytics'
-import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { NAMESPACE } from 'constants/namespaces'
+import { useTranslation } from 'react-i18next'
+import { Linking } from 'react-native'
 import { Notifications } from 'react-native-notifications'
-import { NotificationsState, loadPushPreferences, registerDevice, setPushPref } from 'store/slices'
+import { useSelector } from 'react-redux'
+
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
+import {
+  AlertBox,
+  Box,
+  ButtonDecoratorType,
+  ErrorComponent,
+  FeatureLandingTemplate,
+  LoadingComponent,
+  SimpleList,
+  SimpleListItemObj,
+  TextView,
+} from 'components'
+import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
-import { StackScreenProps } from '@react-navigation/stack'
+import { NotificationsState, loadPushPreferences, registerDevice, setPushPref } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { screenContentAllowed } from 'utils/waygateConfig'
 import { useAppDispatch, useError, useOnResumeForeground, useTheme } from 'utils/hooks'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
 type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'NotificationsSettings'>
 
@@ -24,9 +36,8 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const hasError = useError(ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN)
   const theme = useTheme()
   const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
-  const { deviceToken, preferences, loadingPreferences, registeringDevice, systemNotificationsOn, settingPreference } = useSelector<RootState, NotificationsState>(
-    (state) => state.notifications,
-  )
+  const { deviceToken, preferences, loadingPreferences, registeringDevice, systemNotificationsOn, settingPreference } =
+    useSelector<RootState, NotificationsState>((state) => state.notifications)
   const goToSettings = () => {
     logAnalyticsEvent(Events.vama_click(t('notifications.settings.alert.openSettings'), t('notifications.title')))
     Linking.openSettings()
@@ -78,7 +89,10 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const loadingCheck = loadingPreferences || registeringDevice || settingPreference
 
   return (
-    <FeatureLandingTemplate backLabel={t('settings.title')} backLabelOnPress={navigation.goBack} title={t('notifications.title')}>
+    <FeatureLandingTemplate
+      backLabel={t('settings.title')}
+      backLabelOnPress={navigation.goBack}
+      title={t('notifications.title')}>
       {hasError ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN} />
       ) : loadingCheck ? (
@@ -96,7 +110,10 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
               {preferenceList()}
             </>
           ) : (
-            <AlertBox border={'informational'} title={t('notifications.settings.alert.title')} text={t('notifications.settings.alert.text')}>
+            <AlertBox
+              border={'informational'}
+              title={t('notifications.settings.alert.title')}
+              text={t('notifications.settings.alert.text')}>
               <Box mt={standardMarginBetween}>
                 <Button onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} />
               </Box>

@@ -1,5 +1,6 @@
-import { LinkingOptions, NavigationState } from '@react-navigation/native'
 import React, { ReactElement } from 'react'
+
+import { LinkingOptions, NavigationState } from '@react-navigation/native'
 
 import { LoadingComponent } from '../components'
 import { UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
@@ -42,7 +43,11 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'HealthTab',
                   state: {
-                    routes: [{ name: 'Health' }, { name: 'SecureMessaging' }, { name: 'ViewMessage', params: { messageID: pathParts[1] } }],
+                    routes: [
+                      { name: 'Health' },
+                      { name: 'SecureMessaging' },
+                      { name: 'ViewMessage', params: { messageID: pathParts[1] } },
+                    ],
                   },
                 },
               ],

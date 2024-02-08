@@ -5,10 +5,10 @@ This repository hosts the source code for the VA: Health and Benefits mobile app
 ## Quick links
 
 - [Documentation site](https://department-of-veterans-affairs.github.io/va-mobile-app/)
-- [Development setup instructions](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevSetupInstructions/DevSetupProcess)
+- [Development setup instructions](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevSetupProcess)
 - [API docs (Swagger)](https://department-of-veterans-affairs.github.io/va-mobile-app/api/)
-- [Component library](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/ComponentsSection/)
-- [Team charter](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/About/team-charter#operation/v1/immunizations)
+- [Component library](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Components/Overview)
+- [Team charter](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/About%20our%20team/team-charter)
 
 ## Background
 

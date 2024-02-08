@@ -6,9 +6,10 @@ import { CommonE2eIdConstants, loginToDemoMode, openDismissLeavingAppPopup, open
 export const SettingsE2eIdConstants = {
   SETTINGS_SCREEN_TEXT: 'Settings',
   MANAGE_ACCT_ROW_TEXT: 'Manage account',
-  MANAGE_ACCT_SCREEN_TEXT: 'To confirm or update your sign-in email, go to the website where you manage your account information.',
+  MANAGE_ACCT_SCREEN_TEXT:
+    'To confirm or update your sign-in email, go to the website where you manage your account information.',
   NOTIFICATIONS_ROW_TEXT: 'Notifications',
-  NOTIFICATIONS_SCREEN_TEXT: 'Select which notifications you\'d like to receive.',
+  NOTIFICATIONS_SCREEN_TEXT: "Select which notifications you'd like to receive.",
   NOTIFICATIONS_APPOINTMENT_TEXT: 'Upcoming appointments',
   NOTIFICATIONS_MESSAGING_TEXT: 'New messages',
   SHARE_APP_ROW_TEXT: 'Share the app',
@@ -67,10 +68,19 @@ describe('Settings Screen', () => {
     } catch (ex) {
       await element(by.text('Developer Screen')).tap()
       await element(by.text('Remote Config')).tap()
-      await waitFor(element(by.text('Override Toggles'))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(400, 'down')
-      await waitFor(element(by.text('inAppRecruitment'))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(100, 'down')
+      await waitFor(element(by.text('Override Toggles')))
+        .toBeVisible()
+        .whileElement(by.id('remoteConfigTestID'))
+        .scroll(400, 'down')
+      await waitFor(element(by.text('inAppRecruitment')))
+        .toBeVisible()
+        .whileElement(by.id('remoteConfigTestID'))
+        .scroll(100, 'down')
       await element(by.text('inAppRecruitment')).tap()
-      await waitFor(element(by.text('Apply Overrides'))).toBeVisible().whileElement(by.id('remoteConfigTestID')).scroll(100, 'down')
+      await waitFor(element(by.text('Apply Overrides')))
+        .toBeVisible()
+        .whileElement(by.id('remoteConfigTestID'))
+        .scroll(100, 'down')
       await element(by.text('Apply Overrides')).tap()
       await loginToDemoMode()
       await openProfile()

@@ -1,10 +1,10 @@
-import * as commonEN from 'translations/en/common.json'
+import { initReactI18next } from 'react-i18next'
+import * as RNLocalize from 'react-native-localize'
+
+import i18n from 'i18next'
 
 import { NAMESPACE } from 'constants/namespaces'
-
-import * as RNLocalize from 'react-native-localize'
-import { initReactI18next } from 'react-i18next'
-import i18n from 'i18next'
+import * as commonEN from 'translations/en/common.json'
 
 const fallbackLanguage = { languageTag: 'en', isRTL: false }
 const defaultLanguage = RNLocalize.findBestLanguageTag(['en']) || fallbackLanguage

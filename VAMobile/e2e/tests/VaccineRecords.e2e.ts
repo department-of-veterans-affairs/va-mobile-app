@@ -1,5 +1,6 @@
-import { expect, by, element } from 'detox'
-import { loginToDemoMode, checkImages, openHealth, openVaccineRecords } from './utils'
+import { by, element, expect } from 'detox'
+
+import { checkImages, loginToDemoMode, openHealth, openVaccineRecords } from './utils'
 
 export const VaccinesE2eIdConstants = {
   VACCINE_1_ID: 'COVID-19 vaccine January 14, 2021',
@@ -15,17 +16,19 @@ beforeAll(async () => {
   await openVaccineRecords()
 })
 
-describe('Vaccine Records Screen', () => { 
+describe('Vaccine Records Screen', () => {
   it('should show vaccine records list content', async () => {
     await expect(element(by.text('VA vaccines'))).toExist()
     await expect(element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID))).toExist()
-    var defaultVaccineTemplate = await element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID)).takeScreenshot('defaultVaccineTemplate')
+    const defaultVaccineTemplate = await element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID)).takeScreenshot(
+      'defaultVaccineTemplate',
+    )
     checkImages(defaultVaccineTemplate)
     await expect(element(by.id(VaccinesE2eIdConstants.VACCINE_3_ID))).toExist()
     await expect(element(by.id(VaccinesE2eIdConstants.VACCINE_5_ID))).toExist()
     await expect(element(by.id(VaccinesE2eIdConstants.VACCINE_6_ID))).toExist()
   })
-  
+
   it('verify COVID-19 record information', async () => {
     await element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID)).tap()
     await expect(element(by.text('January 14, 2021'))).toExist()
@@ -38,8 +41,16 @@ describe('Vaccine Records Screen', () => {
     await expect(element(by.text('Cheyenne, WY 82001-5356'))).toExist()
     await expect(element(by.text('Reaction'))).toExist()
     await expect(element(by.text('None noted')).atIndex(1)).toExist()
-    await expect(element(by.id('Notes Dose #2 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.'))).toExist()
-    await expect(element(by.label('We base this information on your current  V-A  health records. If you have any questions, contact your health care team.'))).toExist()
+    await expect(
+      element(by.id('Notes Dose #2 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.')),
+    ).toExist()
+    await expect(
+      element(
+        by.label(
+          'We base this information on your current  V-A  health records. If you have any questions, contact your health care team.',
+        ),
+      ),
+    ).toExist()
   })
 
   it('should tap on VA vaccines and navigate back to the vaccines list', async () => {
@@ -49,10 +60,16 @@ describe('Vaccine Records Screen', () => {
   it('verify no disclaimer is displayed when all fields are populated', async () => {
     await element(by.id(VaccinesE2eIdConstants.VACCINE_2_ID)).tap()
     await expect(element(by.text('None noted'))).not.toExist()
-    await expect(element(by.label('We base this information on your current  V-A  health records. If you have any questions, contact your health care team.'))).not.toExist()
+    await expect(
+      element(
+        by.label(
+          'We base this information on your current  V-A  health records. If you have any questions, contact your health care team.',
+        ),
+      ),
+    ).not.toExist()
     await element(by.text('VA vaccines')).tap()
   })
-  
+
   it('verify no manufacturer for non COVID-19 record', async () => {
     await element(by.id(VaccinesE2eIdConstants.VACCINE_3_ID)).tap()
     await expect(element(by.text('Manufacturer'))).not.toExist()

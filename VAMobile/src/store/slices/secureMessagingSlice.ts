@@ -1,7 +1,15 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import FileViewer from 'react-native-file-viewer'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
-import * as api from '../api'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+
+import { SnackbarMessages } from 'components/SnackBar'
+import { Events, UserAnalytics } from 'constants/analytics'
+import { SecureMessagingErrorCodesConstants } from 'constants/errors'
+import { READ, UNREAD } from 'constants/secureMessaging'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { AppDispatch, AppThunk } from 'store'
+import { Params, contentTypes } from 'store/api/api'
 import {
   APIError,
   ScreenIDTypes,
@@ -29,21 +37,20 @@ import {
   SecureMessagingThreadGetData,
   SecureMessagingThreads,
 } from 'store/api/types'
-import { AppDispatch, AppThunk } from 'store'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Events, UserAnalytics } from 'constants/analytics'
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { Params, contentTypes } from 'store/api/api'
-import { READ, UNREAD } from 'constants/secureMessaging'
-import { SecureMessagingErrorCodesConstants } from 'constants/errors'
-import { SnackbarMessages } from 'components/SnackBar'
-import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { downloadFile, unlinkFile } from 'utils/filesystem'
-import { getAnalyticsTimers, logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
-import { getCommonErrorFromAPIError, hasErrorCode } from 'utils/errors'
+import {
+  getAnalyticsTimers,
+  logAnalyticsEvent,
+  logNonFatalErrorToFirebase,
+  setAnalyticsUserProperty,
+} from 'utils/analytics'
 import { isErrorObject, showSnackBar } from 'utils/common'
+import { getCommonErrorFromAPIError, hasErrorCode } from 'utils/errors'
+import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { registerReviewEvent } from 'utils/inAppReviews'
+
+import * as api from '../api'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 
 const secureMessagingNonFatalErrorString = 'Secure Messaging Service Error'
 
@@ -146,9 +153,12 @@ export const fetchInboxMessages =
 
     try {
       const folderID = SecureMessagingSystemFolderIdConstants.INBOX
-      const inboxMessages = await api.get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
-        page: page.toString(),
-      } as Params)
+      const inboxMessages = await api.get<SecureMessagingFolderMessagesGetData>(
+        `/v0/messaging/health/folders/${folderID}/messages`,
+        {
+          page: page.toString(),
+        } as Params,
+      )
       if (getState().secureMessaging.inboxFirstRetrieval && inboxMessages?.meta?.messageCounts) {
         await logAnalyticsEvent(Events.vama_hs_sm_count(inboxMessages.meta.messageCounts.unread))
       }
@@ -179,7 +189,9 @@ export const listFolders =
       // Since users can't manage folders from within the app, they are unlikely to change
       // within a session.  Prevents multiple fetch calls for folders unless forceRefresh = true
       if (!currentStateFolders?.length || forceRefresh) {
-        folders = await api.get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders', { useCache: `${!forceRefresh}` })
+        folders = await api.get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders', {
+          useCache: `${!forceRefresh}`,
+        })
       }
       dispatch(dispatchFinishListFolders({ folderData: folders }))
     } catch (error) {
@@ -202,9 +214,12 @@ export const listFolderMessages =
     dispatch(dispatchStartListFolderMessages())
 
     try {
-      const messages = await api.get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
-        page: page.toString(),
-      } as Params)
+      const messages = await api.get<SecureMessagingFolderMessagesGetData>(
+        `/v0/messaging/health/folders/${folderID}/messages`,
+        {
+          page: page.toString(),
+        } as Params,
+      )
       dispatch(dispatchFinishListFolderMessages({ folderID: folderID, messageData: messages }))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -227,7 +242,9 @@ export const getThread =
 
     try {
       const excludeProvidedMessage = true
-      const response = await api.get<SecureMessagingThreadGetData>(`/v1/messaging/health/messages/${messageID}/thread?excludeProvidedMessage=${excludeProvidedMessage}`)
+      const response = await api.get<SecureMessagingThreadGetData>(
+        `/v1/messaging/health/messages/${messageID}/thread?excludeProvidedMessage=${excludeProvidedMessage}`,
+      )
       dispatch(dispatchFinishGetThread({ threadData: response, messageID }))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
     } catch (error) {
@@ -271,7 +288,11 @@ export const getMessage =
       let response
       // If no message contents, then this messageID was added during fetch folder/inbox message call and does not contain the full info yet
       // Message content of some kind is required on the reply/compose forms.
-      if (!messagesById?.[messageID] || (messagesById?.[messageID] && !messagesById[messageID].body && !messagesById[messageID].attachments) || force) {
+      if (
+        !messagesById?.[messageID] ||
+        (messagesById?.[messageID] && !messagesById[messageID].body && !messagesById[messageID].attachments) ||
+        force
+      ) {
         response = await api.get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
       }
 
@@ -378,7 +399,14 @@ export const getMessageSignature =
  * Redux action to save draft
  */
 export const saveDraft =
-  (messageData: SecureMessagingFormData, messages: SnackbarMessages, messageID?: number, isReply?: boolean, replyID?: number, refreshFolder?: boolean): AppThunk =>
+  (
+    messageData: SecureMessagingFormData,
+    messages: SnackbarMessages,
+    messageID?: number,
+    isReply?: boolean,
+    replyID?: number,
+    refreshFolder?: boolean,
+  ): AppThunk =>
   async (dispatch, getState) => {
     const retryFunction = () => dispatch(saveDraft(messageData, messages, messageID, isReply, replyID, refreshFolder))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
@@ -386,10 +414,14 @@ export const saveDraft =
     try {
       let response
       if (messageID) {
-        const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft/${messageID}` : `/v0/messaging/health/message_drafts/${messageID}`
+        const url = isReply
+          ? `/v0/messaging/health/message_drafts/${replyID}/replydraft/${messageID}`
+          : `/v0/messaging/health/message_drafts/${messageID}`
         response = await api.put<SecureMessagingSaveDraftData>(url, messageData as unknown as api.Params)
       } else {
-        const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft` : '/v0/messaging/health/message_drafts'
+        const url = isReply
+          ? `/v0/messaging/health/message_drafts/${replyID}/replydraft`
+          : '/v0/messaging/health/message_drafts'
         response = await api.post<SecureMessagingSaveDraftData>(url, messageData as unknown as api.Params)
       }
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
@@ -401,7 +433,13 @@ export const saveDraft =
       dispatch(dispatchFinishSaveDraft({ messageID: Number(response?.data?.id) }))
 
       if (refreshFolder) {
-        dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
+        dispatch(
+          listFolderMessages(
+            SecureMessagingSystemFolderIdConstants.DRAFTS,
+            1,
+            ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID,
+          ),
+        )
       }
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
       showSnackBar(messages.successMsg, dispatch, undefined, true, false, true)
@@ -418,7 +456,12 @@ export const saveDraft =
  * Redux action to send message
  */
 export const sendMessage =
-  (messageData: SecureMessagingFormData, messages: SnackbarMessages, uploads?: Array<ImagePickerResponse | DocumentPickerResponse>, replyToID?: number): AppThunk =>
+  (
+    messageData: SecureMessagingFormData,
+    messages: SnackbarMessages,
+    uploads?: Array<ImagePickerResponse | DocumentPickerResponse>,
+    replyToID?: number,
+  ): AppThunk =>
   async (dispatch, getState) => {
     let formData: FormData
     let postData
@@ -518,7 +561,19 @@ const refreshFoldersAfterMove = (
     isUndo && messages.undoMsg ? messages.undoMsg : messages.successMsg,
     dispatch,
     () => {
-      dispatch(moveMessage(messages, messageID, currentFolderID, newFolderID, folderToRefresh, currentPage, messagesLeft, true, folders))
+      dispatch(
+        moveMessage(
+          messages,
+          messageID,
+          currentFolderID,
+          newFolderID,
+          folderToRefresh,
+          currentPage,
+          messagesLeft,
+          true,
+          folders,
+        ),
+      )
     },
     isUndo,
     false,
@@ -542,7 +597,20 @@ export const moveMessage =
     folders: SecureMessagingFolderList,
   ): AppThunk =>
   async (dispatch) => {
-    const retryFunction = () => dispatch(moveMessage(messages, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders))
+    const retryFunction = () =>
+      dispatch(
+        moveMessage(
+          messages,
+          messageID,
+          newFolderID,
+          currentFolderID,
+          folderToRefresh,
+          currentPage,
+          messagesLeft,
+          isUndo,
+          folders,
+        ),
+      )
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartMoveMessage(isUndo))
 
@@ -569,12 +637,30 @@ export const moveMessage =
       }
 
       await logAnalyticsEvent(Events.vama_sm_move_outcome(folder()))
-      refreshFoldersAfterMove(dispatch, messages, messageID, newFolderID, currentFolderID, folderToRefresh, currentPage, messagesLeft, isUndo, folders)
+      refreshFoldersAfterMove(
+        dispatch,
+        messages,
+        messageID,
+        newFolderID,
+        currentFolderID,
+        folderToRefresh,
+        currentPage,
+        messagesLeft,
+        isUndo,
+        folders,
+      )
     } catch (error) {
       if (isErrorObject(error)) {
         logNonFatalErrorToFirebase(error, `moveMessage: ${secureMessagingNonFatalErrorString}`)
         dispatch(dispatchFinishMoveMessage({ error }))
-        showSnackBar(isUndo && messages.undoErrorMsg ? messages.undoErrorMsg : messages.errorMsg, dispatch, retryFunction, false, true, true)
+        showSnackBar(
+          isUndo && messages.undoErrorMsg ? messages.undoErrorMsg : messages.errorMsg,
+          dispatch,
+          retryFunction,
+          false,
+          true,
+          true,
+        )
       }
     }
   }
@@ -592,7 +678,13 @@ export const deleteDraft =
     try {
       await callDeleteMessageApi(messageID)
 
-      dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
+      dispatch(
+        listFolderMessages(
+          SecureMessagingSystemFolderIdConstants.DRAFTS,
+          1,
+          ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID,
+        ),
+      )
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
 
       dispatch(dispatchFinishDeleteDraft(undefined))
@@ -619,7 +711,9 @@ export const callDeleteMessageApi = async (messageID: number): Promise<void> => 
  * @param newFolderID - the new folder for the message
  */
 export const callMoveMessageApi = async (messageID: number, newFolderID: number): Promise<void> => {
-  await api.patch(`/v0/messaging/health/messages/${messageID}/move`, { folder_id: newFolderID } as unknown as api.Params)
+  await api.patch(`/v0/messaging/health/messages/${messageID}/move`, {
+    folder_id: newFolderID,
+  } as unknown as api.Params)
 }
 
 /**
@@ -633,7 +727,10 @@ const secureMessagingSlice = createSlice({
       state.loadingInbox = true
     },
 
-    dispatchFinishFetchInboxMessages: (state, action: PayloadAction<{ inboxMessages?: SecureMessagingFolderMessagesGetData; error?: api.APIError }>) => {
+    dispatchFinishFetchInboxMessages: (
+      state,
+      action: PayloadAction<{ inboxMessages?: SecureMessagingFolderMessagesGetData; error?: api.APIError }>,
+    ) => {
       const { inboxMessages, error } = action.payload
       const messages = inboxMessages ? inboxMessages.data : []
       const termsAndConditionError = hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, error)
@@ -667,7 +764,10 @@ const secureMessagingSlice = createSlice({
       state.loadingFolders = true
     },
 
-    dispatchFinishListFolders: (state, action: PayloadAction<{ folderData?: SecureMessagingFoldersGetData; error?: api.APIError }>) => {
+    dispatchFinishListFolders: (
+      state,
+      action: PayloadAction<{ folderData?: SecureMessagingFoldersGetData; error?: api.APIError }>,
+    ) => {
       const { folderData, error } = action.payload
       state.folders = folderData?.data || state.folders
       state.loadingFolders = false
@@ -678,7 +778,14 @@ const secureMessagingSlice = createSlice({
       state.loading = true
     },
 
-    dispatchFinishListFolderMessages: (state, action: PayloadAction<{ folderID: number; messageData?: SecureMessagingFolderMessagesGetData; error?: api.APIError }>) => {
+    dispatchFinishListFolderMessages: (
+      state,
+      action: PayloadAction<{
+        folderID: number
+        messageData?: SecureMessagingFolderMessagesGetData
+        error?: api.APIError
+      }>,
+    ) => {
       const { folderID, messageData, error } = action.payload
       const messageMap = {
         ...state.messagesByFolderId,
@@ -714,7 +821,10 @@ const secureMessagingSlice = createSlice({
       state.loading = true
     },
 
-    dispatchFinishGetThread: (state, action: PayloadAction<{ threadData?: SecureMessagingThreadGetData; messageID?: number; error?: api.APIError }>) => {
+    dispatchFinishGetThread: (
+      state,
+      action: PayloadAction<{ threadData?: SecureMessagingThreadGetData; messageID?: number; error?: api.APIError }>,
+    ) => {
       const { threadData, messageID, error } = action.payload
 
       let messagesById = state.messagesById
@@ -722,11 +832,14 @@ const secureMessagingSlice = createSlice({
 
       if (!error && threadData?.data && messageID) {
         const threadIDs = [messageID]
-        const threadMap = threadData.data.reduce((map: SecureMessagingMessageMap, message: SecureMessagingMessageData) => {
-          map[message.id] = message.attributes
-          threadIDs.push(message.attributes.messageId)
-          return map
-        }, {})
+        const threadMap = threadData.data.reduce(
+          (map: SecureMessagingMessageMap, message: SecureMessagingMessageData) => {
+            map[message.id] = message.attributes
+            threadIDs.push(message.attributes.messageId)
+            return map
+          },
+          {},
+        )
 
         messagesById = { ...messagesById, ...threadMap }
         const existingThreadIndex: number = threads.findIndex((t) => t.includes(messageID))
@@ -750,7 +863,15 @@ const secureMessagingSlice = createSlice({
       state.messageIDsOfError = state.messageIDsOfError?.filter((id) => id !== messageID)
     },
 
-    dispatchFinishGetMessage: (state, action: PayloadAction<{ messageData?: SecureMessagingMessageGetData; error?: api.APIError; messageId?: number; isDemoMode?: boolean }>) => {
+    dispatchFinishGetMessage: (
+      state,
+      action: PayloadAction<{
+        messageData?: SecureMessagingMessageGetData
+        error?: api.APIError
+        messageId?: number
+        isDemoMode?: boolean
+      }>,
+    ) => {
       const { messageId, messageData, error, isDemoMode } = action.payload
 
       if (!error && messageData?.data) {
@@ -821,7 +942,10 @@ const secureMessagingSlice = createSlice({
       state.hasLoadedRecipients = false
     },
 
-    dispatchFinishGetMessageRecipients: (state, action: PayloadAction<{ recipients?: SecureMessagingRecipientDataList; error?: api.APIError }>) => {
+    dispatchFinishGetMessageRecipients: (
+      state,
+      action: PayloadAction<{ recipients?: SecureMessagingRecipientDataList; error?: api.APIError }>,
+    ) => {
       const { recipients, error } = action.payload
       return {
         ...state,
@@ -835,7 +959,10 @@ const secureMessagingSlice = createSlice({
       state.loadingSignature = true
     },
 
-    dispatchFinishGetMessageSignature: (state, action: PayloadAction<{ signature?: SecureMessagingSignatureDataAttributes; error?: api.APIError }>) => {
+    dispatchFinishGetMessageSignature: (
+      state,
+      action: PayloadAction<{ signature?: SecureMessagingSignatureDataAttributes; error?: api.APIError }>,
+    ) => {
       const { signature, error } = action.payload
       return {
         ...state,

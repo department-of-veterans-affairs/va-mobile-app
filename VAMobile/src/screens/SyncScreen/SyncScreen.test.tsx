@@ -1,13 +1,15 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, render, waitFor } from 'testUtils'
 import { initialAuthState, initialDisabilityRatingState, initialMilitaryServiceState } from 'store/slices'
-import { SyncScreen } from './index'
 import { completeSync, getDisabilityRating, getServiceHistory } from 'store/slices'
+import { context, render, waitFor } from 'testUtils'
+
+import { SyncScreen } from './index'
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     completeSync: jest.fn(() => {
@@ -32,11 +34,11 @@ jest.mock('store/slices', () => {
 })
 
 jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
-  let original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
+  const original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({
-      status: "success",
+      status: 'success',
       data: {
         appeals: true,
         appointments: true,
@@ -53,17 +55,21 @@ jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
         prescriptions: true,
         scheduleAppointments: true,
         secureMessaging: true,
-        userProfileUpdate: true
-      }
-    })
+        userProfileUpdate: true,
+      },
+    }),
   }
 })
 
 context('SyncScreen', () => {
-  let store: any
-
-  const initializeTestInstance = (militaryLoading = true, disabilityRatingLoading = true, loggedIn = false, loggingOut = false, syncing = true): void => {
-    store = {
+  const initializeTestInstance = (
+    militaryLoading = true,
+    disabilityRatingLoading = true,
+    loggedIn = false,
+    loggingOut = false,
+    syncing = true,
+  ): void => {
+    const store = {
       auth: { ...initialAuthState, loggedIn, loggingOut, syncing },
       disabilityRating: { ...initialDisabilityRatingState, preloadComplete: !disabilityRatingLoading },
       militaryService: { ...initialMilitaryServiceState, preloadComplete: !militaryLoading },

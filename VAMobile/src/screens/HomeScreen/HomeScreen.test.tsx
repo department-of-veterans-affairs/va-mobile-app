@@ -1,11 +1,12 @@
 import React from 'react'
-import { Linking } from 'react-native'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, mockNavProps, render } from 'testUtils'
+
+import { HomeScreen } from './HomeScreen'
 import { initialPrescriptionState } from 'store/slices'
 import { initialClaimsAndAppealsState } from 'store/slices'
-import { HomeScreen } from './HomeScreen'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -65,41 +66,11 @@ context('HomeScreen', () => {
   describe('when the find VA location link is clicked', () => {
     it('should call useRouteNavigation', () => {
       fireEvent.press(screen.getByRole('button', { name: 'Find a VA location' }))
-      expect(mockNavigationSpy).toBeCalledWith('Webview', { displayTitle: 'va.gov', url: 'https://www.va.gov/find-locations/', loadingMessage: 'Loading VA location finder...' })
+      expect(mockNavigationSpy).toBeCalledWith('Webview', {
+        displayTitle: 'va.gov',
+        url: 'https://www.va.gov/find-locations/',
+        loadingMessage: 'Loading VA location finder...',
+      })
     })
   })
-
-  // it('displays prescriptions module when there are active prescriptions', () => {
-  //   initializeTestInstance(2)
-  //   expect(screen.getByText('Prescriptions')).toBeTruthy()
-  //   expect(screen.getByText('(2 active)')).toBeTruthy()
-  // })
-
-  // it('navigates to prescriptions screen when prescriptions module is tapped', () => {
-  //   initializeTestInstance(2)
-  //   fireEvent.press(screen.getByText('Prescriptions'))
-  //   expect(Linking.openURL).toBeCalledWith('vamobile://prescriptions')
-  // })
-
-  // it('does not display prescriptions module when there are no active prescriptions', () => {
-  //   initializeTestInstance(0)
-  //   expect(screen.queryByText('Prescriptions')).toBeFalsy()
-  // })
-
-  // it('displays claims module when there are active claims', () => {
-  //   initializeTestInstance(0, 2)
-  //   expect(screen.getByText('Claims')).toBeTruthy()
-  //   expect(screen.getByText('(2 open)')).toBeTruthy()
-  // })
-
-  // it('navigates to claims history screen when claims module is tapped', () => {
-  //   initializeTestInstance(0, 2)
-  //   fireEvent.press(screen.getByText('Claims'))
-  //   expect(Linking.openURL).toBeCalledWith('vamobile://claims')
-  // })
-
-  // it('does not display claims module when there are no active claims', () => {
-  //   initializeTestInstance(0)
-  //   expect(screen.queryByText('Claims')).toBeFalsy()
-  // })
 })

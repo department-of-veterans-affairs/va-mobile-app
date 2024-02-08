@@ -1,5 +1,13 @@
-import * as api from 'store/api'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import _ from 'underscore'
+
+import { Events, UserAnalytics } from 'constants/analytics'
+import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { CommonErrorTypesConstants } from 'constants/errors'
 import { AppThunk } from 'store'
+import * as api from 'store/api'
+import { Params } from 'store/api'
 import {
   AppointmentCancellationStatusConstants,
   AppointmentCancellationStatusTypes,
@@ -14,20 +22,14 @@ import {
   AppointmentsMetaPagination,
   ScreenIDTypes,
 } from 'store/api/types'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import { Events, UserAnalytics } from 'constants/analytics'
-import { Params } from 'store/api'
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
-import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
+import { getItemsInRange, isErrorObject, showSnackBar } from 'utils/common'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getFormattedDate } from 'utils/formattingUtils'
-import { getItemsInRange, isErrorObject, showSnackBar } from 'utils/common'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { registerReviewEvent } from 'utils/inAppReviews'
+
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analyticsSlice'
-import _ from 'underscore'
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 
 const appointmenNonFatalErrorString = 'Appointments Service Error'
 
@@ -149,7 +151,10 @@ export const initialAppointmentsState: AppointmentsState = {
 }
 
 // Issue#2273 Tracks and logs pagination warning if there are discrepancies in the total entries of appointments
-const trackAppointmentPaginationDiscrepancy = async (previousPagination: AppointmentsMetaPagination, currentPagination?: AppointmentsMetaPagination): Promise<void> => {
+const trackAppointmentPaginationDiscrepancy = async (
+  previousPagination: AppointmentsMetaPagination,
+  currentPagination?: AppointmentsMetaPagination,
+): Promise<void> => {
   // skip first call by checking against the initial state
   if (
     previousPagination.totalEntries === initialPaginationState.totalEntries &&
@@ -194,7 +199,9 @@ export const mapAppointmentsById = (appointmentsList?: AppointmentsList): Appoin
   return appointmentsMap
 }
 
-export const findAppointmentErrors = (appointmentsMetaErrors?: Array<AppointmentsMetaError>): { vaServiceError: boolean; ccServiceError: boolean } => {
+export const findAppointmentErrors = (
+  appointmentsMetaErrors?: Array<AppointmentsMetaError>,
+): { vaServiceError: boolean; ccServiceError: boolean } => {
   const vaServiceError = !!appointmentsMetaErrors?.find((error) => {
     return error.source === AppointmentsErrorServiceTypesConstants.VA
   })
@@ -246,8 +253,10 @@ export const prefetchAppointments =
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
     dispatch(dispatchStartPrefetchAppointments())
 
-    const { upcoming: loadedUpcoming, pastThreeMonths: loadedPastThreeMonths } = getState().appointments.loadedAppointmentsByTimeFrame
-    const { upcoming: upcomingPagination, pastThreeMonths: pastPagination } = getState().appointments.paginationByTimeFrame
+    const { upcoming: loadedUpcoming, pastThreeMonths: loadedPastThreeMonths } =
+      getState().appointments.loadedAppointmentsByTimeFrame
+    const { upcoming: upcomingPagination, pastThreeMonths: pastPagination } =
+      getState().appointments.paginationByTimeFrame
     try {
       let upcomingAppointments
       let pastAppointments
@@ -255,7 +264,12 @@ export const prefetchAppointments =
       if (past) {
         // use loaded data if we have it and `forceRefetch` is false
         const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, pastPagination, 1, DEFAULT_PAGE_SIZE)
-        if (!forceRefetch && loadedPastAppointments && getState().appointments.pastCcServiceError === false && getState().appointments.pastVaServiceError === false) {
+        if (
+          !forceRefetch &&
+          loadedPastAppointments &&
+          getState().appointments.pastCcServiceError === false &&
+          getState().appointments.pastVaServiceError === false
+        ) {
           pastAppointments = loadedPastAppointments
         } else {
           pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
@@ -304,7 +318,11 @@ export const getAppointmentsInDateRange =
   (startDate: string, endDate: string, timeFrame: TimeFrameType, page: number, screenID?: ScreenIDTypes): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, page, screenID))))
+    dispatch(
+      dispatchSetTryAgainFunction(() =>
+        dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, page, screenID)),
+      ),
+    )
     dispatch(dispatchStartGetAppointmentsInDateRange())
 
     const appointmentsState = getState().appointments
@@ -343,9 +361,17 @@ export const getAppointmentsInDateRange =
  * Redux action to cancel appointment associated with the given cancelID
  */
 export const cancelAppointment =
-  (cancelID?: string, appointmentID?: string, isPendingAppointment?: boolean, status?: string, type?: string, days_to_apt?: number): AppThunk =>
+  (
+    cancelID?: string,
+    appointmentID?: string,
+    isPendingAppointment?: boolean,
+    status?: string,
+    type?: string,
+    days_to_apt?: number,
+  ): AppThunk =>
   async (dispatch) => {
-    const retryFunction = () => dispatch(cancelAppointment(cancelID, appointmentID, isPendingAppointment, status, type, days_to_apt))
+    const retryFunction = () =>
+      dispatch(cancelAppointment(cancelID, appointmentID, isPendingAppointment, status, type, days_to_apt))
     dispatch(dispatchSetTryAgainFunction(retryFunction))
     dispatch(dispatchStartCancelAppointment())
 
@@ -372,10 +398,18 @@ export const cancelAppointment =
  * Redux action to track appointment details
  */
 export const trackAppointmentDetail =
-  (isPendingAppointment?: boolean, appointmentID?: string, status?: string, type?: string, days_to_apt?: number): AppThunk =>
+  (
+    isPendingAppointment?: boolean,
+    appointmentID?: string,
+    status?: string,
+    type?: string,
+    days_to_apt?: number,
+  ): AppThunk =>
   async (dispatch) => {
     await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
-    await logAnalyticsEvent(Events.vama_appt_view_details(!!isPendingAppointment, appointmentID, status, type, days_to_apt))
+    await logAnalyticsEvent(
+      Events.vama_appt_view_details(!!isPendingAppointment, appointmentID, status, type, days_to_apt),
+    )
     await registerReviewEvent()
     await dispatch(resetAnalyticsActionStart())
     await dispatch(setAnalyticsTotalTimeStart())
@@ -395,7 +429,10 @@ const appointmentsSlice = createSlice({
   name: 'appointments',
   initialState: initialAppointmentsState,
   reducers: {
-    dispatchFinishGetAppointmentsInDateRange: (state, action: PayloadAction<{ timeFrame: TimeFrameType; appointments?: AppointmentsGetData; error?: Error }>) => {
+    dispatchFinishGetAppointmentsInDateRange: (
+      state,
+      action: PayloadAction<{ timeFrame: TimeFrameType; appointments?: AppointmentsGetData; error?: Error }>,
+    ) => {
       const { appointments, timeFrame, error } = action.payload
       const appointmentInfo = appointments || emptyAppointmentsInDateRange
       const appointmentData = appointmentInfo?.data || []
@@ -419,7 +456,9 @@ const appointmentsSlice = createSlice({
       state.loading = false
       state.currentPageAppointmentsByYear[timeFrame] = appointmentsByYear
       // only added appointments if the api was called
-      state.loadedAppointmentsByTimeFrame[timeFrame] = appointmentInfo?.meta?.dataFromStore ? currAppointmentList : currAppointmentList?.concat(appointmentData)
+      state.loadedAppointmentsByTimeFrame[timeFrame] = appointmentInfo?.meta?.dataFromStore
+        ? currAppointmentList
+        : currAppointmentList?.concat(appointmentData)
       state.paginationByTimeFrame[timeFrame] = appointmentInfo?.meta?.pagination || initialPaginationState
     },
 
@@ -431,12 +470,19 @@ const appointmentsSlice = createSlice({
       state.loading = true
     },
 
-    dispatchFinishPrefetchAppointments: (state, action: PayloadAction<{ upcoming?: AppointmentsGetData; past?: AppointmentsGetData; error?: Error }>) => {
+    dispatchFinishPrefetchAppointments: (
+      state,
+      action: PayloadAction<{ upcoming?: AppointmentsGetData; past?: AppointmentsGetData; error?: Error }>,
+    ) => {
       const { upcoming, past, error } = action.payload
       const upcomingAppointments = upcoming?.data || []
       const pastAppointments = past?.data || []
-      const { vaServiceError: upcomingVaServiceError, ccServiceError: upcomingCcServiceError } = findAppointmentErrors(upcoming?.meta?.errors)
-      const { vaServiceError: pastVaServiceError, ccServiceError: pastCcServiceError } = findAppointmentErrors(past?.meta?.errors)
+      const { vaServiceError: upcomingVaServiceError, ccServiceError: upcomingCcServiceError } = findAppointmentErrors(
+        upcoming?.meta?.errors,
+      )
+      const { vaServiceError: pastVaServiceError, ccServiceError: pastCcServiceError } = findAppointmentErrors(
+        past?.meta?.errors,
+      )
       const loadedAppointmentsByTimeFrame = state.loadedAppointmentsByTimeFrame
       const upcomingAppointmentsPagination = upcoming?.meta?.pagination || state.paginationByTimeFrame.upcoming
       const pastAppointmentsPagination = past?.meta?.pagination || state.paginationByTimeFrame.pastThreeMonths
@@ -517,10 +563,14 @@ const appointmentsSlice = createSlice({
 
       state.error = error
       state.upcomingAppointmentsById = updatedUpcomingAppointmentsById || state.upcomingAppointmentsById
-      state.currentPageAppointmentsByYear.upcoming = updatedCurrentPageUpcomingAppointmentsByYear || state.currentPageAppointmentsByYear.upcoming
-      state.loadedAppointmentsByTimeFrame.upcoming = updatedUpcomingAppointmentsList || state.loadedAppointmentsByTimeFrame.upcoming
+      state.currentPageAppointmentsByYear.upcoming =
+        updatedCurrentPageUpcomingAppointmentsByYear || state.currentPageAppointmentsByYear.upcoming
+      state.loadedAppointmentsByTimeFrame.upcoming =
+        updatedUpcomingAppointmentsList || state.loadedAppointmentsByTimeFrame.upcoming
       state.loadingAppointmentCancellation = false
-      state.appointmentCancellationStatus = error ? AppointmentCancellationStatusConstants.FAIL : AppointmentCancellationStatusConstants.SUCCESS
+      state.appointmentCancellationStatus = error
+        ? AppointmentCancellationStatusConstants.FAIL
+        : AppointmentCancellationStatusConstants.SUCCESS
     },
 
     dispatchClearAppointmentCancellation: (state) => {

@@ -1,11 +1,19 @@
-import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
+
+import { useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
 
 import { Box, BoxProps } from '../../index'
-import { getInputBorderColor, getInputBorderWidth, getInputWrapperProps, removeInputErrorMessage, renderInputError, renderInputLabelSection } from './formFieldUtils'
-import { isIOS } from 'utils/platform'
-import { useTheme } from 'utils/hooks'
+import {
+  getInputBorderColor,
+  getInputBorderWidth,
+  getInputWrapperProps,
+  removeInputErrorMessage,
+  renderInputError,
+  renderInputLabelSection,
+} from './formFieldUtils'
 
 export type VATextInputTypes = 'none' | 'email' | 'phone'
 
@@ -65,7 +73,9 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const startTextPositon = { start: 0, end: 0 }
   const [focusUpdated, setFocusUpdated] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
-  const [selection, setSelection] = useState<{ start: number; end?: number } | undefined>(setInputCursorToBeginning ? startTextPositon : undefined)
+  const [selection, setSelection] = useState<{ start: number; end?: number } | undefined>(
+    setInputCursorToBeginning ? startTextPositon : undefined,
+  )
   const ref = useRef<TextInput>(null)
 
   useEffect(() => {
