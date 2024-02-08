@@ -23,6 +23,7 @@ import java.util.List;
 
 import gov.va.mobileapp.native_modules.CustomTabsIntentManager;
 import gov.va.mobileapp.native_modules.DeviceDataPackage;
+import gov.va.mobileapp.native_modules.InstallReferrer;
 import gov.va.mobileapp.native_modules.RNCalendarPackage;
 import gov.va.mobileapp.native_modules.RNCheckVoiceOverPackage;
 import gov.va.mobileapp.native_modules.RNNotificationPrefsPackage;
@@ -59,6 +60,7 @@ public class MainApplication extends Application implements ReactApplication, IN
             packages.add(new RNNativeUIUtilitiesPackage());
             packages.add(new LottiePackage());
             packages.add(new CustomTabsIntentManager());
+            packages.add(new InstallReferrer());
 
             return packages;
         }
