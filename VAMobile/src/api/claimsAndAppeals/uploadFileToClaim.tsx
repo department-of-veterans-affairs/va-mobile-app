@@ -15,7 +15,7 @@ import { claimsAndAppealsKeys } from './queryKeys'
 /**
  * Uploads a File to Claim
  */
-export const uploadFileToClaim = async ({ claimID, request, files }: UploadFileToClaimParamaters) => {
+const uploadFileToClaim = async ({ claimID, request, files }: UploadFileToClaimParamaters) => {
   if (files.length > 1) {
     const fileStrings = files.map((file: DocumentPickerResponse | Asset) => {
       return file.base64
