@@ -714,5 +714,5 @@ beforeAll(async () => {
 
 describe('Appointments Screen', () => {
   apppointmentVerification()
-  //apppointmentVerification(true)
+  apppointmentVerification(true)
 })
