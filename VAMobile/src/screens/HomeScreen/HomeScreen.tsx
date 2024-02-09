@@ -76,8 +76,7 @@ export function HomeScreen({}: HomeScreenProps) {
 
   useEffect(() => {
     if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
-      dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
-      //dispatch(fetchInboxMessages(1, undefined))
+      dispatch(getInbox(ScreenIDTypesConstants.HOME_SCREEN_ID))
     }
   }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
 
