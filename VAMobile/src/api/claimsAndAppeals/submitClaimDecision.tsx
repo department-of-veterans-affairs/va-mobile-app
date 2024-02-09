@@ -8,7 +8,7 @@ import { isErrorObject } from 'utils/common'
 import { claimsAndAppealsKeys } from './queryKeys'
 
 /**
- * Action to notify VA to make a claim decision
+ * Notifes VA to make a claim decision
  */
 
 export const submitClaimDecision = async (claimID: string) => {
