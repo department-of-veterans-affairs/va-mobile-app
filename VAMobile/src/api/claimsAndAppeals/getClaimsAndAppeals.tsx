@@ -11,7 +11,7 @@ import { claimsAndAppealsKeys } from './queryKeys'
 /**
  * Fetch user ClaimsAndAppeals
  */
-export const getClaimsAndAppeals = async (
+const getClaimsAndAppeals = async (
   claimType: ClaimType,
   page: number,
 ): Promise<ClaimsAndAppealsListPayload | undefined> => {
