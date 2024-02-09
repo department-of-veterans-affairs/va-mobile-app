@@ -21,9 +21,10 @@ export const getClaimsAndAppeals = async (
     showCompleted: claimType === ClaimTypeConstants.ACTIVE ? 'false' : 'true',
   })
   if (response) {
-    response.data = sortByLatestDate(response.data)
+    return {
+      ...response,
+      data: sortByLatestDate(response.data),
   }
-  return response
 }
 
 /**
