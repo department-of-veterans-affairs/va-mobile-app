@@ -513,6 +513,7 @@ export type ClaimsAndAppealsGetDataMeta = {
     perPage: number
     totalEntries: number
   }
+  activeClaimcCount: number
   // This property does not exist in api, used to track if the data(ClaimsAndAppealsGetData) return was from an api call
   dataFromStore: boolean
 }
