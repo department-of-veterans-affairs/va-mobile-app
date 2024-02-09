@@ -89,7 +89,7 @@ export const useUploadFileToClaim = (claimID: string) => {
 }
 
 // creates the documents array after submitting a file request
-export const createFileRequestDocumentsArray = (
+const createFileRequestDocumentsArray = (
   files: Array<Asset> | Array<DocumentPickerResponse>,
   trackedItemId: number | undefined,
   documentType: string,
