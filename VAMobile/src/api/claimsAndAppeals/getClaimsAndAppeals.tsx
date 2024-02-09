@@ -1,12 +1,20 @@
 import { useQuery } from '@tanstack/react-query'
 import { chain } from 'underscore'
 
-import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types/ClaimsAndAppealsData'
+import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
 
 import { claimsAndAppealsKeys } from './queryKeys'
+
+const sortByLatestDate = (claimsAndAppeals: Array<ClaimsAndAppealsList>): Array<ClaimsAndAppealsList> => {
+  return chain(claimsAndAppeals)
+    .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.dateFiled))
+    .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.updatedAt))
+    .reverse()
+    .value()
+}
 
 /**
  * Fetch user ClaimsAndAppeals
@@ -24,6 +32,7 @@ const getClaimsAndAppeals = async (
     return {
       ...response,
       data: sortByLatestDate(response.data),
+    }
   }
 }
 
@@ -39,12 +48,4 @@ export const useClaimsAndAppeals = (claimType: ClaimType, page: number, options?
       errorName: 'getClaimsAndAppeals: Service error',
     },
   })
-}
-
-const sortByLatestDate = (claimsAndAppeals: Array<ClaimsAndAppealsList>): Array<ClaimsAndAppealsList> => {
-  return chain(claimsAndAppeals)
-    .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.dateFiled))
-    .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.updatedAt))
-    .reverse()
-    .value()
 }

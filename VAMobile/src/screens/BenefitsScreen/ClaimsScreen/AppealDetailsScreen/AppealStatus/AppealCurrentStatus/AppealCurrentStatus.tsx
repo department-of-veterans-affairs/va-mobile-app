@@ -13,7 +13,7 @@ import {
   AppealStatusTypesConstants,
   AppealTypes,
   AppealTypesConstants,
-} from 'api/types/ClaimsAndAppealsData'
+} from 'api/types'
 import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import getEnv from 'utils/env'

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 
-import { ClaimAttributesData, ClaimEventData } from 'api/types/ClaimsAndAppealsData'
+import { ClaimAttributesData, ClaimEventData } from 'api/types'
 import { AccordionCollapsible, Box, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'

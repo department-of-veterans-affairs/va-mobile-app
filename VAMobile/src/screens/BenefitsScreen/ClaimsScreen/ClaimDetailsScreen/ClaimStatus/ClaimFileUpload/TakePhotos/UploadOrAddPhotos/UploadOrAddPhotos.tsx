@@ -10,7 +10,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import _ from 'underscore'
 
 import { useClaim, useUploadFileToClaim } from 'api/claimsAndAppeals'
-import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types/ClaimsAndAppealsData'
+import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types'
 import {
   AlertBox,
   Box,

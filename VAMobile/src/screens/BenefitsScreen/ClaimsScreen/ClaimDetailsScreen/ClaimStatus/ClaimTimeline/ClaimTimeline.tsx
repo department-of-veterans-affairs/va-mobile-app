@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ClaimAttributesData } from 'api/types/ClaimsAndAppealsData'
+import { ClaimAttributesData } from 'api/types'
 import { AlertBox, Box } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import theme from 'styles/themes/standardTheme'

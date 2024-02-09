@@ -3,7 +3,7 @@ import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
-import { ClaimsAndAppealsListPayload } from 'api/types/ClaimsAndAppealsData'
+import { ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType } from 'constants/claims'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
-import { ClaimOrAppeal, ClaimOrAppealConstants } from 'api/types/ClaimsAndAppealsData'
+import { ClaimOrAppeal, ClaimOrAppealConstants } from 'api/types'
 import {
   Box,
   DefaultList,

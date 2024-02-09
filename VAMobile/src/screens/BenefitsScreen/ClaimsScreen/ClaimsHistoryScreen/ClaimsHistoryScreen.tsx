@@ -7,7 +7,7 @@ import { SegmentedControl } from '@department-of-veterans-affairs/mobile-compone
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
-import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types/ClaimsAndAppealsData'
+import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types'
 import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'

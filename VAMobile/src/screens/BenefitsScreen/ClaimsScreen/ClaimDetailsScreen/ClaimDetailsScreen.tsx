@@ -11,7 +11,7 @@ import { TFunction } from 'i18next'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaim } from 'api/claimsAndAppeals'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
-import { ClaimAttributesData, ClaimData } from 'api/types/ClaimsAndAppealsData'
+import { ClaimAttributesData, ClaimData } from 'api/types'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -42,11 +42,13 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   const { claimID, claimType } = route.params
   const queryClient = useQueryClient()
+  const abortController = new AbortController()
+  const abortSignal = abortController.signal
   const {
     data: claim,
     isLoading: loadingClaim,
     isError: claimError,
-  } = useClaim(claimID, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
+  } = useClaim(claimID, abortSignal, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
@@ -55,6 +57,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     // if claim is still loading cancel it
     if (loadingClaim) {
       queryClient.invalidateQueries({ queryKey: claimsAndAppealsKeys.claim })
+      abortController.abort()
     }
   })
 

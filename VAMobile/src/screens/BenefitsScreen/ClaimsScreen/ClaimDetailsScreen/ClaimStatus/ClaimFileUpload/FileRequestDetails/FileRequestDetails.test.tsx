@@ -2,7 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { ClaimEventData } from 'api/types/ClaimsAndAppealsData'
+import { ClaimEventData } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
 
 import FileRequestDetails from './FileRequestDetails'

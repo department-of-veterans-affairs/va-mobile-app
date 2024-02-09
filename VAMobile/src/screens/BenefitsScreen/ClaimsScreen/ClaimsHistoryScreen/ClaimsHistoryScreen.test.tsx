@@ -3,7 +3,7 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
-import { ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsListPayload } from 'api/types/ClaimsAndAppealsData'
+import { ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsListPayload } from 'api/types'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import * as api from 'store/api'

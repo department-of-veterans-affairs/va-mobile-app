@@ -2,7 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { AppealEventTypes } from 'api/types/ClaimsAndAppealsData'
+import { AppealEventTypes } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
 
 import AppealPhase from './AppealPhase'

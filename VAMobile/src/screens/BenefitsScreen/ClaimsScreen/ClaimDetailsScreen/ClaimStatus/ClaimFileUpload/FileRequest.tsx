@@ -7,7 +7,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { map } from 'underscore'
 
 import { useClaim } from 'api/claimsAndAppeals'
-import { ClaimEventData } from 'api/types/ClaimsAndAppealsData'
+import { ClaimEventData } from 'api/types'
 import { Box, ChildTemplate, ErrorComponent, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'

@@ -3,7 +3,7 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
-import { ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsListPayload } from 'api/types/ClaimsAndAppealsData'
+import { ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimTypeConstants } from 'constants/claims'
 import * as api from 'store/api'
 import { QueriesData, context, render, waitFor, when } from 'testUtils'

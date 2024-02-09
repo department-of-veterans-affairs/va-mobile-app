@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AppealAOJTypes, AppealEventData, AppealStatusData, AppealTypes } from 'api/types/ClaimsAndAppealsData'
+import { AppealAOJTypes, AppealEventData, AppealStatusData, AppealTypes } from 'api/types'
 import { Box, CollapsibleView, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'

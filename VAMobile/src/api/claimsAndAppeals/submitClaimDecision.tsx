@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { ClaimDecisionResponseData } from 'api/types/ClaimsAndAppealsData'
+import { ClaimDecisionResponseData } from 'api/types'
 import { post } from 'store/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'

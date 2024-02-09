@@ -1,10 +1,8 @@
 import { Asset } from 'react-native-image-picker'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { find, map } from 'underscore'
 
-import { ClaimDocUploadData, ClaimEventDocumentData, UploadFileToClaimParamaters } from 'api/types/ClaimsAndAppealsData'
-import { DocumentTypes526 } from 'constants/documentTypes'
+import { ClaimDocUploadData, UploadFileToClaimParamaters } from 'api/types'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Params, contentTypes, post } from 'store/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
@@ -85,35 +83,5 @@ export const useUploadFileToClaim = (claimID: string) => {
         logNonFatalErrorToFirebase(error, 'uploadFileToClaim: Service error')
       }
     },
-  })
-}
-
-// creates the documents array after submitting a file request
-const createFileRequestDocumentsArray = (
-  files: Array<Asset> | Array<DocumentPickerResponse>,
-  trackedItemId: number | undefined,
-  documentType: string,
-  uploadDate: string,
-): Array<ClaimEventDocumentData> => {
-  return map(files, (item) => {
-    let name: string | undefined
-
-    if ('fileSize' in item) {
-      name = item.fileName
-    } else if ('size' in item) {
-      name = item.name
-    }
-
-    const fileType = find(DocumentTypes526, (type) => {
-      return type.value === documentType
-    })
-
-    return {
-      trackedItemId,
-      fileType: fileType ? fileType.label : '',
-      filename: name,
-      documentType,
-      uploadDate,
-    } as ClaimEventDocumentData
   })
 }

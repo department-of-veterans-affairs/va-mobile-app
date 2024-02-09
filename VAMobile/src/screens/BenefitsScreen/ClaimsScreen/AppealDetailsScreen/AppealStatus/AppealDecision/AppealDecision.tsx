@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import _ from 'underscore'
 
-import { AppealAOJTypes, AppealStatusDetailsIssue } from 'api/types/ClaimsAndAppealsData'
+import { AppealAOJTypes, AppealStatusDetailsIssue } from 'api/types'
 import { Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'

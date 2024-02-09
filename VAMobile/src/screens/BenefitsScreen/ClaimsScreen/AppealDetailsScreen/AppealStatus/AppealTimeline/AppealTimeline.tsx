@@ -2,7 +2,7 @@ import React from 'react'
 
 import _ from 'underscore'
 
-import { AppealEventData } from 'api/types/ClaimsAndAppealsData'
+import { AppealEventData } from 'api/types'
 import { Box } from 'components'
 
 import AppealPhase from './AppealPhase'

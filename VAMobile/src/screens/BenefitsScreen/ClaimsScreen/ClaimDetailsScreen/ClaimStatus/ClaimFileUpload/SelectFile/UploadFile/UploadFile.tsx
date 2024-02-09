@@ -7,7 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useClaim, useUploadFileToClaim } from 'api/claimsAndAppeals'
-import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types/ClaimsAndAppealsData'
+import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types'
 import { Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView } from 'components'
 import FileList from 'components/FileList'
 import { SnackbarMessages } from 'components/SnackBar'

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { ClaimData } from 'api/types/ClaimsAndAppealsData'
+import { ClaimData } from 'api/types'
 import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'

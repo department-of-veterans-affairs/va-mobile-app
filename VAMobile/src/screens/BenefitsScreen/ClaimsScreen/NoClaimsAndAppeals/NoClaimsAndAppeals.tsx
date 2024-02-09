@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
-import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types/ClaimsAndAppealsData'
+import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types'
 import { Box, TextView } from 'components'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { TFunction } from 'i18next'
 import { camelCase } from 'lodash'
 
-import { AppealEventData, AppealEventTypes } from 'api/types/ClaimsAndAppealsData'
+import { AppealEventData, AppealEventTypes } from 'api/types'
 import { Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'

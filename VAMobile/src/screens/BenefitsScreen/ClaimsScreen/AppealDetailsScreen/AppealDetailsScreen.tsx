@@ -8,12 +8,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { filter, pluck } from 'underscore'
 
 import { claimsAndAppealsKeys, useAppeal } from 'api/claimsAndAppeals'
-import {
-  AppealAttributesData,
-  AppealData,
-  AppealEventTypesConstants,
-  AppealTypesConstants,
-} from 'api/types/ClaimsAndAppealsData'
+import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'api/typesa'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -41,13 +36,14 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
     t('appealDetails.viewYourAppeal', { tabName: t('claimDetails.status') }),
     t('appealDetails.viewYourAppeal', { tabName: t('appealDetails.issuesTab') }),
   ]
-
+  const abortController = new AbortController()
+  const abortSignal = abortController.signal
   const { appealID } = route.params
   const {
     data: appeal,
     isLoading: loadingAppeal,
     isError: appealError,
-  } = useAppeal(appealID, { enabled: screenContentAllowed('WG_AppealDetailsScreen') })
+  } = useAppeal(appealID, abortSignal, { enabled: screenContentAllowed('WG_AppealDetailsScreen') })
   const { attributes, type } = appeal || ({} as AppealData)
   const { updated, programArea, events, status, aoj, docket, issues, active } =
     attributes || ({} as AppealAttributesData)
@@ -56,6 +52,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
     // if appeals is still loading cancel it
     if (loadingAppeal) {
       queryClient.invalidateQueries({ queryKey: claimsAndAppealsKeys.claim })
+      abortController.abort()
     }
   })
 
