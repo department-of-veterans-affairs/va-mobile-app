@@ -403,7 +403,7 @@ export type ClaimsAndAppealsListPayload = {
       perPage: number
       totalEntries: number
     }
-    activeClaimsCount: number
+    activeClaimsCount?: number
   }
 }
 
