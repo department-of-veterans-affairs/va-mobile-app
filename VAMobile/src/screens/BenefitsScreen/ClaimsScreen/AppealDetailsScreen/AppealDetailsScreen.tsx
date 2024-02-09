@@ -8,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { filter, pluck } from 'underscore'
 
 import { claimsAndAppealsKeys, useAppeal } from 'api/claimsAndAppeals'
-import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'api/typesa'
+import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'api/types'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
