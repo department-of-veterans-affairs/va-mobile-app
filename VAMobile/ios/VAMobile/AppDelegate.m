@@ -42,12 +42,6 @@ static void InitializeFlipper(UIApplication *application) {
   InitializeFlipper(application);
 #endif
 
-  // Enables Firebase DebugView for test builds
-  var args = ProcessInfo.processInfo.arguments
-  args.append("-FIRAnalyticsDebugEnabled")
-  args.append("-FIRDebugEnabled")
-  ProcessInfo.processInfo.setValue(args, forKey: "arguments")
-
   // firebase configuration
   if ([FIRApp defaultApp] == nil) {
       [FIRApp configure];
