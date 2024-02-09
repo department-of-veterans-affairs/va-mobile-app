@@ -88,7 +88,16 @@ context('HealthScreen', () => {
           ...initialSecureMessagingState,
           hasLoadedInbox,
           inbox: {
-            unread: unreadCount,
+            type: 'Inbox',
+            id: '123',
+            attributes: {
+              //SecureMessagingFolderAttributes
+              folderId: 123,
+              name: 'Inbox',
+              count: 45,
+              unreadCount: unreadCount,
+              systemFolder: true,
+            },
           },
         },
       },

@@ -106,8 +106,15 @@ context('secureMessaging', () => {
       secureMessaging: {
         ...initialSecureMessagingState,
         inbox: {
-          read: 4,
-          unread: 19,
+          type: 'Inbox',
+          id: '123',
+          attributes: {
+            folderId: 123,
+            name: 'Inbox',
+            count: 100,
+            unreadCount: 19,
+            systemFolder: true,
+          },
         },
         inboxMessages: [
           {
@@ -237,8 +244,15 @@ context('secureMessaging', () => {
         secureMessaging: {
           ...initialSecureMessagingState,
           inbox: {
-            read: 5,
-            unread: 19,
+            type: 'Inbox',
+            id: '123',
+            attributes: {
+              folderId: 1,
+              name: 'Inbox',
+              count: 100,
+              unreadCount: 19,
+              systemFolder: true,
+            },
           },
           inboxMessages: [
             {

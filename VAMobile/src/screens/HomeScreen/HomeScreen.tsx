@@ -20,8 +20,8 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { fetchInboxMessages, getClaimsAndAppeals, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { getClaimsAndAppeals, getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -76,7 +76,8 @@ export function HomeScreen({}: HomeScreenProps) {
 
   useEffect(() => {
     if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
-      dispatch(fetchInboxMessages(1, undefined))
+      dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
+      //dispatch(fetchInboxMessages(1, undefined))
     }
   }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
 
