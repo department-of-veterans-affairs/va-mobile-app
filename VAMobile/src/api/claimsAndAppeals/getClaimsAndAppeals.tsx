@@ -41,7 +41,7 @@ export const useClaimsAndAppeals = (claimType: ClaimType, page: number, options?
   })
 }
 
-export const sortByLatestDate = (claimsAndAppeals: Array<ClaimsAndAppealsList>): Array<ClaimsAndAppealsList> => {
+const sortByLatestDate = (claimsAndAppeals: Array<ClaimsAndAppealsList>): Array<ClaimsAndAppealsList> => {
   return chain(claimsAndAppeals)
     .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.dateFiled))
     .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.updatedAt))
