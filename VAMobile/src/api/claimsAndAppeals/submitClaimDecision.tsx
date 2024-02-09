@@ -11,7 +11,7 @@ import { claimsAndAppealsKeys } from './queryKeys'
  * Notifes VA to make a claim decision
  */
 
-export const submitClaimDecision = async (claimID: string) => {
+const submitClaimDecision = async (claimID: string) => {
   return post<ClaimDecisionResponseData>(`/v0/claim/${claimID}/request-decision`)
 }
 
