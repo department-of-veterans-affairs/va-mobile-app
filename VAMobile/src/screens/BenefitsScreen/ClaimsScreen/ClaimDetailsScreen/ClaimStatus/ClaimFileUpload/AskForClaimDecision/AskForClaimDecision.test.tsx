@@ -65,11 +65,8 @@ context('AskForClaimDecision', () => {
     render(<AskForClaimDecision {...props} />, { queriesData })
   }
 
-  beforeEach(() => {
-    initializeTestInstance()
-  })
-
   it('should initialize', () => {
+    initializeTestInstance()
     expect(screen.getByText('Claim evaluation')).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Evaluation details' })).toBeTruthy()
     expect(
@@ -92,6 +89,7 @@ context('AskForClaimDecision', () => {
 
   describe('when cancel button is pressed', () => {
     it('should call goBack', () => {
+      initializeTestInstance()
       fireEvent.press(screen.getByRole('button', { name: 'Cancel' }))
       expect(navigateSpy).toHaveBeenCalled()
     })
@@ -99,6 +97,7 @@ context('AskForClaimDecision', () => {
 
   describe('when submitted decision is false or there is an erroror check box is not checked', () => {
     it('should not call navigation go back and display a field error when not checked', () => {
+      initializeTestInstance()
       expect(mockNavigationSpy).not.toHaveBeenCalledWith('ClaimDetailsScreen', {
         claimID: '600156928',
         claimType: 'CLOSED',
