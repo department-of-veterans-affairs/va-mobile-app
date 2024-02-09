@@ -8,7 +8,7 @@ import { claimsAndAppealsKeys } from './queryKeys'
 /**
  * Fetch user Claim
  */
-export const getClaim = async (id: string): Promise<ClaimData | undefined> => {
+const getClaim = async (id: string): Promise<ClaimData | undefined> => {
   const newAbortController = new AbortController()
   const signal = newAbortController.signal
   const response = await get<ClaimGetData>(`/v0/claim/${id}`, {}, signal)
