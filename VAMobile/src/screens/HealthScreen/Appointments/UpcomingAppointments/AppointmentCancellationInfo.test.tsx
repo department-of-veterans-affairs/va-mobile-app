@@ -118,13 +118,13 @@ context('AppointmentCancellationInfo', () => {
   describe('when the appointment type is VA', () => {
     it('should display the correct cancellation details', () => {
       initializeTestInstance(AppointmentTypeConstants.VA, 'BOOKED', appointmentPhoneData)
-      expect(screen.getByText('Cancel this appointment')).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
       expect(
-        screen.getByText(
-          "If you want to reschedule this appointment, you'll need to first cancel this one and then create a new appointment.",
-        ),
+        screen.getByText('You can cancel this appointment in the app. But if you need to reschedule, call us.'),
       ).toBeTruthy()
-      expect(screen.getByText('Cancel appointment')).toBeTruthy()
+      expect(screen.getByRole('link', { name: '123-456-7890' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
+      expect(screen.getByRole('button', { name: 'Cancel appointment' })).toBeTruthy()
     })
   })
 
