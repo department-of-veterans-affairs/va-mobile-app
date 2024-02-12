@@ -31,7 +31,7 @@ jobs:
       - name: 'Find run ID in testRail'
         id: run-id-selection
         run: | 
-          if [[ "${{ inputs.testRail_name }}" != ""]]; then
+          if [[ "${{ inputs.testRail_name }}" != "" ]]; then
             echo "TEST_RUN_ID=${{ inputs.testRail_name }}" >> "$GITHUB_OUTPUT"
           else
             resp=$(curl -X GET -H 'Content-Type: application/json' \
