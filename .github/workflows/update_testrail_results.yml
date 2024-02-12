@@ -33,7 +33,7 @@ jobs:
       - name: 'Find run ID in testRail'
         id: run-id-selection
         run: | 
-          echo "TEST_RUN_ID=${{ inputs.testRail_name }}"" >> "$GITHUB_OUTPUT"
+          echo "TEST_RUN_ID=${{ inputs.testRail_name }}" >> "$GITHUB_OUTPUT"
           if [  TEST_RUN_ID == '']; then
             resp=$(curl -X GET -H 'Content-Type: application/json' \
                 -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
