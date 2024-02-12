@@ -151,5 +151,6 @@ jobs:
     needs: e2e-ios
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
-    with: ${{ github.event.inputs.testRail_name }}
+    with: 
+      testRail_name: ${{ inputs.testRail_name }}
     secrets: inherit
