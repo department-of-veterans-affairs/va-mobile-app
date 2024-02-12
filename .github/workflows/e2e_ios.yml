@@ -10,13 +10,13 @@ on:
       - 'dependabot/**'
   workflow_dispatch:
     inputs:
-      run_testRail:
-        description: 'Add results to testRail?'
-        type: boolean
-        required: false
       testRail_name:
         description: 'Name testRail run (will default to date if blank)'
         type: string
+        required: false
+      run_testRail:
+        description: 'Add results to testRail?'
+        type: boolean
         required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
