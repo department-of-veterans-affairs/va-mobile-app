@@ -34,5 +34,5 @@ jobs:
     with:
       lane: on_demand
       ref: ${{ github.ref_name }}
-      environment: ${{ inputs.environment }}
+      environment: staging
       notes: 'IGNORE - TESTING in CI'
