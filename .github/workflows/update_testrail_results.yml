@@ -49,7 +49,7 @@ jobs:
               echo "$resp"
               echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
             fi
-          elif [[ "${{ inputs.testRail_name }}" != "" ]]; then
+          else
             resp=$(curl -X POST -H 'Content-Type: application/json' \
                     -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                     -d '{"suite_id": 92, "include_all": false, "name": "${{ inputs.testRail_name }}"}' \
