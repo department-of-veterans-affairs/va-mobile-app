@@ -28,19 +28,17 @@ jobs:
       #   uses: actions/download-artifact@v3
       #   with:
       #     name: e2e-junit
-      - name: Output testRail name
-        run: echo "${{ inputs.testRail_name }}"
       - name: 'Find run ID in testRail'
         id: run-id-selection
         run: | 
           echo "TEST_RUN_ID=${{ inputs.testRail_name }}" >> "$GITHUB_OUTPUT"
-          if [ "${{ inputs.testRail_name }}" == '']; then
+          if [ "${{ inputs.testRail_name }}" == ""]; then
             resp=$(curl -X GET -H 'Content-Type: application/json' \
                 -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                 "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&is_completed=0" | jq '.runs[] | select(.name =="Regression pass for release" or .name=="'"$(date +'%Y-%m-%d')"'") | .id')
             echo "$resp"
             echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
-            if [ "$resp" == '' ]; then
+            if [ "$resp" == "" ]; then
               resp=$(curl -X POST -H 'Content-Type: application/json' \
                     -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                     -d '{"suite_id": 92, "include_all": false, "name": "'"$(date +'%Y-%m-%d')"'"}' \
