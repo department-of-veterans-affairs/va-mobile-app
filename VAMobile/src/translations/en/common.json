@@ -392,7 +392,7 @@
   "claimPhase.youHaveFileRequest_plural": "You have {{count}} file requests from VA",
   "claims.appealFor": "{{displayTitle}} updated on {{date}}",
   "claims.claimFor": "Claim for {{displayTitle}} updated on {{date}}",
-  "claims.decisionLetterAvailable": "Decision letter available",
+  "claims.decisionLetterReady": "Decision letter ready",
   "claims.defaultClaimType": "disability compensation",
   "claims.title": "Claims",
   "claims.viewYourActiveClaims": "Review your active claims and appeals",
