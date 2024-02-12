@@ -31,7 +31,6 @@ jobs:
       - name: 'Find run ID in testRail'
         id: run-id-selection
         run: | 
-          echo "TEST_RUN_ID=${{ inputs.testRail_name }}" >> "$GITHUB_OUTPUT"
           if [[ "${{ inputs.testRail_name }}" == "" ]]; then
             resp=$(curl -X GET -H 'Content-Type: application/json' \
                 -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
@@ -56,7 +55,9 @@ jobs:
                     "https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29" )
             resp=$(curl -X GET -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                  "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&is_completed=0" | jq '.runs[] | select(.name =="${{ inputs.testRail_name }}") | .id'
+                  "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&is_completed=0" | jq '.runs[] | select(.name =="${{ inputs.testRail_name }}") | .id')
+            echo "$resp"
+            echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
           fi
       # - name: 'Find section ID in testRail'
       #   id: section-id-selection
