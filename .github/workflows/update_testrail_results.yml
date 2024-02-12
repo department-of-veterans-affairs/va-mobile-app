@@ -9,6 +9,10 @@ on:
       TEST_RAIL_KEY:
         description: "TestRail api key"
         required: true
+    inputs:
+      testRail_name:
+        type: string
+        default: ''
   
 defaults:
   run:
@@ -24,6 +28,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: e2e-junit
+      - name: Output testRail name
+        run: echo "${{ inputs.testRail_name }}"
       - name: 'Find run ID in testRail'
         id: run-id-selection
         run: | 

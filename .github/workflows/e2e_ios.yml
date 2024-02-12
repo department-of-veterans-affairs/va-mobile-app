@@ -11,15 +11,19 @@ on:
   workflow_dispatch:
     inputs:
       run_testRail:
-        description: Run_TestRail
+        description: 'Add results to testRail?'
         type: boolean
+        required: false
+      testRail_name:
+        description: 'Name testRail run (will default to date if blank)'
+        type: string
         required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
     workflows: ['[Release] New Release Issue']
     types: 
-      - completed
+      - in_progress
 
 defaults:
   run:
@@ -104,7 +108,7 @@ jobs:
         run: yarn e2e:ios-build
 
       - name: Run e2e tests for iOS
-        run: yarn e2e:ios-test --take-screenshots failing --updateSnapshot
+        run: yarn e2e:ios-test /e2e/tests/LoginScreen.e2e --take-screenshots failing --updateSnapshot
 
       - name: Upload e2e-junit
         if: failure() || success()
@@ -147,4 +151,5 @@ jobs:
     needs: e2e-ios
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
+    with: ${{ inputs.testRail_name }}
     secrets: inherit
