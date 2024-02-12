@@ -27,6 +27,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -57,25 +58,29 @@ export function HomeScreen({}: HomeScreenProps) {
   const { data: userAuthorizedServices } = useAuthorizedServices()
 
   useEffect(() => {
-    if (userAuthorizedServices?.appointments && !appointmentsInDowntime) {
+    if (userAuthorizedServices?.appointments && !appointmentsInDowntime && featureEnabled('homeScreenPrefetch')) {
       dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
     }
   }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments])
 
   useEffect(() => {
-    if ((userAuthorizedServices?.claims || userAuthorizedServices?.appeals) && !claimsInDowntime) {
+    if (
+      (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) &&
+      !claimsInDowntime &&
+      featureEnabled('homeScreenPrefetch')
+    ) {
       dispatch(getClaimsAndAppeals('ACTIVE', undefined, undefined, true))
     }
   }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals])
 
   useEffect(() => {
-    if (userAuthorizedServices?.prescriptions && !rxInDowntime) {
+    if (userAuthorizedServices?.prescriptions && !rxInDowntime && featureEnabled('homeScreenPrefetch')) {
       dispatch(loadAllPrescriptions())
     }
   }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions])
 
   useEffect(() => {
-    if (userAuthorizedServices?.secureMessaging && !smInDowntime) {
+    if (userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch')) {
       dispatch(getInbox(ScreenIDTypesConstants.HOME_SCREEN_ID))
     }
   }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])

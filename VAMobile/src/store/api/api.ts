@@ -1,7 +1,9 @@
 import _ from 'underscore'
 
+import { Events } from 'constants/analytics'
 import { ReduxToolkitStore } from 'store'
 import { logout, refreshAccessToken } from 'store/slices'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 
 import { transform } from './demo/store'
@@ -164,6 +166,7 @@ const call = async function <T>(
       let json
       let text
       if (response.headers.get('Content-Type')?.startsWith('application/json')) {
+        logAnalyticsEvent(Events.vama_error_json_resp(endpoint, response.status))
         json = await response.json()
         const vamfBody = json?.errors?.[0].source?.vamfBody
 

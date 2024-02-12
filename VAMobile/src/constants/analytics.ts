@@ -423,6 +423,15 @@ export const Events = {
       },
     }
   },
+  vama_error_json_resp: (endpoint?: string, statusCode?: number): Event => {
+    return {
+      name: 'vama_error_json_resp',
+      params: {
+        statusCode,
+        endpoint,
+      },
+    }
+  },
   vama_eu_shown: (): Event => {
     return {
       name: 'vama_eu_shown',
