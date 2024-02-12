@@ -96,7 +96,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: pwd && ls && cd VAMobile && yarn install --frozen-lockfile --non-interactive
+          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: Set app environment variables
         run: yarn env:${{ inputs.environment }}
       - name: Set SLACK_THREAD_TS environment variable
