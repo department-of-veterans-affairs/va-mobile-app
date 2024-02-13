@@ -39,11 +39,11 @@ function NeedHelpData({ isAppeal, claimId, claimType, claimPhase }: NeedHelpData
     }
 
     const clickToRedirectProps: LinkButtonProps = {
-      displayedText: t('appealDetails.visitVAGov'),
+      displayedText: t('appealDetails.goToVAGov'),
       numberOrUrlLink: LINK_URL_CLAIM_APPEAL_STATUS,
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,
-      a11yLabel: a11yLabelVA(t('appealDetails.visitVAGov')),
+      a11yLabel: a11yLabelVA(t('appealDetails.goToVAGov')),
     }
 
     return (
@@ -52,7 +52,7 @@ function NeedHelpData({ isAppeal, claimId, claimType, claimPhase }: NeedHelpData
           {t('appealDetails.viewMoreDetails')}
         </TextView>
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <ClickForActionLink {...clickToRedirectProps} {...a11yHintProp(t('appealDetails.visitVAGovA11yHint'))} />
+          <ClickForActionLink {...clickToRedirectProps} {...a11yHintProp(t('appealDetails.goToVAGovA11yHint'))} />
         </Box>
       </Box>
     )
