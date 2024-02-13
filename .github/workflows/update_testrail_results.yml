@@ -59,37 +59,37 @@ jobs:
           echo "$resp"
           echo "SECTION_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
     
-    send_test_results_to_testrail:
-      needs: setup_testrail
-      runs-on: ubuntu-latest
+  send_test_results_to_testrail:
+    needs: setup_testrail
+    runs-on: ubuntu-latest
 
-      strategy:
-        matrix:
-          testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
+    strategy:
+      matrix:
+        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
 
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-        - name: Download junit file
-          uses: actions/download-artifact@v3
-          with:
-            pattern: *-e2e-junit
-        - name: Python setup
-          if: always()
-          uses: actions/setup-python@v3
-          with:
-            python-version: '3.x'
-        - name: TestRail CLI upload results
-          if: always()
-          run: |      
-            pip install trcli
-            trcli -y \
-              -h https://dsvavsp.testrail.io/ \
-              --project "VA Mobile App" \
-              --project-id 29 \
-              -u ${{secrets.TEST_RAIL_USER}} \
-              -k ${{secrets.TEST_RAIL_KEY}} \
-              parse_junit \
-              --run-id ${{needs.setup_testrail.outputs.output1}} \
-              --section-id ${{needs.setup_testrail.outputs.output2}} \
-              -f "/home/runner/work/va-mobile-app/va-mobile-app/${{matrix.testsuite}}-e2e-junit.xml"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download junit file
+        uses: actions/download-artifact@v3
+        with:
+          pattern: *-e2e-junit
+      - name: Python setup
+        if: always()
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+      - name: TestRail CLI upload results
+        if: always()
+        run: |      
+          pip install trcli
+          trcli -y \
+            -h https://dsvavsp.testrail.io/ \
+            --project "VA Mobile App" \
+            --project-id 29 \
+            -u ${{secrets.TEST_RAIL_USER}} \
+            -k ${{secrets.TEST_RAIL_KEY}} \
+            parse_junit \
+            --run-id ${{needs.setup_testrail.outputs.output1}} \
+            --section-id ${{needs.setup_testrail.outputs.output2}} \
+            -f "/home/runner/work/va-mobile-app/va-mobile-app/${{matrix.testsuite}}-e2e-junit.xml"
