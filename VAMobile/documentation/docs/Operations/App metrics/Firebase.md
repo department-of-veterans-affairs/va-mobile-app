@@ -128,7 +128,7 @@ iOS:
 
 Android:
  - Open Android Studio and run the emulator or build to device
- - In a terminal, execute the command `adb shell setprop debug.firebase.analytics.ap gov.va.mobileapp`
+ - In a terminal, execute the command `adb shell setprop debug.firebase.analytics.app gov.va.mobileapp`
  - In the app, go to Profile > Settings > Developer and click `Enable Firebase Debug Mode`
  - Go the Firebase Debug dashboard and select your device from the top left Debug Devices list
  - After debugging is complete, run the command `adb shell setprop debug.firebase.analytics.app .none.`
