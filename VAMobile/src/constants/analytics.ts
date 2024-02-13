@@ -653,6 +653,14 @@ export const Events = {
       },
     }
   },
+  vama_hs_load_time: (loadTime: number): Event => {
+    return {
+      name: 'vama_hs_load_time',
+      params: {
+        loadTime,
+      },
+    }
+  },
   vama_hs_rx_count: (rxCount: number): Event => {
     return {
       name: 'vama_hs_rx_count',
