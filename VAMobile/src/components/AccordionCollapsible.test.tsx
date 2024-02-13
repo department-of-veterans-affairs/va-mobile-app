@@ -1,12 +1,14 @@
 import React from 'react'
 
 import { context, fireEvent, render, screen } from 'testUtils'
+
 import AccordionCollapsible from './AccordionCollapsible'
 import TextView from './TextView'
+
 import Mock = jest.Mock
 
 context('AccordionCollapsible', () => {
-  let onPressSpy: Mock 
+  let onPressSpy: Mock
   const initializeTestInstance = (hideArrow = false, expandedInitialValue = false) => {
     onPressSpy = jest.fn(() => {})
     render(
@@ -16,8 +18,9 @@ context('AccordionCollapsible', () => {
         expandedContent={<TextView>EXPANDED</TextView>}
         collapsedContent={<TextView>COLLAPSED</TextView>}
         customOnPress={onPressSpy}
-        expandedInitialValue={expandedInitialValue}
-      ><TextView>Child</TextView> </AccordionCollapsible>,
+        expandedInitialValue={expandedInitialValue}>
+        <TextView>Child</TextView>{' '}
+      </AccordionCollapsible>,
     )
   }
 
@@ -31,7 +34,7 @@ context('AccordionCollapsible', () => {
       expect(screen.queryByText('EXPANDED')).toBeFalsy()
       expect(screen.getByText('COLLAPSED')).toBeTruthy()
       expect(screen.getByText('Child')).toBeTruthy()
-    }) 
+    })
 
     it('when pressed should display the expanded content and hide the collapsed and calls custom on press', () => {
       fireEvent.press(screen.getByRole('tab'))

@@ -1,12 +1,21 @@
-import { useTranslation } from 'react-i18next'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { AlertBox, Box, BoxProps, ClickToCallPhoneNumber, TextView, VABulletList, VABulletListText, VAScrollView } from 'components'
+import {
+  AlertBox,
+  Box,
+  BoxProps,
+  ClickToCallPhoneNumber,
+  TextView,
+  VABulletList,
+  VABulletListText,
+  VAScrollView,
+} from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 function PrescriptionHistoryNoPrescriptions() {
@@ -45,8 +54,14 @@ function PrescriptionHistoryNoPrescriptions() {
   return (
     <VAScrollView>
       <Box {...alertWrapperProps}>
-        <AlertBox border={'informational'} title={t('prescriptions.notFound.title')} titleA11yLabel={a11yLabelVA(t('prescriptions.notFound.title'))}>
-          <TextView pt={theme.paragraphSpacing.spacing20FontSize} mb={theme.dimensions.condensedMarginBetween} accessibilityLabel={a11yLabelVA(t('prescriptions.notFound.yourVA'))}>
+        <AlertBox
+          border={'informational'}
+          title={t('prescriptions.notFound.title')}
+          titleA11yLabel={a11yLabelVA(t('prescriptions.notFound.title'))}>
+          <TextView
+            pt={theme.paragraphSpacing.spacing20FontSize}
+            mb={theme.dimensions.condensedMarginBetween}
+            accessibilityLabel={a11yLabelVA(t('prescriptions.notFound.yourVA'))}>
             {t('prescriptions.notFound.yourVA')}
           </TextView>
           <VABulletList listOfText={medicationsNotIncludedList} paragraphSpacing={true} />

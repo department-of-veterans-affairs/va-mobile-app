@@ -1,17 +1,13 @@
 import React from 'react'
-import { context, render, screen, fireEvent } from 'testUtils'
+
+import { context, fireEvent, render, screen } from 'testUtils'
+
 import VAModalPicker from './VAModalPicker'
-import { InitialState } from 'store/slices'
 
 context('VAModalPicker', () => {
   let selected: string
 
-  const initializeTestInstance = (
-    labelKey = '',
-    helperTextKey = '',
-    isRequiredField = false,
-    error = ''
-  ) => {
+  const initializeTestInstance = (labelKey = '', helperTextKey = '', isRequiredField = false, error = '') => {
     const props = {
       selectedValue: 'js',
       onSelectionChange: (updatedSelected: string) => {
@@ -27,7 +23,7 @@ context('VAModalPicker', () => {
       helperTextKey,
       error,
       isRequiredField,
-      testID: ''
+      testID: '',
     }
 
     render(<VAModalPicker {...props} />)

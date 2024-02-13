@@ -1,7 +1,9 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
+
 import LoadingComponent from './LoadingComponent'
 
 context('LoadingComponent', () => {
@@ -10,10 +12,10 @@ context('LoadingComponent', () => {
   })
 
   it('renders text', () => {
-    expect(screen.getByText('This is a loading component'))
+    expect(screen.getByText('This is a loading component')).toBeTruthy()
   })
 
   it('renders a11yLabel', () => {
-    expect(screen.getByLabelText('This is the label'))
+    expect(screen.getByLabelText('This is the label')).toBeTruthy()
   })
 })

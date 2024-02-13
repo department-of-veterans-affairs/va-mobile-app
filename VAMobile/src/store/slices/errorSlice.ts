@@ -1,12 +1,18 @@
-import { DateTime } from 'luxon'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { DateTime } from 'luxon'
 import { reduce } from 'underscore'
 
-import { AppThunk } from 'store'
 import { CommonErrorTypes } from 'constants/errors'
-import { DowntimeFeatureType, DowntimeFeatureTypeConstants, MaintenanceWindowsGetData, ScreenIDTypes } from 'store/api/types'
-import { ScreenIDTypesConstants } from '../api/types/Screens'
+import { AppThunk } from 'store'
 import { get } from 'store/api'
+import {
+  DowntimeFeatureType,
+  DowntimeFeatureTypeConstants,
+  MaintenanceWindowsGetData,
+  ScreenIDTypes,
+} from 'store/api/types'
+
+import { ScreenIDTypesConstants } from '../api/types/Screens'
 
 export type ErrorsByScreenIDType = {
   [key in ScreenIDTypes]?: CommonErrorTypes
@@ -66,7 +72,9 @@ export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
   }
 
   // filtering out any maintenance windows we haven't mapped to a screen in the app
-  const maintWindows = response.data.filter((w) => Object.values(DowntimeFeatureTypeConstants).includes(w.attributes.service))
+  const maintWindows = response.data.filter((w) =>
+    Object.values(DowntimeFeatureTypeConstants).includes(w.attributes.service),
+  )
   let downtimeWindows = {} as DowntimeWindowsByFeatureType
   for (const m of maintWindows) {
     const maintWindow = m.attributes
@@ -123,5 +131,6 @@ const errorSlice = createSlice({
   },
 })
 
-export const { dispatchSetError, dispatchClearErrors, dispatchSetTryAgainFunction, dispatchSetDowntime } = errorSlice.actions
+export const { dispatchSetError, dispatchClearErrors, dispatchSetTryAgainFunction, dispatchSetDowntime } =
+  errorSlice.actions
 export default errorSlice.reducer

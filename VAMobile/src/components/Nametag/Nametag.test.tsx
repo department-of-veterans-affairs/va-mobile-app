@@ -1,14 +1,16 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
-import Nametag from './Nametag'
-import { InitialState } from 'store/slices'
 import { BranchesOfServiceConstants } from 'store/api/types'
+import { InitialState } from 'store/slices'
+import { context, render } from 'testUtils'
+
+import Nametag from './Nametag'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
@@ -16,7 +18,7 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
-  let original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
+  const original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({

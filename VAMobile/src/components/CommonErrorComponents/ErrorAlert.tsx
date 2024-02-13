@@ -1,11 +1,12 @@
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { ViewStyle } from 'react-native'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ViewStyle } from 'react-native'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AlertBox, Box, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
-import { useTranslation } from 'react-i18next'
 
 export type ErrorAlertProps = {
   /** Function called when the primary button is pressed */

@@ -1,62 +1,62 @@
 import React from 'react'
-import { screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import MilitaryInformationScreen from './index'
-import {
-  ErrorsState,
-  initialErrorsState,
-  initialMilitaryServiceState,
-  MilitaryServiceState,
-} from 'store/slices'
-import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
+import { screen } from '@testing-library/react-native'
 import { waitFor } from '@testing-library/react-native'
 
+import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
+import { ErrorsState, MilitaryServiceState, initialErrorsState, initialMilitaryServiceState } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
+
+import MilitaryInformationScreen from './index'
+
 jest.mock('../../../../api/authorizedServices/getAuthorizedServices', () => {
-  let original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
+  const original = jest.requireActual('../../../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
-    useAuthorizedServices: jest.fn().mockReturnValue({
-      status: "success",
-      data: {
-        appeals: true,
-        appointments: true,
-        claims: true,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: true,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: true,
-        secureMessaging: true,
-        userProfileUpdate: true
-      }
-    }).mockReturnValueOnce({
-      status: "success",
-      data: {
-        appeals: true,
-        appointments: true,
-        claims: true,
-        decisionLetters: true,
-        directDepositBenefits: true,
-        directDepositBenefitsUpdate: true,
-        disabilityRating: true,
-        genderIdentity: true,
-        lettersAndDocuments: true,
-        militaryServiceHistory: false,
-        paymentHistory: true,
-        preferredName: true,
-        prescriptions: true,
-        scheduleAppointments: true,
-        secureMessaging: true,
-        userProfileUpdate: true
-      }
-    })
+    useAuthorizedServices: jest
+      .fn()
+      .mockReturnValue({
+        status: 'success',
+        data: {
+          appeals: true,
+          appointments: true,
+          claims: true,
+          decisionLetters: true,
+          directDepositBenefits: true,
+          directDepositBenefitsUpdate: true,
+          disabilityRating: true,
+          genderIdentity: true,
+          lettersAndDocuments: true,
+          militaryServiceHistory: true,
+          paymentHistory: true,
+          preferredName: true,
+          prescriptions: true,
+          scheduleAppointments: true,
+          secureMessaging: true,
+          userProfileUpdate: true,
+        },
+      })
+      .mockReturnValueOnce({
+        status: 'success',
+        data: {
+          appeals: true,
+          appointments: true,
+          claims: true,
+          decisionLetters: true,
+          directDepositBenefits: true,
+          directDepositBenefitsUpdate: true,
+          disabilityRating: true,
+          genderIdentity: true,
+          lettersAndDocuments: true,
+          militaryServiceHistory: false,
+          paymentHistory: true,
+          preferredName: true,
+          prescriptions: true,
+          scheduleAppointments: true,
+          secureMessaging: true,
+          userProfileUpdate: true,
+        },
+      }),
   }
 })
 
@@ -80,7 +80,10 @@ context('MilitaryInformationScreen', () => {
       addListener: jest.fn(),
     },
   )
-  const initializeTestInstance = ( errorsState: ErrorsState = initialErrorsState, serviceHistory = serviceHistoryMock) => {
+  const initializeTestInstance = (
+    errorsState: ErrorsState = initialErrorsState,
+    serviceHistory = serviceHistoryMock,
+  ) => {
     render(<MilitaryInformationScreen {...props} />, {
       preloadedState: {
         militaryService: {
@@ -93,7 +96,7 @@ context('MilitaryInformationScreen', () => {
       },
     })
   }
-  
+
   describe('when military service history authorization is false', () => {
     it('should render NoMilitaryInformationAccess', async () => {
       await waitFor(() => {

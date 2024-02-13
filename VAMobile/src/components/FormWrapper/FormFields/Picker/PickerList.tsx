@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ButtonDecoratorType, List, ListItemObj, VAIconProps } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
-import { TextLine } from 'components/types'
 import { TextLineWithIconProps } from 'components/TextLineWithIcon'
 import { TextLines } from 'components/TextLines'
+import { TextLine } from 'components/types'
+import { NAMESPACE } from 'constants/namespaces'
 
 /**
  * Signifies each item in the list of items in {@link PickerListProps}
@@ -41,7 +41,9 @@ const PickerList: FC<PickerListProps> = ({ items, title, titleA11yLabel }) => {
     // Move all of the properties except text lines to the standard list item object
     const { text, icon, testId, isSelected, ...listItemObj } = item
 
-    const textLine = icon ? [{ text, iconProps: icon, color: icon.fill } as TextLineWithIconProps] : [{ text } as TextLine]
+    const textLine = icon
+      ? [{ text, iconProps: icon, color: icon.fill } as TextLineWithIconProps]
+      : [{ text } as TextLine]
     const content = <TextLines listOfText={textLine} />
 
     const backgroundColor = isSelected ? 'pickerSelectedItem' : 'list'
@@ -55,7 +57,16 @@ const PickerList: FC<PickerListProps> = ({ items, title, titleA11yLabel }) => {
       selected: isSelected,
     }
 
-    return { ...listItemObj, content, backgroundColor, decorator, testId: testIdToUse, a11yValue, a11yRole: 'menuitem', a11yState }
+    return {
+      ...listItemObj,
+      content,
+      backgroundColor,
+      decorator,
+      testId: testIdToUse,
+      a11yValue,
+      a11yRole: 'menuitem',
+      a11yState,
+    }
   })
 
   return <List items={listItemObjs} title={title} titleA11yLabel={titleA11yLabel} />

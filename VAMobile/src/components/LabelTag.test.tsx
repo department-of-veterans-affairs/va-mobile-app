@@ -1,5 +1,7 @@
 import React from 'react'
+
 import { context, fireEvent, render, screen } from 'testUtils'
+
 import LabelTag from './LabelTag'
 
 context('LabelTag', () => {

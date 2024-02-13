@@ -1,9 +1,9 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types/AppointmentData'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types/AppointmentData'
 import { isAPendingAppointment } from 'utils/appointments'
 import { useTheme } from 'utils/hooks'
 
@@ -16,7 +16,8 @@ function ContactInformation({ attributes }: ContactInformationProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const { patientEmail, patientPhoneNumber, bestTimeToCall, appointmentType, phoneOnly } = attributes || ({} as AppointmentAttributes)
+  const { patientEmail, patientPhoneNumber, bestTimeToCall, appointmentType, phoneOnly } =
+    attributes || ({} as AppointmentAttributes)
 
   if (isAppointmentPending) {
     return (

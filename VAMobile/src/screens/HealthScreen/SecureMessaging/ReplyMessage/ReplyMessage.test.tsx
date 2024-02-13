@@ -1,15 +1,17 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import ReplyMessage from './ReplyMessage'
 import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
 import { initialSecureMessagingState, saveDraft } from 'store/slices'
-import { isIOS } from '../../../../utils/platform'
+import { context, mockNavProps, render } from 'testUtils'
 
-let mockNavigationSpy = jest.fn()
+import { isIOS } from '../../../../utils/platform'
+import ReplyMessage from './ReplyMessage'
+
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useRouteNavigation: () => {
@@ -19,7 +21,7 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     saveDraft: jest.fn(() => {
@@ -40,16 +42,16 @@ jest.mock('react-native', () => {
   return RN
 })
 
-let mockUseComposeCancelConfirmationSpy = jest.fn()
+const mockUseComposeCancelConfirmationSpy = jest.fn()
 jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
   }
 })
 
-let mockIsIOS = jest.fn()
+const mockIsIOS = jest.fn()
 jest.mock('utils/platform', () => ({
   isIOS: jest.fn(() => mockIsIOS),
 }))
@@ -118,19 +120,16 @@ const mockMessagesById: SecureMessagingMessageMap = {
 }
 
 context('ReplyMessage', () => {
-  let props: any
-  let isIOSMock = isIOS as jest.Mock
+  const isIOSMock = isIOS as jest.Mock
 
   const initializeTestInstance = (
-    mockMessagesById: SecureMessagingMessageMap,
     threadList: SecureMessagingThreads,
     loading: boolean = false,
     sendMessageFailed: boolean = false,
   ) => {
-
     isIOSMock.mockReturnValue(false)
 
-    props = mockNavProps(
+    const props = mockNavProps(
       undefined,
       {
         addListener: mockUseComposeCancelConfirmationSpy,
@@ -152,11 +151,10 @@ context('ReplyMessage', () => {
         },
       },
     })
-
   }
 
   beforeEach(() => {
-    initializeTestInstance(mockMessagesById, mockThreads)
+    initializeTestInstance(mockThreads)
   })
 
   describe('on click of the crisis line banner', () => {
@@ -222,8 +220,8 @@ context('ReplyMessage', () => {
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance(mockMessagesById, [], true)
-      expect(screen.getByText("Loading your message...")).toBeTruthy()
+      initializeTestInstance([], true)
+      expect(screen.getByText('Loading your message...')).toBeTruthy()
     })
   })
 

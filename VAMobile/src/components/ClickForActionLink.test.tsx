@@ -1,6 +1,9 @@
 import React from 'react'
+
 import { context, fireEvent, render, screen } from 'testUtils'
-import ClickForActionLink, { LinkUrlIconType, LinkTypeOptionsConstants } from './ClickForActionLink'
+
+import ClickForActionLink, { LinkTypeOptionsConstants, LinkUrlIconType } from './ClickForActionLink'
+
 import Mock = jest.Mock
 
 const mockExternalLinkSpy = jest.fn()
@@ -16,7 +19,12 @@ jest.mock('utils/hooks', () => {
 context('ClickForActionLink', () => {
   let analyticFn: Mock
 
-  const initializeTestInstance = (displayedText: string, numberOrUrlLink: string, linkType: keyof typeof LinkTypeOptionsConstants, linkIconType?: LinkUrlIconType): void => {
+  const initializeTestInstance = (
+    displayedText: string,
+    numberOrUrlLink: string,
+    linkType: keyof typeof LinkTypeOptionsConstants,
+    linkIconType?: LinkUrlIconType,
+  ): void => {
     analyticFn = jest.fn()
 
     render(

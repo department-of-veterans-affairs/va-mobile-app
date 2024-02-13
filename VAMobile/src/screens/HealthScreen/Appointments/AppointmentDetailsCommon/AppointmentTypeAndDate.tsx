@@ -1,12 +1,24 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { AppointmentAttributes, AppointmentStatusConstants, AppointmentStatusDetailTypeConsts, AppointmentTypeToA11yLabel, AppointmentTypeToID } from 'store/api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
-import { isAPendingAppointment } from 'utils/appointments'
+import {
+  AppointmentAttributes,
+  AppointmentStatusConstants,
+  AppointmentStatusDetailTypeConsts,
+  AppointmentTypeConstants,
+  AppointmentTypeToA11yLabel,
+  AppointmentTypeToID,
+} from 'store/api/types'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
+import { isAPendingAppointment } from 'utils/appointments'
+import {
+  getFormattedDateWithWeekdayForTimeZone,
+  getFormattedTimeForTimeZone,
+  getTranslation,
+} from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 type AppointmentTypeAndDateProps = {
@@ -17,8 +29,19 @@ type AppointmentTypeAndDateProps = {
 function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: AppointmentTypeAndDateProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { appointmentType, startDateUtc, timeZone, isCovidVaccine, typeOfCare, status, serviceCategoryName, phoneOnly, statusDetail, healthcareProvider, location } =
-    attributes || ({} as AppointmentAttributes)
+  const {
+    appointmentType,
+    startDateUtc,
+    timeZone,
+    isCovidVaccine,
+    typeOfCare,
+    status,
+    serviceCategoryName,
+    phoneOnly,
+    statusDetail,
+    healthcareProvider,
+    location,
+  } = attributes || ({} as AppointmentAttributes)
 
   const isAppointmentPending = isAPendingAppointment(attributes)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
@@ -30,17 +53,24 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
 
   if (phoneOnly) {
     let who = t('appointments.canceled.whoCanceled.you')
-    if (statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK) {
+    if (
+      statusDetail === AppointmentStatusDetailTypeConsts.CLINIC ||
+      statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
+    ) {
       who = healthcareProvider || location?.name || t('appointments.canceled.whoCanceled.facility')
     }
-    const apptTitle = isAppointmentCanceled ? t('appointments.phone.canceledTitle') : isPastAppointment ? t('appointments.phone.pastTitle') : t('appointments.phone.upcomingTitle')
+    const apptTitle = isAppointmentCanceled
+      ? t('appointments.phone.canceledTitle')
+      : isPastAppointment
+        ? t('appointments.phone.pastTitle')
+        : t('appointments.phone.upcomingTitle')
     const apptBody = isAppointmentCanceled
       ? t('appointments.pending.cancelled.theTimeAndDate', { who })
       : isPastAppointment
-      ? t('appointments.pastBody')
-      : isAppointmentPending
-      ? t('appointments.pending.submitted.pendingRequestTypeOfCare', { typeOfCare })
-      : t('appointments.phone.upcomingBody')
+        ? t('appointments.pastBody')
+        : isAppointmentPending
+          ? t('appointments.pending.submitted.pendingRequestTypeOfCare', { typeOfCare })
+          : t('appointments.phone.upcomingBody')
     return (
       <Box>
         <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
@@ -49,7 +79,52 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
         <TextView variant={'MobileBody'} paragraphSpacing={true}>
           {apptBody}
         </TextView>
-        {isAppointmentPending ? undefined : <TextView variant={'MobileBodyBold'} mb={theme.dimensions.standardMarginBetween}>{`${date}\n${time}`}</TextView>}
+        {isAppointmentPending ? undefined : (
+          <TextView
+            variant={'MobileBodyBold'}
+            mb={theme.dimensions.standardMarginBetween}>{`${date}\n${time}`}</TextView>
+        )}
+      </Box>
+    )
+  } else if (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION') {
+    let who = t('appointments.canceled.whoCanceled.you')
+    if (
+      statusDetail === AppointmentStatusDetailTypeConsts.CLINIC ||
+      statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
+    ) {
+      who = healthcareProvider || location?.name || t('appointments.canceled.whoCanceled.facility')
+    }
+    const apptTitle = isAppointmentCanceled
+      ? t('appointments.inPersonVA.canceledTitle')
+      : isPastAppointment
+        ? t('appointments.inPersonVA.pastTitle')
+        : t('appointments.inPersonVA.upcomingTitle')
+
+    const apptBody = isAppointmentCanceled
+      ? t('appointments.pending.cancelled.theTimeAndDate', { who })
+      : isPastAppointment
+        ? t('appointments.pastBody')
+        : isAppointmentPending
+          ? t('appointments.pending.submitted.pendingRequestTypeOfCare', { typeOfCare })
+          : t('appointments.inPersonVA.upcomingBody', {
+              facilityName: location?.name || t('prescription.details.vaFacilityHeader'),
+            })
+
+    const apptBodyA11yLabel = a11yLabelVA(apptBody)
+
+    return (
+      <Box>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+          {apptTitle}
+        </TextView>
+        <TextView variant={'MobileBody'} paragraphSpacing={true} accessibilityLabel={apptBodyA11yLabel}>
+          {apptBody}
+        </TextView>
+        {isAppointmentPending ? undefined : (
+          <TextView
+            variant={'MobileBodyBold'}
+            mb={theme.dimensions.standardMarginBetween}>{`${date}\n${time}`}</TextView>
+        )}
       </Box>
     )
   }
@@ -61,7 +136,9 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
     } else {
       // pending
       const appointmentCanceled = status === AppointmentStatusConstants.CANCELLED
-      const title = appointmentCanceled ? 'appointments.pending.cancelled.pendingRequestTypeOfCare' : 'appointments.pending.submitted.pendingRequestTypeOfCare'
+      const title = appointmentCanceled
+        ? 'appointments.pending.cancelled.pendingRequestTypeOfCare'
+        : 'appointments.pending.submitted.pendingRequestTypeOfCare'
       content = (
         <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} selectable={true}>
           {t(title, { typeOfCare })}
@@ -74,7 +151,10 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
         <TextView variant={'MobileBody'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
           {t('appointments.claimExam')}
         </TextView>
-        <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+        <TextView
+          variant={'BitterBoldHeading'}
+          accessibilityRole={'header'}
+          mb={theme.dimensions.condensedMarginBetween}>
           {t('appointments.canceled.message', { date, time })}
         </TextView>
       </>
@@ -83,7 +163,10 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
     // cancelled
     content = (
       <>
-        <TextView variant={'BitterBoldHeading'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+        <TextView
+          variant={'BitterBoldHeading'}
+          accessibilityRole={'header'}
+          mb={theme.dimensions.condensedMarginBetween}>
           {t('appointments.canceled.message', { date, time })}
         </TextView>
       </>
@@ -91,7 +174,10 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
   } else if (serviceCategoryName === 'COMPENSATION & PENSION') {
     content = (
       <>
-        <TextView variant={isPastAppointment ? 'MobileBody' : 'MobileBodyBold'} accessibilityRole={'header'} mb={theme.dimensions.condensedMarginBetween}>
+        <TextView
+          variant={isPastAppointment ? 'MobileBody' : 'MobileBodyBold'}
+          accessibilityRole={'header'}
+          mb={theme.dimensions.condensedMarginBetween}>
           {t('appointments.claimExam')}
         </TextView>
         {isPastAppointment ? (
@@ -120,7 +206,10 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
       return <></>
     } else {
       return (
-        <TextView variant={'MobileBody'} mb={theme.dimensions.standardMarginBetween} {...testIdProps(isCovidVaccine ? covid19Text : appointmentTypeLabel)}>
+        <TextView
+          variant={'MobileBody'}
+          mb={theme.dimensions.standardMarginBetween}
+          {...testIdProps(isCovidVaccine ? covid19Text : appointmentTypeLabel)}>
           {getTranslation(isCovidVaccine ? covid19Text : AppointmentTypeToID[appointmentType], t)}
         </TextView>
       )

@@ -1,10 +1,14 @@
 import React from 'react'
+
+import { TFunction } from 'i18next'
+
 import { context, render, screen } from 'testUtils'
-import Carousel from './Carousel'
+
 import { TextView } from '../index'
+import Carousel from './Carousel'
 
 context('Carousel', () => {
-  let t = jest.fn(() => { })
+  const t = jest.fn(() => {})
 
   const TestComponent = () => {
     return <TextView>Test Component</TextView>
@@ -17,12 +21,12 @@ context('Carousel', () => {
       a11yHints: {
         skipHint: 'skip',
         doneHint: 'done',
-      }
-    }
+      },
+    },
   ]
 
   beforeEach(() => {
-    render(<Carousel screenList={screenList} onCarouselEnd={() => { }} translation={t as any} />)
+    render(<Carousel screenList={screenList} onCarouselEnd={() => {}} translation={t as unknown as TFunction} />)
   })
 
   it('initializes correctly', () => {
