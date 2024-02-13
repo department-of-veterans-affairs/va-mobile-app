@@ -117,7 +117,8 @@ jobs:
             yarn e2e:ios-test --take-screenshots failing --updateSnapshot
           else
             yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot
-
+          fi
+          
       - name: Upload e2e-junit
         if: failure() || success()
         uses: actions/upload-artifact@v3
