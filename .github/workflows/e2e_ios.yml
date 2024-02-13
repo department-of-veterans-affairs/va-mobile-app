@@ -14,6 +14,10 @@ on:
         description: Run_TestRail
         type: boolean
         required: false
+      tests_to_test:
+        description: 'List tests to test in [\"test name\", \"test name\"] format.  All tests will run if left blank'
+        type: string
+        required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
@@ -32,6 +36,10 @@ env:
   APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
   # Slack API token
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+
+strategy:
+  matrix:
+    testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
 
 jobs:
   start_slack_thread:
@@ -104,7 +112,11 @@ jobs:
         run: yarn e2e:ios-build
 
       - name: Run e2e tests for iOS
-        run: yarn e2e:ios-test --take-screenshots failing --updateSnapshot
+        run: |
+          if [[ "${{github.event.inputs.tests_to_test}}" == "" ]]; then
+            yarn e2e:ios-test --take-screenshots failing --updateSnapshot
+          else
+            yarn e2e:ios-test e2e/tests/${{matrix.testsuite}}.e2e.ts
 
       - name: Upload e2e-junit
         if: failure() || success()
@@ -136,15 +148,15 @@ jobs:
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
       - name: Upload artifacts on failure
-        if: failure()
+        #if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}
           path: VAMobile/artifacts
 
-  send_test_results_to_testrail:
-    if: always() && (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true'
-    needs: e2e-ios
-    name: Update testRail Results
-    uses: ./.github/workflows/update_testrail_results.yml
-    secrets: inherit
+  # send_test_results_to_testrail:
+  #   if: always() && (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true'
+  #   needs: e2e-ios
+  #   name: Update testRail Results
+  #   uses: ./.github/workflows/update_testrail_results.yml
+  #   secrets: inherit
