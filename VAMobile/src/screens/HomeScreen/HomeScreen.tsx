@@ -114,7 +114,7 @@ export function HomeScreen({}: HomeScreenProps) {
     if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {
       logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
-  }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch])
+  }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
 
   const navigateTo = useRouteNavigation()
 
