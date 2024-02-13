@@ -798,6 +798,7 @@ const secureMessagingSlice = createSlice({
       state.inbox = inboxData ? inboxData.data : ({} as SecureMessagingFolderData)
       state.hasLoadedInbox = true
       state.error = error
+      state.inboxFirstRetrieval = !!error
     },
 
     dispatchStartListFolders: (state) => {
