@@ -22,8 +22,8 @@ jobs:
   setup_testrail:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{steps.run-id-selection.outputs.TEST_RUN_ID}}
-      output2: ${{steps.section-id-selection.outputs.SECTION_RUN_ID}}
+      output1: ${{ steps.run-id-selection.outputs.TEST_RUN_ID }}
+      output2: ${{ steps.section-id-selection.outputs.SECTION_RUN_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -72,8 +72,6 @@ jobs:
         uses: actions/checkout@v3
       - name: Download junit file
         uses: actions/download-artifact@v3
-        with:
-          pattern: *-e2e-junit
       - name: Python setup
         if: always()
         uses: actions/setup-python@v3
