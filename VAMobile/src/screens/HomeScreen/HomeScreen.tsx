@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -22,9 +23,18 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
-import store from 'store'
+import store, { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { getClaimsAndAppeals, getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
+import {
+  AppointmentsState,
+  ClaimsAndAppealsState,
+  PrescriptionState,
+  SecureMessagingState,
+  getClaimsAndAppeals,
+  getInbox,
+  loadAllPrescriptions,
+  prefetchAppointments,
+} from 'store/slices'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -58,10 +68,16 @@ export function HomeScreen({}: HomeScreenProps) {
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-  const apptsPrefetch = store.getState().appointments.preloadComplete
-  const claimsPrefetch = store.getState().claimsAndAppeals.claimsFirstRetrieval
-  const rxPrefetch = store.getState().prescriptions.prescriptionFirstRetrieval
-  const smPrefetch = store.getState().secureMessaging.inboxFirstRetrieval
+  const { preloadComplete: apptsPrefetch } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { claimsFirstRetrieval: claimsPrefetch } = useSelector<RootState, ClaimsAndAppealsState>(
+    (state) => state.claimsAndAppeals,
+  )
+  const { prescriptionFirstRetrieval: rxPrefetch } = useSelector<RootState, PrescriptionState>(
+    (state) => state.prescriptions,
+  )
+  const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
   const { data: userAuthorizedServices } = useAuthorizedServices()
 
   useEffect(() => {
@@ -81,13 +97,13 @@ export function HomeScreen({}: HomeScreenProps) {
   }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals])
 
   useEffect(() => {
-    if (userAuthorizedServices?.prescriptions && !rxInDowntime && featureEnabled('homeScreenPrefetch')) {
+    if (true && !rxInDowntime && featureEnabled('homeScreenPrefetch')) {
       dispatch(loadAllPrescriptions())
     }
   }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions])
 
   useEffect(() => {
-    if (userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch')) {
+    if (true && !smInDowntime && featureEnabled('homeScreenPrefetch')) {
       dispatch(getInbox(ScreenIDTypesConstants.HOME_SCREEN_ID))
     }
   }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
