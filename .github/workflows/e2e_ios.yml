@@ -165,14 +165,5 @@ jobs:
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     secrets: inherit
-    strategy:
-      matrix:
-        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
-    with: |
-      if [[ "${{github.event.inputs.tests_to_test}}" == "" ]]; then
-        name: e2e-junit
-        path: VAMobile/e2e/test_reports/e2e-junit.xml
-      else
-        name: ${{matrix.testsuite}}-e2e-junit
-        path: VAMobile/e2e/test_reports/e2e-junit.xml
-      fi
+    with: 
+      test_names: ${{ github.event.inputs.tests_to_test }}
