@@ -133,9 +133,16 @@ Android:
  - Go the Firebase Debug dashboard and select your device from the top left Debug Devices list
  - After debugging is complete, run the command `adb shell setprop debug.firebase.analytics.app .none.`
 
-For QA team members, DebugView does not work using a signed build. Either build locally using the steps above, or use the steps below, but be aware that the wait time is high and it doesn't always work due to the way events are batched and sent to the Dashboard:
+For QA team members, DebugView only works with TestFlight builds. Testing on Android requires a different method:
 
-On either platform:
+iOS:
+- Install the build you want to test on your device
+- In the app, go to Profile > Settings > Developer and click `Enable Firebase Debug Mode`
+
+Android:
+
+Note: With the following method, the wait time is high, and it may not work due to the way events are batched and sent to the Dashboard:
+
  - In the app, go to Profile > Settings > Developer and click `Enable Firebase Debug Mode`
  - Go to the Firebase Realtime dashboard
  - Click on the `All Users` button at the top left. A `Build Comparison` menu will pop up.
