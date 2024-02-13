@@ -338,11 +338,11 @@ const prescriptionSlice = createSlice({
       state.refillablePrescriptions = refillablePrescriptions
 
       state.loadingHistory = false
-      state.prescriptionPagination = { ...meta?.pagination }
+      state.prescriptionPagination = { ...meta.pagination }
       state.prescriptionStatusCount = { ...meta.prescriptionStatusCount }
       state.prescriptionsById = prescriptionsById
       state.prescriptionsNeedLoad = false
-      state.prescriptionFirstRetrieval = error ? true : false
+      state.prescriptionFirstRetrieval = !!error
 
       state.tabCounts = {
         '0': prescriptions?.length,

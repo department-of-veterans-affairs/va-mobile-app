@@ -604,7 +604,7 @@ const claimsAndAppealsSlice = createSlice({
         ? curLoadedClaimsAndAppeals
         : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
       state.activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount || 0
-      state.claimsFirstRetrieval = error ? true : false
+      state.claimsFirstRetrieval = !!error
     },
 
     dispatchStartGetClaim: (state, action: PayloadAction<{ abortController: AbortController }>) => {
