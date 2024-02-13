@@ -3,14 +3,14 @@ import { useQuery } from '@tanstack/react-query'
 import { PaymentsGetData } from 'api/types'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
-import { getFirstAndLastDayOfYear } from 'utils/payments'
+import { getFirstAndLastDayOfYear, groupPaymentsByDate } from 'utils/payments'
 
 import { paymentKeys } from './queryKeys'
 
 /**
  * Fetch user payments history
  */
-const getPayments = async (year: string, page: number): Promise<PaymentsGetData | undefined> => {
+const getPayments = async (year: string | undefined, page: number): Promise<PaymentsGetData | undefined> => {
   const [startDate, endDate] = getFirstAndLastDayOfYear(year)
 
   const params: Params =
@@ -23,13 +23,19 @@ const getPayments = async (year: string, page: number): Promise<PaymentsGetData 
         }
       : {}
   const response = await get<PaymentsGetData>('/v0/payment-history', params)
-  return response
+  if (response) {
+    return {
+      ...response,
+      paymentsByDate: groupPaymentsByDate(response.data),
+    }
+  }
+  return undefined
 }
 
 /**
  * Returns a query for user payments history
  */
-export const usePayments = (year: string, page: number, options?: { enabled?: boolean }) => {
+export const usePayments = (year: string | undefined, page: number, options?: { enabled?: boolean }) => {
   return useQuery({
     ...options,
     queryKey: [paymentKeys.payment, year, page],
