@@ -47,7 +47,7 @@ jobs:
       channel_name: va-mobile-build-alerts
       message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
-  setup-e2e-ios:
+  e2e-ios:
     if: ${{ always() }}
     needs: start_slack_thread
     runs-on: macos-latest-xl
@@ -58,6 +58,10 @@ jobs:
       IOS_PROJ_FILE: 'VAMobile.xcodeproj'
       # Xcode scheme to build
       IOS_SCHEME: 'VAMobileRelease'
+    
+    strategy:
+      matrix:
+        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
 
     steps:
       - uses: actions/checkout@v3
@@ -106,24 +110,6 @@ jobs:
 
       - name: Bundle iOS app
         run: yarn e2e:ios-build
-
-  e2e-ios:
-    if: ${{ always() }}
-    needs: setup-e2e-ios
-    runs-on: macos-latest-xl
-    env:
-      # Path to write secret key to. Also used by fastlane
-      APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
-      # Xcode project file name
-      IOS_PROJ_FILE: 'VAMobile.xcodeproj'
-      # Xcode scheme to build
-      IOS_SCHEME: 'VAMobileRelease'
-    
-    strategy:
-      matrix:
-        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
-
-    steps:
       - name: Run e2e tests for iOS
         run: |
           if [[ "${{github.event.inputs.tests_to_test}}" == "" ]]; then
