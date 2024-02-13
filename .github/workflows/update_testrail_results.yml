@@ -10,8 +10,9 @@ on:
         description: "TestRail api key"
         required: true
     inputs:
-      test_names:
+      tests_to_test:
         type: string
+        default: ''
   
 defaults:
   run:
@@ -64,7 +65,7 @@ jobs:
 
       strategy:
         matrix:
-          testsuite: ${{ fromJSON(github.event.inputs.test_names) }}
+          testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
 
       steps:
         - name: Checkout
