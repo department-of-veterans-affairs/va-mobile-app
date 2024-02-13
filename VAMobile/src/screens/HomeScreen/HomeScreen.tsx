@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { DateTime } from 'luxon'
+
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import {
   Box,
@@ -20,6 +22,7 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
+import store from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { getClaimsAndAppeals, getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
@@ -55,6 +58,10 @@ export function HomeScreen({}: HomeScreenProps) {
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const apptsPrefetch = store.getState().appointments.preloadComplete
+  const claimsPrefetch = store.getState().claimsAndAppeals.claimsFirstRetrieval
+  const rxPrefetch = store.getState().prescriptions.prescriptionFirstRetrieval
+  const smPrefetch = store.getState().secureMessaging.inboxFirstRetrieval
   const { data: userAuthorizedServices } = useAuthorizedServices()
 
   useEffect(() => {
@@ -84,6 +91,12 @@ export function HomeScreen({}: HomeScreenProps) {
       dispatch(getInbox(ScreenIDTypesConstants.HOME_SCREEN_ID))
     }
   }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
+
+  useEffect(() => {
+    if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {
+      logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - store.getState().analytics.loginTimestamp))
+    }
+  }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch])
 
   const navigateTo = useRouteNavigation()
 
