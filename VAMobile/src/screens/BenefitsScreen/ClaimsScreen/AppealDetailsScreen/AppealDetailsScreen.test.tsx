@@ -104,8 +104,8 @@ context('AppealDetailsScreen', () => {
         screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'),
       ).toBeTruthy()
       expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
-      expect(screen.getByText('To review more details about your appeal, visit VA.gov: ')).toBeTruthy()
-      expect(screen.getByRole('link', { name: 'Visit VA.gov' })).toBeTruthy()
+      expect(screen.getByText('To review more details about your appeal, go to VA.gov.')).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Go to VA.gov' })).toBeTruthy()
     })
   })
 
