@@ -2,8 +2,6 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { initialPrescriptionState } from 'store/slices'
-import { initialClaimsAndAppealsState } from 'store/slices'
 import { context, mockNavProps, render } from 'testUtils'
 
 import { HomeScreen } from './HomeScreen'
@@ -21,22 +19,9 @@ jest.mock('utils/hooks', () => {
 jest.mock('utils/remoteConfig')
 
 context('HomeScreen', () => {
-  const initializeTestInstance = (refillablePrescriptionsCount?: number, activeClaimsCount?: number) => {
+  const initializeTestInstance = () => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
-    render(<HomeScreen {...props} />, {
-      preloadedState: {
-        prescriptions: {
-          ...initialPrescriptionState,
-          prescriptionStatusCount: {
-            isRefillable: refillablePrescriptionsCount || 0,
-          },
-        },
-        claimsAndAppeals: {
-          ...initialClaimsAndAppealsState,
-          activeClaimsCount: activeClaimsCount || 0,
-        },
-      },
-    })
+    render(<HomeScreen {...props} />)
   }
 
   beforeEach(() => {
