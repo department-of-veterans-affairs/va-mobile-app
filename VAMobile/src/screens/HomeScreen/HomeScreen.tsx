@@ -97,13 +97,13 @@ export function HomeScreen({}: HomeScreenProps) {
   }, [dispatch, claimsInDowntime, userAuthorizedServices?.claims, userAuthorizedServices?.appeals])
 
   useEffect(() => {
-    if (true && !rxInDowntime && featureEnabled('homeScreenPrefetch')) {
+    if (userAuthorizedServices?.prescriptions && !rxInDowntime && featureEnabled('homeScreenPrefetch')) {
       dispatch(loadAllPrescriptions())
     }
   }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions])
 
   useEffect(() => {
-    if (true && !smInDowntime && featureEnabled('homeScreenPrefetch')) {
+    if (userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch')) {
       dispatch(getInbox(ScreenIDTypesConstants.HOME_SCREEN_ID))
     }
   }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
