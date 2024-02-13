@@ -37,10 +37,6 @@ env:
   # Slack API token
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
-strategy:
-  matrix:
-    testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
-
 jobs:
   start_slack_thread:
     if: github.event_name == 'schedule'
@@ -62,6 +58,10 @@ jobs:
       IOS_PROJ_FILE: 'VAMobile.xcodeproj'
       # Xcode scheme to build
       IOS_SCHEME: 'VAMobileRelease'
+    
+    strategy:
+      matrix:
+        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
 
     steps:
       - uses: actions/checkout@v3
