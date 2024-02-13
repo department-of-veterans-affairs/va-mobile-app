@@ -2,6 +2,7 @@ import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
 import {
+  changeMockData,
   checkImages,
   loginToDemoMode,
   openBenefits,
@@ -86,6 +87,30 @@ export async function tapPhoneAndTTYLinks() {
     await device.launchApp({ newInstance: false })
   })
 }
+
+export async function verifyMilitaryInfo(militaryBranch) {
+  it(militaryBranch + ': verify the name and branch matches the home/profile page', async () => {
+    await changeMockData(
+      'profile.json',
+      ['/v0/military-service-history', 'data', 'attributes', { serviceHistory: 1 }, 'branchOfService'],
+      militaryBranch,
+    )
+    await element(by.text('Home')).tap()
+    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
+    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_NAME_TEXT)).atIndex(1)).toExist()
+    await expect(element(by.text(militaryBranch)).atIndex(1)).toExist()
+    await element(by.text('Close')).tap()
+    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_NAME_TEXT))).toExist()
+    await expect(element(by.text(militaryBranch))).toExist()
+    await openProfile()
+    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
+    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_NAME_TEXT)).atIndex(1)).toExist()
+    await expect(element(by.text(militaryBranch)).atIndex(1)).toExist()
+    await element(by.text('Close')).tap()
+    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_NAME_TEXT))).toExist()
+    await expect(element(by.text(militaryBranch))).toExist()
+  })
+}
 describe('Veteran Status Card', () => {
   it('should match design in the home screen', async () => {
     await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
@@ -135,20 +160,36 @@ describe('Veteran Status Card', () => {
     await expect(element(by.text('100%')).atIndex(1)).toExist()
   })
 
-  it('verify the name and branch matches the home/profile page', async () => {
-    await element(by.text('Home')).tap()
-    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_NAME_TEXT)).atIndex(1)).toExist()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_MILITARY_BRANCH_TEXT)).atIndex(1)).toExist()
-    await element(by.text('Close')).tap()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_NAME_TEXT))).toExist()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_MILITARY_BRANCH_TEXT))).toExist()
-    await openProfile()
-    await element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_TEXT)).tap()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_NAME_TEXT)).atIndex(1)).toExist()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_MILITARY_BRANCH_TEXT)).atIndex(1)).toExist()
-    await element(by.text('Close')).tap()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_NAME_TEXT))).toExist()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_MILITARY_BRANCH_TEXT))).toExist()
+  verifyMilitaryInfo('United States Coast Guard')
+  verifyMilitaryInfo('United States Army')
+  verifyMilitaryInfo('United States Air Force')
+  verifyMilitaryInfo('United States Navy')
+  verifyMilitaryInfo('United States Marine Corps')
+
+  it('should reset mock data', async () => {
+    await changeMockData(
+      'profile.json',
+      ['/v0/military-service-history', 'data', 'attributes', 'serviceHistory'],
+      [
+        {
+          branchOfService: 'United States Army',
+          beginDate: '1970-07-13',
+          endDate: '1998-08-31',
+          formattedBeginDate: 'July 13, 1970',
+          formattedEndDate: 'August 31, 1998',
+          characterOfDischarge: 'Dishonorable',
+          honorableServiceIndicator: 'N',
+        },
+        {
+          branchOfService: 'United States Coast Guard',
+          beginDate: '1998-09-01',
+          endDate: '2000-01-01',
+          formattedBeginDate: 'September 01, 1998',
+          formattedEndDate: 'January 01, 2000',
+          characterOfDischarge: 'Honorable',
+          honorableServiceIndicator: 'Y',
+        },
+      ],
+    )
   })
 })
