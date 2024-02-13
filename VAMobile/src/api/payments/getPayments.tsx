@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { VaccineLocationPayload } from 'api/types'
+import { PaymentsGetData } from 'api/types'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
 import { getFirstAndLastDayOfYear } from 'utils/payments'
@@ -10,7 +10,7 @@ import { paymentKeys } from './queryKeys'
 /**
  * Fetch user payments history
  */
-const getPayments = async (year: string, page: number): Promise<VaccineLocationPayload | undefined> => {
+const getPayments = async (year: string, page: number): Promise<PaymentsGetData | undefined> => {
   const [startDate, endDate] = getFirstAndLastDayOfYear(year)
 
   const params: Params =
@@ -22,7 +22,7 @@ const getPayments = async (year: string, page: number): Promise<VaccineLocationP
           'page[size]': DEFAULT_PAGE_SIZE.toString(),
         }
       : {}
-  const response = await get<VaccineLocationPayload>('/v0/payment-history', params)
+  const response = await get<PaymentsGetData>('/v0/payment-history', params)
   return response
 }
 
