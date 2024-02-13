@@ -23,9 +23,10 @@ import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
-import store, { RootState } from 'store'
+import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import {
+  AnalyticsState,
   AppointmentsState,
   ClaimsAndAppealsState,
   PrescriptionState,
@@ -78,6 +79,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
+  const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const { data: userAuthorizedServices } = useAuthorizedServices()
 
   useEffect(() => {
@@ -110,7 +112,7 @@ export function HomeScreen({}: HomeScreenProps) {
 
   useEffect(() => {
     if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {
-      logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - store.getState().analytics.loginTimestamp))
+      logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
   }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch])
 
