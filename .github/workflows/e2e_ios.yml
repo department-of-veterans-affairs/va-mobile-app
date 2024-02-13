@@ -47,7 +47,7 @@ jobs:
       channel_name: va-mobile-build-alerts
       message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
-  e2e-ios:
+  setup-e2e-ios:
     if: ${{ always() }}
     needs: start_slack_thread
     runs-on: macos-latest-xl
@@ -58,10 +58,6 @@ jobs:
       IOS_PROJ_FILE: 'VAMobile.xcodeproj'
       # Xcode scheme to build
       IOS_SCHEME: 'VAMobileRelease'
-    
-    strategy:
-      matrix:
-        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
 
     steps:
       - uses: actions/checkout@v3
@@ -111,6 +107,23 @@ jobs:
       - name: Bundle iOS app
         run: yarn e2e:ios-build
 
+  e2e-ios:
+    if: ${{ always() }}
+    needs: setup-e2e-ios
+    runs-on: macos-latest-xl
+    env:
+      # Path to write secret key to. Also used by fastlane
+      APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
+      # Xcode project file name
+      IOS_PROJ_FILE: 'VAMobile.xcodeproj'
+      # Xcode scheme to build
+      IOS_SCHEME: 'VAMobileRelease'
+    
+    strategy:
+      matrix:
+        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
+
+    steps:
       - name: Run e2e tests for iOS
         run: |
           if [[ "${{github.event.inputs.tests_to_test}}" == "" ]]; then
@@ -118,35 +131,35 @@ jobs:
           else
             yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot
           fi
-          
+
       - name: Upload e2e-junit
         if: failure() || success()
         uses: actions/upload-artifact@v3
         with:
-          name: e2e-junit
+          name: ${{matrix.testsuite}}-e2e-junit
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
-      - name: Inform Slack of Failure
-        id: post_failure
-        if: failure() && github.event_name == 'schedule'
-        run: |
-          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-            -H 'Content-type: application/json' \
-            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
-            https://slack.com/api/chat.postMessage|
-            jq -r '.ts')
-          echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+      # - name: Inform Slack of Failure
+      #   id: post_failure
+      #   if: failure() && github.event_name == 'schedule'
+      #   run: |
+      #     ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+      #       -H 'Content-type: application/json' \
+      #       --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Failed! Please check workflow for results: https://github.com/department-of-veterans-affairs/va-mobile-app/actions"}' \
+      #       https://slack.com/api/chat.postMessage|
+      #       jq -r '.ts')
+      #     echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
-      - name: Inform Slack of success
-        id: post_success
-        if: ${{!failure()}} && github.event_name == 'schedule'
-        run: |
-          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-            -H 'Content-type: application/json' \
-            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
-            https://slack.com/api/chat.postMessage|
-            jq -r '.ts')
-          echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
+      # - name: Inform Slack of success
+      #   id: post_success
+      #   if: ${{!failure()}} && github.event_name == 'schedule'
+      #   run: |
+      #     ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+      #       -H 'Content-type: application/json' \
+      #       --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"Success! All E2E tests have passed"}' \
+      #       https://slack.com/api/chat.postMessage|
+      #       jq -r '.ts')
+      #     echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
 
       - name: Upload artifacts on failure
         #if: failure()
