@@ -42,7 +42,33 @@ describe('Direct Deposit Screen', () => {
     await expect(element(by.text(DirectDepositConstants.TTY_LINK_TEXT))).toExist()
   })
 
-  it('should fill out Account form', async () => {
+  it('should check direct deposit error handling for null', async () => {
+    await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
+    await element(by.text('Save')).tap()
+    await expect(element(by.text('Check your direct deposit information'))).toExist()
+    await expect(element(by.text('Enter a 9-digit routing number'))).toExist()
+    await expect(element(by.text('Enter an account number'))).toExist()
+    await expect(element(by.text('Select an account type'))).toExist()
+    await expect(element(by.text('Select checkbox to confirm information'))).toExist()
+    await element(by.text('Cancel')).tap()
+  })
+
+  it('should check direct deposit error handling incorrect routing number', async () => {
+    await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
+    await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
+    await element(by.id('accountType picker required')).tap()
+    await element(by.text('Checking')).tap()
+    await element(by.text('Done')).tap()
+    await element(by.id('routingNumber')).typeText('1234567\n')
+    await element(by.id('accountNumber')).typeText('12345678901234567\n')
+    await element(by.text('Save')).tap()
+    await expect(element(by.text('Check your direct deposit information'))).toExist()
+    await expect(element(by.text('Enter a 9-digit routing number'))).toExist()
+    await element(by.text('Cancel')).tap()
+    await element(by.text(DirectDepositConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()
+  })
+
+  it('should fill out Account form for checking', async () => {
     await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
     await expect(element(by.text(DirectDepositConstants.EDIT_ACCOUNT_TEXT))).toExist()
     await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
@@ -59,6 +85,27 @@ describe('Direct Deposit Screen', () => {
     await expect(element(by.text('Bank'))).toExist()
     await expect(element(by.text('*************4567'))).toExist()
     await expect(element(by.text('Checking account'))).toExist()
+    await expect(element(by.text('Direct deposit information saved'))).toExist()
+    await element(by.text('Dismiss')).tap()
+  })
+
+  it('should fill out Account form for savings', async () => {
+    await element(by.text(DirectDepositConstants.ACCOUNT_TEXT)).tap()
+    await expect(element(by.text(DirectDepositConstants.EDIT_ACCOUNT_TEXT))).toExist()
+    await scrollToThenTap(DirectDepositConstants.CONFIRM_CHECKBOX_TEXT)
+
+    // Ordering here is intentional because the iOS keyboard sometimes blocks fields at the bottom of the form
+    await element(by.id('accountType picker required')).tap()
+    await element(by.text('Savings')).tap()
+    await element(by.text('Done')).tap()
+    await element(by.id('routingNumber')).typeText('053100300\n')
+    await element(by.id('accountNumber')).typeText('12345678901234567\n')
+    await element(by.text('Save')).tap()
+
+    await expect(element(by.text(DirectDepositConstants.INFORMATION_HEADING))).toExist()
+    await expect(element(by.text('Bank'))).toExist()
+    await expect(element(by.text('*************4567'))).toExist()
+    await expect(element(by.text('Savings account'))).toExist()
     await expect(element(by.text('Direct deposit information saved'))).toExist()
     await element(by.text('Dismiss')).tap()
   })
