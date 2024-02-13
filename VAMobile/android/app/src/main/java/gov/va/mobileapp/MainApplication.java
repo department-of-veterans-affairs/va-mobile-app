@@ -81,7 +81,6 @@ public class MainApplication extends Application implements ReactApplication, IN
         if (BuildConfig.DEBUG) {
             WebView.setWebContentsDebuggingEnabled(true);
         }
-        System.setProperty("debug.firebase.analytics.app", "gov.va.mobileapp");
         SoLoader.init(this, /* native exopackage */ false);
         initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
     }
