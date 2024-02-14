@@ -37,7 +37,7 @@ const getPayments = async (year: string | undefined, page: number): Promise<Paym
 export const usePayments = (year: string | undefined, page: number, options?: { enabled?: boolean }) => {
   return useQuery({
     ...options,
-    queryKey: [paymentKeys.payment, year, page],
+    queryKey: [paymentsKeys.payments, year, page],
     queryFn: () => getPayments(year, page),
     meta: {
       errorName: 'getPayments: Service error',

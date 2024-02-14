@@ -57,9 +57,8 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
           a11yLabel: year,
         }
       })
-    } else {
-      return []
     }
+    return []
   }, [payments])
 
   useEffect(() => {
@@ -101,7 +100,6 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
   }
 
   const getPaymentsData = (): ReactNode => {
-    console.log(payments)
     if (payments?.data.length === 0 || !payments?.paymentsByDate || !payments.meta.pagination) {
       return (
         <Box mt={theme.dimensions.standardMarginBetween}>
