@@ -77,7 +77,7 @@ export function HomeScreen({}: HomeScreenProps) {
   )
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const { isLoading: claimsPrefetch } = useClaimsAndAppeals('ACTIVE', 1, true, {
+  const { isFetched: claimsPrefetch } = useClaimsAndAppeals('ACTIVE', 1, true, {
     enabled:
       (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) &&
       !claimsInDowntime &&
