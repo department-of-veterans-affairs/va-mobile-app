@@ -23,6 +23,7 @@ export type FeatureToggleType =
   | 'inAppUpdates'
   | 'preferredNameGenderWaygate'
   | 'haptics'
+  | 'homeScreenPrefetch'
   | 'whatsNewUI'
   | 'decisionLettersWaygate'
   | 'patientCheckIn'
@@ -36,6 +37,7 @@ type FeatureToggleValues = {
   inAppUpdates: boolean
   preferredNameGenderWaygate: boolean
   haptics: boolean
+  homeScreenPrefetch: boolean
   whatsNewUI: boolean
   decisionLettersWaygate: boolean
   patientCheckIn: boolean
@@ -50,6 +52,7 @@ export const defaults: FeatureToggleValues = {
   inAppUpdates: true,
   preferredNameGenderWaygate: true,
   haptics: true,
+  homeScreenPrefetch: true,
   whatsNewUI: true,
   decisionLettersWaygate: true,
   patientCheckIn: false,

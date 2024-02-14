@@ -426,6 +426,15 @@ export const Events = {
       },
     }
   },
+  vama_error_json_resp: (endpoint?: string, statusCode?: number): Event => {
+    return {
+      name: 'vama_error_json_resp',
+      params: {
+        statusCode,
+        endpoint,
+      },
+    }
+  },
   vama_eu_shown: (): Event => {
     return {
       name: 'vama_eu_shown',
@@ -628,6 +637,46 @@ export const Events = {
       name: 'vama_givefb_open',
       params: {
         linkType,
+      },
+    }
+  },
+  vama_hs_appts_count: (apptCount: number): Event => {
+    return {
+      name: 'vama_hs_appts_count',
+      params: {
+        apptCount,
+      },
+    }
+  },
+  vama_hs_claims_count: (claimsCount: number): Event => {
+    return {
+      name: 'vama_hs_claims_count',
+      params: {
+        claimsCount,
+      },
+    }
+  },
+  vama_hs_load_time: (loadTime: number): Event => {
+    return {
+      name: 'vama_hs_load_time',
+      params: {
+        loadTime,
+      },
+    }
+  },
+  vama_hs_rx_count: (rxCount: number): Event => {
+    return {
+      name: 'vama_hs_rx_count',
+      params: {
+        rxCount,
+      },
+    }
+  },
+  vama_hs_sm_count: (smCount: number): Event => {
+    return {
+      name: 'vama_hs_sm_count',
+      params: {
+        smCount,
       },
     }
   },
