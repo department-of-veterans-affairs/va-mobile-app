@@ -5,7 +5,7 @@ import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
 import { getFirstAndLastDayOfYear, groupPaymentsByDate } from 'utils/payments'
 
-import { paymentKeys } from './queryKeys'
+import { paymentsKeys } from './queryKeys'
 
 /**
  * Fetch user payments history
