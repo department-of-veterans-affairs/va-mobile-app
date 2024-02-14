@@ -666,6 +666,19 @@
         "prev": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1",
         "next": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=4",
         "last": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=7"
+      },
+      "prescriptionStatusCount": {
+        "active": 1,
+        "isRefillable": 10,
+        "discontinued": 1,
+        "expired": 4,
+        "historical": 3,
+        "pending": 1,
+        "transferred": 1,
+        "submitted": 0,
+        "hold": 1,
+        "unknown": 1,
+        "total": 23
       }
     }
   },
