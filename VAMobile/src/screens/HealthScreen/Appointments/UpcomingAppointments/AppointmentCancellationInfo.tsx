@@ -190,7 +190,8 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
         variant="MobileBody"
         {...testIdProps(bodyA11yLabel || body)}
         mt={theme.dimensions.standardMarginBetween}
-        paragraphSpacing={true}>
+        paragraphSpacing={true}
+        testID="upcomingApptCancellationTestID">
         {body}
       </TextView>
       {(appointmentType === AppointmentTypeConstants.VA || phoneOnly) && !isCovidVaccine && cancelId ? (
