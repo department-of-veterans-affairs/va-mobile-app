@@ -1,6 +1,6 @@
-import { DemoStore } from './store'
 import { Params } from '..'
 import { VaccineListData, VaccineLocationData } from '../types'
+import { DemoStore } from './store'
 
 type VaccinePageNumber = '1' | '2'
 

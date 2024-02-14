@@ -1,24 +1,31 @@
-import { ScrollView } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect, useRef, useState } from 'react'
-import _ from 'underscore'
+import { useTranslation } from 'react-i18next'
+import { Image } from 'react-native'
+import { ScrollView } from 'react-native'
+import { Asset, ImagePickerResponse } from 'react-native-image-picker'
+
+import { StackScreenProps } from '@react-navigation/stack'
+
 import styled from 'styled-components'
+import _ from 'underscore'
 
 import { AlertBox, Box, FullScreenSubtask, TextView, VABulletList } from 'components'
-import { Asset, ImagePickerResponse } from 'react-native-image-picker'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { Events } from 'constants/analytics'
-import { FormHeaderTypeConstants } from 'constants/secureMessaging'
-import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { Image } from 'react-native'
-import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y, getMaxWidthAndHeightOfImage } from 'utils/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
+import {
+  ImageMaxWidthAndHeight,
+  bytesToFinalSizeDisplay,
+  bytesToFinalSizeDisplayA11y,
+  getMaxWidthAndHeightOfImage,
+} from 'utils/common'
+import getEnv from 'utils/env'
+import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { themeFn } from 'utils/theme'
-import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
-import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
 
@@ -55,7 +62,10 @@ function Attachments({ navigation, route }: AttachmentsProps) {
     }
   }, [error])
 
-  const callbackOnSuccessfulFileSelection = (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean): void => {
+  const callbackOnSuccessfulFileSelection = (
+    response: ImagePickerResponse | DocumentPickerResponse,
+    isImage: boolean,
+  ): void => {
     logAnalyticsEvent(Events.vama_sm_attach_outcome('true'))
     // display image preview
     if (isImage) {
@@ -166,7 +176,9 @@ function Attachments({ navigation, route }: AttachmentsProps) {
       title={t('secureMessaging.startNewMessage.attachments.title')}
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
-      primaryContentButtonText={displaySelectFile ? t('secureMessaging.attachments.selectAFile') : t('secureMessaging.startNewMessage.attach')}
+      primaryContentButtonText={
+        displaySelectFile ? t('secureMessaging.attachments.selectAFile') : t('secureMessaging.startNewMessage.attach')
+      }
       onPrimaryContentButtonPress={displaySelectFile ? onSelectAFile : onAttach}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
@@ -180,8 +192,16 @@ function Attachments({ navigation, route }: AttachmentsProps) {
         <VABulletList listOfText={bullets} />
         {image && uri && (
           // need to set label has \ufeff so that samsung just says image and not unliable image
-          <Box mb={theme.dimensions.standardMarginBetween} accessibilityRole="image" accessible={true} accessibilityLabel={'\ufeff'}>
-            <StyledImage source={{ uri }} height={imageMaxWidthAndHeight.height} maxWidth={imageMaxWidthAndHeight.maxWidth} />
+          <Box
+            mb={theme.dimensions.standardMarginBetween}
+            accessibilityRole="image"
+            accessible={true}
+            accessibilityLabel={'\ufeff'}>
+            <StyledImage
+              source={{ uri }}
+              height={imageMaxWidthAndHeight.height}
+              maxWidth={imageMaxWidthAndHeight.maxWidth}
+            />
           </Box>
         )}
         {file?.name && file?.size && renderFileDisplay(file.name, file.size)}

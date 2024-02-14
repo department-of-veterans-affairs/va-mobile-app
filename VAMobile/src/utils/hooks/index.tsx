@@ -1,33 +1,48 @@
-import { AccessibilityInfo, Alert, AlertButton, AppState, Dimensions, EmitterSubscription, Linking, PixelRatio, ScrollView, UIManager, View, findNodeHandle } from 'react-native'
-import { CommonActions, EventArg, useNavigation } from '@react-navigation/native'
-import { ImagePickerResponse } from 'react-native-image-picker'
 import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import {
+  AccessibilityInfo,
+  Alert,
+  AlertButton,
+  AppState,
+  Dimensions,
+  EmitterSubscription,
+  Linking,
+  PixelRatio,
+  ScrollView,
+  UIManager,
+  View,
+  findNodeHandle,
+} from 'react-native'
+import { ImagePickerResponse } from 'react-native-image-picker'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { CommonActions, EventArg, useNavigation } from '@react-navigation/native'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { StackNavigationProp } from '@react-navigation/stack'
-import { useActionSheet } from '@expo/react-native-action-sheet'
-import { useDispatch, useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
-import React from 'react'
 
-import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
+import { useActionSheet } from '@expo/react-native-action-sheet'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
-import { AppDispatch, RootState } from 'store'
 import { DateTime } from 'luxon'
-import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
-import { DowntimeWindowsByFeatureType, ErrorsState, SecureMessagingState } from 'store/slices'
-import { EventParams, logAnalyticsEvent } from 'utils/analytics'
+import { useTheme as styledComponentsUseTheme } from 'styled-components'
+
 import { Events } from 'constants/analytics'
+import { WebProtocolTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { AppDispatch, RootState } from 'store'
+import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
+import { DowntimeWindowsByFeatureType, ErrorsState, SecureMessagingState } from 'store/slices'
+import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { VATheme } from 'styles/theme'
-import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
-import { WebProtocolTypesConstants } from 'constants/common'
-import { a11yLabelVA } from 'utils/a11yLabel'
-import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { getTheme } from 'styles/themes/standardTheme'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { EventParams, logAnalyticsEvent } from 'utils/analytics'
+import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
-import { useTheme as styledComponentsUseTheme } from 'styled-components'
+import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
 /**
  * Hook to determine if an error should be shown for a given screen id
@@ -55,12 +70,18 @@ export const useDowntimeByScreenID = (currentScreenID: ScreenIDTypes): boolean =
   return oneOfFeaturesInDowntime(features, downtimeWindowsByFeature)
 }
 
-export const featureInDowntime = (feature: DowntimeFeatureType, downtimeWindows: DowntimeWindowsByFeatureType): boolean => {
+export const featureInDowntime = (
+  feature: DowntimeFeatureType,
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): boolean => {
   const mw = downtimeWindows[feature]
   return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime
 }
 
-export const oneOfFeaturesInDowntime = (features: DowntimeFeatureType[], downtimeWindows: DowntimeWindowsByFeatureType): boolean => {
+export const oneOfFeaturesInDowntime = (
+  features: DowntimeFeatureType[],
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): boolean => {
   return !!features?.some((feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
 }
 
@@ -115,8 +136,8 @@ type RouteNavParams<T extends ParamListBase> = {
 
 /**
  * On iOS, voiceover will focus on the element closest to what the user last interacted with on the
- * previous screen rather than what is on the top left (https://github.com/react-navigation/react-navigation/issues/7056) This hook allows you to manually set the accessibility
- * focus on the element we know will be in the correct place.
+ * previous screen rather than what is on the top left (https://github.com/react-navigation/react-navigation/issues/7056)
+ * This hook allows you to manually set the accessibility focus on the element we know will be in the correct place.
  *
  * @returns Array with a ref and the function to set the ref for the accessibility focus
  */
@@ -177,11 +198,14 @@ export function useIsScreenReaderEnabled(withListener = false): boolean {
     let screenReaderChangedSubscription: EmitterSubscription
 
     if (withListener) {
-      screenReaderChangedSubscription = AccessibilityInfo.addEventListener('screenReaderChanged', (isScreenReaderEnabled) => {
-        if (isMounted) {
-          setScreenReaderEnabled(isScreenReaderEnabled)
-        }
-      })
+      screenReaderChangedSubscription = AccessibilityInfo.addEventListener(
+        'screenReaderChanged',
+        (isScreenReaderEnabled) => {
+          if (isMounted) {
+            setScreenReaderEnabled(isScreenReaderEnabled)
+          }
+        },
+      )
     }
     AccessibilityInfo.isScreenReaderEnabled().then((isScreenReaderEnabled) => {
       if (isMounted) {
@@ -314,7 +338,8 @@ export type UseAlertProps = {
  * @param title - title of the alert
  * @param message - optional message for the alert
  * @param buttons - options to show in the alert
- * @param screenReaderEnabled - apply a11yLabelNeededForScreenReader will have the side effect of visually displaying V-A since the alert used does not have a separate accessibility Label
+ * @param screenReaderEnabled - apply a11yLabelNeededForScreenReader will have the side effect of visually
+ * displaying V-A since the alert used does not have a separate accessibility Label
  * @returns returns an alert for ios and android
  */
 export function useAlert(): (props: UseAlertProps) => void {
@@ -332,7 +357,12 @@ export function useAlert(): (props: UseAlertProps) => void {
  *
  * @returns ref to the scrollView and the element to scroll to and the function to call the manual scroll
  */
-export function useAutoScrollToElement(): [MutableRefObject<ScrollView>, MutableRefObject<View>, (offset?: number) => void, React.Dispatch<React.SetStateAction<boolean>>] {
+export function useAutoScrollToElement(): [
+  MutableRefObject<ScrollView>,
+  MutableRefObject<View>,
+  (offset?: number) => void,
+  React.Dispatch<React.SetStateAction<boolean>>,
+] {
   const scrollRef = useRef() as MutableRefObject<ScrollView>
   const [viewRef, setFocus] = useAccessibilityFocus<View>()
   const [shouldFocus, setShouldFocus] = useState(true)
@@ -460,7 +490,10 @@ export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()
  * Returns a wrapper to showActionSheetWithOptions that converts iOS options to title case
  * TODO: consolidate this and useDestructiveActionSheet into a single hook
  */
-export function useShowActionSheet(): (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void {
+export function useShowActionSheet(): (
+  options: ActionSheetOptions,
+  callback: (i?: number) => void | Promise<void>,
+) => void {
   const { showActionSheetWithOptions } = useActionSheet()
   const currentTheme = getTheme()
 
@@ -524,7 +557,18 @@ export function useOrientation(): boolean {
 export function useBeforeNavBackListener(
   navigation: StackNavigationProp<ParamListBase, keyof ParamListBase>,
   callback: (
-    e: EventArg<'beforeRemove', true, { action: Readonly<{ type: string; payload?: object | undefined; source?: string | undefined; target?: string | undefined }> }>,
+    e: EventArg<
+      'beforeRemove',
+      true,
+      {
+        action: Readonly<{
+          type: string
+          payload?: object | undefined
+          source?: string | undefined
+          target?: string | undefined
+        }>
+      }
+    >,
   ) => void,
 ): void {
   useEffect(() => {

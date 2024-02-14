@@ -1,12 +1,13 @@
 import React, { FC } from 'react'
 
-import { SwitchProps } from './Switch'
-import { TextView } from './index'
-import { TextViewProps } from './TextView'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
+
 import BaseListItem, { BaseListItemProps } from './BaseListItem'
 import Box from './Box'
+import { SwitchProps } from './Switch'
+import { TextViewProps } from './TextView'
+import { TextView } from './index'
 
 /**
  * Signifies each item in the list of items in {@link ListProps}

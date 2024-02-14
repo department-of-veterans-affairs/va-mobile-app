@@ -1,13 +1,14 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
-import { context, render } from 'testUtils'
 import { AppointmentAttributes, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
+import { context, render } from 'testUtils'
+
 import ProviderName from './ProviderName'
 
 context('ProviderName', () => {
-  let props: any
-  let practitionerData = {
+  const practitionerData = {
     prefix: '',
     firstName: 'Larry',
     middleName: 'Andy',
@@ -15,10 +16,10 @@ context('ProviderName', () => {
   }
 
   const initializeTestInstance = (attributes?: Partial<AppointmentAttributes>): void => {
-    props = {
+    const props = {
       appointmentType: 'VA_VIDEO_CONNECT_ONSITE',
       ...(attributes || {}),
-    }
+    } as AppointmentAttributes
 
     render(<ProviderName attributes={props} />)
   }
@@ -39,14 +40,14 @@ context('ProviderName', () => {
 
   describe('when phone Appointment with a healthcare provider', () => {
     it('should render any with healthcare provider', () => {
-      initializeTestInstance({phoneOnly: true, healthcareProvider: 'John Adams'})
+      initializeTestInstance({ phoneOnly: true, healthcareProvider: 'John Adams' })
       expect(screen.getByRole('header', { name: 'John Adams' })).toBeTruthy()
     })
   })
 
   describe('when phone Appointment with no healthcare provider', () => {
     it('should render with defaults', () => {
-      initializeTestInstance({phoneOnly: true})
+      initializeTestInstance({ phoneOnly: true })
       expect(screen.getByRole('header', { name: 'Provider not noted' })).toBeTruthy()
     })
   })

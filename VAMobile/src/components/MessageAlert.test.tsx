@@ -1,17 +1,15 @@
 import React from 'react'
-import { context, render, screen } from 'testUtils'
+
 import { MessageAlert } from 'components'
+import { context, render, screen } from 'testUtils'
 
 context('MessageAlert', () => {
-
   const initializeTestInstance = ({
     hasValidationError,
     saveDraftAttempted,
-    savingDraft,
   }: {
     hasValidationError?: boolean
     saveDraftAttempted?: boolean
-    savingDraft?: boolean
     errorList?: { [key: number]: string }
   }): void => {
     render(<MessageAlert hasValidationError={hasValidationError} saveDraftAttempted={saveDraftAttempted} />)

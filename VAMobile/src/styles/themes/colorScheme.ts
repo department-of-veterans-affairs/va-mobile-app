@@ -1,5 +1,5 @@
-import { Appearance, ColorSchemeName } from 'react-native'
 import { useEffect, useRef, useState } from 'react'
+import { Appearance, ColorSchemeName } from 'react-native'
 
 /**
  * A function overriding RN's default useColorScheme hook

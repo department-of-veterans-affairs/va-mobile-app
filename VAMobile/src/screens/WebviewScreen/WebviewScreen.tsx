@@ -1,17 +1,19 @@
-import { Linking, StatusBar, ViewStyle } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack'
-import { WebView } from 'react-native-webview'
-import { useTranslation } from 'react-i18next'
 import React, { MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, StatusBar, ViewStyle } from 'react-native'
+import { WebView } from 'react-native-webview'
 
+import { StackScreenProps } from '@react-navigation/stack'
+
+import { Box, BoxProps, LoadingComponent } from 'components'
 import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { Box, BoxProps, LoadingComponent } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
+
 import WebviewControlButton from './WebviewControlButton'
 import WebviewControls, { WebviewControlsProps } from './WebviewControls'
 import WebviewTitle from './WebviewTitle'
@@ -35,7 +37,13 @@ function ReloadButton({ reloadPressed }: ReloadButtonProps) {
 
   return (
     <Box {...reloadBoxProps}>
-      <WebviewControlButton onPress={reloadPressed} disabled={false} icon={'Redo'} fill={colors.icon.webviewReload} testID={t('refresh')} />
+      <WebviewControlButton
+        onPress={reloadPressed}
+        disabled={false}
+        icon={'Redo'}
+        fill={colors.icon.webviewReload}
+        testID={t('refresh')}
+      />
     </Box>
   )
 }
@@ -94,7 +102,15 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props): ReactNode => <BackButton webview={true} onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.done} showCarat={false} />,
+      headerLeft: (props): ReactNode => (
+        <BackButton
+          webview={true}
+          onPress={props.onPress}
+          canGoBack={props.canGoBack}
+          label={BackButtonLabelConstants.done}
+          showCarat={false}
+        />
+      ),
       headerTitle: () => <WebviewTitle title={displayTitle} />,
       headerRight: () => <ReloadButton reloadPressed={onReloadPressed} />,
     })
@@ -142,7 +158,11 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
 
   return (
     <Box {...mainViewBoxProps} {...testIdProps('Webview-page', true)}>
-      <StatusBar translucent barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={theme.colors.background.main} />
+      <StatusBar
+        translucent
+        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+        backgroundColor={theme.colors.background.main}
+      />
       <WebView
         startInLoadingState
         renderLoading={(): ReactElement => <WebviewLoading loadingMessage={loadingMessage} />}

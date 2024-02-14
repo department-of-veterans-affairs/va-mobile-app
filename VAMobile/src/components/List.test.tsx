@@ -1,16 +1,26 @@
 import React from 'react'
-import Mock = jest.Mock
+
 import { context, fireEvent, render, screen } from 'testUtils'
+
 import List from './List'
 import TextView from './TextView'
+
+import Mock = jest.Mock
 
 context('List', () => {
   let onPressSpy: Mock
 
   beforeEach(() => {
-    onPressSpy = jest.fn(() => { })
+    onPressSpy = jest.fn(() => {})
 
-    const items = [{ content: <TextView>Hello</TextView>, a11yHintText: 'military hint', onPress: onPressSpy, testId: 'military-information' }]
+    const items = [
+      {
+        content: <TextView>Hello</TextView>,
+        a11yHintText: 'military hint',
+        onPress: onPressSpy,
+        testId: 'military-information',
+      },
+    ]
 
     render(<List items={items} />)
   })

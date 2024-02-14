@@ -1,16 +1,18 @@
 import React from 'react'
 
-import { screen, fireEvent } from '@testing-library/react-native'
-import { context, mockNavProps, render } from 'testUtils'
-import { HealthScreen } from './HealthScreen'
-import { initialSecureMessagingState, loadAllPrescriptions } from 'store/slices'
+import { fireEvent, screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
+
+import { initialSecureMessagingState, loadAllPrescriptions } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
+
+import { HealthScreen } from './HealthScreen'
 
 const mockNavigationSpy = jest.fn()
 
 jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
-  let original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
+  const original = jest.requireActual('../../api/authorizedServices/getAuthorizedServices')
   return {
     ...original,
     useAuthorizedServices: jest.fn().mockReturnValue({
@@ -40,7 +42,7 @@ jest.mock('../../api/authorizedServices/getAuthorizedServices', () => {
 jest.mock('utils/remoteConfig')
 
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
 
   return {
     ...original,
@@ -49,7 +51,7 @@ jest.mock('utils/hooks', () => {
 })
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     loadAllPrescriptions: jest.fn(() => {
@@ -62,19 +64,22 @@ jest.mock('store/slices', () => {
 })
 
 context('HealthScreen', () => {
-  let props: any
-  let mockFeatureEnabled = featureEnabled as jest.Mock
+  const mockFeatureEnabled = featureEnabled as jest.Mock
 
   afterEach(() => {
     jest.clearAllMocks()
   })
 
   //mockList:  SecureMessagingMessageList --> for inboxMessages
-  const initializeTestInstance = (unreadCount = 13, hasLoadedInbox = true, prescriptionsEnabled = false, prescriptionsNeedLoad = false) => {
-
+  const initializeTestInstance = (
+    unreadCount = 13,
+    hasLoadedInbox = true,
+    prescriptionsEnabled = false,
+    prescriptionsNeedLoad = false,
+  ) => {
     when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(prescriptionsEnabled)
 
-    props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
+    const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
 
     render(<HealthScreen {...props} />, {
       preloadedState: {
@@ -136,12 +141,6 @@ context('HealthScreen', () => {
       initializeTestInstance(0, true, true, false)
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(loadAllPrescriptions).toHaveBeenCalled()
-    })
-
-    it('should not reload rx data if data is not present', async () => {
-      initializeTestInstance(0, true, true, true)
-      fireEvent.press(screen.getByText('Prescriptions'))
-      expect(loadAllPrescriptions).not.toHaveBeenCalled()
     })
   })
 

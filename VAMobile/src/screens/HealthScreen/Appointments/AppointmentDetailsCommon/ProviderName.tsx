@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { getAllFieldsThatExist } from 'utils/common'
+import { AppointmentAttributes, AppointmentTypeConstants } from 'store/api/types'
 import { isAPendingAppointment } from 'utils/appointments'
+import { getAllFieldsThatExist } from 'utils/common'
 import { useTheme } from 'utils/hooks'
 
 type ProviderNameProps = {
@@ -16,10 +16,20 @@ function ProviderName({ attributes }: ProviderNameProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const isAppointmentPending = isAPendingAppointment(attributes)
+  const {
+    appointmentType,
+    practitioner,
+    healthcareProvider,
+    friendlyLocationName,
+    location,
+    phoneOnly,
+    serviceCategoryName,
+  } = attributes || ({} as AppointmentAttributes)
 
-  const { appointmentType, practitioner, healthcareProvider, friendlyLocationName, location, phoneOnly } = attributes || ({} as AppointmentAttributes)
-
-  if (phoneOnly) {
+  if (
+    phoneOnly ||
+    (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+  ) {
     return (
       <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
         {healthcareProvider ? healthcareProvider : t('appointments.noProvider')}
@@ -47,7 +57,11 @@ function ProviderName({ attributes }: ProviderNameProps) {
   // Canceled and Booked appointments
   let practitionerName = ''
   if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE && practitioner) {
-    practitionerName = getAllFieldsThatExist([practitioner.firstName || '', practitioner.middleName || '', practitioner.lastName || ''])
+    practitionerName = getAllFieldsThatExist([
+      practitioner.firstName || '',
+      practitioner.middleName || '',
+      practitioner.lastName || '',
+    ])
       .join(' ')
       .trim()
   } else if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && healthcareProvider) {
