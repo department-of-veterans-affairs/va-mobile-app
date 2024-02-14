@@ -56,6 +56,9 @@ jobs:
       matrix:
         testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
     steps: 
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
       - name: output_matrix
         run: echo "MATRIX_OUTPUT=${{matrix.testsuite}}" >> "$GITHUB_OUTPUT"
 
