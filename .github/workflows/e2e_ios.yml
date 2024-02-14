@@ -165,7 +165,7 @@ jobs:
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
-      test_names: ${{matrix.testsuite}}
+      test_names: ${{ toJson(matrix.testsuite) }}
     secrets: inherit
 
 
