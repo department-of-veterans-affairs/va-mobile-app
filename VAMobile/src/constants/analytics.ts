@@ -1135,13 +1135,9 @@ export const Events = {
       },
     }
   },
-  vama_update_dir_dep: (totalTime: number, actionTime: number): Event => {
+  vama_update_dir_dep: (): Event => {
     return {
       name: 'vama_update_dir_dep',
-      params: {
-        totalTime,
-        actionTime,
-      },
     }
   },
   vama_user_call: (status_code: number): Event => {
