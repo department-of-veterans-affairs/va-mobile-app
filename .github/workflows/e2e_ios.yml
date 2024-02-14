@@ -48,7 +48,7 @@ jobs:
       message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
   matrix_prep:
-    if: ${{ github.event.inputs.tests_to_test != "" }}
+    if: github.event.inputs.tests_to_test != ''
     runs-on: macos-latest-xl
     outputs:
       output1: ${{steps.output_matrix.outputs.MATRIX_OUTPUT}}
