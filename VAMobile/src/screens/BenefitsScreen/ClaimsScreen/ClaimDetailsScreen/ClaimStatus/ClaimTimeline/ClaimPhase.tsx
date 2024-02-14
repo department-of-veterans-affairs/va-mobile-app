@@ -65,9 +65,9 @@ function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
 
   useEffect(() => {
     if (phase === 3 && current === 3 && showClaimFileUploadBtn) {
-      logAnalyticsEvent(Events.vama_claim_file_request())
+      logAnalyticsEvent(Events.vama_claim_file_request(claimID))
     }
-  }, [phase, current, showClaimFileUploadBtn])
+  }, [phase, current, showClaimFileUploadBtn, claimID])
 
   const getPhaseHeader = (): ReactNode => {
     return (

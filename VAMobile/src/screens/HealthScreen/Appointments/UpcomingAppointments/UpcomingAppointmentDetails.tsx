@@ -89,8 +89,17 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   }
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, location, startDateUtc, minutesDuration, comment, status, isCovidVaccine, phoneOnly } =
-    attributes || ({} as AppointmentAttributes)
+  const {
+    appointmentType,
+    location,
+    startDateUtc,
+    minutesDuration,
+    comment,
+    status,
+    isCovidVaccine,
+    phoneOnly,
+    serviceCategoryName,
+  } = attributes || ({} as AppointmentAttributes)
   const { name, code, url, lat, long, address } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
@@ -266,7 +275,8 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
 
           <TextView
             {...prepareForVideoVisitLinkProps}
-            {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}>
+            {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}
+            testID="prepareForVideoVisitTestID">
             {t('upcomingAppointmentDetails.prepareForVideoVisit')}
           </TextView>
         </Box>
@@ -317,7 +327,8 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       <Box mt={theme.dimensions.condensedMarginBetween}>
         {!isAppointmentCanceled ? (
           <AppointmentCancellationInfo appointment={appointment} goBack={goBack} />
-        ) : phoneOnly ? (
+        ) : phoneOnly ||
+          (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION') ? (
           <Box mt={theme.dimensions.condensedMarginBetween}>
             <TextArea>
               <TextView
@@ -329,8 +340,8 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
               <TextView variant="MobileBody" paragraphSpacing={true}>
                 {t('appointments.reschedule.body')}
               </TextView>
-              {location.phone ? (
-                <ClickToCallPhoneNumber phone={location.phone.areaCode + ' ' + location.phone.number} />
+              {location?.phone && location.phone.areaCode && location.phone.number ? (
+                <ClickToCallPhoneNumber phone={location.phone} />
               ) : undefined}
               <ClickForActionLink
                 displayedText={t('appointments.vaSchedule')}
@@ -393,10 +404,9 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           <TypeOfCare attributes={attributes} />
           <ProviderName attributes={attributes} />
 
-          <AppointmentAddressAndNumber attributes={attributes} />
+          <AppointmentAddressAndNumber attributes={attributes} isPastAppointment={false} />
 
           {renderAtlasVideoConnectAppointmentData()}
-          {renderSpecialInstructions()}
           {featureEnabled('patientCheckIn') && (
             <Box my={theme.dimensions.gutter} mr={theme.dimensions.buttonPadding}>
               <Button onPress={() => navigateTo('ConfirmContactInfo')} label={t('checkIn.now')} />
@@ -405,6 +415,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
           <PreferredDateAndTime attributes={attributes} />
           <PreferredAppointmentType attributes={attributes} />
           <AppointmentReason attributes={attributes} />
+          {renderSpecialInstructions()}
           <ContactInformation attributes={attributes} />
           <PendingAppointmentCancelButton attributes={attributes} appointmentID={appointmentID} />
         </TextArea>

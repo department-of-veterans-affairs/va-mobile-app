@@ -61,7 +61,7 @@ const disabilitRatingSlice = createSlice({
       const { ratingData, error } = action.payload
       state.ratingData = ratingData
       state.error = error
-      state.needsDataLoad = error ? true : false
+      state.needsDataLoad = !!error
       state.preloadComplete = true
       state.loading = false
     },

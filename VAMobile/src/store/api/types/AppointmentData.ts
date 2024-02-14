@@ -155,7 +155,7 @@ export type AppointmentAttributes = {
   minutesDuration: number
   comment: string
   timeZone: AppointmentTimeZone
-  healthcareService: string
+  healthcareService: string | undefined
   healthcareProvider: string | null
   location: AppointmentLocation
   practitioner?: AppointmentPractitioner
@@ -216,6 +216,7 @@ export type AppointmentsGetDataMeta = {
   pagination?: AppointmentsMetaPagination
   // This property does not exist in api, used to track if the data(AppointmentsGetData) return was from an api call
   dataFromStore: boolean
+  upcomingAppointmentsCount: number
 }
 
 export type AppointmentsGetData = {

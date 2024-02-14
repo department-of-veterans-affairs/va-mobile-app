@@ -61,7 +61,12 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
   let body
   let bodyA11yLabel
 
-  if (phoneOnly) {
+  if (
+    phoneOnly ||
+    (appointmentType === AppointmentTypeConstants.VA &&
+      serviceCategoryName !== 'COMPENSATION & PENSION' &&
+      !isCovidVaccine)
+  ) {
     title = t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule')
     body =
       appointmentType === AppointmentTypeConstants.VA && !isCovidVaccine && cancelId
@@ -118,13 +123,14 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
     }
   }
 
-  const linkOrPhone = phone ? (
-    <ClickToCallPhoneNumber phone={phone} />
-  ) : (
-    <Box mt={theme.dimensions.standardMarginBetween}>
-      <ClickForActionLink {...findYourVALocationProps} />
-    </Box>
-  )
+  const linkOrPhone =
+    phone && phone.areaCode && phone.number ? (
+      <ClickToCallPhoneNumber phone={phone} />
+    ) : (
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <ClickForActionLink {...findYourVALocationProps} />
+      </Box>
+    )
 
   const onCancelAppointment = () => {
     logAnalyticsEvent(
@@ -184,13 +190,22 @@ function AppointmentCancellationInfo({ appointment }: AppointmentCancellationInf
         variant="MobileBody"
         {...testIdProps(bodyA11yLabel || body)}
         mt={theme.dimensions.standardMarginBetween}
-        paragraphSpacing={true}>
+        paragraphSpacing={true}
+        testID="upcomingApptCancellationTestID">
         {body}
       </TextView>
       {(appointmentType === AppointmentTypeConstants.VA || phoneOnly) && !isCovidVaccine && cancelId ? (
         <>
-          {phoneOnly && linkOrPhone}
-          <Box mt={phoneOnly ? theme.dimensions.standardMarginBetween : undefined}>
+          {(phoneOnly ||
+            (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')) &&
+            linkOrPhone}
+          <Box
+            mt={
+              phoneOnly ||
+              (appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION')
+                ? theme.dimensions.standardMarginBetween
+                : undefined
+            }>
             <Button
               onPress={onCancelAppointment}
               label={t('upcomingAppointmentDetails.cancelAppointment')}

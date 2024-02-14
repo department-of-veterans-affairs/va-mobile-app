@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { DateTime } from 'luxon'
+
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import {
   Box,
   CategoryLanding,
@@ -18,11 +23,24 @@ import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
+import { RootState } from 'store'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import {
+  AnalyticsState,
+  AppointmentsState,
+  PrescriptionState,
+  SecureMessagingState,
+  getInbox,
+  loadAllPrescriptions,
+  prefetchAppointments,
+} from 'store/slices'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -46,6 +64,50 @@ export function HomeScreen({}: HomeScreenProps) {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
+  const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
+  const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
+  const { preloadComplete: apptsPrefetch } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { prescriptionFirstRetrieval: rxPrefetch } = useSelector<RootState, PrescriptionState>(
+    (state) => state.prescriptions,
+  )
+  const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
+  const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { isLoading: claimsPrefetch } = useClaimsAndAppeals('ACTIVE', 1, true, {
+    enabled:
+      (userAuthorizedServices?.claims || userAuthorizedServices?.appeals) &&
+      !claimsInDowntime &&
+      featureEnabled('homeScreenPrefetch'),
+  })
+
+  useEffect(() => {
+    if (userAuthorizedServices?.appointments && !appointmentsInDowntime && featureEnabled('homeScreenPrefetch')) {
+      dispatch(prefetchAppointments(getUpcomingAppointmentDateRange(), undefined, undefined, true))
+    }
+  }, [dispatch, appointmentsInDowntime, userAuthorizedServices?.appointments])
+
+  useEffect(() => {
+    if (userAuthorizedServices?.prescriptions && !rxInDowntime && featureEnabled('homeScreenPrefetch')) {
+      dispatch(loadAllPrescriptions())
+    }
+  }, [dispatch, rxInDowntime, userAuthorizedServices?.prescriptions])
+
+  useEffect(() => {
+    if (userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch')) {
+      dispatch(getInbox(ScreenIDTypesConstants.HOME_SCREEN_ID))
+    }
+  }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging])
+
+  useEffect(() => {
+    if (apptsPrefetch && claimsPrefetch && !rxPrefetch && !smPrefetch) {
+      logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
+    }
+  }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
+
   const navigateTo = useRouteNavigation()
 
   const onContactVA = () => {

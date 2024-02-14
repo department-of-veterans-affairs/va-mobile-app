@@ -269,9 +269,12 @@ export const Events = {
       },
     }
   },
-  vama_claim_file_request: (): Event => {
+  vama_claim_file_request: (claim_id: string): Event => {
     return {
       name: 'vama_claim_file_request',
+      params: {
+        claim_id,
+      },
     }
   },
   vama_claim_review: (claim_id: string, claim_type: string, num_requests: number): Event => {
@@ -409,6 +412,15 @@ export const Events = {
         errorName,
         errorMessage,
         callStack,
+        statusCode,
+        endpoint,
+      },
+    }
+  },
+  vama_error_json_resp: (endpoint?: string, statusCode?: number): Event => {
+    return {
+      name: 'vama_error_json_resp',
+      params: {
         statusCode,
         endpoint,
       },
@@ -616,6 +628,46 @@ export const Events = {
       name: 'vama_givefb_open',
       params: {
         linkType,
+      },
+    }
+  },
+  vama_hs_appts_count: (apptCount: number): Event => {
+    return {
+      name: 'vama_hs_appts_count',
+      params: {
+        apptCount,
+      },
+    }
+  },
+  vama_hs_claims_count: (claimsCount: number): Event => {
+    return {
+      name: 'vama_hs_claims_count',
+      params: {
+        claimsCount,
+      },
+    }
+  },
+  vama_hs_load_time: (loadTime: number): Event => {
+    return {
+      name: 'vama_hs_load_time',
+      params: {
+        loadTime,
+      },
+    }
+  },
+  vama_hs_rx_count: (rxCount: number): Event => {
+    return {
+      name: 'vama_hs_rx_count',
+      params: {
+        rxCount,
+      },
+    }
+  },
+  vama_hs_sm_count: (smCount: number): Event => {
+    return {
+      name: 'vama_hs_sm_count',
+      params: {
+        smCount,
       },
     }
   },
