@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
@@ -12,8 +12,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { PrescriptionState, loadAllPrescriptions } from 'store/slices'
-import { getInbox } from 'store/slices/secureMessagingSlice'
+import { loadAllPrescriptions } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -46,14 +45,11 @@ export function HealthScreen({}: HealthScreenProps) {
   const isScreenContentAllowed = screenContentAllowed('WG_Health')
 
   const unreadCount = useSelector<RootState, number>(getInboxUnreadCount)
-  const { prescriptionsNeedLoad } = useSelector<RootState, PrescriptionState>((s) => s.prescriptions)
   const { data: userAuthorizedServices } = useAuthorizedServices({ enabled: isScreenContentAllowed })
 
   const onPharmacy = () => {
-    // If rx list is already loaded, reload it to ensure freshness
-    if (!prescriptionsNeedLoad) {
-      dispatch(loadAllPrescriptions(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
-    }
+    // always reload to ensure freshness
+    dispatch(loadAllPrescriptions(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
     navigateTo('PrescriptionHistory')
   }
   const onCoronaVirusFAQ = () => {
@@ -66,13 +62,6 @@ export function HealthScreen({}: HealthScreenProps) {
   }
 
   const smNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
-
-  useEffect(() => {
-    if (isScreenContentAllowed && smNotInDowntime) {
-      // fetch inbox metadata to display unread messages count tag
-      dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
-    }
-  }, [dispatch, smNotInDowntime, isScreenContentAllowed])
 
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
