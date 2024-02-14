@@ -183,7 +183,7 @@ function AppointmentTypeAndDate({ attributes, isPastAppointment = false }: Appoi
         {isPastAppointment ? (
           <></>
         ) : (
-          <TextView variant={'MobileBody'} paragraphSpacing={true}>
+          <TextView variant={'MobileBody'} paragraphSpacing={true} testID="claimExamExplanationTestID">
             {t('appointments.claimExam.explanationText')}
           </TextView>
         )}
