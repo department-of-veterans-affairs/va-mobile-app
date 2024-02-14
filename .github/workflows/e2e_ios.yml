@@ -160,6 +160,6 @@ jobs:
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
-      test_names: ${{ inputs.tests_to_test }}
+      test_names: ${{ github.event.inputs.tests_to_test }}
     secrets: inherit
 
