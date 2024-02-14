@@ -6,23 +6,23 @@ import { get } from 'store/api'
 import { vaccineKeys } from './queryKeys'
 
 /**
- * Fetch user VaccinesLocation
+ * Fetch user Vaccine Location
  */
-const getVaccinesLocation = async (locationId: string): Promise<VaccineLocationPayload | undefined> => {
+const getVaccineLocation = async (locationId: string): Promise<VaccineLocationPayload | undefined> => {
   const response = await get<VaccineLocationPayload>(`/v0/health/locations/${locationId}`)
   return response
 }
 
 /**
- * Returns a query for user VaccinesLocation
+ * Returns a query for user Vaccine Location
  */
-export const useVaccinesLocation = (locationId: string, options?: { enabled?: boolean }) => {
+export const useVaccineLocation = (locationId: string, options?: { enabled?: boolean }) => {
   return useQuery({
     ...options,
     queryKey: [vaccineKeys.vaccineLocations, locationId],
-    queryFn: () => getVaccinesLocation(locationId),
+    queryFn: () => getVaccineLocation(locationId),
     meta: {
-      errorName: 'getVaccinesLocation: Service error',
+      errorName: 'getVaccineLocation: Service error',
     },
   })
 }

@@ -5,7 +5,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { every, isString } from 'underscore'
 
-import { useVaccinesLocation } from 'api/vaccines/getVaccineLocation'
+import { useVaccineLocation } from 'api/vaccines/getVaccineLocation'
 import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { COVID19 } from 'constants/common'
@@ -25,7 +25,7 @@ type VaccineDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Vaccine
  */
 function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) {
   const { vaccine } = route.params
-  const { data: location, isLoading: detailsLoading } = useVaccinesLocation(
+  const { data: location, isLoading: detailsLoading } = useVaccineLocation(
     vaccine.relationships?.location?.data?.id || '',
     {
       enabled: isString(vaccine.relationships?.location?.data?.id) && screenContentAllowed('WG_VaccineDetails'),

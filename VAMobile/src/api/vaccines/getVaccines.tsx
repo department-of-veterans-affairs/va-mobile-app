@@ -9,13 +9,12 @@ import { vaccineKeys } from './queryKeys'
 /**
  * Fetch user Vaccines
  */
-const getVaccines = async (page: number): Promise<VaccineListPayload | undefined> => {
-  const response = await get<VaccineListPayload>('/v1/health/immunizations', {
+const getVaccines = (page: number): Promise<VaccineListPayload | undefined> => {
+  return get<VaccineListPayload>('/v1/health/immunizations', {
     'page[number]': page.toString(),
     'page[size]': DEFAULT_PAGE_SIZE.toString(),
     sort: 'date',
   })
-  return response
 }
 
 /**
