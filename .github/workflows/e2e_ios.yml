@@ -75,7 +75,7 @@ jobs:
       # Xcode scheme to build
       IOS_SCHEME: 'VAMobileRelease'
     outputs:
-      output2: ${{steps.Run_e2e_tests_for_iOS.outputs.TESTRAIL_INPUT}}
+      output2: ${{steps.run_e2e_tests.outputs.TESTRAIL_INPUT}}
     
     # strategy:
     #   matrix:
@@ -130,6 +130,7 @@ jobs:
         run: yarn e2e:ios-build
 
       - name: Run_e2e_tests_for_iOS
+        id: run_e2e_tests
         run: |
           if [[ "${{github.event.inputs.tests_to_test}}" == "" ]]; then
             echo "TESTRAIL_INPUT=""" >> "$GITHUB_OUTPUT"
