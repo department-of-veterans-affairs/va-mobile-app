@@ -47,9 +47,22 @@ jobs:
       channel_name: va-mobile-build-alerts
       message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
+  matrix_prep:
+    if: ${{ github.event.inputs.tests_to_test != "" }}
+    runs-on: macos-latest-xl
+    outputs:
+      output1: ${{steps.output_matrix.outputs.MATRIX_OUTPUT}}
+    strategy:
+      matrix:
+        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
+    steps: 
+      id: output_matrix
+      run: |
+        echo "MATRIX_OUTPUT=${{matrix.testsuite}}" >> "$GITHUB_OUTPUT"
+
   e2e-ios:
     if: ${{ always() }}
-    needs: start_slack_thread
+    needs: start_slack_thread, matrix_prep
     runs-on: macos-latest-xl
     env:
       # Path to write secret key to. Also used by fastlane
@@ -58,10 +71,12 @@ jobs:
       IOS_PROJ_FILE: 'VAMobile.xcodeproj'
       # Xcode scheme to build
       IOS_SCHEME: 'VAMobileRelease'
+    outputs:
+      output1: ${{steps.Run_e2e_tests_for_iOS.outputs.TESTRAIL_INPUT}}
     
-    strategy:
-      matrix:
-        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
+    # strategy:
+    #   matrix:
+    #     testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
 
     steps:
       - uses: actions/checkout@v3
@@ -113,18 +128,19 @@ jobs:
 
       - name: Run_e2e_tests_for_iOS
         run: |
-          echo "${{matrix.testsuite}}"
           if [[ "${{github.event.inputs.tests_to_test}}" == "" ]]; then
+            echo "TESTRAIL_INPUT=""" >> "$GITHUB_OUTPUT"
             yarn e2e:ios-test --take-screenshots failing --updateSnapshot
           else
-            yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}}.e2e --take-screenshots failing --updateSnapshot
+            yarn e2e:ios-test /e2e/tests/${{needs.matrix_prep.outputs.output1}}.e2e --take-screenshots failing --updateSnapshot
+            echo "TESTRAIL_INPUT=${{needs.matrix_prep.outputs.output1}}" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Upload e2e-junit
         if: failure() || success()
         uses: actions/upload-artifact@v3
         with: 
-            name: ${{matrix.testsuite}}-e2e-junit
+            name: ${{steps.Run_e2e_tests_for_iOS.outputs.TESTRAIL_INPUT}}-e2e-junit
             path: VAMobile/e2e/test_reports/e2e-junit.xml
 
       - name: Inform Slack of Failure
@@ -158,15 +174,15 @@ jobs:
 
   send_test_results_to_testrail:
     if: always() && (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true'
-    needs: e2e-ios
-    strategy:
-      matrix:
-        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
+    needs: e2e-ios, matrix_prep
+    # strategy:
+    #   matrix:
+    #     testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
       
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
-      test_names: "${{matrix.testsuite}}"
+      test_names: "${{needs.e2e-ios.outputs.output1}}"
     secrets: inherit
 
 
