@@ -2,7 +2,7 @@ import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
-import { paymentKeys } from 'api/payments'
+import { paymentsKeys } from 'api/payments'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 import { getFirstAndLastDayOfYear, groupPaymentsByDate } from 'utils/payments'
@@ -59,14 +59,14 @@ context('PaymentHistoryScreen', () => {
   const initializeTestInstance = (data = mockData) => {
     const queriesData: QueriesData = [
       {
-        queryKey: paymentKeys.payment,
+        queryKey: paymentsKeys.payments,
         data: {
           ...data,
           paymentsByDate: groupPaymentsByDate(data.data),
         },
       },
       {
-        queryKey: [paymentKeys.payment, '2021', '1'],
+        queryKey: [paymentsKeys.payments, '2021', '1'],
         data: {
           ...data,
           paymentsByDate: groupPaymentsByDate(data.data),
