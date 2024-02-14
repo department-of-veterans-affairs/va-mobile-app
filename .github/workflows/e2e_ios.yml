@@ -61,7 +61,7 @@ jobs:
 
   e2e-ios:
     if: ${{ always() }}
-    needs: start_slack_thread, matrix_prep
+    needs: [start_slack_thread, matrix_prep]
     runs-on: macos-latest-xl
     env:
       # Path to write secret key to. Also used by fastlane
@@ -173,7 +173,7 @@ jobs:
 
   send_test_results_to_testrail:
     if: always() && (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true'
-    needs: e2e-ios, matrix_prep
+    needs: [e2e-ios, matrix_prep]
     # strategy:
     #   matrix:
     #     testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
