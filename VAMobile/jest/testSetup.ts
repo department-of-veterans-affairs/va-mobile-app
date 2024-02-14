@@ -1,4 +1,5 @@
 import { NativeModules } from 'react-native'
+import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock'
 
 const globalAny: any = global
 
@@ -26,17 +27,16 @@ NativeModules.RNInAppUpdate = {
 
 NativeModules.SettingsManager = {
   ...NativeModules.SettingsManager,
-  settings: {AppleLocale: 'en_US'}
+  settings: { AppleLocale: 'en_US' },
 }
 
 NativeModules.I18nManager = {
   ...NativeModules.I18nManager,
-  localeIdentifier: 'en_US'
+  localeIdentifier: 'en_US',
 }
 
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
-import mockSafeAreaContext from 'react-native-safe-area-context/jest/mock'
 jest.mock('react-native-safe-area-context', () => mockSafeAreaContext)
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
@@ -74,7 +74,8 @@ jest.mock('../src/utils/waygateConfig', () => {
   let original = jest.requireActual('../src/utils/waygateConfig')
   return {
     ...original,
-    waygateEnabled: jest.fn().mockReturnValue({enabled: true,
+    waygateEnabled: jest.fn().mockReturnValue({
+      enabled: true,
       errorMsgTitle: undefined,
       errorMsgBody: undefined,
       appUpdateButton: false,
@@ -167,7 +168,7 @@ jest.mock('@react-navigation/native', () => {
   }
 })
 
-jest.mock('rn-fetch-blob', () => {
+jest.mock('react-native-blob-util', () => {
   return {
     fs: {
       dirs: {
