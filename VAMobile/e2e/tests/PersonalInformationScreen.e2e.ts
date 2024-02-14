@@ -41,6 +41,29 @@ const checkLocatorAndContactLinks = async () => {
   await device.launchApp({ newInstance: false })
 }
 
+export async function updateGenderIdentify(genderIdentityOption) {
+  it('should update gender identity for ' + genderIdentityOption, async () => {
+    await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
+    await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
+    await expect(element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).atIndex(0)).toExist()
+    await scrollToThenTap(genderIdentityOption)
+    await element(by.text(genderIdentityOption)).tap()
+    await element(by.text('Save')).tap()
+    await expect(element(by.text(genderIdentityOption))).toExist()
+
+    await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT))).toExist()
+    await expect(element(by.text('Gender identity saved'))).toExist()
+    await expect(element(by.text(genderIdentityOption))).toExist()
+    await element(by.text('Dismiss')).tap()
+
+    await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
+    await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
+    await expect(element(by.text('Gender identity saved'))).not.toExist()
+    await expect(element(by.label(genderIdentityOption + ' ').withDescendant(by.id('RadioFilled')))).toExist()
+    await element(by.text('Cancel')).tap()
+  })
+}
+
 beforeAll(async () => {
   await loginToDemoMode()
   await openProfile()
@@ -102,27 +125,12 @@ describe('Personal Info Screen', () => {
     await element(by.text('Cancel')).tap()
   })
 
-  it('should update gender identity', async () => {
-    await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
-    await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
-    await expect(element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).atIndex(0)).toExist()
-    await scrollToThenTap(PersonalInfoConstants.PREFER_NOT_TEXT)
-    await element(by.text(PersonalInfoConstants.PREFER_NOT_TEXT)).tap()
-    await element(by.text('Save')).tap()
-
-    await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT))).toExist()
-    await expect(element(by.text('Gender identity saved'))).toExist()
-    await expect(element(by.text(PersonalInfoConstants.PREFER_NOT_TEXT))).toExist()
-    await element(by.text('Dismiss')).tap()
-
-    await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
-    await element(by.text(PersonalInfoConstants.GENDER_IDENTITY_ROW_TEXT)).tap()
-    await expect(element(by.text('Gender identity saved'))).not.toExist()
-    await expect(
-      element(by.label(PersonalInfoConstants.PREFER_NOT_TEXT + ' ').withDescendant(by.id('RadioFilled'))),
-    ).toExist()
-    await element(by.text('Cancel')).tap()
-  })
+  updateGenderIdentify(PersonalInfoConstants.PREFER_NOT_TEXT)
+  updateGenderIdentify('Man')
+  updateGenderIdentify('Non-Binary')
+  updateGenderIdentify('Transgender Man')
+  updateGenderIdentify('Transgender Woman')
+  updateGenderIdentify('A gender not listed here')
 
   it('should show "What to know" large panel in gender identity section', async () => {
     await element(by.id('PersonalInformationTestID')).scrollTo('bottom')
