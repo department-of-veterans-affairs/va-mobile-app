@@ -1,3 +1,3 @@
 export const paymentsKeys = {
-  payment: ['payment'] as const,
+  payments: ['payments'] as const,
 }
