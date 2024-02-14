@@ -102,12 +102,12 @@ const activeClaimsAndAppealsList: api.ClaimsAndAppealsList = [
 
 const mockPagination: ClaimsAndAppealsGetDataMeta = {
   dataFromStore: false,
-
   pagination: {
     currentPage: 1,
     perPage: 10,
     totalEntries: 3,
   },
+  activeClaimsCount: 0,
 }
 
 const mockPaginationClaimsServiceError: ClaimsAndAppealsGetDataMeta = {
