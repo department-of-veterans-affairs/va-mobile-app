@@ -39,11 +39,11 @@ function NeedHelpData({ isAppeal, claimId, claimType, claimPhase }: NeedHelpData
     }
 
     const clickToRedirectProps: LinkButtonProps = {
-      displayedText: t('appealDetails.goToVAGov'),
+      displayedText: t('goToVAGov'),
       numberOrUrlLink: LINK_URL_CLAIM_APPEAL_STATUS,
       linkType: LinkTypeOptionsConstants.url,
       linkUrlIconType: LinkUrlIconType.Arrow,
-      a11yLabel: a11yLabelVA(t('appealDetails.goToVAGov')),
+      a11yLabel: a11yLabelVA(t('goToVAGov')),
     }
 
     return (
