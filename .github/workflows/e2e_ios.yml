@@ -56,9 +56,8 @@ jobs:
       matrix:
         testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
     steps: 
-      id: output_matrix
-      run: |
-        echo "MATRIX_OUTPUT=${{matrix.testsuite}}" >> "$GITHUB_OUTPUT"
+      - name: output_matrix
+        run: echo "MATRIX_OUTPUT=${{matrix.testsuite}}" >> "$GITHUB_OUTPUT"
 
   e2e-ios:
     if: ${{ always() }}
