@@ -51,8 +51,6 @@ jobs:
     if: ${{ always() }}
     needs: start_slack_thread
     runs-on: macos-latest-xl
-    outputs:
-      output1: ${{ steps.Run_e2e_tests_for_iOS.outputs.TEST_NAMES }}
     env:
       # Path to write secret key to. Also used by fastlane
       APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
@@ -115,8 +113,6 @@ jobs:
 
       - name: Run_e2e_tests_for_iOS
         run: |
-          echo "${{github.event.inputs.tests_to_test}}"
-          echo "TEST_NAMES=${{github.event.inputs.tests_to_test}}" >> "$GITHUB_OUTPUT"
           if [[ "${{github.event.inputs.tests_to_test}}" == "" ]]; then
             yarn e2e:ios-test --take-screenshots failing --updateSnapshot
           else
@@ -162,10 +158,14 @@ jobs:
   send_test_results_to_testrail:
     if: always() && (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true'
     needs: e2e-ios
+    strategy:
+      matrix:
+        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
+      
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
-      test_names: ${{needs.setup_testrail.outputs.output1}}
+      test_names: ${{matrix.testsuite}}
     secrets: inherit
 
 

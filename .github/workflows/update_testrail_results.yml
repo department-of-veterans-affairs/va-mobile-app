@@ -19,18 +19,13 @@ defaults:
     working-directory: VAMobile
 
 jobs:
-  setup_testrail:
+  send_test_results_to_testrail:
     runs-on: ubuntu-latest
-    outputs:
-      output1: ${{ steps.run-id-selection.outputs.TEST_RUN_ID }}
-      output2: ${{ steps.section-id-selection.outputs.SECTION_RUN_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      # - name: Download junit file
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     pattern: *-e2e-junit
+       - name: Download junit file
+         uses: actions/download-artifact@v3
       - name: 'Find run ID in testRail'
         id: run-id-selection
         run: | 
@@ -59,20 +54,6 @@ jobs:
               "https://dsvavsp.testrail.io//index.php?/api/v2/get_sections/29" | jq '.sections[] | select(.name =="Automated") | .id')
           echo "$resp"
           echo "SECTION_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
-    
-  send_test_results_to_testrail:
-    needs: setup_testrail
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        testsuite: ${{ github.event.inputs.test_names }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Download junit file
-        uses: actions/download-artifact@v3
       - name: Python setup
         if: always()
         uses: actions/setup-python@v3
@@ -89,6 +70,8 @@ jobs:
             -u ${{secrets.TEST_RAIL_USER}} \
             -k ${{secrets.TEST_RAIL_KEY}} \
             parse_junit \
-            --run-id ${{needs.setup_testrail.outputs.output1}} \
-            --section-id ${{needs.setup_testrail.outputs.output2}} \
-            -f "/home/runner/work/va-mobile-app/va-mobile-app/${{matrix.testsuite}}-e2e-junit.xml"
+            --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
+            --section-id ${{steps.section-id-selection.outputs.SECTION_RUN_ID}} \
+            -f "/home/runner/work/va-mobile-app/va-mobile-app/${{github.event.inputs.test_names}}-e2e-junit.xml"
+    
+  
