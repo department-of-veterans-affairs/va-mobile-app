@@ -29,7 +29,6 @@ const getPayments = async (year: string | undefined, page: number): Promise<Paym
       paymentsByDate: groupPaymentsByDate(response.data),
     }
   }
-  return undefined
 }
 
 /**
