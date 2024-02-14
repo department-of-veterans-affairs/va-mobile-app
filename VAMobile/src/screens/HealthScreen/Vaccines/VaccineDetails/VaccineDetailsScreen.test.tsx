@@ -64,7 +64,7 @@ context('VaccineDetailsScreen', () => {
     render(<VaccineDetailsScreen {...props} />)
   }
 
-  it('initializes correctly for default vaccine', async () => {
+  it('initializes correctly for default vaccine', () => {
     initializeTestInstance()
     expect(screen.getByText('December 18, 2020')).toBeTruthy()
     expect(screen.getByRole('header', { name: 'COVID-19 vaccine' })).toBeTruthy()
