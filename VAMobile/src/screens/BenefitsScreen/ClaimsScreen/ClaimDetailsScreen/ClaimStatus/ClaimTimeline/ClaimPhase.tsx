@@ -67,9 +67,9 @@ function ClaimPhase({ phase, current, attributes, claimID }: ClaimPhaseProps) {
 
   useEffect(() => {
     if (phase === 3 && current === 3 && showClaimFileUploadBtn) {
-      dispatch(sendClaimStep3FileRequestAnalytics())
+      dispatch(sendClaimStep3FileRequestAnalytics(claimID))
     }
-  }, [dispatch, phase, current, showClaimFileUploadBtn])
+  }, [dispatch, phase, current, claimID, showClaimFileUploadBtn])
 
   const getPhaseHeader = (): ReactNode => {
     return (

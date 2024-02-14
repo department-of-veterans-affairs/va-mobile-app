@@ -278,9 +278,12 @@ export const Events = {
       },
     }
   },
-  vama_claim_file_request: (): Event => {
+  vama_claim_file_request: (claim_id: string): Event => {
     return {
       name: 'vama_claim_file_request',
+      params: {
+        claim_id,
+      },
     }
   },
   vama_claim_review: (claim_id: string, claim_type: string, num_requests: number): Event => {

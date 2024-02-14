@@ -486,9 +486,11 @@ export const fileUploadSuccess = (): AppThunk => async (dispatch) => {
 /**
  * Redux action to track when a user is on step 3 of claims and has a file request
  */
-export const sendClaimStep3FileRequestAnalytics = (): AppThunk => async () => {
-  await logAnalyticsEvent(Events.vama_claim_file_request())
-}
+export const sendClaimStep3FileRequestAnalytics =
+  (claimID: string): AppThunk =>
+  async () => {
+    await logAnalyticsEvent(Events.vama_claim_file_request(claimID))
+  }
 
 // creates the documents array after submitting a file request
 const createFileRequestDocumentsArray = (
