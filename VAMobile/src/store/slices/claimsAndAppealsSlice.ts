@@ -67,6 +67,9 @@ export type ClaimsAndAppealsState = {
   loadedClaimsAndAppeals: ClaimsAndAppealsListType
   claimsAndAppealsMetaPagination: ClaimsAndAppealsMetaPaginationType
   cancelLoadingDetailScreen?: AbortController // abortController to canceling loading of claim(getClaim) and appeal(getAppeal) detail screens
+  preloadComplete: boolean
+  activeClaimsCount: number
+  claimsFirstRetrieval: boolean
 }
 
 const claimsAndAppealsNonFatalErrorString = 'Claims And Appeals Service Error'
@@ -104,6 +107,9 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
     CLOSED: initialPaginationState,
   },
   cancelLoadingDetailScreen: undefined,
+  preloadComplete: false,
+  activeClaimsCount: 0,
+  claimsFirstRetrieval: true,
 }
 
 const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
@@ -116,6 +122,7 @@ const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
       currentPage: 1,
       perPage: DEFAULT_PAGE_SIZE,
     },
+    activeClaimsCount: 0,
   },
 }
 
@@ -134,6 +141,7 @@ const getLoadedClaimsAndAppeals = (
   claimType: ClaimType,
   latestPage: number,
   pageSize: number,
+  activeClaimsCount: number,
 ) => {
   const loadedClaimsAndAppeals = getItemsInRange(claimsAndAppeals[claimType], latestPage, pageSize)
   // do we have the claimsAndAppeals?
@@ -146,6 +154,7 @@ const getLoadedClaimsAndAppeals = (
           perPage: pageSize,
           totalEntries: paginationMetaData[claimType].totalEntries,
         },
+        activeClaimsCount,
         dataFromStore: true, // informs reducer not to save these claimsAndAppeals to the store
       },
     } as api.ClaimsAndAppealsGetData
@@ -167,13 +176,18 @@ export const prefetchClaimsAndAppeals =
       let activeClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined
       let closedClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined
 
-      const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
+      const {
+        claimsAndAppealsMetaPagination,
+        loadedClaimsAndAppeals: loadedItems,
+        activeClaimsCount,
+      } = getState().claimsAndAppeals
       const activeLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(
         loadedItems,
         claimsAndAppealsMetaPagination,
         ClaimTypeConstants.ACTIVE,
         1,
         DEFAULT_PAGE_SIZE,
+        activeClaimsCount,
       )
       const closedLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(
         loadedItems,
@@ -181,6 +195,7 @@ export const prefetchClaimsAndAppeals =
         ClaimTypeConstants.CLOSED,
         1,
         DEFAULT_PAGE_SIZE,
+        activeClaimsCount,
       )
 
       if (activeLoadedClaimsAndAppeals) {
@@ -219,7 +234,7 @@ export const prefetchClaimsAndAppeals =
  * Redux action to get all claims and appeals
  */
 export const getClaimsAndAppeals =
-  (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1): AppThunk =>
+  (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1, forceRefetch = false): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaimsAndAppeals(claimType, screenID, page))))
@@ -228,15 +243,20 @@ export const getClaimsAndAppeals =
     try {
       let claimsAndAppeals
       const isActive = claimType === ClaimTypeConstants.ACTIVE
-      const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
+      const {
+        claimsAndAppealsMetaPagination,
+        loadedClaimsAndAppeals: loadedItems,
+        activeClaimsCount,
+      } = getState().claimsAndAppeals
       const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(
         loadedItems,
         claimsAndAppealsMetaPagination,
         claimType,
         page,
         DEFAULT_PAGE_SIZE,
+        activeClaimsCount,
       )
-      if (loadedClaimsAndAppeals) {
+      if (!forceRefetch && loadedClaimsAndAppeals) {
         claimsAndAppeals = loadedClaimsAndAppeals
       } else {
         claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
@@ -246,6 +266,9 @@ export const getClaimsAndAppeals =
         })
       }
 
+      if (getState().claimsAndAppeals.claimsFirstRetrieval && claimsAndAppeals?.meta) {
+        await logAnalyticsEvent(Events.vama_hs_claims_count(claimsAndAppeals.meta.activeClaimsCount))
+      }
       dispatch(dispatchFinishAllClaimsAndAppeals({ claimType, claimsAndAppeals }))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -548,6 +571,8 @@ const claimsAndAppealsSlice = createSlice({
       state.loadedClaimsAndAppeals.CLOSED = closedData?.meta.dataFromStore
         ? curLoadedClosed
         : curLoadedClosed.concat(closedList)
+      state.activeClaimsCount = activeData?.meta.activeClaimsCount
+      state.preloadComplete = true
     },
 
     dispatchStartGetAllClaimsAndAppeals: (state) => {
@@ -580,6 +605,8 @@ const claimsAndAppealsSlice = createSlice({
       state.loadedClaimsAndAppeals[claimType] = claimsAndAppeals?.meta.dataFromStore
         ? curLoadedClaimsAndAppeals
         : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList)
+      state.activeClaimsCount = claimsAndAppeals?.meta.activeClaimsCount || 0
+      state.claimsFirstRetrieval = !!error
     },
 
     dispatchStartGetClaim: (state, action: PayloadAction<{ abortController: AbortController }>) => {
