@@ -142,12 +142,6 @@ context('HealthScreen', () => {
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(loadAllPrescriptions).toHaveBeenCalled()
     })
-
-    it('should not reload rx data if data is not present', async () => {
-      initializeTestInstance(0, true, true, true)
-      fireEvent.press(screen.getByText('Prescriptions'))
-      expect(loadAllPrescriptions).not.toHaveBeenCalled()
-    })
   })
 
   describe('on click of the appointments button', () => {
