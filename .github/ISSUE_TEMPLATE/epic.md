@@ -228,12 +228,13 @@ Product will need to create on in the Github folder and link it here.
   <summary>Toggle Product Checklist</summary>
 
 **Project Kickoff & Requirements Gathering**
-   - [ ] PM to create new Github epic and fill out accordingly (Type - Epic, Template - Epic Ticket
+   - [ ] PM to create new Github epic and fill out accordingly (Type - Epic, Template - Epic Ticket)
        - [ ]  Updated so it is seen in Mobile and External Github Boards - may need to view this epic in Github and not Zenhub
    - [ ] PM to create new Github folder for feature or update existing
        - [ ] Create a separate document for the project's decision log - link it here  
    - [ ] Project Kickoff session to review problem statement, Veteran experience, and goals with stakeholders
    - [ ] Determine team roles, responsibilities, approvers with stakeholders
+   - [ ] Are there any deadlines that need to be met? Explicitly state them on the ticket 
    - [ ] Determine future cadance reviews with stakeholders 
    - [ ] Review dependencies 
    - [ ] Scope finalized or approved by Mobile POs
@@ -241,33 +242,21 @@ Product will need to create on in the Github folder and link it here.
    - [ ] Other: 
 
 
-**Pre-Production Readiness**
-- [ ] PM to update [Call Center Guide](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/releases/Call%20Center%20Docs)
-    - [ ] Coordinate with contact center support teams to have guide out before feature in production 
-- [ ] PM to determine if In-App What’s New feature needs to be used and coordinated with Content / Engineering to complete - tickets needed 
-    - [ ] If so, will need to determine content before release 
-- [ ] PM to determine if VA, Apple, Google App stores need changes and coordinate with UX / Engineering to complete - tickets needed
-    - [ ] Apple Store - Content, Whats New, Phone Images, iPad Images 
-    - [ ] Google Playstore - Content, Whats New, Phone Images
-    - [ ] [VA App Store - Content, Phone Images](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/VA.Gov%20App%20Store)
-- [ ] UAT complete, if applicable
-- [ ] Update demo mode to ensure demo mode matches production
-- [ ] Complete automation/detox work for new / updated feature
+**Go to Market Readiness Checklist**
+- [ ] Documentation - [Call Center Guide](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/releases/Call%20Center%20Docs), training materials, etc
+- [ ] App store content - feature and whats new 
+- [ ] [App store images](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Updating%20the%20App%20Stores/)
+- [ ] [In-App What’s New feature](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies/Process%20-%20In%20App%20Whats%20New%20Messaging.md)
+- [ ] Demo mode is updated with the changes 
+- [ ] Detox test cases written and passing 
 - [ ] Stakeholder demo completed 
-- [ ] Release plan - (slow rollout, 100% release, other) - link to plan 
+- [ ] Release plan - (slow rollout, 100% release, other)
 - [ ] Review existing bugs and open tickets to determine if they need to be include in MVP or considered post-mvp work
     - [ ] If post MVP work - create separate epic to store work 
-- [ ] Coordinate with Release coordinator from QA and Release Team on when release is expected 
-- [ ] Design work to update hi-res internal files
-- [ ] Engineering created successful unit tests 
-- [ ] UX has completed visual QA
-- [ ] Content has completed content QA
-- [ ] Accessibility testing has been completed
-- [ ] Demo mode has been updated - MVP
-- [ ] QA sign off 
-- [ ] Obtain Go/No Go decision from Mobile POs and / or Octo POs for launch
-- [ ] PM fills out and completes Epic's checklists 
-- [ ] Post launch monitoring plan / post production follow-up
+- [ ] Non-Mobile OCTO PO approvals
+- [ ] Mobile OCTO approvals 
+- [ ] Monitoring / rollback plan 
+- [ ] Post launch monitoring plan / post production follow-up plan
 - [ ] Other: 
   
 **Feature Go Live**
@@ -277,20 +266,37 @@ Product will need to create on in the Github folder and link it here.
 </details>
 
 <details>
+  <summary>Product Checklist</summary>
+ 
+- [ ] Update [Call Center Guide](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/releases/Call%20Center%20Docs)
+- [ ] Determine if [In-App What’s New feature](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies/Process%20-%20In%20App%20Whats%20New%20Messaging.md) needs to be used 
+- [ ] PM to determine if VA, Apple, Google App stores need changes and coordinate with UX / Engineering to complete - tickets needed
+    - [ ] Apple Store - Content, Whats New, Phone Images, iPad Images 
+    - [ ] Google Playstore - Content, Whats New, Phone Images
+    - [ ] [VA App Store - Content, Phone Images](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/VA.Gov%20App%20Store)
+- [ ] Provide updates where and when needed (Team of Teams, MHV Weekly Standup, random requests, epic, planning other, etc) 
+- [ ] Coordinate necessary approvals will we need (ex. Internal POs, External POs, CAIA, external, etc) 
+- [ ] Coordinate with VA on [test accounts and test data prep](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies/Policy%20-%20Ticket%20Account%20Needs.md)
+- [ ] Keep this epic updated and filled in appropriately 
+- [ ] Other:
+      
+</details>
+
+<details>
   <summary>Toggle Team Collaboration Checklist</summary>
 
 - [ ] Design Intent & Feasibility discussions
-- [ ] PO prioritization determined
 - [ ] Dependencies resolved 
-- [ ] Determine if Veteran Research is needed, if so link Rsearch Plan
-- [ ] UAT Needed, if so link UAT plan
+- [ ] Determine if Veteran [Research ](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/Foundations/Research) is needed, if so link Rsearch Plan
+- [ ] [UAT](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/testing/uat) is applicable Needed, if so link UAT plan
 - [ ] Steps process completed and documented
 - [ ] Waygate / feature flag needed
 - [ ] Update demo mode
-- [ ] Accessibility needs
+- [ ] [Accessibility](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/Foundations/Accessibility/testing-plan/) needs
 - [ ] Where updates need to be communicated (Team of Teams, MHV Weekly Standup, other, etc) 
 - [ ] What approvals will we need (ex. Internal POs, External POs, CAIA, external, etc) 
 - [ ] How and when are we going to measure success / failure
+- [ ] Do the App Stores images or contents need changes? Do we use In-App Whats New? 
 - [ ] Does In-App App Store Feedback need to be modified for this project
 - [ ] Other:
       
@@ -299,11 +305,7 @@ Product will need to create on in the Github folder and link it here.
 <details>
   <summary>Toggle Design/UX Checklist</summary>
  
-- [ ] If QA testing needed, coordinate with QA agent and assign QA agent to the ticket
 - [ ] Review problem/opportunity statement
-- [ ] Add questions and assumptions to product brief
-- [ ] Add research links to product brief
-- [ ] Document high-level research/design plans
 - [ ] Create lo/hi fi wireframes & user flows if applicable 
 - [ ] Add links to Epic & applicable GitHub folders
 - [ ] Socialize designs
@@ -311,18 +313,19 @@ Product will need to create on in the Github folder and link it here.
 - [ ] Design QA / Visual QA approval
 - [ ] If QA testing needed, coordinate with QA agent
 - [ ] Component review
-- [ ] Accessibility review 
+- [ ] [Accessibility](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/Foundations/Accessibility/testing-plan) review 
 - [ ] Design system review
 - [ ] Update internal documents
+- [ ] [Checklist for UX designers](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/Foundations/Accessibility/a11y-checklist-ux-designers)
+- [ ] [Research needs and tasks](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/Foundations/Research)
 - [ ] Other:
       
 </details>
 
 <details>
   <summary>Toggle Content Checklist</summary>
- 
-- [ ] If QA testing needed, coordinate with QA agent and assign QA agent to the ticket
-- [ ] Review product brief and surface any questions, assumptions & risks
+
+- [ ] [Chedcklist for content designers](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/Foundations/Accessibility/a11y-checklist-content-designers)
 - [ ] Participate in project discovery and kickoff activities/ceremonies
 - [ ] Complete comparative analysis/content research activities for net-new content
 - [ ] Review current content and determine where app may need to differ and potential improvements to share with web
@@ -330,10 +333,10 @@ Product will need to create on in the Github folder and link it here.
 - [ ] Support Research & UX Design in research sessions and synthesis
 - [ ] Make content recommendations for lo-/hi-fi wireframes in collaboration with UX Design
 - [ ] Collaborate with Sitewide Content team for alignment, improvements, and sign-off
-- [ ] Participate in FE hand off
 - [ ] Complete content QA
 - [ ] Write copy for What's New In App, if needed 
-- [ ] Write copy for app stores' What's New sections, if needed 
+- [ ] Write copy for app stores' What's New sections, if needed
+- [ ] Update copy for App Store Feature details, if needed 
 - [ ] Write copy for updated screenshots in app stores, if needed 
 - [ ] Other:
       
@@ -342,9 +345,7 @@ Product will need to create on in the Github folder and link it here.
 <details>
   <summary>Toggle Engineering Checklist</summary>
  
-- [ ] If QA testing needed, coordinate with QA agent and assign QA agent to the ticket
 - [ ] Are UI designs/ specs available/ready? If yes, they should be attached to  attach specs. (We are assuming the design specs have been approved)
-- [ ] Are there any deadlines that need to be met?
 - [ ] What is the roll out plan? (Do we need a feature toggle? is this going to be available to every user immediately or do we want to roll out to a few users first)
 - [ ] Does this project require api integration? if yes, what api endpoint are we integrating with and what is the expected response body?
 - [ ] Do we want to capture analytics for this projects (i.e. update GA, add logs to grafana/datadog etc)?If yes, what metrics would we like to capture?
@@ -359,17 +360,16 @@ Product will need to create on in the Github folder and link it here.
   <summary>Toggle QA Checklist</summary>
  
 - [ ] Team PM creates test plan and assigns to Team QA agent-  Template: QA Test Plan
-- [ ] QA agent to monitor and speak up on QA needs for the project
 - [ ] Document decision in the decision log regarding QA 
-- [ ] Identify test data needs
+- [ ] Identify test data needs - coordinate with PMs
    - [ ] Determine and document test accounts used 
 - [ ] Test plan creation and resolution 
 - [ ] Successful testing on all MVP tickets 
-- [ ] Reviews open bug tickets pre-production
+- [ ] Reviews open bug tickets 
 - [ ] Waygate tasks complete
-- [ ] Added new feature cases to the RC in TestRail - MVP 
-- [ ] Added feature cases to appropriate section of active cases in TestRail - MVP 
-- [ ] Detox UI / Automation work completed - MVP
+- [ ] Added new feature cases to the RC in [TestRail](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/Resources) 
+- [ ] [Pass Release Candidate Testing](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/Release%20Testing) 
+- [ ] [Detox UI / Automation test cases update or added](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/Automation)
 - [ ] Other:
 
 </details>
@@ -387,5 +387,17 @@ Product will need to create on in the Github folder and link it here.
 - [ ] Other:
  
 </details>
-
+<details>
+  <summary>Release Manager Checklist</summary>
+ 
+- [ ] RC testing 
+- [ ] QA approval
+- [ ] Product Approval
+- [ ] PO Approval 
+- [ ] Whats New In-App 
+- [ ] Release #: 
+- [ ] Release date: 
+- [ ] Other:
+ 
+</details>
 
