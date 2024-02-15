@@ -57,7 +57,7 @@ jobs:
       channel_name: va-mobile-build-alerts
       message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
 
-    matrix-e2e-android:
+  matrix-e2e-android:
     if: github.event.inputs.tests_to_test != ''
     runs-on: macos-latest-xl
     strategy:
