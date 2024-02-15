@@ -118,7 +118,7 @@ jobs:
         if: failure() || success()
         uses: actions/upload-artifact@v3
         with: 
-            name: ${{matrix.testsuite}}.-e2e-junit
+            name: ${{matrix.testsuite}}-e2e-junit
             path: VAMobile/e2e/test_reports/e2e-junit.xml
 
       - name: Upload artifacts on failure
