@@ -235,7 +235,7 @@ jobs:
           path: VAMobile/artifacts
 
   matrix-send_test_results_to_testrail:
-    if: github.event.inputs.tests_to_test != '' && github.event.inputs.run_testRail == 'true'
+    if: github.event.inputs.run_testRail == 'true'
     needs: matrix-e2e-ios
     strategy:
       matrix:
