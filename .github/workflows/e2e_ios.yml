@@ -242,6 +242,7 @@ jobs:
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
       test_names: "${{matrix.testsuite}}"
+      testRail_name: ${{ inputs.testRail_name }}
     secrets: inherit
 
   send_test_results_to_testrail:
