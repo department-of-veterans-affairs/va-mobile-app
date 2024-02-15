@@ -10,6 +10,10 @@ on:
       - 'dependabot/**'
   workflow_dispatch:
     inputs:
+      tests_to_test:
+        description: 'List tests to test in ["test name", "test name"] format.  All tests will run if left blank'
+        type: string
+        required: false
       testRail_name:
         description: 'Name testRail run (will default to date if blank)'
         type: string
@@ -17,10 +21,6 @@ on:
       run_testRail:
         description: 'Add results to testRail?'
         type: boolean
-        required: false
-      tests_to_test:
-        description: 'List tests to test in ["test name", "test name"] format.  All tests will run if left blank'
-        type: string
         required: false
   schedule:
     - cron: '0 4 * * 1,2,3,4,5'
