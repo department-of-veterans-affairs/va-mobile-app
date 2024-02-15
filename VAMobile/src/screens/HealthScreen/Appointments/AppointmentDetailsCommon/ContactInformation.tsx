@@ -21,7 +21,7 @@ function ContactInformation({ attributes }: ContactInformationProps) {
 
   if (isAppointmentPending) {
     return (
-      <Box mt={phoneOnly ? undefined : theme.dimensions.standardMarginBetween}>
+      <Box mt={phoneOnly ? undefined : theme.dimensions.standardMarginBetween} testID="apptContactDetailsTestID">
         {(!!patientEmail || !!patientPhoneNumber || !!bestTimeToCall?.length) && (
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('appointments.pending.yourContactDetails')}

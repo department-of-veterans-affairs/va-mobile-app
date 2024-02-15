@@ -26,6 +26,7 @@ const mockOverrides = {
   inAppUpdates: false,
   preferredNameGenderWaygate: false,
   haptics: false,
+  homeScreenPrefetch: false,
   whatsNewUI: false,
   decisionLettersWaygate: false,
   patientCheckIn: false,

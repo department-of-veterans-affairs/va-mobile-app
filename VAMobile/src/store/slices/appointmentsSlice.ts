@@ -43,6 +43,7 @@ const emptyAppointmentsInDateRange: AppointmentsGetData = {
       currentPage: 1,
       perPage: DEFAULT_PAGE_SIZE,
     },
+    upcomingAppointmentsCount: 0,
   },
 }
 
@@ -98,6 +99,8 @@ export type AppointmentsState = {
   loadedAppointmentsByTimeFrame: LoadedAppointments
   paginationByTimeFrame: AppointmentsPaginationByTimeFrame
   messagesLoading: boolean
+  upcomingAppointmentsCount?: number
+  preloadComplete: boolean
 }
 
 export const initialPaginationState = {
@@ -144,6 +147,7 @@ export const initialAppointmentsState: AppointmentsState = {
     pastAllLastYear: {},
   },
   messagesLoading: false,
+  preloadComplete: false,
 }
 
 // Issue#2273 Tracks and logs pagination warning if there are discrepancies in the total entries of appointments
@@ -218,6 +222,7 @@ const getLoadedAppointments = (
   paginationData: AppointmentsMetaPagination,
   latestPage: number,
   pageSize: number,
+  upcomingAppointmentsCount?: number,
 ) => {
   const loadedAppointments = getItemsInRange(appointments, latestPage, pageSize)
   // do we have the appointments?
@@ -231,6 +236,7 @@ const getLoadedAppointments = (
           totalEntries: paginationData.totalEntries,
         },
         dataFromStore: true, // informs reducer not to save these appointments to the store
+        upcomingAppointmentsCount,
       },
     } as AppointmentsGetData
   }
@@ -241,7 +247,12 @@ const getLoadedAppointments = (
  * Redux action to prefetch appointments for upcoming and past the given their date ranges
  */
 export const prefetchAppointments =
-  (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes): AppThunk =>
+  (
+    upcoming: AppointmentsDateRange,
+    past?: AppointmentsDateRange,
+    screenID?: ScreenIDTypes,
+    forceRefetch = false,
+  ): AppThunk =>
   async (dispatch, getState) => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
@@ -255,28 +266,43 @@ export const prefetchAppointments =
       let upcomingAppointments
       let pastAppointments
 
-      // use loaded data if we have it
-      const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, pastPagination, 1, DEFAULT_PAGE_SIZE)
-      if (
-        loadedPastAppointments &&
-        getState().appointments.pastCcServiceError === false &&
-        getState().appointments.pastVaServiceError === false
-      ) {
-        pastAppointments = loadedPastAppointments
-      } else {
-        pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
-          startDate: past.startDate,
-          endDate: past.endDate,
-          'page[size]': DEFAULT_PAGE_SIZE.toString(),
-          'page[number]': '1', // prefetch assume always first page
-          sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest,
-          'included[]': 'pending',
-        } as Params)
+      if (past) {
+        // use loaded data if we have it and `forceRefetch` is false
+        const loadedPastAppointments = getLoadedAppointments(
+          loadedPastThreeMonths,
+          pastPagination,
+          1,
+          DEFAULT_PAGE_SIZE,
+        )
+        if (
+          !forceRefetch &&
+          loadedPastAppointments &&
+          getState().appointments.pastCcServiceError === false &&
+          getState().appointments.pastVaServiceError === false
+        ) {
+          pastAppointments = loadedPastAppointments
+        } else {
+          pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
+            startDate: past.startDate,
+            endDate: past.endDate,
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            'page[number]': '1', // prefetch assume always first page
+            sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest,
+            'included[]': 'pending',
+          } as Params)
+        }
       }
 
       // use loaded data if we have it
-      const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, upcomingPagination, 1, DEFAULT_PAGE_SIZE)
+      const loadedUpcomingAppointments = getLoadedAppointments(
+        loadedUpcoming,
+        upcomingPagination,
+        1,
+        DEFAULT_PAGE_SIZE,
+        getState().appointments.upcomingAppointmentsCount,
+      )
       if (
+        !forceRefetch &&
         loadedUpcomingAppointments &&
         getState().appointments.upcomingCcServiceError === false &&
         getState().appointments.upcomingVaServiceError === false
@@ -293,6 +319,9 @@ export const prefetchAppointments =
         } as Params)
       }
 
+      if (!getState().appointments.preloadComplete && upcomingAppointments?.meta) {
+        await logAnalyticsEvent(Events.vama_hs_appts_count(upcomingAppointments.meta.upcomingAppointmentsCount))
+      }
       dispatch(dispatchFinishPrefetchAppointments({ upcoming: upcomingAppointments, past: pastAppointments }))
     } catch (error) {
       if (isErrorObject(error)) {
@@ -479,6 +508,7 @@ const appointmentsSlice = createSlice({
       const upcomingAppointmentsPagination = upcoming?.meta?.pagination || state.paginationByTimeFrame.upcoming
       const pastAppointmentsPagination = past?.meta?.pagination || state.paginationByTimeFrame.pastThreeMonths
 
+      state.upcomingAppointmentsCount = upcoming?.meta?.upcomingAppointmentsCount
       state.upcomingAppointmentsById = mapAppointmentsById(upcomingAppointments)
       state.pastAppointmentsById = mapAppointmentsById(pastAppointments)
       state.upcomingCcServiceError = upcomingCcServiceError
@@ -487,6 +517,7 @@ const appointmentsSlice = createSlice({
       state.pastVaServiceError = pastVaServiceError
       state.error = error
       state.loading = false
+      state.preloadComplete = !error
 
       state.currentPageAppointmentsByYear.upcoming = groupAppointmentsByYear(upcomingAppointments)
       state.currentPageAppointmentsByYear.pastThreeMonths = groupAppointmentsByYear(pastAppointments)

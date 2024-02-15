@@ -10,8 +10,12 @@ on:
       - 'dependabot/**'
   workflow_dispatch:
     inputs:
+      testRail_name:
+        description: 'Name testRail run (will default to date if blank)'
+        type: string
+        required: false
       run_testRail:
-        description: Run_TestRail
+        description: 'Add results to testRail?'
         type: boolean
         required: false
       tests_to_test:
@@ -23,7 +27,7 @@ on:
   workflow_run:
     workflows: ['[Release] New Release Issue']
     types: 
-      - completed
+      - in_progress
 
 defaults:
   run:
@@ -247,4 +251,5 @@ jobs:
     uses: ./.github/workflows/update_testrail_results.yml
     with: 
       test_names: ""
+      testRail_name: ${{ inputs.testRail_name }}
     secrets: inherit
