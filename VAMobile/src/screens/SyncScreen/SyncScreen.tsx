@@ -4,17 +4,12 @@ import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useServiceHistory } from 'api/militaryService'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { AuthState, completeSync, logInDemoMode } from 'store/slices'
-import {
-  DisabilityRatingState,
-  MilitaryServiceState,
-  checkForDowntimeErrors,
-  getDisabilityRating,
-  getServiceHistory,
-} from 'store/slices'
+import { DisabilityRatingState, checkForDowntimeErrors, getDisabilityRating } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
 import { testIdProps } from 'utils/accessibility'
@@ -34,10 +29,6 @@ function SyncScreen({}: SyncScreenProps) {
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const { preloadComplete: militaryHistoryLoaded, loading: militaryHistoryLoading } = useSelector<
-    RootState,
-    MilitaryServiceState
-  >((s) => s.militaryService)
   const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<
     RootState,
     DisabilityRatingState
@@ -48,6 +39,10 @@ function SyncScreen({}: SyncScreenProps) {
   // TODO: For some reason Unit Tests cannot pick up the DowntimeFeatureTypeConstants constant
   const drNotInDowntime = !useDowntime('disability_rating')
   const mhNotInDowntime = !useDowntime('military_service_history')
+
+  const { isFetched: useServiceHistoryFetched } = useServiceHistory({
+    enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime,
+  })
 
   const [displayMessage, setDisplayMessage] = useState('')
 
@@ -63,15 +58,7 @@ function SyncScreen({}: SyncScreenProps) {
 
   useEffect(() => {
     if (loggedIn) {
-      if (
-        !loadingUserAuthorizedServices &&
-        userAuthorizedServices?.militaryServiceHistory &&
-        !militaryHistoryLoaded &&
-        !militaryHistoryLoading &&
-        mhNotInDowntime
-      ) {
-        dispatch(getServiceHistory())
-      } else if (!disabilityRatingLoaded && !disabilityRatingLoading && drNotInDowntime) {
+      if (!disabilityRatingLoaded && !disabilityRatingLoading && drNotInDowntime) {
         dispatch(getDisabilityRating())
       }
     }
@@ -83,9 +70,6 @@ function SyncScreen({}: SyncScreenProps) {
     disabilityRatingLoaded,
     disabilityRatingLoading,
     drNotInDowntime,
-    mhNotInDowntime,
-    militaryHistoryLoaded,
-    militaryHistoryLoading,
   ])
 
   useEffect(() => {
@@ -101,7 +85,7 @@ function SyncScreen({}: SyncScreenProps) {
 
     const finishSyncingMilitaryHistory =
       !mhNotInDowntime ||
-      (!loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded))
+      (!loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || useServiceHistoryFetched))
     const finishSyncingDisabilityRating = !drNotInDowntime || (drNotInDowntime && disabilityRatingLoaded)
     if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating) {
       dispatch(completeSync())
@@ -111,7 +95,7 @@ function SyncScreen({}: SyncScreenProps) {
     loggedIn,
     loggingOut,
     loadingUserAuthorizedServices,
-    militaryHistoryLoaded,
+    useServiceHistoryFetched,
     userAuthorizedServices?.militaryServiceHistory,
     t,
     disabilityRatingLoaded,

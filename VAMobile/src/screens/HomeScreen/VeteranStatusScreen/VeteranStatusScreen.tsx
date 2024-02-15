@@ -7,7 +7,9 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+import { BranchesOfServiceConstants, ServiceData, ServiceHistoryData } from 'api/types'
 import {
   BackgroundVariant,
   BorderColorVariant,
@@ -21,8 +23,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
-import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
-import { DisabilityRatingState, MilitaryServiceState } from 'store/slices'
+import { DisabilityRatingState } from 'store/slices'
 import { useOrientation, useTheme } from 'utils/hooks'
 
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
@@ -32,9 +33,9 @@ import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
 
 function VeteranStatusScreen({}: VeteranStatusScreenProps) {
-  const { serviceHistory, mostRecentBranch } = useSelector<RootState, MilitaryServiceState>(
-    (state) => state.militaryService,
-  )
+  const { data: militaryServiceHistoryAttributes } = useServiceHistory()
+  const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
+  const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()

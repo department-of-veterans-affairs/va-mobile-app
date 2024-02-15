@@ -11,7 +11,6 @@ import directDepositReducer from 'store/slices/directDepositSlice'
 import disabilityRatingReducer from 'store/slices/disabilityRatingSlice'
 import errorReducer from 'store/slices/errorSlice'
 import lettersReducer from 'store/slices/lettersSlice'
-import militaryServiceReducer from 'store/slices/militaryServiceSlice'
 import notificationReducer from 'store/slices/notificationSlice'
 import paymentsReducer from 'store/slices/paymentsSlice'
 import prescriptionsReducer from 'store/slices/prescriptionSlice'
@@ -34,7 +33,6 @@ const store = configureStore({
     disabilityRating: disabilityRatingReducer,
     decisionLetters: decisionLettersReducer,
     letters: lettersReducer,
-    militaryService: militaryServiceReducer,
     notifications: notificationReducer,
     secureMessaging: secureMessagingReducer,
     snackBar: snackbarReducer,

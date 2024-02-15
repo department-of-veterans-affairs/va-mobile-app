@@ -9,7 +9,6 @@ import { initialDirectDepositState } from 'store/slices/directDepositSlice'
 import { initialDisabilityRatingState } from 'store/slices/disabilityRatingSlice'
 import { initialErrorsState } from 'store/slices/errorSlice'
 import { initialLettersState } from 'store/slices/lettersSlice'
-import { initialMilitaryServiceState } from 'store/slices/militaryServiceSlice'
 import { initialNotificationsState } from 'store/slices/notificationSlice'
 import { initialPaymentsState } from 'store/slices/paymentsSlice'
 import { initialSecureMessagingState } from 'store/slices/secureMessagingSlice'
@@ -29,7 +28,6 @@ export * from './directDepositSlice'
 export * from './disabilityRatingSlice'
 export * from './errorSlice'
 export * from './lettersSlice'
-export * from './militaryServiceSlice'
 export * from './notificationSlice'
 export * from './secureMessagingSlice'
 export * from './snackBarSlice'
@@ -41,7 +39,6 @@ export * from './settingsSlice'
 export const InitialState: RootState = {
   auth: initialAuthState,
   directDeposit: initialDirectDepositState,
-  militaryService: initialMilitaryServiceState,
   decisionLetters: initialDecisionLettersState,
   letters: initialLettersState,
   appointments: initialAppointmentsState,
