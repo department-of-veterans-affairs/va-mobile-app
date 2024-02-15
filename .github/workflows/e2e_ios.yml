@@ -139,12 +139,6 @@ jobs:
       IOS_PROJ_FILE: 'VAMobile.xcodeproj'
       # Xcode scheme to build
       IOS_SCHEME: 'VAMobileRelease'
-    outputs:
-      output2: ${{steps.run_e2e_tests.outputs.TESTRAIL_INPUT}}
-
-    strategy:
-      matrix:
-        testsuite: ${{ fromJSON(github.event.inputs.tests_to_test) }}
 
     steps:
       - uses: actions/checkout@v3
