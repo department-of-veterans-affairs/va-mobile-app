@@ -129,7 +129,7 @@ jobs:
           path: VAMobile/artifacts
 
   e2e-ios:
-    if: ${{!cancelled()}} && github.event.inputs.tests_to_test == ''
+    if: always() && github.event.inputs.tests_to_test == ''
     needs: start_slack_thread
     runs-on: macos-latest-xl
     env:
@@ -241,7 +241,7 @@ jobs:
     secrets: inherit
 
   send_test_results_to_testrail:
-    if: ${{!cancelled()}} && (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || (github.event.inputs.run_testRail == 'true' || github.event.inputs.tests_to_test == null)
+    if: always() && github.event.inputs.tests_to_test == '' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'skipped') || github.event.inputs.run_testRail == 'true')
     needs: e2e-ios   
     name: Update testRail Results
     uses: ./.github/workflows/update_testrail_results.yml
