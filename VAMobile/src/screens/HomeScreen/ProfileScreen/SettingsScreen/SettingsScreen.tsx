@@ -146,7 +146,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
           <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
             <Box mb={theme.dimensions.standardMarginBetween}>
               <SimpleList items={items} />
-              {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
+              {(SHOW_DEBUG_MENU || true) && debugMenu()}
             </Box>
             <Box px={theme.dimensions.gutter}>
               <Button onPress={onShowConfirm} label={t('logout.title')} buttonType={ButtonVariants.Destructive} />
