@@ -41,7 +41,7 @@ function SyncScreen({}: SyncScreenProps) {
   const mhNotInDowntime = !useDowntime('military_service_history')
 
   const { isFetched: useServiceHistoryFetched } = useServiceHistory({
-    enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime,
+    enabled: userAuthorizedServices?.militaryServiceHistory && mhNotInDowntime && loggedIn,
   })
 
   const [displayMessage, setDisplayMessage] = useState('')
