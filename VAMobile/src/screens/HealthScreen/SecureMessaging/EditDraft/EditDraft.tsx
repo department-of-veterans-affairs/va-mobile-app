@@ -605,7 +605,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={noProviderError || isFormBlank || !draftChanged() ? () => goToDrafts(false) : goToCancel}
       menuViewActions={MenViewActions}
-      showCrisisLineCta={true}
+      showCrisisLineButton={true}
       leftButtonTestID="editDraftCancelTestID"
       testID="editDraftTestID">
       <Box mb={theme.dimensions.contentMarginBottom}>

@@ -7,7 +7,7 @@ import { StackActions, useNavigation } from '@react-navigation/native'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, CrisisLineCta, TextView, TextViewProps, VAScrollView, WaygateWrapper } from 'components'
+import { Box, CrisisLineButton, TextView, TextViewProps, VAScrollView, WaygateWrapper } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
 import { VAIconProps } from 'components/VAIcon'
 import { NAMESPACE } from 'constants/namespaces'
@@ -62,7 +62,7 @@ export type FullScreenSubtaskProps = {
   /** how many screens to pop after multiStep Cancel  */
   navigationMultiStepCancelScreen?: number
   /** whether to show the crisis line CTA (defaults to false) */
-  showCrisisLineCta?: boolean
+  showCrisisLineButton?: boolean
   /** Optional testID */
   testID?: string
 }
@@ -88,7 +88,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   secondaryContentButtonText,
   onSecondaryContentButtonPress,
   navigationMultiStepCancelScreen,
-  showCrisisLineCta = false,
+  showCrisisLineButton = false,
   testID,
 }) => {
   const theme = useTheme()
@@ -185,13 +185,13 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     backgroundColor: theme.colors.background.main,
     flex: 1,
   }
-  const titleMarginTop = showCrisisLineCta ? 0 : theme.dimensions.buttonPadding
+  const titleMarginTop = showCrisisLineButton ? 0 : theme.dimensions.buttonPadding
 
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
       <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
-        {showCrisisLineCta && <CrisisLineCta onPress={() => navigateTo('VeteransCrisisLine')} />}
+        {showCrisisLineButton && <CrisisLineButton />}
         {title && (
           <Box mt={titleMarginTop} mb={theme.dimensions.buttonPadding} mx={theme.dimensions.gutter}>
             <TextView {...titleTextProps}>{title}</TextView>
