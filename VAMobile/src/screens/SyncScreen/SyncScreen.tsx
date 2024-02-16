@@ -4,17 +4,12 @@ import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useDisabilityRating } from 'api/disabilityRating'
 import { Box, LoadingComponent, TextView, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { AuthState, completeSync, logInDemoMode } from 'store/slices'
-import {
-  DisabilityRatingState,
-  MilitaryServiceState,
-  checkForDowntimeErrors,
-  getDisabilityRating,
-  getServiceHistory,
-} from 'store/slices'
+import { MilitaryServiceState, checkForDowntimeErrors, getServiceHistory } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import colors from 'styles/themes/VAColors'
 import { testIdProps } from 'utils/accessibility'
@@ -38,10 +33,6 @@ function SyncScreen({}: SyncScreenProps) {
     RootState,
     MilitaryServiceState
   >((s) => s.militaryService)
-  const { preloadComplete: disabilityRatingLoaded, loading: disabilityRatingLoading } = useSelector<
-    RootState,
-    DisabilityRatingState
-  >((s) => s.disabilityRating)
   const { data: userAuthorizedServices, isLoading: loadingUserAuthorizedServices } = useAuthorizedServices({
     enabled: loggedIn,
   })
@@ -49,6 +40,9 @@ function SyncScreen({}: SyncScreenProps) {
   const drNotInDowntime = !useDowntime('disability_rating')
   const mhNotInDowntime = !useDowntime('military_service_history')
 
+  const { isFetched: useDisabilityRatingFetched } = useDisabilityRating({
+    enabled: userAuthorizedServices?.disabilityRating && drNotInDowntime && loggedIn,
+  })
   const [displayMessage, setDisplayMessage] = useState('')
 
   useEffect(() => {
@@ -71,8 +65,6 @@ function SyncScreen({}: SyncScreenProps) {
         mhNotInDowntime
       ) {
         dispatch(getServiceHistory())
-      } else if (!disabilityRatingLoaded && !disabilityRatingLoading && drNotInDowntime) {
-        dispatch(getDisabilityRating())
       }
     }
   }, [
@@ -80,10 +72,6 @@ function SyncScreen({}: SyncScreenProps) {
     loggedIn,
     loadingUserAuthorizedServices,
     userAuthorizedServices?.militaryServiceHistory,
-    disabilityRatingLoaded,
-    disabilityRatingLoading,
-    drNotInDowntime,
-    mhNotInDowntime,
     militaryHistoryLoaded,
     militaryHistoryLoading,
   ])
@@ -102,7 +90,8 @@ function SyncScreen({}: SyncScreenProps) {
     const finishSyncingMilitaryHistory =
       !mhNotInDowntime ||
       (!loadingUserAuthorizedServices && (!userAuthorizedServices?.militaryServiceHistory || militaryHistoryLoaded))
-    const finishSyncingDisabilityRating = !drNotInDowntime || (drNotInDowntime && disabilityRatingLoaded)
+    const finishSyncingDisabilityRating =
+      !loadingUserAuthorizedServices && (!userAuthorizedServices?.disabilityRating || useDisabilityRatingFetched)
     if (finishSyncingMilitaryHistory && loggedIn && !loggingOut && finishSyncingDisabilityRating) {
       dispatch(completeSync())
     }
@@ -112,9 +101,9 @@ function SyncScreen({}: SyncScreenProps) {
     loggingOut,
     loadingUserAuthorizedServices,
     militaryHistoryLoaded,
-    userAuthorizedServices?.militaryServiceHistory,
+    userAuthorizedServices,
     t,
-    disabilityRatingLoaded,
+    useDisabilityRatingFetched,
     drNotInDowntime,
     mhNotInDowntime,
     syncing,
