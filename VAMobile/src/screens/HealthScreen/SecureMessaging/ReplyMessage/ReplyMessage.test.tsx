@@ -157,13 +157,6 @@ context('ReplyMessage', () => {
     initializeTestInstance(mockThreads)
   })
 
-  describe('on click of the crisis line banner', () => {
-    it('should call useRouteNavigation', async () => {
-      fireEvent.press(screen.getByLabelText('talk-to-the-veterans-crisis-line-now'))
-      expect(mockNavigationSpy).toHaveBeenCalled()
-    })
-  })
-
   describe('on click of the collapsible view', () => {
     it('should show the Reply Help panel', async () => {
       fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs'))

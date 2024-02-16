@@ -7,7 +7,7 @@ import { Box, ClickToCallPhoneNumber, CrisisLineButton, FeatureLandingTemplate, 
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 import { HomeStackParamList } from '../HomeStackScreens'
 
@@ -21,11 +21,6 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 function ContactVAScreen({ navigation }: ContactVAScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
-
-  const onCrisisLine = () => {
-    navigateTo('VeteransCrisisLine')
-  }
 
   const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
 

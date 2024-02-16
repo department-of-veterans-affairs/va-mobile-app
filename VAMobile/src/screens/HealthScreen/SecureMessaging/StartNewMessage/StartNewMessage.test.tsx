@@ -185,13 +185,6 @@ context('StartNewMessage', () => {
     })
   })
 
-  describe('on click of the crisis line banner', () => {
-    it('should call useRouteNavigation', () => {
-      fireEvent.press(screen.getByLabelText('talk-to-the-veterans-crisis-line-now'))
-      expect(mockNavigationSpy).toHaveBeenCalled()
-    })
-  })
-
   describe('when returning from confirmation screen', () => {
     it('should show Recheck Info if validation had failed', () => {
       initializeTestInstance(undefined, undefined, undefined, undefined, { saveDraftConfirmFailed: true })
