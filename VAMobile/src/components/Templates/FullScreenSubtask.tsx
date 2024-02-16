@@ -11,7 +11,7 @@ import { Box, CrisisLineButton, TextView, TextViewProps, VAScrollView, WaygateWr
 import { MenuViewActionsType } from 'components/Menu'
 import { VAIconProps } from 'components/VAIcon'
 import { NAMESPACE } from 'constants/namespaces'
-import { useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
@@ -93,7 +93,6 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
 }) => {
   const theme = useTheme()
   const navigation = useNavigation()
-  const navigateTo = useRouteNavigation()
   const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveActionSheet()
