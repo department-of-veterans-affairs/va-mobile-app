@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
 import { Image } from 'react-native'
+import { ScrollView } from 'react-native'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker'
 
 import { StackScreenProps } from '@react-navigation/stack'

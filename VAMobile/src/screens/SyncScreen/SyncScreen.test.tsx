@@ -85,37 +85,31 @@ context('SyncScreen', () => {
     jest.clearAllMocks()
   })
 
-  describe('loading text', () => {
-    it('should show the signing in text', () => {
-      initializeTestInstance()
-      expect(screen.getByText('Signing you in...')).toBeTruthy()
-    })
+  it('shows "Signing you in" text', () => {
+    initializeTestInstance()
+    expect(screen.getByText('Signing you in...')).toBeTruthy()
   })
 
-  describe('sign out', () => {
-    it('should show sign out text', () => {
-      initializeTestInstance(false, false, true, true)
-      expect(screen.getByText('Signing you out...')).toBeTruthy()
-    })
-
-    it('should show sign out text even if data is not loaded', () => {
-      initializeTestInstance(true, true, true, true)
-      expect(screen.getByText('Signing you out...')).toBeTruthy()
-    })
+  it('shows "Signing you out" text when logging out', () => {
+    initializeTestInstance(false, false, true, true)
+    expect(screen.getByText('Signing you out...')).toBeTruthy()
   })
 
-  describe('loading sequence', () => {
-    it('should load military history first', () => {
-      initializeTestInstance(true, true, true, false)
-      expect(getServiceHistory).toHaveBeenCalled()
-      expect(getDisabilityRating).not.toHaveBeenCalled()
-    })
+  it('shows "Signing you out" text when logging out and data is not loaded', () => {
+    initializeTestInstance(true, true, true, true)
+    expect(screen.getByText('Signing you out...')).toBeTruthy()
+  })
 
-    it('should load disability ratings after military history has loaded', () => {
-      initializeTestInstance(false, true, true, false)
-      expect(getServiceHistory).not.toHaveBeenCalled()
-      expect(getDisabilityRating).toHaveBeenCalled()
-    })
+  it('loads military history before loading disability ratings', () => {
+    initializeTestInstance(true, true, true, false)
+    expect(getServiceHistory).toHaveBeenCalled()
+    expect(getDisabilityRating).not.toHaveBeenCalled()
+  })
+
+  it('loads disability ratings after military history has loaded', () => {
+    initializeTestInstance(false, true, true, false)
+    expect(getServiceHistory).not.toHaveBeenCalled()
+    expect(getDisabilityRating).toHaveBeenCalled()
   })
 
   describe('sync completion', () => {

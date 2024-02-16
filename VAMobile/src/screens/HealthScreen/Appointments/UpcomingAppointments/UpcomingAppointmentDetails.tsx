@@ -275,7 +275,8 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
 
           <TextView
             {...prepareForVideoVisitLinkProps}
-            {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}>
+            {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}
+            testID="prepareForVideoVisitTestID">
             {t('upcomingAppointmentDetails.prepareForVideoVisit')}
           </TextView>
         </Box>

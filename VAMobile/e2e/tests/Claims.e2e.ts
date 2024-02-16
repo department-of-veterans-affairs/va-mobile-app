@@ -19,7 +19,7 @@ export const ClaimsE2eIdConstants = {
   CLAIM_6_ID: 'Claim for dependency updated on July 30, 2016 Submitted January 01, 2016',
   APPEAL_1_ID: 'Disability compensation appeal updated on November 22, 2011 Submitted June 12, 2008',
   CLOSED_CLAIM_DECISION_LETTER_ID:
-    'Claim for compensation updated on April 09, 2021 Submitted January 01, 2021 Decision letter available',
+    'Claim for compensation updated on April 09, 2021 Submitted January 01, 2021 Decision letter ready',
   CLAIM_1_STATUS_STEP_1_ID: 'Step 1 of 5. completed. Claim received July 20, 2021',
   CLAIM_1_STATUS_STEP_2_ID: 'Step 2 of 5. current. Initial review July 20, 2021',
   CLAIM_1_STATUS_STEP_3_ID: 'Step 3 of 5.  Evidence gathering, review, and decision',
