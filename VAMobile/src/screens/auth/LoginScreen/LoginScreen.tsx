@@ -17,7 +17,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
 
 import DemoAlert from './DemoAlert'
@@ -29,6 +29,7 @@ function LoginScreen() {
 
   const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
+  const navigateTo = useRouteNavigation()
   const startAuth = useStartAuth()
   const theme = useTheme()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
@@ -57,10 +58,6 @@ function LoginScreen() {
       displayTitle: t('webview.vagov'),
       loadingMessage: t('webview.valocation.loading'),
     })
-  }
-
-  const onCrisisLine = () => {
-    navigateTo('VeteransCrisisLine')
   }
 
   const findLocationProps: BoxProps = {
