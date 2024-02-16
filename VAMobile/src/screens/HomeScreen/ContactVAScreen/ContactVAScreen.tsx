@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Box, ClickToCallPhoneNumber, CrisisLineCta, FeatureLandingTemplate, TextArea, TextView } from 'components'
+import { Box, ClickToCallPhoneNumber, CrisisLineButton, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
@@ -36,7 +36,7 @@ function ContactVAScreen({ navigation }: ContactVAScreenProps) {
       title={t('contactVA.title')}
       titleA11y={a11yLabelVA(t('contactVA.title'))}>
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-        <CrisisLineCta onPress={onCrisisLine} />
+        <CrisisLineButton />
         <TextArea>
           <TextView
             variant="MobileBodyBold"

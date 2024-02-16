@@ -462,7 +462,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineCta={true}
+      showCrisisLineButton={true}
       testID="startNewMessageTestID"
       rightButtonTestID="startNewMessageSaveTestID"
       leftButtonTestID="startNewMessageCancelTestID">
