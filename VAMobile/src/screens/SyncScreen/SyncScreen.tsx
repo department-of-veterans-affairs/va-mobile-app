@@ -72,6 +72,7 @@ function SyncScreen({}: SyncScreenProps) {
     loggedIn,
     loadingUserAuthorizedServices,
     userAuthorizedServices?.militaryServiceHistory,
+    mhNotInDowntime,
     militaryHistoryLoaded,
     militaryHistoryLoading,
   ])

@@ -65,15 +65,6 @@ context('Nametag', () => {
             },
           ],
         },
-        disabilityRating: {
-          ...InitialState.disabilityRating,
-          ratingData: {
-            combinedDisabilityRating: 100,
-            combinedEffectiveDate: '2013-08-09T00:00:00.000+00:00',
-            legalEffectiveDate: '2013-08-09T00:00:00.000+00:00',
-            individualRatings: [],
-          },
-        },
       },
     })
   }
