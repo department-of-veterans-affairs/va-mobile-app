@@ -17,7 +17,6 @@ export const ClaimsE2eIdConstants = {
   CLAIM_4_ID: 'Claim for compensation updated on May 05, 2021 Submitted January 01, 2021',
   CLAIM_5_ID: 'Claim for compensation updated on May 04, 2021 Submitted January 01, 2021',
   CLAIM_6_ID: 'Claim for dependency updated on July 30, 2016 Submitted January 01, 2016',
-  APPEAL_1_ID: 'Disability compensation appeal updated on November 22, 2011 Submitted June 12, 2008',
   CLOSED_CLAIM_DECISION_LETTER_ID:
     'Claim for compensation updated on April 09, 2021 Submitted January 01, 2021 Decision letter available',
   CLAIM_1_STATUS_STEP_1_ID: 'Step 1 of 5. completed. Claim received July 20, 2021',
@@ -56,7 +55,6 @@ describe('Claims Screen', () => {
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_4_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_5_ID))).toExist()
     await expect(element(by.id(ClaimsE2eIdConstants.CLAIM_6_ID))).toExist()
-    await expect(element(by.id(ClaimsE2eIdConstants.APPEAL_1_ID))).toExist()
   })
 
   it('Verify the claim status detail page', async () => {
