@@ -82,7 +82,7 @@ function ClaimsAndAppealsListView({ claimType }: ClaimsAndAppealsListProps) {
       ) {
         const margin = theme.dimensions.condensedMarginBetween
         textLines.push({
-          text: t('claims.decisionLetterAvailable'),
+          text: t('claims.decisionLetterReady'),
           textTag: { labelType: LabelTagTypeConstants.tagBlue },
           mt: margin,
           mb: margin,
