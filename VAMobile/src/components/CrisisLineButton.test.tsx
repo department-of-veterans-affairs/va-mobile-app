@@ -8,9 +8,8 @@ import CrisisLineButton from './CrisisLineButton'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  const original = jest.requireActual('utils/hooks')
   return {
-    ...original,
+    ...jest.requireActual<typeof import('utils/hooks')>('utils/hooks'),
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
