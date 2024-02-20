@@ -23,7 +23,6 @@ const CrisisLineButton: FC = () => {
   const boxProps: BoxProps = {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: 'ctaButton',
     minHeight: theme.dimensions.touchableMinHeight,
     mx: theme.dimensions.gutter,
@@ -36,16 +35,7 @@ const CrisisLineButton: FC = () => {
   return (
     <TouchableWithoutFeedback onPress={() => navigateTo('VeteransCrisisLine')} {...touchableProps}>
       <Box {...boxProps}>
-        <TextView
-          variant="MobileBody"
-          display="flex"
-          flexDirection="row"
-          color="primaryContrast"
-          mr={theme.dimensions.textIconMargin}>
-          <TextView color="primaryContrast" variant="MobileBody">
-            {t('crisisLineButton.label')}
-          </TextView>
-        </TextView>
+        <TextView color={'crisisLineButton'}> {t('crisisLineButton.label')} </TextView>
       </Box>
     </TouchableWithoutFeedback>
   )
