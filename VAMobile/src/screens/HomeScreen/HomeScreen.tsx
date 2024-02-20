@@ -17,6 +17,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
+import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
@@ -36,7 +37,6 @@ import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/R
 import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
 import SettingsScreen from './ProfileScreen/SettingsScreen'
 import getEnv from 'utils/env'
-import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 

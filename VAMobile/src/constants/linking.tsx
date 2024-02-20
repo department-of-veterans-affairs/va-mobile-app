@@ -46,13 +46,7 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'HealthTab',
                   state: {
-                    routes: [
-                      { name: 'Health' }, 
-                      { name: 'SecureMessaging' },
-                      ...(hasMessageID ? [
-                        { name: 'ViewMessageScreen', params: { messageID: pathParts[1] } }
-                      ] : []),
-                    ],
+                    routes: [{ name: 'Health' }, { name: 'SecureMessaging' }, ...(hasMessageID ? [{ name: 'ViewMessageScreen', params: { messageID: pathParts[1] } }] : [])],
                   },
                 },
               ],
