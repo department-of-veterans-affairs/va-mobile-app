@@ -13,7 +13,6 @@ jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => jest.fn(),
     useExternalLink: () => mockExternalLinkSpy,
   }
 })
@@ -22,18 +21,8 @@ jest.mock('store/slices', () => {
   const actual = jest.requireActual('store/slices')
   return {
     ...actual,
-    downloadLetter: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-    getLetterBeneficiaryData: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
+    downloadLetter: jest.fn(() => ({ type: '', payload: '' })),
+    getLetterBeneficiaryData: jest.fn(() => ({ type: '', payload: '' })),
   }
 })
 
@@ -47,9 +36,7 @@ context('BenefitSummaryServiceVerification', () => {
     downloading = false,
     hasDownloadError = false,
   ) => {
-    const props = mockNavProps()
-
-    render(<BenefitSummaryServiceVerification {...props} />, {
+    render(<BenefitSummaryServiceVerification {...mockNavProps()} />, {
       preloadedState: {
         letters: {
           loading: false,
