@@ -76,4 +76,6 @@ export default {
   darkmodeRed: '#FF4F5B',
   darkmodeGrayWarmDark: '#292929',
   primaryDarker2: '#2864AF',
+  // USWDS colors
+  uswdsRedVivid40: '#fb5a47',
 }

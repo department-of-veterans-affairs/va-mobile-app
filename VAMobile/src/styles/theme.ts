@@ -69,6 +69,7 @@ export type VATextColors = {
   textWithIconButtonInactive: string
   veteranStatus: string
   webviewTitle: string
+  crisisLineButton: string
 }
 
 export type VAIconColors = {
