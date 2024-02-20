@@ -2,10 +2,7 @@
   Returns a string that replaces unicode/whitespace markup in json strings
   \n Newline
   \r Carriage Return
-  \u2028 Line Separator
-  \u2029 Paragraph Separator
   \t Tab
-  \v Vertical Tab
   \u2022 Bullet Points
   @param text - array of textline to concatenate
   */
