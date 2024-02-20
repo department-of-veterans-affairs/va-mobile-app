@@ -37,7 +37,7 @@ import {
   getLetterBeneficiaryData,
   prefetchClaimsAndAppeals,
 } from 'store/slices'
-import { AnalyticsState, SecureMessagingState, getClaimsAndAppeals } from 'store/slices'
+import { AnalyticsState, SecureMessagingState } from 'store/slices'
 import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -48,6 +48,7 @@ import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils
 import { featureEnabled } from 'utils/remoteConfig'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
+import { HomeStackParamList } from './HomeStackScreens'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
 import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
