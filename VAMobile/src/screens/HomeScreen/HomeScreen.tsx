@@ -36,6 +36,7 @@ import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/R
 import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
 import SettingsScreen from './ProfileScreen/SettingsScreen'
 import getEnv from 'utils/env'
+import { getInboxUnreadCount } from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -49,6 +50,7 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
   const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
   const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const unreadMessageCount = useSelector<RootState, number>(getInboxUnreadCount)
   const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
   const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
@@ -163,6 +165,16 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
               title={`${t('claims.title')}`}
               subText={`(${activeClaimsCount} ${t('open')})`}
               onPress={() => Linking.openURL('vamobile://claims')}
+              borderWidth={theme.dimensions.buttonBorderWidth}
+            />
+          </Box>
+        )}
+        {Number(unreadMessageCount) > 0 && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
+            <LargeNavButton
+              title={`${t('messages')}`}
+              subText={`${unreadMessageCount} ${t('unread')}`}
+              onPress={() => Linking.openURL('vamobile://messages')}
               borderWidth={theme.dimensions.buttonBorderWidth}
             />
           </Box>
