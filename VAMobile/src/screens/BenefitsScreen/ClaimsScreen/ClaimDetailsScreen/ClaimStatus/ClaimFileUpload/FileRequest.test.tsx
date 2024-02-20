@@ -1,30 +1,25 @@
 import React from 'react'
+
+import { CommonErrorTypesConstants } from 'constants/errors'
+import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
+import { ClaimEventData } from 'store/api/types'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { ErrorsState, InitialState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
 import { context, fireEvent, mockNavProps, render, screen } from 'testUtils'
 
 import FileRequest from './FileRequest'
-import { ClaimEventData } from 'store/api/types'
-import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/slices'
-import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { when } from 'jest-when'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 context('FileRequest', () => {
-  let props: any
-  let mockNavigateToFileRequestdetailsSpy: jest.Mock
-
-  let requests = [
+  const requests = [
     {
       type: 'still_need_from_you_list',
       date: '2020-07-16',
@@ -35,13 +30,12 @@ context('FileRequest', () => {
     },
   ]
 
-  const initializeTestInstance = (requests: ClaimEventData[], currentPhase?: number, errorsState: ErrorsState = initialErrorsState): void => {
-    props = mockNavProps(undefined, undefined, { params: { requests, currentPhase } })
-    mockNavigateToFileRequestdetailsSpy = jest.fn()
-    when(mockNavigationSpy)
-      .mockReturnValue(() => {})
-      .calledWith('FileRequestDetails', { request: requests[0] })
-      .mockReturnValue(mockNavigateToFileRequestdetailsSpy)
+  const initializeTestInstance = (
+    providedRequests: ClaimEventData[],
+    currentPhase?: number,
+    errorsState: ErrorsState = initialErrorsState,
+  ): void => {
+    const props = mockNavProps(undefined, undefined, { params: { requests: providedRequests, currentPhase } })
 
     render(<FileRequest {...props} />, {
       preloadedState: {
@@ -53,7 +47,7 @@ context('FileRequest', () => {
             attributes: {
               ...Claim.attributes,
               waiverSubmitted: false,
-              eventsTimeline: requests,
+              eventsTimeline: providedRequests,
             },
           },
         },
@@ -68,7 +62,7 @@ context('FileRequest', () => {
 
   describe('when number of requests is greater than 1', () => {
     it('should display the text "You have {{number}} file requests from VA"', async () => {
-      let updatedRequests = [
+      const updatedRequests = [
         {
           type: 'still_need_from_you_list',
           date: '2020-07-16',
@@ -107,7 +101,8 @@ context('FileRequest', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      errorsByScreenID[ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID] =
+        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
         ...initialErrorsState,
@@ -121,7 +116,7 @@ context('FileRequest', () => {
     describe('on click of a file request', () => {
       it('should navigate to file request details page', async () => {
         fireEvent.press(screen.getByRole('button', { name: 'Request 1' }))
-        expect(mockNavigateToFileRequestdetailsSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', { request: requests[0] })
       })
     })
   })
@@ -131,7 +126,11 @@ context('FileRequest', () => {
       it('should display evaluation section', async () => {
         initializeTestInstance(requests, 3)
         expect(screen.getByText('Ask for your claim evaluation')).toBeTruthy()
-        expect(screen.getByText('Please review the evaluation details if you are ready for us to begin evaluating your claim')).toBeTruthy()
+        expect(
+          screen.getByText(
+            'Please review the evaluation details if you are ready for us to begin evaluating your claim',
+          ),
+        ).toBeTruthy()
       })
     })
   })
@@ -139,7 +138,7 @@ context('FileRequest', () => {
   describe('request timeline', () => {
     describe('when a request type is received_from_you_list', () => {
       it('should set fileUploaded to true for FileRequestNumberIndicator', async () => {
-        let updatedRequests = [
+        const updatedRequests = [
           {
             type: 'still_need_from_you_list',
             date: '2020-07-16',

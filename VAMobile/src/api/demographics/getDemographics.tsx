@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { DemographicsPayload, UserDemographics } from 'api/types/DemographicsData'
-import { demographicsKeys } from './queryKeys'
 import { get } from 'store/api'
+
+import { demographicsKeys } from './queryKeys'
 
 /**
  * Fetch user demographics
@@ -15,8 +16,9 @@ const getDemographics = async (): Promise<UserDemographics | undefined> => {
 /**
  * Returns a query for user demographics
  */
-export const useDemographics = () => {
+export const useDemographics = (options?: { enabled?: boolean }) => {
   return useQuery({
+    ...options,
     queryKey: demographicsKeys.demographics,
     queryFn: () => getDemographics(),
     meta: {

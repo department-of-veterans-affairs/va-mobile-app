@@ -1,14 +1,25 @@
-import { AccessibilityInfo } from 'react-native'
-import { isEqual, map } from 'underscore'
-import { useTranslation } from 'react-i18next'
 import React, { ReactElement, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { AccessibilityInfo } from 'react-native'
 
-import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, SelectorType, TextLine, TextView, VASelector } from '../../index'
+import { isEqual, map } from 'underscore'
+
 import { NAMESPACE } from 'constants/namespaces'
 import { getTranslation } from 'utils/formattingUtils'
-import { isIOS } from 'utils/platform'
-import { renderInputError } from './formFieldUtils'
 import { useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
+
+import {
+  Box,
+  ButtonDecoratorType,
+  DefaultList,
+  DefaultListItemObj,
+  SelectorType,
+  TextLine,
+  TextView,
+  VASelector,
+} from '../../index'
+import { renderInputError } from './formFieldUtils'
 
 export type radioOption<T> = {
   /** translated text displayed next to the checkbox/radio */
@@ -33,7 +44,8 @@ export type radioOption<T> = {
  * Signifies props for the component {@link RadioGroup}
  */
 export type RadioGroupProps<T> = {
-  /** Zero based array of options. An option is an object with both a value which is the relevant data, and a label which is displayed as a string to represent the value. */
+  /** Zero based array of options. An option is an object with both a value which is the relevant data,
+   * and a label which is displayed as a string to represent the value. */
   options: Array<radioOption<T>>
   /** Currently selected option. An initial value can be used or this can be left undefined which will have nothing initially selected.  */
   value?: T
@@ -50,7 +62,15 @@ export type RadioGroupProps<T> = {
 }
 
 /**A common component to display radio button selectors for a list of selectable items*/
-const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isRadioList, radioListTitle }: RadioGroupProps<T>): ReactElement => {
+const RadioGroup = <T,>({
+  options,
+  value,
+  onChange,
+  disabled = false,
+  error,
+  isRadioList,
+  radioListTitle,
+}: RadioGroupProps<T>): ReactElement => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const hasSingleOption = options.length === 1
@@ -106,7 +126,10 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isR
               </TextView>
             </Box>
           )}
-          <Box mb={theme.dimensions.standardMarginBetween} key={index} mt={headerText ? theme.dimensions.contentMarginTop : 0}>
+          <Box
+            mb={theme.dimensions.standardMarginBetween}
+            key={index}
+            mt={headerText ? theme.dimensions.contentMarginTop : 0}>
             {getOption(option)}
           </Box>
         </Box>
@@ -125,7 +148,9 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isR
           onChange(option.value)
         }
       }
-      const textLines: Array<TextLine> = [{ text: option.labelKey, variant: 'VASelector', color: disabled ? 'checkboxDisabled' : 'primary' }]
+      const textLines: Array<TextLine> = [
+        { text: option.labelKey, variant: 'VASelector', color: disabled ? 'checkboxDisabled' : 'primary' },
+      ]
 
       if (option.additionalLabelText && option.additionalLabelText.length > 0) {
         textLines[0].variant = 'MobileBodyBold'
@@ -139,10 +164,10 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false, error, isR
         decorator: option.notSelectableRadioBtn
           ? ButtonDecoratorType.None
           : disabled
-          ? ButtonDecoratorType.RadioDisabled
-          : selected
-          ? ButtonDecoratorType.RadioFilled
-          : ButtonDecoratorType.RadioEmpty,
+            ? ButtonDecoratorType.RadioDisabled
+            : selected
+              ? ButtonDecoratorType.RadioFilled
+              : ButtonDecoratorType.RadioEmpty,
         onPress: onSelectorChange,
         minHeight: 64,
         a11yRole: 'radio',

@@ -15,6 +15,20 @@ export const Events = {
       },
     }
   },
+  vama_af_shown: (af_status: string, firebase_screen: string): Event => {
+    return {
+      name: 'vama_af_shown',
+      params: {
+        af_status,
+        firebase_screen,
+      },
+    }
+  },
+  vama_af_updated: (): Event => {
+    return {
+      name: 'vama_af_updated',
+    }
+  },
   vama_appt_cancel: (
     isPendingAppointment: boolean,
     apt_id: string | undefined,
@@ -30,6 +44,14 @@ export const Events = {
         apt_status: apt_status,
         apt_type: apt_type,
         days_to_apt: days_to_apt,
+      },
+    }
+  },
+  vama_appt_deep_link_fail: (vetext_id: string): Event => {
+    return {
+      name: 'vama_appt_deep_link_fail',
+      params: {
+        vetext_id,
       },
     }
   },
@@ -68,7 +90,13 @@ export const Events = {
       },
     }
   },
-  vama_apt_cancel_clicks: (apt_id: string, apt_status: string, apt_type: string, days_to_apt: number, step: string): Event => {
+  vama_apt_cancel_clicks: (
+    apt_id: string,
+    apt_status: string,
+    apt_type: string,
+    days_to_apt: number,
+    step: string,
+  ): Event => {
     return {
       name: 'vama_apt_cancel_clicks',
       params: {
@@ -85,6 +113,16 @@ export const Events = {
       name: 'vama_auth_completed',
     }
   },
+  vama_cerner_alert: (): Event => {
+    return {
+      name: 'vama_cerner_alert',
+    }
+  },
+  vama_cerner_alert_exp: (): Event => {
+    return {
+      name: 'vama_cerner_alert_exp',
+    }
+  },
   vama_claim_call: (claim_id: string, claim_type: string, claim_step: number): Event => {
     return {
       name: 'vama_claim_call',
@@ -95,17 +133,23 @@ export const Events = {
       },
     }
   },
-  vama_claim_count: (closed_claims: number, open_claims: number, claims_tab: string): Event => {
+  vama_claim_count: (closed_claims: number, open_claims: number): Event => {
     return {
       name: 'vama_claim_count',
       params: {
         closed_claims,
         open_claims,
-        claims_tab,
       },
     }
   },
-  vama_claim_details_exp: (claim_id: string, claim_type: string, claim_step: number, step_expanded: boolean, claim_step_change: string, claim_submitted_date: string): Event => {
+  vama_claim_details_exp: (
+    claim_id: string,
+    claim_type: string,
+    claim_step: number,
+    step_expanded: boolean,
+    claim_step_change: string,
+    claim_submitted_date: string,
+  ): Event => {
     return {
       name: 'vama_claim_details_exp',
       params: {
@@ -118,7 +162,13 @@ export const Events = {
       },
     }
   },
-  vama_claim_details_open: (claim_id: string, claim_type: string, claim_step: number, claim_step_change: string, claim_submitted_date: string): Event => {
+  vama_claim_details_open: (
+    claim_id: string,
+    claim_type: string,
+    claim_step: number,
+    claim_step_change: string,
+    claim_submitted_date: string,
+  ): Event => {
     return {
       name: 'vama_claim_details_open',
       params: {
@@ -130,7 +180,12 @@ export const Events = {
       },
     }
   },
-  vama_claim_details_tab: (claim_id: string, claim_type: string, claim_step: number, claim_submitted_date: string): Event => {
+  vama_claim_details_tab: (
+    claim_id: string,
+    claim_type: string,
+    claim_step: number,
+    claim_submitted_date: string,
+  ): Event => {
     return {
       name: 'vama_claim_details_tab',
       params: {
@@ -141,7 +196,14 @@ export const Events = {
       },
     }
   },
-  vama_claim_details_ttv: (claim_id: string, claim_type: string, claim_step: number, claim_step_change: string, claim_submitted_date: string, ttv_claim_details: number): Event => {
+  vama_claim_details_ttv: (
+    claim_id: string,
+    claim_type: string,
+    claim_step: number,
+    claim_step_change: string,
+    claim_submitted_date: string,
+    ttv_claim_details: number,
+  ): Event => {
     return {
       name: 'vama_claim_details_ttv',
       params: {
@@ -216,9 +278,12 @@ export const Events = {
       },
     }
   },
-  vama_claim_file_request: (): Event => {
+  vama_claim_file_request: (claim_id: string): Event => {
     return {
       name: 'vama_claim_file_request',
+      params: {
+        claim_id,
+      },
     }
   },
   vama_claim_review: (claim_id: string, claim_type: string, num_requests: number): Event => {
@@ -231,7 +296,12 @@ export const Events = {
       },
     }
   },
-  vama_claim_status_tab: (claim_id: string, claim_type: string, claim_step: number, claim_submitted_date: string): Event => {
+  vama_claim_status_tab: (
+    claim_id: string,
+    claim_type: string,
+    claim_step: number,
+    claim_submitted_date: string,
+  ): Event => {
     return {
       name: 'vama_claim_status_tab',
       params: {
@@ -242,7 +312,12 @@ export const Events = {
       },
     }
   },
-  vama_claim_upload_compl: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+  vama_claim_upload_compl: (
+    claim_id: string,
+    claim_request_id: number | null,
+    claim_request_type: string,
+    evidence_method: string,
+  ): Event => {
     return {
       name: 'vama_claim_upload_compl',
       params: {
@@ -253,7 +328,12 @@ export const Events = {
       },
     }
   },
-  vama_claim_upload_fail: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+  vama_claim_upload_fail: (
+    claim_id: string,
+    claim_request_id: number | null,
+    claim_request_type: string,
+    evidence_method: string,
+  ): Event => {
     return {
       name: 'vama_claim_upload_fail',
       params: {
@@ -264,7 +344,12 @@ export const Events = {
       },
     }
   },
-  vama_claim_upload_start: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+  vama_claim_upload_start: (
+    claim_id: string,
+    claim_request_id: number | null,
+    claim_request_type: string,
+    evidence_method: string,
+  ): Event => {
     return {
       name: 'vama_claim_upload_start',
       params: {
@@ -323,13 +408,28 @@ export const Events = {
       name: 'vama_ddl_status_click',
     }
   },
-  vama_error: (errorName: string, errorMessage: string, callStack?: string, statusCode?: number, endpoint?: string): Event => {
+  vama_error: (
+    errorName: string,
+    errorMessage: string,
+    callStack?: string,
+    statusCode?: number,
+    endpoint?: string,
+  ): Event => {
     return {
       name: 'vama_error',
       params: {
         errorName,
         errorMessage,
         callStack,
+        statusCode,
+        endpoint,
+      },
+    }
+  },
+  vama_error_json_resp: (endpoint?: string, statusCode?: number): Event => {
+    return {
+      name: 'vama_error_json_resp',
+      params: {
         statusCode,
         endpoint,
       },
@@ -355,7 +455,12 @@ export const Events = {
       name: 'vama_eu_updated_success',
     }
   },
-  vama_evidence_cancel_1: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+  vama_evidence_cancel_1: (
+    claim_id: string,
+    claim_request_id: number | null,
+    claim_request_type: string,
+    evidence_method: string,
+  ): Event => {
     return {
       name: 'vama_claim_cancel_1',
       params: {
@@ -366,7 +471,12 @@ export const Events = {
       },
     }
   },
-  vama_evidence_cancel_2: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+  vama_evidence_cancel_2: (
+    claim_id: string,
+    claim_request_id: number | null,
+    claim_request_type: string,
+    evidence_method: string,
+  ): Event => {
     return {
       name: 'vama_claim_cancel_2',
       params: {
@@ -377,7 +487,12 @@ export const Events = {
       },
     }
   },
-  vama_evidence_conf: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+  vama_evidence_conf: (
+    claim_id: string,
+    claim_request_id: number | null,
+    claim_request_type: string,
+    evidence_method: string,
+  ): Event => {
     return {
       name: 'vama_evidence_conf',
       params: {
@@ -388,7 +503,12 @@ export const Events = {
       },
     }
   },
-  vama_evidence_cont_1: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+  vama_evidence_cont_1: (
+    claim_id: string,
+    claim_request_id: number | null,
+    claim_request_type: string,
+    evidence_method: string,
+  ): Event => {
     return {
       name: 'vama_evidence_cont_1',
       params: {
@@ -419,7 +539,12 @@ export const Events = {
       },
     }
   },
-  vama_evidence_cont_3: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+  vama_evidence_cont_3: (
+    claim_id: string,
+    claim_request_id: number | null,
+    claim_request_type: string,
+    evidence_method: string,
+  ): Event => {
     return {
       name: 'vama_evidence_cont_3',
       params: {
@@ -430,7 +555,12 @@ export const Events = {
       },
     }
   },
-  vama_evidence_start: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string): Event => {
+  vama_evidence_start: (
+    claim_id: string,
+    claim_request_id: number | null,
+    claim_request_type: string,
+    evidence_method: string,
+  ): Event => {
     return {
       name: 'vama_evidence_start',
       params: {
@@ -441,7 +571,13 @@ export const Events = {
       },
     }
   },
-  vama_evidence_type: (claim_id: string, claim_request_id: number | null, claim_request_type: string, evidence_method: string, evidence_type: string): Event => {
+  vama_evidence_type: (
+    claim_id: string,
+    claim_request_id: number | null,
+    claim_request_type: string,
+    evidence_method: string,
+    evidence_type: string,
+  ): Event => {
     return {
       name: 'vama_evidence_type',
       params: {
@@ -486,6 +622,62 @@ export const Events = {
   vama_gender_id_success: (): Event => {
     return {
       name: 'vama_gender_id_success',
+    }
+  },
+  vama_givefb_close: (screenName: string): Event => {
+    return {
+      name: 'vama_givefb_close',
+      params: {
+        screenName,
+      },
+    }
+  },
+  vama_givefb_open: (linkType: string): Event => {
+    return {
+      name: 'vama_givefb_open',
+      params: {
+        linkType,
+      },
+    }
+  },
+  vama_hs_appts_count: (apptCount: number): Event => {
+    return {
+      name: 'vama_hs_appts_count',
+      params: {
+        apptCount,
+      },
+    }
+  },
+  vama_hs_claims_count: (claimsCount: number): Event => {
+    return {
+      name: 'vama_hs_claims_count',
+      params: {
+        claimsCount,
+      },
+    }
+  },
+  vama_hs_load_time: (loadTime: number): Event => {
+    return {
+      name: 'vama_hs_load_time',
+      params: {
+        loadTime,
+      },
+    }
+  },
+  vama_hs_rx_count: (rxCount: number): Event => {
+    return {
+      name: 'vama_hs_rx_count',
+      params: {
+        rxCount,
+      },
+    }
+  },
+  vama_hs_sm_count: (smCount: number): Event => {
+    return {
+      name: 'vama_hs_sm_count',
+      params: {
+        smCount,
+      },
     }
   },
   vama_letter_download: (letterName: string): Event => {
@@ -538,6 +730,38 @@ export const Events = {
       name: 'vama_login_success',
       params: {
         sis: isSIS.toString(),
+      },
+    }
+  },
+  vama_login_token_fetch: (status_code: number): Event => {
+    return {
+      name: 'vama_login_token_fetch',
+      params: {
+        status_code,
+      },
+    }
+  },
+  vama_login_token_get: (success: boolean): Event => {
+    return {
+      name: 'vama_login_token_get',
+      params: {
+        success,
+      },
+    }
+  },
+  vama_login_token_refresh: (status_code: number): Event => {
+    return {
+      name: 'vama_login_token_refresh',
+      params: {
+        status_code,
+      },
+    }
+  },
+  vama_login_token_store: (success: boolean): Event => {
+    return {
+      name: 'vama_login_token_store',
+      params: {
+        success,
       },
     }
   },
@@ -632,11 +856,6 @@ export const Events = {
       },
     }
   },
-  vama_rx_cerner_exp: (): Event => {
-    return {
-      name: 'vama_rx_cerner_exp ',
-    }
-  },
   vama_rx_details: (rx_id: string): Event => {
     return {
       name: 'vama_rx_details ',
@@ -676,11 +895,6 @@ export const Events = {
   vama_rx_pendingtab: (): Event => {
     return {
       name: 'vama_rx_pendingtab',
-    }
-  },
-  vama_rx_refill_cerner: (): Event => {
-    return {
-      name: 'vama_rx_refill_cerner',
     }
   },
   vama_rx_refill_fail: (rx_ids: string[]): Event => {
@@ -866,7 +1080,12 @@ export const Events = {
       },
     }
   },
-  vama_sm_send_message: (totalTime: number, actionTime: number, messageCategory: CategoryTypes, replyToID: number | undefined): Event => {
+  vama_sm_send_message: (
+    totalTime: number,
+    actionTime: number,
+    messageCategory: CategoryTypes,
+    replyToID: number | undefined,
+  ): Event => {
     return {
       name: 'vama_sm_send_message',
       params: {
@@ -925,6 +1144,14 @@ export const Events = {
       },
     }
   },
+  vama_user_call: (status_code: number): Event => {
+    return {
+      name: 'vama_user_call',
+      params: {
+        status_code,
+      },
+    }
+  },
   vama_vaccine_details: (groupName: string): Event => {
     return {
       name: 'vama_vaccine_details',
@@ -959,6 +1186,12 @@ export const UserAnalytics = {
   vama_biometric_device: (value: boolean): UserAnalytic => {
     return {
       name: 'vama_biometric_device',
+      value: value.toString(),
+    }
+  },
+  vama_cerner_transition: (value: boolean): UserAnalytic => {
+    return {
+      name: 'vama_cerner_transition',
       value: value.toString(),
     }
   },

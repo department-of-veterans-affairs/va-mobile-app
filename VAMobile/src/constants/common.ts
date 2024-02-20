@@ -1,5 +1,6 @@
-import { Events } from './analytics'
 import { logAnalyticsEvent } from 'utils/analytics'
+
+import { Events } from './analytics'
 
 export const DEFAULT_PAGE_SIZE = 10
 
@@ -48,4 +49,13 @@ export const MAX_DIGITS_AFTER_FORMAT = 14
 export const EMAIL_REGEX_EXP = new RegExp(
   /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 )
+export const MAIL_TO_REGEX_EXP = new RegExp(
+  /^(mailto:([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+)
+
+export const PHONE_REGEX_EXP = new RegExp(/^[-0-9()+]{10,}/)
+export const NUMBERS_ONLY_REGEX_EXP = new RegExp(/^[0-9]/)
+
+export const URL_REGEX_EXP = new RegExp(/^((https:|http:)\S*)/)
+export const URL2_REGEX_EXP = new RegExp(/^(www\.\S*)|^([a-zA-Z]*\.([a-z]){2,3})/)
 export const ASCENDING = 'ascending'

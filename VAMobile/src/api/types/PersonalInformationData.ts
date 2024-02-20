@@ -9,16 +9,12 @@ export type PersonalInformationPayload = {
       signinEmail: string
       signinService: string
       birthDate: string | null
+      hasFacilityTransitioningToCerner: boolean
     }
   }
 }
 
-export type PersonalInformationData = {
-  firstName: string
-  middleName: string | null
-  lastName: string
-  signinEmail: string
-  signinService: string
-  birthDate: string | null
+export type PersonalInformationData = PersonalInformationPayload['data']['attributes'] & {
+  id: string
   fullName: string
 }

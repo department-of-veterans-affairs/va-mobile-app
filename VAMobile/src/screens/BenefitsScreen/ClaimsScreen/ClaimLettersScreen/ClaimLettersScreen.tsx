@@ -1,22 +1,33 @@
-import { StackScreenProps } from '@react-navigation/stack'
-import { useNavigationState } from '@react-navigation/native'
-import { useTranslation } from 'react-i18next'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, DefaultList, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextLine, TextView } from 'components'
-import { DecisionLettersState, downloadDecisionLetter, getDecisionLetters } from 'store/slices/decisionLettersSlice'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { useNavigationState } from '@react-navigation/native'
+import { StackScreenProps } from '@react-navigation/stack'
+
+import {
+  Box,
+  DefaultList,
+  ErrorComponent,
+  FeatureLandingTemplate,
+  LoadingComponent,
+  TextLine,
+  TextView,
+} from 'components'
+import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { RootState } from 'store'
-import { SnackbarMessages } from 'components/SnackBar'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { DecisionLettersState, downloadDecisionLetter, getDecisionLetters } from 'store/slices/decisionLettersSlice'
 import { VATypographyThemeVariants } from 'styles/theme'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getA11yLabelText } from 'utils/common'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { getA11yLabelText } from 'utils/common'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useError, useTheme } from 'utils/hooks'
-import { useSelector } from 'react-redux'
+import { screenContentAllowed } from 'utils/waygateConfig'
+
 import NoClaimLettersScreen from './NoClaimLettersScreen/NoClaimLettersScreen'
 
 type ClaimLettersScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimLettersScreen'>
@@ -25,7 +36,9 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { loading, decisionLetters, downloading } = useSelector<RootState, DecisionLettersState>((state) => state.decisionLetters)
+  const { loading, decisionLetters, downloading } = useSelector<RootState, DecisionLettersState>(
+    (state) => state.decisionLetters,
+  )
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
 
@@ -38,37 +51,13 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   }
 
   useEffect(() => {
-    if (!claimsInDowntime) {
+    if (screenContentAllowed('WG_ClaimLettersScreen') && !claimsInDowntime) {
       dispatch(getDecisionLetters(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID))
     }
   }, [dispatch, claimsInDowntime])
 
   const fetchInfoAgain = () => {
     dispatch(getDecisionLetters(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID))
-  }
-
-  if (useError(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID)) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-        <ErrorComponent screenID={ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID} onTryAgain={fetchInfoAgain} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (loading || downloading) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-        <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (decisionLetters.length === 0) {
-    return (
-      <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-        <NoClaimLettersScreen />
-      </FeatureLandingTemplate>
-    )
   }
 
   const letterButtons = decisionLetters.map((letter, index) => {
@@ -97,12 +86,22 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
   return (
     <FeatureLandingTemplate backLabel={backLabel} backLabelOnPress={navigation.goBack} title={t('claimLetters.title')}>
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} paragraphSpacing={true}>
-        {t('claimLetters.overview')}
-      </TextView>
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <DefaultList items={letterButtons} />
-      </Box>
+      {useError(ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID) ? (
+        <ErrorComponent screenID={ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID} onTryAgain={fetchInfoAgain} />
+      ) : loading || downloading ? (
+        <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
+      ) : decisionLetters.length === 0 ? (
+        <NoClaimLettersScreen />
+      ) : (
+        <>
+          <TextView variant="MobileBody" mx={theme.dimensions.gutter} paragraphSpacing={true}>
+            {t('claimLetters.overview')}
+          </TextView>
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <DefaultList items={letterButtons} />
+          </Box>
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }

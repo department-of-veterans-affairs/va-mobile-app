@@ -1,13 +1,16 @@
-import { LinkingOptions } from '@react-navigation/native'
-import { NavigationState } from 'react-navigation'
 import React, { ReactElement } from 'react'
 
-import { LoadingComponent } from '../components'
-import { UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
+import { LinkingOptions, NavigationState } from '@react-navigation/native'
+
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import queryClient from 'api/queryClient'
+import { UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
 
-const authorizedServices = queryClient.getQueryData(authorizedServicesKeys.authorizedServices) as UserAuthorizedServicesData
+import { LoadingComponent } from '../components'
+
+const authorizedServices = queryClient.getQueryData(
+  authorizedServicesKeys.authorizedServices,
+) as UserAuthorizedServicesData
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const linking: LinkingOptions<any> = {
@@ -22,10 +25,8 @@ export const linking: LinkingOptions<any> = {
         screens: {
           HealthTab: {
             screens: {
-              ClaimsHistory: 'claims',
-              PrescriptionHistory: 'prescriptions',
               UpcomingAppointmentDetails: 'appointments/:vetextID',
-              ViewMessageScreen: 'messages/:messageID',
+              ViewMessage: 'messages/:messageID',
             },
           },
         },
@@ -45,7 +46,11 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'HealthTab',
                   state: {
-                    routes: [{ name: 'Health' }, { name: 'SecureMessaging' }, { name: 'ViewMessageScreen', params: { messageID: pathParts[1] } }],
+                    routes: [
+                      { name: 'Health' },
+                      { name: 'SecureMessaging' },
+                      { name: 'ViewMessage', params: { messageID: pathParts[1] } },
+                    ],
                   },
                 },
               ],
@@ -112,7 +117,11 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'BenefitsTab',
                   state: {
-                    routes: [{ name: 'Benefits' }, ...(authorizedServices?.decisionLetters ? [{ name: 'Claims' }] : []), { name: 'ClaimsHistory' }],
+                    routes: [
+                      { name: 'Benefits' },
+                      ...(authorizedServices?.decisionLetters ? [{ name: 'Claims' }] : []),
+                      { name: 'ClaimsHistory' },
+                    ],
                   },
                 },
               ],
@@ -126,9 +135,11 @@ export const linking: LinkingOptions<any> = {
 
 export const state: NavigationState = {
   index: 0,
-  isTransitioning: false,
   key: '',
   routes: [],
+  routeNames: [],
+  type: '',
+  stale: false,
 }
 
 export const fallback: ReactElement = <LoadingComponent />

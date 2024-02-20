@@ -1,62 +1,110 @@
-import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
-import { Linking } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useFocusEffect } from '@react-navigation/native'
-import { useSelector } from 'react-redux'
+import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useCallback } from 'react'
+import { Linking } from 'react-native'
+import { useSelector } from 'react-redux'
 
-import { AppointmentsState, ClaimsAndAppealsState, DisabilityRatingState, LettersState, PrescriptionState, getLetterBeneficiaryData, prefetchClaimsAndAppeals } from 'store/slices'
-import { Box, CategoryLanding, EncourageUpdateAlert, LargeNavButton, Nametag, SimpleList, SimpleListItemObj, TextView, VAIconProps } from 'components'
-import { CloseSnackbarOnNavigation } from 'constants/common'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { useFocusEffect } from '@react-navigation/native'
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { DateTime } from 'luxon'
+
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import {
+  Box,
+  CategoryLanding,
+  EncourageUpdateAlert,
+  LargeNavButton,
+  Nametag,
+  SimpleList,
+  SimpleListItemObj,
+  TextView,
+  VAIconProps,
+} from 'components'
 import { Events } from 'constants/analytics'
-import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { HomeStackParamList } from './HomeStackScreens'
+import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { RootState } from 'store'
-import { a11yLabelVA } from 'utils/a11yLabel'
-import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { getUpcomingAppointmentDateRange } from 'screens/HealthScreen/Appointments/Appointments'
-import { logAnalyticsEvent } from 'utils/analytics'
+import { RootState } from 'store'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import {
+  AppointmentsState,
+  ClaimsAndAppealsState,
+  DisabilityRatingState,
+  LettersState,
+  PrescriptionState,
+  getLetterBeneficiaryData,
+  prefetchClaimsAndAppeals,
+} from 'store/slices'
+import { AnalyticsState, SecureMessagingState, getClaimsAndAppeals } from 'store/slices'
+import { getInbox, loadAllPrescriptions, prefetchAppointments } from 'store/slices'
 import { logCOVIDClickAnalytics } from 'store/slices/vaccineSlice'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
+import { featureEnabled } from 'utils/remoteConfig'
+
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
-import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
-import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/HapticsDemoScreen'
-import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
+import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
-import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
 import ProfileScreen from './ProfileScreen/ProfileScreen'
+import SettingsScreen from './ProfileScreen/SettingsScreen'
+import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
+import HapticsDemoScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/HapticsDemoScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import SandboxScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/SandboxScreen/SandboxScreen'
-import SettingsScreen from './ProfileScreen/SettingsScreen'
-import getEnv from 'utils/env'
+import ManageYourAccount from './ProfileScreen/SettingsScreen/ManageYourAccount/ManageYourAccount'
+import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
-export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
+export function HomeScreen({}: HomeScreenProps) {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
-  const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
-  const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-  const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
-  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
+  const navigateTo = useRouteNavigation()
+  const { data: userAuthorizedServices } = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
-  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { upcomingAppointmentsCount } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { prescriptionStatusCount } = useSelector<RootState, PrescriptionState>((state) => state.prescriptions)
+  const { activeClaimsCount } = useSelector<RootState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { letterBeneficiaryData } = useSelector<RootState, LettersState>((state) => state.letters)
+  const { ratingData } = useSelector<RootState, DisabilityRatingState>((state) => state.disabilityRating)
+  const { preloadComplete: apptsPrefetch } = useSelector<RootState, AppointmentsState>((state) => state.appointments)
+  const { claimsFirstRetrieval: claimsPrefetch } = useSelector<RootState, ClaimsAndAppealsState>(
+    (state) => state.claimsAndAppeals,
+  )
+  const { prescriptionFirstRetrieval: rxPrefetch } = useSelector<RootState, PrescriptionState>(
+    (state) => state.prescriptions,
+  )
+  const { inboxFirstRetrieval: smPrefetch } = useSelector<RootState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
+  const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+
+  useEffect(() => {
+    if (apptsPrefetch && !claimsPrefetch && !rxPrefetch && !smPrefetch) {
+      logAnalyticsEvent(Events.vama_hs_load_time(DateTime.now().toMillis() - loginTimestamp))
+    }
+  }, [dispatch, apptsPrefetch, claimsPrefetch, rxPrefetch, smPrefetch, loginTimestamp])
+
+  useFocusEffect(
+    useCallback(() => {
+      if (userAuthorizedServices?.secureMessaging && !smInDowntime && featureEnabled('homeScreenPrefetch')) {
+        dispatch(getInbox(ScreenIDTypesConstants.HOME_SCREEN_ID))
+      }
+    }, [dispatch, smInDowntime, userAuthorizedServices?.secureMessaging]),
+  )
 
   useFocusEffect(
     useCallback(() => {
@@ -98,18 +146,22 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     }, [dispatch, lettersInDowntime, userAuthorizedServices?.lettersAndDocuments]),
   )
 
-  const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = () => {
     logAnalyticsEvent(Events.vama_find_location())
-    navigation.navigate('Webview', {
+    navigateTo('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
       displayTitle: t('webview.vagov'),
       loadingMessage: t('webview.valocation.loading'),
     })
   }
+
   const onCoronaVirusFAQ = () => {
     dispatch(logCOVIDClickAnalytics('home_screen'))
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('webview.vagov'), loadingMessage: t('webview.covidUpdates.loading') })
+    navigateTo('Webview', {
+      url: WEBVIEW_URL_CORONA_FAQ,
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('webview.covidUpdates.loading'),
+    })
   }
 
   const buttonDataList: Array<SimpleListItemObj> = [
@@ -126,15 +178,19 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     name: 'ProfileSelected',
   }
 
+  const onProfile = () => {
+    navigateTo('Profile')
+  }
+
   const headerButton = {
     label: t('profile.title'),
     icon: profileIconProps,
-    onPress: navigateTo('Profile'),
+    onPress: onProfile,
   }
 
   return (
-    <CategoryLanding headerButton={headerButton}>
-      <Box flex={1} justifyContent="flex-start">
+    <CategoryLanding headerButton={headerButton} testID="homeScreenID">
+      <Box>
         <EncourageUpdateAlert />
         <Nametag />
         {Number(upcomingAppointmentsCount) > 0 && (
@@ -194,12 +250,12 @@ export const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
 type HomeStackScreenProps = Record<string, unknown>
 
-const HomeScreenStack = createStackNavigator()
+const HomeScreenStack = createStackNavigator<HomeStackParamList>()
 
 /**
  * Stack screen for the Home tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
-const HomeStackScreen: FC<HomeStackScreenProps> = () => {
+function HomeStackScreen({}: HomeStackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const screenOptions = {
     headerShown: false,
@@ -223,14 +279,38 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
       <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
       <HomeScreenStack.Screen name="ContactVA" component={ContactVAScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
-      <HomeScreenStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="ContactInformation" component={ContactInformationScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="PersonalInformation"
+        component={PersonalInformationScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="ContactInformation"
+        component={ContactInformationScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="MilitaryInformation"
+        component={MilitaryInformationScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen name="Settings" component={SettingsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="ManageYourAccount" component={ManageYourAccount} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="NotificationsSettings" component={NotificationsSettingsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="ManageYourAccount"
+        component={ManageYourAccount}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="NotificationsSettings"
+        component={NotificationsSettingsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
-      <HomeScreenStack.Screen name="RemoteConfig" component={RemoteConfigScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="RemoteConfig"
+        component={RemoteConfigScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen name="Sandbox" component={SandboxScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HomeScreenStack.Screen name="HapticsDemoScreen" component={HapticsDemoScreen} options={{ headerShown: false }} />
     </HomeScreenStack.Navigator>

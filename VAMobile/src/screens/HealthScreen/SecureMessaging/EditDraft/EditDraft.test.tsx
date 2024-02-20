@@ -1,25 +1,25 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, mockNavProps, render } from 'testUtils'
-import EditDraft from './EditDraft'
-import { initializeErrorsByScreenID, InitialState, updateSecureMessagingTab } from 'store/slices'
-import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
+import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap } from 'store/api/types'
+import { InitialState, initializeErrorsByScreenID, updateSecureMessagingTab } from 'store/slices'
+import { context, mockNavProps, render } from 'testUtils'
 
-let mockNavigationSpy = jest.fn()
+import EditDraft from './EditDraft'
+
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useRouteNavigation: () => {
-      return mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     updateSecureMessagingTab: jest.fn(() => {
@@ -55,10 +55,10 @@ jest.mock('store/slices', () => {
   }
 })
 
-let mockUseComposeCancelConfirmationSpy = jest.fn()
-let mockUseGoToDraftSpy = jest.fn()
+const mockUseComposeCancelConfirmationSpy = jest.fn()
+const mockUseGoToDraftSpy = jest.fn()
 jest.mock('../CancelConfirmations/ComposeCancelConfirmation', () => {
-  let original = jest.requireActual('utils/hooks')
+  const original = jest.requireActual('utils/hooks')
   return {
     ...original,
     useComposeCancelConfirmation: () => [false, mockUseComposeCancelConfirmationSpy],
@@ -139,9 +139,7 @@ const mockMessages: SecureMessagingMessageMap = {
 }
 
 context('EditDraft', () => {
-  let props: any
   let goBack: jest.Mock
-  let navigateSpy: jest.Mock
 
   const initializeTestInstance = ({
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
@@ -153,15 +151,14 @@ context('EditDraft', () => {
     messageID = 2,
   }) => {
     goBack = jest.fn()
-    navigateSpy = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
-    props = mockNavProps(
+    const props = mockNavProps(
       undefined,
       {
         addListener: mockUseComposeCancelConfirmationSpy,
-        navigate: navigateSpy,
+        navigate: mockNavigationSpy,
         goBack,
         setOptions: jest.fn(),
       },
@@ -231,7 +228,7 @@ context('EditDraft', () => {
     describe('on click of the go to inbox button', () => {
       it('should call useRouteNavigation and updateSecureMessagingTab', () => {
         fireEvent.press(screen.getByRole('button', { name: 'Go to inbox' }))
-        expect(navigateSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalled()
         expect(updateSecureMessagingTab).toHaveBeenCalled()
       })
     })
@@ -240,7 +237,7 @@ context('EditDraft', () => {
   describe('when hasLoadedRecipients is false', () => {
     it('should display the LoadingComponent', () => {
       initializeTestInstance({ loading: true })
-      expect(screen.getByText("Loading your draft...")).toBeTruthy()
+      expect(screen.getByText('Loading your draft...')).toBeTruthy()
     })
   })
 

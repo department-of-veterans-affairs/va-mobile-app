@@ -41,6 +41,7 @@
 #import "Crashlytics/Shared/FIRCLSFABHost.h"
 
 #import "Crashlytics/Crashlytics/Controllers/FIRCLSAnalyticsManager.h"
+#import "Crashlytics/Crashlytics/Controllers/FIRCLSContextManager.h"
 #import "Crashlytics/Crashlytics/Controllers/FIRCLSExistingReportManager.h"
 #import "Crashlytics/Crashlytics/Controllers/FIRCLSManagerData.h"
 #import "Crashlytics/Crashlytics/Controllers/FIRCLSNotificationManager.h"
@@ -50,11 +51,13 @@
 #import "Crashlytics/Crashlytics/Private/FIRCLSOnDemandModel_Private.h"
 #import "Crashlytics/Crashlytics/Private/FIRExceptionModel_Private.h"
 
-#import "FirebaseCore/Sources/Private/FirebaseCoreInternal.h"
+#import "FirebaseCore/Extension/FirebaseCoreInternal.h"
 #import "FirebaseInstallations/Source/Library/Private/FirebaseInstallationsInternal.h"
 #import "Interop/Analytics/Public/FIRAnalyticsInterop.h"
 
 #import <GoogleDataTransport/GoogleDataTransport.h>
+
+@import FirebaseSessions;
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
@@ -73,7 +76,7 @@ NSString *const FIRCLSGoogleTransportMappingID = @"1206";
 @protocol FIRCrashlyticsInstanceProvider <NSObject>
 @end
 
-@interface FIRCrashlytics () <FIRLibrary, FIRCrashlyticsInstanceProvider>
+@interface FIRCrashlytics () <FIRLibrary, FIRCrashlyticsInstanceProvider, FIRSessionsSubscriber>
 
 @property(nonatomic) BOOL didPreviouslyCrash;
 @property(nonatomic, copy) NSString *googleAppID;
@@ -100,7 +103,8 @@ NSString *const FIRCLSGoogleTransportMappingID = @"1206";
 - (instancetype)initWithApp:(FIRApp *)app
                     appInfo:(NSDictionary *)appInfo
               installations:(FIRInstallations *)installations
-                  analytics:(id<FIRAnalyticsInterop>)analytics {
+                  analytics:(id<FIRAnalyticsInterop>)analytics
+                   sessions:(id<FIRSessionsProvider>)sessions {
   self = [super init];
 
   if (self) {
@@ -131,7 +135,7 @@ NSString *const FIRCLSGoogleTransportMappingID = @"1206";
                                                                 appIDModel:appModel];
 
     FIRCLSOnDemandModel *onDemandModel =
-        [[FIRCLSOnDemandModel alloc] initWithFIRCLSSettings:settings];
+        [[FIRCLSOnDemandModel alloc] initWithFIRCLSSettings:settings fileManager:_fileManager];
     _managerData = [[FIRCLSManagerData alloc] initWithGoogleAppID:_googleAppID
                                                   googleTransport:googleTransport
                                                     installations:installations
@@ -140,6 +144,18 @@ NSString *const FIRCLSGoogleTransportMappingID = @"1206";
                                                       dataArbiter:_dataArbiter
                                                          settings:settings
                                                     onDemandModel:onDemandModel];
+
+    if (sessions) {
+      FIRCLSDebugLog(@"Registering Sessions SDK subscription for session data");
+
+      // Subscription should be made after the DataCollectionArbiter
+      // is initialized so that the Sessions SDK can immediately get
+      // the data collection state.
+      //
+      // It should also be made after managerData is initialized so
+      // that the ContextManager can accept data
+      [sessions registerWithSubscriber:self];
+    }
 
     _reportUploader = [[FIRCLSReportUploader alloc] initWithManagerData:_managerData];
 
@@ -180,11 +196,15 @@ NSString *const FIRCLSGoogleTransportMappingID = @"1206";
 
 + (void)load {
   [FIRApp registerInternalLibrary:(Class<FIRLibrary>)self withName:@"firebase-crashlytics"];
+  [FIRSessionsDependencies addDependencyWithName:FIRSessionsSubscriberNameCrashlytics];
 }
 
 + (NSArray<FIRComponent *> *)componentsToRegister {
   FIRDependency *analyticsDep =
       [FIRDependency dependencyWithProtocol:@protocol(FIRAnalyticsInterop)];
+
+  FIRDependency *sessionsDep =
+      [FIRDependency dependencyWithProtocol:@protocol(FIRSessionsProvider)];
 
   FIRComponentCreationBlock creationBlock =
       ^id _Nullable(FIRComponentContainer *container, BOOL *isCacheable) {
@@ -194,6 +214,7 @@ NSString *const FIRCLSGoogleTransportMappingID = @"1206";
     }
 
     id<FIRAnalyticsInterop> analytics = FIR_COMPONENT(FIRAnalyticsInterop, container);
+    id<FIRSessionsProvider> sessions = FIR_COMPONENT(FIRSessionsProvider, container);
 
     FIRInstallations *installations = [FIRInstallations installationsWithApp:container.app];
 
@@ -202,13 +223,14 @@ NSString *const FIRCLSGoogleTransportMappingID = @"1206";
     return [[FIRCrashlytics alloc] initWithApp:container.app
                                        appInfo:NSBundle.mainBundle.infoDictionary
                                  installations:installations
-                                     analytics:analytics];
+                                     analytics:analytics
+                                      sessions:sessions];
   };
 
   FIRComponent *component =
       [FIRComponent componentWithProtocol:@protocol(FIRCrashlyticsInstanceProvider)
                       instantiationTiming:FIRInstantiationTimingEagerInDefaultApp
-                             dependencies:@[ analyticsDep ]
+                             dependencies:@[ analyticsDep, sessionsDep ]
                             creationBlock:creationBlock];
   return @[ component ];
 }
@@ -351,7 +373,11 @@ NSString *const FIRCLSGoogleTransportMappingID = @"1206";
 
 #pragma mark - API: Errors and Exceptions
 - (void)recordError:(NSError *)error {
-  FIRCLSUserLoggingRecordError(error, nil);
+  [self recordError:error userInfo:nil];
+}
+
+- (void)recordError:(NSError *)error userInfo:(NSDictionary<NSString *, id> *)userInfo {
+  FIRCLSUserLoggingRecordError(error, userInfo);
 }
 
 - (void)recordExceptionModel:(FIRExceptionModel *)exceptionModel {
@@ -363,6 +389,22 @@ NSString *const FIRCLSGoogleTransportMappingID = @"1206";
       recordOnDemandExceptionIfQuota:exceptionModel
            withDataCollectionEnabled:[self.dataArbiter isCrashlyticsCollectionEnabled]
           usingExistingReportManager:self.existingReportManager];
+}
+
+#pragma mark - FIRSessionsSubscriber
+
+- (void)onSessionChanged:(FIRSessionDetails *_Nonnull)session {
+  FIRCLSDebugLog(@"Session ID changed: %@", session.sessionId.copy);
+
+  [self.managerData.contextManager setAppQualitySessionId:session.sessionId.copy];
+}
+
+- (BOOL)isDataCollectionEnabled {
+  return self.dataArbiter.isCrashlyticsCollectionEnabled;
+}
+
+- (FIRSessionsSubscriberName)sessionsSubscriberName {
+  return FIRSessionsSubscriberNameCrashlytics;
 }
 
 @end

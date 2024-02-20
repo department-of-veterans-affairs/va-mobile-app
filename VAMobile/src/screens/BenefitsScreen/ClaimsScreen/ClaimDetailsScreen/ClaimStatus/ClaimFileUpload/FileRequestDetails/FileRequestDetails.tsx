@@ -1,20 +1,23 @@
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { map } from 'underscore'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { Box, BoxProps, ButtonTypesConstants, ChildTemplate, TextArea, TextView, VAButton } from 'components'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+
+import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { map } from 'underscore'
+
+import { Box, BoxProps, ChildTemplate, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { hasUploadedOrReceived } from 'utils/claims'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { hasUploadedOrReceived } from 'utils/claims'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestDetailsProps = StackScreenProps<BenefitsStackParamList, 'FileRequestDetails'>
 
-const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) => {
+function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -58,16 +61,20 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
 
   const onFilePress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'file'))
-    navigateTo('SelectFile', { claimID, request })()
+    navigateTo('SelectFile', { claimID, request })
   }
 
   const onPhotoPress = () => {
     logAnalyticsEvent(Events.vama_evidence_start(claimID, request.trackedItemId || null, request.type, 'photo'))
-    navigateTo('TakePhotos', { claimID, request })()
+    navigateTo('TakePhotos', { claimID, request })
   }
 
   return (
-    <ChildTemplate backLabel={t('request.backLabel')} backLabelOnPress={navigation.goBack} title={displayName || ''}>
+    <ChildTemplate
+      backLabel={t('request.backLabel')}
+      backLabelOnPress={navigation.goBack}
+      title={displayName || ''}
+      testID="fileRequestDetailsID">
       <Box mb={contentMarginBottom} flex={1}>
         {hasUploaded && (
           <Box mb={standardMarginBetween}>
@@ -108,9 +115,19 @@ const FileRequestDetails: FC<FileRequestDetailsProps> = ({ navigation, route }) 
       {!hasUploaded && (
         <Box {...boxProps}>
           <Box mt={standardMarginBetween} mx={gutter} mb={contentMarginBottom}>
-            <VAButton onPress={onFilePress} label={t('fileUpload.selectAFile')} testID={t('fileUpload.selectAFile')} buttonType={ButtonTypesConstants.buttonSecondary} />
+            <Button
+              onPress={onFilePress}
+              label={t('fileUpload.selectAFile')}
+              testID={t('fileUpload.selectAFile')}
+              buttonType={ButtonVariants.Secondary}
+            />
             <Box mt={theme.dimensions.condensedMarginBetween}>
-              <VAButton onPress={onPhotoPress} label={t('fileUpload.takePhotos')} testID={t('fileUpload.takePhotos')} buttonType={ButtonTypesConstants.buttonSecondary} />
+              <Button
+                onPress={onPhotoPress}
+                label={t('fileUpload.takePhotos')}
+                testID={t('fileUpload.takePhotos')}
+                buttonType={ButtonVariants.Secondary}
+              />
             </Box>
           </Box>
         </Box>

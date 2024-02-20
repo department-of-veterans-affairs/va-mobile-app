@@ -1,55 +1,28 @@
-import 'react-native'
 import React from 'react'
 
-// Note: test renderer must be required after react-native.
-import 'jest-styled-components'
-import { ReactTestInstance } from 'react-test-renderer'
+import { fireEvent, screen } from '@testing-library/react-native'
 
-import { context, render, RenderAPI, waitFor } from 'testUtils'
+import { context, render } from 'testUtils'
+
 import CollapsibleView from './CollapsibleView'
 import TextView from './TextView'
-import { Pressable } from 'react-native'
 
 context('CollapsibleView', () => {
-  let component: RenderAPI
-  let testInstance: ReactTestInstance
-
   beforeEach(() => {
-    component = render(<CollapsibleView text={'Where can I find these numbers?'} children={<TextView>Revealed text</TextView>} />)
-
-    testInstance = component.UNSAFE_root
+    render(<CollapsibleView text={'Press here'} children={<TextView>Revealed text</TextView>} />)
   })
 
-  it('initializes correctly', async () => {
-    expect(component).toBeTruthy()
+  it('renders text', () => {
+    expect(screen.getByRole('tab', { name: 'Press here' })).toBeTruthy()
   })
 
-  describe('when the dropdown is pressed once', () => {
-    it('should show the children content', async () => {
-      await waitFor(() => {
-        testInstance.findByType(Pressable).props.onPress()
-      })
+  it('shows/hides children on press', () => {
+    fireEvent.press(screen.getByRole('tab', { name: 'Press here' }))
+    expect(screen.getByRole('tab', { expanded: true })).toBeTruthy()
+    expect(screen.getByText('Revealed text')).toBeTruthy()
 
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews.length).toEqual(2)
-      const expandedContent = textViews[1]
-      expect(expandedContent.props.children).toEqual('Revealed text')
-    })
-  })
-
-  describe('when the dropdown is pressed twice', () => {
-    it('should hide the children content since the dropdown was opened and then closed', async () => {
-      const touchable = testInstance.findByType(Pressable)
-      await waitFor(() => {
-        touchable.props.onPress()
-      })
-
-      await waitFor(() => {
-        touchable.props.onPress()
-      })
-
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews.length).toEqual(1)
-    })
+    fireEvent.press(screen.getByRole('tab', { name: 'Press here' }))
+    expect(screen.getByRole('tab', { expanded: false })).toBeTruthy()
+    expect(screen.queryByText('Revealed text')).toBeFalsy()
   })
 })

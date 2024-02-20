@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { ContactInformationPayload, UserContactInformation } from 'api/types/ContactInformation'
-import { contactInformationKeys } from './queryKeys'
 import { get } from 'store/api'
 import { getFormattedPhoneNumber } from 'utils/common'
+
+import { contactInformationKeys } from './queryKeys'
 
 /**
  * Fetch user contact information
@@ -25,8 +26,9 @@ const getContactInformation = async (): Promise<UserContactInformation | undefin
 /**
  * Returns a query for user contact information
  */
-export const useContactInformation = () => {
+export const useContactInformation = (options?: { enabled?: boolean }) => {
   return useQuery({
+    ...options,
     queryKey: contactInformationKeys.contactInformation,
     queryFn: () => getContactInformation(),
     meta: {

@@ -1,14 +1,15 @@
 import React from 'react'
+
 import { fireEvent, screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
-import { context, render } from 'testUtils'
-import NoFolderMessages from './NoFolderMessages'
 import { updateSecureMessagingTab } from 'store/slices'
+import { context, render } from 'testUtils'
 
+import NoFolderMessages from './NoFolderMessages'
 
 jest.mock('store/slices', () => {
-  let actual = jest.requireActual('store/slices')
+  const actual = jest.requireActual('store/slices')
   return {
     ...actual,
     updateSecureMessagingTab: jest.fn(() => {

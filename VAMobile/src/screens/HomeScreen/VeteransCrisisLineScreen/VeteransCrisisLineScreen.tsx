@@ -1,14 +1,15 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
 import { Box, LargePanel, TextView } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import { UserAnalytics } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useExternalLink, useTheme } from 'utils/hooks'
-import VeteransCrisisLineNumbers from './VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 import getEnv from 'utils/env'
+import { useExternalLink, useTheme } from 'utils/hooks'
+
+import VeteransCrisisLineNumbers from './VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 
 const { LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
 
@@ -17,7 +18,7 @@ const { LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
  *
  * Returns VeteransCrisisLineScreen component
  */
-const VeteransCrisisLineScreen: FC = () => {
+function VeteransCrisisLineScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
@@ -35,7 +36,10 @@ const VeteransCrisisLineScreen: FC = () => {
   return (
     <LargePanel title={t('veteransCrisisLine.title')} rightButtonText={t('done')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
+        <TextView
+          variant="MobileBodyBold"
+          accessibilityRole="header"
+          accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
         <Box mt={standardMarginBetween}>
@@ -43,9 +47,7 @@ const VeteransCrisisLineScreen: FC = () => {
             {t('veteransCrisisLine.connectWithResponders')}
           </TextView>
         </Box>
-
         <VeteransCrisisLineNumbers />
-
         <Box mt={standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('veteransCrisisLine.getMoreResources')}

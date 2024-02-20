@@ -1,17 +1,17 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { Carousel, TextLine } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
-import { capitalizeWord } from 'utils/formattingUtils'
-
-import { a11yLabelVA } from 'utils/a11yLabel'
-import { completeFirstTimeLogin } from 'store/slices'
-import { useAppDispatch } from 'utils/hooks'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+import { Carousel, CarouselScreen, TextLine } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { completeFirstTimeLogin } from 'store/slices'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { capitalizeWord } from 'utils/formattingUtils'
+import { useAppDispatch } from 'utils/hooks'
+
 import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
 
-const OnboardingPayments: FC = () => {
+function OnboardingPayments() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const paymentsTextLines: Array<TextLine> = [
     {
@@ -25,10 +25,16 @@ const OnboardingPayments: FC = () => {
       color: 'primaryContrast',
     },
   ]
-  return <GenericOnboarding header={t('onboarding.payments.header')} text={t('onboarding.payments.details')} listOfText={paymentsTextLines} />
+  return (
+    <GenericOnboarding
+      header={t('onboarding.payments.header')}
+      text={t('onboarding.payments.details')}
+      listOfText={paymentsTextLines}
+    />
+  )
 }
 
-const OnboardingBenefits: FC = () => {
+function OnboardingBenefits() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const benefitsTextLines: Array<TextLine> = [
     {
@@ -48,10 +54,16 @@ const OnboardingBenefits: FC = () => {
       a11yLabel: a11yLabelVA(t('onboarding.benefits.commonLetters.bullet')),
     },
   ]
-  return <GenericOnboarding header={t('onboarding.benefits.header')} text={t('onboarding.benefits.details')} listOfText={benefitsTextLines} />
+  return (
+    <GenericOnboarding
+      header={t('onboarding.benefits.header')}
+      text={t('onboarding.benefits.details')}
+      listOfText={benefitsTextLines}
+    />
+  )
 }
 
-const OnboardingHealth: FC = () => {
+function OnboardingHealth() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const healthTextLines: Array<TextLine> = [
     {
@@ -71,10 +83,16 @@ const OnboardingHealth: FC = () => {
     },
   ]
 
-  return <GenericOnboarding header={t('onboarding.health.header')} text={t('onboarding.health.details')} listOfText={healthTextLines} />
+  return (
+    <GenericOnboarding
+      header={t('onboarding.health.header')}
+      text={t('onboarding.health.details')}
+      listOfText={healthTextLines}
+    />
+  )
 }
 
-const OnboardingAppOverview: FC = () => {
+function OnboardingAppOverview() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { data: personalInfo } = usePersonalInformation()
   const firstName = personalInfo?.firstName ? `${capitalizeWord(personalInfo?.firstName)}` : ''
@@ -90,7 +108,7 @@ const OnboardingAppOverview: FC = () => {
   )
 }
 
-const OnboardingCarousel: FC = () => {
+function OnboardingCarousel() {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -98,7 +116,7 @@ const OnboardingCarousel: FC = () => {
     dispatch(completeFirstTimeLogin())
   }
 
-  const screenList = [
+  const screenList: Array<CarouselScreen> = [
     {
       name: 'OnboardingAppOverview',
       component: OnboardingAppOverview,

@@ -1,12 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-import * as api from 'store/api'
 import { AppThunk } from 'store'
+import * as api from 'store/api'
 import { RatingData, ScreenIDTypes } from 'store/api'
-import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
-import { getCommonErrorFromAPIError } from 'utils/errors'
-import { isErrorObject } from 'utils/common'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { isErrorObject } from 'utils/common'
+import { getCommonErrorFromAPIError } from 'utils/errors'
+
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errorSlice'
 
 export type DisabilityRatingState = {
   ratingData?: RatingData
@@ -60,7 +61,7 @@ const disabilitRatingSlice = createSlice({
       const { ratingData, error } = action.payload
       state.ratingData = ratingData
       state.error = error
-      state.needsDataLoad = error ? true : false
+      state.needsDataLoad = !!error
       state.preloadComplete = true
       state.loading = false
     },
@@ -71,5 +72,6 @@ const disabilitRatingSlice = createSlice({
   },
 })
 
-export const { dispatchDisabilityRatingLogout, dispatchFinishGetRating, dispatchStartGetRating } = disabilitRatingSlice.actions
+export const { dispatchDisabilityRatingLogout, dispatchFinishGetRating, dispatchStartGetRating } =
+  disabilitRatingSlice.actions
 export default disabilitRatingSlice.reducer

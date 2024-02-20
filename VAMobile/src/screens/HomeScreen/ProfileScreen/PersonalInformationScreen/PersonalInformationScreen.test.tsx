@@ -1,15 +1,19 @@
 import React from 'react'
+
 import { screen, waitFor } from '@testing-library/react-native'
 
-import PersonalInformationScreen from './index'
-import { context, mockNavProps, QueriesData, render, when } from 'testUtils'
 import { personalInformationKeys } from 'api/personalInformation/queryKeys'
-import { get } from 'store/api'
 import { DemographicsPayload, GenderIdentityOptionsPayload, UserDemographics } from 'api/types'
+import { get } from 'store/api'
+import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
+import PersonalInformationScreen from './index'
+
 jest.mock('utils/remoteConfig')
-when(featureEnabled as jest.Mock).calledWith('preferredNameGenderWaygate').mockReturnValue(true)
+when(featureEnabled as jest.Mock)
+  .calledWith('preferredNameGenderWaygate')
+  .mockReturnValue(true)
 
 when(get as jest.Mock)
   .calledWith('/v0/user/gender_identity/edit')
@@ -25,15 +29,13 @@ when(get as jest.Mock)
           tf: 'Transgender Woman',
           f: 'Woman',
           n: 'Prefer not to answer',
-          o: 'A gender not listed here'
+          o: 'A gender not listed here',
         },
       },
-    }
+    },
   } as GenderIdentityOptionsPayload)
 
 context('PersonalInformationScreen', () => {
-  let props: any
-
   const renderWithData = (queriesData?: QueriesData, demographics?: UserDemographics) => {
     when(get as jest.Mock)
       .calledWith('/v0/user/demographics')
@@ -45,10 +47,10 @@ context('PersonalInformationScreen', () => {
             genderIdentity: demographics?.genderIdentity || '',
             preferredName: demographics?.preferredName || '',
           },
-        }
+        },
       } as DemographicsPayload)
 
-    props = mockNavProps(
+    const props = mockNavProps(
       {},
       {
         navigate: jest.fn(),
@@ -63,46 +65,56 @@ context('PersonalInformationScreen', () => {
     renderWithData()
     expect(screen.getByText('Loading your personal information...')).toBeTruthy()
     await waitFor(() => expect(screen.getByLabelText('Personal information')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Any updates you make here will also update in your VA.gov profile.')).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('link', { name: 'How to update or fix an error in your legal name' })).toBeTruthy())
+    await waitFor(() =>
+      expect(screen.getByText('Any updates you make here will also update in your VA.gov profile.')).toBeTruthy(),
+    )
+    await waitFor(() =>
+      expect(screen.getByRole('link', { name: 'How to update or fix an error in your legal name' })).toBeTruthy(),
+    )
     await waitFor(() => expect(screen.getByText('Date of birth')).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('link', { name: 'How to fix an error in your date of birth' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Preferred name' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Gender identity' })).toBeTruthy())
+    await waitFor(() =>
+      expect(screen.getByRole('link', { name: 'How to fix an error in your date of birth' })).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByText('Preferred name')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Gender identity')).toBeTruthy())
   })
 
   describe('when there is no birth date', () => {
     it('should display the message This information is not available right now', async () => {
-      renderWithData([{
-        queryKey: personalInformationKeys.personalInformation,
-        data: {
-          firstName: 'Gary',
-          middleName: null,
-          lastName: 'Washington',
-          signinEmail: 'Gary.Washington@idme.com',
-          signinService: 'IDME',
-          fullName: 'Gary Washington',
-          birthDate: null
-        }
-      }])
+      renderWithData([
+        {
+          queryKey: personalInformationKeys.personalInformation,
+          data: {
+            firstName: 'Gary',
+            middleName: null,
+            lastName: 'Washington',
+            signinEmail: 'Gary.Washington@idme.com',
+            signinService: 'IDME',
+            fullName: 'Gary Washington',
+            birthDate: null,
+          },
+        },
+      ])
       await waitFor(() => expect(screen.getByText('This information is not available right now')).toBeTruthy())
     })
   })
 
   describe('when there is a birth date', () => {
     it('should display the birth date in the format Month day, year', async () => {
-      renderWithData([{
-        queryKey: personalInformationKeys.personalInformation,
-        data: {
-          firstName: 'Gary',
-          middleName: null,
-          lastName: 'Washington',
-          signinEmail: 'Gary.Washington@idme.com',
-          signinService: 'IDME',
-          fullName: 'Gary Washington',
-          birthDate: 'May 08, 1990'
-        }
-      }])
+      renderWithData([
+        {
+          queryKey: personalInformationKeys.personalInformation,
+          data: {
+            firstName: 'Gary',
+            middleName: null,
+            lastName: 'Washington',
+            signinEmail: 'Gary.Washington@idme.com',
+            signinService: 'IDME',
+            fullName: 'Gary Washington',
+            birthDate: 'May 08, 1990',
+          },
+        },
+      ])
       await waitFor(() => expect(screen.getByText('May 08, 1990')).toBeTruthy())
     })
   })
@@ -117,7 +129,7 @@ context('PersonalInformationScreen', () => {
 
   describe('when the gender identity is set', () => {
     it("displays the user's gender identity", async () => {
-      const demographics = { genderIdentity: 'M', preferredName: ''}
+      const demographics = { genderIdentity: 'M', preferredName: '' }
 
       renderWithData(undefined, demographics)
       await waitFor(() => expect(screen.getByText('Man')).toBeTruthy())
@@ -126,7 +138,7 @@ context('PersonalInformationScreen', () => {
 
   describe('when the preferred name is set', () => {
     it("displays the user's preferred name", async () => {
-      const demographics = { genderIdentity: '', preferredName: 'Gar'}
+      const demographics = { genderIdentity: '', preferredName: 'Gar' }
 
       renderWithData(undefined, demographics)
       await waitFor(() => expect(screen.getByText('Gar')).toBeTruthy())

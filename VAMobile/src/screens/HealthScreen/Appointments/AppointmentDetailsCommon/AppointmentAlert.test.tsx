@@ -1,22 +1,29 @@
 import React from 'react'
+
 import { screen } from '@testing-library/react-native'
 
+import {
+  AppointmentLocation,
+  AppointmentStatus,
+  AppointmentStatusConstants,
+  AppointmentStatusDetailType,
+  AppointmentStatusDetailTypeConsts,
+} from 'store/api/types/AppointmentData'
 import { context, render } from 'testUtils'
-import AppointmentAlert from './AppointmentAlert'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
-import { AppointmentLocation, AppointmentStatus, AppointmentStatusConstants, AppointmentStatusDetailType, AppointmentStatusDetailTypeConsts } from 'store/api/types/AppointmentData'
+
+import AppointmentAlert from './AppointmentAlert'
 
 context('AppointmentAlert', () => {
-  let props: any
-
   const initializeTestInstance = (
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
     statusDetail: AppointmentStatusDetailType = AppointmentStatusDetailTypeConsts.CLINIC_REBOOK,
     phoneOnly: boolean = false,
     location?: AppointmentLocation,
   ): void => {
-    props = {
+    const props = {
       ...defaultAppointmentAttributes,
+      serviceCategoryName: 'COMPENSATION & PENSION',
       status,
       statusDetail,
       location: location || defaultAppointmentAttributes.location,
@@ -40,7 +47,6 @@ context('AppointmentAlert', () => {
     expect(screen.queryByText('VA Long Beach Healthcare System canceled this appointment.')).toBeFalsy()
   })
 
-
   describe('when an appointment is CANCELLED', () => {
     describe('when a facility cancels an appointment', () => {
       it('should display facility name', () => {
@@ -49,7 +55,12 @@ context('AppointmentAlert', () => {
       })
 
       it('should display "facility"', () => {
-        initializeTestInstance(AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK, false, { name: '' })
+        initializeTestInstance(
+          AppointmentStatusConstants.CANCELLED,
+          AppointmentStatusDetailTypeConsts.CLINIC_REBOOK,
+          false,
+          { name: '' },
+        )
         expect(screen.getByText('Facility canceled this appointment.')).toBeTruthy()
       })
     })

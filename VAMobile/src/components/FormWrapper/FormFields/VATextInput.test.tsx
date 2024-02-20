@@ -1,25 +1,26 @@
 import React from 'react'
-import { context, render, screen, fireEvent } from 'testUtils'
+
+import { context, fireEvent, render, screen } from 'testUtils'
+
 import VATextInput from './VATextInput'
 
 context('VATextInput', () => {
-  let onChangeSpy = jest.fn()
+  const onChangeSpy = jest.fn()
 
-  const initializeTestInstance = (
-    isRequiredField = false,
-    error = ''
-  ) => {
-    render(<VATextInput
-      inputType={'email'}
-      onChange={onChangeSpy}
-      labelKey={'contactInformation.emailAddress'}
-      value={''}
-      helperTextKey={'back.a11yHint'}
-      isRequiredField={isRequiredField}
-      testID={'InputTest'}
-      isTextArea={false}
-      error={error}
-    />)
+  const initializeTestInstance = (isRequiredField = false, error = '') => {
+    render(
+      <VATextInput
+        inputType={'email'}
+        onChange={onChangeSpy}
+        labelKey={'contactInformation.emailAddress'}
+        value={''}
+        helperTextKey={'back.a11yHint'}
+        isRequiredField={isRequiredField}
+        testID={'InputTest'}
+        isTextArea={false}
+        error={error}
+      />,
+    )
   }
 
   describe('When input type is email', () => {

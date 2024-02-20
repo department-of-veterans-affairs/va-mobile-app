@@ -1,15 +1,18 @@
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { Box, ButtonTypesConstants, CollapsibleView, FullScreenSubtask, TextView, TextViewProps, VABulletList, VAButton } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import { useNavigation } from '@react-navigation/native'
-import { useStartAuth } from 'utils/hooks/auth'
+
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, CollapsibleView, FullScreenSubtask, TextView, TextViewProps, VABulletList } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
+import { useStartAuth } from 'utils/hooks/auth'
 
 type LoaGateProps = Record<string, unknown>
 
-const LoaGate: FC<LoaGateProps> = ({}) => {
+function LoaGate({}: LoaGateProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const startAuth = useStartAuth()
@@ -30,8 +33,15 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
   }
 
   return (
-    <FullScreenSubtask leftButtonText={t('close')} title={t('signin')} onLeftButtonPress={navigation.goBack} showCrisisLineCta={true}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+    <FullScreenSubtask
+      leftButtonText={t('close')}
+      title={t('signin')}
+      onLeftButtonPress={navigation.goBack}
+      showCrisisLineCta={true}>
+      <Box
+        mt={theme.dimensions.contentMarginTop}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
         <TextView paragraphSpacing={true} {...bodyTextProps}>
           {t('loaGate.p1')}
         </TextView>
@@ -60,7 +70,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
           </Box>
         </CollapsibleView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
-          <VAButton onPress={startAuth} label={t('continueToSignin')} buttonType={ButtonTypesConstants.buttonPrimary} testID={t('continueToSignin')} />
+          <Button onPress={startAuth} label={t('continueToSignin')} testID={t('continueToSignin')} />
         </Box>
       </Box>
     </FullScreenSubtask>
